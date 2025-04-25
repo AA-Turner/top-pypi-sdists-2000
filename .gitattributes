@@ -1,0 +1,64 @@
+# Unix-style line endings
+[attr]unix text eol=lf
+
+*.c     unix
+*.c++   unix
+*.cc    unix
+*.cfg   unix
+*.conf  unix
+*.cpp   unix
+*.cs    unix
+*.css   unix
+*.csv   unix
+*.csx   unix
+*.cxx   unix
+*.dot   unix
+*.f     unix
+*.h     unix
+*.h++   unix
+*.hh    unix
+*.hpp   unix
+*.html  unix
+*.inc   unix
+*.ini   unix
+*.ipp   unix
+*.ipynb unix
+*.java  unix
+*.jinja unix
+*.js    unix
+*.markdown  unix
+*.md    unix
+*.mjs   unix
+*.pl    unix
+*.pxd   unix
+*.py    unix
+*.pyi   unix
+*.pyw   unix
+*.pyx   unix
+*.pyz   unix
+*.rs    unix
+*.rst   unix
+*.s     unix
+*.sty   unix
+*.svg   unix
+*.tex   unix
+*.toml  unix
+*.ts    unix
+*.txt   unix
+*.xml   unix
+*.yaml  unix
+*.yml   unix
+
+# CRLF files
+[attr]dos text eol=crlf
+
+*.bat       dos
+*.bat.jinja dos
+*.cmd       dos
+*.ps1       dos
+*.psd1      dos
+*.psm1      dos
+*.stp       dos
+
+# Language aware diff headers
+*.py   diff=python
