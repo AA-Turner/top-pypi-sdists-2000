@@ -41,24 +41,25 @@ def main() -> int:
 
 def process_project(index, proj):
     try:
-        urls = http.request('GET', f'https://pypi.org/pypi/{proj}/json').json()['urls']
-        for entry in urls:
-            if entry['packagetype'] == 'sdist':
-                url = entry['url']
-                break
-        else:
-            print(f'No source distribution for {proj!r}')
+        if (url := sdist_url(http, proj)) is None:
             return None
-        del urls
-        response = http.request('GET', url)
         filename = url.rpartition('/')[2]
+        archive_data = http.request('GET', url).data
         print(f'{index:6,}: Writing {filename} for {proj!r}')
-        SDIST_ROOT.joinpath(filename).write_bytes(response.data)
-        del response
+        SDIST_ROOT.joinpath(filename).write_bytes(archive_data)
         return filename
     except Exception:
         print(f'Fetching {proj!r} failed')
         traceback.print_exc()
+
+
+def sdist_url(http: urllib3.PoolManager, project_name: str) -> str | None:
+    urls = http.request('GET', f'https://pypi.org/pypi/{project_name}/json').json()['urls']
+    for entry in urls:
+        if entry['packagetype'] == 'sdist':
+            return entry['url']
+    print(f'No source distribution for {project_name!r}')
+    return None
 
 
 if __name__ == '__main__':
