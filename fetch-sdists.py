@@ -5,6 +5,7 @@
 # ///
 
 import concurrent.futures
+import json
 import shutil
 import tarfile
 import time
@@ -66,12 +67,15 @@ def main() -> int:
     start = time.perf_counter()
 
     rows = http.request('GET', PACKAGES_URL).json()['rows'][:1_500]
-    project_names = [row['project'] for row in rows]
+    project_names = [
+        (row['project'], row['download_count'], rank)
+        for rank, row in enumerate(rows, start=1)
+    ]
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {
-            executor.submit(process_project, index, proj)
-            for index, proj in enumerate(project_names, start=1)
+            executor.submit(process_project, index, proj, download_count, rank)
+            for index, (proj, download_count, rank) in enumerate(project_names, start=1)
         }
         sdists = {fut.result() for fut in concurrent.futures.as_completed(futures)}
     sdists.discard(None)
@@ -81,119 +85,164 @@ def main() -> int:
     return 0
 
 
-def process_project(index, proj):
+def process_project(index, proj, download_count, rank):
     try:
-        if (url := sdist_url(http, proj)) is None:
+        metadata = sdist_url(http, index, proj)
+        if metadata is None:
             return None
+        url, upload_time = metadata
         filename = url.rpartition('/')[2]
         archive_data = http.request('GET', url).data
         print(f'{index:6,}: Downloaded {filename} for {proj!r}')
-        extract_archive(filename, archive_data, proj)
+
+        # Group projects by first two letters, excluding 'py'
+        prefix = proj.removeprefix('py').removeprefix('-')[:2] or proj
+        project_root = EXTRACTED_ROOT / prefix / proj
+        project_root.mkdir(parents=True, exist_ok=True)
+
+        sdist_metadata = {
+            'url': url,
+            'filename': filename,
+            'upload_time': upload_time,
+            'download_count': download_count,
+            'rank': rank,
+        }
+        (project_root / '__sdist_metadata__.json').write_text(
+            json.dumps(sdist_metadata, ensure_ascii=False, indent=0),
+            encoding='utf-8',
+        )
+
+        extract_archive(index, filename, archive_data, project_root)
         return filename
     except Exception:
-        print(f'Fetching {proj!r} failed')
+        print(f'{index:6,}: Fetching {proj!r} failed')
         traceback.print_exc()
 
 
-def sdist_url(http: urllib3.PoolManager, project_name: str) -> str | None:
+def sdist_url(
+    http: urllib3.PoolManager, index: int, project_name: str
+) -> tuple[str, str] | None:
     data = http.request('GET', f'https://pypi.org/pypi/{project_name}/json').json()
     for entry in data['urls']:
         if entry['packagetype'] == 'sdist':
-            return entry['url']
-    print(f'No source distribution for {project_name!r}')
+            return entry['url'], entry['upload_time_iso_8601']
+    print(f'{index:6,}: No source distribution for {project_name!r}')
     return None
 
 
-def extract_archive(filename: str, content: bytes, project_name: str):
-    print(f'Extracting {filename!r}')
+def extract_archive(index: int, filename: str, content: bytes, project_root: Path):
+    print(f'{index:6,}: Extracting {filename!r}')
     stream = BytesIO(content)
     if filename.endswith(('.tar.gz', '.tgz')):
-        return extract_archive_tar_gzip(filename, stream, project_name)
+        return extract_archive_tar_gzip(index, filename, stream, project_root)
     if filename.endswith('.tar.bz2'):
-        return extract_archive_tar_bzip2(filename, stream, project_name)
+        return extract_archive_tar_bzip2(index, filename, stream, project_root)
     if filename.endswith('.zip'):
-        return extract_archive_zip(filename, stream, project_name)
+        return extract_archive_zip(index, filename, stream, project_root)
     return None
 
 
-def extract_archive_tar_gzip(filename: str, stream: BytesIO, project_name: str):
+def extract_archive_tar_gzip(
+    index: int, filename: str, stream: BytesIO, project_root: Path
+):
     with tarfile.TarFile.gzopen(filename, mode='r', fileobj=stream) as tar:
-        return extract_archive_tar(tar, project_name)
+        return extract_archive_tar(index, tar, project_root)
 
 
-def extract_archive_tar_bzip2(filename: str, stream: BytesIO, project_name: str):
+def extract_archive_tar_bzip2(
+    index: int, filename: str, stream: BytesIO, project_root: Path
+):
     with tarfile.TarFile.bz2open(filename, mode='r', fileobj=stream) as tar:
-        return extract_archive_tar(tar, project_name)
+        return extract_archive_tar(index, tar, project_root)
 
 
-def extract_archive_tar(tar: tarfile.TarFile, /, project_name: str):
+def extract_archive_tar(index: int, tar: tarfile.TarFile, /, project_root: Path):
+    extracted = set()
     while (member := tar.next()) is not None:
         if not member.isfile():
             continue
 
         path = Path(member.name)
-        if not keep_file(path):
+        path_normcase = path.as_posix().casefold()
+        if path_normcase in extracted or not keep_file(index, path, member.size):
             continue
 
-        if (size_mb := member.size / 1000 / 1000) > 5:
-            print(f'Skipping {path} (too large: {size_mb:.2f}MB)')
-            continue
-
-        parts_rm_first = valid_cross_platform_path(path).parts[1:]
-        dest_path = EXTRACTED_ROOT.joinpath(project_name, *parts_rm_first)
-        dest_path.parent.mkdir(parents=True, exist_ok=True)
+        dest_path = cross_platform_dest_path(
+            path, archive_filename=tar.name, project_root=project_root
+        )
         try:
             tar.makefile(member, dest_path)
         except OSError:
-            print(f'Failed to extract {path!r} to {dest_path!r}!')
+            print(f'{index:6,}: Failed to extract {path!r} to {dest_path!r}!')
+        extracted.add(path_normcase)
 
 
-def extract_archive_zip(filename: str, stream: BytesIO, project_name: str):
+def extract_archive_zip(index: int, filename: str, stream: BytesIO, project_root: Path):
     zip = zipfile.ZipFile(stream)
     zip.filename = filename
+    extracted = set()
     with zip:
         for member in zip.filelist:
             if member.is_dir():
                 continue
+
             path = Path(member.filename)
-            if not keep_file(path):
+            path_normcase = path.as_posix().casefold()
+            if path_normcase in extracted or not keep_file(
+                index, path, member.file_size
+            ):
                 continue
 
-            # Remove large files
-            if (size_mb := member.file_size / 1000 / 1000) > 5:
-                print(f'Skipping {path} (too large: {size_mb:.2f}MB)')
-                continue
-
-            # Remove version from archive filename
-            parts_rm_first = valid_cross_platform_path(path).parts[1:]
-            dest_path = EXTRACTED_ROOT.joinpath(project_name, *parts_rm_first)
-            dest_path.parent.mkdir(parents=True, exist_ok=True)
+            dest_path = cross_platform_dest_path(
+                path, archive_filename=zip.filename, project_root=project_root
+            )
             try:
                 with zip.open(member) as source, open(dest_path, 'wb') as target:
                     shutil.copyfileobj(source, target)
-
             except OSError:
-                print(f'Failed to extract {path!r} to {dest_path!r}!')
+                print(f'{index:6,}: Failed to extract {path!r} to {dest_path!r}!')
+            extracted.add(path_normcase)
 
 
-def keep_file(path: Path) -> bool:
+def keep_file(index: int, path: Path, size: int) -> bool:
     if any(part.lower() in DIRECTORY_BLACKLIST for part in path.parts):
         return False
+
+    if '..' in path.parts:
+        print(f'{index:6,}: Skipping {path} (would extract to parent directory)')
+        return False
+
+    # Remove large files
+    if (size_mb := size / 1000 / 1000) > 5:
+        print(f'{index:6,}: Skipping {path} (too large: {size_mb:.2f}MB)')
+        return False
+
     if path.name in METADATA_FILES:
         return True
+
     if path.suffix.lower() in FILE_EXTENSIONS:
         return True
+
     return False
 
 
-PATH_RESERVED = dict.fromkeys((*range(0x20), *rb'?<>\:*|"'), '_')
+_ILLEGAL = dict.fromkeys((*range(0x20), *rb'?<>\:*|"'), '_')
 
 
-def valid_cross_platform_path(path: Path, /) -> Path:
+def cross_platform_dest_path(
+    path: Path, *, archive_filename: str, project_root: Path
+) -> Path:
+    # Remove version from archive filename
+    if Path(archive_filename).name.startswith(f'{path.parts[0]}.'):
+        part_parts = path.parts[1:]
+    else:
+        part_parts = path.parts
+
     # Make filenames valid for Windows
-    if path.name.endswith((' ', '.')):
-        return path.with_name(f'{path}_')
-    return Path(*(p.translate(PATH_RESERVED) for p in path.parts))
+    parts = filter(None, (p.translate(_ILLEGAL).rstrip(' .') for p in part_parts))
+    dest_path = Path(project_root, *parts)
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+    return dest_path
 
 
 if __name__ == '__main__':
