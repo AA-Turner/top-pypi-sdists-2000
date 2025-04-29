@@ -66,7 +66,7 @@ DIRECTORY_BLACKLIST = frozenset({
 def main() -> int:
     start = time.perf_counter()
 
-    rows = http.request('GET', PACKAGES_URL).json()['rows'][:1_500]
+    rows = http.request('GET', PACKAGES_URL).json()['rows'][:2_000]
     project_names = [
         (row['project'], row['download_count'], rank)
         for rank, row in enumerate(rows, start=1)
