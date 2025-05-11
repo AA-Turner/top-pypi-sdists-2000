@@ -60,6 +60,13 @@ class pyzstd_build_ext(build_ext):
         # Build debug build
         self.debug = self.PYZSTD_DEBUG
 
+        if self.compiler.compiler_type in ('unix', 'mingw32', 'cygwin'):
+            # Remove -Wunreachable-code default args based on how Python was build
+            # see distutils.sysconfig.get_config_var("CFLAGS")
+            # see https://github.com/facebook/zstd/issues/4308
+            self.compiler.compiler = [part for part in self.compiler.compiler if part != '-Wunreachable-code']
+            self.compiler.compiler_so = [part for part in self.compiler.compiler_so if part != '-Wunreachable-code']
+
         for extension in self.extensions:
             if self.compiler.compiler_type in ('unix', 'mingw32', 'cygwin'):
                 # -g0:
@@ -159,20 +166,20 @@ def do_setup():
 
     if CFFI:
         # Packages
-        packages = ['pyzstd', 'pyzstd.cffi']
+        packages = ['pyzstd', 'pyzstd._cffi']
 
         # Binary extension
-        kwargs['module_name'] = 'pyzstd.cffi._cffi_zstd'
+        kwargs['module_name'] = 'pyzstd._cffi._cffi_zstd'
 
         sys.path.append('build_script')
         import pyzstd_build_cffi
         binary_extension = pyzstd_build_cffi.get_extension(**kwargs)
     else:  # C implementation
         # Packages
-        packages = ['pyzstd', 'pyzstd.c']
+        packages = ['pyzstd', 'pyzstd._c']
 
         # Binary extension
-        kwargs['name'] = 'pyzstd.c._zstd'
+        kwargs['name'] = 'pyzstd._c._zstd'
         kwargs['sources'].append('src/bin_ext/pyzstd.c')
         if MULTI_PHASE_INIT:
             # Use multi-phase initialization (PEP-489) on CPython 3.11.
@@ -197,6 +204,7 @@ def do_setup():
         url='https://github.com/Rogdham/pyzstd',
         license='BSD-3-Clause',
         python_requires='>=3.5',
+        install_requires=["typing-extensions>=4.13.2 ; python_version<'3.13'"],
 
         classifiers=[
             "Development Status :: 5 - Production/Stable",
@@ -222,7 +230,7 @@ def do_setup():
         test_suite='tests'
     )
 
-    if sys.version_info < (3, 8):
+    if sys.version_info < (3, 9):
         print()
         print("WARNING")
         print("    Python {} has reached end of life.".format(platform.python_version()))

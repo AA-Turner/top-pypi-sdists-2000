@@ -245,7 +245,7 @@ class BaseLLMHTTPHandler:
         stream: Optional[bool] = False,
         fake_stream: bool = False,
         api_key: Optional[str] = None,
-        headers: Optional[dict] = {},
+        headers: Optional[Dict[str, Any]] = None,
         client: Optional[Union[HTTPHandler, AsyncHTTPHandler]] = None,
         provider_config: Optional[BaseConfig] = None,
     ):
@@ -680,7 +680,7 @@ class BaseLLMHTTPHandler:
         api_key: Optional[str] = None,
         client: Optional[Union[HTTPHandler, AsyncHTTPHandler]] = None,
         aembedding: bool = False,
-        headers={},
+        headers: Optional[Dict[str, Any]] = None,
     ) -> EmbeddingResponse:
         provider_config = ProviderConfigManager.get_provider_embedding_config(
             model=model, provider=litellm.LlmProviders(custom_llm_provider)
@@ -688,7 +688,7 @@ class BaseLLMHTTPHandler:
         # get config from model, custom llm provider
         headers = provider_config.validate_environment(
             api_key=api_key,
-            headers=headers,
+            headers=headers or {},
             model=model,
             messages=[],
             optional_params=optional_params,
@@ -821,7 +821,7 @@ class BaseLLMHTTPHandler:
         timeout: Optional[Union[float, httpx.Timeout]],
         model_response: RerankResponse,
         _is_async: bool = False,
-        headers: dict = {},
+        headers: Optional[Dict[str, Any]] = None,
         api_key: Optional[str] = None,
         api_base: Optional[str] = None,
         client: Optional[Union[HTTPHandler, AsyncHTTPHandler]] = None,
@@ -829,7 +829,7 @@ class BaseLLMHTTPHandler:
         # get config from model, custom llm provider
         headers = provider_config.validate_environment(
             api_key=api_key,
-            headers=headers,
+            headers=headers or {},
             model=model,
         )
 
@@ -951,7 +951,7 @@ class BaseLLMHTTPHandler:
         custom_llm_provider: str,
         client: Optional[Union[HTTPHandler, AsyncHTTPHandler]] = None,
         atranscription: bool = False,
-        headers: dict = {},
+        headers: Optional[Dict[str, Any]] = None,
         provider_config: Optional[BaseAudioTranscriptionConfig] = None,
     ) -> TranscriptionResponse:
         if provider_config is None:
@@ -960,7 +960,7 @@ class BaseLLMHTTPHandler:
             )
         headers = provider_config.validate_environment(
             api_key=api_key,
-            headers=headers,
+            headers=headers or {},
             model=model,
             messages=[],
             optional_params=optional_params,
@@ -1034,10 +1034,6 @@ class BaseLLMHTTPHandler:
         stream: Optional[bool] = False,
         kwargs: Optional[Dict[str, Any]] = None,
     ) -> Union[AnthropicMessagesResponse, AsyncIterator]:
-        from litellm.llms.anthropic.experimental_pass_through.messages.handler import (
-            AnthropicMessagesHandler,
-        )
-
         if client is None or not isinstance(client, AsyncHTTPHandler):
             async_httpx_client = get_async_httpx_client(
                 llm_provider=litellm.LlmProviders.ANTHROPIC
@@ -1131,11 +1127,13 @@ class BaseLLMHTTPHandler:
         logging_obj.model_call_details["httpx_response"] = response
 
         if stream:
-            return await AnthropicMessagesHandler._handle_anthropic_streaming(
-                response=response,
+            completion_stream = anthropic_messages_provider_config.get_async_streaming_response_iterator(
+                model=model,
+                httpx_response=response,
                 request_body=request_body,
                 litellm_logging_obj=logging_obj,
             )
+            return completion_stream
         else:
             return anthropic_messages_provider_config.transform_anthropic_messages_response(
                 model=model,

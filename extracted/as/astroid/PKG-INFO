@@ -1,20 +1,18 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: astroid
-Version: 3.3.9
+Version: 3.3.10
 Summary: An abstract syntax tree for Python with inference support.
-License: LGPL-2.1-or-later
-Project-URL: Docs, https://pylint.readthedocs.io/projects/astroid/en/latest/
-Project-URL: Source Code, https://github.com/pylint-dev/astroid
+License-Expression: LGPL-2.1-or-later
 Project-URL: Bug tracker, https://github.com/pylint-dev/astroid/issues
 Project-URL: Discord server, https://discord.gg/Egy6P8AMB5
-Keywords: static code analysis,python,abstract syntax tree
+Project-URL: Docs, https://pylint.readthedocs.io/projects/astroid/en/latest/
+Project-URL: Source Code, https://github.com/pylint-dev/astroid
+Keywords: abstract syntax tree,python,static code analysis
 Classifier: Development Status :: 6 - Mature
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
@@ -30,7 +28,8 @@ Requires-Python: >=3.9.0
 Description-Content-Type: text/x-rst
 License-File: LICENSE
 License-File: CONTRIBUTORS.txt
-Requires-Dist: typing-extensions>=4.0.0; python_version < "3.11"
+Requires-Dist: typing-extensions>=4; python_version < "3.11"
+Dynamic: license-file
 
 Astroid
 =======

@@ -1,13 +1,13 @@
 Metadata-Version: 2.4
 Name: dnachisel
-Version: 3.2.15
+Version: 3.2.16
 Summary: Optimize DNA sequences under constraints.
 Author: Zulko
 License-Expression: MIT
 Project-URL: Homepage, https://github.com/Edinburgh-Genome-Foundry/dnachisel
 Keywords: DNA,gene,design,codon,optimization,constraints,synthetic biology
 Description-Content-Type: text/x-rst
-License-File: LICENCE.txt
+License-File: LICENSE
 Requires-Dist: numpy
 Requires-Dist: biopython
 Requires-Dist: proglog

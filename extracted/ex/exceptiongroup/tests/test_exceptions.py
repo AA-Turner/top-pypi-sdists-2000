@@ -1,5 +1,6 @@
 # Copied from the standard library
 import collections.abc
+import platform
 import sys
 import unittest
 
@@ -22,14 +23,14 @@ class TestExceptionGroupTypeHierarchy(unittest.TestCase):
 
 class BadConstructorArgs(unittest.TestCase):
     def test_bad_EG_construction__too_few_args(self):
-        if sys.version_info >= (3, 11):
+        if sys.version_info >= (3, 11) and platform.python_implementation() != "PyPy":
             MSG = (
                 r"BaseExceptionGroup.__new__\(\) takes exactly 2 arguments \(1 given\)"
             )
         else:
             MSG = (
                 r"__new__\(\) missing 1 required positional argument: "
-                r"'_ExceptionGroup__exceptions'"
+                r"'(_(Base)?ExceptionGroup__)?exceptions'"
             )
 
         with self.assertRaisesRegex(TypeError, MSG):
@@ -38,7 +39,7 @@ class BadConstructorArgs(unittest.TestCase):
             ExceptionGroup([ValueError("no msg")])
 
     def test_bad_EG_construction__too_many_args(self):
-        if sys.version_info >= (3, 11):
+        if sys.version_info >= (3, 11) and platform.python_implementation() != "PyPy":
             MSG = (
                 r"BaseExceptionGroup.__new__\(\) takes exactly 2 arguments \(3 given\)"
             )
@@ -843,3 +844,45 @@ def test_repr():
 
     group = ExceptionGroup("foo", [ValueError(1), RuntimeError("bar")])
     assert repr(group) == "ExceptionGroup('foo', [ValueError(1), RuntimeError('bar')])"
+
+
+def test_bug_exceptiongroup_has_no_init():
+    assert (
+        BaseExceptionGroup.__init__
+        is ExceptionGroup.__init__
+        is not BaseException.__init__
+    )
+    for base in [BaseExceptionGroup, ExceptionGroup]:
+
+        class MyException(Exception):
+            def __init__(self, message):
+                pytest.fail("should not be reached")
+
+        class MyExceptionGroup(base, MyException):
+            pass
+
+        MyExceptionGroup(
+            "...", [Exception()]
+        )  # does not try to call MyException.__init__
+
+
+@pytest.mark.xfail(
+    platform.python_implementation() == "PyPy",
+    reason="PyPy 3.11 does not match CPython behavior in repr()",
+)
+def test_exceptions_mutate_original_sequence():
+    if platform.python_implementation() == "PyPy":
+        pytest.skip("PyPy does not support mutation of a tuple")
+
+    exceptions = [ValueError(1), KeyboardInterrupt()]
+    excgrp = BaseExceptionGroup("foo", exceptions)
+    exc_tuple = excgrp.exceptions
+    assert isinstance(exc_tuple, tuple)
+    assert list(exc_tuple) == exceptions
+
+    exceptions.append(KeyError("bar"))
+    assert excgrp.exceptions is exc_tuple
+    assert repr(excgrp) == (
+        "BaseExceptionGroup('foo', [ValueError(1), KeyboardInterrupt(), "
+        "KeyError('bar')])"
+    )

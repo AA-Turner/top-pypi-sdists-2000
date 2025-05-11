@@ -757,7 +757,7 @@ class Queue:
         ttl: Optional[int] = None,
         failure_ttl: Optional[int] = None,
         description: Optional[str] = None,
-        depends_on: Optional[List] = None,
+        depends_on: Optional['JobDependencyType'] = None,
         job_id: Optional[str] = None,
         at_front: bool = False,
         meta: Optional[Dict] = None,
@@ -856,7 +856,7 @@ class Queue:
                 'on_failure': job_data.on_failure,
                 'on_stopped': job_data.on_stopped,
                 'group_id': group_id,
-                'repeat': job_data.repeat
+                'repeat': job_data.repeat,
             }
 
         # Enqueue jobs without dependencies
