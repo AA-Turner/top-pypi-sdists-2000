@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: Office365-REST-Python-Client
-Version: 2.6.1
+Version: 2.6.2
 Summary: Microsoft 365 & Microsoft Graph Library for Python
 Home-page: https://github.com/vgrem/Office365-REST-Python-Client
 Author: Vadim Gremyachev

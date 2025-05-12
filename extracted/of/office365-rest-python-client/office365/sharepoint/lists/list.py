@@ -13,6 +13,7 @@ from office365.sharepoint.changes.collection import ChangeCollection
 from office365.sharepoint.changes.log_item_query import ChangeLogItemQuery
 from office365.sharepoint.changes.query import ChangeQuery
 from office365.sharepoint.changes.token import ChangeToken
+from office365.sharepoint.compliance.tag import ComplianceTag
 from office365.sharepoint.contenttypes.collection import ContentTypeCollection
 from office365.sharepoint.customactions.element_collection import (
     CustomActionElementCollection,
@@ -172,6 +173,23 @@ class List(SecurableObject):
             self, "GetBloomFilter", None, payload, None, return_type
         )
         self.context.add_query(qry)
+        return return_type
+
+    def get_compliance_tag(self):
+        """ """
+        from office365.sharepoint.compliance.store_proxy import SPPolicyStoreProxy
+
+        return_type = ClientResult(self.context, ComplianceTag())
+        list_folder = self.root_folder
+
+        def _get_compliance_tag():
+            SPPolicyStoreProxy.get_list_compliance_tag(
+                self.context,
+                list_folder.serverRelativeUrl,
+                return_type=return_type,
+            )
+
+        list_folder.ensure_property("ServerRelativeUrl", _get_compliance_tag)
         return return_type
 
     def get_metadata_navigation_settings(self):
@@ -407,7 +425,7 @@ class List(SecurableObject):
         :param ClientResult[dict] return_type: The return type.
         """
         if return_type is None:
-            return_type = ClientResult(context, dict())
+            return_type = ClientResult(context, {})
         payload = {
             "listFullUrl": list_full_url,
             "parameters": parameters,
@@ -433,7 +451,7 @@ class List(SecurableObject):
         :param ClientResult[dict] return_type: The return type.
         """
         if return_type is None:
-            return_type = ClientResult(context, dict())
+            return_type = ClientResult(context, {})
         payload = {
             "parameters": parameters,
         }
@@ -758,7 +776,7 @@ class List(SecurableObject):
         :param int render_options: Specifies the type of output to return.
         :param bool expand_groups: Specifies whether to expand the grouping or not.
         """
-        return_type = ClientResult(self.context, dict())
+        return_type = ClientResult(self.context, {})
         if view_xml is None:
             view_xml = "<View/>"
         payload = {
@@ -823,6 +841,22 @@ class List(SecurableObject):
             doc_mng.reset_doc_ids_in_library(self.root_folder.serverRelativeUrl)
 
         self.ensure_property("RootFolder", _loaded)
+        return self
+
+    def set_exempt_from_block_download_of_non_viewable_files(self, value):
+        """
+        Method to set the ExemptFromBlockDownloadOfNonViewableFiles property.
+        Ensures that only a tenant administrator can set the exemption.
+        """
+        qry = ServiceOperationQuery(
+            self,
+            "SetExemptFromBlockDownloadOfNonViewableFiles",
+            [value],
+            None,
+            None,
+            None,
+        )
+        self.context.add_query(qry)
         return self
 
     @property

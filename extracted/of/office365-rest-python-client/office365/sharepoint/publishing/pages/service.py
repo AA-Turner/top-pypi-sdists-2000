@@ -1,10 +1,14 @@
 from typing import TYPE_CHECKING, Optional
 
 from office365.runtime.client_result import ClientResult
+from office365.runtime.client_value_collection import ClientValueCollection
 from office365.runtime.paths.resource_path import ResourcePath
 from office365.runtime.queries.service_operation import ServiceOperationQuery
 from office365.runtime.types.collections import StringCollection
 from office365.sharepoint.administration.orgassets.org_assets import OrgAssets
+from office365.sharepoint.clientsidecomponent.query_result import (
+    SPClientSideComponentQueryResult,
+)
 from office365.sharepoint.entity import Entity
 from office365.sharepoint.files.file import File
 from office365.sharepoint.publishing.file_picker_options import FilePickerOptions
@@ -50,10 +54,11 @@ class SitePageService(Entity):
     def entity_type_name(self):
         return "SP.Publishing.SitePageService"
 
-    def create_page(self, title):
-        # type: (str) -> SitePage
+    def create_page(self, title, language=None):
+        # type: (str, Optional[str]) -> SitePage
         """Create a new sitePage in the site pages list in a site.
         :param str title: The title of Site Page
+        :param str language: The language of the Site Page.
         """
 
         def _page_created(return_type):
@@ -61,13 +66,13 @@ class SitePageService(Entity):
 
             def _draft_saved(result):
                 # type: (ClientResult[bool]) -> None
-                pass
+                return_type.get()
 
             return_type.save_draft(title=title).after_execute(
                 _draft_saved, execute_first=True
             )
 
-        return self.pages.add().after_execute(_page_created).get()
+        return self.pages.add().after_execute(_page_created)
 
     def create_and_publish_page(self, title):
         """
@@ -155,8 +160,24 @@ class SitePageService(Entity):
         return return_type
 
     @staticmethod
-    def get_available_full_page_applications():
-        pass
+    def get_available_full_page_applications(
+        context, include_errors=None, project=None
+    ):
+        return_type = ClientResult(
+            context, ClientValueCollection(SPClientSideComponentQueryResult)
+        )
+        params = {"includeErrors": include_errors, "project": project}
+        qry = ServiceOperationQuery(
+            SitePageService(context),
+            "GetAvailableFullPageApplications",
+            None,
+            params,
+            None,
+            return_type,
+            True,
+        )
+        context.add_query(qry)
+        return return_type
 
     @staticmethod
     def is_file_picker_external_image_search_enabled(context):

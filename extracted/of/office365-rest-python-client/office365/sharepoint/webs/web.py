@@ -190,6 +190,20 @@ class Web(SecurableObject):
         self.ensure_properties(["AccessRequestListUrl"], _get_access_request_list)
         return return_type
 
+    def get_adaptive_card_extensions(self, include_errors=None, project=None):
+        payload = {
+            "includeErrors": include_errors,
+            "project": project,
+        }
+        return_type = ClientResult(
+            self.context, ClientValueCollection(SPClientSideComponentQueryResult)
+        )
+        qry = ServiceOperationQuery(
+            self, "GetAdaptiveCardExtensions", None, payload, None, return_type
+        )
+        self.context.add_query(qry)
+        return return_type
+
     def get_document_by_doc_id(self, doc_id):
         """ """
         return_type = ClientResult(self.context)
@@ -252,7 +266,7 @@ class Web(SecurableObject):
         """
         if view_xml is None:
             view_xml = "<View><Query></Query></View>"
-        return_type = ClientResult(self.context, dict())
+        return_type = ClientResult(self.context, {})
 
         def _get_list_data_as_stream():
             list_abs_url = self.url + path
@@ -947,6 +961,7 @@ class Web(SecurableObject):
         return return_type
 
     def get_file_by_server_relative_url(self, server_relative_url):
+        # type: (str) -> File
         """
         Returns the file object located at the specified server-relative URL, for example:
             - "/sites/MySite/Shared Documents/MyDocument.docx"
@@ -964,6 +979,7 @@ class Web(SecurableObject):
         )
 
     def get_file_by_server_relative_path(self, path):
+        # type: (str) -> File
         """Returns the file object located at the specified server-relative path, for example:
             - "/sites/MySite/Shared Documents/MyDocument.docx"
             - "Shared Documents/MyDocument.docx"
@@ -981,6 +997,7 @@ class Web(SecurableObject):
         )
 
     def get_folder_by_server_relative_url(self, url):
+        # type: (str) -> Folder
         """Returns the folder object located at the specified server-relative URL.
 
         :param str url: Specifies the server-relative URL for the folder.
@@ -994,6 +1011,7 @@ class Web(SecurableObject):
         )
 
     def get_folder_by_server_relative_path(self, decoded_url):
+        # type: (str) -> Folder
         """Returns the folder object located at the specified server-relative URL, for example:
              - "/sites/MySite/Shared Documents"
              - "Shared Documents"
@@ -2673,6 +2691,7 @@ class Web(SecurableObject):
                 "SiteGroups": self.site_groups,
                 "SiteUsers": self.site_users,
                 "SiteUserInfoList": self.site_user_info_list,
+                "SupportedUILanguageIds": self.supported_ui_language_ids,
                 "TenantAppCatalog": self.tenant_app_catalog,
                 "TitleResource": self.title_resource,
                 "UserCustomActions": self.user_custom_actions,

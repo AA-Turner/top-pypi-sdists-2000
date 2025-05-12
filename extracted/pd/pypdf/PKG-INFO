@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pypdf
-Version: 5.4.0
+Version: 5.5.0
 Summary: A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files
 Author-email: Mathieu Fenniak <biziqe@mathieu.fenniak.net>
 Maintainer: stefan6419846
@@ -28,7 +28,7 @@ Requires-Dist: PyCryptodome ; extra == "cryptodome"
 Requires-Dist: black ; extra == "dev"
 Requires-Dist: flit ; extra == "dev"
 Requires-Dist: pip-tools ; extra == "dev"
-Requires-Dist: pre-commit<2.18.0 ; extra == "dev"
+Requires-Dist: pre-commit ; extra == "dev"
 Requires-Dist: pytest-cov ; extra == "dev"
 Requires-Dist: pytest-socket ; extra == "dev"
 Requires-Dist: pytest-timeout ; extra == "dev"
@@ -103,9 +103,8 @@ page = reader.pages[0]
 text = page.extract_text()
 ```
 
-pypdf can do a lot more, e.g. splitting, merging, reading and creating
-annotations, decrypting and encrypting, and more. Check out [the
-documentation](https://pypdf.readthedocs.io/en/stable/) for additional usage
+pypdf can do a lot more, e.g. splitting, merging, reading and creating annotations, decrypting and encrypting. Check out the
+[documentation](https://pypdf.readthedocs.io/en/stable/) for additional usage
 examples!
 
 For questions and answers, visit
@@ -120,9 +119,7 @@ See the [CONTRIBUTING.md](https://github.com/py-pdf/pypdf/blob/main/CONTRIBUTING
 
 ### Q&A
 
-The experience pypdf users have covers the whole range from beginners who
-want to make their live easier to experts who developed software before PDF
-existed. You can contribute to the pypdf community by answering questions
+The experience pypdf users have covers the whole range from beginner to expert. You can contribute to the pypdf community by answering questions
 on [StackOverflow](https://stackoverflow.com/questions/tagged/pypdf),
 helping in [discussions](https://github.com/py-pdf/pypdf/discussions),
 and asking users who report issues for [MCVE](https://stackoverflow.com/help/minimal-reproducible-example)'s (Code + example PDF!).

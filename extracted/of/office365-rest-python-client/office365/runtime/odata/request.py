@@ -99,7 +99,7 @@ class ODataRequest(ClientRequest):
             elif isinstance(json, dict):
                 for name, value in json.items():
                     if isinstance(json_format, JsonLightFormat):
-                        is_valid = name != "__metadata" and not (
+                        is_valid = name != json_format.metadata_type and not (
                             isinstance(value, dict) and "__deferred" in value
                         )
                     else:
@@ -155,5 +155,3 @@ class ODataRequest(ClientRequest):
         media_type = self.json_format.media_type
         request.ensure_header("Content-Type", media_type)
         request.ensure_header("Accept", media_type)
-        if self.json_format.etag is not None:
-            request.ensure_header("If-Match", self.json_format.etag)

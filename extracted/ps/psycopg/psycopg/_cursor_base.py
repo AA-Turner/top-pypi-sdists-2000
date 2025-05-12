@@ -565,7 +565,7 @@ class BaseCursor(Generic[ConnectionType, Row]):
                 name, pgq.params, param_formats=pgq.formats, result_format=fmt
             )
 
-    def _check_result_for_fetch(self) -> None:
+    def _check_result_for_fetch(self) -> PGresult:
         if self.closed:
             raise e.InterfaceError("the cursor is closed")
 
@@ -573,13 +573,23 @@ class BaseCursor(Generic[ConnectionType, Row]):
             raise e.ProgrammingError("no result available")
 
         if (status := res.status) == TUPLES_OK:
-            return
+            return res
         elif status == FATAL_ERROR:
             raise e.error_from_result(res, encoding=self._encoding)
         elif status == PIPELINE_ABORTED:
             raise e.PipelineAborted("pipeline aborted")
         else:
-            raise e.ProgrammingError("the last operation didn't produce a result")
+            if res.command_status:
+                detail = f" (command status: {res.command_status.decode()})"
+            else:
+                try:
+                    status_name = pq.ExecStatus(status).name
+                except ValueError:
+                    status_name = f"{status} - unknown"
+                detail = f" (result status: {status_name})"
+            raise e.ProgrammingError(
+                f"the last operation didn't produce records{detail}"
+            )
 
     def _check_copy_result(self, result: PGresult) -> None:
         """
@@ -597,15 +607,14 @@ class BaseCursor(Generic[ConnectionType, Row]):
             )
 
     def _scroll(self, value: int, mode: str) -> None:
-        self._check_result_for_fetch()
-        assert self.pgresult
+        res = self._check_result_for_fetch()
         if mode == "relative":
             newpos = self._pos + value
         elif mode == "absolute":
             newpos = value
         else:
             raise ValueError(f"bad mode: {mode}. It should be 'relative' or 'absolute'")
-        if not 0 <= newpos < self.pgresult.ntuples:
+        if not 0 <= newpos < res.ntuples:
             raise IndexError("position out of bound")
         self._pos = newpos
 

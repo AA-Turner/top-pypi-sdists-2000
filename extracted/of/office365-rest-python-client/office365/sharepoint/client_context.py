@@ -405,7 +405,7 @@ class ClientContext(ClientRuntimeContext):
 
         from office365.sharepoint.brandcenter.brand_center import BrandCenter
 
-        return BrandCenter(self, ResourcePath("BrandCenter"))
+        return BrandCenter(self)
 
     @property
     def client_people_picker(self):
@@ -416,6 +416,16 @@ class ClientContext(ClientRuntimeContext):
         )
 
         return ClientPeoplePickerWebServiceInterface(self)
+
+    @property
+    def component_context_info(self):
+        """ComponentContextInfo alias"""
+
+        from office365.sharepoint.clientsidecomponent.component_context_info import (
+            ComponentContextInfo,
+        )
+
+        return ComponentContextInfo(self, ResourcePath("ComponentContextInfo"))
 
     @property
     def consumer_permissions(self):
@@ -630,6 +640,14 @@ class ClientContext(ClientRuntimeContext):
         from office365.sharepoint.portal.sites.manager import SPSiteManager
 
         return SPSiteManager(self, ResourcePath("spSiteManager"))
+
+    @property
+    def site_manager_svc(self):
+        """Alias to SiteManagerService."""
+
+        from office365.sharepoint.sites.manager.service import SiteManagerService
+
+        return SiteManagerService(self)
 
     @property
     def social_feed_manager(self):

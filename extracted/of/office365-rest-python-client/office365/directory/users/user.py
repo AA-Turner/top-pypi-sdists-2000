@@ -2,6 +2,8 @@ import json
 from datetime import datetime
 from typing import List, Optional
 
+from typing_extensions import Self
+
 from office365.communications.onlinemeetings.collection import OnlineMeetingCollection
 from office365.communications.presences.presence import Presence
 from office365.delta_collection import DeltaCollection
@@ -12,6 +14,9 @@ from office365.directory.audit.signins.activity import SignInActivity
 from office365.directory.authentication.authentication import Authentication
 from office365.directory.extensions.extension import Extension
 from office365.directory.identities.object_identity import ObjectIdentity
+from office365.directory.identitygovernance.termsofuse.agreement_acceptance import (
+    AgreementAcceptance,
+)
 from office365.directory.insights.office_graph import OfficeGraphInsights
 from office365.directory.licenses.assigned_license import AssignedLicense
 from office365.directory.licenses.assigned_plan import AssignedPlan
@@ -36,6 +41,7 @@ from office365.onedrive.sites.site import Site
 from office365.onenote.onenote import Onenote
 from office365.outlook.calendar.attendees.base import AttendeeBase
 from office365.outlook.calendar.calendar import Calendar
+from office365.outlook.calendar.dateTimeTimeZone import DateTimeTimeZone
 from office365.outlook.calendar.events.event import Event
 from office365.outlook.calendar.events.reminder import Reminder
 from office365.outlook.calendar.group import CalendarGroup
@@ -51,7 +57,8 @@ from office365.outlook.mail.mailbox_settings import MailboxSettings
 from office365.outlook.mail.messages.collection import MessageCollection
 from office365.outlook.mail.messages.message import Message
 from office365.outlook.mail.recipient import Recipient
-from office365.outlook.mail.tips import MailTips
+from office365.outlook.mail.tips.tips import MailTips
+from office365.outlook.person import Person
 from office365.outlook.user import OutlookUser
 from office365.planner.user import PlannerUser
 from office365.runtime.client_result import ClientResult
@@ -66,6 +73,7 @@ from office365.runtime.queries.service_operation import ServiceOperationQuery
 from office365.runtime.types.collections import StringCollection
 from office365.teams.chats.collection import ChatCollection
 from office365.teams.collection import TeamCollection
+from office365.teams.teamwork.shiftmanagement.user_solution_root import UserSolutionRoot
 from office365.teams.teamwork.user import UserTeamwork
 from office365.teams.viva.employee_experience_user import EmployeeExperienceUser
 from office365.todo.todo import Todo
@@ -76,6 +84,60 @@ class User(DirectoryObject):
 
     def __repr__(self):
         return self.user_principal_name or self.id or self.entity_type_name
+
+    def enable_automatic_replies_setting(
+        self,
+        status,
+        scheduled_start_datetime,
+        scheduled_end_datetime,
+        internal_reply_message=None,
+        external_reply_message=None,
+    ):
+        # type: (str, datetime, datetime, str, str) -> Self
+        """
+        Enable, configure, automatic replies (notify people automatically upon receipt of their email)
+
+        """
+        from office365.outlook.mail.automatic_replies_setting import (
+            AutomaticRepliesSetting,
+        )
+
+        setting = AutomaticRepliesSetting(
+            status=status,
+            scheduled_start_datetime=DateTimeTimeZone.parse(scheduled_start_datetime),
+            scheduled_end_datetime=DateTimeTimeZone.parse(scheduled_end_datetime),
+            internal_reply_message=internal_reply_message,
+            external_reply_message=external_reply_message,
+        )
+
+        def _construct_request(request):
+            payload = {"automaticRepliesSetting": setting.to_json()}
+            request.data = payload
+            request.url += "/mailboxSettings"
+
+        self.update().before_execute(_construct_request)
+        return self
+
+    def disable_automatic_replies_setting(self, clear_all=False):
+        """
+        Disable automatic replies (notify people automatically upon receipt of their email)
+        :param bool clear_all: If true, clear all automatic replies settings
+        """
+        from office365.outlook.mail.automatic_replies_setting import (
+            AutomaticRepliesSetting,
+        )
+
+        setting = AutomaticRepliesSetting(
+            status="disabled",
+        )
+
+        def _construct_request(request):
+            payload = {"automaticRepliesSetting": setting.to_json()}
+            request.data = payload
+            request.url += "/mailboxSettings"
+
+        self.update().before_execute(_construct_request)
+        return self
 
     def add_extension(self, name):
         """
@@ -210,9 +272,11 @@ class User(DirectoryObject):
         to_recipients,
         cc_recipients=None,
         bcc_recipients=None,
+        reply_to=None,
         save_to_sent_items=False,
+        body_type="Text",
     ):
-        # type: (str, str|ItemBody, List[str], List[str], List[str], bool) -> Message
+        # type: (str, str|ItemBody, List[str], List[str]|None, List[str]|None, List[str]|None, bool, str) -> Message
         """Send a new message on the fly
 
         :param str subject: The subject of the message.
@@ -220,12 +284,14 @@ class User(DirectoryObject):
         :param list[str] to_recipients: The To: recipients for the message.
         :param list[str] cc_recipients: The CC: recipients for the message.
         :param list[str] bcc_recipients: The BCC: recipients for the message.
+        :param list[str] reply_to: The Reply-To: : recipients for the reply to the message.
         :param bool save_to_sent_items: Indicates whether to save the message in Sent Items. Specify it only if
             the parameter is false; default is true
+        :param str body_type: The type of the message body. It can be "HTML" or "Text". Default is "Text".
         """
         return_type = Message(self.context)
         return_type.subject = subject
-        return_type.body = body
+        return_type.body = (body, body_type)
         [
             return_type.to_recipients.add(Recipient.from_email(email))
             for email in to_recipients
@@ -239,6 +305,11 @@ class User(DirectoryObject):
             [
                 return_type.cc_recipients.add(Recipient.from_email(email))
                 for email in cc_recipients
+            ]
+        if reply_to is not None:
+            [
+                return_type.reply_to.add(Recipient.from_email(email))
+                for email in reply_to
             ]
 
         payload = {"message": return_type, "saveToSentItems": save_to_sent_items}
@@ -727,6 +798,10 @@ class User(DirectoryObject):
         """Get the user's mailboxSettings."""
         return self.properties.get("mailboxSettings", MailboxSettings())
 
+    @mailbox_settings.setter
+    def mailbox_settings(self, value):
+        self.set_property("mailboxSettings", value)
+
     @property
     def calendar(self):
         # type: () -> Calendar
@@ -965,6 +1040,17 @@ class User(DirectoryObject):
         )
 
     @property
+    def people(self):
+        # type: () -> EntityCollection[Person]
+        """People that are relevant to the user. Read-only. Nullable."""
+        return self.properties.get(
+            "people",
+            EntityCollection(
+                self.context, Person, ResourcePath("people", self.resource_path)
+            ),
+        )
+
+    @property
     def onenote(self):
         # type: () -> Onenote
         """Represents the Onenote services available to a user."""
@@ -987,6 +1073,20 @@ class User(DirectoryObject):
         return self.properties.get(
             "planner",
             PlannerUser(self.context, ResourcePath("planner", self.resource_path)),
+        )
+
+    @property
+    def agreement_acceptances(self):
+        """
+        The user's terms of use acceptance statuses
+        """
+        return self.properties.get(
+            "agreementAcceptances",
+            EntityCollection(
+                self.context,
+                AgreementAcceptance,
+                ResourcePath("agreementAcceptances", self.resource_path),
+            ),
         )
 
     @property
@@ -1077,6 +1177,17 @@ class User(DirectoryObject):
         return self.properties.get(
             "teamwork",
             UserTeamwork(self.context, ResourcePath("teamwork", self.resource_path)),
+        )
+
+    @property
+    def solutions(self):
+        # type: () -> UserSolutionRoot
+        """The identifier that relates the user to the working time schedule triggers. Read-Only. Nullable."""
+        return self.properties.get(
+            "solutions",
+            UserSolutionRoot(
+                self.context, ResourcePath("solutions", self.resource_path)
+            ),
         )
 
     @property
