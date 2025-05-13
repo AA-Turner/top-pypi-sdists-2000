@@ -151,6 +151,7 @@ class StandardResourceHints(object):
     ACCELERATOR = PropertiesFromEnumValue('beam:resources:accelerator:v1', '', EMPTY_MONITORING_INFO_SPEC, EMPTY_MONITORING_INFO_LABEL_PROPS)
     MIN_RAM_BYTES = PropertiesFromEnumValue('beam:resources:min_ram_bytes:v1', '', EMPTY_MONITORING_INFO_SPEC, EMPTY_MONITORING_INFO_LABEL_PROPS)
     CPU_COUNT = PropertiesFromEnumValue('beam:resources:cpu_count:v1', '', EMPTY_MONITORING_INFO_SPEC, EMPTY_MONITORING_INFO_LABEL_PROPS)
+    MAX_ACTIVE_BUNDLES_PER_WORKER = PropertiesFromEnumValue('beam:resources:max_active_bundles_per_worker:v1', '', EMPTY_MONITORING_INFO_SPEC, EMPTY_MONITORING_INFO_LABEL_PROPS)
 
 
 class StandardRunnerProtocols(object):

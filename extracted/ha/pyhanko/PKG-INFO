@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: pyHanko
-Version: 0.26.0
+Version: 0.27.0
 Summary: Tools for stamping and signing PDF files
 Author-email: Matthias Valvekens <dev@mvalvekens.be>
 Maintainer-email: Matthias Valvekens <dev@mvalvekens.be>
@@ -32,14 +32,14 @@ Requires-Dist: asn1crypto>=1.5.1
 Requires-Dist: qrcode>=7.3.1
 Requires-Dist: tzlocal>=4.3
 Requires-Dist: pyhanko-certvalidator<0.27,>=0.26.5
-Requires-Dist: click>=8.1.3
+Requires-Dist: click<8.2.0,>=8.1.3
 Requires-Dist: requests>=2.31.0
 Requires-Dist: pyyaml>=6.0
 Requires-Dist: cryptography>=43.0.3
 Requires-Dist: defusedxml~=0.7.1
 Provides-Extra: opentype
 Requires-Dist: fonttools>=4.33.3; extra == "opentype"
-Requires-Dist: uharfbuzz<0.47.0,>=0.25.0; extra == "opentype"
+Requires-Dist: uharfbuzz<0.51.0,>=0.25.0; extra == "opentype"
 Provides-Extra: image-support
 Requires-Dist: Pillow>=7.2.0; extra == "image-support"
 Requires-Dist: python-barcode==0.15.1; extra == "image-support"
@@ -48,15 +48,15 @@ Requires-Dist: python-pkcs11~=0.7.0; extra == "pkcs11"
 Provides-Extra: async-http
 Requires-Dist: aiohttp<3.12,>=3.9; extra == "async-http"
 Provides-Extra: etsi
-Requires-Dist: xsdata<25.0,>=24.4; extra == "etsi"
+Requires-Dist: xsdata<26.0,>=24.4; extra == "etsi"
 Provides-Extra: testing-basic
 Requires-Dist: pytest>=6.1.1; extra == "testing-basic"
 Requires-Dist: requests-mock>=1.8.0; extra == "testing-basic"
 Requires-Dist: freezegun>=1.1.0; extra == "testing-basic"
 Requires-Dist: certomancer<0.13,>=0.12.3; extra == "testing-basic"
-Requires-Dist: pytest-cov<6.1,>=4.0; extra == "testing-basic"
+Requires-Dist: pytest-cov<6.2,>=4.0; extra == "testing-basic"
 Requires-Dist: pytest-asyncio==0.24.0; python_version < "3.9" and extra == "testing-basic"
-Requires-Dist: pytest-asyncio==0.25.3; python_version >= "3.9" and extra == "testing-basic"
+Requires-Dist: pytest-asyncio==0.26.0; python_version >= "3.9" and extra == "testing-basic"
 Requires-Dist: backports.zoneinfo[tzdata]; python_version < "3.9" and extra == "testing-basic"
 Provides-Extra: testing
 Requires-Dist: pyHanko[async-http,image-support,opentype,pkcs11,testing-basic]; extra == "testing"
@@ -68,7 +68,7 @@ Requires-Dist: pyHanko[async-http,testing-basic]; extra == "live-test"
 Requires-Dist: pytest-aiohttp<1.2.0,>=1.0.4; extra == "live-test"
 Requires-Dist: certomancer-csc-dummy==0.3.0; extra == "live-test"
 Requires-Dist: certomancer[web-api]<0.13,>=0.12.3; extra == "live-test"
-Requires-Dist: pytest-cov<6.1,>=4.0; extra == "live-test"
+Requires-Dist: pytest-cov<6.2,>=4.0; extra == "live-test"
 Provides-Extra: mypy
 Requires-Dist: pyHanko[async-http,etsi,image-support,opentype,pkcs11]; extra == "mypy"
 Requires-Dist: types-requests; extra == "mypy"
@@ -78,6 +78,7 @@ Requires-Dist: types-tzlocal; extra == "mypy"
 Provides-Extra: docs
 Requires-Dist: sphinx; extra == "docs"
 Requires-Dist: sphinx-rtd-theme; extra == "docs"
+Dynamic: license-file
 
 ![pyHanko](docs/images/pyhanko-logo.svg)
 
@@ -104,13 +105,13 @@ PyHanko is hosted on [PyPI](https://pypi.org/project/pyHanko/),
 and can be installed using `pip`:
 
 ```bash
-pip install 'pyHanko[pkcs11,image-support,opentype,xmp]'
+pip install 'pyHanko[pkcs11,image-support,opentype]'
 ```
 
 Depending on your shell, you might have to leave off the quotes:
 
 ```bash
-pip install pyHanko[pkcs11,image-support,opentype,xmp]
+pip install pyHanko[pkcs11,image-support,opentype]
 ```
 
 This `pip` invocation includes the optional dependencies required for PKCS#11, image handling and

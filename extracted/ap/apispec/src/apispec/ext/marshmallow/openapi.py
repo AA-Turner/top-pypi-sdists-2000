@@ -167,9 +167,9 @@ class OpenAPIConverter(FieldConverterMixin):
                 param["description"] = description
             return [param]
 
-        assert not getattr(
-            schema, "many", False
-        ), "Schemas with many=True are only supported for 'json' location (aka 'in: body')"
+        assert not getattr(schema, "many", False), (
+            "Schemas with many=True are only supported for 'json' location (aka 'in: body')"
+        )
 
         fields = get_fields(schema, exclude_dump_only=True)
 
@@ -218,7 +218,7 @@ class OpenAPIConverter(FieldConverterMixin):
         ret = {}
         partial = getattr(field.parent, "partial", False)
         ret["required"] = field.required and (
-            not partial or (is_collection(partial) and field.name not in partial)  # type:ignore
+            not partial or (is_collection(partial) and field.name not in partial)
         )
         return ret
 

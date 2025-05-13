@@ -523,7 +523,7 @@ class FieldConverterMixin:
             value_field = field.value_field
             if value_field:
                 ret["additionalProperties"] = self.field2property(value_field)
-            else:
+            elif "additionalProperties" not in kwargs.get("ret", {}):
                 ret["additionalProperties"] = {}
         return ret
 
@@ -565,9 +565,7 @@ class FieldConverterMixin:
         :rtype: dict
         """
         ret = {}
-        if isinstance(field, marshmallow.fields.DateTime) and not isinstance(
-            field, marshmallow.fields.Date
-        ):
+        if isinstance(field, marshmallow.fields.DateTime):
             if field.format == "iso" or field.format is None:
                 # Will return { "type": "string", "format": "date-time" }
                 # as specified inside DEFAULT_FIELD_MAPPING

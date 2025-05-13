@@ -118,246 +118,6 @@ class ManagedMySqlDatabasesClient(object):
         self.retry_strategy = kwargs.get('retry_strategy')
         self.circuit_breaker_callback = kwargs.get('circuit_breaker_callback')
 
-    def disable_external_mysql_associated_service(self, external_my_sql_database_id, disable_external_mysql_associated_service_details, **kwargs):
-        """
-        Disable an Associated Service for an external MySQL database resource. An Associated Service example is OPSI.
-
-
-        :param str external_my_sql_database_id: (required)
-            The OCID of the External MySQL Database.
-
-        :param oci.database_management.models.DisableExternalMysqlAssociatedServiceDetails disable_external_mysql_associated_service_details: (required)
-            The details required to disable an Associated Service for an external MySQL database resource.
-
-        :param str opc_retry_token: (optional)
-            A token that uniquely identifies a request so it can be retried in case of a timeout or
-            server error without risk of executing that same action again. Retry tokens expire after 24
-            hours, but can be invalidated before then due to conflicting operations. For example, if a resource
-            has been deleted and purged from the system, then a retry of the original creation request
-            might be rejected.
-
-        :param str if_match: (optional)
-            For optimistic concurrency control. In the PUT or DELETE call
-            for a resource, set the `if-match` parameter to the value of the
-            etag from a previous GET or POST response for that resource.
-            The resource will be updated or deleted only if the etag you
-            provide matches the resource's current etag value.
-
-        :param str opc_request_id: (optional)
-            The client request ID for tracing.
-
-        :param obj retry_strategy: (optional)
-            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
-
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
-            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
-
-            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
-
-        :param bool allow_control_chars: (optional)
-            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
-            By default, the response will not allow control characters in strings
-
-        :return: A :class:`~oci.response.Response` object with data of type None
-        :rtype: :class:`~oci.response.Response`
-
-        :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.151.0/databasemanagement/disable_external_mysql_associated_service.py.html>`__ to see an example of how to use disable_external_mysql_associated_service API.
-        """
-        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
-        required_arguments = ['externalMySqlDatabaseId']
-        resource_path = "/internal/externalMySqlDatabases/{externalMySqlDatabaseId}/actions/disableAssociatedService"
-        method = "POST"
-        operation_name = "disable_external_mysql_associated_service"
-        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/database-management/20201101/ExternalMySqlDatabase/DisableExternalMysqlAssociatedService"
-
-        # Don't accept unknown kwargs
-        expected_kwargs = [
-            "allow_control_chars",
-            "retry_strategy",
-            "opc_retry_token",
-            "if_match",
-            "opc_request_id"
-        ]
-        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
-        if extra_kwargs:
-            raise ValueError(
-                f"disable_external_mysql_associated_service got unknown kwargs: {extra_kwargs!r}")
-
-        path_params = {
-            "externalMySqlDatabaseId": external_my_sql_database_id
-        }
-
-        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
-
-        for (k, v) in six.iteritems(path_params):
-            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
-                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
-
-        header_params = {
-            "accept": "application/json",
-            "content-type": "application/json",
-            "opc-retry-token": kwargs.get("opc_retry_token", missing),
-            "if-match": kwargs.get("if_match", missing),
-            "opc-request-id": kwargs.get("opc_request_id", missing)
-        }
-        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
-
-        retry_strategy = self.base_client.get_preferred_retry_strategy(
-            operation_retry_strategy=kwargs.get('retry_strategy'),
-            client_retry_strategy=self.retry_strategy
-        )
-        if retry_strategy is None:
-            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
-
-        if retry_strategy:
-            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
-                self.base_client.add_opc_retry_token_if_needed(header_params)
-                self.base_client.add_opc_client_retries_header(header_params)
-                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
-            return retry_strategy.make_retrying_call(
-                self.base_client.call_api,
-                resource_path=resource_path,
-                method=method,
-                path_params=path_params,
-                header_params=header_params,
-                body=disable_external_mysql_associated_service_details,
-                allow_control_chars=kwargs.get('allow_control_chars'),
-                operation_name=operation_name,
-                api_reference_link=api_reference_link,
-                required_arguments=required_arguments)
-        else:
-            return self.base_client.call_api(
-                resource_path=resource_path,
-                method=method,
-                path_params=path_params,
-                header_params=header_params,
-                body=disable_external_mysql_associated_service_details,
-                allow_control_chars=kwargs.get('allow_control_chars'),
-                operation_name=operation_name,
-                api_reference_link=api_reference_link,
-                required_arguments=required_arguments)
-
-    def enable_external_mysql_associated_service(self, external_my_sql_database_id, enable_external_mysql_associated_service_details, **kwargs):
-        """
-        Enable an Associated Service for an external MySQL database resource. An Associated Service example is OPSI.
-
-
-        :param str external_my_sql_database_id: (required)
-            The OCID of the External MySQL Database.
-
-        :param oci.database_management.models.EnableExternalMysqlAssociatedServiceDetails enable_external_mysql_associated_service_details: (required)
-            The details required to enable an Associated Service for an external MySQL database resource.
-
-        :param str opc_retry_token: (optional)
-            A token that uniquely identifies a request so it can be retried in case of a timeout or
-            server error without risk of executing that same action again. Retry tokens expire after 24
-            hours, but can be invalidated before then due to conflicting operations. For example, if a resource
-            has been deleted and purged from the system, then a retry of the original creation request
-            might be rejected.
-
-        :param str if_match: (optional)
-            For optimistic concurrency control. In the PUT or DELETE call
-            for a resource, set the `if-match` parameter to the value of the
-            etag from a previous GET or POST response for that resource.
-            The resource will be updated or deleted only if the etag you
-            provide matches the resource's current etag value.
-
-        :param str opc_request_id: (optional)
-            The client request ID for tracing.
-
-        :param obj retry_strategy: (optional)
-            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
-
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
-            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
-
-            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
-
-        :param bool allow_control_chars: (optional)
-            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
-            By default, the response will not allow control characters in strings
-
-        :return: A :class:`~oci.response.Response` object with data of type None
-        :rtype: :class:`~oci.response.Response`
-
-        :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.151.0/databasemanagement/enable_external_mysql_associated_service.py.html>`__ to see an example of how to use enable_external_mysql_associated_service API.
-        """
-        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
-        required_arguments = ['externalMySqlDatabaseId']
-        resource_path = "/internal/externalMySqlDatabases/{externalMySqlDatabaseId}/actions/enableAssociatedService"
-        method = "POST"
-        operation_name = "enable_external_mysql_associated_service"
-        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/database-management/20201101/ExternalMySqlDatabase/EnableExternalMysqlAssociatedService"
-
-        # Don't accept unknown kwargs
-        expected_kwargs = [
-            "allow_control_chars",
-            "retry_strategy",
-            "opc_retry_token",
-            "if_match",
-            "opc_request_id"
-        ]
-        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
-        if extra_kwargs:
-            raise ValueError(
-                f"enable_external_mysql_associated_service got unknown kwargs: {extra_kwargs!r}")
-
-        path_params = {
-            "externalMySqlDatabaseId": external_my_sql_database_id
-        }
-
-        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
-
-        for (k, v) in six.iteritems(path_params):
-            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
-                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
-
-        header_params = {
-            "accept": "application/json",
-            "content-type": "application/json",
-            "opc-retry-token": kwargs.get("opc_retry_token", missing),
-            "if-match": kwargs.get("if_match", missing),
-            "opc-request-id": kwargs.get("opc_request_id", missing)
-        }
-        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
-
-        retry_strategy = self.base_client.get_preferred_retry_strategy(
-            operation_retry_strategy=kwargs.get('retry_strategy'),
-            client_retry_strategy=self.retry_strategy
-        )
-        if retry_strategy is None:
-            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
-
-        if retry_strategy:
-            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
-                self.base_client.add_opc_retry_token_if_needed(header_params)
-                self.base_client.add_opc_client_retries_header(header_params)
-                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
-            return retry_strategy.make_retrying_call(
-                self.base_client.call_api,
-                resource_path=resource_path,
-                method=method,
-                path_params=path_params,
-                header_params=header_params,
-                body=enable_external_mysql_associated_service_details,
-                allow_control_chars=kwargs.get('allow_control_chars'),
-                operation_name=operation_name,
-                api_reference_link=api_reference_link,
-                required_arguments=required_arguments)
-        else:
-            return self.base_client.call_api(
-                resource_path=resource_path,
-                method=method,
-                path_params=path_params,
-                header_params=header_params,
-                body=enable_external_mysql_associated_service_details,
-                allow_control_chars=kwargs.get('allow_control_chars'),
-                operation_name=operation_name,
-                api_reference_link=api_reference_link,
-                required_arguments=required_arguments)
-
     def get_heat_wave_fleet_metric(self, compartment_id, start_time, end_time, **kwargs):
         """
         Gets the health metrics for a fleet of HeatWave clusters in a compartment.
@@ -409,7 +169,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.151.0/databasemanagement/get_heat_wave_fleet_metric.py.html>`__ to see an example of how to use get_heat_wave_fleet_metric API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.0/databasemanagement/get_heat_wave_fleet_metric.py.html>`__ to see an example of how to use get_heat_wave_fleet_metric API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'startTime', 'endTime']
@@ -517,7 +277,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.151.0/databasemanagement/get_managed_my_sql_database.py.html>`__ to see an example of how to use get_managed_my_sql_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.0/databasemanagement/get_managed_my_sql_database.py.html>`__ to see an example of how to use get_managed_my_sql_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedMySqlDatabaseId']
@@ -652,7 +412,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.151.0/databasemanagement/get_my_sql_fleet_metric.py.html>`__ to see an example of how to use get_my_sql_fleet_metric API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.0/databasemanagement/get_my_sql_fleet_metric.py.html>`__ to see an example of how to use get_my_sql_fleet_metric API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'startTime', 'endTime']
@@ -806,7 +566,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.151.0/databasemanagement/list_managed_my_sql_database_configuration_data.py.html>`__ to see an example of how to use list_managed_my_sql_database_configuration_data API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.0/databasemanagement/list_managed_my_sql_database_configuration_data.py.html>`__ to see an example of how to use list_managed_my_sql_database_configuration_data API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedMySqlDatabaseId']
@@ -976,7 +736,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.151.0/databasemanagement/list_managed_my_sql_database_sql_data.py.html>`__ to see an example of how to use list_managed_my_sql_database_sql_data API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.0/databasemanagement/list_managed_my_sql_database_sql_data.py.html>`__ to see an example of how to use list_managed_my_sql_database_sql_data API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedMySqlDatabaseId', 'startTime', 'endTime']
@@ -1132,7 +892,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.151.0/databasemanagement/list_managed_my_sql_databases.py.html>`__ to see an example of how to use list_managed_my_sql_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.0/databasemanagement/list_managed_my_sql_databases.py.html>`__ to see an example of how to use list_managed_my_sql_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1269,7 +1029,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.151.0/databasemanagement/summarize_managed_my_sql_database_availability_metrics.py.html>`__ to see an example of how to use summarize_managed_my_sql_database_availability_metrics API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.0/databasemanagement/summarize_managed_my_sql_database_availability_metrics.py.html>`__ to see an example of how to use summarize_managed_my_sql_database_availability_metrics API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedMySqlDatabaseId', 'startTime', 'endTime']

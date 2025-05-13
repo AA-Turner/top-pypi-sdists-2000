@@ -1,14 +1,14 @@
 Metadata-Version: 2.1
 Name: langchain-community
-Version: 0.3.23
+Version: 0.3.24
 Summary: Community contributed LangChain integrations.
 License: MIT
 Project-URL: Source Code, https://github.com/langchain-ai/langchain-community/tree/main/libs/community
 Project-URL: Release Notes, https://github.com/langchain-ai/langchain/releases?q=tag%3A%22langchain-community%3D%3D0%22&expanded=true
 Project-URL: repository, https://github.com/langchain-ai/langchain-community
 Requires-Python: >=3.9
-Requires-Dist: langchain-core<1.0.0,>=0.3.56
-Requires-Dist: langchain<1.0.0,>=0.3.24
+Requires-Dist: langchain-core<1.0.0,>=0.3.59
+Requires-Dist: langchain<1.0.0,>=0.3.25
 Requires-Dist: SQLAlchemy<3,>=1.4
 Requires-Dist: requests<3,>=2
 Requires-Dist: PyYAML>=5.3

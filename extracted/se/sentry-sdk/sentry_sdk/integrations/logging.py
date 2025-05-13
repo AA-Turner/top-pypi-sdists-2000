@@ -348,16 +348,15 @@ class SentryLogsHandler(_BaseHandler):
             if not client.options["_experiments"].get("enable_logs", False):
                 return
 
-            SentryLogsHandler._capture_log_from_record(client, record)
+            self._capture_log_from_record(client, record)
 
-    @staticmethod
-    def _capture_log_from_record(client, record):
+    def _capture_log_from_record(self, client, record):
         # type: (BaseClient, LogRecord) -> None
         scope = sentry_sdk.get_current_scope()
         otel_severity_number, otel_severity_text = _python_level_to_otel(record.levelno)
-        attrs = {
-            "sentry.origin": "auto.logger.log",
-        }  # type: dict[str, str | bool | float | int]
+        project_root = client.options["project_root"]
+        attrs = self._extra_from_record(record)  # type: Any
+        attrs["sentry.origin"] = "auto.logger.log"
         if isinstance(record.msg, str):
             attrs["sentry.message.template"] = record.msg
         if record.args is not None:
@@ -374,7 +373,10 @@ class SentryLogsHandler(_BaseHandler):
         if record.lineno:
             attrs["code.line.number"] = record.lineno
         if record.pathname:
-            attrs["code.file.path"] = record.pathname
+            if project_root is not None and record.pathname.startswith(project_root):
+                attrs["code.file.path"] = record.pathname[len(project_root) + 1 :]
+            else:
+                attrs["code.file.path"] = record.pathname
         if record.funcName:
             attrs["code.function.name"] = record.funcName
 

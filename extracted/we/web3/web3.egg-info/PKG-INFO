@@ -1,6 +1,6 @@
-Metadata-Version: 2.4
+Metadata-Version: 2.1
 Name: web3
-Version: 7.11.0
+Version: 7.11.1
 Summary: web3: A Python library for interacting with Ethereum
 Home-page: https://github.com/ethereum/web3.py
 Author: The Ethereum Foundation
@@ -78,19 +78,6 @@ Requires-Dist: mypy==1.10.0; extra == "test"
 Requires-Dist: pre-commit>=3.4.0; extra == "test"
 Requires-Dist: eth-tester[py-evm]<0.14.0b1,>=0.13.0b1; extra == "test"
 Requires-Dist: py-geth>=5.1.0; extra == "test"
-Dynamic: author
-Dynamic: author-email
-Dynamic: classifier
-Dynamic: description
-Dynamic: description-content-type
-Dynamic: home-page
-Dynamic: keywords
-Dynamic: license
-Dynamic: license-file
-Dynamic: provides-extra
-Dynamic: requires-dist
-Dynamic: requires-python
-Dynamic: summary
 
 # web3.py
 

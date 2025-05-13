@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: gevent
-Version: 25.4.2
+Version: 25.5.1
 Summary: Coroutine-based network library
 Home-page: http://www.gevent.org/
 Author: Denis Bilenko
@@ -31,7 +31,7 @@ Classifier: Development Status :: 4 - Beta
 Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: LICENSE
-Requires-Dist: greenlet>=3.2.0; platform_python_implementation == "CPython"
+Requires-Dist: greenlet>=3.2.2; platform_python_implementation == "CPython"
 Requires-Dist: cffi>=1.17.1; platform_python_implementation == "CPython" and sys_platform == "win32"
 Requires-Dist: zope.event
 Requires-Dist: zope.interface

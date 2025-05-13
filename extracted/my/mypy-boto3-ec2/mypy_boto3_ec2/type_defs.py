@@ -3638,6 +3638,7 @@ class CapacityReservationInfoTypeDef(TypedDict):
     InstanceType: NotRequired[str]
     AvailabilityZone: NotRequired[str]
     Tenancy: NotRequired[CapacityReservationTenancyType]
+    AvailabilityZoneId: NotRequired[str]
 
 
 class CapacityReservationCommitmentInfoTypeDef(TypedDict):
@@ -7116,6 +7117,7 @@ class ReservedInstancesConfigurationTypeDef(TypedDict):
     InstanceType: NotRequired[InstanceTypeType]
     Platform: NotRequired[str]
     Scope: NotRequired[ScopeType]
+    AvailabilityZoneId: NotRequired[str]
 
 
 class ModifyRouteServerRequestTypeDef(TypedDict):
@@ -9247,6 +9249,7 @@ class ModifyVpcEndpointServicePermissionsResultTypeDef(TypedDict):
 class AnalysisLoadBalancerTargetTypeDef(TypedDict):
     Address: NotRequired[str]
     AvailabilityZone: NotRequired[str]
+    AvailabilityZoneId: NotRequired[str]
     Instance: NotRequired[AnalysisComponentTypeDef]
     Port: NotRequired[int]
 
@@ -12341,6 +12344,7 @@ class DescribeReservedInstancesOfferingsRequestPaginateTypeDef(TypedDict):
     OfferingClass: NotRequired[OfferingClassTypeType]
     ProductDescription: NotRequired[RIProductDescriptionType]
     ReservedInstancesOfferingIds: NotRequired[Sequence[str]]
+    AvailabilityZoneId: NotRequired[str]
     DryRun: NotRequired[bool]
     Filters: NotRequired[Sequence[FilterTypeDef]]
     InstanceTenancy: NotRequired[TenancyType]
@@ -12358,6 +12362,7 @@ class DescribeReservedInstancesOfferingsRequestTypeDef(TypedDict):
     OfferingClass: NotRequired[OfferingClassTypeType]
     ProductDescription: NotRequired[RIProductDescriptionType]
     ReservedInstancesOfferingIds: NotRequired[Sequence[str]]
+    AvailabilityZoneId: NotRequired[str]
     DryRun: NotRequired[bool]
     Filters: NotRequired[Sequence[FilterTypeDef]]
     InstanceTenancy: NotRequired[TenancyType]
@@ -14975,6 +14980,7 @@ class ReservedInstancesOfferingTypeDef(TypedDict):
     PricingDetails: NotRequired[List[PricingDetailTypeDef]]
     RecurringCharges: NotRequired[List[RecurringChargeTypeDef]]
     Scope: NotRequired[ScopeType]
+    AvailabilityZoneId: NotRequired[str]
     ReservedInstancesOfferingId: NotRequired[str]
     InstanceType: NotRequired[InstanceTypeType]
     AvailabilityZone: NotRequired[str]
@@ -14992,6 +14998,7 @@ class ReservedInstancesTypeDef(TypedDict):
     RecurringCharges: NotRequired[List[RecurringChargeTypeDef]]
     Scope: NotRequired[ScopeType]
     Tags: NotRequired[List[TagTypeDef]]
+    AvailabilityZoneId: NotRequired[str]
     ReservedInstancesId: NotRequired[str]
     InstanceType: NotRequired[InstanceTypeType]
     AvailabilityZone: NotRequired[str]
@@ -16149,6 +16156,7 @@ class ExplanationTypeDef(TypedDict):
     Addresses: NotRequired[List[str]]
     AttachedTo: NotRequired[AnalysisComponentTypeDef]
     AvailabilityZones: NotRequired[List[str]]
+    AvailabilityZoneIds: NotRequired[List[str]]
     Cidrs: NotRequired[List[str]]
     Component: NotRequired[AnalysisComponentTypeDef]
     CustomerGateway: NotRequired[AnalysisComponentTypeDef]
@@ -18191,6 +18199,7 @@ class VolumeStatusItemTypeDef(TypedDict):
     VolumeId: NotRequired[str]
     VolumeStatus: NotRequired[VolumeStatusInfoTypeDef]
     AttachmentStatuses: NotRequired[List[VolumeStatusAttachmentStatusTypeDef]]
+    AvailabilityZoneId: NotRequired[str]
 
 
 class AssociateVpcCidrBlockResultTypeDef(TypedDict):
@@ -18270,17 +18279,18 @@ class AllocateAddressRequestTypeDef(TypedDict):
 
 
 class AllocateHostsRequestTypeDef(TypedDict):
-    AvailabilityZone: str
     InstanceFamily: NotRequired[str]
     TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
     HostRecovery: NotRequired[HostRecoveryType]
     OutpostArn: NotRequired[str]
     HostMaintenance: NotRequired[HostMaintenanceType]
     AssetIds: NotRequired[Sequence[str]]
+    AvailabilityZoneId: NotRequired[str]
     AutoPlacement: NotRequired[AutoPlacementType]
     ClientToken: NotRequired[str]
     InstanceType: NotRequired[str]
     Quantity: NotRequired[int]
+    AvailabilityZone: NotRequired[str]
 
 
 class AssociateIpamResourceDiscoveryRequestTypeDef(TypedDict):

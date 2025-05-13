@@ -435,6 +435,12 @@ class TestTable(unittest.TestCase, _SchemaBase):
                 "sourceFormat": "CSV",
                 "csvOptions": {"allowJaggedRows": True, "encoding": "encoding"},
             },
+            "biglakeConfiguration": {
+                "connectionId": "connection",
+                "storageUri": "uri",
+                "fileFormat": "PARQUET",
+                "tableFormat": "ICEBERG",
+            },
             "labels": {"x": "y"},
         }
 
@@ -520,6 +526,15 @@ class TestTable(unittest.TestCase, _SchemaBase):
             )
         else:
             self.assertIsNone(table.encryption_configuration)
+
+        if "biglakeConfiguration" in resource:
+            self.assertIsNotNone(table.biglake_configuration)
+            self.assertEqual(table.biglake_configuration.connection_id, "connection")
+            self.assertEqual(table.biglake_configuration.storage_uri, "uri")
+            self.assertEqual(table.biglake_configuration.file_format, "PARQUET")
+            self.assertEqual(table.biglake_configuration.table_format, "ICEBERG")
+        else:
+            self.assertIsNone(table.biglake_configuration)
 
     def test_ctor(self):
         dataset = DatasetReference(self.PROJECT, self.DS_ID)
@@ -892,6 +907,60 @@ class TestTable(unittest.TestCase, _SchemaBase):
 
         assert isinstance(table_constraints, TableConstraints)
         assert table_constraints.primary_key == PrimaryKey(columns=["id"])
+
+    def test_biglake_configuration_not_set(self):
+        dataset = DatasetReference(self.PROJECT, self.DS_ID)
+        table_ref = dataset.table(self.TABLE_NAME)
+        table = self._make_one(table_ref)
+
+        assert table.biglake_configuration is None
+
+    def test_biglake_configuration_set(self):
+        from google.cloud.bigquery.table import BigLakeConfiguration
+
+        dataset = DatasetReference(self.PROJECT, self.DS_ID)
+        table_ref = dataset.table(self.TABLE_NAME)
+        table = self._make_one(table_ref)
+
+        table._properties["biglakeConfiguration"] = {
+            "connectionId": "connection",
+            "storageUri": "uri",
+            "fileFormat": "PARQUET",
+            "tableFormat": "ICEBERG",
+        }
+
+        config = table.biglake_configuration
+
+        assert isinstance(config, BigLakeConfiguration)
+        assert config.connection_id == "connection"
+        assert config.storage_uri == "uri"
+        assert config.file_format == "PARQUET"
+        assert config.table_format == "ICEBERG"
+
+    def test_biglake_configuration_property_setter(self):
+        from google.cloud.bigquery.table import BigLakeConfiguration
+
+        dataset = DatasetReference(self.PROJECT, self.DS_ID)
+        table_ref = dataset.table(self.TABLE_NAME)
+        table = self._make_one(table_ref)
+
+        config = BigLakeConfiguration(
+            connection_id="connection",
+            storage_uri="uri",
+            file_format="PARQUET",
+            table_format="ICEBERG",
+        )
+        table.biglake_configuration = config
+
+        assert table._properties["biglakeConfiguration"] == {
+            "connectionId": "connection",
+            "storageUri": "uri",
+            "fileFormat": "PARQUET",
+            "tableFormat": "ICEBERG",
+        }
+
+        table.biglake_configuration = None
+        assert table.biglake_configuration is None
 
     def test_table_constraints_property_setter(self):
         from google.cloud.bigquery.table import (
@@ -2166,6 +2235,97 @@ class TestSnapshotDefinition:
         assert instance.snapshot_time == expected_time
 
 
+class TestBigLakeConfiguration(unittest.TestCase):
+    @staticmethod
+    def _get_target_class():
+        from google.cloud.bigquery.table import BigLakeConfiguration
+
+        return BigLakeConfiguration
+
+    @classmethod
+    def _make_one(cls, *args, **kwargs):
+        klass = cls._get_target_class()
+        return klass(*args, **kwargs)
+
+    def test_ctor_empty_resource(self):
+        instance = self._make_one()
+        self.assertIsNone(instance.connection_id)
+        self.assertIsNone(instance.storage_uri)
+        self.assertIsNone(instance.file_format)
+        self.assertIsNone(instance.table_format)
+
+    def test_ctor_kwargs(self):
+        instance = self._make_one(
+            connection_id="conn",
+            storage_uri="uri",
+            file_format="FILE",
+            table_format="TABLE",
+        )
+        self.assertEqual(instance.connection_id, "conn")
+        self.assertEqual(instance.storage_uri, "uri")
+        self.assertEqual(instance.file_format, "FILE")
+        self.assertEqual(instance.table_format, "TABLE")
+
+    def test_ctor_full_resource(self):
+        resource = {
+            "connectionId": "conn",
+            "storageUri": "uri",
+            "fileFormat": "FILE",
+            "tableFormat": "TABLE",
+        }
+        instance = self._make_one(_properties=resource)
+        self.assertEqual(instance.connection_id, "conn")
+        self.assertEqual(instance.storage_uri, "uri")
+        self.assertEqual(instance.file_format, "FILE")
+        self.assertEqual(instance.table_format, "TABLE")
+
+    def test_to_api_repr(self):
+        resource = {
+            "connectionId": "conn",
+            "storageUri": "uri",
+            "fileFormat": "FILE",
+            "tableFormat": "TABLE",
+        }
+        instance = self._make_one(_properties=resource)
+        self.assertEqual(instance.to_api_repr(), resource)
+
+    def test_from_api_repr_partial(self):
+        klass = self._get_target_class()
+        api_repr = {"fileFormat": "FILE"}
+        instance = klass.from_api_repr(api_repr)
+
+        self.assertIsNone(instance.connection_id)
+        self.assertIsNone(instance.storage_uri)
+        self.assertEqual(instance.file_format, "FILE")
+        self.assertIsNone(instance.table_format)
+
+    def test_comparisons(self):
+        resource = {
+            "connectionId": "conn",
+            "storageUri": "uri",
+            "fileFormat": "FILE",
+            "tableFormat": "TABLE",
+        }
+
+        first = self._make_one(_properties=resource)
+        second = self._make_one(_properties=copy.deepcopy(resource))
+        # Exercise comparator overloads.
+        # first and second should be equivalent.
+        self.assertNotEqual(first, resource)
+        self.assertEqual(first, second)
+        self.assertEqual(hash(first), hash(second))
+
+        # Update second to ensure that first and second are no longer equivalent.
+        second.connection_id = "foo"
+        self.assertNotEqual(first, second)
+        self.assertNotEqual(hash(first), hash(second))
+
+        # Update first with the same change, restoring equivalence.
+        first.connection_id = "foo"
+        self.assertEqual(first, second)
+        self.assertEqual(hash(first), hash(second))
+
+
 class TestCloneDefinition:
     @staticmethod
     def _get_target_class():
@@ -2688,6 +2848,13 @@ class TestRowIterator(unittest.TestCase):
         iterator = self._make_one(
             max_results=10, first_page_response=None  # not cached
         )
+        result = iterator._should_use_bqstorage(
+            bqstorage_client=None, create_bqstorage_client=True
+        )
+        self.assertFalse(result)
+
+    def test__should_use_bqstorage_returns_false_if_page_size_set(self):
+        iterator = self._make_one(page_size=10, first_page_response=None)  # not cached
         result = iterator._should_use_bqstorage(
             bqstorage_client=None, create_bqstorage_client=True
         )
@@ -4143,14 +4310,8 @@ class TestRowIterator(unittest.TestCase):
         )
         self.assertEqual(df.name.dtype.name, "string")
 
-        # While pyproject.toml lists pandas 1.1 as the lowest supported version of
-        # pandas, the pip resolver is not able to resolve pandas 1.1 and numpy
-        if hasattr(pandas, "Float64Dtype"):
-            self.assertEqual(list(df.miles), [1.77, 6.66, 2.0])
-            self.assertEqual(df.miles.dtype.name, "Float64")
-        else:
-            self.assertEqual(list(df.miles), ["1.77", "6.66", "2.0"])
-            self.assertEqual(df.miles.dtype.name, "string")
+        self.assertEqual(list(df.miles), [1.77, 6.66, 2.0])
+        self.assertEqual(df.miles.dtype.name, "Float64")
 
         if hasattr(pandas, "ArrowDtype"):
             self.assertEqual(

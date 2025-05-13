@@ -42,12 +42,12 @@ class GenerateSequence(ExternalTransform):
 
   def __init__(self, start, end=None, rate=None, expansion_service=None):
     """
-    :param start: (numpy.int64)
+    :param start: (int64)
       The minimum number to generate (inclusive). 
-    :param end: (numpy.int64)
+    :param end: (int64)
       The maximum number to generate (exclusive). Will be an unbounded
       sequence if left unspecified. 
-    :param rate: (Row(elements=<class 'numpy.int64'>, seconds=typing.Optional[numpy.int64]))
+    :param rate: (Row(elements=<class 'int64'>, seconds=typing.Optional[int64]))
       Specifies the rate to generate a given number of elements per a given
       number of seconds. Applicable only to unbounded sequences. 
     """
@@ -55,3 +55,79 @@ class GenerateSequence(ExternalTransform):
         "sdks:java:io:expansion-service:shadowJar")
     super().__init__(
         start=start, end=end, rate=rate, expansion_service=expansion_service)
+
+
+class TfrecordRead(ExternalTransform):
+
+  identifier = "beam:schematransform:org.apache.beam:tfrecord_read:v1"
+
+  def __init__(
+      self,
+      compression,
+      file_pattern,
+      validate,
+      error_handling=None,
+      expansion_service=None):
+    """
+    :param compression: (str)
+      Decompression type to use when reading input files. 
+    :param file_pattern: (str)
+      Filename or file pattern used to find input files. 
+    :param validate: (boolean)
+      Validate file pattern. 
+    :param error_handling: (Row(output=<class 'str'>))
+      This option specifies whether and where to output unwritable rows. 
+    """
+    self.default_expansion_service = BeamJarExpansionService(
+        "sdks:java:io:expansion-service:shadowJar")
+    super().__init__(
+        compression=compression,
+        file_pattern=file_pattern,
+        validate=validate,
+        error_handling=error_handling,
+        expansion_service=expansion_service)
+
+
+class TfrecordWrite(ExternalTransform):
+
+  identifier = "beam:schematransform:org.apache.beam:tfrecord_write:v1"
+
+  def __init__(
+      self,
+      compression,
+      num_shards,
+      output_prefix,
+      error_handling=None,
+      filename_suffix=None,
+      no_spilling=None,
+      shard_template=None,
+      expansion_service=None):
+    """
+    :param compression: (str)
+      Option to indicate the output sink's compression type. Default is NONE. 
+    :param num_shards: (int32)
+      The number of shards to use, or 0 for automatic. 
+    :param output_prefix: (str)
+      The directory to which files will be written. 
+    :param error_handling: (Row(output=<class 'str'>))
+      This option specifies whether and where to output unwritable rows. 
+    :param filename_suffix: (str)
+      The suffix of each file written, combined with prefix and shardTemplate. 
+    :param no_spilling: (boolean)
+      Whether to skip the spilling of data caused by having
+      maxNumWritersPerBundle. 
+    :param shard_template: (str)
+      The shard template of each file written, combined with prefix and
+      suffix. 
+    """
+    self.default_expansion_service = BeamJarExpansionService(
+        "sdks:java:io:expansion-service:shadowJar")
+    super().__init__(
+        compression=compression,
+        num_shards=num_shards,
+        output_prefix=output_prefix,
+        error_handling=error_handling,
+        filename_suffix=filename_suffix,
+        no_spilling=no_spilling,
+        shard_template=shard_template,
+        expansion_service=expansion_service)

@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: astropy
-Version: 7.0.1
+Version: 7.0.2
 Summary: Astronomy and astrophysics core library
 Author-email: The Astropy Developers <astropy.team@gmail.com>
 License: BSD-3-Clause
@@ -36,7 +36,7 @@ License-File: licenses/README.rst
 License-File: licenses/WCSLIB_LICENSE.rst
 Requires-Dist: numpy>=1.23.2
 Requires-Dist: pyerfa>=2.0.1.1
-Requires-Dist: astropy-iers-data>=0.2025.1.31.12.41.4
+Requires-Dist: astropy-iers-data>=0.2025.4.28.0.37.27
 Requires-Dist: PyYAML>=6.0.0
 Requires-Dist: packaging>=22.0.0
 Provides-Extra: recommended
@@ -108,6 +108,7 @@ Provides-Extra: dev-all
 Requires-Dist: tox; extra == "dev-all"
 Requires-Dist: astropy[dev]; extra == "dev-all"
 Requires-Dist: astropy[test_all]; extra == "dev-all"
+Dynamic: license-file
 
 |Astropy Logo|
 

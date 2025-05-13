@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: atlassian-python-api
-Version: 4.0.3
+Version: 4.0.4
 Summary: Python Atlassian REST API Wrapper
 Home-page: https://github.com/atlassian-api/atlassian-python-api
 Download-URL: https://github.com/atlassian-api/atlassian-python-api
@@ -41,7 +41,6 @@ Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
 License-File: LICENSE
 Requires-Dist: deprecated
 Requires-Dist: requests
-Requires-Dist: six
 Requires-Dist: oauthlib
 Requires-Dist: requests_oauthlib
 Requires-Dist: jmespath

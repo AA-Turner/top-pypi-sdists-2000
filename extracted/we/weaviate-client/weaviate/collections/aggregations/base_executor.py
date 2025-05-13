@@ -7,27 +7,27 @@ from httpx import Response
 from typing_extensions import ParamSpec
 
 from weaviate.collections.classes.aggregate import (
-    AProperties,
-    AggregateResult,
     AggregateBoolean,
     AggregateDate,
+    AggregateGroup,
+    AggregateGroupByReturn,
     AggregateInteger,
     AggregateNumber,
     AggregateReference,
-    AggregateText,
-    AggregateGroup,
-    AggregateGroupByReturn,
+    AggregateResult,
     AggregateReturn,
+    AggregateText,
+    AProperties,
     GroupByAggregate,
+    GroupedBy,
+    TopOccurrence,
     _Metrics,
     _MetricsBoolean,
     _MetricsDate,
-    _MetricsNumber,
     _MetricsInteger,
+    _MetricsNumber,
     _MetricsReference,
     _MetricsText,
-    GroupedBy,
-    TopOccurrence,
 )
 from weaviate.collections.classes.config import ConsistencyLevel
 from weaviate.collections.classes.filters import _Filters
@@ -41,8 +41,8 @@ from weaviate.exceptions import WeaviateInvalidInputError, WeaviateQueryError
 from weaviate.gql.aggregate import AggregateBuilder
 from weaviate.proto.v1 import aggregate_pb2
 from weaviate.types import NUMBER, UUID
-from weaviate.util import parse_blob, _decode_json_response_dict
-from weaviate.validator import _ValidateArgument, _validate_input
+from weaviate.util import _decode_json_response_dict, parse_blob
+from weaviate.validator import _validate_input, _ValidateArgument
 from weaviate.warnings import _Warnings
 
 P = ParamSpec("P")
@@ -81,8 +81,10 @@ class _BaseExecutor(Generic[ConnectionType]):
         try:
             result: dict = response["data"]["Aggregate"][self._name][0]
             return AggregateReturn(
-                properties=self.__parse_properties(result, metrics) if metrics is not None else {},
-                total_count=result["meta"]["count"] if result.get("meta") is not None else None,
+                properties=(
+                    self.__parse_properties(result, metrics) if metrics is not None else {}
+                ),
+                total_count=(result["meta"]["count"] if result.get("meta") is not None else None),
             )
         except KeyError as e:
             raise ValueError(
@@ -90,9 +92,9 @@ class _BaseExecutor(Generic[ConnectionType]):
             )
 
     def _to_result(
-        self, response: aggregate_pb2.AggregateReply
+        self, is_groupby: bool, response: aggregate_pb2.AggregateReply
     ) -> Union[AggregateReturn, AggregateGroupByReturn]:
-        if response.HasField("single_result"):
+        if not is_groupby:
             return AggregateReturn(
                 properties={
                     aggregation.property: self.__parse_property_grpc(aggregation)
@@ -100,7 +102,7 @@ class _BaseExecutor(Generic[ConnectionType]):
                 },
                 total_count=response.single_result.objects_count,
             )
-        if response.HasField("grouped_results"):
+        if is_groupby:
             return AggregateGroupByReturn(
                 groups=[
                     AggregateGroup(
@@ -114,9 +116,6 @@ class _BaseExecutor(Generic[ConnectionType]):
                     for group in response.grouped_results.groups
                 ]
             )
-        else:
-            _Warnings.unknown_type_encountered(response.WhichOneof("result"))
-            return AggregateReturn(properties={}, total_count=None)
 
     def __parse_grouped_by_value(
         self, grouped_by: aggregate_pb2.AggregateReply.Group.GroupedBy

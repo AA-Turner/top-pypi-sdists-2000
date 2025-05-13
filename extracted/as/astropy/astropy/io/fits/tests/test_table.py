@@ -1156,6 +1156,24 @@ class TestTableFunctions(FitsTestCase):
 
         t1.close()
 
+    def test_row_setitem(self):
+        tbdata = fits.getdata(self.data("tb.fits"))
+        row = tbdata[0]
+        assert row["c1"] == 1
+        assert row["c2"] == "abc"
+
+        row[0] = 2
+        assert row["c1"] == 2
+        row["c1"] = 3
+        assert row["c1"] == 3
+
+        with pytest.raises(IndexError):
+            row[5] = 2
+
+        row[:2] = (12, "xyz")
+        assert row["c1"] == 12
+        assert row["c2"] == "xyz"
+
     def test_fits_record_len(self):
         counts = np.array([312, 334, 308, 317])
         names = np.array(["NGC1", "NGC2", "NGC3", "NCG4"])
@@ -3916,3 +3934,20 @@ def test_invalid_table_array():
         ),
     ):
         fits.BinTableHDU(data, name="DATA")
+
+
+def test_repr_scaling(tmp_path):
+    cols = [
+        fits.Column(name="a", array=np.array([1, 2]), format="I"),
+        fits.Column(name="b", array=np.array([1, 2]), format="I"),
+    ]
+    hdu = fits.BinTableHDU.from_columns(cols)
+    hdu.header["TSCAL2"] = 0.1
+    hdu.header["TZERO2"] = 10
+    hdu.writeto(tmp_path / "test.fits")
+
+    data = fits.getdata(tmp_path / "test.fits")
+    assert repr(data) == (
+        "FITS_rec([(1, 10.1), (2, 10.2)],\n"
+        "         dtype=(numpy.record, [('a', '>i2'), ('b', '>i2')]))"
+    )

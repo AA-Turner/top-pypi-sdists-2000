@@ -4384,6 +4384,11 @@ class StandardResourceHints(google.protobuf.message.Message):
         SDKs should accept and validate a positive integer count.
         Payload: ASCII encoded string of the base 10 representation of an integer number of CPUs.
         """
+        MAX_ACTIVE_BUNDLES_PER_WORKER: StandardResourceHints._Enum.ValueType  # 3
+        """Describes max number of active bundles per worker in transform's execution environment.
+        SDKs should accept and validate a positive integer count.
+        Payload: ASCII encoded string of the base 10 representation of an integer number of active bundles.
+        """
 
     class Enum(_Enum, metaclass=_EnumEnumTypeWrapper): ...
     ACCELERATOR: StandardResourceHints.Enum.ValueType  # 0
@@ -4401,6 +4406,11 @@ class StandardResourceHints(google.protobuf.message.Message):
     """Describes desired number of CPUs available in transform's execution environment.
     SDKs should accept and validate a positive integer count.
     Payload: ASCII encoded string of the base 10 representation of an integer number of CPUs.
+    """
+    MAX_ACTIVE_BUNDLES_PER_WORKER: StandardResourceHints.Enum.ValueType  # 3
+    """Describes max number of active bundles per worker in transform's execution environment.
+    SDKs should accept and validate a positive integer count.
+    Payload: ASCII encoded string of the base 10 representation of an integer number of active bundles.
     """
 
     def __init__(

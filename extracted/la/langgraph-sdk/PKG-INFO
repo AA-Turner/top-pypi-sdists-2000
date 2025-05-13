@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: langgraph-sdk
-Version: 0.1.66
+Version: 0.1.69
 Summary: SDK for interacting with LangGraph API
 License: MIT
 Requires-Python: >=3.9
@@ -18,7 +18,7 @@ Description-Content-Type: text/markdown
 
 # LangGraph Python SDK
 
-This repository contains the Python SDK for interacting with the LangGraph Cloud REST API.
+This repository contains the Python SDK for interacting with the LangGraph Platform REST API.
 
 ## Quick Start
 

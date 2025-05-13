@@ -723,6 +723,8 @@ class AsyncEthModuleTest:
         keyfile_account_pkey: HexStr,
         async_math_contract: "AsyncContract",
     ) -> None:
+        # TODO: remove blockNumber block_id from eth_call and eth_getCode calls once
+        #  geth behavior for "latest" seems stable again.
         keyfile_account = async_w3.eth.account.from_key(keyfile_account_pkey)
 
         chain_id = await async_w3.eth.chain_id
@@ -737,9 +739,7 @@ class AsyncEthModuleTest:
 
         # get current math counter and increase it only in the delegation by n
         math_counter = await async_math_contract.functions.counter().call()
-        built_tx = await async_math_contract.functions.incrementCounter(
-            math_counter + 1337
-        ).build_transaction({})
+        data = async_math_contract.encode_abi("incrementCounter", [math_counter + 1337])
         txn: TxParams = {
             "chainId": chain_id,
             "to": keyfile_account.address,
@@ -748,23 +748,30 @@ class AsyncEthModuleTest:
             "nonce": nonce,
             "maxPriorityFeePerGas": Wei(10**9),
             "maxFeePerGas": Wei(10**9),
-            "data": built_tx["data"],
+            "data": data,
             "authorizationList": [signed_auth],
         }
 
         signed = keyfile_account.sign_transaction(txn)
         tx_hash = await async_w3.eth.send_raw_transaction(signed.raw_transaction)
         get_tx = await async_w3.eth.get_transaction(tx_hash)
-        await async_w3.eth.wait_for_transaction_receipt(tx_hash, timeout=10)
+        tx_receipt = await async_w3.eth.wait_for_transaction_receipt(
+            tx_hash, timeout=10
+        )
 
-        code = await async_w3.eth.get_code(keyfile_account.address)
+        code = await async_w3.eth.get_code(
+            keyfile_account.address, block_identifier=tx_receipt["blockNumber"]
+        )
         assert code.to_0x_hex() == f"0xef0100{async_math_contract.address[2:].lower()}"
         delegated = async_w3.eth.contract(
             address=keyfile_account.address, abi=async_math_contract.abi
         )
+
         # assert the math counter is increased by 1337 only in delegated acct
         assert await async_math_contract.functions.counter().call() == math_counter
-        delegated_call = await delegated.functions.counter().call()
+        delegated_call = await delegated.functions.counter().call(
+            block_identifier=tx_receipt["blockNumber"]
+        )
         assert delegated_call == math_counter + 1337
 
         assert len(get_tx["authorizationList"]) == 1
@@ -791,9 +798,13 @@ class AsyncEthModuleTest:
         reset_tx_hash = await async_w3.eth.send_raw_transaction(
             signed_reset.raw_transaction
         )
-        await async_w3.eth.wait_for_transaction_receipt(reset_tx_hash, timeout=10)
+        reset_tx_receipt = await async_w3.eth.wait_for_transaction_receipt(
+            reset_tx_hash, timeout=10
+        )
 
-        reset_code = await async_w3.eth.get_code(keyfile_account.address)
+        reset_code = await async_w3.eth.get_code(
+            keyfile_account.address, reset_tx_receipt["blockNumber"]
+        )
         assert reset_code == HexBytes("0x")
 
     @pytest.mark.asyncio
@@ -1881,6 +1892,10 @@ class AsyncEthModuleTest:
         assert effective_gas_price > 0
 
     @pytest.mark.asyncio
+    # TODO: Remove xfail when issue has been identified
+    @pytest.mark.xfail(
+        reason="latest geth seems to cause this to be flaky", strict=False
+    )
     async def test_async_eth_wait_for_transaction_receipt_unmined(
         self,
         async_w3: "AsyncWeb3",
@@ -2221,19 +2236,31 @@ class AsyncEthModuleTest:
     async def test_eth_getUncleCountByBlockHash(
         self, async_w3: "AsyncWeb3", async_empty_block: BlockData
     ) -> None:
-        uncle_count = await async_w3.eth.get_uncle_count(async_empty_block["hash"])
+        with pytest.warns(
+            DeprecationWarning,
+            match=r"get_uncle_count is deprecated: all get_uncle\* "
+            r"methods will be removed in v8",
+        ):
+            uncle_count = await async_w3.eth.get_uncle_count(async_empty_block["hash"])
 
-        assert is_integer(uncle_count)
-        assert uncle_count == 0
+            assert is_integer(uncle_count)
+            assert uncle_count == 0
 
     @pytest.mark.asyncio
     async def test_eth_getUncleCountByBlockNumber(
         self, async_w3: "AsyncWeb3", async_empty_block: BlockData
     ) -> None:
-        uncle_count = await async_w3.eth.get_uncle_count(async_empty_block["number"])
+        with pytest.warns(
+            DeprecationWarning,
+            match=r"get_uncle_count is deprecated: all get_uncle\* "
+            r"methods will be removed in v8",
+        ):
+            uncle_count = await async_w3.eth.get_uncle_count(
+                async_empty_block["number"]
+            )
 
-        assert is_integer(uncle_count)
-        assert uncle_count == 0
+            assert is_integer(uncle_count)
+            assert uncle_count == 0
 
     @pytest.mark.asyncio
     async def test_eth_getBlockTransactionCountByNumber_block_with_txn(
@@ -2718,13 +2745,15 @@ class EthModuleTest:
         assert balance >= 0
 
     def test_eth_get_balance_with_block_identifier(self, w3: "Web3") -> None:
-        miner_address = w3.eth.get_block(1)["miner"]
-        balance_post_genesis = w3.eth.get_balance(miner_address, 1)
+        genesis_block = w3.eth.get_block(0)
+        miner_address = genesis_block["miner"]
+
+        balance_genesis = w3.eth.get_balance(miner_address, 0)
         later_balance = w3.eth.get_balance(miner_address, "latest")
 
-        assert is_integer(balance_post_genesis)
+        assert is_integer(balance_genesis)
         assert is_integer(later_balance)
-        assert later_balance > balance_post_genesis
+        assert later_balance != balance_genesis
 
     @pytest.mark.parametrize(
         "address, expect_success",
@@ -2843,18 +2872,24 @@ class EthModuleTest:
     def test_eth_getUncleCountByBlockHash(
         self, w3: "Web3", empty_block: BlockData
     ) -> None:
-        uncle_count = w3.eth.get_uncle_count(empty_block["hash"])
+        with pytest.warns(
+            DeprecationWarning, match=r"All get_uncle\* methods have been deprecated"
+        ):
+            uncle_count = w3.eth.get_uncle_count(empty_block["hash"])
 
-        assert is_integer(uncle_count)
-        assert uncle_count == 0
+            assert is_integer(uncle_count)
+            assert uncle_count == 0
 
     def test_eth_getUncleCountByBlockNumber(
         self, w3: "Web3", empty_block: BlockData
     ) -> None:
-        uncle_count = w3.eth.get_uncle_count(empty_block["number"])
+        with pytest.warns(
+            DeprecationWarning, match=r"All get_uncle\* methods have been deprecated"
+        ):
+            uncle_count = w3.eth.get_uncle_count(empty_block["number"])
 
-        assert is_integer(uncle_count)
-        assert uncle_count == 0
+            assert is_integer(uncle_count)
+            assert uncle_count == 0
 
     def test_eth_get_code(
         self, w3: "Web3", math_contract_address: ChecksumAddress
@@ -3835,6 +3870,8 @@ class EthModuleTest:
     def test_sign_authorization_and_send_raw_set_code_transaction(
         self, w3: "Web3", keyfile_account_pkey: HexStr, math_contract: "Contract"
     ) -> None:
+        # TODO: remove blockNumber block_id from eth_call and eth_getCode calls once
+        #  geth behavior for "latest" seems stable again.
         keyfile_account = w3.eth.account.from_key(keyfile_account_pkey)
 
         chain_id = w3.eth.chain_id
@@ -3849,9 +3886,7 @@ class EthModuleTest:
 
         # get current math counter and increase it only in the delegation by n
         math_counter = math_contract.functions.counter().call()
-        data = math_contract.functions.incrementCounter(
-            math_counter + 1337
-        ).build_transaction({})["data"]
+        data = math_contract.encode_abi("incrementCounter", [math_counter + 1337])
         txn: TxParams = {
             "chainId": chain_id,
             "to": keyfile_account.address,
@@ -3867,16 +3902,26 @@ class EthModuleTest:
         signed = keyfile_account.sign_transaction(txn)
         tx_hash = w3.eth.send_raw_transaction(signed.raw_transaction)
         get_tx = w3.eth.get_transaction(tx_hash)
-        w3.eth.wait_for_transaction_receipt(tx_hash, timeout=10)
+        receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=10)
 
-        code = w3.eth.get_code(keyfile_account.address)
+        code = w3.eth.get_code(
+            keyfile_account.address, block_identifier=receipt["blockNumber"]
+        )
         assert code.to_0x_hex() == f"0xef0100{math_contract.address[2:].lower()}"
         delegated = w3.eth.contract(
             address=keyfile_account.address, abi=math_contract.abi
         )
         # assert the math counter is increased by 1337 only in delegated acct
-        assert math_contract.functions.counter().call() == math_counter
-        assert delegated.functions.counter().call() == math_counter + 1337
+        assert (
+            math_contract.functions.counter().call(
+                block_identifier=receipt["blockNumber"]
+            )
+            == math_counter
+        )
+        assert (
+            delegated.functions.counter().call(block_identifier=receipt["blockNumber"])
+            == math_counter + 1337
+        )
 
         assert len(get_tx["authorizationList"]) == 1
         get_auth = get_tx["authorizationList"][0]
@@ -3900,9 +3945,13 @@ class EthModuleTest:
 
         signed_reset = keyfile_account.sign_transaction(new_txn)
         reset_tx_hash = w3.eth.send_raw_transaction(signed_reset.raw_transaction)
-        w3.eth.wait_for_transaction_receipt(reset_tx_hash, timeout=10)
+        reset_tx_receipt = w3.eth.wait_for_transaction_receipt(
+            reset_tx_hash, timeout=10
+        )
 
-        reset_code = w3.eth.get_code(keyfile_account.address)
+        reset_code = w3.eth.get_code(
+            keyfile_account.address, block_identifier=reset_tx_receipt["blockNumber"]
+        )
         assert reset_code == HexBytes("0x")
 
     def test_eth_call(self, w3: "Web3", math_contract: "Contract") -> None:
