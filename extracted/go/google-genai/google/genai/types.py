@@ -405,6 +405,38 @@ class TurnCoverage(_common.CaseInSensitiveEnum):
   TURN_INCLUDES_ALL_INPUT = 'TURN_INCLUDES_ALL_INPUT'
 
 
+class Blob(_common.BaseModel):
+  """Content blob."""
+
+  display_name: Optional[str] = Field(
+      default=None,
+      description="""Optional. Display name of the blob. Used to provide a label or filename to distinguish blobs. This field is not currently used in the Gemini GenerateContent calls.""",
+  )
+  data: Optional[bytes] = Field(
+      default=None, description="""Required. Raw bytes."""
+  )
+  mime_type: Optional[str] = Field(
+      default=None,
+      description="""Required. The IANA standard MIME type of the source data.""",
+  )
+
+
+class BlobDict(TypedDict, total=False):
+  """Content blob."""
+
+  display_name: Optional[str]
+  """Optional. Display name of the blob. Used to provide a label or filename to distinguish blobs. This field is not currently used in the Gemini GenerateContent calls."""
+
+  data: Optional[bytes]
+  """Required. Raw bytes."""
+
+  mime_type: Optional[str]
+  """Required. The IANA standard MIME type of the source data."""
+
+
+BlobOrDict = Union[Blob, BlobDict]
+
+
 class VideoMetadata(_common.BaseModel):
   """Metadata describes the input video content."""
 
@@ -588,31 +620,6 @@ class FunctionResponseDict(TypedDict, total=False):
 FunctionResponseOrDict = Union[FunctionResponse, FunctionResponseDict]
 
 
-class Blob(_common.BaseModel):
-  """Content blob."""
-
-  data: Optional[bytes] = Field(
-      default=None, description="""Required. Raw bytes."""
-  )
-  mime_type: Optional[str] = Field(
-      default=None,
-      description="""Required. The IANA standard MIME type of the source data.""",
-  )
-
-
-class BlobDict(TypedDict, total=False):
-  """Content blob."""
-
-  data: Optional[bytes]
-  """Required. Raw bytes."""
-
-  mime_type: Optional[str]
-  """Required. The IANA standard MIME type of the source data."""
-
-
-BlobOrDict = Union[Blob, BlobDict]
-
-
 class Part(_common.BaseModel):
   """A datatype containing media content.
 
@@ -627,6 +634,9 @@ class Part(_common.BaseModel):
   thought: Optional[bool] = Field(
       default=None,
       description="""Indicates if the part is thought from the model.""",
+  )
+  inline_data: Optional[Blob] = Field(
+      default=None, description="""Optional. Inlined bytes data."""
   )
   code_execution_result: Optional[CodeExecutionResult] = Field(
       default=None,
@@ -646,9 +656,6 @@ class Part(_common.BaseModel):
   function_response: Optional[FunctionResponse] = Field(
       default=None,
       description="""Optional. The result output of a [FunctionCall] that contains a string representing the [FunctionDeclaration.name] and a structured JSON object containing any output from the function call. It is used as context to the model.""",
-  )
-  inline_data: Optional[Blob] = Field(
-      default=None, description="""Optional. Inlined bytes data."""
   )
   text: Optional[str] = Field(
       default=None, description="""Optional. Text part (can be code)."""
@@ -725,6 +732,9 @@ class PartDict(TypedDict, total=False):
   thought: Optional[bool]
   """Indicates if the part is thought from the model."""
 
+  inline_data: Optional[BlobDict]
+  """Optional. Inlined bytes data."""
+
   code_execution_result: Optional[CodeExecutionResultDict]
   """Optional. Result of executing the [ExecutableCode]."""
 
@@ -739,9 +749,6 @@ class PartDict(TypedDict, total=False):
 
   function_response: Optional[FunctionResponseDict]
   """Optional. The result output of a [FunctionCall] that contains a string representing the [FunctionDeclaration.name] and a structured JSON object containing any output from the function call. It is used as context to the model."""
-
-  inline_data: Optional[BlobDict]
-  """Optional. Inlined bytes data."""
 
   text: Optional[str]
   """Optional. Text part (can be code)."""
@@ -2991,12 +2998,23 @@ class GenerateContentConfig(_common.BaseModel):
   )
   response_mime_type: Optional[str] = Field(
       default=None,
-      description="""Output response media type of the generated candidate text.
+      description="""Output response mimetype of the generated candidate text.
+      Supported mimetype:
+        - `text/plain`: (default) Text output.
+        - `application/json`: JSON response in the candidates.
+      The model needs to be prompted to output the appropriate response type,
+      otherwise the behavior is undefined.
+      This is a preview feature.
       """,
   )
   response_schema: Optional[SchemaUnion] = Field(
       default=None,
-      description="""Schema that the generated candidate text must adhere to.
+      description="""The `Schema` object allows the definition of input and output data types.
+      These types can be objects, but also primitives and arrays.
+      Represents a select subset of an [OpenAPI 3.0 schema
+      object](https://spec.openapis.org/oas/v3.0.3#schema).
+      If set, a compatible response_mime_type must also be set.
+      Compatible mimetypes: `application/json`: Schema for JSON response.
       """,
   )
   routing_config: Optional[GenerationConfigRoutingConfig] = Field(
@@ -3163,11 +3181,22 @@ class GenerateContentConfigDict(TypedDict, total=False):
       """
 
   response_mime_type: Optional[str]
-  """Output response media type of the generated candidate text.
+  """Output response mimetype of the generated candidate text.
+      Supported mimetype:
+        - `text/plain`: (default) Text output.
+        - `application/json`: JSON response in the candidates.
+      The model needs to be prompted to output the appropriate response type,
+      otherwise the behavior is undefined.
+      This is a preview feature.
       """
 
   response_schema: Optional[SchemaUnionDict]
-  """Schema that the generated candidate text must adhere to.
+  """The `Schema` object allows the definition of input and output data types.
+      These types can be objects, but also primitives and arrays.
+      Represents a select subset of an [OpenAPI 3.0 schema
+      object](https://spec.openapis.org/oas/v3.0.3#schema).
+      If set, a compatible response_mime_type must also be set.
+      Compatible mimetypes: `application/json`: Schema for JSON response.
       """
 
   routing_config: Optional[GenerationConfigRoutingConfigDict]
@@ -5449,7 +5478,7 @@ EditImageResponseOrDict = Union[EditImageResponse, EditImageResponseDict]
 
 
 class _UpscaleImageAPIConfig(_common.BaseModel):
-  """API config for UpscaleImage with fields not exposed to users.
+  """Internal API config for UpscaleImage.
 
   These fields require default values sent to the API which are not intended
   to be modifiable or exposed to users in the SDK method.
@@ -5477,7 +5506,7 @@ class _UpscaleImageAPIConfig(_common.BaseModel):
 
 
 class _UpscaleImageAPIConfigDict(TypedDict, total=False):
-  """API config for UpscaleImage with fields not exposed to users.
+  """Internal API config for UpscaleImage.
 
   These fields require default values sent to the API which are not intended
   to be modifiable or exposed to users in the SDK method.
@@ -5662,6 +5691,45 @@ class TunedModelInfoDict(TypedDict, total=False):
 TunedModelInfoOrDict = Union[TunedModelInfo, TunedModelInfoDict]
 
 
+class Checkpoint(_common.BaseModel):
+  """Describes the machine learning model version checkpoint."""
+
+  checkpoint_id: Optional[str] = Field(
+      default=None,
+      description="""The ID of the checkpoint.
+      """,
+  )
+  epoch: Optional[int] = Field(
+      default=None,
+      description="""The epoch of the checkpoint.
+      """,
+  )
+  step: Optional[int] = Field(
+      default=None,
+      description="""The step of the checkpoint.
+      """,
+  )
+
+
+class CheckpointDict(TypedDict, total=False):
+  """Describes the machine learning model version checkpoint."""
+
+  checkpoint_id: Optional[str]
+  """The ID of the checkpoint.
+      """
+
+  epoch: Optional[int]
+  """The epoch of the checkpoint.
+      """
+
+  step: Optional[int]
+  """The step of the checkpoint.
+      """
+
+
+CheckpointOrDict = Union[Checkpoint, CheckpointDict]
+
+
 class Model(_common.BaseModel):
   """A trained machine learning model."""
 
@@ -5706,6 +5774,14 @@ class Model(_common.BaseModel):
       default=None,
       description="""List of actions that are supported by the model.""",
   )
+  default_checkpoint_id: Optional[str] = Field(
+      default=None,
+      description="""The default checkpoint id of a model version.
+      """,
+  )
+  checkpoints: Optional[list[Checkpoint]] = Field(
+      default=None, description="""The checkpoints of the model."""
+  )
 
 
 class ModelDict(TypedDict, total=False):
@@ -5744,6 +5820,13 @@ class ModelDict(TypedDict, total=False):
 
   supported_actions: Optional[list[str]]
   """List of actions that are supported by the model."""
+
+  default_checkpoint_id: Optional[str]
+  """The default checkpoint id of a model version.
+      """
+
+  checkpoints: Optional[list[CheckpointDict]]
+  """The checkpoints of the model."""
 
 
 ModelOrDict = Union[Model, ModelDict]
@@ -5826,6 +5909,7 @@ class UpdateModelConfig(_common.BaseModel):
   )
   display_name: Optional[str] = Field(default=None, description="""""")
   description: Optional[str] = Field(default=None, description="""""")
+  default_checkpoint_id: Optional[str] = Field(default=None, description="""""")
 
 
 class UpdateModelConfigDict(TypedDict, total=False):
@@ -5838,6 +5922,9 @@ class UpdateModelConfigDict(TypedDict, total=False):
   """"""
 
   description: Optional[str]
+  """"""
+
+  default_checkpoint_id: Optional[str]
   """"""
 
 
@@ -6619,6 +6706,58 @@ _GetTuningJobParametersOrDict = Union[
 ]
 
 
+class TunedModelCheckpoint(_common.BaseModel):
+  """TunedModelCheckpoint for the Tuned Model of a Tuning Job."""
+
+  checkpoint_id: Optional[str] = Field(
+      default=None,
+      description="""The ID of the checkpoint.
+      """,
+  )
+  epoch: Optional[int] = Field(
+      default=None,
+      description="""The epoch of the checkpoint.
+      """,
+  )
+  step: Optional[int] = Field(
+      default=None,
+      description="""The step of the checkpoint.
+      """,
+  )
+  endpoint: Optional[str] = Field(
+      default=None,
+      description="""The Endpoint resource name that the checkpoint is deployed to.
+      Format: `projects/{project}/locations/{location}/endpoints/{endpoint}`.
+      """,
+  )
+
+
+class TunedModelCheckpointDict(TypedDict, total=False):
+  """TunedModelCheckpoint for the Tuned Model of a Tuning Job."""
+
+  checkpoint_id: Optional[str]
+  """The ID of the checkpoint.
+      """
+
+  epoch: Optional[int]
+  """The epoch of the checkpoint.
+      """
+
+  step: Optional[int]
+  """The step of the checkpoint.
+      """
+
+  endpoint: Optional[str]
+  """The Endpoint resource name that the checkpoint is deployed to.
+      Format: `projects/{project}/locations/{location}/endpoints/{endpoint}`.
+      """
+
+
+TunedModelCheckpointOrDict = Union[
+    TunedModelCheckpoint, TunedModelCheckpointDict
+]
+
+
 class TunedModel(_common.BaseModel):
 
   model: Optional[str] = Field(
@@ -6629,6 +6768,12 @@ class TunedModel(_common.BaseModel):
       default=None,
       description="""Output only. A resource name of an Endpoint. Format: `projects/{project}/locations/{location}/endpoints/{endpoint}`.""",
   )
+  checkpoints: Optional[list[TunedModelCheckpoint]] = Field(
+      default=None,
+      description="""The checkpoints associated with this TunedModel.
+      This field is only populated for tuning jobs that enable intermediate
+      checkpoints.""",
+  )
 
 
 class TunedModelDict(TypedDict, total=False):
@@ -6638,6 +6783,11 @@ class TunedModelDict(TypedDict, total=False):
 
   endpoint: Optional[str]
   """Output only. A resource name of an Endpoint. Format: `projects/{project}/locations/{location}/endpoints/{endpoint}`."""
+
+  checkpoints: Optional[list[TunedModelCheckpointDict]]
+  """The checkpoints associated with this TunedModel.
+      This field is only populated for tuning jobs that enable intermediate
+      checkpoints."""
 
 
 TunedModelOrDict = Union[TunedModel, TunedModelDict]
@@ -6736,6 +6886,10 @@ class SupervisedTuningSpec(_common.BaseModel):
       default=None,
       description="""Optional. Cloud Storage path to file containing validation dataset for tuning. The dataset must be formatted as a JSONL file.""",
   )
+  export_last_checkpoint_only: Optional[bool] = Field(
+      default=None,
+      description="""Optional. If set to true, disable intermediate checkpoints for SFT and only the last checkpoint will be exported.""",
+  )
 
 
 class SupervisedTuningSpecDict(TypedDict, total=False):
@@ -6749,6 +6903,9 @@ class SupervisedTuningSpecDict(TypedDict, total=False):
 
   validation_dataset_uri: Optional[str]
   """Optional. Cloud Storage path to file containing validation dataset for tuning. The dataset must be formatted as a JSONL file."""
+
+  export_last_checkpoint_only: Optional[bool]
+  """Optional. If set to true, disable intermediate checkpoints for SFT and only the last checkpoint will be exported."""
 
 
 SupervisedTuningSpecOrDict = Union[
@@ -7661,6 +7818,10 @@ class CreateTuningJobConfig(_common.BaseModel):
       default=None,
       description="""Multiplier for adjusting the default learning rate.""",
   )
+  export_last_checkpoint_only: Optional[bool] = Field(
+      default=None,
+      description="""If set to true, disable intermediate checkpoints for SFT and only the last checkpoint will be exported. Otherwise, enable intermediate checkpoints for SFT.""",
+  )
   adapter_size: Optional[AdapterSize] = Field(
       default=None, description="""Adapter size for tuning."""
   )
@@ -7694,6 +7855,9 @@ class CreateTuningJobConfigDict(TypedDict, total=False):
 
   learning_rate_multiplier: Optional[float]
   """Multiplier for adjusting the default learning rate."""
+
+  export_last_checkpoint_only: Optional[bool]
+  """If set to true, disable intermediate checkpoints for SFT and only the last checkpoint will be exported. Otherwise, enable intermediate checkpoints for SFT."""
 
   adapter_size: Optional[AdapterSize]
   """Adapter size for tuning."""
@@ -10792,6 +10956,87 @@ LiveClientRealtimeInputOrDict = Union[
     LiveClientRealtimeInput, LiveClientRealtimeInputDict
 ]
 
+if _is_pillow_image_imported:
+  BlobImageUnion = Union[Blob, PIL_Image]
+else:
+  BlobImageUnion = Blob  # type: ignore[misc]
+
+
+BlobImageUnionDict = Union[BlobImageUnion, BlobDict]
+
+
+class LiveSendRealtimeInputParameters(_common.BaseModel):
+  """Parameters for sending realtime input to the live API."""
+
+  media: Optional[BlobImageUnion] = Field(
+      default=None, description="""Realtime input to send to the session."""
+  )
+  audio: Optional[Blob] = Field(
+      default=None, description="""The realtime audio input stream."""
+  )
+  audio_stream_end: Optional[bool] = Field(
+      default=None,
+      description="""
+Indicates that the audio stream has ended, e.g. because the microphone was
+turned off.
+
+This should only be sent when automatic activity detection is enabled
+(which is the default).
+
+The client can reopen the stream by sending an audio message.
+""",
+  )
+  video: Optional[BlobImageUnion] = Field(
+      default=None, description="""The realtime video input stream."""
+  )
+  text: Optional[str] = Field(
+      default=None, description="""The realtime text input stream."""
+  )
+  activity_start: Optional[ActivityStart] = Field(
+      default=None, description="""Marks the start of user activity."""
+  )
+  activity_end: Optional[ActivityEnd] = Field(
+      default=None, description="""Marks the end of user activity."""
+  )
+
+
+class LiveSendRealtimeInputParametersDict(TypedDict, total=False):
+  """Parameters for sending realtime input to the live API."""
+
+  media: Optional[BlobImageUnionDict]
+  """Realtime input to send to the session."""
+
+  audio: Optional[BlobDict]
+  """The realtime audio input stream."""
+
+  audio_stream_end: Optional[bool]
+  """
+Indicates that the audio stream has ended, e.g. because the microphone was
+turned off.
+
+This should only be sent when automatic activity detection is enabled
+(which is the default).
+
+The client can reopen the stream by sending an audio message.
+"""
+
+  video: Optional[BlobImageUnionDict]
+  """The realtime video input stream."""
+
+  text: Optional[str]
+  """The realtime text input stream."""
+
+  activity_start: Optional[ActivityStartDict]
+  """Marks the start of user activity."""
+
+  activity_end: Optional[ActivityEndDict]
+  """Marks the end of user activity."""
+
+
+LiveSendRealtimeInputParametersOrDict = Union[
+    LiveSendRealtimeInputParameters, LiveSendRealtimeInputParametersDict
+]
+
 
 class LiveClientToolResponse(_common.BaseModel):
   """Client generated response to a `ToolCall` received from the server.
@@ -11089,85 +11334,4 @@ class LiveConnectParametersDict(TypedDict, total=False):
 
 LiveConnectParametersOrDict = Union[
     LiveConnectParameters, LiveConnectParametersDict
-]
-
-if _is_pillow_image_imported:
-  BlobImageUnion = Union[Blob, PIL_Image]
-else:
-  BlobImageUnion = Blob  # type: ignore[misc]
-
-
-BlobImageUnionDict = Union[BlobImageUnion, BlobDict]
-
-
-class LiveSendRealtimeInputParameters(_common.BaseModel):
-  """Parameters for sending realtime input to the live API."""
-
-  media: Optional[BlobImageUnion] = Field(
-      default=None, description="""Realtime input to send to the session."""
-  )
-  audio: Optional[Blob] = Field(
-      default=None, description="""The realtime audio input stream."""
-  )
-  audio_stream_end: Optional[bool] = Field(
-      default=None,
-      description="""
-Indicates that the audio stream has ended, e.g. because the microphone was
-turned off.
-
-This should only be sent when automatic activity detection is enabled
-(which is the default).
-
-The client can reopen the stream by sending an audio message.
-""",
-  )
-  video: Optional[BlobImageUnion] = Field(
-      default=None, description="""The realtime video input stream."""
-  )
-  text: Optional[str] = Field(
-      default=None, description="""The realtime text input stream."""
-  )
-  activity_start: Optional[ActivityStart] = Field(
-      default=None, description="""Marks the start of user activity."""
-  )
-  activity_end: Optional[ActivityEnd] = Field(
-      default=None, description="""Marks the end of user activity."""
-  )
-
-
-class LiveSendRealtimeInputParametersDict(TypedDict, total=False):
-  """Parameters for sending realtime input to the live API."""
-
-  media: Optional[BlobImageUnionDict]
-  """Realtime input to send to the session."""
-
-  audio: Optional[BlobDict]
-  """The realtime audio input stream."""
-
-  audio_stream_end: Optional[bool]
-  """
-Indicates that the audio stream has ended, e.g. because the microphone was
-turned off.
-
-This should only be sent when automatic activity detection is enabled
-(which is the default).
-
-The client can reopen the stream by sending an audio message.
-"""
-
-  video: Optional[BlobImageUnionDict]
-  """The realtime video input stream."""
-
-  text: Optional[str]
-  """The realtime text input stream."""
-
-  activity_start: Optional[ActivityStartDict]
-  """Marks the start of user activity."""
-
-  activity_end: Optional[ActivityEndDict]
-  """Marks the end of user activity."""
-
-
-LiveSendRealtimeInputParametersOrDict = Union[
-    LiveSendRealtimeInputParameters, LiveSendRealtimeInputParametersDict
 ]

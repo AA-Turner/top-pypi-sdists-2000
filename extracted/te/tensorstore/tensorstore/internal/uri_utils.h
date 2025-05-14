@@ -22,6 +22,7 @@
 #include <string>
 #include <string_view>
 
+#include "absl/status/status.h"
 #include "tensorstore/internal/ascii_set.h"
 
 namespace tensorstore {
@@ -38,6 +39,16 @@ static inline constexpr AsciiSet kUriPathUnreservedChars{
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "0123456789"
     "-_.!~*'():@&=+$,;/"};
+
+// Same as kUriPathUnreservedChars except that "@" is excluded.
+//
+// This is used when encoding kvstore URLs in order to reserve @ for specifying
+// versions, e.g. for OCDBT.
+static inline constexpr AsciiSet kKvStoreUriPathUnreservedChars{
+    "abcdefghijklmnopqrstuvwxyz"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "0123456789"
+    "-_.!~*'():&=+$,;/"};
 
 /// Percent encodes any characters in `src` that are not in `unreserved`.
 void PercentEncodeReserved(std::string_view src, std::string& dest,
@@ -73,6 +84,14 @@ inline std::string PercentEncodeReserved(std::string_view src,
 ///   "/"
 inline std::string PercentEncodeUriPath(std::string_view src) {
   return PercentEncodeReserved(src, kUriPathUnreservedChars);
+}
+
+/// Percent-encodes characters not allowed in KvStore URI paths.
+///
+/// "@" is percent-encoded in order to allow it to be used to indicate a
+/// version.
+inline std::string PercentEncodeKvStoreUriPath(std::string_view src) {
+  return PercentEncodeReserved(src, kKvStoreUriPathUnreservedChars);
 }
 
 /// Percent-encodes characters not in the unreserved set, as defined by RFC2396:
@@ -120,9 +139,20 @@ struct ParsedGenericUri {
 };
 
 /// Parses a "generic" URI of the form
-/// `<scheme>://<authority-and-path>?<query>#<fragment>` where the `?<query>`
-/// and `#<fragment>` portions are optional.
+/// `<scheme><scheme_delimiter>//<authority-and-path>?<query>#<fragment>`
+/// where the `?<query>` and `#<fragment>` portions are optional.
+///
+/// `<scheme_delimiter>`  is:
+/// - "://" for `ParseGenericUri`
+/// - ":" for `ParseGenericUriWithoutSlashSlash`
 ParsedGenericUri ParseGenericUri(std::string_view uri);
+ParsedGenericUri ParseGenericUriWithoutSlashSlash(std::string_view uri);
+
+// Returns an error if there is a query or fragment.
+absl::Status EnsureNoQueryOrFragment(const ParsedGenericUri& parsed_uri);
+
+// Returns an error if there is a path, query or fragment.
+absl::Status EnsureNoPathOrQueryOrFragment(const ParsedGenericUri& parsed_uri);
 
 struct HostPort {
   std::string_view host;

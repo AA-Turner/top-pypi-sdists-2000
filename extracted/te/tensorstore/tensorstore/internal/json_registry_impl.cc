@@ -23,6 +23,7 @@
 #include <utility>
 
 #include "absl/container/flat_hash_set.h"
+#include "absl/functional/function_ref.h"
 #include "absl/log/absl_log.h"
 #include "absl/status/status.h"
 #include "absl/synchronization/mutex.h"
@@ -42,9 +43,9 @@ absl::Status GetJsonUnregisteredError(std::string_view id) {
       tensorstore::StrCat(QuoteString(id), " is not registered"));
 }
 
-void JsonRegistryImpl::Register(std::unique_ptr<Entry> entry) {
+void JsonRegistryImpl::Register(std::unique_ptr<Entry> entry, bool alias) {
   absl::WriterMutexLock lock(&mutex_);
-  {
+  if (!alias) {
     auto [it, inserted] = entries_by_type_.insert(entry.get());
     if (!inserted) {
       ABSL_LOG(FATAL) << (*it)->type->name() << " already registered";
@@ -58,7 +59,10 @@ void JsonRegistryImpl::Register(std::unique_ptr<Entry> entry) {
   }
 }
 
-absl::Status JsonRegistryImpl::LoadKey(void* obj, ::nlohmann::json* j) const {
+absl::Status JsonRegistryImpl::LoadKey(
+    void* obj, ::nlohmann::json* j,
+    absl::FunctionRef<absl::Status(std::string_view unregistered_key)>
+        handle_unregistered) const {
   TENSORSTORE_ASSIGN_OR_RETURN(
       auto id, internal_json_binding::FromJson<std::string>(std::move(*j)));
   const Entry* entry = nullptr;
@@ -71,7 +75,7 @@ absl::Status JsonRegistryImpl::LoadKey(void* obj, ::nlohmann::json* j) const {
   if (entry) {
     entry->allocate(obj);
   } else {
-    return internal_json_registry::GetJsonUnregisteredError(id);
+    return handle_unregistered(id);
   }
   return absl::OkStatus();
 }

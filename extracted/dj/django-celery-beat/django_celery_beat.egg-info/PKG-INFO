@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: django-celery-beat
-Version: 2.8.0
+Version: 2.8.1
 Summary: Database-backed Periodic Tasks.
 Home-page: https://github.com/celery/django-celery-beat
 Author: Asif Saif Uddin, Ask Solem
@@ -63,7 +63,7 @@ Dynamic: summary
 
 |build-status| |coverage| |license| |wheel| |pyversion| |pyimp|
 
-:Version: 2.8.0
+:Version: 2.8.1
 :Web: http://django-celery-beat.readthedocs.io/
 :Download: http://pypi.python.org/pypi/django-celery-beat
 :Source: http://github.com/celery/django-celery-beat

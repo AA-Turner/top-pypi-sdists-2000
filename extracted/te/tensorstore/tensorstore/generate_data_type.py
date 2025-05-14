@@ -23,6 +23,7 @@ MAP = {
     'BOOL': ['bool_t'],
     'BYTE': ['char_t', 'byte_t'],
     'INT': [
+        'int2_t',
         'int4_t',
         # 'uint4_t',  # TODO(summivox): b/295577703
         'int8_t',
@@ -35,6 +36,7 @@ MAP = {
         'uint64_t',
     ],
     'FLOAT': [
+        'float8_e3m4_t',
         'float8_e4m3fn_t',
         'float8_e4m3fnuz_t',
         'float8_e4m3b11fnuz_t',

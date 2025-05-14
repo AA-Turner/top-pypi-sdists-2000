@@ -173,6 +173,11 @@ def _CreateTuningJobConfig_to_mldev(
         getv(from_object, ['learning_rate_multiplier']),
     )
 
+  if getv(from_object, ['export_last_checkpoint_only']) is not None:
+    raise ValueError(
+        'export_last_checkpoint_only parameter is not supported in Gemini API.'
+    )
+
   if getv(from_object, ['adapter_size']) is not None:
     raise ValueError('adapter_size parameter is not supported in Gemini API.')
 
@@ -367,6 +372,13 @@ def _CreateTuningJobConfig_to_vertex(
         getv(from_object, ['learning_rate_multiplier']),
     )
 
+  if getv(from_object, ['export_last_checkpoint_only']) is not None:
+    setv(
+        parent_object,
+        ['supervisedTuningSpec', 'exportLastCheckpointOnly'],
+        getv(from_object, ['export_last_checkpoint_only']),
+    )
+
   if getv(from_object, ['adapter_size']) is not None:
     setv(
         parent_object,
@@ -409,6 +421,16 @@ def _CreateTuningJobParameters_to_vertex(
             api_client, getv(from_object, ['config']), to_object
         ),
     )
+
+  return to_object
+
+
+def _TunedModelCheckpoint_from_mldev(
+    api_client: BaseApiClient,
+    from_object: Union[dict[str, Any], object],
+    parent_object: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+  to_object: dict[str, Any] = {}
 
   return to_object
 
@@ -548,6 +570,27 @@ def _Operation_from_mldev(
   return to_object
 
 
+def _TunedModelCheckpoint_from_vertex(
+    api_client: BaseApiClient,
+    from_object: Union[dict[str, Any], object],
+    parent_object: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+  to_object: dict[str, Any] = {}
+  if getv(from_object, ['checkpointId']) is not None:
+    setv(to_object, ['checkpoint_id'], getv(from_object, ['checkpointId']))
+
+  if getv(from_object, ['epoch']) is not None:
+    setv(to_object, ['epoch'], getv(from_object, ['epoch']))
+
+  if getv(from_object, ['step']) is not None:
+    setv(to_object, ['step'], getv(from_object, ['step']))
+
+  if getv(from_object, ['endpoint']) is not None:
+    setv(to_object, ['endpoint'], getv(from_object, ['endpoint']))
+
+  return to_object
+
+
 def _TunedModel_from_vertex(
     api_client: BaseApiClient,
     from_object: Union[dict[str, Any], object],
@@ -559,6 +602,16 @@ def _TunedModel_from_vertex(
 
   if getv(from_object, ['endpoint']) is not None:
     setv(to_object, ['endpoint'], getv(from_object, ['endpoint']))
+
+  if getv(from_object, ['checkpoints']) is not None:
+    setv(
+        to_object,
+        ['checkpoints'],
+        [
+            _TunedModelCheckpoint_from_vertex(api_client, item, to_object)
+            for item in getv(from_object, ['checkpoints'])
+        ],
+    )
 
   return to_object
 

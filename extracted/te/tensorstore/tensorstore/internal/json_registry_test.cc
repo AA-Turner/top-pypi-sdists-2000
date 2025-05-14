@@ -14,16 +14,20 @@
 
 #include "tensorstore/internal/json_registry.h"
 
+#include <string_view>
+
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include "absl/base/no_destructor.h"
 #include "absl/status/status.h"
+#include <nlohmann/json_fwd.hpp>
 #include "tensorstore/internal/intrusive_ptr.h"
 #include "tensorstore/internal/json_binding/bindable.h"
 #include "tensorstore/internal/json_binding/json_binding.h"
-#include "tensorstore/internal/json_gtest.h"
+#include "tensorstore/internal/testing/json_gtest.h"  // IWYU pragma: keep
 #include "tensorstore/json_serialization_options.h"
 #include "tensorstore/util/status_testutil.h"
+#include "tensorstore/util/str_cat.h"
 
 namespace {
 
@@ -54,14 +58,22 @@ Registry& GetRegistry() {
   return *registry;
 }
 
+namespace jb = tensorstore::internal_json_binding;
+
 TENSORSTORE_DEFINE_JSON_DEFAULT_BINDER(MyInterfacePtr, [](auto is_loading,
                                                           const auto& options,
                                                           auto* obj,
                                                           ::nlohmann::json* j) {
-  namespace jb = tensorstore::internal_json_binding;
   return jb::Object(GetRegistry().MemberBinder("id"))(is_loading, options, obj,
                                                       j);
 })
+
+auto GetBinderWithCustomError() {
+  return jb::Object(GetRegistry().MemberBinder("id", [](std::string_view id) {
+    return absl::InvalidArgumentError(
+        tensorstore::StrCat("custom error: ", id));
+  }));
+}
 
 class FooImpl : public MyInterface {
  public:
@@ -79,7 +91,8 @@ struct FooRegistration {
   FooRegistration() {
     namespace jb = tensorstore::internal_json_binding;
     GetRegistry().Register<FooImpl>(
-        "foo", jb::Object(jb::Member("x", jb::Projection(&FooImpl::x))));
+        "foo", jb::Object(jb::Member("x", jb::Projection(&FooImpl::x))),
+        {{"foo_alias1", "foo_alias2"}});
   }
 } foo_registration;
 
@@ -96,6 +109,20 @@ TEST(RegistryTest, Foo) {
   TENSORSTORE_ASSERT_OK_AND_ASSIGN(auto obj, MyInterfacePtr::FromJson(j));
   EXPECT_EQ(10, obj->Whatever());
   EXPECT_EQ(j, obj.ToJson());
+
+  {
+    TENSORSTORE_ASSERT_OK_AND_ASSIGN(
+        auto obj_alias,
+        MyInterfacePtr::FromJson({{"id", "foo_alias1"}, {"x", 10}}));
+    EXPECT_EQ(j, obj_alias.ToJson());
+  }
+
+  {
+    TENSORSTORE_ASSERT_OK_AND_ASSIGN(
+        auto obj_alias,
+        MyInterfacePtr::FromJson({{"id", "foo_alias2"}, {"x", 10}}));
+    EXPECT_EQ(j, obj_alias.ToJson());
+  }
 }
 
 TEST(RegistryTest, Bar) {
@@ -110,6 +137,14 @@ TEST(RegistryTest, Unknown) {
               MatchesStatus(absl::StatusCode::kInvalidArgument,
                             "Error parsing object member \"id\": "
                             "\"baz\" is not registered"));
+}
+
+TEST(RegistryTest, UnknownCustomError) {
+  EXPECT_THAT(jb::FromJson<MyInterfacePtr>({{"id", "baz"}, {"y", 42.5}},
+                                           GetBinderWithCustomError()),
+              MatchesStatus(absl::StatusCode::kInvalidArgument,
+                            "Error parsing object member \"id\": "
+                            "custom error: baz"));
 }
 
 }  // namespace

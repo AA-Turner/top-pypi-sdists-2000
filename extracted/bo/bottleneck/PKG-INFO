@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: Bottleneck
-Version: 1.4.2
+Version: 1.5.0
 Summary: Fast NumPy array functions written in C
 Home-page: https://github.com/pydata/bottleneck
 Download-URL: http://pypi.python.org/pypi/Bottleneck
@@ -12,7 +12,6 @@ Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Science/Research
 Classifier: Intended Audience :: Financial and Insurance Industry
-Classifier: License :: OSI Approved :: BSD License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: C
 Classifier: Programming Language :: Python
@@ -31,6 +30,20 @@ Provides-Extra: doc
 Requires-Dist: numpydoc; extra == "doc"
 Requires-Dist: sphinx; extra == "doc"
 Requires-Dist: gitpython; extra == "doc"
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: download-url
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: maintainer
+Dynamic: maintainer-email
+Dynamic: platform
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 Bottleneck is a collection of fast NumPy array functions written in C.
 
@@ -134,10 +147,18 @@ and LICENSES directory for details.
 Install
 =======
 
+Bottleneck provides binary wheels on PyPI for all the most common platforms.
+Binary packages are also available in conda-forge. We recommend installing binaries
+with ``pip``, ``uv``, ``conda`` or similar - it's faster and easier than building
+from source.
+
+Installing from source
+----------------------
+
 Requirements:
 
 ======================== ============================================================================
-Bottleneck               Python 2.7, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11; NumPy 1.16.0+
+Bottleneck               Python >=3.9; NumPy 1.16.0+
 Compile                  gcc, clang, MinGW or MSVC
 Unit tests               pytest
 Documentation            sphinx, numpydoc
@@ -155,9 +176,6 @@ system path. Then install Bottleneck with the command:
 .. code-block:: console
 
     $ python setup.py install --compiler=mingw32
-
-Alternatively, you can use the Windows binaries created by Christoph Gohlke:
-http://www.lfd.uci.edu/~gohlke/pythonlibs/#bottleneck
 
 Unit tests
 ==========

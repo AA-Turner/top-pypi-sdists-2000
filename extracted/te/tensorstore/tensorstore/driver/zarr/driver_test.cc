@@ -46,12 +46,12 @@
 #include "tensorstore/index_space/index_transform.h"
 #include "tensorstore/index_space/index_transform_builder.h"
 #include "tensorstore/internal/compression/blosc.h"
-#include "tensorstore/internal/decoded_matches.h"
 #include "tensorstore/internal/global_initializer.h"
 #include "tensorstore/internal/json/json.h"
 #include "tensorstore/internal/json_binding/gtest.h"
-#include "tensorstore/internal/json_gtest.h"
-#include "tensorstore/internal/parse_json_matches.h"
+#include "tensorstore/internal/testing/decoded_matches.h"
+#include "tensorstore/internal/testing/json_gtest.h"
+#include "tensorstore/internal/testing/parse_json_matches.h"
 #include "tensorstore/json_serialization_options_base.h"
 #include "tensorstore/kvstore/kvstore.h"
 #include "tensorstore/kvstore/memory/memory_key_value_store.h"
@@ -98,6 +98,8 @@ using ::tensorstore::internal::ParseJsonMatches;
 using ::tensorstore::internal::TestSpecSchema;
 using ::tensorstore::internal::TestTensorStoreCreateCheckSchema;
 using ::tensorstore::internal::TestTensorStoreCreateWithSchema;
+using ::tensorstore::internal::TestTensorStoreSpecRoundtripNormalize;
+using ::tensorstore::internal::TestTensorStoreUrlRoundtrip;
 using ::testing::ElementsAreArray;
 using ::testing::Pair;
 using ::testing::UnorderedElementsAreArray;
@@ -871,7 +873,8 @@ template <typename InternalFloat>
 class InternalFloat8Test : public ::testing::Test {};
 
 using InternalFloat8Types =
-    ::testing::Types<::tensorstore::dtypes::float8_e4m3fn_t,
+    ::testing::Types<::tensorstore::dtypes::float8_e3m4_t,
+                     ::tensorstore::dtypes::float8_e4m3fn_t,
                      ::tensorstore::dtypes::float8_e4m3fnuz_t,
                      ::tensorstore::dtypes::float8_e4m3b11fnuz_t,
                      ::tensorstore::dtypes::float8_e5m2_t,
@@ -2287,6 +2290,7 @@ TENSORSTORE_GLOBAL_INITIALIZER {
         {"input_inclusive_min", {0, 0}}}},
   };
   options.check_serialization = true;
+  options.url = "file://${TEMPDIR}/prefix/|zarr2:";
   tensorstore::internal::RegisterTensorStoreDriverSpecRoundtripTest(
       std::move(options));
 }
@@ -3458,6 +3462,17 @@ TEST(DriverTest, AssumeCachedMetadataMismatch) {
 
   EXPECT_THAT(tensorstore::ResolveBounds(store).result(),
               MatchesStatus(absl::StatusCode::kFailedPrecondition));
+}
+
+TEST(DriverTest, UrlSchemeRoundtrip) {
+  TestTensorStoreUrlRoundtrip(
+      {{"driver", "zarr"},
+       {"kvstore", {{"driver", "memory"}, {"path", "abc.zarr/"}}}},
+      "memory://abc.zarr/|zarr2:");
+  TestTensorStoreSpecRoundtripNormalize(
+      "memory://abc.zarr|zarr2:def",
+      {{"driver", "zarr"},
+       {"kvstore", {{"driver", "memory"}, {"path", "abc.zarr/def/"}}}});
 }
 
 }  // namespace

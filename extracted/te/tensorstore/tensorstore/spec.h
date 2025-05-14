@@ -34,7 +34,7 @@
 #include "tensorstore/index_space/index_domain.h"
 #include "tensorstore/index_space/index_transform.h"
 #include "tensorstore/internal/json_binding/bindable.h"
-#include "tensorstore/internal/type_traits.h"
+#include "tensorstore/internal/meta/type_traits.h"
 #include "tensorstore/json_serialization_options.h"
 #include "tensorstore/kvstore/spec.h"
 #include "tensorstore/open_mode.h"
@@ -218,6 +218,12 @@ class Spec {
   /// Otherwise, returns an error.
   Result<IndexTransform<>> GetTransformForIndexingOperation() const;
 
+  /// Parses a `Spec` from its URL representation.
+  static Result<Spec> FromUrl(std::string_view url);
+
+  /// Returns the URL representation of this spec, if supported.
+  Result<std::string> ToUrl() const;
+
  private:
   friend class internal_spec::SpecAccess;
 
@@ -225,9 +231,9 @@ class Spec {
 };
 
 namespace internal {
-/// Implementation of `TensorStore::spec`.
-///
-/// Refer to that method documentation for details.
+// Implementation of `TensorStore::spec`.
+//
+// Refer to that method documentation for details.
 Result<Spec> GetSpec(const DriverHandle& handle, SpecRequestOptions&& options);
 
 struct SpecNonNullSerializer {

@@ -22,13 +22,13 @@
 #include <string_view>
 #include <variant>
 
-#include "absl/base/internal/endian.h"
 #include "absl/crc/crc32c.h"
 #include "absl/functional/function_ref.h"
 #include "absl/log/absl_check.h"
 #include "absl/status/status.h"
 #include "absl/strings/cord.h"
 #include "absl/strings/str_format.h"
+#include "riegeli/base/byte_fill.h"
 #include "riegeli/bytes/cord_reader.h"
 #include "riegeli/bytes/cord_writer.h"
 #include "riegeli/bytes/limiting_reader.h"
@@ -44,6 +44,7 @@
 #include "riegeli/zstd/zstd_reader.h"
 #include "riegeli/zstd/zstd_writer.h"
 #include "tensorstore/kvstore/ocdbt/format/config.h"
+#include "tensorstore/util/endian.h"
 #include "tensorstore/util/result.h"
 #include "tensorstore/util/status.h"
 
@@ -193,7 +194,7 @@ Result<absl::Cord> EncodeWithOptionalCompression(
     absl::big_endian::Store32(header, magic);
 
     // Leave 12-byte placeholder to be filled in later.
-    if (!writer.WriteZeros(12)) return false;
+    if (!writer.Write(riegeli::ByteFill(12))) return false;
 
     // Compute CRC-32C digest of remaining data.
     riegeli::DigestingWriter digesting_writer(&writer,
@@ -221,7 +222,7 @@ Result<absl::Cord> EncodeWithOptionalCompression(
 
     // Complete `header` by filling in length.
     auto length = writer.pos() + 4;
-    absl::little_endian::Store64(header + 4, length);
+    little_endian::Store64(header + 4, length);
 
     std::string_view header_string_view(header, sizeof(header));
 

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: psycopg
-Version: 3.2.8
+Version: 3.2.9
 Summary: PostgreSQL database adapter for Python
 Home-page: https://psycopg.org/psycopg3/
 Author: Daniele Varrazzo
@@ -39,9 +39,9 @@ Requires-Dist: backports.zoneinfo>=0.2.0; python_version < "3.9"
 Requires-Dist: typing-extensions>=4.6; python_version < "3.13"
 Requires-Dist: tzdata; sys_platform == "win32"
 Provides-Extra: c
-Requires-Dist: psycopg-c==3.2.8; implementation_name != "pypy" and extra == "c"
+Requires-Dist: psycopg-c==3.2.9; implementation_name != "pypy" and extra == "c"
 Provides-Extra: binary
-Requires-Dist: psycopg-binary==3.2.8; implementation_name != "pypy" and extra == "binary"
+Requires-Dist: psycopg-binary==3.2.9; implementation_name != "pypy" and extra == "binary"
 Provides-Extra: pool
 Requires-Dist: psycopg-pool; extra == "pool"
 Provides-Extra: test

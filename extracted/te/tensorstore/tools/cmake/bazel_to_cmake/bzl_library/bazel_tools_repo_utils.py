@@ -15,14 +15,14 @@
 
 # pylint: disable=invalid-name,missing-function-docstring,relative-beyond-top-level,g-long-lambda
 
-from ..starlark.bazel_globals import BazelGlobals
-from ..starlark.bazel_globals import register_bzl_library
+from ..starlark.scope_common import ScopeCommon
+from .register import register_bzl_library
 
 
 @register_bzl_library(
     "@bazel_tools//tools/build_defs/repo:utils.bzl", workspace=True
 )
-class BazelToolsRepoUtilsLibrary(BazelGlobals):
+class BazelToolsRepoUtilsLibrary(ScopeCommon):
 
   def bazel_maybe(self, fn, **kwargs):
     fn(**kwargs)

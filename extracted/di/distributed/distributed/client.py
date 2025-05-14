@@ -892,7 +892,7 @@ class _MapExpr(Expr):
 
         if not self.kwargs:
             dsk = {
-                key: Task(key, self.func, *args)
+                key: Task(key, self.func, *parse_input(args))  # type: ignore[misc]
                 for key, args in zip(self.keys, zip(*self.iterables))
             }
 
@@ -907,12 +907,17 @@ class _MapExpr(Expr):
                 else:
                     kwargs2[k] = parse_input(v)
 
-                dsk.update(
-                    {
-                        key: Task(key, self.func, *args, **kwargs2)
-                        for key, args in zip(self.keys, zip(*self.iterables))
-                    }
-                )
+            dsk.update(
+                {
+                    key: Task(
+                        key,
+                        self.func,
+                        *parse_input(args),  # type: ignore[misc]
+                        **kwargs2,
+                    )
+                    for key, args in zip(self.keys, zip(*self.iterables))
+                }
+            )
         return dsk
 
 
@@ -1343,18 +1348,16 @@ class Client(SyncMethodMixin):
         info = self._scheduler_identity
         addr = info.get("address")
         if addr:
-            workers = info.get("workers", {})
-            nworkers = len(workers)
-            nthreads = sum(w["nthreads"] for w in workers.values())
+            nworkers = info.get("n_workers", 0)
+            nthreads = info.get("total_threads", 0)
             text = "<%s: %r processes=%d threads=%d" % (
                 self.__class__.__name__,
                 addr,
                 nworkers,
                 nthreads,
             )
-            memory = [w["memory_limit"] for w in workers.values()]
-            if all(memory):
-                text += ", memory=" + format_bytes(sum(memory))
+            memory = info.get("total_memory", 0)
+            text += ", memory=" + format_bytes(memory)
             text += ">"
             return text
 
@@ -2146,7 +2149,10 @@ class Client(SyncMethodMixin):
                     *(parse_input(a) for a in args),
                     **{k: parse_input(v) for k, v in kwargs.items()},
                 )
-            }
+            },
+            # We'd like to avoid hashing/tokenizing all of the above.
+            # The LLGExpr in this situation is as unique as it'll get.
+            _determ_token=uuid.uuid4().hex,
         )
         futures = self._graph_to_futures(
             expr,

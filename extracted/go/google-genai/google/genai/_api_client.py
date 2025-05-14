@@ -32,6 +32,7 @@ import math
 import os
 import ssl
 import sys
+import threading
 import time
 from typing import Any, AsyncIterator, Optional, Tuple, Union
 from urllib.parse import urlparse
@@ -376,10 +377,12 @@ class BaseApiClient:
     # credentials. This is crucial for thread safety when multiple coroutines
     # might be accessing the credentials at the same time.
     try:
-      self._auth_lock = asyncio.Lock()
+      self._sync_auth_lock = threading.Lock()
+      self._async_auth_lock = asyncio.Lock()
     except RuntimeError:
       asyncio.set_event_loop(asyncio.new_event_loop())
-      self._auth_lock = asyncio.Lock()
+      self._sync_auth_lock = threading.Lock()
+      self._async_auth_lock = asyncio.Lock()
 
     # Handle when to use Vertex AI in express mode (api key).
     # Explicit initializer arguments are already validated above.
@@ -519,25 +522,26 @@ class BaseApiClient:
 
   def _access_token(self) -> str:
     """Retrieves the access token for the credentials."""
-    if not self._credentials:
-      self._credentials, project = _load_auth(project=self.project)
-      if not self.project:
-        self.project = project
+    with self._sync_auth_lock:
+      if not self._credentials:
+        self._credentials, project = _load_auth(project=self.project)
+        if not self.project:
+          self.project = project
 
-    if self._credentials:
-      if self._credentials.expired or not self._credentials.token:
-        # Only refresh when it needs to. Default expiration is 3600 seconds.
-        _refresh_auth(self._credentials)
-      if not self._credentials.token:
+      if self._credentials:
+        if self._credentials.expired or not self._credentials.token:
+          # Only refresh when it needs to. Default expiration is 3600 seconds.
+          _refresh_auth(self._credentials)
+        if not self._credentials.token:
+          raise RuntimeError('Could not resolve API token from the environment')
+        return self._credentials.token  # type: ignore[no-any-return]
+      else:
         raise RuntimeError('Could not resolve API token from the environment')
-      return self._credentials.token  # type: ignore[no-any-return]
-    else:
-      raise RuntimeError('Could not resolve API token from the environment')
 
   async def _async_access_token(self) -> Union[str, Any]:
     """Retrieves the access token for the credentials asynchronously."""
     if not self._credentials:
-      async with self._auth_lock:
+      async with self._async_auth_lock:
         # This ensures that only one coroutine can execute the auth logic at a
         # time for thread safety.
         if not self._credentials:
@@ -551,7 +555,7 @@ class BaseApiClient:
     if self._credentials:
       if self._credentials.expired or not self._credentials.token:
         # Only refresh when it needs to. Default expiration is 3600 seconds.
-        async with self._auth_lock:
+        async with self._async_auth_lock:
           if self._credentials.expired or not self._credentials.token:
             # Double check that the credentials expired before refreshing.
             await asyncio.to_thread(_refresh_auth, self._credentials)

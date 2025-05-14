@@ -17,9 +17,7 @@
 
 #include <openssl/evp.h>
 
-#include "crypto/s2n_ecdsa.h"
 #include "crypto/s2n_hash.h"
-#include "crypto/s2n_rsa.h"
 #include "crypto/s2n_signature.h"
 #include "utils/s2n_blob.h"
 #include "utils/s2n_result.h"
@@ -30,17 +28,12 @@ typedef enum {
     S2N_PKEY_TYPE_RSA = 0,
     S2N_PKEY_TYPE_ECDSA,
     S2N_PKEY_TYPE_RSA_PSS,
+    S2N_PKEY_TYPE_MLDSA,
     S2N_PKEY_TYPE_SENTINEL
 } s2n_pkey_type;
 
 /* Structure that models a public or private key and type-specific operations */
 struct s2n_pkey {
-    /* Legacy OpenSSL APIs operate on specific keys, but the more recent
-     * APIs all operate on EVP_PKEY. Let's store both for backwards compatibility. */
-    union {
-        struct s2n_rsa_key rsa_key;
-        struct s2n_ecdsa_key ecdsa_key;
-    } key;
     EVP_PKEY *pkey;
 
     S2N_RESULT (*size)(const struct s2n_pkey *key, uint32_t *size_out);
@@ -50,8 +43,6 @@ struct s2n_pkey {
             struct s2n_hash_state *digest, struct s2n_blob *signature);
     int (*encrypt)(const struct s2n_pkey *key, struct s2n_blob *in, struct s2n_blob *out);
     int (*decrypt)(const struct s2n_pkey *key, struct s2n_blob *in, struct s2n_blob *out);
-    int (*free)(struct s2n_pkey *key);
-    int (*check_key)(const struct s2n_pkey *key);
 };
 
 int s2n_pkey_zero_init(struct s2n_pkey *pkey);

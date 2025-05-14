@@ -62,9 +62,8 @@ from tlz import (
 from tornado.ioloop import IOLoop
 
 import dask
-import dask.utils
 from dask._expr import LLGExpr
-from dask._task_spec import DependenciesMapping, GraphNode, convert_legacy_graph
+from dask._task_spec import GraphNode, convert_legacy_graph
 from dask.core import istask, validate_key
 from dask.typing import Key, no_default
 from dask.utils import (
@@ -2599,7 +2598,7 @@ class SchedulerState:
             if ts.who_wants:
                 ts.exception_blame = ts
                 ts.exception = Serialized(
-                    *serialize(ValueError("Worker holding Actor was lost"))
+                    *serialize(RuntimeError("Worker holding Actor was lost"))
                 )
                 return {ts.key: "erred"}, {}, {}  # don't try to recreate
 
@@ -2652,7 +2651,7 @@ class SchedulerState:
 
         if self.validate:
             assert ts.exception_blame
-            assert not ts.who_has
+            assert not ts.who_has or ts.actor
             assert not ts.waiting_on
 
         failing_ts = ts.exception_blame
@@ -2772,8 +2771,8 @@ class SchedulerState:
         self,
         key: Key,
         stimulus_id: str,
-        worker: str,
         *,
+        worker: str | None = None,
         cause: Key | None = None,
         exception: Serialized | None = None,
         traceback: Serialized | None = None,
@@ -2988,6 +2987,45 @@ class SchedulerState:
         ts.exception_blame = ts.exception = ts.traceback = None
         self.task_metadata.pop(key, None)
 
+    def _transition_memory_erred(self, key: Key, stimulus_id: str) -> RecsMsgs:
+        ts = self.tasks[key]
+        if self.validate:
+            assert ts.actor
+        recommendations: Recs = {}
+        client_msgs: Msgs = {}
+        worker_msgs: Msgs = {}
+        # XXX factor this out?
+        worker_msg = {
+            "op": "free-keys",
+            "keys": [key],
+            "stimulus_id": stimulus_id,
+        }
+        for ws in ts.who_has or ():
+            worker_msgs[ws.address] = [worker_msg]
+        self.remove_all_replicas(ts)
+
+        for dts in ts.dependents:
+            if not dts.who_has:
+                dts.exception_blame = ts
+                recommendations[dts.key] = "erred"
+        exception = Serialized(
+            *serialize(RuntimeError("Worker holding Actor was lost"))
+        )
+        report_msg = {
+            "op": "task-erred",
+            "key": key,
+            "exception": exception,
+        }
+        for cs in ts.who_wants or ():
+            client_msgs[cs.client_key] = [report_msg]
+
+        ts.state = "erred"
+        return self._propagate_erred(
+            ts,
+            cause=ts.key,
+            exception=exception,
+        )
+
     def _transition_memory_forgotten(self, key: Key, stimulus_id: str) -> RecsMsgs:
         ts = self.tasks[key]
 
@@ -3078,6 +3116,7 @@ class SchedulerState:
         ("no-worker", "processing"): _transition_no_worker_processing,
         ("no-worker", "erred"): _transition_no_worker_erred,
         ("released", "forgotten"): _transition_released_forgotten,
+        ("memory", "erred"): _transition_memory_erred,
         ("memory", "forgotten"): _transition_memory_forgotten,
         ("erred", "released"): _transition_erred_released,
         ("memory", "released"): _transition_memory_released,
@@ -4632,9 +4671,9 @@ class Scheduler(SchedulerState, ServerNode):
     def _find_lost_dependencies(
         self,
         dsk: dict[Key, T_runspec],
-        dependencies: dict[Key, set[Key]],
         keys: set[Key],
     ) -> set[Key]:
+        # FIXME: There is typically no need to walk the entire graph
         lost_keys = set()
         seen: set[Key] = set()
         sadd = seen.add
@@ -4656,8 +4695,6 @@ class Scheduler(SchedulerState, ServerNode):
                             k,
                             d,
                         )
-                        dependencies.pop(d, None)
-                        keys.discard(k)
                     continue
                 wupdate(dsk[d].dependencies)
         return lost_keys
@@ -4667,7 +4704,6 @@ class Scheduler(SchedulerState, ServerNode):
         *,
         start: float,
         dsk: dict[Key, T_runspec],
-        dependencies: dict,
         keys: set[Key],
         ordered: dict[Key, int],
         client: str,
@@ -4706,14 +4742,12 @@ class Scheduler(SchedulerState, ServerNode):
             # annotations.
             computation.annotations.update(global_annotations)
         (
-            runnable,
             touched_tasks,
             new_tasks,
             colliding_task_count,
         ) = self._generate_taskstates(
             keys=keys,
             dsk=dsk,
-            dependencies=dependencies,
             computation=computation,
         )
 
@@ -4735,7 +4769,7 @@ class Scheduler(SchedulerState, ServerNode):
             user_priority=user_priority,
             fifo_timeout=fifo_timeout,
             start=start,
-            tasks=runnable,
+            tasks=touched_tasks,
         )
 
         self.client_desires_keys(keys=keys, client=client)
@@ -4749,19 +4783,17 @@ class Scheduler(SchedulerState, ServerNode):
 
         # Compute recommendations
         recommendations: Recs = {}
-        priority = dict()
         for ts in sorted(
-            runnable,
+            filter(
+                lambda ts: ts.state == "released",
+                map(self.tasks.__getitem__, keys),
+            ),
             key=operator.attrgetter("priority"),
             reverse=True,
         ):
-            assert ts.priority  # mypy
-            priority[ts.key] = ts.priority
-            assert ts.run_spec
-            if ts.state == "released":
-                recommendations[ts.key] = "waiting"
+            recommendations[ts.key] = "waiting"
 
-        for ts in runnable:
+        for ts in touched_tasks:
             for dts in ts.dependencies:
                 if dts.exception_blame:
                     ts.exception_blame = dts.exception_blame
@@ -4782,7 +4814,7 @@ class Scheduler(SchedulerState, ServerNode):
             # TaskState may have also been created by client_desires_keys or scatter,
             # and only later gained a run_spec.
             span_annotations = spans_ext.observe_tasks(
-                runnable, span_metadata=span_metadata, code=code
+                touched_tasks, span_metadata=span_metadata, code=code
             )
             # In case of TaskGroup collision, spans may have changed
             # FIXME: Is this used anywhere besides tests?
@@ -4791,16 +4823,17 @@ class Scheduler(SchedulerState, ServerNode):
             else:
                 annotations_for_plugin.pop("span", None)
 
+        tasks_for_plugin = [ts.key for ts in touched_tasks]
+        priorities_for_plugin = {ts.key: ts.priority for ts in touched_tasks}
         for plugin in list(self.plugins.values()):
             try:
                 plugin.update_graph(
                     self,
                     client=client,
-                    tasks=[ts.key for ts in touched_tasks],
+                    tasks=tasks_for_plugin,
                     keys=keys,
-                    dependencies=dependencies,
-                    annotations=dict(annotations_for_plugin),
-                    priority=priority,
+                    annotations=annotations_for_plugin,
+                    priority=priorities_for_plugin,
                     stimulus_id=stimulus_id,
                 )
             except Exception as e:
@@ -4813,42 +4846,6 @@ class Scheduler(SchedulerState, ServerNode):
                 self.report_on_key(ts=ts, client=client)
 
         return metrics
-
-    def _remove_done_tasks_from_dsk(
-        self,
-        dsk: dict[Key, T_runspec],
-        dependencies: dict[Key, set[Key]],
-    ) -> None:
-        # Avoid computation that is already finished
-        done = set()  # tasks that are already done
-        for k, v in dependencies.items():
-            if v and k in self.tasks:
-                ts = self.tasks[k]
-                if ts.state in ("memory", "erred"):
-                    done.add(k)
-        if done:
-            dependents = dask.core.reverse_dict(dependencies)
-            stack = list(done)
-            while stack:  # remove unnecessary dependencies
-                key = stack.pop()
-                try:
-                    deps = dependencies[key]
-                except KeyError:
-                    deps = {ts.key for ts in self.tasks[key].dependencies}
-                for dep in deps:
-                    if dep in dependents:
-                        child_deps = dependents[dep]
-                    elif dep in self.tasks:
-                        child_deps = {ts.key for ts in self.tasks[key].dependencies}
-                    else:
-                        child_deps = set()
-                    if all(d in done for d in child_deps):
-                        if dep in self.tasks and dep not in done:
-                            done.add(dep)
-                            stack.append(dep)
-        for anc in done:
-            dsk.pop(anc, None)
-            dependencies.pop(anc, None)
 
     @log_errors
     async def update_graph(
@@ -4869,6 +4866,8 @@ class Scheduler(SchedulerState, ServerNode):
         start = time()
         stimulus_id = stimulus_id or f"update-graph-{start}"
         self._active_graph_updates += 1
+        evt_msg: dict[str, Any]
+
         try:
             logger.debug("Received new graph. Deserializing...")
             try:
@@ -4884,7 +4883,6 @@ class Scheduler(SchedulerState, ServerNode):
                 raise RuntimeError(textwrap.dedent(msg)) from e
             (
                 dsk,
-                dependencies,
                 annotations_by_type,
             ) = await offload(
                 _materialize_graph,
@@ -4914,29 +4912,31 @@ class Scheduler(SchedulerState, ServerNode):
             # has to happen in the same event loop.
             # *************************************
 
-            lost_keys = self._find_lost_dependencies(dsk, dependencies, keys)
-
-            if lost_keys:
+            if self._find_lost_dependencies(dsk, keys):
                 self.report(
                     {
                         "op": "cancelled-keys",
-                        "keys": lost_keys,
+                        "keys": keys,
                         "reason": "lost dependencies",
                     },
                     client=client,
                 )
                 self.client_releases_keys(
-                    keys=lost_keys, client=client, stimulus_id=stimulus_id
+                    keys=keys, client=client, stimulus_id=stimulus_id
                 )
+                evt_msg = {
+                    "action": "update-graph",
+                    "stimulus_id": stimulus_id,
+                    "status": "cancelled",
+                }
+                self.log_event(["scheduler", client], evt_msg)
+                return
 
             before = len(self.tasks)
-
-            self._remove_done_tasks_from_dsk(dsk, dependencies)
 
             metrics = self._create_taskstate_from_graph(
                 dsk=dsk,
                 client=client,
-                dependencies=dependencies,
                 keys=set(keys),
                 ordered=internal_priority or {},
                 submitting_task=submitting_task,
@@ -5000,17 +5000,16 @@ class Scheduler(SchedulerState, ServerNode):
         self,
         keys: set[Key],
         dsk: dict[Key, T_runspec],
-        dependencies: dict[Key, set[Key]],
         computation: Computation,
     ) -> tuple:
         # Get or create task states
-        runnable = list()
         new_tasks = []
         stack = list(keys)
         touched_keys = set()
         touched_tasks = []
         tgs_with_bad_run_spec = set()
         colliding_task_count = 0
+        collisions = set()
         while stack:
             k = stack.pop()
             if k in touched_keys:
@@ -5033,18 +5032,13 @@ class Scheduler(SchedulerState, ServerNode):
             elif k in dsk:
                 # Check dependency names.
                 deps_lhs = {dts.key for dts in ts.dependencies}
-                deps_rhs = dependencies[k]
+                deps_rhs = dsk[k].dependencies
 
                 # FIXME It would be a really healthy idea to change this to a hard
                 # failure. However, this is not possible at the moment because of
                 # https://github.com/dask/dask/issues/9888
                 if deps_lhs != deps_rhs:
-                    # Retain old run_spec and dependencies; rerun them if necessary.
-                    # This sweeps the issue of collision under the carpet as long as the
-                    # old and new task produce the same output - such as in
-                    # dask/dask#9888.
-                    dependencies[k] = deps_lhs
-
+                    collisions.add(k)
                     colliding_task_count += 1
                     if ts.group not in tgs_with_bad_run_spec:
                         tgs_with_bad_run_spec.add(ts.group)
@@ -5075,18 +5069,17 @@ class Scheduler(SchedulerState, ServerNode):
                             "two consecutive calls to `update_graph`."
                         )
 
-            if ts.run_spec:
-                runnable.append(ts)
             touched_keys.add(k)
             touched_tasks.append(ts)
-            stack.extend(dependencies.get(k, ()))
+            if tspec := dsk.get(k, ()):
+                stack.extend(tspec.dependencies)
 
         # Add dependencies
-        for key, deps in dependencies.items():
+        for key, tspec in dsk.items():
             ts = self.tasks.get(key)
-            if ts is None or ts.dependencies:
+            if ts is None or key in collisions:
                 continue
-            for dep in deps:
+            for dep in tspec.dependencies:
                 dts = self.tasks[dep]
                 ts.add_dependency(dts)
 
@@ -5096,7 +5089,7 @@ class Scheduler(SchedulerState, ServerNode):
                 len(touched_tasks),
                 len(keys),
             )
-        return runnable, touched_tasks, new_tasks, colliding_task_count
+        return touched_tasks, new_tasks, colliding_task_count
 
     def _apply_annotations(
         self,
@@ -5521,7 +5514,9 @@ class Scheduler(SchedulerState, ServerNode):
 
         for ts in list(ws.has_what):
             self.remove_replica(ts, ws)
-            if not ts.who_has:
+            if ts in ws.actors:
+                recommendations[ts.key] = "erred"
+            elif not ts.who_has:
                 if ts.run_spec:
                     recompute_keys.add(ts.key)
                     recommendations[ts.key] = "released"
@@ -9462,7 +9457,7 @@ class CollectTaskMetaDataPlugin(SchedulerPlugin):
 def _materialize_graph(
     expr: Expr,
     validate: bool,
-) -> tuple[dict[Key, T_runspec], dict[Key, set[Key]], dict[str, dict[Key, Any]]]:
+) -> tuple[dict[Key, T_runspec], dict[str, dict[Key, Any]]]:
     dsk: dict = expr.__dask_graph__()
     if validate:
         for k in dsk:
@@ -9473,10 +9468,7 @@ def _materialize_graph(
         annotations_by_type[annotations_type].update(value)
 
     dsk2 = convert_legacy_graph(dsk)
-    # FIXME: There should be no need to fully materialize and copy this but some
-    # sections in the scheduler are mutating it.
-    dependencies = {k: set(v) for k, v in DependenciesMapping(dsk2).items()}
-    return dsk2, dependencies, annotations_by_type
+    return dsk2, annotations_by_type
 
 
 def _cull(dsk: dict[Key, GraphNode], keys: set[Key]) -> dict[Key, GraphNode]:

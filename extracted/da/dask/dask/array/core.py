@@ -45,7 +45,7 @@ from dask.array.dispatch import (  # noqa: F401
     tensordot_lookup,
 )
 from dask.array.numpy_compat import NUMPY_GE_200, _Recurser
-from dask.array.slicing import replace_ellipsis, setitem_array, slice_array
+from dask.array.slicing import SlicingNoop, replace_ellipsis, setitem_array, slice_array
 from dask.array.utils import (
     asanyarray_safe,
     asarray_safe,
@@ -1934,7 +1934,14 @@ class Array(DaskMethodsMixin):
         if isinstance(key, Array):
             from dask.array.routines import where
 
-            if key.shape != self.shape:
+            left_shape = np.array(key.shape)
+            right_shape = np.array(self.shape)
+
+            # We want to treat unknown shape on *either* sides as a match
+            match = left_shape == right_shape
+            match |= np.isnan(left_shape) | np.isnan(right_shape)
+
+            if not match.all():
                 raise IndexError(
                     f"boolean index shape {key.shape} must match indexed array's "
                     f"{self.shape}."
@@ -2028,7 +2035,10 @@ class Array(DaskMethodsMixin):
             return self
 
         out = "getitem-" + tokenize(self, index2)
-        dsk, chunks = slice_array(out, self.name, self.chunks, index2, self.itemsize)
+        try:
+            dsk, chunks = slice_array(out, self.name, self.chunks, index2)
+        except SlicingNoop:
+            return self
 
         graph = HighLevelGraph.from_collections(out, dsk, dependencies=[self])
 

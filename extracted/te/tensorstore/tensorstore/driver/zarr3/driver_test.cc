@@ -42,7 +42,7 @@
 #include "tensorstore/index_space/dim_expression.h"
 #include "tensorstore/index_space/index_domain_builder.h"
 #include "tensorstore/internal/global_initializer.h"
-#include "tensorstore/internal/json_gtest.h"
+#include "tensorstore/internal/testing/json_gtest.h"
 #include "tensorstore/internal/testing/scoped_directory.h"
 #include "tensorstore/kvstore/generation.h"
 #include "tensorstore/kvstore/kvstore.h"
@@ -79,9 +79,12 @@ using ::tensorstore::StorageGeneration;
 using ::tensorstore::TimestampedStorageGeneration;
 using ::tensorstore::internal::GetMap;
 using ::tensorstore::internal::MatchesKvsReadResult;
+using ::tensorstore::internal::MatchesKvsReadResultNotFound;
 using ::tensorstore::internal::TestSpecSchema;
 using ::tensorstore::internal::TestTensorStoreCreateCheckSchema;
 using ::tensorstore::internal::TestTensorStoreCreateWithSchema;
+using ::tensorstore::internal::TestTensorStoreSpecRoundtripNormalize;
+using ::tensorstore::internal::TestTensorStoreUrlRoundtrip;
 using ::tensorstore::internal_zarr3::GetDefaultBytesCodecJson;
 
 ::nlohmann::json GetJsonSpec() {
@@ -112,6 +115,72 @@ TEST(ZarrDriverTest, OpenNonExisting) {
       MatchesStatus(absl::StatusCode::kNotFound,
                     "Error opening \"zarr3\" driver: "
                     "Metadata at \"prefix/zarr\\.json\" does not exist"));
+}
+
+TEST(ZarrDriverTest, OpenWithOpenKvStore) {
+  TENSORSTORE_ASSERT_OK_AND_ASSIGN(
+      auto kvs, tensorstore::kvstore::Open("memory://").result());
+  {
+    TENSORSTORE_ASSERT_OK_AND_ASSIGN(
+        auto txn_kvs, kvs | tensorstore::Transaction(tensorstore::isolated));
+    TENSORSTORE_ASSERT_OK_AND_ASSIGN(
+        auto store, tensorstore::Open({{"driver", "zarr3"}}, dtype_v<uint8_t>,
+                                      tensorstore::Schema::Shape({1}), txn_kvs,
+                                      tensorstore::OpenMode::create)
+                        .result());
+    EXPECT_THAT(
+        tensorstore::kvstore::Read(txn_kvs, "zarr.json").result(),
+        MatchesKvsReadResult(::testing::Matcher<absl::Cord>(::testing::_)));
+    EXPECT_THAT(tensorstore::kvstore::Read(kvs, "zarr.json").result(),
+                MatchesKvsReadResultNotFound());
+  }
+
+  {
+    TENSORSTORE_ASSERT_OK_AND_ASSIGN(
+        auto txn_kvs, kvs | tensorstore::Transaction(tensorstore::isolated));
+    // Can specify both transactional KvStore and transaction as long
+    // as they are consistent.
+    TENSORSTORE_ASSERT_OK_AND_ASSIGN(
+        auto store,
+        tensorstore::Open({{"driver", "zarr3"}}, dtype_v<uint8_t>,
+                          tensorstore::Schema::Shape({1}), txn_kvs,
+                          txn_kvs.transaction, tensorstore::OpenMode::create)
+            .result());
+    EXPECT_THAT(
+        tensorstore::kvstore::Read(txn_kvs, "zarr.json").result(),
+        MatchesKvsReadResult(::testing::Matcher<absl::Cord>(::testing::_)));
+    EXPECT_THAT(tensorstore::kvstore::Read(kvs, "zarr.json").result(),
+                MatchesKvsReadResultNotFound());
+  }
+
+  TENSORSTORE_ASSERT_OK_AND_ASSIGN(
+      auto store, tensorstore::Open({{"driver", "zarr3"}}, dtype_v<uint8_t>,
+                                    tensorstore::Schema::Shape({1}), kvs,
+                                    tensorstore::OpenMode::create)
+                      .result());
+
+  EXPECT_THAT(tensorstore::Open({{"driver", "zarr3"}}, dtype_v<uint8_t>,
+                                tensorstore::Schema::Shape({1}), kvs, kvs,
+                                tensorstore::OpenMode::create),
+              MatchesStatus(absl::StatusCode::kInvalidArgument,
+                            "KvStore already specified"));
+  EXPECT_THAT(tensorstore::Open({{"driver", "zarr3"}}, dtype_v<uint8_t>,
+                                tensorstore::Schema::Shape({1}), kvs,
+                                tensorstore::Transaction(tensorstore::isolated),
+                                tensorstore::Transaction(tensorstore::isolated),
+                                tensorstore::OpenMode::create),
+              MatchesStatus(absl::StatusCode::kInvalidArgument,
+                            "Inconsistent transactions specified"));
+  EXPECT_THAT(tensorstore::Open({{"driver", "zarr3"}}, dtype_v<uint8_t>,
+                                tensorstore::Schema::Shape({1}), kvs,
+                                tensorstore::Transaction(tensorstore::isolated),
+                                tensorstore::Transaction(tensorstore::isolated),
+                                tensorstore::OpenMode::create),
+              MatchesStatus(absl::StatusCode::kInvalidArgument,
+                            "Inconsistent transactions specified"));
+  EXPECT_THAT(
+      tensorstore::kvstore::Read(kvs, "zarr.json").result(),
+      MatchesKvsReadResult(::testing::Matcher<absl::Cord>(::testing::_)));
 }
 
 TEST(ZarrDriverTest, ShardedTranspose) {
@@ -1133,6 +1202,7 @@ TENSORSTORE_GLOBAL_INITIALIZER {
         {"input_inclusive_min", {0, 0, 0}}}},
   };
   options.check_serialization = true;
+  options.url = "file://${TEMPDIR}/prefix/|zarr3:";
   tensorstore::internal::RegisterTensorStoreDriverSpecRoundtripTest(
       std::move(options));
 }
@@ -1661,6 +1731,17 @@ TEST(DriverTest, TransactionalZeroByteReadAfterWritingChunk) {
   }
 
   EXPECT_THAT(mock_kvstore->request_log.pop_all(), ::testing::ElementsAre());
+}
+
+TEST(DriverTest, UrlSchemeRoundtrip) {
+  TestTensorStoreUrlRoundtrip(
+      {{"driver", "zarr3"},
+       {"kvstore", {{"driver", "memory"}, {"path", "abc.zarr3/"}}}},
+      "memory://abc.zarr3/|zarr3:");
+  TestTensorStoreSpecRoundtripNormalize(
+      "memory://abc.zarr3|zarr3:def",
+      {{"driver", "zarr3"},
+       {"kvstore", {{"driver", "memory"}, {"path", "abc.zarr3/def/"}}}});
 }
 
 }  // namespace

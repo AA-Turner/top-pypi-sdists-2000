@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pyyaml_env_tag
-Version: 1.0
+Version: 1.1
 Summary: A custom YAML tag for referencing environment variables in YAML files.
 Author-email: Waylan Limberg <waylan.limberg@icloud.com>
 License-Expression: MIT
@@ -158,6 +158,10 @@ pyyaml_env_tag is licensed under the [MIT License] as defined in `LICENSE`.
 [MIT License]: https://opensource.org/licenses/MIT
 
 ## Changelog
+
+### [1.1] - 2025-05-13
+
+- Ensure tests get included with distribution (#9).
 
 ### [1.0] - 2025-05-09
 

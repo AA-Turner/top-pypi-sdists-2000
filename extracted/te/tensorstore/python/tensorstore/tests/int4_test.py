@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for the int4 NumPy data type."""
+"""Tests for int4 data type with NumPy."""
 
 # This is based on `bfloat16_test`, which in turn is from Tensorflow:
 # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/lib/core/bfloat16_test.py

@@ -34,10 +34,10 @@ from . import native_rules_proto  # pylint: disable=unused-import
 from .evaluation import EvaluationState
 from .package import Visibility
 from .starlark import rule  # pylint: disable=unused-import
-from .starlark.bazel_build_file import register_native_build_rule
 from .starlark.bazel_glob import glob as starlark_glob
 from .starlark.invocation_context import InvocationContext
 from .starlark.label import RelativeLabel
+from .starlark.scope_build_file import register_native_build_rule
 
 
 @register_native_build_rule
@@ -91,27 +91,6 @@ def glob(
 ) -> List[str]:
   package_directory = self.get_source_package_dir(self.caller_package_id)
   return starlark_glob(str(package_directory), include, exclude, allow_empty)
-
-
-@register_native_build_rule
-def py_library(self: InvocationContext, name: str, **kwargs):
-  del self
-  del name
-  del kwargs
-
-
-@register_native_build_rule
-def py_test(self: InvocationContext, name: str, **kwargs):
-  del self
-  del name
-  del kwargs
-
-
-@register_native_build_rule
-def py_binary(self: InvocationContext, name: str, **kwargs):
-  del self
-  del name
-  del kwargs
 
 
 @register_native_build_rule
@@ -224,3 +203,4 @@ def sh_test(self: InvocationContext, name: str, **kwargs):
   del self
   del name
   del kwargs
+

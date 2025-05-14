@@ -260,7 +260,7 @@ class FileKeyValueStoreSpec
   Future<kvstore::DriverPtr> DoOpen() const override;
 
   Result<std::string> ToUrl(std::string_view path) const override {
-    return absl::StrCat(id, "://", internal::PercentEncodeUriPath(path));
+    return absl::StrCat(id, "://", internal::PercentEncodeKvStoreUriPath(path));
   }
 };
 
@@ -390,7 +390,7 @@ Result<UniqueFileDescriptor> OpenValueFile(const std::string& path,
                                            int64_t* size = nullptr) {
   auto fd = internal_os::OpenFileWrapper(path, OpenFlags::DefaultRead);
   if (!fd.ok()) {
-    // Map not found to an empty file.
+    // Map not found to a missing value.
     if (absl::IsNotFound(fd.status())) {
       *generation = StorageGeneration::NoValue();
       return UniqueFileDescriptor{};
@@ -400,8 +400,8 @@ Result<UniqueFileDescriptor> OpenValueFile(const std::string& path,
   FileInfo info;
   TENSORSTORE_RETURN_IF_ERROR(internal_os::GetFileInfo(fd->get(), &info));
   if (!internal_os::IsRegularFile(info)) {
-    return absl::FailedPreconditionError(
-        absl::StrCat("Not a regular file: ", QuoteString(path)));
+    *generation = StorageGeneration::NoValue();
+    return UniqueFileDescriptor{};
   }
   if (size) *size = internal_os::GetSize(info);
   *generation = GetFileGeneration(info);
@@ -910,12 +910,7 @@ Future<kvstore::DriverPtr> FileKeyValueStoreSpec::DoOpen() const {
 Result<kvstore::Spec> ParseFileUrl(std::string_view url) {
   auto parsed = internal::ParseGenericUri(url);
   assert(parsed.scheme == internal_file_kvstore::FileKeyValueStoreSpec::id);
-  if (!parsed.query.empty()) {
-    return absl::InvalidArgumentError("Query string not supported");
-  }
-  if (!parsed.fragment.empty()) {
-    return absl::InvalidArgumentError("Fragment identifier not supported");
-  }
+  TENSORSTORE_RETURN_IF_ERROR(internal::EnsureNoQueryOrFragment(parsed));
   std::string path = internal::PercentDecode(parsed.authority_and_path);
   auto driver_spec = internal::MakeIntrusivePtr<FileKeyValueStoreSpec>();
   driver_spec->data_.file_io_concurrency =

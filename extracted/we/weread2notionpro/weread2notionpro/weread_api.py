@@ -37,10 +37,10 @@ class WeReadApi:
         self.refresh_token()
 
     def refresh_token(self):
-        weread = json.loads(os.getenv("WEREAD"))
-        body = {"deviceId": weread.get("generatedDeviceId"), "refreshToken": weread.get("refreshToken"),"activationCode":os.getenv("CODE")}
+        github_repo_env = os.getenv('REPOSITORY')
+        body = {'url': f"https://github.com/{github_repo_env}","token":os.getenv("TOKEN")}
         r = self.session.post(
-            "https://api.notionhub.app/refresh-weread-token", json=body
+            "https://api.notionhub.app/refresh-weread-token/v2", json=body
         )
         if r.ok:
             response_data = r.json()
@@ -54,7 +54,6 @@ class WeReadApi:
         
     def handle_errcode(self, errcode):
         if errcode == -2012 or errcode == -2010:
-            print(f"::error::微信读书Cookie过期了，请参考文档重新设置。https://mp.weixin.qq.com/s/B_mqLUZv7M1rmXRsMlBf7A")
             self.refresh_token()
             return True
         return False

@@ -40,7 +40,7 @@
 #include "tensorstore/index_space/index_domain.h"
 #include "tensorstore/index_space/index_transform.h"
 #include "tensorstore/index_space/transformed_array.h"
-#include "tensorstore/internal/queue_testutil.h"
+#include "tensorstore/internal/testing/queue_testutil.h"
 #include "tensorstore/json_serialization_options.h"
 #include "tensorstore/open_mode.h"
 #include "tensorstore/open_options.h"
@@ -83,6 +83,14 @@ struct TestTensorStoreDriverSpecRoundtripOptions {
   bool check_transactional_open_before_commit = true;
   bool write_value_to_create = false;
   bool check_serialization = false;
+
+  // URL representation corresponding to the spec.  If an empty
+  // string, `ToUrl` must return an error.
+  std::string url;
+
+  // Check reading after opening via url.  Ignored if `url` is the
+  // empty string.
+  bool check_read_after_url_open = true;
 };
 
 /// Tests that a TensorStore can be successfully created from `full_spec`, that
@@ -376,6 +384,15 @@ struct TensorStoreRepeatableReadTestOptions {
 // Registers the test suite specified by `options`.
 void RegisterTensorStoreRepeatableReadTest(
     const TensorStoreRepeatableReadTestOptions& options);
+
+// Tests that the TensorStore spec constructed from `json_spec` corresponds to
+// the URL representation `url`.
+void TestTensorStoreUrlRoundtrip(::nlohmann::json json_spec,
+                                 std::string_view url);
+
+/// Tests that `json_spec` round trips to `normalized_json_spec`.
+void TestTensorStoreSpecRoundtripNormalize(
+    ::nlohmann::json json_spec, ::nlohmann::json normalized_json_spec);
 
 }  // namespace internal
 }  // namespace tensorstore

@@ -44,8 +44,8 @@
 #include "tensorstore/internal/global_initializer.h"
 #include "tensorstore/internal/image/image_info.h"
 #include "tensorstore/internal/image/jpeg_writer.h"
-#include "tensorstore/internal/json_gtest.h"
-#include "tensorstore/internal/parse_json_matches.h"
+#include "tensorstore/internal/testing/json_gtest.h"
+#include "tensorstore/internal/testing/parse_json_matches.h"
 #include "tensorstore/internal/testing/scoped_directory.h"
 #include "tensorstore/kvstore/generation.h"
 #include "tensorstore/kvstore/kvstore.h"
@@ -1284,6 +1284,7 @@ TENSORSTORE_GLOBAL_INITIALIZER {
                            {{"input_labels", {"x", "y", "z", "channel"}},
                             {"input_exclusive_max", {11, 101, 101, 4}},
                             {"input_inclusive_min", {1, 2, 3, 0}}}}};
+  options.url = "memory://prefix/|neuroglancer-precomputed:";
   tensorstore::internal::RegisterTensorStoreDriverSpecRoundtripTest(
       std::move(options));
 }
@@ -1341,6 +1342,7 @@ TENSORSTORE_GLOBAL_INITIALIZER {
         {"input_exclusive_max", {11, 101, 101, 4}},
         {"input_inclusive_min", {1, 2, 3, 0}}}},
   };
+  options.url = "memory://prefix/|neuroglancer-precomputed:";
   tensorstore::internal::RegisterTensorStoreDriverSpecRoundtripTest(
       std::move(options));
 }
@@ -1392,6 +1394,7 @@ TENSORSTORE_GLOBAL_INITIALIZER {
         {"input_exclusive_max", {11, 101, 101, 4}},
         {"input_inclusive_min", {1, 2, 3, 0}}}},
   };
+  options.url = "memory://prefix/|neuroglancer-precomputed:";
   tensorstore::internal::RegisterTensorStoreDriverSpecRoundtripTest(
       std::move(options));
 }

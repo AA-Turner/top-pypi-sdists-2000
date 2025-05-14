@@ -68,7 +68,6 @@ Similar to the real Bazel, evaluation is performed in several phases:
 
 # pylint: disable=relative-beyond-top-level,protected-access,missing-function-docstring,invalid-name,g-doc-args,g-doc-return-or-yield
 
-import ast
 import collections
 import copy
 import enum
@@ -79,6 +78,8 @@ import pathlib
 from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Tuple, Type, TypeVar, cast
 
 from . import cmake_builder
+from .active_repository import Repository
+from .bzl_library.register import get_bzl_library
 from .cmake_builder import CMakeBuilder
 from .cmake_provider import CMakeExecutableTargetProvider
 from .cmake_provider import CMakeHallucinatedTarget
@@ -89,27 +90,25 @@ from .cmake_target import CMakeTargetPair
 from .package import Package
 from .package import Visibility
 from .provider_util import ProviderCollection
-from .starlark import dict_polyfill
-from .starlark.bazel_build_file import BuildFileGlobals
-from .starlark.bazel_build_file import BuildFileLibraryGlobals
-from .starlark.bazel_globals import get_bazel_library
 from .starlark.bazel_target import PackageId
 from .starlark.bazel_target import RepositoryId
 from .starlark.bazel_target import TargetId
-from .starlark.bazel_workspace_file import BazelWorkspaceGlobals
 from .starlark.common_providers import BuildSettingProvider
 from .starlark.common_providers import ConditionProvider
 from .starlark.common_providers import FilesProvider
+from .starlark.exec import compile_and_exec
 from .starlark.ignored import IgnoredLibrary
 from .starlark.invocation_context import InvocationContext
 from .starlark.label import RelativeLabel
 from .starlark.provider import TargetInfo
+from .starlark.scope_build_file import ScopeBuildBzlFile
+from .starlark.scope_build_file import ScopeBuildFile
+from .starlark.scope_workspace_file import ScopeWorkspaceFile
 from .starlark.select import Configurable
 from .starlark.select import Select
 from .starlark.select import SelectExpression
 from .util import cmake_is_true
 from .util import is_relative_to
-from .workspace import Repository
 from .workspace import Workspace
 
 T = TypeVar("T")
@@ -227,18 +226,26 @@ class EvaluationState:
         it is a dependency of another target being analyzed.
     """
     assert isinstance(rule_id, TargetId), f"Requires TargetId: {repr(rule_id)}"
-    if rule_id in self._all_rules:
-      raise ValueError(f"Duplicate rule: {rule_id.as_label()}")
+    # kind is assigned from caller function name
     if outs is None:
       outs = []
-    # kind is assigned from caller function name
     r = RuleInfo(_mnemonic, _callers, outs=outs, impl=impl)
+    if rule_id in self._all_rules:
+      raise ValueError(
+          f"Duplicate rule: {rule_id.as_label()} from {r}\n"
+          f"Existing rule: {self._all_rules[rule_id]}"
+      )
     self._all_rules[rule_id] = r
     self._unanalyzed_rules.add(rule_id)
     self._unanalyzed_targets[rule_id] = rule_id
     for out_id in r.outs:
       if out_id in self._unanalyzed_targets or out_id in self._analyzed_targets:
-        raise ValueError(f"Duplicate output: {out_id.as_label()}")
+        detail = ""
+        if out_id in self._all_rules:
+          detail = f"\nExisting rule: {self._all_rules[out_id]}"
+        raise ValueError(
+            f"Duplicate output: {out_id.as_label()} from {r}{detail}"
+        )
       self._unanalyzed_targets[out_id] = rule_id
     if analyze_by_default:
       self._targets_to_analyze.add(rule_id)
@@ -307,11 +314,13 @@ class EvaluationState:
         return None
       if source_path is None:
         raise ValueError(
-            f"Error analyzing {target_id.as_label()}: Unknown repository"
+            f"Error analyzing {target_id.as_label()}: Unknown repository\n"
+            f"{self._all_rules.get(target_id, None)}"
         )
       raise ValueError(
-          f"Error analyzing {target_id.as_label()}: File not found"
-          f" {source_path}"
+          f"Error analyzing {target_id.as_label()}: File not found "
+          f"{source_path}\n"
+          f"{self._all_rules.get(target_id, None)}"
       )
 
     # At this point a rule_info instance is expected.
@@ -452,7 +461,10 @@ class EvaluationState:
   ) -> CMakeTargetPair:
     repo = self.workspace.all_repositories.get(target_id.repository_id)
     if repo is None:
-      raise ValueError(f"Unknown repo in target {target_id.as_label()}")
+      raise ValueError(
+          f"Unknown repository {target_id.repository_id} in target"
+          f" {target_id.as_label()}"
+      )
     cmake_target_pair = repo.get_cmake_target_pair(target_id)
     if alias:
       return cmake_target_pair
@@ -538,7 +550,7 @@ class EvaluationState:
     if library is not None:
       return library
 
-    if target_id in self.workspace.ignored_libraries:
+    if target_id in self.active_repo.ignored_libraries:
       # Specifically ignored.
       if self.verbose:
         print(f"Ignoring library: {target_id.as_label()}")
@@ -546,7 +558,7 @@ class EvaluationState:
       self._loaded_libraries[key] = library
       return library
 
-    library_type = get_bazel_library(key)
+    library_type = get_bzl_library(key)
     if library_type is not None:
       if self.verbose:
         print(f"Builtin library: {target_id.as_label()}")
@@ -566,9 +578,7 @@ class EvaluationState:
     if self.verbose:
       print(f"Loading library: {target_id.as_label()} at {library_path}")
 
-    scope_type = (
-        BazelWorkspaceGlobals if is_workspace else BuildFileLibraryGlobals
-    )
+    scope_type = ScopeWorkspaceFile if is_workspace else ScopeBuildBzlFile
     library = scope_type(
         self._evaluation_context, target_id, library_path.as_posix()
     )
@@ -584,7 +594,7 @@ class EvaluationState:
     self.loaded_files.add(library_path.as_posix())
 
     # Load, parse and evaluate the starlark script as a library.
-    _exec_module(
+    compile_and_exec(
         None,
         library_path.as_posix(),
         library,
@@ -630,12 +640,12 @@ class EvaluationState:
     build_target = package.package_id.get_target_id(build_file_path.name)
     self._evaluation_context.update_current_package(package=package)
 
-    scope = BuildFileGlobals(
+    scope = ScopeBuildFile(
         self._evaluation_context, build_target, build_file_path.as_posix()
     )
 
     # Load, parse and evaluate the starlark script as a library.
-    _exec_module(
+    compile_and_exec(
         content,
         build_file_path.as_posix(),
         scope,
@@ -681,13 +691,13 @@ class EvaluationState:
     self._evaluation_context.update_current_package(
         package_id=workspace_target_id.package_id
     )
-    scope = BazelWorkspaceGlobals(
+    scope = ScopeWorkspaceFile(
         self._evaluation_context,
         workspace_target_id,
         workspace_file_path.as_posix(),
     )
 
-    _exec_module(
+    compile_and_exec(
         content,
         workspace_file_path.as_posix(),
         scope,
@@ -880,30 +890,3 @@ class EvaluationContext(InvocationContext):
 
   def evaluate_configurable(self, configurable: Configurable[T]) -> T:
     return self._state.evaluate_configurable(configurable)
-
-
-def _exec_module(
-    source: Optional[str],
-    filename: str,
-    scope: Dict[str, Any],
-    extra: Optional[str] = None,
-) -> None:
-  """Executes Python code with the specified `scope`.
-
-  Polyfills support for dict union operator (PEP 584) on Python 3.8.
-  """
-  if extra is None:
-    extra = ""
-  try:
-    if source is None:
-      source = pathlib.Path(filename).read_text(encoding="utf-8")
-
-    tree = ast.parse(source, filename)
-    # Apply AST transformations to support `dict.__or__`. (PEP 584)
-    tree = ast.fix_missing_locations(dict_polyfill.ASTTransformer().visit(tree))
-    code = compile(tree, filename=filename, mode="exec")
-    exec(code, scope)  # pylint: disable=exec-used
-  except Exception as e:
-    raise RuntimeError(
-        f"While evaluating {filename} {extra} with content:\n{source}"
-    ) from e

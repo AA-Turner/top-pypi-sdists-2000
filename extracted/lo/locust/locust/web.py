@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import itertools
 import json
 import logging
 import mimetypes
@@ -8,7 +9,6 @@ import os.path
 from functools import wraps
 from html import escape
 from io import StringIO
-from itertools import chain
 from json import dumps
 from typing import TYPE_CHECKING, Any, TypedDict
 
@@ -456,18 +456,17 @@ class WebUI:
 
                 return jsonify(report)
 
-            for s in chain(stats.sort_stats(environment.runner.stats.entries), [environment.runner.stats.total]):
-                _stats.append(s.to_dict())
-
-            errors = [e.serialize() for e in environment.runner.errors.values()]
-
             # Truncate the total number of stats and errors displayed since a large number of rows will cause the app
             # to render extremely slowly. Aggregate stats should be preserved.
-            truncated_stats = _stats[:500]
-            if len(_stats) > 500:
-                truncated_stats += [_stats[-1]]
+            _stats.extend(
+                stat.to_dict() for stat in itertools.islice(stats.sort_stats(environment.runner.stats.entries), 500)
+            )
+            _stats.append(environment.runner.stats.total.to_dict())
 
-            report = {"stats": truncated_stats, "errors": errors[:500]}
+            errors = [e.serialize() for e in itertools.islice(environment.runner.errors.values(), 500)]
+
+            report = {"stats": _stats, "errors": errors}
+
             total_stats = _stats[-1]
 
             if _stats:
@@ -495,6 +494,7 @@ class WebUI:
                     )
 
                 report["workers"] = workers
+                report["worker_count"] = environment.runner.worker_count
 
             report["state"] = environment.runner.state
             report["user_count"] = environment.runner.user_count
@@ -564,6 +564,7 @@ class WebUI:
             )
 
         @app_blueprint.route("/user", methods=["POST"])
+        @self.auth_required_if_enabled
         def update_user():
             assert request.method == "POST"
 
@@ -571,6 +572,15 @@ class WebUI:
             self.environment.update_user_class(user_settings)
 
             return {}, 201
+
+        @app_blueprint.route("/worker-count")
+        @self.auth_required_if_enabled
+        def get_worker_count():
+            return {
+                "worker_count": self.environment.runner.worker_count
+                if isinstance(self.environment.runner, MasterRunner)
+                else 0
+            }
 
         app.register_blueprint(app_blueprint)
 

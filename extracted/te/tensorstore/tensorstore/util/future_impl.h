@@ -33,11 +33,11 @@
 #include "absl/status/status.h"
 #include "absl/synchronization/mutex.h"
 #include "absl/time/time.h"
-#include "tensorstore/internal/integer_sequence.h"
 #include "tensorstore/internal/intrusive_ptr.h"
+#include "tensorstore/internal/meta/integer_sequence.h"
+#include "tensorstore/internal/meta/type_traits.h"
 #include "tensorstore/internal/tagged_ptr.h"
 #include "tensorstore/internal/tracing/trace_context.h"
-#include "tensorstore/internal/type_traits.h"
 #include "tensorstore/util/result.h"
 
 namespace tensorstore {
@@ -949,6 +949,11 @@ struct FutureLinkPropagateFirstErrorPolicy {
   static bool OnFutureReady(FutureStateBase* future_state,
                             FutureState<PromiseValue>* promise_state) {
     if (future_state->has_value()) return true;
+    // Hold reference to `promise_state` while calling `SetResult`.
+    // Otherwise, calling `promise_state->SetResult` can trigger
+    // `promise_state` being destroyed while `SetResult` is still
+    // invoking callbacks.
+    PromiseStatePointer promise_state_ptr(promise_state);
     promise_state->SetResult(future_state->status());
     return false;
   }

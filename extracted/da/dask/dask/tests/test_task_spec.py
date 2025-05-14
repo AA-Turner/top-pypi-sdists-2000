@@ -4,6 +4,7 @@ import itertools
 import pickle
 import sys
 from collections import namedtuple
+from collections.abc import Mapping
 
 import pytest
 
@@ -965,6 +966,8 @@ def test_nested_containers():
     assert t.dependencies == {"b"}
     assert t({"b": "b"}) == ["a-b", "c-d"]
 
+
+def test_dict_class():
     t = Dict(k=Task("key-1", func, "a", "b"), v=Task("key-2", func, "c", "d"))
     assert not t.dependencies
     assert t() == {"k": "a-b", "v": "c-d"}
@@ -996,6 +999,36 @@ def test_nested_containers():
     )
     assert t == t2
     assert tokenize(t) == tokenize(t2)
+
+    d = Dict(
+        [
+            ["k", Task("key-1", func, "a", TaskRef("b"))],
+            ["v", Task("key-2", func, TaskRef("c"), "d")],
+        ]
+    )
+    assert d.dependencies == {"c", "b"}
+    assert d({"b": "b", "c": "c"}) == {"k": "a-b", "v": "c-d"}
+
+    d = Dict([("columns", ["a", "b"])])
+    assert d() == {"columns": ["a", "b"]}
+
+    d = Dict([["columns", ["a", "b"]]])
+    assert d() == {"columns": ["a", "b"]}
+    # Can be converted to a dict, e.g. also used as **kwargs
+    assert isinstance(t, Mapping)
+    assert dict(t) == {
+        "k": Task("key-1", func, "a", "b"),
+        "v": Task("key-2", func, "c", "d"),
+    }
+    assert len(t) == len(dict(t)) == 2
+
+    def as_kwargs(**kwargs):
+        return kwargs == {
+            "k": Task("key-1", func, "a", "b"),
+            "v": Task("key-2", func, "c", "d"),
+        }
+
+    assert as_kwargs(**t)
 
 
 def test_block_io_fusion():

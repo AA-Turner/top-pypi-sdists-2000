@@ -195,9 +195,11 @@ struct aws_http_connection *aws_http_connection_new_channel_handler(
             break;
         case AWS_HTTP_VERSION_2:
             if (is_server) {
-                connection = aws_http_connection_new_http2_server(alloc, manual_window_management, http2_options);
+                connection = aws_http_connection_new_http2_server(
+                    alloc, manual_window_management, initial_window_size, http2_options);
             } else {
-                connection = aws_http_connection_new_http2_client(alloc, manual_window_management, http2_options);
+                connection = aws_http_connection_new_http2_client(
+                    alloc, manual_window_management, initial_window_size, http2_options);
             }
             break;
         default:
@@ -963,7 +965,7 @@ int s_validate_http_client_connection_options(const struct aws_http_client_conne
     }
 
     /* http2_options cannot be NULL here, calling function adds them if they were missing */
-    if (options->http2_options->num_initial_settings > 0 && options->http2_options->initial_settings_array) {
+    if (options->http2_options->num_initial_settings > 0 && !options->http2_options->initial_settings_array) {
         AWS_LOGF_ERROR(
             AWS_LS_HTTP_CONNECTION,
             "static: Invalid connection options, h2 settings count is non-zero but settings array is null");

@@ -15,6 +15,7 @@
 
 # pylint: disable=invalid-name,relative-beyond-top-level,missing-function-docstring,missing-class-docstring,g-long-lambda
 
+import io
 import itertools
 import json
 import pathlib
@@ -26,15 +27,15 @@ from ..cmake_provider import CMakeAddDependenciesProvider
 from ..cmake_provider import default_providers
 from ..cmake_target import CMakeTarget
 from ..evaluation import EvaluationState
-from ..starlark.bazel_globals import BazelGlobals
-from ..starlark.bazel_globals import register_bzl_library
 from ..starlark.bazel_target import TargetId
 from ..starlark.common_providers import BuildSettingProvider
 from ..starlark.common_providers import ConditionProvider
 from ..starlark.common_providers import FilesProvider
 from ..starlark.invocation_context import InvocationContext
 from ..starlark.invocation_context import RelativeLabel
+from ..starlark.provider import provider
 from ..starlark.provider import TargetInfo
+from ..starlark.scope_common import ScopeCommon
 from ..starlark.select import Configurable
 from ..starlark.select import Select
 from ..starlark.toolchain import CMAKE_TOOLCHAIN
@@ -44,9 +45,13 @@ from ..util import quote_list
 from ..util import quote_path
 from ..util import quote_string
 from ..util import write_file_if_not_already_equal
-
+from .register import ignore_bzl_library
+from .register import register_bzl_library
 
 T = TypeVar("T")
+
+
+ignore_bzl_library("@bazel_skylib//:bzl_library.bzl")
 
 
 class BazelSelectsWrapper:
@@ -138,16 +143,16 @@ def _config_settings_group_impl(
   )
 
 
-@register_bzl_library("@bazel_skylib//lib:selects.bzl", build=True)
-class BazelSkylibSelectsLibrary(BazelGlobals):
+@register_bzl_library("@bazel_skylib//lib:selects.bzl")
+class BazelSkylibSelectsLibrary(ScopeCommon):
 
   @property
   def bazel_selects(self):
     return BazelSelectsWrapper(self._context)
 
 
-@register_bzl_library("@bazel_skylib//rules:expand_template.bzl", build=True)
-class BazelSkylibExpandTemplateLibrary(BazelGlobals):
+@register_bzl_library("@bazel_skylib//rules:expand_template.bzl")
+class BazelSkylibExpandTemplateLibrary(ScopeCommon):
 
   def bazel_expand_template(
       self,
@@ -219,28 +224,35 @@ def _expand_template_impl(
   add_dependencies.add(CMakeTarget(script_path.as_posix()))
   add_dependencies.add(CMakeTarget(subs_path.as_posix()))
 
-  builder: CMakeBuilder = _context.access(CMakeBuilder)
-  builder.addtext(f"""
+  quoted_output = quote_path(out_file)
+
+  out = io.StringIO()
+
+  out.write(f"""
 # expand_template({_target.as_label()})
 add_custom_command(
-OUTPUT {quote_path(out_file)}
+OUTPUT {quoted_output}
 COMMAND ${{Python3_EXECUTABLE}} {quote_path(script_path)}
         {quote_path(template_path)}
         {quote_path(subs_path)}
-        {quote_path(out_file)}
-DEPENDS {quote_list(sorted(add_dependencies))}
+        {quoted_output}
 VERBATIM
+DEPENDS {quote_list(sorted(add_dependencies))}
+COMMENT "Generating {out_file}"
 )
-add_custom_target({cmake_target_pair.target} DEPENDS {quote_path(out_file)})
+set_source_files_properties({quoted_output} PROPERTIES GENERATED TRUE)
+add_custom_target({cmake_target_pair.target} DEPENDS {quoted_output})
 """)
+
+  _context.access(CMakeBuilder).addtext(out.getvalue())
   _context.add_analyzed_target(
       _target,
       TargetInfo(*default_providers(cmake_target_pair)),
   )
 
 
-@register_bzl_library("@bazel_skylib//rules:copy_file.bzl", build=True)
-class BazelSkylibCopyFileLibrary(BazelGlobals):
+@register_bzl_library("@bazel_skylib//rules:copy_file.bzl")
+class BazelSkylibCopyFileLibrary(ScopeCommon):
 
   def bazel_copy_file(
       self,
@@ -263,8 +275,8 @@ class BazelSkylibCopyFileLibrary(BazelGlobals):
     )
 
 
-@register_bzl_library("@bazel_skylib//rules:write_file.bzl", build=True)
-class BazelSkylibWriteFileLibrary(BazelGlobals):
+@register_bzl_library("@bazel_skylib//rules:write_file.bzl")
+class BazelSkylibWriteFileLibrary(ScopeCommon):
 
   def bazel_write_file(
       self,
@@ -329,8 +341,23 @@ def _write_file_impl(
   )
 
 
-@register_bzl_library("@bazel_skylib//rules:common_settings.bzl", build=True)
-class BazelSkylibCommonSettingsLibrary(BazelGlobals):
+@register_bzl_library("@bazel_skylib//rules:common_settings.bzl")
+class BazelSkylibCommonSettingsLibrary(ScopeCommon):
+
+  BuildSettingInfo = provider(
+      doc="A singleton provider that contains the raw value of a build setting",
+      fields={
+          "value": (
+              "The value of the build setting in the current configuration. "
+              "This value may come from the command line or an upstream "
+              "transition, or else it will be the build setting's default."
+          ),
+      },
+  )
+
+  @property
+  def bazel_BuildSettingInfo(self):
+    return self.BuildSettingInfo
 
   def bazel_bool_flag(
       self,

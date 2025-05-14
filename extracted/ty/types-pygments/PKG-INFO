@@ -1,29 +1,20 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: types-Pygments
-Version: 2.19.0.20250305
+Version: 2.19.0.20250514
 Summary: Typing stubs for Pygments
-Home-page: https://github.com/python/typeshed
-License: Apache-2.0
+License-Expression: Apache-2.0
+Project-URL: Homepage, https://github.com/python/typeshed
 Project-URL: GitHub, https://github.com/python/typeshed
 Project-URL: Changes, https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/Pygments.md
 Project-URL: Issue tracker, https://github.com/python/typeshed/issues
 Project-URL: Chat, https://gitter.im/python/typing
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3
 Classifier: Typing :: Stubs Only
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: types-docutils
-Dynamic: classifier
-Dynamic: description
-Dynamic: description-content-type
-Dynamic: home-page
-Dynamic: license
-Dynamic: project-url
-Dynamic: requires-dist
-Dynamic: requires-python
-Dynamic: summary
+Dynamic: license-file
 
 ## Typing stubs for Pygments
 
@@ -51,7 +42,7 @@ directory.
 
 This package was tested with
 mypy 1.15.0,
-pyright 1.1.396,
+pyright 1.1.400,
 and pytype 2024.10.11.
 It was generated from typeshed commit
-[`714c99bbdbdc4af11ffc506e71a8c29bffb3b520`](https://github.com/python/typeshed/commit/714c99bbdbdc4af11ffc506e71a8c29bffb3b520).
+[`9589e369f8afdd2980e45953e2ca9f2055d74c10`](https://github.com/python/typeshed/commit/9589e369f8afdd2980e45953e2ca9f2055d74c10).

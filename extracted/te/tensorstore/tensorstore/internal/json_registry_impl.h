@@ -25,6 +25,7 @@
 #include <typeinfo>
 
 #include "absl/base/thread_annotations.h"
+#include "absl/functional/function_ref.h"
 #include "absl/status/status.h"
 #include "absl/synchronization/mutex.h"
 #include "tensorstore/internal/container/heterogeneous_container.h"
@@ -83,8 +84,13 @@ class JsonRegistryImpl {
 
   /// Registers an object type.
   ///
-  /// Logs a fatal error if the type or id is already registered.
-  void Register(std::unique_ptr<Entry> entry);
+  /// Logs a fatal error if the id is already registered.
+  ///
+  /// If `alias==false`, logs a fatal error if the type is already
+  /// registered.
+  ///
+  /// If `alias==true`, does not register the type, only the id.
+  void Register(std::unique_ptr<Entry> entry, bool alias);
 
   /// Initializes a `BasePtr` from a JSON representation of the object
   /// identifier.
@@ -92,7 +98,12 @@ class JsonRegistryImpl {
   /// \param obj Non-null pointer to `BasePtr`.
   /// \param j Non-null JSON object assumed to specify the string object
   ///     identifier.
-  absl::Status LoadKey(void* obj, ::nlohmann::json* j) const;
+  /// \param handle_unregistered Function to generate the error if the
+  ///     identifier is not registered.
+  absl::Status LoadKey(
+      void* obj, ::nlohmann::json* j,
+      absl::FunctionRef<absl::Status(std::string_view unregistered_key)>
+          handle_unregistered) const;
 
   /// Converts a `BasePtr` to a JSON representation of the object identifier.
   ///

@@ -15,6 +15,8 @@
 #ifndef TENSORSTORE_OPEN_H_
 #define TENSORSTORE_OPEN_H_
 
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 
@@ -33,6 +35,30 @@
 
 namespace tensorstore {
 
+/// Indicates that `T` may be passed as a JSON spec to `tensorstore::Open`.
+///
+/// Supported types are:
+///
+/// - `::nlohmann::json`
+/// - `std::string`
+/// - `std::string_view`
+///
+/// \relates TensorStore
+template <typename T>
+constexpr inline bool IsJsonSpecLike = false;
+
+template <>
+constexpr inline bool IsJsonSpecLike<::nlohmann::json> = true;
+
+template <>
+constexpr inline bool IsJsonSpecLike<const char*> = true;
+
+template <>
+constexpr inline bool IsJsonSpecLike<std::string> = true;
+
+template <>
+constexpr inline bool IsJsonSpecLike<std::string_view> = true;
+
 /// Opens a TensorStore from a Spec.
 ///
 /// Options are specified in any order after `spec`.  The meaning of the option
@@ -40,28 +66,29 @@ namespace tensorstore {
 ///
 /// Supported option types include:
 ///
-/// - Context: Shared resource context to use.  Defaults to
+/// - `Context`: Shared resource context to use.  Defaults to
 ///   `Context::Default()`.
 ///
-/// - Transaction: Transaction to use for opening.  Defaults to
+/// - `Transaction`: Transaction to use for opening.  Defaults to
 ///   `no_transaction`.
 ///
-/// - Batch: Batch to use for read operations performed when opening.  Defaults
-///   to no/implicit batching.
+/// - `Batch`: Batch to use for read operations performed when
+///   opening.  Defaults to no/implicit batching.
 ///
-/// - ReadWriteMode: specifies whether reading and/or writing is supported.
-///   Defaults to `Mode`.  Specifying multiple modes as separate options is
-///   equivalent to ORing them together.
+/// - `ReadWriteMode`: specifies whether reading and/or writing is
+///   supported.  Defaults to `Mode`.  Specifying multiple modes as
+///   separate options is equivalent to ORing them together.
 ///
-/// - OpenMode: specifies the open mode (overriding any open mode set on
-///   `spec`).  Specifying multiple modes as separate options is equivalent to
-///   ORing them together.
+/// - `OpenMode`: specifies the open mode (overriding any open mode
+///   set on `spec`).  Specifying multiple modes as separate options
+///   is equivalent to ORing them together.
 ///
-/// - RecheckCached, RecheckCachedData, RecheckCachedMetadata: specifies cache
-///   staleness bounds, overriding the corresponding bound or default from
-///   `spec`.
+/// - `RecheckCached`, `RecheckCachedData`, `RecheckCachedMetadata`:
+///   specifies cache staleness bounds, overriding the corresponding
+///   bound or default from `spec`.
 ///
-/// - kvstore::Spec: specifies the underlying storage, if applicable.
+/// - `kvstore::Spec` or `KvStore`: specifies the underlying storage, if
+///   applicable.
 ///
 /// For option types other than `ReadWriteMode` and `OpenMode` (for which
 /// multiple modes are ORed together), if the same option type is specified more
@@ -120,18 +147,17 @@ template <typename Element = void, DimensionIndex Rank = dynamic_rank,
           typename J = ::nlohmann::json, typename... Option>
 std::enable_if_t<
     (IsCompatibleOptionSequence<TransactionalOpenOptions, Option...> &&
-     std::is_same_v<J, ::nlohmann::json>),
+     IsJsonSpecLike<J>),
     Future<TensorStore<Element, Rank, Mode>>>
 Open(J json_spec, Option&&... option) {
-  TENSORSTORE_ASSIGN_OR_RETURN(auto spec, Spec::FromJson(json_spec));
+  TENSORSTORE_ASSIGN_OR_RETURN(auto spec, Spec::FromJson(std::move(json_spec)));
   return tensorstore::Open<Element, Rank, Mode>(
       std::move(spec), std::forward<Option>(option)...);
 }
 template <typename Element = void, DimensionIndex Rank = dynamic_rank,
           ReadWriteMode Mode = ReadWriteMode::dynamic,
           typename J = ::nlohmann::json>
-std::enable_if_t<std::is_same_v<J, ::nlohmann::json>,
-                 Future<TensorStore<Element, Rank, Mode>>>
+std::enable_if_t<IsJsonSpecLike<J>, Future<TensorStore<Element, Rank, Mode>>>
 Open(J json_spec, TransactionalOpenOptions&& options) {
   TENSORSTORE_ASSIGN_OR_RETURN(auto spec, Spec::FromJson(json_spec));
   return tensorstore::Open<Element, Rank, Mode>(std::move(spec),

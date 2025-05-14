@@ -26,8 +26,6 @@ from ..native_aspect_proto import aspect_genproto_library_target
 from ..native_aspect_proto import PluginSettings
 from ..native_rules_cc_proto import cc_proto_library_impl
 from ..starlark.aspect import aspect
-from ..starlark.bazel_globals import BazelGlobals
-from ..starlark.bazel_globals import register_bzl_library
 from ..starlark.bazel_target import RepositoryId
 from ..starlark.bazel_target import TargetId
 from ..starlark.invocation_context import InvocationContext
@@ -36,6 +34,8 @@ from ..starlark.provider import Provider
 from ..starlark.provider import provider
 from ..starlark.rule import AttrModule
 from ..starlark.rule import rule
+from ..starlark.scope_common import ScopeCommon
+from .register import register_bzl_library
 
 UPB_REPO = RepositoryId("com_google_protobuf")
 
@@ -85,7 +85,7 @@ _UPB_MINITABLE = PluginSettings(
     name="upb_minitable",
     language="upb_minitable",
     plugin=UPB_REPO.parse_target(
-        "//upb_generator:protoc-gen-upb_minitable_stage1"
+        "//upb_generator/minitable:protoc-gen-upb_minitable_stage1"
     ),
     exts=[".upb_minitable.h", ".upb_minitable.c"],
     runtime=[
@@ -101,7 +101,7 @@ _UPB_MINITABLE = PluginSettings(
 _UPB_STAGE1 = PluginSettings(
     name="upb",
     language="upb",
-    plugin=UPB_REPO.parse_target("//upb_generator:protoc-gen-upb_stage1"),
+    plugin=UPB_REPO.parse_target("//upb_generator/c:protoc-gen-upb_stage1"),
     exts=[".upb.h", ".upb.c"],
     runtime=[
         UPB_REPO.parse_target(
@@ -115,7 +115,9 @@ _UPB_STAGE1 = PluginSettings(
 _UPBDEFS = PluginSettings(
     name="upbdefs",
     language="upbdefs",
-    plugin=UPB_REPO.parse_target("//upb_generator:protoc-gen-upbdefs"),
+    plugin=UPB_REPO.parse_target(
+        "//upb_generator/reflection:protoc-gen-upbdefs"
+    ),
     exts=[".upbdefs.h", ".upbdefs.c"],
     runtime=[
         UPB_REPO.parse_target(
@@ -129,7 +131,7 @@ _UPBDEFS = PluginSettings(
 UPB_PLUGIN = PluginSettings(
     name="upb",
     language="upb",
-    plugin=UPB_REPO.parse_target("//upb_generator:protoc-gen-upb"),
+    plugin=UPB_REPO.parse_target("//upb_generator/c:protoc-gen-upb"),
     exts=[".upb.h", ".upb.c"],
     runtime=[
         UPB_REPO.parse_target(
@@ -222,9 +224,9 @@ class UpbMinitableCcInfo(Provider):
 
 
 @register_bzl_library(
-    "@com_google_protobuf//bazel:upb_minitable_proto_library.bzl", build=True
+    "@com_google_protobuf//bazel:upb_minitable_proto_library.bzl"
 )
-class UpbMinitableProtoLibrary(BazelGlobals):
+class UpbMinitableProtoLibrary(ScopeCommon):
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
@@ -258,9 +260,9 @@ class UpbMinitableProtoLibrary(BazelGlobals):
 
 
 @register_bzl_library(
-    "@com_google_protobuf//bazel:upb_proto_reflection_library.bzl", build=True
+    "@com_google_protobuf//bazel:upb_proto_reflection_library.bzl"
 )
-class UpbProtoReflectionLibrary(BazelGlobals):
+class UpbProtoReflectionLibrary(ScopeCommon):
 
   def bazel_upb_proto_reflection_library(
       self,
@@ -299,10 +301,8 @@ class UpbWrappedCcInfo(Provider):
     return f"{self.__class__.__name__}({repr(self.cc_info)},{repr(self.cc_info_with_thunks)})"
 
 
-@register_bzl_library(
-    "@com_google_protobuf//bazel:upb_c_proto_library.bzl", build=True
-)
-class UpbCProtoLibrary(BazelGlobals):
+@register_bzl_library("@com_google_protobuf//bazel:upb_c_proto_library.bzl")
+class UpbCProtoLibrary(ScopeCommon):
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
@@ -335,9 +335,7 @@ class UpbCProtoLibrary(BazelGlobals):
 #############################################################################
 
 
-@register_bzl_library(
-    "@com_google_protobuf//bazel:upb_proto_library.bzl", build=True
-)
+@register_bzl_library("@com_google_protobuf//bazel:upb_proto_library.bzl")
 class UpbProtoLibrary(UpbCProtoLibrary, UpbProtoReflectionLibrary):
 
   def __init__(self, *args, **kwargs):
@@ -367,10 +365,8 @@ HpbProtoLibraryCoptsInfo = provider(
 )
 
 
-@register_bzl_library(
-    "@com_google_protobuf//hpb/bazel:hpb_proto_library.bzl", build=True
-)
-class HpbProtoLibrary(BazelGlobals):
+@register_bzl_library("@com_google_protobuf//hpb/bazel:hpb_proto_library.bzl")
+class HpbProtoLibrary(ScopeCommon):
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)

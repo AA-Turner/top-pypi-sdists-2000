@@ -5,6 +5,7 @@ import time
 
 from notion_client import Client
 import pendulum
+import requests
 from retrying import retry
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -52,10 +53,11 @@ class NotionHelper:
     block_type = "callout"
     sync_bookmark = True
     def __init__(self):
-
-        notion_json = os.getenv("NOTION")
-        notion_dict = json.loads(notion_json) if notion_json else {}
-        print(notion_dict.get("access_token"),)
+        
+        notion_dict = self.get_notion_data()
+        if not notion_dict:
+            print("⚠️ Notion JSON 数据为空或未提供，终止后续操作。")
+            return
         self.client = Client(auth = notion_dict.get("access_token"),log_level=logging.ERROR)
         self.__cache = {}
         self.page_id = self.extract_page_id(notion_dict.get("duplicated_template_id"))
@@ -117,6 +119,18 @@ class NotionHelper:
             return match.group(0)
         else:
             raise Exception(f"获取NotionID失败，请检查输入的Url是否正确")
+    
+
+    @retry(stop_max_attempt_number=3, wait_fixed=5000)
+    def get_notion_data(self):
+        api_endpoint = "https://api.notionhub.app/get-notion-data" # 根据您的实际 Worker URL 修改
+        github_repo_env = os.getenv('REPOSITORY')
+        body = {'url': f"https://github.com/{github_repo_env}","token":os.getenv("TOKEN")}
+        response = requests.post(api_endpoint, json=body, timeout=30)
+        if response.ok and response.json().get("success"):
+            return response.json().get("notionData")
+            
+            
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def search_database(self, block_id):

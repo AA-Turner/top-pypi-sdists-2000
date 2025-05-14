@@ -26,8 +26,7 @@ from ..native_aspect_proto import btc_protobuf
 from ..native_aspect_proto import plugin_generated_files
 from ..native_aspect_proto import PluginSettings
 from ..native_aspect_proto import maybe_augment_output_dir
-from ..starlark.bazel_globals import BazelGlobals
-from ..starlark.bazel_globals import register_bzl_library
+from ..starlark.scope_common import ScopeCommon
 from ..starlark.bazel_target import RepositoryId
 from ..starlark.bazel_target import TargetId
 from ..starlark.common_providers import FilesProvider
@@ -36,10 +35,11 @@ from ..starlark.invocation_context import InvocationContext
 from ..starlark.invocation_context import RelativeLabel
 from ..starlark.provider import TargetInfo
 from ..starlark.select import Configurable
-from ..util import quote_path_list
+from ..util import quote_path
+from .register import register_bzl_library
 from .upb_proto_library import UPB_PLUGIN  # pylint: disable=unused-import
 
-GRPC_REPO = RepositoryId("com_github_grpc_grpc")
+GRPC_REPO = RepositoryId("grpc")
 
 _SEP = "\n        "
 
@@ -59,10 +59,8 @@ _GRPC = PluginSettings(
 )
 
 
-@register_bzl_library(
-    "@com_github_grpc_grpc//bazel:generate_cc.bzl", build=True
-)
-class GrpcGenerateCcLibrary(BazelGlobals):
+@register_bzl_library("@grpc//bazel:generate_cc.bzl")
+class GrpcGenerateCcLibrary(ScopeCommon):
 
   def bazel_generate_cc(
       self,
@@ -207,11 +205,9 @@ def _generate_grpc_cc_impl(
       flags=flags,
       output_dir=repo.replace_with_cmake_macro_dirs([output_dir])[0],
   )
-  sep = "\n    "
-
-  out.write(
-      f"add_custom_target({cmake_target_pair.target} DEPENDS\n"
-      f"  {quote_path_list(generated_files, separator=sep)})\n"
-  )
+  out.write(f"add_custom_target({cmake_target_pair.target} DEPENDS")
+  for x in generated_files:
+    out.write(f"\n    {quote_path(x)}")
+  out.write(")\n")
 
   _context.access(CMakeBuilder).addtext(out.getvalue())

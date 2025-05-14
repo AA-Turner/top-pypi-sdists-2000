@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: singer-sdk
-Version: 0.46.0
+Version: 0.46.1
 Summary: A framework for building Singer taps
 Project-URL: Homepage, https://sdk.meltano.com/en/latest/
 Project-URL: Repository, https://github.com/meltano/sdk
@@ -55,8 +55,7 @@ Requires-Dist: pyjwt~=2.4; extra == 'jwt'
 Provides-Extra: msgspec
 Requires-Dist: msgspec>=0.19.0; extra == 'msgspec'
 Provides-Extra: parquet
-Requires-Dist: numpy>=1.22; extra == 'parquet'
-Requires-Dist: pyarrow>=13; extra == 'parquet'
+Requires-Dist: pyarrow>=15; extra == 'parquet'
 Provides-Extra: s3
 Requires-Dist: s3fs>=2024.9.0; extra == 's3'
 Provides-Extra: ssh
@@ -74,7 +73,7 @@ Taps and targets built on the SDK are automatically compliant with the
 de-facto open source standard for extract and load pipelines.
 </h3>
 
----
+______________________________________________________________________
 
 </br>
 
@@ -112,7 +111,7 @@ de-facto open source standard for extract and load pipelines.
   </a>
 </div>
 
----
+______________________________________________________________________
 
 ## Future-proof extractors and loaders, with less code
 
@@ -123,7 +122,7 @@ capabilities and bug fixes, simply by updating your SDK dependency to the latest
 
 ## Meltano
 
-*Not familiar with Meltano?*  [Meltano](https://docs.meltano.com/getting-started/meltano-at-a-glance) is your CLI for ELT+ that:
+*Not familiar with Meltano?* [Meltano](https://docs.meltano.com/getting-started/meltano-at-a-glance) is your CLI for ELT+ that:
 
 - **Starts simple**: Meltano is pip-installable and comes in a prepackaged docker container, you can have your first ELT pipeline running within minutes.
 - **Has DataOps out-of-the-box**: Meltano provides tools that make DataOps best practices easy to use in every project.
@@ -133,13 +132,14 @@ capabilities and bug fixes, simply by updating your SDK dependency to the latest
 - **Has first class ELT tooling built-in**: Extract data from any data source, load into any target, use inline maps to transform on data on the fly, and test the incoming data, all in one package.
 
 If you want to get started with Meltano, we suggest you:
+
 - head over to the [Installation](https://docs.meltano.com/getting-started/installation)
 - or if you have it installed, go through the [Meltano Tutorial](https://docs.meltano.com/getting-started/part1).
 
 ## Documentation
 
 - See our [online documentation](https://sdk.meltano.com) for instructions on how
-to get started with the SDK.
+  to get started with the SDK.
 
 ## Contributing back to the SDK
 

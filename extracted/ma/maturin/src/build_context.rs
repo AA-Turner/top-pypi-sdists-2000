@@ -1,5 +1,6 @@
 use crate::auditwheel::{get_policy_and_libs, patchelf, relpath, AuditWheelMode};
 use crate::auditwheel::{PlatformTag, Policy};
+use crate::bridge::Abi3Version;
 use crate::build_options::CargoOptions;
 use crate::compile::{warn_missing_py_init, CompileTarget};
 use crate::module_writer::{
@@ -155,7 +156,7 @@ impl BuildContext {
             BridgeModel::Bin(None) => self.build_bin_wheel(None)?,
             BridgeModel::Bin(Some(..)) => self.build_bin_wheels(&self.interpreter)?,
             BridgeModel::PyO3(crate::PyO3 { abi3, .. }) => match abi3 {
-                Some((major, minor)) => {
+                Some(Abi3Version::Version(major, minor)) => {
                     let abi3_interps: Vec<_> = self
                         .interpreter
                         .iter()
@@ -174,6 +175,41 @@ impl BuildContext {
                             &abi3_interps,
                             *major,
                             *minor,
+                        )?);
+                    }
+                    if !non_abi3_interps.is_empty() {
+                        let interp_names: HashSet<_> = non_abi3_interps
+                            .iter()
+                            .map(|interp| interp.to_string())
+                            .collect();
+                        eprintln!(
+                                "⚠️ Warning: {} does not yet support abi3 so the build artifacts will be version-specific.",
+                                interp_names.iter().join(", ")
+                            );
+                        built_wheels.extend(self.build_pyo3_wheels(&non_abi3_interps)?);
+                    }
+                    built_wheels
+                }
+                Some(Abi3Version::CurrentPython) => {
+                    let abi3_interps: Vec<_> = self
+                        .interpreter
+                        .iter()
+                        .filter(|interp| interp.has_stable_api())
+                        .cloned()
+                        .collect();
+                    let non_abi3_interps: Vec<_> = self
+                        .interpreter
+                        .iter()
+                        .filter(|interp| !interp.has_stable_api())
+                        .cloned()
+                        .collect();
+                    let mut built_wheels = Vec::new();
+                    if !abi3_interps.is_empty() {
+                        let interp = abi3_interps.first().unwrap();
+                        built_wheels.extend(self.build_pyo3_wheel_abi3(
+                            &abi3_interps,
+                            interp.major as u8,
+                            interp.minor as u8,
                         )?);
                     }
                     if !non_abi3_interps.is_empty() {
@@ -485,7 +521,9 @@ impl BuildContext {
     /// Returns the platform part of the tag for the wheel name
     pub fn get_platform_tag(&self, platform_tags: &[PlatformTag]) -> Result<String> {
         if let Ok(host_platform) = env::var("_PYTHON_HOST_PLATFORM") {
-            return Ok(host_platform.replace(['.', '-'], "_"));
+            let override_platform = host_platform.replace(['.', '-'], "_");
+            eprintln!("🚉 Overriding platform tag from _PYTHON_HOST_PLATFORM environment variable as {override_platform}.");
+            return Ok(override_platform);
         }
 
         let target = &self.target;

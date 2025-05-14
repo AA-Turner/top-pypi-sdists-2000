@@ -24,7 +24,7 @@
 #include "tensorstore/context.h"
 #include "tensorstore/internal/cache_key/cache_key.h"
 #include "tensorstore/internal/global_initializer.h"
-#include "tensorstore/internal/json_gtest.h"
+#include "tensorstore/internal/testing/json_gtest.h"
 #include "tensorstore/json_serialization_options_base.h"
 #include "tensorstore/kvstore/kvstore.h"
 #include "tensorstore/kvstore/operations.h"
@@ -112,6 +112,7 @@ TEST(MemoryKeyValueStoreTest, SpecRoundtrip) {
   };
   // Not possible with "memory" driver.
   options.check_data_after_serialization = false;
+  options.url = "memory://";
   tensorstore::internal::TestKeyValueStoreSpecRoundtrip(options);
 }
 
@@ -131,6 +132,7 @@ TEST(MemoryKeyValueStoreTest, SpecRoundtripWithContextSpec) {
   options.check_data_persists = false;
   // Not possible with "memory" driver.
   options.check_data_after_serialization = false;
+  options.url = "memory://";
   tensorstore::internal::TestKeyValueStoreSpecRoundtrip(options);
 }
 

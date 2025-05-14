@@ -1,19 +1,19 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: types-docutils
-Version: 0.21.0.20241128
+Version: 0.21.0.20250514
 Summary: Typing stubs for docutils
-Home-page: https://github.com/python/typeshed
-License: Apache-2.0
+License-Expression: Apache-2.0
+Project-URL: Homepage, https://github.com/python/typeshed
 Project-URL: GitHub, https://github.com/python/typeshed
 Project-URL: Changes, https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/docutils.md
 Project-URL: Issue tracker, https://github.com/python/typeshed/issues
 Project-URL: Chat, https://gitter.im/python/typing
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3
 Classifier: Typing :: Stubs Only
-Requires-Python: >=3.8
+Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Dynamic: license-file
 
 ## Typing stubs for docutils
 
@@ -40,8 +40,8 @@ for more details. The source for this package can be found in the
 directory.
 
 This package was tested with
-mypy 1.13.0,
-pyright 1.1.389,
+mypy 1.15.0,
+pyright 1.1.400,
 and pytype 2024.10.11.
 It was generated from typeshed commit
-[`11ec1a10fdee3d50889e4bab63ac7a52d02a5e96`](https://github.com/python/typeshed/commit/11ec1a10fdee3d50889e4bab63ac7a52d02a5e96).
+[`9589e369f8afdd2980e45953e2ca9f2055d74c10`](https://github.com/python/typeshed/commit/9589e369f8afdd2980e45953e2ca9f2055d74c10).

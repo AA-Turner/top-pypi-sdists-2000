@@ -26,18 +26,18 @@ from ..cmake_provider import default_providers
 from ..cmake_target import CMakeTarget
 from ..emit_alias import emit_library_alias
 from ..evaluation import EvaluationState
-from ..starlark.bazel_globals import BazelGlobals
-from ..starlark.bazel_globals import register_bzl_library
 from ..starlark.bazel_target import TargetId
 from ..starlark.invocation_context import InvocationContext
 from ..starlark.invocation_context import RelativeLabel
 from ..starlark.provider import TargetInfo
+from ..starlark.scope_common import ScopeCommon
 from ..starlark.select import Configurable
 from ..util import cmake_is_true
 from ..util import quote_list
 from ..util import quote_path
 from ..util import quote_path_list
 from ..util import quote_string
+from .register import register_bzl_library
 
 
 _EMIT_YASM_CHECK = """
@@ -50,8 +50,8 @@ unset(_nasm_compiler_barename)
 """
 
 
-@register_bzl_library("@tensorstore//bazel:rules_nasm.bzl", build=True)
-class RulesNasmLibrary(BazelGlobals):
+@register_bzl_library("@tensorstore//bazel:rules_nasm.bzl")
+class RulesNasmLibrary(ScopeCommon):
 
   def bazel_nasm_library(
       self,
