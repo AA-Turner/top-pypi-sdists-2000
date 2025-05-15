@@ -99,10 +99,8 @@ def test_suspend_and_resume(warehouses):
         result = next(warehouses.iter(like=warehouse_name))
         assert result.state in ("STARTING", "STARTED", "RESUMING")
 
-        # resume from default state - a warehoue cannot be resumed if it is not in suspended state
-        # TODO(SNOW-1362454) - Please uncomment this once you have this bug resolved
-        # with pytest.raises(APIError):
-        #     warehouse_ref.resume()
+        # Warehouse can be resumed even if running because IF SUSPENDED is used in REST
+        warehouse_ref.resume()
 
     finally:
         with suppress(NotFoundError):

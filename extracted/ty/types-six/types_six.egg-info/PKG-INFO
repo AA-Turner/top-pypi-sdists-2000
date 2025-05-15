@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: types-six
-Version: 1.17.0.20250403
+Version: 1.17.0.20250515
 Summary: Typing stubs for six
 License-Expression: Apache-2.0
 Project-URL: Homepage, https://github.com/python/typeshed
@@ -37,7 +37,7 @@ directory.
 
 This package was tested with
 mypy 1.15.0,
-pyright 1.1.398,
+pyright 1.1.400,
 and pytype 2024.10.11.
 It was generated from typeshed commit
-[`23488363ce6221a5eccb98f9506ef70482772cb5`](https://github.com/python/typeshed/commit/23488363ce6221a5eccb98f9506ef70482772cb5).
+[`1063db7c15135c172f1f6a81d3aff6d1cb00a980`](https://github.com/python/typeshed/commit/1063db7c15135c172f1f6a81d3aff6d1cb00a980).

@@ -33,6 +33,17 @@ class XyzResource(SchemaObjectReferenceMixin):
         self.name = name
 
 
+class ArgsCollection(SchemaObjectCollectionParent["ArgsResource"]):
+    def __init__(self, schema: "SchemaResource") -> None:
+        super().__init__(schema, ArgsResource)
+
+
+class ArgsResource(SchemaObjectReferenceMixin):
+    def __init__(self, name_with_args: str, collection: "ArgsCollection") -> None:
+        self.collection = collection
+        self.name_with_args = name_with_args
+
+
 def test_collection_and_references():
     mock_session = MagicMock()
     db_collection = DatabaseCollection(mock_session)
@@ -88,6 +99,11 @@ def test_repr():
     my_xyz_ref = xyz_collection["my_xyz"]
     assert repr(xyz_collection) == """<XyzCollection: 'my_db."my_schema"'>"""
     assert repr(my_xyz_ref) == """<XyzResource: 'my_db."my_schema".my_xyz'>"""
+
+    args_collection = ArgsCollection(my_schema_ref)
+    my_args_ref = args_collection["my_args(float)"]
+    assert repr(args_collection) == """<ArgsCollection: 'my_db."my_schema"'>"""
+    assert repr(my_args_ref) == """<ArgsResource: 'my_db."my_schema".my_args(float)'>"""
 
 
 def test_createmode():

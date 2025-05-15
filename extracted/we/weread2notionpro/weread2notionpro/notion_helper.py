@@ -341,7 +341,7 @@ class NotionHelper:
         return self.get_relation_id(
             day, self.day_database_id, TARGET_ICON_URL, properties
         )
-
+    @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def get_relation_id(self, name, id, icon, properties={}):
         key = f"{id}{name}"
         if key in self.__cache:
@@ -429,6 +429,8 @@ class NotionHelper:
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def update_page(self, page_id, properties, cover):
+        if cover is None:
+            return self.client.pages.update(page_id=page_id, properties=properties)
         return self.client.pages.update(
             page_id=page_id, properties=properties, cover=cover
         )

@@ -6,8 +6,10 @@ import logging
 
 import pytest
 
+from snowflake.core._utils import check_version_lte
 from snowflake.core.database import Database
 from snowflake.core.schema import Schema
+from snowflake.core.version import __version__
 from tests.utils import is_prod_version, random_string
 
 
@@ -78,18 +80,15 @@ def test_url_embedding_into_url(schemas, caplog):
 # this test should always pass -- we would never set the configuration to make it not work
 # with the most recent version.
 
-# TODO(SNOW-1704760): This test is commented out for now because the configuration file has not yet
-# been updated in S3, so this test would fail. Once it has been updated, this test should be uncommented.
-#
-# def test_client_info_integration(root):
-#     assert root.client_info.client_version == __version__
-#
-#     # Assert that ClientInfo parsed the information correctly.
-#     assert root.client_info.minimum_supported_version is not None
-#     assert root.client_info.end_of_support_version is not None
-#     assert root.client_info.recommended_version is not None
-#
-#     # All minimum and recommended versions should be less than or equal to the current version
-#     assert check_version_lte(root.client_info.minimum_supported_version, __version__)
-#     assert check_version_lte(root.client_info.end_of_support_version, __version__)
-#     assert check_version_lte(root.client_info.recommended_version, __version__)
+def test_client_info_integration(root):
+    assert root._client_info.client_version == __version__
+
+    # Assert that ClientInfo parsed the information correctly.
+    assert root._client_info.minimum_supported_version is not None
+    assert root._client_info.end_of_support_version is not None
+    assert root._client_info.recommended_version is not None
+
+    # All minimum and recommended versions should be less than or equal to the current version
+    assert check_version_lte(root._client_info.minimum_supported_version, __version__)
+    assert check_version_lte(root._client_info.end_of_support_version, __version__)
+    assert check_version_lte(root._client_info.recommended_version, __version__)

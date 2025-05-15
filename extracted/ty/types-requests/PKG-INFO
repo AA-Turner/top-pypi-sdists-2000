@@ -1,30 +1,20 @@
 Metadata-Version: 2.4
 Name: types-requests
-Version: 2.32.0.20250328
+Version: 2.32.0.20250515
 Summary: Typing stubs for requests
-Home-page: https://github.com/python/typeshed
-License: Apache-2.0
+License-Expression: Apache-2.0
+Project-URL: Homepage, https://github.com/python/typeshed
 Project-URL: GitHub, https://github.com/python/typeshed
 Project-URL: Changes, https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/requests.md
 Project-URL: Issue tracker, https://github.com/python/typeshed/issues
 Project-URL: Chat, https://gitter.im/python/typing
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3
 Classifier: Typing :: Stubs Only
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: urllib3>=2
-Dynamic: classifier
-Dynamic: description
-Dynamic: description-content-type
-Dynamic: home-page
-Dynamic: license
 Dynamic: license-file
-Dynamic: project-url
-Dynamic: requires-dist
-Dynamic: requires-python
-Dynamic: summary
 
 ## Typing stubs for requests
 
@@ -50,7 +40,7 @@ directory.
 
 This package was tested with
 mypy 1.15.0,
-pyright 1.1.398,
+pyright 1.1.400,
 and pytype 2024.10.11.
 It was generated from typeshed commit
-[`2a7a601a5ca2237037965f52eca5925dba530c62`](https://github.com/python/typeshed/commit/2a7a601a5ca2237037965f52eca5925dba530c62).
+[`1063db7c15135c172f1f6a81d3aff6d1cb00a980`](https://github.com/python/typeshed/commit/1063db7c15135c172f1f6a81d3aff6d1cb00a980).

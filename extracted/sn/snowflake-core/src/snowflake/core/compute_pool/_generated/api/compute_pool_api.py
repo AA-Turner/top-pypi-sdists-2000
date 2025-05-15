@@ -1062,7 +1062,7 @@ class ComputePoolApi(object):
     ) -> Union[SuccessResponse, Future[SuccessResponse]]:  # noqa: E501
         """Resumes a suspended compute pool.  # noqa: E501.
 
-        Resume a compute pool, if suspended. If the specified compute pool is already running, no action is taken.  # noqa: E501
+        Resume a compute pool, if suspended. If the specified compute pool is already running, this will cause a 400 Bad Request error.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1098,7 +1098,7 @@ class ComputePoolApi(object):
                                            **kwargs):  # noqa: E501
         """Resumes a suspended compute pool.  # noqa: E501.
 
-        Resume a compute pool, if suspended. If the specified compute pool is already running, no action is taken.  # noqa: E501
+        Resume a compute pool, if suspended. If the specified compute pool is already running, this will cause a 400 Bad Request error.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

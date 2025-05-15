@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: motor
-Version: 3.7.0
+Version: 3.7.1
 Summary: Non-blocking MongoDB driver for Tornado or asyncio
 Project-URL: Homepage, https://www.mongodb.org
 Project-URL: Documentation, https://motor.readthedocs.io
@@ -266,6 +266,12 @@ Description-Content-Type: text/markdown
 [![Documentation Status](https://readthedocs.org/projects/motor/badge/?version=stable)](http://motor.readthedocs.io/en/stable/?badge=stable)
 
 ![image](https://raw.github.com/mongodb/motor/master/doc/_static/motor.png)
+
+> [!WARNING]
+> Motor will be deprecated on May 14th, 2026, one year after the production release of the PyMongo Async driver.
+> Critical bug fixes will be made until May 14th, 2027.
+> We strongly recommend that Motor users migrate to the PyMongo Async driver while Motor is still supported.
+> To learn more, see the migration guide: https://www.mongodb.com/docs/languages/python/pymongo-driver/current/reference/migration/.
 
 ## About
 

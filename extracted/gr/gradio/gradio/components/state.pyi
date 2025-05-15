@@ -9,13 +9,13 @@ from typing import Any
 
 from gradio_client.documentation import document
 
-from gradio.components.base import Component
+from gradio.components.base import FormComponent
 from gradio.events import Events
 
 from gradio.events import Dependency
 
 @document()
-class State(Component):
+class State(FormComponent):
     EVENTS = [Events.change]
     """
     Special hidden component that stores session state across runs of the demo by the

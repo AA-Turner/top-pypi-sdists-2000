@@ -184,6 +184,9 @@ class TestSrvPolling(AsyncPyMongoTestCase):
             ):
                 await assertion_method(expected_response, client)
 
+            # Close the client early to avoid affecting the next scenario run.
+            await client.close()
+
     async def test_addition(self):
         response = self.BASE_SRV_RESPONSE[:]
         response.append(("localhost.test.build.10gen.cc", 27019))

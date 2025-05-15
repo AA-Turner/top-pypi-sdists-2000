@@ -22,15 +22,10 @@ from snowflake.core.cortex.lite_agent_service._generated.models.analyst_resource
 from snowflake.core.cortex.lite_agent_service._generated.models.error_response import ErrorResponse
 from snowflake.core.cortex.lite_agent_service._generated.models.message import Message
 from snowflake.core.cortex.lite_agent_service._generated.models.search_resource import SearchResource
-from snowflake.core.cortex.lite_agent_service._generated.models.text_content import TextContent
 from snowflake.core.cortex.lite_agent_service._generated.models.tool import Tool
 from snowflake.core.cortex.lite_agent_service._generated.models.tool_choice import ToolChoice
-from snowflake.core.cortex.lite_agent_service._generated.models.tool_results import ToolResults
-from snowflake.core.cortex.lite_agent_service._generated.models.tool_results_tool_results import ToolResultsToolResults
 from snowflake.core.cortex.lite_agent_service._generated.models.tool_tool_spec import ToolToolSpec
 from snowflake.core.cortex.lite_agent_service._generated.models.tool_tool_spec_input_schema import ToolToolSpecInputSchema
-from snowflake.core.cortex.lite_agent_service._generated.models.tool_use import ToolUse
-from snowflake.core.cortex.lite_agent_service._generated.models.tool_use_tool_use import ToolUseToolUse
 
 __all__ = [
     'AgentRunRequest',
@@ -39,13 +34,8 @@ __all__ = [
     'ErrorResponse',
     'Message',
     'SearchResource',
-    'TextContent',
     'Tool',
     'ToolChoice',
-    'ToolResults',
-    'ToolResultsToolResults',
     'ToolToolSpec',
     'ToolToolSpecInputSchema',
-    'ToolUse',
-    'ToolUseToolUse',
 ]

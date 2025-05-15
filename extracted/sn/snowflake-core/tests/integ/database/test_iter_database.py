@@ -59,4 +59,4 @@ def test_iter_limit(databases):
     with pytest.raises(
         ValidationError,
     ):
-        data = list(databases.iter(limit=10001))
+        list(databases.iter(limit=10001))

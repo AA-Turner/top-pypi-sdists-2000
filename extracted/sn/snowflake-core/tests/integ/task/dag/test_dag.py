@@ -235,7 +235,6 @@ def test_deploy_dag_python_function_directly(schema, db_parameters):
         schema._connection.execute_string(f"drop stage {test_stage}")
 
 
-@pytest.mark.flaky
 @pytest.mark.snowpark
 @pytest.mark.usefixtures("anaconda_package_available")
 @pytest.mark.parametrize("reverse", [True, False])

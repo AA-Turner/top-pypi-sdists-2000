@@ -25,6 +25,7 @@ from snowflake.core.cortex.search_service._generated.models.functions import Fun
 from snowflake.core.cortex.search_service._generated.models.numeric_boost import NumericBoost
 from snowflake.core.cortex.search_service._generated.models.query_request import QueryRequest
 from snowflake.core.cortex.search_service._generated.models.query_response import QueryResponse
+from snowflake.core.cortex.search_service._generated.models.query_similarity_boost import QuerySimilarityBoost
 from snowflake.core.cortex.search_service._generated.models.scheduling_state import SchedulingState
 from snowflake.core.cortex.search_service._generated.models.scoring_config import ScoringConfig
 from snowflake.core.cortex.search_service._generated.models.success_accepted_response import SuccessAcceptedResponse
@@ -46,6 +47,7 @@ __all__ = [
     'NumericBoost',
     'QueryRequest',
     'QueryResponse',
+    'QuerySimilarityBoost',
     'SchedulingState',
     'ScoringConfig',
     'SuccessAcceptedResponse',

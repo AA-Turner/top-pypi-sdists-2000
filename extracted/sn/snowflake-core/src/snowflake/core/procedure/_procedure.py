@@ -1,4 +1,6 @@
 # mypy: ignore-errors
+import json
+import warnings
 
 from collections.abc import Iterator
 from concurrent.futures import Future
@@ -28,6 +30,7 @@ from ._generated.models.procedure import Procedure
 if TYPE_CHECKING:
     from snowflake.core.schema import SchemaResource
 
+
 def _cast_result(result: str, returns: ReturnDataType) -> Any:
     if returns.datatype in ["NUMBER", "DECIMAL", "NUMERIC", "INT", "INTEGER",
                             "BIGINT", "SMALLINT", "TINYINT", "BYTEINT"]:
@@ -48,11 +51,12 @@ def _cast_result(result: str, returns: ReturnDataType) -> Any:
         return list(result)
     if returns.datatype == "DATE":
         return date(result)
-    if returns.datatype in ["GEOMETRY", "GEOGRAPHY", "OBJECT"]:
-        return dict(result)
+    if returns.datatype in ["GEOMETRY", "GEOGRAPHY", "OBJECT", "VARIANT"]:
+        return json.loads(result)
     if returns.datatype == "BOOLEAN":
         return result.lower() in ("yes", "y", "true", "t", "1")
     return result
+
 
 class ProcedureCollection(SchemaObjectCollectionParent["ProcedureResource"]):
     """Represents the collection operations on the Snowflake Procedure resource.
@@ -338,7 +342,7 @@ class ProcedureResource(SchemaObjectReferenceMixin[ProcedureCollection]):
         return PollingOperations.empty(future)
 
     @api_telemetry
-    def call(self, call_argument_list: Optional[CallArgumentList] = None) -> Any:
+    def call(self, call_argument_list: Optional[CallArgumentList] = None, extract: Optional[bool] = False) -> Any:
         """Call this procedure.
 
         Examples
@@ -354,21 +358,26 @@ class ProcedureResource(SchemaObjectReferenceMixin[ProcedureCollection]):
         ...     CallArgument(name="tableName", datatype="VARCHAR", value="my_table_name"),
         ... ]))
         """
-        return self._call(call_argument_list=call_argument_list, async_req=False)
+        return self._call(call_argument_list=call_argument_list, async_req=False, extract=extract)
 
     @api_telemetry
-    def call_async(self, call_argument_list: Optional[CallArgumentList] = None) -> PollingOperation[Any]:
+    def call_async(
+        self,
+        call_argument_list: Optional[CallArgumentList] = None,
+        extract: Optional[bool] = False
+    ) -> PollingOperation[Any]:
         """An asynchronous version of :func:`call`.
 
         Refer to :class:`~snowflake.core.PollingOperation` for more information on asynchronous execution and
         the return type.
         """ # noqa: D401
-        return self._call(call_argument_list=call_argument_list, async_req=True)
+        return self._call(call_argument_list=call_argument_list, async_req=True, extract=extract)
 
     @overload
     def _call(
         self,
         call_argument_list: Optional[CallArgumentList],
+        extract: Optional[bool],
         async_req: Literal[True],
     ) -> PollingOperation[Any]:
         ...
@@ -377,6 +386,7 @@ class ProcedureResource(SchemaObjectReferenceMixin[ProcedureCollection]):
     def _call(
         self,
         call_argument_list: Optional[CallArgumentList],
+        extract: Optional[bool],
         async_req: Literal[False],
     ) -> Any:
         ...
@@ -384,8 +394,21 @@ class ProcedureResource(SchemaObjectReferenceMixin[ProcedureCollection]):
     def _call(
         self,
         call_argument_list: Optional[CallArgumentList],
-        async_req: bool
+        async_req: bool,
+        extract: bool = False
     ) -> Union[Any, PollingOperation[Any]]:
+        if extract is False:
+            warnings.warn(
+                "Please use `extract=True` when calling procedure. This will extract "
+                "result from [{sproc_name: result}] object. This will become default behavior.",
+                DeprecationWarning,
+                stacklevel=4
+            )
+
+        # None is not supported by self.collection._api.call_procedure
+        if call_argument_list is None:
+            call_argument_list = CallArgumentList(call_arguments=[])
+
         procedure = self.fetch()
         for argument in procedure.arguments:
             if argument.default_value is None:
@@ -413,7 +436,13 @@ class ProcedureResource(SchemaObjectReferenceMixin[ProcedureCollection]):
                     result_list.append(result_dict)
             else:
                 result_list = result
-            return result_list
+            if not extract:
+                return result_list
+
+            payload = result_list[0]
+            if not isinstance(payload, dict):
+                raise TypeError(f"Expected first item to be of type dict but got {type(payload)}")
+            return payload[next(iter(payload.keys()))]
 
         if isinstance(result_or_future, Future):
             return PollingOperation(result_or_future, map_result)

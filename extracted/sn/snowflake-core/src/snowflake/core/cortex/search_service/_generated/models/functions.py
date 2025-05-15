@@ -20,6 +20,8 @@ from typing import Union
 
 from snowflake.core.cortex.search_service._generated.models.numeric_boost import NumericBoost
 
+from snowflake.core.cortex.search_service._generated.models.query_similarity_boost import QuerySimilarityBoost
+
 from snowflake.core.cortex.search_service._generated.models.text_boost import TextBoost
 
 from snowflake.core.cortex.search_service._generated.models.time_decay import TimeDecay
@@ -45,6 +47,8 @@ class Functions(BaseModel):
     text_boosts : List[TextBoost], optional
 
     vector_boosts : List[VectorBoost], optional
+
+    query_similarity_boosts : List[QuerySimilarityBoost], optional
     """
 
     numeric_boosts: Optional[List[NumericBoost]] = None
@@ -55,8 +59,11 @@ class Functions(BaseModel):
 
     vector_boosts: Optional[List[VectorBoost]] = None
 
+    query_similarity_boosts: Optional[List[QuerySimilarityBoost]] = None
+
     __properties = [
-        "numeric_boosts", "time_decays", "text_boosts", "vector_boosts"
+        "numeric_boosts", "time_decays", "text_boosts", "vector_boosts",
+        "query_similarity_boosts"
     ]
 
     class Config:
@@ -125,6 +132,14 @@ class Functions(BaseModel):
                     _items.append(_item.to_dict())
             _dict['vector_boosts'] = _items
 
+        # override the default output from pydantic by calling `to_dict()` of each item in query_similarity_boosts (list)
+        _items = []
+        if self.query_similarity_boosts:
+            for _item in self.query_similarity_boosts:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['query_similarity_boosts'] = _items
+
         return _dict
 
     def to_dict_without_readonly_properties(self) -> dict[str, Any]:
@@ -156,6 +171,10 @@ class Functions(BaseModel):
                 VectorBoost.from_dict(_item)
                 for _item in obj.get("vector_boosts")
             ] if obj.get("vector_boosts") is not None else None,
+            "query_similarity_boosts": [
+                QuerySimilarityBoost.from_dict(_item)
+                for _item in obj.get("query_similarity_boosts")
+            ] if obj.get("query_similarity_boosts") is not None else None,
         })
 
         return _obj
@@ -164,6 +183,8 @@ class Functions(BaseModel):
 from typing import Optional, List, Dict
 
 from snowflake.core.cortex.search_service._generated.models.numeric_boost import NumericBoost
+
+from snowflake.core.cortex.search_service._generated.models.query_similarity_boost import QuerySimilarityBoost
 
 from snowflake.core.cortex.search_service._generated.models.text_boost import TextBoost
 
@@ -180,6 +201,7 @@ class FunctionsModel():
         time_decays: Optional[List[TimeDecay]] = None,
         text_boosts: Optional[List[TextBoost]] = None,
         vector_boosts: Optional[List[VectorBoost]] = None,
+        query_similarity_boosts: Optional[List[QuerySimilarityBoost]] = None,
     ):
         """A model object representing the Functions resource.
 
@@ -194,15 +216,19 @@ class FunctionsModel():
         text_boosts : List[TextBoost], optional
 
         vector_boosts : List[VectorBoost], optional
+
+        query_similarity_boosts : List[QuerySimilarityBoost], optional
         """
 
         self.numeric_boosts = numeric_boosts
         self.time_decays = time_decays
         self.text_boosts = text_boosts
         self.vector_boosts = vector_boosts
+        self.query_similarity_boosts = query_similarity_boosts
 
     __properties = [
-        "numeric_boosts", "time_decays", "text_boosts", "vector_boosts"
+        "numeric_boosts", "time_decays", "text_boosts", "vector_boosts",
+        "query_similarity_boosts"
     ]
 
     def __repr__(self) -> str:
@@ -218,6 +244,9 @@ class FunctionsModel():
             if self.text_boosts is not None else None,
             vector_boosts=[x._to_model() for x in self.vector_boosts]
             if self.vector_boosts is not None else None,
+            query_similarity_boosts=[
+                x._to_model() for x in self.query_similarity_boosts
+            ] if self.query_similarity_boosts is not None else None,
         )
 
     @classmethod
@@ -235,6 +264,10 @@ class FunctionsModel():
             vector_boosts=[
                 VectorBoostModel._from_model(x) for x in model.vector_boosts
             ] if model.vector_boosts is not None else None,
+            query_similarity_boosts=[
+                QuerySimilarityBoostModel._from_model(x)
+                for x in model.query_similarity_boosts
+            ] if model.query_similarity_boosts is not None else None,
         )
 
     def to_dict(self):

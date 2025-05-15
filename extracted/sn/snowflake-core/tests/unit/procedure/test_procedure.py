@@ -169,3 +169,31 @@ def test_call_procedure(fake_root, procedure):
         assert isinstance(op, PollingOperation)
         op.result()
     mocked_request.assert_called_with(*args, **kwargs)
+
+
+@pytest.mark.parametrize("extract, expected_result", [
+    (True, {"a": 1, "b": 2}),
+    (False, [{"foo": {"a": 1, "b": 2}}])
+])
+@pytest.mark.parametrize("data_type", ["GEOMETRY", "GEOGRAPHY", "OBJECT", "VARIANT"])
+def test_variant_mapping(procedure, extract, expected_result, fake_root, data_type):
+    from snowflake.core.procedure._generated.models import Procedure as ProcedureModel
+    from snowflake.core.procedure._generated.models import ReturnDataType as ReturnDataTypeModel
+    from snowflake.core.procedure._generated.models import SQLFunction as SQLFunctionModel
+
+    model = ProcedureModel(
+        name="my_proc",
+        arguments=[],
+        return_type=ReturnDataTypeModel(datatype=data_type),
+        language_config=SQLFunctionModel(),
+        body="SELECT 'xyz'"
+    )
+    fetch_response = mock_http_response(model.to_json())
+    call_response = mock_http_response(json.dumps([{'foo': '{\n  "a": 1,\n  "b": 2\n}'}]))
+
+    with mock.patch(API_CLIENT_REQUEST) as mocked_request:
+        mocked_request.side_effect = [fetch_response, call_response]
+        result = procedure.call(call_argument_list=CallArgumentList(call_arguments=[]), extract=extract)
+
+    assert result == expected_result
+

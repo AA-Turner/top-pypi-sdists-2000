@@ -10,7 +10,6 @@ from snowflake.core.service import Service
 from tests.utils import random_string
 
 
-@pytest.mark.flaky
 @pytest.mark.min_sf_ver("8.37.0")
 def test_create_or_alter(services, service_spec_file_on_stage, shared_compute_pool, warehouse):
     service_name = random_string(5, "test_create_or_alter_service_")
@@ -96,10 +95,8 @@ def test_create_or_alter(services, service_spec_file_on_stage, shared_compute_po
         assert result.max_instances == test_service_new_3.max_instances
         assert result.comment == test_service_new_3.comment
 
-        # Uncomment when SNOW-1664511 is fixed; CoA does not seem to be properly unsetting properties
-        # that are not filled.
         # This should be reset to the default value which is True
-        # assert result.auto_resume is True
+        assert result.auto_resume is True
 
     finally:
         with suppress(NotFoundError):

@@ -4,7 +4,7 @@ requires = ["setuptools>=77.0.3"]
 
 [project]
 name = "types-six"
-version = "1.17.0.20250403"
+version = "1.17.0.20250515"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 description = "Typing stubs for six"
@@ -31,10 +31,10 @@ directory.
 
 This package was tested with
 mypy 1.15.0,
-pyright 1.1.398,
+pyright 1.1.400,
 and pytype 2024.10.11.
 It was generated from typeshed commit
-[`23488363ce6221a5eccb98f9506ef70482772cb5`](https://github.com/python/typeshed/commit/23488363ce6221a5eccb98f9506ef70482772cb5).
+[`1063db7c15135c172f1f6a81d3aff6d1cb00a980`](https://github.com/python/typeshed/commit/1063db7c15135c172f1f6a81d3aff6d1cb00a980).
 """, content-type = "text/markdown" }
 classifiers = [
   "Programming Language :: Python :: 3",

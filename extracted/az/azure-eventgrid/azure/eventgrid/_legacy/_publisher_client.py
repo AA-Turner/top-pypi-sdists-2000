@@ -48,7 +48,6 @@ from ._constants import DEFAULT_API_VERSION
 from ._version import VERSION
 
 if TYPE_CHECKING:
-    # pylint: disable=unused-import,ungrouped-imports
     from azure.core.credentials import (
         AzureKeyCredential,
         AzureSasCredential,
@@ -71,7 +70,7 @@ SendType = Union[
 ListEventType = Union[List[CloudEvent], List[EventGridEvent], List[Dict]]
 
 
-class EventGridPublisherClient(object):  # pylint: disable=client-accepts-api-version-keyword
+class EventGridPublisherClient(object):
     """EventGridPublisherClient publishes events to an EventGrid topic or domain.
     It can be used to publish either an EventGridEvent, a CloudEvent or a Custom Schema.
 
@@ -117,8 +116,10 @@ class EventGridPublisherClient(object):  # pylint: disable=client-accepts-api-ve
         self._api_version = api_version if api_version is not None else DEFAULT_API_VERSION
 
     @staticmethod
-    def _policies(credential, **kwargs):
-        # type: (Union[AzureKeyCredential, AzureSasCredential, TokenCredential], Any) -> List[Any]
+    def _policies(
+        credential: Union["AzureKeyCredential", "AzureSasCredential", "TokenCredential"],
+        **kwargs: Any
+    ) -> List[Any]:
         auth_policy = _get_authentication_policy(credential)
         sdk_moniker = "eventgrid/{}".format(VERSION)
         policies = [
@@ -139,7 +140,7 @@ class EventGridPublisherClient(object):  # pylint: disable=client-accepts-api-ve
         return policies
 
     @distributed_trace
-    def send(self, events: SendType, *, channel_name: Optional[str] = None, **kwargs: Any) -> None:
+    def send(self, events: SendType, *, channel_name: Optional[str] = None, **kwargs: Any) -> None: # pylint:disable=docstring-keyword-should-match-keyword-only
         """Sends events to a topic or a domain specified during the client initialization.
 
         A single instance or a list of dictionaries, CloudEvents or EventGridEvents are accepted.
@@ -204,7 +205,7 @@ class EventGridPublisherClient(object):  # pylint: disable=client-accepts-api-ve
         :keyword channel_name: Optional. Used to specify the name of event channel when publishing to partner.
         :paramtype channel_name: str or None
          namespaces with partner topic. For more details, visit
-         https://docs.microsoft.com/azure/event-grid/partner-events-overview
+         https://learn.microsoft.com/azure/event-grid/partner-events-overview
         :rtype: None
         """
         if not isinstance(events, list):
@@ -212,7 +213,7 @@ class EventGridPublisherClient(object):  # pylint: disable=client-accepts-api-ve
         content_type = kwargs.pop("content_type", "application/json; charset=utf-8")
         if isinstance(events[0], CloudEvent) or _is_cloud_event(events[0]):
             try:
-                events = [_cloud_event_to_generated(e, **kwargs) for e in events]  # pylint: disable=protected-access
+                events = [_cloud_event_to_generated(e, **kwargs) for e in events]
             except AttributeError:
                 ## this is either a dictionary or a CNCF cloud event
                 events = [_from_cncf_events(e) for e in events]
@@ -220,7 +221,7 @@ class EventGridPublisherClient(object):  # pylint: disable=client-accepts-api-ve
         elif isinstance(events[0], EventGridEvent) or _is_eventgrid_event_format(events[0]):
             for event in events:
                 _eventgrid_data_typecheck(event)
-        response = self._client.send_request(  # pylint: disable=protected-access
+        response = self._client.send_request(
             _build_request(
                 self._endpoint, content_type, events, channel_name=channel_name, api_version=self._api_version
             ),
@@ -235,16 +236,13 @@ class EventGridPublisherClient(object):  # pylint: disable=client-accepts-api-ve
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             raise HttpResponseError(response=response)
 
-    def close(self):
-        # type: () -> None
-        """Close the :class:`~azure.eventgrid.EventGridPublisherClient` session."""
-        return self._client.close()
+    def close(self) -> None:
+        """Closes the EventGridPublisherClient session."""
+        self._client.close()
 
-    def __enter__(self):
-        # type: () -> EventGridPublisherClient
-        self._client.__enter__()  # pylint:disable=no-member
+    def __enter__(self) -> "EventGridPublisherClient":
+        self._client.__enter__()
         return self
 
-    def __exit__(self, *args):
-        # type: (*Any) -> None
-        self._client.__exit__(*args)  # pylint:disable=no-member
+    def __exit__(self, *args) -> None:
+        self._client.__exit__(*args)

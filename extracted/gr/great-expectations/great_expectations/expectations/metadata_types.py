@@ -11,6 +11,7 @@ class DataQualityIssues(str, Enum):
     NUMERIC = "Numeric"
     VALIDITY = "Validity"
     SQL = "SQL"
+    MULTI_SOURCE = "Multi-source"
 
 
 class SupportedDataSources(str, Enum):

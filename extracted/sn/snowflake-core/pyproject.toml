@@ -132,7 +132,8 @@ check_storedproc = [
     "python -u -m 'tests.integ.storedproc.run_storedproc'",
 ]
 check_flaky = [
-    'pytest -m "flaky" {args:tests}',
+    # Supress exit code 5 (no tests collected)
+    'pytest -m "flaky" {args:tests} || ([ $? = 5 ] && exit 0 || exit $?)',
 ]
 check_unit = [
     "pytest tests/unit"

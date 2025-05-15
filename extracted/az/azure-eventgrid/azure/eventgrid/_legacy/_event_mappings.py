@@ -8,13 +8,12 @@ from enum import Enum
 from azure.core import CaseInsensitiveEnumMeta
 
 
-# pylint: disable=line-too-long
 # pylint: disable=enum-must-be-uppercase
 class SystemEventNames(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     """
     This enum represents the names of the various event types for the system events published to
     Azure Event Grid. To check the list of recognizable system topics,
-    visit https://docs.microsoft.com/azure/event-grid/system-topics.
+    visit https://learn.microsoft.com/azure/event-grid/system-topics.
     """
 
     # These names at the top are 'corrected' aliases of duplicate values that appear below, which are
@@ -62,6 +61,16 @@ class SystemEventNames(str, Enum, metaclass=CaseInsensitiveEnumMeta):
 
     AcsAdvancedMessageReceivedEventName = "Microsoft.Communication.AdvancedMessageReceived"
 
+    AcsCallEndedEventName = "Microsoft.Communication.CallEnded"
+
+    AcsCallParticipantAddedEventName = "Microsoft.Communication.CallParticipantAdded"
+
+    AcsCallParticipantRemovedEventName = "Microsoft.Communication.CallParticipantRemoved"
+
+    AcsCallStartedEventName = "Microsoft.Communication.CallStarted"
+
+    AcsChatAzureBotCommandReceivedInThreadEventName = "Microsoft.Communication.ChatAzureBotCommandReceivedInThread"
+
     AcsChatMessageDeletedEventName = "Microsoft.Communication.ChatMessageDeleted"
 
     AcsChatMessageDeletedInThreadEventName = "Microsoft.Communication.ChatMessageDeletedInThread"
@@ -95,6 +104,8 @@ class SystemEventNames(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     AcsChatThreadPropertiesUpdatedPerUserEventName = "Microsoft.Communication.ChatThreadPropertiesUpdatedPerUser"
 
     AcsChatThreadWithUserDeletedEventName = "Microsoft.Communication.ChatThreadWithUserDeleted"
+
+    AcsChatTypingIndicatorReceivedInThreadEventName = "Microsoft.Communication.ChatTypingIndicatorReceivedInThread"
 
     AcsEmailDeliveryReportReceivedEventName = "Microsoft.Communication.EmailDeliveryReportReceived"
 
@@ -170,6 +181,10 @@ class SystemEventNames(str, Enum, metaclass=CaseInsensitiveEnumMeta):
 
     ApiManagementApiUpdatedEventName = "Microsoft.ApiManagement.APIUpdated"
 
+    ApiManagementCircuitBreakerClosedEventName = "Microsoft.ApiManagement.CircuitBreaker.Closed"
+
+    ApiManagementCircuitBreakerOpenedEventName = "Microsoft.ApiManagement.CircuitBreaker.Opened"
+
     ApiManagementGatewayApiAddedEventName = "Microsoft.ApiManagement.GatewayAPIAdded"
 
     ApiManagementGatewayApiRemovedEventName = "Microsoft.ApiManagement.GatewayAPIRemoved"
@@ -201,6 +216,10 @@ class SystemEventNames(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     ApiManagementGatewayHostnameConfigurationUpdatedEventName = (
         "Microsoft.ApiManagement.GatewayHostnameConfigurationUpdated"
     )
+
+    ApiManagementGatewayTokenExpiredEventName = "Microsoft.ApiManagement.GatewayTokenExpired"
+
+    ApiManagementGatewayTokenNearExpiryEventName = "Microsoft.ApiManagement.GatewayTokenNearExpiry"
 
     ApiManagementGatewayUpdatedEventName = "Microsoft.ApiManagement.GatewayUpdated"
 
@@ -279,6 +298,8 @@ class SystemEventNames(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     DataBoxCopyStartedEventName = "Microsoft.DataBox.CopyStarted"
 
     DataBoxOrderCompletedEventName = "Microsoft.DataBox.OrderCompleted"
+
+    EdgeSolutionVersionPublishedEventName = "Microsoft.Edge.SolutionVersionPublished"
 
     EventGridMQTTClientCreatedOrUpdatedEventName = "Microsoft.EventGrid.MQTTClientCreatedOrUpdated"
 

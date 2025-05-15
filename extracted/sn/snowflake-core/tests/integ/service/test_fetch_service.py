@@ -6,8 +6,7 @@ from io import BytesIO
 from textwrap import dedent
 from time import sleep
 
-import pytest
-
+from snowflake.core.exceptions import APIError
 from snowflake.core.service import Service, ServiceSpecStageFile
 from tests.utils import random_string
 
@@ -34,13 +33,15 @@ def test_fetch(services, temp_service, database, shared_compute_pool):
     assert service.is_upgrading is not None
 
 
-@pytest.mark.flaky("Test is flaky -- logs can take a while to propagate")
 def test_fetch_service_logs(services, temp_service, instance_family):
     service_name = temp_service.name
     logs = None
 
     for _ in range(10):
-        logs = services[service_name].get_service_logs(0, "hello-world")
+        try:
+            logs = services[service_name].get_service_logs("0", "hello-world")
+        except APIError:
+            pass
         if logs:
             break
         sleep(5)
@@ -51,12 +52,11 @@ def test_fetch_service_logs(services, temp_service, instance_family):
         message = "test 999"
     assert message in logs
 
-    trimmed_logs = services[temp_service.name].get_service_logs(0, "hello-world", num_lines=10)
+    trimmed_logs = services[temp_service.name].get_service_logs("0", "hello-world", num_lines=10)
     assert trimmed_logs in logs
     assert len(trimmed_logs) < len(logs)
 
 
-@pytest.mark.flaky
 def test_fetch_service_status(services, session, imagerepo, shared_compute_pool):
     service_name = random_string(5, "test_service_")
     stage_name = random_string(5, "test_stage_")
@@ -85,14 +85,14 @@ def test_fetch_service_status(services, session, imagerepo, shared_compute_pool)
 
     try:
         s = services.create(test_service)
-        status = s.get_service_status()
+        status = s.get_service_status(timeout=10)
         assert status[0]["status"] in ["UNKNOWN", "PENDING", "READY", "DONE"]
-        status = s.get_service_status(timeout=3)
+        status = s.get_service_status()
         assert status[0]["status"] in ["UNKNOWN", "PENDING", "READY", "DONE"]
         s.suspend()
+        status = s.get_service_status(timeout=10)
+        assert not status
         status = s.get_service_status()
-        assert status[0]["status"] in ["SUSPENDED", "UNKNOWN", "PENDING", "READY", "DONE"]
-        status = s.get_service_status(timeout=3)
-        assert status[0]["status"] in ["SUSPENDED"]
+        assert not status
     finally:
         services[test_service.name].drop()

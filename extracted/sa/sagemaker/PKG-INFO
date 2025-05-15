@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: sagemaker
-Version: 2.244.0
+Version: 2.244.1
 Summary: Open source library for training and deploying models on Amazon SageMaker.
 Project-URL: Homepage, https://github.com/aws/sagemaker-python-sdk
 Author: Amazon Web Services
@@ -24,7 +24,7 @@ Requires-Dist: google-pasta
 Requires-Dist: importlib-metadata<7.0,>=1.4.0
 Requires-Dist: jsonschema
 Requires-Dist: numpy==1.26.4
-Requires-Dist: omegaconf<=2.3,>=2.2
+Requires-Dist: omegaconf<3,>=2.2
 Requires-Dist: packaging<25,>=23.0
 Requires-Dist: pandas
 Requires-Dist: pathos
@@ -87,6 +87,7 @@ Requires-Dist: fabric==3.2.2; extra == 'test'
 Requires-Dist: fastapi==0.115.4; extra == 'test'
 Requires-Dist: fastapi>=0.111.0; extra == 'test'
 Requires-Dist: flake8==7.1.2; extra == 'test'
+Requires-Dist: flask-limiter==3.11; extra == 'test'
 Requires-Dist: huggingface-hub==0.26.2; extra == 'test'
 Requires-Dist: jinja2==3.1.6; extra == 'test'
 Requires-Dist: jsonpickle<4.0.0; extra == 'test'

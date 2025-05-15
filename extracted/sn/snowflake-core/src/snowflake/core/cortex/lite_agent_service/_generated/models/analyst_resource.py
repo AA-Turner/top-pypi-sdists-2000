@@ -20,7 +20,7 @@ from typing import Union
 
 from pydantic import BaseModel, ConfigDict, StrictStr
 
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 
 
 class AnalystResource(BaseModel):
@@ -30,15 +30,19 @@ class AnalystResource(BaseModel):
 
     Parameters
     __________
-    semantic_model_file : str
+    semantic_model_file : str, optional
         The path to a file stored in a Snowflake Stage holding the semantic model yaml.
+    semantic_view : str, optional
+        The name of the Snowflake native semantic model object
     """
 
-    semantic_model_file: StrictStr
+    semantic_model_file: Optional[StrictStr] = None
+
+    semantic_view: Optional[StrictStr] = None
 
     additional_properties: dict[str, Any] = {}
 
-    __properties = ["semantic_model_file"]
+    __properties = ["semantic_model_file", "semantic_view"]
 
     class Config:
         populate_by_name = True
@@ -98,6 +102,8 @@ class AnalystResource(BaseModel):
         _obj = AnalystResource.parse_obj({
             "semantic_model_file":
             obj.get("semantic_model_file"),
+            "semantic_view":
+            obj.get("semantic_view"),
         })
 
         # store additional fields in additional_properties
@@ -114,9 +120,9 @@ from typing import Optional, List, Dict
 class AnalystResourceModel():
 
     def __init__(
-        self,
-        semantic_model_file: str,
-        # optional properties
+        self,  # optional properties
+        semantic_model_file: Optional[str] = None,
+        semantic_view: Optional[str] = None,
     ):
         """A model object representing the AnalystResource resource.
 
@@ -124,26 +130,35 @@ class AnalystResourceModel():
 
         Parameters
         __________
-        semantic_model_file : str
+        semantic_model_file : str, optional
             The path to a file stored in a Snowflake Stage holding the semantic model yaml.
+
+        semantic_view : str, optional
+            The name of the Snowflake native semantic model object
         """
 
         self.semantic_model_file = semantic_model_file
+        self.semantic_view = semantic_view
 
     additional_properties: dict[str, Any] = {}
 
-    __properties = ["semantic_model_file"]
+    __properties = ["semantic_model_file", "semantic_view"]
 
     def __repr__(self) -> str:
         return repr(self._to_model())
 
     def _to_model(self):
-        return AnalystResource(semantic_model_file=self.semantic_model_file, )
+        return AnalystResource(
+            semantic_model_file=self.semantic_model_file,
+            semantic_view=self.semantic_view,
+        )
 
     @classmethod
     def _from_model(cls, model) -> AnalystResourceModel:
         return AnalystResourceModel(
-            semantic_model_file=model.semantic_model_file, )
+            semantic_model_file=model.semantic_model_file,
+            semantic_view=model.semantic_view,
+        )
 
     def to_dict(self):
         """Creates a dictionary of the properties from a AnalystResource.

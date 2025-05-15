@@ -18,8 +18,6 @@ import json
 
 from typing import Union
 
-from snowflake.core.cortex.search_service._generated.models.column_query import ColumnQuery
-
 from snowflake.core.cortex.search_service._generated.models.scoring_config import ScoringConfig
 
 from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
@@ -38,8 +36,8 @@ class QueryRequest(BaseModel):
         List of columns to return.
     query : str, optional
         Unstructured text query.  Exactly one of 'query' or 'multi_index_query' must be specified.
-    multi_index_query : ColumnQuery, optional
-        A search query expressed as a collection of multiple column-level queries.  Exactly one of 'query' or 'multi_index_query' must be specified.
+    multi_index_query : object, optional
+        A search query expressed as a collection of multiple column-level queries.  Exactly one of 'query' or 'multi_index_query' must be specified. A column/index can be queried with multiple queries.
     filter : object, optional
         Filter query.
     limit : int,  default 10
@@ -52,7 +50,7 @@ class QueryRequest(BaseModel):
 
     query: Optional[StrictStr] = None
 
-    multi_index_query: Optional[Dict[str, ColumnQuery]] = None
+    multi_index_query: Optional[Dict[str, Any]] = None
 
     columns: List[StrictStr]
 
@@ -103,14 +101,6 @@ class QueryRequest(BaseModel):
                        exclude=exclude_properties,
                        exclude_none=True))
 
-        # override the default output from pydantic by calling `to_dict()` of each value in multi_index_query (dict)
-        _field_dict = {}
-        if self.multi_index_query:
-            for _key in self.multi_index_query:
-                if self.multi_index_query[_key]:
-                    _field_dict[_key] = self.multi_index_query[_key].to_dict()
-            _dict['multi_index_query'] = _field_dict
-
         # override the default output from pydantic by calling `to_dict()` of scoring_config
         if self.scoring_config:
             _dict['scoring_config'] = self.scoring_config.to_dict()
@@ -135,9 +125,7 @@ class QueryRequest(BaseModel):
             "query":
             obj.get("query"),
             "multi_index_query":
-            dict((_k, ColumnQuery.from_dict(_v))
-                 for _k, _v in obj.get("multi_index_query").items())
-            if obj.get("multi_index_query") is not None else None,
+            obj.get("multi_index_query"),
             "columns":
             obj.get("columns"),
             "filter":
@@ -156,8 +144,6 @@ class QueryRequest(BaseModel):
 
 from typing import Optional, List, Dict
 
-from snowflake.core.cortex.search_service._generated.models.column_query import ColumnQuery
-
 from snowflake.core.cortex.search_service._generated.models.scoring_config import ScoringConfig
 
 
@@ -168,7 +154,7 @@ class QueryRequestModel():
         columns: List[str],
         # optional properties
         query: Optional[str] = None,
-        multi_index_query: Optional[ColumnQuery] = None,
+        multi_index_query: Optional[object] = None,
         filter: Optional[object] = None,
         limit: Optional[int] = 10,
         scoring_config: Optional[ScoringConfig] = None,
@@ -184,8 +170,8 @@ class QueryRequestModel():
             List of columns to return.
         query : str, optional
             Unstructured text query.  Exactly one of 'query' or 'multi_index_query' must be specified.
-        multi_index_query : ColumnQuery, optional
-            A search query expressed as a collection of multiple column-level queries.  Exactly one of 'query' or 'multi_index_query' must be specified.
+        multi_index_query : object, optional
+            A search query expressed as a collection of multiple column-level queries.  Exactly one of 'query' or 'multi_index_query' must be specified. A column/index can be queried with multiple queries.
         filter : object, optional
             Filter query.
         limit : int,  default 10

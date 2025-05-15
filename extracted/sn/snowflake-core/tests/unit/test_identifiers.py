@@ -21,6 +21,7 @@ def test_attributes():
         (FQN(name="name", database=None, schema="schema"), "schema.name"),
         (FQN(name="name", database=None, schema=None), "name"),
         (FQN(name="name", database="db", schema=None), "db.PUBLIC.name"),
+        (FQN(name="name(float, string)", database="db", schema=None), "db.PUBLIC.name(float, string)"),
     ],
 )
 def test_identifier(fqn, identifier):

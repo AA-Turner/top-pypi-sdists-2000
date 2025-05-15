@@ -1,26 +1,23 @@
 Metadata-Version: 2.3
 Name: unstructured-client
-Version: 0.34.0
+Version: 0.35.0
 Summary: Python Client SDK for Unstructured API
 License: MIT
 Author: Unstructured
-Requires-Python: >=3.9
+Requires-Python: >=3.9.2
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Requires-Dist: aiofiles (>=24.1.0)
 Requires-Dist: cryptography (>=3.1)
-Requires-Dist: eval-type-backport (>=0.2.0)
 Requires-Dist: httpx (>=0.27.0)
 Requires-Dist: nest-asyncio (>=1.6.0)
 Requires-Dist: pydantic (>=2.11.2)
 Requires-Dist: pypdf (>=4.0)
 Requires-Dist: requests-toolbelt (>=1.0.0)
-Requires-Dist: typing-inspection (>=0.4.0)
 Project-URL: Repository, https://github.com/Unstructured-IO/unstructured-python-client.git
 Description-Content-Type: text/markdown
 

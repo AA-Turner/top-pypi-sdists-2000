@@ -2,277 +2,47 @@
 from __future__ import annotations
 
 import sys
-from dataclasses import dataclass
-from inspect import getmembers, isfunction
-from itertools import cycle, product, zip_longest
-from pathlib import Path
-from typing import Any
+from itertools import product
 
+from generate_config_utils import (
+    ALL_PYTHONS,
+    ALL_VERSIONS,
+    BATCHTIME_WEEK,
+    C_EXTS,
+    CPYTHONS,
+    DEFAULT_HOST,
+    HOSTS,
+    MIN_MAX_PYTHON,
+    OTHER_HOSTS,
+    PYPYS,
+    SYNCS,
+    TOPOLOGIES,
+    create_variant,
+    get_assume_role,
+    get_s3_put,
+    get_standard_auth_ssl,
+    get_subprocess_exec,
+    get_task_name,
+    get_variant_name,
+    get_versions_from,
+    get_versions_until,
+    handle_c_ext,
+    write_functions_to_file,
+    write_tasks_to_file,
+    write_variants_to_file,
+    zip_cycle,
+)
 from shrub.v3.evg_build_variant import BuildVariant
 from shrub.v3.evg_command import (
-    EvgCommandType,
     FunctionCall,
     archive_targz_pack,
+    attach_results,
+    attach_xunit_results,
     ec2_assume_role,
-    s3_put,
-    subprocess_exec,
+    expansions_update,
+    git_get_project,
 )
-from shrub.v3.evg_project import EvgProject
 from shrub.v3.evg_task import EvgTask, EvgTaskDependency, EvgTaskRef
-from shrub.v3.shrub_service import ShrubService
-
-##############
-# Globals
-##############
-
-ALL_VERSIONS = ["4.0", "4.2", "4.4", "5.0", "6.0", "7.0", "8.0", "rapid", "latest"]
-CPYTHONS = ["3.9", "3.10", "3.11", "3.12", "3.13"]
-PYPYS = ["pypy3.10"]
-ALL_PYTHONS = CPYTHONS + PYPYS
-MIN_MAX_PYTHON = [CPYTHONS[0], CPYTHONS[-1]]
-BATCHTIME_WEEK = 10080
-AUTH_SSLS = [("auth", "ssl"), ("noauth", "ssl"), ("noauth", "nossl")]
-TOPOLOGIES = ["standalone", "replica_set", "sharded_cluster"]
-C_EXTS = ["without_ext", "with_ext"]
-# By default test each of the topologies with a subset of auth/ssl.
-SUB_TASKS = [
-    ".sharded_cluster .auth .ssl",
-    ".replica_set .noauth .ssl",
-    ".standalone .noauth .nossl",
-]
-SYNCS = ["sync", "async", "sync_async"]
-DISPLAY_LOOKUP = dict(
-    ssl=dict(ssl="SSL", nossl="NoSSL"),
-    auth=dict(auth="Auth", noauth="NoAuth"),
-    test_suites=dict(default="Sync", default_async="Async"),
-    coverage=dict(coverage="cov"),
-    no_ext={"1": "No C"},
-)
-HOSTS = dict()
-
-
-@dataclass
-class Host:
-    name: str
-    run_on: str
-    display_name: str
-    variables: dict[str, str] | None
-
-
-# Hosts with toolchains.
-HOSTS["rhel8"] = Host("rhel8", "rhel87-small", "RHEL8", dict())
-HOSTS["win64"] = Host("win64", "windows-64-vsMulti-small", "Win64", dict())
-HOSTS["win32"] = Host("win32", "windows-64-vsMulti-small", "Win32", dict())
-HOSTS["macos"] = Host("macos", "macos-14", "macOS", dict())
-HOSTS["macos-arm64"] = Host("macos-arm64", "macos-14-arm64", "macOS Arm64", dict())
-HOSTS["ubuntu20"] = Host("ubuntu20", "ubuntu2004-small", "Ubuntu-20", dict())
-HOSTS["ubuntu22"] = Host("ubuntu22", "ubuntu2204-small", "Ubuntu-22", dict())
-HOSTS["rhel7"] = Host("rhel7", "rhel79-small", "RHEL7", dict())
-HOSTS["perf"] = Host("perf", "rhel90-dbx-perf-large", "", dict())
-HOSTS["debian11"] = Host("debian11", "debian11-small", "Debian11", dict())
-DEFAULT_HOST = HOSTS["rhel8"]
-
-# Other hosts
-OTHER_HOSTS = ["RHEL9-FIPS", "RHEL8-zseries", "RHEL8-POWER8", "RHEL8-arm64", "Amazon2023"]
-for name, run_on in zip(
-    OTHER_HOSTS,
-    [
-        "rhel92-fips",
-        "rhel8-zseries-small",
-        "rhel8-power-small",
-        "rhel82-arm64-small",
-        "amazon2023-arm64-latest-large-m8g",
-    ],
-):
-    HOSTS[name] = Host(name, run_on, name, dict())
-
-
-##############
-# Helpers
-##############
-
-
-def create_variant_generic(
-    tasks: list[str | EvgTaskRef],
-    display_name: str,
-    *,
-    host: Host | None = None,
-    default_run_on="rhel87-small",
-    expansions: dict | None = None,
-    **kwargs: Any,
-) -> BuildVariant:
-    """Create a build variant for the given inputs."""
-    task_refs = []
-    for t in tasks:
-        if isinstance(t, EvgTaskRef):
-            task_refs.append(t)
-        else:
-            task_refs.append(EvgTaskRef(name=t))
-    expansions = expansions and expansions.copy() or dict()
-    if "run_on" in kwargs:
-        run_on = kwargs.pop("run_on")
-    elif host:
-        run_on = [host.run_on]
-        if host.variables:
-            expansions.update(host.variables)
-    else:
-        run_on = [default_run_on]
-    if isinstance(run_on, str):
-        run_on = [run_on]
-    name = display_name.replace(" ", "-").replace("*-", "").lower()
-    return BuildVariant(
-        name=name,
-        display_name=display_name,
-        tasks=task_refs,
-        expansions=expansions or None,
-        run_on=run_on,
-        **kwargs,
-    )
-
-
-def create_variant(
-    tasks: list[str | EvgTaskRef],
-    display_name: str,
-    *,
-    version: str | None = None,
-    host: Host | None = None,
-    python: str | None = None,
-    expansions: dict | None = None,
-    **kwargs: Any,
-) -> BuildVariant:
-    expansions = expansions and expansions.copy() or dict()
-    if version:
-        expansions["VERSION"] = version
-    if python:
-        expansions["PYTHON_BINARY"] = get_python_binary(python, host)
-    return create_variant_generic(
-        tasks, display_name, version=version, host=host, expansions=expansions, **kwargs
-    )
-
-
-def get_python_binary(python: str, host: Host) -> str:
-    """Get the appropriate python binary given a python version and host."""
-    name = host.name
-    if name in ["win64", "win32"]:
-        if name == "win32":
-            base = "C:/python/32"
-        else:
-            base = "C:/python"
-        python = python.replace(".", "")
-        if python == "313t":
-            return f"{base}/Python313/python3.13t.exe"
-        return f"{base}/Python{python}/python.exe"
-
-    if name in ["rhel8", "ubuntu22", "ubuntu20", "rhel7"]:
-        return f"/opt/python/{python}/bin/python3"
-
-    if name in ["macos", "macos-arm64"]:
-        if python == "3.13t":
-            return "/Library/Frameworks/PythonT.Framework/Versions/3.13/bin/python3t"
-        return f"/Library/Frameworks/Python.Framework/Versions/{python}/bin/python3"
-
-    raise ValueError(f"no match found for python {python} on {name}")
-
-
-def get_versions_from(min_version: str) -> list[str]:
-    """Get all server versions starting from a minimum version."""
-    min_version_float = float(min_version)
-    rapid_latest = ["rapid", "latest"]
-    versions = [v for v in ALL_VERSIONS if v not in rapid_latest]
-    return [v for v in versions if float(v) >= min_version_float] + rapid_latest
-
-
-def get_versions_until(max_version: str) -> list[str]:
-    """Get all server version up to a max version."""
-    max_version_float = float(max_version)
-    versions = [v for v in ALL_VERSIONS if v not in ["rapid", "latest"]]
-    versions = [v for v in versions if float(v) <= max_version_float]
-    if not len(versions):
-        raise ValueError(f"No server versions found less <= {max_version}")
-    return versions
-
-
-def get_common_name(base: str, sep: str, **kwargs) -> str:
-    display_name = base
-    version = kwargs.pop("VERSION", None)
-    version = version or kwargs.pop("version", None)
-    if version:
-        if version not in ["rapid", "latest"]:
-            version = f"v{version}"
-        display_name = f"{display_name}{sep}{version}"
-    for key, value in kwargs.items():
-        name = value
-        if key.lower() == "python":
-            if not value.startswith("pypy"):
-                name = f"Python{value}"
-            else:
-                name = f"PyPy{value.replace('pypy', '')}"
-        elif key.lower() in DISPLAY_LOOKUP:
-            name = DISPLAY_LOOKUP[key.lower()][value]
-        else:
-            continue
-        display_name = f"{display_name}{sep}{name}"
-    return display_name
-
-
-def get_variant_name(base: str, host: Host | None = None, **kwargs) -> str:
-    """Get the display name of a variant."""
-    display_name = base
-    if host is not None:
-        display_name += f" {host.display_name}"
-    return get_common_name(display_name, " ", **kwargs)
-
-
-def get_task_name(base: str, **kwargs):
-    return get_common_name(base, "-", **kwargs).replace(" ", "-").lower()
-
-
-def zip_cycle(*iterables, empty_default=None):
-    """Get all combinations of the inputs, cycling over the shorter list(s)."""
-    cycles = [cycle(i) for i in iterables]
-    for _ in zip_longest(*iterables):
-        yield tuple(next(i, empty_default) for i in cycles)
-
-
-def handle_c_ext(c_ext, expansions) -> None:
-    """Handle c extension option."""
-    if c_ext == C_EXTS[0]:
-        expansions["NO_EXT"] = "1"
-
-
-def get_assume_role(**kwargs):
-    kwargs.setdefault("command_type", EvgCommandType.SETUP)
-    kwargs.setdefault("role_arn", "${assume_role_arn}")
-    return ec2_assume_role(**kwargs)
-
-
-def get_subprocess_exec(**kwargs):
-    kwargs.setdefault("binary", "bash")
-    kwargs.setdefault("working_dir", "src")
-    kwargs.setdefault("command_type", EvgCommandType.TEST)
-    return subprocess_exec(**kwargs)
-
-
-def get_s3_put(**kwargs):
-    kwargs["aws_key"] = "${AWS_ACCESS_KEY_ID}"
-    kwargs["aws_secret"] = "${AWS_SECRET_ACCESS_KEY}"  # noqa:S105
-    kwargs["aws_session_token"] = "${AWS_SESSION_TOKEN}"  # noqa:S105
-    kwargs["bucket"] = "${bucket_name}"
-    kwargs.setdefault("optional", "true")
-    kwargs.setdefault("permissions", "public-read")
-    kwargs.setdefault("content_type", "${content_type|application/x-gzip}")
-    kwargs.setdefault("command_type", EvgCommandType.SETUP)
-    return s3_put(**kwargs)
-
-
-def generate_yaml(tasks=None, variants=None):
-    """Generate the yaml for a given set of tasks and variants."""
-    project = EvgProject(tasks=tasks, buildvariants=variants)
-    out = ShrubService.generate_yaml(project)
-    # Dedent by two spaces to match what we use in config.yml
-    lines = [line[2:] for line in out.splitlines()]
-    print("\n".join(lines))  # noqa: T201
-
 
 ##############
 # Variants
@@ -300,53 +70,37 @@ def create_ocsp_variants() -> list[BuildVariant]:
     return variants
 
 
-def create_server_variants() -> list[BuildVariant]:
+def create_server_version_variants() -> list[BuildVariant]:
     variants = []
+    for version in ALL_VERSIONS:
+        display_name = get_variant_name("* MongoDB", version=version)
+        variant = create_variant(
+            [".server-version"], display_name, host=DEFAULT_HOST, tags=["coverage_tag"]
+        )
+        variants.append(variant)
+    return variants
 
-    # Run the full matrix on linux with min and max CPython, and latest pypy.
-    host = DEFAULT_HOST
-    # Prefix the display name with an asterisk so it is sorted first.
+
+def create_standard_nonlinux_variants() -> list[BuildVariant]:
+    variants = []
     base_display_name = "* Test"
-    for python, c_ext in product([*MIN_MAX_PYTHON, PYPYS[-1]], C_EXTS):
-        expansions = dict(COVERAGE="coverage")
-        handle_c_ext(c_ext, expansions)
-        display_name = get_variant_name(base_display_name, host, python=python, **expansions)
-        variant = create_variant(
-            [f".{t} .sync_async" for t in TOPOLOGIES],
-            display_name,
-            python=python,
-            host=host,
-            tags=["coverage_tag"],
-            expansions=expansions,
-        )
-        variants.append(variant)
-
-    # Test the rest of the pythons.
-    for python in CPYTHONS[1:-1] + PYPYS[:-1]:
-        display_name = f"Test {host}"
-        display_name = get_variant_name(base_display_name, host, python=python)
-        variant = create_variant(
-            [f"{t} .sync_async" for t in SUB_TASKS],
-            display_name,
-            python=python,
-            host=host,
-            expansions=expansions,
-        )
-        variants.append(variant)
 
     # Test a subset on each of the other platforms.
     for host_name in ("macos", "macos-arm64", "win64", "win32"):
-        for python in MIN_MAX_PYTHON:
-            tasks = [f"{t} !.sync_async" for t in SUB_TASKS]
-            # MacOS arm64 only works on server versions 6.0+
-            if host_name == "macos-arm64":
-                tasks = []
-                for version in get_versions_from("6.0"):
-                    tasks.extend(f"{t} .{version} !.sync_async" for t in SUB_TASKS)
-            host = HOSTS[host_name]
-            display_name = get_variant_name(base_display_name, host, python=python)
-            variant = create_variant(tasks, display_name, python=python, host=host)
-            variants.append(variant)
+        tasks = [".test-standard !.pypy"]
+        # MacOS arm64 only works on server versions 6.0+
+        if host_name == "macos-arm64":
+            tasks = [
+                f".test-standard !.pypy .server-{version}" for version in get_versions_from("6.0")
+            ]
+        host = HOSTS[host_name]
+        tags = ["standard-non-linux"]
+        expansions = dict()
+        if host_name == "win32":
+            expansions["IS_WIN32"] = "1"
+        display_name = get_variant_name(base_display_name, host)
+        variant = create_variant(tasks, display_name, host=host, tags=tags, expansions=expansions)
+        variants.append(variant)
 
     return variants
 
@@ -358,10 +112,13 @@ def create_free_threaded_variants() -> list[BuildVariant]:
             # TODO: PYTHON-5027
             continue
         tasks = [".free-threading"]
+        tags = []
+        if host_name == "rhel8":
+            tags.append("pr")
         host = HOSTS[host_name]
         python = "3.13t"
         display_name = get_variant_name("Free-threaded", host, python=python)
-        variant = create_variant(tasks, display_name, python=python, host=host)
+        variant = create_variant(tasks, display_name, tags=tags, python=python, host=host)
         variants.append(variant)
     return variants
 
@@ -379,89 +136,69 @@ def create_encryption_variants() -> list[BuildVariant]:
             expansions["SUB_TEST_NAME"] = "pyopenssl"
         return expansions
 
+    # Test encryption on all hosts.
+    for encryption, host in product(
+        ["Encryption", "Encryption crypt_shared"], ["rhel8", "macos", "win64"]
+    ):
+        expansions = get_encryption_expansions(encryption)
+        display_name = get_variant_name(encryption, host, **expansions)
+        tasks = [".test-non-standard"]
+        if host != "rhel8":
+            tasks = [".test-non-standard !.pypy"]
+        variant = create_variant(
+            tasks,
+            display_name,
+            host=host,
+            expansions=expansions,
+            batchtime=batchtime,
+            tags=tags,
+        )
+        variants.append(variant)
+
+    # Test PyOpenSSL on linux.
     host = DEFAULT_HOST
-
-    # Test against all server versions for the three main python versions.
-    encryptions = ["Encryption", "Encryption crypt_shared"]
-    for encryption, python in product(encryptions, [*MIN_MAX_PYTHON, PYPYS[-1]]):
-        expansions = get_encryption_expansions(encryption)
-        display_name = get_variant_name(encryption, host, python=python, **expansions)
-        variant = create_variant(
-            [f"{t} .sync_async" for t in SUB_TASKS],
-            display_name,
-            python=python,
-            host=host,
-            expansions=expansions,
-            batchtime=batchtime,
-            tags=tags,
-        )
-        variants.append(variant)
-
-    # Test PyOpenSSL against on all server versions for all python versions.
-    for encryption, python in product(["Encryption PyOpenSSL"], [*MIN_MAX_PYTHON, PYPYS[-1]]):
-        expansions = get_encryption_expansions(encryption)
-        display_name = get_variant_name(encryption, host, python=python, **expansions)
-        variant = create_variant(
-            [f"{t} .sync" for t in SUB_TASKS],
-            display_name,
-            python=python,
-            host=host,
-            expansions=expansions,
-            batchtime=batchtime,
-            tags=tags,
-        )
-        variants.append(variant)
-
-    # Test the rest of the pythons on linux for all server versions.
-    for encryption, python, task in zip_cycle(encryptions, CPYTHONS[1:-1] + PYPYS[:-1], SUB_TASKS):
-        expansions = get_encryption_expansions(encryption)
-        display_name = get_variant_name(encryption, host, python=python, **expansions)
-        variant = create_variant(
-            [f"{task} .sync_async"],
-            display_name,
-            python=python,
-            host=host,
-            expansions=expansions,
-        )
-        variants.append(variant)
-
-    # Test on macos and linux on one server version and topology for min and max python.
-    encryptions = ["Encryption", "Encryption crypt_shared"]
-    task_names = [".latest .replica_set .sync_async"]
-    for host_name, encryption, python in product(["macos", "win64"], encryptions, MIN_MAX_PYTHON):
-        host = HOSTS[host_name]
-        expansions = get_encryption_expansions(encryption)
-        display_name = get_variant_name(encryption, host, python=python, **expansions)
-        variant = create_variant(
-            task_names,
-            display_name,
-            python=python,
-            host=host,
-            expansions=expansions,
-            batchtime=batchtime,
-            tags=tags,
-        )
-        variants.append(variant)
+    encryption = "Encryption PyOpenSSL"
+    expansions = get_encryption_expansions(encryption)
+    display_name = get_variant_name(encryption, host, **expansions)
+    variant = create_variant(
+        [".test-non-standard"],
+        display_name,
+        host=host,
+        expansions=expansions,
+        batchtime=batchtime,
+        tags=tags,
+    )
+    variants.append(variant)
     return variants
 
 
 def create_load_balancer_variants():
-    # Load balancer tests - run all supported server versions using the lowest supported python.
+    tasks = [
+        f".test-non-standard .server-{v} .sharded_cluster-auth-ssl"
+        for v in get_versions_from("6.0")
+    ]
+    expansions = dict(TEST_NAME="load_balancer")
     return [
         create_variant(
-            [".load-balancer"], "Load Balancer", host=DEFAULT_HOST, batchtime=BATCHTIME_WEEK
+            tasks,
+            "Load Balancer",
+            host=DEFAULT_HOST,
+            batchtime=BATCHTIME_WEEK,
+            expansions=expansions,
         )
     ]
 
 
 def create_compression_variants():
-    # Compression tests - standalone versions of each server, across python versions.
+    # Compression tests - use the standard linux tests.
     host = DEFAULT_HOST
-    base_task = ".compression"
     variants = []
     for compressor in "snappy", "zlib", "zstd":
         expansions = dict(COMPRESSOR=compressor)
-        tasks = [base_task] if compressor != "zstd" else [f"{base_task} !.4.0"]
+        if compressor == "zstd":
+            tasks = [".test-standard !.server-4.0"]
+        else:
+            tasks = [".test-standard"]
         display_name = get_variant_name(f"Compression {compressor}", host)
         variants.append(
             create_variant(
@@ -476,56 +213,36 @@ def create_compression_variants():
 
 def create_enterprise_auth_variants():
     variants = []
-    for host in [HOSTS["macos"], HOSTS["win64"], DEFAULT_HOST]:
+    for host in ["rhel8", "macos", "win64"]:
+        expansions = dict(TEST_NAME="enterprise_auth", AUTH="auth")
         display_name = get_variant_name("Auth Enterprise", host)
-        if host == DEFAULT_HOST:
-            tags = [".enterprise_auth"]
-        else:
-            tags = [".enterprise_auth !.pypy"]
-        variant = create_variant(tags, display_name, host=host)
+        tasks = [".test-non-standard .auth"]
+        if host != "rhel8":
+            tasks = [".test-non-standard !.pypy .auth"]
+        variant = create_variant(tasks, display_name, host=host, expansions=expansions)
         variants.append(variant)
-
     return variants
 
 
 def create_pyopenssl_variants():
     base_name = "PyOpenSSL"
     batchtime = BATCHTIME_WEEK
-    expansions = dict(TEST_NAME="default", SUB_TEST_NAME="pyopenssl")
+    expansions = dict(SUB_TEST_NAME="pyopenssl")
     variants = []
 
-    for python in ALL_PYTHONS:
-        # Only test "noauth" with min python.
-        auth = "noauth" if python == CPYTHONS[0] else "auth"
-        ssl = "nossl" if auth == "noauth" else "ssl"
-        if python == CPYTHONS[0]:
-            host = HOSTS["macos"]
-        elif python == CPYTHONS[-1]:
-            host = HOSTS["win64"]
-        else:
-            host = DEFAULT_HOST
-
-        display_name = get_variant_name(base_name, host, python=python)
-        # only need to run some on async
-        if python in (CPYTHONS[1], CPYTHONS[-1]):
-            variant = create_variant(
-                [f".replica_set .{auth} .{ssl} .sync_async", f".7.0 .{auth} .{ssl} .sync_async"],
+    for host in ["rhel8", "macos", "win64"]:
+        display_name = get_variant_name(base_name, host)
+        base_task = ".test-standard" if host == "rhel8" else ".test-standard !.pypy"
+        # We only need to run a subset on async.
+        tasks = [f"{base_task} .sync", f"{base_task} .async .replica_set-noauth-ssl"]
+        variants.append(
+            create_variant(
+                tasks,
                 display_name,
-                python=python,
-                host=host,
                 expansions=expansions,
                 batchtime=batchtime,
             )
-        else:
-            variant = create_variant(
-                [f".replica_set .{auth} .{ssl} .sync", f".7.0 .{auth} .{ssl} .sync"],
-                display_name,
-                python=python,
-                host=host,
-                expansions=expansions,
-                batchtime=batchtime,
-            )
-        variants.append(variant)
+        )
 
     return variants
 
@@ -535,20 +252,15 @@ def create_storage_engine_variants():
     engines = ["InMemory", "MMAPv1"]
     variants = []
     for engine in engines:
-        python = CPYTHONS[0]
         expansions = dict(STORAGE_ENGINE=engine.lower())
         if engine == engines[0]:
-            tasks = [f".standalone .noauth .nossl .{v} .sync_async" for v in ALL_VERSIONS]
+            tasks = [".test-standard .standalone-noauth-nossl"]
         else:
             # MongoDB 4.2 drops support for MMAPv1
             versions = get_versions_until("4.0")
-            tasks = [f".standalone .{v} .noauth .nossl .sync_async" for v in versions] + [
-                f".replica_set .{v} .noauth .nossl .sync_async" for v in versions
-            ]
-        display_name = get_variant_name(f"Storage {engine}", host, python=python)
-        variant = create_variant(
-            tasks, display_name, host=host, python=python, expansions=expansions
-        )
+            tasks = [f".test-standard !.sharded_cluster-auth-ssl .server-{v}" for v in versions]
+        display_name = get_variant_name(f"Storage {engine}", host)
+        variant = create_variant(tasks, display_name, host=host, expansions=expansions)
         variants.append(variant)
     return variants
 
@@ -560,7 +272,7 @@ def create_stable_api_variants():
     types = ["require v1", "accept v2"]
 
     # All python versions across platforms.
-    for python, test_type in product(MIN_MAX_PYTHON, types):
+    for test_type in types:
         expansions = dict(AUTH="auth")
         # Test against a cluster with requireApiVersion=1.
         if test_type == types[0]:
@@ -570,7 +282,8 @@ def create_stable_api_variants():
             # MONGODB_API_VERSION is the apiVersion to use in the test suite.
             expansions["MONGODB_API_VERSION"] = "1"
             tasks = [
-                f"!.replica_set .{v} .noauth .nossl .sync_async" for v in get_versions_from("5.0")
+                f".test-standard !.replica_set-noauth-ssl .server-{v}"
+                for v in get_versions_from("5.0")
             ]
         else:
             # Test against a cluster with acceptApiVersion2 but without
@@ -578,13 +291,12 @@ def create_stable_api_variants():
             # clients created in the test suite.
             expansions["ORCHESTRATION_FILE"] = "versioned-api-testing.json"
             tasks = [
-                f".standalone .{v} .noauth .nossl .sync_async" for v in get_versions_from("5.0")
+                f".test-standard .server-{v} .standalone-noauth-nossl"
+                for v in get_versions_from("5.0")
             ]
         base_display_name = f"Stable API {test_type}"
-        display_name = get_variant_name(base_display_name, host, python=python, **expansions)
-        variant = create_variant(
-            tasks, display_name, host=host, python=python, tags=tags, expansions=expansions
-        )
+        display_name = get_variant_name(base_display_name, host, **expansions)
+        variant = create_variant(tasks, display_name, host=host, tags=tags, expansions=expansions)
         variants.append(variant)
 
     return variants
@@ -592,56 +304,43 @@ def create_stable_api_variants():
 
 def create_green_framework_variants():
     variants = []
-    tasks = [".standalone .noauth .nossl .sync_async"]
     host = DEFAULT_HOST
-    for python, framework in product([CPYTHONS[0], CPYTHONS[-1]], ["eventlet", "gevent"]):
+    for framework in ["eventlet", "gevent"]:
+        tasks = [".test-standard .standalone-noauth-nossl"]
+        if framework == "eventlet":
+            # Eventlet has issues with dnspython > 2.0 and newer versions of CPython
+            # https://jira.mongodb.org/browse/PYTHON-5284
+            tasks = [".test-standard .standalone-noauth-nossl .python-3.9"]
         expansions = dict(GREEN_FRAMEWORK=framework, AUTH="auth", SSL="ssl")
-        display_name = get_variant_name(f"Green {framework.capitalize()}", host, python=python)
-        variant = create_variant(
-            tasks, display_name, host=host, python=python, expansions=expansions
-        )
+        display_name = get_variant_name(f"Green {framework.capitalize()}", host)
+        variant = create_variant(tasks, display_name, host=host, expansions=expansions)
         variants.append(variant)
     return variants
 
 
 def create_no_c_ext_variants():
-    variants = []
     host = DEFAULT_HOST
-    for python, topology in zip_cycle(CPYTHONS, TOPOLOGIES):
-        tasks = [f".{topology} .noauth .nossl !.sync_async"]
-        expansions = dict()
-        handle_c_ext(C_EXTS[0], expansions)
-        display_name = get_variant_name("No C Ext", host, python=python)
-        variant = create_variant(
-            tasks, display_name, host=host, python=python, expansions=expansions
-        )
-        variants.append(variant)
-    return variants
+    tasks = [".test-standard"]
+    expansions = dict()
+    handle_c_ext(C_EXTS[0], expansions)
+    display_name = get_variant_name("No C Ext", host)
+    return [create_variant(tasks, display_name, host=host)]
 
 
 def create_atlas_data_lake_variants():
-    variants = []
     host = HOSTS["ubuntu22"]
-    for python in MIN_MAX_PYTHON:
-        tasks = [".atlas_data_lake"]
-        display_name = get_variant_name("Atlas Data Lake", host, python=python)
-        variant = create_variant(tasks, display_name, host=host, python=python)
-        variants.append(variant)
-    return variants
+    tasks = [".test-no-orchestration"]
+    expansions = dict(TEST_NAME="data_lake")
+    display_name = get_variant_name("Atlas Data Lake", host)
+    return [create_variant(tasks, display_name, tags=["pr"], host=host, expansions=expansions)]
 
 
 def create_mod_wsgi_variants():
-    variants = []
     host = HOSTS["ubuntu22"]
     tasks = [".mod_wsgi"]
     expansions = dict(MOD_WSGI_VERSION="4")
-    for python in MIN_MAX_PYTHON:
-        display_name = get_variant_name("mod_wsgi", host, python=python)
-        variant = create_variant(
-            tasks, display_name, host=host, python=python, expansions=expansions
-        )
-        variants.append(variant)
-    return variants
+    display_name = get_variant_name("Mod_WSGI", host)
+    return [create_variant(tasks, display_name, host=host, expansions=expansions)]
 
 
 def create_disable_test_commands_variants():
@@ -649,7 +348,7 @@ def create_disable_test_commands_variants():
     expansions = dict(AUTH="auth", SSL="ssl", DISABLE_TEST_COMMANDS="1")
     python = CPYTHONS[0]
     display_name = get_variant_name("Disable test commands", host, python=python)
-    tasks = [".latest .sync_async"]
+    tasks = [".test-standard .server-latest"]
     return [create_variant(tasks, display_name, host=host, python=python, expansions=expansions)]
 
 
@@ -674,9 +373,9 @@ def create_oidc_auth_variants():
     variants = []
     for host_name in ["ubuntu22", "macos", "win64"]:
         if host_name == "ubuntu22":
-            tasks = [".auth_oidc"]
+            tasks = [".auth_oidc_remote"]
         else:
-            tasks = [".auth_oidc !.auth_oidc_remote"]
+            tasks = ["!.auth_oidc_remote .auth_oidc"]
         host = HOSTS[host_name]
         variants.append(
             create_variant(
@@ -686,6 +385,18 @@ def create_oidc_auth_variants():
                 batchtime=BATCHTIME_WEEK,
             )
         )
+        # Add a specific local test to run on PRs.
+        if host_name == "ubuntu22":
+            tasks = ["!.auth_oidc_remote .auth_oidc"]
+            variants.append(
+                create_variant(
+                    tasks,
+                    get_variant_name("Auth OIDC Local", host),
+                    tags=["pr"],
+                    host=host,
+                    batchtime=BATCHTIME_WEEK,
+                )
+            )
     return variants
 
 
@@ -704,26 +415,27 @@ def create_search_index_variants():
 
 def create_mockupdb_variants():
     host = DEFAULT_HOST
-    python = CPYTHONS[0]
+    expansions = dict(TEST_NAME="mockupdb")
     return [
         create_variant(
-            [".mockupdb"],
-            get_variant_name("MockupDB", host, python=python),
-            python=python,
+            [".test-no-orchestration"],
+            get_variant_name("MockupDB", host),
             host=host,
+            tags=["pr"],
+            expansions=expansions,
         )
     ]
 
 
 def create_doctests_variants():
     host = DEFAULT_HOST
-    python = CPYTHONS[0]
+    expansions = dict(TEST_NAME="doctest")
     return [
         create_variant(
-            [".doctests"],
-            get_variant_name("Doctests", host, python=python),
-            python=python,
+            [".test-non-standard .standalone-noauth-nossl"],
+            get_variant_name("Doctests", host),
             host=host,
+            expansions=expansions,
         )
     ]
 
@@ -732,12 +444,11 @@ def create_atlas_connect_variants():
     host = DEFAULT_HOST
     return [
         create_variant(
-            [".atlas_connect"],
-            get_variant_name("Atlas connect", host, python=python),
-            python=python,
-            host=host,
+            [".test-no-orchestration"],
+            get_variant_name("Atlas connect", host),
+            tags=["pr"],
+            host=DEFAULT_HOST,
         )
-        for python in MIN_MAX_PYTHON
     ]
 
 
@@ -772,19 +483,21 @@ def create_perf_variants():
 def create_aws_auth_variants():
     variants = []
 
-    for host_name, python in product(["ubuntu20", "win64", "macos"], MIN_MAX_PYTHON):
+    for host_name in ["ubuntu20", "win64", "macos"]:
         expansions = dict()
         tasks = [".auth-aws"]
+        tags = []
         if host_name == "macos":
             tasks = [".auth-aws !.auth-aws-web-identity !.auth-aws-ecs !.auth-aws-ec2"]
+            tags = ["pr"]
         elif host_name == "win64":
             tasks = [".auth-aws !.auth-aws-ecs"]
         host = HOSTS[host_name]
         variant = create_variant(
             tasks,
-            get_variant_name("Auth AWS", host, python=python),
+            get_variant_name("Auth AWS", host),
             host=host,
-            python=python,
+            tags=tags,
             expansions=expansions,
         )
         variants.append(variant)
@@ -793,7 +506,8 @@ def create_aws_auth_variants():
 
 def create_no_server_variants():
     host = HOSTS["rhel8"]
-    return [create_variant([".no-server"], "No server", host=host)]
+    name = get_variant_name("No server", host=host)
+    return [create_variant([".test-no-orchestration"], name, host=host, tags=["pr"])]
 
 
 def create_alternative_hosts_variants():
@@ -801,29 +515,35 @@ def create_alternative_hosts_variants():
     variants = []
 
     host = HOSTS["rhel7"]
+    version = "5.0"
     variants.append(
         create_variant(
-            [".5.0 .standalone !.sync_async"],
-            get_variant_name("OpenSSL 1.0.2", host, python=CPYTHONS[0]),
+            [".test-no-toolchain"],
+            get_variant_name("OpenSSL 1.0.2", host, python=CPYTHONS[0], version=version),
             host=host,
             python=CPYTHONS[0],
             batchtime=batchtime,
+            expansions=dict(VERSION=version, PYTHON_VERSION=CPYTHONS[0]),
         )
     )
 
-    expansions = dict()
-    handle_c_ext(C_EXTS[0], expansions)
+    version = "latest"
     for host_name in OTHER_HOSTS:
+        expansions = dict(VERSION="latest")
+        handle_c_ext(C_EXTS[0], expansions)
         host = HOSTS[host_name]
-        tags = [".6.0 .standalone !.sync_async"]
-        if host_name == "Amazon2023":
-            tags = [f".latest !.sync_async {t}" for t in SUB_TASKS]
+        tags = []
+        if "fips" in host_name.lower():
+            expansions["REQUIRE_FIPS"] = "1"
+        if "amazon" in host_name.lower():
+            tags.append("pr")
         variants.append(
             create_variant(
-                tags,
-                display_name=get_variant_name("Other hosts", host),
+                [".test-no-toolchain"],
+                display_name=get_variant_name("Other hosts", host, version=version),
                 batchtime=batchtime,
                 host=host,
+                tags=tags,
                 expansions=expansions,
             )
         )
@@ -840,78 +560,154 @@ def create_aws_lambda_variants():
 ##############
 
 
-def create_server_tasks():
+def create_server_version_tasks():
     tasks = []
-    for topo, version, (auth, ssl), sync in product(TOPOLOGIES, ALL_VERSIONS, AUTH_SSLS, SYNCS):
-        name = f"test-{version}-{topo}-{auth}-{ssl}-{sync}".lower()
-        tags = [version, topo, auth, ssl, sync]
-        server_vars = dict(
-            VERSION=version,
-            TOPOLOGY=topo if topo != "standalone" else "server",
-            AUTH=auth,
-            SSL=ssl,
-        )
-        server_func = FunctionCall(func="run server", vars=server_vars)
-        test_vars = dict(AUTH=auth, SSL=ssl, SYNC=sync)
-        if sync == "sync":
-            test_vars["TEST_NAME"] = "default_sync"
-        elif sync == "async":
-            test_vars["TEST_NAME"] = "default_async"
+    task_inputs = []
+    # All combinations of topology, auth, ssl, and sync should be tested.
+    for (topology, auth, ssl, sync), python in zip_cycle(
+        list(product(TOPOLOGIES, ["auth", "noauth"], ["ssl", "nossl"], SYNCS)), ALL_PYTHONS
+    ):
+        task_inputs.append((topology, auth, ssl, sync, python))
+
+    # Every python should be tested with sharded cluster, auth, ssl, with sync and async.
+    for python, sync in product(ALL_PYTHONS, SYNCS):
+        task_input = ("sharded_cluster", "auth", "ssl", sync, python)
+        if task_input not in task_inputs:
+            task_inputs.append(task_input)
+
+    # Assemble the tasks.
+    seen = set()
+    for topology, auth, ssl, sync, python in task_inputs:
+        combo = f"{topology}-{auth}-{ssl}"
+        tags = ["server-version", f"python-{python}", combo, sync]
+        if combo in [
+            "standalone-noauth-nossl",
+            "replica_set-noauth-nossl",
+            "sharded_cluster-auth-ssl",
+        ]:
+            combo = f"{combo}-{sync}"
+            if combo not in seen:
+                seen.add(combo)
+                tags.append("pr")
+        expansions = dict(AUTH=auth, SSL=ssl, TOPOLOGY=topology)
+        if python not in PYPYS:
+            expansions["COVERAGE"] = "1"
+        name = get_task_name("test-server-version", python=python, sync=sync, **expansions)
+        server_func = FunctionCall(func="run server", vars=expansions)
+        test_vars = expansions.copy()
+        test_vars["PYTHON_VERSION"] = python
+        test_vars["TEST_NAME"] = f"default_{sync}"
         test_func = FunctionCall(func="run tests", vars=test_vars)
         tasks.append(EvgTask(name=name, tags=tags, commands=[server_func, test_func]))
     return tasks
 
 
-def create_load_balancer_tasks():
+def create_no_toolchain_tasks():
     tasks = []
-    for (auth, ssl), version in product(AUTH_SSLS, get_versions_from("6.0")):
-        name = get_task_name(f"test-load-balancer-{auth}-{ssl}", version=version)
-        tags = ["load-balancer", auth, ssl]
-        server_vars = dict(
-            TOPOLOGY="sharded_cluster",
-            AUTH=auth,
-            SSL=ssl,
-            TEST_NAME="load_balancer",
-            VERSION=version,
-        )
-        server_func = FunctionCall(func="run server", vars=server_vars)
-        test_vars = dict(AUTH=auth, SSL=ssl, TEST_NAME="load_balancer")
+
+    for topology, sync in zip_cycle(TOPOLOGIES, SYNCS):
+        auth, ssl = get_standard_auth_ssl(topology)
+        tags = [
+            "test-no-toolchain",
+            f"{topology}-{auth}-{ssl}",
+        ]
+        expansions = dict(AUTH=auth, SSL=ssl, TOPOLOGY=topology)
+        name = get_task_name("test-no-toolchain", sync=sync, **expansions)
+        server_func = FunctionCall(func="run server", vars=expansions)
+        test_vars = expansions.copy()
+        test_vars["TEST_NAME"] = f"default_{sync}"
         test_func = FunctionCall(func="run tests", vars=test_vars)
         tasks.append(EvgTask(name=name, tags=tags, commands=[server_func, test_func]))
-
     return tasks
 
 
-def create_compression_tasks():
+def create_test_non_standard_tasks():
+    """For variants that set a TEST_NAME."""
     tasks = []
-    versions = get_versions_from("4.0")
-    # Test all server versions with min python.
-    for version in versions:
-        python = CPYTHONS[0]
-        tags = ["compression", version]
-        name = get_task_name("test-compression", python=python, version=version)
-        server_func = FunctionCall(func="run server", vars=dict(VERSION=version))
-        test_func = FunctionCall(func="run tests")
+    task_combos = []
+    # For each version and topology, rotate through the CPythons.
+    for (version, topology), python in zip_cycle(list(product(ALL_VERSIONS, TOPOLOGIES)), CPYTHONS):
+        pr = version == "latest"
+        task_combos.append((version, topology, python, pr))
+    # For each PyPy and topology, rotate through the the versions.
+    for (python, topology), version in zip_cycle(list(product(PYPYS, TOPOLOGIES)), ALL_VERSIONS):
+        task_combos.append((version, topology, python, False))
+    for version, topology, python, pr in task_combos:
+        auth, ssl = get_standard_auth_ssl(topology)
+        tags = [
+            "test-non-standard",
+            f"server-{version}",
+            f"python-{python}",
+            f"{topology}-{auth}-{ssl}",
+            auth,
+        ]
+        if python in PYPYS:
+            tags.append("pypy")
+        if pr:
+            tags.append("pr")
+        expansions = dict(AUTH=auth, SSL=ssl, TOPOLOGY=topology, VERSION=version)
+        name = get_task_name("test-non-standard", python=python, **expansions)
+        server_func = FunctionCall(func="run server", vars=expansions)
+        test_vars = expansions.copy()
+        test_vars["PYTHON_VERSION"] = python
+        test_func = FunctionCall(func="run tests", vars=test_vars)
         tasks.append(EvgTask(name=name, tags=tags, commands=[server_func, test_func]))
+    return tasks
 
-    # Test latest with max python, with and without c exts.
-    version = "latest"
-    tags = ["compression", "latest"]
-    for c_ext in C_EXTS:
-        python = CPYTHONS[-1]
-        expansions = dict()
-        handle_c_ext(c_ext, expansions)
-        name = get_task_name("test-compression", python=python, version=version, **expansions)
-        server_func = FunctionCall(func="run server", vars=dict(VERSION=version))
-        test_func = FunctionCall(func="run tests", vars=expansions)
+
+def create_standard_tasks():
+    """For variants that do not set a TEST_NAME."""
+    tasks = []
+    task_combos = []
+    # For each version and topology, rotate through the CPythons and sync/async.
+    for (version, topology), python, sync in zip_cycle(
+        list(product(ALL_VERSIONS, TOPOLOGIES)), CPYTHONS, SYNCS
+    ):
+        pr = version == "latest"
+        task_combos.append((version, topology, python, sync, pr))
+    # For each PyPy and topology, rotate through the the versions and sync/async.
+    for (python, topology), version, sync in zip_cycle(
+        list(product(PYPYS, TOPOLOGIES)), ALL_VERSIONS, SYNCS
+    ):
+        task_combos.append((version, topology, python, sync, False))
+
+    for version, topology, python, sync, pr in task_combos:
+        auth, ssl = get_standard_auth_ssl(topology)
+        tags = [
+            "test-standard",
+            f"server-{version}",
+            f"python-{python}",
+            f"{topology}-{auth}-{ssl}",
+            sync,
+        ]
+        if python in PYPYS:
+            tags.append("pypy")
+        if pr:
+            tags.append("pr")
+        expansions = dict(AUTH=auth, SSL=ssl, TOPOLOGY=topology, VERSION=version)
+        name = get_task_name("test-standard", python=python, sync=sync, **expansions)
+        server_func = FunctionCall(func="run server", vars=expansions)
+        test_vars = expansions.copy()
+        test_vars["PYTHON_VERSION"] = python
+        test_vars["TEST_NAME"] = f"default_{sync}"
+        test_func = FunctionCall(func="run tests", vars=test_vars)
         tasks.append(EvgTask(name=name, tags=tags, commands=[server_func, test_func]))
+    return tasks
 
-    # Test on latest with pypy.
-    python = PYPYS[-1]
-    name = get_task_name("test-compression", python=python, version=version)
-    server_func = FunctionCall(func="run server", vars=dict(VERSION=version))
-    test_func = FunctionCall(func="run tests")
-    tasks.append(EvgTask(name=name, tags=tags, commands=[server_func, test_func]))
+
+def create_no_orchestration_tasks():
+    tasks = []
+    for python in [*MIN_MAX_PYTHON, PYPYS[-1]]:
+        tags = [
+            "test-no-orchestration",
+            f"python-{python}",
+        ]
+        name = get_task_name("test-no-orchestration", python=python)
+        assume_func = FunctionCall(func="assume ec2 role")
+        test_vars = dict(PYTHON_VERSION=python)
+        test_func = FunctionCall(func="run tests", vars=test_vars)
+        commands = [assume_func, test_func]
+        tasks.append(EvgTask(name=name, tags=tags, commands=commands))
     return tasks
 
 
@@ -921,16 +717,18 @@ def create_kms_tasks():
         for success in [True, False]:
             name = f"test-{kms_type}kms"
             sub_test_name = kms_type
+            tags = []
             if not success:
                 name += "-fail"
                 sub_test_name += "-fail"
+                tags.append("pr")
             commands = []
             if not success:
                 commands.append(FunctionCall(func="run server"))
             test_vars = dict(TEST_NAME="kms", SUB_TEST_NAME=sub_test_name)
             test_func = FunctionCall(func="run tests", vars=test_vars)
             commands.append(test_func)
-            tasks.append(EvgTask(name=name, commands=commands))
+            tasks.append(EvgTask(name=name, tags=tags, commands=commands))
     return tasks
 
 
@@ -945,28 +743,31 @@ def create_aws_tasks():
         "web-identity",
         "ecs",
     ]
-    for version in get_versions_from("4.4"):
+    for version, test_type, python in zip_cycle(get_versions_from("4.4"), aws_test_types, CPYTHONS):
         base_name = f"test-auth-aws-{version}"
         base_tags = ["auth-aws"]
         server_vars = dict(AUTH_AWS="1", VERSION=version)
         server_func = FunctionCall(func="run server", vars=server_vars)
         assume_func = FunctionCall(func="assume ec2 role")
-        for test_type in aws_test_types:
-            tags = [*base_tags, f"auth-aws-{test_type}"]
-            name = f"{base_name}-{test_type}"
-            test_vars = dict(TEST_NAME="auth_aws", SUB_TEST_NAME=test_type)
-            test_func = FunctionCall(func="run tests", vars=test_vars)
-            funcs = [server_func, assume_func, test_func]
-            tasks.append(EvgTask(name=name, tags=tags, commands=funcs))
-
-        tags = [*base_tags, "auth-aws-web-identity"]
-        name = f"{base_name}-web-identity-session-name"
-        test_vars = dict(
-            TEST_NAME="auth_aws", SUB_TEST_NAME="web-identity", AWS_ROLE_SESSION_NAME="test"
-        )
+        tags = [*base_tags, f"auth-aws-{test_type}"]
+        name = get_task_name(f"{base_name}-{test_type}", python=python)
+        test_vars = dict(TEST_NAME="auth_aws", SUB_TEST_NAME=test_type, PYTHON_VERSION=python)
         test_func = FunctionCall(func="run tests", vars=test_vars)
         funcs = [server_func, assume_func, test_func]
         tasks.append(EvgTask(name=name, tags=tags, commands=funcs))
+
+        if test_type == "web-identity":
+            tags = [*base_tags, "auth-aws-web-identity"]
+            name = get_task_name(f"{base_name}-web-identity-session-name", python=python)
+            test_vars = dict(
+                TEST_NAME="auth_aws",
+                SUB_TEST_NAME="web-identity",
+                AWS_ROLE_SESSION_NAME="test",
+                PYTHON_VERSION=python,
+            )
+            test_func = FunctionCall(func="run tests", vars=test_vars)
+            funcs = [server_func, assume_func, test_func]
+            tasks.append(EvgTask(name=name, tags=tags, commands=funcs))
 
     return tasks
 
@@ -981,22 +782,26 @@ def create_oidc_tasks():
         if sub_test != "default":
             tags.append("auth_oidc_remote")
         tasks.append(EvgTask(name=task_name, tags=tags, commands=[test_func]))
+
     return tasks
 
 
 def create_mod_wsgi_tasks():
     tasks = []
-    for test, topology in product(["standalone", "embedded-mode"], ["standalone", "replica_set"]):
+    for (test, topology), python in zip_cycle(
+        product(["standalone", "embedded-mode"], ["standalone", "replica_set"]), CPYTHONS
+    ):
         if test == "standalone":
             task_name = "mod-wsgi-"
         else:
             task_name = "mod-wsgi-embedded-mode-"
         task_name += topology.replace("_", "-")
-        server_vars = dict(TOPOLOGY=topology)
+        task_name = get_task_name(task_name, python=python)
+        server_vars = dict(TOPOLOGY=topology, PYTHON_VERSION=python)
         server_func = FunctionCall(func="run server", vars=server_vars)
-        vars = dict(TEST_NAME="mod_wsgi", SUB_TEST_NAME=test.split("-")[0])
+        vars = dict(TEST_NAME="mod_wsgi", SUB_TEST_NAME=test.split("-")[0], PYTHON_VERSION=python)
         test_func = FunctionCall(func="run tests", vars=vars)
-        tags = ["mod_wsgi"]
+        tags = ["mod_wsgi", "pr"]
         commands = [server_func, test_func]
         tasks.append(EvgTask(name=task_name, tags=tags, commands=commands))
     return tasks
@@ -1024,6 +829,8 @@ def _create_ocsp_tasks(algo, variant, server_type, base_task_name):
         tags = ["ocsp", f"ocsp-{algo}", version]
         if "disableStapling" not in variant:
             tags.append("ocsp-staple")
+        if algo == "valid-cert-server-staples" and version == "latest":
+            tags.append("pr")
 
         task_name = get_task_name(
             f"test-ocsp-{algo}-{base_task_name}", python=python, version=version
@@ -1053,32 +860,6 @@ def create_search_index_tasks():
     return [EvgTask(name=task_name, tags=tags, commands=commands)]
 
 
-def create_atlas_connect_tasks():
-    vars = dict(TEST_NAME="atlas_connect")
-    assume_func = FunctionCall(func="assume ec2 role")
-    test_func = FunctionCall(func="run tests", vars=vars)
-    task_name = "test-atlas-connect"
-    tags = ["atlas_connect"]
-    return [EvgTask(name=task_name, tags=tags, commands=[assume_func, test_func])]
-
-
-def create_enterprise_auth_tasks():
-    tasks = []
-    for python in [*MIN_MAX_PYTHON, PYPYS[-1]]:
-        vars = dict(TEST_NAME="enterprise_auth", AUTH="auth", PYTHON_VERSION=python)
-        server_func = FunctionCall(func="run server", vars=vars)
-        assume_func = FunctionCall(func="assume ec2 role")
-        test_func = FunctionCall(func="run tests", vars=vars)
-        task_name = get_task_name("test-enterprise-auth", python=python)
-        tags = ["enterprise_auth"]
-        if python in PYPYS:
-            tags += ["pypy"]
-        tasks.append(
-            EvgTask(name=task_name, tags=tags, commands=[server_func, assume_func, test_func])
-        )
-    return tasks
-
-
 def create_perf_tasks():
     tasks = []
     for version, ssl, sync in product(["8.0"], ["ssl", "nossl"], ["sync", "async"]):
@@ -1099,18 +880,6 @@ def create_perf_tasks():
     return tasks
 
 
-def create_atlas_data_lake_tasks():
-    tags = ["atlas_data_lake"]
-    tasks = []
-    for c_ext in C_EXTS:
-        vars = dict(TEST_NAME="data_lake")
-        handle_c_ext(c_ext, vars)
-        test_func = FunctionCall(func="run tests", vars=vars)
-        task_name = f"test-atlas-data-lake-{c_ext}"
-        tasks.append(EvgTask(name=task_name, tags=tags, commands=[test_func]))
-    return tasks
-
-
 def create_getdata_tasks():
     # Wildcard task. Do you need to find out what tools are available and where?
     # Throw it here, and execute this task on all buildvariants
@@ -1119,17 +888,17 @@ def create_getdata_tasks():
 
 
 def create_coverage_report_tasks():
-    tags = ["coverage"]
+    tags = ["coverage", "pr"]
     task_name = "coverage-report"
     # BUILD-3165: We can't use "*" (all tasks) and specify "variant".
     # Instead list out all coverage tasks using tags.
     # Run the coverage task even if some tasks fail.
     # Run the coverage task even if some tasks are not scheduled in a patch build.
-    task_deps = []
-    for name in [".standalone", ".replica_set", ".sharded_cluster"]:
-        task_deps.append(
-            EvgTaskDependency(name=name, variant=".coverage_tag", status="*", patch_optional=True)
+    task_deps = [
+        EvgTaskDependency(
+            name=".server-version", variant=".coverage_tag", status="*", patch_optional=True
         )
+    ]
     cmd = FunctionCall(func="download and merge coverage")
     return [EvgTask(name=task_name, tags=tags, depends_on=task_deps, commands=[cmd])]
 
@@ -1188,28 +957,6 @@ def create_ocsp_tasks():
             tasks.extend(new_tasks)
 
     return tasks
-
-
-def create_mockupdb_tasks():
-    test_func = FunctionCall(func="run tests", vars=dict(TEST_NAME="mockupdb"))
-    task_name = "test-mockupdb"
-    tags = ["mockupdb"]
-    return [EvgTask(name=task_name, tags=tags, commands=[test_func])]
-
-
-def create_doctest_tasks():
-    server_func = FunctionCall(func="run server")
-    test_func = FunctionCall(func="run just script", vars=dict(JUSTFILE_TARGET="docs-test"))
-    task_name = "test-doctests"
-    tags = ["doctests"]
-    return [EvgTask(name=task_name, tags=tags, commands=[server_func, test_func])]
-
-
-def create_no_server_tasks():
-    test_func = FunctionCall(func="run tests")
-    task_name = "test-no-server"
-    tags = ["no-server"]
-    return [EvgTask(name=task_name, tags=tags, commands=[test_func])]
 
 
 def create_free_threading_tasks():
@@ -1302,105 +1049,130 @@ def create_upload_mo_artifacts_func():
     return "upload mo artifacts", cmds
 
 
-##################
-# Generate Config
-##################
+def create_fetch_source_func():
+    # Executes clone and applies the submitted patch, if any.
+    cmd = git_get_project(directory="src")
+    return "fetch source", [cmd]
 
 
-def write_variants_to_file():
-    mod = sys.modules[__name__]
-    here = Path(__file__).absolute().parent
-    target = here.parent / "generated_configs" / "variants.yml"
-    if target.exists():
-        target.unlink()
-    with target.open("w") as fid:
-        fid.write("buildvariants:\n")
-
-    for name, func in sorted(getmembers(mod, isfunction)):
-        if not name.endswith("_variants"):
-            continue
-        if not name.startswith("create_"):
-            raise ValueError("Variant creators must start with create_")
-        title = name.replace("create_", "").replace("_variants", "").replace("_", " ").capitalize()
-        project = EvgProject(tasks=None, buildvariants=func())
-        out = ShrubService.generate_yaml(project).splitlines()
-        with target.open("a") as fid:
-            fid.write(f"  # {title} tests\n")
-            for line in out[1:]:
-                fid.write(f"{line}\n")
-            fid.write("\n")
-
-    # Remove extra trailing newline:
-    data = target.read_text().splitlines()
-    with target.open("w") as fid:
-        for line in data[:-1]:
-            fid.write(f"{line}\n")
+def create_setup_system_func():
+    # Make an evergreen expansion file with dynamic values.
+    includes = ["is_patch", "project", "version_id"]
+    args = [".evergreen/scripts/setup-system.sh"]
+    setup_cmd = get_subprocess_exec(include_expansions_in_env=includes, args=args)
+    # Load the expansion file to make an evergreen variable with the current unique version.
+    expansion_cmd = expansions_update(file="src/expansion.yml")
+    return "setup system", [setup_cmd, expansion_cmd]
 
 
-def write_tasks_to_file():
-    mod = sys.modules[__name__]
-    here = Path(__file__).absolute().parent
-    target = here.parent / "generated_configs" / "tasks.yml"
-    if target.exists():
-        target.unlink()
-    with target.open("w") as fid:
-        fid.write("tasks:\n")
-
-    for name, func in sorted(getmembers(mod, isfunction)):
-        if name.startswith("_") or not name.endswith("_tasks"):
-            continue
-        if not name.startswith("create_"):
-            raise ValueError("Task creators must start with create_")
-        title = name.replace("create_", "").replace("_tasks", "").replace("_", " ").capitalize()
-        project = EvgProject(tasks=func(), buildvariants=None)
-        out = ShrubService.generate_yaml(project).splitlines()
-        with target.open("a") as fid:
-            fid.write(f"  # {title} tests\n")
-            for line in out[1:]:
-                fid.write(f"{line}\n")
-            fid.write("\n")
-
-    # Remove extra trailing newline:
-    data = target.read_text().splitlines()
-    with target.open("w") as fid:
-        for line in data[:-1]:
-            fid.write(f"{line}\n")
+def create_upload_test_results_func():
+    results_cmd = attach_results(file_location="${DRIVERS_TOOLS}/results.json")
+    xresults_cmd = attach_xunit_results(file="src/xunit-results/TEST-*.xml")
+    return "upload test results", [results_cmd, xresults_cmd]
 
 
-def write_functions_to_file():
-    mod = sys.modules[__name__]
-    here = Path(__file__).absolute().parent
-    target = here.parent / "generated_configs" / "functions.yml"
-    if target.exists():
-        target.unlink()
-    with target.open("w") as fid:
-        fid.write("functions:\n")
-
-    functions = dict()
-    for name, func in sorted(getmembers(mod, isfunction)):
-        if name.startswith("_") or not name.endswith("_func"):
-            continue
-        if not name.startswith("create_"):
-            raise ValueError("Function creators must start with create_")
-        title = name.replace("create_", "").replace("_func", "").replace("_", " ").capitalize()
-        func_name, cmds = func()
-        functions = dict()
-        functions[func_name] = cmds
-        project = EvgProject(functions=functions, tasks=None, buildvariants=None)
-        out = ShrubService.generate_yaml(project).splitlines()
-        with target.open("a") as fid:
-            fid.write(f"  # {title}\n")
-            for line in out[1:]:
-                fid.write(f"{line}\n")
-            fid.write("\n")
-
-    # Remove extra trailing newline:
-    data = target.read_text().splitlines()
-    with target.open("w") as fid:
-        for line in data[:-1]:
-            fid.write(f"{line}\n")
+def create_run_server_func():
+    includes = [
+        "VERSION",
+        "TOPOLOGY",
+        "AUTH",
+        "SSL",
+        "ORCHESTRATION_FILE",
+        "PYTHON_BINARY",
+        "PYTHON_VERSION",
+        "STORAGE_ENGINE",
+        "REQUIRE_API_VERSION",
+        "DRIVERS_TOOLS",
+        "TEST_CRYPT_SHARED",
+        "AUTH_AWS",
+        "LOAD_BALANCER",
+        "LOCAL_ATLAS",
+        "NO_EXT",
+    ]
+    args = [".evergreen/just.sh", "run-server", "${TEST_NAME}"]
+    sub_cmd = get_subprocess_exec(include_expansions_in_env=includes, args=args)
+    expansion_cmd = expansions_update(file="${DRIVERS_TOOLS}/mo-expansion.yml")
+    return "run server", [sub_cmd, expansion_cmd]
 
 
-write_variants_to_file()
-write_tasks_to_file()
-write_functions_to_file()
+def create_run_tests_func():
+    includes = [
+        "AUTH",
+        "SSL",
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "AWS_SESSION_TOKEN",
+        "COVERAGE",
+        "PYTHON_BINARY",
+        "LIBMONGOCRYPT_URL",
+        "MONGODB_URI",
+        "PYTHON_VERSION",
+        "DISABLE_TEST_COMMANDS",
+        "GREEN_FRAMEWORK",
+        "NO_EXT",
+        "COMPRESSORS",
+        "MONGODB_API_VERSION",
+        "REQUIRE_API_VERSION",
+        "DEBUG_LOG",
+        "ORCHESTRATION_FILE",
+        "OCSP_SERVER_TYPE",
+        "VERSION",
+        "IS_WIN32",
+        "REQUIRE_FIPS",
+    ]
+    args = [".evergreen/just.sh", "setup-tests", "${TEST_NAME}", "${SUB_TEST_NAME}"]
+    setup_cmd = get_subprocess_exec(include_expansions_in_env=includes, args=args)
+    test_cmd = get_subprocess_exec(args=[".evergreen/just.sh", "run-tests"])
+    return "run tests", [setup_cmd, test_cmd]
+
+
+def create_cleanup_func():
+    cmd = get_subprocess_exec(args=[".evergreen/scripts/cleanup.sh"])
+    return "cleanup", [cmd]
+
+
+def create_teardown_system_func():
+    tests_cmd = get_subprocess_exec(args=[".evergreen/just.sh", "teardown-tests"])
+    drivers_cmd = get_subprocess_exec(args=["${DRIVERS_TOOLS}/.evergreen/teardown.sh"])
+    return "teardown system", [tests_cmd, drivers_cmd]
+
+
+def create_assume_ec2_role_func():
+    cmd = ec2_assume_role(role_arn="${aws_test_secrets_role}", duration_seconds=3600)
+    return "assume ec2 role", [cmd]
+
+
+def create_attach_benchmark_test_results_func():
+    cmd = attach_results(file_location="src/report.json")
+    return "attach benchmark test results", [cmd]
+
+
+def create_send_dashboard_data_func():
+    includes = [
+        "requester",
+        "revision_order_id",
+        "project_id",
+        "version_id",
+        "build_variant",
+        "parsed_order_id",
+        "task_name",
+        "task_id",
+        "execution",
+        "is_mainline",
+    ]
+    cmds = [
+        get_subprocess_exec(
+            include_expansions_in_env=includes, args=[".evergreen/scripts/perf-submission-setup.sh"]
+        ),
+        expansions_update(file="src/expansion.yml"),
+        get_subprocess_exec(
+            include_expansions_in_env=includes, args=[".evergreen/scripts/perf-submission.sh"]
+        ),
+    ]
+    return "send dashboard data", cmds
+
+
+mod = sys.modules[__name__]
+write_variants_to_file(mod)
+write_tasks_to_file(mod)
+write_functions_to_file(mod)

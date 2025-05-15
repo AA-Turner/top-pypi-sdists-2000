@@ -232,6 +232,13 @@ class DatabaseObjectReferenceMixin(Generic[T], ObjectReferenceMixin[DatabaseObje
         return f"<{type_name}: {qualified_name!r}>"
 
 
+def build_resource_fqn_identifier(resource: SchemaObjectReferenceProtocol[T]) -> str:
+    prefix = f"{resource.database.name}.{resource.schema.name}"
+    if hasattr(resource, "name_with_args"):
+        return f"{prefix}.{resource.name_with_args}"
+    return f"{prefix}.{resource.name}"
+
+
 class SchemaObjectReferenceMixin(Generic[T], ObjectReferenceMixin[SchemaObjectCollectionParent[T]]):
     @property
     def schema(self: SchemaObjectReferenceProtocol[T]) -> "SchemaResource":
@@ -246,12 +253,11 @@ class SchemaObjectReferenceMixin(Generic[T], ObjectReferenceMixin[SchemaObjectCo
     @property
     def fully_qualified_name(self: SchemaObjectReferenceProtocol[T]) -> str:
         """Return the fully qualified name of the object this reference points to."""
-        return f"{self.database.name}.{self.schema.name}.{self.name}"
+        return build_resource_fqn_identifier(self)
 
     def __repr__(self: SchemaObjectReferenceProtocol[T]) -> str:
         type_name = type(self).__name__
-        fully_qualified_name = f"{self.database.name}.{self.schema.name}.{self.name}"
-        return f"<{type_name}: {fully_qualified_name!r}>"
+        return f"<{type_name}: {build_resource_fqn_identifier(self)!r}>"
 
 
 class CaseInsensitiveEnumMeta(EnumMeta):

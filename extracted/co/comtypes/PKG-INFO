@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: comtypes
-Version: 1.4.10
+Version: 1.4.11
 Summary: Pure Python COM package
 Home-page: https://github.com/enthought/comtypes
 Download-URL: https://github.com/enthought/comtypes/releases
@@ -17,6 +17,7 @@ Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
 Dynamic: download-url
+Dynamic: license-file
 
 # comtypes
 

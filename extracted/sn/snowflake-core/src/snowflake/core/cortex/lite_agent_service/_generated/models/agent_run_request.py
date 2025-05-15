@@ -24,7 +24,7 @@ from snowflake.core.cortex.lite_agent_service._generated.models.tool import Tool
 
 from snowflake.core.cortex.lite_agent_service._generated.models.tool_choice import ToolChoice
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 
 from typing import Any, ClassVar, Dict, List, Optional
 
@@ -55,6 +55,11 @@ class AgentRunRequest(BaseModel):
         Configuration for each tool referenced in the tools array.
         Keys must match the name field of tools.
     tool_choice : ToolChoice, optional
+
+    thread_id : int, optional
+        The id of the thread.
+    parent_message_id : int, optional
+        The id of the message from which this run should begin.
     """
 
     model: StrictStr
@@ -71,9 +76,13 @@ class AgentRunRequest(BaseModel):
 
     tool_choice: Optional[ToolChoice] = None
 
+    thread_id: Optional[StrictInt] = None
+
+    parent_message_id: Optional[StrictInt] = None
+
     __properties = [
         "model", "response_instruction", "experimental", "messages", "tools",
-        "tool_resources", "tool_choice"
+        "tool_resources", "tool_choice", "thread_id", "parent_message_id"
     ]
 
     class Config:
@@ -167,6 +176,10 @@ class AgentRunRequest(BaseModel):
             "tool_choice":
             ToolChoice.from_dict(obj.get("tool_choice"))
             if obj.get("tool_choice") is not None else None,
+            "thread_id":
+            obj.get("thread_id"),
+            "parent_message_id":
+            obj.get("parent_message_id"),
         })
 
         return _obj
@@ -193,6 +206,8 @@ class AgentRunRequestModel():
         tools: Optional[List[Tool]] = None,
         tool_resources: Optional[Dict[str, object]] = None,
         tool_choice: Optional[ToolChoice] = None,
+        thread_id: Optional[int] = None,
+        parent_message_id: Optional[int] = None,
     ):
         """A model object representing the AgentRunRequest resource.
 
@@ -221,6 +236,12 @@ Tools may have a corresponding configuration in tool_resources.
 Keys must match the name field of tools.
 
         tool_choice : ToolChoice, optional
+
+        thread_id : int, optional
+            The id of the thread.
+
+        parent_message_id : int, optional
+            The id of the message from which this run should begin.
         """
 
         self.model = model
@@ -230,10 +251,12 @@ Keys must match the name field of tools.
         self.tools = tools
         self.tool_resources = tool_resources
         self.tool_choice = tool_choice
+        self.thread_id = thread_id
+        self.parent_message_id = parent_message_id
 
     __properties = [
         "model", "response_instruction", "experimental", "messages", "tools",
-        "tool_resources", "tool_choice"
+        "tool_resources", "tool_choice", "thread_id", "parent_message_id"
     ]
 
     def __repr__(self) -> str:
@@ -251,6 +274,8 @@ Keys must match the name field of tools.
             tool_resources=self.tool_resources,
             tool_choice=self.tool_choice._to_model()
             if self.tool_choice is not None else None,
+            thread_id=self.thread_id,
+            parent_message_id=self.parent_message_id,
         )
 
     @classmethod
@@ -266,6 +291,8 @@ Keys must match the name field of tools.
             tool_resources=model.tool_resources,
             tool_choice=ToolChoiceModel._from_model(model.tool_choice)
             if model.tool_choice is not None else None,
+            thread_id=model.thread_id,
+            parent_message_id=model.parent_message_id,
         )
 
     def to_dict(self):

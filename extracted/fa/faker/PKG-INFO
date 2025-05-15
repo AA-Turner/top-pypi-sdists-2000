@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: Faker
-Version: 37.1.0
+Version: 37.3.0
 Summary: Faker is a Python package that generates fake data for you.
 Home-page: https://github.com/joke2k/faker
 Author: joke2k
@@ -36,6 +36,7 @@ Dynamic: description
 Dynamic: home-page
 Dynamic: keywords
 Dynamic: license
+Dynamic: license-file
 Dynamic: platform
 Dynamic: project-url
 Dynamic: requires-dist

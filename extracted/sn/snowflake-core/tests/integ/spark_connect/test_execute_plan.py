@@ -28,13 +28,13 @@ def execute_plan_common(spark_connect_resource):
     assert response_envelope.execute_plan_response.result_complete is not None
 
 
-@pytest.mark.flaky
+@pytest.mark.skip("SNOW-2081641: 500 Internal Server Error returned from the server")
 @pytest.mark.min_sf_ver("9.6.0")
 def test_execute_plan_using_session(spark_connect_session_resource):
     execute_plan_common(spark_connect_session_resource)
 
 
-@pytest.mark.flaky
+@pytest.mark.skip("SNOW-2081641: 500 Internal Server Error returned from the server")
 @pytest.mark.min_sf_ver("9.6.0")
 def test_execute_plan_using_rest(spark_connect_rest_resource):
     execute_plan_common(spark_connect_rest_resource)
@@ -53,13 +53,13 @@ def analyze_plan_common(spark_connect_resource):
     assert analyze_plan_response.session_id == analyze_plan_request.session_id
 
 
-@pytest.mark.flaky
+@pytest.mark.skip("SNOW-2081641: 500 Internal Server Error returned from the server")
 @pytest.mark.min_sf_ver("9.6.0")
 def test_analyze_plan_using_session(spark_connect_session_resource):
     analyze_plan_common(spark_connect_session_resource)
 
 
-@pytest.mark.flaky
+@pytest.mark.skip("SNOW-2081641: 500 Internal Server Error returned from the server")
 @pytest.mark.min_sf_ver("9.6.0")
 def test_analyze_plan_using_rest(spark_connect_rest_resource):
     analyze_plan_common(spark_connect_rest_resource)
@@ -77,13 +77,13 @@ def config_common(spark_connect_resource):
     config_response.ParseFromString(bytes(response))
 
 
-@pytest.mark.flaky
+@pytest.mark.skip("SNOW-2081641: 500 Internal Server Error returned from the server")
 @pytest.mark.min_sf_ver("9.6.0")
 def test_config_using_session(spark_connect_session_resource):
     config_common(spark_connect_session_resource)
 
 
-@pytest.mark.flaky
+@pytest.mark.skip("SNOW-2081641: 500 Internal Server Error returned from the server")
 @pytest.mark.min_sf_ver("9.6.0")
 def test_config_using_rest(spark_connect_rest_resource):
     config_common(spark_connect_rest_resource)

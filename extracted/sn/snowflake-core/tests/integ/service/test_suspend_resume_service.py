@@ -18,7 +18,6 @@ def seed_temp_service_data():
     return
 
 
-@pytest.mark.flaky
 def test_suspend_resume(root, services, session, imagerepo, shared_compute_pool):
     stage_name = random_string(5, "test_stage_")
     s_name = random_string(5, "test_service_")
@@ -50,12 +49,12 @@ def test_suspend_resume(root, services, session, imagerepo, shared_compute_pool)
 
     ready_status = ("READY", "DONE", "PENDING")  # fake status might have DONE as status
 
+    s = services.create(test_s)
     try:
-        s = services.create(test_s)
         last_status = ""
         for _ in range(10):
-            web_server = s.get_service_status(1)[0]
-            last_status = web_server["status"]
+            web_server = next(s.get_containers())
+            last_status = web_server.service_status
             if last_status in ready_status:
                 break
             sleep(1)
@@ -63,18 +62,17 @@ def test_suspend_resume(root, services, session, imagerepo, shared_compute_pool)
             pytest.fail(f"web_server never came online: {last_status}")
         services[test_s.name].suspend()
         for _ in range(10):
-            web_server = s.get_service_status(1)[0]
-            if web_server["status"] in ("SUSPENDED", "SUSPENDING"):
+            web_server = next(s.get_containers())
+            if web_server.service_status in ("SUSPENDED", "SUSPENDING"):
                 break
             sleep(1)
         else:
             pytest.fail("web_server never went to sleep")
         services[test_s.name].resume()
         for _ in range(60):
-            web_server = s.get_service_status(1)[0]
-            if web_server["status"] in ready_status:
+            web_server = next(s.get_containers())
+            if web_server.service_status in ready_status:
                 break
-            print(f"{web_server['status']}")
             sleep(1)
         else:
             pytest.fail("web_server never resumed")

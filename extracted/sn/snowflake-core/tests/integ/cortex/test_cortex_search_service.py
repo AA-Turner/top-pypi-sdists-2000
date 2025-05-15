@@ -55,7 +55,6 @@ def precheck_cortex_search_enabled(cortex_search_services, setup_cortex_search_s
         raise
 
 
-@pytest.mark.flaky
 def test_search(cortex_search_services):
     resp = cortex_search_services[TEST_SERVICE_NAME].search("hi", ["col1", "col2"], limit=5)
     assert len(resp.results) == 5
@@ -64,7 +63,6 @@ def test_search(cortex_search_services):
         assert row["col2"] is not None
 
 
-@pytest.mark.flaky
 def test_search_collection(cortex_search_services):
     resp = cortex_search_services.search(
         TEST_SERVICE_NAME,
@@ -77,7 +75,6 @@ def test_search_collection(cortex_search_services):
         assert row["col2"] is not None
 
 
-@pytest.mark.flaky
 def test_experimental_arg(cortex_search_services) -> None:
     resp = cortex_search_services[TEST_SERVICE_NAME].search(
         "hi", ["col1", "col2"], limit=5, experimental={"debug": True},

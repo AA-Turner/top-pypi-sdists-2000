@@ -118,9 +118,9 @@ def deprecated(
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
         """Mark methods as deprecated with a warning message."""
-        deprecation_message = f"The `{func.__name__}` method is deprecated;"
+        deprecation_message = f"The :func:`{func.__name__}` method is deprecated;"
         if alternative:
-            deprecation_message += f" use `{alternative}` instead."
+            deprecation_message += f" use :func:`{alternative}` instead."
 
         @functools.wraps(func)
         def deprecate_wrapper(
@@ -130,9 +130,9 @@ def deprecated(
             return func(*args, **kwargs)
 
         if deprecate_wrapper.__doc__ is None:
-            deprecate_wrapper.__doc__ = ""
-
-        deprecate_wrapper.__doc__ += deprecation_message
+            deprecate_wrapper.__doc__ = deprecation_message
+        else:
+            deprecate_wrapper.__doc__ = deprecation_message + "\n\n" + deprecate_wrapper.__doc__
 
         return deprecate_wrapper
     return decorator

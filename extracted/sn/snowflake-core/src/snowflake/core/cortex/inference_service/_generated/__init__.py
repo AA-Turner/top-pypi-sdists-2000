@@ -27,6 +27,8 @@ from snowflake.core.cortex.inference_service._generated.models.complete_request 
 from snowflake.core.cortex.inference_service._generated.models.complete_request_messages_inner import CompleteRequestMessagesInner
 from snowflake.core.cortex.inference_service._generated.models.complete_request_response_format import CompleteRequestResponseFormat
 from snowflake.core.cortex.inference_service._generated.models.error_response import ErrorResponse
+from snowflake.core.cortex.inference_service._generated.models.get_models_request import GetModelsRequest
+from snowflake.core.cortex.inference_service._generated.models.get_models_response import GetModelsResponse
 from snowflake.core.cortex.inference_service._generated.models.guardrails_config import GuardrailsConfig
 from snowflake.core.cortex.inference_service._generated.models.non_streaming_complete_response import NonStreamingCompleteResponse
 from snowflake.core.cortex.inference_service._generated.models.non_streaming_complete_response_choices_inner import NonStreamingCompleteResponseChoicesInner

@@ -33,6 +33,8 @@ PASS_THROUGH_ENV = [
     "DEBUG_LOG",
     "PYTHON_BINARY",
     "PYTHON_VERSION",
+    "REQUIRE_FIPS",
+    "IS_WIN32",
 ]
 
 # Map the test name to test extra.
@@ -283,6 +285,9 @@ def handle_test_env() -> None:
         write_env("GSSAPI_PORT", config["SASL_PORT"])
         write_env("GSSAPI_PRINCIPAL", config["PRINCIPAL"])
 
+    if test_name == "doctest":
+        UV_ARGS.append("--extra docs")
+
     if test_name == "load_balancer":
         SINGLE_MONGOS_LB_URI = os.environ.get(
             "SINGLE_MONGOS_LB_URI", "mongodb://127.0.0.1:8000/?loadBalanced=true"
@@ -385,12 +390,12 @@ def handle_test_env() -> None:
         if not DRIVERS_TOOLS:
             raise RuntimeError("Missing DRIVERS_TOOLS")
         csfle_dir = Path(f"{DRIVERS_TOOLS}/.evergreen/csfle")
-        run_command(f"bash {csfle_dir}/setup-secrets.sh", cwd=csfle_dir)
+        run_command(f"bash {csfle_dir.as_posix()}/setup-secrets.sh", cwd=csfle_dir)
         load_config_from_file(csfle_dir / "secrets-export.sh")
-        run_command(f"bash {csfle_dir}/start-servers.sh")
+        run_command(f"bash {csfle_dir.as_posix()}/start-servers.sh")
 
-        if sub_test_name == "pyopenssl":
-            UV_ARGS.append("--extra ocsp")
+    if sub_test_name == "pyopenssl":
+        UV_ARGS.append("--extra ocsp")
 
     if is_set("TEST_CRYPT_SHARED") or opts.crypt_shared:
         config = read_env(f"{DRIVERS_TOOLS}/mo-expansion.sh")
@@ -463,9 +468,7 @@ def handle_test_env() -> None:
         UV_ARGS.append(f"--group {framework}")
 
     else:
-        # Use --capture=tee-sys so pytest prints test output inline:
-        # https://docs.pytest.org/en/stable/how-to/capture-stdout-stderr.html
-        TEST_ARGS = f"-v --capture=tee-sys --durations=5 {TEST_ARGS}"
+        TEST_ARGS = f"-v --durations=5 {TEST_ARGS}"
         TEST_SUITE = TEST_SUITE_MAP.get(test_name)
         if TEST_SUITE:
             TEST_ARGS = f"-m {TEST_SUITE} {TEST_ARGS}"

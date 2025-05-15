@@ -144,7 +144,6 @@ def test_create_clone(databases: DatabaseCollection):
         db.drop()
 
 
-@pytest.mark.flaky
 @pytest.mark.usefixtures("shared_database_available")
 def test_create_from_share(databases: DatabaseCollection):
     new_db_name = random_string(3, "test_db_from_share_")
@@ -164,4 +163,3 @@ def test_create_from_share(databases: DatabaseCollection):
         # So, catch that case and pass if that is detected.
         assert "importing more than once is not supported" in json.loads(err.body)['message']
         pytest.skip("Test was not run because of database was already shared.")
-

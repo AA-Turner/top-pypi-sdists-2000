@@ -35,7 +35,7 @@ def test_fetch(warehouses):
         assert warehouse_name.upper() == warehouse.name.upper()
         assert warehouse.size.upper() == "SMALL"
         assert warehouse.auto_suspend == 500
-        assert warehouse.type == "STANDARD"
+        assert warehouse.type.startswith("STANDARD")
         assert warehouse.auto_resume.upper() == "FALSE"
         # assert warehouse.initially_suspended == "TRUE"
         assert warehouse.comment == "This IS a COmment"

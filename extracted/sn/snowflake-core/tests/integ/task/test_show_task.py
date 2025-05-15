@@ -5,11 +5,14 @@
 import copy
 import json
 
-from collections.abc import Generator, Iterable
+from collections.abc import Iterable, Iterator
+from datetime import timedelta
 
 import pytest
 
-from snowflake.core.task import Task
+from snowflake.core import CreateMode
+from snowflake.core.schema import Schema
+from snowflake.core.task import Cron, Task, TaskCollection
 
 from ..utils import random_object_name
 
@@ -21,53 +24,44 @@ task_name4 = random_object_name()
 name_list = [task_name1, task_name2, task_name3, task_name4]
 
 
-@pytest.fixture(scope="module", autouse=True)
-def setup(connection) -> Generator[None, None, None]:
-    with connection.cursor() as cur:
-        warehouse_name: str = cur.execute("select current_warehouse();").fetchone()[0]
-        create_task2 = (
-            f"create or replace task {task_name2} "
-            "ALLOW_OVERLAPPING_EXECUTION = true SUSPEND_TASK_AFTER_NUM_FAILURES = 10 "
-            "schedule = '10 minute' as select current_version()"
-        )
-        cur.execute(create_task2).fetchone()
-        create_task3 = (
-            f"create or replace task {task_name3} "
-            "user_task_managed_initial_warehouse_size = 'xsmall' "
-            "target_completion_interval = '5 MINUTE' "
-            "serverless_task_min_statement_size = 'xsmall' "
-            "serverless_task_max_statement_size = 'small' "
-            "SCHEDULE = 'USING CRON 0 9-17 * * SUN America/Los_Angeles' as select current_version()"
-        )
-        cur.execute(create_task3).fetchone()
-        create_task1 = (
-            f"create or replace task {task_name1} "
-            f"warehouse = {warehouse_name} "
-            "comment = 'test_task' "
-            f"after {task_name2}, {task_name3} "
-            "as select current_version()"
-        )
-        cur.execute(create_task1).fetchone()
-        create_task4 = (
-            f"create or replace task {task_name4} "
-            f"warehouse = {warehouse_name} "
-            "comment = 'test_task' "
-            f"finalize = {task_name2} "
-            "as select current_version()"
-        )
-        cur.execute(create_task4).fetchone()
-        yield
-        drop_task1 = f"drop task if exists {task_name1}"
-        cur.execute(drop_task1).fetchone()
-        drop_task2 = f"drop task if exists {task_name2}"
-        cur.execute(drop_task2).fetchone()
-        drop_task3 = f"drop task if exists {task_name2}"
-        cur.execute(drop_task3).fetchone()
-        drop_task4 = f"drop task if exists {task_name4}"
-        cur.execute(drop_task4).fetchone()
+@pytest.fixture(scope="module")
+def tasks(db_parameters, database) -> Iterator[TaskCollection]:
+    warehouse_name = db_parameters["warehouse"]
+    schema = database.schemas.create(Schema(name=(random_object_name())))
+    tasks = [
+        Task(name=task_name2,
+             definition="select current_version()",
+             suspend_task_after_num_failures=10,
+             schedule=timedelta(minutes=10),
+             allow_overlapping_execution=True),
+        Task(name=task_name3,
+             definition="select current_version()",
+             user_task_managed_initial_warehouse_size="xsmall",
+             target_completion_interval=timedelta(minutes=5),
+             serverless_task_min_statement_size="xsmall",
+             serverless_task_max_statement_size="small",
+             schedule=Cron("0 9-17 * * SUN", "America/Los_Angeles")),
+        Task(name=task_name1,
+             definition="select current_version()",
+             warehouse=warehouse_name,
+             comment="test_task",
+             predecessors=[task_name2, task_name3]),
+        Task(name=task_name4,
+             definition="select current_version()",
+             warehouse=warehouse_name,
+             comment="test_task",
+             finalize=task_name2),
+    ]
+    task_collection = schema.tasks
+    for task in tasks:
+        task_collection.create(task, mode=CreateMode.or_replace)
+    try:
+        yield task_collection
+    finally:
+        schema.drop()
 
 
-def test_basic(tasks, database, schema):
+def test_basic(tasks):
     result = _info_list_to_dict(tasks.iter())
     for t in [task_name1, task_name2, task_name3, task_name4]:
         assert t.upper() in result
@@ -90,7 +84,9 @@ def test_basic(tasks, database, schema):
 
 
 @pytest.mark.min_sf_ver("8.27.0")
-def test_finalize_support(tasks, database, schema):
+def test_finalize_support(tasks):
+    database = tasks.database
+    schema = tasks.schema
     result = _info_list_to_dict(tasks.iter())
     # assert finalize
     res = result[task_name4.upper()]
@@ -131,7 +127,7 @@ def test_finalize_support(tasks, database, schema):
 
 
 @pytest.mark.min_sf_ver("9.4.0")
-def test_serverless_attributes(tasks, database, schema):
+def test_serverless_attributes(tasks):
     result = _info_list_to_dict(tasks.iter())
     for t in [task_name1, task_name2, task_name3, task_name4]:
         assert t.upper() in result
@@ -162,7 +158,6 @@ def test_like(tasks):
     assert len(list(result)) == 0
 
 
-@pytest.mark.flaky
 def test_limit_from(tasks):
     result = tasks.iter()
     assert len(list(result)) >= 4
@@ -173,8 +168,6 @@ def test_limit_from(tasks):
     lex_order_names = copy.deepcopy(name_list)
     lex_order_names.sort()
     # use the second last task_name as 'from_name'
-    # TODO: SNOW-1944134 - this can return tasks created in the same schema by other test suites - use separate schema
-    #  in each test suite
     result = _info_list_to_dict(tasks.iter(limit=3, from_name=lex_order_names[-2][:-1].upper()))
     assert len(result) >= 2
     assert lex_order_names[-2].upper() in result

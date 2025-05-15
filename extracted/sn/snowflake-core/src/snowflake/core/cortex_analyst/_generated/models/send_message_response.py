@@ -43,6 +43,8 @@ class SendMessageResponse(BaseModel):
     warnings : List[Warning], optional
 
     semantic_model_selection : SemanticModelSelection, optional
+
+    response_metadata : object, optional
     """
 
     message: MessageObject
@@ -53,8 +55,11 @@ class SendMessageResponse(BaseModel):
 
     semantic_model_selection: Optional[SemanticModelSelection] = None
 
+    response_metadata: Optional[Dict[str, Any]] = None
+
     __properties = [
-        "message", "request_id", "warnings", "semantic_model_selection"
+        "message", "request_id", "warnings", "semantic_model_selection",
+        "response_metadata"
     ]
 
     class Config:
@@ -138,6 +143,8 @@ class SendMessageResponse(BaseModel):
             SemanticModelSelection.from_dict(
                 obj.get("semantic_model_selection"))
             if obj.get("semantic_model_selection") is not None else None,
+            "response_metadata":
+            obj.get("response_metadata"),
         })
 
         return _obj
@@ -161,6 +168,7 @@ class SendMessageResponseModel():
         request_id: Optional[str] = None,
         warnings: Optional[List[Warning]] = None,
         semantic_model_selection: Optional[SemanticModelSelection] = None,
+        response_metadata: Optional[object] = None,
     ):
         """A model object representing the SendMessageResponse resource.
 
@@ -175,15 +183,19 @@ class SendMessageResponseModel():
         warnings : List[Warning], optional
 
         semantic_model_selection : SemanticModelSelection, optional
+
+        response_metadata : object, optional
         """
 
         self.message = message
         self.request_id = request_id
         self.warnings = warnings
         self.semantic_model_selection = semantic_model_selection
+        self.response_metadata = response_metadata
 
     __properties = [
-        "message", "request_id", "warnings", "semantic_model_selection"
+        "message", "request_id", "warnings", "semantic_model_selection",
+        "response_metadata"
     ]
 
     def __repr__(self) -> str:
@@ -198,6 +210,7 @@ class SendMessageResponseModel():
             if self.warnings is not None else None,
             semantic_model_selection=self.semantic_model_selection._to_model()
             if self.semantic_model_selection is not None else None,
+            response_metadata=self.response_metadata,
         )
 
     @classmethod
@@ -211,6 +224,7 @@ class SendMessageResponseModel():
             semantic_model_selection=SemanticModelSelectionModel._from_model(
                 model.semantic_model_selection)
             if model.semantic_model_selection is not None else None,
+            response_metadata=model.response_metadata,
         )
 
     def to_dict(self):

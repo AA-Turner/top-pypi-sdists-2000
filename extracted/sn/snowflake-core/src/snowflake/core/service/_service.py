@@ -607,6 +607,7 @@ class ServiceResource(SchemaObjectReferenceMixin[ServiceCollection]):
         return PollingOperations.iterator(future)
 
     @api_telemetry
+    @deprecated("get_containers")
     def get_service_status(self, timeout: int = 0) -> list[dict[str, Any]]:
         """Get the status of the service.
 
@@ -643,6 +644,7 @@ class ServiceResource(SchemaObjectReferenceMixin[ServiceCollection]):
         return json.loads(status.systemget_service_status)
 
     @api_telemetry
+    @deprecated("get_containers_async")
     def get_service_status_async(self, timeout: int = 0) -> PollingOperation[list[dict[str, Any]]]:
         """An asynchronous version of :func:`get_service_status`.
 

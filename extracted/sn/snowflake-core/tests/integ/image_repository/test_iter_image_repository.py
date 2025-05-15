@@ -3,8 +3,6 @@
 #
 
 
-import pytest
-
 from tests.utils import random_string
 
 from snowflake.core.image_repository import ImageRepository
@@ -48,7 +46,6 @@ def test_iter(image_repositories):
             image_repositories[ir_name].drop(if_exists=True)
 
 
-@pytest.mark.skip(reason="SNOW-1555422")
 def test_list_images(image_repositories):
     try:
         ir_name = random_string(5, "test_ir_3")

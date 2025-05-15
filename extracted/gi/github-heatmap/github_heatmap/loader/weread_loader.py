@@ -61,7 +61,7 @@ class WereadLoader(BaseLoader):
         if not r.ok:
             print(r.text)
             # need to refresh cookie
-            if r.json()["errcode"] == -2012:
+            if r.json()["errcode"] == -2012 or r.json()["errcode"] == -2010:
                 self.refresh_token()
                 r = self.session.get(WEREAD_HISTORY_URL)
             else:
