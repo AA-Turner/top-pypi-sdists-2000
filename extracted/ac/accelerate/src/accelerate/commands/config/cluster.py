@@ -21,6 +21,7 @@ from ...utils import (
     DistributedType,
     is_deepspeed_available,
     is_fp8_available,
+    is_hpu_available,
     is_mlu_available,
     is_mps_available,
     is_msamp_available,
@@ -60,6 +61,7 @@ def get_cluster_input():
             "No distributed training",
             "multi-CPU",
             "multi-XPU",
+            "multi-HPU",
             "multi-GPU",
             "multi-NPU",
             "multi-MLU",
@@ -88,6 +90,7 @@ def get_cluster_input():
         DistributedType.MULTI_NPU,
         DistributedType.MULTI_XPU,
         DistributedType.MULTI_CPU,
+        DistributedType.MULTI_HPU,
     ]:
         num_machines = _ask_field(
             "How many different machines will you use (use more than 1 for multi-node training)? [1]: ",
@@ -204,6 +207,12 @@ def get_cluster_input():
                 default=False,
                 error_message="Please enter yes or no.",
             )
+            dynamo_config[prefix + "use_regional_compilation"] = _ask_field(
+                "Do you want to enable regional compilation? [yes/NO]: ",
+                _convert_yes_no_to_bool,
+                default=False,
+                error_message="Please enter yes or no.",
+            )
 
     use_mps = not use_cpu and is_mps_available()
     deepspeed_config = {}
@@ -212,6 +221,7 @@ def get_cluster_input():
         in [
             DistributedType.MULTI_GPU,
             DistributedType.MULTI_XPU,
+            DistributedType.MULTI_HPU,
             DistributedType.MULTI_NPU,
             DistributedType.MULTI_MLU,
             DistributedType.MULTI_SDAA,
@@ -365,7 +375,7 @@ def get_cluster_input():
                         )
 
     fsdp_config = {}
-    tp_config = {}
+
     if distributed_type in [
         DistributedType.MULTI_GPU,
         DistributedType.MULTI_NPU,
@@ -373,6 +383,7 @@ def get_cluster_input():
         DistributedType.MULTI_SDAA,
         DistributedType.MULTI_MUSA,
         DistributedType.MULTI_XPU,
+        DistributedType.MULTI_HPU,
     ]:
         use_fsdp = _ask_field(
             "Do you want to use FullyShardedDataParallel? [yes/NO]: ",
@@ -493,21 +504,7 @@ def get_cluster_input():
                 default=False,
                 error_message="Please enter yes or no.",
             )
-        if not use_fsdp:
-            use_tp = _ask_field(
-                "Do you want to use TensorParallel? [yes/NO]: ",
-                _convert_yes_no_to_bool,
-                default=False,
-                error_message="Please enter yes or no.",
-            )
-            if use_tp:
-                distributed_type = DistributedType.TP
-            if distributed_type == DistributedType.TP:
-                tp_config["tp_size"] = _ask_field(
-                    "What should be your Tensor Parallel degree? [1]: ",
-                    int,
-                    default=1,
-                )
+
     megatron_lm_config = {}
     if distributed_type in [DistributedType.MULTI_GPU]:
         use_megatron_lm = _ask_field(
@@ -582,6 +579,7 @@ def get_cluster_input():
     if distributed_type in [
         DistributedType.MULTI_CPU,
         DistributedType.MULTI_XPU,
+        DistributedType.MULTI_HPU,
         DistributedType.MULTI_GPU,
         DistributedType.MULTI_MLU,
         DistributedType.MULTI_SDAA,
@@ -626,6 +624,7 @@ def get_cluster_input():
             DistributedType.MULTI_MUSA,
             DistributedType.MULTI_NPU,
             DistributedType.MULTI_XPU,
+            DistributedType.MULTI_HPU,
             DistributedType.NO,
         ]
         and not use_cpu
@@ -641,10 +640,12 @@ def get_cluster_input():
             machine_type = "MUSA(s)"
         elif is_xpu_available():
             machine_type = "XPU(s)"
+        elif is_hpu_available():
+            machine_type = "HPU(s)"
         else:
             machine_type = "GPU(s)"
         gpu_ids = _ask_field(
-            f"What {machine_type} (by id) should be used for training on this machine as a comma-seperated list? [all]:",
+            f"What {machine_type} (by id) should be used for training on this machine as a comma-separated list? [all]:",
             default="all",
         )
 
@@ -708,7 +709,7 @@ def get_cluster_input():
                     )
                     tpu_command_file = os.path.abspath(tpu_command_file)
                 else:
-                    print("Please enter each command seperately you wish to run on startup in each pod.")
+                    print("Please enter each command separately you wish to run on startup in each pod.")
                     tpu_commands = []
                     another_command = True
                     while another_command:
@@ -726,11 +727,11 @@ def get_cluster_input():
                             error_message="Please enter yes or no.",
                         )
             tpu_vm = _ask_field(
-                "If not using an instance group, what are the names of the Compute VM instances to be used, seperated by a comma: ",
+                "If not using an instance group, what are the names of the Compute VM instances to be used, separated by a comma: ",
                 default="",
             ).split(",")
             tpu_env = _ask_field(
-                "What environment variables do you wish to set in each pod, seperated by a comma: ",
+                "What environment variables do you wish to set in each pod, separated by a comma: ",
                 default="",
             ).split(",")
 
@@ -810,6 +811,8 @@ def get_cluster_input():
                             default=False,
                         )
                         fp8_config["override_linear_precision"] = (fprop, dgrad, wgrad)
+                    else:
+                        fp8_config["override_linear_precision"] = (False, False, False)
 
                 elif fp8_config["backend"] == "MSAMP":
                     if not is_msamp_available():
@@ -846,7 +849,6 @@ def get_cluster_input():
         fp8_config=fp8_config,
         deepspeed_config=deepspeed_config,
         fsdp_config=fsdp_config,
-        tp_config=tp_config,
         megatron_lm_config=megatron_lm_config,
         ipex_config=ipex_config,
         mpirun_config=mpirun_config,

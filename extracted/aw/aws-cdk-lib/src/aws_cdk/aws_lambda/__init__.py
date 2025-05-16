@@ -11047,10 +11047,12 @@ class CfnVersion(
             update_runtime_on: builtins.str,
             runtime_version_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Runtime Management Config of a function.
+            '''Sets the runtime management configuration for a function's version.
 
-            :param update_runtime_on: The runtime update mode.
-            :param runtime_version_arn: The ARN of the runtime the function is configured to use. If the runtime update mode is manual, the ARN is returned, otherwise null is returned.
+            For more information, see `Runtime updates <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html>`_ .
+
+            :param update_runtime_on: Specify the runtime update mode. - *Auto (default)* - Automatically update to the most recent and secure runtime version using a `Two-phase runtime version rollout <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html#runtime-management-two-phase>`_ . This is the best choice for most customers to ensure they always benefit from runtime updates. - *FunctionUpdate* - Lambda updates the runtime of you function to the most recent and secure runtime version when you update your function. This approach synchronizes runtime updates with function deployments, giving you control over when runtime updates are applied and allowing you to detect and mitigate rare runtime update incompatibilities early. When using this setting, you need to regularly update your functions to keep their runtime up-to-date. - *Manual* - You specify a runtime version in your function configuration. The function will use this runtime version indefinitely. In the rare case where a new runtime version is incompatible with an existing function, this allows you to roll back your function to an earlier runtime version. For more information, see `Roll back a runtime version <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html#runtime-management-rollback>`_ . *Valid Values* : ``Auto`` | ``FunctionUpdate`` | ``Manual``
+            :param runtime_version_arn: The ARN of the runtime version you want the function to use. .. epigraph:: This is only required if you're using the *Manual* runtime update mode.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-version-runtimepolicy.html
             :exampleMetadata: fixture=_generated
@@ -11080,7 +11082,13 @@ class CfnVersion(
 
         @builtins.property
         def update_runtime_on(self) -> builtins.str:
-            '''The runtime update mode.
+            '''Specify the runtime update mode.
+
+            - *Auto (default)* - Automatically update to the most recent and secure runtime version using a `Two-phase runtime version rollout <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html#runtime-management-two-phase>`_ . This is the best choice for most customers to ensure they always benefit from runtime updates.
+            - *FunctionUpdate* - Lambda updates the runtime of you function to the most recent and secure runtime version when you update your function. This approach synchronizes runtime updates with function deployments, giving you control over when runtime updates are applied and allowing you to detect and mitigate rare runtime update incompatibilities early. When using this setting, you need to regularly update your functions to keep their runtime up-to-date.
+            - *Manual* - You specify a runtime version in your function configuration. The function will use this runtime version indefinitely. In the rare case where a new runtime version is incompatible with an existing function, this allows you to roll back your function to an earlier runtime version. For more information, see `Roll back a runtime version <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html#runtime-management-rollback>`_ .
+
+            *Valid Values* : ``Auto`` | ``FunctionUpdate`` | ``Manual``
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-version-runtimepolicy.html#cfn-lambda-version-runtimepolicy-updateruntimeon
             '''
@@ -11090,9 +11098,11 @@ class CfnVersion(
 
         @builtins.property
         def runtime_version_arn(self) -> typing.Optional[builtins.str]:
-            '''The ARN of the runtime the function is configured to use.
+            '''The ARN of the runtime version you want the function to use.
 
-            If the runtime update mode is manual, the ARN is returned, otherwise null is returned.
+            .. epigraph::
+
+               This is only required if you're using the *Manual* runtime update mode.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-version-runtimepolicy.html#cfn-lambda-version-runtimepolicy-runtimeversionarn
             '''
@@ -13216,6 +13226,12 @@ class EventInvokeConfig(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(
@@ -19753,6 +19769,12 @@ class LayerVersion(
 
         return typing.cast(None, jsii.invoke(self, "addPermission", [id, permission]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="layerVersionArn")
     def layer_version_arn(self) -> builtins.str:
@@ -24881,6 +24903,12 @@ class CodeSigningConfig(
             check_type(argname="argument code_signing_config_arn", value=code_signing_config_arn, expected_type=type_hints["code_signing_config_arn"])
         return typing.cast(ICodeSigningConfig, jsii.sinvoke(cls, "fromCodeSigningConfigArn", [scope, id, code_signing_config_arn]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="codeSigningConfigArn")
     def code_signing_config_arn(self) -> builtins.str:
@@ -26031,6 +26059,12 @@ class EventSourceMapping(
             check_type(argname="argument event_source_mapping_id", value=event_source_mapping_id, expected_type=type_hints["event_source_mapping_id"])
         return typing.cast(IEventSourceMapping, jsii.sinvoke(cls, "fromEventSourceMappingId", [scope, id, event_source_mapping_id]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="eventSourceMappingArn")
     def event_source_mapping_arn(self) -> builtins.str:
@@ -26842,6 +26876,12 @@ class FunctionUrl(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeUrl", [grantee]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="authType")
     def auth_type(self) -> FunctionUrlAuthType:
@@ -27391,6 +27431,12 @@ class SingletonFunction(
             check_type(argname="argument down", value=down, expected_type=type_hints["down"])
         return typing.cast(None, jsii.invoke(self, "dependOn", [down]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="architecture")
     def architecture(self) -> Architecture:
@@ -27735,6 +27781,12 @@ class Version(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="architecture")
     def architecture(self) -> Architecture:
@@ -27975,6 +28027,12 @@ class Alias(
         )
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="aliasName")
@@ -28821,6 +28879,12 @@ class Function(
             check_type(argname="argument x", value=x, expected_type=type_hints["x"])
         return typing.cast(None, jsii.invoke(self, "invalidateVersionBasedOn", [x]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="architecture")
     def architecture(self) -> Architecture:
@@ -29106,6 +29170,12 @@ class DockerImageFunction(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 __all__ = [

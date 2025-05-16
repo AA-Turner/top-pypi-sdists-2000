@@ -114,8 +114,8 @@ import aws_cdk as cdk
 
 class FooStack(cdk.Stack):
 
-    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         self.global_table = dynamodb.TableV2(self, "GlobalTable",
             partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING),
@@ -124,8 +124,8 @@ class FooStack(cdk.Stack):
         )
 
 class BarStack(cdk.Stack):
-    def __init__(self, scope, id, *, replicaTable, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, replicaTable=replicaTable, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, replicaTable, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, replicaTable=replicaTable, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         # user is given grantWriteData permissions to replica in us-east-1
         replica_table.grant_write_data(user)
@@ -810,8 +810,8 @@ import aws_cdk.aws_cloudwatch as cloudwatch
 
 class FooStack(cdk.Stack):
 
-    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         self.global_table = dynamodb.TableV2(self, "GlobalTable",
             partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING),
@@ -820,8 +820,8 @@ class FooStack(cdk.Stack):
         )
 
 class BarStack(cdk.Stack):
-    def __init__(self, scope, id, *, replicaTable, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, replicaTable=replicaTable, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, replicaTable, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, replicaTable=replicaTable, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         # metric is only for the table in us-east-1
         metric = replica_table.metric_consumed_read_capacity_units()
@@ -14229,6 +14229,12 @@ class TableV2(
             check_type(argname="argument region", value=region, expected_type=type_hints["region"])
         return typing.cast(ITableV2, jsii.invoke(self, "replica", [region]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="hasIndex")
     def _has_index(self) -> builtins.bool:
@@ -16008,6 +16014,12 @@ class Table(
             type_hints = typing.get_type_hints(_typecheckingstub__9bf5dafcde17b7b65610795b8d251399ace67acb6de4e8ea9af3afe7b588b341)
             check_type(argname="argument index_name", value=index_name, expected_type=type_hints["index_name"])
         return typing.cast(SchemaOptions, jsii.invoke(self, "schema", [index_name]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="hasIndex")

@@ -4397,6 +4397,12 @@ class Subscription(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="deadLetterQueue")
     def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
@@ -5947,6 +5953,12 @@ class TopicPolicy(
             check_type(argname="argument topic_arn", value=topic_arn, expected_type=type_hints["topic_arn"])
         return typing.cast(_PolicyStatement_0fe33853, jsii.invoke(self, "createSSLPolicyDocument", [topic_arn]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="document")
     def document(self) -> _PolicyDocument_3ac34393:
@@ -6780,6 +6792,12 @@ class Topic(TopicBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.T
         )
 
         return typing.cast(None, jsii.invoke(self, "addLoggingConfig", [config]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="autoCreatePolicy")

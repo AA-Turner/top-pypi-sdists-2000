@@ -679,6 +679,12 @@ class Archive(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="archiveArn")
     def archive_arn(self) -> builtins.str:
@@ -8646,6 +8652,12 @@ class EventBusPolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_events.EventBusPolicyProps",
@@ -10715,6 +10727,12 @@ class Rule(
     def _validate_rule(self) -> typing.List[builtins.str]:
         return typing.cast(typing.List[builtins.str], jsii.invoke(self, "validateRule", []))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="ruleArn")
     def rule_arn(self) -> builtins.str:
@@ -11758,6 +11776,12 @@ class ApiDestination(
 
         return typing.cast("ApiDestination", jsii.sinvoke(cls, "fromApiDestinationAttributes", [scope, id, attrs]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="apiDestinationArn")
     def api_destination_arn(self) -> builtins.str:
@@ -12043,6 +12067,12 @@ class Connection(
             check_type(argname="argument connection_secret_arn", value=connection_secret_arn, expected_type=type_hints["connection_secret_arn"])
         return typing.cast(IConnection, jsii.sinvoke(cls, "fromEventBusArn", [scope, id, connection_arn, connection_secret_arn]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="connectionArn")
     def connection_arn(self) -> builtins.str:
@@ -12281,6 +12311,12 @@ class EventBus(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument sid", value=sid, expected_type=type_hints["sid"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPutEventsTo", [grantee, sid]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="eventBusArn")

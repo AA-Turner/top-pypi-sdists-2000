@@ -43,6 +43,7 @@ from google.auth.exceptions import MutualTLSChannelError  # type: ignore
 from google.auth.transport import mtls  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.oauth2 import service_account  # type: ignore
+import google.protobuf
 
 from google.cloud.dataplex_v1 import gapic_version as package_version
 
@@ -796,13 +797,9 @@ class CmekServiceClient(metaclass=CmekServiceClientMeta):
                 should not be set.
             encryption_config_id (str):
                 Required. The ID of the
-                EncryptionConfig to create. The ID must
-                contain only letters (a-z, A-Z), numbers
-                (0-9), and hyphens (-).
-                The maximum size is 63 characters.
-                The first character must be a letter.
-                The last character must be a letter or a
-                number.
+                [EncryptionConfig][google.cloud.dataplex.v1.EncryptionConfig]
+                to create. Currently, only a value of "default" is
+                supported.
 
                 This corresponds to the ``encryption_config_id`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -1741,5 +1738,7 @@ DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
     gapic_version=package_version.__version__
 )
 
+if hasattr(DEFAULT_CLIENT_INFO, "protobuf_runtime_version"):  # pragma: NO COVER
+    DEFAULT_CLIENT_INFO.protobuf_runtime_version = google.protobuf.__version__
 
 __all__ = ("CmekServiceClient",)

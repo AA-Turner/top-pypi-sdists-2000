@@ -3427,6 +3427,12 @@ class QueuePolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="document")
     def document(self) -> _PolicyDocument_3ac34393:
@@ -4134,6 +4140,12 @@ class Queue(QueueBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.Q
         )
 
         return typing.cast(IQueue, jsii.sinvoke(cls, "fromQueueAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="autoCreatePolicy")

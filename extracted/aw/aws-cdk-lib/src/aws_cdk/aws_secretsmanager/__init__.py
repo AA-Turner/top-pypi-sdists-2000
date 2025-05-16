@@ -3579,6 +3579,12 @@ class ResourcePolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="document")
     def document(self) -> _PolicyDocument_3ac34393:
@@ -3702,6 +3708,12 @@ class RotationSchedule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(
@@ -4273,6 +4285,12 @@ class Secret(
             type_hints = typing.get_type_hints(_typecheckingstub__0b5506b8e74910c6bcedb58ad6aba08df4f75faf9c12c09a961f9d0300901011)
             check_type(argname="argument json_field", value=json_field, expected_type=type_hints["json_field"])
         return typing.cast(_SecretValue_3dd0ddae, jsii.invoke(self, "secretValueFromJson", [json_field]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="arnForPolicies")
@@ -5749,6 +5767,12 @@ class SecretTargetAttachment(
             type_hints = typing.get_type_hints(_typecheckingstub__b8cbc1b2c0b7e4c5034f81f7e19b10a9a5c4f8a1130cae389291c758992793dd)
             check_type(argname="argument json_field", value=json_field, expected_type=type_hints["json_field"])
         return typing.cast(_SecretValue_3dd0ddae, jsii.invoke(self, "secretValueFromJson", [json_field]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="arnForPolicies")

@@ -173,8 +173,8 @@ class MyNestedStack(cfn.NestedStack):
         s3.Bucket(self, "NestedBucket")
 
 class MyParentStack(Stack):
-    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         MyNestedStack(self, "Nested1")
         MyNestedStack(self, "Nested2")
@@ -1499,6 +1499,84 @@ warning by the `id`.
 Annotations.of(self).acknowledge_warning("IAM:Group:MaxPoliciesExceeded", "Account has quota increased to 20")
 ```
 
+## Blueprint Property Injection
+
+The goal of Blueprint Property Injection is to provide builders an automatic way to set default property values.
+
+Construct authors can declare that a Construct can have it properties injected by adding `@propertyInjectable`
+class decorator and specifying `PROPERTY_INJECTION_ID` readonly property.
+All L2 Constructs will support Property Injection so organizations can write injectors to set their Construct Props.
+
+Organizations can set default property values to a Construct by writing Injectors for builders to consume.
+
+Here is a simple example of an Injector for APiKey that sets enabled to false.
+
+```python
+@jsii.implements(IPropertyInjector)
+class ApiKeyPropsInjector:
+
+    def __init__(self):
+        self.construct_unique_id = api.ApiKey.PROPERTY_INJECTION_ID
+
+    def inject(self, original_props, *, scope, id):
+        return api.ApiKeyProps(
+            enabled=False,
+            api_key_name=original_props.api_key_name,
+            customer_id=original_props.customer_id,
+            default_cors_preflight_options=original_props.default_cors_preflight_options,
+            default_integration=original_props.default_integration,
+            default_method_options=original_props.default_method_options,
+            description=original_props.description,
+            generate_distinct_id=original_props.generate_distinct_id,
+            resources=original_props.resources,
+            stages=original_props.stages,
+            value=original_props.value
+        )
+```
+
+Some notes:
+
+* ApiKey must have a `PROPERTY_INJECTION_ID` property, in addition to having `@propertyInjectable` class decorator.
+* We set ApiKeyProps.enabled to false, if it is not provided; otherwise it would use the value that was passed in.
+* It is also possible to force ApiKeyProps.enabled to false, and not provide a way for the builders to overwrite it.
+
+Here is an example of how builders can use the injector the org created.
+
+```python
+stack = Stack(app, "my-stack",
+    property_injectors=[ApiKeyPropsInjector()]
+)
+api.ApiKey(stack, "my-api-key")
+```
+
+This is equivalent to:
+
+```python
+stack = Stack(app, "my-stack")
+api.ApiKey(stack, "my-api-key",
+    enabled=False
+)
+```
+
+Some notes:
+
+* We attach the injectors to Stack in this example, but we can also attach them to App or Stage.
+* All the ApiKey created in the scope of stack will get `enabled: false`.
+* Builders can overwrite the default value with `new ApiKey(stack, 'my-api-key', {enabled: true});`
+
+If you specify two or more injectors for the same Constructs, the last one is in effect.  In the example below, `ApiKeyPropsInjector` will never be applied.
+
+```python
+stack = Stack(app, "my-stack",
+    property_injectors=[
+        ApiKeyPropsInjector(),
+        AnotherApiKeyPropsInjector()
+    ]
+)
+```
+
+For more information, please see the [RFC](https://github.com/aws/aws-cdk-rfcs/blob/main/text/0693-property-injection.md).
+
 <!--END CORE DOCUMENTATION-->
 '''
 from pkgutil import extend_path
@@ -1834,6 +1912,7 @@ class Annotations(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Annotations"):
         "outdir": "outdir",
         "policy_validation_beta1": "policyValidationBeta1",
         "post_cli_context": "postCliContext",
+        "property_injectors": "propertyInjectors",
         "stack_traces": "stackTraces",
         "tree_metadata": "treeMetadata",
     },
@@ -1849,6 +1928,7 @@ class AppProps:
         outdir: typing.Optional[builtins.str] = None,
         policy_validation_beta1: typing.Optional[typing.Sequence["IPolicyValidationPluginBeta1"]] = None,
         post_cli_context: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+        property_injectors: typing.Optional[typing.Sequence["IPropertyInjector"]] = None,
         stack_traces: typing.Optional[builtins.bool] = None,
         tree_metadata: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -1861,6 +1941,7 @@ class AppProps:
         :param outdir: The output directory into which to emit synthesized artifacts. You should never need to set this value. By default, the value you pass to the CLI's ``--output`` flag will be used, and if you change it to a different directory the CLI will fail to pick up the generated Cloud Assembly. This property is intended for internal and testing use. Default: - If this value is *not* set, considers the environment variable ``CDK_OUTDIR``. If ``CDK_OUTDIR`` is not defined, uses a temp directory.
         :param policy_validation_beta1: Validation plugins to run after synthesis. Default: - no validation plugins
         :param post_cli_context: Additional context values for the application. Context provided here has precedence over context set by: - The CLI via --context - The ``context`` key in ``cdk.json`` - The ``AppProps.context`` property This property is recommended over the ``AppProps.context`` property since you can make final decision over which context value to take in your app. Context can be read from any construct using ``node.getContext(key)``. Default: - no additional context
+        :param property_injectors: A list of IPropertyInjector attached to this App. Default: - no PropertyInjectors
         :param stack_traces: Include construct creation stack trace in the ``aws:cdk:trace`` metadata key of all constructs. Default: true stack traces are included unless ``aws:cdk:disable-stack-trace`` is set in the context.
         :param tree_metadata: Include construct tree metadata as part of the Cloud Assembly. Default: true
 
@@ -1888,6 +1969,7 @@ class AppProps:
             check_type(argname="argument outdir", value=outdir, expected_type=type_hints["outdir"])
             check_type(argname="argument policy_validation_beta1", value=policy_validation_beta1, expected_type=type_hints["policy_validation_beta1"])
             check_type(argname="argument post_cli_context", value=post_cli_context, expected_type=type_hints["post_cli_context"])
+            check_type(argname="argument property_injectors", value=property_injectors, expected_type=type_hints["property_injectors"])
             check_type(argname="argument stack_traces", value=stack_traces, expected_type=type_hints["stack_traces"])
             check_type(argname="argument tree_metadata", value=tree_metadata, expected_type=type_hints["tree_metadata"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -1905,6 +1987,8 @@ class AppProps:
             self._values["policy_validation_beta1"] = policy_validation_beta1
         if post_cli_context is not None:
             self._values["post_cli_context"] = post_cli_context
+        if property_injectors is not None:
+            self._values["property_injectors"] = property_injectors
         if stack_traces is not None:
             self._values["stack_traces"] = stack_traces
         if tree_metadata is not None:
@@ -2025,6 +2109,15 @@ class AppProps:
         '''
         result = self._values.get("post_cli_context")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
+
+    @builtins.property
+    def property_injectors(self) -> typing.Optional[typing.List["IPropertyInjector"]]:
+        '''A list of IPropertyInjector attached to this App.
+
+        :default: - no PropertyInjectors
+        '''
+        result = self._values.get("property_injectors")
+        return typing.cast(typing.Optional[typing.List["IPropertyInjector"]], result)
 
     @builtins.property
     def stack_traces(self) -> typing.Optional[builtins.bool]:
@@ -16410,6 +16503,75 @@ class _IPostProcessorProxy:
 typing.cast(typing.Any, IPostProcessor).__jsii_proxy_class__ = lambda : _IPostProcessorProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.IPropertyInjector")
+class IPropertyInjector(typing_extensions.Protocol):
+    '''This interface define an inject function that operates on a Construct's Property.
+
+    The Construct must have a constructUniqueId to uniquely identify itself.
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="constructUniqueId")
+    def construct_unique_id(self) -> builtins.str:
+        '''The unique Id of the Construct class.'''
+        ...
+
+    @jsii.member(jsii_name="inject")
+    def inject(
+        self,
+        original_props: typing.Any,
+        *,
+        id: builtins.str,
+        scope: _constructs_77d1e7e8.Construct,
+    ) -> typing.Any:
+        '''The injector to be applied to the constructor properties of the Construct.
+
+        :param original_props: -
+        :param id: id from the Construct constructor.
+        :param scope: scope from the constructor.
+        '''
+        ...
+
+
+class _IPropertyInjectorProxy:
+    '''This interface define an inject function that operates on a Construct's Property.
+
+    The Construct must have a constructUniqueId to uniquely identify itself.
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.IPropertyInjector"
+
+    @builtins.property
+    @jsii.member(jsii_name="constructUniqueId")
+    def construct_unique_id(self) -> builtins.str:
+        '''The unique Id of the Construct class.'''
+        return typing.cast(builtins.str, jsii.get(self, "constructUniqueId"))
+
+    @jsii.member(jsii_name="inject")
+    def inject(
+        self,
+        original_props: typing.Any,
+        *,
+        id: builtins.str,
+        scope: _constructs_77d1e7e8.Construct,
+    ) -> typing.Any:
+        '''The injector to be applied to the constructor properties of the Construct.
+
+        :param original_props: -
+        :param id: id from the Construct constructor.
+        :param scope: scope from the constructor.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a84c13d89fffb1ee8026280d3071636f041aaa121bab44f9659e3255feca881d)
+            check_type(argname="argument original_props", value=original_props, expected_type=type_hints["original_props"])
+        context = InjectionContext(id=id, scope=scope)
+
+        return typing.cast(typing.Any, jsii.invoke(self, "inject", [original_props, context]))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IPropertyInjector).__jsii_proxy_class__ = lambda : _IPropertyInjectorProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.IResolvable")
 class IResolvable(typing_extensions.Protocol):
     '''Interface for values that can be resolvable later.
@@ -17706,6 +17868,74 @@ class _IgnoreStrategyProxy(IgnoreStrategy):
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, IgnoreStrategy).__jsii_proxy_class__ = lambda : _IgnoreStrategyProxy
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.InjectionContext",
+    jsii_struct_bases=[],
+    name_mapping={"id": "id", "scope": "scope"},
+)
+class InjectionContext:
+    def __init__(
+        self,
+        *,
+        id: builtins.str,
+        scope: _constructs_77d1e7e8.Construct,
+    ) -> None:
+        '''This defines the values needed for Injection.
+
+        :param id: id from the Construct constructor.
+        :param scope: scope from the constructor.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            import aws_cdk as cdk
+            import constructs as constructs
+            
+            # construct: constructs.Construct
+            
+            injection_context = cdk.InjectionContext(
+                id="id",
+                scope=construct
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__474d9096cc3297bd5f64e3e487372aedd71d529e93d80a946aa117f0e0f8bc5b)
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "id": id,
+            "scope": scope,
+        }
+
+    @builtins.property
+    def id(self) -> builtins.str:
+        '''id from the Construct constructor.'''
+        result = self._values.get("id")
+        assert result is not None, "Required property 'id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def scope(self) -> _constructs_77d1e7e8.Construct:
+        '''scope from the  constructor.'''
+        result = self._values.get("scope")
+        assert result is not None, "Required property 'scope' is missing"
+        return typing.cast(_constructs_77d1e7e8.Construct, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "InjectionContext(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
 
 
 @jsii.implements(IResolvable)
@@ -19342,6 +19572,92 @@ class PolicyViolationBeta1:
         return "PolicyViolationBeta1(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+class PropertyInjectors(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.PropertyInjectors",
+):
+    '''This is a collection of ProjectInjectors assigned to this scope.
+
+    It is keyed by constructUniqueId.  There can be only one ProjectInjector for a constructUniqueId.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        import aws_cdk as cdk
+        
+        property_injectors = cdk.PropertyInjectors.of(self)
+    '''
+
+    @jsii.member(jsii_name="hasPropertyInjectors")
+    @builtins.classmethod
+    def has_property_injectors(cls, x: typing.Any) -> builtins.bool:
+        '''Return whether the given object has a PropertyInjectors property.
+
+        We do attribute detection since we can't reliably use 'instanceof'.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4200e15e2cc09377aa6dd49e79c545a26e8c65589955f7210d145afb4881fcc5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "hasPropertyInjectors", [x]))
+
+    @jsii.member(jsii_name="of")
+    @builtins.classmethod
+    def of(cls, scope: _constructs_77d1e7e8.IConstruct) -> "PropertyInjectors":
+        '''Returns the ``PropertyInjectors`` object associated with a construct scope.
+
+        If ``PropertyInjectors`` object doesn't exist on this scope, then it creates one and attaches it to scope.
+
+        :param scope: The scope for which these PropertyInjectors will apply.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d558bd5d62319107ba8d7aec423cb982f18f533d7f90939b4576ae5cabe237e6)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+        return typing.cast("PropertyInjectors", jsii.sinvoke(cls, "of", [scope]))
+
+    @jsii.member(jsii_name="add")
+    def add(self, *props_injectors: IPropertyInjector) -> None:
+        '''Add a list of  IPropertyInjectors to this collection of PropertyInjectors.
+
+        :param props_injectors: - a list of IPropertyInjector.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b15ed456b528cac4ffc455783d09279b63e060419397678acf12dc8a07323ae9)
+            check_type(argname="argument props_injectors", value=props_injectors, expected_type=typing.Tuple[type_hints["props_injectors"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(None, jsii.invoke(self, "add", [*props_injectors]))
+
+    @jsii.member(jsii_name="for")
+    def for_(self, unique_id: builtins.str) -> typing.Optional[IPropertyInjector]:
+        '''Get the PropertyInjector that is registered to the Construct's uniqueId.
+
+        :param unique_id: - the construct uniqueId.
+
+        :return: - the IPropertyInjector for that construct uniqueId
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ba79b618f23d72687ff58834f8d791bcc5f41fb49c8301987bb45eee4378958b)
+            check_type(argname="argument unique_id", value=unique_id, expected_type=type_hints["unique_id"])
+        return typing.cast(typing.Optional[IPropertyInjector], jsii.invoke(self, "for", [unique_id]))
+
+    @jsii.member(jsii_name="supportedClasses")
+    def supported_classes(self) -> typing.List[builtins.str]:
+        '''This returns a list of the Constructs that are supporting by this PropertyInjectors.
+
+        :return: a list of string showing the supported Constructs.
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.invoke(self, "supportedClasses", []))
+
+    @builtins.property
+    @jsii.member(jsii_name="scope")
+    def scope(self) -> _constructs_77d1e7e8.IConstruct:
+        '''The scope attached to Injectors.'''
+        return typing.cast(_constructs_77d1e7e8.IConstruct, jsii.get(self, "scope"))
 
 
 class Reference(
@@ -21410,6 +21726,7 @@ class Stack(
         env: typing.Optional[typing.Union[Environment, typing.Dict[builtins.str, typing.Any]]] = None,
         notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         permissions_boundary: typing.Optional[PermissionsBoundary] = None,
+        property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
         stack_name: typing.Optional[builtins.str] = None,
         suppress_template_indentation: typing.Optional[builtins.bool] = None,
         synthesizer: typing.Optional[IStackSynthesizer] = None,
@@ -21426,6 +21743,7 @@ class Stack(
         :param env: The AWS environment (account/region) where this stack will be deployed. Set the ``region``/``account`` fields of ``env`` to either a concrete value to select the indicated environment (recommended for production stacks), or to the values of environment variables ``CDK_DEFAULT_REGION``/``CDK_DEFAULT_ACCOUNT`` to let the target environment depend on the AWS credentials/configuration that the CDK CLI is executed under (recommended for development stacks). If the ``Stack`` is instantiated inside a ``Stage``, any undefined ``region``/``account`` fields from ``env`` will default to the same field on the encompassing ``Stage``, if configured there. If either ``region`` or ``account`` are not set nor inherited from ``Stage``, the Stack will be considered "*environment-agnostic*"". Environment-agnostic stacks can be deployed to any environment but may not be able to take advantage of all features of the CDK. For example, they will not be able to use environmental context lookups such as ``ec2.Vpc.fromLookup`` and will not automatically translate Service Principals to the right format based on the environment's AWS partition, and other such enhancements. Default: - The environment of the containing ``Stage`` if available, otherwise create the stack will be environment-agnostic.
         :param notification_arns: SNS Topic ARNs that will receive stack events. Default: - no notfication arns.
         :param permissions_boundary: Options for applying a permissions boundary to all IAM Roles and Users created within this Stage. Default: - no permissions boundary is applied
+        :param property_injectors: A list of IPropertyInjector attached to this Stack. Default: - no PropertyInjectors
         :param stack_name: Name to deploy the stack with. Default: - Derived from construct path.
         :param suppress_template_indentation: Enable this flag to suppress indentation in generated CloudFormation templates. If not specified, the value of the ``@aws-cdk/core:suppressTemplateIndentation`` context key will be used. If that is not specified, then the default value ``false`` will be used. Default: - the value of ``@aws-cdk/core:suppressTemplateIndentation``, or ``false`` if that is not set.
         :param synthesizer: Synthesis method to use while deploying this stack. The Stack Synthesizer controls aspects of synthesis and deployment, like how assets are referenced and what IAM roles to use. For more information, see the README of the main CDK package. If not specified, the ``defaultStackSynthesizer`` from ``App`` will be used. If that is not specified, ``DefaultStackSynthesizer`` is used if ``@aws-cdk/core:newStyleStackSynthesis`` is set to ``true`` or the CDK major version is v2. In CDK v1 ``LegacyStackSynthesizer`` is the default if no other synthesizer is specified. Default: - The synthesizer specified on ``App``, or ``DefaultStackSynthesizer`` otherwise.
@@ -21443,6 +21761,7 @@ class Stack(
             env=env,
             notification_arns=notification_arns,
             permissions_boundary=permissions_boundary,
+            property_injectors=property_injectors,
             stack_name=stack_name,
             suppress_template_indentation=suppress_template_indentation,
             synthesizer=synthesizer,
@@ -22103,6 +22422,7 @@ class Stack(
         "env": "env",
         "notification_arns": "notificationArns",
         "permissions_boundary": "permissionsBoundary",
+        "property_injectors": "propertyInjectors",
         "stack_name": "stackName",
         "suppress_template_indentation": "suppressTemplateIndentation",
         "synthesizer": "synthesizer",
@@ -22120,6 +22440,7 @@ class StackProps:
         env: typing.Optional[typing.Union[Environment, typing.Dict[builtins.str, typing.Any]]] = None,
         notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         permissions_boundary: typing.Optional[PermissionsBoundary] = None,
+        property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
         stack_name: typing.Optional[builtins.str] = None,
         suppress_template_indentation: typing.Optional[builtins.bool] = None,
         synthesizer: typing.Optional[IStackSynthesizer] = None,
@@ -22133,6 +22454,7 @@ class StackProps:
         :param env: The AWS environment (account/region) where this stack will be deployed. Set the ``region``/``account`` fields of ``env`` to either a concrete value to select the indicated environment (recommended for production stacks), or to the values of environment variables ``CDK_DEFAULT_REGION``/``CDK_DEFAULT_ACCOUNT`` to let the target environment depend on the AWS credentials/configuration that the CDK CLI is executed under (recommended for development stacks). If the ``Stack`` is instantiated inside a ``Stage``, any undefined ``region``/``account`` fields from ``env`` will default to the same field on the encompassing ``Stage``, if configured there. If either ``region`` or ``account`` are not set nor inherited from ``Stage``, the Stack will be considered "*environment-agnostic*"". Environment-agnostic stacks can be deployed to any environment but may not be able to take advantage of all features of the CDK. For example, they will not be able to use environmental context lookups such as ``ec2.Vpc.fromLookup`` and will not automatically translate Service Principals to the right format based on the environment's AWS partition, and other such enhancements. Default: - The environment of the containing ``Stage`` if available, otherwise create the stack will be environment-agnostic.
         :param notification_arns: SNS Topic ARNs that will receive stack events. Default: - no notfication arns.
         :param permissions_boundary: Options for applying a permissions boundary to all IAM Roles and Users created within this Stage. Default: - no permissions boundary is applied
+        :param property_injectors: A list of IPropertyInjector attached to this Stack. Default: - no PropertyInjectors
         :param stack_name: Name to deploy the stack with. Default: - Derived from construct path.
         :param suppress_template_indentation: Enable this flag to suppress indentation in generated CloudFormation templates. If not specified, the value of the ``@aws-cdk/core:suppressTemplateIndentation`` context key will be used. If that is not specified, then the default value ``false`` will be used. Default: - the value of ``@aws-cdk/core:suppressTemplateIndentation``, or ``false`` if that is not set.
         :param synthesizer: Synthesis method to use while deploying this stack. The Stack Synthesizer controls aspects of synthesis and deployment, like how assets are referenced and what IAM roles to use. For more information, see the README of the main CDK package. If not specified, the ``defaultStackSynthesizer`` from ``App`` will be used. If that is not specified, ``DefaultStackSynthesizer`` is used if ``@aws-cdk/core:newStyleStackSynthesis`` is set to ``true`` or the CDK major version is v2. In CDK v1 ``LegacyStackSynthesizer`` is the default if no other synthesizer is specified. Default: - The synthesizer specified on ``App``, or ``DefaultStackSynthesizer`` otherwise.
@@ -22143,26 +22465,29 @@ class StackProps:
 
         Example::
 
-            import aws_cdk as cdk
-            import aws_cdk.aws_cloudwatch as cloudwatch
-            
-            
-            app = cdk.App()
-            stack = cdk.Stack(app, "Stack", env=cdk.Environment(region="us-west-2"))
-            
-            global_table = dynamodb.TableV2(stack, "GlobalTable",
-                partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING),
-                replicas=[dynamodb.ReplicaTableProps(region="us-east-1"), dynamodb.ReplicaTableProps(region="us-east-2")
-                ]
+            stack1 = Stack(app, "Stack1",
+                env=Environment(
+                    region="us-east-1"
+                ),
+                cross_region_references=True
+            )
+            cert = acm.Certificate(stack1, "Cert",
+                domain_name="*.example.com",
+                validation=acm.CertificateValidation.from_dns(route53.PublicHostedZone.from_hosted_zone_id(stack1, "Zone", "Z0329774B51CGXTDQV3X"))
             )
             
-            # metric is only for the table in us-west-2
-            metric = global_table.metric_consumed_read_capacity_units()
-            
-            cloudwatch.Alarm(self, "Alarm",
-                metric=metric,
-                evaluation_periods=1,
-                threshold=1
+            stack2 = Stack(app, "Stack2",
+                env=Environment(
+                    region="us-east-2"
+                ),
+                cross_region_references=True
+            )
+            cloudfront.Distribution(stack2, "Distribution",
+                default_behavior=cloudfront.BehaviorOptions(
+                    origin=origins.HttpOrigin("example.com")
+                ),
+                domain_names=["dev.example.com"],
+                certificate=cert
             )
         '''
         if isinstance(env, dict):
@@ -22175,6 +22500,7 @@ class StackProps:
             check_type(argname="argument env", value=env, expected_type=type_hints["env"])
             check_type(argname="argument notification_arns", value=notification_arns, expected_type=type_hints["notification_arns"])
             check_type(argname="argument permissions_boundary", value=permissions_boundary, expected_type=type_hints["permissions_boundary"])
+            check_type(argname="argument property_injectors", value=property_injectors, expected_type=type_hints["property_injectors"])
             check_type(argname="argument stack_name", value=stack_name, expected_type=type_hints["stack_name"])
             check_type(argname="argument suppress_template_indentation", value=suppress_template_indentation, expected_type=type_hints["suppress_template_indentation"])
             check_type(argname="argument synthesizer", value=synthesizer, expected_type=type_hints["synthesizer"])
@@ -22193,6 +22519,8 @@ class StackProps:
             self._values["notification_arns"] = notification_arns
         if permissions_boundary is not None:
             self._values["permissions_boundary"] = permissions_boundary
+        if property_injectors is not None:
+            self._values["property_injectors"] = property_injectors
         if stack_name is not None:
             self._values["stack_name"] = stack_name
         if suppress_template_indentation is not None:
@@ -22326,6 +22654,15 @@ class StackProps:
         '''
         result = self._values.get("permissions_boundary")
         return typing.cast(typing.Optional[PermissionsBoundary], result)
+
+    @builtins.property
+    def property_injectors(self) -> typing.Optional[typing.List[IPropertyInjector]]:
+        '''A list of IPropertyInjector attached to this Stack.
+
+        :default: - no PropertyInjectors
+        '''
+        result = self._values.get("property_injectors")
+        return typing.cast(typing.Optional[typing.List[IPropertyInjector]], result)
 
     @builtins.property
     def stack_name(self) -> typing.Optional[builtins.str]:
@@ -22965,6 +23302,7 @@ class Stage(
         outdir: typing.Optional[builtins.str] = None,
         permissions_boundary: typing.Optional[PermissionsBoundary] = None,
         policy_validation_beta1: typing.Optional[typing.Sequence[IPolicyValidationPluginBeta1]] = None,
+        property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
         stage_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -22974,6 +23312,7 @@ class Stage(
         :param outdir: The output directory into which to emit synthesized artifacts. Can only be specified if this stage is the root stage (the app). If this is specified and this stage is nested within another stage, an error will be thrown. Default: - for nested stages, outdir will be determined as a relative directory to the outdir of the app. For apps, if outdir is not specified, a temporary directory will be created.
         :param permissions_boundary: Options for applying a permissions boundary to all IAM Roles and Users created within this Stage. Be aware that this feature uses Aspects, and the Aspects are applied at the Stack level with a priority of ``MUTATING`` (if the feature flag ``@aws-cdk/core:aspectPrioritiesMutating`` is set) or ``DEFAULT`` (if the flag is not set). This is relevant if you are both using your own Aspects to assign Permissions Boundaries, as well as specifying this property. The Aspect added by this property will overwrite the Permissions Boundary assigned by your own Aspect if both: (a) your Aspect has a lower or equal priority to the automatic Aspect, and (b) your Aspect is applied *above* the Stack level. If either of those conditions are not true, your own Aspect will win. We recommend assigning Permissions Boundaries only using the provided APIs, and not using custom Aspects. Default: - no permissions boundary is applied
         :param policy_validation_beta1: Validation plugins to run during synthesis. If any plugin reports any violation, synthesis will be interrupted and the report displayed to the user. Default: - no validation plugins are used
+        :param property_injectors: A list of IPropertyInjector attached to this Stage. Default: - no PropertyInjectors
         :param stage_name: Name of this stage. Default: - Derived from the id.
         '''
         if __debug__:
@@ -22985,6 +23324,7 @@ class Stage(
             outdir=outdir,
             permissions_boundary=permissions_boundary,
             policy_validation_beta1=policy_validation_beta1,
+            property_injectors=property_injectors,
             stage_name=stage_name,
         )
 
@@ -23121,6 +23461,7 @@ class Stage(
         "outdir": "outdir",
         "permissions_boundary": "permissionsBoundary",
         "policy_validation_beta1": "policyValidationBeta1",
+        "property_injectors": "propertyInjectors",
         "stage_name": "stageName",
     },
 )
@@ -23132,6 +23473,7 @@ class StageProps:
         outdir: typing.Optional[builtins.str] = None,
         permissions_boundary: typing.Optional[PermissionsBoundary] = None,
         policy_validation_beta1: typing.Optional[typing.Sequence[IPolicyValidationPluginBeta1]] = None,
+        property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
         stage_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Initialization props for a stage.
@@ -23140,6 +23482,7 @@ class StageProps:
         :param outdir: The output directory into which to emit synthesized artifacts. Can only be specified if this stage is the root stage (the app). If this is specified and this stage is nested within another stage, an error will be thrown. Default: - for nested stages, outdir will be determined as a relative directory to the outdir of the app. For apps, if outdir is not specified, a temporary directory will be created.
         :param permissions_boundary: Options for applying a permissions boundary to all IAM Roles and Users created within this Stage. Be aware that this feature uses Aspects, and the Aspects are applied at the Stack level with a priority of ``MUTATING`` (if the feature flag ``@aws-cdk/core:aspectPrioritiesMutating`` is set) or ``DEFAULT`` (if the flag is not set). This is relevant if you are both using your own Aspects to assign Permissions Boundaries, as well as specifying this property. The Aspect added by this property will overwrite the Permissions Boundary assigned by your own Aspect if both: (a) your Aspect has a lower or equal priority to the automatic Aspect, and (b) your Aspect is applied *above* the Stack level. If either of those conditions are not true, your own Aspect will win. We recommend assigning Permissions Boundaries only using the provided APIs, and not using custom Aspects. Default: - no permissions boundary is applied
         :param policy_validation_beta1: Validation plugins to run during synthesis. If any plugin reports any violation, synthesis will be interrupted and the report displayed to the user. Default: - no validation plugins are used
+        :param property_injectors: A list of IPropertyInjector attached to this Stage. Default: - no PropertyInjectors
         :param stage_name: Name of this stage. Default: - Derived from the id.
 
         :exampleMetadata: infused
@@ -23171,6 +23514,7 @@ class StageProps:
             check_type(argname="argument outdir", value=outdir, expected_type=type_hints["outdir"])
             check_type(argname="argument permissions_boundary", value=permissions_boundary, expected_type=type_hints["permissions_boundary"])
             check_type(argname="argument policy_validation_beta1", value=policy_validation_beta1, expected_type=type_hints["policy_validation_beta1"])
+            check_type(argname="argument property_injectors", value=property_injectors, expected_type=type_hints["property_injectors"])
             check_type(argname="argument stage_name", value=stage_name, expected_type=type_hints["stage_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if env is not None:
@@ -23181,6 +23525,8 @@ class StageProps:
             self._values["permissions_boundary"] = permissions_boundary
         if policy_validation_beta1 is not None:
             self._values["policy_validation_beta1"] = policy_validation_beta1
+        if property_injectors is not None:
+            self._values["property_injectors"] = property_injectors
         if stage_name is not None:
             self._values["stage_name"] = stage_name
 
@@ -23271,6 +23617,15 @@ class StageProps:
         '''
         result = self._values.get("policy_validation_beta1")
         return typing.cast(typing.Optional[typing.List[IPolicyValidationPluginBeta1]], result)
+
+    @builtins.property
+    def property_injectors(self) -> typing.Optional[typing.List[IPropertyInjector]]:
+        '''A list of IPropertyInjector attached to this Stage.
+
+        :default: - no PropertyInjectors
+        '''
+        result = self._values.get("property_injectors")
+        return typing.cast(typing.Optional[typing.List[IPropertyInjector]], result)
 
     @builtins.property
     def stage_name(self) -> typing.Optional[builtins.str]:
@@ -28334,6 +28689,7 @@ class App(Stage, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.App"):
         outdir: typing.Optional[builtins.str] = None,
         policy_validation_beta1: typing.Optional[typing.Sequence[IPolicyValidationPluginBeta1]] = None,
         post_cli_context: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+        property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
         stack_traces: typing.Optional[builtins.bool] = None,
         tree_metadata: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -28346,6 +28702,7 @@ class App(Stage, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.App"):
         :param outdir: The output directory into which to emit synthesized artifacts. You should never need to set this value. By default, the value you pass to the CLI's ``--output`` flag will be used, and if you change it to a different directory the CLI will fail to pick up the generated Cloud Assembly. This property is intended for internal and testing use. Default: - If this value is *not* set, considers the environment variable ``CDK_OUTDIR``. If ``CDK_OUTDIR`` is not defined, uses a temp directory.
         :param policy_validation_beta1: Validation plugins to run after synthesis. Default: - no validation plugins
         :param post_cli_context: Additional context values for the application. Context provided here has precedence over context set by: - The CLI via --context - The ``context`` key in ``cdk.json`` - The ``AppProps.context`` property This property is recommended over the ``AppProps.context`` property since you can make final decision over which context value to take in your app. Context can be read from any construct using ``node.getContext(key)``. Default: - no additional context
+        :param property_injectors: A list of IPropertyInjector attached to this App. Default: - no PropertyInjectors
         :param stack_traces: Include construct creation stack trace in the ``aws:cdk:trace`` metadata key of all constructs. Default: true stack traces are included unless ``aws:cdk:disable-stack-trace`` is set in the context.
         :param tree_metadata: Include construct tree metadata as part of the Cloud Assembly. Default: true
         '''
@@ -28357,6 +28714,7 @@ class App(Stage, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.App"):
             outdir=outdir,
             policy_validation_beta1=policy_validation_beta1,
             post_cli_context=post_cli_context,
+            property_injectors=property_injectors,
             stack_traces=stack_traces,
             tree_metadata=tree_metadata,
         )
@@ -34792,6 +35150,12 @@ class CustomResource(
             check_type(argname="argument attribute_name", value=attribute_name, expected_type=type_hints["attribute_name"])
         return typing.cast(builtins.str, jsii.invoke(self, "getAttString", [attribute_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="ref")
     def ref(self) -> builtins.str:
@@ -37159,6 +37523,7 @@ __all__ = [
     "IPolicyValidationContextBeta1",
     "IPolicyValidationPluginBeta1",
     "IPostProcessor",
+    "IPropertyInjector",
     "IResolvable",
     "IResolveContext",
     "IResource",
@@ -37177,6 +37542,7 @@ __all__ = [
     "ITokenResolver",
     "IgnoreMode",
     "IgnoreStrategy",
+    "InjectionContext",
     "Intrinsic",
     "IntrinsicProps",
     "JsonNull",
@@ -37197,6 +37563,7 @@ __all__ = [
     "PolicyValidationReportStatusBeta1",
     "PolicyViolatingResourceBeta1",
     "PolicyViolationBeta1",
+    "PropertyInjectors",
     "Reference",
     "RemovalPolicies",
     "RemovalPolicy",
@@ -37902,6 +38269,7 @@ def _typecheckingstub__ef2fee5e91b22ed9e2b91aa309be73835ddfb834f19eb3d41540c7e38
     outdir: typing.Optional[builtins.str] = None,
     policy_validation_beta1: typing.Optional[typing.Sequence[IPolicyValidationPluginBeta1]] = None,
     post_cli_context: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+    property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
     stack_traces: typing.Optional[builtins.bool] = None,
     tree_metadata: typing.Optional[builtins.bool] = None,
 ) -> None:
@@ -39671,6 +40039,15 @@ def _typecheckingstub__421f2755d7e81609d225eb32560b6f8749147026d0e9c4a8130c5421a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a84c13d89fffb1ee8026280d3071636f041aaa121bab44f9659e3255feca881d(
+    original_props: typing.Any,
+    *,
+    id: builtins.str,
+    scope: _constructs_77d1e7e8.Construct,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__09341b9d2d6a06b3937530fa96a1bcb7562ccdf5246e5563a8a552ec1f8c0fa5(
     context: IResolveContext,
 ) -> None:
@@ -39822,6 +40199,14 @@ def _typecheckingstub__30e8e458c385d1db329cfc0c45f966d2d15c1b0166b3e7cfe8a57c780
 
 def _typecheckingstub__639820bc3ab9fb78a31dec5d3d916a2befafc70af8c041b6e444ac075904e2f5(
     absolute_file_path: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__474d9096cc3297bd5f64e3e487372aedd71d529e93d80a946aa117f0e0f8bc5b(
+    *,
+    id: builtins.str,
+    scope: _constructs_77d1e7e8.Construct,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -40042,6 +40427,30 @@ def _typecheckingstub__2f965066f077908d4839609b519c39167a0b14e83374fbf4bb1601ab5
     fix: typing.Optional[builtins.str] = None,
     rule_metadata: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     severity: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4200e15e2cc09377aa6dd49e79c545a26e8c65589955f7210d145afb4881fcc5(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d558bd5d62319107ba8d7aec423cb982f18f533d7f90939b4576ae5cabe237e6(
+    scope: _constructs_77d1e7e8.IConstruct,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b15ed456b528cac4ffc455783d09279b63e060419397678acf12dc8a07323ae9(
+    *props_injectors: IPropertyInjector,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ba79b618f23d72687ff58834f8d791bcc5f41fb49c8301987bb45eee4378958b(
+    unique_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -40361,6 +40770,7 @@ def _typecheckingstub__835828a2dac25cb8eb22f32985554296e8bd61463c8cc32bb2df4c1f4
     env: typing.Optional[typing.Union[Environment, typing.Dict[builtins.str, typing.Any]]] = None,
     notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     permissions_boundary: typing.Optional[PermissionsBoundary] = None,
+    property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
     stack_name: typing.Optional[builtins.str] = None,
     suppress_template_indentation: typing.Optional[builtins.bool] = None,
     synthesizer: typing.Optional[IStackSynthesizer] = None,
@@ -40486,6 +40896,7 @@ def _typecheckingstub__a36aaf4edf2967c8ed36d2cad24d023f14778db721379dffbd74eb6dd
     env: typing.Optional[typing.Union[Environment, typing.Dict[builtins.str, typing.Any]]] = None,
     notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     permissions_boundary: typing.Optional[PermissionsBoundary] = None,
+    property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
     stack_name: typing.Optional[builtins.str] = None,
     suppress_template_indentation: typing.Optional[builtins.bool] = None,
     synthesizer: typing.Optional[IStackSynthesizer] = None,
@@ -40573,6 +40984,7 @@ def _typecheckingstub__c0677d374e192ff51310cb5059d45186fd8a854f0c4f6485ff9ec9692
     outdir: typing.Optional[builtins.str] = None,
     permissions_boundary: typing.Optional[PermissionsBoundary] = None,
     policy_validation_beta1: typing.Optional[typing.Sequence[IPolicyValidationPluginBeta1]] = None,
+    property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
     stage_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -40596,6 +41008,7 @@ def _typecheckingstub__c519a1aa0534921a8dfdfa69ddc24b52c09a7eb52fc889f7fb96b737e
     outdir: typing.Optional[builtins.str] = None,
     permissions_boundary: typing.Optional[PermissionsBoundary] = None,
     policy_validation_beta1: typing.Optional[typing.Sequence[IPolicyValidationPluginBeta1]] = None,
+    property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
     stage_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""

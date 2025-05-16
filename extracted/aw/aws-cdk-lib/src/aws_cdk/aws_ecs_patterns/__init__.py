@@ -1143,6 +1143,20 @@ network_load_balanced_fargate_service = ecs_patterns.NetworkLoadBalancedFargateS
 )
 ```
 
+### Set healthCheckGracePeriod for QueueProcessingFargateService
+
+```python
+# vpc: ec2.Vpc
+
+queue_processing_fargate_service = ecs_patterns.QueueProcessingFargateService(self, "Service",
+    vpc=vpc,
+    memory_limit_mi_b=512,
+    image=ecs.ContainerImage.from_registry("test"),
+    min_healthy_percent=100,
+    health_check_grace_period=Duration.seconds(120)
+)
+```
+
 ### Set securityGroups for NetworkLoadBalancedFargateService
 
 ```python
@@ -8560,6 +8574,12 @@ class ApplicationLoadBalancedFargateService(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="assignPublicIp")
     def assign_public_ip(self) -> builtins.bool:
@@ -10064,6 +10084,12 @@ class ApplicationMultipleTargetGroupsFargateService(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="assignPublicIp")
     def assign_public_ip(self) -> builtins.bool:
@@ -11428,6 +11454,12 @@ class NetworkLoadBalancedFargateService(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="assignPublicIp")
     def assign_public_ip(self) -> builtins.bool:
@@ -12730,6 +12762,12 @@ class NetworkMultipleTargetGroupsFargateService(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="assignPublicIp")
@@ -14068,6 +14106,7 @@ class QueueProcessingFargateService(
         assign_public_ip: typing.Optional[builtins.bool] = None,
         container_name: typing.Optional[builtins.str] = None,
         health_check: typing.Optional[typing.Union[_HealthCheck_6459d04f, typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
         security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
         task_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
         capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union[_CapacityProviderStrategy_8d7b6657, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -14112,6 +14151,7 @@ class QueueProcessingFargateService(
         :param assign_public_ip: Specifies whether the task's elastic network interface receives a public IP address. If true, each task will receive a public IP address. Default: false
         :param container_name: Optional name for the container added. This name is not used when ``taskDefinition`` is provided. Default: - QueueProcessingContainer
         :param health_check: The health check command and associated configuration parameters for the container. Default: - Health check configuration from container.
+        :param health_check_grace_period: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started. Default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
         :param security_groups: The security groups to associate with the service. If you do not specify a security group, a new security group is created. Default: - A new security group is created.
         :param task_subnets: The subnets to associate with the service. Default: - Public subnets if ``assignPublicIp`` is set, otherwise the first available one of Private, Isolated, Public, in that order.
         :param capacity_provider_strategies: A list of Capacity Provider strategies used to place a service. Default: - undefined
@@ -14157,6 +14197,7 @@ class QueueProcessingFargateService(
             assign_public_ip=assign_public_ip,
             container_name=container_name,
             health_check=health_check,
+            health_check_grace_period=health_check_grace_period,
             security_groups=security_groups,
             task_subnets=task_subnets,
             capacity_provider_strategies=capacity_provider_strategies,
@@ -14251,6 +14292,7 @@ class QueueProcessingFargateService(
         "assign_public_ip": "assignPublicIp",
         "container_name": "containerName",
         "health_check": "healthCheck",
+        "health_check_grace_period": "healthCheckGracePeriod",
         "security_groups": "securityGroups",
         "task_subnets": "taskSubnets",
     },
@@ -14299,6 +14341,7 @@ class QueueProcessingFargateServiceProps(
         assign_public_ip: typing.Optional[builtins.bool] = None,
         container_name: typing.Optional[builtins.str] = None,
         health_check: typing.Optional[typing.Union[_HealthCheck_6459d04f, typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
         security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
         task_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
@@ -14341,6 +14384,7 @@ class QueueProcessingFargateServiceProps(
         :param assign_public_ip: Specifies whether the task's elastic network interface receives a public IP address. If true, each task will receive a public IP address. Default: false
         :param container_name: Optional name for the container added. This name is not used when ``taskDefinition`` is provided. Default: - QueueProcessingContainer
         :param health_check: The health check command and associated configuration parameters for the container. Default: - Health check configuration from container.
+        :param health_check_grace_period: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started. Default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
         :param security_groups: The security groups to associate with the service. If you do not specify a security group, a new security group is created. Default: - A new security group is created.
         :param task_subnets: The subnets to associate with the service. Default: - Public subnets if ``assignPublicIp`` is set, otherwise the first available one of Private, Isolated, Public, in that order.
 
@@ -14416,6 +14460,7 @@ class QueueProcessingFargateServiceProps(
             check_type(argname="argument assign_public_ip", value=assign_public_ip, expected_type=type_hints["assign_public_ip"])
             check_type(argname="argument container_name", value=container_name, expected_type=type_hints["container_name"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
+            check_type(argname="argument health_check_grace_period", value=health_check_grace_period, expected_type=type_hints["health_check_grace_period"])
             check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
             check_type(argname="argument task_subnets", value=task_subnets, expected_type=type_hints["task_subnets"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -14493,6 +14538,8 @@ class QueueProcessingFargateServiceProps(
             self._values["container_name"] = container_name
         if health_check is not None:
             self._values["health_check"] = health_check
+        if health_check_grace_period is not None:
+            self._values["health_check_grace_period"] = health_check_grace_period
         if security_groups is not None:
             self._values["security_groups"] = security_groups
         if task_subnets is not None:
@@ -14936,6 +14983,15 @@ class QueueProcessingFargateServiceProps(
         '''
         result = self._values.get("health_check")
         return typing.cast(typing.Optional[_HealthCheck_6459d04f], result)
+
+    @builtins.property
+    def health_check_grace_period(self) -> typing.Optional[_Duration_4839e8c3]:
+        '''The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started.
+
+        :default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
+        '''
+        result = self._values.get("health_check_grace_period")
+        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
 
     @builtins.property
     def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
@@ -17671,6 +17727,7 @@ def _typecheckingstub__f7f1cc7ffec4414918cb71e7371c364ad046987205ab7eb0cbe7ad6fc
     assign_public_ip: typing.Optional[builtins.bool] = None,
     container_name: typing.Optional[builtins.str] = None,
     health_check: typing.Optional[typing.Union[_HealthCheck_6459d04f, typing.Dict[builtins.str, typing.Any]]] = None,
+    health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     task_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union[_CapacityProviderStrategy_8d7b6657, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -17750,6 +17807,7 @@ def _typecheckingstub__9959b47db027250927e99f3cbc475109465e4e426a52383adb8d29f22
     assign_public_ip: typing.Optional[builtins.bool] = None,
     container_name: typing.Optional[builtins.str] = None,
     health_check: typing.Optional[typing.Union[_HealthCheck_6459d04f, typing.Dict[builtins.str, typing.Any]]] = None,
+    health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     task_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:

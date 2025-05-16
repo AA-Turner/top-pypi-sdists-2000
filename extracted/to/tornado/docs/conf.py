@@ -21,7 +21,6 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
-    "sphinxcontrib.asyncio",
 ]
 
 primary_domain = "py"
@@ -37,7 +36,9 @@ autodoc_inherit_docstrings = False
 autodoc_docstring_signature = False
 
 coverage_skip_undoc_in_source = True
+coverage_show_missing_items = True
 coverage_ignore_modules = [
+    "tornado.curl_httpclient",
     "tornado.platform.asyncio",
     "tornado.platform.caresresolver",
     "tornado.platform.twisted",
@@ -107,6 +108,7 @@ missing_references = {
     "concurrent.futures._base.Future",
     "futures.Future",
     "socket.socket",
+    "unittest.case.TestCase",
     "TextIO",
     # Other stuff. I'm not sure why some of these are showing up, but
     # I'm just listing everything here to avoid blocking the upgrade of sphinx.
@@ -144,3 +146,16 @@ def missing_reference_handler(app, env, node, contnode):
 
 def setup(app):
     app.connect("missing-reference", missing_reference_handler)
+
+
+# Read the Docs configuration updates from
+# https://about.readthedocs.com/blog/2024/07/addons-by-default/
+
+# Define the canonical URL if you are using a custom domain on Read the Docs
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
+
+# Tell Jinja2 templates the build is running on Read the Docs
+if os.environ.get("READTHEDOCS", "") == "True":
+    if "html_context" not in globals():
+        html_context = {}
+    html_context["READTHEDOCS"] = True

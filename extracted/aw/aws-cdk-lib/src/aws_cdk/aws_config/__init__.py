@@ -7286,6 +7286,12 @@ class ManagedRule(
 
         return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReEvaluationStatus", [id, options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="configRuleArn")
     def config_rule_arn(self) -> builtins.str:
@@ -12779,6 +12785,12 @@ class AccessKeysRotated(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_config.AccessKeysRotatedProps",
@@ -13008,6 +13020,12 @@ class CloudFormationStackDriftDetectionCheck(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(
@@ -13243,6 +13261,12 @@ class CloudFormationStackNotificationCheck(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(
@@ -13602,6 +13626,12 @@ class CustomPolicy(
         )
 
         return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReEvaluationStatus", [id, options]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="configRuleArn")
@@ -14057,6 +14087,12 @@ class CustomRule(
         )
 
         return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReEvaluationStatus", [id, options]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="configRuleArn")

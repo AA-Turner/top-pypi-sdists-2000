@@ -798,6 +798,30 @@ listener.add_targets("Targets",
 
 Only a single Lambda function can be added to a single listener rule.
 
+### Multi-Value Headers with Lambda Targets
+
+When using a Lambda function as a target, you can enable [multi-value headers](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/lambda-functions.html#multi-value-headers) to allow the load balancer to send headers with multiple values:
+
+```python
+import aws_cdk.aws_lambda as lambda_
+import aws_cdk.aws_elasticloadbalancingv2_targets as targets
+
+# vpc: ec2.Vpc
+# lambda_function: lambda.Function
+
+
+# Create a target group with multi-value headers enabled
+target_group = elbv2.ApplicationTargetGroup(self, "LambdaTargetGroup",
+    vpc=vpc,
+    targets=[targets.LambdaTarget(lambda_function)],
+
+    # Enable multi-value headers
+    multi_value_headers_enabled=True
+)
+```
+
+When multi-value headers are enabled, the request and response headers exchanged between the load balancer and the Lambda function include headers with multiple values. If this option is disabled (the default) and the request contains a duplicate header field name, the load balancer uses the last value sent by the client.
+
 ## Using Application Load Balancer Targets
 
 To use a single application load balancer as a target for the network load balancer, use the integration class in the
@@ -3839,7 +3863,7 @@ class CfnListener(
         :param mutual_authentication: The mutual authentication configuration information.
         :param port: The port on which the load balancer is listening. You can't specify a port for a Gateway Load Balancer.
         :param protocol: The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP. You can’t specify the UDP or TCP_UDP protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
-        :param ssl_policy: [HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies>`_ in the *Network Load Balancers Guide* .
+        :param ssl_policy: [HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/describe-ssl-policies.html>`_ in the *Network Load Balancers Guide* . Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__da6c6bab97eae93f0a1595d72a25ac890e7034cc701e7cf76b58f5c6a2170048)
@@ -5788,7 +5812,7 @@ class CfnListenerProps:
         :param mutual_authentication: The mutual authentication configuration information.
         :param port: The port on which the load balancer is listening. You can't specify a port for a Gateway Load Balancer.
         :param protocol: The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP. You can’t specify the UDP or TCP_UDP protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
-        :param ssl_policy: [HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies>`_ in the *Network Load Balancers Guide* .
+        :param ssl_policy: [HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/describe-ssl-policies.html>`_ in the *Network Load Balancers Guide* . Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html
         :exampleMetadata: fixture=_generated
@@ -6014,9 +6038,9 @@ class CfnListenerProps:
     def ssl_policy(self) -> typing.Optional[builtins.str]:
         '''[HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported.
 
-        Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic.
+        For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/describe-ssl-policies.html>`_ in the *Network Load Balancers Guide* .
 
-        For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies>`_ in the *Network Load Balancers Guide* .
+        Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-sslpolicy
         '''
@@ -8472,9 +8496,9 @@ class CfnLoadBalancer(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param enable_prefix_for_ipv6_source_nat: [Network Load Balancers with UDP listeners] Indicates whether to use an IPv6 prefix from each subnet for source NAT. The IP address type must be ``dualstack`` . The default value is ``off`` .
-        :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink . The default is ``on`` .
+        :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink . The default is ``on`` . You can't configure this property on a Network Load Balancer unless you associated a security group with the load balancer when you created it.
         :param ip_address_type: The IP address type. Internal load balancers must use ``ipv4`` . [Application Load Balancers] The possible values are ``ipv4`` (IPv4 addresses), ``dualstack`` (IPv4 and IPv6 addresses), and ``dualstack-without-public-ipv4`` (public IPv6 addresses and private IPv4 and IPv6 addresses). Application Load Balancer authentication supports IPv4 addresses only when connecting to an Identity Provider (IdP) or Amazon Cognito endpoint. Without a public IPv4 address the load balancer can't complete the authentication process, resulting in HTTP 500 errors. [Network Load Balancers and Gateway Load Balancers] The possible values are ``ipv4`` (IPv4 addresses) and ``dualstack`` (IPv4 and IPv6 addresses).
-        :param ipv4_ipam_pool_id: 
+        :param ipv4_ipam_pool_id: The ID of the IPv4 IPAM pool.
         :param load_balancer_attributes: The load balancer attributes.
         :param minimum_load_balancer_capacity: The minimum capacity for a load balancer.
         :param name: The name of the load balancer. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, must not begin or end with a hyphen, and must not begin with "internal-". If you don't specify a name, AWS CloudFormation generates a unique physical ID for the load balancer. If you specify a name, you cannot perform updates that require replacement of this resource, but you can perform other updates. To replace the resource, specify a new name.
@@ -8663,6 +8687,7 @@ class CfnLoadBalancer(
     @builtins.property
     @jsii.member(jsii_name="ipv4IpamPoolId")
     def ipv4_ipam_pool_id(self) -> typing.Optional[builtins.str]:
+        '''The ID of the IPv4 IPAM pool.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "ipv4IpamPoolId"))
 
     @ipv4_ipam_pool_id.setter
@@ -9132,9 +9157,9 @@ class CfnLoadBalancerProps:
         '''Properties for defining a ``CfnLoadBalancer``.
 
         :param enable_prefix_for_ipv6_source_nat: [Network Load Balancers with UDP listeners] Indicates whether to use an IPv6 prefix from each subnet for source NAT. The IP address type must be ``dualstack`` . The default value is ``off`` .
-        :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink . The default is ``on`` .
+        :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink . The default is ``on`` . You can't configure this property on a Network Load Balancer unless you associated a security group with the load balancer when you created it.
         :param ip_address_type: The IP address type. Internal load balancers must use ``ipv4`` . [Application Load Balancers] The possible values are ``ipv4`` (IPv4 addresses), ``dualstack`` (IPv4 and IPv6 addresses), and ``dualstack-without-public-ipv4`` (public IPv6 addresses and private IPv4 and IPv6 addresses). Application Load Balancer authentication supports IPv4 addresses only when connecting to an Identity Provider (IdP) or Amazon Cognito endpoint. Without a public IPv4 address the load balancer can't complete the authentication process, resulting in HTTP 500 errors. [Network Load Balancers and Gateway Load Balancers] The possible values are ``ipv4`` (IPv4 addresses) and ``dualstack`` (IPv4 and IPv6 addresses).
-        :param ipv4_ipam_pool_id: 
+        :param ipv4_ipam_pool_id: The ID of the IPv4 IPAM pool.
         :param load_balancer_attributes: The load balancer attributes.
         :param minimum_load_balancer_capacity: The minimum capacity for a load balancer.
         :param name: The name of the load balancer. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, must not begin or end with a hyphen, and must not begin with "internal-". If you don't specify a name, AWS CloudFormation generates a unique physical ID for the load balancer. If you specify a name, you cannot perform updates that require replacement of this resource, but you can perform other updates. To replace the resource, specify a new name.
@@ -9248,6 +9273,8 @@ class CfnLoadBalancerProps:
 
         The default is ``on`` .
 
+        You can't configure this property on a Network Load Balancer unless you associated a security group with the load balancer when you created it.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-enforcesecuritygroupinboundrulesonprivatelinktraffic
         '''
         result = self._values.get("enforce_security_group_inbound_rules_on_private_link_traffic")
@@ -9270,7 +9297,8 @@ class CfnLoadBalancerProps:
 
     @builtins.property
     def ipv4_ipam_pool_id(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The ID of the IPv4 IPAM pool.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-ipv4ipampoolid
         '''
         result = self._values.get("ipv4_ipam_pool_id")
@@ -18022,6 +18050,12 @@ class NetworkLoadBalancer(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTcpTargetResetCount", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="connections")
     def connections(self) -> _Connections_0f31fce8:
@@ -20177,6 +20211,12 @@ class TrustStore(
             check_type(argname="argument trust_store_arn", value=trust_store_arn, expected_type=type_hints["trust_store_arn"])
         return typing.cast(ITrustStore, jsii.sinvoke(cls, "fromTrustStoreArn", [scope, id, trust_store_arn]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="numberOfCaCertificates")
     def number_of_ca_certificates(self) -> jsii.Number:
@@ -20380,6 +20420,12 @@ class TrustStoreRevocation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(
@@ -22084,6 +22130,7 @@ class ApplicationLoadBalancerProps(BaseLoadBalancerProps):
         "vpc": "vpc",
         "enable_anomaly_mitigation": "enableAnomalyMitigation",
         "load_balancing_algorithm_type": "loadBalancingAlgorithmType",
+        "multi_value_headers_enabled": "multiValueHeadersEnabled",
         "port": "port",
         "protocol": "protocol",
         "protocol_version": "protocolVersion",
@@ -22106,6 +22153,7 @@ class ApplicationTargetGroupProps(BaseTargetGroupProps):
         vpc: typing.Optional[_IVpc_f30d5663] = None,
         enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
         load_balancing_algorithm_type: typing.Optional[TargetGroupLoadBalancingAlgorithmType] = None,
+        multi_value_headers_enabled: typing.Optional[builtins.bool] = None,
         port: typing.Optional[jsii.Number] = None,
         protocol: typing.Optional[ApplicationProtocol] = None,
         protocol_version: typing.Optional[ApplicationProtocolVersion] = None,
@@ -22125,6 +22173,7 @@ class ApplicationTargetGroupProps(BaseTargetGroupProps):
         :param vpc: The virtual private cloud (VPC). only if ``TargetType`` is ``Ip`` or ``InstanceId`` Default: - undefined
         :param enable_anomaly_mitigation: Indicates whether anomaly mitigation is enabled. Only available when ``loadBalancingAlgorithmType`` is ``TargetGroupLoadBalancingAlgorithmType.WEIGHTED_RANDOM`` Default: false
         :param load_balancing_algorithm_type: The load balancing algorithm to select targets for routing requests. Default: TargetGroupLoadBalancingAlgorithmType.ROUND_ROBIN
+        :param multi_value_headers_enabled: Indicates whether the target group supports multi-value headers. If the value is true, the request and response headers exchanged between the load balancer and the Lambda function include arrays of values or strings. Only applicable for Lambda targets. Default: false
         :param port: The port on which the target receives traffic. This is not applicable for Lambda targets. Default: - Determined from protocol if known
         :param protocol: The protocol used for communication with the target. This is not applicable for Lambda targets. Default: - Determined from port if known
         :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
@@ -22165,6 +22214,7 @@ class ApplicationTargetGroupProps(BaseTargetGroupProps):
             check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
             check_type(argname="argument enable_anomaly_mitigation", value=enable_anomaly_mitigation, expected_type=type_hints["enable_anomaly_mitigation"])
             check_type(argname="argument load_balancing_algorithm_type", value=load_balancing_algorithm_type, expected_type=type_hints["load_balancing_algorithm_type"])
+            check_type(argname="argument multi_value_headers_enabled", value=multi_value_headers_enabled, expected_type=type_hints["multi_value_headers_enabled"])
             check_type(argname="argument port", value=port, expected_type=type_hints["port"])
             check_type(argname="argument protocol", value=protocol, expected_type=type_hints["protocol"])
             check_type(argname="argument protocol_version", value=protocol_version, expected_type=type_hints["protocol_version"])
@@ -22191,6 +22241,8 @@ class ApplicationTargetGroupProps(BaseTargetGroupProps):
             self._values["enable_anomaly_mitigation"] = enable_anomaly_mitigation
         if load_balancing_algorithm_type is not None:
             self._values["load_balancing_algorithm_type"] = load_balancing_algorithm_type
+        if multi_value_headers_enabled is not None:
+            self._values["multi_value_headers_enabled"] = multi_value_headers_enabled
         if port is not None:
             self._values["port"] = port
         if protocol is not None:
@@ -22308,6 +22360,22 @@ class ApplicationTargetGroupProps(BaseTargetGroupProps):
         '''
         result = self._values.get("load_balancing_algorithm_type")
         return typing.cast(typing.Optional[TargetGroupLoadBalancingAlgorithmType], result)
+
+    @builtins.property
+    def multi_value_headers_enabled(self) -> typing.Optional[builtins.bool]:
+        '''Indicates whether the target group supports multi-value headers.
+
+        If the value is true, the request and response headers exchanged between
+        the load balancer and the Lambda function include arrays of values or strings.
+
+        Only applicable for Lambda targets.
+
+        :default: false
+
+        :see: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes
+        '''
+        result = self._values.get("multi_value_headers_enabled")
+        return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
     def port(self) -> typing.Optional[jsii.Number]:
@@ -23429,6 +23497,12 @@ class NetworkListener(
 
         return typing.cast("NetworkTargetGroup", jsii.invoke(self, "addTargets", [id, props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="loadBalancer")
     def load_balancer(self) -> INetworkLoadBalancer:
@@ -23681,6 +23755,12 @@ class NetworkTargetGroup(
     @jsii.member(jsii_name="validateTargetGroup")
     def _validate_target_group(self) -> typing.List[builtins.str]:
         return typing.cast(typing.List[builtins.str], jsii.invoke(self, "validateTargetGroup", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="firstLoadBalancerFullName")
@@ -24038,6 +24118,12 @@ class ApplicationListener(
     def _validate_listener(self) -> typing.List[builtins.str]:
         '''Validate this listener.'''
         return typing.cast(typing.List[builtins.str], jsii.invoke(self, "validateListener", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="connections")
@@ -25516,6 +25602,12 @@ class ApplicationLoadBalancer(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTargetTLSNegotiationErrorCount", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="connections")
     def connections(self) -> _Connections_0f31fce8:
@@ -25583,6 +25675,7 @@ class ApplicationTargetGroup(
         *,
         enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
         load_balancing_algorithm_type: typing.Optional[TargetGroupLoadBalancingAlgorithmType] = None,
+        multi_value_headers_enabled: typing.Optional[builtins.bool] = None,
         port: typing.Optional[jsii.Number] = None,
         protocol: typing.Optional[ApplicationProtocol] = None,
         protocol_version: typing.Optional[ApplicationProtocolVersion] = None,
@@ -25603,6 +25696,7 @@ class ApplicationTargetGroup(
         :param id: -
         :param enable_anomaly_mitigation: Indicates whether anomaly mitigation is enabled. Only available when ``loadBalancingAlgorithmType`` is ``TargetGroupLoadBalancingAlgorithmType.WEIGHTED_RANDOM`` Default: false
         :param load_balancing_algorithm_type: The load balancing algorithm to select targets for routing requests. Default: TargetGroupLoadBalancingAlgorithmType.ROUND_ROBIN
+        :param multi_value_headers_enabled: Indicates whether the target group supports multi-value headers. If the value is true, the request and response headers exchanged between the load balancer and the Lambda function include arrays of values or strings. Only applicable for Lambda targets. Default: false
         :param port: The port on which the target receives traffic. This is not applicable for Lambda targets. Default: - Determined from protocol if known
         :param protocol: The protocol used for communication with the target. This is not applicable for Lambda targets. Default: - Determined from port if known
         :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
@@ -25625,6 +25719,7 @@ class ApplicationTargetGroup(
         props = ApplicationTargetGroupProps(
             enable_anomaly_mitigation=enable_anomaly_mitigation,
             load_balancing_algorithm_type=load_balancing_algorithm_type,
+            multi_value_headers_enabled=multi_value_headers_enabled,
             port=port,
             protocol=protocol,
             protocol_version=protocol_version,
@@ -26253,6 +26348,12 @@ class ApplicationTargetGroup(
     @jsii.member(jsii_name="validateTargetGroup")
     def _validate_target_group(self) -> typing.List[builtins.str]:
         return typing.cast(typing.List[builtins.str], jsii.invoke(self, "validateTargetGroup", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="firstLoadBalancerFullName")
@@ -28363,6 +28464,7 @@ def _typecheckingstub__0fbf37aa0a91cb985ce7a336a6188364cc38400538c1653e53453287c
     vpc: typing.Optional[_IVpc_f30d5663] = None,
     enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
     load_balancing_algorithm_type: typing.Optional[TargetGroupLoadBalancingAlgorithmType] = None,
+    multi_value_headers_enabled: typing.Optional[builtins.bool] = None,
     port: typing.Optional[jsii.Number] = None,
     protocol: typing.Optional[ApplicationProtocol] = None,
     protocol_version: typing.Optional[ApplicationProtocolVersion] = None,
@@ -28856,6 +28958,7 @@ def _typecheckingstub__e179515c9d6138007cc1b74835b75f10a179c1f5ef977cbe4188c778c
     *,
     enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
     load_balancing_algorithm_type: typing.Optional[TargetGroupLoadBalancingAlgorithmType] = None,
+    multi_value_headers_enabled: typing.Optional[builtins.bool] = None,
     port: typing.Optional[jsii.Number] = None,
     protocol: typing.Optional[ApplicationProtocol] = None,
     protocol_version: typing.Optional[ApplicationProtocolVersion] = None,

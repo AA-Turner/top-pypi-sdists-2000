@@ -5615,9 +5615,9 @@ class CfnImageRecipe(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImageRecipe",
 ):
-    '''An Image Builder image recipe is a document that defines the base image and the components to be applied to the base image to produce the desired configuration for the output image.
+    '''Creates a new image recipe.
 
-    You can use an image recipe to duplicate builds. Image Builder image recipes can be shared, branched, and edited using the console wizard, the AWS CLI , or the API. You can use image recipes with your version control software to maintain shareable versioned image recipes.
+    Image recipes define how images are configured, tested, and assessed.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagerecipe.html
     :cloudformationResource: AWS::ImageBuilder::ImageRecipe
@@ -5689,10 +5689,10 @@ class CfnImageRecipe(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param components: The components of the image recipe. Components are orchestration documents that define a sequence of steps for downloading, installing, configuring, and testing software packages. They also define validation and security hardening steps. A component is defined using a YAML document format.
+        :param components: The components that are included in the image recipe. Recipes require a minimum of one build component, and can have a maximum of 20 build and test components in any combination.
         :param name: The name of the image recipe.
-        :param parent_image: The parent image of the image recipe. The string must be either an Image ARN or an AMI ID.
-        :param version: The semantic version of the image recipe.
+        :param parent_image: The base image for customizations specified in the image recipe. You can specify the parent image using one of the following options: - AMI ID - Image Builder image Amazon Resource Name (ARN) - AWS Systems Manager (SSM) Parameter Store Parameter, prefixed by ``ssm:`` , followed by the parameter name or ARN. - AWS Marketplace product ID
+        :param version: The version of the image recipe.
         :param additional_instance_configuration: Before you create a new AMI, Image Builder launches temporary Amazon EC2 instances to build and test your image configuration. Instance configuration adds a layer of control over those instances. You can define settings and add scripts to run when an instance is launched from your AMI.
         :param block_device_mappings: The block device mappings to apply when creating images from this recipe.
         :param description: The description of the image recipe.
@@ -5783,7 +5783,7 @@ class CfnImageRecipe(
     def components(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnImageRecipe.ComponentConfigurationProperty"]]]:
-        '''The components of the image recipe.'''
+        '''The components that are included in the image recipe.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnImageRecipe.ComponentConfigurationProperty"]]], jsii.get(self, "components"))
 
     @components.setter
@@ -5812,7 +5812,7 @@ class CfnImageRecipe(
     @builtins.property
     @jsii.member(jsii_name="parentImage")
     def parent_image(self) -> builtins.str:
-        '''The parent image of the image recipe.'''
+        '''The base image for customizations specified in the image recipe.'''
         return typing.cast(builtins.str, jsii.get(self, "parentImage"))
 
     @parent_image.setter
@@ -5825,7 +5825,7 @@ class CfnImageRecipe(
     @builtins.property
     @jsii.member(jsii_name="version")
     def version(self) -> builtins.str:
-        '''The semantic version of the image recipe.'''
+        '''The version of the image recipe.'''
         return typing.cast(builtins.str, jsii.get(self, "version"))
 
     @version.setter
@@ -6535,10 +6535,10 @@ class CfnImageRecipeProps:
     ) -> None:
         '''Properties for defining a ``CfnImageRecipe``.
 
-        :param components: The components of the image recipe. Components are orchestration documents that define a sequence of steps for downloading, installing, configuring, and testing software packages. They also define validation and security hardening steps. A component is defined using a YAML document format.
+        :param components: The components that are included in the image recipe. Recipes require a minimum of one build component, and can have a maximum of 20 build and test components in any combination.
         :param name: The name of the image recipe.
-        :param parent_image: The parent image of the image recipe. The string must be either an Image ARN or an AMI ID.
-        :param version: The semantic version of the image recipe.
+        :param parent_image: The base image for customizations specified in the image recipe. You can specify the parent image using one of the following options: - AMI ID - Image Builder image Amazon Resource Name (ARN) - AWS Systems Manager (SSM) Parameter Store Parameter, prefixed by ``ssm:`` , followed by the parameter name or ARN. - AWS Marketplace product ID
+        :param version: The version of the image recipe.
         :param additional_instance_configuration: Before you create a new AMI, Image Builder launches temporary Amazon EC2 instances to build and test your image configuration. Instance configuration adds a layer of control over those instances. You can define settings and add scripts to run when an instance is launched from your AMI.
         :param block_device_mappings: The block device mappings to apply when creating images from this recipe.
         :param description: The description of the image recipe.
@@ -6627,9 +6627,9 @@ class CfnImageRecipeProps:
     def components(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnImageRecipe.ComponentConfigurationProperty]]]:
-        '''The components of the image recipe.
+        '''The components that are included in the image recipe.
 
-        Components are orchestration documents that define a sequence of steps for downloading, installing, configuring, and testing software packages. They also define validation and security hardening steps. A component is defined using a YAML document format.
+        Recipes require a minimum of one build component, and can have a maximum of 20 build and test components in any combination.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagerecipe.html#cfn-imagebuilder-imagerecipe-components
         '''
@@ -6649,9 +6649,14 @@ class CfnImageRecipeProps:
 
     @builtins.property
     def parent_image(self) -> builtins.str:
-        '''The parent image of the image recipe.
+        '''The base image for customizations specified in the image recipe.
 
-        The string must be either an Image ARN or an AMI ID.
+        You can specify the parent image using one of the following options:
+
+        - AMI ID
+        - Image Builder image Amazon Resource Name (ARN)
+        - AWS Systems Manager (SSM) Parameter Store Parameter, prefixed by ``ssm:`` , followed by the parameter name or ARN.
+        - AWS Marketplace product ID
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagerecipe.html#cfn-imagebuilder-imagerecipe-parentimage
         '''
@@ -6661,7 +6666,7 @@ class CfnImageRecipeProps:
 
     @builtins.property
     def version(self) -> builtins.str:
-        '''The semantic version of the image recipe.
+        '''The version of the image recipe.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagerecipe.html#cfn-imagebuilder-imagerecipe-version
         '''

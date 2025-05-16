@@ -24086,6 +24086,12 @@ class Mesh(
 
         return typing.cast("VirtualRouter", jsii.invoke(self, "addVirtualRouter", [id, props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="meshArn")
     def mesh_arn(self) -> builtins.str:
@@ -24749,6 +24755,12 @@ class Route(
         attrs = RouteAttributes(route_name=route_name, virtual_router=virtual_router)
 
         return typing.cast(IRoute, jsii.sinvoke(cls, "fromRouteAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="routeArn")
@@ -27285,6 +27297,12 @@ class VirtualGateway(
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStreamAggregatedResources", [identity]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="listeners")
     def _listeners(self) -> typing.List["VirtualGatewayListenerConfig"]:
@@ -28063,6 +28081,12 @@ class VirtualNode(
             type_hints = typing.get_type_hints(_typecheckingstub__c0ff8dcf17a0238a0826fbb4018d029f54a14597066df5cc2dd221fba9033419)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStreamAggregatedResources", [identity]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
@@ -28952,6 +28976,12 @@ class VirtualRouter(
 
         return typing.cast(Route, jsii.invoke(self, "addRoute", [id, props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="mesh")
     def mesh(self) -> IMesh:
@@ -29468,6 +29498,12 @@ class VirtualService(
         )
 
         return typing.cast(IVirtualService, jsii.sinvoke(cls, "fromVirtualServiceAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
@@ -30102,6 +30138,12 @@ class GatewayRoute(
         )
 
         return typing.cast(IGatewayRoute, jsii.sinvoke(cls, "fromGatewayRouteAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRouteArn")

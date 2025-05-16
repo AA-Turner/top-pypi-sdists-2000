@@ -798,6 +798,12 @@ class ProfilingGroup(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="profilingGroupArn")
     def profiling_group_arn(self) -> builtins.str:

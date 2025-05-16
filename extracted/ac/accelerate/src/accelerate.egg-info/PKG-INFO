@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: accelerate
-Version: 1.6.0
+Version: 1.7.0
 Summary: Accelerate
 Home-page: https://github.com/huggingface/accelerate
 Author: The HuggingFace team
@@ -70,6 +70,8 @@ Provides-Extra: deepspeed
 Requires-Dist: deepspeed; extra == "deepspeed"
 Provides-Extra: rich
 Requires-Dist: rich; extra == "rich"
+Provides-Extra: test-fp8
+Requires-Dist: torchao; extra == "test-fp8"
 Provides-Extra: test-trackers
 Requires-Dist: wandb; extra == "test-trackers"
 Requires-Dist: comet-ml; extra == "test-trackers"

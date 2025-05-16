@@ -4519,7 +4519,7 @@ class CfnManagedLoginBranding(
         :param id: Construct identifier for this resource (unique in its scope).
         :param user_pool_id: The user pool where the branding style is assigned.
         :param assets: An array of image files that you want to apply to roles like backgrounds, logos, and icons. Each object must also indicate whether it is for dark mode, light mode, or browser-adaptive mode.
-        :param client_id: The app client that's assigned to the branding style that you want more information about.
+        :param client_id: The app client that you want to assign the branding style to. Each style is linked to an app client until you delete it.
         :param return_merged_resources: When ``true`` , returns values for branding options that are unchanged from Amazon Cognito defaults. When ``false`` or when you omit this parameter, returns only values that you customized in your branding style.
         :param settings: A JSON file, encoded as a ``Document`` type, with the the settings that you want to apply to your style.
         :param use_cognito_provided_values: When true, applies the default branding style options. This option reverts to default style options that are managed by Amazon Cognito. You can modify them later in the branding editor. When you specify ``true`` for this option, you must also omit values for ``Settings`` and ``Assets`` in the request.
@@ -4617,7 +4617,7 @@ class CfnManagedLoginBranding(
     @builtins.property
     @jsii.member(jsii_name="clientId")
     def client_id(self) -> typing.Optional[builtins.str]:
-        '''The app client that's assigned to the branding style that you want more information about.'''
+        '''The app client that you want to assign the branding style to.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "clientId"))
 
     @client_id.setter
@@ -4832,7 +4832,7 @@ class CfnManagedLoginBrandingProps:
 
         :param user_pool_id: The user pool where the branding style is assigned.
         :param assets: An array of image files that you want to apply to roles like backgrounds, logos, and icons. Each object must also indicate whether it is for dark mode, light mode, or browser-adaptive mode.
-        :param client_id: The app client that's assigned to the branding style that you want more information about.
+        :param client_id: The app client that you want to assign the branding style to. Each style is linked to an app client until you delete it.
         :param return_merged_resources: When ``true`` , returns values for branding options that are unchanged from Amazon Cognito defaults. When ``false`` or when you omit this parameter, returns only values that you customized in your branding style.
         :param settings: A JSON file, encoded as a ``Document`` type, with the the settings that you want to apply to your style.
         :param use_cognito_provided_values: When true, applies the default branding style options. This option reverts to default style options that are managed by Amazon Cognito. You can modify them later in the branding editor. When you specify ``true`` for this option, you must also omit values for ``Settings`` and ``Assets`` in the request.
@@ -4914,7 +4914,9 @@ class CfnManagedLoginBrandingProps:
 
     @builtins.property
     def client_id(self) -> typing.Optional[builtins.str]:
-        '''The app client that's assigned to the branding style that you want more information about.
+        '''The app client that you want to assign the branding style to.
+
+        Each style is linked to an app client until you delete it.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-managedloginbranding.html#cfn-cognito-managedloginbranding-clientid
         '''
@@ -8151,7 +8153,7 @@ class CfnUserPoolClient(
         :param logout_ur_ls: A list of allowed logout URLs for managed login authentication. When you pass ``logout_uri`` and ``client_id`` parameters to ``/logout`` , Amazon Cognito signs out your user and redirects them to the logout URL. This parameter describes the URLs that you want to be the permitted targets of ``logout_uri`` . A typical use of these URLs is when a user selects "Sign out" and you redirect them to your public homepage. For more information, see `Logout endpoint <https://docs.aws.amazon.com/cognito/latest/developerguide/logout-endpoint.html>`_ .
         :param prevent_user_existence_errors: Errors and responses that you want Amazon Cognito APIs to return during authentication, account confirmation, and password recovery when the user doesn't exist in the user pool. When set to ``ENABLED`` and the user doesn't exist, authentication returns an error indicating either the username or password was incorrect. Account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to ``LEGACY`` , those APIs return a ``UserNotFoundException`` exception if the user doesn't exist in the user pool. Valid values include: - ``ENABLED`` - This prevents user existence-related errors. - ``LEGACY`` - This represents the early behavior of Amazon Cognito where user existence related errors aren't prevented. Defaults to ``LEGACY`` when you don't provide a value.
         :param read_attributes: The list of user attributes that you want your app client to have read access to. After your user authenticates in your app, their access token authorizes them to read their own attribute value for any attribute in this list. An example of this kind of activity is when your user selects a link to view their profile information. When you don't specify the ``ReadAttributes`` for your app client, your app can read the values of ``email_verified`` , ``phone_number_verified`` , and the Standard attributes of your user pool. When your user pool app client has read access to these default attributes, ``ReadAttributes`` doesn't return any information. Amazon Cognito only populates ``ReadAttributes`` in the API response if you have specified your own custom set of read attributes.
-        :param refresh_token_rotation: 
+        :param refresh_token_rotation: The configuration of your app client for refresh token rotation. When enabled, your app client issues new ID, access, and refresh tokens when users renew their sessions with refresh tokens. When disabled, token refresh issues only ID and access tokens.
         :param refresh_token_validity: The refresh token time limit. After this limit expires, your user can't use their refresh token. To specify the time unit for ``RefreshTokenValidity`` as ``seconds`` , ``minutes`` , ``hours`` , or ``days`` , set a ``TokenValidityUnits`` value in your API request. For example, when you set ``RefreshTokenValidity`` as ``10`` and ``TokenValidityUnits`` as ``days`` , your user can refresh their session and retrieve new access and ID tokens for 10 days. The default time unit for ``RefreshTokenValidity`` in an API request is days. You can't set ``RefreshTokenValidity`` to 0. If you do, Amazon Cognito overrides the value with the default value of 30 days. *Valid range* is displayed below in seconds. If you don't specify otherwise in the configuration of your app client, your refresh tokens are valid for 30 days.
         :param supported_identity_providers: A list of provider names for the identity providers (IdPs) that are supported on this client. The following are supported: ``COGNITO`` , ``Facebook`` , ``Google`` , ``SignInWithApple`` , and ``LoginWithAmazon`` . You can also specify the names that you configured for the SAML and OIDC IdPs in your user pool, for example ``MySAMLIdP`` or ``MyOIDCIdP`` . This parameter sets the IdPs that `managed login <https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-managed-login.html>`_ will display on the login page for your app client. The removal of ``COGNITO`` from this list doesn't prevent authentication operations for local users with the user pools API in an AWS SDK. The only way to prevent SDK-based authentication is to block access with a `AWS WAF rule <https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-waf.html>`_ .
         :param token_validity_units: The units that validity times are represented in. The default unit for refresh tokens is days, and the default for ID and access tokens are hours.
@@ -8528,6 +8530,7 @@ class CfnUserPoolClient(
     def refresh_token_rotation(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUserPoolClient.RefreshTokenRotationProperty"]]:
+        '''The configuration of your app client for refresh token rotation.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUserPoolClient.RefreshTokenRotationProperty"]], jsii.get(self, "refreshTokenRotation"))
 
     @refresh_token_rotation.setter
@@ -8749,9 +8752,12 @@ class CfnUserPoolClient(
             feature: typing.Optional[builtins.str] = None,
             retry_grace_period_seconds: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param feature: 
-            :param retry_grace_period_seconds: 
+            '''The configuration of your app client for refresh token rotation.
+
+            When enabled, your app client issues new ID, access, and refresh tokens when users renew their sessions with refresh tokens. When disabled, token refresh issues only ID and access tokens.
+
+            :param feature: The state of refresh token rotation for the current app client.
+            :param retry_grace_period_seconds: When you request a token refresh with ``GetTokensFromRefreshToken`` , the original refresh token that you're rotating out can remain valid for a period of time of up to 60 seconds. This allows for client-side retries. When ``RetryGracePeriodSeconds`` is ``0`` , the grace period is disabled and a successful request immediately invalidates the submitted refresh token.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpoolclient-refreshtokenrotation.html
             :exampleMetadata: fixture=_generated
@@ -8779,7 +8785,8 @@ class CfnUserPoolClient(
 
         @builtins.property
         def feature(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The state of refresh token rotation for the current app client.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpoolclient-refreshtokenrotation.html#cfn-cognito-userpoolclient-refreshtokenrotation-feature
             '''
             result = self._values.get("feature")
@@ -8787,7 +8794,10 @@ class CfnUserPoolClient(
 
         @builtins.property
         def retry_grace_period_seconds(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''When you request a token refresh with ``GetTokensFromRefreshToken`` , the original refresh token that you're rotating out can remain valid for a period of time of up to 60 seconds.
+
+            This allows for client-side retries. When ``RetryGracePeriodSeconds`` is ``0`` , the grace period is disabled and a successful request immediately invalidates the submitted refresh token.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpoolclient-refreshtokenrotation.html#cfn-cognito-userpoolclient-refreshtokenrotation-retrygraceperiodseconds
             '''
             result = self._values.get("retry_grace_period_seconds")
@@ -8979,7 +8989,7 @@ class CfnUserPoolClientProps:
         :param logout_ur_ls: A list of allowed logout URLs for managed login authentication. When you pass ``logout_uri`` and ``client_id`` parameters to ``/logout`` , Amazon Cognito signs out your user and redirects them to the logout URL. This parameter describes the URLs that you want to be the permitted targets of ``logout_uri`` . A typical use of these URLs is when a user selects "Sign out" and you redirect them to your public homepage. For more information, see `Logout endpoint <https://docs.aws.amazon.com/cognito/latest/developerguide/logout-endpoint.html>`_ .
         :param prevent_user_existence_errors: Errors and responses that you want Amazon Cognito APIs to return during authentication, account confirmation, and password recovery when the user doesn't exist in the user pool. When set to ``ENABLED`` and the user doesn't exist, authentication returns an error indicating either the username or password was incorrect. Account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to ``LEGACY`` , those APIs return a ``UserNotFoundException`` exception if the user doesn't exist in the user pool. Valid values include: - ``ENABLED`` - This prevents user existence-related errors. - ``LEGACY`` - This represents the early behavior of Amazon Cognito where user existence related errors aren't prevented. Defaults to ``LEGACY`` when you don't provide a value.
         :param read_attributes: The list of user attributes that you want your app client to have read access to. After your user authenticates in your app, their access token authorizes them to read their own attribute value for any attribute in this list. An example of this kind of activity is when your user selects a link to view their profile information. When you don't specify the ``ReadAttributes`` for your app client, your app can read the values of ``email_verified`` , ``phone_number_verified`` , and the Standard attributes of your user pool. When your user pool app client has read access to these default attributes, ``ReadAttributes`` doesn't return any information. Amazon Cognito only populates ``ReadAttributes`` in the API response if you have specified your own custom set of read attributes.
-        :param refresh_token_rotation: 
+        :param refresh_token_rotation: The configuration of your app client for refresh token rotation. When enabled, your app client issues new ID, access, and refresh tokens when users renew their sessions with refresh tokens. When disabled, token refresh issues only ID and access tokens.
         :param refresh_token_validity: The refresh token time limit. After this limit expires, your user can't use their refresh token. To specify the time unit for ``RefreshTokenValidity`` as ``seconds`` , ``minutes`` , ``hours`` , or ``days`` , set a ``TokenValidityUnits`` value in your API request. For example, when you set ``RefreshTokenValidity`` as ``10`` and ``TokenValidityUnits`` as ``days`` , your user can refresh their session and retrieve new access and ID tokens for 10 days. The default time unit for ``RefreshTokenValidity`` in an API request is days. You can't set ``RefreshTokenValidity`` to 0. If you do, Amazon Cognito overrides the value with the default value of 30 days. *Valid range* is displayed below in seconds. If you don't specify otherwise in the configuration of your app client, your refresh tokens are valid for 30 days.
         :param supported_identity_providers: A list of provider names for the identity providers (IdPs) that are supported on this client. The following are supported: ``COGNITO`` , ``Facebook`` , ``Google`` , ``SignInWithApple`` , and ``LoginWithAmazon`` . You can also specify the names that you configured for the SAML and OIDC IdPs in your user pool, for example ``MySAMLIdP`` or ``MyOIDCIdP`` . This parameter sets the IdPs that `managed login <https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-managed-login.html>`_ will display on the login page for your app client. The removal of ``COGNITO`` from this list doesn't prevent authentication operations for local users with the user pools API in an AWS SDK. The only way to prevent SDK-based authentication is to block access with a `AWS WAF rule <https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-waf.html>`_ .
         :param token_validity_units: The units that validity times are represented in. The default unit for refresh tokens is days, and the default for ID and access tokens are hours.
@@ -9381,7 +9391,10 @@ class CfnUserPoolClientProps:
     def refresh_token_rotation(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUserPoolClient.RefreshTokenRotationProperty]]:
-        '''
+        '''The configuration of your app client for refresh token rotation.
+
+        When enabled, your app client issues new ID, access, and refresh tokens when users renew their sessions with refresh tokens. When disabled, token refresh issues only ID and access tokens.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html#cfn-cognito-userpoolclient-refreshtokenrotation
         '''
         result = self._values.get("refresh_token_rotation")
@@ -18232,6 +18245,12 @@ class UserPool(
             check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
         return typing.cast(None, jsii.invoke(self, "registerIdentityProvider", [provider]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="identityProviders")
     def identity_providers(self) -> typing.List[IUserPoolIdentityProvider]:
@@ -18387,6 +18406,12 @@ class UserPoolClient(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument user_pool_client_id", value=user_pool_client_id, expected_type=type_hints["user_pool_client_id"])
         return typing.cast(IUserPoolClient, jsii.sinvoke(cls, "fromUserPoolClientId", [scope, id, user_pool_client_id]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="oAuthFlows")
@@ -19302,6 +19327,12 @@ class UserPoolDomain(
 
         return typing.cast(builtins.str, jsii.invoke(self, "signInUrl", [client, options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="cloudFrontDomainName")
     def cloud_front_domain_name(self) -> builtins.str:
@@ -19890,6 +19921,12 @@ class UserPoolGroup(
             check_type(argname="argument group_name", value=group_name, expected_type=type_hints["group_name"])
         return typing.cast(IUserPoolGroup, jsii.sinvoke(cls, "fromGroupName", [scope, id, group_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="groupName")
     def group_name(self) -> builtins.str:
@@ -20251,6 +20288,12 @@ class UserPoolIdentityProviderAmazon(
     def _configure_attribute_mapping(self) -> typing.Any:
         return typing.cast(typing.Any, jsii.invoke(self, "configureAttributeMapping", []))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="providerName")
     def provider_name(self) -> builtins.str:
@@ -20363,6 +20406,12 @@ class UserPoolIdentityProviderApple(
     def _configure_attribute_mapping(self) -> typing.Any:
         return typing.cast(typing.Any, jsii.invoke(self, "configureAttributeMapping", []))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="providerName")
     def provider_name(self) -> builtins.str:
@@ -20465,6 +20514,12 @@ class UserPoolIdentityProviderFacebook(
     def _configure_attribute_mapping(self) -> typing.Any:
         return typing.cast(typing.Any, jsii.invoke(self, "configureAttributeMapping", []))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="providerName")
     def provider_name(self) -> builtins.str:
@@ -20537,6 +20592,12 @@ class UserPoolIdentityProviderGoogle(
     @jsii.member(jsii_name="configureAttributeMapping")
     def _configure_attribute_mapping(self) -> typing.Any:
         return typing.cast(typing.Any, jsii.invoke(self, "configureAttributeMapping", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="providerName")
@@ -20660,6 +20721,12 @@ class UserPoolIdentityProviderOidc(
     @jsii.member(jsii_name="configureAttributeMapping")
     def _configure_attribute_mapping(self) -> typing.Any:
         return typing.cast(typing.Any, jsii.invoke(self, "configureAttributeMapping", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="providerName")
@@ -20848,6 +20915,12 @@ class UserPoolIdentityProviderSaml(
     @jsii.member(jsii_name="configureAttributeMapping")
     def _configure_attribute_mapping(self) -> typing.Any:
         return typing.cast(typing.Any, jsii.invoke(self, "configureAttributeMapping", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="providerName")
@@ -22008,6 +22081,12 @@ class UserPoolResourceServer(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument user_pool_resource_server_id", value=user_pool_resource_server_id, expected_type=type_hints["user_pool_resource_server_id"])
         return typing.cast(IUserPoolResourceServer, jsii.sinvoke(cls, "fromUserPoolResourceServerId", [scope, id, user_pool_resource_server_id]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="userPoolResourceServerId")

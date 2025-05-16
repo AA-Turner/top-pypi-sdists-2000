@@ -13,6 +13,7 @@
 # limitations under the License.
 import copy
 import gc
+import itertools
 import logging
 import os
 import unittest
@@ -35,7 +36,6 @@ from accelerate.big_modeling import (
 from accelerate.hooks import remove_hook_from_submodules
 from accelerate.test_utils import (
     require_bnb,
-    require_cuda,
     require_cuda_or_xpu,
     require_multi_device,
     require_multi_gpu_or_xpu,
@@ -46,6 +46,8 @@ from accelerate.test_utils import (
     torch_device,
 )
 from accelerate.utils import is_hpu_available, offload_state_dict
+from accelerate.utils.memory import clear_device_cache
+from accelerate.utils.versions import is_torch_version
 
 
 logger = logging.getLogger(__name__)
@@ -377,7 +379,7 @@ class BigModelingTester(unittest.TestCase):
 
         torch_accelerator_module = getattr(torch, torch_device_type)
 
-        torch_accelerator_module.empty_cache()  # Needed in case we run several tests in a row.
+        clear_device_cache()  # Needed in case we run several tests in a row.
 
         model = nn.Sequential(
             OrderedDict(
@@ -420,10 +422,13 @@ class BigModelingTester(unittest.TestCase):
         foo = torch.rand(n_vals, device=device_0)  # noqa: F841
 
         # If this does OOM: there is an issue in somewhere in dispatch_model, memory of tied weights is duplicated.
+        oom_error = (
+            torch.OutOfMemoryError if is_torch_version(">=", "2.5.0") else torch_accelerator_module.OutOfMemoryError
+        )
         try:
             dispatch_model(model, device_map)
-        except torch_accelerator_module.OutOfMemoryError as e:
-            raise torch_accelerator_module.OutOfMemoryError(
+        except oom_error as e:
+            raise oom_error(
                 f"OOM error in dispatch_model. This is a bug and should not happen, see test_dispatch_model_tied_weights_memory. {e}"
             )
         except Exception as e:
@@ -438,7 +443,7 @@ class BigModelingTester(unittest.TestCase):
         # Test that we do not duplicate tied weights at any point during dispatch_model call.
 
         torch_accelerator_module = getattr(torch, torch_device_type)
-        torch_accelerator_module.empty_cache()  # Needed in case we run several tests in a row.
+        clear_device_cache()  # Needed in case we run several tests in a row.
 
         class SubModule(torch.nn.Module):
             def __init__(self, ref_to_parameter):
@@ -501,11 +506,14 @@ class BigModelingTester(unittest.TestCase):
 
         original_pointer = model.compute1._hf_hook.weights_map["weight"].data_ptr()
 
+        oom_error = (
+            torch.OutOfMemoryError if is_torch_version(">=", "2.5.0") else torch_accelerator_module.OutOfMemoryError
+        )
         with torch.no_grad():
             try:
                 output = model(x)
-            except torch_accelerator_module.OutOfMemoryError as e:
-                raise torch_accelerator_module.OutOfMemoryError(
+            except oom_error as e:
+                raise oom_error(
                     f"OOM error in dispatch_model. This is a bug and should not happen, see test_dispatch_model_tied_weights_memory_with_nested_offload_cpu. {e}"
                 )
             except Exception as e:
@@ -513,7 +521,7 @@ class BigModelingTester(unittest.TestCase):
 
         torch.testing.assert_close(expected, output.cpu(), atol=ATOL, rtol=RTOL)
 
-        torch_accelerator_module.empty_cache()
+        clear_device_cache()
 
         free_memory_bytes_after_infer = torch_accelerator_module.mem_get_info(torch_device)[0]
 
@@ -528,14 +536,16 @@ class BigModelingTester(unittest.TestCase):
 
     # This test fails because sometimes data_ptr() of compute2.weight is the same as compute1.weight.
     # I checked that the values are not the same but it gives the same address. This does not happen on my local machine.
-    @require_cuda
+    @require_cuda_or_xpu
     @unittest.skip(
         "Flaky test, we should have enough coverage with test_dispatch_model_tied_weights_memory_with_nested_offload_cpu test"
     )
     def test_dispatch_model_tied_weights_memory_with_nested_offload_disk(self):
         # Test that we do not duplicate tied weights at any point during dispatch_model call.
 
-        torch.cuda.empty_cache()  # Needed in case we run several tests in a row.
+        torch_accelerator_module = getattr(torch, torch_device_type)
+
+        clear_device_cache()  # Needed in case we run several tests in a row.
 
         class SubModule(torch.nn.Module):
             def __init__(self, ref_to_parameter):
@@ -581,27 +591,33 @@ class BigModelingTester(unittest.TestCase):
             expected = model(x)
 
         # Just to initialize CUDA context.
-        a = torch.rand(5).to("cuda:0")  # noqa: F841
+        device_0 = f"{torch_device_type}:0"
+        a = torch.rand(5).to(device_0)  # noqa: F841
 
-        free_memory_bytes = torch.cuda.mem_get_info("cuda:0")[0]
+        free_memory_bytes = torch_accelerator_module.mem_get_info(device_0)[0]
         required_memory_bytes = 2 * 5000 * 5000 * (32 // 8)  # 200 MB
 
         # Leaving 150 MB of free memory for possible buffers, etc.
         n_vals = (free_memory_bytes - required_memory_bytes - int(200e6)) // (32 // 8)
-        foo = torch.rand(n_vals, device="cuda:0")  # noqa: F841
+        foo = torch.rand(n_vals, device=device_0)  # noqa: F841
 
-        free_memory_bytes_before_dispatch = torch.cuda.mem_get_info("cuda:0")[0]
+        free_memory_bytes_before_dispatch = torch_accelerator_module.mem_get_info(device_0)[0]
         with TemporaryDirectory() as tmp_dir:
             dispatch_model(model, device_map, offload_dir=tmp_dir)
-            free_memory_bytes_after_dispatch = torch.cuda.mem_get_info("cuda:0")[0]
+            free_memory_bytes_after_dispatch = torch_accelerator_module.mem_get_info(device_0)[0]
 
             assert (free_memory_bytes_after_dispatch - free_memory_bytes_before_dispatch) * 1e-6 < 130
 
+            oom_error = (
+                torch.OutOfMemoryError
+                if hasattr(torch, "OutOfMemoryError")
+                else torch_accelerator_module.OutOfMemoryError
+            )
             with torch.no_grad():
                 try:
                     output = model(x)
-                except torch.cuda.OutOfMemoryError as e:
-                    raise torch.cuda.OutOfMemoryError(
+                except oom_error as e:
+                    raise oom_error(
                         f"OOM error in dispatch_model. This is a bug and should not happen, see test_dispatch_model_tied_weights_memory_with_nested_offload_disk. {e}"
                     )
                 except Exception as e:
@@ -609,9 +625,9 @@ class BigModelingTester(unittest.TestCase):
 
             torch.testing.assert_close(expected, output.cpu(), atol=ATOL, rtol=RTOL)
 
-            torch.cuda.empty_cache()
+            clear_device_cache()
 
-            free_memory_bytes_after_infer = torch.cuda.mem_get_info("cuda:0")[0]
+            free_memory_bytes_after_infer = torch_accelerator_module.mem_get_info(device_0)[0]
 
             # Check that we have no more references on GPU for the offloaded tied weight.
             n_non_empty = 0
@@ -794,6 +810,23 @@ class BigModelingTester(unittest.TestCase):
 
         output = new_model(x)
         torch.testing.assert_close(expected, output.cpu(), atol=ATOL, rtol=RTOL)
+
+    def test_load_checkpoint_and_dispatch_device_map_none(self):
+        model = ModelForTest()
+
+        with TemporaryDirectory() as tmp_dir:
+            checkpoint = os.path.join(tmp_dir, "pt_model.bin")
+            torch.save(model.state_dict(), checkpoint)
+
+            new_model = ModelForTest()
+            new_model = load_checkpoint_and_dispatch(new_model, checkpoint, device_map=None)
+
+        for (name, tensor), (new_name, new_tensor) in zip(
+            itertools.chain(model.named_parameters(), model.named_buffers()),
+            itertools.chain(new_model.named_parameters(), new_model.named_buffers()),
+        ):
+            assert name == new_name
+            torch.testing.assert_close(tensor, new_tensor, msg=new_name)
 
     @require_non_hpu  # hpu does not support device indexing "hpu:1"
     @require_multi_device

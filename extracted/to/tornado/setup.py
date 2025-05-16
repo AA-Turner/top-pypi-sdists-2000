@@ -18,11 +18,7 @@
 import os
 import platform
 import setuptools
-
-try:
-    import wheel.bdist_wheel
-except ImportError:
-    wheel = None
+import sysconfig
 
 
 kwargs = {}
@@ -40,6 +36,9 @@ if (
     platform.python_implementation() == "CPython"
     and os.environ.get("TORNADO_EXTENSION") != "0"
 ):
+
+    can_use_limited_api = not sysconfig.get_config_var("Py_GIL_DISABLED")
+
     # This extension builds and works on pypy as well, although pypy's jit
     # produces equivalent performance.
     kwargs["ext_modules"] = [
@@ -51,28 +50,19 @@ if (
             optional=os.environ.get("TORNADO_EXTENSION") != "1",
             # Use the stable ABI so our wheels are compatible across python
             # versions.
-            py_limited_api=True,
-            define_macros=[("Py_LIMITED_API", "0x03080000")],
+            py_limited_api=can_use_limited_api,
+            define_macros=[("Py_LIMITED_API", "0x03090000")] if can_use_limited_api else [],
         )
     ]
 
-if wheel is not None:
-    # From https://github.com/joerick/python-abi3-package-sample/blob/main/setup.py
-    class bdist_wheel_abi3(wheel.bdist_wheel.bdist_wheel):
-        def get_tag(self):
-            python, abi, plat = super().get_tag()
-
-            if python.startswith("cp"):
-                return "cp38", "abi3", plat
-            return python, abi, plat
-
-    kwargs["cmdclass"] = {"bdist_wheel": bdist_wheel_abi3}
+    if can_use_limited_api:
+        kwargs["options"] = {"bdist_wheel": {"py_limited_api": "cp39"}}
 
 
 setuptools.setup(
     name="tornado",
     version=version,
-    python_requires=">= 3.8",
+    python_requires=">= 3.9",
     packages=["tornado", "tornado.test", "tornado.platform"],
     package_data={
         # data files need to be listed both here (which determines what gets
@@ -112,12 +102,13 @@ setuptools.setup(
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
     ],
-    **kwargs
+    **kwargs,
 )

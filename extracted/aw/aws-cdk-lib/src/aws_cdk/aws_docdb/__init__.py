@@ -639,7 +639,7 @@ class CfnDBCluster(
         :param db_subnet_group_name: A subnet group to associate with this cluster. Constraints: Must match the name of an existing ``DBSubnetGroup`` . Must not be default. Example: ``mySubnetgroup``
         :param deletion_protection: Protects clusters from being accidentally deleted. If enabled, the cluster cannot be deleted unless it is modified and ``DeletionProtection`` is disabled.
         :param enable_cloudwatch_logs_exports: The list of log types that need to be enabled for exporting to Amazon CloudWatch Logs. You can enable audit logs or profiler logs. For more information, see `Auditing Amazon DocumentDB Events <https://docs.aws.amazon.com/documentdb/latest/developerguide/event-auditing.html>`_ and `Profiling Amazon DocumentDB Operations <https://docs.aws.amazon.com/documentdb/latest/developerguide/profiling.html>`_ .
-        :param engine_version: The version number of the database engine to use. The ``--engine-version`` will default to the latest major engine version. For production workloads, we recommend explicitly declaring this parameter with the intended major engine version. Changing the ``EngineVersion`` will start an in-place engine version upgrade. Note that in-place engine version upgrade will cause downtime in the cluster. See `Amazon DocumentDB in-place major version upgrade <https://docs.aws.amazon.com/documentdb/latest/developerguide/docdb-mvu.html>`_ before starting an in-place engine version upgrade.
+        :param engine_version: The version number of the database engine to use. The ``--engine-version`` will default to the latest major engine version. For production workloads, we recommend explicitly declaring this parameter with the intended major engine version. If you intend to trigger an in-place upgrade, please refer to `Amazon DocumentDB in-place major version upgrade <https://docs.aws.amazon.com/documentdb/latest/developerguide/docdb-mvu.html>`_ . Note that for an in-place engine version upgrade, you need to remove other cluster properties changes (e.g. SecurityGroupId) from the CFN template.
         :param kms_key_id: The AWS KMS key identifier for an encrypted cluster. The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are creating a cluster using the same AWS account that owns the AWS KMS encryption key that is used to encrypt the new cluster, you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key. If an encryption key is not specified in ``KmsKeyId`` : - If the ``StorageEncrypted`` parameter is ``true`` , Amazon DocumentDB uses your default encryption key. AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Regions .
         :param manage_master_user_password: Specifies whether to manage the master user password with Amazon Web Services Secrets Manager. Constraint: You can't manage the master user password with Amazon Web Services Secrets Manager if ``MasterUserPassword`` is specified.
         :param master_username: The name of the master user for the cluster. Constraints: - Must be from 1 to 63 letters or numbers. - The first character must be a letter. - Cannot be a reserved word for the chosen database engine.
@@ -1694,7 +1694,7 @@ class CfnDBClusterProps:
         :param db_subnet_group_name: A subnet group to associate with this cluster. Constraints: Must match the name of an existing ``DBSubnetGroup`` . Must not be default. Example: ``mySubnetgroup``
         :param deletion_protection: Protects clusters from being accidentally deleted. If enabled, the cluster cannot be deleted unless it is modified and ``DeletionProtection`` is disabled.
         :param enable_cloudwatch_logs_exports: The list of log types that need to be enabled for exporting to Amazon CloudWatch Logs. You can enable audit logs or profiler logs. For more information, see `Auditing Amazon DocumentDB Events <https://docs.aws.amazon.com/documentdb/latest/developerguide/event-auditing.html>`_ and `Profiling Amazon DocumentDB Operations <https://docs.aws.amazon.com/documentdb/latest/developerguide/profiling.html>`_ .
-        :param engine_version: The version number of the database engine to use. The ``--engine-version`` will default to the latest major engine version. For production workloads, we recommend explicitly declaring this parameter with the intended major engine version. Changing the ``EngineVersion`` will start an in-place engine version upgrade. Note that in-place engine version upgrade will cause downtime in the cluster. See `Amazon DocumentDB in-place major version upgrade <https://docs.aws.amazon.com/documentdb/latest/developerguide/docdb-mvu.html>`_ before starting an in-place engine version upgrade.
+        :param engine_version: The version number of the database engine to use. The ``--engine-version`` will default to the latest major engine version. For production workloads, we recommend explicitly declaring this parameter with the intended major engine version. If you intend to trigger an in-place upgrade, please refer to `Amazon DocumentDB in-place major version upgrade <https://docs.aws.amazon.com/documentdb/latest/developerguide/docdb-mvu.html>`_ . Note that for an in-place engine version upgrade, you need to remove other cluster properties changes (e.g. SecurityGroupId) from the CFN template.
         :param kms_key_id: The AWS KMS key identifier for an encrypted cluster. The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are creating a cluster using the same AWS account that owns the AWS KMS encryption key that is used to encrypt the new cluster, you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key. If an encryption key is not specified in ``KmsKeyId`` : - If the ``StorageEncrypted`` parameter is ``true`` , Amazon DocumentDB uses your default encryption key. AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Regions .
         :param manage_master_user_password: Specifies whether to manage the master user password with Amazon Web Services Secrets Manager. Constraint: You can't manage the master user password with Amazon Web Services Secrets Manager if ``MasterUserPassword`` is specified.
         :param master_username: The name of the master user for the cluster. Constraints: - Must be from 1 to 63 letters or numbers. - The first character must be a letter. - Cannot be a reserved word for the chosen database engine.
@@ -1957,7 +1957,7 @@ class CfnDBClusterProps:
 
         The ``--engine-version`` will default to the latest major engine version. For production workloads, we recommend explicitly declaring this parameter with the intended major engine version.
 
-        Changing the ``EngineVersion`` will start an in-place engine version upgrade. Note that in-place engine version upgrade will cause downtime in the cluster. See `Amazon DocumentDB in-place major version upgrade <https://docs.aws.amazon.com/documentdb/latest/developerguide/docdb-mvu.html>`_ before starting an in-place engine version upgrade.
+        If you intend to trigger an in-place upgrade, please refer to `Amazon DocumentDB in-place major version upgrade <https://docs.aws.amazon.com/documentdb/latest/developerguide/docdb-mvu.html>`_ . Note that for an in-place engine version upgrade, you need to remove other cluster properties changes (e.g. SecurityGroupId) from the CFN template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-dbcluster.html#cfn-docdb-dbcluster-engineversion
         '''
@@ -4578,6 +4578,12 @@ class DatabaseSecret(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_docdb.DatabaseSecretProps",
@@ -5299,6 +5305,12 @@ class ClusterParameterGroup(
             check_type(argname="argument parameter_group_name", value=parameter_group_name, expected_type=type_hints["parameter_group_name"])
         return typing.cast(IClusterParameterGroup, jsii.sinvoke(cls, "fromParameterGroupName", [scope, id, parameter_group_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="parameterGroupName")
     def parameter_group_name(self) -> builtins.str:
@@ -5543,6 +5555,12 @@ class DatabaseCluster(
         '''The default port Document DB listens on.'''
         return typing.cast(jsii.Number, jsii.sget(cls, "DEFAULT_PORT"))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="clusterEndpoint")
     def cluster_endpoint(self) -> Endpoint:
@@ -5719,6 +5737,12 @@ class DatabaseInstance(
         )
 
         return typing.cast(IDatabaseInstance, jsii.sinvoke(cls, "fromDatabaseInstanceAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="cluster")

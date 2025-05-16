@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: aws-cdk.integ-tests-alpha
-Version: 2.195.0a0
+Version: 2.196.0a0
 Summary: CDK Integration Testing Constructs
 Home-page: https://github.com/aws/aws-cdk
 Author: Amazon Web Services
@@ -22,9 +22,9 @@ Requires-Python: ~=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 License-File: NOTICE
-Requires-Dist: aws-cdk-lib<3.0.0,>=2.195.0
+Requires-Dist: aws-cdk-lib<3.0.0,>=2.196.0
 Requires-Dist: constructs<11.0.0,>=10.0.0
-Requires-Dist: jsii<2.0.0,>=1.110.0
+Requires-Dist: jsii<2.0.0,>=1.112.0
 Requires-Dist: publication>=0.0.3
 Requires-Dist: typeguard<4.3.0,>=2.13.3
 
@@ -96,8 +96,8 @@ certain handler:
 
 ```python
 class StackUnderTest(Stack):
-    def __init__(self, scope, id, *, architecture=None, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, architecture=architecture, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, architecture=None, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, architecture=architecture, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         lambda_.Function(self, "Handler",
             runtime=lambda_.Runtime.NODEJS_LATEST,
@@ -114,8 +114,8 @@ for the Lambda function. In particular, it should work for both `ARM_64` and
 
 ```python
 class StackUnderTest(Stack):
-    def __init__(self, scope, id, *, architecture=None, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, architecture=architecture, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, architecture=None, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, architecture=architecture, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         lambda_.Function(self, "Handler",
             runtime=lambda_.Runtime.NODEJS_LATEST,

@@ -50,7 +50,7 @@ class ExplodedDrawing_Drawing(_DrawingEditorMixin,Drawing):
 'height': 20.0
 '_splitLongWordCount': 0
 '_hyphenations': 0
-'blPara': ParaLines(kind=1, lines=[FragLine(ascent=7.59765625, descent=-2.40234375, extraSpace=0.0, fontSize=10, lineBreak=True, maxWidth=12.4091796875, sFW=0, wordCount=1, words=[ParaFrag(__tag__='u', _fkind=0, bold=1, fontName='Vera', fontSize=10, greek=0, italic=1, link=[], rise=0, text='U', textColor=Color(0,0,0,1), us_lines=[(0, 'underline', None, '', '-0.125*F', 0, 1, '1')]), ParaFrag(__tag__='span', _fkind=0, bold=1, fontName='Vera', fontSize=8, greek=0, italic=1, link=[], rise=5.0, text='2', textColor=Color(1,0,0,1), us_lines=[(0, 'underline', None, '', '-0.125*F', 0, 1, '1')]), ParaFrag(__tag__='br', _fkind=3, bold=1, fontName='Vera', fontSize=10, greek=0, italic=1, lineBreak=True, link=[], rise=0, text='', textColor=Color(0,0,0,1), us_lines=[])]), ParaLines(ascent=7.59765625, descent=-2.40234375, extraSpace=6.046875, fontSize=10, lineBreak=False, maxWidth=12.4091796875, sFW=1, wordCount=1, words=[ParaFrag(__tag__='para', _fkind=0, bold=1, fontName='Vera', fontSize=10, greek=0, italic=1, link=[], rise=0, text='3', textColor=Color(0,0,0,1), us_lines=[])])])
+'blPara': ParaLines(kind=1, lines=[FragLine(ascent=7.59765625, descent=-2.40234375, extraSpace=0.0, fontSize=10, lineBreak=True, maxWidth=12.4091796875, sFW=0, wordCount=1, words=[ParaFrag(__tag__='u', _fkind=0, bold=1, fontName='Vera', fontSize=10, greek=0, italic=1, link=[], rise=0, text='U', textColor=Color(0,0,0,1), us_lines=[(0, 'underline', None, '', '-0.125*F', 0, 1, '1')]), ParaFrag(__tag__='span', _fkind=0, bold=1, fontName='Vera', fontSize=8, greek=0, italic=1, link=[], rise=5.0, text='2', textColor=Color(1,0,0,1), us_lines=[(0, 'underline', None, '', '-0.125*F', 0, 1, '1')]), ParaFrag(__tag__='br', _fkind=3, bold=1, fontName='Vera', fontSize=10, greek=0, italic=1, lineBreak=True, link=[], rise=0, text='', textColor=Color(0,0,0,1), us_lines=[])]), FragLine(ascent=7.59765625, descent=-2.40234375, extraSpace=6.046875, fontSize=10, lineBreak=False, maxWidth=12.4091796875, sFW=1, wordCount=1, words=[ParaFrag(__tag__='para', _fkind=0, bold=1, fontName='Vera', fontSize=10, greek=0, italic=1, link=[], rise=0, text='3', textColor=Color(0,0,0,1), us_lines=[])])])
 ) #Paragraph))
 		self.add(Line(95,95,151.2917,127.5,strokeColor=Color(0,0,0,1),strokeWidth=.5,strokeLineCap=0,strokeLineJoin=0,strokeMiterLimit=0,strokeDashArray=None,strokeOpacity=None))
 		v0=self._nn(Group())
@@ -71,7 +71,7 @@ class ExplodedDrawing_Drawing(_DrawingEditorMixin,Drawing):
 'height': 10.0
 '_splitLongWordCount': 0
 '_hyphenations': 0
-'blPara': ParaLines(kind=1, lines=[ParaLines(ascent=7.59765625, descent=-2.40234375, extraSpace=0.0, fontSize=10, lineBreak=False, maxWidth=11.9306640625, sFW=0, wordCount=1, words=[ParaFrag(__tag__='para', _fkind=0, bold=1, fontName='Vera', fontSize=10, greek=0, italic=1, link=[], rise=0, text='V', textColor=Color(0,0,0,1), us_lines=[]), ParaFrag(__tag__='span', _fkind=0, bold=1, fontName='Vera', fontSize=8, greek=0, italic=1, link=[], rise=5.0, text='3', textColor=Color(1,0,0,1), us_lines=[])])])
+'blPara': ParaLines(kind=1, lines=[FragLine(ascent=7.59765625, descent=-2.40234375, extraSpace=0.0, fontSize=10, lineBreak=False, maxWidth=11.9306640625, sFW=0, wordCount=1, words=[ParaFrag(__tag__='para', _fkind=0, bold=1, fontName='Vera', fontSize=10, greek=0, italic=1, link=[], rise=0, text='V', textColor=Color(0,0,0,1), us_lines=[]), ParaFrag(__tag__='span', _fkind=0, bold=1, fontName='Vera', fontSize=8, greek=0, italic=1, link=[], rise=5.0, text='3', textColor=Color(1,0,0,1), us_lines=[])])])
 ) #Paragraph))
 		self.add(Line(95,95,151.2917,62.5,strokeColor=Color(0,0,0,1),strokeWidth=.5,strokeLineCap=0,strokeLineJoin=0,strokeMiterLimit=0,strokeDashArray=None,strokeOpacity=None))
 		v0=self._nn(Group())
@@ -235,7 +235,7 @@ class ExplodedDrawing_Drawing(_DrawingEditorMixin,Drawing):
 'height': 10.0
 '_splitLongWordCount': 0
 '_hyphenations': 0
-'blPara': ParaLines(kind=1, lines=[ParaLines(ascent=7.59765625, descent=-2.40234375, extraSpace=2147483615.09375, fontSize=10, lineBreak=False, maxWidth=2147483647, sFW=0, wordCount=1, words=[ParaFrag(__tag__='para', _fkind=0, bold=1, fontName='Vera', fontSize=10, greek=0, italic=1, link=[], rise=0, text='Earth', textColor=Color(0,0,0,1), us_lines=[]), ParaFrag(__tag__='super', _fkind=0, bold=1, fontName='Vera', fontSize=8, greek=0, italic=1, link=[], rise=5.0, text='1', textColor=Color(0,0,0,1), us_lines=[])])])
+'blPara': ParaLines(kind=1, lines=[FragLine(ascent=7.59765625, descent=-2.40234375, extraSpace=2147483615.09375, fontSize=10, lineBreak=False, maxWidth=2147483647, sFW=0, wordCount=1, words=[ParaFrag(__tag__='para', _fkind=0, bold=1, fontName='Vera', fontSize=10, greek=0, italic=1, link=[], rise=0, text='Earth', textColor=Color(0,0,0,1), us_lines=[]), ParaFrag(__tag__='super', _fkind=0, bold=1, fontName='Vera', fontSize=8, greek=0, italic=1, link=[], rise=5.0, text='1', textColor=Color(0,0,0,1), us_lines=[])])])
 ) #Paragraph))
 		v0=self._nn(Group())
 		v0.transform = (1,0,0,1,146.9615,65)

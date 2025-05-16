@@ -14,7 +14,6 @@
 
 import contextlib
 import gc
-import importlib
 import inspect
 import json
 import logging
@@ -27,7 +26,8 @@ from collections import OrderedDict, defaultdict
 from typing import Optional, Union
 
 import torch
-import torch.nn as nn
+from torch import distributed as dist
+from torch import nn
 
 from ..state import AcceleratorState
 from .constants import SAFE_WEIGHTS_NAME, WEIGHTS_NAME
@@ -46,7 +46,7 @@ from .imports import (
 from .memory import clear_device_cache, get_xpu_available_memory
 from .offload import load_offloaded_weight, offload_weight, save_offload_index
 from .tqdm import is_tqdm_available, tqdm
-from .versions import compare_versions, is_torch_version
+from .versions import is_torch_version
 
 
 if is_npu_available(check_device=False):
@@ -358,19 +358,7 @@ def set_module_tensor_to_device(
             elif param_cls.__name__ in ["QTensor", "QBitsTensor"]:
                 new_value = torch.nn.Parameter(new_value, requires_grad=old_value.requires_grad).to(device)
             elif param_cls.__name__ in ["AffineQuantizedTensor"]:
-                if importlib.util.find_spec("torchao") is not None and compare_versions("torchao", ">=", "0.7.0"):
-                    # TorchAO v0.7.0 made layout_tensor an internal private variable and exposed tensor_impl
-                    args = (new_value.tensor_impl,)
-                else:
-                    args = (new_value.layout_tensor,)
-                args += (
-                    new_value.block_size,
-                    new_value.shape,
-                    new_value.quant_min,
-                    new_value.quant_max,
-                    new_value.zero_point_domain,
-                )
-                new_value = torch.nn.Parameter(param_cls(*args), requires_grad=old_value.requires_grad).to(device)
+                new_value = new_value.to(device)
             else:
                 new_value = param_cls(new_value, requires_grad=old_value.requires_grad).to(device)
 
@@ -453,7 +441,7 @@ def named_module_tensors(
                 yield named_buffer
 
 
-def get_non_persistent_buffers(module: nn.Module, recurse: bool = False):
+def get_non_persistent_buffers(module: nn.Module, recurse: bool = False, fqns: bool = False):
     """
     Gather all non persistent buffers of a given modules into a set
 
@@ -462,12 +450,17 @@ def get_non_persistent_buffers(module: nn.Module, recurse: bool = False):
             The module we want the non persistent buffers on.
         recurse (`bool`, *optional*, defaults to `False`):
             Whether or not to go look in every submodule or just return the direct non persistent buffers.
+        fqns (`bool`, *optional*, defaults to `False`):
+            Whether or not to return the fully-qualified names of the non persistent buffers.
     """
 
     non_persistent_buffers_set = module._non_persistent_buffers_set
     if recurse:
-        for _, m in module.named_modules():
-            non_persistent_buffers_set |= m._non_persistent_buffers_set
+        for n, m in module.named_modules():
+            if fqns:
+                non_persistent_buffers_set |= {n + "." + b for b in m._non_persistent_buffers_set}
+            else:
+                non_persistent_buffers_set |= m._non_persistent_buffers_set
 
     return non_persistent_buffers_set
 
@@ -506,18 +499,26 @@ def check_tied_parameters_in_config(model: nn.Module):
     has_tied_module = False
 
     if "PreTrainedModel" in [c.__name__ for c in inspect.getmro(model.__class__)]:
+        has_tied_word_embedding = False
+        model_decoder_config = None
+        if hasattr(model, "config"):
+            model_decoder_config = (
+                model.config.get_text_config(decoder=True)
+                if hasattr(model.config, "get_text_config")
+                else model.config
+            )
         has_tied_word_embedding = (
-            hasattr(model, "config")
-            and getattr(model.config, "tie_word_embeddings", False)
+            model_decoder_config is not None
+            and getattr(model_decoder_config, "tie_word_embeddings", False)
             and model.get_output_embeddings()
         )
+
         has_tied_encoder_decoder = (
             hasattr(model, "config")
             and getattr(model.config, "is_encoder_decoder", False)
             and getattr(model.config, "tie_encoder_decoder", False)
         )
         has_tied_module = any(hasattr(module, "_tie_weights") for module in model.modules())
-
     return any([has_tied_word_embedding, has_tied_encoder_decoder, has_tied_module])
 
 
@@ -1109,7 +1110,6 @@ def _init_infer_auto_device_map(
 
     module_sizes = compute_module_sizes(model, dtype=dtype, special_dtypes=special_dtypes)
     tied_parameters = find_tied_parameters(model)
-
     if check_tied_parameters_in_config(model) and len(tied_parameters) == 0:
         logger.warn(
             "The model weights are not tied. Please use the `tie_weights` method before using the `infer_auto_device` function."
@@ -1704,7 +1704,7 @@ def load_state_dict(checkpoint_file, device_map=None):
 
             return tensors
     else:
-        return torch.load(checkpoint_file, map_location=torch.device("cpu"))
+        return torch.load(checkpoint_file, map_location=torch.device("cpu"), weights_only=True)
 
 
 def get_state_dict_offloaded_model(model: nn.Module):
@@ -1791,6 +1791,8 @@ def load_checkpoint_in_model(
     keep_in_fp32_modules: list[str] = None,
     offload_8bit_bnb: bool = False,
     strict: bool = False,
+    full_state_dict: bool = True,
+    broadcast_from_rank0: bool = False,
 ):
     """
     Loads a (potentially sharded) checkpoint inside a model, potentially sending weights to a given device as they are
@@ -1831,6 +1833,12 @@ def load_checkpoint_in_model(
         strict (`bool`, *optional*, defaults to `False`):
             Whether to strictly enforce that the keys in the checkpoint state_dict match the keys of the model's
             state_dict.
+        full_state_dict (`bool`, *optional*, defaults to `True`): if this is set to `True`, all the tensors in the
+            loaded state_dict will be gathered. No ShardedTensor and DTensor will be in the loaded state_dict.
+        broadcast_from_rank0 (`False`, *optional*, defaults to `False`): when the option is `True`, a distributed
+            `ProcessGroup` must be initialized. rank0 should receive a full state_dict and will broadcast the tensors
+            in the state_dict one by one to other ranks. Other ranks will receive the tensors and shard (if applicable)
+            according to the local shards in the model.
 
     """
     if offload_8bit_bnb:
@@ -1911,12 +1919,41 @@ def load_checkpoint_in_model(
     unexpected_keys = set()
     model_keys = set(model.state_dict().keys())
     buffer_names = [name for name, _ in model.named_buffers()]
+    model_devices = {t.device for t in model.state_dict().values() if isinstance(t, torch.Tensor)}
+    model_physical_devices = model_devices - {torch.device("meta")}
     for checkpoint_file in checkpoint_files:
-        loaded_checkpoint = load_state_dict(checkpoint_file, device_map=device_map)
         if device_map is None:
-            model.load_state_dict(loaded_checkpoint, strict=strict)
+            # exception for multi-device loading was made for the meta device in torch v2.7.0
+            # https://github.com/pytorch/pytorch/blob/v2.6.0/torch/distributed/checkpoint/state_dict.py#L557-L563
+            # https://github.com/pytorch/pytorch/blob/v2.7.0-rc2/torch/distributed/checkpoint/state_dict.py#L575-L587
+            if is_torch_version(">=", "2.2.0") and (
+                (is_torch_version(">=", "2.7.0") and len(model_physical_devices) <= 1) or len(model_devices) <= 1
+            ):
+                from torch.distributed.checkpoint.state_dict import StateDictOptions, set_model_state_dict
+
+                broadcast_from_rank0 &= is_torch_version(">=", "2.4.0")
+                loaded_checkpoint = (
+                    load_state_dict(checkpoint_file, device_map=device_map)
+                    if not broadcast_from_rank0 or dist.get_rank() == 0
+                    else {}
+                )
+                set_model_state_dict(
+                    model,
+                    loaded_checkpoint,
+                    options=StateDictOptions(
+                        full_state_dict=full_state_dict,
+                        strict=strict,
+                        **({"broadcast_from_rank0": broadcast_from_rank0} if is_torch_version(">=", "2.4.0") else {}),
+                    ),
+                )
+            else:
+                loaded_checkpoint = load_state_dict(checkpoint_file, device_map=device_map)
+                model.load_state_dict(loaded_checkpoint, strict=strict)
+
             unexpected_keys.update(set(loaded_checkpoint.keys()) - model_keys)
         else:
+            loaded_checkpoint = load_state_dict(checkpoint_file, device_map=device_map)
+
             for param_name, param in loaded_checkpoint.items():
                 # skip SCB parameter (for 8-bit serialization)
                 if "SCB" in param_name:

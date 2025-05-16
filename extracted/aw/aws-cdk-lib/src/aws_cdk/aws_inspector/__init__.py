@@ -153,6 +153,12 @@ class AssessmentTemplate(
             check_type(argname="argument template", value=template, expected_type=type_hints["template"])
         return typing.cast("IAssessmentTemplate", jsii.sinvoke(cls, "fromCfnAssessmentTemplate", [scope, id, template]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_inspector.AssessmentTemplateProps",

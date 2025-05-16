@@ -9822,6 +9822,12 @@ class Pipeline(
             check_type(argname="argument stage_name", value=stage_name, expected_type=type_hints["stage_name"])
         return typing.cast(IStage, jsii.invoke(self, "stage", [stage_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="artifactBucket")
     def artifact_bucket(self) -> _IBucket_42e086fd:

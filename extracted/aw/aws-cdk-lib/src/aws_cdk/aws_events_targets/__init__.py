@@ -1648,19 +1648,19 @@ class CloudWatchLogGroup(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: _IRule_af9e3d28,
+        rule: _IRule_af9e3d28,
         _id: typing.Optional[builtins.str] = None,
     ) -> _RuleTargetConfig_4e70fe03:
         '''Returns a RuleTarget that can be used to log an event into a CloudWatch LogGroup.
 
-        :param _rule: -
+        :param rule: -
         :param _id: -
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5583066efc6b7b2980bfbfbf33e6491271f5faf3b97e5d2ae998d1fe4189d1d4)
-            check_type(argname="argument _rule", value=_rule, expected_type=type_hints["_rule"])
+            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
             check_type(argname="argument _id", value=_id, expected_type=type_hints["_id"])
-        return typing.cast(_RuleTargetConfig_4e70fe03, jsii.invoke(self, "bind", [_rule, _id]))
+        return typing.cast(_RuleTargetConfig_4e70fe03, jsii.invoke(self, "bind", [rule, _id]))
 
 
 @jsii.implements(_IRuleTarget_7a91f454)
@@ -2064,19 +2064,19 @@ class EcsTask(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: _IRule_af9e3d28,
+        rule: _IRule_af9e3d28,
         _id: typing.Optional[builtins.str] = None,
     ) -> _RuleTargetConfig_4e70fe03:
         '''Allows using tasks as target of EventBridge events.
 
-        :param _rule: -
+        :param rule: -
         :param _id: -
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8ad199a8641f171a0447e974756bbddd91b00aaa9bcf33d231826916b85b8166)
-            check_type(argname="argument _rule", value=_rule, expected_type=type_hints["_rule"])
+            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
             check_type(argname="argument _id", value=_id, expected_type=type_hints["_id"])
-        return typing.cast(_RuleTargetConfig_4e70fe03, jsii.invoke(self, "bind", [_rule, _id]))
+        return typing.cast(_RuleTargetConfig_4e70fe03, jsii.invoke(self, "bind", [rule, _id]))
 
     @builtins.property
     @jsii.member(jsii_name="securityGroups")
@@ -6179,7 +6179,7 @@ def _typecheckingstub__c7cd04d50c1c36eb2be36abb3fbdf553a534c7ae5d60f1c9cac6b5cf6
     pass
 
 def _typecheckingstub__5583066efc6b7b2980bfbfbf33e6491271f5faf3b97e5d2ae998d1fe4189d1d4(
-    _rule: _IRule_af9e3d28,
+    rule: _IRule_af9e3d28,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6235,7 +6235,7 @@ def _typecheckingstub__c13bb1641d81a866856c7cdeae6fa612e09bb941bc83053a19b901e30
     pass
 
 def _typecheckingstub__8ad199a8641f171a0447e974756bbddd91b00aaa9bcf33d231826916b85b8166(
-    _rule: _IRule_af9e3d28,
+    rule: _IRule_af9e3d28,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""

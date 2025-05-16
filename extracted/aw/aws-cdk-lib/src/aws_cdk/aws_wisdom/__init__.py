@@ -685,7 +685,7 @@ class CfnAIAgent(
             :param answer_generation_ai_prompt_id: The AI Prompt identifier for the Answer Generation prompt used by the ``ANSWER_RECOMMENDATION`` AI Agent.
             :param association_configurations: The association configurations for overriding behavior on this AI Agent.
             :param intent_labeling_generation_ai_prompt_id: The AI Prompt identifier for the Intent Labeling prompt used by the ``ANSWER_RECOMMENDATION`` AI Agent.
-            :param locale: 
+            :param locale: The locale to which specifies the language and region settings that determine the response language for `QueryAssistant <https://docs.aws.amazon.com/connect/latest/APIReference/API_amazon-q-connect_QueryAssistant.html>`_ .
             :param query_reformulation_ai_prompt_id: The AI Prompt identifier for the Query Reformulation prompt used by the ``ANSWER_RECOMMENDATION`` AI Agent.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-answerrecommendationaiagentconfiguration.html
@@ -807,7 +807,8 @@ class CfnAIAgent(
 
         @builtins.property
         def locale(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The locale to which specifies the language and region settings that determine the response language for `QueryAssistant <https://docs.aws.amazon.com/connect/latest/APIReference/API_amazon-q-connect_QueryAssistant.html>`_ .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-answerrecommendationaiagentconfiguration.html#cfn-wisdom-aiagent-answerrecommendationaiagentconfiguration-locale
             '''
             result = self._values.get("locale")
@@ -1189,7 +1190,7 @@ class CfnAIAgent(
             :param answer_generation_ai_guardrail_id: The ID of the answer generation AI guardrail.
             :param answer_generation_ai_prompt_id: The AI Prompt identifier for the Answer Generation prompt used by the ``ANSWER_RECOMMENDATION`` AI Agent.
             :param association_configurations: The association configurations for overriding behavior on this AI Agent.
-            :param locale: 
+            :param locale: The locale to which specifies the language and region settings that determine the response language for `QueryAssistant <https://docs.aws.amazon.com/connect/latest/APIReference/API_amazon-q-connect_QueryAssistant.html>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-manualsearchaiagentconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1291,7 +1292,8 @@ class CfnAIAgent(
 
         @builtins.property
         def locale(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The locale to which specifies the language and region settings that determine the response language for `QueryAssistant <https://docs.aws.amazon.com/connect/latest/APIReference/API_amazon-q-connect_QueryAssistant.html>`_ .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-manualsearchaiagentconfiguration.html#cfn-wisdom-aiagent-manualsearchaiagentconfiguration-locale
             '''
             result = self._values.get("locale")

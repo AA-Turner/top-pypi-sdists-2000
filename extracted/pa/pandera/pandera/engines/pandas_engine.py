@@ -1,6 +1,6 @@
 """Pandas engine and data types."""
 
-# pylint:disable=too-many-ancestors
+# pylint:disable=too-many-ancestors,unused-argument
 
 # docstrings are inherited
 # pylint:disable=missing-class-docstring
@@ -158,7 +158,14 @@ class DataType(dtypes.DataType):
 
     def coerce(self, data_container: PandasObject) -> PandasObject:
         """Pure coerce without catching exceptions."""
-        coerced = data_container.astype(self.type)
+        try:
+            coerced = data_container.astype(self.type)
+        except AttributeError:
+            # attempt to use underlying numpy dtype if pandas extension type
+            if is_extension_dtype(self.type):
+                coerced = data_container.astype(self.type.type)
+            else:
+                raise
         if type(data_container).__module__.startswith("modin.pandas"):
             # NOTE: this is a hack to enable catching of errors in modin
             coerced.__str__()
@@ -526,7 +533,7 @@ def _check_decimal(
         return is_decimal
 
     decimals = pandas_obj[is_decimal]
-    # fix for modin unamed series raises KeyError
+    # fix for modin unnamed series raises KeyError
     # https://github.com/modin-project/modin/issues/4317
     decimals.name = "decimals"  # type: ignore
 
@@ -1298,7 +1305,7 @@ class PythonGenericType(DataType):
 
     def _check_type(self, element: Any) -> bool:
         # if the element is None or pd.NA, this function should return True:
-        # the schema should only fail if nullable=False is specifed at the
+        # the schema should only fail if nullable=False is specified at the
         # schema/schema component level.
         if element is None or element is pd.NA:
             return True

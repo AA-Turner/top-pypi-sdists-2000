@@ -8793,6 +8793,12 @@ class InstanceProfile(
             check_type(argname="argument instance_profile_name", value=instance_profile_name, expected_type=type_hints["instance_profile_name"])
         return typing.cast(IInstanceProfile, jsii.sinvoke(cls, "fromInstanceProfileName", [scope, id, instance_profile_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="instanceProfileArn")
     def instance_profile_arn(self) -> builtins.str:
@@ -9179,6 +9185,12 @@ class ManagedPolicy(
             check_type(argname="argument user", value=user, expected_type=type_hints["user"])
         return typing.cast(None, jsii.invoke(self, "attachToUser", [user]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> builtins.str:
@@ -9518,6 +9530,12 @@ class OpenIdConnectProvider(
             check_type(argname="argument open_id_connect_provider_arn", value=open_id_connect_provider_arn, expected_type=type_hints["open_id_connect_provider_arn"])
         return typing.cast(IOpenIdConnectProvider, jsii.sinvoke(cls, "fromOpenIdConnectProviderArn", [scope, id, open_id_connect_provider_arn]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="openIdConnectProviderArn")
     def open_id_connect_provider_arn(self) -> builtins.str:
@@ -9847,6 +9865,12 @@ class Policy(
             type_hints = typing.get_type_hints(_typecheckingstub__87f9ba31abd317367c4b853073e8d4e30843f460c3420b69165c6082b01547ae)
             check_type(argname="argument user", value=user, expected_type=type_hints["user"])
         return typing.cast(None, jsii.invoke(self, "attachToUser", [user]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="document")
@@ -10762,6 +10786,12 @@ class PolicyStatement(
         '''
         return typing.cast(typing.List[builtins.str], jsii.invoke(self, "validateForResourcePolicy", []))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="actions")
     def actions(self) -> typing.List[builtins.str]:
@@ -11593,6 +11623,12 @@ class SamlProvider(
             check_type(argname="argument saml_provider_arn", value=saml_provider_arn, expected_type=type_hints["saml_provider_arn"])
         return typing.cast(ISamlProvider, jsii.sinvoke(cls, "fromSamlProviderArn", [scope, id, saml_provider_arn]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="samlProviderArn")
     def saml_provider_arn(self) -> builtins.str:
@@ -12231,6 +12267,12 @@ class AccessKey(
         props = AccessKeyProps(user=user, serial=serial, status=status)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="accessKeyId")
@@ -12925,6 +12967,12 @@ class LazyRole(
             type_hints = typing.get_type_hints(_typecheckingstub__6367cadac69d2b22537737f04814197b71e654eb8d432cbd5b41e484577f1446)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
         return typing.cast(Grant, jsii.invoke(self, "grantPassRole", [identity]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="assumeRoleAction")
@@ -13936,6 +13984,12 @@ class Role(
 
         return typing.cast(IRole, jsii.invoke(self, "withoutPolicyUpdates", [options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="assumeRoleAction")
     def assume_role_action(self) -> builtins.str:
@@ -14469,6 +14523,12 @@ class User(
             type_hints = typing.get_type_hints(_typecheckingstub__5ebb8924f05370c7968859fd9c4bc9b3ab97a7fcbee56ddd82313a0a6038f3d0)
             check_type(argname="argument policy", value=policy, expected_type=type_hints["policy"])
         return typing.cast(None, jsii.invoke(self, "attachInlinePolicy", [policy]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="assumeRoleAction")
@@ -15329,6 +15389,12 @@ class Group(
             type_hints = typing.get_type_hints(_typecheckingstub__f8334d09c64ac01b56e25eccb0dd778a954e4f613c776ac3447cf3f1318a89d7)
             check_type(argname="argument policy", value=policy, expected_type=type_hints["policy"])
         return typing.cast(None, jsii.invoke(self, "attachInlinePolicy", [policy]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="assumeRoleAction")

@@ -948,7 +948,7 @@ class CfnStreamConsumer(
 
     The consumer you register can then call `SubscribeToShard <https://docs.aws.amazon.com/kinesis/latest/APIReference/API_SubscribeToShard.html>`_ to receive data from the stream using enhanced fan-out, at a rate of up to 2 MiB per second for every shard you subscribe to. This rate is unaffected by the total number of consumers that read from the same stream.
 
-    You can register up to five consumers per stream. However, you can request a limit increase using the `Kinesis Data Streams limits form <https://docs.aws.amazon.com/support/v1?#/>`_ . A given consumer can only be registered with one stream at a time.
+    You can register up to 20 consumers per stream. However, you can request a limit increase using the `Kinesis Data Streams limits form <https://docs.aws.amazon.com/support/v1?#/>`_ . A given consumer can only be registered with one stream at a time.
 
     For more information, see `Using Consumers with Enhanced Fan-Out <https://docs.aws.amazon.com/streams/latest/dev/introduction-to-enhanced-consumers.html>`_ .
 
@@ -3427,6 +3427,12 @@ class ResourcePolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="document")
     def document(self) -> _PolicyDocument_3ac34393:
@@ -4684,6 +4690,12 @@ class Stream(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricWriteProvisionedThroughputExceeded", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="autoCreatePolicy")
     def _auto_create_policy(self) -> builtins.bool:
@@ -4922,6 +4934,12 @@ class StreamConsumer(
             type_hints = typing.get_type_hints(_typecheckingstub__21b7fc951011e7e3fc14b6da5ab3310f7cb75cec5142637f1f3948367f34ac02)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="autoCreatePolicy")

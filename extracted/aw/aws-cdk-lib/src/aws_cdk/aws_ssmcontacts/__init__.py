@@ -64,12 +64,13 @@ from .. import (
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
+    ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
 
 
-@jsii.implements(_IInspectable_c2943556)
+@jsii.implements(_IInspectable_c2943556, _ITaggableV2_4e6798f8)
 class CfnContact(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -108,6 +109,10 @@ class CfnContact(
                         is_essential=False
                     )
                 )]
+            )],
+            tags=[CfnTag(
+                key="key",
+                value="value"
             )]
         )
     '''
@@ -121,6 +126,7 @@ class CfnContact(
         display_name: builtins.str,
         type: builtins.str,
         plan: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContact.StageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
@@ -129,13 +135,14 @@ class CfnContact(
         :param display_name: The full name of the contact or escalation plan.
         :param type: The type of contact. - ``PERSONAL`` : A single, individual contact. - ``ESCALATION`` : An escalation plan. - ``ONCALL_SCHEDULE`` : An on-call schedule.
         :param plan: A list of stages. A contact has an engagement plan with stages that contact specified contact channels. An escalation plan uses stages that contact specified contacts.
+        :param tags: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__96185056d36e15643884f48a931b8d7005ac84a62576223bb952c88328d7d90c)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnContactProps(
-            alias=alias, display_name=display_name, type=type, plan=plan
+            alias=alias, display_name=display_name, type=type, plan=plan, tags=tags
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -178,6 +185,12 @@ class CfnContact(
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -240,6 +253,18 @@ class CfnContact(
             type_hints = typing.get_type_hints(_typecheckingstub__1b53265c2630d58664ca7f46c1ce619caeab6eec0dc5682af154a1d6e5fadc5b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "plan", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__59cff570ee94d66883c27c541d2b2e0ef7a60913a10e8561bd8fcab3f1a9341a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ssmcontacts.CfnContact.ChannelTargetInfoProperty",
@@ -898,6 +923,7 @@ class CfnContactChannelProps:
         "display_name": "displayName",
         "type": "type",
         "plan": "plan",
+        "tags": "tags",
     },
 )
 class CfnContactProps:
@@ -908,6 +934,7 @@ class CfnContactProps:
         display_name: builtins.str,
         type: builtins.str,
         plan: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContact.StageProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnContact``.
 
@@ -915,6 +942,7 @@ class CfnContactProps:
         :param display_name: The full name of the contact or escalation plan.
         :param type: The type of contact. - ``PERSONAL`` : A single, individual contact. - ``ESCALATION`` : An escalation plan. - ``ONCALL_SCHEDULE`` : An on-call schedule.
         :param plan: A list of stages. A contact has an engagement plan with stages that contact specified contact channels. An escalation plan uses stages that contact specified contacts.
+        :param tags: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmcontacts-contact.html
         :exampleMetadata: fixture=_generated
@@ -944,6 +972,10 @@ class CfnContactProps:
                             is_essential=False
                         )
                     )]
+                )],
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
                 )]
             )
         '''
@@ -953,6 +985,7 @@ class CfnContactProps:
             check_type(argname="argument display_name", value=display_name, expected_type=type_hints["display_name"])
             check_type(argname="argument type", value=type, expected_type=type_hints["type"])
             check_type(argname="argument plan", value=plan, expected_type=type_hints["plan"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "alias": alias,
             "display_name": display_name,
@@ -960,6 +993,8 @@ class CfnContactProps:
         }
         if plan is not None:
             self._values["plan"] = plan
+        if tags is not None:
+            self._values["tags"] = tags
 
     @builtins.property
     def alias(self) -> builtins.str:
@@ -1007,6 +1042,14 @@ class CfnContactProps:
         '''
         result = self._values.get("plan")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContact.StageProperty]]]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmcontacts-contact.html#cfn-ssmcontacts-contact-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2480,6 +2523,7 @@ def _typecheckingstub__96185056d36e15643884f48a931b8d7005ac84a62576223bb952c8832
     display_name: builtins.str,
     type: builtins.str,
     plan: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContact.StageProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2516,6 +2560,12 @@ def _typecheckingstub__fa02d91e10d2171d1f6f9fba4357f22de345c2007b02d0535df28e85a
 
 def _typecheckingstub__1b53265c2630d58664ca7f46c1ce619caeab6eec0dc5682af154a1d6e5fadc5b(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContact.StageProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__59cff570ee94d66883c27c541d2b2e0ef7a60913a10e8561bd8fcab3f1a9341a(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2625,6 +2675,7 @@ def _typecheckingstub__f741949260f507a90eb76a4ec5f8c03a5b8eeee237bc39b33a8add5cd
     display_name: builtins.str,
     type: builtins.str,
     plan: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContact.StageProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

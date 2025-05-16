@@ -1,10 +1,10 @@
 Metadata-Version: 2.4
 Name: icalendar
-Version: 6.2.0
+Version: 6.3.0
 Summary: iCalendar parser/generator
 Project-URL: Homepage, https://icalendar.readthedocs.io/
 Project-URL: Repository, https://github.com/collective/icalendar/
-Project-URL: source_archive, https://github.com/collective/icalendar/archive/07d49e75cf5716aeed3f3c2fc41c41f4733fcecc.zip
+Project-URL: source_archive, https://github.com/collective/icalendar/archive/4f2f47183467cb02f103b5722faa513acb6f1b62.zip
 Project-URL: Issues, https://github.com/collective/icalendar/issues
 Project-URL: Documentation, https://icalendar.readthedocs.io/
 Project-URL: Changelog, https://icalendar.readthedocs.io/en/latest/changelog.html

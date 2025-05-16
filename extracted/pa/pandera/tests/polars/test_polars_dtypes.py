@@ -121,6 +121,29 @@ def test_coerce_no_cast_special(to_dtype, strategy):
 
 
 @pytest.mark.parametrize(
+    "data_type_cls", list(pe.Engine.get_registered_dtypes())
+)
+def test_polars_data_type_coerce(data_type_cls):
+    """
+    Test that polars data type coercion will raise a ParserError on failure.
+    """
+    try:
+        data_type = data_type_cls()
+    except TypeError:
+        # don't test data types that require parameters
+        return
+    if data_type.type == pl.Struct:
+        pytest.skip(
+            "Polars panics: pyo3_runtime.PanicException: called `Option::unwrap()` on a `None` value"
+        )
+
+    try:
+        data_type.try_coerce(pl.LazyFrame([["1", "2", "a"]]))
+    except pandera.errors.ParserError as exc:
+        assert exc.failure_cases.shape[0] > 0
+
+
+@pytest.mark.parametrize(
     "from_dtype, to_dtype, strategy",
     [
         (pe.UInt32(), pe.UInt64(), get_dataframe_strategy),
@@ -448,6 +471,37 @@ def test_polars_nested_dtypes_try_coercion(
     except pandera.errors.ParserError as exc:
         col = pl.col(exc.failure_cases.columns[0])
         assert exc.failure_cases.select(col).equals(data.collect())
+
+
+@pytest.mark.parametrize(
+    "array",
+    [
+        pl.Array(pl.Int64(), (2, 2)),
+        pl.Array(pl.Int64(), (2, 2, 2)),
+        pl.Array(pl.Int64(), (2, 2, 2, 2)),
+    ],
+)
+def test_polars_nested_dtypes_shape(array):
+    pandera_dtype = pe.Engine.dtype(array)
+
+    assert len(array.shape) == len(pandera_dtype.type.shape)
+    assert array.shape == pandera_dtype.type.shape
+
+
+@pytest.mark.parametrize(
+    "dtype, shape",
+    [
+        (pl.Int64(), (2, 2)),
+        (pl.Int64(), (2, 2, 2)),
+        (pl.Int64(), (2, 2, 2, 2)),
+    ],
+)
+def test_polars_from_parametrized_nested_dtype(dtype, shape):
+    polars_array_type = pl.Array(dtype, shape=shape)
+    pandera_dtype = pe.Array.from_parametrized_dtype(polars_array_type)
+
+    assert pandera_dtype.type.shape == polars_array_type.shape
+    assert pandera_dtype.type.shape == shape
 
 
 @pytest.mark.parametrize(

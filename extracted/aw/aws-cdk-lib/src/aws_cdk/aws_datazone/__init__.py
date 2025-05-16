@@ -5264,7 +5264,7 @@ class CfnDomain(
         :param description: The description of the Amazon DataZone domain.
         :param domain_version: The domain version.
         :param kms_key_identifier: The identifier of the AWS Key Management Service (KMS) key that is used to encrypt the Amazon DataZone domain, metadata, and reporting data.
-        :param service_role: The service role of the domain that is created.
+        :param service_role: The service role of the domain.
         :param single_sign_on: The single sign-on details in Amazon DataZone.
         :param tags: The tags specified for the Amazon DataZone domain.
         '''
@@ -5372,7 +5372,7 @@ class CfnDomain(
     @builtins.property
     @jsii.member(jsii_name="attrRootDomainUnitId")
     def attr_root_domain_unit_id(self) -> builtins.str:
-        '''The ID of the root domain in Amazon Datazone.
+        '''The ID of the root domain unit.
 
         :cloudformationAttribute: RootDomainUnitId
         '''
@@ -5466,7 +5466,7 @@ class CfnDomain(
     @builtins.property
     @jsii.member(jsii_name="serviceRole")
     def service_role(self) -> typing.Optional[builtins.str]:
-        '''The service role of the domain that is created.'''
+        '''The service role of the domain.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "serviceRole"))
 
     @service_role.setter
@@ -5526,7 +5526,7 @@ class CfnDomain(
         ) -> None:
             '''The single sign-on details in Amazon DataZone.
 
-            :param idc_instance_arn: The ARN of the AWS Identity Center instance.
+            :param idc_instance_arn: The ARN of the IDC instance.
             :param type: The type of single sign-on in Amazon DataZone.
             :param user_assignment: The single sign-on user assignment in Amazon DataZone.
 
@@ -5560,7 +5560,7 @@ class CfnDomain(
 
         @builtins.property
         def idc_instance_arn(self) -> typing.Optional[builtins.str]:
-            '''The ARN of the AWS Identity Center instance.
+            '''The ARN of the IDC instance.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-domain-singlesignon.html#cfn-datazone-domain-singlesignon-idcinstancearn
             '''
@@ -5631,7 +5631,7 @@ class CfnDomainProps:
         :param description: The description of the Amazon DataZone domain.
         :param domain_version: The domain version.
         :param kms_key_identifier: The identifier of the AWS Key Management Service (KMS) key that is used to encrypt the Amazon DataZone domain, metadata, and reporting data.
-        :param service_role: The service role of the domain that is created.
+        :param service_role: The service role of the domain.
         :param single_sign_on: The single sign-on details in Amazon DataZone.
         :param tags: The tags specified for the Amazon DataZone domain.
 
@@ -5742,7 +5742,7 @@ class CfnDomainProps:
 
     @builtins.property
     def service_role(self) -> typing.Optional[builtins.str]:
-        '''The service role of the domain that is created.
+        '''The service role of the domain.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-domain.html#cfn-datazone-domain-servicerole
         '''
@@ -5787,7 +5787,7 @@ class CfnDomainUnit(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_datazone.CfnDomainUnit",
 ):
-    '''A domain unit enables you to easily organize your assets and other domain entities under specific business units and teams.
+    '''The summary of the domain unit.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-domainunit.html
     :cloudformationResource: AWS::DataZone::DomainUnit
@@ -5822,7 +5822,7 @@ class CfnDomainUnit(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param domain_identifier: The ID of the domain where you want to create a domain unit.
+        :param domain_identifier: The ID of the domain where you want to crate a domain unit.
         :param name: The name of the domain unit.
         :param parent_domain_unit_identifier: The ID of the parent domain unit.
         :param description: The description of the domain unit.
@@ -5873,7 +5873,7 @@ class CfnDomainUnit(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedAt")
     def attr_created_at(self) -> builtins.str:
-        '''The timestamp at which the domain unit was created.
+        '''The time stamp at which the domain unit was created.
 
         :cloudformationAttribute: CreatedAt
         '''
@@ -5882,7 +5882,7 @@ class CfnDomainUnit(
     @builtins.property
     @jsii.member(jsii_name="attrDomainId")
     def attr_domain_id(self) -> builtins.str:
-        '''The ID of the domain where the domain unit was created.
+        '''The ID of the domain in which the domain unit lives.
 
         :cloudformationAttribute: DomainId
         '''
@@ -5932,7 +5932,7 @@ class CfnDomainUnit(
     @builtins.property
     @jsii.member(jsii_name="domainIdentifier")
     def domain_identifier(self) -> builtins.str:
-        '''The ID of the domain where you want to create a domain unit.'''
+        '''The ID of the domain where you want to crate a domain unit.'''
         return typing.cast(builtins.str, jsii.get(self, "domainIdentifier"))
 
     @domain_identifier.setter
@@ -6003,7 +6003,7 @@ class CfnDomainUnitProps:
     ) -> None:
         '''Properties for defining a ``CfnDomainUnit``.
 
-        :param domain_identifier: The ID of the domain where you want to create a domain unit.
+        :param domain_identifier: The ID of the domain where you want to crate a domain unit.
         :param name: The name of the domain unit.
         :param parent_domain_unit_identifier: The ID of the parent domain unit.
         :param description: The description of the domain unit.
@@ -6042,7 +6042,7 @@ class CfnDomainUnitProps:
 
     @builtins.property
     def domain_identifier(self) -> builtins.str:
-        '''The ID of the domain where you want to create a domain unit.
+        '''The ID of the domain where you want to crate a domain unit.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-domainunit.html#cfn-datazone-domainunit-domainidentifier
         '''
@@ -8393,6 +8393,467 @@ class CfnGroupProfileProps:
 
 
 @jsii.implements(_IInspectable_c2943556)
+class CfnOwner(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_datazone.CfnOwner",
+):
+    '''The owner that you want to add to the entity.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-owner.html
+    :cloudformationResource: AWS::DataZone::Owner
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_datazone as datazone
+        
+        cfn_owner = datazone.CfnOwner(self, "MyCfnOwner",
+            domain_identifier="domainIdentifier",
+            entity_identifier="entityIdentifier",
+            entity_type="entityType",
+            owner=datazone.CfnOwner.OwnerPropertiesProperty(
+                group=datazone.CfnOwner.OwnerGroupPropertiesProperty(
+                    group_identifier="groupIdentifier"
+                ),
+                user=datazone.CfnOwner.OwnerUserPropertiesProperty(
+                    user_identifier="userIdentifier"
+                )
+            )
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        domain_identifier: builtins.str,
+        entity_identifier: builtins.str,
+        entity_type: builtins.str,
+        owner: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOwner.OwnerPropertiesProperty", typing.Dict[builtins.str, typing.Any]]],
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param domain_identifier: The ID of the domain in which you want to add the entity owner.
+        :param entity_identifier: The ID of the entity to which you want to add an owner.
+        :param entity_type: The type of an entity.
+        :param owner: The owner that you want to add to the entity.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__94bfd7733fd63571746923975807ae8f32ba35341a37f7148bb545b4e9847274)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnOwnerProps(
+            domain_identifier=domain_identifier,
+            entity_identifier=entity_identifier,
+            entity_type=entity_type,
+            owner=owner,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__aa3b09221ad53f7b391234ed414a2caf5be239897130cb63a881be90fd3d5159)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e7abc3e34a10e4f417d29d275feb8d0afab58fee4bf106d762ec5e892461eaa7)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="domainIdentifier")
+    def domain_identifier(self) -> builtins.str:
+        '''The ID of the domain in which you want to add the entity owner.'''
+        return typing.cast(builtins.str, jsii.get(self, "domainIdentifier"))
+
+    @domain_identifier.setter
+    def domain_identifier(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e9073faa55a5b23ffa32de5b7b260a878507e76f90477bf1a9c90357c2872891)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "domainIdentifier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="entityIdentifier")
+    def entity_identifier(self) -> builtins.str:
+        '''The ID of the entity to which you want to add an owner.'''
+        return typing.cast(builtins.str, jsii.get(self, "entityIdentifier"))
+
+    @entity_identifier.setter
+    def entity_identifier(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__553cfea40a703af75f1688c6e78763ca8d67d1e10486295a4f15880e459e83ca)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "entityIdentifier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="entityType")
+    def entity_type(self) -> builtins.str:
+        '''The type of an entity.'''
+        return typing.cast(builtins.str, jsii.get(self, "entityType"))
+
+    @entity_type.setter
+    def entity_type(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__59a8766cde46db5fea0cab80e368951dc950c0c18bbe166065a74941ff7268d0)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "entityType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="owner")
+    def owner(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnOwner.OwnerPropertiesProperty"]:
+        '''The owner that you want to add to the entity.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOwner.OwnerPropertiesProperty"], jsii.get(self, "owner"))
+
+    @owner.setter
+    def owner(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnOwner.OwnerPropertiesProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9200651c9921dbe5e1d4780332c9e8f8b197d26e18954ed4949d2b2e1f42f642)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "owner", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datazone.CfnOwner.OwnerGroupPropertiesProperty",
+        jsii_struct_bases=[],
+        name_mapping={"group_identifier": "groupIdentifier"},
+    )
+    class OwnerGroupPropertiesProperty:
+        def __init__(
+            self,
+            *,
+            group_identifier: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The properties of the domain unit owners group.
+
+            :param group_identifier: The ID of the domain unit owners group.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-owner-ownergroupproperties.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datazone as datazone
+                
+                owner_group_properties_property = datazone.CfnOwner.OwnerGroupPropertiesProperty(
+                    group_identifier="groupIdentifier"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ebdf17d77276482c77fb47efd9e4dbd02334583fe0ecbd40c08d7f701ee8d14b)
+                check_type(argname="argument group_identifier", value=group_identifier, expected_type=type_hints["group_identifier"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if group_identifier is not None:
+                self._values["group_identifier"] = group_identifier
+
+        @builtins.property
+        def group_identifier(self) -> typing.Optional[builtins.str]:
+            '''The ID of the domain unit owners group.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-owner-ownergroupproperties.html#cfn-datazone-owner-ownergroupproperties-groupidentifier
+            '''
+            result = self._values.get("group_identifier")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "OwnerGroupPropertiesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datazone.CfnOwner.OwnerPropertiesProperty",
+        jsii_struct_bases=[],
+        name_mapping={"group": "group", "user": "user"},
+    )
+    class OwnerPropertiesProperty:
+        def __init__(
+            self,
+            *,
+            group: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOwner.OwnerGroupPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOwner.OwnerUserPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''The properties of a domain unit's owner.
+
+            :param group: Specifies that the domain unit owner is a group.
+            :param user: Specifies that the domain unit owner is a user.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-owner-ownerproperties.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datazone as datazone
+                
+                owner_properties_property = datazone.CfnOwner.OwnerPropertiesProperty(
+                    group=datazone.CfnOwner.OwnerGroupPropertiesProperty(
+                        group_identifier="groupIdentifier"
+                    ),
+                    user=datazone.CfnOwner.OwnerUserPropertiesProperty(
+                        user_identifier="userIdentifier"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5c101d7b0fa44737f68ea873c4543f1aaebe3e1acc72b89c5d6be7d3315a3f6a)
+                check_type(argname="argument group", value=group, expected_type=type_hints["group"])
+                check_type(argname="argument user", value=user, expected_type=type_hints["user"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if group is not None:
+                self._values["group"] = group
+            if user is not None:
+                self._values["user"] = user
+
+        @builtins.property
+        def group(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOwner.OwnerGroupPropertiesProperty"]]:
+            '''Specifies that the domain unit owner is a group.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-owner-ownerproperties.html#cfn-datazone-owner-ownerproperties-group
+            '''
+            result = self._values.get("group")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOwner.OwnerGroupPropertiesProperty"]], result)
+
+        @builtins.property
+        def user(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOwner.OwnerUserPropertiesProperty"]]:
+            '''Specifies that the domain unit owner is a user.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-owner-ownerproperties.html#cfn-datazone-owner-ownerproperties-user
+            '''
+            result = self._values.get("user")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOwner.OwnerUserPropertiesProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "OwnerPropertiesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datazone.CfnOwner.OwnerUserPropertiesProperty",
+        jsii_struct_bases=[],
+        name_mapping={"user_identifier": "userIdentifier"},
+    )
+    class OwnerUserPropertiesProperty:
+        def __init__(
+            self,
+            *,
+            user_identifier: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The properties of the owner user.
+
+            :param user_identifier: The ID of the owner user.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-owner-owneruserproperties.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datazone as datazone
+                
+                owner_user_properties_property = datazone.CfnOwner.OwnerUserPropertiesProperty(
+                    user_identifier="userIdentifier"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__6ddd200ac00629d27d95838e6fe38733e398593324aa72df62d033667a13781d)
+                check_type(argname="argument user_identifier", value=user_identifier, expected_type=type_hints["user_identifier"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if user_identifier is not None:
+                self._values["user_identifier"] = user_identifier
+
+        @builtins.property
+        def user_identifier(self) -> typing.Optional[builtins.str]:
+            '''The ID of the owner user.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-owner-owneruserproperties.html#cfn-datazone-owner-owneruserproperties-useridentifier
+            '''
+            result = self._values.get("user_identifier")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "OwnerUserPropertiesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_datazone.CfnOwnerProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "domain_identifier": "domainIdentifier",
+        "entity_identifier": "entityIdentifier",
+        "entity_type": "entityType",
+        "owner": "owner",
+    },
+)
+class CfnOwnerProps:
+    def __init__(
+        self,
+        *,
+        domain_identifier: builtins.str,
+        entity_identifier: builtins.str,
+        entity_type: builtins.str,
+        owner: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOwner.OwnerPropertiesProperty, typing.Dict[builtins.str, typing.Any]]],
+    ) -> None:
+        '''Properties for defining a ``CfnOwner``.
+
+        :param domain_identifier: The ID of the domain in which you want to add the entity owner.
+        :param entity_identifier: The ID of the entity to which you want to add an owner.
+        :param entity_type: The type of an entity.
+        :param owner: The owner that you want to add to the entity.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-owner.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_datazone as datazone
+            
+            cfn_owner_props = datazone.CfnOwnerProps(
+                domain_identifier="domainIdentifier",
+                entity_identifier="entityIdentifier",
+                entity_type="entityType",
+                owner=datazone.CfnOwner.OwnerPropertiesProperty(
+                    group=datazone.CfnOwner.OwnerGroupPropertiesProperty(
+                        group_identifier="groupIdentifier"
+                    ),
+                    user=datazone.CfnOwner.OwnerUserPropertiesProperty(
+                        user_identifier="userIdentifier"
+                    )
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d35804fdeb7af54df495ac452da3f154252f3e8b980bc354ae920748f4c8e46d)
+            check_type(argname="argument domain_identifier", value=domain_identifier, expected_type=type_hints["domain_identifier"])
+            check_type(argname="argument entity_identifier", value=entity_identifier, expected_type=type_hints["entity_identifier"])
+            check_type(argname="argument entity_type", value=entity_type, expected_type=type_hints["entity_type"])
+            check_type(argname="argument owner", value=owner, expected_type=type_hints["owner"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "domain_identifier": domain_identifier,
+            "entity_identifier": entity_identifier,
+            "entity_type": entity_type,
+            "owner": owner,
+        }
+
+    @builtins.property
+    def domain_identifier(self) -> builtins.str:
+        '''The ID of the domain in which you want to add the entity owner.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-owner.html#cfn-datazone-owner-domainidentifier
+        '''
+        result = self._values.get("domain_identifier")
+        assert result is not None, "Required property 'domain_identifier' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def entity_identifier(self) -> builtins.str:
+        '''The ID of the entity to which you want to add an owner.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-owner.html#cfn-datazone-owner-entityidentifier
+        '''
+        result = self._values.get("entity_identifier")
+        assert result is not None, "Required property 'entity_identifier' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def entity_type(self) -> builtins.str:
+        '''The type of an entity.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-owner.html#cfn-datazone-owner-entitytype
+        '''
+        result = self._values.get("entity_type")
+        assert result is not None, "Required property 'entity_type' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def owner(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnOwner.OwnerPropertiesProperty]:
+        '''The owner that you want to add to the entity.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-owner.html#cfn-datazone-owner-owner
+        '''
+        result = self._values.get("owner")
+        assert result is not None, "Required property 'owner' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnOwner.OwnerPropertiesProperty], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnOwnerProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556)
 class CfnProject(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -10141,6 +10602,8 @@ __all__ = [
     "CfnEnvironmentProps",
     "CfnGroupProfile",
     "CfnGroupProfileProps",
+    "CfnOwner",
+    "CfnOwnerProps",
     "CfnProject",
     "CfnProjectMembership",
     "CfnProjectMembershipProps",
@@ -11264,6 +11727,86 @@ def _typecheckingstub__4f4f2d05f4850cb07cd88e6e5af875d2c16fa3ae4bcbc384b9a51f7f0
     domain_identifier: builtins.str,
     group_identifier: builtins.str,
     status: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__94bfd7733fd63571746923975807ae8f32ba35341a37f7148bb545b4e9847274(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    domain_identifier: builtins.str,
+    entity_identifier: builtins.str,
+    entity_type: builtins.str,
+    owner: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOwner.OwnerPropertiesProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aa3b09221ad53f7b391234ed414a2caf5be239897130cb63a881be90fd3d5159(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e7abc3e34a10e4f417d29d275feb8d0afab58fee4bf106d762ec5e892461eaa7(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e9073faa55a5b23ffa32de5b7b260a878507e76f90477bf1a9c90357c2872891(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__553cfea40a703af75f1688c6e78763ca8d67d1e10486295a4f15880e459e83ca(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__59a8766cde46db5fea0cab80e368951dc950c0c18bbe166065a74941ff7268d0(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9200651c9921dbe5e1d4780332c9e8f8b197d26e18954ed4949d2b2e1f42f642(
+    value: typing.Union[_IResolvable_da3f097b, CfnOwner.OwnerPropertiesProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ebdf17d77276482c77fb47efd9e4dbd02334583fe0ecbd40c08d7f701ee8d14b(
+    *,
+    group_identifier: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5c101d7b0fa44737f68ea873c4543f1aaebe3e1acc72b89c5d6be7d3315a3f6a(
+    *,
+    group: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOwner.OwnerGroupPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOwner.OwnerUserPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6ddd200ac00629d27d95838e6fe38733e398593324aa72df62d033667a13781d(
+    *,
+    user_identifier: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d35804fdeb7af54df495ac452da3f154252f3e8b980bc354ae920748f4c8e46d(
+    *,
+    domain_identifier: builtins.str,
+    entity_identifier: builtins.str,
+    entity_type: builtins.str,
+    owner: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOwner.OwnerPropertiesProperty, typing.Dict[builtins.str, typing.Any]]],
 ) -> None:
     """Type checking stubs"""
     pass

@@ -779,6 +779,12 @@ class Canary(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSuccessPercent", [options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="artifactsBucket")
     def artifacts_bucket(self) -> _IBucket_42e086fd:
@@ -4184,6 +4190,32 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_synthetics.Run
         :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_python_selenium.html#CloudWatch_Synthetics_runtimeversion-syn-python-selenium-4.1
         '''
         return typing.cast("Runtime", jsii.sget(cls, "SYNTHETICS_PYTHON_SELENIUM_4_1"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="SYNTHETICS_PYTHON_SELENIUM_5_0")
+    def SYNTHETICS_PYTHON_SELENIUM_5_0(cls) -> "Runtime":
+        '''``syn-python-selenium-5.0`` includes the following: - Lambda runtime Python 3.9 - Selenium version 4.21.0 - Chromium version 131.0.6778.264.
+
+        New Features:
+
+        - Automatic retry if the browser fails to launch.
+
+        :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_python_selenium.html#CloudWatch_Synthetics_runtimeversion-syn-python-selenium-5.0
+        '''
+        return typing.cast("Runtime", jsii.sget(cls, "SYNTHETICS_PYTHON_SELENIUM_5_0"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="SYNTHETICS_PYTHON_SELENIUM_5_1")
+    def SYNTHETICS_PYTHON_SELENIUM_5_1(cls) -> "Runtime":
+        '''``syn-python-selenium-5.1`` includes the following: - Lambda runtime Python 3.9 - Selenium version 4.21.0 - Chromium version 131.0.6778.264.
+
+        New Features:
+
+        - Minor updates on metric emission.
+
+        :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_python_selenium.html#CloudWatch_Synthetics_runtimeversion-syn-python-selenium-5.1
+        '''
+        return typing.cast("Runtime", jsii.sget(cls, "SYNTHETICS_PYTHON_SELENIUM_5_1"))
 
     @builtins.property
     @jsii.member(jsii_name="family")

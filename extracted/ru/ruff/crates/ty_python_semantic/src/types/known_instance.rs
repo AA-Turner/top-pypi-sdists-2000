@@ -34,11 +34,6 @@ pub enum KnownInstanceType<'db> {
     NoReturn,
     /// The symbol `typing.Never` available since 3.11 (which can also be found as `typing_extensions.Never`)
     Never,
-    /// The symbol `typing.Any` (which can also be found as `typing_extensions.Any`)
-    /// This is not used since typeshed switched to representing `Any` as a class; now we use
-    /// `KnownClass::Any` instead. But we still support the old `Any = object()` representation, at
-    /// least for now. TODO maybe remove?
-    Any,
     /// The symbol `typing.Tuple` (which can also be found as `typing_extensions.Tuple`)
     Tuple,
     /// The symbol `typing.List` (which can also be found as `typing_extensions.List`)
@@ -60,7 +55,7 @@ pub enum KnownInstanceType<'db> {
     /// The symbol `typing.OrderedDict` (which can also be found as `typing_extensions.OrderedDict`)
     OrderedDict,
     /// The symbol `typing.Protocol` (which can also be found as `typing_extensions.Protocol`)
-    Protocol,
+    Protocol(Option<GenericContext<'db>>),
     /// The symbol `typing.Generic` (which can also be found as `typing_extensions.Generic`)
     Generic(Option<GenericContext<'db>>),
     /// The symbol `typing.Type` (which can also be found as `typing_extensions.Type`)
@@ -86,8 +81,7 @@ pub enum KnownInstanceType<'db> {
     /// The symbol `typing.Callable`
     /// (which can also be found as `typing_extensions.Callable` or as `collections.abc.Callable`)
     Callable,
-
-    /// The symbol `typing.Self`
+    /// The symbol `typing.Self` (which can also be found as `typing_extensions.Self`)
     TypingSelf,
 
     // Various special forms, special aliases and type qualifiers that we don't yet understand
@@ -122,7 +116,6 @@ impl<'db> KnownInstanceType<'db> {
             | Self::Union
             | Self::NoReturn
             | Self::Never
-            | Self::Any
             | Self::Tuple
             | Self::Type
             | Self::TypingSelf
@@ -146,7 +139,7 @@ impl<'db> KnownInstanceType<'db> {
             | Self::Deque
             | Self::ChainMap
             | Self::OrderedDict
-            | Self::Protocol
+            | Self::Protocol(_)
             | Self::Generic(_)
             | Self::ReadOnly
             | Self::TypeAliasType(_)
@@ -178,7 +171,6 @@ impl<'db> KnownInstanceType<'db> {
             Self::Union => KnownClass::SpecialForm,
             Self::NoReturn => KnownClass::SpecialForm,
             Self::Never => KnownClass::SpecialForm,
-            Self::Any => KnownClass::Object,
             Self::Tuple => KnownClass::SpecialForm,
             Self::Type => KnownClass::SpecialForm,
             Self::TypingSelf => KnownClass::SpecialForm,
@@ -203,7 +195,7 @@ impl<'db> KnownInstanceType<'db> {
             Self::Deque => KnownClass::StdlibAlias,
             Self::ChainMap => KnownClass::StdlibAlias,
             Self::OrderedDict => KnownClass::StdlibAlias,
-            Self::Protocol => KnownClass::SpecialForm, // actually `_ProtocolMeta` at runtime but this is what typeshed says
+            Self::Protocol(_) => KnownClass::SpecialForm, // actually `_ProtocolMeta` at runtime but this is what typeshed says
             Self::Generic(_) => KnownClass::SpecialForm, // actually `type` at runtime but this is what typeshed says
             Self::TypeVar(_) => KnownClass::TypeVar,
             Self::TypeAliasType(_) => KnownClass::TypeAliasType,
@@ -237,7 +229,6 @@ impl<'db> KnownInstanceType<'db> {
         symbol_name: &str,
     ) -> Option<Self> {
         let candidate = match symbol_name {
-            "Any" => Self::Any,
             "ClassVar" => Self::ClassVar,
             "Deque" => Self::Deque,
             "List" => Self::List,
@@ -249,7 +240,7 @@ impl<'db> KnownInstanceType<'db> {
             "ChainMap" => Self::ChainMap,
             "OrderedDict" => Self::OrderedDict,
             "Generic" => Self::Generic(None),
-            "Protocol" => Self::Protocol,
+            "Protocol" => Self::Protocol(None),
             "Optional" => Self::Optional,
             "Union" => Self::Union,
             "NoReturn" => Self::NoReturn,
@@ -292,8 +283,7 @@ impl<'db> KnownInstanceType<'db> {
     /// Some variants could validly be defined in either `typing` or `typing_extensions`, however.
     pub(super) fn check_module(self, module: KnownModule) -> bool {
         match self {
-            Self::Any
-            | Self::ClassVar
+            Self::ClassVar
             | Self::Deque
             | Self::List
             | Self::Dict
@@ -311,7 +301,7 @@ impl<'db> KnownInstanceType<'db> {
             | Self::Generic(_)
             | Self::Callable => module.is_typing(),
             Self::Annotated
-            | Self::Protocol
+            | Self::Protocol(_)
             | Self::Literal
             | Self::LiteralString
             | Self::Never
@@ -360,7 +350,6 @@ impl Display for KnownInstanceRepr<'_> {
             KnownInstanceType::Union => f.write_str("typing.Union"),
             KnownInstanceType::NoReturn => f.write_str("typing.NoReturn"),
             KnownInstanceType::Never => f.write_str("typing.Never"),
-            KnownInstanceType::Any => f.write_str("typing.Any"),
             KnownInstanceType::Tuple => f.write_str("typing.Tuple"),
             KnownInstanceType::Type => f.write_str("typing.Type"),
             KnownInstanceType::TypingSelf => f.write_str("typing.Self"),
@@ -384,11 +373,17 @@ impl Display for KnownInstanceRepr<'_> {
             KnownInstanceType::Deque => f.write_str("typing.Deque"),
             KnownInstanceType::ChainMap => f.write_str("typing.ChainMap"),
             KnownInstanceType::OrderedDict => f.write_str("typing.OrderedDict"),
-            KnownInstanceType::Protocol => f.write_str("typing.Protocol"),
+            KnownInstanceType::Protocol(generic_context) => {
+                f.write_str("typing.Protocol")?;
+                if let Some(generic_context) = generic_context {
+                    generic_context.display(self.db).fmt(f)?;
+                }
+                Ok(())
+            }
             KnownInstanceType::Generic(generic_context) => {
                 f.write_str("typing.Generic")?;
                 if let Some(generic_context) = generic_context {
-                    write!(f, "{}", generic_context.display(self.db))?;
+                    generic_context.display(self.db).fmt(f)?;
                 }
                 Ok(())
             }

@@ -3611,6 +3611,12 @@ class AsgCapacityProvider(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="autoScalingGroup")
     def auto_scaling_group(self) -> _AutoScalingGroup_c547a7b9:
@@ -8626,6 +8632,7 @@ class CfnService(
                         )]
                     )],
                     throughput=123,
+                    volume_initialization_rate=123,
                     volume_type="volumeType"
                 )
             )],
@@ -11142,6 +11149,7 @@ class CfnService(
             "snapshot_id": "snapshotId",
             "tag_specifications": "tagSpecifications",
             "throughput": "throughput",
+            "volume_initialization_rate": "volumeInitializationRate",
             "volume_type": "volumeType",
         },
     )
@@ -11158,6 +11166,7 @@ class CfnService(
             snapshot_id: typing.Optional[builtins.str] = None,
             tag_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.EBSTagSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             throughput: typing.Optional[jsii.Number] = None,
+            volume_initialization_rate: typing.Optional[jsii.Number] = None,
             volume_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The configuration for the Amazon EBS volume that Amazon ECS creates and manages on your behalf.
@@ -11175,6 +11184,7 @@ class CfnService(
             :param snapshot_id: The snapshot that Amazon ECS uses to create the volume. You must specify either a snapshot ID or a volume size. This parameter maps 1:1 with the ``SnapshotId`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
             :param tag_specifications: The tags to apply to the volume. Amazon ECS applies service-managed tags by default. This parameter maps 1:1 with the ``TagSpecifications.N`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
             :param throughput: The throughput to provision for a volume, in MiB/s, with a maximum of 1,000 MiB/s. This parameter maps 1:1 with the ``Throughput`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* . .. epigraph:: This parameter is only supported for the ``gp3`` volume type.
+            :param volume_initialization_rate: 
             :param volume_type: The volume type. This parameter maps 1:1 with the ``VolumeType`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* . For more information, see `Amazon EBS volume types <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html>`_ in the *Amazon EC2 User Guide* . The following are the supported volume types. - General Purpose SSD: ``gp2`` | ``gp3`` - Provisioned IOPS SSD: ``io1`` | ``io2`` - Throughput Optimized HDD: ``st1`` - Cold HDD: ``sc1`` - Magnetic: ``standard`` .. epigraph:: The magnetic volume type is not supported on Fargate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-servicemanagedebsvolumeconfiguration.html
@@ -11207,6 +11217,7 @@ class CfnService(
                         )]
                     )],
                     throughput=123,
+                    volume_initialization_rate=123,
                     volume_type="volumeType"
                 )
             '''
@@ -11221,6 +11232,7 @@ class CfnService(
                 check_type(argname="argument snapshot_id", value=snapshot_id, expected_type=type_hints["snapshot_id"])
                 check_type(argname="argument tag_specifications", value=tag_specifications, expected_type=type_hints["tag_specifications"])
                 check_type(argname="argument throughput", value=throughput, expected_type=type_hints["throughput"])
+                check_type(argname="argument volume_initialization_rate", value=volume_initialization_rate, expected_type=type_hints["volume_initialization_rate"])
                 check_type(argname="argument volume_type", value=volume_type, expected_type=type_hints["volume_type"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "role_arn": role_arn,
@@ -11241,6 +11253,8 @@ class CfnService(
                 self._values["tag_specifications"] = tag_specifications
             if throughput is not None:
                 self._values["throughput"] = throughput
+            if volume_initialization_rate is not None:
+                self._values["volume_initialization_rate"] = volume_initialization_rate
             if volume_type is not None:
                 self._values["volume_type"] = volume_type
 
@@ -11373,6 +11387,14 @@ class CfnService(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-servicemanagedebsvolumeconfiguration.html#cfn-ecs-service-servicemanagedebsvolumeconfiguration-throughput
             '''
             result = self._values.get("throughput")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def volume_initialization_rate(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-servicemanagedebsvolumeconfiguration.html#cfn-ecs-service-servicemanagedebsvolumeconfiguration-volumeinitializationrate
+            '''
+            result = self._values.get("volume_initialization_rate")
             return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
@@ -11579,6 +11601,7 @@ class CfnService(
                             )]
                         )],
                         throughput=123,
+                        volume_initialization_rate=123,
                         volume_type="volumeType"
                     )
                 )
@@ -12044,6 +12067,7 @@ class CfnServiceProps:
                             )]
                         )],
                         throughput=123,
+                        volume_initialization_rate=123,
                         volume_type="volumeType"
                     )
                 )],
@@ -20919,6 +20943,12 @@ class ContainerDefinition(
     def CONTAINER_PORT_USE_RANGE(cls) -> jsii.Number:
         return typing.cast(jsii.Number, jsii.sget(cls, "CONTAINER_PORT_USE_RANGE"))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="containerDependencies")
     def container_dependencies(self) -> typing.List["ContainerDependency"]:
@@ -22694,24 +22724,32 @@ class ContainerImage(
 
     Example::
 
-        # my_file_system: efs.IFileSystem
-        # my_job_role: iam.Role
+        # vpc: ec2.Vpc
         
-        my_file_system.grant_read(my_job_role)
         
-        job_defn = batch.EcsJobDefinition(self, "JobDefn",
-            container=batch.EcsEc2ContainerDefinition(self, "containerDefn",
-                image=ecs.ContainerImage.from_registry("public.ecr.aws/amazonlinux/amazonlinux:latest"),
-                memory=cdk.Size.mebibytes(2048),
-                cpu=256,
-                volumes=[batch.EcsVolume.efs(
-                    name="myVolume",
-                    file_system=my_file_system,
-                    container_path="/Volumes/myVolume",
-                    use_job_role=True
-                )],
-                job_role=my_job_role
+        cluster = ecs.Cluster(self, "FargateCPCluster",
+            vpc=vpc,
+            enable_fargate_capacity_providers=True
+        )
+        
+        task_definition = ecs.FargateTaskDefinition(self, "TaskDef")
+        
+        task_definition.add_container("web",
+            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+        )
+        
+        ecs.FargateService(self, "FargateService",
+            cluster=cluster,
+            task_definition=task_definition,
+            min_healthy_percent=100,
+            capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+                capacity_provider="FARGATE_SPOT",
+                weight=2
+            ), ecs.CapacityProviderStrategy(
+                capacity_provider="FARGATE",
+                weight=1
             )
+            ]
         )
     '''
 
@@ -28541,6 +28579,12 @@ class FirelensLogRouter(
             type_hints = typing.get_type_hints(_typecheckingstub__141626a0609c07555867fa8e38d023a1c78f564da4608b1ae4353d235c3d6bdd)
             check_type(argname="argument _task_definition", value=_task_definition, expected_type=type_hints["_task_definition"])
         return typing.cast(CfnTaskDefinition.ContainerDefinitionProperty, jsii.invoke(self, "renderContainerDefinition", [_task_definition]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="firelensConfig")
@@ -37081,8 +37125,8 @@ class TagParameterContainerImage(
         # This is the Stack containing a simple ECS Service that uses the provided ContainerImage.
         #
         class EcsAppStack(cdk.Stack):
-            def __init__(self, scope, id, *, image, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-                super().__init__(scope, id, image=image, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+            def __init__(self, scope, id, *, image, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+                super().__init__(scope, id, image=image, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
         
                 task_definition = ecs.TaskDefinition(self, "TaskDefinition",
                     compatibility=ecs.Compatibility.FARGATE,
@@ -37106,8 +37150,8 @@ class TagParameterContainerImage(
         #
         class PipelineStack(cdk.Stack):
         
-            def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-                super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+            def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+                super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
         
                 # ********* ECS part ****************
         
@@ -37860,6 +37904,12 @@ class TaskDefinition(
     def obtain_execution_role(self) -> _IRole_235f5d8e:
         '''Creates the task execution IAM role if it doesn't already exist.'''
         return typing.cast(_IRole_235f5d8e, jsii.invoke(self, "obtainExecutionRole", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="compatibility")
@@ -40304,6 +40354,12 @@ class Cluster(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricMemoryUtilization", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="capacityProviderNames")
     def capacity_provider_names(self) -> typing.List[builtins.str]:
@@ -41921,6 +41977,12 @@ class Ec2Service(
             check_type(argname="argument load_balancer", value=load_balancer, expected_type=type_hints["load_balancer"])
         return typing.cast(None, jsii.invoke(self, "attachToClassicLB", [load_balancer]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.implements(IEc2TaskDefinition)
 class Ec2TaskDefinition(
@@ -42192,6 +42254,12 @@ class Ec2TaskDefinition(
         )
 
         return typing.cast(ContainerDefinition, jsii.invoke(self, "addContainer", [id, props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.implements(IExternalService)
@@ -42496,6 +42564,12 @@ class ExternalService(
             check_type(argname="argument _targets", value=_targets, expected_type=typing.Tuple[type_hints["_targets"], ...]) # pyright: ignore [reportGeneralTypeIssues]
         return typing.cast(None, jsii.invoke(self, "registerLoadBalancerTargets", [*_targets]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.implements(IExternalTaskDefinition)
 class ExternalTaskDefinition(
@@ -42632,6 +42706,12 @@ class ExternalTaskDefinition(
         )
 
         return typing.cast(None, jsii.invoke(self, "addInferenceAccelerator", [_inference_accelerator]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.implements(IFargateService)
@@ -42837,6 +42917,12 @@ class FargateService(
             check_type(argname="argument load_balancer", value=load_balancer, expected_type=type_hints["load_balancer"])
         return typing.cast(None, jsii.invoke(self, "attachToClassicLB", [load_balancer]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.implements(IFargateTaskDefinition)
 class FargateTaskDefinition(
@@ -42987,6 +43073,12 @@ class FargateTaskDefinition(
         )
 
         return typing.cast(IFargateTaskDefinition, jsii.sinvoke(cls, "fromFargateTaskDefinitionAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="cpu")
@@ -44196,6 +44288,7 @@ def _typecheckingstub__dfccfa8c4140c61b1030fe8ed564cee115f38fe8144d5ff6ac1654634
     snapshot_id: typing.Optional[builtins.str] = None,
     tag_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.EBSTagSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     throughput: typing.Optional[jsii.Number] = None,
+    volume_initialization_rate: typing.Optional[jsii.Number] = None,
     volume_type: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""

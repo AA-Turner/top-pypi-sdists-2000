@@ -1,29 +1,20 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: types-beautifulsoup4
-Version: 4.12.0.20250204
+Version: 4.12.0.20250516
 Summary: Typing stubs for beautifulsoup4
-Home-page: https://github.com/python/typeshed
-License: Apache-2.0
+License-Expression: Apache-2.0
+Project-URL: Homepage, https://github.com/python/typeshed
 Project-URL: GitHub, https://github.com/python/typeshed
 Project-URL: Changes, https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/beautifulsoup4.md
 Project-URL: Issue tracker, https://github.com/python/typeshed/issues
 Project-URL: Chat, https://gitter.im/python/typing
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3
 Classifier: Typing :: Stubs Only
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: types-html5lib
-Dynamic: classifier
-Dynamic: description
-Dynamic: description-content-type
-Dynamic: home-page
-Dynamic: license
-Dynamic: project-url
-Dynamic: requires-dist
-Dynamic: requires-python
-Dynamic: summary
+Dynamic: license-file
 
 ## Typing stubs for beautifulsoup4
 
@@ -55,8 +46,8 @@ for more details. The source for this package can be found in the
 directory.
 
 This package was tested with
-mypy 1.14.1,
-pyright 1.1.389,
+mypy 1.15.0,
+pyright 1.1.400,
 and pytype 2024.10.11.
 It was generated from typeshed commit
-[`aac4394eb29d86797628b57d6f01f5e17f5ff83f`](https://github.com/python/typeshed/commit/aac4394eb29d86797628b57d6f01f5e17f5ff83f).
+[`126768408a69b7a3a09b7d3992970b289f92937e`](https://github.com/python/typeshed/commit/126768408a69b7a3a09b7d3992970b289f92937e).

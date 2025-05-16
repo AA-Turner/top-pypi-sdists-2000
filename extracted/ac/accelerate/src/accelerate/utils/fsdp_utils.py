@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import copy
 import functools
 import os
 import shutil
@@ -25,7 +26,7 @@ import torch
 from ..logging import get_logger
 from .constants import FSDP_MODEL_NAME, OPTIMIZER_NAME, SAFE_WEIGHTS_NAME, WEIGHTS_NAME
 from .dataclasses import get_module_class_from_name
-from .modeling import is_peft_model
+from .modeling import get_non_persistent_buffers, is_peft_model
 from .other import get_module_children_bottom_up, is_compiled_module, save
 from .versions import is_torch_version
 
@@ -50,22 +51,51 @@ def disable_fsdp_ram_efficient_loading():
     os.environ["FSDP_CPU_RAM_EFFICIENT_LOADING"] = "False"
 
 
-def _get_model_state_dict(model, adapter_only=False):
+def _get_model_state_dict(model, adapter_only=False, sd_options=None):
     if adapter_only and is_peft_model(model):
         from peft import get_peft_model_state_dict
 
         return get_peft_model_state_dict(model, adapter_name=model.active_adapter)
+
+    # Invariant: `sd_options` is not None only for FSDP2
+    if sd_options is not None:
+        from torch.distributed.checkpoint.state_dict import get_model_state_dict
+
+        return get_model_state_dict(model, options=sd_options)
     else:
         return model.state_dict()
 
 
-def _set_model_state_dict(model, state_dict, adapter_only=False):
+def _set_model_state_dict(model, state_dict, adapter_only=False, sd_options=None):
     if adapter_only and is_peft_model(model):
         from peft import set_peft_model_state_dict
 
         return set_peft_model_state_dict(model, state_dict, adapter_name=model.active_adapter)
+
+    # Invariant: `sd_options` is not None only for FSDP2
+    if sd_options is not None:
+        from torch.distributed.checkpoint.state_dict import set_model_state_dict
+
+        return set_model_state_dict(model, state_dict, options=sd_options)
     else:
         return model.load_state_dict(state_dict)
+
+
+def _prepare_sd_options(fsdp_plugin):
+    sd_options = None
+
+    # we use this only for FSDP2, as it requires torch >= 2.6.0 and this api requires torch >= 2.2.0
+    if fsdp_plugin.fsdp_version == 2:
+        from torch.distributed.checkpoint.state_dict import StateDictOptions
+        from torch.distributed.fsdp.fully_sharded_data_parallel import StateDictType
+
+        sd_options = StateDictOptions(
+            full_state_dict=fsdp_plugin.state_dict_type == StateDictType.FULL_STATE_DICT,
+            cpu_offload=getattr(fsdp_plugin.state_dict_config, "offload_to_cpu", False),
+            broadcast_from_rank0=getattr(fsdp_plugin.state_dict_config, "rank0_only", False),
+        )
+
+    return sd_options
 
 
 def save_fsdp_model(fsdp_plugin, accelerator, model, output_dir, model_index=0, adapter_only=False):
@@ -76,7 +106,7 @@ def save_fsdp_model(fsdp_plugin, accelerator, model, output_dir, model_index=0, 
     from torch.distributed.fsdp.fully_sharded_data_parallel import StateDictType
 
     os.makedirs(output_dir, exist_ok=True)
-    if fsdp_plugin.state_dict_type == StateDictType.FULL_STATE_DICT and fsdp_plugin.fsdp_version == 1:
+    if fsdp_plugin.state_dict_type == StateDictType.FULL_STATE_DICT:
         # FSDP raises error when single GPU is used with `offload_to_cpu=True` for FULL_STATE_DICT
         # so, only enable it when num_processes>1
         is_multi_process = accelerator.num_processes > 1
@@ -90,9 +120,10 @@ def save_fsdp_model(fsdp_plugin, accelerator, model, output_dir, model_index=0, 
         if fsdp_plugin.fsdp_version == 1
         else nullcontext()
     )
+    sd_options = _prepare_sd_options(fsdp_plugin)
 
     with ctx:
-        state_dict = _get_model_state_dict(model, adapter_only=adapter_only)
+        state_dict = _get_model_state_dict(model, adapter_only=adapter_only, sd_options=sd_options)
         if fsdp_plugin.state_dict_type == StateDictType.FULL_STATE_DICT:
             weights_name = f"{FSDP_MODEL_NAME}.bin" if model_index == 0 else f"{FSDP_MODEL_NAME}_{model_index}.bin"
             output_model_file = os.path.join(output_dir, weights_name)
@@ -117,7 +148,7 @@ def save_fsdp_model(fsdp_plugin, accelerator, model, output_dir, model_index=0, 
             logger.info(f"Saving model to {ckpt_dir}")
             state_dict = {"model": state_dict}
 
-            dist_cp.save_state_dict(
+            dist_cp.save(
                 state_dict=state_dict,
                 storage_writer=dist_cp.FileSystemWriter(ckpt_dir),
                 planner=DefaultSavePlanner(),
@@ -133,7 +164,7 @@ def load_fsdp_model(fsdp_plugin, accelerator, model, input_dir, model_index=0, a
     from torch.distributed.fsdp.fully_sharded_data_parallel import StateDictType
 
     accelerator.wait_for_everyone()
-    if fsdp_plugin.state_dict_type == StateDictType.FULL_STATE_DICT and fsdp_plugin.fsdp_version == 1:
+    if fsdp_plugin.state_dict_type == StateDictType.FULL_STATE_DICT:
         # FSDP raises error when single GPU is used with `offload_to_cpu=True` for FULL_STATE_DICT
         # so, only enable it when num_processes>1
         is_multi_process = accelerator.num_processes > 1
@@ -147,6 +178,7 @@ def load_fsdp_model(fsdp_plugin, accelerator, model, input_dir, model_index=0, a
         if fsdp_plugin.fsdp_version == 1
         else nullcontext()
     )
+    sd_options = _prepare_sd_options(fsdp_plugin)
 
     with ctx:
         if fsdp_plugin.state_dict_type == StateDictType.FULL_STATE_DICT:
@@ -160,7 +192,7 @@ def load_fsdp_model(fsdp_plugin, accelerator, model, input_dir, model_index=0, a
             weights_name = f"{FSDP_MODEL_NAME}.bin" if model_index == 0 else f"{FSDP_MODEL_NAME}_{model_index}.bin"
             input_model_file = os.path.join(input_dir, weights_name)
             logger.info(f"Loading model from {input_model_file}")
-            state_dict = torch.load(input_model_file)
+            state_dict = torch.load(input_model_file, weights_only=True)
             logger.info(f"Model loaded from {input_model_file}")
         elif fsdp_plugin.state_dict_type == StateDictType.LOCAL_STATE_DICT:
             weights_name = (
@@ -170,7 +202,7 @@ def load_fsdp_model(fsdp_plugin, accelerator, model, input_dir, model_index=0, a
             )
             input_model_file = os.path.join(input_dir, weights_name)
             logger.info(f"Loading model from {input_model_file}")
-            state_dict = torch.load(input_model_file)
+            state_dict = torch.load(input_model_file, weights_only=True)
             logger.info(f"Model loaded from {input_model_file}")
         elif fsdp_plugin.state_dict_type == StateDictType.SHARDED_STATE_DICT:
             ckpt_dir = (
@@ -179,8 +211,8 @@ def load_fsdp_model(fsdp_plugin, accelerator, model, input_dir, model_index=0, a
                 else input_dir
             )
             logger.info(f"Loading model from {ckpt_dir}")
-            state_dict = {"model": _get_model_state_dict(model, adapter_only=adapter_only)}
-            dist_cp.load_state_dict(
+            state_dict = {"model": _get_model_state_dict(model, adapter_only=adapter_only, sd_options=sd_options)}
+            dist_cp.load(
                 state_dict=state_dict,
                 storage_reader=dist_cp.FileSystemReader(ckpt_dir),
                 planner=DefaultLoadPlanner(),
@@ -188,12 +220,7 @@ def load_fsdp_model(fsdp_plugin, accelerator, model, input_dir, model_index=0, a
             state_dict = state_dict["model"]
             logger.info(f"Model loaded from {ckpt_dir}")
 
-        if fsdp_plugin.fsdp_version == 1:
-            load_result = _set_model_state_dict(model, state_dict, adapter_only=adapter_only)
-        else:
-            from torch.distributed.checkpoint.state_dict import set_model_state_dict
-
-            load_result = set_model_state_dict(model, state_dict)
+        load_result = _set_model_state_dict(model, state_dict, adapter_only=adapter_only, sd_options=sd_options)
     return load_result
 
 
@@ -214,11 +241,15 @@ def save_fsdp_optimizer(fsdp_plugin, accelerator, optimizer, model, output_dir, 
         else nullcontext()
     )
 
+    sd_options = _prepare_sd_options(fsdp_plugin)
+
     with ctx:
-        if fsdp_plugin.fsdp_version == 1:
-            optim_state = FSDP.optim_state_dict(model, optimizer)
+        if fsdp_plugin.fsdp_version == 2:
+            from torch.distributed.checkpoint.state_dict import get_optimizer_state_dict
+
+            optim_state = get_optimizer_state_dict(model, optimizer, options=sd_options)
         else:
-            optim_state = optimizer.state_dict()
+            optim_state = FSDP.optim_state_dict(model, optimizer)
 
         if fsdp_plugin.state_dict_type == StateDictType.FULL_STATE_DICT:
             if accelerator.process_index == 0:
@@ -233,7 +264,7 @@ def save_fsdp_optimizer(fsdp_plugin, accelerator, optimizer, model, output_dir, 
             ckpt_dir = os.path.join(output_dir, f"{OPTIMIZER_NAME}_{optimizer_index}")
             os.makedirs(ckpt_dir, exist_ok=True)
             logger.info(f"Saving Optimizer state to {ckpt_dir}")
-            dist_cp.save_state_dict(
+            dist_cp.save(
                 state_dict={"optimizer": optim_state},
                 storage_writer=dist_cp.FileSystemWriter(ckpt_dir),
                 planner=DefaultSavePlanner(),
@@ -244,7 +275,6 @@ def save_fsdp_optimizer(fsdp_plugin, accelerator, optimizer, model, output_dir, 
 def load_fsdp_optimizer(fsdp_plugin, accelerator, optimizer, model, input_dir, optimizer_index=0, adapter_only=False):
     # Note: We import here to reduce import time from general modules, and isolate outside dependencies
     import torch.distributed.checkpoint as dist_cp
-    from torch.distributed.checkpoint.optimizer import load_sharded_optimizer_state_dict
     from torch.distributed.fsdp.fully_sharded_data_parallel import FullyShardedDataParallel as FSDP
     from torch.distributed.fsdp.fully_sharded_data_parallel import StateDictType
 
@@ -256,6 +286,7 @@ def load_fsdp_optimizer(fsdp_plugin, accelerator, optimizer, model, input_dir, o
         if fsdp_plugin.fsdp_version == 1
         else nullcontext()
     )
+    sd_options = _prepare_sd_options(fsdp_plugin)
     with ctx:
         if fsdp_plugin.state_dict_type == StateDictType.FULL_STATE_DICT:
             optim_state = None
@@ -265,7 +296,7 @@ def load_fsdp_optimizer(fsdp_plugin, accelerator, optimizer, model, input_dir, o
                 )
                 input_optimizer_file = os.path.join(input_dir, optimizer_name)
                 logger.info(f"Loading Optimizer state from {input_optimizer_file}")
-                optim_state = torch.load(input_optimizer_file)
+                optim_state = torch.load(input_optimizer_file, weights_only=True)
                 logger.info(f"Optimizer state loaded from {input_optimizer_file}")
         else:
             ckpt_dir = (
@@ -274,28 +305,22 @@ def load_fsdp_optimizer(fsdp_plugin, accelerator, optimizer, model, input_dir, o
                 else input_dir
             )
             logger.info(f"Loading Optimizer from {ckpt_dir}")
-            if fsdp_plugin.fsdp_version == 1:
-                optim_state = load_sharded_optimizer_state_dict(
-                    model_state_dict=_get_model_state_dict(model, adapter_only=adapter_only),
-                    optimizer_key="optimizer",
-                    storage_reader=dist_cp.FileSystemReader(ckpt_dir),
-                )
-            else:
-                optim_state = {"optimizer": optimizer.state_dict()}
-                dist_cp.load(
-                    optim_state,
-                    checkpoint_id=ckpt_dir,
-                    storage_reader=dist_cp.FileSystemReader(ckpt_dir),
-                )
+            optim_state = {"optimizer": optimizer.state_dict()}
+            dist_cp.load(
+                optim_state,
+                checkpoint_id=ckpt_dir,
+                storage_reader=dist_cp.FileSystemReader(ckpt_dir),
+            )
             optim_state = optim_state["optimizer"]
             logger.info(f"Optimizer loaded from {ckpt_dir}")
+
         if fsdp_plugin.fsdp_version == 1:
             flattened_osd = FSDP.optim_state_dict_to_load(model=model, optim=optimizer, optim_state_dict=optim_state)
             optimizer.load_state_dict(flattened_osd)
         else:
-            # we can't do `set_state_dict` here because it does a step of the optimizer which breaks with grad-scaler
-            # TODO(siro1): investigate
-            optimizer.load_state_dict(optim_state)
+            from torch.distributed.checkpoint.state_dict import set_optimizer_state_dict
+
+            set_optimizer_state_dict(model, optimizer, optim_state, options=sd_options)
 
 
 def _distributed_checkpoint_to_merged_weights(checkpoint_dir: str, save_path: str, safe_serialization: bool = True):
@@ -434,29 +459,74 @@ def fsdp2_load_full_state_dict(accelerator, model: torch.nn.Module, full_sd: dic
 
     Args:
         accelerator (`Accelerator`): The accelerator instance
-        model (`torch.nn.Module`): The model to load the state dict into
+        model (`torch.nn.Module`):
+            The model to load the state dict into, expected to be on meta device or a VRAM spike can occur
         full_sd (`dict`): The full state dict to load, can only be on rank 0
     """
     import torch.distributed as dist
     from torch.distributed.tensor import distribute_tensor
 
-    sharded_sd = model.state_dict()
+    # Model was previously copied to meta device
+    meta_sharded_sd = model.state_dict()
+    sharded_sd = {}
+
+    # Rank 0 distributes the full state dict to other ranks
+    def _infer_parameter_dtype(model, param_name, empty_param):
+        try:
+            old_param = model.get_parameter_or_buffer(param_name)
+        except AttributeError:
+            # Need this for LORA, as there some params are not *parameters* of sorts
+            base_param_name, local_param_name = param_name.rsplit(".", 1)
+            submodule = model.get_submodule(base_param_name)
+            old_param = getattr(submodule, local_param_name)
+
+        is_torch_e4m3fn_available = hasattr(torch, "float8_e4m3fn")
+        casting_dtype = None
+        is_param_float8_e4m3fn = is_torch_e4m3fn_available and empty_param.dtype == torch.float8_e4m3fn
+
+        if empty_param.dtype.is_floating_point and not is_param_float8_e4m3fn:
+            casting_dtype = old_param.dtype
+
+        return old_param is not None and old_param.is_contiguous(), casting_dtype
+
+    def _cast_and_contiguous(tensor, to_contiguous, dtype):
+        if dtype is not None:
+            tensor = tensor.to(dtype=dtype)
+        if to_contiguous:
+            tensor = tensor.contiguous()
+        return tensor
+
     if accelerator.is_main_process:
-        for (param_name, full_param), sharded_param in zip(full_sd.items(), sharded_sd.values()):
+        for (param_name, full_param), sharded_param in zip(full_sd.items(), meta_sharded_sd.values()):
             full_param = full_param.detach().cuda()
             mesh = sharded_param.device_mesh
             dist.broadcast(full_param, src=0, group=mesh.get_group())
             sharded_tensor = distribute_tensor(full_param, mesh, sharded_param.placements)
+            to_contiguous, casting_dtype = _infer_parameter_dtype(
+                model,
+                param_name,
+                full_param,
+            )
+            sharded_tensor = _cast_and_contiguous(sharded_tensor, to_contiguous, casting_dtype)
             sharded_sd[param_name] = sharded_tensor
+    # We need this else to have a matching `broadcast` for all of the ranks, else we deadlock
     else:
-        for param_name, sharded_param in sharded_sd.items():
+        for param_name, sharded_param in meta_sharded_sd.items():
             full_tensor = torch.empty(sharded_param.size(), device="cuda", dtype=sharded_param.dtype)
             mesh = sharded_param.device_mesh
             dist.broadcast(full_tensor, src=0, group=mesh.get_group())
             sharded_tensor = distribute_tensor(full_tensor, mesh, sharded_param.placements)
+            to_contiguous, casting_dtype = _infer_parameter_dtype(
+                model,
+                param_name,
+                full_tensor,
+            )
+            sharded_tensor = _cast_and_contiguous(sharded_tensor, to_contiguous, casting_dtype)
             sharded_sd[param_name] = sharded_tensor
 
-    model.load_state_dict(sharded_sd)
+    # we set `assign=True` because our params are on meta device
+    model.load_state_dict(sharded_sd, assign=True)
+    return model
 
 
 def fsdp2_switch_optimizer_parameters(optimizer: torch.optim.Optimizer, mapping: dict):
@@ -545,6 +615,35 @@ def fsdp2_prepare_model(accelerator, model: torch.nn.Module) -> torch.nn.Module:
         "mp_policy": fsdp2_plugin.mixed_precision_policy or MixedPrecisionPolicy(),
     }
 
+    model_has_params4bit = False
+    for name, param in model.named_parameters():
+        # this is a temporary fix whereby loading models with bnb params cannot be moved from
+        # GPU to a meta device due with FSDP2 because torch operations don't return the original class type
+        # bypassing the move to meta will still cause the VRAM spike, but at least it still will load
+        if param.__class__.__name__ == "Params4bit":
+            model_has_params4bit = True
+            break
+
+    if fsdp2_plugin.cpu_ram_efficient_loading and not model_has_params4bit:
+        # Context: `fully_shard` moves the model to GPU if it was on CPU, however it can also be on `meta` and then it stays there even after `fully_shard`
+        # For this reason, we need to move the model to `meta` device, as then sharding happens on `meta` device
+        # If we kept the model on CPU (`cpu_ram_efficient_loading` has model be on CPU on all ranks, though non-main ranks only have `torch.emtpy`), `fully_shard` would move it to GPU
+        # Afterwards, when we call `fsdp2_load_full_state_dict`, us creating the state_dict would result into briefly having two copies of model state_dict on the GPU -> VRAM spike
+
+        # We need to keep the original non-persistent buffers, as those MAY not be in the state_dict, resulting in them staying on meta device
+        # Also, these buffers aren't getting sharded by default
+        # We get the FQNs of all non-persistent buffers, to re-register them after
+        non_persistent_buffer_fqns = get_non_persistent_buffers(model, recurse=True, fqns=True)
+        original_non_persistent_buffers = copy.deepcopy(
+            {k: v for k, v in model.named_buffers() if k in non_persistent_buffer_fqns}
+        )
+        # We move the model to meta device, as then sharding happens on meta device
+        model = model.to(torch.device("meta"))
+        # We need to re-tie the weights, not exactly sure why, but if we don't do this, reference to `lm_head/embed_tokens` stay hanging -> more VRAM usage
+        # We assume `transformers` models have a `tie_weights` method if they support it
+        if hasattr(model, "tie_weights"):
+            model.tie_weights()
+
     auto_wrap_policy = fsdp2_prepare_auto_wrap_policy(fsdp2_plugin, auto_wrap_policy_type, model)
     if auto_wrap_policy is not None:
         # We skip the model itself, as that one is always wrapped
@@ -559,7 +658,31 @@ def fsdp2_prepare_model(accelerator, model: torch.nn.Module) -> torch.nn.Module:
         # Other ranks have an empty model on `meta` device, so we need to distribute the weights properly
         fsdp2_load_full_state_dict(accelerator, model, original_sd)
 
-    if accelerator.mixed_precision != "no" and model.dtype != torch.float32:
+    if fsdp2_plugin.cpu_ram_efficient_loading and not model_has_params4bit:
+        # We re-register the buffers, as they may not be in the state_dict
+        for fqn, buffer_tensor in original_non_persistent_buffers.items():
+            buffer_tensor = buffer_tensor.to(accelerator.device)
+
+            if "." in fqn:
+                parent_fqn, local_buffer_name = fqn.rsplit(".", 1)
+                parent_module = model.get_submodule(parent_fqn)
+            else:
+                local_buffer_name = fqn
+                parent_module = model
+
+            parent_module.register_buffer(local_buffer_name, buffer_tensor, persistent=False)
+
+        # We need to tie the weights again, as call to `load_full_state_dict` breaks the tie
+        # Needs to be called both here and above
+        # removing this call makes the have slightly different loss
+        # removing the call above leads to extra memory usage as explained in the comment above
+        if hasattr(model, "tie_weights"):
+            model.tie_weights()
+
+    # There is no `dtype` attribution for nn.Module
+    # Set it to None if it doesn't exist and do the upcast always
+    model_dtype = getattr(model, "dtype", None)
+    if accelerator.mixed_precision != "no" and (model_dtype is None or model_dtype != torch.float32):
         # We upcast the model according to `deepspeed`'s implementation
         # More info about this can be found in `accelerator.py:prepare_model`s FSDP1 section
         model = model.to(torch.float32)
@@ -589,7 +712,7 @@ def fsdp2_prepare_auto_wrap_policy(
             The auto wrap policy function to be applied to the model
     """
     if auto_wrap_policy_type == "transformer":
-        no_split_modules = model._no_split_modules
+        no_split_modules = getattr(model, "_no_split_modules", None)
         if no_split_modules is None:
             no_split_modules = []
         transformer_cls_names_to_wrap = list(no_split_modules)
@@ -611,7 +734,8 @@ def fsdp2_prepare_auto_wrap_policy(
     elif auto_wrap_policy_type == "size":
 
         def policy(module: torch.nn.Module) -> bool:
-            return module.numel() > fsdp2_plugin.min_num_params
+            module_num_params = sum(p.numel() for p in module.parameters())
+            return module_num_params > fsdp2_plugin.min_num_params
     else:
         return None
 
@@ -627,3 +751,21 @@ def get_fsdp2_grad_scaler(**kwargs):
     from torch.amp.grad_scaler import GradScaler
 
     return GradScaler(**kwargs)
+
+
+def fsdp2_canonicalize_names(named_params: dict) -> dict:
+    """Removes parameter name modifiers in order to map them back to their original names.
+
+    See huggingface/accelerate#3554 for more context.
+
+    Args:
+        named_params (`dict`): The named parameters dictionary to canonicalize.
+
+    Returns:
+        `dict`: The canonicalized named parameters dictionary
+    """
+    named_params = {k.replace("._checkpoint_wrapped_module", ""): v for k, v in named_params.items()}
+    named_params = {
+        k.replace("_orig_mod.", "") if k.startswith("_orig_mod.") else k: v for k, v in named_params.items()
+    }
+    return named_params

@@ -2,10 +2,13 @@ use ruff_python_ast as ast;
 use rustc_hash::FxHashMap;
 
 use crate::semantic_index::SemanticIndex;
+use crate::types::class::ClassType;
+use crate::types::class_base::ClassBase;
+use crate::types::instance::{NominalInstanceType, Protocol, ProtocolInstanceType};
 use crate::types::signatures::{Parameter, Parameters, Signature};
 use crate::types::{
-    declaration_type, KnownInstanceType, Type, TypeVarBoundOrConstraints, TypeVarInstance,
-    TypeVarVariance, UnionType,
+    declaration_type, todo_type, KnownInstanceType, Type, TypeVarBoundOrConstraints,
+    TypeVarInstance, TypeVarVariance, UnionType,
 };
 use crate::{Db, FxOrderSet};
 
@@ -17,6 +20,7 @@ use crate::{Db, FxOrderSet};
 pub struct GenericContext<'db> {
     #[returns(ref)]
     pub(crate) variables: FxOrderSet<TypeVarInstance<'db>>,
+    pub(crate) origin: GenericContextOrigin,
 }
 
 impl<'db> GenericContext<'db> {
@@ -30,7 +34,7 @@ impl<'db> GenericContext<'db> {
             .iter()
             .filter_map(|type_param| Self::variable_from_type_param(db, index, type_param))
             .collect();
-        Self::new(db, variables)
+        Self::new(db, variables, GenericContextOrigin::TypeParameterList)
     }
 
     fn variable_from_type_param(
@@ -76,7 +80,11 @@ impl<'db> GenericContext<'db> {
         if variables.is_empty() {
             return None;
         }
-        Some(Self::new(db, variables))
+        Some(Self::new(
+            db,
+            variables,
+            GenericContextOrigin::LegacyGenericFunction,
+        ))
     }
 
     /// Creates a generic context from the legacy `TypeVar`s that appear in class's base class
@@ -92,7 +100,7 @@ impl<'db> GenericContext<'db> {
         if variables.is_empty() {
             return None;
         }
-        Some(Self::new(db, variables))
+        Some(Self::new(db, variables, GenericContextOrigin::Inherited))
     }
 
     pub(crate) fn len(self, db: &'db dyn Db) -> usize {
@@ -131,6 +139,20 @@ impl<'db> GenericContext<'db> {
 
     pub(crate) fn default_specialization(self, db: &'db dyn Db) -> Specialization<'db> {
         self.specialize_partial(db, &vec![None; self.variables(db).len()])
+    }
+
+    #[allow(unused_variables)] // Only unused in release builds
+    pub(crate) fn todo_specialization(
+        self,
+        db: &'db dyn Db,
+        todo: &'static str,
+    ) -> Specialization<'db> {
+        let types = self
+            .variables(db)
+            .iter()
+            .map(|typevar| typevar.default_ty(db).unwrap_or(todo_type!(todo)))
+            .collect();
+        self.specialize(db, types)
     }
 
     pub(crate) fn identity_specialization(self, db: &'db dyn Db) -> Specialization<'db> {
@@ -206,6 +228,58 @@ impl<'db> GenericContext<'db> {
         }
 
         Specialization::new(db, self, expanded.into_boxed_slice())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum GenericContextOrigin {
+    LegacyBase(LegacyGenericBase),
+    Inherited,
+    LegacyGenericFunction,
+    TypeParameterList,
+}
+
+impl GenericContextOrigin {
+    pub(crate) const fn as_str(self) -> &'static str {
+        match self {
+            Self::LegacyBase(base) => base.as_str(),
+            Self::Inherited => "inherited",
+            Self::LegacyGenericFunction => "legacy generic function",
+            Self::TypeParameterList => "type parameter list",
+        }
+    }
+}
+
+impl std::fmt::Display for GenericContextOrigin {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum LegacyGenericBase {
+    Generic,
+    Protocol,
+}
+
+impl LegacyGenericBase {
+    pub(crate) const fn as_str(self) -> &'static str {
+        match self {
+            Self::Generic => "`typing.Generic`",
+            Self::Protocol => "subscripted `typing.Protocol`",
+        }
+    }
+}
+
+impl std::fmt::Display for LegacyGenericBase {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+impl From<LegacyGenericBase> for GenericContextOrigin {
+    fn from(base: LegacyGenericBase) -> Self {
+        Self::LegacyBase(base)
     }
 }
 
@@ -556,7 +630,10 @@ impl<'db> SpecializationBuilder<'db> {
         // ```
         //
         // without specializing `T` to `None`.
-        if !actual.is_never() && actual.is_subtype_of(self.db, formal) {
+        if !matches!(formal, Type::ProtocolInstance(_))
+            && !actual.is_never()
+            && actual.is_subtype_of(self.db, formal)
+        {
             return Ok(());
         }
 
@@ -597,6 +674,43 @@ impl<'db> SpecializationBuilder<'db> {
                     {
                         self.infer(*formal_element, *actual_element)?;
                     }
+                }
+            }
+
+            (
+                Type::NominalInstance(NominalInstanceType {
+                    class: ClassType::Generic(formal_alias),
+                    ..
+                })
+                // TODO: This will only handle classes that explicit implement a generic protocol
+                // by listing it as a base class. To handle classes that implicitly implement a
+                // generic protocol, we will need to check the types of the protocol members to be
+                // able to infer the specialization of the protocol that the class implements.
+                | Type::ProtocolInstance(ProtocolInstanceType {
+                    inner: Protocol::FromClass(ClassType::Generic(formal_alias)),
+                    ..
+                }),
+                Type::NominalInstance(NominalInstanceType {
+                    class: actual_class,
+                    ..
+                }),
+            ) => {
+                let formal_origin = formal_alias.origin(self.db);
+                for base in actual_class.iter_mro(self.db) {
+                    let ClassBase::Class(ClassType::Generic(base_alias)) = base else {
+                        continue;
+                    };
+                    if formal_origin != base_alias.origin(self.db) {
+                        continue;
+                    }
+                    let formal_specialization = formal_alias.specialization(self.db).types(self.db);
+                    let base_specialization = base_alias.specialization(self.db).types(self.db);
+                    for (formal_ty, base_ty) in
+                        formal_specialization.iter().zip(base_specialization)
+                    {
+                        self.infer(*formal_ty, *base_ty)?;
+                    }
+                    return Ok(());
                 }
             }
 

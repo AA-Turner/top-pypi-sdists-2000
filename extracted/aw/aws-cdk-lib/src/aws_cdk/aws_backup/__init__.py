@@ -1160,6 +1160,12 @@ class BackupSelection(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="backupPlanId")
     def backup_plan_id(self) -> builtins.str:
@@ -2183,7 +2189,7 @@ class CfnBackupPlan(
             :param completion_window_minutes: A value in minutes after a backup job is successfully started before it must be completed or it is canceled by AWS Backup .
             :param copy_actions: An array of CopyAction objects, which contains the details of the copy operation.
             :param enable_continuous_backup: Enables continuous backup and point-in-time restores (PITR).
-            :param index_actions: 
+            :param index_actions: There can up to one IndexAction in each BackupRule, as each backup can have 0 or 1 backup index associated with it. Within the array is ResourceTypes. Only 1 resource type will be accepted for each BackupRule. Valid values: - ``EBS`` for Amazon Elastic Block Store - ``S3`` for Amazon Simple Storage Service (Amazon S3)
             :param lifecycle: The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define.
             :param recovery_point_tags: The tags to assign to the resources.
             :param schedule_expression: A CRON expression specifying when AWS Backup initiates a backup job.
@@ -2325,7 +2331,13 @@ class CfnBackupPlan(
         def index_actions(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBackupPlan.IndexActionsResourceTypeProperty"]]]]:
-            '''
+            '''There can up to one IndexAction in each BackupRule, as each backup can have 0 or 1 backup index associated with it.
+
+            Within the array is ResourceTypes. Only 1 resource type will be accepted for each BackupRule. Valid values:
+
+            - ``EBS`` for Amazon Elastic Block Store
+            - ``S3`` for Amazon Simple Storage Service (Amazon S3)
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-backup-backupplan-backupruleresourcetype.html#cfn-backup-backupplan-backupruleresourcetype-indexactions
             '''
             result = self._values.get("index_actions")
@@ -2496,8 +2508,9 @@ class CfnBackupPlan(
             *,
             resource_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
-            '''
-            :param resource_types: 
+            '''Specifies index actions.
+
+            :param resource_types: 0 or 1 index action will be accepted for each BackupRule. Valid values: - ``EBS`` for Amazon Elastic Block Store - ``S3`` for Amazon Simple Storage Service (Amazon S3)
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-backup-backupplan-indexactionsresourcetype.html
             :exampleMetadata: fixture=_generated
@@ -2521,7 +2534,13 @@ class CfnBackupPlan(
 
         @builtins.property
         def resource_types(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''0 or 1 index action will be accepted for each BackupRule.
+
+            Valid values:
+
+            - ``EBS`` for Amazon Elastic Block Store
+            - ``S3`` for Amazon Simple Storage Service (Amazon S3)
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-backup-backupplan-indexactionsresourcetype.html#cfn-backup-backupplan-indexactionsresourcetype-resourcetypes
             '''
             result = self._values.get("resource_types")
@@ -2557,8 +2576,8 @@ class CfnBackupPlan(
         ) -> None:
             '''Specifies an object containing an array of ``Transition`` objects that determine how long in days before a recovery point transitions to cold storage or is deleted.
 
-            :param delete_after_days: Specifies the number of days after creation that a recovery point is deleted. Must be greater than ``MoveToColdStorageAfterDays`` .
-            :param move_to_cold_storage_after_days: Specifies the number of days after creation that a recovery point is moved to cold storage.
+            :param delete_after_days: The number of days after creation that a recovery point is deleted. This value must be at least 90 days after the number of days specified in ``MoveToColdStorageAfterDays`` .
+            :param move_to_cold_storage_after_days: The number of days after creation that a recovery point is moved to cold storage.
             :param opt_in_to_archive_for_supported_resources: If the value is true, your backup plan transitions supported resources to archive (cold) storage tier in accordance with your lifecycle settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-backup-backupplan-lifecycleresourcetype.html
@@ -2591,9 +2610,9 @@ class CfnBackupPlan(
 
         @builtins.property
         def delete_after_days(self) -> typing.Optional[jsii.Number]:
-            '''Specifies the number of days after creation that a recovery point is deleted.
+            '''The number of days after creation that a recovery point is deleted.
 
-            Must be greater than ``MoveToColdStorageAfterDays`` .
+            This value must be at least 90 days after the number of days specified in ``MoveToColdStorageAfterDays`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-backup-backupplan-lifecycleresourcetype.html#cfn-backup-backupplan-lifecycleresourcetype-deleteafterdays
             '''
@@ -2602,7 +2621,7 @@ class CfnBackupPlan(
 
         @builtins.property
         def move_to_cold_storage_after_days(self) -> typing.Optional[jsii.Number]:
-            '''Specifies the number of days after creation that a recovery point is moved to cold storage.
+            '''The number of days after creation that a recovery point is moved to cold storage.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-backup-backupplan-lifecycleresourcetype.html#cfn-backup-backupplan-lifecycleresourcetype-movetocoldstorageafterdays
             '''
@@ -4828,7 +4847,8 @@ class CfnLogicallyAirGappedBackupVault(
     @builtins.property
     @jsii.member(jsii_name="attrBackupVaultArn")
     def attr_backup_vault_arn(self) -> builtins.str:
-        '''
+        '''The ARN of the backup vault.
+
         :cloudformationAttribute: BackupVaultArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrBackupVaultArn"))
@@ -4836,7 +4856,8 @@ class CfnLogicallyAirGappedBackupVault(
     @builtins.property
     @jsii.member(jsii_name="attrEncryptionKeyArn")
     def attr_encryption_key_arn(self) -> builtins.str:
-        '''
+        '''The ARN of the server-side encryption key.
+
         :cloudformationAttribute: EncryptionKeyArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrEncryptionKeyArn"))
@@ -4844,7 +4865,10 @@ class CfnLogicallyAirGappedBackupVault(
     @builtins.property
     @jsii.member(jsii_name="attrVaultState")
     def attr_vault_state(self) -> builtins.str:
-        '''
+        '''The vault state.
+
+        The possible values are ``CREATING`` , ``AVAILABLE`` , and ``FAILED`` .
+
         :cloudformationAttribute: VaultState
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrVaultState"))
@@ -4852,7 +4876,10 @@ class CfnLogicallyAirGappedBackupVault(
     @builtins.property
     @jsii.member(jsii_name="attrVaultType")
     def attr_vault_type(self) -> builtins.str:
-        '''
+        '''The vault type.
+
+        The possible values are ``BACKUP_VAULT`` and ``LOGICALLY_AIR_GAPPED_BACKUP_VAULT`` .
+
         :cloudformationAttribute: VaultType
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrVaultType"))
@@ -7396,6 +7423,12 @@ class BackupPlan(
 
         return typing.cast(BackupSelection, jsii.invoke(self, "addSelection", [id, options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="backupPlanArn")
     def backup_plan_arn(self) -> builtins.str:
@@ -7563,6 +7596,12 @@ class BackupVault(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="backupVaultArn")

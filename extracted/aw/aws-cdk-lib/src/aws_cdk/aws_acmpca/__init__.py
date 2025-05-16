@@ -118,7 +118,7 @@ class CertificateAuthority(
         
         cluster = msk.Cluster(self, "Cluster",
             cluster_name="myCluster",
-            kafka_version=msk.KafkaVersion.V3_8_X,
+            kafka_version=msk.KafkaVersion.V3_9_X,
             vpc=vpc,
             encryption_in_transit=msk.EncryptionInTransitConfig(
                 client_broker=msk.ClientBrokerEncryption.TLS

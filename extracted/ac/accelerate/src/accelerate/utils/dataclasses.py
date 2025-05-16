@@ -33,6 +33,7 @@ import torch
 
 from .constants import (
     BETA_TP_AVAILABLE_PYTORCH_VERSION,
+    FSDP2_PYTORCH_VERSION,
     FSDP_AUTO_WRAP_POLICY,
     FSDP_BACKWARD_PREFETCH,
     FSDP_SHARDING_STRATEGY,
@@ -984,6 +985,11 @@ class TorchDynamoPlugin(KwargsHandler):
             A dictionary of options to pass to the backend.
         disable (`bool`, defaults to `False`):
             Turn torch.compile() into a no-op for testing
+        use_regional_compilation (`bool`, defaults to `None`):
+            Use it to reduce the cold start compilation time of torch.compile() by targeting repeated blocks of the
+            same class and compiling them sequentially to hit the compiler's cache. For example, in `GPT2LMHeadModel`,
+            the repeated block/class is `GPT2Block`, and can be accessed as `model.transformer.h[0]`. The rest of the
+            model (e.g model.lm_head) is compiled separately.
     """
 
     backend: DynamoBackend = field(
@@ -998,22 +1004,46 @@ class TorchDynamoPlugin(KwargsHandler):
     options: Any = field(default=None, metadata={"help": "A dictionary of options to pass to the backend."})
     disable: bool = field(default=False, metadata={"help": "Turn torch.compile() into a no-op for testing"})
 
+    use_regional_compilation: bool = field(
+        default=None,
+        metadata={
+            "help": (
+                # https://pytorch.org/tutorials/recipes/regional_compilation.html
+                "Use it to reduce the cold start compilation time of torch.compile() by targeting repeated "
+                "blocks of the same class and compiling them sequentially to hit the compiler's cache. For "
+                "example, in `GPT2LMHeadModel`, the repeated block/class is `GPT2Block`, and can be accessed "
+                "as `model.transformer.h[0]`. The rest of the model (e.g model.lm_head) is compiled separately."
+            )
+        },
+    )
+
     def __post_init__(self):
         prefix = "ACCELERATE_DYNAMO_"
         if self.backend is None:
             self.backend = os.environ.get(prefix + "BACKEND", "no")
         self.backend = DynamoBackend(self.backend.upper())
+
         if self.mode is None:
             self.mode = os.environ.get(prefix + "MODE", "default")
         if self.fullgraph is None:
             self.fullgraph = str_to_bool(os.environ.get(prefix + "USE_FULLGRAPH", "False")) == 1
-        if self.dynamic is None:
+        if self.use_regional_compilation is None:
+            self.use_regional_compilation = (
+                str_to_bool(os.environ.get(prefix + "USE_REGIONAL_COMPILATION", "False")) == 1
+            )
+
+        if self.dynamic is None and os.environ.get(prefix + "USE_DYNAMIC", None) is not None:
             self.dynamic = str_to_bool(os.environ.get(prefix + "USE_DYNAMIC", "False")) == 1
 
     def to_dict(self):
         dynamo_config = copy.deepcopy(self.__dict__)
         dynamo_config["backend"] = dynamo_config["backend"].value.lower()
         return dynamo_config
+
+    def to_kwargs(self):
+        kwargs = super().to_kwargs()
+        kwargs.pop("use_regional_compilation", None)
+        return kwargs
 
 
 @dataclass
@@ -1674,6 +1704,10 @@ class FullyShardedDataParallelPlugin:
         if self.fsdp_version is None:
             self.fsdp_version = int(os.environ.get(env_prefix + "VERSION", "1"))
 
+        if self.fsdp_version == 2:
+            if not is_torch_version(">=", FSDP2_PYTORCH_VERSION):
+                raise ImportError(f"FSDP2 requires PyTorch >= {FSDP2_PYTORCH_VERSION}")
+
         if self.sharding_strategy is not None:
             # We cannot properly detect all of the cases, as by default `args.fsdp_sharding_strategy` is set to `fully_shard`
             # Therefore we issue a warning only if the user has explicitly set it inside their plugin
@@ -1808,6 +1842,16 @@ class FullyShardedDataParallelPlugin:
             )
             self.sync_module_states = True
 
+        if self.cpu_ram_efficient_loading != bool(
+            str_to_bool(os.environ.get(env_prefix + "CPU_RAM_EFFICIENT_LOADING", "False"))
+        ):
+            env_var = env_prefix + "CPU_RAM_EFFICIENT_LOADING"
+            warnings.warn(
+                f"The `cpu_ram_efficient_loading` flag for `FullyShardedDataParallelPlugin` does not match the environment variable {env_var}. "
+                "Setting environment variable to match `cpu_ram_efficient_loading`."
+            )
+            os.environ[env_var] = str(self.cpu_ram_efficient_loading)
+
         if isinstance(self.mixed_precision_policy, dict):
             self.set_mixed_precision(self.mixed_precision_policy)
         if self.mixed_precision_policy is not None:
@@ -1876,11 +1920,10 @@ class FullyShardedDataParallelPlugin:
             if self.optim_state_dict_config is None:
                 self.optim_state_dict_config = ShardedOptimStateDictConfig(offload_to_cpu=True)
 
-        # TODO(s1ro1): add support for FULL_STATE_DICT in FSDP2
-        if self.fsdp_version == 2 and self.state_dict_type != StateDictType.SHARDED_STATE_DICT:
+        if self.fsdp_version == 2 and self.state_dict_type == StateDictType.LOCAL_STATE_DICT:
             raise ValueError(
-                "FSDP2 only supports SHARDED_STATE_DICT for now. "
-                "Please set `fsdp_state_dict_type` to `SHARDED_STATE_DICT`."
+                "FSDP2 does not support LOCAL_STATE_DICT. "
+                "Please set `fsdp_state_dict_type` to `SHARDED_STATE_DICT` or `FULL_STATE_DICT`."
             )
 
     def set_auto_wrap_policy(self, model):
@@ -2029,9 +2072,11 @@ class TorchTensorParallelPlugin:
     torch_device_mesh: Optional["torch.distributed.DeviceMesh"] = field(default=None)
 
     def __post_init__(self):
-        self.tp_size = self.tp_size if os.environ.get("TP_SIZE", "1") == "1" else int(os.environ.get("TP_SIZE", "1"))
-        if self.tp_size == 1:
-            raise ValueError("Provide TP degree > 1.")
+        if not isinstance(self.tp_size, int):
+            raise ValueError(f"`tp_size` set to {self.tp_size}, please set to an `int`.")
+
+        if self.tp_size <= 1:
+            raise ValueError("`tp_size` must be greater than 1.")
 
         if is_torch_version("<", BETA_TP_AVAILABLE_PYTORCH_VERSION):
             raise ValueError(
@@ -2047,6 +2092,8 @@ class TorchTensorParallelPlugin:
 
         mesh_dim_name = "tp"
 
+        # device mesh is not used for model sharding
+        # it is only used for preparing data loader
         self.torch_device_mesh = init_device_mesh(device, (self.tp_size,), mesh_dim_names=(mesh_dim_name,))
 
 

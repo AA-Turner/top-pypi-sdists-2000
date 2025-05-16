@@ -137,7 +137,6 @@ from aws_cdk import Duration
 
 
 ses.ConfigurationSet(self, "ConfigurationSet",
-    custom_tracking_redirect_domain="track.cdk.dev",
     tls_policy=ses.ConfigurationSetTlsPolicy.REQUIRE,
     dedicated_ip_pool=my_pool,
     # Specify maximum delivery time
@@ -200,6 +199,20 @@ my_configuration_set.add_event_destination("ToFirehose",
     )
 )
 ```
+
+#### Tracking options
+
+You can specify to use a custom redirect domain to handle open and click tracking for email sent with this configuration set by using `customTrackingRedirectDomain` and `customTrackingHttpsPolicy`.
+Detail can be found in [Custom tracking domain](https://docs.aws.amazon.com/ses/latest/dg/configure-custom-open-click-domains.html).
+
+```python
+ses.ConfigurationSet(self, "ConfigurationSet",
+    custom_tracking_redirect_domain="track.cdk.dev",
+    custom_tracking_https_policy=ses.HttpsPolicy.REQUIRE
+)
+```
+
+**Note**: The custom tracking redirect domain must be verified in Amazon SES. To create verified identities, you can use the [`EmailIdentity` construct](#email-identity).
 
 ### Override account-level suppression list settings
 
@@ -6630,8 +6643,8 @@ class CfnMailManagerRuleSet(
 
             :param application_id: The unique identifier of the Amazon Q Business application instance where the email content will be delivered.
             :param index_id: The identifier of the knowledge base index within the Amazon Q Business application where the email content will be stored and indexed.
-            :param role_arn: The Amazon Resource Name (ARN) of the IAM Role to use while delivering to Amazon Q Business. This role must have access to the qbusiness:BatchPutDocument API for the given application and index.
-            :param action_failure_policy: A policy that states what to do in the case of failure. The action will fail if there are configuration errors. For example, the specified application has been deleted or the role lacks necessary permissions to call the qbusiness:BatchPutDocument API.
+            :param role_arn: The Amazon Resource Name (ARN) of the IAM Role to use while delivering to Amazon Q Business. This role must have access to the ``qbusiness:BatchPutDocument`` API for the given application and index.
+            :param action_failure_policy: A policy that states what to do in the case of failure. The action will fail if there are configuration errors. For example, the specified application has been deleted or the role lacks necessary permissions to call the ``qbusiness:BatchPutDocument`` API.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-delivertoqbusinessaction.html
             :exampleMetadata: fixture=_generated
@@ -6689,7 +6702,7 @@ class CfnMailManagerRuleSet(
         def role_arn(self) -> builtins.str:
             '''The Amazon Resource Name (ARN) of the IAM Role to use while delivering to Amazon Q Business.
 
-            This role must have access to the qbusiness:BatchPutDocument API for the given application and index.
+            This role must have access to the ``qbusiness:BatchPutDocument`` API for the given application and index.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-delivertoqbusinessaction.html#cfn-ses-mailmanagerruleset-delivertoqbusinessaction-rolearn
             '''
@@ -6701,7 +6714,7 @@ class CfnMailManagerRuleSet(
         def action_failure_policy(self) -> typing.Optional[builtins.str]:
             '''A policy that states what to do in the case of failure.
 
-            The action will fail if there are configuration errors. For example, the specified application has been deleted or the role lacks necessary permissions to call the qbusiness:BatchPutDocument API.
+            The action will fail if there are configuration errors. For example, the specified application has been deleted or the role lacks necessary permissions to call the ``qbusiness:BatchPutDocument`` API.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-delivertoqbusinessaction.html#cfn-ses-mailmanagerruleset-delivertoqbusinessaction-actionfailurepolicy
             '''
@@ -12031,19 +12044,12 @@ class CfnReceiptRule(
             encoding: typing.Optional[builtins.str] = None,
             topic_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''When included in a receipt rule, this action publishes a notification to Amazon Simple Notification Service (Amazon SNS).
+            '''The action to publish the email content to an Amazon SNS topic.
 
-            This action includes a complete copy of the email content in the Amazon SNS notifications. Amazon SNS notifications for all other actions simply provide information about the email. They do not include the email content itself.
+            When executed, this action will send the email as a notification to the specified SNS topic.
 
-            If you own the Amazon SNS topic, you don't need to do anything to give Amazon SES permission to publish emails to it. However, if you don't own the Amazon SNS topic, you need to attach a policy to the topic to give Amazon SES permissions to access it. For information about giving permissions, see the `Amazon SES Developer Guide <https://docs.aws.amazon.com/ses/latest/dg/receiving-email-permissions.html>`_ .
-            .. epigraph::
-
-               You can only publish emails that are 150 KB or less (including the header) to Amazon SNS. Larger emails bounce. If you anticipate emails larger than 150 KB, use the S3 action instead.
-
-            For information about using a receipt rule to publish an Amazon SNS notification, see the `Amazon SES Developer Guide <https://docs.aws.amazon.com/ses/latest/dg/receiving-email-action-sns.html>`_ .
-
-            :param encoding: The encoding to use for the email within the Amazon SNS notification. UTF-8 is easier to use, but may not preserve all special characters when a message was encoded with a different encoding format. Base64 preserves all special characters. The default value is UTF-8.
-            :param topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic to notify. You can find the ARN of a topic by using the `ListTopics <https://docs.aws.amazon.com/sns/latest/api/API_ListTopics.html>`_ operation in Amazon SNS. For more information about Amazon SNS topics, see the `Amazon SNS Developer Guide <https://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html>`_ .
+            :param encoding: The encoding to use for the email within the Amazon SNS notification. The default value is ``UTF-8`` . Use ``BASE64`` if you need to preserve all special characters, especially when the original message uses a different encoding format.
+            :param topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS Topic to which notification for the email received will be published.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-receiptrule-snsaction.html
             :exampleMetadata: fixture=_generated
@@ -12073,7 +12079,7 @@ class CfnReceiptRule(
         def encoding(self) -> typing.Optional[builtins.str]:
             '''The encoding to use for the email within the Amazon SNS notification.
 
-            UTF-8 is easier to use, but may not preserve all special characters when a message was encoded with a different encoding format. Base64 preserves all special characters. The default value is UTF-8.
+            The default value is ``UTF-8`` . Use ``BASE64`` if you need to preserve all special characters, especially when the original message uses a different encoding format.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-receiptrule-snsaction.html#cfn-ses-receiptrule-snsaction-encoding
             '''
@@ -12082,11 +12088,7 @@ class CfnReceiptRule(
 
         @builtins.property
         def topic_arn(self) -> typing.Optional[builtins.str]:
-            '''The Amazon Resource Name (ARN) of the Amazon SNS topic to notify.
-
-            You can find the ARN of a topic by using the `ListTopics <https://docs.aws.amazon.com/sns/latest/api/API_ListTopics.html>`_ operation in Amazon SNS.
-
-            For more information about Amazon SNS topics, see the `Amazon SNS Developer Guide <https://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html>`_ .
+            '''The Amazon Resource Name (ARN) of the Amazon SNS Topic to which notification for the email received will be published.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-receiptrule-snsaction.html#cfn-ses-receiptrule-snsaction-topicarn
             '''
@@ -13535,6 +13537,7 @@ class ConfigurationSetEventDestinationProps(ConfigurationSetEventDestinationOpti
     jsii_struct_bases=[],
     name_mapping={
         "configuration_set_name": "configurationSetName",
+        "custom_tracking_https_policy": "customTrackingHttpsPolicy",
         "custom_tracking_redirect_domain": "customTrackingRedirectDomain",
         "dedicated_ip_pool": "dedicatedIpPool",
         "disable_suppression_list": "disableSuppressionList",
@@ -13551,6 +13554,7 @@ class ConfigurationSetProps:
         self,
         *,
         configuration_set_name: typing.Optional[builtins.str] = None,
+        custom_tracking_https_policy: typing.Optional["HttpsPolicy"] = None,
         custom_tracking_redirect_domain: typing.Optional[builtins.str] = None,
         dedicated_ip_pool: typing.Optional["IDedicatedIpPool"] = None,
         disable_suppression_list: typing.Optional[builtins.bool] = None,
@@ -13564,6 +13568,7 @@ class ConfigurationSetProps:
         '''Properties for a configuration set.
 
         :param configuration_set_name: A name for the configuration set. Default: - a CloudFormation generated name
+        :param custom_tracking_https_policy: The https policy to use for tracking open and click events. Default: - HttpsPolicy.OPTIONAL if customTrackingRedirectDomain is set, otherwise undefined
         :param custom_tracking_redirect_domain: The custom subdomain that is used to redirect email recipients to the Amazon SES event tracking domain. Default: - use the default awstrack.me domain
         :param dedicated_ip_pool: The dedicated IP pool to associate with the configuration set. Default: - do not use a dedicated IP pool
         :param disable_suppression_list: If true, account-level suppression list is disabled; email sent with this configuration set will not use any suppression settings at all Default: false
@@ -13578,11 +13583,9 @@ class ConfigurationSetProps:
 
         Example::
 
-            ses.ConfigurationSet(self, "ConfigurationSetWithVdmOptions",
-                vdm_options=ses.VdmOptions(
-                    engagement_metrics=True,
-                    optimized_shared_delivery=True
-                )
+            ses.ConfigurationSet(self, "ConfigurationSet",
+                custom_tracking_redirect_domain="track.cdk.dev",
+                custom_tracking_https_policy=ses.HttpsPolicy.REQUIRE
             )
         '''
         if isinstance(vdm_options, dict):
@@ -13590,6 +13593,7 @@ class ConfigurationSetProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fb010161f6c1e40b88122d9cb7754dae093e9cbe5bbfc72b19737729a4f4523d)
             check_type(argname="argument configuration_set_name", value=configuration_set_name, expected_type=type_hints["configuration_set_name"])
+            check_type(argname="argument custom_tracking_https_policy", value=custom_tracking_https_policy, expected_type=type_hints["custom_tracking_https_policy"])
             check_type(argname="argument custom_tracking_redirect_domain", value=custom_tracking_redirect_domain, expected_type=type_hints["custom_tracking_redirect_domain"])
             check_type(argname="argument dedicated_ip_pool", value=dedicated_ip_pool, expected_type=type_hints["dedicated_ip_pool"])
             check_type(argname="argument disable_suppression_list", value=disable_suppression_list, expected_type=type_hints["disable_suppression_list"])
@@ -13602,6 +13606,8 @@ class ConfigurationSetProps:
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if configuration_set_name is not None:
             self._values["configuration_set_name"] = configuration_set_name
+        if custom_tracking_https_policy is not None:
+            self._values["custom_tracking_https_policy"] = custom_tracking_https_policy
         if custom_tracking_redirect_domain is not None:
             self._values["custom_tracking_redirect_domain"] = custom_tracking_redirect_domain
         if dedicated_ip_pool is not None:
@@ -13629,6 +13635,15 @@ class ConfigurationSetProps:
         '''
         result = self._values.get("configuration_set_name")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def custom_tracking_https_policy(self) -> typing.Optional["HttpsPolicy"]:
+        '''The https policy to use for tracking open and click events.
+
+        :default: - HttpsPolicy.OPTIONAL if customTrackingRedirectDomain is set, otherwise undefined
+        '''
+        result = self._values.get("custom_tracking_https_policy")
+        return typing.cast(typing.Optional["HttpsPolicy"], result)
 
     @builtins.property
     def custom_tracking_redirect_domain(self) -> typing.Optional[builtins.str]:
@@ -13742,7 +13757,6 @@ class ConfigurationSetTlsPolicy(enum.Enum):
         
         
         ses.ConfigurationSet(self, "ConfigurationSet",
-            custom_tracking_redirect_domain="track.cdk.dev",
             tls_policy=ses.ConfigurationSetTlsPolicy.REQUIRE,
             dedicated_ip_pool=my_pool,
             # Specify maximum delivery time
@@ -14165,6 +14179,12 @@ class DropSpamReceiptRule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="rule")
@@ -14636,6 +14656,34 @@ class FirehoseDeliveryStreamDestination:
         return "FirehoseDeliveryStreamDestination(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.enum(jsii_type="aws-cdk-lib.aws_ses.HttpsPolicy")
+class HttpsPolicy(enum.Enum):
+    '''HTTPS policy option for the protocol of the open and click tracking links for your custom redirect domain.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        ses.ConfigurationSet(self, "ConfigurationSet",
+            custom_tracking_redirect_domain="track.cdk.dev",
+            custom_tracking_https_policy=ses.HttpsPolicy.REQUIRE
+        )
+    '''
+
+    REQUIRE = "REQUIRE"
+    '''Open and Click tracking links will both be wrapped using HTTPS.'''
+    REQUIRE_OPEN_ONLY = "REQUIRE_OPEN_ONLY"
+    '''Open tracking links will be wrapped using HTTPS.
+
+    Click tracking links will be wrapped using the original protocol of the link.
+    '''
+    OPTIONAL = "OPTIONAL"
+    '''Open tracking links will be wrapped using HTTP.
+
+    Click tracking links will be wrapped using the original protocol of the link.
+    '''
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IConfigurationSet")
@@ -15312,6 +15360,12 @@ class ReceiptFilter(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_ses.ReceiptFilterPolicy")
 class ReceiptFilterPolicy(enum.Enum):
@@ -15498,6 +15552,12 @@ class ReceiptRule(
             type_hints = typing.get_type_hints(_typecheckingstub__e53269c4ea365e8ad5ea79b458ec9a4cd161a16b84e0de7f577a755251624a6b)
             check_type(argname="argument action", value=action, expected_type=type_hints["action"])
         return typing.cast(None, jsii.invoke(self, "addAction", [action]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="receiptRuleName")
@@ -16122,6 +16182,12 @@ class ReceiptRuleSet(
 
         return typing.cast(ReceiptRule, jsii.invoke(self, "addRule", [id, options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="receiptRuleSetName")
     def receipt_rule_set_name(self) -> builtins.str:
@@ -16615,6 +16681,12 @@ class VdmAttributes(
             check_type(argname="argument vdm_attributes_name", value=vdm_attributes_name, expected_type=type_hints["vdm_attributes_name"])
         return typing.cast(IVdmAttributes, jsii.sinvoke(cls, "fromVdmAttributesName", [scope, id, vdm_attributes_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="vdmAttributesName")
     def vdm_attributes_name(self) -> builtins.str:
@@ -16862,11 +16934,9 @@ class ConfigurationSet(
 
     Example::
 
-        ses.ConfigurationSet(self, "ConfigurationSetWithVdmOptions",
-            vdm_options=ses.VdmOptions(
-                engagement_metrics=True,
-                optimized_shared_delivery=True
-            )
+        ses.ConfigurationSet(self, "ConfigurationSet",
+            custom_tracking_redirect_domain="track.cdk.dev",
+            custom_tracking_https_policy=ses.HttpsPolicy.REQUIRE
         )
     '''
 
@@ -16876,6 +16946,7 @@ class ConfigurationSet(
         id: builtins.str,
         *,
         configuration_set_name: typing.Optional[builtins.str] = None,
+        custom_tracking_https_policy: typing.Optional[HttpsPolicy] = None,
         custom_tracking_redirect_domain: typing.Optional[builtins.str] = None,
         dedicated_ip_pool: typing.Optional[IDedicatedIpPool] = None,
         disable_suppression_list: typing.Optional[builtins.bool] = None,
@@ -16890,6 +16961,7 @@ class ConfigurationSet(
         :param scope: -
         :param id: -
         :param configuration_set_name: A name for the configuration set. Default: - a CloudFormation generated name
+        :param custom_tracking_https_policy: The https policy to use for tracking open and click events. Default: - HttpsPolicy.OPTIONAL if customTrackingRedirectDomain is set, otherwise undefined
         :param custom_tracking_redirect_domain: The custom subdomain that is used to redirect email recipients to the Amazon SES event tracking domain. Default: - use the default awstrack.me domain
         :param dedicated_ip_pool: The dedicated IP pool to associate with the configuration set. Default: - do not use a dedicated IP pool
         :param disable_suppression_list: If true, account-level suppression list is disabled; email sent with this configuration set will not use any suppression settings at all Default: false
@@ -16906,6 +16978,7 @@ class ConfigurationSet(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = ConfigurationSetProps(
             configuration_set_name=configuration_set_name,
+            custom_tracking_https_policy=custom_tracking_https_policy,
             custom_tracking_redirect_domain=custom_tracking_redirect_domain,
             dedicated_ip_pool=dedicated_ip_pool,
             disable_suppression_list=disable_suppression_list,
@@ -16969,6 +17042,12 @@ class ConfigurationSet(
         )
 
         return typing.cast("ConfigurationSetEventDestination", jsii.invoke(self, "addEventDestination", [id, options]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetName")
@@ -17062,6 +17141,12 @@ class ConfigurationSetEventDestination(
             check_type(argname="argument configuration_set_event_destination_id", value=configuration_set_event_destination_id, expected_type=type_hints["configuration_set_event_destination_id"])
         return typing.cast(IConfigurationSetEventDestination, jsii.sinvoke(cls, "fromConfigurationSetEventDestinationId", [scope, id, configuration_set_event_destination_id]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="configurationSetEventDestinationId")
     def configuration_set_event_destination_id(self) -> builtins.str:
@@ -17131,6 +17216,12 @@ class DedicatedIpPool(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument dedicated_ip_pool_name", value=dedicated_ip_pool_name, expected_type=type_hints["dedicated_ip_pool_name"])
         return typing.cast(IDedicatedIpPool, jsii.sinvoke(cls, "fromDedicatedIpPoolName", [scope, id, dedicated_ip_pool_name]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="dedicatedIpPoolName")
@@ -17446,6 +17537,12 @@ class EmailIdentity(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSendEmail", [grantee]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="dkimDnsTokenName1")
     def dkim_dns_token_name1(self) -> builtins.str:
@@ -17580,6 +17677,7 @@ __all__ = [
     "EmailSendingEvent",
     "EventDestination",
     "FirehoseDeliveryStreamDestination",
+    "HttpsPolicy",
     "IConfigurationSet",
     "IConfigurationSetEventDestination",
     "IDedicatedIpPool",
@@ -19251,6 +19349,7 @@ def _typecheckingstub__dd3ac4f1af1f2fe9c11fa8894b2eae0f4b13c464b826cffda8b6937f4
 def _typecheckingstub__fb010161f6c1e40b88122d9cb7754dae093e9cbe5bbfc72b19737729a4f4523d(
     *,
     configuration_set_name: typing.Optional[builtins.str] = None,
+    custom_tracking_https_policy: typing.Optional[HttpsPolicy] = None,
     custom_tracking_redirect_domain: typing.Optional[builtins.str] = None,
     dedicated_ip_pool: typing.Optional[IDedicatedIpPool] = None,
     disable_suppression_list: typing.Optional[builtins.bool] = None,
@@ -19622,6 +19721,7 @@ def _typecheckingstub__52b42851a408d3eb2b07399f2b34603200cef443be5e9f913f4a1d80a
     id: builtins.str,
     *,
     configuration_set_name: typing.Optional[builtins.str] = None,
+    custom_tracking_https_policy: typing.Optional[HttpsPolicy] = None,
     custom_tracking_redirect_domain: typing.Optional[builtins.str] = None,
     dedicated_ip_pool: typing.Optional[IDedicatedIpPool] = None,
     disable_suppression_list: typing.Optional[builtins.bool] = None,

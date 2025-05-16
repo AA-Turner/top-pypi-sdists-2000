@@ -2898,6 +2898,12 @@ class AuroraMysqlEngineVersion(
         return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_2_11_5"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_2_11_6")
+    def VER_2_11_6(cls) -> "AuroraMysqlEngineVersion":
+        '''Version "5.7.mysql_aurora.2.11.6".'''
+        return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_2_11_6"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_2_12_0")
     def VER_2_12_0(cls) -> "AuroraMysqlEngineVersion":
         '''Version "5.7.mysql_aurora.2.12.0".'''
@@ -2926,6 +2932,12 @@ class AuroraMysqlEngineVersion(
     def VER_2_12_4(cls) -> "AuroraMysqlEngineVersion":
         '''Version "5.7.mysql_aurora.2.12.4".'''
         return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_2_12_4"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_2_12_5")
+    def VER_2_12_5(cls) -> "AuroraMysqlEngineVersion":
+        '''Version "5.7.mysql_aurora.2.12.5".'''
+        return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_2_12_5"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_3_01_0")
@@ -3060,6 +3072,12 @@ class AuroraMysqlEngineVersion(
     def VER_3_04_3(cls) -> "AuroraMysqlEngineVersion":
         '''Version "8.0.mysql_aurora.3.04.3".'''
         return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_3_04_3"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_3_04_4")
+    def VER_3_04_4(cls) -> "AuroraMysqlEngineVersion":
+        '''Version "8.0.mysql_aurora.3.04.4".'''
+        return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_3_04_4"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_3_05_0")
@@ -3681,67 +3699,122 @@ class AuroraPostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_11")
     def VER_12_11(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.11".'''
+        '''(deprecated) Version "12.11".
+
+        :deprecated: Version 12.11 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_11"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_12")
     def VER_12_12(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.12".'''
+        '''(deprecated) Version "12.12".
+
+        :deprecated: Version 12.12 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_12"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_13")
     def VER_12_13(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.13".'''
+        '''(deprecated) Version "12.13".
+
+        :deprecated: Version 12.13 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_13"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_14")
     def VER_12_14(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.14".'''
+        '''(deprecated) Version "12.14".
+
+        :deprecated: Version 12.14 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_14"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_15")
     def VER_12_15(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.15".'''
+        '''(deprecated) Version "12.15".
+
+        :deprecated: Version 12.15 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_15"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_16")
     def VER_12_16(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.16".'''
+        '''(deprecated) Version "12.16".
+
+        :deprecated: Version 12.16 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_16"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_17")
     def VER_12_17(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.17".'''
+        '''(deprecated) Version "12.17".
+
+        :deprecated: Version 12.17 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_17"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_18")
     def VER_12_18(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.18".'''
+        '''(deprecated) Version "12.18".
+
+        :deprecated: Version 12.18 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_18"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_19")
     def VER_12_19(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.19".'''
+        '''(deprecated) Version "12.19".
+
+        :deprecated: Version 12.19 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_19"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_20")
     def VER_12_20(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.20".'''
+        '''(deprecated) Version "12.20".
+
+        :deprecated: Version 12.20 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_20"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_21")
     def VER_12_21(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "12.21".'''
+        '''(deprecated) Version "12.21".
+
+        :deprecated: Version 12.21 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_12_21"))
 
     @jsii.python.classproperty
@@ -3803,7 +3876,12 @@ class AuroraPostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_13_10")
     def VER_13_10(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "13.10".'''
+        '''(deprecated) Version "13.10".
+
+        :deprecated: Version 13.10 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_13_10"))
 
     @jsii.python.classproperty
@@ -3845,7 +3923,12 @@ class AuroraPostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_13_17")
     def VER_13_17(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "13.17".'''
+        '''(deprecated) Version "13.17".
+
+        :deprecated: Version 13.17 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_13_17"))
 
     @jsii.python.classproperty
@@ -3907,13 +3990,23 @@ class AuroraPostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_13_7")
     def VER_13_7(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "13.7".'''
+        '''(deprecated) Version "13.7".
+
+        :deprecated: Version 13.7 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_13_7"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_13_8")
     def VER_13_8(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "13.8".'''
+        '''(deprecated) Version "13.8".
+
+        :deprecated: Version 13.8 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_13_8"))
 
     @jsii.python.classproperty
@@ -3949,7 +4042,12 @@ class AuroraPostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_14_14")
     def VER_14_14(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "14.14".'''
+        '''(deprecated) Version "14.14".
+
+        :deprecated: Version 14.14 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_14_14"))
 
     @jsii.python.classproperty
@@ -3967,19 +4065,34 @@ class AuroraPostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_14_3")
     def VER_14_3(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "14.3".'''
+        '''(deprecated) Version "14.3".
+
+        :deprecated: Version 14.3 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_14_3"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_14_4")
     def VER_14_4(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "14.4".'''
+        '''(deprecated) Version "14.4".
+
+        :deprecated: Version 14.4 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_14_4"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_14_5")
     def VER_14_5(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "14.5".'''
+        '''(deprecated) Version "14.5".
+
+        :deprecated: Version 14.5 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_14_5"))
 
     @jsii.python.classproperty
@@ -3991,7 +4104,12 @@ class AuroraPostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_14_7")
     def VER_14_7(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "14.7".'''
+        '''(deprecated) Version "14.7".
+
+        :deprecated: Version 14.7 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_14_7"))
 
     @jsii.python.classproperty
@@ -4021,7 +4139,12 @@ class AuroraPostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_15_2")
     def VER_15_2(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "15.2".'''
+        '''(deprecated) Version "15.2".
+
+        :deprecated: Version 15.2 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_15_2"))
 
     @jsii.python.classproperty
@@ -4063,7 +4186,12 @@ class AuroraPostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_15_9")
     def VER_15_9(cls) -> "AuroraPostgresEngineVersion":
-        '''Version "15.9".'''
+        '''(deprecated) Version "15.9".
+
+        :deprecated: Version 15.9 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_15_9"))
 
     @jsii.python.classproperty
@@ -4135,6 +4263,12 @@ class AuroraPostgresEngineVersion(
     def VER_16_8(cls) -> "AuroraPostgresEngineVersion":
         '''Version "16.8".'''
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_16_8"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_16_8_LIMITLESS")
+    def VER_16_8_LIMITLESS(cls) -> "AuroraPostgresEngineVersion":
+        '''Version "16.8 limitless".'''
+        return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_16_8_LIMITLESS"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_17_1")
@@ -27175,6 +27309,12 @@ class DatabaseSecret(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_rds.DatabaseSecretProps",
@@ -33366,6 +33506,12 @@ class OptionGroup(
 
         return typing.cast(builtins.bool, jsii.invoke(self, "addConfiguration", [configuration]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="optionConnections")
     def option_connections(self) -> typing.Mapping[builtins.str, _Connections_0f31fce8]:
@@ -34776,6 +34922,12 @@ class ParameterGroup(
 
         return typing.cast("ParameterGroupInstanceConfig", jsii.invoke(self, "bindToInstance", [_options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_rds.ParameterGroupClusterBindOptions",
@@ -35867,31 +36019,56 @@ class PostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_15")
     def VER_12_15(cls) -> "PostgresEngineVersion":
-        '''Version "12.15".'''
+        '''(deprecated) Version "12.15".
+
+        :deprecated: PostgreSQL 12.15 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_12_15"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_16")
     def VER_12_16(cls) -> "PostgresEngineVersion":
-        '''Version "12.16".'''
+        '''(deprecated) Version "12.16".
+
+        :deprecated: PostgreSQL 12.16 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_12_16"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_17")
     def VER_12_17(cls) -> "PostgresEngineVersion":
-        '''Version "12.17".'''
+        '''(deprecated) Version "12.17".
+
+        :deprecated: PostgreSQL 12.17 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_12_17"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_18")
     def VER_12_18(cls) -> "PostgresEngineVersion":
-        '''Version "12.18".'''
+        '''(deprecated) Version "12.18".
+
+        :deprecated: PostgreSQL 12.18 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_12_18"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_19")
     def VER_12_19(cls) -> "PostgresEngineVersion":
-        '''Version "12.19".'''
+        '''(deprecated) Version "12.19".
+
+        :deprecated: PostgreSQL 12.19 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_12_19"))
 
     @jsii.python.classproperty
@@ -35908,13 +36085,23 @@ class PostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_20")
     def VER_12_20(cls) -> "PostgresEngineVersion":
-        '''Version "12.20".'''
+        '''(deprecated) Version "12.20".
+
+        :deprecated: PostgreSQL 12.20 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_12_20"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_12_21")
     def VER_12_21(cls) -> "PostgresEngineVersion":
-        '''Version "12.21".'''
+        '''(deprecated) Version "12.21".
+
+        :deprecated: PostgreSQL 12.21 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_12_21"))
 
     @jsii.python.classproperty
@@ -36064,7 +36251,12 @@ class PostgresEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_13_14")
     def VER_13_14(cls) -> "PostgresEngineVersion":
-        '''Version "13.14".'''
+        '''(deprecated) Version "13.14".
+
+        :deprecated: PostgreSQL 13.14 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_13_14"))
 
     @jsii.python.classproperty
@@ -36113,6 +36305,12 @@ class PostgresEngineVersion(
     def VER_13_20(cls) -> "PostgresEngineVersion":
         '''Version "13.20".'''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_13_20"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_13_21")
+    def VER_13_21(cls) -> "PostgresEngineVersion":
+        '''Version "13.21".'''
+        return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_13_21"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_13_3")
@@ -36267,6 +36465,12 @@ class PostgresEngineVersion(
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_14_17"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_14_18")
+    def VER_14_18(cls) -> "PostgresEngineVersion":
+        '''Version "14.18".'''
+        return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_14_18"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_14_2")
     def VER_14_2(cls) -> "PostgresEngineVersion":
         '''(deprecated) Version "14.2".
@@ -36377,6 +36581,12 @@ class PostgresEngineVersion(
     def VER_15_12(cls) -> "PostgresEngineVersion":
         '''Version "15.12".'''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_15_12"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_15_13")
+    def VER_15_13(cls) -> "PostgresEngineVersion":
+        '''Version "15.13".'''
+        return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_15_13"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_15_2")
@@ -36516,6 +36726,12 @@ class PostgresEngineVersion(
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_16_8"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_16_9")
+    def VER_16_9(cls) -> "PostgresEngineVersion":
+        '''Version "16.9".'''
+        return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_16_9"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_17")
     def VER_17(cls) -> "PostgresEngineVersion":
         '''Version "17" (only a major version, without a specific minor version).'''
@@ -36544,6 +36760,12 @@ class PostgresEngineVersion(
     def VER_17_4(cls) -> "PostgresEngineVersion":
         '''Version "17.4".'''
         return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_17_4"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_17_5")
+    def VER_17_5(cls) -> "PostgresEngineVersion":
+        '''Version "17.5".'''
+        return typing.cast("PostgresEngineVersion", jsii.sget(cls, "VER_17_5"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_9_6_24")
@@ -37805,6 +38027,12 @@ class ServerlessCluster(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDataApiAccess", [grantee]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="clusterArn")
     def cluster_arn(self) -> builtins.str:
@@ -38110,6 +38338,12 @@ class ServerlessClusterFromSnapshot(
             type_hints = typing.get_type_hints(_typecheckingstub__5bddc08682fc17d1352480181409bfa1cad7f9d0be2d96fa01b2dc399c643a4d)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDataApiAccess", [grantee]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterArn")
@@ -40953,6 +41187,12 @@ class SubnetGroup(
             check_type(argname="argument subnet_group_name", value=subnet_group_name, expected_type=type_hints["subnet_group_name"])
         return typing.cast(ISubnetGroup, jsii.sinvoke(cls, "fromSubnetGroupName", [scope, id, subnet_group_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="subnetGroupName")
     def subnet_group_name(self) -> builtins.str:
@@ -42696,6 +42936,12 @@ class DatabaseClusterFromSnapshot(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricServerlessDatabaseCapacity", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="cloudwatchLogGroups")
     def cloudwatch_log_groups(
@@ -43882,6 +44128,12 @@ class DatabaseInstanceFromSnapshot(
     @jsii.member(jsii_name="setLogRetention")
     def _set_log_retention(self) -> None:
         return typing.cast(None, jsii.invoke(self, "setLogRetention", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="cloudwatchLogGroups")
@@ -46102,6 +46354,12 @@ class DatabaseInstanceReadReplica(
     def _set_log_retention(self) -> None:
         return typing.cast(None, jsii.invoke(self, "setLogRetention", []))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="cloudwatchLogGroups")
     def cloudwatch_log_groups(
@@ -46354,6 +46612,12 @@ class DatabaseProxy(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument db_user", value=db_user, expected_type=type_hints["db_user"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantConnect", [grantee, db_user]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="connections")
@@ -46934,6 +47198,12 @@ class DatabaseCluster(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricServerlessDatabaseCapacity", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="cloudwatchLogGroups")
     def cloudwatch_log_groups(
@@ -47414,6 +47684,12 @@ class DatabaseInstance(
     @jsii.member(jsii_name="setLogRetention")
     def _set_log_retention(self) -> None:
         return typing.cast(None, jsii.invoke(self, "setLogRetention", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="cloudwatchLogGroups")

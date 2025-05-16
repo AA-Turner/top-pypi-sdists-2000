@@ -70,8 +70,11 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    CfnTag as _CfnTag_f6864754,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
+    ITaggableV2 as _ITaggableV2_4e6798f8,
+    TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
 
@@ -1895,7 +1898,7 @@ class CfnPolicyProps:
         )
 
 
-@jsii.implements(_IInspectable_c2943556)
+@jsii.implements(_IInspectable_c2943556, _ITaggableV2_4e6798f8)
 class CfnPolicyStore(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1921,10 +1924,17 @@ class CfnPolicyStore(
             ),
         
             # the properties below are optional
+            deletion_protection=verifiedpermissions.CfnPolicyStore.DeletionProtectionProperty(
+                mode="mode"
+            ),
             description="description",
             schema=verifiedpermissions.CfnPolicyStore.SchemaDefinitionProperty(
                 cedar_json="cedarJson"
-            )
+            ),
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
         )
     '''
 
@@ -1934,15 +1944,19 @@ class CfnPolicyStore(
         id: builtins.str,
         *,
         validation_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicyStore.ValidationSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        deletion_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicyStore.DeletionProtectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicyStore.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param validation_settings: Specifies the validation setting for this policy store. Currently, the only valid and required value is ``Mode`` . .. epigraph:: We recommend that you turn on ``STRICT`` mode only after you define a schema. If a schema doesn't exist, then ``STRICT`` mode causes any policy to fail validation, and Verified Permissions rejects the policy. You can turn off validation by using the `UpdatePolicyStore <https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_UpdatePolicyStore>`_ . Then, when you have a schema defined, use `UpdatePolicyStore <https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_UpdatePolicyStore>`_ again to turn validation back on.
+        :param deletion_protection: 
         :param description: Descriptive text that you can provide to help with identification of the current policy store.
         :param schema: Creates or updates the policy schema in a policy store. Cedar can use the schema to validate any Cedar policies and policy templates submitted to the policy store. Any changes to the schema validate only policies and templates submitted after the schema change. Existing policies and templates are not re-evaluated against the changed schema. If you later update a policy, then it is evaluated against the new schema at that time.
+        :param tags: The list of key-value pairs to associate with the policy store.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8cc0f2986096a74fa71e43f21c340737b2abb3e3f40afbfe29ca3f0bd9b39ee9)
@@ -1950,8 +1964,10 @@ class CfnPolicyStore(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnPolicyStoreProps(
             validation_settings=validation_settings,
+            deletion_protection=deletion_protection,
             description=description,
             schema=schema,
+            tags=tags,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -2005,6 +2021,12 @@ class CfnPolicyStore(
         return typing.cast(builtins.str, jsii.get(self, "attrPolicyStoreId"))
 
     @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
@@ -2026,6 +2048,23 @@ class CfnPolicyStore(
             type_hints = typing.get_type_hints(_typecheckingstub__f75a45bc8d480e61f7e4827904f9e4cfad1881a595a32bf1bebfb6efb618e30f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "validationSettings", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="deletionProtection")
+    def deletion_protection(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.DeletionProtectionProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.DeletionProtectionProperty"]], jsii.get(self, "deletionProtection"))
+
+    @deletion_protection.setter
+    def deletion_protection(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.DeletionProtectionProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__57833e423b36e13e7920abdf1a2596b9080e63fa65941f6d185d155792d5ccf6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "deletionProtection", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -2057,6 +2096,71 @@ class CfnPolicyStore(
             type_hints = typing.get_type_hints(_typecheckingstub__59218b40bcf4539ad10409fa2f065ad910ceb568598b66b8276c1d8844d45901)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "schema", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The list of key-value pairs to associate with the policy store.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a4e637b2595daab8d8dca7da125f3bf21d442c1f8fb59f4caefd71bced88d6b5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_verifiedpermissions.CfnPolicyStore.DeletionProtectionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"mode": "mode"},
+    )
+    class DeletionProtectionProperty:
+        def __init__(self, *, mode: builtins.str) -> None:
+            '''
+            :param mode: Default: - "DISABLED"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-policystore-deletionprotection.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_verifiedpermissions as verifiedpermissions
+                
+                deletion_protection_property = verifiedpermissions.CfnPolicyStore.DeletionProtectionProperty(
+                    mode="mode"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c70b9477a0dc9dad5a293d5f268b74672d7816a3722f79105d3236fca32076a9)
+                check_type(argname="argument mode", value=mode, expected_type=type_hints["mode"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "mode": mode,
+            }
+
+        @builtins.property
+        def mode(self) -> builtins.str:
+            '''
+            :default: - "DISABLED"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-policystore-deletionprotection.html#cfn-verifiedpermissions-policystore-deletionprotection-mode
+            '''
+            result = self._values.get("mode")
+            assert result is not None, "Required property 'mode' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DeletionProtectionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_verifiedpermissions.CfnPolicyStore.SchemaDefinitionProperty",
@@ -2182,8 +2286,10 @@ class CfnPolicyStore(
     jsii_struct_bases=[],
     name_mapping={
         "validation_settings": "validationSettings",
+        "deletion_protection": "deletionProtection",
         "description": "description",
         "schema": "schema",
+        "tags": "tags",
     },
 )
 class CfnPolicyStoreProps:
@@ -2191,14 +2297,18 @@ class CfnPolicyStoreProps:
         self,
         *,
         validation_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.ValidationSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+        deletion_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.DeletionProtectionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.SchemaDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPolicyStore``.
 
         :param validation_settings: Specifies the validation setting for this policy store. Currently, the only valid and required value is ``Mode`` . .. epigraph:: We recommend that you turn on ``STRICT`` mode only after you define a schema. If a schema doesn't exist, then ``STRICT`` mode causes any policy to fail validation, and Verified Permissions rejects the policy. You can turn off validation by using the `UpdatePolicyStore <https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_UpdatePolicyStore>`_ . Then, when you have a schema defined, use `UpdatePolicyStore <https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_UpdatePolicyStore>`_ again to turn validation back on.
+        :param deletion_protection: 
         :param description: Descriptive text that you can provide to help with identification of the current policy store.
         :param schema: Creates or updates the policy schema in a policy store. Cedar can use the schema to validate any Cedar policies and policy templates submitted to the policy store. Any changes to the schema validate only policies and templates submitted after the schema change. Existing policies and templates are not re-evaluated against the changed schema. If you later update a policy, then it is evaluated against the new schema at that time.
+        :param tags: The list of key-value pairs to associate with the policy store.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policystore.html
         :exampleMetadata: fixture=_generated
@@ -2215,24 +2325,37 @@ class CfnPolicyStoreProps:
                 ),
             
                 # the properties below are optional
+                deletion_protection=verifiedpermissions.CfnPolicyStore.DeletionProtectionProperty(
+                    mode="mode"
+                ),
                 description="description",
                 schema=verifiedpermissions.CfnPolicyStore.SchemaDefinitionProperty(
                     cedar_json="cedarJson"
-                )
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0f8a612a98cf26f16f9e9de3e5b0a5faaf9ae49bfb39376380ab1ee24d31ca9f)
             check_type(argname="argument validation_settings", value=validation_settings, expected_type=type_hints["validation_settings"])
+            check_type(argname="argument deletion_protection", value=deletion_protection, expected_type=type_hints["deletion_protection"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument schema", value=schema, expected_type=type_hints["schema"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "validation_settings": validation_settings,
         }
+        if deletion_protection is not None:
+            self._values["deletion_protection"] = deletion_protection
         if description is not None:
             self._values["description"] = description
         if schema is not None:
             self._values["schema"] = schema
+        if tags is not None:
+            self._values["tags"] = tags
 
     @builtins.property
     def validation_settings(
@@ -2250,6 +2373,16 @@ class CfnPolicyStoreProps:
         result = self._values.get("validation_settings")
         assert result is not None, "Required property 'validation_settings' is missing"
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnPolicyStore.ValidationSettingsProperty], result)
+
+    @builtins.property
+    def deletion_protection(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPolicyStore.DeletionProtectionProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policystore.html#cfn-verifiedpermissions-policystore-deletionprotection
+        '''
+        result = self._values.get("deletion_protection")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPolicyStore.DeletionProtectionProperty]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -2272,6 +2405,15 @@ class CfnPolicyStoreProps:
         '''
         result = self._values.get("schema")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPolicyStore.SchemaDefinitionProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The list of key-value pairs to associate with the policy store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policystore.html#cfn-verifiedpermissions-policystore-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2738,8 +2880,10 @@ def _typecheckingstub__8cc0f2986096a74fa71e43f21c340737b2abb3e3f40afbfe29ca3f0bd
     id: builtins.str,
     *,
     validation_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.ValidationSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+    deletion_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.DeletionProtectionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.SchemaDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2762,6 +2906,12 @@ def _typecheckingstub__f75a45bc8d480e61f7e4827904f9e4cfad1881a595a32bf1bebfb6efb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__57833e423b36e13e7920abdf1a2596b9080e63fa65941f6d185d155792d5ccf6(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPolicyStore.DeletionProtectionProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fc845780a5a1510b90c3ed3b31f4edddbe3eb47e0d043f7f9f7b3f43b1788034(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -2770,6 +2920,19 @@ def _typecheckingstub__fc845780a5a1510b90c3ed3b31f4edddbe3eb47e0d043f7f9f7b3f43b
 
 def _typecheckingstub__59218b40bcf4539ad10409fa2f065ad910ceb568598b66b8276c1d8844d45901(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPolicyStore.SchemaDefinitionProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a4e637b2595daab8d8dca7da125f3bf21d442c1f8fb59f4caefd71bced88d6b5(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c70b9477a0dc9dad5a293d5f268b74672d7816a3722f79105d3236fca32076a9(
+    *,
+    mode: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2791,8 +2954,10 @@ def _typecheckingstub__441c781d6c8944f199761ac7a1433da41be4b40fc2d3cbb5df9ccf860
 def _typecheckingstub__0f8a612a98cf26f16f9e9de3e5b0a5faaf9ae49bfb39376380ab1ee24d31ca9f(
     *,
     validation_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.ValidationSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+    deletion_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.DeletionProtectionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.SchemaDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

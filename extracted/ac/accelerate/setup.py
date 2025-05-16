@@ -40,6 +40,7 @@ extras["testing"] = extras["test_prod"] + extras["test_dev"]
 extras["deepspeed"] = ["deepspeed"]
 extras["rich"] = ["rich"]
 
+extras["test_fp8"] = ["torchao"]  # note: TE for now needs to be done via pulling down the docker image directly
 extras["test_trackers"] = ["wandb", "comet-ml", "tensorboard", "dvclive", "mlflow", "matplotlib"]
 extras["dev"] = extras["quality"] + extras["testing"] + extras["rich"]
 
@@ -49,7 +50,7 @@ extras["sagemaker"] = [
 
 setup(
     name="accelerate",
-    version="1.6.0",
+    version="1.7.0",
     description="Accelerate",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",

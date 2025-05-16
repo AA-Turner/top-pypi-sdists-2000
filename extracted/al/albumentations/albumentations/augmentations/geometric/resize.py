@@ -38,6 +38,12 @@ class RandomScale(DualTransform):
         mask_interpolation (OpenCV flag): flag that is used to specify the interpolation algorithm for mask.
             Should be one of: cv2.INTER_NEAREST, cv2.INTER_LINEAR, cv2.INTER_CUBIC, cv2.INTER_AREA, cv2.INTER_LANCZOS4.
             Default: cv2.INTER_NEAREST.
+        area_for_downscale (Literal[None, "image", "image_mask"]): Controls automatic use of INTER_AREA interpolation
+            for downscaling. Options:
+            - None: No automatic interpolation selection, always use the specified interpolation method
+            - "image": Use INTER_AREA when downscaling images, retain specified interpolation for upscaling and masks
+            - "image_mask": Use INTER_AREA when downscaling both images and masks
+            Default: None.
         p (float): probability of applying the transform. Default: 0.5.
 
     Targets:
@@ -51,21 +57,67 @@ class RandomScale(DualTransform):
         - Scale factor is sampled independently per image side (width and height).
         - Bounding box coordinates are scaled accordingly.
         - Keypoint coordinates are scaled accordingly.
+        - When area_for_downscale is set, INTER_AREA interpolation will be used automatically for
+          downscaling (scale < 1.0), which provides better quality for size reduction.
 
     Mathematical formulation:
         Let (W, H) be the original image dimensions and (W', H') be the output dimensions.
         The scale factor s is sampled from the range [1 + scale_limit[0], 1 + scale_limit[1]].
         Then, W' = W * s and H' = H * s.
 
-    Example:
+    Examples:
         >>> import numpy as np
         >>> import albumentations as A
-        >>> image = np.random.randint(0, 256, (100, 100, 3), dtype=np.uint8)
-        >>> transform = A.RandomScale(scale_limit=0.1, p=1.0)
-        >>> result = transform(image=image)
-        >>> scaled_image = result['image']
-        # scaled_image will have dimensions in the range [90, 110] x [90, 110]
-        # (assuming the scale_limit of 0.1 results in a scaling factor between 0.9 and 1.1)
+        >>> import cv2
+        >>>
+        >>> # Create sample data for demonstration
+        >>> image = np.zeros((100, 100, 3), dtype=np.uint8)
+        >>> # Add some shapes to visualize scaling effects
+        >>> cv2.rectangle(image, (25, 25), (75, 75), (255, 0, 0), -1)  # Red square
+        >>> cv2.circle(image, (50, 50), 10, (0, 255, 0), -1)  # Green circle
+        >>>
+        >>> # Create a mask for segmentation
+        >>> mask = np.zeros((100, 100), dtype=np.uint8)
+        >>> mask[25:75, 25:75] = 1  # Mask covering the red square
+        >>>
+        >>> # Create bounding boxes and keypoints
+        >>> bboxes = np.array([[25, 25, 75, 75]])  # Box around the red square
+        >>> bbox_labels = [1]
+        >>> keypoints = np.array([[50, 50]])  # Center of circle
+        >>> keypoint_labels = [0]
+        >>>
+        >>> # Apply RandomScale transform with comprehensive parameters
+        >>> transform = A.Compose([
+        ...     A.RandomScale(
+        ...         scale_limit=(-0.3, 0.5),     # Scale between 0.7x and 1.5x
+        ...         interpolation=cv2.INTER_LINEAR,
+        ...         mask_interpolation=cv2.INTER_NEAREST,
+        ...         area_for_downscale="image",  # Use INTER_AREA for image downscaling
+        ...         p=1.0                         # Always apply
+        ...     )
+        ... ], bbox_params=A.BboxParams(format='pascal_voc', label_fields=['bbox_labels']),
+        ...    keypoint_params=A.KeypointParams(format='xy', label_fields=['keypoint_labels']))
+        >>>
+        >>> # Apply the transform to all targets
+        >>> result = transform(
+        ...     image=image,
+        ...     mask=mask,
+        ...     bboxes=bboxes,
+        ...     bbox_labels=bbox_labels,
+        ...     keypoints=keypoints,
+        ...     keypoint_labels=keypoint_labels
+        ... )
+        >>>
+        >>> # Get the transformed results
+        >>> scaled_image = result['image']        # Dimensions will be between 70-150 pixels
+        >>> scaled_mask = result['mask']          # Mask scaled proportionally to image
+        >>> scaled_bboxes = result['bboxes']      # Bounding boxes adjusted to new dimensions
+        >>> scaled_bbox_labels = result['bbox_labels']  # Labels remain unchanged
+        >>> scaled_keypoints = result['keypoints']      # Keypoints adjusted to new dimensions
+        >>> scaled_keypoint_labels = result['keypoint_labels']  # Labels remain unchanged
+        >>>
+        >>> # The image dimensions will vary based on the randomly sampled scale factor
+        >>> # With scale_limit=(-0.3, 0.5), dimensions could be anywhere from 70% to 150% of original
 
     """
 
@@ -73,6 +125,7 @@ class RandomScale(DualTransform):
 
     class InitSchema(BaseTransformInitSchema):
         scale_limit: tuple[float, float] | float
+        area_for_downscale: Literal[None, "image", "image_mask"]
         interpolation: Literal[
             cv2.INTER_NEAREST,
             cv2.INTER_NEAREST_EXACT,
@@ -118,12 +171,14 @@ class RandomScale(DualTransform):
             cv2.INTER_LANCZOS4,
             cv2.INTER_LINEAR_EXACT,
         ] = cv2.INTER_NEAREST,
+        area_for_downscale: Literal[None, "image", "image_mask"] = None,
         p: float = 0.5,
     ):
         super().__init__(p=p)
         self.scale_limit = cast("tuple[float, float]", scale_limit)
         self.interpolation = interpolation
         self.mask_interpolation = mask_interpolation
+        self.area_for_downscale = area_for_downscale
 
     def get_params(self) -> dict[str, float]:
         """Get parameters for the transform.
@@ -151,7 +206,11 @@ class RandomScale(DualTransform):
             np.ndarray: Scaled image.
 
         """
-        return fgeometric.scale(img, scale, self.interpolation)
+        interpolation = self.interpolation
+        if self.area_for_downscale in ["image", "image_mask"] and scale < 1.0:
+            interpolation = cv2.INTER_AREA
+
+        return fgeometric.scale(img, scale, interpolation)
 
     def apply_to_mask(
         self,
@@ -170,7 +229,11 @@ class RandomScale(DualTransform):
             np.ndarray: Scaled mask.
 
         """
-        return fgeometric.scale(mask, scale, self.mask_interpolation)
+        interpolation = self.mask_interpolation
+        if self.area_for_downscale == "image_mask" and scale < 1.0:
+            interpolation = cv2.INTER_AREA
+
+        return fgeometric.scale(mask, scale, interpolation)
 
     def apply_to_bboxes(self, bboxes: np.ndarray, **params: Any) -> np.ndarray:
         """Apply the transform to bounding boxes.
@@ -207,13 +270,112 @@ class RandomScale(DualTransform):
 
 
 class MaxSizeTransform(DualTransform):
-    """Base class for transforms that resize based on maximum size constraints."""
+    """Base class for transforms that resize based on maximum size constraints.
+
+    This class provides common functionality for derived transforms like LongestMaxSize and
+    SmallestMaxSize that resize images based on size constraints while preserving aspect ratio.
+
+    Args:
+        max_size (int, Sequence[int], optional): Maximum size constraint. The specific interpretation
+            depends on the derived class. Default: None.
+        max_size_hw (tuple[int | None, int | None], optional): Maximum (height, width) constraints.
+            Either max_size or max_size_hw must be specified, but not both. Default: None.
+        interpolation (OpenCV flag): Flag for the interpolation algorithm. Should be one of:
+            cv2.INTER_NEAREST, cv2.INTER_LINEAR, cv2.INTER_CUBIC, cv2.INTER_AREA, cv2.INTER_LANCZOS4.
+            Default: cv2.INTER_LINEAR.
+        mask_interpolation (OpenCV flag): Flag for the mask interpolation algorithm.
+            Should be one of: cv2.INTER_NEAREST, cv2.INTER_LINEAR, cv2.INTER_CUBIC, cv2.INTER_AREA, cv2.INTER_LANCZOS4.
+            Default: cv2.INTER_NEAREST.
+        area_for_downscale (Literal[None, "image", "image_mask"]): Controls automatic use of INTER_AREA interpolation
+            for downscaling. Options:
+            - None: No automatic interpolation selection, always use the specified interpolation method
+            - "image": Use INTER_AREA when downscaling images, retain specified interpolation for upscaling and masks
+            - "image_mask": Use INTER_AREA when downscaling both images and masks
+            Default: None.
+        p (float): Probability of applying the transform. Default: 1.
+
+    Targets:
+        image, mask, bboxes, keypoints, volume, mask3d
+
+    Image types:
+        uint8, float32
+
+    Note:
+        - This is a base class that should be extended by concrete resize transforms.
+        - The scaling calculation is implemented in derived classes.
+        - Aspect ratio is preserved by applying the same scale factor to both dimensions.
+        - When area_for_downscale is set, INTER_AREA interpolation will be used automatically for
+          downscaling (scale < 1.0), which provides better quality for size reduction.
+
+    Examples:
+        >>> import numpy as np
+        >>> import albumentations as A
+        >>> import cv2
+        >>>
+        >>> # Example of creating a custom transform that extends MaxSizeTransform
+        >>> class CustomMaxSize(A.MaxSizeTransform):
+        ...     def get_params_dependent_on_data(self, params, data):
+        ...         img_h, img_w = params["shape"][:2]
+        ...         # Calculate scale factor - here we scale to make the image area constant
+        ...         target_area = 300 * 300  # Target area of 300x300
+        ...         current_area = img_h * img_w
+        ...         scale = np.sqrt(target_area / current_area)
+        ...         return {"scale": scale}
+        >>>
+        >>> # Prepare sample data
+        >>> image = np.zeros((100, 200, 3), dtype=np.uint8)
+        >>> # Add a rectangle to visualize the effect
+        >>> cv2.rectangle(image, (50, 20), (150, 80), (255, 0, 0), -1)
+        >>>
+        >>> # Create a mask
+        >>> mask = np.zeros((100, 200), dtype=np.uint8)
+        >>> mask[20:80, 50:150] = 1
+        >>>
+        >>> # Create bounding boxes and keypoints
+        >>> bboxes = np.array([[50, 20, 150, 80]])
+        >>> bbox_labels = [1]
+        >>> keypoints = np.array([[100, 50]])
+        >>> keypoint_labels = [0]
+        >>>
+        >>> # Apply the custom transform
+        >>> transform = A.Compose([
+        ...     CustomMaxSize(
+        ...         max_size=None,
+        ...         max_size_hw=(None, None),  # Not used in our custom implementation
+        ...         interpolation=cv2.INTER_LINEAR,
+        ...         mask_interpolation=cv2.INTER_NEAREST,
+        ...         area_for_downscale="image",  # Use INTER_AREA when downscaling images
+        ...         p=1.0
+        ...     )
+        ... ], bbox_params=A.BboxParams(format='pascal_voc', label_fields=['bbox_labels']),
+        ...    keypoint_params=A.KeypointParams(format='xy', label_fields=['keypoint_labels']))
+        >>>
+        >>> # Apply the transform
+        >>> result = transform(
+        ...     image=image,
+        ...     mask=mask,
+        ...     bboxes=bboxes,
+        ...     bbox_labels=bbox_labels,
+        ...     keypoints=keypoints,
+        ...     keypoint_labels=keypoint_labels
+        ... )
+        >>>
+        >>> # Get results
+        >>> transformed_image = result['image']  # Shape will be approximately (122, 245, 3)
+        >>> transformed_mask = result['mask']    # Shape will be approximately (122, 245)
+        >>> transformed_bboxes = result['bboxes']  # Bounding boxes are scale invariant
+        >>> transformed_keypoints = result['keypoints']  # Keypoints scaled proportionally
+        >>> transformed_bbox_labels = result['bbox_labels']  # Labels remain unchanged
+        >>> transformed_keypoint_labels = result['keypoint_labels']  # Labels remain unchanged
+
+    """
 
     _targets = ALL_TARGETS
 
     class InitSchema(BaseTransformInitSchema):
         max_size: int | list[int] | None
         max_size_hw: tuple[int | None, int | None] | None
+        area_for_downscale: Literal[None, "image", "image_mask"] = None
         interpolation: Literal[
             cv2.INTER_NEAREST,
             cv2.INTER_NEAREST_EXACT,
@@ -263,6 +425,7 @@ class MaxSizeTransform(DualTransform):
             cv2.INTER_LANCZOS4,
             cv2.INTER_LINEAR_EXACT,
         ] = cv2.INTER_NEAREST,
+        area_for_downscale: Literal[None, "image", "image_mask"] = None,
         p: float = 1,
     ):
         super().__init__(p=p)
@@ -270,6 +433,7 @@ class MaxSizeTransform(DualTransform):
         self.max_size_hw = max_size_hw
         self.interpolation = interpolation
         self.mask_interpolation = mask_interpolation
+        self.area_for_downscale = area_for_downscale
 
     def apply(
         self,
@@ -279,7 +443,12 @@ class MaxSizeTransform(DualTransform):
     ) -> np.ndarray:
         height, width = img.shape[:2]
         new_height, new_width = max(1, round(height * scale)), max(1, round(width * scale))
-        return fgeometric.resize(img, (new_height, new_width), interpolation=self.interpolation)
+
+        interpolation = self.interpolation
+        if self.area_for_downscale in ["image", "image_mask"] and scale < 1.0:
+            interpolation = cv2.INTER_AREA
+
+        return fgeometric.resize(img, (new_height, new_width), interpolation=interpolation)
 
     def apply_to_mask(
         self,
@@ -289,7 +458,12 @@ class MaxSizeTransform(DualTransform):
     ) -> np.ndarray:
         height, width = mask.shape[:2]
         new_height, new_width = max(1, round(height * scale)), max(1, round(width * scale))
-        return fgeometric.resize(mask, (new_height, new_width), interpolation=self.mask_interpolation)
+
+        interpolation = self.mask_interpolation
+        if self.area_for_downscale == "image_mask" and scale < 1.0:
+            interpolation = cv2.INTER_AREA
+
+        return fgeometric.resize(mask, (new_height, new_width), interpolation=interpolation)
 
     def apply_to_bboxes(self, bboxes: np.ndarray, **params: Any) -> np.ndarray:
         # Bounding box coordinates are scale invariant
@@ -340,6 +514,12 @@ class LongestMaxSize(MaxSizeTransform):
         mask_interpolation (OpenCV flag): flag that is used to specify the interpolation algorithm for mask.
             Should be one of: cv2.INTER_NEAREST, cv2.INTER_LINEAR, cv2.INTER_CUBIC, cv2.INTER_AREA, cv2.INTER_LANCZOS4.
             Default: cv2.INTER_NEAREST.
+        area_for_downscale (Literal[None, "image", "image_mask"]): Controls automatic use of INTER_AREA interpolation
+            for downscaling. Options:
+            - None: No automatic interpolation selection, always use the specified interpolation method
+            - "image": Use INTER_AREA when downscaling images, retain specified interpolation for upscaling and masks
+            - "image_mask": Use INTER_AREA when downscaling both images and masks
+            Default: None.
         p (float): probability of applying the transform. Default: 1.
 
     Targets:
@@ -353,6 +533,7 @@ class LongestMaxSize(MaxSizeTransform):
         - This transform will not crop the image. The resulting image may be smaller than specified in both dimensions.
         - For non-square images, both sides will be scaled proportionally to maintain the aspect ratio.
         - Bounding boxes and keypoints are scaled accordingly.
+        - When area_for_downscale is set, INTER_AREA will be used for downscaling, providing better quality.
 
     Mathematical Details:
         Let (W, H) be the original width and height of the image.
@@ -385,11 +566,11 @@ class LongestMaxSize(MaxSizeTransform):
         >>> import albumentations as A
         >>> import cv2
         >>> # Using max_size
-        >>> transform1 = A.LongestMaxSize(max_size=1024)
+        >>> transform1 = A.LongestMaxSize(max_size=1024, area_for_downscale="image")
         >>> # Input image (1500, 800) -> Output (1024, 546)
         >>>
         >>> # Using max_size_hw with both dimensions
-        >>> transform2 = A.LongestMaxSize(max_size_hw=(800, 1024))
+        >>> transform2 = A.LongestMaxSize(max_size_hw=(800, 1024), area_for_downscale="image_mask")
         >>> # Input (1500, 800) -> Output (800, 427)
         >>> # Input (800, 1500) -> Output (546, 1024)
         >>>
@@ -399,7 +580,7 @@ class LongestMaxSize(MaxSizeTransform):
         >>>
         >>> # Common use case with padding
         >>> transform4 = A.Compose([
-        ...     A.LongestMaxSize(max_size=1024),
+        ...     A.LongestMaxSize(max_size=1024, area_for_downscale="image"),
         ...     A.PadIfNeeded(min_height=1024, min_width=1024),
         ... ])
 
@@ -460,6 +641,12 @@ class SmallestMaxSize(MaxSizeTransform):
         mask_interpolation (OpenCV flag): flag that is used to specify the interpolation algorithm for mask.
             Should be one of: cv2.INTER_NEAREST, cv2.INTER_LINEAR, cv2.INTER_CUBIC, cv2.INTER_AREA, cv2.INTER_LANCZOS4.
             Default: cv2.INTER_NEAREST.
+        area_for_downscale (Literal[None, "image", "image_mask"]): Controls automatic use of INTER_AREA interpolation
+            for downscaling. Options:
+            - None: No automatic interpolation selection, always use the specified interpolation method
+            - "image": Use INTER_AREA when downscaling images, retain specified interpolation for upscaling and masks
+            - "image_mask": Use INTER_AREA when downscaling both images and masks
+            Default: None.
         p (float): Probability of applying the transform. Default: 1.
 
     Targets:
@@ -473,6 +660,7 @@ class SmallestMaxSize(MaxSizeTransform):
         - This transform will not crop the image. The resulting image may be larger than specified in both dimensions.
         - For non-square images, both sides will be scaled proportionally to maintain the aspect ratio.
         - Bounding boxes and keypoints are scaled accordingly.
+        - When area_for_downscale is set, INTER_AREA will be used for downscaling, providing better quality.
 
     Mathematical Details:
         Let (W, H) be the original width and height of the image.
@@ -505,11 +693,11 @@ class SmallestMaxSize(MaxSizeTransform):
         >>> import numpy as np
         >>> import albumentations as A
         >>> # Using max_size
-        >>> transform1 = A.SmallestMaxSize(max_size=120)
+        >>> transform1 = A.SmallestMaxSize(max_size=120, area_for_downscale="image")
         >>> # Input image (100, 150) -> Output (120, 180)
         >>>
         >>> # Using max_size_hw with both dimensions
-        >>> transform2 = A.SmallestMaxSize(max_size_hw=(100, 200))
+        >>> transform2 = A.SmallestMaxSize(max_size_hw=(100, 200), area_for_downscale="image_mask")
         >>> # Input (80, 160) -> Output (100, 200)
         >>> # Input (160, 80) -> Output (400, 200)
         >>>
@@ -567,6 +755,12 @@ class Resize(DualTransform):
         mask_interpolation (OpenCV flag): flag that is used to specify the interpolation algorithm for mask.
             Should be one of: cv2.INTER_NEAREST, cv2.INTER_LINEAR, cv2.INTER_CUBIC, cv2.INTER_AREA, cv2.INTER_LANCZOS4.
             Default: cv2.INTER_NEAREST.
+        area_for_downscale (Literal[None, "image", "image_mask"]): Controls automatic use of INTER_AREA interpolation
+            for downscaling. Options:
+            - None: No automatic interpolation selection, always use the specified interpolation method
+            - "image": Use INTER_AREA when downscaling images, retain specified interpolation for upscaling and masks
+            - "image_mask": Use INTER_AREA when downscaling both images and masks
+            Default: None.
         p (float): probability of applying the transform. Default: 1.
 
     Targets:
@@ -575,6 +769,63 @@ class Resize(DualTransform):
     Image types:
         uint8, float32
 
+    Examples:
+        >>> import numpy as np
+        >>> import albumentations as A
+        >>> import cv2
+        >>>
+        >>> # Create sample data for demonstration
+        >>> image = np.zeros((100, 100, 3), dtype=np.uint8)
+        >>> # Add some shapes to visualize resize effects
+        >>> cv2.rectangle(image, (25, 25), (75, 75), (255, 0, 0), -1)  # Red square
+        >>> cv2.circle(image, (50, 50), 10, (0, 255, 0), -1)  # Green circle
+        >>>
+        >>> # Create a mask for segmentation
+        >>> mask = np.zeros((100, 100), dtype=np.uint8)
+        >>> mask[25:75, 25:75] = 1  # Mask covering the red square
+        >>>
+        >>> # Create bounding boxes and keypoints
+        >>> bboxes = np.array([[25, 25, 75, 75]])  # Box around the red square
+        >>> bbox_labels = [1]
+        >>> keypoints = np.array([[50, 50]])  # Center of circle
+        >>> keypoint_labels = [0]
+        >>>
+        >>> # Resize all data to 224x224 (common input size for many CNNs)
+        >>> transform = A.Compose([
+        ...     A.Resize(
+        ...         height=224,
+        ...         width=224,
+        ...         interpolation=cv2.INTER_LINEAR,
+        ...         mask_interpolation=cv2.INTER_NEAREST,
+        ...         area_for_downscale="image",  # Use INTER_AREA when downscaling images
+        ...         p=1.0
+        ...     )
+        ... ], bbox_params=A.BboxParams(format='pascal_voc', label_fields=['bbox_labels']),
+        ...    keypoint_params=A.KeypointParams(format='xy', label_fields=['keypoint_labels']))
+        >>>
+        >>> # Apply the transform to all targets
+        >>> result = transform(
+        ...     image=image,
+        ...     mask=mask,
+        ...     bboxes=bboxes,
+        ...     bbox_labels=bbox_labels,
+        ...     keypoints=keypoints,
+        ...     keypoint_labels=keypoint_labels
+        ... )
+        >>>
+        >>> # Get the transformed results
+        >>> resized_image = result['image']        # Shape will be (224, 224, 3)
+        >>> resized_mask = result['mask']          # Shape will be (224, 224)
+        >>> resized_bboxes = result['bboxes']      # Bounding boxes scaled to new dimensions
+        >>> resized_bbox_labels = result['bbox_labels']  # Labels remain unchanged
+        >>> resized_keypoints = result['keypoints']      # Keypoints scaled to new dimensions
+        >>> resized_keypoint_labels = result['keypoint_labels']  # Labels remain unchanged
+        >>>
+        >>> # Note: When resizing from 100x100 to 224x224:
+        >>> # - The red square will be scaled from (25-75) to approximately (56-168)
+        >>> # - The keypoint at (50, 50) will move to approximately (112, 112)
+        >>> # - All spatial relationships are preserved but coordinates are scaled
+
     """
 
     _targets = ALL_TARGETS
@@ -582,6 +833,7 @@ class Resize(DualTransform):
     class InitSchema(BaseTransformInitSchema):
         height: int = Field(ge=1)
         width: int = Field(ge=1)
+        area_for_downscale: Literal[None, "image", "image_mask"] = None
         interpolation: Literal[
             cv2.INTER_NEAREST,
             cv2.INTER_NEAREST_EXACT,
@@ -623,6 +875,7 @@ class Resize(DualTransform):
             cv2.INTER_LANCZOS4,
             cv2.INTER_LINEAR_EXACT,
         ] = cv2.INTER_NEAREST,
+        area_for_downscale: Literal[None, "image", "image_mask"] = None,
         p: float = 1,
     ):
         super().__init__(p=p)
@@ -630,6 +883,7 @@ class Resize(DualTransform):
         self.width = width
         self.interpolation = interpolation
         self.mask_interpolation = mask_interpolation
+        self.area_for_downscale = area_for_downscale
 
     def apply(self, img: np.ndarray, **params: Any) -> np.ndarray:
         """Apply resizing to the image.
@@ -642,7 +896,14 @@ class Resize(DualTransform):
             np.ndarray: Resized image.
 
         """
-        return fgeometric.resize(img, (self.height, self.width), interpolation=self.interpolation)
+        height, width = img.shape[:2]
+        is_downscale = (self.height < height) or (self.width < width)
+
+        interpolation = self.interpolation
+        if self.area_for_downscale in ["image", "image_mask"] and is_downscale:
+            interpolation = cv2.INTER_AREA
+
+        return fgeometric.resize(img, (self.height, self.width), interpolation=interpolation)
 
     def apply_to_mask(self, mask: np.ndarray, **params: Any) -> np.ndarray:
         """Apply resizing to the mask.
@@ -655,7 +916,14 @@ class Resize(DualTransform):
             np.ndarray: Resized mask.
 
         """
-        return fgeometric.resize(mask, (self.height, self.width), interpolation=self.mask_interpolation)
+        height, width = mask.shape[:2]
+        is_downscale = (self.height < height) or (self.width < width)
+
+        interpolation = self.mask_interpolation
+        if self.area_for_downscale == "image_mask" and is_downscale:
+            interpolation = cv2.INTER_AREA
+
+        return fgeometric.resize(mask, (self.height, self.width), interpolation=interpolation)
 
     def apply_to_bboxes(self, bboxes: np.ndarray, **params: Any) -> np.ndarray:
         """Apply the transform to bounding boxes.

@@ -17585,6 +17585,12 @@ class JobQueue(
             check_type(argname="argument order", value=order, expected_type=type_hints["order"])
         return typing.cast(None, jsii.invoke(self, "addComputeEnvironment", [compute_environment, order]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="computeEnvironments")
     def compute_environments(self) -> typing.List["OrderedComputeEnvironment"]:
@@ -18710,6 +18716,12 @@ class ManagedEc2EcsComputeEnvironment(
             check_type(argname="argument instance_type", value=instance_type, expected_type=type_hints["instance_type"])
         return typing.cast(None, jsii.invoke(self, "addInstanceType", [instance_type]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="computeEnvironmentArn")
     def compute_environment_arn(self) -> builtins.str:
@@ -19590,6 +19602,12 @@ class ManagedEc2EksComputeEnvironment(
             type_hints = typing.get_type_hints(_typecheckingstub__6db493b9e37dd179fbd7d1579b2af93591ee5a43cdc12c16cd05074f6711d989)
             check_type(argname="argument instance_type", value=instance_type, expected_type=type_hints["instance_type"])
         return typing.cast(None, jsii.invoke(self, "addInstanceType", [instance_type]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="computeEnvironmentArn")
@@ -20606,6 +20624,12 @@ class MultiNodeJobDefinition(
             type_hints = typing.get_type_hints(_typecheckingstub__0bfe4d02197d155803692c7dc9274f2798dc0d60ab4f1ad7e6fcadbba8afb451)
             check_type(argname="argument strategy", value=strategy, expected_type=type_hints["strategy"])
         return typing.cast(None, jsii.invoke(self, "addRetryStrategy", [strategy]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="containers")
@@ -22014,6 +22038,12 @@ class UnmanagedComputeEnvironment(
             check_type(argname="argument unmanaged_compute_environment_arn", value=unmanaged_compute_environment_arn, expected_type=type_hints["unmanaged_compute_environment_arn"])
         return typing.cast(IUnmanagedComputeEnvironment, jsii.sinvoke(cls, "fromUnmanagedComputeEnvironmentArn", [scope, id, unmanaged_compute_environment_arn]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="computeEnvironmentArn")
     def compute_environment_arn(self) -> builtins.str:
@@ -22319,6 +22349,12 @@ class EcsEc2ContainerDefinition(
             check_type(argname="argument volume", value=volume, expected_type=type_hints["volume"])
         return typing.cast(None, jsii.invoke(self, "addVolume", [volume]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="cpu")
     def cpu(self) -> jsii.Number:
@@ -22548,6 +22584,12 @@ class EcsFargateContainerDefinition(
             type_hints = typing.get_type_hints(_typecheckingstub__c1169861c904d2660467857187e3d388cb9a70d2aa9164bb45b2fa3556f971f1)
             check_type(argname="argument volume", value=volume, expected_type=type_hints["volume"])
         return typing.cast(None, jsii.invoke(self, "addVolume", [volume]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="cpu")
@@ -22816,6 +22858,12 @@ class EcsJobDefinition(
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument queue", value=queue, expected_type=type_hints["queue"])
         return typing.cast(None, jsii.invoke(self, "grantSubmitJob", [identity, queue]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="container")
@@ -23182,6 +23230,12 @@ class EksContainerDefinition(
             type_hints = typing.get_type_hints(_typecheckingstub__fc36d641aa57a466b387b3ef01c20f61f6a9a0e6a757d8c7cd0434b76cf1b98a)
             check_type(argname="argument volume", value=volume, expected_type=type_hints["volume"])
         return typing.cast(None, jsii.invoke(self, "addVolume", [volume]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="image")
@@ -24256,6 +24310,12 @@ class EksJobDefinition(
             check_type(argname="argument strategy", value=strategy, expected_type=type_hints["strategy"])
         return typing.cast(None, jsii.invoke(self, "addRetryStrategy", [strategy]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="container")
     def container(self) -> EksContainerDefinition:
@@ -24445,6 +24505,12 @@ class FairshareSchedulingPolicy(
 
         return typing.cast(None, jsii.invoke(self, "addShare", [share]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="schedulingPolicyArn")
     def scheduling_policy_arn(self) -> builtins.str:
@@ -24605,6 +24671,12 @@ class FargateComputeEnvironment(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument fargate_compute_environment_arn", value=fargate_compute_environment_arn, expected_type=type_hints["fargate_compute_environment_arn"])
         return typing.cast(IFargateComputeEnvironment, jsii.sinvoke(cls, "fromFargateComputeEnvironmentArn", [scope, id, fargate_compute_environment_arn]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="computeEnvironmentArn")

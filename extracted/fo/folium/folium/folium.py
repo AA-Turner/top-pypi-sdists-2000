@@ -192,6 +192,29 @@ class Map(JSCSSMixin, Evented):
                 }
                 .leaflet-container { font-size: {{this.font_size}}; }
             </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = {{ this.global_switches.no_touch |tojson}};
+                L_DISABLE_3D = {{ this.global_switches.disable_3d|tojson }};
+            </script>
+
         {% endmacro %}
 
         {% macro html(this, kwargs) %}
@@ -304,6 +327,8 @@ class Map(JSCSSMixin, Evented):
         else:
             self.zoom_control_position = False
 
+        self.global_switches = GlobalSwitches(no_touch, disable_3d)
+
         self.options = remove_empty(
             max_bounds=max_bounds_array,
             zoom=zoom_start,
@@ -311,8 +336,6 @@ class Map(JSCSSMixin, Evented):
             prefer_canvas=prefer_canvas,
             **kwargs,
         )
-
-        self.global_switches = GlobalSwitches(no_touch, disable_3d)
 
         self.objects_to_stay_in_front: List[Layer] = []
 
@@ -335,7 +358,9 @@ class Map(JSCSSMixin, Evented):
             out = self._parent._repr_html_(**kwargs)
         return out
 
-    def _to_png(self, delay: int = 3, driver: Any = None) -> bytes:
+    def _to_png(
+        self, delay: int = 3, driver: Any = None, size: Optional[Sequence[int]] = None
+    ) -> bytes:
         """Export the HTML to byte representation of a PNG image.
 
         Uses selenium to render the HTML and record a PNG. You may need to
@@ -349,6 +374,7 @@ class Map(JSCSSMixin, Evented):
         >>> m._to_png(time=10)  # Wait 10 seconds between render and snapshot.
 
         """
+
         if self._png_image is None:
             if driver is None:
                 from selenium import webdriver
@@ -357,11 +383,21 @@ class Map(JSCSSMixin, Evented):
                 options.add_argument("--headless")
                 driver = webdriver.Firefox(options=options)
 
+            if size is None:
+                driver.fullscreen_window()
+            else:
+                window_size = driver.execute_script(
+                    """
+                    return [window.outerWidth - window.innerWidth + arguments[0],
+                      window.outerHeight - window.innerHeight + arguments[1]];
+                    """,
+                    *size,
+                )
+                driver.set_window_size(*window_size)
             html = self.get_root().render()
             with temp_html_filepath(html) as fname:
                 # We need the tempfile to avoid JS security issues.
                 driver.get(f"file:///{fname}")
-                driver.fullscreen_window()
                 time.sleep(delay)
                 div = driver.find_element("class name", "folium-map")
                 png = div.screenshot_as_png
@@ -376,45 +412,6 @@ class Map(JSCSSMixin, Evented):
         if not self.png_enabled:
             return None
         return self._to_png()
-
-    def render(self, **kwargs):
-        """Renders the HTML representation of the element."""
-        figure = self.get_root()
-        assert isinstance(
-            figure, Figure
-        ), "You cannot render this Element if it is not in a Figure."
-
-        # Set global switches
-        figure.header.add_child(self.global_switches, name="global_switches")
-
-        figure.header.add_child(
-            Element(
-                "<style>html, body {"
-                "width: 100%;"
-                "height: 100%;"
-                "margin: 0;"
-                "padding: 0;"
-                "}"
-                "</style>"
-            ),
-            name="css_style",
-        )
-
-        figure.header.add_child(
-            Element(
-                "<style>#map {"
-                "position:absolute;"
-                "top:0;"
-                "bottom:0;"
-                "right:0;"
-                "left:0;"
-                "}"
-                "</style>"
-            ),
-            name="map_style",
-        )
-
-        super().render(**kwargs)
 
     def show_in_browser(self) -> None:
         """Display the Map in the default web browser."""

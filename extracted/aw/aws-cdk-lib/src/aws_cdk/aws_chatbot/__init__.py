@@ -2288,6 +2288,12 @@ class SlackChannelConfiguration(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
     def grant_principal(self) -> _IPrincipal_539bb2fd:

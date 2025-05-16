@@ -598,6 +598,12 @@ class UrlSubscription(
             check_type(argname="argument _topic", value=_topic, expected_type=type_hints["_topic"])
         return typing.cast(_TopicSubscriptionConfig_3a01016e, jsii.invoke(self, "bind", [_topic]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_sns_subscriptions.UrlSubscriptionProps",

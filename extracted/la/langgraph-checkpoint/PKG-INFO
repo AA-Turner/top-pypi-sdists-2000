@@ -1,9 +1,9 @@
 Metadata-Version: 2.3
 Name: langgraph-checkpoint
-Version: 2.0.25
+Version: 2.0.26
 Summary: Library with base interfaces for LangGraph checkpoint savers.
 License: MIT
-Requires-Python: >=3.9.0,<4.0.0
+Requires-Python: >=3.9
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.9
@@ -11,7 +11,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
-Requires-Dist: langchain-core (>=0.2.38,<0.4)
+Requires-Dist: langchain-core (>=0.2.38) ; python_version < "4.0"
 Requires-Dist: ormsgpack (>=1.8.0,<2.0.0)
 Project-URL: Repository, https://www.github.com/langchain-ai/langgraph
 Description-Content-Type: text/markdown

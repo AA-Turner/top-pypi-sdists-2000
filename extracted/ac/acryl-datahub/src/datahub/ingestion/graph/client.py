@@ -34,9 +34,7 @@ from datahub.emitter.aspect import TIMESERIES_ASPECT_MAP
 from datahub.emitter.mce_builder import DEFAULT_ENV, Aspect
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
 from datahub.emitter.rest_emitter import (
-    DEFAULT_REST_TRACE_MODE,
     DatahubRestEmitter,
-    RestTraceMode,
 )
 from datahub.emitter.serialization_helper import post_json_transform
 from datahub.ingestion.graph.config import (
@@ -159,7 +157,6 @@ class DataHubGraph(DatahubRestEmitter, EntityVersioningAPI):
             client_certificate_path=self.config.client_certificate_path,
             disable_ssl_verification=self.config.disable_ssl_verification,
             openapi_ingestion=self.config.openapi_ingestion,
-            default_trace_mode=DEFAULT_REST_TRACE_MODE == RestTraceMode.ENABLED,
             client_mode=config.client_mode,
             datahub_component=config.datahub_component,
         )
@@ -377,7 +374,7 @@ class DataHubGraph(DatahubRestEmitter, EntityVersioningAPI):
         )
 
     def get_config(self) -> Dict[str, Any]:
-        return self.get_server_config().config
+        return self.server_config.raw_config
 
     def get_ownership(self, entity_urn: str) -> Optional[OwnershipClass]:
         return self.get_aspect(entity_urn=entity_urn, aspect_type=OwnershipClass)
@@ -477,7 +474,7 @@ class DataHubGraph(DatahubRestEmitter, EntityVersioningAPI):
         filter_criteria_map: Dict[str, str],
     ) -> Optional[Aspect]:
         filter_criteria = [
-            {"field": k, "value": v, "condition": "EQUAL"}
+            {"field": k, "values": [v], "condition": "EQUAL"}
             for k, v in filter_criteria_map.items()
         ]
         filter = {"or": [{"and": filter_criteria}]}
@@ -672,7 +669,7 @@ class DataHubGraph(DatahubRestEmitter, EntityVersioningAPI):
         filter_criteria = [
             {
                 "field": "name",
-                "value": domain_name,
+                "values": [domain_name],
                 "condition": "EQUAL",
             }
         ]
@@ -792,7 +789,7 @@ class DataHubGraph(DatahubRestEmitter, EntityVersioningAPI):
             filter_criteria.append(
                 {
                     "field": "customProperties",
-                    "value": f"instance={env}",
+                    "values": [f"instance={env}"],
                     "condition": "EQUAL",
                 }
             )
@@ -800,7 +797,7 @@ class DataHubGraph(DatahubRestEmitter, EntityVersioningAPI):
             filter_criteria.append(
                 {
                     "field": "typeNames",
-                    "value": container_subtype,
+                    "values": [container_subtype],
                     "condition": "EQUAL",
                 }
             )

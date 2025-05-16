@@ -8,17 +8,16 @@ build-backend = "pdm.backend"
 authors = []
 requires-python = ">=3.9"
 dependencies = [
-    "langsmith<0.4,>=0.1.125",
+    "langsmith<0.4,>=0.1.126",
     "tenacity!=8.4.0,<10.0.0,>=8.1.0",
     "jsonpatch<2.0,>=1.33",
     "PyYAML>=5.3",
     "packaging<25,>=23.2",
     "typing-extensions>=4.7",
-    "pydantic<3.0.0,>=2.5.2; python_full_version < \"3.12.4\"",
-    "pydantic<3.0.0,>=2.7.4; python_full_version >= \"3.12.4\"",
+    "pydantic>=2.7.4",
 ]
 name = "langchain-core"
-version = "0.3.59"
+version = "0.3.60"
 description = "Building applications with LLMs through composability"
 readme = "README.md"
 
@@ -107,7 +106,6 @@ ignore = [
     "ERA",
     "PLR2004",
     "RUF",
-    "SLF",
 ]
 
 [tool.ruff.lint.flake8-type-checking]
@@ -152,6 +150,7 @@ classmethod-decorators = [
 "tests/**" = [
     "D",
     "S",
+    "SLF",
 ]
 "scripts/**" = [
     "INP",

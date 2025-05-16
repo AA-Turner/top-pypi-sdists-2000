@@ -1262,7 +1262,10 @@ class CfnDeliveryDestination(
             name="name",
         
             # the properties below are optional
-            delivery_destination_policy=delivery_destination_policy,
+            delivery_destination_policy=logs.CfnDeliveryDestination.DestinationPolicyProperty(
+                delivery_destination_name="deliveryDestinationName",
+                delivery_destination_policy=delivery_destination_policy
+            ),
             destination_resource_arn="destinationResourceArn",
             output_format="outputFormat",
             tags=[CfnTag(
@@ -1278,7 +1281,7 @@ class CfnDeliveryDestination(
         id: builtins.str,
         *,
         name: builtins.str,
-        delivery_destination_policy: typing.Any = None,
+        delivery_destination_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryDestination.DestinationPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         destination_resource_arn: typing.Optional[builtins.str] = None,
         output_format: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1380,12 +1383,17 @@ class CfnDeliveryDestination(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryDestinationPolicy")
-    def delivery_destination_policy(self) -> typing.Any:
+    def delivery_destination_policy(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryDestination.DestinationPolicyProperty"]]:
         '''An IAM policy that grants permissions to CloudWatch Logs to deliver logs cross-account to a specified destination in this account.'''
-        return typing.cast(typing.Any, jsii.get(self, "deliveryDestinationPolicy"))
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryDestination.DestinationPolicyProperty"]], jsii.get(self, "deliveryDestinationPolicy"))
 
     @delivery_destination_policy.setter
-    def delivery_destination_policy(self, value: typing.Any) -> None:
+    def delivery_destination_policy(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryDestination.DestinationPolicyProperty"]],
+    ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__318bc8d97cf7e7f129b83631444b5c478bd65a7e80725c9b3be7e3cc4a600b05)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1430,6 +1438,80 @@ class CfnDeliveryDestination(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_logs.CfnDeliveryDestination.DestinationPolicyProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "delivery_destination_name": "deliveryDestinationName",
+            "delivery_destination_policy": "deliveryDestinationPolicy",
+        },
+    )
+    class DestinationPolicyProperty:
+        def __init__(
+            self,
+            *,
+            delivery_destination_name: typing.Optional[builtins.str] = None,
+            delivery_destination_policy: typing.Any = None,
+        ) -> None:
+            '''
+            :param delivery_destination_name: The name of the delivery destination to assign this policy to.
+            :param delivery_destination_policy: The contents of the policy attached to the delivery destination.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-deliverydestination-destinationpolicy.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_logs as logs
+                
+                # delivery_destination_policy: Any
+                
+                destination_policy_property = logs.CfnDeliveryDestination.DestinationPolicyProperty(
+                    delivery_destination_name="deliveryDestinationName",
+                    delivery_destination_policy=delivery_destination_policy
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__476eb70b6b82939807d3600d63a802f799886d0c7cc23550944471a71b16233e)
+                check_type(argname="argument delivery_destination_name", value=delivery_destination_name, expected_type=type_hints["delivery_destination_name"])
+                check_type(argname="argument delivery_destination_policy", value=delivery_destination_policy, expected_type=type_hints["delivery_destination_policy"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if delivery_destination_name is not None:
+                self._values["delivery_destination_name"] = delivery_destination_name
+            if delivery_destination_policy is not None:
+                self._values["delivery_destination_policy"] = delivery_destination_policy
+
+        @builtins.property
+        def delivery_destination_name(self) -> typing.Optional[builtins.str]:
+            '''The name of the delivery destination to assign this policy to.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-deliverydestination-destinationpolicy.html#cfn-logs-deliverydestination-destinationpolicy-deliverydestinationname
+            '''
+            result = self._values.get("delivery_destination_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def delivery_destination_policy(self) -> typing.Any:
+            '''The contents of the policy attached to the delivery destination.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-deliverydestination-destinationpolicy.html#cfn-logs-deliverydestination-destinationpolicy-deliverydestinationpolicy
+            '''
+            result = self._values.get("delivery_destination_policy")
+            return typing.cast(typing.Any, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DestinationPolicyProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_logs.CfnDeliveryDestinationProps",
@@ -1447,7 +1529,7 @@ class CfnDeliveryDestinationProps:
         self,
         *,
         name: builtins.str,
-        delivery_destination_policy: typing.Any = None,
+        delivery_destination_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryDestination.DestinationPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         destination_resource_arn: typing.Optional[builtins.str] = None,
         output_format: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1475,7 +1557,10 @@ class CfnDeliveryDestinationProps:
                 name="name",
             
                 # the properties below are optional
-                delivery_destination_policy=delivery_destination_policy,
+                delivery_destination_policy=logs.CfnDeliveryDestination.DestinationPolicyProperty(
+                    delivery_destination_name="deliveryDestinationName",
+                    delivery_destination_policy=delivery_destination_policy
+                ),
                 destination_resource_arn="destinationResourceArn",
                 output_format="outputFormat",
                 tags=[CfnTag(
@@ -1514,7 +1599,9 @@ class CfnDeliveryDestinationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def delivery_destination_policy(self) -> typing.Any:
+    def delivery_destination_policy(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryDestination.DestinationPolicyProperty]]:
         '''An IAM policy that grants permissions to CloudWatch Logs to deliver logs cross-account to a specified destination in this account.
 
         For examples of this policy, see `Examples <https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutDeliveryDestinationPolicy.html#API_PutDeliveryDestinationPolicy_Examples>`_ in the CloudWatch Logs API Reference.
@@ -1522,7 +1609,7 @@ class CfnDeliveryDestinationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-deliverydestination.html#cfn-logs-deliverydestination-deliverydestinationpolicy
         '''
         result = self._values.get("delivery_destination_policy")
-        return typing.cast(typing.Any, result)
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryDestination.DestinationPolicyProperty]], result)
 
     @builtins.property
     def destination_resource_arn(self) -> typing.Optional[builtins.str]:
@@ -11173,6 +11260,12 @@ class LogGroup(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingLogEvents", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="logGroupArn")
     def log_group_arn(self) -> builtins.str:
@@ -11452,6 +11545,12 @@ class LogRetention(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="logGroupArn")
@@ -11757,6 +11856,12 @@ class LogStream(
             check_type(argname="argument log_stream_name", value=log_stream_name, expected_type=type_hints["log_stream_name"])
         return typing.cast(ILogStream, jsii.sinvoke(cls, "fromLogStreamName", [scope, id, log_stream_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="logStreamName")
     def log_stream_name(self) -> builtins.str:
@@ -12049,6 +12154,12 @@ class MetricFilter(
         )
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(
@@ -12471,6 +12582,12 @@ class QueryDefinition(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="queryDefinitionId")
@@ -12896,6 +13013,12 @@ class ResourcePolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="document")
     def document(self) -> _PolicyDocument_3ac34393:
@@ -13280,6 +13403,12 @@ class SubscriptionFilter(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_logs.SubscriptionFilterOptions",
@@ -13607,6 +13736,12 @@ class CrossAccountDestination(
             check_type(argname="argument _source_log_group", value=_source_log_group, expected_type=type_hints["_source_log_group"])
         return typing.cast(LogSubscriptionDestinationConfig, jsii.invoke(self, "bind", [_scope, _source_log_group]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="destinationArn")
     def destination_arn(self) -> builtins.str:
@@ -13926,7 +14061,7 @@ def _typecheckingstub__b48efa0b7b05ab2d9f1417a0b1e0cd7f28039825d1520fe16f6f8dca7
     id: builtins.str,
     *,
     name: builtins.str,
-    delivery_destination_policy: typing.Any = None,
+    delivery_destination_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryDestination.DestinationPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     destination_resource_arn: typing.Optional[builtins.str] = None,
     output_format: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -13953,7 +14088,7 @@ def _typecheckingstub__0fdc8a995b69cc816b4deffcde2adde43de71476430695742e74896d1
     pass
 
 def _typecheckingstub__318bc8d97cf7e7f129b83631444b5c478bd65a7e80725c9b3be7e3cc4a600b05(
-    value: typing.Any,
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryDestination.DestinationPolicyProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13976,10 +14111,18 @@ def _typecheckingstub__e4f5227f043e0a8609b64c4a174886ba54b2825ada7e9a1dffe8fd354
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__476eb70b6b82939807d3600d63a802f799886d0c7cc23550944471a71b16233e(
+    *,
+    delivery_destination_name: typing.Optional[builtins.str] = None,
+    delivery_destination_policy: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__53bbf04ee2b4b7e83a98258d41a973972fae20f7537731a0fbcda3e7c5f46c1c(
     *,
     name: builtins.str,
-    delivery_destination_policy: typing.Any = None,
+    delivery_destination_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryDestination.DestinationPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     destination_resource_arn: typing.Optional[builtins.str] = None,
     output_format: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,

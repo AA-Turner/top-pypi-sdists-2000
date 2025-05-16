@@ -84,6 +84,12 @@ class NodeProxyAgentLayer(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         jsii.create(self.__class__, self, [scope, id])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 __all__ = [
     "NodeProxyAgentLayer",

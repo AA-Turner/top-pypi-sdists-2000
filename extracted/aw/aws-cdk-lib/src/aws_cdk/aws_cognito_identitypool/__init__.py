@@ -671,6 +671,12 @@ class IdentityPool(
             check_type(argname="argument user_pool", value=user_pool, expected_type=type_hints["user_pool"])
         return typing.cast(None, jsii.invoke(self, "addUserPoolAuthentication", [user_pool]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="authenticatedRole")
     def authenticated_role(self) -> _IRole_235f5d8e:

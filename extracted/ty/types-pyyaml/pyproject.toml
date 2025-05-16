@@ -4,7 +4,7 @@ requires = ["setuptools>=77.0.3"]
 
 [project]
 name = "types-PyYAML"
-version = "6.0.12.20250402"
+version = "6.0.12.20250516"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 description = "Typing stubs for PyYAML"
@@ -31,10 +31,10 @@ directory.
 
 This package was tested with
 mypy 1.15.0,
-pyright 1.1.398,
+pyright 1.1.400,
 and pytype 2024.10.11.
 It was generated from typeshed commit
-[`bf8d2a99126dcb155692c0ba56c4866fcd618393`](https://github.com/python/typeshed/commit/bf8d2a99126dcb155692c0ba56c4866fcd618393).
+[`126768408a69b7a3a09b7d3992970b289f92937e`](https://github.com/python/typeshed/commit/126768408a69b7a3a09b7d3992970b289f92937e).
 """, content-type = "text/markdown" }
 classifiers = [
   "Programming Language :: Python :: 3",

@@ -16,6 +16,7 @@ from typing import (
     Iterable,
     Iterator,
     List,
+    Literal,
     Optional,
     Sequence,
     Tuple,
@@ -57,6 +58,7 @@ TypeBounds = Sequence[Sequence[float]]
 TypeBoundsReturn = List[List[Optional[float]]]
 
 TypeContainer = Union[Figure, Div, "Popup"]
+TypePosition = Literal["bottomright", "bottomleft", "topright", "topleft"]
 
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
@@ -169,12 +171,14 @@ def image_to_url(
 
     Parameters
     ----------
-    image: string, file or array-like object
-        * If string, it will be written directly in the output file.
-        * If file, it's content will be converted as embedded in the
-          output file.
-        * If array-like, it will be converted to PNG base64 string and
-          embedded in the output.
+    image: string or array-like object
+        *  If string is a path to an image file, its content will be converted and
+           embedded in the output URL.
+        *  If string is a URL, it will be linked in the output URL.
+        *  Otherwise a string will be assumed to be JSON and embedded in the
+           output URL.
+        *  If array-like, it will be converted to PNG base64 string and embedded in the
+           output URL.
     origin: ['upper' | 'lower'], optional, default 'upper'
         Place the [0, 0] index of the array in the upper left or
         lower left corner of the axes.
@@ -264,7 +268,7 @@ def mercator_transform(
         0.5 / height_out, 1.0 - 0.5 / height_out, height_out
     ) * (mercator(lat_max) - mercator(lat_min))
 
-    out = np.zeros((height_out, width, nblayers))
+    out: np.ndarray = np.zeros((height_out, width, nblayers))
     for i in range(width):
         for j in range(nblayers):
             out[:, i, j] = np.interp(latslats, mercator(lats), array[:, i, j])

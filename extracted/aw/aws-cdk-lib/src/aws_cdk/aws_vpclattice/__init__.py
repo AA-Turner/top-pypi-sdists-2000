@@ -1592,7 +1592,7 @@ class CfnResourceConfiguration(
             '''The domain name of the resource configuration.
 
             :param domain_name: The domain name of the resource configuration.
-            :param ip_address_type: The IP address type for the resource configuration.
+            :param ip_address_type: The IP address type for the resource configuration. Dualstack is not currently supported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-resourceconfiguration-dnsresource.html
             :exampleMetadata: fixture=_generated
@@ -1630,6 +1630,8 @@ class CfnResourceConfiguration(
         @builtins.property
         def ip_address_type(self) -> builtins.str:
             '''The IP address type for the resource configuration.
+
+            Dualstack is not currently supported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-resourceconfiguration-dnsresource.html#cfn-vpclattice-resourceconfiguration-dnsresource-ipaddresstype
             '''

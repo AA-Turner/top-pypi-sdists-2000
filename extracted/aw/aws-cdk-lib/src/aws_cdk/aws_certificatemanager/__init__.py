@@ -2044,6 +2044,12 @@ class PrivateCertificate(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDaysToExpiry", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="certificateArn")
     def certificate_arn(self) -> builtins.str:
@@ -2318,6 +2324,12 @@ class Certificate(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDaysToExpiry", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="certificateArn")
     def certificate_arn(self) -> builtins.str:
@@ -2501,6 +2513,15 @@ class DnsValidatedCertificate(
         )
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDaysToExpiry", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''(deprecated) Uniquely identifies this class.
+
+        :stability: deprecated
+        '''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="certificateArn")

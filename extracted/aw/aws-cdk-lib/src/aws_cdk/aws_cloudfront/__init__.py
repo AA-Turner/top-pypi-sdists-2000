@@ -21224,6 +21224,12 @@ class KeyGroup(
             check_type(argname="argument key_group_id", value=key_group_id, expected_type=type_hints["key_group_id"])
         return typing.cast(IKeyGroup, jsii.sinvoke(cls, "fromKeyGroupId", [scope, id, key_group_id]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="keyGroupId")
     def key_group_id(self) -> builtins.str:
@@ -21398,6 +21404,12 @@ class KeyValueStore(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument key_value_store_arn", value=key_value_store_arn, expected_type=type_hints["key_value_store_arn"])
         return typing.cast(IKeyValueStore, jsii.sinvoke(cls, "fromKeyValueStoreArn", [scope, id, key_value_store_arn]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="keyValueStoreArn")
@@ -21947,6 +21959,12 @@ class OriginAccessIdentity(
     def _arn(self) -> builtins.str:
         '''The ARN to include in S3 bucket policy to allow CloudFront access.'''
         return typing.cast(builtins.str, jsii.invoke(self, "arn", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="cloudFrontOriginAccessIdentityS3CanonicalUserId")
@@ -23087,6 +23105,12 @@ class OriginRequestPolicy(
         return typing.cast(IOriginRequestPolicy, jsii.sget(cls, "ELEMENTAL_MEDIA_TAILOR"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="USER_AGENT_REFERER_HEADERS")
     def USER_AGENT_REFERER_HEADERS(cls) -> IOriginRequestPolicy:
         '''This policy includes only the User-Agent and Referer headers.
@@ -23457,6 +23481,12 @@ class PublicKey(
             check_type(argname="argument public_key_id", value=public_key_id, expected_type=type_hints["public_key_id"])
         return typing.cast(IPublicKey, jsii.sinvoke(cls, "fromPublicKeyId", [scope, id, public_key_id]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="publicKeyId")
     def public_key_id(self) -> builtins.str:
@@ -23635,6 +23665,12 @@ class RealtimeLogConfig(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="realtimeLogConfigArn")
@@ -24553,6 +24589,12 @@ class ResponseHeadersPolicy(
     ) -> IResponseHeadersPolicy:
         '''Use this managed policy to allow CORS requests from any origin, including preflight requests, and add a set of security headers to all responses that CloudFront sends to viewers.'''
         return typing.cast(IResponseHeadersPolicy, jsii.sget(cls, "CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="SECURITY_HEADERS")
@@ -25486,6 +25528,12 @@ class S3OriginAccessControl(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument origin_access_control_id", value=origin_access_control_id, expected_type=type_hints["origin_access_control_id"])
         return typing.cast(IOriginAccessControl, jsii.sinvoke(cls, "fromOriginAccessControlId", [scope, id, origin_access_control_id]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="originAccessControlId")
@@ -26552,6 +26600,12 @@ class VpcOrigin(
             check_type(argname="argument vpc_origin_id", value=vpc_origin_id, expected_type=type_hints["vpc_origin_id"])
         return typing.cast(IVpcOrigin, jsii.sinvoke(cls, "fromVpcOriginId", [scope, id, vpc_origin_id]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
     def cdk_tag_manager(self) -> _TagManager_0a598cb3:
@@ -27290,6 +27344,12 @@ class CachePolicy(
         return typing.cast(ICachePolicy, jsii.sget(cls, "ELEMENTAL_MEDIA_PACKAGE"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="USE_ORIGIN_CACHE_CONTROL_HEADERS")
     def USE_ORIGIN_CACHE_CONTROL_HEADERS(cls) -> ICachePolicy:
         '''Designed for use with an origin that returns Cache-Control HTTP response headers and does not serve different content based on values present in the query string.'''
@@ -27485,6 +27545,15 @@ class CloudFrontWebDistribution(
             type_hints = typing.get_type_hints(_typecheckingstub__1e035551f14cb51c65a18baf4f340f3be55199133afe180ca2138a8a0e86e6f8)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantCreateInvalidation", [identity]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''(deprecated) Uniquely identifies this class.
+
+        :stability: deprecated
+        '''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="distributionArn")
@@ -28466,6 +28535,12 @@ class Distribution(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTotalErrorRate", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="distributionArn")
     def distribution_arn(self) -> builtins.str:
@@ -28580,6 +28655,12 @@ class Function(
         )
 
         return typing.cast(IFunction, jsii.sinvoke(cls, "fromFunctionAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="functionArn")
@@ -28704,6 +28785,12 @@ class FunctionUrlOriginAccessControl(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument origin_access_control_id", value=origin_access_control_id, expected_type=type_hints["origin_access_control_id"])
         return typing.cast(IOriginAccessControl, jsii.sinvoke(cls, "fromOriginAccessControlId", [scope, id, origin_access_control_id]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="originAccessControlId")

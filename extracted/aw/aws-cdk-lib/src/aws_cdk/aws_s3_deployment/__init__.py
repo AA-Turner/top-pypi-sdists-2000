@@ -781,6 +781,12 @@ class BucketDeployment(
             check_type(argname="argument source", value=source, expected_type=type_hints["source"])
         return typing.cast(None, jsii.invoke(self, "addSource", [source]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="deployedBucket")
     def deployed_bucket(self) -> _IBucket_42e086fd:

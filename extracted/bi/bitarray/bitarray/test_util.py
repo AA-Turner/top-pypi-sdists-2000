@@ -19,7 +19,7 @@ from collections import Counter
 
 from bitarray import (bitarray, frozenbitarray, decodetree, bits2bytes,
                       _set_default_endian)
-from bitarray.test_bitarray import (Util, skipIf, is_pypy,
+from bitarray.test_bitarray import (Util, skipIf, is_pypy, urandom_2,
                                     SYSINFO, DEBUG, WHITESPACE)
 
 from bitarray.util import (
@@ -473,7 +473,7 @@ class BitwiseCountTests(unittest.TestCase, Util):
     def test_random(self):
         for _ in range(100):
             n = randrange(1000)
-            a = urandom(n, self.random_endian())
+            a = urandom_2(n)
             b = urandom(n, a.endian)
             self.assertEqual(count_and(a, b), (a & b).count())
             self.assertEqual(count_or(a, b),  (a | b).count())
@@ -517,6 +517,38 @@ class BitwiseAnyTests(unittest.TestCase, Util):
         self.assertRaises(ValueError, any_and,
                           bitarray('01', 'little'),
                           bitarray('11', 'big'))
+
+    def test_overlap(self):
+        n = 100
+        for _ in range(500):
+            i1 = randint(0, n)
+            j1 = randint(i1, n)
+            r1 = range(i1, j1)
+
+            i2 = randint(0, n)
+            j2 = randint(i2, n)
+            r2 = range(i2, j2)
+
+            # test if ranges r1 and r2 overlap
+            res1 = bool(r1) and bool(r2) and (i2 in r1 or i1 in r2)
+            res2 = bool(set(r1) & set(r2))
+            self.assertEqual(res1, res2)
+
+            a1, a2 = bitarray(n), bitarray(n)
+            a1[i1:j1] = a2[i2:j2] = 1
+            self.assertEqual(any_and(a1, a2), res1)
+
+    def test_common(self):
+        n = 100
+        for _ in range(500):
+            s1 = self.random_slice(n)
+            s2 = self.random_slice(n)
+            r1 = range(n)[s1]
+            r2 = range(n)[s2]
+            # test if ranges r1 and r2 have common items
+            a1, a2 = bitarray(n), bitarray(n)
+            a1[s1] = a2[s2] = 1
+            self.assertEqual(any_and(a1, a2), bool(set(r1) & set(r2)))
 
     def check(self, a, b):
         r = any_and(a, b)
@@ -828,7 +860,14 @@ class XoredIndicesTests(unittest.TestCase, Util):
             self.assertEqual(xor_indices(a), i)  # index of the flipped bit!
             a.invert(i)
 
-# ---------------------------------------------------------------------------
+# ------------------   intervals of uninterrupted runs   --------------------
+
+def runs(a):
+    "return number of uninterrupted intervals of 1s and 0s"
+    n = len(a)
+    if n < 2:
+        return n
+    return 1 + count_xor(a[:-1], a[1:])
 
 class IntervalsTests(unittest.TestCase, Util):
 
@@ -837,26 +876,19 @@ class IntervalsTests(unittest.TestCase, Util):
                 ('', []),
                 ('0', [(0, 0, 1)]),
                 ('1', [(1, 0, 1)]),
-                ('00111100 00000111 00',
-                 [(0, 0, 2), (1, 2, 6), (0, 6, 13), (1, 13, 16), (0, 16, 18)]),
+                ('00111100 0000011',
+                 [(0, 0, 2), (1, 2, 6), (0, 6, 13), (1, 13, 15)]),
             ]:
             a = bitarray(s)
             self.assertEqual(list(intervals(a)), lst)
+            self.assertEqual(runs(a), len(lst))
 
-    def test_count(self):
-        for s, res in [
-                ('', 0),
-                ('0', 1),
-                ('1', 1),
-                ('00', 1),
-                ('01', 2),
-                ('10', 2),
-                ('11', 1),
-                ('0011110000000', 3),
-            ]:
-            a = bitarray(s)
-            self.assertEqual(res, len(list(intervals(a))))
-            self.assertEqual(res, sum(1 for _ in intervals(a)))
+    def test_uniform(self):
+        for n in range(1, 100):
+            for v in 0, 1:
+                a = n * bitarray([v], self.random_endian())
+                self.assertEqual(list(intervals(a)), [(v, 0, n)])
+                self.assertEqual(runs(a), 1)
 
     def test_random(self):
         for a in self.randombitarrays():
@@ -868,18 +900,18 @@ class IntervalsTests(unittest.TestCase, Util):
                 b[start:stop] = value
             self.assertEqual(a, b)
 
-    def test_runs(self):
+    def test_list_runs(self):
         for a in self.randombitarrays():
-            first = a[0] if a else None
             # list of length of runs of alternating bits
-            runs = [stop - start for _, start, stop in intervals(a)]
+            alt_runs = [stop - start for _, start, stop in intervals(a)]
+            self.assertEqual(len(alt_runs), runs(a))
 
             b = bitarray()
-            v = first
-            for length in runs:
+            v = a[0] if a else None  # value of first run
+            for length in alt_runs:
+                self.assertTrue(length > 0)
                 b.extend(length * bitarray([v]))
                 v = not v
-
             self.assertEqual(a, b)
 
 # ---------------------------------------------------------------------------
@@ -976,7 +1008,7 @@ class HexlifyTests(unittest.TestCase, Util):
 
     def test_random(self):
         for _ in range(100):
-            a = urandom(4 * randrange(100), self.random_endian())
+            a = urandom_2(4 * randrange(100))
             s = ba2hex(a, group=randrange(10), sep=randrange(5) * " ")
             b = hex2ba(s, endian=a.endian)
             self.assertEQUAL(a, b)
@@ -1194,7 +1226,7 @@ class BaseTests(unittest.TestCase, Util):
     def test_random(self):
         for _ in range(100):
             m = randint(1, 6)
-            a = urandom(m * randrange(100), self.random_endian())
+            a = urandom_2(m * randrange(100))
             self.assertEqual(len(a) % m, 0)
             n = 1 << m
             s = ba2base(n, a, group=randrange(10), sep=randrange(5) * " ")
@@ -1684,7 +1716,7 @@ class IntegerizationTests(unittest.TestCase, Util):
 
     def test_ba2int_bytes(self):
         for n in range(1, 50):
-            a = urandom(8 * n, self.random_endian())
+            a = urandom_2(8 * n)
             c = bytearray(a.tobytes())
             i = 0
             for x in (c if a.endian == 'big' else reversed(c)):

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -111,6 +111,10 @@ class ListEkmConnectionsResponse(proto.Message):
             The total number of
             [EkmConnections][google.cloud.kms.v1.EkmConnection] that
             matched the query.
+
+            This field is not populated if
+            [ListEkmConnectionsRequest.filter][google.cloud.kms.v1.ListEkmConnectionsRequest.filter]
+            is applied.
     """
 
     @property

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -250,6 +250,8 @@ class Task(proto.Message):
             execution can be found in Cloud Console.
         satisfies_pzs (bool):
             Output only. Reserved for future use.
+        node_selector (google.cloud.run_v2.types.NodeSelector):
+            Output only. The node selector for the task.
         etag (str):
             Output only. A system-generated fingerprint
             for this version of the resource. May be used to
@@ -391,6 +393,11 @@ class Task(proto.Message):
     satisfies_pzs: bool = proto.Field(
         proto.BOOL,
         number=33,
+    )
+    node_selector: vendor_settings.NodeSelector = proto.Field(
+        proto.MESSAGE,
+        number=36,
+        message=vendor_settings.NodeSelector,
     )
     etag: str = proto.Field(
         proto.STRING,

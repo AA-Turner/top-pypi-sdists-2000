@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -99,6 +99,13 @@ class AutokeyConfig(proto.Message):
             project field will clear the configuration.
         state (google.cloud.kms_v1.types.AutokeyConfig.State):
             Output only. The state for the AutokeyConfig.
+        etag (str):
+            Optional. A checksum computed by the server
+            based on the value of other fields. This may be
+            sent on update requests to ensure that the
+            client has an up-to-date value before
+            proceeding. The request will be rejected with an
+            ABORTED error on a mismatched etag.
     """
 
     class State(proto.Enum):
@@ -136,6 +143,10 @@ class AutokeyConfig(proto.Message):
         proto.ENUM,
         number=4,
         enum=State,
+    )
+    etag: str = proto.Field(
+        proto.STRING,
+        number=6,
     )
 
 

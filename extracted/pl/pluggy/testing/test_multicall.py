@@ -1,8 +1,6 @@
+from collections.abc import Mapping
+from collections.abc import Sequence
 from typing import Callable
-from typing import List
-from typing import Mapping
-from typing import Sequence
-from typing import Type
 from typing import Union
 
 import pytest
@@ -22,7 +20,7 @@ def MC(
     methods: Sequence[Callable[..., object]],
     kwargs: Mapping[str, object],
     firstresult: bool = False,
-) -> Union[object, List[object]]:
+) -> Union[object, list[object]]:
     caller = _multicall
     hookfuncs = []
     for method in methods:
@@ -57,7 +55,7 @@ def test_keyword_args_with_defaultargs() -> None:
 def test_tags_call_error() -> None:
     @hookimpl
     def f(x):
-        return x
+        return x  # pragma: no cover
 
     with pytest.raises(HookCallError):
         MC([f], {})
@@ -250,7 +248,7 @@ def test_wrapper_too_many_yield() -> None:
 
 
 @pytest.mark.parametrize("exc", [ValueError, SystemExit])
-def test_hookwrapper_exception(exc: "Type[BaseException]") -> None:
+def test_hookwrapper_exception(exc: type[BaseException]) -> None:
     out = []
 
     @hookimpl(hookwrapper=True)
@@ -320,7 +318,7 @@ def test_hookwrapper_force_exception() -> None:
 
 
 @pytest.mark.parametrize("exc", [ValueError, SystemExit])
-def test_wrapper_exception(exc: "Type[BaseException]") -> None:
+def test_wrapper_exception(exc: type[BaseException]) -> None:
     out = []
 
     @hookimpl(wrapper=True)
@@ -333,7 +331,7 @@ def test_wrapper_exception(exc: "Type[BaseException]") -> None:
             raise
         finally:
             out.append("m1 finish")
-        return result
+        return result  # pragma: no cover
 
     @hookimpl
     def m2():
@@ -360,7 +358,7 @@ def test_wrapper_exception_chaining() -> None:
     @hookimpl(wrapper=True)
     def m3():
         yield
-        return 10
+        return 10  # pragma: no cover
 
     @hookimpl(wrapper=True)
     def m4():
@@ -386,7 +384,7 @@ def test_unwind_inner_wrapper_teardown_exc() -> None:
         out.append("m1 init")
         try:
             yield
-            out.append("m1 unreachable")
+            out.append("m1 unreachable")  # pragma: no cover
         except BaseException:
             out.append("m1 teardown")
             raise
@@ -416,6 +414,36 @@ def test_unwind_inner_wrapper_teardown_exc() -> None:
     ]
 
 
+@pytest.mark.parametrize("has_hookwrapper", [True, False])
+def test_wrapper_stopiteration_passtrough(has_hookwrapper: bool) -> None:
+    out = []
+
+    @hookimpl(wrapper=True)
+    def wrap():
+        out.append("wrap")
+        try:
+            yield
+        finally:
+            out.append("wrap done")
+
+    @hookimpl(wrapper=not has_hookwrapper, hookwrapper=has_hookwrapper)
+    def wrap_path2():
+        yield
+
+    @hookimpl
+    def stop():
+        out.append("stop")
+        raise StopIteration
+
+    with pytest.raises(StopIteration):
+        try:
+            MC([stop, wrap, wrap_path2], {})
+        finally:
+            out.append("finally")
+
+    assert out == ["wrap", "stop", "wrap done", "finally"]
+
+
 def test_suppress_inner_wrapper_teardown_exc() -> None:
     out = []
 
@@ -431,7 +459,7 @@ def test_suppress_inner_wrapper_teardown_exc() -> None:
         out.append("m2 init")
         try:
             yield
-            out.append("m2 unreachable")
+            out.append("m2 unreachable")  # pragma: no cover
         except ValueError:
             out.append("m2 suppress")
             return 22

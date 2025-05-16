@@ -67,8 +67,8 @@ certain handler:
 
 ```python
 class StackUnderTest(Stack):
-    def __init__(self, scope, id, *, architecture=None, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, architecture=architecture, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, architecture=None, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, architecture=architecture, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         lambda_.Function(self, "Handler",
             runtime=lambda_.Runtime.NODEJS_LATEST,
@@ -85,8 +85,8 @@ for the Lambda function. In particular, it should work for both `ARM_64` and
 
 ```python
 class StackUnderTest(Stack):
-    def __init__(self, scope, id, *, architecture=None, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, architecture=architecture, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, architecture=None, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, architecture=architecture, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         lambda_.Function(self, "Handler",
             runtime=lambda_.Runtime.NODEJS_LATEST,
@@ -3775,6 +3775,7 @@ class IntegTestCaseStack(
         env: typing.Optional[typing.Union[_aws_cdk_ceddda9d.Environment, typing.Dict[builtins.str, typing.Any]]] = None,
         notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         permissions_boundary: typing.Optional[_aws_cdk_ceddda9d.PermissionsBoundary] = None,
+        property_injectors: typing.Optional[typing.Sequence[_aws_cdk_ceddda9d.IPropertyInjector]] = None,
         stack_name: typing.Optional[builtins.str] = None,
         suppress_template_indentation: typing.Optional[builtins.bool] = None,
         synthesizer: typing.Optional[_aws_cdk_ceddda9d.IStackSynthesizer] = None,
@@ -3796,6 +3797,7 @@ class IntegTestCaseStack(
         :param env: The AWS environment (account/region) where this stack will be deployed. Set the ``region``/``account`` fields of ``env`` to either a concrete value to select the indicated environment (recommended for production stacks), or to the values of environment variables ``CDK_DEFAULT_REGION``/``CDK_DEFAULT_ACCOUNT`` to let the target environment depend on the AWS credentials/configuration that the CDK CLI is executed under (recommended for development stacks). If the ``Stack`` is instantiated inside a ``Stage``, any undefined ``region``/``account`` fields from ``env`` will default to the same field on the encompassing ``Stage``, if configured there. If either ``region`` or ``account`` are not set nor inherited from ``Stage``, the Stack will be considered "*environment-agnostic*"". Environment-agnostic stacks can be deployed to any environment but may not be able to take advantage of all features of the CDK. For example, they will not be able to use environmental context lookups such as ``ec2.Vpc.fromLookup`` and will not automatically translate Service Principals to the right format based on the environment's AWS partition, and other such enhancements. Default: - The environment of the containing ``Stage`` if available, otherwise create the stack will be environment-agnostic.
         :param notification_arns: SNS Topic ARNs that will receive stack events. Default: - no notfication arns.
         :param permissions_boundary: Options for applying a permissions boundary to all IAM Roles and Users created within this Stage. Default: - no permissions boundary is applied
+        :param property_injectors: A list of IPropertyInjector attached to this Stack. Default: - no PropertyInjectors
         :param stack_name: Name to deploy the stack with. Default: - Derived from construct path.
         :param suppress_template_indentation: Enable this flag to suppress indentation in generated CloudFormation templates. If not specified, the value of the ``@aws-cdk/core:suppressTemplateIndentation`` context key will be used. If that is not specified, then the default value ``false`` will be used. Default: - the value of ``@aws-cdk/core:suppressTemplateIndentation``, or ``false`` if that is not set.
         :param synthesizer: Synthesis method to use while deploying this stack. The Stack Synthesizer controls aspects of synthesis and deployment, like how assets are referenced and what IAM roles to use. For more information, see the README of the main CDK package. If not specified, the ``defaultStackSynthesizer`` from ``App`` will be used. If that is not specified, ``DefaultStackSynthesizer`` is used if ``@aws-cdk/core:newStyleStackSynthesis`` is set to ``true`` or the CDK major version is v2. In CDK v1 ``LegacyStackSynthesizer`` is the default if no other synthesizer is specified. Default: - The synthesizer specified on ``App``, or ``DefaultStackSynthesizer`` otherwise.
@@ -3821,6 +3823,7 @@ class IntegTestCaseStack(
             env=env,
             notification_arns=notification_arns,
             permissions_boundary=permissions_boundary,
+            property_injectors=property_injectors,
             stack_name=stack_name,
             suppress_template_indentation=suppress_template_indentation,
             synthesizer=synthesizer,
@@ -3873,6 +3876,7 @@ class IntegTestCaseStack(
         "env": "env",
         "notification_arns": "notificationArns",
         "permissions_boundary": "permissionsBoundary",
+        "property_injectors": "propertyInjectors",
         "stack_name": "stackName",
         "suppress_template_indentation": "suppressTemplateIndentation",
         "synthesizer": "synthesizer",
@@ -3899,6 +3903,7 @@ class IntegTestCaseStackProps(
         env: typing.Optional[typing.Union[_aws_cdk_ceddda9d.Environment, typing.Dict[builtins.str, typing.Any]]] = None,
         notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         permissions_boundary: typing.Optional[_aws_cdk_ceddda9d.PermissionsBoundary] = None,
+        property_injectors: typing.Optional[typing.Sequence[_aws_cdk_ceddda9d.IPropertyInjector]] = None,
         stack_name: typing.Optional[builtins.str] = None,
         suppress_template_indentation: typing.Optional[builtins.bool] = None,
         synthesizer: typing.Optional[_aws_cdk_ceddda9d.IStackSynthesizer] = None,
@@ -3919,6 +3924,7 @@ class IntegTestCaseStackProps(
         :param env: The AWS environment (account/region) where this stack will be deployed. Set the ``region``/``account`` fields of ``env`` to either a concrete value to select the indicated environment (recommended for production stacks), or to the values of environment variables ``CDK_DEFAULT_REGION``/``CDK_DEFAULT_ACCOUNT`` to let the target environment depend on the AWS credentials/configuration that the CDK CLI is executed under (recommended for development stacks). If the ``Stack`` is instantiated inside a ``Stage``, any undefined ``region``/``account`` fields from ``env`` will default to the same field on the encompassing ``Stage``, if configured there. If either ``region`` or ``account`` are not set nor inherited from ``Stage``, the Stack will be considered "*environment-agnostic*"". Environment-agnostic stacks can be deployed to any environment but may not be able to take advantage of all features of the CDK. For example, they will not be able to use environmental context lookups such as ``ec2.Vpc.fromLookup`` and will not automatically translate Service Principals to the right format based on the environment's AWS partition, and other such enhancements. Default: - The environment of the containing ``Stage`` if available, otherwise create the stack will be environment-agnostic.
         :param notification_arns: SNS Topic ARNs that will receive stack events. Default: - no notfication arns.
         :param permissions_boundary: Options for applying a permissions boundary to all IAM Roles and Users created within this Stage. Default: - no permissions boundary is applied
+        :param property_injectors: A list of IPropertyInjector attached to this Stack. Default: - no PropertyInjectors
         :param stack_name: Name to deploy the stack with. Default: - Derived from construct path.
         :param suppress_template_indentation: Enable this flag to suppress indentation in generated CloudFormation templates. If not specified, the value of the ``@aws-cdk/core:suppressTemplateIndentation`` context key will be used. If that is not specified, then the default value ``false`` will be used. Default: - the value of ``@aws-cdk/core:suppressTemplateIndentation``, or ``false`` if that is not set.
         :param synthesizer: Synthesis method to use while deploying this stack. The Stack Synthesizer controls aspects of synthesis and deployment, like how assets are referenced and what IAM roles to use. For more information, see the README of the main CDK package. If not specified, the ``defaultStackSynthesizer`` from ``App`` will be used. If that is not specified, ``DefaultStackSynthesizer`` is used if ``@aws-cdk/core:newStyleStackSynthesis`` is set to ``true`` or the CDK major version is v2. In CDK v1 ``LegacyStackSynthesizer`` is the default if no other synthesizer is specified. Default: - The synthesizer specified on ``App``, or ``DefaultStackSynthesizer`` otherwise.
@@ -3959,6 +3965,7 @@ class IntegTestCaseStackProps(
             check_type(argname="argument env", value=env, expected_type=type_hints["env"])
             check_type(argname="argument notification_arns", value=notification_arns, expected_type=type_hints["notification_arns"])
             check_type(argname="argument permissions_boundary", value=permissions_boundary, expected_type=type_hints["permissions_boundary"])
+            check_type(argname="argument property_injectors", value=property_injectors, expected_type=type_hints["property_injectors"])
             check_type(argname="argument stack_name", value=stack_name, expected_type=type_hints["stack_name"])
             check_type(argname="argument suppress_template_indentation", value=suppress_template_indentation, expected_type=type_hints["suppress_template_indentation"])
             check_type(argname="argument synthesizer", value=synthesizer, expected_type=type_hints["synthesizer"])
@@ -3989,6 +3996,8 @@ class IntegTestCaseStackProps(
             self._values["notification_arns"] = notification_arns
         if permissions_boundary is not None:
             self._values["permissions_boundary"] = permissions_boundary
+        if property_injectors is not None:
+            self._values["property_injectors"] = property_injectors
         if stack_name is not None:
             self._values["stack_name"] = stack_name
         if suppress_template_indentation is not None:
@@ -4192,6 +4201,17 @@ class IntegTestCaseStackProps(
         '''
         result = self._values.get("permissions_boundary")
         return typing.cast(typing.Optional[_aws_cdk_ceddda9d.PermissionsBoundary], result)
+
+    @builtins.property
+    def property_injectors(
+        self,
+    ) -> typing.Optional[typing.List[_aws_cdk_ceddda9d.IPropertyInjector]]:
+        '''A list of IPropertyInjector attached to this Stack.
+
+        :default: - no PropertyInjectors
+        '''
+        result = self._values.get("property_injectors")
+        return typing.cast(typing.Optional[typing.List[_aws_cdk_ceddda9d.IPropertyInjector]], result)
 
     @builtins.property
     def stack_name(self) -> typing.Optional[builtins.str]:
@@ -6482,6 +6502,7 @@ def _typecheckingstub__ae3a10010962bdab5e34756e8b8781def4d66140bc39b762ac839b643
     env: typing.Optional[typing.Union[_aws_cdk_ceddda9d.Environment, typing.Dict[builtins.str, typing.Any]]] = None,
     notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     permissions_boundary: typing.Optional[_aws_cdk_ceddda9d.PermissionsBoundary] = None,
+    property_injectors: typing.Optional[typing.Sequence[_aws_cdk_ceddda9d.IPropertyInjector]] = None,
     stack_name: typing.Optional[builtins.str] = None,
     suppress_template_indentation: typing.Optional[builtins.bool] = None,
     synthesizer: typing.Optional[_aws_cdk_ceddda9d.IStackSynthesizer] = None,
@@ -6511,6 +6532,7 @@ def _typecheckingstub__59edf2938a92df2253021d942b03a0fa818705ff3df6920854079be73
     env: typing.Optional[typing.Union[_aws_cdk_ceddda9d.Environment, typing.Dict[builtins.str, typing.Any]]] = None,
     notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     permissions_boundary: typing.Optional[_aws_cdk_ceddda9d.PermissionsBoundary] = None,
+    property_injectors: typing.Optional[typing.Sequence[_aws_cdk_ceddda9d.IPropertyInjector]] = None,
     stack_name: typing.Optional[builtins.str] = None,
     suppress_template_indentation: typing.Optional[builtins.bool] = None,
     synthesizer: typing.Optional[_aws_cdk_ceddda9d.IStackSynthesizer] = None,

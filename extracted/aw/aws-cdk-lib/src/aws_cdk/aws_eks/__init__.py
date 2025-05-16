@@ -14894,6 +14894,12 @@ class KubernetesManifest(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="RESOURCE_TYPE")
     def RESOURCE_TYPE(cls) -> builtins.str:
         '''The CloudFormation resource type.'''
@@ -16225,6 +16231,12 @@ class Nodegroup(
             check_type(argname="argument nodegroup_name", value=nodegroup_name, expected_type=type_hints["nodegroup_name"])
         return typing.cast(INodegroup, jsii.sinvoke(cls, "fromNodegroupName", [scope, id, nodegroup_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="cluster")
     def cluster(self) -> ICluster:
@@ -17334,6 +17346,12 @@ class OpenIdConnectProvider(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_eks.OpenIdConnectProviderProps",
@@ -18286,6 +18304,12 @@ class AccessEntry(
             check_type(argname="argument new_access_policies", value=new_access_policies, expected_type=type_hints["new_access_policies"])
         return typing.cast(None, jsii.invoke(self, "addAccessPolicies", [new_access_policies]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="accessEntryArn")
     def access_entry_arn(self) -> builtins.str:
@@ -18479,6 +18503,12 @@ class Addon(
         attrs = AddonAttributes(addon_name=addon_name, cluster_name=cluster_name)
 
         return typing.cast(IAddon, jsii.sinvoke(cls, "fromAddonAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="addonArn")
@@ -19247,6 +19277,12 @@ class Cluster(
             check_type(argname="argument principal", value=principal, expected_type=type_hints["principal"])
             check_type(argname="argument access_policies", value=access_policies, expected_type=type_hints["access_policies"])
         return typing.cast(None, jsii.invoke(self, "grantAccess", [id, principal, access_policies]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="adminRole")
@@ -20950,6 +20986,12 @@ class FargateCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultProfile")

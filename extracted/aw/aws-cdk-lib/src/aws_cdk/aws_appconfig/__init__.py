@@ -11624,6 +11624,12 @@ class Application(
 
         return typing.cast(None, jsii.invoke(self, "preStartDeployment", [event_destination, options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="applicationArn")
     def application_arn(self) -> builtins.str:
@@ -11759,6 +11765,12 @@ class DeploymentStrategy(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument deployment_strategy_id", value=deployment_strategy_id, expected_type=type_hints["deployment_strategy_id"])
         return typing.cast(IDeploymentStrategy, jsii.sinvoke(cls, "fromDeploymentStrategyId", [scope, id, deployment_strategy_id]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentStrategyArn")
@@ -12271,6 +12283,12 @@ class Environment(
         )
 
         return typing.cast(None, jsii.invoke(self, "preStartDeployment", [event_destination, options]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -12837,6 +12855,12 @@ class Extension(
         )
 
         return typing.cast(IExtension, jsii.sinvoke(cls, "fromExtensionAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="extensionArn")

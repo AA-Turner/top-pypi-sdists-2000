@@ -3481,19 +3481,24 @@ pub struct AddArgs {
     #[arg(long, overrides_with = "editable", hide = true)]
     pub no_editable: bool,
 
-    /// Add source requirements to `project.dependencies`, rather than `tool.uv.sources`.
+    /// Add a dependency as provided.
     ///
     /// By default, uv will use the `tool.uv.sources` section to record source information for Git,
-    /// local, editable, and direct URL requirements.
+    /// local, editable, and direct URL requirements. When `--raw` is provided, uv will add source
+    /// requirements to `project.dependencies`, rather than `tool.uv.sources`.
+    ///
+    /// Additionally, by default, uv will add bounds to your dependency, e.g., `foo>=1.0.0`. When
+    /// `--raw` is provided, uv will add the dependency without bounds.
     #[arg(
         long,
         conflicts_with = "editable",
         conflicts_with = "no_editable",
         conflicts_with = "rev",
         conflicts_with = "tag",
-        conflicts_with = "branch"
+        conflicts_with = "branch",
+        alias = "raw-sources"
     )]
-    pub raw_sources: bool,
+    pub raw: bool,
 
     /// Commit to use when adding a dependency from Git.
     #[arg(long, group = "git-ref", action = clap::ArgAction::Set)]
@@ -3936,7 +3941,7 @@ pub struct ExportArgs {
     #[arg(long, overrides_with("no_header"), hide = true)]
     pub header: bool,
 
-    /// Install any editable dependencies, including the project and any workspace members, as
+    /// Export any editable dependencies, including the project and any workspace members, as
     /// non-editable.
     #[arg(long)]
     pub no_editable: bool,
@@ -3972,7 +3977,7 @@ pub struct ExportArgs {
     /// Do not emit the given package(s).
     ///
     /// By default, all of the project's dependencies are included in the exported requirements
-    /// file. The `--no-install-package` option allows exclusion of specific packages.
+    /// file. The `--no-emit-package` option allows exclusion of specific packages.
     #[arg(long, alias = "no-install-package")]
     pub no_emit_package: Vec<PackageName>,
 

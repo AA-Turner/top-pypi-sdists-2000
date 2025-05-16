@@ -313,14 +313,19 @@ class LambdaAction(
     def __init__(
         self,
         lambda_function: typing.Union[_IFunction_6adb0ab8, _IVersion_faf7234e, _IAlias_c8fe45f4],
+        *,
+        use_unique_permission_id: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
         :param lambda_function: -
+        :param use_unique_permission_id: Whether to generate unique Lambda Permission id. Use this parameter to resolve id collision in case of multiple alarms triggering the same action Default: - false
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2693adec8362e537633b2584509df8d0d77cb381732395de1707d1edfe2c3c9e)
             check_type(argname="argument lambda_function", value=lambda_function, expected_type=type_hints["lambda_function"])
-        jsii.create(self.__class__, self, [lambda_function])
+        props = LambdaActionProps(use_unique_permission_id=use_unique_permission_id)
+
+        jsii.create(self.__class__, self, [lambda_function, props])
 
     @jsii.member(jsii_name="bind")
     def bind(
@@ -340,6 +345,65 @@ class LambdaAction(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument alarm", value=alarm, expected_type=type_hints["alarm"])
         return typing.cast(_AlarmActionConfig_f831c655, jsii.invoke(self, "bind", [scope, alarm]))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_cloudwatch_actions.LambdaActionProps",
+    jsii_struct_bases=[],
+    name_mapping={"use_unique_permission_id": "useUniquePermissionId"},
+)
+class LambdaActionProps:
+    def __init__(
+        self,
+        *,
+        use_unique_permission_id: typing.Optional[builtins.bool] = None,
+    ) -> None:
+        '''Properties for Lambda Alarm Action.
+
+        :param use_unique_permission_id: Whether to generate unique Lambda Permission id. Use this parameter to resolve id collision in case of multiple alarms triggering the same action Default: - false
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_cloudwatch_actions as cloudwatch_actions
+            
+            lambda_action_props = cloudwatch_actions.LambdaActionProps(
+                use_unique_permission_id=False
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2be134df5b4b042a1cf75cbb9e29a273c25a1bdf15dc683b2cbba3452447846a)
+            check_type(argname="argument use_unique_permission_id", value=use_unique_permission_id, expected_type=type_hints["use_unique_permission_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if use_unique_permission_id is not None:
+            self._values["use_unique_permission_id"] = use_unique_permission_id
+
+    @builtins.property
+    def use_unique_permission_id(self) -> typing.Optional[builtins.bool]:
+        '''Whether to generate unique Lambda Permission id.
+
+        Use this parameter to resolve id collision in case of multiple alarms triggering the same action
+
+        :default: - false
+
+        :see: https://github.com/aws/aws-cdk/issues/33958
+        '''
+        result = self._values.get("use_unique_permission_id")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "LambdaActionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_cloudwatch_actions.OpsItemCategory")
@@ -542,6 +606,7 @@ __all__ = [
     "Ec2Action",
     "Ec2InstanceAction",
     "LambdaAction",
+    "LambdaActionProps",
     "OpsItemCategory",
     "OpsItemSeverity",
     "SnsAction",
@@ -592,6 +657,8 @@ def _typecheckingstub__617684dcf0b429d0176779c30669a734e5e356a2d0dbb98bf321e897c
 
 def _typecheckingstub__2693adec8362e537633b2584509df8d0d77cb381732395de1707d1edfe2c3c9e(
     lambda_function: typing.Union[_IFunction_6adb0ab8, _IVersion_faf7234e, _IAlias_c8fe45f4],
+    *,
+    use_unique_permission_id: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -599,6 +666,13 @@ def _typecheckingstub__2693adec8362e537633b2584509df8d0d77cb381732395de1707d1edf
 def _typecheckingstub__2856bb69373ffd5b6a7628782cc0fb8ab9fd20450269ca5c709a08e9bfac50d5(
     scope: _constructs_77d1e7e8.Construct,
     alarm: _IAlarm_ff3eabc0,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2be134df5b4b042a1cf75cbb9e29a273c25a1bdf15dc683b2cbba3452447846a(
+    *,
+    use_unique_permission_id: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
     pass

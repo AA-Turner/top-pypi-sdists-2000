@@ -72,7 +72,7 @@ pub(crate) async fn add(
     marker: Option<MarkerTree>,
     editable: Option<bool>,
     dependency_type: DependencyType,
-    raw_sources: bool,
+    raw: bool,
     indexes: Vec<Index>,
     rev: Option<String>,
     tag: Option<String>,
@@ -104,7 +104,13 @@ pub(crate) async fn add(
             RequirementsSource::SetupCfg(_) => {
                 bail!("Adding requirements from a `setup.cfg` is not supported in `uv add`");
             }
-            _ => {}
+            RequirementsSource::PylockToml(_) => {
+                bail!("Adding requirements from a `pylock.toml` is not supported in `uv add`");
+            }
+            RequirementsSource::Package(_)
+            | RequirementsSource::Editable(_)
+            | RequirementsSource::RequirementsTxt(_)
+            | RequirementsSource::EnvironmentYml(_) => {}
         }
     }
 
@@ -444,7 +450,7 @@ pub(crate) async fn add(
         &target,
         editable,
         &dependency_type,
-        raw_sources,
+        raw,
         rev.as_deref(),
         tag.as_deref(),
         branch.as_deref(),
@@ -454,7 +460,7 @@ pub(crate) async fn add(
     )?;
 
     // Add any indexes that were provided on the command-line, in priority order.
-    if !raw_sources {
+    if !raw {
         let urls = IndexUrls::from_indexes(indexes);
         for index in urls.defined_indexes() {
             toml.add_index(index)?;
@@ -519,7 +525,7 @@ pub(crate) async fn add(
         sync_state,
         locked,
         &dependency_type,
-        raw_sources,
+        raw,
         constraints,
         &settings,
         &network_settings,
@@ -551,7 +557,7 @@ fn edits(
     target: &AddTarget,
     editable: Option<bool>,
     dependency_type: &DependencyType,
-    raw_sources: bool,
+    raw: bool,
     rev: Option<&str>,
     tag: Option<&str>,
     branch: Option<&str>,
@@ -569,7 +575,7 @@ fn edits(
         requirement.extras = ex.into_boxed_slice();
 
         let (requirement, source) = match target {
-            AddTarget::Script(_, _) | AddTarget::Project(_, _) if raw_sources => {
+            AddTarget::Script(_, _) | AddTarget::Project(_, _) if raw => {
                 (uv_pep508::Requirement::from(requirement), None)
             }
             AddTarget::Script(ref script, _) => {
@@ -743,7 +749,7 @@ async fn lock_and_sync(
     sync_state: PlatformState,
     locked: bool,
     dependency_type: &DependencyType,
-    raw_sources: bool,
+    raw: bool,
     constraints: Vec<NameRequirementSpecification>,
     settings: &ResolverInstallerSettings,
     network_settings: &NetworkSettings,
@@ -774,7 +780,7 @@ async fn lock_and_sync(
     .into_lock();
 
     // Avoid modifying the user request further if `--raw-sources` is set.
-    if !raw_sources {
+    if !raw {
         // Extract the minimum-supported version for each dependency.
         let mut minimum_version =
             FxHashMap::with_capacity_and_hasher(lock.packages().len(), FxBuildHasher);

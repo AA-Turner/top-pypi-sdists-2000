@@ -5252,11 +5252,11 @@ class CfnApplicationV2(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param runtime_environment: The runtime environment for the application. *Allowed values for ``RuntimeEnvironment`` :* ``SQL-1_0 | FLINK-1_6 | FLINK-1_8 | ZEPPELIN-FLINK-1_0 | FLINK-1_11 | FLINK-1_13 | ZEPPELIN-FLINK-2_0 | FLINK-1_15 | ZEPPELIN-FLINK-3_0 | FLINK-1_18 | FLINK-1_19 | FLINK-1_20``
+        :param runtime_environment: The runtime environment for the application.
         :param service_execution_role: Specifies the IAM role that the application uses to access external resources.
         :param application_configuration: Use this parameter to configure the application.
         :param application_description: The description of the application. Default: - ""
-        :param application_maintenance_configuration: Describes the maintenance configuration for the application.
+        :param application_maintenance_configuration: Specifies the maintenance window parameters for a Kinesis Data Analytics application.
         :param application_mode: To create a Kinesis Data Analytics Studio notebook, you must set the mode to ``INTERACTIVE`` . However, for a Kinesis Data Analytics for Apache Flink application, the mode is optional.
         :param application_name: The name of the application.
         :param run_configuration: Describes the starting parameters for an Managed Service for Apache Flink application.
@@ -5383,7 +5383,7 @@ class CfnApplicationV2(
     def application_maintenance_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationV2.ApplicationMaintenanceConfigurationProperty"]]:
-        '''Describes the maintenance configuration for the application.'''
+        '''Specifies the maintenance window parameters for a Kinesis Data Analytics application.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationV2.ApplicationMaintenanceConfigurationProperty"]], jsii.get(self, "applicationMaintenanceConfiguration"))
 
     @application_maintenance_configuration.setter
@@ -5868,9 +5868,9 @@ class CfnApplicationV2(
             *,
             application_maintenance_window_start_time: builtins.str,
         ) -> None:
-            '''Specifies the maintence window parameters for a Kinesis Data Analytics application.
+            '''Describes the maintenance configuration for the application.
 
-            :param application_maintenance_window_start_time: Specifies the start time of the maintence window.
+            :param application_maintenance_window_start_time: The start time for the maintenance window.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationmaintenanceconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -5894,7 +5894,7 @@ class CfnApplicationV2(
 
         @builtins.property
         def application_maintenance_window_start_time(self) -> builtins.str:
-            '''Specifies the start time of the maintence window.
+            '''The start time for the maintenance window.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationmaintenanceconfiguration.html#cfn-kinesisanalyticsv2-application-applicationmaintenanceconfiguration-applicationmaintenancewindowstarttime
             '''
@@ -8884,11 +8884,11 @@ class CfnApplicationV2Props:
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
-        :param runtime_environment: The runtime environment for the application. *Allowed values for ``RuntimeEnvironment`` :* ``SQL-1_0 | FLINK-1_6 | FLINK-1_8 | ZEPPELIN-FLINK-1_0 | FLINK-1_11 | FLINK-1_13 | ZEPPELIN-FLINK-2_0 | FLINK-1_15 | ZEPPELIN-FLINK-3_0 | FLINK-1_18 | FLINK-1_19 | FLINK-1_20``
+        :param runtime_environment: The runtime environment for the application.
         :param service_execution_role: Specifies the IAM role that the application uses to access external resources.
         :param application_configuration: Use this parameter to configure the application.
         :param application_description: The description of the application. Default: - ""
-        :param application_maintenance_configuration: Describes the maintenance configuration for the application.
+        :param application_maintenance_configuration: Specifies the maintenance window parameters for a Kinesis Data Analytics application.
         :param application_mode: To create a Kinesis Data Analytics Studio notebook, you must set the mode to ``INTERACTIVE`` . However, for a Kinesis Data Analytics for Apache Flink application, the mode is optional.
         :param application_name: The name of the application.
         :param run_configuration: Describes the starting parameters for an Managed Service for Apache Flink application.
@@ -9106,8 +9106,6 @@ class CfnApplicationV2Props:
     def runtime_environment(self) -> builtins.str:
         '''The runtime environment for the application.
 
-        *Allowed values for ``RuntimeEnvironment`` :* ``SQL-1_0 | FLINK-1_6 | FLINK-1_8 | ZEPPELIN-FLINK-1_0 | FLINK-1_11 | FLINK-1_13 | ZEPPELIN-FLINK-2_0 | FLINK-1_15 | ZEPPELIN-FLINK-3_0 | FLINK-1_18 | FLINK-1_19 | FLINK-1_20``
-
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalyticsv2-application.html#cfn-kinesisanalyticsv2-application-runtimeenvironment
         '''
         result = self._values.get("runtime_environment")
@@ -9150,7 +9148,7 @@ class CfnApplicationV2Props:
     def application_maintenance_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplicationV2.ApplicationMaintenanceConfigurationProperty]]:
-        '''Describes the maintenance configuration for the application.
+        '''Specifies the maintenance window parameters for a Kinesis Data Analytics application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalyticsv2-application.html#cfn-kinesisanalyticsv2-application-applicationmaintenanceconfiguration
         '''

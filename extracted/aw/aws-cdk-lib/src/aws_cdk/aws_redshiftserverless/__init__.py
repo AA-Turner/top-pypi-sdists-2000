@@ -1352,7 +1352,7 @@ class CfnWorkgroup(
         :param id: Construct identifier for this resource (unique in its scope).
         :param workgroup_name: The name of the workgroup.
         :param base_capacity: The base compute capacity of the workgroup in Redshift Processing Units (RPUs).
-        :param config_parameters: A list of parameters to set for finer control over a database. Available options are ``datestyle`` , ``enable_user_activity_logging`` , ``query_group`` , ``search_path`` , ``max_query_execution_time`` , and ``require_ssl`` .
+        :param config_parameters: The key of the parameter. The options are ``auto_mv`` , ``datestyle`` , ``enable_case_sensitive_identifier`` , ``enable_user_activity_logging`` , ``query_group`` , ``search_path`` , ``require_ssl`` , ``use_fips_ssl`` , and query monitoring metrics that let you define performance boundaries. For more information about query monitoring rules and available metrics, see `Query monitoring metrics for Amazon Redshift Serverless <https://docs.aws.amazon.com/redshift/latest/dg/cm-c-wlm-query-monitoring-rules.html#cm-c-wlm-query-monitoring-metrics-serverless>`_ .
         :param enhanced_vpc_routing: The value that specifies whether to enable enhanced virtual private cloud (VPC) routing, which forces Amazon Redshift Serverless to route traffic through your VPC. Default: - false
         :param max_capacity: The maximum data-warehouse capacity Amazon Redshift Serverless uses to serve queries. The max capacity is specified in RPUs.
         :param namespace_name: The namespace the workgroup is associated with.
@@ -1639,7 +1639,7 @@ class CfnWorkgroup(
     def config_parameters(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkgroup.ConfigParameterProperty"]]]]:
-        '''A list of parameters to set for finer control over a database.'''
+        '''The key of the parameter.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkgroup.ConfigParameterProperty"]]]], jsii.get(self, "configParameters"))
 
     @config_parameters.setter
@@ -1887,7 +1887,7 @@ class CfnWorkgroup(
         ) -> None:
             '''A array of parameters to set for more control over a serverless database.
 
-            :param parameter_key: The key of the parameter. The options are ``datestyle`` , ``enable_user_activity_logging`` , ``query_group`` , ``search_path`` , ``max_query_execution_time`` , and ``require_ssl`` .
+            :param parameter_key: The key of the parameter. The options are ``auto_mv`` , ``datestyle`` , ``enable_case_sensitive_identifier`` , ``enable_user_activity_logging`` , ``query_group`` , ``search_path`` , ``require_ssl`` , ``use_fips_ssl`` , and query monitoring metrics that let you define performance boundaries. For more information about query monitoring rules and available metrics, see `Query monitoring metrics for Amazon Redshift Serverless <https://docs.aws.amazon.com/redshift/latest/dg/cm-c-wlm-query-monitoring-rules.html#cm-c-wlm-query-monitoring-metrics-serverless>`_ .
             :param parameter_value: The value of the parameter to set.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-redshiftserverless-workgroup-configparameter.html
@@ -1918,7 +1918,7 @@ class CfnWorkgroup(
         def parameter_key(self) -> typing.Optional[builtins.str]:
             '''The key of the parameter.
 
-            The options are ``datestyle`` , ``enable_user_activity_logging`` , ``query_group`` , ``search_path`` , ``max_query_execution_time`` , and ``require_ssl`` .
+            The options are ``auto_mv`` , ``datestyle`` , ``enable_case_sensitive_identifier`` , ``enable_user_activity_logging`` , ``query_group`` , ``search_path`` , ``require_ssl`` , ``use_fips_ssl`` , and query monitoring metrics that let you define performance boundaries. For more information about query monitoring rules and available metrics, see `Query monitoring metrics for Amazon Redshift Serverless <https://docs.aws.amazon.com/redshift/latest/dg/cm-c-wlm-query-monitoring-rules.html#cm-c-wlm-query-monitoring-metrics-serverless>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-redshiftserverless-workgroup-configparameter.html#cfn-redshiftserverless-workgroup-configparameter-parameterkey
             '''
@@ -2702,7 +2702,7 @@ class CfnWorkgroupProps:
 
         :param workgroup_name: The name of the workgroup.
         :param base_capacity: The base compute capacity of the workgroup in Redshift Processing Units (RPUs).
-        :param config_parameters: A list of parameters to set for finer control over a database. Available options are ``datestyle`` , ``enable_user_activity_logging`` , ``query_group`` , ``search_path`` , ``max_query_execution_time`` , and ``require_ssl`` .
+        :param config_parameters: The key of the parameter. The options are ``auto_mv`` , ``datestyle`` , ``enable_case_sensitive_identifier`` , ``enable_user_activity_logging`` , ``query_group`` , ``search_path`` , ``require_ssl`` , ``use_fips_ssl`` , and query monitoring metrics that let you define performance boundaries. For more information about query monitoring rules and available metrics, see `Query monitoring metrics for Amazon Redshift Serverless <https://docs.aws.amazon.com/redshift/latest/dg/cm-c-wlm-query-monitoring-rules.html#cm-c-wlm-query-monitoring-metrics-serverless>`_ .
         :param enhanced_vpc_routing: The value that specifies whether to enable enhanced virtual private cloud (VPC) routing, which forces Amazon Redshift Serverless to route traffic through your VPC. Default: - false
         :param max_capacity: The maximum data-warehouse capacity Amazon Redshift Serverless uses to serve queries. The max capacity is specified in RPUs.
         :param namespace_name: The namespace the workgroup is associated with.
@@ -2877,9 +2877,9 @@ class CfnWorkgroupProps:
     def config_parameters(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnWorkgroup.ConfigParameterProperty]]]]:
-        '''A list of parameters to set for finer control over a database.
+        '''The key of the parameter.
 
-        Available options are ``datestyle`` , ``enable_user_activity_logging`` , ``query_group`` , ``search_path`` , ``max_query_execution_time`` , and ``require_ssl`` .
+        The options are ``auto_mv`` , ``datestyle`` , ``enable_case_sensitive_identifier`` , ``enable_user_activity_logging`` , ``query_group`` , ``search_path`` , ``require_ssl`` , ``use_fips_ssl`` , and query monitoring metrics that let you define performance boundaries. For more information about query monitoring rules and available metrics, see `Query monitoring metrics for Amazon Redshift Serverless <https://docs.aws.amazon.com/redshift/latest/dg/cm-c-wlm-query-monitoring-rules.html#cm-c-wlm-query-monitoring-metrics-serverless>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshiftserverless-workgroup.html#cfn-redshiftserverless-workgroup-configparameters
         '''

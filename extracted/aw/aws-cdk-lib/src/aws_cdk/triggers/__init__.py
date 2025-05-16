@@ -620,6 +620,12 @@ class TriggerFunction(
             check_type(argname="argument scopes", value=scopes, expected_type=typing.Tuple[type_hints["scopes"], ...]) # pyright: ignore [reportGeneralTypeIssues]
         return typing.cast(None, jsii.invoke(self, "executeBefore", [*scopes]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="trigger")
     def trigger(self) -> Trigger:

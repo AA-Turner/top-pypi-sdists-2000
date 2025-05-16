@@ -3221,6 +3221,12 @@ class Listener(
 
         return typing.cast("EndpointGroup", jsii.invoke(self, "addEndpointGroup", [id, options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="listenerArn")
     def listener_arn(self) -> builtins.str:
@@ -3961,6 +3967,12 @@ class Accelerator(
 
         return typing.cast(Listener, jsii.invoke(self, "addListener", [id, options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="acceleratorArn")
     def accelerator_arn(self) -> builtins.str:
@@ -4136,6 +4148,12 @@ class EndpointGroup(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
         return typing.cast(_IPeer_cf58db9a, jsii.invoke(self, "connectionsPeer", [id, vpc]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="endpointGroupArn")

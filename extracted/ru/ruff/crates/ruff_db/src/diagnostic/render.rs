@@ -140,7 +140,6 @@ impl std::fmt::Display for DisplayDiagnostic<'_> {
 /// both.)
 #[derive(Debug)]
 struct Resolved<'a> {
-    id: String,
     diagnostics: Vec<ResolvedDiagnostic<'a>>,
 }
 
@@ -152,14 +151,12 @@ impl<'a> Resolved<'a> {
         for sub in &diag.inner.subs {
             diagnostics.push(ResolvedDiagnostic::from_sub_diagnostic(resolver, sub));
         }
-        let id = diag.inner.id.to_string();
-        Resolved { id, diagnostics }
+        Resolved { diagnostics }
     }
 
     /// Creates a value that is amenable to rendering directly.
     fn to_renderable(&self, context: usize) -> Renderable<'_> {
         Renderable {
-            id: &self.id,
             diagnostics: self
                 .diagnostics
                 .iter()
@@ -177,6 +174,7 @@ impl<'a> Resolved<'a> {
 #[derive(Debug)]
 struct ResolvedDiagnostic<'a> {
     severity: Severity,
+    id: Option<String>,
     message: String,
     annotations: Vec<ResolvedAnnotation<'a>>,
 }
@@ -197,20 +195,11 @@ impl<'a> ResolvedDiagnostic<'a> {
                 ResolvedAnnotation::new(path, &diagnostic_source, ann)
             })
             .collect();
-        let message = if diag.inner.message.as_str().is_empty() {
-            diag.inner.id.to_string()
-        } else {
-            // TODO: See the comment on `Renderable::id` for
-            // a plausible better idea than smushing the ID
-            // into the diagnostic message.
-            format!(
-                "{id}: {message}",
-                id = diag.inner.id,
-                message = diag.inner.message.as_str(),
-            )
-        };
+        let id = Some(diag.inner.id.to_string());
+        let message = diag.inner.message.as_str().to_string();
         ResolvedDiagnostic {
             severity: diag.inner.severity,
+            id,
             message,
             annotations,
         }
@@ -233,6 +222,7 @@ impl<'a> ResolvedDiagnostic<'a> {
             .collect();
         ResolvedDiagnostic {
             severity: diag.inner.severity,
+            id: None,
             message: diag.inner.message.as_str().to_string(),
             annotations,
         }
@@ -299,6 +289,7 @@ impl<'a> ResolvedDiagnostic<'a> {
             .sort_by(|snips1, snips2| snips1.has_primary.cmp(&snips2.has_primary).reverse());
         RenderableDiagnostic {
             severity: self.severity,
+            id: self.id.as_deref(),
             message: &self.message,
             snippets_by_input,
         }
@@ -378,20 +369,6 @@ impl<'a> ResolvedAnnotation<'a> {
 /// renderable value. This is usually the lifetime of `Resolved`.
 #[derive(Debug)]
 struct Renderable<'r> {
-    // TODO: This is currently unused in the rendering logic below. I'm not
-    // 100% sure yet where I want to put it, but I like what `rustc` does:
-    //
-    //     error[E0599]: no method named `sub_builder` <..snip..>
-    //
-    // I believe in order to do this, we'll need to patch it in to
-    // `ruff_annotate_snippets` though. We leave it here for now with that plan
-    // in mind.
-    //
-    // (At time of writing, 2025-03-13, we currently render the diagnostic
-    // ID into the main message of the parent diagnostic. We don't use this
-    // specific field to do that though.)
-    #[expect(dead_code)]
-    id: &'r str,
     diagnostics: Vec<RenderableDiagnostic<'r>>,
 }
 
@@ -400,6 +377,12 @@ struct Renderable<'r> {
 struct RenderableDiagnostic<'r> {
     /// The severity of the diagnostic.
     severity: Severity,
+    /// The ID of the diagnostic. The ID can usually be used on the CLI or in a
+    /// config file to change the severity of a lint.
+    ///
+    /// An ID is always present for top-level diagnostics and always absent for
+    /// sub-diagnostics.
+    id: Option<&'r str>,
     /// The message emitted with the diagnostic, before any snippets are
     /// rendered.
     message: &'r str,
@@ -420,7 +403,11 @@ impl RenderableDiagnostic<'_> {
                 .iter()
                 .map(|snippet| snippet.to_annotate(path))
         });
-        level.title(self.message).snippets(snippets)
+        let mut message = level.title(self.message);
+        if let Some(id) = self.id {
+            message = message.id(id);
+        }
+        message.snippets(snippets)
     }
 }
 
@@ -799,7 +786,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         3 | canary
@@ -823,7 +810,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        warning: lint:test-diagnostic: main diagnostic message
+        warning[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         3 | canary
@@ -843,7 +830,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        info: lint:test-diagnostic: main diagnostic message
+        info[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         3 | canary
@@ -870,7 +857,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:1:1
           |
         1 | aardvark
@@ -889,7 +876,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:1:1
           |
         1 | aardvark
@@ -910,7 +897,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> non-ascii:5:1
           |
         3 | ΔΔΔΔΔΔΔΔΔΔΔΔ
@@ -929,7 +916,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> non-ascii:2:2
           |
         1 | ☃☃☃☃☃☃☃☃☃☃☃☃
@@ -953,7 +940,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         4 | dog
@@ -970,7 +957,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         5 | elephant
@@ -985,7 +972,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:1:1
           |
         1 | aardvark
@@ -1002,7 +989,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> animals:11:1
            |
          9 | inchworm
@@ -1019,7 +1006,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> animals:5:1
            |
          1 | aardvark
@@ -1052,7 +1039,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> animals:1:1
            |
          1 | aardvark
@@ -1096,7 +1083,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:1:1
           |
         1 | aardvark
@@ -1121,7 +1108,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:1:1
           |
         1 | aardvark
@@ -1149,7 +1136,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:1:1
           |
         1 | aardvark
@@ -1177,7 +1164,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:1:1
           |
         1 | aardvark
@@ -1202,7 +1189,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> animals:1:1
            |
          1 | aardvark
@@ -1233,7 +1220,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> animals:1:1
            |
          1 | aardvark
@@ -1271,7 +1258,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> spacey-animals:8:1
           |
         7 | dog
@@ -1288,7 +1275,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> spacey-animals:12:1
            |
         11 | gorilla
@@ -1306,7 +1293,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> spacey-animals:13:1
            |
         11 | gorilla
@@ -1346,7 +1333,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> spacey-animals:3:1
           |
         3 | beetle
@@ -1375,7 +1362,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:3:1
           |
         1 | aardvark
@@ -1412,7 +1399,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:3:1
           |
         1 | aardvark
@@ -1449,7 +1436,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:3:1
           |
         1 | aardvark
@@ -1477,7 +1464,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:3:1
           |
         1 | aardvark
@@ -1513,7 +1500,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:3:1
           |
         1 | aardvark
@@ -1552,7 +1539,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:3:1
           |
         1 | aardvark
@@ -1600,7 +1587,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:3:1
           |
         1 | aardvark
@@ -1636,7 +1623,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         3 |   canary
@@ -1659,7 +1646,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         3 |   canary
@@ -1679,7 +1666,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         3 |   canary
@@ -1699,7 +1686,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> animals:5:4
            |
          3 |   canary
@@ -1721,7 +1708,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> animals:5:4
            |
          3 |   canary
@@ -1753,7 +1740,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:4:1
           |
         2 |    beetle
@@ -1782,7 +1769,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:4:1
           |
         2 |    beetle
@@ -1813,7 +1800,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         3 |    canary
@@ -1848,7 +1835,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         3 |    canary
@@ -1876,7 +1863,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         3 |    canary
@@ -1908,7 +1895,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:3
           |
         3 | canary
@@ -1930,7 +1917,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:3
           |
         3 | canary
@@ -1963,7 +1950,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> animals:8:1
            |
          6 | finch
@@ -2003,7 +1990,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> animals:5:1
           |
         5 | elephant
@@ -2047,7 +2034,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
          --> fruits:1:1
           |
         1 | apple
@@ -2082,7 +2069,7 @@ watermelon
         insta::assert_snapshot!(
             env.render(&diag),
             @r"
-        error: lint:test-diagnostic: main diagnostic message
+        error[test-diagnostic]: main diagnostic message
           --> animals:11:1
            |
         11 | kangaroo

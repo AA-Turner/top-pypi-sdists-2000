@@ -210,7 +210,54 @@ route53.ARecord(self, "ARecordMultiValue1",
 )
 ```
 
-To specify a unique identifier to differentiate among multiple resource record sets that have the same combination of name and type, use the `setIdentifier` parameter:
+To enable [IP-based routing](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-ipbased.html), use the `cidrRoutingConfig` parameter:
+
+```python
+# my_zone: route53.HostedZone
+
+
+cidr_collection = route53.CfnCidrCollection(self, "CidrCollection",
+    name="test-collection",
+    locations=[route53.CfnCidrCollection.LocationProperty(
+        cidr_list=["192.168.1.0/24"],
+        location_name="my_location"
+    )]
+)
+
+route53.ARecord(self, "CidrRoutingConfig",
+    zone=my_zone,
+    target=route53.RecordTarget.from_ip_addresses("1.2.3.4"),
+    set_identifier="test",
+    cidr_routing_config=route53.CidrRoutingConfig.create(
+        collection_id=cidr_collection.attr_id,
+        location_name="test_location"
+    )
+)
+```
+
+To use the default CIDR record, call the `route53.CidrRoutingConfig.default`. This sets the `locationName` to `*`. The `collectionId` is still required.
+
+```python
+# my_zone: route53.HostedZone
+
+
+cidr_collection = route53.CfnCidrCollection(self, "CidrCollection",
+    name="test-collection",
+    locations=[route53.CfnCidrCollection.LocationProperty(
+        cidr_list=["192.168.1.0/24"],
+        location_name="my_location"
+    )]
+)
+
+route53.ARecord(self, "DefaultCidrRoutingConfig",
+    zone=my_zone,
+    target=route53.RecordTarget.from_ip_addresses("5.6.7.8"),
+    set_identifier="default",
+    cidr_routing_config=route53.CidrRoutingConfig.with_default_location_name(cidr_collection.attr_id)
+)
+```
+
+To specify a unique identifier to differentiate among multiple resource record sets that have the same combination of name and type, use the `setIdentifier` parameter:
 
 ```python
 # my_zone: route53.HostedZone
@@ -868,22 +915,29 @@ class CfnCidrCollection(
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-cidrcollection.html
     :cloudformationResource: AWS::Route53::CidrCollection
-    :exampleMetadata: fixture=_generated
+    :exampleMetadata: infused
 
     Example::
 
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_route53 as route53
+        # my_zone: route53.HostedZone
         
-        cfn_cidr_collection = route53.CfnCidrCollection(self, "MyCfnCidrCollection",
-            name="name",
         
-            # the properties below are optional
+        cidr_collection = route53.CfnCidrCollection(self, "CidrCollection",
+            name="test-collection",
             locations=[route53.CfnCidrCollection.LocationProperty(
-                cidr_list=["cidrList"],
-                location_name="locationName"
+                cidr_list=["192.168.1.0/24"],
+                location_name="my_location"
             )]
+        )
+        
+        route53.ARecord(self, "CidrRoutingConfig",
+            zone=my_zone,
+            target=route53.RecordTarget.from_ip_addresses("1.2.3.4"),
+            set_identifier="test",
+            cidr_routing_config=route53.CidrRoutingConfig.create(
+                collection_id=cidr_collection.attr_id,
+                location_name="test_location"
+            )
         )
     '''
 
@@ -1083,22 +1137,29 @@ class CfnCidrCollectionProps:
         :param locations: A complex type that contains information about the list of CIDR locations.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-cidrcollection.html
-        :exampleMetadata: fixture=_generated
+        :exampleMetadata: infused
 
         Example::
 
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_route53 as route53
+            # my_zone: route53.HostedZone
             
-            cfn_cidr_collection_props = route53.CfnCidrCollectionProps(
-                name="name",
             
-                # the properties below are optional
+            cidr_collection = route53.CfnCidrCollection(self, "CidrCollection",
+                name="test-collection",
                 locations=[route53.CfnCidrCollection.LocationProperty(
-                    cidr_list=["cidrList"],
-                    location_name="locationName"
+                    cidr_list=["192.168.1.0/24"],
+                    location_name="my_location"
                 )]
+            )
+            
+            route53.ARecord(self, "CidrRoutingConfig",
+                zone=my_zone,
+                target=route53.RecordTarget.from_ip_addresses("1.2.3.4"),
+                set_identifier="test",
+                cidr_routing_config=route53.CidrRoutingConfig.create(
+                    collection_id=cidr_collection.attr_id,
+                    location_name="test_location"
+                )
             )
         '''
         if __debug__:
@@ -6150,6 +6211,170 @@ class CfnRecordSetProps:
         )
 
 
+class CidrRoutingConfig(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_route53.CidrRoutingConfig",
+):
+    '''Configuration for CIDR routing in Route 53 resource record set objects.
+
+    :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+    :exampleMetadata: infused
+
+    Example::
+
+        # my_zone: route53.HostedZone
+        
+        
+        cidr_collection = route53.CfnCidrCollection(self, "CidrCollection",
+            name="test-collection",
+            locations=[route53.CfnCidrCollection.LocationProperty(
+                cidr_list=["192.168.1.0/24"],
+                location_name="my_location"
+            )]
+        )
+        
+        route53.ARecord(self, "CidrRoutingConfig",
+            zone=my_zone,
+            target=route53.RecordTarget.from_ip_addresses("1.2.3.4"),
+            set_identifier="test",
+            cidr_routing_config=route53.CidrRoutingConfig.create(
+                collection_id=cidr_collection.attr_id,
+                location_name="test_location"
+            )
+        )
+    '''
+
+    @jsii.member(jsii_name="create")
+    @builtins.classmethod
+    def create(
+        cls,
+        *,
+        collection_id: builtins.str,
+        location_name: typing.Optional[builtins.str] = None,
+    ) -> "CidrRoutingConfig":
+        '''Creates a new instance of CidrRoutingConfig.
+
+        :param collection_id: The CIDR collection ID.
+        :param location_name: The CIDR collection location name. Default: ``*``
+        '''
+        props = CidrRoutingConfigProps(
+            collection_id=collection_id, location_name=location_name
+        )
+
+        return typing.cast("CidrRoutingConfig", jsii.sinvoke(cls, "create", [props]))
+
+    @jsii.member(jsii_name="withDefaultLocationName")
+    @builtins.classmethod
+    def with_default_location_name(
+        cls,
+        collection_id: builtins.str,
+    ) -> "CidrRoutingConfig":
+        '''Creates a new instance of CidrRoutingConfig for default CIDR record.
+
+        This method defines the locationName as ``*``.
+
+        :param collection_id: The CIDR collection ID.
+
+        :return: A new instance of CidrRoutingConfig with the default location name as ``*``.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1b3062acaf063c194e911820073130a65424f55f49053b79198d7fc79931f82d)
+            check_type(argname="argument collection_id", value=collection_id, expected_type=type_hints["collection_id"])
+        return typing.cast("CidrRoutingConfig", jsii.sinvoke(cls, "withDefaultLocationName", [collection_id]))
+
+    @builtins.property
+    @jsii.member(jsii_name="collectionId")
+    def collection_id(self) -> builtins.str:
+        '''The CIDR collection ID.'''
+        return typing.cast(builtins.str, jsii.get(self, "collectionId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="locationName")
+    def location_name(self) -> builtins.str:
+        '''The CIDR collection location name.'''
+        return typing.cast(builtins.str, jsii.get(self, "locationName"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_route53.CidrRoutingConfigProps",
+    jsii_struct_bases=[],
+    name_mapping={"collection_id": "collectionId", "location_name": "locationName"},
+)
+class CidrRoutingConfigProps:
+    def __init__(
+        self,
+        *,
+        collection_id: builtins.str,
+        location_name: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for configuring CIDR routing in Route 53 resource record set objects.
+
+        :param collection_id: The CIDR collection ID.
+        :param location_name: The CIDR collection location name. Default: ``*``
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # my_zone: route53.HostedZone
+            
+            
+            cidr_collection = route53.CfnCidrCollection(self, "CidrCollection",
+                name="test-collection",
+                locations=[route53.CfnCidrCollection.LocationProperty(
+                    cidr_list=["192.168.1.0/24"],
+                    location_name="my_location"
+                )]
+            )
+            
+            route53.ARecord(self, "CidrRoutingConfig",
+                zone=my_zone,
+                target=route53.RecordTarget.from_ip_addresses("1.2.3.4"),
+                set_identifier="test",
+                cidr_routing_config=route53.CidrRoutingConfig.create(
+                    collection_id=cidr_collection.attr_id,
+                    location_name="test_location"
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__510f03d6221534b2d6d0a4bda86f20f5ff3efa07a26a50f14673b2b5b5e13a0a)
+            check_type(argname="argument collection_id", value=collection_id, expected_type=type_hints["collection_id"])
+            check_type(argname="argument location_name", value=location_name, expected_type=type_hints["location_name"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "collection_id": collection_id,
+        }
+        if location_name is not None:
+            self._values["location_name"] = location_name
+
+    @builtins.property
+    def collection_id(self) -> builtins.str:
+        '''The CIDR collection ID.'''
+        result = self._values.get("collection_id")
+        assert result is not None, "Required property 'collection_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def location_name(self) -> typing.Optional[builtins.str]:
+        '''The CIDR collection location name.
+
+        :default: ``*``
+        '''
+        result = self._values.get("location_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CidrRoutingConfigProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.CommonHostedZoneProps",
     jsii_struct_bases=[],
@@ -7823,6 +8048,12 @@ class KeySigningKey(
 
         return typing.cast(IKeySigningKey, jsii.sinvoke(cls, "fromKeySigningKeyAttributes", [scope, id, attrs]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="hostedZone")
     def hosted_zone(self) -> IHostedZone:
@@ -8514,6 +8745,7 @@ class RecordSet(
         import aws_cdk as cdk
         from aws_cdk import aws_route53 as route53
         
+        # cidr_routing_config: route53.CidrRoutingConfig
         # geo_location: route53.GeoLocation
         # health_check: route53.HealthCheck
         # hosted_zone: route53.HostedZone
@@ -8525,6 +8757,7 @@ class RecordSet(
             zone=hosted_zone,
         
             # the properties below are optional
+            cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
             geo_location=geo_location,
@@ -8546,6 +8779,7 @@ class RecordSet(
         record_type: "RecordType",
         target: "RecordTarget",
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -8563,6 +8797,7 @@ class RecordSet(
         :param record_type: The record type.
         :param target: The target for this record, either ``RecordTarget.fromValues()`` or ``RecordTarget.fromAlias()``.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -8582,6 +8817,7 @@ class RecordSet(
             record_type=record_type,
             target=target,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -8596,6 +8832,12 @@ class RecordSet(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="domainName")
     def domain_name(self) -> builtins.str:
@@ -8608,6 +8850,7 @@ class RecordSet(
     jsii_struct_bases=[],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -8625,6 +8868,7 @@ class RecordSetOptions:
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -8639,6 +8883,7 @@ class RecordSetOptions:
         '''Options for a RecordSet.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -8659,6 +8904,7 @@ class RecordSetOptions:
             import aws_cdk as cdk
             from aws_cdk import aws_route53 as route53
             
+            # cidr_routing_config: route53.CidrRoutingConfig
             # geo_location: route53.GeoLocation
             # health_check: route53.HealthCheck
             # hosted_zone: route53.HostedZone
@@ -8667,6 +8913,7 @@ class RecordSetOptions:
                 zone=hosted_zone,
             
                 # the properties below are optional
+                cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
                 geo_location=geo_location,
@@ -8682,6 +8929,7 @@ class RecordSetOptions:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c44f39638a001e90bc1175667e4764c4cbde27cade202d52a4f4d87246c57781)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -8695,6 +8943,8 @@ class RecordSetOptions:
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "zone": zone,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -8722,6 +8972,19 @@ class RecordSetOptions:
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -8865,6 +9128,7 @@ class RecordSetOptions:
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -8884,6 +9148,7 @@ class RecordSetProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -8900,6 +9165,7 @@ class RecordSetProps(RecordSetOptions):
         '''Construction properties for a RecordSet.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -8922,6 +9188,7 @@ class RecordSetProps(RecordSetOptions):
             import aws_cdk as cdk
             from aws_cdk import aws_route53 as route53
             
+            # cidr_routing_config: route53.CidrRoutingConfig
             # geo_location: route53.GeoLocation
             # health_check: route53.HealthCheck
             # hosted_zone: route53.HostedZone
@@ -8933,6 +9200,7 @@ class RecordSetProps(RecordSetOptions):
                 zone=hosted_zone,
             
                 # the properties below are optional
+                cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
                 geo_location=geo_location,
@@ -8948,6 +9216,7 @@ class RecordSetProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__038200686c47ef30f81bc5289a6235e766372281295129670053b793d545dfca)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -8965,6 +9234,8 @@ class RecordSetProps(RecordSetOptions):
             "record_type": record_type,
             "target": target,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -8992,6 +9263,19 @@ class RecordSetProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -9154,18 +9438,15 @@ class RecordTarget(
 
     Example::
 
-        from aws_cdk.region_info import RegionInfo
+        import aws_cdk.aws_apigatewayv2 as apigwv2
         
         # zone: route53.HostedZone
-        # ebs_environment_url: str
+        # domain_name: apigwv2.DomainName
         
         
         route53.ARecord(self, "AliasRecord",
             zone=zone,
-            target=route53.RecordTarget.from_alias(
-                targets.ElasticBeanstalkEnvironmentEndpointTarget(ebs_environment_url, {
-                    "hosted_zone_id": RegionInfo.get("us-east-1").ebs_env_endpoint_hosted_zone_id
-                }))
+            target=route53.RecordTarget.from_alias(targets.ApiGatewayv2DomainProperties(domain_name.regional_domain_name, domain_name.regional_hosted_zone_id))
         )
     '''
 
@@ -9356,6 +9637,7 @@ class SrvRecord(
         import aws_cdk as cdk
         from aws_cdk import aws_route53 as route53
         
+        # cidr_routing_config: route53.CidrRoutingConfig
         # geo_location: route53.GeoLocation
         # health_check: route53.HealthCheck
         # hosted_zone: route53.HostedZone
@@ -9370,6 +9652,7 @@ class SrvRecord(
             zone=hosted_zone,
         
             # the properties below are optional
+            cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
             geo_location=geo_location,
@@ -9390,6 +9673,7 @@ class SrvRecord(
         *,
         values: typing.Sequence[typing.Union["SrvRecordValue", typing.Dict[builtins.str, typing.Any]]],
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -9406,6 +9690,7 @@ class SrvRecord(
         :param id: -
         :param values: The values.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -9424,6 +9709,7 @@ class SrvRecord(
         props = SrvRecordProps(
             values=values,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -9438,12 +9724,19 @@ class SrvRecord(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.SrvRecordProps",
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -9462,6 +9755,7 @@ class SrvRecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -9477,6 +9771,7 @@ class SrvRecordProps(RecordSetOptions):
         '''Construction properties for a SrvRecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -9498,6 +9793,7 @@ class SrvRecordProps(RecordSetOptions):
             import aws_cdk as cdk
             from aws_cdk import aws_route53 as route53
             
+            # cidr_routing_config: route53.CidrRoutingConfig
             # geo_location: route53.GeoLocation
             # health_check: route53.HealthCheck
             # hosted_zone: route53.HostedZone
@@ -9512,6 +9808,7 @@ class SrvRecordProps(RecordSetOptions):
                 zone=hosted_zone,
             
                 # the properties below are optional
+                cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
                 geo_location=geo_location,
@@ -9527,6 +9824,7 @@ class SrvRecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__803828161f541995c058596dab53102f2eccd14ba565bbe715a5ac29353f6db9)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -9542,6 +9840,8 @@ class SrvRecordProps(RecordSetOptions):
             "zone": zone,
             "values": values,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -9569,6 +9869,19 @@ class SrvRecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -9841,6 +10154,7 @@ class TxtRecord(
         *,
         values: typing.Sequence[builtins.str],
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -9857,6 +10171,7 @@ class TxtRecord(
         :param id: -
         :param values: The text values.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -9875,6 +10190,7 @@ class TxtRecord(
         props = TxtRecordProps(
             values=values,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -9889,12 +10205,19 @@ class TxtRecord(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.TxtRecordProps",
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -9913,6 +10236,7 @@ class TxtRecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -9928,6 +10252,7 @@ class TxtRecordProps(RecordSetOptions):
         '''Construction properties for a TxtRecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -9960,6 +10285,7 @@ class TxtRecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1925dd23d881cbbf99625b9a5fe0ef65b92a92359376c46e49b6690f1a4a9dab)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -9975,6 +10301,8 @@ class TxtRecordProps(RecordSetOptions):
             "zone": zone,
             "values": values,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -10002,6 +10330,19 @@ class TxtRecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -10388,6 +10729,7 @@ class ZoneDelegationRecord(
         import aws_cdk as cdk
         from aws_cdk import aws_route53 as route53
         
+        # cidr_routing_config: route53.CidrRoutingConfig
         # geo_location: route53.GeoLocation
         # health_check: route53.HealthCheck
         # hosted_zone: route53.HostedZone
@@ -10397,6 +10739,7 @@ class ZoneDelegationRecord(
             zone=hosted_zone,
         
             # the properties below are optional
+            cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
             geo_location=geo_location,
@@ -10417,6 +10760,7 @@ class ZoneDelegationRecord(
         *,
         name_servers: typing.Sequence[builtins.str],
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -10433,6 +10777,7 @@ class ZoneDelegationRecord(
         :param id: -
         :param name_servers: The name servers to report in the delegation records.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -10451,6 +10796,7 @@ class ZoneDelegationRecord(
         props = ZoneDelegationRecordProps(
             name_servers=name_servers,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -10465,12 +10811,19 @@ class ZoneDelegationRecord(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.ZoneDelegationRecordProps",
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -10489,6 +10842,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -10504,6 +10858,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         '''Construction properties for a ZoneDelegationRecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -10525,6 +10880,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
             import aws_cdk as cdk
             from aws_cdk import aws_route53 as route53
             
+            # cidr_routing_config: route53.CidrRoutingConfig
             # geo_location: route53.GeoLocation
             # health_check: route53.HealthCheck
             # hosted_zone: route53.HostedZone
@@ -10534,6 +10890,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
                 zone=hosted_zone,
             
                 # the properties below are optional
+                cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
                 geo_location=geo_location,
@@ -10549,6 +10906,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__240a965753acb9488d02c120074027364f5e85a8ec585205a863174feadd7582)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -10564,6 +10922,8 @@ class ZoneDelegationRecordProps(RecordSetOptions):
             "zone": zone,
             "name_servers": name_servers,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -10591,6 +10951,19 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -10847,6 +11220,7 @@ class ARecord(
         *,
         target: RecordTarget,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -10863,6 +11237,7 @@ class ARecord(
         :param id: -
         :param target: The target.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -10881,6 +11256,7 @@ class ARecord(
         props = ARecordProps(
             target=target,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -10904,6 +11280,7 @@ class ARecord(
         *,
         target_dns: builtins.str,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -10924,6 +11301,7 @@ class ARecord(
         :param id: Logical Id of the resource.
         :param target_dns: Existing A record DNS name to set RecordTarget.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -10946,6 +11324,7 @@ class ARecord(
         attrs = ARecordAttrs(
             target_dns=target_dns,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -10960,12 +11339,19 @@ class ARecord(
 
         return typing.cast("ARecord", jsii.sinvoke(cls, "fromARecordAttributes", [scope, id, attrs]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.ARecordAttrs",
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -10984,6 +11370,7 @@ class ARecordAttrs(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -10999,6 +11386,7 @@ class ARecordAttrs(RecordSetOptions):
         '''Construction properties to import existing ARecord as target.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -11028,6 +11416,7 @@ class ARecordAttrs(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__514d7eccc21be019febe80e121fd7d979162668b63cb99051c629ef087f5fe9a)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -11043,6 +11432,8 @@ class ARecordAttrs(RecordSetOptions):
             "zone": zone,
             "target_dns": target_dns,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -11070,6 +11461,19 @@ class ARecordAttrs(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -11220,6 +11624,7 @@ class ARecordAttrs(RecordSetOptions):
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -11238,6 +11643,7 @@ class ARecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -11253,6 +11659,7 @@ class ARecordProps(RecordSetOptions):
         '''Construction properties for a ARecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -11286,6 +11693,7 @@ class ARecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a73a5c86411a0d853fcfad820ed58f5a5c19df65a7b2756560958db5cbe36569)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -11301,6 +11709,8 @@ class ARecordProps(RecordSetOptions):
             "zone": zone,
             "target": target,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -11328,6 +11738,19 @@ class ARecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -11503,6 +11926,7 @@ class AaaaRecord(
         *,
         target: RecordTarget,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -11519,6 +11943,7 @@ class AaaaRecord(
         :param id: -
         :param target: The target.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -11537,6 +11962,7 @@ class AaaaRecord(
         props = AaaaRecordProps(
             target=target,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -11551,12 +11977,19 @@ class AaaaRecord(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.AaaaRecordProps",
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -11575,6 +12008,7 @@ class AaaaRecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -11590,6 +12024,7 @@ class AaaaRecordProps(RecordSetOptions):
         '''Construction properties for a AaaaRecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -11619,6 +12054,7 @@ class AaaaRecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c051ff70083b2ae68889d3f02be8344125acf64b4768d5f5df3298ba8a8d6a32)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -11634,6 +12070,8 @@ class AaaaRecordProps(RecordSetOptions):
             "zone": zone,
             "target": target,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -11661,6 +12099,19 @@ class AaaaRecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -11811,6 +12262,7 @@ class AaaaRecordProps(RecordSetOptions):
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -11828,6 +12280,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -11842,6 +12295,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
         '''Construction properties for a CaaAmazonRecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -11862,6 +12316,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
             import aws_cdk as cdk
             from aws_cdk import aws_route53 as route53
             
+            # cidr_routing_config: route53.CidrRoutingConfig
             # geo_location: route53.GeoLocation
             # health_check: route53.HealthCheck
             # hosted_zone: route53.HostedZone
@@ -11870,6 +12325,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
                 zone=hosted_zone,
             
                 # the properties below are optional
+                cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
                 geo_location=geo_location,
@@ -11885,6 +12341,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__14055fdb7d9f4b55091295996ec92db8d73fa789a21fca2664da1242ae89f859)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -11898,6 +12355,8 @@ class CaaAmazonRecordProps(RecordSetOptions):
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "zone": zone,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -11925,6 +12384,19 @@ class CaaAmazonRecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -12080,6 +12552,7 @@ class CaaRecord(
         import aws_cdk as cdk
         from aws_cdk import aws_route53 as route53
         
+        # cidr_routing_config: route53.CidrRoutingConfig
         # geo_location: route53.GeoLocation
         # health_check: route53.HealthCheck
         # hosted_zone: route53.HostedZone
@@ -12093,6 +12566,7 @@ class CaaRecord(
             zone=hosted_zone,
         
             # the properties below are optional
+            cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
             geo_location=geo_location,
@@ -12113,6 +12587,7 @@ class CaaRecord(
         *,
         values: typing.Sequence[typing.Union[CaaRecordValue, typing.Dict[builtins.str, typing.Any]]],
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -12129,6 +12604,7 @@ class CaaRecord(
         :param id: -
         :param values: The values.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -12147,6 +12623,7 @@ class CaaRecord(
         props = CaaRecordProps(
             values=values,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -12161,12 +12638,19 @@ class CaaRecord(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.CaaRecordProps",
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -12185,6 +12669,7 @@ class CaaRecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -12200,6 +12685,7 @@ class CaaRecordProps(RecordSetOptions):
         '''Construction properties for a CaaRecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -12221,6 +12707,7 @@ class CaaRecordProps(RecordSetOptions):
             import aws_cdk as cdk
             from aws_cdk import aws_route53 as route53
             
+            # cidr_routing_config: route53.CidrRoutingConfig
             # geo_location: route53.GeoLocation
             # health_check: route53.HealthCheck
             # hosted_zone: route53.HostedZone
@@ -12234,6 +12721,7 @@ class CaaRecordProps(RecordSetOptions):
                 zone=hosted_zone,
             
                 # the properties below are optional
+                cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
                 geo_location=geo_location,
@@ -12249,6 +12737,7 @@ class CaaRecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__349a94b990ddb833b270dc692692a8b37187c6f17114e02514f44accfb8de443)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -12264,6 +12753,8 @@ class CaaRecordProps(RecordSetOptions):
             "zone": zone,
             "values": values,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -12291,6 +12782,19 @@ class CaaRecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -12489,6 +12993,7 @@ class CnameRecord(
         *,
         domain_name: builtins.str,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -12505,6 +13010,7 @@ class CnameRecord(
         :param id: -
         :param domain_name: The domain name of the target that this record should point to.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -12523,6 +13029,7 @@ class CnameRecord(
         props = CnameRecordProps(
             domain_name=domain_name,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -12537,12 +13044,19 @@ class CnameRecord(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.CnameRecordProps",
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -12561,6 +13075,7 @@ class CnameRecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -12576,6 +13091,7 @@ class CnameRecordProps(RecordSetOptions):
         '''Construction properties for a CnameRecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -12628,6 +13144,7 @@ class CnameRecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__43b5fc8ccb719e2580c804225e8258b57b1700a701203416558eb2d76a86f86f)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -12643,6 +13160,8 @@ class CnameRecordProps(RecordSetOptions):
             "zone": zone,
             "domain_name": domain_name,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -12670,6 +13189,19 @@ class CnameRecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -12846,6 +13378,7 @@ class DsRecord(
         *,
         values: typing.Sequence[builtins.str],
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -12862,6 +13395,7 @@ class DsRecord(
         :param id: -
         :param values: The DS values.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -12880,6 +13414,7 @@ class DsRecord(
         props = DsRecordProps(
             values=values,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -12894,12 +13429,19 @@ class DsRecord(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.DsRecordProps",
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -12918,6 +13460,7 @@ class DsRecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -12933,6 +13476,7 @@ class DsRecordProps(RecordSetOptions):
         '''Construction properties for a DSRecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -12963,6 +13507,7 @@ class DsRecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f86f16d9f2de8fe03cc1189a56a86c4888d20f69dc0f241aa21b50fdf34d4645)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -12978,6 +13523,8 @@ class DsRecordProps(RecordSetOptions):
             "zone": zone,
             "values": values,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -13005,6 +13552,19 @@ class DsRecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -13290,6 +13850,12 @@ class HealthCheck(
             check_type(argname="argument health_check_id", value=health_check_id, expected_type=type_hints["health_check_id"])
         return typing.cast(IHealthCheck, jsii.sinvoke(cls, "fromHealthCheckId", [scope, id, health_check_id]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="healthCheckId")
     def health_check_id(self) -> builtins.str:
@@ -13485,6 +14051,12 @@ class HostedZone(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="hostedZoneArn")
     def hosted_zone_arn(self) -> builtins.str:
@@ -13536,6 +14108,7 @@ class MxRecord(
         import aws_cdk as cdk
         from aws_cdk import aws_route53 as route53
         
+        # cidr_routing_config: route53.CidrRoutingConfig
         # geo_location: route53.GeoLocation
         # health_check: route53.HealthCheck
         # hosted_zone: route53.HostedZone
@@ -13548,6 +14121,7 @@ class MxRecord(
             zone=hosted_zone,
         
             # the properties below are optional
+            cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
             geo_location=geo_location,
@@ -13568,6 +14142,7 @@ class MxRecord(
         *,
         values: typing.Sequence[typing.Union[MxRecordValue, typing.Dict[builtins.str, typing.Any]]],
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -13584,6 +14159,7 @@ class MxRecord(
         :param id: -
         :param values: The values.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -13602,6 +14178,7 @@ class MxRecord(
         props = MxRecordProps(
             values=values,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -13616,12 +14193,19 @@ class MxRecord(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.MxRecordProps",
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -13640,6 +14224,7 @@ class MxRecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -13655,6 +14240,7 @@ class MxRecordProps(RecordSetOptions):
         '''Construction properties for a MxRecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -13676,6 +14262,7 @@ class MxRecordProps(RecordSetOptions):
             import aws_cdk as cdk
             from aws_cdk import aws_route53 as route53
             
+            # cidr_routing_config: route53.CidrRoutingConfig
             # geo_location: route53.GeoLocation
             # health_check: route53.HealthCheck
             # hosted_zone: route53.HostedZone
@@ -13688,6 +14275,7 @@ class MxRecordProps(RecordSetOptions):
                 zone=hosted_zone,
             
                 # the properties below are optional
+                cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
                 geo_location=geo_location,
@@ -13703,6 +14291,7 @@ class MxRecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b259122626a3ba94eebff0b5f692944df4aa55dc550b7d113eec491e1c57307d)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -13718,6 +14307,8 @@ class MxRecordProps(RecordSetOptions):
             "zone": zone,
             "values": values,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -13745,6 +14336,19 @@ class MxRecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -13921,6 +14525,7 @@ class NsRecord(
         *,
         values: typing.Sequence[builtins.str],
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -13937,6 +14542,7 @@ class NsRecord(
         :param id: -
         :param values: The NS values.
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -13955,6 +14561,7 @@ class NsRecord(
         props = NsRecordProps(
             values=values,
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -13969,12 +14576,19 @@ class NsRecord(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.NsRecordProps",
     jsii_struct_bases=[RecordSetOptions],
     name_mapping={
         "zone": "zone",
+        "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
         "geo_location": "geoLocation",
@@ -13993,6 +14607,7 @@ class NsRecordProps(RecordSetOptions):
         self,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -14008,6 +14623,7 @@ class NsRecordProps(RecordSetOptions):
         '''Construction properties for a NSRecord.
 
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -14038,6 +14654,7 @@ class NsRecordProps(RecordSetOptions):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__33cda5fac8572316158161da713e2ceea9d3f7f56b5ee9a2a25acf331e737e86)
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
+            check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
@@ -14053,6 +14670,8 @@ class NsRecordProps(RecordSetOptions):
             "zone": zone,
             "values": values,
         }
+        if cidr_routing_config is not None:
+            self._values["cidr_routing_config"] = cidr_routing_config
         if comment is not None:
             self._values["comment"] = comment
         if delete_existing is not None:
@@ -14080,6 +14699,19 @@ class NsRecordProps(RecordSetOptions):
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
         return typing.cast(IHostedZone, result)
+
+    @builtins.property
+    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+        '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+
+        A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+
+        :default: - No CIDR routing configured
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
+        '''
+        result = self._values.get("cidr_routing_config")
+        return typing.cast(typing.Optional[CidrRoutingConfig], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -14308,6 +14940,12 @@ class PrivateHostedZone(
             check_type(argname="argument private_hosted_zone_id", value=private_hosted_zone_id, expected_type=type_hints["private_hosted_zone_id"])
         return typing.cast(IPrivateHostedZone, jsii.sinvoke(cls, "fromPrivateHostedZoneId", [scope, id, private_hosted_zone_id]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.implements(IPublicHostedZone)
 class PublicHostedZone(
@@ -14473,6 +15111,12 @@ class PublicHostedZone(
             check_type(argname="argument _vpc", value=_vpc, expected_type=type_hints["_vpc"])
         return typing.cast(None, jsii.invoke(self, "addVpc", [_vpc]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="crossAccountZoneDelegationRole")
     def cross_account_zone_delegation_role(self) -> typing.Optional[_Role_e8c6e11f]:
@@ -14500,6 +15144,7 @@ class CaaAmazonRecord(
         import aws_cdk as cdk
         from aws_cdk import aws_route53 as route53
         
+        # cidr_routing_config: route53.CidrRoutingConfig
         # geo_location: route53.GeoLocation
         # health_check: route53.HealthCheck
         # hosted_zone: route53.HostedZone
@@ -14508,6 +15153,7 @@ class CaaAmazonRecord(
             zone=hosted_zone,
         
             # the properties below are optional
+            cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
             geo_location=geo_location,
@@ -14527,6 +15173,7 @@ class CaaAmazonRecord(
         id: builtins.str,
         *,
         zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
         geo_location: typing.Optional[GeoLocation] = None,
@@ -14542,6 +15189,7 @@ class CaaAmazonRecord(
         :param scope: -
         :param id: -
         :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
@@ -14559,6 +15207,7 @@ class CaaAmazonRecord(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CaaAmazonRecordProps(
             zone=zone,
+            cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
             geo_location=geo_location,
@@ -14572,6 +15221,12 @@ class CaaAmazonRecord(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 __all__ = [
@@ -14602,6 +15257,8 @@ __all__ = [
     "CfnRecordSetGroup",
     "CfnRecordSetGroupProps",
     "CfnRecordSetProps",
+    "CidrRoutingConfig",
+    "CidrRoutingConfigProps",
     "CnameRecord",
     "CnameRecordProps",
     "CommonHostedZoneProps",
@@ -15335,6 +15992,20 @@ def _typecheckingstub__07806684fd0bcb683322d42ae67181582216fa4e1371a7133012bf489
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1b3062acaf063c194e911820073130a65424f55f49053b79198d7fc79931f82d(
+    collection_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__510f03d6221534b2d6d0a4bda86f20f5ff3efa07a26a50f14673b2b5b5e13a0a(
+    *,
+    collection_id: builtins.str,
+    location_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3c0a60680828ad59f14d241729df78a8969a23a13155e2327837897bb4545149(
     *,
     zone_name: builtins.str,
@@ -15543,6 +16214,7 @@ def _typecheckingstub__b92f4bc0484ad6fe8cce3c7e37b4ee3cd051b8f325d16efd23f924767
     record_type: RecordType,
     target: RecordTarget,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15560,6 +16232,7 @@ def _typecheckingstub__b92f4bc0484ad6fe8cce3c7e37b4ee3cd051b8f325d16efd23f924767
 def _typecheckingstub__c44f39638a001e90bc1175667e4764c4cbde27cade202d52a4f4d87246c57781(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15577,6 +16250,7 @@ def _typecheckingstub__c44f39638a001e90bc1175667e4764c4cbde27cade202d52a4f4d8724
 def _typecheckingstub__038200686c47ef30f81bc5289a6235e766372281295129670053b793d545dfca(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15624,6 +16298,7 @@ def _typecheckingstub__d52a70fbe22ca5e13acce72254719ea0dd37b436de0640b65774aadd9
     *,
     values: typing.Sequence[typing.Union[SrvRecordValue, typing.Dict[builtins.str, typing.Any]]],
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15641,6 +16316,7 @@ def _typecheckingstub__d52a70fbe22ca5e13acce72254719ea0dd37b436de0640b65774aadd9
 def _typecheckingstub__803828161f541995c058596dab53102f2eccd14ba565bbe715a5ac29353f6db9(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15672,6 +16348,7 @@ def _typecheckingstub__df1e0c1447d860a09246a7ec54507ca123346e57365df024460258839
     *,
     values: typing.Sequence[builtins.str],
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15689,6 +16366,7 @@ def _typecheckingstub__df1e0c1447d860a09246a7ec54507ca123346e57365df024460258839
 def _typecheckingstub__1925dd23d881cbbf99625b9a5fe0ef65b92a92359376c46e49b6690f1a4a9dab(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15744,6 +16422,7 @@ def _typecheckingstub__1f8360676c13e2167bb58d36e1b6384ba70f036979aa9c80cac046e12
     *,
     name_servers: typing.Sequence[builtins.str],
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15761,6 +16440,7 @@ def _typecheckingstub__1f8360676c13e2167bb58d36e1b6384ba70f036979aa9c80cac046e12
 def _typecheckingstub__240a965753acb9488d02c120074027364f5e85a8ec585205a863174feadd7582(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15790,6 +16470,7 @@ def _typecheckingstub__ca2e60ba6b2baeeff2cc875c86af94b4b26d6f11c1cfcca09280ac533
     *,
     target: RecordTarget,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15810,6 +16491,7 @@ def _typecheckingstub__c76ad72e64542d58d5e33c28ccaca560dac09b21c920d094b7a0c2386
     *,
     target_dns: builtins.str,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15827,6 +16509,7 @@ def _typecheckingstub__c76ad72e64542d58d5e33c28ccaca560dac09b21c920d094b7a0c2386
 def _typecheckingstub__514d7eccc21be019febe80e121fd7d979162668b63cb99051c629ef087f5fe9a(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15845,6 +16528,7 @@ def _typecheckingstub__514d7eccc21be019febe80e121fd7d979162668b63cb99051c629ef08
 def _typecheckingstub__a73a5c86411a0d853fcfad820ed58f5a5c19df65a7b2756560958db5cbe36569(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15866,6 +16550,7 @@ def _typecheckingstub__4d5345c027ebd51f32f58fdeb055904a5c4dd3f5523f55954f8a191ae
     *,
     target: RecordTarget,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15883,6 +16568,7 @@ def _typecheckingstub__4d5345c027ebd51f32f58fdeb055904a5c4dd3f5523f55954f8a191ae
 def _typecheckingstub__c051ff70083b2ae68889d3f02be8344125acf64b4768d5f5df3298ba8a8d6a32(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15901,6 +16587,7 @@ def _typecheckingstub__c051ff70083b2ae68889d3f02be8344125acf64b4768d5f5df3298ba8
 def _typecheckingstub__14055fdb7d9f4b55091295996ec92db8d73fa789a21fca2664da1242ae89f859(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15921,6 +16608,7 @@ def _typecheckingstub__3a2502cdc1fe021e837217ab0d96b9fa6ea450a68c089482935b695f7
     *,
     values: typing.Sequence[typing.Union[CaaRecordValue, typing.Dict[builtins.str, typing.Any]]],
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15938,6 +16626,7 @@ def _typecheckingstub__3a2502cdc1fe021e837217ab0d96b9fa6ea450a68c089482935b695f7
 def _typecheckingstub__349a94b990ddb833b270dc692692a8b37187c6f17114e02514f44accfb8de443(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15959,6 +16648,7 @@ def _typecheckingstub__e8dfccd8504bb3c0a779b42a665f362282b1083fe52a95b450d1ac1eb
     *,
     domain_name: builtins.str,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15976,6 +16666,7 @@ def _typecheckingstub__e8dfccd8504bb3c0a779b42a665f362282b1083fe52a95b450d1ac1eb
 def _typecheckingstub__43b5fc8ccb719e2580c804225e8258b57b1700a701203416558eb2d76a86f86f(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -15997,6 +16688,7 @@ def _typecheckingstub__24205d1a44dcefb992b7bd9b6d91d8b6396f8498224c30876fe8a0673
     *,
     values: typing.Sequence[builtins.str],
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -16014,6 +16706,7 @@ def _typecheckingstub__24205d1a44dcefb992b7bd9b6d91d8b6396f8498224c30876fe8a0673
 def _typecheckingstub__f86f16d9f2de8fe03cc1189a56a86c4888d20f69dc0f241aa21b50fdf34d4645(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -16122,6 +16815,7 @@ def _typecheckingstub__615153e942ef5cdcb0022d4565e0ec8b8c5554594bfe7221366ad5c83
     *,
     values: typing.Sequence[typing.Union[MxRecordValue, typing.Dict[builtins.str, typing.Any]]],
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -16139,6 +16833,7 @@ def _typecheckingstub__615153e942ef5cdcb0022d4565e0ec8b8c5554594bfe7221366ad5c83
 def _typecheckingstub__b259122626a3ba94eebff0b5f692944df4aa55dc550b7d113eec491e1c57307d(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -16160,6 +16855,7 @@ def _typecheckingstub__7f3bbcb4bd5bcd8978ae60eaac5ea2c6ab0bb8357a389e9b981e63291
     *,
     values: typing.Sequence[builtins.str],
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -16177,6 +16873,7 @@ def _typecheckingstub__7f3bbcb4bd5bcd8978ae60eaac5ea2c6ab0bb8357a389e9b981e63291
 def _typecheckingstub__33cda5fac8572316158161da713e2ceea9d3f7f56b5ee9a2a25acf331e737e86(
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,
@@ -16266,6 +16963,7 @@ def _typecheckingstub__f189380057459afbeff6d38749625e3756c4572dec90f74ca7a400dcb
     id: builtins.str,
     *,
     zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
     geo_location: typing.Optional[GeoLocation] = None,

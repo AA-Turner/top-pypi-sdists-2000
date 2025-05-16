@@ -4562,6 +4562,12 @@ class AccessPoint(
             check_type(argname="argument access_point_id", value=access_point_id, expected_type=type_hints["access_point_id"])
         return typing.cast(IAccessPoint, jsii.sinvoke(cls, "fromAccessPointId", [scope, id, access_point_id]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="accessPointArn")
     def access_point_arn(self) -> builtins.str:
@@ -4830,6 +4836,12 @@ class FileSystem(
     def DEFAULT_PORT(cls) -> jsii.Number:
         '''The default port File System listens on.'''
         return typing.cast(jsii.Number, jsii.sget(cls, "DEFAULT_PORT"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="connections")

@@ -3649,6 +3649,12 @@ class BasePathMapping(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_apigateway.BasePathMappingOptions",
@@ -7867,6 +7873,14 @@ class CfnDomainName(
         return typing.cast(builtins.str, jsii.get(self, "attrDistributionHostedZoneId"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrDomainNameArn")
+    def attr_domain_name_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: DomainNameArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrDomainNameArn"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrRegionalDomainName")
     def attr_regional_domain_name(self) -> builtins.str:
         '''The domain name associated with the regional endpoint for this custom domain name.
@@ -8885,7 +8899,7 @@ class CfnDomainNameV2(
         ) -> None:
             '''The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.
 
-            :param ip_address_type: 
+            :param ip_address_type: The IP address types that can invoke an API (RestApi) or a DomainName. Use ``ipv4`` to allow only IPv4 addresses to invoke an API or DomainName, or use ``dualstack`` to allow both IPv4 and IPv6 addresses to invoke an API or a DomainName. For the ``PRIVATE`` endpoint type, only ``dualstack`` is supported.
             :param types: A list of endpoint types of an API (RestApi) or its custom domain name (DomainName). For an edge-optimized API and its custom domain name, the endpoint type is ``"EDGE"`` . For a regional API and its custom domain name, the endpoint type is ``REGIONAL`` . For a private API, the endpoint type is ``PRIVATE`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-domainnamev2-endpointconfiguration.html
@@ -8914,7 +8928,10 @@ class CfnDomainNameV2(
 
         @builtins.property
         def ip_address_type(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The IP address types that can invoke an API (RestApi) or a DomainName.
+
+            Use ``ipv4`` to allow only IPv4 addresses to invoke an API or DomainName, or use ``dualstack`` to allow both IPv4 and IPv6 addresses to invoke an API or a DomainName. For the ``PRIVATE`` endpoint type, only ``dualstack`` is supported.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-domainnamev2-endpointconfiguration.html#cfn-apigateway-domainnamev2-endpointconfiguration-ipaddresstype
             '''
             result = self._values.get("ip_address_type")
@@ -15236,6 +15253,12 @@ class Deployment(
             check_type(argname="argument data", value=data, expected_type=type_hints["data"])
         return typing.cast(None, jsii.invoke(self, "addToLogicalId", [data]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="api")
     def api(self) -> "IRestApi":
@@ -20156,6 +20179,12 @@ class Method(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricServerError", [stage, props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="api")
     def api(self) -> IRestApi:
@@ -21207,6 +21236,12 @@ class Model(
         '''
         return typing.cast(IModel, jsii.sget(cls, "ERROR_MODEL"))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="modelId")
     def model_id(self) -> builtins.str:
@@ -21863,6 +21898,12 @@ class RateLimitedApiKey(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="keyArn")
     def key_arn(self) -> builtins.str:
@@ -22461,6 +22502,12 @@ class RequestValidator(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument request_validator_id", value=request_validator_id, expected_type=type_hints["request_validator_id"])
         return typing.cast(IRequestValidator, jsii.sinvoke(cls, "fromRequestValidatorId", [scope, id, request_validator_id]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="requestValidatorId")
@@ -25855,6 +25902,12 @@ class SpecRestApi(
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
         return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="restApiId")
     def rest_api_id(self) -> builtins.str:
@@ -29193,6 +29246,12 @@ class UsagePlan(
 
         return typing.cast(None, jsii.invoke(self, "addApiStage", [api_stage]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="usagePlanId")
     def usage_plan_id(self) -> builtins.str:
@@ -29515,6 +29574,12 @@ class VpcLink(
             check_type(argname="argument targets", value=targets, expected_type=typing.Tuple[type_hints["targets"], ...]) # pyright: ignore [reportGeneralTypeIssues]
         return typing.cast(None, jsii.invoke(self, "addTargets", [*targets]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="vpcLinkId")
     def vpc_link_id(self) -> builtins.str:
@@ -29637,11 +29702,14 @@ class ApiKey(
     An ApiKey can be distributed to API clients that are executing requests
     for Method resources that require an Api Key.
 
-    :exampleMetadata: infused
+    :exampleMetadata: fixture=README-blueprints infused
 
     Example::
 
-        imported_key = apigateway.ApiKey.from_api_key_id(self, "imported-key", "<api-key-id>")
+        stack = Stack(app, "my-stack")
+        api.ApiKey(stack, "my-api-key",
+            enabled=False
+        )
     '''
 
     def __init__(
@@ -29749,6 +29817,12 @@ class ApiKey(
             type_hints = typing.get_type_hints(_typecheckingstub__208197c4bdb65d9de7e77781bb300689a0372537c67bea69b947ce2e66fc4db3)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="keyArn")
@@ -29957,75 +30031,14 @@ class ApiKeyProps(ApiKeyOptions):
         :param resources: (deprecated) A list of resources this api key is associated with. Default: none
         :param stages: A list of Stages this api key is associated with. Default: - the api key is not associated with any stages
 
-        :exampleMetadata: fixture=_generated
+        :exampleMetadata: fixture=README-blueprints infused
 
         Example::
 
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            import aws_cdk as cdk
-            from aws_cdk import aws_apigateway as apigateway
-            
-            # authorizer: apigateway.Authorizer
-            # integration: apigateway.Integration
-            # model: apigateway.Model
-            # request_validator: apigateway.RequestValidator
-            # rest_api: apigateway.RestApi
-            # stage: apigateway.Stage
-            
-            api_key_props = apigateway.ApiKeyProps(
-                api_key_name="apiKeyName",
-                customer_id="customerId",
-                default_cors_preflight_options=apigateway.CorsOptions(
-                    allow_origins=["allowOrigins"],
-            
-                    # the properties below are optional
-                    allow_credentials=False,
-                    allow_headers=["allowHeaders"],
-                    allow_methods=["allowMethods"],
-                    disable_cache=False,
-                    expose_headers=["exposeHeaders"],
-                    max_age=cdk.Duration.minutes(30),
-                    status_code=123
-                ),
-                default_integration=integration,
-                default_method_options=apigateway.MethodOptions(
-                    api_key_required=False,
-                    authorization_scopes=["authorizationScopes"],
-                    authorization_type=apigateway.AuthorizationType.NONE,
-                    authorizer=authorizer,
-                    method_responses=[apigateway.MethodResponse(
-                        status_code="statusCode",
-            
-                        # the properties below are optional
-                        response_models={
-                            "response_models_key": model
-                        },
-                        response_parameters={
-                            "response_parameters_key": False
-                        }
-                    )],
-                    operation_name="operationName",
-                    request_models={
-                        "request_models_key": model
-                    },
-                    request_parameters={
-                        "request_parameters_key": False
-                    },
-                    request_validator=request_validator,
-                    request_validator_options=apigateway.RequestValidatorOptions(
-                        request_validator_name="requestValidatorName",
-                        validate_request_body=False,
-                        validate_request_parameters=False
-                    )
-                ),
-                description="description",
-                enabled=False,
-                generate_distinct_id=False,
-                resources=[rest_api],
-                stages=[stage],
-                value="value"
+            stack = Stack(app, "my-stack",
+                property_injectors=[ApiKeyPropsInjector()]
             )
+            api.ApiKey(stack, "my-api-key")
         '''
         if isinstance(default_cors_preflight_options, dict):
             default_cors_preflight_options = CorsOptions(**default_cors_preflight_options)
@@ -30409,6 +30422,12 @@ class CognitoUserPoolsAuthorizer(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="authorizerArn")
     def authorizer_arn(self) -> builtins.str:
@@ -30585,6 +30604,12 @@ class DomainName(
 
         return typing.cast(BasePathMapping, jsii.invoke(self, "addBasePathMapping", [target_api, options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="domainName")
     def domain_name(self) -> builtins.str:
@@ -30725,6 +30750,12 @@ class GatewayResponse(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 class HttpIntegration(
@@ -32039,6 +32070,12 @@ class RequestAuthorizer(
         '''Sets up the permissions necessary for the API Gateway service to invoke the Lambda function.'''
         return typing.cast(None, jsii.invoke(self, "setupPermissions", []))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="authorizerArn")
     def authorizer_arn(self) -> builtins.str:
@@ -32167,6 +32204,12 @@ class Resource(
         )
 
         return typing.cast(IResource, jsii.sinvoke(cls, "fromResourceAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="api")
@@ -32471,6 +32514,12 @@ class RestApi(
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
         return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="methods")
     def methods(self) -> typing.List[Method]:
@@ -32721,6 +32770,12 @@ class Stage(
 
         return typing.cast(IStage, jsii.sinvoke(cls, "fromStageAttributes", [scope, id, attrs]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="restApi")
     def rest_api(self) -> IRestApi:
@@ -32866,6 +32921,12 @@ class StepFunctionsRestApi(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.implements(IAuthorizer)
 class TokenAuthorizer(
@@ -32944,6 +33005,12 @@ class TokenAuthorizer(
     def _setup_permissions(self) -> None:
         '''Sets up the permissions necessary for the API Gateway service to invoke the Lambda function.'''
         return typing.cast(None, jsii.invoke(self, "setupPermissions", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="authorizerArn")
@@ -33117,6 +33184,12 @@ class LambdaRestApi(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 class ProxyResource(
     Resource,
@@ -33225,6 +33298,12 @@ class ProxyResource(
         )
 
         return typing.cast(Method, jsii.invoke(self, "addMethod", [http_method, integration, options]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="anyMethod")

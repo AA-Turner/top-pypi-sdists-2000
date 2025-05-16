@@ -2296,6 +2296,8 @@ class AppSyncDataSourceType(enum.Enum):
     '''Relational DB data source type.'''
     BEDROCK = "BEDROCK"
     '''Bedrock runtime data source type.'''
+    ELASTICSEARCH = "ELASTICSEARCH"
+    '''Elasticsearch data source type.'''
 
 
 @jsii.data_type(
@@ -6636,14 +6638,14 @@ class CfnChannelNamespace(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param api_id: AppSync Api Id that this Channel Namespace belongs to.
-        :param name: Namespace indentifier.
-        :param code_handlers: String of APPSYNC_JS code to be used by the handlers.
+        :param api_id: The ``Api`` ID.
+        :param name: The name of the channel namespace. This name must be unique within the ``Api`` .
+        :param code_handlers: The event handler functions that run custom business logic to process published events and subscribe requests.
         :param code_s3_location: The Amazon S3 endpoint where the code is located.
         :param handler_configs: 
         :param publish_auth_modes: The authorization mode to use for publishing messages on the channel namespace. This configuration overrides the default ``Api`` authorization configuration.
         :param subscribe_auth_modes: The authorization mode to use for subscribing to messages on the channel namespace. This configuration overrides the default ``Api`` authorization configuration.
-        :param tags: An arbitrary set of tags (key-value pairs) for this AppSync API.
+        :param tags: A set of tags (key-value pairs) for this channel namespace.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a093c57f7353830d56f8cde41e8653e333d0f0b91da87dd9ca86d72460c39119)
@@ -6695,7 +6697,7 @@ class CfnChannelNamespace(
     @builtins.property
     @jsii.member(jsii_name="attrChannelNamespaceArn")
     def attr_channel_namespace_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) for the Channel Namespace.
+        '''The Amazon Resource Name (ARN) of the channel namespace.
 
         :cloudformationAttribute: ChannelNamespaceArn
         '''
@@ -6715,7 +6717,7 @@ class CfnChannelNamespace(
     @builtins.property
     @jsii.member(jsii_name="apiId")
     def api_id(self) -> builtins.str:
-        '''AppSync Api Id that this Channel Namespace belongs to.'''
+        '''The ``Api`` ID.'''
         return typing.cast(builtins.str, jsii.get(self, "apiId"))
 
     @api_id.setter
@@ -6728,7 +6730,7 @@ class CfnChannelNamespace(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''Namespace indentifier.'''
+        '''The name of the channel namespace.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -6741,7 +6743,7 @@ class CfnChannelNamespace(
     @builtins.property
     @jsii.member(jsii_name="codeHandlers")
     def code_handlers(self) -> typing.Optional[builtins.str]:
-        '''String of APPSYNC_JS code to be used by the handlers.'''
+        '''The event handler functions that run custom business logic to process published events and subscribe requests.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "codeHandlers"))
 
     @code_handlers.setter
@@ -6820,7 +6822,7 @@ class CfnChannelNamespace(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An arbitrary set of tags (key-value pairs) for this AppSync API.'''
+        '''A set of tags (key-value pairs) for this channel namespace.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -6837,9 +6839,11 @@ class CfnChannelNamespace(
     )
     class AuthModeProperty:
         def __init__(self, *, auth_type: typing.Optional[builtins.str] = None) -> None:
-            '''An auth mode.
+            '''Describes an authorization configuration.
 
-            :param auth_type: Security configuration for your AppSync API.
+            Use ``AuthMode`` to specify the publishing and subscription authorization configuration for an Event API.
+
+            :param auth_type: The authorization type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-authmode.html
             :exampleMetadata: fixture=_generated
@@ -6863,7 +6867,7 @@ class CfnChannelNamespace(
 
         @builtins.property
         def auth_type(self) -> typing.Optional[builtins.str]:
-            '''Security configuration for your AppSync API.
+            '''The authorization type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-authmode.html#cfn-appsync-channelnamespace-authmode-authtype
             '''
@@ -7209,14 +7213,14 @@ class CfnChannelNamespaceProps:
     ) -> None:
         '''Properties for defining a ``CfnChannelNamespace``.
 
-        :param api_id: AppSync Api Id that this Channel Namespace belongs to.
-        :param name: Namespace indentifier.
-        :param code_handlers: String of APPSYNC_JS code to be used by the handlers.
+        :param api_id: The ``Api`` ID.
+        :param name: The name of the channel namespace. This name must be unique within the ``Api`` .
+        :param code_handlers: The event handler functions that run custom business logic to process published events and subscribe requests.
         :param code_s3_location: The Amazon S3 endpoint where the code is located.
         :param handler_configs: 
         :param publish_auth_modes: The authorization mode to use for publishing messages on the channel namespace. This configuration overrides the default ``Api`` authorization configuration.
         :param subscribe_auth_modes: The authorization mode to use for subscribing to messages on the channel namespace. This configuration overrides the default ``Api`` authorization configuration.
-        :param tags: An arbitrary set of tags (key-value pairs) for this AppSync API.
+        :param tags: A set of tags (key-value pairs) for this channel namespace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-channelnamespace.html
         :exampleMetadata: fixture=_generated
@@ -7299,7 +7303,7 @@ class CfnChannelNamespaceProps:
 
     @builtins.property
     def api_id(self) -> builtins.str:
-        '''AppSync Api Id that this Channel Namespace belongs to.
+        '''The ``Api`` ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-channelnamespace.html#cfn-appsync-channelnamespace-apiid
         '''
@@ -7309,7 +7313,9 @@ class CfnChannelNamespaceProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''Namespace indentifier.
+        '''The name of the channel namespace.
+
+        This name must be unique within the ``Api`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-channelnamespace.html#cfn-appsync-channelnamespace-name
         '''
@@ -7319,7 +7325,7 @@ class CfnChannelNamespaceProps:
 
     @builtins.property
     def code_handlers(self) -> typing.Optional[builtins.str]:
-        '''String of APPSYNC_JS code to be used by the handlers.
+        '''The event handler functions that run custom business logic to process published events and subscribe requests.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-channelnamespace.html#cfn-appsync-channelnamespace-codehandlers
         '''
@@ -7373,7 +7379,7 @@ class CfnChannelNamespaceProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An arbitrary set of tags (key-value pairs) for this AppSync API.
+        '''A set of tags (key-value pairs) for this channel namespace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-channelnamespace.html#cfn-appsync-channelnamespace-tags
         '''
@@ -20147,6 +20153,12 @@ class SourceApiAssociation(
 
         return typing.cast(ISourceApiAssociation, jsii.sinvoke(cls, "fromSourceApiAssociationAttributes", [scope, id, attrs]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="association")
     def association(self) -> CfnSourceApiAssociation:
@@ -22470,6 +22482,12 @@ class AppsyncFunction(
 
         return typing.cast(IAppsyncFunction, jsii.sinvoke(cls, "fromAppsyncFunctionAttributes", [scope, id, attrs]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="dataSource")
     def data_source(self) -> BaseDataSource:
@@ -23110,6 +23128,12 @@ class ChannelNamespace(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSubscribe", [grantee]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="channelNamespaceArn")
     def channel_namespace_arn(self) -> builtins.str:
@@ -23216,6 +23240,12 @@ class DynamoDbDataSource(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(
@@ -23990,6 +24020,12 @@ class EventBridgeDataSource(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_appsync.EventBridgeDataSourceProps",
@@ -24666,6 +24702,12 @@ class HttpDataSource(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_appsync.HttpDataSourceProps",
@@ -24876,6 +24918,12 @@ class LambdaDataSource(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_appsync.LambdaDataSourceProps",
@@ -25083,6 +25131,12 @@ class OpenSearchDataSource(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(
@@ -25363,6 +25417,12 @@ class RdsDataSource(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(
@@ -25789,6 +25849,12 @@ class EventApi(
 
         return typing.cast(IEventApi, jsii.sinvoke(cls, "fromEventApiAttributes", [scope, id, attrs]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="apiArn")
     def api_arn(self) -> builtins.str:
@@ -26025,6 +26091,12 @@ class GraphqlApi(
             type_hints = typing.get_type_hints(_typecheckingstub__fca5d6afc67603703e938a4f127d82a052b1172c6c07cab72c6e3bded9ccd8e9)
             check_type(argname="argument construct", value=construct, expected_type=type_hints["construct"])
         return typing.cast(builtins.bool, jsii.invoke(self, "addSchemaDependency", [construct]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="apiId")

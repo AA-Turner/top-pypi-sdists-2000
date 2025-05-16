@@ -75,7 +75,7 @@ setup(
     python_requires=">=3.9,<3.13",
     install_requires=[
         # cli
-        "click>=5.0",
+        "click>=5.0,<8.2",
         "coloredlogs>=6.1,<=14.0",
         "Jinja2",
         # core (not explicitly expressed atm)
@@ -106,8 +106,8 @@ setup(
         "universal_pathlib>=0.2.0; python_version>='3.12'",
         "rich",
         "filelock",
-        "dagster-pipes==1.10.14",
-        "dagster-shared==0.26.14",
+        "dagster-pipes==1.10.15",
+        "dagster-shared==0.26.15",
         "antlr4-python3-runtime",
     ],
     extras_require={

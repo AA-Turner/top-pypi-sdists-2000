@@ -4,7 +4,7 @@
 
    Author: Ilan Schnell
 */
-#define BITARRAY_VERSION  "3.4.0"
+#define BITARRAY_VERSION  "3.4.1"
 
 #ifdef STDC_HEADERS
 #  include <stddef.h>
@@ -138,13 +138,13 @@ zlc(bitarrayobject *self)       /* zlc = zeroed last char */
 static inline uint64_t
 zlw(bitarrayobject *self)       /* zlw = zeroed last word */
 {
-    const Py_ssize_t nbits = self->nbits;
-    const Py_ssize_t nw = 8 * (nbits / 64);  /* bytes in complete words */
-    const int nr = (nbits % 64) / 8;         /* complete remaining bytes */
+    const size_t nbits = self->nbits;
+    const size_t nw = (nbits / 64) * 8;   /* bytes in complete words */
+    const size_t nr = (nbits % 64) / 8;   /* complete remaining bytes */
     uint64_t res = 0;
 
-    assert(nw + nr == nbits / 8 && nw + nr <= Py_SIZE(self));
-    memcpy((char *) &res, self->ob_item + nw, (size_t) nr);
+    assert(nw + nr == nbits / 8 && 8 * (nw + nr) + nbits % 8 == nbits);
+    memcpy((char *) &res, self->ob_item + nw, nr);
     if (nbits % 8)
         *(((char *) &res) + nr) = zlc(self);
 
@@ -234,7 +234,7 @@ static inline int
 to_aligned(void *p)
 {
     int r = ((uintptr_t) p) % 4;
-    return r ? 4 - r : 0;
+    return (4 - r) % 4;
 }
 
 /* population count of n words starting from at uint64_t pointer w */
@@ -249,8 +249,11 @@ popcnt_words(uint64_t *w, Py_ssize_t n)
     return cnt;
 }
 
-/* adjust slice parameters such that step is always positive; produces
-   simpler loops over elements when their order is irrelevant */
+/* Adjust slice parameters such that step is always positive.
+   This produces simpler loops over elements when their order is irrelevant.
+   Moreover, for step = -1, we can now use set_span() in set_range() and
+   count_span() in count_range().
+*/
 static inline void
 adjust_step_positive(Py_ssize_t slicelength,
                      Py_ssize_t *start, Py_ssize_t *stop, Py_ssize_t *step)

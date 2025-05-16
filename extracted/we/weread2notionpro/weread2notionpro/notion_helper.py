@@ -428,7 +428,7 @@ class NotionHelper:
         return self.client.pages.update(page_id=page_id, properties=properties)
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
-    def update_page(self, page_id, properties, cover):
+    def update_page(self, page_id, properties, cover=None):
         if cover is None:
             return self.client.pages.update(page_id=page_id, properties=properties)
         return self.client.pages.update(

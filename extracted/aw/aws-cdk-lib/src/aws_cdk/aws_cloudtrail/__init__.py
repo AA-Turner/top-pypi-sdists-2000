@@ -4760,6 +4760,12 @@ class Trail(
 
         return typing.cast(None, jsii.invoke(self, "logAllS3DataEvents", [options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="trailArn")
     def trail_arn(self) -> builtins.str:

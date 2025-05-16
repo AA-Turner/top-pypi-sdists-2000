@@ -1,11 +1,11 @@
 """Class-based api for polars models."""
 
+import copy
 import inspect
-from typing import Dict, List, Tuple, Type, cast, Optional, overload, Union
-from typing_extensions import Self
+from typing import Dict, List, Optional, Tuple, Type, Union, cast, overload
 
-import pandas as pd
 import polars as pl
+from typing_extensions import Self
 
 from pandera.api.base.schema import BaseSchema
 from pandera.api.checks import Check
@@ -15,10 +15,11 @@ from pandera.api.dataframe.model_components import FieldInfo
 from pandera.api.polars.components import Column
 from pandera.api.polars.container import DataFrameSchema
 from pandera.api.polars.model_config import BaseConfig
+from pandera.api.polars.types import PolarsFrame
 from pandera.engines import polars_engine as pe
 from pandera.errors import SchemaInitError
 from pandera.typing import AnnotationInfo
-from pandera.typing.polars import Series, LazyFrame, DataFrame
+from pandera.typing.polars import DataFrame, LazyFrame, Series
 from pandera.utils import docstring_substitution
 
 
@@ -44,7 +45,6 @@ class DataFrameModel(_DataFrameModel[pl.LazyFrame, DataFrameSchema]):
         fields: Dict[str, Tuple[AnnotationInfo, FieldInfo]],
         checks: Dict[str, List[Check]],
     ) -> Dict[str, Column]:
-
         columns: Dict[str, Column] = {}
         for field_name, (annotation, field) in fields.items():
             field_checks = checks.get(field_name, [])
@@ -106,8 +106,7 @@ class DataFrameModel(_DataFrameModel[pl.LazyFrame, DataFrameSchema]):
 
             else:
                 raise SchemaInitError(
-                    f"Invalid annotation '{field_name}: "
-                    f"{annotation.raw_annotation}'."
+                    f"Invalid annotation '{field_name}: {annotation.raw_annotation}'."
                 )
 
         return columns
@@ -142,7 +141,7 @@ class DataFrameModel(_DataFrameModel[pl.LazyFrame, DataFrameSchema]):
     @docstring_substitution(validate_doc=BaseSchema.validate.__doc__)
     def validate(
         cls: Type[Self],
-        check_obj: Union[pl.LazyFrame, pl.DataFrame],
+        check_obj: PolarsFrame,
         head: Optional[int] = None,
         tail: Optional[int] = None,
         sample: Optional[int] = None,
@@ -170,7 +169,16 @@ class DataFrameModel(_DataFrameModel[pl.LazyFrame, DataFrameSchema]):
             This function is currently does not fully specify a pandera schema,
             and is primarily used internally to render OpenAPI docs via the
             FastAPI integration.
+
+        :raises ImportError: if ``pandas`` is not installed.
         """
+        try:
+            import pandas as pd
+        except ImportError as exc:
+            raise ImportError(
+                "pandas is required to serialize polars schema to json-schema"
+            ) from exc
+
         schema = cls.to_schema()
         empty = pl.DataFrame(
             schema={k: v.type for k, v in schema.dtypes.items()}
@@ -191,3 +199,11 @@ class DataFrameModel(_DataFrameModel[pl.LazyFrame, DataFrameSchema]):
                 for field in table_schema["fields"]
             },
         }
+
+    @classmethod
+    def empty(cls: Type[Self], *_args) -> DataFrame[Self]:
+        """Create an empty DataFrame with the schema of this model."""
+        schema = copy.deepcopy(cls.to_schema())
+        schema.coerce = True
+        empty_df = schema.coerce_dtype(pl.DataFrame(schema=[*schema.columns]))
+        return DataFrame[Self](empty_df)

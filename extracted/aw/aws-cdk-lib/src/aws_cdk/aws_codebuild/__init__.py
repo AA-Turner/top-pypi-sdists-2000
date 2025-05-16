@@ -1392,6 +1392,12 @@ class BitBucketSourceCredentials(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_codebuild.BitBucketSourceCredentialsProps",
@@ -9960,6 +9966,12 @@ class GitHubEnterpriseSourceCredentials(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_codebuild.GitHubEnterpriseSourceCredentialsProps",
@@ -10053,6 +10065,12 @@ class GitHubSourceCredentials(
         props = GitHubSourceCredentialsProps(access_token=access_token)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(
@@ -14626,6 +14644,12 @@ class Project(
 
         return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onStateChange", [id, options]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="connections")
     def connections(self) -> _Connections_0f31fce8:
@@ -15480,6 +15504,12 @@ class ReportGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__0c43f1b89e5327905cbd3ab855ebe25b298798e44abb2a2f958ea30261160e4e)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [identity]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="reportGroupArn")
@@ -16500,6 +16530,12 @@ class UntrustedCodeBoundaryPolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_codebuild.UntrustedCodeBoundaryPolicyProps",
@@ -17430,6 +17466,12 @@ class Fleet(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument fleet_arn", value=fleet_arn, expected_type=type_hints["fleet_arn"])
         return typing.cast(IFleet, jsii.sinvoke(cls, "fromFleetArn", [scope, id, fleet_arn]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="computeType")
@@ -18433,6 +18475,12 @@ class PipelineProject(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.data_type(

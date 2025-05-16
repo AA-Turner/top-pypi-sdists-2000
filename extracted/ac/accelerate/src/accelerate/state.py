@@ -59,6 +59,7 @@ from .utils.dataclasses import SageMakerDistributedType
 
 if is_torch_xla_available():
     import torch_xla.core.xla_model as xm
+    import torch_xla.runtime as xr
 
 if is_mlu_available(check_device=False):
     import torch_mlu  # noqa: F401
@@ -213,6 +214,12 @@ class PartialState:
                             if self.backend == "tccl":
                                 local_rank = os.environ.get("LOCAL_RANK", -1)
                                 torch.sdaa.set_device(f"sdaa:{local_rank}")
+                            if (
+                                self.backend == "nccl"
+                                and os.environ.get("ACCELERATE_USE_FSDP", "false") == "true"
+                                and os.environ.get("FSDP_OFFLOAD_PARAMS", "false") == "true"
+                            ):
+                                self.backend = "cuda:nccl,cpu:gloo"
                             dist.init_distributed(dist_backend=self.backend, auto_mpi_discovery=False, **kwargs)
                         # We need to flag to `use_deepspeed` to be True to override `distributed_type` later
                         use_deepspeed = True
@@ -277,8 +284,8 @@ class PartialState:
                 # XLA needs device setting first for `set_replication`
                 self.set_device()
                 xm.set_replication(self.device, xm.get_xla_supported_devices())
-                self.num_processes = xm.xrt_world_size()
-                self.process_index = xm.get_ordinal()
+                self.num_processes = xr.world_size()
+                self.process_index = xr.global_ordinal()
                 if is_torch_xla_available(check_is_tpu=True):
                     self.local_process_index = xm.get_local_ordinal()
                 else:
@@ -470,7 +477,7 @@ class PartialState:
                         tensorized_result = send_to_device(result, self.device)
                         result = pad_across_processes(tensorized_result, pad_index=inputs[-1])
                     else:
-                        result += [result[-1]] * (num_samples_per_process + 1 - len(result))
+                        result += [result[-1]] * (num_samples_per_process + (1 if num_extras > 0 else 0) - len(result))
                 return result
             elif isinstance(inputs, dict):
                 for key in inputs.keys():
@@ -487,7 +494,9 @@ class PartialState:
                             end_index = len(inputs)
                         result_idcs = list(range(start_index, end_index))
                         if apply_padding:
-                            result_idcs += [end_index - 1] * (num_samples_per_process + 1 - len(result_idcs))
+                            result_idcs += [end_index - 1] * (
+                                num_samples_per_process + (1 if num_extras > 0 else 0) - len(result_idcs)
+                            )
                         return inputs.select(result_idcs)
                 return inputs
 
@@ -971,7 +980,7 @@ class AcceleratorState:
                     self.distributed_type = DistributedType.MEGATRON_LM
                     megatron_lm_plugin.set_mixed_precision(self._mixed_precision)
                     self.megatron_lm_plugin = megatron_lm_plugin
-                if os.environ.get("ACCELERATE_USE_TP", "false") == "true" or self.torch_tp_plugin is not None:
+                if self.torch_tp_plugin is not None:
                     self.distributed_type = DistributedType.TP
             elif self.distributed_type in [DistributedType.MULTI_CPU, DistributedType.MULTI_XPU, DistributedType.NO]:
                 if is_ipex_available():

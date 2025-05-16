@@ -197,6 +197,23 @@ api = apigwv2.HttpApi(self, "HttpProxyProdApi",
 )
 ```
 
+The IP address type for the domain name can be configured by using the `ipAddressType`
+property. Valid values are `IPV4` (default) and `DUAL_STACK`.
+
+```python
+import aws_cdk.aws_certificatemanager as acm
+
+# certificate: acm.ICertificate
+# domain_name: str
+
+
+dn = apigwv2.DomainName(self, "DN",
+    domain_name=domain_name,
+    certificate=certificate,
+    ip_address_type=apigwv2.IpAddressType.DUAL_STACK
+)
+```
+
 To migrate a domain endpoint from one type to another, you can add a new endpoint configuration via `addEndpoint()`
 and then configure DNS records to route traffic to the new endpoint. After that, you can remove the previous endpoint configuration.
 Learn more at [Migrating a custom domain name](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-regional-api-custom-domain-migrate.html)
@@ -8888,6 +8905,7 @@ class DomainNameAttributes:
         "certificate": "certificate",
         "certificate_name": "certificateName",
         "endpoint_type": "endpointType",
+        "ip_address_type": "ipAddressType",
         "ownership_certificate": "ownershipCertificate",
         "security_policy": "securityPolicy",
     },
@@ -8899,6 +8917,7 @@ class EndpointOptions:
         certificate: _ICertificate_c194c70b,
         certificate_name: typing.Optional[builtins.str] = None,
         endpoint_type: typing.Optional["EndpointType"] = None,
+        ip_address_type: typing.Optional["IpAddressType"] = None,
         ownership_certificate: typing.Optional[_ICertificate_c194c70b] = None,
         security_policy: typing.Optional["SecurityPolicy"] = None,
     ) -> None:
@@ -8907,6 +8926,7 @@ class EndpointOptions:
         :param certificate: The ACM certificate for this domain name. Certificate can be both ACM issued or imported.
         :param certificate_name: The user-friendly name of the certificate that will be used by the endpoint for this domain name. Default: - No friendly certificate name
         :param endpoint_type: The type of endpoint for this DomainName. Default: EndpointType.REGIONAL
+        :param ip_address_type: The IP address types that can invoke the API. Default: undefined - AWS default is IPV4
         :param ownership_certificate: A public certificate issued by ACM to validate that you own a custom domain. This parameter is required only when you configure mutual TLS authentication and you specify an ACM imported or private CA certificate for ``certificate``. The ownership certificate validates that you have permissions to use the domain name. Default: - only required when configuring mTLS
         :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this domain name. Default: SecurityPolicy.TLS_1_2
 
@@ -8927,6 +8947,7 @@ class EndpointOptions:
                 # the properties below are optional
                 certificate_name="certificateName",
                 endpoint_type=apigatewayv2.EndpointType.EDGE,
+                ip_address_type=apigatewayv2.IpAddressType.IPV4,
                 ownership_certificate=certificate,
                 security_policy=apigatewayv2.SecurityPolicy.TLS_1_0
             )
@@ -8936,6 +8957,7 @@ class EndpointOptions:
             check_type(argname="argument certificate", value=certificate, expected_type=type_hints["certificate"])
             check_type(argname="argument certificate_name", value=certificate_name, expected_type=type_hints["certificate_name"])
             check_type(argname="argument endpoint_type", value=endpoint_type, expected_type=type_hints["endpoint_type"])
+            check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
             check_type(argname="argument ownership_certificate", value=ownership_certificate, expected_type=type_hints["ownership_certificate"])
             check_type(argname="argument security_policy", value=security_policy, expected_type=type_hints["security_policy"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -8945,6 +8967,8 @@ class EndpointOptions:
             self._values["certificate_name"] = certificate_name
         if endpoint_type is not None:
             self._values["endpoint_type"] = endpoint_type
+        if ip_address_type is not None:
+            self._values["ip_address_type"] = ip_address_type
         if ownership_certificate is not None:
             self._values["ownership_certificate"] = ownership_certificate
         if security_policy is not None:
@@ -8977,6 +9001,17 @@ class EndpointOptions:
         '''
         result = self._values.get("endpoint_type")
         return typing.cast(typing.Optional["EndpointType"], result)
+
+    @builtins.property
+    def ip_address_type(self) -> typing.Optional["IpAddressType"]:
+        '''The IP address types that can invoke the API.
+
+        :default: undefined - AWS default is IPV4
+
+        :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-ip-address-type.html
+        '''
+        result = self._values.get("ip_address_type")
+        return typing.cast(typing.Optional["IpAddressType"], result)
 
     @builtins.property
     def ownership_certificate(self) -> typing.Optional[_ICertificate_c194c70b]:
@@ -13412,6 +13447,12 @@ class VpcLink(
             check_type(argname="argument subnets", value=subnets, expected_type=typing.Tuple[type_hints["subnets"], ...]) # pyright: ignore [reportGeneralTypeIssues]
         return typing.cast(None, jsii.invoke(self, "addSubnets", [*subnets]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="vpc")
     def vpc(self) -> _IVpc_f30d5663:
@@ -13828,6 +13869,12 @@ class WebSocketApi(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="apiEndpoint")
     def api_endpoint(self) -> builtins.str:
@@ -14235,6 +14282,12 @@ class WebSocketAuthorizer(
 
         return typing.cast(IWebSocketRouteAuthorizer, jsii.sinvoke(cls, "fromWebSocketAuthorizerAttributes", [scope, id, attrs]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="authorizerId")
     def authorizer_id(self) -> builtins.str:
@@ -14542,6 +14595,12 @@ class WebSocketIntegration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="integrationId")
@@ -14914,6 +14973,12 @@ class WebSocketRoute(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="routeId")
@@ -15839,6 +15904,12 @@ class WebSocketStage(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="api")
     def api(self) -> IWebSocketApi:
@@ -16317,6 +16388,12 @@ class ApiMapping(
 
         return typing.cast(IApiMapping, jsii.sinvoke(cls, "fromApiMappingAttributes", [scope, id, attrs]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="apiMappingId")
     def api_mapping_id(self) -> builtins.str:
@@ -16348,25 +16425,21 @@ class DomainName(
 
     Example::
 
+        import aws_cdk.aws_s3 as s3
         import aws_cdk.aws_certificatemanager as acm
-        from aws_cdk.aws_apigatewayv2_integrations import HttpLambdaIntegration
-        
-        # handler: lambda.Function
+        # bucket: s3.Bucket
         
         
         cert_arn = "arn:aws:acm:us-east-1:111111111111:certificate"
         domain_name = "example.com"
         
-        dn = apigwv2.DomainName(self, "DN",
+        apigwv2.DomainName(self, "DomainName",
             domain_name=domain_name,
-            certificate=acm.Certificate.from_certificate_arn(self, "cert", cert_arn)
-        )
-        api = apigwv2.HttpApi(self, "HttpProxyProdApi",
-            default_integration=HttpLambdaIntegration("DefaultIntegration", handler),
-            # https://${dn.domainName}/foo goes to prodApi $default stage
-            default_domain_mapping=apigwv2.DomainMappingOptions(
-                domain_name=dn,
-                mapping_key="foo"
+            certificate=acm.Certificate.from_certificate_arn(self, "cert", cert_arn),
+            mtls=apigwv2.MTLSConfig(
+                bucket=bucket,
+                key="someca.pem",
+                version="version"
             )
         )
     '''
@@ -16381,6 +16454,7 @@ class DomainName(
         certificate: _ICertificate_c194c70b,
         certificate_name: typing.Optional[builtins.str] = None,
         endpoint_type: typing.Optional[EndpointType] = None,
+        ip_address_type: typing.Optional[IpAddressType] = None,
         ownership_certificate: typing.Optional[_ICertificate_c194c70b] = None,
         security_policy: typing.Optional[SecurityPolicy] = None,
     ) -> None:
@@ -16392,6 +16466,7 @@ class DomainName(
         :param certificate: The ACM certificate for this domain name. Certificate can be both ACM issued or imported.
         :param certificate_name: The user-friendly name of the certificate that will be used by the endpoint for this domain name. Default: - No friendly certificate name
         :param endpoint_type: The type of endpoint for this DomainName. Default: EndpointType.REGIONAL
+        :param ip_address_type: The IP address types that can invoke the API. Default: undefined - AWS default is IPV4
         :param ownership_certificate: A public certificate issued by ACM to validate that you own a custom domain. This parameter is required only when you configure mutual TLS authentication and you specify an ACM imported or private CA certificate for ``certificate``. The ownership certificate validates that you have permissions to use the domain name. Default: - only required when configuring mTLS
         :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this domain name. Default: SecurityPolicy.TLS_1_2
         '''
@@ -16405,6 +16480,7 @@ class DomainName(
             certificate=certificate,
             certificate_name=certificate_name,
             endpoint_type=endpoint_type,
+            ip_address_type=ip_address_type,
             ownership_certificate=ownership_certificate,
             security_policy=security_policy,
         )
@@ -16449,6 +16525,7 @@ class DomainName(
         certificate: _ICertificate_c194c70b,
         certificate_name: typing.Optional[builtins.str] = None,
         endpoint_type: typing.Optional[EndpointType] = None,
+        ip_address_type: typing.Optional[IpAddressType] = None,
         ownership_certificate: typing.Optional[_ICertificate_c194c70b] = None,
         security_policy: typing.Optional[SecurityPolicy] = None,
     ) -> None:
@@ -16457,6 +16534,7 @@ class DomainName(
         :param certificate: The ACM certificate for this domain name. Certificate can be both ACM issued or imported.
         :param certificate_name: The user-friendly name of the certificate that will be used by the endpoint for this domain name. Default: - No friendly certificate name
         :param endpoint_type: The type of endpoint for this DomainName. Default: EndpointType.REGIONAL
+        :param ip_address_type: The IP address types that can invoke the API. Default: undefined - AWS default is IPV4
         :param ownership_certificate: A public certificate issued by ACM to validate that you own a custom domain. This parameter is required only when you configure mutual TLS authentication and you specify an ACM imported or private CA certificate for ``certificate``. The ownership certificate validates that you have permissions to use the domain name. Default: - only required when configuring mTLS
         :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this domain name. Default: SecurityPolicy.TLS_1_2
         '''
@@ -16464,11 +16542,18 @@ class DomainName(
             certificate=certificate,
             certificate_name=certificate_name,
             endpoint_type=endpoint_type,
+            ip_address_type=ip_address_type,
             ownership_certificate=ownership_certificate,
             security_policy=security_policy,
         )
 
         return typing.cast(None, jsii.invoke(self, "addEndpoint", [options]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -16496,6 +16581,7 @@ class DomainName(
         "certificate": "certificate",
         "certificate_name": "certificateName",
         "endpoint_type": "endpointType",
+        "ip_address_type": "ipAddressType",
         "ownership_certificate": "ownershipCertificate",
         "security_policy": "securityPolicy",
         "domain_name": "domainName",
@@ -16509,6 +16595,7 @@ class DomainNameProps(EndpointOptions):
         certificate: _ICertificate_c194c70b,
         certificate_name: typing.Optional[builtins.str] = None,
         endpoint_type: typing.Optional[EndpointType] = None,
+        ip_address_type: typing.Optional[IpAddressType] = None,
         ownership_certificate: typing.Optional[_ICertificate_c194c70b] = None,
         security_policy: typing.Optional[SecurityPolicy] = None,
         domain_name: builtins.str,
@@ -16519,6 +16606,7 @@ class DomainNameProps(EndpointOptions):
         :param certificate: The ACM certificate for this domain name. Certificate can be both ACM issued or imported.
         :param certificate_name: The user-friendly name of the certificate that will be used by the endpoint for this domain name. Default: - No friendly certificate name
         :param endpoint_type: The type of endpoint for this DomainName. Default: EndpointType.REGIONAL
+        :param ip_address_type: The IP address types that can invoke the API. Default: undefined - AWS default is IPV4
         :param ownership_certificate: A public certificate issued by ACM to validate that you own a custom domain. This parameter is required only when you configure mutual TLS authentication and you specify an ACM imported or private CA certificate for ``certificate``. The ownership certificate validates that you have permissions to use the domain name. Default: - only required when configuring mTLS
         :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this domain name. Default: SecurityPolicy.TLS_1_2
         :param domain_name: The custom domain name.
@@ -16528,25 +16616,21 @@ class DomainNameProps(EndpointOptions):
 
         Example::
 
+            import aws_cdk.aws_s3 as s3
             import aws_cdk.aws_certificatemanager as acm
-            from aws_cdk.aws_apigatewayv2_integrations import HttpLambdaIntegration
-            
-            # handler: lambda.Function
+            # bucket: s3.Bucket
             
             
             cert_arn = "arn:aws:acm:us-east-1:111111111111:certificate"
             domain_name = "example.com"
             
-            dn = apigwv2.DomainName(self, "DN",
+            apigwv2.DomainName(self, "DomainName",
                 domain_name=domain_name,
-                certificate=acm.Certificate.from_certificate_arn(self, "cert", cert_arn)
-            )
-            api = apigwv2.HttpApi(self, "HttpProxyProdApi",
-                default_integration=HttpLambdaIntegration("DefaultIntegration", handler),
-                # https://${dn.domainName}/foo goes to prodApi $default stage
-                default_domain_mapping=apigwv2.DomainMappingOptions(
-                    domain_name=dn,
-                    mapping_key="foo"
+                certificate=acm.Certificate.from_certificate_arn(self, "cert", cert_arn),
+                mtls=apigwv2.MTLSConfig(
+                    bucket=bucket,
+                    key="someca.pem",
+                    version="version"
                 )
             )
         '''
@@ -16557,6 +16641,7 @@ class DomainNameProps(EndpointOptions):
             check_type(argname="argument certificate", value=certificate, expected_type=type_hints["certificate"])
             check_type(argname="argument certificate_name", value=certificate_name, expected_type=type_hints["certificate_name"])
             check_type(argname="argument endpoint_type", value=endpoint_type, expected_type=type_hints["endpoint_type"])
+            check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
             check_type(argname="argument ownership_certificate", value=ownership_certificate, expected_type=type_hints["ownership_certificate"])
             check_type(argname="argument security_policy", value=security_policy, expected_type=type_hints["security_policy"])
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
@@ -16569,6 +16654,8 @@ class DomainNameProps(EndpointOptions):
             self._values["certificate_name"] = certificate_name
         if endpoint_type is not None:
             self._values["endpoint_type"] = endpoint_type
+        if ip_address_type is not None:
+            self._values["ip_address_type"] = ip_address_type
         if ownership_certificate is not None:
             self._values["ownership_certificate"] = ownership_certificate
         if security_policy is not None:
@@ -16603,6 +16690,17 @@ class DomainNameProps(EndpointOptions):
         '''
         result = self._values.get("endpoint_type")
         return typing.cast(typing.Optional[EndpointType], result)
+
+    @builtins.property
+    def ip_address_type(self) -> typing.Optional[IpAddressType]:
+        '''The IP address types that can invoke the API.
+
+        :default: undefined - AWS default is IPV4
+
+        :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-ip-address-type.html
+        '''
+        result = self._values.get("ip_address_type")
+        return typing.cast(typing.Optional[IpAddressType], result)
 
     @builtins.property
     def ownership_certificate(self) -> typing.Optional[_ICertificate_c194c70b]:
@@ -17184,6 +17282,12 @@ class HttpApi(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricServerError", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="apiEndpoint")
     def api_endpoint(self) -> builtins.str:
@@ -17364,6 +17468,12 @@ class HttpAuthorizer(
         )
 
         return typing.cast(IHttpRouteAuthorizer, jsii.sinvoke(cls, "fromHttpAuthorizerAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="authorizerId")
@@ -18569,6 +18679,12 @@ class HttpIntegration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="httpApi")
     def http_api(self) -> IHttpApi:
@@ -18670,6 +18786,12 @@ class HttpRoute(
         options = GrantInvokeOptions(http_methods=http_methods)
 
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvoke", [grantee, options]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="httpApi")
@@ -19098,6 +19220,12 @@ class HttpStage(
         )
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricServerError", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="api")
@@ -20698,6 +20826,7 @@ def _typecheckingstub__49650157c3c7bf21d138844b8a4ae00525de0e03c59b8ce04dc4d1580
     certificate: _ICertificate_c194c70b,
     certificate_name: typing.Optional[builtins.str] = None,
     endpoint_type: typing.Optional[EndpointType] = None,
+    ip_address_type: typing.Optional[IpAddressType] = None,
     ownership_certificate: typing.Optional[_ICertificate_c194c70b] = None,
     security_policy: typing.Optional[SecurityPolicy] = None,
 ) -> None:
@@ -21484,6 +21613,7 @@ def _typecheckingstub__dc77eca585800a80e5c515369595effe8304d0c7a7a4475e4dcf83a18
     certificate: _ICertificate_c194c70b,
     certificate_name: typing.Optional[builtins.str] = None,
     endpoint_type: typing.Optional[EndpointType] = None,
+    ip_address_type: typing.Optional[IpAddressType] = None,
     ownership_certificate: typing.Optional[_ICertificate_c194c70b] = None,
     security_policy: typing.Optional[SecurityPolicy] = None,
 ) -> None:
@@ -21506,6 +21636,7 @@ def _typecheckingstub__bf9ba44a3d76edbaeae31f2d3f5182b50739d6fc964c1bbfc6a1bde50
     certificate: _ICertificate_c194c70b,
     certificate_name: typing.Optional[builtins.str] = None,
     endpoint_type: typing.Optional[EndpointType] = None,
+    ip_address_type: typing.Optional[IpAddressType] = None,
     ownership_certificate: typing.Optional[_ICertificate_c194c70b] = None,
     security_policy: typing.Optional[SecurityPolicy] = None,
     domain_name: builtins.str,

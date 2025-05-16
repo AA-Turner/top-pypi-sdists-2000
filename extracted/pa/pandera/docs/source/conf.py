@@ -134,8 +134,9 @@ html_theme = "furo"
 # documentation.
 
 announcement = """
-📢 Pandera 0.19.0 now supports <a href="polars.html">Polars</a> 🎉.
-If you like this project, <a href='https://github.com/unionai-oss/pandera' target='_blank'>give us a star ⭐️! </a>
+📢 Pandera 0.24.0 introduces the <i>pandera.pandas</i>
+module, which is the recommended way of defining schemas for <i>pandas objects</i>.
+Learn more details <a href='https://github.com/unionai-oss/pandera/releases/tag/v0.24.0'>here</a>
 """
 
 html_logo = "_static/pandera-banner.png"
@@ -323,7 +324,7 @@ nb_execution_excludepatterns = ["_contents/try_pandera.ipynb"]
 # docsearch configuration
 docsearch_container = "#docsearch"
 docsearch_app_id = os.getenv("DOCSEARCH_SEARCH_APP_ID", "GA9NROLUXR")
-docsearch_api_key = os.getenv("DOCSEARCH_SEARCH_API_KEY")
+docsearch_api_key = os.getenv("DOCSEARCH_SEARCH_API_KEY", "<PLACEHOLDER>")
 docsearch_index_name = os.getenv("DOCSEARCH_INDEX_NAME", "pandera")
 docsearch_search_parameters = {
     "facetFilters": [f"version:{os.getenv('READTHEDOCS_VERSION', 'stable')}"]

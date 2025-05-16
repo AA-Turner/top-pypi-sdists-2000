@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: oracledb
-Version: 3.1.0
+Version: 3.1.1
 Summary: Python interface to Oracle Database
 Home-page: https://oracle.github.io/python-oracledb
 Author: Anthony Tuininga
@@ -95,7 +95,7 @@ Examples can be found in the [/samples][samples] directory and the
 
 ## Help
 
-Questions can be asked in [Github Discussions][ghdiscussions].
+Questions can be asked in [GitHub Discussions][ghdiscussions].
 
 Problem reports can be raised in [GitHub Issues][ghissues].
 

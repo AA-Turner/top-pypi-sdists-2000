@@ -7167,6 +7167,12 @@ class LambdaApplication(
             check_type(argname="argument lambda_application_name", value=lambda_application_name, expected_type=type_hints["lambda_application_name"])
         return typing.cast(ILambdaApplication, jsii.sinvoke(cls, "fromLambdaApplicationName", [scope, id, lambda_application_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="applicationArn")
     def application_arn(self) -> builtins.str:
@@ -7521,6 +7527,12 @@ class LambdaDeploymentGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__6d8689c21818340ec688b7586fd416bd82b1e7011d11184910717b5859285cb4)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPutLifecycleEventHookExecutionStatus", [grantee]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="application")
@@ -8204,6 +8216,12 @@ class ServerApplication(
             check_type(argname="argument server_application_name", value=server_application_name, expected_type=type_hints["server_application_name"])
         return typing.cast(IServerApplication, jsii.sinvoke(cls, "fromServerApplicationName", [scope, id, server_application_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="applicationArn")
     def application_arn(self) -> builtins.str:
@@ -8492,6 +8510,12 @@ class ServerDeploymentGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__8eb5bbbb7e095997fadbddebece8f587dfbebf76e4fba6c071f9def29db693c8)
             check_type(argname="argument asg", value=asg, expected_type=type_hints["asg"])
         return typing.cast(None, jsii.invoke(self, "addAutoScalingGroup", [asg]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="application")
@@ -9529,6 +9553,15 @@ class CustomLambdaDeploymentConfig(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''(deprecated) Uniquely identifies this class.
+
+        :stability: deprecated
+        '''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="deploymentConfigArn")
     def deployment_config_arn(self) -> builtins.str:
@@ -9640,6 +9673,12 @@ class EcsApplication(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument ecs_application_name", value=ecs_application_name, expected_type=type_hints["ecs_application_name"])
         return typing.cast(IEcsApplication, jsii.sinvoke(cls, "fromEcsApplicationName", [scope, id, ecs_application_name]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationArn")
@@ -9773,6 +9812,12 @@ class EcsDeploymentConfig(
     def LINEAR_10_PERCENT_EVERY_3_MINUTES(cls) -> IEcsDeploymentConfig:
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic every three minutes until all traffic is shifted.'''
         return typing.cast(IEcsDeploymentConfig, jsii.sget(cls, "LINEAR_10PERCENT_EVERY_3MINUTES"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 @jsii.implements(IEcsDeploymentGroup)
@@ -9909,6 +9954,12 @@ class EcsDeploymentGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__ecbfe2758d485b20b4d7753475293fc67c26edc4d904112e8a409df22ce5f06c)
             check_type(argname="argument alarm", value=alarm, expected_type=type_hints["alarm"])
         return typing.cast(None, jsii.invoke(self, "addAlarm", [alarm]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="application")
@@ -10114,6 +10165,12 @@ class LambdaDeploymentConfig(
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic every three minutes until all traffic is shifted.'''
         return typing.cast(ILambdaDeploymentConfig, jsii.sget(cls, "LINEAR_10PERCENT_EVERY_3MINUTES"))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
 
 @jsii.implements(IServerDeploymentConfig)
 class ServerDeploymentConfig(
@@ -10212,6 +10269,12 @@ class ServerDeploymentConfig(
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html#deployment-configuration-server
         '''
         return typing.cast(IServerDeploymentConfig, jsii.sget(cls, "ONE_AT_A_TIME"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
 
 class TimeBasedCanaryTrafficRouting(

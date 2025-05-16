@@ -1171,6 +1171,12 @@ class AwsCustomResource(
         return typing.cast(_Reference_6ab8bd04, jsii.invoke(self, "getResponseFieldReference", [data_path]))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="PROVIDER_FUNCTION_UUID")
     def PROVIDER_FUNCTION_UUID(cls) -> builtins.str:
         '''The uuid of the custom resource provider singleton lambda function.'''
@@ -2520,6 +2526,12 @@ class Provider(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="onEventHandler")
     def on_event_handler(self) -> _IFunction_6adb0ab8:
@@ -3061,6 +3073,12 @@ class WaiterStateMachine(
             type_hints = typing.get_type_hints(_typecheckingstub__2c3d1c306ca04ebd1194ce4f97bed6aa9510a02067654b39f43a1ecef601e3db)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStartExecution", [identity]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="stateMachineArn")

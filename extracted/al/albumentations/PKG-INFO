@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: albumentations
-Version: 2.0.6
+Version: 2.0.7
 Summary: Fast, flexible, and advanced augmentation library for deep learning, computer vision, and medical imaging. Albumentations offers a wide range of transformations for both 2D (images, masks, bboxes, keypoints) and 3D (volumes, volumetric masks, keypoints) data, with optimized performance and seamless integration into ML workflows.
 Author: Vladimir Iglovikov
 Maintainer: Vladimir Iglovikov
@@ -77,15 +77,13 @@ Dynamic: requires-dist
 
 [![PyPI version](https://badge.fury.io/py/albumentations.svg)](https://badge.fury.io/py/albumentations)
 ![CI](https://github.com/albumentations-team/albumentations/workflows/CI/badge.svg)
-[![PyPI Downloads](https://img.shields.io/pypi/dm/albumentations.svg?label=PyPI%20downloads)](
-https://pypi.org/project/albumentations/)
-[![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/albumentations.svg?label=Conda%20downloads)](
-https://anaconda.org/conda-forge/albumentations)
-[![Stack Overflow](https://img.shields.io/badge/stackoverflow-Ask%20questions-blue.svg)](
-https://stackoverflow.com/questions/tagged/albumentations)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/albumentations.svg?label=PyPI%20downloads)](https://pypi.org/project/albumentations/)
+[![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/albumentations.svg?label=Conda%20downloads)](https://anaconda.org/conda-forge/albumentations)
+
+> 📣 **Stay updated!** [Subscribe to our newsletter](https://albumentations.ai/subscribe) for the latest releases, tutorials, and tips directly from the Albumentations team.
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 [![Gurubase](https://img.shields.io/badge/Gurubase-Ask%20Albumentations%20Guru-006BFF)](https://gurubase.io/g/albumentations)
-![PyPI - Types](https://img.shields.io/pypi/types/albumentations)
 
 [Docs](https://albumentations.ai/docs/) | [Discord](https://discord.gg/AKPrrDYNAt) | [Twitter](https://twitter.com/albumentations) | [LinkedIn](https://www.linkedin.com/company/100504475/)
 
@@ -107,23 +105,23 @@ Here is an example of how you can apply some [pixel-level](#pixel-level-transfor
 
 Albumentations thrives on developer contributions. We appreciate our sponsors who help sustain the project's infrastructure.
 
-| 🏆 Gold Sponsors |
-|-----------------|
+| 🟠 Exclusive Partner |
+|-------------------|
 | Your company could be here |
 
-| 🥈 Silver Sponsors |
+| 🟡 Integration Partner |
 |-------------------|
-| <a href="https://datature.io" target="_blank"><img src="https://albumentations.ai/assets/sponsors/datature-full.png" width="100" alt="Datature"/></a> |
+| Your company could be here |
 
-| 🥉 Bronze Sponsors |
-|-------------------|
-| <a href="https://roboflow.com" target="_blank"><img src="https://albumentations.ai/assets/sponsors/roboflow.png" width="100" alt="Roboflow"/></a> |
+| 🟢 Community Sponsor |
+|-----------------|
+| <a href="https://datature.io" target="_blank"><img src="https://albumentations.ai/assets/sponsors/datature-full.png" width="100" alt="Datature"/></a> |
 
 ---
 
 ### 💝 Become a Sponsor
 
-Your sponsorship is a way to say "thank you" to the maintainers and contributors who spend their free time building and maintaining Albumentations. Sponsors are featured on our website and README. View sponsorship tiers on [GitHub Sponsors](https://github.com/sponsors/albumentations-team)
+Your sponsorship is a way to say "thank you" to the maintainers and contributors who spend their free time building and maintaining Albumentations. Sponsors are featured on our website and README. View sponsorship tiers on [our support page](https://albumentations.ai/support/)
 
 ## Table of contents
 
@@ -532,3 +530,9 @@ If you find this library useful for your research, please consider citing [Album
     DOI = {10.3390/info11020125}
 }
 ```
+
+---
+
+## 📫 Stay Connected
+
+Never miss updates, tutorials, and tips from the Albumentations team! [Subscribe to our newsletter](https://albumentations.ai/subscribe).

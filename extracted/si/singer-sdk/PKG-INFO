@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: singer-sdk
-Version: 0.46.1
+Version: 0.46.3
 Summary: A framework for building Singer taps
 Project-URL: Homepage, https://sdk.meltano.com/en/latest/
 Project-URL: Repository, https://github.com/meltano/sdk
@@ -16,7 +16,6 @@ License-Expression: Apache-2.0
 License-File: LICENSE
 Keywords: ELT,Meltano,Meltano SDK,Singer,Singer SDK
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10

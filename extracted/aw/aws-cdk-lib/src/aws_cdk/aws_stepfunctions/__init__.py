@@ -677,7 +677,8 @@ see [step function comparison operators](https://docs.aws.amazon.com/step-functi
 ### Parallel
 
 A `Parallel` state executes one or more subworkflows in parallel. It can also
-be used to catch and recover from errors in subworkflows.
+be used to catch and recover from errors in subworkflows. The `parameters` property
+can be used to transform the input that is passed to each branch of the parallel execution.
 
 ```python
 parallel = sfn.Parallel(self, "Do the work in parallel")
@@ -1004,6 +1005,25 @@ distributed_map = sfn.DistributedMap(self, "Distributed Map State",
 )
 distributed_map.item_processor(sfn.Pass(self, "Pass State"))
 ```
+
+* If information about `bucket` is only known while starting execution of `StateMachine` (dynamically or at run-time) via JSON state input:
+
+```python
+#
+# JSON state input:
+#  {
+#    "bucketName": "my-bucket"
+#  }
+#
+distributed_map = sfn.DistributedMap(self, "DistributedMap",
+    result_writer_v2=sfn.ResultWriterV2(
+        bucket_name_path=sfn.JsonPath.string_at("$.bucketName")
+    )
+)
+distributed_map.item_processor(sfn.Pass(self, "Pass"))
+```
+
+* Both `bucket` and `bucketNamePath` are mutually exclusive.
 
 If you want to specify the execution type for the ItemProcessor in the DistributedMap, you must set the `mapExecutionType` property in the `DistributedMap` class. When using the `DistributedMap` class, the `ProcessorConfig.executionType` property is ignored.
 
@@ -9627,16 +9647,21 @@ class ResultWriterV2(
         self,
         *,
         bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket_name_path: typing.Optional[builtins.str] = None,
         prefix: typing.Optional[builtins.str] = None,
         writer_config: typing.Optional["WriterConfig"] = None,
     ) -> None:
         '''
         :param bucket: S3 Bucket in which to save Map Run results. Default: - specify a bucket
+        :param bucket_name_path: S3 bucket name in which to save Map Run results, as JsonPath. Default: - no bucket path
         :param prefix: S3 prefix in which to save Map Run results. Default: - No prefix
         :param writer_config: Configuration to format the output of the Child Workflow executions. Default: - Specify both Transformation and OutputType
         '''
         props = ResultWriterV2Props(
-            bucket=bucket, prefix=prefix, writer_config=writer_config
+            bucket=bucket,
+            bucket_name_path=bucket_name_path,
+            prefix=prefix,
+            writer_config=writer_config,
         )
 
         jsii.create(self.__class__, self, [props])
@@ -9660,11 +9685,25 @@ class ResultWriterV2(
             check_type(argname="argument query_language", value=query_language, expected_type=type_hints["query_language"])
         return typing.cast(typing.Any, jsii.invoke(self, "render", [query_language]))
 
+    @jsii.member(jsii_name="validateResultWriter")
+    def validate_result_writer(self) -> typing.List[builtins.str]:
+        '''Validate that ResultWriter contains exactly either.
+
+        :see: bucketNamePath
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.invoke(self, "validateResultWriter", []))
+
     @builtins.property
     @jsii.member(jsii_name="bucket")
     def bucket(self) -> typing.Optional[_IBucket_42e086fd]:
         '''S3 Bucket in which to save Map Run results.'''
         return typing.cast(typing.Optional[_IBucket_42e086fd], jsii.get(self, "bucket"))
+
+    @builtins.property
+    @jsii.member(jsii_name="bucketNamePath")
+    def bucket_name_path(self) -> typing.Optional[builtins.str]:
+        '''S3 bucket name in which to save Map Run results, as JsonPath.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "bucketNamePath"))
 
     @builtins.property
     @jsii.member(jsii_name="prefix")
@@ -9687,6 +9726,7 @@ class ResultWriterV2(
     jsii_struct_bases=[],
     name_mapping={
         "bucket": "bucket",
+        "bucket_name_path": "bucketNamePath",
         "prefix": "prefix",
         "writer_config": "writerConfig",
     },
@@ -9696,12 +9736,14 @@ class ResultWriterV2Props:
         self,
         *,
         bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket_name_path: typing.Optional[builtins.str] = None,
         prefix: typing.Optional[builtins.str] = None,
         writer_config: typing.Optional["WriterConfig"] = None,
     ) -> None:
         '''Interface for Result Writer configuration props.
 
         :param bucket: S3 Bucket in which to save Map Run results. Default: - specify a bucket
+        :param bucket_name_path: S3 bucket name in which to save Map Run results, as JsonPath. Default: - no bucket path
         :param prefix: S3 prefix in which to save Map Run results. Default: - No prefix
         :param writer_config: Configuration to format the output of the Child Workflow executions. Default: - Specify both Transformation and OutputType
 
@@ -9732,11 +9774,14 @@ class ResultWriterV2Props:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__18a2140bb5a78d8150eb6ee1111271032f9faccf277b97a882d6bded4d0905a1)
             check_type(argname="argument bucket", value=bucket, expected_type=type_hints["bucket"])
+            check_type(argname="argument bucket_name_path", value=bucket_name_path, expected_type=type_hints["bucket_name_path"])
             check_type(argname="argument prefix", value=prefix, expected_type=type_hints["prefix"])
             check_type(argname="argument writer_config", value=writer_config, expected_type=type_hints["writer_config"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if bucket is not None:
             self._values["bucket"] = bucket
+        if bucket_name_path is not None:
+            self._values["bucket_name_path"] = bucket_name_path
         if prefix is not None:
             self._values["prefix"] = prefix
         if writer_config is not None:
@@ -9750,6 +9795,15 @@ class ResultWriterV2Props:
         '''
         result = self._values.get("bucket")
         return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+
+    @builtins.property
+    def bucket_name_path(self) -> typing.Optional[builtins.str]:
+        '''S3 bucket name in which to save Map Run results, as JsonPath.
+
+        :default: - no bucket path
+        '''
+        result = self._values.get("bucket_name_path")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def prefix(self) -> typing.Optional[builtins.str]:
@@ -12216,6 +12270,12 @@ class StateMachine(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTimedOut", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
     def grant_principal(self) -> _IPrincipal_539bb2fd:
@@ -12348,6 +12408,7 @@ class StateMachineFragment(
         prefix_states: typing.Optional[builtins.str] = None,
         state_id: typing.Optional[builtins.str] = None,
         arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+        parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
@@ -12371,6 +12432,7 @@ class StateMachineFragment(
         :param prefix_states: String to prefix all stateIds in the state machine with. Default: stateId
         :param state_id: ID of newly created containing state. Default: Construct ID of the StateMachineFragment
         :param arguments: Parameters pass a collection of key-value pairs, either static values or JSONata expressions that select from the input. Default: No arguments
+        :param parameters: Parameters pass a collection of key-value pairs, either static values or JSONPath expressions that select from the input. Default: No parameters
         :param result_path: JSONPath expression to indicate where to inject the state's output. May also be the special value JsonPath.DISCARD, which will cause the state's input to become its output. Default: $
         :param result_selector: The JSON that will replace the state's raw result and become the effective result before ResultPath is applied. You can use ResultSelector to create a payload with values that are static or selected from the state's raw result. Default: - None
         :param comment: A comment describing this state. Default: No comment
@@ -12385,6 +12447,7 @@ class StateMachineFragment(
             prefix_states=prefix_states,
             state_id=state_id,
             arguments=arguments,
+            parameters=parameters,
             result_path=result_path,
             result_selector=result_selector,
             comment=comment,
@@ -17571,6 +17634,12 @@ class Activity(
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTimedOut", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="activityArn")
     def activity_arn(self) -> builtins.str:
@@ -17719,6 +17788,7 @@ class Chain(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_stepfunctions.Ch
         id: builtins.str,
         *,
         arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+        parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
@@ -17740,6 +17810,7 @@ class Chain(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_stepfunctions.Ch
 
         :param id: -
         :param arguments: Parameters pass a collection of key-value pairs, either static values or JSONata expressions that select from the input. Default: No arguments
+        :param parameters: Parameters pass a collection of key-value pairs, either static values or JSONPath expressions that select from the input. Default: No parameters
         :param result_path: JSONPath expression to indicate where to inject the state's output. May also be the special value JsonPath.DISCARD, which will cause the state's input to become its output. Default: $
         :param result_selector: The JSON that will replace the state's raw result and become the effective result before ResultPath is applied. You can use ResultSelector to create a payload with values that are static or selected from the state's raw result. Default: - None
         :param comment: A comment describing this state. Default: No comment
@@ -17755,6 +17826,7 @@ class Chain(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_stepfunctions.Ch
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = ParallelProps(
             arguments=arguments,
+            parameters=parameters,
             result_path=result_path,
             result_selector=result_selector,
             comment=comment,
@@ -21998,6 +22070,7 @@ class Parallel(
         id: builtins.str,
         *,
         arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+        parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
@@ -22012,6 +22085,7 @@ class Parallel(
         :param scope: -
         :param id: Descriptive identifier for this chainable.
         :param arguments: Parameters pass a collection of key-value pairs, either static values or JSONata expressions that select from the input. Default: No arguments
+        :param parameters: Parameters pass a collection of key-value pairs, either static values or JSONPath expressions that select from the input. Default: No parameters
         :param result_path: JSONPath expression to indicate where to inject the state's output. May also be the special value JsonPath.DISCARD, which will cause the state's input to become its output. Default: $
         :param result_selector: The JSON that will replace the state's raw result and become the effective result before ResultPath is applied. You can use ResultSelector to create a payload with values that are static or selected from the state's raw result. Default: - None
         :param comment: A comment describing this state. Default: No comment
@@ -22028,6 +22102,7 @@ class Parallel(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = ParallelProps(
             arguments=arguments,
+            parameters=parameters,
             result_path=result_path,
             result_selector=result_selector,
             comment=comment,
@@ -22093,6 +22168,7 @@ class Parallel(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
+        parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
@@ -22111,6 +22187,7 @@ class Parallel(
 
         :param scope: -
         :param id: -
+        :param parameters: Parameters pass a collection of key-value pairs, either static values or JSONPath expressions that select from the input. Default: No parameters
         :param result_path: JSONPath expression to indicate where to inject the state's output. May also be the special value JsonPath.DISCARD, which will cause the state's input to become its output. Default: $
         :param result_selector: The JSON that will replace the state's raw result and become the effective result before ResultPath is applied. You can use ResultSelector to create a payload with values that are static or selected from the state's raw result. Default: - None
         :param comment: A comment describing this state. Default: No comment
@@ -22125,6 +22202,7 @@ class Parallel(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = ParallelJsonPathProps(
+            parameters=parameters,
             result_path=result_path,
             result_selector=result_selector,
             comment=comment,
@@ -22270,6 +22348,7 @@ class Parallel(
         "assign": "assign",
         "input_path": "inputPath",
         "output_path": "outputPath",
+        "parameters": "parameters",
         "result_path": "resultPath",
         "result_selector": "resultSelector",
     },
@@ -22288,6 +22367,7 @@ class ParallelJsonPathProps(
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
+        parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     ) -> None:
@@ -22299,6 +22379,7 @@ class ParallelJsonPathProps(
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
         :param input_path: JSONPath expression to select part of the state to be the input to this state. May also be the special value JsonPath.DISCARD, which will cause the effective input to be the empty object {}. Default: $
         :param output_path: JSONPath expression to select part of the state to be the output to this state. May also be the special value JsonPath.DISCARD, which will cause the effective output to be the empty object {}. Default: $
+        :param parameters: Parameters pass a collection of key-value pairs, either static values or JSONPath expressions that select from the input. Default: No parameters
         :param result_path: JSONPath expression to indicate where to inject the state's output. May also be the special value JsonPath.DISCARD, which will cause the state's input to become its output. Default: $
         :param result_selector: The JSON that will replace the state's raw result and become the effective result before ResultPath is applied. You can use ResultSelector to create a payload with values that are static or selected from the state's raw result. Default: - None
 
@@ -22311,6 +22392,7 @@ class ParallelJsonPathProps(
             from aws_cdk import aws_stepfunctions as stepfunctions
             
             # assign: Any
+            # parameters: Any
             # result_selector: Any
             
             parallel_json_path_props = stepfunctions.ParallelJsonPathProps(
@@ -22320,6 +22402,9 @@ class ParallelJsonPathProps(
                 comment="comment",
                 input_path="inputPath",
                 output_path="outputPath",
+                parameters={
+                    "parameters_key": parameters
+                },
                 query_language=stepfunctions.QueryLanguage.JSON_PATH,
                 result_path="resultPath",
                 result_selector={
@@ -22336,6 +22421,7 @@ class ParallelJsonPathProps(
             check_type(argname="argument assign", value=assign, expected_type=type_hints["assign"])
             check_type(argname="argument input_path", value=input_path, expected_type=type_hints["input_path"])
             check_type(argname="argument output_path", value=output_path, expected_type=type_hints["output_path"])
+            check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
             check_type(argname="argument result_path", value=result_path, expected_type=type_hints["result_path"])
             check_type(argname="argument result_selector", value=result_selector, expected_type=type_hints["result_selector"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -22351,6 +22437,8 @@ class ParallelJsonPathProps(
             self._values["input_path"] = input_path
         if output_path is not None:
             self._values["output_path"] = output_path
+        if parameters is not None:
+            self._values["parameters"] = parameters
         if result_path is not None:
             self._values["result_path"] = result_path
         if result_selector is not None:
@@ -22422,6 +22510,17 @@ class ParallelJsonPathProps(
         '''
         result = self._values.get("output_path")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def parameters(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
+        '''Parameters pass a collection of key-value pairs, either static values or JSONPath expressions that select from the input.
+
+        :default: No parameters
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/input-output-inputpath-params.html#input-output-parameters
+        '''
+        result = self._values.get("parameters")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
     def result_path(self) -> typing.Optional[builtins.str]:
@@ -22646,6 +22745,7 @@ class ParallelJsonataProps(
         "output_path": "outputPath",
         "outputs": "outputs",
         "arguments": "arguments",
+        "parameters": "parameters",
         "result_path": "resultPath",
         "result_selector": "resultSelector",
     },
@@ -22667,6 +22767,7 @@ class ParallelProps(
         output_path: typing.Optional[builtins.str] = None,
         outputs: typing.Any = None,
         arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+        parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     ) -> None:
@@ -22680,6 +22781,7 @@ class ParallelProps(
         :param output_path: JSONPath expression to select part of the state to be the output to this state. May also be the special value JsonPath.DISCARD, which will cause the effective output to be the empty object {}. Default: $
         :param outputs: Used to specify and transform output from the state. When specified, the value overrides the state output default. The output field accepts any JSON value (object, array, string, number, boolean, null). Any string value, including those inside objects or arrays, will be evaluated as JSONata if surrounded by {% %} characters. Output also accepts a JSONata expression directly. Default: - $states.result or $states.errorOutput
         :param arguments: Parameters pass a collection of key-value pairs, either static values or JSONata expressions that select from the input. Default: No arguments
+        :param parameters: Parameters pass a collection of key-value pairs, either static values or JSONPath expressions that select from the input. Default: No parameters
         :param result_path: JSONPath expression to indicate where to inject the state's output. May also be the special value JsonPath.DISCARD, which will cause the state's input to become its output. Default: $
         :param result_selector: The JSON that will replace the state's raw result and become the effective result before ResultPath is applied. You can use ResultSelector to create a payload with values that are static or selected from the state's raw result. Default: - None
 
@@ -22694,6 +22796,7 @@ class ParallelProps(
             # arguments_: Any
             # assign: Any
             # outputs: Any
+            # parameters: Any
             # result_selector: Any
             
             parallel_props = stepfunctions.ParallelProps(
@@ -22707,6 +22810,9 @@ class ParallelProps(
                 input_path="inputPath",
                 output_path="outputPath",
                 outputs=outputs,
+                parameters={
+                    "parameters_key": parameters
+                },
                 query_language=stepfunctions.QueryLanguage.JSON_PATH,
                 result_path="resultPath",
                 result_selector={
@@ -22725,6 +22831,7 @@ class ParallelProps(
             check_type(argname="argument output_path", value=output_path, expected_type=type_hints["output_path"])
             check_type(argname="argument outputs", value=outputs, expected_type=type_hints["outputs"])
             check_type(argname="argument arguments", value=arguments, expected_type=type_hints["arguments"])
+            check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
             check_type(argname="argument result_path", value=result_path, expected_type=type_hints["result_path"])
             check_type(argname="argument result_selector", value=result_selector, expected_type=type_hints["result_selector"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -22744,6 +22851,8 @@ class ParallelProps(
             self._values["outputs"] = outputs
         if arguments is not None:
             self._values["arguments"] = arguments
+        if parameters is not None:
+            self._values["parameters"] = parameters
         if result_path is not None:
             self._values["result_path"] = result_path
         if result_selector is not None:
@@ -22842,6 +22951,17 @@ class ParallelProps(
         :see: https://docs.aws.amazon.com/step-functions/latest/dg/transforming-data.html
         '''
         result = self._values.get("arguments")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
+
+    @builtins.property
+    def parameters(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
+        '''Parameters pass a collection of key-value pairs, either static values or JSONPath expressions that select from the input.
+
+        :default: No parameters
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/input-output-inputpath-params.html#input-output-parameters
+        '''
+        result = self._values.get("parameters")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
@@ -23835,6 +23955,7 @@ class S3CsvItemReaderProps(S3FileItemReaderProps):
         "output_path": "outputPath",
         "outputs": "outputs",
         "arguments": "arguments",
+        "parameters": "parameters",
         "result_path": "resultPath",
         "result_selector": "resultSelector",
         "prefix_states": "prefixStates",
@@ -23853,6 +23974,7 @@ class SingleStateOptions(ParallelProps):
         output_path: typing.Optional[builtins.str] = None,
         outputs: typing.Any = None,
         arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+        parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         prefix_states: typing.Optional[builtins.str] = None,
@@ -23868,6 +23990,7 @@ class SingleStateOptions(ParallelProps):
         :param output_path: JSONPath expression to select part of the state to be the output to this state. May also be the special value JsonPath.DISCARD, which will cause the effective output to be the empty object {}. Default: $
         :param outputs: Used to specify and transform output from the state. When specified, the value overrides the state output default. The output field accepts any JSON value (object, array, string, number, boolean, null). Any string value, including those inside objects or arrays, will be evaluated as JSONata if surrounded by {% %} characters. Output also accepts a JSONata expression directly. Default: - $states.result or $states.errorOutput
         :param arguments: Parameters pass a collection of key-value pairs, either static values or JSONata expressions that select from the input. Default: No arguments
+        :param parameters: Parameters pass a collection of key-value pairs, either static values or JSONPath expressions that select from the input. Default: No parameters
         :param result_path: JSONPath expression to indicate where to inject the state's output. May also be the special value JsonPath.DISCARD, which will cause the state's input to become its output. Default: $
         :param result_selector: The JSON that will replace the state's raw result and become the effective result before ResultPath is applied. You can use ResultSelector to create a payload with values that are static or selected from the state's raw result. Default: - None
         :param prefix_states: String to prefix all stateIds in the state machine with. Default: stateId
@@ -23884,6 +24007,7 @@ class SingleStateOptions(ParallelProps):
             # arguments_: Any
             # assign: Any
             # outputs: Any
+            # parameters: Any
             # result_selector: Any
             
             single_state_options = stepfunctions.SingleStateOptions(
@@ -23897,6 +24021,9 @@ class SingleStateOptions(ParallelProps):
                 input_path="inputPath",
                 output_path="outputPath",
                 outputs=outputs,
+                parameters={
+                    "parameters_key": parameters
+                },
                 prefix_states="prefixStates",
                 query_language=stepfunctions.QueryLanguage.JSON_PATH,
                 result_path="resultPath",
@@ -23917,6 +24044,7 @@ class SingleStateOptions(ParallelProps):
             check_type(argname="argument output_path", value=output_path, expected_type=type_hints["output_path"])
             check_type(argname="argument outputs", value=outputs, expected_type=type_hints["outputs"])
             check_type(argname="argument arguments", value=arguments, expected_type=type_hints["arguments"])
+            check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
             check_type(argname="argument result_path", value=result_path, expected_type=type_hints["result_path"])
             check_type(argname="argument result_selector", value=result_selector, expected_type=type_hints["result_selector"])
             check_type(argname="argument prefix_states", value=prefix_states, expected_type=type_hints["prefix_states"])
@@ -23938,6 +24066,8 @@ class SingleStateOptions(ParallelProps):
             self._values["outputs"] = outputs
         if arguments is not None:
             self._values["arguments"] = arguments
+        if parameters is not None:
+            self._values["parameters"] = parameters
         if result_path is not None:
             self._values["result_path"] = result_path
         if result_selector is not None:
@@ -24043,6 +24173,17 @@ class SingleStateOptions(ParallelProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
+    def parameters(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
+        '''Parameters pass a collection of key-value pairs, either static values or JSONPath expressions that select from the input.
+
+        :default: No parameters
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/input-output-inputpath-params.html#input-output-parameters
+        '''
+        result = self._values.get("parameters")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
+
+    @builtins.property
     def result_path(self) -> typing.Optional[builtins.str]:
         '''JSONPath expression to indicate where to inject the state's output.
 
@@ -24125,14 +24266,12 @@ class DistributedMap(
         #
         # JSON state input:
         #  {
-        #    "bucketName": "my-bucket",
-        #    "prefix": "item"
+        #    "bucketName": "my-bucket"
         #  }
         #
         distributed_map = sfn.DistributedMap(self, "DistributedMap",
-            item_reader=sfn.S3ObjectsItemReader(
-                bucket_name_path=sfn.JsonPath.string_at("$.bucketName"),
-                prefix=sfn.JsonPath.string_at("$.prefix")
+            result_writer_v2=sfn.ResultWriterV2(
+                bucket_name_path=sfn.JsonPath.string_at("$.bucketName")
             )
         )
         distributed_map.item_processor(sfn.Pass(self, "Pass"))
@@ -26746,6 +26885,7 @@ def _typecheckingstub__4d76b7d45bf1ab379f1533a844554757a1b805fb94f1a5b1c5d2573bb
 def _typecheckingstub__18a2140bb5a78d8150eb6ee1111271032f9faccf277b97a882d6bded4d0905a1(
     *,
     bucket: typing.Optional[_IBucket_42e086fd] = None,
+    bucket_name_path: typing.Optional[builtins.str] = None,
     prefix: typing.Optional[builtins.str] = None,
     writer_config: typing.Optional[WriterConfig] = None,
 ) -> None:
@@ -27704,6 +27844,7 @@ def _typecheckingstub__468194d7b14012a289ab0c26efcba49fbd09832b9f87d79467e6334c8
     id: builtins.str,
     *,
     arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+    parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     result_path: typing.Optional[builtins.str] = None,
     result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     comment: typing.Optional[builtins.str] = None,
@@ -28149,6 +28290,7 @@ def _typecheckingstub__94610eed4635a69c6d4a92818527e6ecdf15561092c488fb6caa8d8ec
     id: builtins.str,
     *,
     arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+    parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     result_path: typing.Optional[builtins.str] = None,
     result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     comment: typing.Optional[builtins.str] = None,
@@ -28180,6 +28322,7 @@ def _typecheckingstub__59516f88fca1f12471673842bc69a84f5bc6f1e5e9870f37ee194215e
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
+    parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     result_path: typing.Optional[builtins.str] = None,
     result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     comment: typing.Optional[builtins.str] = None,
@@ -28235,6 +28378,7 @@ def _typecheckingstub__01751a726904e9d37b08d2e5f3e03603fcb85bd621338876a23594d1e
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     input_path: typing.Optional[builtins.str] = None,
     output_path: typing.Optional[builtins.str] = None,
+    parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     result_path: typing.Optional[builtins.str] = None,
     result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
 ) -> None:
@@ -28263,6 +28407,7 @@ def _typecheckingstub__7a04fcca9cbcddc34201ab96bfd6e4be7793eed6937bb07ccd5c1a2dc
     output_path: typing.Optional[builtins.str] = None,
     outputs: typing.Any = None,
     arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+    parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     result_path: typing.Optional[builtins.str] = None,
     result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
 ) -> None:
@@ -28393,6 +28538,7 @@ def _typecheckingstub__5bfe6c744bf72f7e27c754b7de24b3cc1c8ee511680b9a61ee46fc118
     output_path: typing.Optional[builtins.str] = None,
     outputs: typing.Any = None,
     arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+    parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     result_path: typing.Optional[builtins.str] = None,
     result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     prefix_states: typing.Optional[builtins.str] = None,

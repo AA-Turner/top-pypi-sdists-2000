@@ -1372,7 +1372,7 @@ class CfnAgent(
             *,
             executor: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAgent.OrchestrationExecutorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''Details of custom orchestration.
+            '''Contains details of the custom orchestration configured for the agent.
 
             :param executor: The structure of the executor invoking the actions in custom orchestration.
 
@@ -1929,7 +1929,7 @@ class CfnAgent(
     )
     class OrchestrationExecutorProperty:
         def __init__(self, *, lambda_: builtins.str) -> None:
-            '''Contains details about the Lambda function containing the orchestration logic carried out upon invoking the custom orchestration.
+            '''The structure of the executor invoking the actions in custom orchestration.
 
             :param lambda_: The Amazon Resource Name (ARN) of the Lambda function containing the business logic that is carried out upon invoking the action.
 
@@ -13301,7 +13301,7 @@ class CfnFlow(
 
             :param agent: Contains configurations for an agent node in your flow. Invokes an alias of an agent and returns the response.
             :param collector: Contains configurations for a collector node in your flow. Collects an iteration of inputs and consolidates them into an array of outputs.
-            :param condition: Contains configurations for a Condition node in your flow. Defines conditions that lead to different branches of the flow.
+            :param condition: Contains configurations for a condition node in your flow. Defines conditions that lead to different branches of the flow.
             :param input: Contains configurations for an input flow node in your flow. The first node in the flow. ``inputs`` can't be specified for this node.
             :param iterator: Contains configurations for an iterator node in your flow. Takes an input that is an array and iteratively sends each item of the array as an output to the following node. The size of the array is also returned in the output. The output flow node at the end of the flow iteration will return a response for each member of the array. To return only one response, you can include a collector node downstream from the iterator node.
             :param knowledge_base: Contains configurations for a knowledge base node in your flow. Queries a knowledge base and returns the retrieved results or generated response.
@@ -13309,8 +13309,8 @@ class CfnFlow(
             :param lex: Contains configurations for a Lex node in your flow. Invokes an Amazon Lex bot to identify the intent of the input and return the intent as the output.
             :param output: Contains configurations for an output flow node in your flow. The last node in the flow. ``outputs`` can't be specified for this node.
             :param prompt: Contains configurations for a prompt node in your flow. Runs a prompt and generates the model response as the output. You can use a prompt from Prompt management or you can configure one in this node.
-            :param retrieval: Contains configurations for a Retrieval node in your flow. Retrieves data from an Amazon S3 location and returns it as the output.
-            :param storage: Contains configurations for a Storage node in your flow. Stores an input in an Amazon S3 location.
+            :param retrieval: Contains configurations for a retrieval node in your flow. Retrieves data from an Amazon S3 location and returns it as the output.
+            :param storage: Contains configurations for a storage node in your flow. Stores an input in an Amazon S3 location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-flownodeconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -13480,7 +13480,7 @@ class CfnFlow(
         def condition(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlow.ConditionFlowNodeConfigurationProperty"]]:
-            '''Contains configurations for a Condition node in your flow.
+            '''Contains configurations for a condition node in your flow.
 
             Defines conditions that lead to different branches of the flow.
 
@@ -13580,7 +13580,7 @@ class CfnFlow(
         def retrieval(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlow.RetrievalFlowNodeConfigurationProperty"]]:
-            '''Contains configurations for a Retrieval node in your flow.
+            '''Contains configurations for a retrieval node in your flow.
 
             Retrieves data from an Amazon S3 location and returns it as the output.
 
@@ -13593,7 +13593,7 @@ class CfnFlow(
         def storage(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlow.StorageFlowNodeConfigurationProperty"]]:
-            '''Contains configurations for a Storage node in your flow.
+            '''Contains configurations for a storage node in your flow.
 
             Stores an input in an Amazon S3 location.
 
@@ -17291,7 +17291,7 @@ class CfnFlowVersion(
 
             :param agent: Contains configurations for an agent node in your flow. Invokes an alias of an agent and returns the response.
             :param collector: Contains configurations for a collector node in your flow. Collects an iteration of inputs and consolidates them into an array of outputs.
-            :param condition: Contains configurations for a Condition node in your flow. Defines conditions that lead to different branches of the flow.
+            :param condition: Contains configurations for a condition node in your flow. Defines conditions that lead to different branches of the flow.
             :param input: Contains configurations for an input flow node in your flow. The first node in the flow. ``inputs`` can't be specified for this node.
             :param iterator: Contains configurations for an iterator node in your flow. Takes an input that is an array and iteratively sends each item of the array as an output to the following node. The size of the array is also returned in the output. The output flow node at the end of the flow iteration will return a response for each member of the array. To return only one response, you can include a collector node downstream from the iterator node.
             :param knowledge_base: Contains configurations for a knowledge base node in your flow. Queries a knowledge base and returns the retrieved results or generated response.
@@ -17299,8 +17299,8 @@ class CfnFlowVersion(
             :param lex: Contains configurations for a Lex node in your flow. Invokes an Amazon Lex bot to identify the intent of the input and return the intent as the output.
             :param output: Contains configurations for an output flow node in your flow. The last node in the flow. ``outputs`` can't be specified for this node.
             :param prompt: Contains configurations for a prompt node in your flow. Runs a prompt and generates the model response as the output. You can use a prompt from Prompt management or you can configure one in this node.
-            :param retrieval: Contains configurations for a Retrieval node in your flow. Retrieves data from an Amazon S3 location and returns it as the output.
-            :param storage: Contains configurations for a Storage node in your flow. Stores an input in an Amazon S3 location.
+            :param retrieval: Contains configurations for a retrieval node in your flow. Retrieves data from an Amazon S3 location and returns it as the output.
+            :param storage: Contains configurations for a storage node in your flow. Stores an input in an Amazon S3 location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-flownodeconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -17470,7 +17470,7 @@ class CfnFlowVersion(
         def condition(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowVersion.ConditionFlowNodeConfigurationProperty"]]:
-            '''Contains configurations for a Condition node in your flow.
+            '''Contains configurations for a condition node in your flow.
 
             Defines conditions that lead to different branches of the flow.
 
@@ -17570,7 +17570,7 @@ class CfnFlowVersion(
         def retrieval(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowVersion.RetrievalFlowNodeConfigurationProperty"]]:
-            '''Contains configurations for a Retrieval node in your flow.
+            '''Contains configurations for a retrieval node in your flow.
 
             Retrieves data from an Amazon S3 location and returns it as the output.
 
@@ -17583,7 +17583,7 @@ class CfnFlowVersion(
         def storage(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowVersion.StorageFlowNodeConfigurationProperty"]]:
-            '''Contains configurations for a Storage node in your flow.
+            '''Contains configurations for a storage node in your flow.
 
             Stores an input in an Amazon S3 location.
 
@@ -22051,6 +22051,522 @@ class CfnGuardrailVersionProps:
 
     def __repr__(self) -> str:
         return "CfnGuardrailVersionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ITaggableV2_4e6798f8)
+class CfnIntelligentPromptRouter(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_bedrock.CfnIntelligentPromptRouter",
+):
+    '''Definition of AWS::Bedrock::IntelligentPromptRouter Resource Type.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html
+    :cloudformationResource: AWS::Bedrock::IntelligentPromptRouter
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_bedrock as bedrock
+        
+        cfn_intelligent_prompt_router = bedrock.CfnIntelligentPromptRouter(self, "MyCfnIntelligentPromptRouter",
+            fallback_model=bedrock.CfnIntelligentPromptRouter.PromptRouterTargetModelProperty(
+                model_arn="modelArn"
+            ),
+            models=[bedrock.CfnIntelligentPromptRouter.PromptRouterTargetModelProperty(
+                model_arn="modelArn"
+            )],
+            prompt_router_name="promptRouterName",
+            routing_criteria=bedrock.CfnIntelligentPromptRouter.RoutingCriteriaProperty(
+                response_quality_difference=123
+            ),
+        
+            # the properties below are optional
+            description="description",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        fallback_model: typing.Union[_IResolvable_da3f097b, typing.Union["CfnIntelligentPromptRouter.PromptRouterTargetModelProperty", typing.Dict[builtins.str, typing.Any]]],
+        models: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIntelligentPromptRouter.PromptRouterTargetModelProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        prompt_router_name: builtins.str,
+        routing_criteria: typing.Union[_IResolvable_da3f097b, typing.Union["CfnIntelligentPromptRouter.RoutingCriteriaProperty", typing.Dict[builtins.str, typing.Any]]],
+        description: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param fallback_model: Model configuration.
+        :param models: List of model configuration.
+        :param prompt_router_name: Name of the Prompt Router.
+        :param routing_criteria: Routing criteria for a prompt router.
+        :param description: Description of the Prompt Router.
+        :param tags: List of Tags.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a5d2e514af9553d15e3be6a1c57dd1062d7a60fee139dbca24ce0ced551672eb)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnIntelligentPromptRouterProps(
+            fallback_model=fallback_model,
+            models=models,
+            prompt_router_name=prompt_router_name,
+            routing_criteria=routing_criteria,
+            description=description,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__03b0b2936dfa8c510b4e2f9e5f7110304e75b128876e0272df9b9ac91dd26930)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9feb5c424ea1c452676a08cce16f75eb90f9235e27c9bfc0b9cbd839871891f3)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedAt")
+    def attr_created_at(self) -> builtins.str:
+        '''Time Stamp.
+
+        :cloudformationAttribute: CreatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrPromptRouterArn")
+    def attr_prompt_router_arn(self) -> builtins.str:
+        '''Arn of the Prompt Router.
+
+        :cloudformationAttribute: PromptRouterArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrPromptRouterArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''Status of a PromptRouter.
+
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrType")
+    def attr_type(self) -> builtins.str:
+        '''Type of a Prompt Router.
+
+        :cloudformationAttribute: Type
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrUpdatedAt")
+    def attr_updated_at(self) -> builtins.str:
+        '''Time Stamp.
+
+        :cloudformationAttribute: UpdatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrUpdatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="fallbackModel")
+    def fallback_model(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.PromptRouterTargetModelProperty"]:
+        '''Model configuration.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.PromptRouterTargetModelProperty"], jsii.get(self, "fallbackModel"))
+
+    @fallback_model.setter
+    def fallback_model(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.PromptRouterTargetModelProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cd80df76a813246a8e4277e3bc440f0bd9af1683df43577473a9071026d3b6bf)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "fallbackModel", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="models")
+    def models(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.PromptRouterTargetModelProperty"]]]:
+        '''List of model configuration.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.PromptRouterTargetModelProperty"]]], jsii.get(self, "models"))
+
+    @models.setter
+    def models(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.PromptRouterTargetModelProperty"]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a25f72fc5023b70494fc722f22f88047d6a2c0242e2e3e9faf9709606670791a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "models", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="promptRouterName")
+    def prompt_router_name(self) -> builtins.str:
+        '''Name of the Prompt Router.'''
+        return typing.cast(builtins.str, jsii.get(self, "promptRouterName"))
+
+    @prompt_router_name.setter
+    def prompt_router_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ec21107d1eca7e309bcd9f3df4a7749c2b99c2f6c11a70183255fce541a6087f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "promptRouterName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="routingCriteria")
+    def routing_criteria(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.RoutingCriteriaProperty"]:
+        '''Routing criteria for a prompt router.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.RoutingCriteriaProperty"], jsii.get(self, "routingCriteria"))
+
+    @routing_criteria.setter
+    def routing_criteria(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.RoutingCriteriaProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__803bc18993ea7d90a900939d6578f087141fb630c6e5d87b74ad4e7fa6b91af8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "routingCriteria", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="description")
+    def description(self) -> typing.Optional[builtins.str]:
+        '''Description of the Prompt Router.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
+
+    @description.setter
+    def description(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__08709ed1bc4a3037160cec605e0b1bd4113b22ec101704d31096b5c625a9d9cf)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''List of Tags.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3c6153dd14f4fef3c8f916f48185faa26c1372a89eb9c48120b46b15741ed8d3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnIntelligentPromptRouter.PromptRouterTargetModelProperty",
+        jsii_struct_bases=[],
+        name_mapping={"model_arn": "modelArn"},
+    )
+    class PromptRouterTargetModelProperty:
+        def __init__(self, *, model_arn: builtins.str) -> None:
+            '''The target model for a prompt router.
+
+            :param model_arn: The target model's ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-intelligentpromptrouter-promptroutertargetmodel.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                prompt_router_target_model_property = bedrock.CfnIntelligentPromptRouter.PromptRouterTargetModelProperty(
+                    model_arn="modelArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f13c2a7cb42b0b44b093f57856aeb21f6e80f9a98941ae4c0bcca2d340bc4c74)
+                check_type(argname="argument model_arn", value=model_arn, expected_type=type_hints["model_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "model_arn": model_arn,
+            }
+
+        @builtins.property
+        def model_arn(self) -> builtins.str:
+            '''The target model's ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-intelligentpromptrouter-promptroutertargetmodel.html#cfn-bedrock-intelligentpromptrouter-promptroutertargetmodel-modelarn
+            '''
+            result = self._values.get("model_arn")
+            assert result is not None, "Required property 'model_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "PromptRouterTargetModelProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnIntelligentPromptRouter.RoutingCriteriaProperty",
+        jsii_struct_bases=[],
+        name_mapping={"response_quality_difference": "responseQualityDifference"},
+    )
+    class RoutingCriteriaProperty:
+        def __init__(self, *, response_quality_difference: jsii.Number) -> None:
+            '''Routing criteria for a prompt router.
+
+            :param response_quality_difference: The criteria's response quality difference.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-intelligentpromptrouter-routingcriteria.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                routing_criteria_property = bedrock.CfnIntelligentPromptRouter.RoutingCriteriaProperty(
+                    response_quality_difference=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7b122742002952822ca4101c16f95952147a47cfb8a5ad666e4a2aa644ea2023)
+                check_type(argname="argument response_quality_difference", value=response_quality_difference, expected_type=type_hints["response_quality_difference"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "response_quality_difference": response_quality_difference,
+            }
+
+        @builtins.property
+        def response_quality_difference(self) -> jsii.Number:
+            '''The criteria's response quality difference.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-intelligentpromptrouter-routingcriteria.html#cfn-bedrock-intelligentpromptrouter-routingcriteria-responsequalitydifference
+            '''
+            result = self._values.get("response_quality_difference")
+            assert result is not None, "Required property 'response_quality_difference' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RoutingCriteriaProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_bedrock.CfnIntelligentPromptRouterProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "fallback_model": "fallbackModel",
+        "models": "models",
+        "prompt_router_name": "promptRouterName",
+        "routing_criteria": "routingCriteria",
+        "description": "description",
+        "tags": "tags",
+    },
+)
+class CfnIntelligentPromptRouterProps:
+    def __init__(
+        self,
+        *,
+        fallback_model: typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntelligentPromptRouter.PromptRouterTargetModelProperty, typing.Dict[builtins.str, typing.Any]]],
+        models: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntelligentPromptRouter.PromptRouterTargetModelProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        prompt_router_name: builtins.str,
+        routing_criteria: typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntelligentPromptRouter.RoutingCriteriaProperty, typing.Dict[builtins.str, typing.Any]]],
+        description: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnIntelligentPromptRouter``.
+
+        :param fallback_model: Model configuration.
+        :param models: List of model configuration.
+        :param prompt_router_name: Name of the Prompt Router.
+        :param routing_criteria: Routing criteria for a prompt router.
+        :param description: Description of the Prompt Router.
+        :param tags: List of Tags.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_bedrock as bedrock
+            
+            cfn_intelligent_prompt_router_props = bedrock.CfnIntelligentPromptRouterProps(
+                fallback_model=bedrock.CfnIntelligentPromptRouter.PromptRouterTargetModelProperty(
+                    model_arn="modelArn"
+                ),
+                models=[bedrock.CfnIntelligentPromptRouter.PromptRouterTargetModelProperty(
+                    model_arn="modelArn"
+                )],
+                prompt_router_name="promptRouterName",
+                routing_criteria=bedrock.CfnIntelligentPromptRouter.RoutingCriteriaProperty(
+                    response_quality_difference=123
+                ),
+            
+                # the properties below are optional
+                description="description",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ac97327bebd43ad8b942919c24917e1378d3c55caa8d2363928873ac029be7da)
+            check_type(argname="argument fallback_model", value=fallback_model, expected_type=type_hints["fallback_model"])
+            check_type(argname="argument models", value=models, expected_type=type_hints["models"])
+            check_type(argname="argument prompt_router_name", value=prompt_router_name, expected_type=type_hints["prompt_router_name"])
+            check_type(argname="argument routing_criteria", value=routing_criteria, expected_type=type_hints["routing_criteria"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "fallback_model": fallback_model,
+            "models": models,
+            "prompt_router_name": prompt_router_name,
+            "routing_criteria": routing_criteria,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def fallback_model(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.PromptRouterTargetModelProperty]:
+        '''Model configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-fallbackmodel
+        '''
+        result = self._values.get("fallback_model")
+        assert result is not None, "Required property 'fallback_model' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.PromptRouterTargetModelProperty], result)
+
+    @builtins.property
+    def models(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.PromptRouterTargetModelProperty]]]:
+        '''List of model configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-models
+        '''
+        result = self._values.get("models")
+        assert result is not None, "Required property 'models' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.PromptRouterTargetModelProperty]]], result)
+
+    @builtins.property
+    def prompt_router_name(self) -> builtins.str:
+        '''Name of the Prompt Router.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-promptroutername
+        '''
+        result = self._values.get("prompt_router_name")
+        assert result is not None, "Required property 'prompt_router_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def routing_criteria(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.RoutingCriteriaProperty]:
+        '''Routing criteria for a prompt router.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-routingcriteria
+        '''
+        result = self._values.get("routing_criteria")
+        assert result is not None, "Required property 'routing_criteria' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.RoutingCriteriaProperty], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''Description of the Prompt Router.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''List of Tags.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnIntelligentPromptRouterProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -32260,6 +32776,8 @@ __all__ = [
     "CfnGuardrailProps",
     "CfnGuardrailVersion",
     "CfnGuardrailVersionProps",
+    "CfnIntelligentPromptRouter",
+    "CfnIntelligentPromptRouterProps",
     "CfnKnowledgeBase",
     "CfnKnowledgeBaseProps",
     "CfnPrompt",
@@ -34633,6 +35151,94 @@ def _typecheckingstub__e07f1ed805e6d73c6e83274e605414f148ca0a10b6065c654e3b54502
     *,
     guardrail_identifier: builtins.str,
     description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a5d2e514af9553d15e3be6a1c57dd1062d7a60fee139dbca24ce0ced551672eb(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    fallback_model: typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntelligentPromptRouter.PromptRouterTargetModelProperty, typing.Dict[builtins.str, typing.Any]]],
+    models: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntelligentPromptRouter.PromptRouterTargetModelProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    prompt_router_name: builtins.str,
+    routing_criteria: typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntelligentPromptRouter.RoutingCriteriaProperty, typing.Dict[builtins.str, typing.Any]]],
+    description: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__03b0b2936dfa8c510b4e2f9e5f7110304e75b128876e0272df9b9ac91dd26930(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9feb5c424ea1c452676a08cce16f75eb90f9235e27c9bfc0b9cbd839871891f3(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cd80df76a813246a8e4277e3bc440f0bd9af1683df43577473a9071026d3b6bf(
+    value: typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.PromptRouterTargetModelProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a25f72fc5023b70494fc722f22f88047d6a2c0242e2e3e9faf9709606670791a(
+    value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.PromptRouterTargetModelProperty]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ec21107d1eca7e309bcd9f3df4a7749c2b99c2f6c11a70183255fce541a6087f(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__803bc18993ea7d90a900939d6578f087141fb630c6e5d87b74ad4e7fa6b91af8(
+    value: typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.RoutingCriteriaProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__08709ed1bc4a3037160cec605e0b1bd4113b22ec101704d31096b5c625a9d9cf(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3c6153dd14f4fef3c8f916f48185faa26c1372a89eb9c48120b46b15741ed8d3(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f13c2a7cb42b0b44b093f57856aeb21f6e80f9a98941ae4c0bcca2d340bc4c74(
+    *,
+    model_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7b122742002952822ca4101c16f95952147a47cfb8a5ad666e4a2aa644ea2023(
+    *,
+    response_quality_difference: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ac97327bebd43ad8b942919c24917e1378d3c55caa8d2363928873ac029be7da(
+    *,
+    fallback_model: typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntelligentPromptRouter.PromptRouterTargetModelProperty, typing.Dict[builtins.str, typing.Any]]],
+    models: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntelligentPromptRouter.PromptRouterTargetModelProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    prompt_router_name: builtins.str,
+    routing_criteria: typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntelligentPromptRouter.RoutingCriteriaProperty, typing.Dict[builtins.str, typing.Any]]],
+    description: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

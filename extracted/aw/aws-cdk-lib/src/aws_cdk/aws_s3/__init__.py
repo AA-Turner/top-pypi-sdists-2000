@@ -183,8 +183,8 @@ To use a bucket in a different stack in the same CDK application, pass the objec
 #
 class Producer(Stack):
 
-    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         bucket = s3.Bucket(self, "MyBucket",
             removal_policy=cdk.RemovalPolicy.DESTROY
@@ -195,8 +195,8 @@ class Producer(Stack):
 # Stack that consumes the bucket
 #
 class Consumer(Stack):
-    def __init__(self, scope, id, *, userBucket, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, userBucket=userBucket, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, userBucket, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, userBucket=userBucket, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         user = iam.User(self, "MyUser")
         user_bucket.grant_read_write(user)
@@ -360,19 +360,19 @@ bucket = s3.Bucket(self, "MyBlockedBucket",
 )
 ```
 
-Block and ignore public ACLs:
+Block and ignore public ACLs (other options remain unblocked):
 
 ```python
 bucket = s3.Bucket(self, "MyBlockedBucket",
-    block_public_access=s3.BlockPublicAccess.BLOCK_ACLS
+    block_public_access=s3.BlockPublicAccess.BLOCK_ACLS_ONLY
 )
 ```
 
-Alternatively, specify the settings manually:
+Alternatively, specify the settings manually (unspecified options will remain blocked):
 
 ```python
 bucket = s3.Bucket(self, "MyBlockedBucket",
-    block_public_access=s3.BlockPublicAccess(block_public_policy=True)
+    block_public_access=s3.BlockPublicAccess(block_public_policy=False)
 )
 ```
 
@@ -1075,7 +1075,7 @@ class BlockPublicAccess(
     Example::
 
         bucket = s3.Bucket(self, "MyBlockedBucket",
-            block_public_access=s3.BlockPublicAccess.BLOCK_ALL
+            block_public_access=s3.BlockPublicAccess(block_public_policy=False)
         )
     '''
 
@@ -1105,11 +1105,26 @@ class BlockPublicAccess(
     @jsii.python.classproperty
     @jsii.member(jsii_name="BLOCK_ACLS")
     def BLOCK_ACLS(cls) -> "BlockPublicAccess":
+        '''
+        :deprecated: Use ``BLOCK_ACLS_ONLY`` instead.
+
+        :stability: deprecated
+        '''
         return typing.cast("BlockPublicAccess", jsii.sget(cls, "BLOCK_ACLS"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="BLOCK_ACLS_ONLY")
+    def BLOCK_ACLS_ONLY(cls) -> "BlockPublicAccess":
+        '''Use this option if you want to only block the ACLs, using this will set blockPublicPolicy and restrictPublicBuckets to false.'''
+        return typing.cast("BlockPublicAccess", jsii.sget(cls, "BLOCK_ACLS_ONLY"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="BLOCK_ALL")
     def BLOCK_ALL(cls) -> "BlockPublicAccess":
+        '''Use this option if you want to ensure every public access method is blocked.
+
+        However keep in mind that this is the default state of an S3 bucket, and leaving blockPublicAccess undefined would also work.
+        '''
         return typing.cast("BlockPublicAccess", jsii.sget(cls, "BLOCK_ALL"))
 
     @builtins.property
@@ -1191,7 +1206,7 @@ class BlockPublicAccessOptions:
         Example::
 
             bucket = s3.Bucket(self, "MyBlockedBucket",
-                block_public_access=s3.BlockPublicAccess(block_public_policy=True)
+                block_public_access=s3.BlockPublicAccess(block_public_policy=False)
             )
         '''
         if __debug__:
@@ -1918,6 +1933,12 @@ class BucketPolicy(
             type_hints = typing.get_type_hints(_typecheckingstub__70ab6602f43f75a64ae8e8349b5d140cdfefe9af2e4d2352ec6279ed1b544fca)
             check_type(argname="argument removal_policy", value=removal_policy, expected_type=type_hints["removal_policy"])
         return typing.cast(None, jsii.invoke(self, "applyRemovalPolicy", [removal_policy]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
@@ -21034,6 +21055,12 @@ class Bucket(
         metric = BucketMetrics(id=id, prefix=prefix, tag_filters=tag_filters)
 
         return typing.cast(None, jsii.invoke(self, "addMetric", [metric]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="bucketArn")

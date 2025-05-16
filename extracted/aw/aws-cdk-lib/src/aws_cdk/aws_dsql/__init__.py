@@ -85,7 +85,7 @@ class CfnCluster(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_dsql.CfnCluster",
 ):
-    '''Resource Type definition for AWS::DSQL::Cluster.
+    '''Creates a cluster in Amazon Aurora DSQL.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dsql-cluster.html
     :cloudformationResource: AWS::DSQL::Cluster
@@ -117,8 +117,8 @@ class CfnCluster(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param deletion_protection_enabled: Whether deletion protection is enabled in this cluster.
-        :param tags: 
+        :param deletion_protection_enabled: Whether deletion protection is enabled on this cluster.
+        :param tags: A map of key and value pairs this cluster is tagged with.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b82b76673b1942e60f823768c857e13a61b0491cdd1ca21c1f2a574e980d253e)
@@ -163,7 +163,7 @@ class CfnCluster(
     @builtins.property
     @jsii.member(jsii_name="attrCreationTime")
     def attr_creation_time(self) -> builtins.str:
-        '''The time of when the cluster was created in ISO-8601 format.
+        '''The timestamp when the cluster was created, in ISO 8601 format.
 
         :cloudformationAttribute: CreationTime
         '''
@@ -172,7 +172,7 @@ class CfnCluster(
     @builtins.property
     @jsii.member(jsii_name="attrIdentifier")
     def attr_identifier(self) -> builtins.str:
-        '''The ID of the created cluster.
+        '''The unique identifier assigned to the cluster upon creation.
 
         :cloudformationAttribute: Identifier
         '''
@@ -181,7 +181,9 @@ class CfnCluster(
     @builtins.property
     @jsii.member(jsii_name="attrResourceArn")
     def attr_resource_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) for the cluster.
+        '''The Amazon Resource Name (ARN) of the cluster.
+
+        Used for IAM permissions and resource identification.
 
         :cloudformationAttribute: ResourceArn
         '''
@@ -190,7 +192,9 @@ class CfnCluster(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''The status of the cluster.
+        '''The current status of the cluster.
+
+        Possible values include: CREATING, ACTIVE, DELETING, FAILED.
 
         :cloudformationAttribute: Status
         '''
@@ -199,7 +203,9 @@ class CfnCluster(
     @builtins.property
     @jsii.member(jsii_name="attrVpcEndpointServiceName")
     def attr_vpc_endpoint_service_name(self) -> builtins.str:
-        '''The VPC endpoint service name.
+        '''The VPC Endpoint Service name for the cluster.
+
+        This can be used to create a VPC endpoint to connect to the cluster from within a VPC.
 
         :cloudformationAttribute: VpcEndpointServiceName
         '''
@@ -221,7 +227,7 @@ class CfnCluster(
     def deletion_protection_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Whether deletion protection is enabled in this cluster.'''
+        '''Whether deletion protection is enabled on this cluster.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtectionEnabled"))
 
     @deletion_protection_enabled.setter
@@ -237,6 +243,7 @@ class CfnCluster(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''A map of key and value pairs this cluster is tagged with.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -264,8 +271,8 @@ class CfnClusterProps:
     ) -> None:
         '''Properties for defining a ``CfnCluster``.
 
-        :param deletion_protection_enabled: Whether deletion protection is enabled in this cluster.
-        :param tags: 
+        :param deletion_protection_enabled: Whether deletion protection is enabled on this cluster.
+        :param tags: A map of key and value pairs this cluster is tagged with.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dsql-cluster.html
         :exampleMetadata: fixture=_generated
@@ -298,7 +305,7 @@ class CfnClusterProps:
     def deletion_protection_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Whether deletion protection is enabled in this cluster.
+        '''Whether deletion protection is enabled on this cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dsql-cluster.html#cfn-dsql-cluster-deletionprotectionenabled
         '''
@@ -307,7 +314,8 @@ class CfnClusterProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''
+        '''A map of key and value pairs this cluster is tagged with.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dsql-cluster.html#cfn-dsql-cluster-tags
         '''
         result = self._values.get("tags")

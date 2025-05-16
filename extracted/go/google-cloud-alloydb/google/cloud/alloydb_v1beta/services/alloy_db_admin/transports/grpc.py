@@ -74,12 +74,11 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
                 f"Sending request for {client_call_details.method}",
                 extra={
                     "serviceName": "google.cloud.alloydb.v1beta.AlloyDBAdmin",
-                    "rpcName": client_call_details.method,
+                    "rpcName": str(client_call_details.method),
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
                 },
             )
-
         response = continuation(client_call_details, request)
         if logging_enabled:  # pragma: NO COVER
             response_metadata = response.trailing_metadata()
@@ -471,6 +470,33 @@ class AlloyDBAdminGrpcTransport(AlloyDBAdminTransport):
                 response_deserializer=operations_pb2.Operation.FromString,
             )
         return self._stubs["export_cluster"]
+
+    @property
+    def import_cluster(
+        self,
+    ) -> Callable[[service.ImportClusterRequest], operations_pb2.Operation]:
+        r"""Return a callable for the import cluster method over gRPC.
+
+        Imports data to the cluster.
+        Imperative only.
+
+        Returns:
+            Callable[[~.ImportClusterRequest],
+                    ~.Operation]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "import_cluster" not in self._stubs:
+            self._stubs["import_cluster"] = self._logged_channel.unary_unary(
+                "/google.cloud.alloydb.v1beta.AlloyDBAdmin/ImportCluster",
+                request_serializer=service.ImportClusterRequest.serialize,
+                response_deserializer=operations_pb2.Operation.FromString,
+            )
+        return self._stubs["import_cluster"]
 
     @property
     def upgrade_cluster(

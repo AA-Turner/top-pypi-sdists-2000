@@ -6,7 +6,6 @@ Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOv
 from typing import Any, Callable, Optional, Union
 
 import xyzservices
-from branca.element import Element, Figure
 
 from folium.map import Layer
 from folium.template import Template
@@ -243,14 +242,17 @@ class ImageOverlay(Layer):
 
     Parameters
     ----------
-    image: string, file or array-like object
-        The data you want to draw on the map.
-        * If string, it will be written directly in the output file.
-        * If file, it's content will be converted as embedded in the output file.
-        * If array-like, it will be converted to PNG base64 string and embedded in the output.
+    image: string or array-like object
+        The data to overlay as an image.
+
+        * If string is a path to an image file, its content will be converted and
+          embedded.
+        * If string is a URL, it will be linked.
+        * Otherwise a string will be assumed to be JSON and embedded.
+        * If array-like, it will be converted to PNG base64 string and embedded.
     bounds: list/tuple of list/tuple of float
         Image bounds on the map in the form
-         [[lat_min, lon_min], [lat_max, lon_max]]
+        [[lat_min, lon_min], [lat_max, lon_max]]
     opacity: float, default Leaflet's default (1.0)
     alt: string, default Leaflet's default ('')
     origin: ['upper' | 'lower'], optional, default 'upper'
@@ -285,6 +287,22 @@ class ImageOverlay(Layer):
 
     _template = Template(
         """
+        {% macro header(this, kwargs) %}
+            {% if this.pixelated %}
+                <style>
+                    .leaflet-image-layer {
+                        /* old android/safari*/
+                        image-rendering: -webkit-optimize-contrast;
+                        image-rendering: crisp-edges; /* safari */
+                        image-rendering: pixelated; /* chrome */
+                        image-rendering: -moz-crisp-edges; /* firefox */
+                        image-rendering: -o-crisp-edges; /* opera */
+                        -ms-interpolation-mode: nearest-neighbor; /* ie */
+                    }
+                </style>
+            {% endif %}
+        {% endmacro %}
+
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.imageOverlay(
                 {{ this.url|tojson }},
@@ -320,31 +338,6 @@ class ImageOverlay(Layer):
             )
 
         self.url = image_to_url(image, origin=origin, colormap=colormap)
-
-    def render(self, **kwargs):
-        super().render()
-
-        figure = self.get_root()
-        assert isinstance(
-            figure, Figure
-        ), "You cannot render this Element if it is not in a Figure."
-        if self.pixelated:
-            pixelated = """
-                <style>
-                    .leaflet-image-layer {
-                        /* old android/safari*/
-                        image-rendering: -webkit-optimize-contrast;
-                        image-rendering: crisp-edges; /* safari */
-                        image-rendering: pixelated; /* chrome */
-                        image-rendering: -moz-crisp-edges; /* firefox */
-                        image-rendering: -o-crisp-edges; /* opera */
-                        -ms-interpolation-mode: nearest-neighbor; /* ie */
-                    }
-                </style>
-            """
-            figure.header.add_child(
-                Element(pixelated), name="leaflet-image-layer"
-            )  # noqa
 
     def _get_self_bounds(self) -> TypeBoundsReturn:
         """

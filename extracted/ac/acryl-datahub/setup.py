@@ -28,7 +28,8 @@ base_requirements = {
 }
 
 framework_common = {
-    "click>=7.1.2",
+    # Avoiding click 8.2.0 due to https://github.com/pallets/click/issues/2894
+    "click>=7.1.2, !=8.2.0",
     "click-default-group",
     "PyYAML",
     "toml>=0.10.0",
@@ -61,12 +62,6 @@ pydantic_no_v2 = {
     # pydantic 2 makes major, backwards-incompatible changes - https://github.com/pydantic/pydantic/issues/4887
     # Tags sources that require the pydantic v2 API.
     "pydantic<2",
-}
-
-plugin_common = {
-    # While pydantic v2 support is experimental, require that all plugins
-    # continue to use v1. This will ensure that no ingestion recipes break.
-    *pydantic_no_v2,
 }
 
 rest_common = {"requests", "requests_file"}
@@ -105,7 +100,7 @@ sqlglot_lib = {
     # We heavily monkeypatch sqlglot.
     # We used to maintain an acryl-sqlglot fork: https://github.com/tobymao/sqlglot/compare/main...hsheth2:sqlglot:main?expand=1
     # but not longer do.
-    "sqlglot[rs]==26.6.0",
+    "sqlglot[rs]==26.16.4",
     "patchy==2.8.0",
 }
 
@@ -157,7 +152,6 @@ sql_common = (
         *sqlalchemy_lib,
         # Required for SQL profiling.
         *great_expectations_lib,
-        "pydantic<2",  # keeping this for now, but can be removed eventually
         # scipy version restricted to reduce backtracking, used by great-expectations,
         "scipy>=1.7.2",
         # GE added handling for higher version of jinja2
@@ -227,6 +221,8 @@ clickhouse_common = {
     # Clickhouse 0.2.0 adds support for SQLAlchemy 1.4.x
     # Disallow 0.2.5 because of https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/272.
     # Note that there's also a known issue around nested map types: https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/269.
+    # zstd needs to be pinned because the latest version causes issues on arm
+    "zstd<1.5.6.8",
     "clickhouse-sqlalchemy>=0.2.0,<0.2.5",
 }
 
@@ -361,7 +357,7 @@ databricks = {
     "pandas<2.2.0",
 }
 
-mysql = sql_common | {"pymysql>=1.0.2"}
+mysql = {"pymysql>=1.0.2"}
 
 sac = {
     "requests",
@@ -393,7 +389,9 @@ plugins: Dict[str, Set[str]] = {
         "gql>=3.3.0",
         "gql[requests]>=3.3.0",
     },
-    "datahub": mysql | kafka_common,
+    # TODO: Eventually we should reorganize our imports so that this depends on sqlalchemy_lib
+    # but not the full sql_common.
+    "datahub": sql_common | mysql | kafka_common,
     "great-expectations": {
         f"acryl-datahub-gx-plugin{_self_pin}",
     },
@@ -494,7 +492,7 @@ plugins: Dict[str, Set[str]] = {
     "mongodb": {"pymongo[srv]>=3.11", "packaging"},
     "mssql": sql_common | mssql_common,
     "mssql-odbc": sql_common | mssql_common | {"pyodbc"},
-    "mysql": mysql,
+    "mysql": sql_common | mysql,
     # mariadb should have same dependency as mysql
     "mariadb": sql_common | mysql,
     "okta": {"okta~=1.7.0", "nest-asyncio"},
@@ -708,6 +706,7 @@ base_dev_requirements = {
         if plugin
         for dependency in plugins[plugin]
     ),
+    *pydantic_no_v2,
 }
 
 dev_requirements = {
@@ -943,7 +942,9 @@ See the [DataHub docs](https://docs.datahub.com/docs/metadata-ingestion).
             plugin: list(
                 framework_common
                 | (
-                    plugin_common
+                    # While pydantic v2 support is experimental, require that all plugins
+                    # continue to use v1. This will ensure that no ingestion recipes break.
+                    pydantic_no_v2
                     if plugin
                     not in {
                         "airflow",
@@ -951,10 +952,12 @@ See the [DataHub docs](https://docs.datahub.com/docs/metadata-ingestion).
                         "datahub-kafka",
                         "sync-file-emitter",
                         "sql-parser",
+                        # Some sources have been manually tested for compatibility with pydantic v2.
                         "iceberg",
                         "feast",
                         "bigquery-slim",
                         "snowflake-slim",
+                        "mysql",  # tested in smoke-test
                     }
                     else set()
                 )

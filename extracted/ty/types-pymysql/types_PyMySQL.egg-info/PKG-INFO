@@ -1,18 +1,19 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: types-PyMySQL
-Version: 1.1.0.20241103
+Version: 1.1.0.20250516
 Summary: Typing stubs for PyMySQL
-Home-page: https://github.com/python/typeshed
-License: Apache-2.0
+License-Expression: Apache-2.0
+Project-URL: Homepage, https://github.com/python/typeshed
 Project-URL: GitHub, https://github.com/python/typeshed
 Project-URL: Changes, https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/PyMySQL.md
 Project-URL: Issue tracker, https://github.com/python/typeshed/issues
 Project-URL: Chat, https://gitter.im/python/typing
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3
 Classifier: Typing :: Stubs Only
-Requires-Python: >=3.8
+Requires-Python: >=3.9
 Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
 
 ## Typing stubs for PyMySQL
 
@@ -39,8 +40,8 @@ for more details. The source for this package can be found in the
 directory.
 
 This package was tested with
-mypy 1.13.0,
-pyright 1.1.387,
+mypy 1.15.0,
+pyright 1.1.400,
 and pytype 2024.10.11.
 It was generated from typeshed commit
-[`348c44f46830e69c1f3574ce8820f505134f9ca8`](https://github.com/python/typeshed/commit/348c44f46830e69c1f3574ce8820f505134f9ca8).
+[`126768408a69b7a3a09b7d3992970b289f92937e`](https://github.com/python/typeshed/commit/126768408a69b7a3a09b7d3992970b289f92937e).

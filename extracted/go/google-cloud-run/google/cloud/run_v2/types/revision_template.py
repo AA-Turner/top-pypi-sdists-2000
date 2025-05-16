@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,6 +33,9 @@ __protobuf__ = proto.module(
 class RevisionTemplate(proto.Message):
     r"""RevisionTemplate describes the data a revision should have
     when created from a template.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
         revision (str):
@@ -124,6 +127,11 @@ class RevisionTemplate(proto.Message):
         node_selector (google.cloud.run_v2.types.NodeSelector):
             Optional. The node selector for the revision
             template.
+        gpu_zonal_redundancy_disabled (bool):
+            Optional. True if GPU zonal redundancy is
+            disabled on this revision.
+
+            This field is a member of `oneof`_ ``_gpu_zonal_redundancy_disabled``.
     """
 
     revision: str = proto.Field(
@@ -211,6 +219,11 @@ class RevisionTemplate(proto.Message):
         proto.MESSAGE,
         number=21,
         message=vendor_settings.NodeSelector,
+    )
+    gpu_zonal_redundancy_disabled: bool = proto.Field(
+        proto.BOOL,
+        number=24,
+        optional=True,
     )
 
 

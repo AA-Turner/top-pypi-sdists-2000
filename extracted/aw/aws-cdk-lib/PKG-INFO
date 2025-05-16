@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: aws-cdk-lib
-Version: 2.195.0
+Version: 2.196.0
 Summary: Version 2 of the AWS Cloud Development Kit library
 Home-page: https://github.com/aws/aws-cdk
 Author: Amazon Web Services
@@ -20,11 +20,11 @@ Requires-Python: ~=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 License-File: NOTICE
-Requires-Dist: aws-cdk.asset-awscli-v1<3.0.0,>=2.2.229
+Requires-Dist: aws-cdk.asset-awscli-v1==2.2.236
 Requires-Dist: aws-cdk.asset-node-proxy-agent-v6<3.0.0,>=2.1.0
 Requires-Dist: aws-cdk.cloud-assembly-schema<42.0.0,>=41.2.0
 Requires-Dist: constructs<11.0.0,>=10.0.0
-Requires-Dist: jsii<2.0.0,>=1.110.0
+Requires-Dist: jsii<2.0.0,>=1.112.0
 Requires-Dist: publication>=0.0.3
 Requires-Dist: typeguard<4.3.0,>=2.13.3
 
@@ -202,8 +202,8 @@ class MyNestedStack(cfn.NestedStack):
         s3.Bucket(self, "NestedBucket")
 
 class MyParentStack(Stack):
-    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         MyNestedStack(self, "Nested1")
         MyNestedStack(self, "Nested2")
@@ -1527,5 +1527,83 @@ warning by the `id`.
 ```python
 Annotations.of(self).acknowledge_warning("IAM:Group:MaxPoliciesExceeded", "Account has quota increased to 20")
 ```
+
+## Blueprint Property Injection
+
+The goal of Blueprint Property Injection is to provide builders an automatic way to set default property values.
+
+Construct authors can declare that a Construct can have it properties injected by adding `@propertyInjectable`
+class decorator and specifying `PROPERTY_INJECTION_ID` readonly property.
+All L2 Constructs will support Property Injection so organizations can write injectors to set their Construct Props.
+
+Organizations can set default property values to a Construct by writing Injectors for builders to consume.
+
+Here is a simple example of an Injector for APiKey that sets enabled to false.
+
+```python
+@jsii.implements(IPropertyInjector)
+class ApiKeyPropsInjector:
+
+    def __init__(self):
+        self.construct_unique_id = api.ApiKey.PROPERTY_INJECTION_ID
+
+    def inject(self, original_props, *, scope, id):
+        return api.ApiKeyProps(
+            enabled=False,
+            api_key_name=original_props.api_key_name,
+            customer_id=original_props.customer_id,
+            default_cors_preflight_options=original_props.default_cors_preflight_options,
+            default_integration=original_props.default_integration,
+            default_method_options=original_props.default_method_options,
+            description=original_props.description,
+            generate_distinct_id=original_props.generate_distinct_id,
+            resources=original_props.resources,
+            stages=original_props.stages,
+            value=original_props.value
+        )
+```
+
+Some notes:
+
+* ApiKey must have a `PROPERTY_INJECTION_ID` property, in addition to having `@propertyInjectable` class decorator.
+* We set ApiKeyProps.enabled to false, if it is not provided; otherwise it would use the value that was passed in.
+* It is also possible to force ApiKeyProps.enabled to false, and not provide a way for the builders to overwrite it.
+
+Here is an example of how builders can use the injector the org created.
+
+```python
+stack = Stack(app, "my-stack",
+    property_injectors=[ApiKeyPropsInjector()]
+)
+api.ApiKey(stack, "my-api-key")
+```
+
+This is equivalent to:
+
+```python
+stack = Stack(app, "my-stack")
+api.ApiKey(stack, "my-api-key",
+    enabled=False
+)
+```
+
+Some notes:
+
+* We attach the injectors to Stack in this example, but we can also attach them to App or Stage.
+* All the ApiKey created in the scope of stack will get `enabled: false`.
+* Builders can overwrite the default value with `new ApiKey(stack, 'my-api-key', {enabled: true});`
+
+If you specify two or more injectors for the same Constructs, the last one is in effect.  In the example below, `ApiKeyPropsInjector` will never be applied.
+
+```python
+stack = Stack(app, "my-stack",
+    property_injectors=[
+        ApiKeyPropsInjector(),
+        AnotherApiKeyPropsInjector()
+    ]
+)
+```
+
+For more information, please see the [RFC](https://github.com/aws/aws-cdk-rfcs/blob/main/text/0693-property-injection.md).
 
 <!--END CORE DOCUMENTATION-->

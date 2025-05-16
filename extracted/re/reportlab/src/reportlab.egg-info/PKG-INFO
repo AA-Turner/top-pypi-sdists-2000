@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: reportlab
-Version: 4.4.0
+Version: 4.4.1
 Summary: The Reportlab Toolkit
 Home-page: https://www.reportlab.com/
 Author: Andy Robinson, Robin Becker, the ReportLab team and the community
@@ -34,5 +34,16 @@ Provides-Extra: bidi
 Requires-Dist: rlbidi; extra == "bidi"
 Provides-Extra: shaping
 Requires-Dist: uharfbuzz; extra == "shaping"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 The ReportLab Toolkit. An Open Source Python library for generating PDFs and graphics.

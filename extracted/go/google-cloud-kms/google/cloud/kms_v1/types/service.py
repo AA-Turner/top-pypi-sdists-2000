@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -321,6 +321,10 @@ class ListKeyRingsResponse(proto.Message):
         total_size (int):
             The total number of [KeyRings][google.cloud.kms.v1.KeyRing]
             that matched the query.
+
+            This field is not populated if
+            [ListKeyRingsRequest.filter][google.cloud.kms.v1.ListKeyRingsRequest.filter]
+            is applied.
     """
 
     @property
@@ -357,6 +361,10 @@ class ListCryptoKeysResponse(proto.Message):
             The total number of
             [CryptoKeys][google.cloud.kms.v1.CryptoKey] that matched the
             query.
+
+            This field is not populated if
+            [ListCryptoKeysRequest.filter][google.cloud.kms.v1.ListCryptoKeysRequest.filter]
+            is applied.
     """
 
     @property
@@ -394,6 +402,10 @@ class ListCryptoKeyVersionsResponse(proto.Message):
             The total number of
             [CryptoKeyVersions][google.cloud.kms.v1.CryptoKeyVersion]
             that matched the query.
+
+            This field is not populated if
+            [ListCryptoKeyVersionsRequest.filter][google.cloud.kms.v1.ListCryptoKeyVersionsRequest.filter]
+            is applied.
     """
 
     @property
@@ -432,6 +444,10 @@ class ListImportJobsResponse(proto.Message):
             The total number of
             [ImportJobs][google.cloud.kms.v1.ImportJob] that matched the
             query.
+
+            This field is not populated if
+            [ListImportJobsRequest.filter][google.cloud.kms.v1.ListImportJobsRequest.filter]
+            is applied.
     """
 
     @property

@@ -4529,6 +4529,12 @@ class Schedule(
 
         return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricAllThrottled", [props]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="scheduleArn")
     def schedule_arn(self) -> builtins.str:
@@ -5281,6 +5287,12 @@ class ScheduleGroup(
         )
 
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricThrottled", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="scheduleGroupArn")

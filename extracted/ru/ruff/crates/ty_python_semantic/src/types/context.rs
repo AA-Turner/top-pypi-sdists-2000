@@ -318,10 +318,13 @@ impl Drop for LintDiagnosticGuard<'_, '_> {
         diag.sub(SubDiagnostic::new(
             Severity::Info,
             match self.source {
-                LintSource::Default => format!("`{}` is enabled by default", diag.id()),
-                LintSource::Cli => format!("`{}` was selected on the command line", diag.id()),
+                LintSource::Default => format!("rule `{}` is enabled by default", diag.id()),
+                LintSource::Cli => format!("rule `{}` was selected on the command line", diag.id()),
                 LintSource::File => {
-                    format!("`{}` was selected in the configuration file", diag.id())
+                    format!(
+                        "rule `{}` was selected in the configuration file",
+                        diag.id()
+                    )
                 }
             },
         ));
@@ -492,7 +495,7 @@ impl std::ops::DerefMut for DiagnosticGuard<'_, '_> {
 ///
 /// # Panics
 ///
-/// This panics when the the underlying diagnostic lacks a primary
+/// This panics when the underlying diagnostic lacks a primary
 /// annotation, or if it has one and its file doesn't match the file
 /// being type checked.
 impl Drop for DiagnosticGuard<'_, '_> {

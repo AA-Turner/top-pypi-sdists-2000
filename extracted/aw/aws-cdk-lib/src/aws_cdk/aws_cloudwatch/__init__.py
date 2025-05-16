@@ -7180,6 +7180,12 @@ class Dashboard(
             check_type(argname="argument widgets", value=widgets, expected_type=typing.Tuple[type_hints["widgets"], ...]) # pyright: ignore [reportGeneralTypeIssues]
         return typing.cast(None, jsii.invoke(self, "addWidgets", [*widgets]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="dashboardArn")
     def dashboard_arn(self) -> builtins.str:
@@ -14829,6 +14835,12 @@ class CompositeAlarm(
             check_type(argname="argument composite_alarm_name", value=composite_alarm_name, expected_type=type_hints["composite_alarm_name"])
         return typing.cast(IAlarm, jsii.sinvoke(cls, "fromCompositeAlarmName", [scope, id, composite_alarm_name]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="alarmArn")
     def alarm_arn(self) -> builtins.str:
@@ -15007,6 +15019,12 @@ class Alarm(
         - You want to show an Alarm line in a graph with multiple metrics in it.
         '''
         return typing.cast(HorizontalAnnotation, jsii.invoke(self, "toAnnotation", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
     @jsii.member(jsii_name="alarmArn")

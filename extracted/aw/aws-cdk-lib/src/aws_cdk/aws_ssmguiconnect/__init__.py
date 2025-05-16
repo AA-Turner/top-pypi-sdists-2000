@@ -82,7 +82,7 @@ class CfnPreferences(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_ssmguiconnect.CfnPreferences",
 ):
-    '''Definition of AWS::SSMGuiConnect::Preferences Resource Type.
+    '''Specify new or changed connection recording preferences for your AWS Systems Manager GUI Connect connections.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmguiconnect-preferences.html
     :cloudformationResource: AWS::SSMGuiConnect::Preferences
@@ -117,7 +117,7 @@ class CfnPreferences(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param connection_recording_preferences: The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region. This includes details such as which S3 bucket recordings are stored in.
+        :param connection_recording_preferences: The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region . This includes details such as which S3 bucket recordings are stored in.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__045e31f70bcabcaa4437ed6c7e11fb8462233ba15c60675b143088abfe090752)
@@ -162,7 +162,7 @@ class CfnPreferences(
     @builtins.property
     @jsii.member(jsii_name="attrAccountId")
     def attr_account_id(self) -> builtins.str:
-        '''The AWS Account Id that the preference is associated with, used as the unique identifier for this resource.
+        '''The primary identifier for the AWS CloudFormation resource.
 
         :cloudformationAttribute: AccountId
         '''
@@ -178,7 +178,7 @@ class CfnPreferences(
     def connection_recording_preferences(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPreferences.ConnectionRecordingPreferencesProperty"]]:
-        '''The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region.'''
+        '''The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region .'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPreferences.ConnectionRecordingPreferencesProperty"]], jsii.get(self, "connectionRecordingPreferences"))
 
     @connection_recording_preferences.setter
@@ -206,7 +206,7 @@ class CfnPreferences(
             kms_key_arn: builtins.str,
             recording_destinations: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPreferences.RecordingDestinationsProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
-            '''The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region.
+            '''The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region .
 
             This includes details such as which S3 bucket recordings are stored in.
 
@@ -424,7 +424,7 @@ class CfnPreferencesProps:
     ) -> None:
         '''Properties for defining a ``CfnPreferences``.
 
-        :param connection_recording_preferences: The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region. This includes details such as which S3 bucket recordings are stored in.
+        :param connection_recording_preferences: The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region . This includes details such as which S3 bucket recordings are stored in.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmguiconnect-preferences.html
         :exampleMetadata: fixture=_generated
@@ -458,7 +458,7 @@ class CfnPreferencesProps:
     def connection_recording_preferences(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPreferences.ConnectionRecordingPreferencesProperty]]:
-        '''The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region.
+        '''The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region .
 
         This includes details such as which S3 bucket recordings are stored in.
 

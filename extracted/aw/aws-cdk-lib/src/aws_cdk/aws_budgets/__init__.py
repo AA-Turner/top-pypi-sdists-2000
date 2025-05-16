@@ -89,6 +89,7 @@ class CfnBudget(
         from aws_cdk import aws_budgets as budgets
         
         # cost_filters: Any
+        # expression_property_: budgets.CfnBudget.ExpressionProperty
         # planned_budget_limits: Any
         
         cfn_budget = budgets.CfnBudget(self, "MyCfnBudget",
@@ -124,6 +125,27 @@ class CfnBudget(
                     use_amortized=False,
                     use_blended=False
                 ),
+                filter_expression=budgets.CfnBudget.ExpressionProperty(
+                    and=[expression_property_],
+                    cost_categories=budgets.CfnBudget.CostCategoryValuesProperty(
+                        key="key",
+                        match_options=["matchOptions"],
+                        values=["values"]
+                    ),
+                    dimensions=budgets.CfnBudget.ExpressionDimensionValuesProperty(
+                        key="key",
+                        match_options=["matchOptions"],
+                        values=["values"]
+                    ),
+                    not=expression_property_,
+                    or=[expression_property_],
+                    tags=budgets.CfnBudget.TagValuesProperty(
+                        key="key",
+                        match_options=["matchOptions"],
+                        values=["values"]
+                    )
+                ),
+                metrics=["metrics"],
                 planned_budget_limits=planned_budget_limits,
                 time_period=budgets.CfnBudget.TimePeriodProperty(
                     end="end",
@@ -371,6 +393,8 @@ class CfnBudget(
             "budget_name": "budgetName",
             "cost_filters": "costFilters",
             "cost_types": "costTypes",
+            "filter_expression": "filterExpression",
+            "metrics": "metrics",
             "planned_budget_limits": "plannedBudgetLimits",
             "time_period": "timePeriod",
         },
@@ -386,6 +410,8 @@ class CfnBudget(
             budget_name: typing.Optional[builtins.str] = None,
             cost_filters: typing.Any = None,
             cost_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBudget.CostTypesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            filter_expression: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBudget.ExpressionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            metrics: typing.Optional[typing.Sequence[builtins.str]] = None,
             planned_budget_limits: typing.Any = None,
             time_period: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBudget.TimePeriodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
@@ -404,6 +430,8 @@ class CfnBudget(
             :param budget_name: The name of a budget. The value must be unique within an account. ``BudgetName`` can't include ``:`` and ``\\`` characters. If you don't include value for ``BudgetName`` in the template, Billing and Cost Management assigns your budget a randomly generated name.
             :param cost_filters: The cost filters, such as ``Region`` , ``Service`` , ``LinkedAccount`` , ``Tag`` , or ``CostCategory`` , that are applied to a budget. AWS Budgets supports the following services as a ``Service`` filter for RI budgets: - Amazon EC2 - Amazon Redshift - Amazon Relational Database Service - Amazon ElastiCache - Amazon OpenSearch Service
             :param cost_types: The types of costs that are included in this ``COST`` budget. ``USAGE`` , ``RI_UTILIZATION`` , ``RI_COVERAGE`` , ``SAVINGS_PLANS_UTILIZATION`` , and ``SAVINGS_PLANS_COVERAGE`` budgets do not have ``CostTypes`` .
+            :param filter_expression: 
+            :param metrics: 
             :param planned_budget_limits: A map containing multiple ``BudgetLimit`` , including current or future limits. ``PlannedBudgetLimits`` is available for cost or usage budget and supports both monthly and quarterly ``TimeUnit`` . For monthly budgets, provide 12 months of ``PlannedBudgetLimits`` values. This must start from the current month and include the next 11 months. The ``key`` is the start of the month, ``UTC`` in epoch seconds. For quarterly budgets, provide four quarters of ``PlannedBudgetLimits`` value entries in standard calendar quarter increments. This must start from the current quarter and include the next three quarters. The ``key`` is the start of the quarter, ``UTC`` in epoch seconds. If the planned budget expires before 12 months for monthly or four quarters for quarterly, provide the ``PlannedBudgetLimits`` values only for the remaining periods. If the budget begins at a date in the future, provide ``PlannedBudgetLimits`` values from the start date of the budget. After all of the ``BudgetLimit`` values in ``PlannedBudgetLimits`` are used, the budget continues to use the last limit as the ``BudgetLimit`` . At that point, the planned budget provides the same experience as a fixed budget. ``DescribeBudget`` and ``DescribeBudgets`` response along with ``PlannedBudgetLimits`` also contain ``BudgetLimit`` representing the current month or quarter limit present in ``PlannedBudgetLimits`` . This only applies to budgets that are created with ``PlannedBudgetLimits`` . Budgets that are created without ``PlannedBudgetLimits`` only contain ``BudgetLimit`` . They don't contain ``PlannedBudgetLimits`` .
             :param time_period: The period of time that is covered by a budget. The period has a start date and an end date. The start date must come before the end date. There are no restrictions on the end date. The start date for a budget. If you created your budget and didn't specify a start date, the start date defaults to the start of the chosen time period (MONTHLY, QUARTERLY, or ANNUALLY). For example, if you create your budget on January 24, 2019, choose ``MONTHLY`` , and don't set a start date, the start date defaults to ``01/01/19 00:00 UTC`` . The defaults are the same for the Billing and Cost Management console and the API. You can change your start date with the ``UpdateBudget`` operation. After the end date, AWS deletes the budget and all associated notifications and subscribers.
 
@@ -417,6 +445,7 @@ class CfnBudget(
                 from aws_cdk import aws_budgets as budgets
                 
                 # cost_filters: Any
+                # expression_property_: budgets.CfnBudget.ExpressionProperty
                 # planned_budget_limits: Any
                 
                 budget_data_property = budgets.CfnBudget.BudgetDataProperty(
@@ -451,6 +480,27 @@ class CfnBudget(
                         use_amortized=False,
                         use_blended=False
                     ),
+                    filter_expression=budgets.CfnBudget.ExpressionProperty(
+                        and=[expression_property_],
+                        cost_categories=budgets.CfnBudget.CostCategoryValuesProperty(
+                            key="key",
+                            match_options=["matchOptions"],
+                            values=["values"]
+                        ),
+                        dimensions=budgets.CfnBudget.ExpressionDimensionValuesProperty(
+                            key="key",
+                            match_options=["matchOptions"],
+                            values=["values"]
+                        ),
+                        not=expression_property_,
+                        or=[expression_property_],
+                        tags=budgets.CfnBudget.TagValuesProperty(
+                            key="key",
+                            match_options=["matchOptions"],
+                            values=["values"]
+                        )
+                    ),
+                    metrics=["metrics"],
                     planned_budget_limits=planned_budget_limits,
                     time_period=budgets.CfnBudget.TimePeriodProperty(
                         end="end",
@@ -467,6 +517,8 @@ class CfnBudget(
                 check_type(argname="argument budget_name", value=budget_name, expected_type=type_hints["budget_name"])
                 check_type(argname="argument cost_filters", value=cost_filters, expected_type=type_hints["cost_filters"])
                 check_type(argname="argument cost_types", value=cost_types, expected_type=type_hints["cost_types"])
+                check_type(argname="argument filter_expression", value=filter_expression, expected_type=type_hints["filter_expression"])
+                check_type(argname="argument metrics", value=metrics, expected_type=type_hints["metrics"])
                 check_type(argname="argument planned_budget_limits", value=planned_budget_limits, expected_type=type_hints["planned_budget_limits"])
                 check_type(argname="argument time_period", value=time_period, expected_type=type_hints["time_period"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -483,6 +535,10 @@ class CfnBudget(
                 self._values["cost_filters"] = cost_filters
             if cost_types is not None:
                 self._values["cost_types"] = cost_types
+            if filter_expression is not None:
+                self._values["filter_expression"] = filter_expression
+            if metrics is not None:
+                self._values["metrics"] = metrics
             if planned_budget_limits is not None:
                 self._values["planned_budget_limits"] = planned_budget_limits
             if time_period is not None:
@@ -576,6 +632,24 @@ class CfnBudget(
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBudget.CostTypesProperty"]], result)
 
         @builtins.property
+        def filter_expression(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBudget.ExpressionProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-budgetdata.html#cfn-budgets-budget-budgetdata-filterexpression
+            '''
+            result = self._values.get("filter_expression")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBudget.ExpressionProperty"]], result)
+
+        @builtins.property
+        def metrics(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-budgetdata.html#cfn-budgets-budget-budgetdata-metrics
+            '''
+            result = self._values.get("metrics")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
         def planned_budget_limits(self) -> typing.Any:
             '''A map containing multiple ``BudgetLimit`` , including current or future limits.
 
@@ -625,6 +699,95 @@ class CfnBudget(
 
         def __repr__(self) -> str:
             return "BudgetDataProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_budgets.CfnBudget.CostCategoryValuesProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "key": "key",
+            "match_options": "matchOptions",
+            "values": "values",
+        },
+    )
+    class CostCategoryValuesProperty:
+        def __init__(
+            self,
+            *,
+            key: typing.Optional[builtins.str] = None,
+            match_options: typing.Optional[typing.Sequence[builtins.str]] = None,
+            values: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''The cost category values used for filtering the costs.
+
+            :param key: The unique name of the cost category.
+            :param match_options: The match options that you can use to filter your results.
+            :param values: The specific value of the cost category.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costcategoryvalues.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_budgets as budgets
+                
+                cost_category_values_property = budgets.CfnBudget.CostCategoryValuesProperty(
+                    key="key",
+                    match_options=["matchOptions"],
+                    values=["values"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__6fec62209c71ad186d3dce49e5d480b003e62ed76aa01d5734d80cbfd5b050cb)
+                check_type(argname="argument key", value=key, expected_type=type_hints["key"])
+                check_type(argname="argument match_options", value=match_options, expected_type=type_hints["match_options"])
+                check_type(argname="argument values", value=values, expected_type=type_hints["values"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if key is not None:
+                self._values["key"] = key
+            if match_options is not None:
+                self._values["match_options"] = match_options
+            if values is not None:
+                self._values["values"] = values
+
+        @builtins.property
+        def key(self) -> typing.Optional[builtins.str]:
+            '''The unique name of the cost category.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costcategoryvalues.html#cfn-budgets-budget-costcategoryvalues-key
+            '''
+            result = self._values.get("key")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def match_options(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The match options that you can use to filter your results.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costcategoryvalues.html#cfn-budgets-budget-costcategoryvalues-matchoptions
+            '''
+            result = self._values.get("match_options")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def values(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The specific value of the cost category.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costcategoryvalues.html#cfn-budgets-budget-costcategoryvalues-values
+            '''
+            result = self._values.get("values")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CostCategoryValuesProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -888,6 +1051,260 @@ class CfnBudget(
 
         def __repr__(self) -> str:
             return "CostTypesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_budgets.CfnBudget.ExpressionDimensionValuesProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "key": "key",
+            "match_options": "matchOptions",
+            "values": "values",
+        },
+    )
+    class ExpressionDimensionValuesProperty:
+        def __init__(
+            self,
+            *,
+            key: typing.Optional[builtins.str] = None,
+            match_options: typing.Optional[typing.Sequence[builtins.str]] = None,
+            values: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''Contains the specifications for the filters to use for your request.
+
+            :param key: The name of the dimension that you want to filter on.
+            :param match_options: The match options that you can use to filter your results. You can specify only one of these values in the array.
+            :param values: The metadata values you can specify to filter upon, so that the results all match at least one of the specified values.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expressiondimensionvalues.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_budgets as budgets
+                
+                expression_dimension_values_property = budgets.CfnBudget.ExpressionDimensionValuesProperty(
+                    key="key",
+                    match_options=["matchOptions"],
+                    values=["values"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__46271189f69022d8735b1bf112d5cddaac665cdc9fd75885c426b8af000590bb)
+                check_type(argname="argument key", value=key, expected_type=type_hints["key"])
+                check_type(argname="argument match_options", value=match_options, expected_type=type_hints["match_options"])
+                check_type(argname="argument values", value=values, expected_type=type_hints["values"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if key is not None:
+                self._values["key"] = key
+            if match_options is not None:
+                self._values["match_options"] = match_options
+            if values is not None:
+                self._values["values"] = values
+
+        @builtins.property
+        def key(self) -> typing.Optional[builtins.str]:
+            '''The name of the dimension that you want to filter on.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expressiondimensionvalues.html#cfn-budgets-budget-expressiondimensionvalues-key
+            '''
+            result = self._values.get("key")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def match_options(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The match options that you can use to filter your results.
+
+            You can specify only one of these values in the array.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expressiondimensionvalues.html#cfn-budgets-budget-expressiondimensionvalues-matchoptions
+            '''
+            result = self._values.get("match_options")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def values(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The metadata values you can specify to filter upon, so that the results all match at least one of the specified values.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expressiondimensionvalues.html#cfn-budgets-budget-expressiondimensionvalues-values
+            '''
+            result = self._values.get("values")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExpressionDimensionValuesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_budgets.CfnBudget.ExpressionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "and_": "and",
+            "cost_categories": "costCategories",
+            "dimensions": "dimensions",
+            "not_": "not",
+            "or_": "or",
+            "tags": "tags",
+        },
+    )
+    class ExpressionProperty:
+        def __init__(
+            self,
+            *,
+            and_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBudget.ExpressionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            cost_categories: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBudget.CostCategoryValuesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBudget.ExpressionDimensionValuesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            not_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBudget.ExpressionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            or_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBudget.ExpressionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            tags: typing.Optional[typing.Union["CfnBudget.TagValuesProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        ) -> None:
+            '''Use Expression to filter in various Budgets APIs.
+
+            :param and_: Return results that match both Dimension objects.
+            :param cost_categories: The filter that's based on CostCategoryValues.
+            :param dimensions: The specific Dimension to use for Expression.
+            :param not_: Return results that don't match a Dimension object.
+            :param or_: Return results that match either Dimension object.
+            :param tags: The specific Tag to use for Expression.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expression.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_budgets as budgets
+                
+                # expression_property_: budgets.CfnBudget.ExpressionProperty
+                
+                expression_property = budgets.CfnBudget.ExpressionProperty(
+                    and=[expression_property_],
+                    cost_categories=budgets.CfnBudget.CostCategoryValuesProperty(
+                        key="key",
+                        match_options=["matchOptions"],
+                        values=["values"]
+                    ),
+                    dimensions=budgets.CfnBudget.ExpressionDimensionValuesProperty(
+                        key="key",
+                        match_options=["matchOptions"],
+                        values=["values"]
+                    ),
+                    not=expression_property_,
+                    or=[expression_property_],
+                    tags=budgets.CfnBudget.TagValuesProperty(
+                        key="key",
+                        match_options=["matchOptions"],
+                        values=["values"]
+                    )
+                )
+            '''
+            if isinstance(tags, dict):
+                tags = CfnBudget.TagValuesProperty(**tags)
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__eb71e1eb3b48926947e35d102ec777f08901def25ae4961947e1ab68d1692ace)
+                check_type(argname="argument and_", value=and_, expected_type=type_hints["and_"])
+                check_type(argname="argument cost_categories", value=cost_categories, expected_type=type_hints["cost_categories"])
+                check_type(argname="argument dimensions", value=dimensions, expected_type=type_hints["dimensions"])
+                check_type(argname="argument not_", value=not_, expected_type=type_hints["not_"])
+                check_type(argname="argument or_", value=or_, expected_type=type_hints["or_"])
+                check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if and_ is not None:
+                self._values["and_"] = and_
+            if cost_categories is not None:
+                self._values["cost_categories"] = cost_categories
+            if dimensions is not None:
+                self._values["dimensions"] = dimensions
+            if not_ is not None:
+                self._values["not_"] = not_
+            if or_ is not None:
+                self._values["or_"] = or_
+            if tags is not None:
+                self._values["tags"] = tags
+
+        @builtins.property
+        def and_(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBudget.ExpressionProperty"]]]]:
+            '''Return results that match both Dimension objects.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expression.html#cfn-budgets-budget-expression-and
+            '''
+            result = self._values.get("and_")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBudget.ExpressionProperty"]]]], result)
+
+        @builtins.property
+        def cost_categories(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBudget.CostCategoryValuesProperty"]]:
+            '''The filter that's based on CostCategoryValues.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expression.html#cfn-budgets-budget-expression-costcategories
+            '''
+            result = self._values.get("cost_categories")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBudget.CostCategoryValuesProperty"]], result)
+
+        @builtins.property
+        def dimensions(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBudget.ExpressionDimensionValuesProperty"]]:
+            '''The specific Dimension to use for Expression.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expression.html#cfn-budgets-budget-expression-dimensions
+            '''
+            result = self._values.get("dimensions")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBudget.ExpressionDimensionValuesProperty"]], result)
+
+        @builtins.property
+        def not_(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBudget.ExpressionProperty"]]:
+            '''Return results that don't match a Dimension object.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expression.html#cfn-budgets-budget-expression-not
+            '''
+            result = self._values.get("not_")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBudget.ExpressionProperty"]], result)
+
+        @builtins.property
+        def or_(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBudget.ExpressionProperty"]]]]:
+            '''Return results that match either Dimension object.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expression.html#cfn-budgets-budget-expression-or
+            '''
+            result = self._values.get("or_")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBudget.ExpressionProperty"]]]], result)
+
+        @builtins.property
+        def tags(self) -> typing.Optional["CfnBudget.TagValuesProperty"]:
+            '''The specific Tag to use for Expression.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-expression.html#cfn-budgets-budget-expression-tags
+            '''
+            result = self._values.get("tags")
+            return typing.cast(typing.Optional["CfnBudget.TagValuesProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExpressionProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -1388,6 +1805,95 @@ class CfnBudget(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_budgets.CfnBudget.TagValuesProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "key": "key",
+            "match_options": "matchOptions",
+            "values": "values",
+        },
+    )
+    class TagValuesProperty:
+        def __init__(
+            self,
+            *,
+            key: typing.Optional[builtins.str] = None,
+            match_options: typing.Optional[typing.Sequence[builtins.str]] = None,
+            values: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''The values that are available for a tag.
+
+            :param key: The key for the tag.
+            :param match_options: The match options that you can use to filter your results.
+            :param values: The specific value of the tag.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-tagvalues.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_budgets as budgets
+                
+                tag_values_property = budgets.CfnBudget.TagValuesProperty(
+                    key="key",
+                    match_options=["matchOptions"],
+                    values=["values"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ffd9b3bd7b99090fed06a8003a3319bf7bba070cdd4b3ec936c178caac26d0de)
+                check_type(argname="argument key", value=key, expected_type=type_hints["key"])
+                check_type(argname="argument match_options", value=match_options, expected_type=type_hints["match_options"])
+                check_type(argname="argument values", value=values, expected_type=type_hints["values"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if key is not None:
+                self._values["key"] = key
+            if match_options is not None:
+                self._values["match_options"] = match_options
+            if values is not None:
+                self._values["values"] = values
+
+        @builtins.property
+        def key(self) -> typing.Optional[builtins.str]:
+            '''The key for the tag.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-tagvalues.html#cfn-budgets-budget-tagvalues-key
+            '''
+            result = self._values.get("key")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def match_options(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The match options that you can use to filter your results.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-tagvalues.html#cfn-budgets-budget-tagvalues-matchoptions
+            '''
+            result = self._values.get("match_options")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def values(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The specific value of the tag.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-tagvalues.html#cfn-budgets-budget-tagvalues-values
+            '''
+            result = self._values.get("values")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TagValuesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_budgets.CfnBudget.TimePeriodProperty",
         jsii_struct_bases=[],
         name_mapping={"end": "end", "start": "start"},
@@ -1506,6 +2012,7 @@ class CfnBudgetProps:
             from aws_cdk import aws_budgets as budgets
             
             # cost_filters: Any
+            # expression_property_: budgets.CfnBudget.ExpressionProperty
             # planned_budget_limits: Any
             
             cfn_budget_props = budgets.CfnBudgetProps(
@@ -1541,6 +2048,27 @@ class CfnBudgetProps:
                         use_amortized=False,
                         use_blended=False
                     ),
+                    filter_expression=budgets.CfnBudget.ExpressionProperty(
+                        and=[expression_property_],
+                        cost_categories=budgets.CfnBudget.CostCategoryValuesProperty(
+                            key="key",
+                            match_options=["matchOptions"],
+                            values=["values"]
+                        ),
+                        dimensions=budgets.CfnBudget.ExpressionDimensionValuesProperty(
+                            key="key",
+                            match_options=["matchOptions"],
+                            values=["values"]
+                        ),
+                        not=expression_property_,
+                        or=[expression_property_],
+                        tags=budgets.CfnBudget.TagValuesProperty(
+                            key="key",
+                            match_options=["matchOptions"],
+                            values=["values"]
+                        )
+                    ),
+                    metrics=["metrics"],
                     planned_budget_limits=planned_budget_limits,
                     time_period=budgets.CfnBudget.TimePeriodProperty(
                         end="end",
@@ -2820,8 +3348,19 @@ def _typecheckingstub__b2c7f5c59209a2623bf116ca3a20b23835ececd0df52736e4f148622f
     budget_name: typing.Optional[builtins.str] = None,
     cost_filters: typing.Any = None,
     cost_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBudget.CostTypesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    filter_expression: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBudget.ExpressionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    metrics: typing.Optional[typing.Sequence[builtins.str]] = None,
     planned_budget_limits: typing.Any = None,
     time_period: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBudget.TimePeriodProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6fec62209c71ad186d3dce49e5d480b003e62ed76aa01d5734d80cbfd5b050cb(
+    *,
+    key: typing.Optional[builtins.str] = None,
+    match_options: typing.Optional[typing.Sequence[builtins.str]] = None,
+    values: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2839,6 +3378,27 @@ def _typecheckingstub__ca892e141a9adeb986265203927fc16b8a26091edacd45cbc9ebe6689
     include_upfront: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     use_amortized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     use_blended: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__46271189f69022d8735b1bf112d5cddaac665cdc9fd75885c426b8af000590bb(
+    *,
+    key: typing.Optional[builtins.str] = None,
+    match_options: typing.Optional[typing.Sequence[builtins.str]] = None,
+    values: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eb71e1eb3b48926947e35d102ec777f08901def25ae4961947e1ab68d1692ace(
+    *,
+    and_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBudget.ExpressionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    cost_categories: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBudget.CostCategoryValuesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBudget.ExpressionDimensionValuesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    not_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBudget.ExpressionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    or_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBudget.ExpressionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Union[CfnBudget.TagValuesProperty, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2888,6 +3448,15 @@ def _typecheckingstub__e5d0b208f458ade09c3843fe83aba0d6db3ddb09a594e82cdd14537ff
     *,
     address: builtins.str,
     subscription_type: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ffd9b3bd7b99090fed06a8003a3319bf7bba070cdd4b3ec936c178caac26d0de(
+    *,
+    key: typing.Optional[builtins.str] = None,
+    match_options: typing.Optional[typing.Sequence[builtins.str]] = None,
+    values: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

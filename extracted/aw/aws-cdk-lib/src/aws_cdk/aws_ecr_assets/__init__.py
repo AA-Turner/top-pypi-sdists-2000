@@ -487,6 +487,12 @@ class DockerImageAsset(
             check_type(argname="argument resource_property", value=resource_property, expected_type=type_hints["resource_property"])
         return typing.cast(None, jsii.invoke(self, "addResourceMetadata", [resource, resource_property]))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
     @builtins.property
     @jsii.member(jsii_name="assetHash")
     def asset_hash(self) -> builtins.str:

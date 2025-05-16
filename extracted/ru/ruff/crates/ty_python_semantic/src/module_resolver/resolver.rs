@@ -14,7 +14,7 @@ use ruff_python_ast::PythonVersion;
 use crate::db::Db;
 use crate::module_name::ModuleName;
 use crate::module_resolver::typeshed::{vendored_typeshed_versions, TypeshedVersions};
-use crate::site_packages::{SitePackagesDiscoveryError, SysPrefixPathOrigin, VirtualEnvironment};
+use crate::site_packages::{PythonEnvironment, SitePackagesDiscoveryError, SysPrefixPathOrigin};
 use crate::{Program, PythonPath, SearchPathSettings};
 
 use super::module::{Module, ModuleKind};
@@ -243,7 +243,34 @@ impl SearchPaths {
                 //  than the one resolved in the program settings because it indicates
                 //  that the `target-version` is incorrectly configured or that the
                 //  venv is out of date.
-                VirtualEnvironment::new(sys_prefix, *origin, system)
+                PythonEnvironment::new(sys_prefix, *origin, system)
+                    .and_then(|env| env.site_packages_directories(system))?
+            }
+
+            PythonPath::Resolve(target, origin) => {
+                tracing::debug!("Resolving {origin}: {target}");
+
+                let root = system
+                    // If given a file, assume it's a Python executable, e.g., `.venv/bin/python3`,
+                    // and search for a virtual environment in the root directory. Ideally, we'd
+                    // invoke the target to determine `sys.prefix` here, but that's more complicated
+                    // and may be deferred to uv.
+                    .is_file(target)
+                    .then(|| target.as_path())
+                    .take_if(|target| {
+                        // Avoid using the target if it doesn't look like a Python executable, e.g.,
+                        // to deny cases like `.venv/bin/foo`
+                        target
+                            .file_name()
+                            .is_some_and(|name| name.starts_with("python"))
+                    })
+                    .and_then(SystemPath::parent)
+                    .and_then(SystemPath::parent)
+                    // If not a file, use the path as given and allow let `PythonEnvironment::new`
+                    // handle the error.
+                    .unwrap_or(target);
+
+                PythonEnvironment::new(root, *origin, system)
                     .and_then(|venv| venv.site_packages_directories(system))?
             }
 
@@ -262,7 +289,7 @@ impl SearchPaths {
                         vec![]
                     };
 
-                    match VirtualEnvironment::new(
+                    match PythonEnvironment::new(
                         virtual_env_path.clone(),
                         SysPrefixPathOrigin::LocalVenv,
                         system,

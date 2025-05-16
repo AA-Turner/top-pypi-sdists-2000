@@ -33,8 +33,6 @@ import torch
 import torch.utils.hooks as hooks
 from huggingface_hub import split_torch_state_dict_into_shards
 
-from accelerate.utils.imports import is_torchao_available
-
 from .checkpointing import load_accelerator_state, load_custom_state, save_accelerator_state, save_custom_state
 from .data_loader import DataLoaderDispatcher, prepare_data_loader, skip_first_batches
 from .logging import get_logger
@@ -82,6 +80,7 @@ from .utils import (
     convert_outputs_to_fp32,
     ensure_weights_retied,
     extract_model_from_parallel,
+    fsdp2_canonicalize_names,
     fsdp2_prepare_model,
     fsdp2_switch_optimizer_parameters,
     gather,
@@ -103,6 +102,7 @@ from .utils import (
     is_npu_available,
     is_torch_version,
     is_torch_xla_available,
+    is_torchao_available,
     is_transformer_engine_available,
     is_xpu_available,
     load_fsdp_model,
@@ -125,7 +125,7 @@ from .utils.constants import (
     PROFILE_PATTERN_NAME,
 )
 from .utils.modeling import get_state_dict_offloaded_model
-from .utils.other import is_compiled_module
+from .utils.other import compile_regions, is_compiled_module
 
 
 if is_deepspeed_available():
@@ -374,9 +374,7 @@ class Accelerator:
             if not is_torch_version(">=", FSDP_PYTORCH_VERSION):
                 raise ValueError(f"FSDP requires PyTorch >= {FSDP_PYTORCH_VERSION}")
 
-        if os.environ.get("ACCELERATE_USE_TP", "false") == "true" or isinstance(
-            torch_tp_plugin, TorchTensorParallelPlugin
-        ):
+        if isinstance(torch_tp_plugin, TorchTensorParallelPlugin):
             if not is_torch_version(">=", BETA_TP_AVAILABLE_PYTORCH_VERSION):
                 raise ValueError(f"TP requires PyTorch >= {BETA_TP_AVAILABLE_PYTORCH_VERSION}")
 
@@ -396,14 +394,8 @@ class Accelerator:
             if not is_torch_version(">=", FSDP2_PYTORCH_VERSION):
                 raise ImportError(f"FSDP2 requires PyTorch >= {FSDP2_PYTORCH_VERSION}")
 
-        if torch_tp_plugin is None:
-            torch_tp_plugin = (
-                TorchTensorParallelPlugin() if os.environ.get("ACCELERATE_USE_TP", "false") == "true" else None
-            )
-        else:
-            if not isinstance(torch_tp_plugin, TorchTensorParallelPlugin):
-                raise TypeError("`torch_tp_plugin` must be a TorchTensorParallelPlugin object.")
-            os.environ["ACCELERATE_USE_TP"] = "true"
+        if torch_tp_plugin is not None and not isinstance(torch_tp_plugin, TorchTensorParallelPlugin):
+            raise TypeError("`torch_tp_plugin` must be a TorchTensorParallelPlugin object.")
 
         if megatron_lm_plugin is None:  # init from env variables
             megatron_lm_plugin = (
@@ -1450,10 +1442,8 @@ class Accelerator:
         if should_fix_optimizer:
             # 2. grabbing new model parameters
             new_named_params = self._get_named_parameters(*result)
-            if fsdp2_should_fix_optimizer and self.state.fsdp_plugin.activation_checkpointing:
-                new_named_params = {
-                    k.replace("._checkpoint_wrapped_module", ""): v for k, v in new_named_params.items()
-                }
+            if fsdp2_should_fix_optimizer:
+                new_named_params = fsdp2_canonicalize_names(new_named_params)
             # 3. building a map from the first to the second
             mapping = {p: new_named_params[n] for n, p in old_named_params.items()}
             # 4. using that map to update the parameters of the optimizer
@@ -1598,15 +1588,17 @@ class Accelerator:
                     if self.ddp_handler is not None:
                         self.ddp_handler.register_comm_hook(model)
             elif self.distributed_type == DistributedType.TP:
-                if hasattr(model, "supports_tp_plan") and not model.supports_tp_plan:
-                    if not compare_versions("transformers", ">=", BETA_TP_AVAILABLE_TRANSFORMERS_VERSION):
-                        raise ValueError(f"TP requires transformers >= {BETA_TP_AVAILABLE_TRANSFORMERS_VERSION}")
+                if not compare_versions("transformers", ">=", BETA_TP_AVAILABLE_TRANSFORMERS_VERSION):
+                    raise ValueError(f"TP requires transformers >= {BETA_TP_AVAILABLE_TRANSFORMERS_VERSION}")
+                if not hasattr(model, "tp_size"):
                     raise NotImplementedError(
-                        "Provided model does not support tensor parallelism. \
-                        Tensor parallelism plan can be added as base_model_tp_plan to model config class \
-                        and _tp_plan attribute to model class."
+                        "Model should undergo tensor parallel before passing it to accelerate."
+                        "You can use .from_pretrained(..., tp_plan='auto') if the model supports"
                     )
-                model.tensor_parallel(self.state.torch_tp_plugin.torch_device_mesh["tp"])
+                if model.tp_size != self.state.torch_tp_plugin.tp_size:
+                    raise ValueError(
+                        f"tp_size in the plugin {self.state.torch_tp_plugin.tp_size} should be same as model's tp size {model.tp_size}"
+                    )
             elif self.is_fsdp2:
                 model = fsdp2_prepare_model(self, model)
 
@@ -1681,24 +1673,24 @@ class Accelerator:
                 #   * this attribute will always set by init_utils.init_core_state so its always not None.
                 #   * mixed_precision.param_dtype only regards _fwd_bwd_param_dtype
                 #   * if model is loaded in 16bit, and even if mixed_precision.param_dtype is None,
-                #     we sill want to upcast the flat_param.
+                #     we still want to upcast the flat_param.
                 if self.mixed_precision != "no":  # if mixed precision is set
                     upcasted_log = []
                     for module in FSDP.fsdp_modules(model):
                         # Referencing DeepSpeed Zero3
                         # - in Init, params are converted to 16bit while partitioning.
-                        # - in accelerator.prepare, deepspeed.initalize is called to:
-                        #   * creates the DeepSpeeedEngine.
+                        # - in accelerator.prepare, deepspeed.initialize is called to:
+                        #   * creates the DeepSpeedEngine.
                         #   * since zero_optimization() is True , calls engine._configure_zero_optimizer.
                         #
-                        # Inside the DeepSpeed Zero3 optimizer configuration, which initalizes
+                        # Inside the DeepSpeed Zero3 optimizer configuration, which initializes
                         # DeepSpeedZeroOptimizer_Stage3, during which:
                         #   * trainable_param_groups are obtained from the attached optimizer
                         #     (already partitioned in 16bit).
                         #   * then _setup_for_real_optimizer -> _create_fp32_partitions
                         #     which performs the fp32 upcasting.
 
-                        # To mimick DeepSeepds's casting in FSDP, we look at the (single) FlatParameter held
+                        # To mimic DeepSeepds's casting in FSDP, we look at the (single) FlatParameter held
                         # within an FSDP wrapper. This FlatParameter will be seen by the optimizer.
                         #  - even though there is a torch.device('meta') guard below, we
                         #    expect _init_utils._init_param_handle_from_module to already
@@ -1754,7 +1746,10 @@ class Accelerator:
             model = apply_fp8_autowrap(model, self.te_recipe_handler or self.fp8_recipe_handler)
         # torch.compile should be called last and only if the model isn't already compiled.
         if self.state.dynamo_plugin.backend != DynamoBackend.NO and not is_compiled_module(model):
-            model = torch.compile(model, **self.state.dynamo_plugin.to_kwargs())
+            if self.state.dynamo_plugin.use_regional_compilation:
+                model = compile_regions(model, **self.state.dynamo_plugin.to_kwargs())
+            else:
+                model = torch.compile(model, **self.state.dynamo_plugin.to_kwargs())
         return model
 
     def _prepare_ao(self, *args):
@@ -2034,7 +2029,10 @@ class Accelerator:
 
             if compare_versions("deepspeed", ">=", "0.14.4") and self.state.dynamo_plugin.backend != DynamoBackend.NO:
                 compile_kwargs = self.state.dynamo_plugin.to_kwargs()
-                engine.compile(backend=compile_kwargs.pop("backend"), compile_kwargs=compile_kwargs)
+                if self.state.dynamo_plugin.use_regional_compilation:
+                    engine.module = compile_regions(engine.module, **compile_kwargs)
+                else:
+                    engine.compile(backend=compile_kwargs.pop("backend"), compile_kwargs=compile_kwargs)
             if optimizer is not None:
                 optimizer = DeepSpeedOptimizerWrapper(optimizer)
             if scheduler is not None:
@@ -2182,36 +2180,58 @@ class Accelerator:
         only support, IPEX compiled with XPU support and training with XPU pytorch backend available in stock pytorch
         starting from version 2.4.
         """
-        if self.state.use_ipex:
-            if not is_ipex_available():
-                raise ImportError(
-                    "IPEX is not installed or IPEX's version does not match current PyTorch version. Please refer"
-                    " to https://github.com/intel/intel-extension-for-pytorch."
-                )
 
-        model = None
-        optimizer = None
+        # ipex.optimize() is available only for IPEX, both IPEX-CPU and IPEX-XPU
+        if is_ipex_available():
+            import intel_extension_for_pytorch as ipex
+        else:
+            raise ImportError(
+                "IPEX is not installed or IPEX's version does not match current PyTorch version. Please refer"
+                " to https://github.com/intel/intel-extension-for-pytorch."
+            )
+
+        models = []
+        optimizers = []
         result = [obj for obj in args]
-        for obj in result:
+        for i, obj in enumerate(result):
             if isinstance(obj, torch.nn.Module):
                 model = obj
                 model.train()
+                models.append((i, model))
             elif isinstance(obj, (torch.optim.Optimizer)):
-                optimizer = obj
-        if optimizer is not None and model is not None:
-            dtype = torch.bfloat16 if self.state.mixed_precision == "bf16" else None
+                optimizers.append((i, obj))
+
+        # Impossible to determine what to do if multiple models and/or optimizers are provided
+        if len(optimizers) > 1 or (len(models) > 1 and len(optimizers) == 1):
+            raise ValueError(
+                "Prepare with IPEX expects either 1+ models and no optimizer OR a single model-optimizer pair."
+            )
+
+        # Nothing to do
+        if len(models) == 0 and len(optimizers) == 0:
+            return result
+
+        dtype = torch.bfloat16 if self.state.mixed_precision == "bf16" else None
+        # Multiple models and no optimizer (inference) are provided
+        if len(models) > 0 and len(optimizers) == 0:
+            for i, model in models:
+                if self.device.type == "xpu" and next(model.parameters()).device.type == "cpu":
+                    model = model.to(self.device)
+                    model, _ = ipex.optimize(model, optimizer=None, dtype=dtype, inplace=True, level="O1")
+                    # Replace in result
+                    result[i] = model
+
+        # A single model-optimizer pair (training) is provided
+        if len(models) == 1 and len(optimizers) == 1:
+            i_model, model = models[0]
+            i_optimizer, optimizer = optimizers[0]
             if self.device.type == "xpu" and next(model.parameters()).device.type == "cpu":
                 model = model.to(self.device)
-            # ipex.optimize() is available only for IPEX, both IPEX-CPU and IPEX-XPU
-            if is_ipex_available():
-                import intel_extension_for_pytorch as ipex
+            model, optimizer = ipex.optimize(model, optimizer=optimizer, dtype=dtype, inplace=True, level="O1")
+            # Replace in result
+            result[i_model] = model
+            result[i_optimizer] = optimizer
 
-                model, optimizer = ipex.optimize(model, optimizer=optimizer, dtype=dtype, inplace=True, level="O1")
-        for i in range(len(result)):
-            if isinstance(result[i], torch.nn.Module):
-                result[i] = model
-            elif isinstance(result[i], (torch.optim.Optimizer)):
-                result[i] = optimizer
         return tuple(result)
 
     def _prepare_device_mesh(self):
@@ -2223,8 +2243,7 @@ class Accelerator:
             return self.state.torch_tp_plugin.torch_device_mesh
         elif self.distributed_type == DistributedType.DEEPSPEED and hasattr(self.state, "ds_device_mesh"):
             return self.state.ds_device_mesh
-        else:
-            return None
+        return None
 
     def _prepare_msamp(self, *args, device_placement):
         if not is_msamp_available():
@@ -3179,7 +3198,7 @@ class Accelerator:
 
         If a `ProjectConfiguration` was passed to the `Accelerator` object with `automatic_checkpoint_naming` enabled
         then checkpoints will be saved to `self.project_dir/checkpoints`. If the number of current saves is greater
-        than `total_limit` then the oldest save is deleted. Each checkpoint is saved in seperate folders named
+        than `total_limit` then the oldest save is deleted. Each checkpoint is saved in separate folders named
         `checkpoint_<iteration>`.
 
         Otherwise they are just saved to `output_dir`.
@@ -3604,8 +3623,11 @@ class Accelerator:
 
                 state_dict = clone_tensors_for_torch_save(self.unwrap_model(model).state_dict())
         elif self.is_fsdp2:
-            with torch.no_grad():
-                state_dict = {k: v.full_tensor() for k, v in model.state_dict().items()}
+            from torch.distributed.checkpoint.state_dict import StateDictOptions, get_model_state_dict
+
+            # This hangs if `cpu_offload` is also True
+            options = StateDictOptions(full_state_dict=True, broadcast_from_rank0=True)
+            state_dict = get_model_state_dict(model, options=options)
         elif self.distributed_type == DistributedType.FSDP:
             from torch.distributed.fsdp import FullStateDictConfig, StateDictType
             from torch.distributed.fsdp import FullyShardedDataParallel as FSDP

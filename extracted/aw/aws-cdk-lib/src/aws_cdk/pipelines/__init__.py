@@ -70,8 +70,8 @@ class ComputeStack(Stack):
 # Stack to hold the pipeline
 #
 class MyPipelineStack(Stack):
-    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         pipeline = pipelines.CodePipeline(self, "Pipeline",
             synth=pipelines.ShellStep("Synth",
@@ -104,8 +104,8 @@ class MyPipelineStack(Stack):
 # we make sure they are deployed together, or not at all.
 #
 class MyApplication(Stage):
-    def __init__(self, scope, id, *, env=None, outdir=None, stageName=None, permissionsBoundary=None, policyValidationBeta1=None):
-        super().__init__(scope, id, env=env, outdir=outdir, stageName=stageName, permissionsBoundary=permissionsBoundary, policyValidationBeta1=policyValidationBeta1)
+    def __init__(self, scope, id, *, env=None, outdir=None, stageName=None, permissionsBoundary=None, policyValidationBeta1=None, propertyInjectors=None):
+        super().__init__(scope, id, env=env, outdir=outdir, stageName=stageName, permissionsBoundary=permissionsBoundary, policyValidationBeta1=policyValidationBeta1, propertyInjectors=propertyInjectors)
 
         db_stack = DatabaseStack(self, "Database")
         ComputeStack(self, "Compute",
@@ -512,8 +512,8 @@ The creation of change sets can be switched off by setting `useChangeSets: false
 
 
 class PipelineStack(Stack):
-    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None):
-        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation)
+    def __init__(self, scope, id, *, description=None, env=None, stackName=None, tags=None, notificationArns=None, synthesizer=None, terminationProtection=None, analyticsReporting=None, crossRegionReferences=None, permissionsBoundary=None, suppressTemplateIndentation=None, propertyInjectors=None):
+        super().__init__(scope, id, description=description, env=env, stackName=stackName, tags=tags, notificationArns=notificationArns, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting, crossRegionReferences=crossRegionReferences, permissionsBoundary=permissionsBoundary, suppressTemplateIndentation=suppressTemplateIndentation, propertyInjectors=propertyInjectors)
 
         pipeline = pipelines.CodePipeline(self, "Pipeline",
             synth=synth,
@@ -559,8 +559,8 @@ You can also specify steps to be executed at the stack level. To achieve this, y
 # pipeline: pipelines.CodePipeline
 class MyStacksStage(Stage):
 
-    def __init__(self, scope, id, *, env=None, outdir=None, stageName=None, permissionsBoundary=None, policyValidationBeta1=None):
-        super().__init__(scope, id, env=env, outdir=outdir, stageName=stageName, permissionsBoundary=permissionsBoundary, policyValidationBeta1=policyValidationBeta1)
+    def __init__(self, scope, id, *, env=None, outdir=None, stageName=None, permissionsBoundary=None, policyValidationBeta1=None, propertyInjectors=None):
+        super().__init__(scope, id, env=env, outdir=outdir, stageName=stageName, permissionsBoundary=permissionsBoundary, policyValidationBeta1=policyValidationBeta1, propertyInjectors=propertyInjectors)
         self.stack1 = Stack(self, "stack1")
         self.stack2 = Stack(self, "stack2")
 prod = MyStacksStage(self, "Prod")
@@ -613,8 +613,8 @@ pass it to `envFromCfnOutputs` of the `ShellStep`:
 # pipeline: pipelines.CodePipeline
 class MyOutputStage(Stage):
 
-    def __init__(self, scope, id, *, env=None, outdir=None, stageName=None, permissionsBoundary=None, policyValidationBeta1=None):
-        super().__init__(scope, id, env=env, outdir=outdir, stageName=stageName, permissionsBoundary=permissionsBoundary, policyValidationBeta1=policyValidationBeta1)
+    def __init__(self, scope, id, *, env=None, outdir=None, stageName=None, permissionsBoundary=None, policyValidationBeta1=None, propertyInjectors=None):
+        super().__init__(scope, id, env=env, outdir=outdir, stageName=stageName, permissionsBoundary=permissionsBoundary, policyValidationBeta1=policyValidationBeta1, propertyInjectors=propertyInjectors)
         self.load_balancer_address = CfnOutput(self, "Output",
             value="value"
         )

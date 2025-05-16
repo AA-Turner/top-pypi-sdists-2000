@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -5925,6 +5925,7 @@ def test_create_service_rest_call_success(request_type):
             "session_affinity": True,
             "health_check_disabled": True,
             "node_selector": {"accelerator": "accelerator_value"},
+            "gpu_zonal_redundancy_disabled": True,
         },
         "traffic": [
             {
@@ -6590,6 +6591,7 @@ def test_update_service_rest_call_success(request_type):
             "session_affinity": True,
             "health_check_disabled": True,
             "node_selector": {"accelerator": "accelerator_value"},
+            "gpu_zonal_redundancy_disabled": True,
         },
         "traffic": [
             {
