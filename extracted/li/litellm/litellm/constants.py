@@ -153,6 +153,13 @@ FIREWORKS_AI_80_B = int(os.getenv("FIREWORKS_AI_80_B", 80))
 #### Logging callback constants ####
 REDACTED_BY_LITELM_STRING = "REDACTED_BY_LITELM"
 
+### ANTHROPIC CONSTANTS ###
+ANTHROPIC_WEB_SEARCH_TOOL_MAX_USES = {
+    "low": 1,
+    "medium": 5,
+    "high": 10,
+}
+
 LITELLM_CHAT_PROVIDERS = [
     "openai",
     "openai_like",
@@ -219,6 +226,12 @@ LITELLM_CHAT_PROVIDERS = [
     "nscale",
 ]
 
+LITELLM_EMBEDDING_PROVIDERS_SUPPORTING_INPUT_ARRAY_OF_TOKENS = [
+    "openai",
+    "azure",
+    "hosted_vllm"
+]
+
 
 OPENAI_CHAT_COMPLETION_PARAMS = [
     "functions",
@@ -259,6 +272,7 @@ OPENAI_CHAT_COMPLETION_PARAMS = [
     "reasoning_effort",
     "extra_headers",
     "thinking",
+    "web_search_options",
 ]
 
 openai_compatible_endpoints: List = [
@@ -602,7 +616,9 @@ LITELLM_PROXY_ADMIN_NAME = "default_user_id"
 
 ########################### DB CRON JOB NAMES ###########################
 DB_SPEND_UPDATE_JOB_NAME = "db_spend_update_job"
-PROMETHEUS_EMIT_BUDGET_METRICS_JOB_NAME = "prometheus_emit_budget_metrics_job"
+PROMETHEUS_EMIT_BUDGET_METRICS_JOB_NAME = "prometheus_emit_budget_metrics"
+SPEND_LOG_CLEANUP_JOB_NAME = "spend_log_cleanup"
+SPEND_LOG_RUN_LOOPS = int(os.getenv("SPEND_LOG_RUN_LOOPS", 100))
 DEFAULT_CRON_JOB_LOCK_TTL_SECONDS = int(
     os.getenv("DEFAULT_CRON_JOB_LOCK_TTL_SECONDS", 60)
 )  # 1 minute

@@ -1,6 +1,7 @@
 import logging
 import os
 import re
+import sys
 import time
 
 from notion_client import Client
@@ -56,8 +57,7 @@ class NotionHelper:
         
         notion_dict = self.get_notion_data()
         if not notion_dict:
-            print("⚠️ Notion JSON 数据为空或未提供，终止后续操作。")
-            return
+            sys.exit(0)
         self.client = Client(auth = notion_dict.get("access_token"),log_level=logging.ERROR)
         self.__cache = {}
         self.page_id = self.extract_page_id(notion_dict.get("duplicated_template_id"))

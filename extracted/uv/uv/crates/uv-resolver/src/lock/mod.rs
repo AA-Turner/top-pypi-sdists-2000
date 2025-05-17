@@ -824,10 +824,10 @@ impl Lock {
                     let mut table = InlineTable::new();
                     table.insert("package", Value::from(item.package().to_string()));
                     match item.conflict() {
-                        ConflictPackage::Extra(ref extra) => {
+                        ConflictPackage::Extra(extra) => {
                             table.insert("extra", Value::from(extra.to_string()));
                         }
-                        ConflictPackage::Group(ref group) => {
+                        ConflictPackage::Group(group) => {
                             table.insert("group", Value::from(group.to_string()));
                         }
                     }
@@ -4111,7 +4111,7 @@ impl Wheel {
                             name: filename.name,
                             version: filename.version,
                         }
-                        .into())
+                        .into());
                     }
                 };
                 let file = Box::new(uv_distribution_types::File {
@@ -4141,7 +4141,7 @@ impl Wheel {
                             name: filename.name,
                             version: filename.version,
                         }
-                        .into())
+                        .into());
                     }
                 };
                 let file_url = Url::from_file_path(root.join(index_path).join(file_path))
@@ -4527,7 +4527,7 @@ impl From<Hash> for Hashes {
 /// Convert a [`FileLocation`] into a normalized [`UrlString`].
 fn normalize_file_location(location: &FileLocation) -> Result<UrlString, ToUrlError> {
     match location {
-        FileLocation::AbsoluteUrl(ref absolute) => Ok(absolute.without_fragment()),
+        FileLocation::AbsoluteUrl(absolute) => Ok(absolute.without_fragment()),
         FileLocation::RelativeUrl(_, _) => Ok(normalize_url(location.to_url()?)),
     }
 }

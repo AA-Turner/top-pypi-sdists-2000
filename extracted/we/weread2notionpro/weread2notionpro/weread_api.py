@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 import re
+import sys
 
 import requests
 from retrying import retry
@@ -49,6 +50,7 @@ class WeReadApi:
             if vid and accessToken:
                 self.session.headers.update({"vid": str(vid), "accessToken": accessToken})
         else:
+            sys.exit(0)
             print("Failed to refresh token")
        
         
@@ -152,6 +154,7 @@ class WeReadApi:
                 return self.get_review_list(bookId)
             raise Exception(f"get {bookId} review list failed {r.text}")
 
+    @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def get_api_data(self):
         r = self.session.get(WEREAD_HISTORY_URL)
         if r.ok:
@@ -190,6 +193,29 @@ class WeReadApi:
                 return self.get_chapter_info(bookId)
             raise Exception(f"get {bookId} chapter info failed {r.text}")
 
+    # listType 2 :读完
+    # listType 1 :在读
+    # listType 3 :全部
+    def get_read_book(self):
+        results = []
+        hasMore = 1
+        vid = self.session.headers.get("vid")
+        while hasMore:
+            url = f"https://i.weread.qq.com/mine/readbook?vid={vid}&star=0&yearRange=0_0&count=15&rating=0&listType=3"
+            maxidx = len(results)
+            if maxidx:
+                url = f"{url}&maxidx={maxidx}"
+            r = self.session.get(url)
+            if r.ok:
+                data = r.json()
+                hasMore = data.get("hasMore")
+                results.extend(data.get("readBooks"))
+            else:
+                errcode = r.json().get("errcode", 0)
+                if self.handle_errcode(errcode):
+                    return self.get_api_data()
+                raise Exception(f"get history data failed {r.text}")
+        return results
     def transform_id(self, book_id):
         id_length = len(book_id)
         if re.match("^\\d*$", book_id):

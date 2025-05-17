@@ -72,6 +72,7 @@ def _run_tests(
     if "--cov" in posargs:
         _extras.append("cov")
         posargs.append("--cov-config=pyproject.toml")
+        env["COVERAGE_CORE"] = "sysmon"
 
     install_arg = f"-e.[{','.join(_extras)}]"
     session.install(install_arg, *install_args, silent=False)
@@ -110,6 +111,18 @@ def readme(session: nox.Session) -> None:
 
     session.install("-e.", "cogapp")
     session.run("cog", "-P", *args, "README.md")
+
+
+@nox.session(reuse_venv=True, tags=["gen"])
+def generate_config_reference(session: nox.Session) -> None:
+    """
+    Update the configure reference with cog. Pass --check to check instead.
+    """
+
+    args = session.posargs or ["-r"]
+
+    session.install("-e.", "cogapp")
+    session.run("cog", "-P", *args, f"{DIR / 'docs/reference/configs.md'}")
 
 
 @nox.session(venv_backend="uv", default=False)

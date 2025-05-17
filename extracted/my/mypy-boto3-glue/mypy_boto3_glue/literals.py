@@ -91,6 +91,8 @@ __all__ = (
     "GlueRecordTypeType",
     "GlueServiceName",
     "HudiTargetCompressionTypeType",
+    "HyperTargetCompressionTypeType",
+    "IcebergTargetCompressionTypeType",
     "InclusionAnnotationValueType",
     "IntegrationStatusType",
     "JDBCConnectionTypeType",
@@ -381,6 +383,8 @@ GlueRecordTypeType = Literal[
     "BIGDECIMAL", "BYTE", "DATE", "DOUBLE", "FLOAT", "INT", "LONG", "SHORT", "STRING", "TIMESTAMP"
 ]
 HudiTargetCompressionTypeType = Literal["gzip", "lzo", "snappy", "uncompressed"]
+HyperTargetCompressionTypeType = Literal["uncompressed"]
+IcebergTargetCompressionTypeType = Literal["gzip", "lzo", "snappy", "uncompressed"]
 InclusionAnnotationValueType = Literal["EXCLUDE", "INCLUDE"]
 IntegrationStatusType = Literal[
     "ACTIVE", "CREATING", "DELETING", "FAILED", "MODIFYING", "NEEDS_ATTENTION", "SYNCING"
@@ -463,7 +467,9 @@ MetadataOperationType = Literal["CREATE"]
 NodeTypeType = Literal["CRAWLER", "JOB", "TRIGGER"]
 OAuth2GrantTypeType = Literal["AUTHORIZATION_CODE", "CLIENT_CREDENTIALS", "JWT_BEARER"]
 ParamTypeType = Literal["bool", "complex", "float", "int", "list", "null", "str"]
-ParquetCompressionTypeType = Literal["gzip", "lzo", "none", "snappy", "uncompressed"]
+ParquetCompressionTypeType = Literal[
+    "brotli", "gzip", "lz4", "lzo", "none", "snappy", "uncompressed"
+]
 PartitionIndexStatusType = Literal["ACTIVE", "CREATING", "DELETING", "FAILED"]
 PermissionType = Literal[
     "ALL",
@@ -508,7 +514,9 @@ StatisticEvaluationLevelType = Literal["Column", "Dataset", "Multicolumn"]
 TableAttributesType = Literal["NAME", "TABLE_TYPE"]
 TableOptimizerEventTypeType = Literal["completed", "failed", "in_progress", "starting"]
 TableOptimizerTypeType = Literal["compaction", "orphan_file_deletion", "retention"]
-TargetFormatType = Literal["avro", "csv", "delta", "hudi", "json", "orc", "parquet"]
+TargetFormatType = Literal[
+    "avro", "csv", "delta", "hudi", "hyper", "iceberg", "json", "orc", "parquet", "xml"
+]
 TaskRunSortColumnTypeType = Literal["STARTED", "STATUS", "TASK_RUN_TYPE"]
 TaskStatusTypeType = Literal[
     "FAILED", "RUNNING", "STARTING", "STOPPED", "STOPPING", "SUCCEEDED", "TIMEOUT"

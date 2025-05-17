@@ -244,11 +244,11 @@ func (c *DockerCommand) ContainerStop(ctx context.Context, containerID string) e
 	args := []string{
 		"container",
 		"stop",
-		"--timeout", "3",
+		"-t", "3",
 		containerID,
 	}
 
-	if err := c.exec(ctx, nil, nil, nil, "", args); err != nil {
+	if err := c.exec(ctx, nil, io.Discard, nil, "", args); err != nil {
 		if strings.Contains(err.Error(), "No such container") {
 			err = &command.NotFoundError{Object: "container", Ref: containerID}
 		}

@@ -36,6 +36,7 @@ from litellm.llms.custom_httpx.http_handler import (
     get_async_httpx_client,
 )
 from litellm.types.llms.anthropic import AnthropicThinkingParam
+from litellm.types.llms.gemini import BidiGenerateContentServerMessage
 from litellm.types.llms.openai import (
     AllMessageValues,
     ChatCompletionResponseMessage,
@@ -789,8 +790,14 @@ class VertexGeminiConfig(VertexAIBaseConfig, BaseConfig):
 
     def _calculate_usage(
         self,
-        completion_response: GenerateContentResponseBody,
+        completion_response: Union[
+            GenerateContentResponseBody, BidiGenerateContentServerMessage
+        ],
     ) -> Usage:
+        if "usageMetadata" not in completion_response:
+            raise ValueError(
+                f"usageMetadata not found in completion_response. Got={completion_response}"
+            )
         cached_tokens: Optional[int] = None
         audio_tokens: Optional[int] = None
         text_tokens: Optional[int] = None
@@ -1626,6 +1633,11 @@ class ModelResponseIterator:
                     total_tokens=processed_chunk["usageMetadata"].get(
                         "totalTokenCount", 0
                     ),
+                    completion_tokens_details={
+                        "reasoning_tokens": processed_chunk["usageMetadata"].get(
+                            "thoughtsTokenCount", 0
+                        )
+                    }
                 )
 
             returned_chunk = GenericStreamingChunk(

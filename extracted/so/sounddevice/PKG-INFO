@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: sounddevice
-Version: 0.5.1
+Version: 0.5.2
 Summary: Play and Record Sound with Python
 Home-page: http://python-sounddevice.readthedocs.io/
 Author: Matthias Geier
@@ -19,6 +19,20 @@ License-File: LICENSE
 Requires-Dist: CFFI>=1.0
 Provides-Extra: numpy
 Requires-Dist: NumPy; extra == "numpy"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: platform
+Dynamic: project-url
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 Play and Record Sound with Python
 =================================

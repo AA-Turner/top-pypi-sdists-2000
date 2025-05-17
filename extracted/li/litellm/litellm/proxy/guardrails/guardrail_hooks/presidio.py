@@ -11,22 +11,24 @@
 import asyncio
 import json
 import uuid
-from typing import Any, Dict, List, Optional, Tuple, Union, cast
+from datetime import datetime
+from typing import Any, Dict, List, Literal, Optional, Tuple, Union, cast
 
 import aiohttp
-from pydantic import BaseModel
 
 import litellm  # noqa: E401
 from litellm import get_secret
 from litellm._logging import verbose_proxy_logger
 from litellm.caching.caching import DualCache
 from litellm.exceptions import BlockedPiiEntityError
-from litellm.integrations.custom_guardrail import (
-    CustomGuardrail,
-    log_guardrail_information,
-)
+from litellm.integrations.custom_guardrail import CustomGuardrail
 from litellm.proxy._types import UserAPIKeyAuth
-from litellm.types.guardrails import GuardrailEventHooks, PiiAction, PiiEntityType
+from litellm.types.guardrails import (
+    GuardrailEventHooks,
+    PiiAction,
+    PiiEntityType,
+    PresidioPerRequestConfig,
+)
 from litellm.types.proxy.guardrails.guardrail_hooks.presidio import (
     PresidioAnalyzeRequest,
     PresidioAnalyzeResponseItem,
@@ -38,15 +40,6 @@ from litellm.utils import (
     ModelResponse,
     StreamingChoices,
 )
-
-
-class PresidioPerRequestConfig(BaseModel):
-    """
-    presdio params that can be controlled per request, api key
-    """
-
-    language: Optional[str] = None
-    entities: Optional[List[PiiEntityType]] = None
 
 
 class _OPTIONAL_PresidioPIIMasking(CustomGuardrail):
@@ -223,7 +216,11 @@ class _OPTIONAL_PresidioPIIMasking(CustomGuardrail):
             raise e
 
     async def anonymize_text(
-        self, text: str, analyze_results: Any, output_parse_pii: bool
+        self,
+        text: str,
+        analyze_results: Any,
+        output_parse_pii: bool,
+        masked_entity_count: Dict[str, int],
     ) -> str:
         """
         Send analysis results to the Presidio anonymizer endpoint to get redacted text
@@ -261,6 +258,11 @@ class _OPTIONAL_PresidioPIIMasking(CustomGuardrail):
                             ]  # get text it'll replace
 
                         new_text = new_text[:start] + replacement + new_text[end:]
+                        entity_type = item.get("entity_type", None)
+                        if entity_type is not None:
+                            masked_entity_count[entity_type] = (
+                                masked_entity_count.get(entity_type, 0) + 1
+                            )
                     return redacted_text["text"]
                 else:
                     raise Exception(f"Invalid anonymizer response: {redacted_text}")
@@ -305,6 +307,11 @@ class _OPTIONAL_PresidioPIIMasking(CustomGuardrail):
         """
         Calls Presidio Analyze + Anonymize endpoints for PII Analysis + Masking
         """
+        start_time = datetime.now()
+        analyze_results: Optional[Union[List[PresidioAnalyzeResponseItem], Dict]] = None
+        status: Literal["success", "failure"] = "success"
+        masked_entity_count: Dict[str, int] = {}
+        exception_str: str = ""
         try:
             if self.mock_redacted_text is not None:
                 redacted_text = self.mock_redacted_text
@@ -329,13 +336,33 @@ class _OPTIONAL_PresidioPIIMasking(CustomGuardrail):
                     text=text,
                     analyze_results=analyze_results,
                     output_parse_pii=output_parse_pii,
+                    masked_entity_count=masked_entity_count,
                 )
-
             return redacted_text["text"]
         except Exception as e:
+            status = "failure"
+            exception_str = str(e)
             raise e
+        finally:
+            ####################################################
+            # Create Guardrail Trace for logging on Langfuse, Datadog, etc.
+            ####################################################
+            guardrail_json_response: Union[Exception, str, dict, List[dict]] = {}
+            if status == "success":
+                if isinstance(analyze_results, List):
+                    guardrail_json_response = [dict(item) for item in analyze_results]
+            else:
+                guardrail_json_response = exception_str
+            self.add_standard_logging_guardrail_information_to_request_data(
+                guardrail_json_response=guardrail_json_response,
+                request_data=request_data,
+                guardrail_status=status,
+                start_time=start_time.timestamp(),
+                end_time=datetime.now().timestamp(),
+                duration=(datetime.now() - start_time).total_seconds(),
+                masked_entity_count=masked_entity_count,
+            )
 
-    @log_guardrail_information
     async def async_pre_call_hook(
         self,
         user_api_key_dict: UserAPIKeyAuth,
@@ -399,7 +426,6 @@ class _OPTIONAL_PresidioPIIMasking(CustomGuardrail):
         except Exception as e:
             raise e
 
-    @log_guardrail_information
     def logging_hook(
         self, kwargs: dict, result: Any, call_type: str
     ) -> Tuple[dict, Any]:
@@ -432,7 +458,6 @@ class _OPTIONAL_PresidioPIIMasking(CustomGuardrail):
             # No running event loop, we can safely run in this thread
             return run_in_new_loop()
 
-    @log_guardrail_information
     async def async_logging_hook(
         self, kwargs: dict, result: Any, call_type: str
     ) -> Tuple[dict, Any]:
@@ -481,7 +506,6 @@ class _OPTIONAL_PresidioPIIMasking(CustomGuardrail):
 
         return kwargs, result
 
-    @log_guardrail_information
     async def async_post_call_success_hook(  # type: ignore
         self,
         data: dict,
@@ -533,14 +557,19 @@ class _OPTIONAL_PresidioPIIMasking(CustomGuardrail):
         except Exception:
             pass
 
-    async def apply_guardrail(self, input_text: str) -> str:
+    async def apply_guardrail(
+        self,
+        text: str,
+        language: Optional[str] = None,
+        entities: Optional[List[PiiEntityType]] = None,
+    ) -> str:
         """
         UI will call this function to check:
             1. If the connection to the guardrail is working
             2. When Testing the guardrail with some text, this function will be called with the input text and returns a text after applying the guardrail
         """
         text = await self.check_pii(
-            text=input_text,
+            text=text,
             output_parse_pii=self.output_parse_pii,
             presidio_config=None,
             request_data={},

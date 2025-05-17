@@ -71,6 +71,7 @@ from .literals import (
     FilterValueTypeType,
     GlueRecordTypeType,
     HudiTargetCompressionTypeType,
+    IcebergTargetCompressionTypeType,
     InclusionAnnotationValueType,
     IntegrationStatusType,
     JDBCConnectionTypeType,
@@ -984,6 +985,9 @@ __all__ = (
     "S3DirectTargetTypeDef",
     "S3DirectTargetUnionTypeDef",
     "S3EncryptionTypeDef",
+    "S3ExcelSourceOutputTypeDef",
+    "S3ExcelSourceTypeDef",
+    "S3ExcelSourceUnionTypeDef",
     "S3GlueParquetTargetOutputTypeDef",
     "S3GlueParquetTargetTypeDef",
     "S3GlueParquetTargetUnionTypeDef",
@@ -996,6 +1000,12 @@ __all__ = (
     "S3HudiSourceOutputTypeDef",
     "S3HudiSourceTypeDef",
     "S3HudiSourceUnionTypeDef",
+    "S3HyperDirectTargetOutputTypeDef",
+    "S3HyperDirectTargetTypeDef",
+    "S3HyperDirectTargetUnionTypeDef",
+    "S3IcebergDirectTargetOutputTypeDef",
+    "S3IcebergDirectTargetTypeDef",
+    "S3IcebergDirectTargetUnionTypeDef",
     "S3JsonSourceOutputTypeDef",
     "S3JsonSourceTypeDef",
     "S3JsonSourceUnionTypeDef",
@@ -4985,6 +4995,7 @@ class S3DeltaDirectTargetOutputTypeDef(TypedDict):
     Compression: DeltaTargetCompressionTypeType
     Format: TargetFormatType
     PartitionKeys: NotRequired[List[List[str]]]
+    NumberTargetPartitions: NotRequired[str]
     AdditionalOptions: NotRequired[Dict[str, str]]
     SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
 
@@ -4995,6 +5006,7 @@ class S3DeltaDirectTargetTypeDef(TypedDict):
     Compression: DeltaTargetCompressionTypeType
     Format: TargetFormatType
     PartitionKeys: NotRequired[Sequence[Sequence[str]]]
+    NumberTargetPartitions: NotRequired[str]
     AdditionalOptions: NotRequired[Mapping[str, str]]
     SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
 
@@ -5005,6 +5017,7 @@ class S3DirectTargetOutputTypeDef(TypedDict):
     Format: TargetFormatType
     PartitionKeys: NotRequired[List[List[str]]]
     Compression: NotRequired[str]
+    NumberTargetPartitions: NotRequired[str]
     SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
 
 class S3DirectTargetTypeDef(TypedDict):
@@ -5014,6 +5027,7 @@ class S3DirectTargetTypeDef(TypedDict):
     Format: TargetFormatType
     PartitionKeys: NotRequired[Sequence[Sequence[str]]]
     Compression: NotRequired[str]
+    NumberTargetPartitions: NotRequired[str]
     SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
 
 class S3GlueParquetTargetOutputTypeDef(TypedDict):
@@ -5022,6 +5036,7 @@ class S3GlueParquetTargetOutputTypeDef(TypedDict):
     Path: str
     PartitionKeys: NotRequired[List[List[str]]]
     Compression: NotRequired[ParquetCompressionTypeType]
+    NumberTargetPartitions: NotRequired[str]
     SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
 
 class S3GlueParquetTargetTypeDef(TypedDict):
@@ -5030,6 +5045,7 @@ class S3GlueParquetTargetTypeDef(TypedDict):
     Path: str
     PartitionKeys: NotRequired[Sequence[Sequence[str]]]
     Compression: NotRequired[ParquetCompressionTypeType]
+    NumberTargetPartitions: NotRequired[str]
     SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
 
 class S3HudiDirectTargetOutputTypeDef(TypedDict):
@@ -5039,6 +5055,7 @@ class S3HudiDirectTargetOutputTypeDef(TypedDict):
     Compression: HudiTargetCompressionTypeType
     Format: TargetFormatType
     AdditionalOptions: Dict[str, str]
+    NumberTargetPartitions: NotRequired[str]
     PartitionKeys: NotRequired[List[List[str]]]
     SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
 
@@ -5049,8 +5066,47 @@ class S3HudiDirectTargetTypeDef(TypedDict):
     Compression: HudiTargetCompressionTypeType
     Format: TargetFormatType
     AdditionalOptions: Mapping[str, str]
+    NumberTargetPartitions: NotRequired[str]
     PartitionKeys: NotRequired[Sequence[Sequence[str]]]
     SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
+
+class S3HyperDirectTargetOutputTypeDef(TypedDict):
+    Name: str
+    Inputs: List[str]
+    Path: str
+    PartitionKeys: NotRequired[List[List[str]]]
+    Compression: NotRequired[Literal["uncompressed"]]
+    SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
+
+class S3HyperDirectTargetTypeDef(TypedDict):
+    Name: str
+    Inputs: Sequence[str]
+    Path: str
+    PartitionKeys: NotRequired[Sequence[Sequence[str]]]
+    Compression: NotRequired[Literal["uncompressed"]]
+    SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
+
+class S3IcebergDirectTargetOutputTypeDef(TypedDict):
+    Name: str
+    Inputs: List[str]
+    Path: str
+    Format: TargetFormatType
+    Compression: IcebergTargetCompressionTypeType
+    PartitionKeys: NotRequired[List[List[str]]]
+    AdditionalOptions: NotRequired[Dict[str, str]]
+    SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
+    NumberTargetPartitions: NotRequired[str]
+
+class S3IcebergDirectTargetTypeDef(TypedDict):
+    Name: str
+    Inputs: Sequence[str]
+    Path: str
+    Format: TargetFormatType
+    Compression: IcebergTargetCompressionTypeType
+    PartitionKeys: NotRequired[Sequence[Sequence[str]]]
+    AdditionalOptions: NotRequired[Mapping[str, str]]
+    SchemaChangePolicy: NotRequired[DirectSchemaChangePolicyTypeDef]
+    NumberTargetPartitions: NotRequired[str]
 
 DropDuplicatesUnionTypeDef = Union[DropDuplicatesTypeDef, DropDuplicatesOutputTypeDef]
 DropFieldsUnionTypeDef = Union[DropFieldsTypeDef, DropFieldsOutputTypeDef]
@@ -5947,6 +6003,12 @@ S3GlueParquetTargetUnionTypeDef = Union[
     S3GlueParquetTargetTypeDef, S3GlueParquetTargetOutputTypeDef
 ]
 S3HudiDirectTargetUnionTypeDef = Union[S3HudiDirectTargetTypeDef, S3HudiDirectTargetOutputTypeDef]
+S3HyperDirectTargetUnionTypeDef = Union[
+    S3HyperDirectTargetTypeDef, S3HyperDirectTargetOutputTypeDef
+]
+S3IcebergDirectTargetUnionTypeDef = Union[
+    S3IcebergDirectTargetTypeDef, S3IcebergDirectTargetOutputTypeDef
+]
 
 class SecurityConfigurationTypeDef(TypedDict):
     Name: NotRequired[str]
@@ -6106,6 +6168,21 @@ class S3DeltaSourceOutputTypeDef(TypedDict):
     AdditionalOptions: NotRequired[S3DirectSourceAdditionalOptionsTypeDef]
     OutputSchemas: NotRequired[List[GlueSchemaOutputTypeDef]]
 
+class S3ExcelSourceOutputTypeDef(TypedDict):
+    Name: str
+    Paths: List[str]
+    CompressionType: NotRequired[ParquetCompressionTypeType]
+    Exclusions: NotRequired[List[str]]
+    GroupSize: NotRequired[str]
+    GroupFiles: NotRequired[str]
+    Recurse: NotRequired[bool]
+    MaxBand: NotRequired[int]
+    MaxFilesInBand: NotRequired[int]
+    AdditionalOptions: NotRequired[S3DirectSourceAdditionalOptionsTypeDef]
+    NumberRows: NotRequired[int]
+    SkipFooter: NotRequired[int]
+    OutputSchemas: NotRequired[List[GlueSchemaOutputTypeDef]]
+
 class S3HudiSourceOutputTypeDef(TypedDict):
     Name: str
     Paths: List[str]
@@ -6252,6 +6329,21 @@ class S3DeltaSourceTypeDef(TypedDict):
     Paths: Sequence[str]
     AdditionalDeltaOptions: NotRequired[Mapping[str, str]]
     AdditionalOptions: NotRequired[S3DirectSourceAdditionalOptionsTypeDef]
+    OutputSchemas: NotRequired[Sequence[GlueSchemaTypeDef]]
+
+class S3ExcelSourceTypeDef(TypedDict):
+    Name: str
+    Paths: Sequence[str]
+    CompressionType: NotRequired[ParquetCompressionTypeType]
+    Exclusions: NotRequired[Sequence[str]]
+    GroupSize: NotRequired[str]
+    GroupFiles: NotRequired[str]
+    Recurse: NotRequired[bool]
+    MaxBand: NotRequired[int]
+    MaxFilesInBand: NotRequired[int]
+    AdditionalOptions: NotRequired[S3DirectSourceAdditionalOptionsTypeDef]
+    NumberRows: NotRequired[int]
+    SkipFooter: NotRequired[int]
     OutputSchemas: NotRequired[Sequence[GlueSchemaTypeDef]]
 
 class S3HudiSourceTypeDef(TypedDict):
@@ -6925,6 +7017,7 @@ S3CatalogHudiSourceUnionTypeDef = Union[
 ]
 S3CsvSourceUnionTypeDef = Union[S3CsvSourceTypeDef, S3CsvSourceOutputTypeDef]
 S3DeltaSourceUnionTypeDef = Union[S3DeltaSourceTypeDef, S3DeltaSourceOutputTypeDef]
+S3ExcelSourceUnionTypeDef = Union[S3ExcelSourceTypeDef, S3ExcelSourceOutputTypeDef]
 S3HudiSourceUnionTypeDef = Union[S3HudiSourceTypeDef, S3HudiSourceOutputTypeDef]
 S3JsonSourceUnionTypeDef = Union[S3JsonSourceTypeDef, S3JsonSourceOutputTypeDef]
 S3ParquetSourceUnionTypeDef = Union[S3ParquetSourceTypeDef, S3ParquetSourceOutputTypeDef]
@@ -7047,6 +7140,7 @@ CodeGenConfigurationNodeOutputTypeDef = TypedDict(
         "RedshiftSource": NotRequired[RedshiftSourceTypeDef],
         "S3CatalogSource": NotRequired[S3CatalogSourceTypeDef],
         "S3CsvSource": NotRequired[S3CsvSourceOutputTypeDef],
+        "S3ExcelSource": NotRequired[S3ExcelSourceOutputTypeDef],
         "S3JsonSource": NotRequired[S3JsonSourceOutputTypeDef],
         "S3ParquetSource": NotRequired[S3ParquetSourceOutputTypeDef],
         "RelationalCatalogSource": NotRequired[RelationalCatalogSourceTypeDef],
@@ -7057,7 +7151,9 @@ CodeGenConfigurationNodeOutputTypeDef = TypedDict(
         "RedshiftTarget": NotRequired[RedshiftTargetOutputTypeDef],
         "S3CatalogTarget": NotRequired[S3CatalogTargetOutputTypeDef],
         "S3GlueParquetTarget": NotRequired[S3GlueParquetTargetOutputTypeDef],
+        "S3HyperDirectTarget": NotRequired[S3HyperDirectTargetOutputTypeDef],
         "S3DirectTarget": NotRequired[S3DirectTargetOutputTypeDef],
+        "S3IcebergDirectTarget": NotRequired[S3IcebergDirectTargetOutputTypeDef],
         "ApplyMapping": NotRequired[ApplyMappingOutputTypeDef],
         "SelectFields": NotRequired[SelectFieldsOutputTypeDef],
         "DropFields": NotRequired[DropFieldsOutputTypeDef],
@@ -7125,6 +7221,7 @@ CodeGenConfigurationNodePaginatorTypeDef = TypedDict(
         "RedshiftSource": NotRequired[RedshiftSourceTypeDef],
         "S3CatalogSource": NotRequired[S3CatalogSourceTypeDef],
         "S3CsvSource": NotRequired[S3CsvSourceOutputTypeDef],
+        "S3ExcelSource": NotRequired[S3ExcelSourceOutputTypeDef],
         "S3JsonSource": NotRequired[S3JsonSourceOutputTypeDef],
         "S3ParquetSource": NotRequired[S3ParquetSourceOutputTypeDef],
         "RelationalCatalogSource": NotRequired[RelationalCatalogSourceTypeDef],
@@ -7135,7 +7232,9 @@ CodeGenConfigurationNodePaginatorTypeDef = TypedDict(
         "RedshiftTarget": NotRequired[RedshiftTargetOutputTypeDef],
         "S3CatalogTarget": NotRequired[S3CatalogTargetOutputTypeDef],
         "S3GlueParquetTarget": NotRequired[S3GlueParquetTargetOutputTypeDef],
+        "S3HyperDirectTarget": NotRequired[S3HyperDirectTargetOutputTypeDef],
         "S3DirectTarget": NotRequired[S3DirectTargetOutputTypeDef],
+        "S3IcebergDirectTarget": NotRequired[S3IcebergDirectTargetOutputTypeDef],
         "ApplyMapping": NotRequired[ApplyMappingPaginatorTypeDef],
         "SelectFields": NotRequired[SelectFieldsOutputTypeDef],
         "DropFields": NotRequired[DropFieldsOutputTypeDef],
@@ -7729,6 +7828,7 @@ CodeGenConfigurationNodeTypeDef = TypedDict(
         "RedshiftSource": NotRequired[RedshiftSourceTypeDef],
         "S3CatalogSource": NotRequired[S3CatalogSourceTypeDef],
         "S3CsvSource": NotRequired[S3CsvSourceUnionTypeDef],
+        "S3ExcelSource": NotRequired[S3ExcelSourceUnionTypeDef],
         "S3JsonSource": NotRequired[S3JsonSourceUnionTypeDef],
         "S3ParquetSource": NotRequired[S3ParquetSourceUnionTypeDef],
         "RelationalCatalogSource": NotRequired[RelationalCatalogSourceTypeDef],
@@ -7739,7 +7839,9 @@ CodeGenConfigurationNodeTypeDef = TypedDict(
         "RedshiftTarget": NotRequired[RedshiftTargetUnionTypeDef],
         "S3CatalogTarget": NotRequired[S3CatalogTargetUnionTypeDef],
         "S3GlueParquetTarget": NotRequired[S3GlueParquetTargetUnionTypeDef],
+        "S3HyperDirectTarget": NotRequired[S3HyperDirectTargetUnionTypeDef],
         "S3DirectTarget": NotRequired[S3DirectTargetUnionTypeDef],
+        "S3IcebergDirectTarget": NotRequired[S3IcebergDirectTargetUnionTypeDef],
         "ApplyMapping": NotRequired[ApplyMappingUnionTypeDef],
         "SelectFields": NotRequired[SelectFieldsUnionTypeDef],
         "DropFields": NotRequired[DropFieldsUnionTypeDef],

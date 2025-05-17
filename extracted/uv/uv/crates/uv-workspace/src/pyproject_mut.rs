@@ -529,10 +529,10 @@ impl PyProjectTomlMut {
         let group = match dependency_type {
             DependencyType::Production => self.set_project_dependency_minimum_version()?,
             DependencyType::Dev => self.set_dev_dependency_minimum_version()?,
-            DependencyType::Optional(ref extra) => {
+            DependencyType::Optional(extra) => {
                 self.set_optional_dependency_minimum_version(extra)?
             }
-            DependencyType::Group(ref group) => {
+            DependencyType::Group(group) => {
                 self.set_dependency_group_requirement_minimum_version(group)?
             }
         };
@@ -1487,6 +1487,14 @@ mod test {
             ("flask[dotenv]", ">=1.0")
         );
         assert_eq!(split_specifiers("flask[dotenv]"), ("flask[dotenv]", ""));
-        assert_eq!(split_specifiers("flask @ https://files.pythonhosted.org/packages/af/47/93213ee66ef8fae3b93b3e29206f6b251e65c97bd91d8e1c5596ef15af0a/flask-3.1.0-py3-none-any.whl"), ("flask", "@ https://files.pythonhosted.org/packages/af/47/93213ee66ef8fae3b93b3e29206f6b251e65c97bd91d8e1c5596ef15af0a/flask-3.1.0-py3-none-any.whl"));
+        assert_eq!(
+            split_specifiers(
+                "flask @ https://files.pythonhosted.org/packages/af/47/93213ee66ef8fae3b93b3e29206f6b251e65c97bd91d8e1c5596ef15af0a/flask-3.1.0-py3-none-any.whl"
+            ),
+            (
+                "flask",
+                "@ https://files.pythonhosted.org/packages/af/47/93213ee66ef8fae3b93b3e29206f6b251e65c97bd91d8e1c5596ef15af0a/flask-3.1.0-py3-none-any.whl"
+            )
+        );
     }
 }

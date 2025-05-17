@@ -162,18 +162,26 @@ pub(crate) async fn run(
     };
 
     let Some(target) = target.to_str() else {
-        return Err(anyhow::anyhow!("Tool command could not be parsed as UTF-8 string. Use `--from` to specify the package name"));
+        return Err(anyhow::anyhow!(
+            "Tool command could not be parsed as UTF-8 string. Use `--from` to specify the package name"
+        ));
     };
 
     if let Some(ref from) = from {
         if has_python_script_ext(Path::new(from)) {
             let package_name = PackageName::from_str(from)?;
             return Err(anyhow::anyhow!(
-                "It looks you provided a Python script to `--from`, which is not supported\n\n{}{} If you meant to run a command from the `{}` package, use the normalized package name instead to disambiguate, e.g., `{}`",
+                "It looks like you provided a Python script to `--from`, which is not supported\n\n{}{} If you meant to run a command from the `{}` package, use the normalized package name instead to disambiguate, e.g., `{}`",
                 "hint".bold().cyan(),
                 ":".bold(),
                 package_name.cyan(),
-                format!("{} --from {} {}", invocation_source, package_name.cyan(), target).green(),
+                format!(
+                    "{} --from {} {}",
+                    invocation_source,
+                    package_name.cyan(),
+                    target
+                )
+                .green(),
             ));
         }
     } else {
@@ -183,7 +191,7 @@ pub(crate) async fn run(
         if has_python_script_ext(target_path) {
             return if target_path.try_exists()? {
                 Err(anyhow::anyhow!(
-                    "It looks you tried to run a Python script at `{}`, which is not supported by `{}`\n\n{}{} Use `{}` instead",
+                    "It looks like you tried to run a Python script at `{}`, which is not supported by `{}`\n\n{}{} Use `{}` instead",
                     target_path.user_display(),
                     invocation_source,
                     "hint".bold().cyan(),
@@ -193,7 +201,7 @@ pub(crate) async fn run(
             } else {
                 let package_name = PackageName::from_str(target)?;
                 Err(anyhow::anyhow!(
-                    "It looks you provided a Python script to run, which is not supported supported by `{}`\n\n{}{} We did not find a script at the requested path. If you meant to run a command from the `{}` package, pass the normalized package name to `--from` to disambiguate, e.g., `{}`",
+                    "It looks like you provided a Python script to run, which is not supported supported by `{}`\n\n{}{} We did not find a script at the requested path. If you meant to run a command from the `{}` package, pass the normalized package name to `--from` to disambiguate, e.g., `{}`",
                     invocation_source,
                     "hint".bold().cyan(),
                     ":".bold(),
@@ -231,7 +239,9 @@ pub(crate) async fn run(
                     return Err(anyhow::anyhow!("No tool command provided"));
                 };
                 let Some(next_target) = next_target.to_str() else {
-                    return Err(anyhow::anyhow!("Tool command could not be parsed as UTF-8 string. Use `--from` to specify the package name"));
+                    return Err(anyhow::anyhow!(
+                        "Tool command could not be parsed as UTF-8 string. Use `--from` to specify the package name"
+                    ));
                 };
                 target = next_target;
                 args = next_args;
@@ -581,13 +591,14 @@ impl std::fmt::Display for ExecutableProviderHints<'_> {
                     package.name(),
                     executable
                 );
-                write!(f,
-                        "An executable named `{}` is not provided by package `{}` but is available via the dependency `{}`. Consider using `{}` instead.",
-                        executable.cyan(),
-                        from.name.cyan(),
-                        package.name().cyan(),
-                        suggested_command.green()
-                    )?;
+                write!(
+                    f,
+                    "An executable named `{}` is not provided by package `{}` but is available via the dependency `{}`. Consider using `{}` instead.",
+                    executable.cyan(),
+                    from.name.cyan(),
+                    package.name().cyan(),
+                    suggested_command.green()
+                )?;
             }
             packages => {
                 let provided_by = packages
@@ -597,15 +608,17 @@ impl std::fmt::Display for ExecutableProviderHints<'_> {
                     .join("\n");
                 if self.not_from_expected() {
                     let suggested_command = format!("{invocation_source} --from PKG {executable}");
-                    write!(f,
-                            "An executable named `{}` is not provided by package `{}` but is available via the following dependencies:\n- {}\nConsider using `{}` instead.",
-                            executable.cyan(),
-                            from.name.cyan(),
-                            provided_by,
-                            suggested_command.green(),
-                        )?;
+                    write!(
+                        f,
+                        "An executable named `{}` is not provided by package `{}` but is available via the following dependencies:\n- {}\nConsider using `{}` instead.",
+                        executable.cyan(),
+                        from.name.cyan(),
+                        provided_by,
+                        suggested_command.green(),
+                    )?;
                 } else {
-                    write!(f,
+                    write!(
+                        f,
                         "An executable named `{}` is provided by package `{}` but is also available via the following dependencies:\n- {}\nUnexpected behavior may occur.",
                         executable.cyan(),
                         from.name.cyan(),
@@ -694,7 +707,7 @@ async fn get_or_create_environment(
                 return Err(anyhow::anyhow!(
                     "Requesting the 'latest' Python version is not yet supported"
                 )
-                .into())
+                .into());
             }
         };
 

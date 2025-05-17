@@ -152,9 +152,13 @@ class WheelTag:
 
 
 if __name__ == "__main__":
-    import argparse
+    from .._compat.argparse import ArgumentParser
 
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser(
+        prog="python -m scikit_build_core.builder.wheel_tag",
+        description="Get the computed wheel tag for the current environment.",
+        allow_abbrev=False,
+    )
     parser.add_argument(
         "--archs",
         nargs="*",
