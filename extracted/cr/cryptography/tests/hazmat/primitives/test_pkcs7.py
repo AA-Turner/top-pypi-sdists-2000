@@ -3,6 +3,7 @@
 # for complete details.
 
 
+import contextlib
 import email.parser
 import os
 import typing
@@ -15,6 +16,7 @@ from cryptography.exceptions import _Reasons
 from cryptography.hazmat.bindings._rust import test_support
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ed25519, padding, rsa
+from cryptography.hazmat.primitives.ciphers import algorithms
 from cryptography.hazmat.primitives.serialization import pkcs7
 from tests.x509.test_x509 import _generate_ca_and_leaf
 
@@ -41,6 +43,12 @@ class TestPKCS7Loading:
     def test_load_invalid_pem_pkcs7(self, backend):
         with pytest.raises(ValueError):
             pkcs7.load_pem_pkcs7_certificates(b"nonsense")
+
+        with pytest.raises(ValueError):
+            pkcs7.load_pem_pkcs7_certificates(b"""
+-----BEGIN CERTIFICATE-----
+-----END CERTIFICATE-----
+            """)
 
     def test_not_bytes_der(self, backend):
         with pytest.raises(TypeError):
@@ -69,11 +77,19 @@ class TestPKCS7Loading:
         ],
     )
     def test_load_pkcs7_der(self, filepath, backend):
-        certs = load_vectors_from_file(
-            filepath,
-            lambda derfile: pkcs7.load_der_pkcs7_certificates(derfile.read()),
-            mode="rb",
-        )
+        if filepath.endswith("p7b"):
+            ctx: typing.Any = pytest.warns(UserWarning)
+        else:
+            ctx = contextlib.nullcontext()
+
+        with ctx:
+            certs = load_vectors_from_file(
+                filepath,
+                lambda derfile: pkcs7.load_der_pkcs7_certificates(
+                    derfile.read()
+                ),
+                mode="rb",
+            )
         assert len(certs) == 2
         assert certs[0].subject.get_attributes_for_oid(
             x509.oid.NameOID.COMMON_NAME
@@ -899,6 +915,21 @@ class TestPKCS7EnvelopeBuilder:
                 b"notacert",  # type: ignore[arg-type]
             )
 
+    def test_set_content_encryption_algorithm_twice(self, backend):
+        builder = pkcs7.PKCS7EnvelopeBuilder()
+        builder = builder.set_content_encryption_algorithm(algorithms.AES128)
+        with pytest.raises(ValueError):
+            builder.set_content_encryption_algorithm(algorithms.AES128)
+
+    def test_invalid_content_encryption_algorithm(self, backend):
+        class InvalidAlgorithm:
+            pass
+
+        with pytest.raises(TypeError):
+            pkcs7.PKCS7EnvelopeBuilder().set_content_encryption_algorithm(
+                InvalidAlgorithm,  # type: ignore[arg-type]
+            )
+
     def test_encrypt_invalid_options(self, backend):
         cert, _ = _load_rsa_cert_key()
         builder = (
@@ -1148,6 +1179,25 @@ class TestPKCS7Decrypt:
         )
         assert decrypted == data.replace(b"\n", b"\r\n")
 
+    def test_pkcs7_decrypt_aes_256_cbc_encrypted_content(
+        self, backend, data, certificate, private_key
+    ):
+        # Encryption
+        builder = (
+            pkcs7.PKCS7EnvelopeBuilder()
+            .set_data(data)
+            .set_content_encryption_algorithm(algorithms.AES256)
+            .add_recipient(certificate)
+        )
+        enveloped = builder.encrypt(serialization.Encoding.PEM, [])
+
+        # Test decryption: new lines are canonicalized to '\r\n' when
+        # encryption has no Binary option
+        decrypted = pkcs7.pkcs7_decrypt_pem(
+            enveloped, certificate, private_key, []
+        )
+        assert decrypted == data.replace(b"\n", b"\r\n")
+
     @pytest.mark.parametrize(
         "header",
         [
@@ -1318,7 +1368,7 @@ class TestPKCS7Decrypt:
         self, backend, data, certificate, private_key
     ):
         enveloped = load_vectors_from_file(
-            os.path.join("pkcs7", "enveloped-aes-256-cbc.pem"),
+            os.path.join("pkcs7", "enveloped-triple-des.pem"),
             loader=lambda pemfile: pemfile.read(),
             mode="rb",
         )

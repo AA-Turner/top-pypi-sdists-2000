@@ -365,13 +365,13 @@ impl LazyEvpCipherAead {
     }
 }
 
-#[cfg(CRYPTOGRAPHY_IS_BORINGSSL)]
+#[cfg(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC))]
 struct EvpAead {
     ctx: cryptography_openssl::aead::AeadCtx,
     tag_len: usize,
 }
 
-#[cfg(CRYPTOGRAPHY_IS_BORINGSSL)]
+#[cfg(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC))]
 impl EvpAead {
     fn new(
         algorithm: cryptography_openssl::aead::AeadType,
@@ -447,20 +447,22 @@ impl EvpAead {
 
 #[pyo3::pyclass(frozen, module = "cryptography.hazmat.bindings._rust.openssl.aead")]
 struct ChaCha20Poly1305 {
-    #[cfg(CRYPTOGRAPHY_IS_BORINGSSL)]
+    #[cfg(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC))]
     ctx: EvpAead,
     #[cfg(any(
         CRYPTOGRAPHY_OPENSSL_320_OR_GREATER,
         CRYPTOGRAPHY_IS_LIBRESSL,
-        all(
-            not(CRYPTOGRAPHY_OPENSSL_300_OR_GREATER),
-            not(CRYPTOGRAPHY_IS_BORINGSSL)
-        )
+        not(any(
+            CRYPTOGRAPHY_OPENSSL_300_OR_GREATER,
+            CRYPTOGRAPHY_IS_BORINGSSL,
+            CRYPTOGRAPHY_IS_AWSLC
+        ))
     ))]
     ctx: EvpCipherAead,
     #[cfg(not(any(
         CRYPTOGRAPHY_IS_LIBRESSL,
         CRYPTOGRAPHY_IS_BORINGSSL,
+        CRYPTOGRAPHY_IS_AWSLC,
         not(CRYPTOGRAPHY_OPENSSL_300_OR_GREATER),
         CRYPTOGRAPHY_OPENSSL_320_OR_GREATER
     )))]
@@ -477,9 +479,17 @@ impl ChaCha20Poly1305 {
                 pyo3::exceptions::PyValueError::new_err("ChaCha20Poly1305 key must be 32 bytes."),
             ));
         }
+        if cryptography_openssl::fips::is_enabled() {
+            return Err(CryptographyError::from(
+                exceptions::UnsupportedAlgorithm::new_err((
+                    "ChaCha20Poly1305 is not supported by this version of OpenSSL",
+                    exceptions::Reasons::UNSUPPORTED_CIPHER,
+                )),
+            ));
+        }
 
         cfg_if::cfg_if! {
-            if #[cfg(CRYPTOGRAPHY_IS_BORINGSSL)] {
+            if #[cfg(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC))] {
                 Ok(ChaCha20Poly1305 {
                     ctx: EvpAead::new(
                         cryptography_openssl::aead::AeadType::ChaCha20Poly1305,
@@ -492,15 +502,6 @@ impl ChaCha20Poly1305 {
                 CRYPTOGRAPHY_OPENSSL_320_OR_GREATER,
                 not(CRYPTOGRAPHY_OPENSSL_300_OR_GREATER),
             ))] {
-                if cryptography_openssl::fips::is_enabled() {
-                    return Err(CryptographyError::from(
-                        exceptions::UnsupportedAlgorithm::new_err((
-                            "ChaCha20Poly1305 is not supported by this version of OpenSSL",
-                            exceptions::Reasons::UNSUPPORTED_CIPHER,
-                        )),
-                    ));
-                }
-
                 Ok(ChaCha20Poly1305 {
                     ctx: EvpCipherAead::new(
                         openssl::cipher::Cipher::chacha20_poly1305(),
@@ -510,15 +511,6 @@ impl ChaCha20Poly1305 {
                     )?,
                 })
             } else {
-                if cryptography_openssl::fips::is_enabled() {
-                    return Err(CryptographyError::from(
-                        exceptions::UnsupportedAlgorithm::new_err((
-                            "ChaCha20Poly1305 is not supported by this version of OpenSSL",
-                            exceptions::Reasons::UNSUPPORTED_CIPHER,
-                        )),
-                    ));
-                }
-
                 Ok(ChaCha20Poly1305{
                     ctx: LazyEvpCipherAead::new(
                         openssl::cipher::Cipher::chacha20_poly1305(),
@@ -590,6 +582,7 @@ struct AesGcm {
         CRYPTOGRAPHY_OPENSSL_320_OR_GREATER,
         CRYPTOGRAPHY_IS_LIBRESSL,
         CRYPTOGRAPHY_IS_BORINGSSL,
+        CRYPTOGRAPHY_IS_AWSLC,
         not(CRYPTOGRAPHY_OPENSSL_300_OR_GREATER),
     ))]
     ctx: EvpCipherAead,
@@ -598,6 +591,7 @@ struct AesGcm {
         CRYPTOGRAPHY_OPENSSL_320_OR_GREATER,
         CRYPTOGRAPHY_IS_LIBRESSL,
         CRYPTOGRAPHY_IS_BORINGSSL,
+        CRYPTOGRAPHY_IS_AWSLC,
         not(CRYPTOGRAPHY_OPENSSL_300_OR_GREATER),
     )))]
     ctx: LazyEvpCipherAead,
@@ -626,6 +620,7 @@ impl AesGcm {
                 CRYPTOGRAPHY_OPENSSL_320_OR_GREATER,
                 CRYPTOGRAPHY_IS_BORINGSSL,
                 CRYPTOGRAPHY_IS_LIBRESSL,
+                CRYPTOGRAPHY_IS_AWSLC,
                 not(CRYPTOGRAPHY_OPENSSL_300_OR_GREATER),
             ))] {
                 Ok(AesGcm {
@@ -916,6 +911,7 @@ impl AesSiv {
         let data_bytes = data.as_bytes();
         let aad = associated_data.map(Aad::List);
 
+        #[cfg(not(CRYPTOGRAPHY_OPENSSL_350_OR_GREATER))]
         if data_bytes.is_empty() {
             return Err(CryptographyError::from(
                 pyo3::exceptions::PyValueError::new_err("data must not be zero length"),
@@ -950,7 +946,7 @@ impl AesOcb3 {
     #[new]
     fn new(key: CffiBuf<'_>) -> CryptographyResult<AesOcb3> {
         cfg_if::cfg_if! {
-            if #[cfg(any(CRYPTOGRAPHY_IS_LIBRESSL, CRYPTOGRAPHY_IS_BORINGSSL))] {
+            if #[cfg(any(CRYPTOGRAPHY_IS_LIBRESSL, CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC))] {
                 _ = key;
 
                 Err(CryptographyError::from(
@@ -1052,6 +1048,9 @@ impl AesOcb3 {
     name = "AESGCMSIV"
 )]
 struct AesGcmSiv {
+    #[cfg(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC))]
+    ctx: EvpAead,
+    #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
     ctx: EvpCipherAead,
 }
 
@@ -1073,7 +1072,22 @@ impl AesGcmSiv {
         };
 
         cfg_if::cfg_if! {
-            if #[cfg(not(CRYPTOGRAPHY_OPENSSL_320_OR_GREATER))] {
+            if #[cfg(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC))] {
+                let _ = cipher_name;
+                let aead_type = match key.as_bytes().len() {
+                    16 => cryptography_openssl::aead::AeadType::Aes128GcmSiv,
+                    32 => cryptography_openssl::aead::AeadType::Aes256GcmSiv,
+                    _ => return Err(CryptographyError::from(
+                        exceptions::UnsupportedAlgorithm::new_err((
+                            "Only 128-bit and 256-bit keys are supported for AES-GCM-SIV with AWS-LC or BoringSSL",
+                            exceptions::Reasons::UNSUPPORTED_CIPHER,
+                        )),
+                    ))
+                };
+                Ok(AesGcmSiv {
+                    ctx: EvpAead::new(aead_type, key.as_bytes(), 16)?,
+                })
+            } else if #[cfg(not(CRYPTOGRAPHY_OPENSSL_320_OR_GREATER))] {
                 let _ = cipher_name;
                 Err(CryptographyError::from(
                     exceptions::UnsupportedAlgorithm::new_err((
@@ -1124,6 +1138,11 @@ impl AesGcmSiv {
         let data_bytes = data.as_bytes();
         let aad = associated_data.map(Aad::Single);
 
+        #[cfg(not(any(
+            CRYPTOGRAPHY_OPENSSL_350_OR_GREATER,
+            CRYPTOGRAPHY_IS_BORINGSSL,
+            CRYPTOGRAPHY_IS_AWSLC
+        )))]
         if data_bytes.is_empty() {
             return Err(CryptographyError::from(
                 pyo3::exceptions::PyValueError::new_err("data must not be zero length"),

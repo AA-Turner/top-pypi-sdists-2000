@@ -3,11 +3,14 @@
 // for complete details.
 
 use foreign_types_shared::{ForeignType, ForeignTypeRef};
+use openssl_sys as ffi;
 
 use crate::{cvt, cvt_p, OpenSSLResult};
 
 pub enum AeadType {
     ChaCha20Poly1305,
+    Aes128GcmSiv,
+    Aes256GcmSiv,
 }
 
 foreign_types::foreign_type! {
@@ -28,6 +31,10 @@ impl AeadCtx {
         let aead = match aead {
             // SAFETY: No preconditions.
             AeadType::ChaCha20Poly1305 => unsafe { ffi::EVP_aead_chacha20_poly1305() },
+            // SAFETY: No preconditions.
+            AeadType::Aes128GcmSiv => unsafe { ffi::EVP_aead_aes_128_gcm_siv() },
+            // SAFETY: No preconditions.
+            AeadType::Aes256GcmSiv => unsafe { ffi::EVP_aead_aes_256_gcm_siv() },
         };
 
         // SAFETY: We're passing a valid key and aead.

@@ -13,7 +13,7 @@ use pyo3::types::{PyAnyMethods, PyListMethods};
 use crate::asn1::{encode_der_data, oid_to_py_oid, py_oid_to_oid};
 use crate::backend::keys;
 use crate::error::{CryptographyError, CryptographyResult};
-use crate::x509::common::cstr_from_literal;
+use crate::utils::cstr_from_literal;
 use crate::x509::{certificate, sign};
 use crate::{exceptions, types, x509};
 
@@ -222,17 +222,14 @@ impl CertificateSigningRequest {
     }
 
     #[getter]
-    fn is_signature_valid(
-        slf: pyo3::PyRef<'_, Self>,
-        py: pyo3::Python<'_>,
-    ) -> CryptographyResult<bool> {
-        let public_key = slf.public_key(py)?;
+    fn is_signature_valid(&self, py: pyo3::Python<'_>) -> CryptographyResult<bool> {
+        let public_key = self.public_key(py)?;
         Ok(sign::verify_signature_with_signature_algorithm(
             py,
             public_key,
-            &slf.raw.borrow_dependent().signature_alg,
-            slf.raw.borrow_dependent().signature.as_bytes(),
-            &asn1::write_single(&slf.raw.borrow_dependent().csr_info)?,
+            &self.raw.borrow_dependent().signature_alg,
+            self.raw.borrow_dependent().signature.as_bytes(),
+            &asn1::write_single(&self.raw.borrow_dependent().csr_info)?,
         )
         .is_ok())
     }
@@ -295,6 +292,7 @@ pub(crate) fn create_x509_csr(
     private_key: &pyo3::Bound<'_, pyo3::PyAny>,
     hash_algorithm: &pyo3::Bound<'_, pyo3::PyAny>,
     rsa_padding: &pyo3::Bound<'_, pyo3::PyAny>,
+    ecdsa_deterministic: Option<bool>,
 ) -> CryptographyResult<CertificateSigningRequest> {
     let sigalg = x509::sign::compute_signature_algorithm(
         py,
@@ -384,6 +382,7 @@ pub(crate) fn create_x509_csr(
         private_key.clone(),
         hash_algorithm.clone(),
         rsa_padding.clone(),
+        ecdsa_deterministic,
         &tbs_bytes,
     )?;
     let data = asn1::write_single(&Csr {

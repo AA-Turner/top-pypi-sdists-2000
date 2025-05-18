@@ -1,6 +1,6 @@
 [project]
 name = "flask-cors"
-version = "5.0.1"
+version = "6.0.0"
 description = "A Flask extension simplifying CORS support"
 authors = [{ name = "Cory Dolphin", email = "corydolphin@gmail.com" }]
 readme = "README.md"

@@ -2,7 +2,8 @@
 // 2.0, and the BSD License. See the LICENSE file in the root of this repository
 // for complete details.
 
-use cryptography_x509::certificate::Certificate;
+use std::sync::Arc;
+
 use cryptography_x509::extensions::{Extension, Extensions};
 use cryptography_x509::oid::{
     AUTHORITY_INFORMATION_ACCESS_OID, AUTHORITY_KEY_IDENTIFIER_OID, BASIC_CONSTRAINTS_OID,
@@ -10,26 +11,170 @@ use cryptography_x509::oid::{
     SUBJECT_KEY_IDENTIFIER_OID,
 };
 
-use crate::ops::CryptoOps;
+use crate::ops::{CryptoOps, VerificationCertificate};
 use crate::policy::Policy;
 use crate::{ValidationError, ValidationErrorKind, ValidationResult};
 
-pub(crate) struct ExtensionPolicy<B: CryptoOps> {
-    pub(crate) authority_information_access: ExtensionValidator<B>,
-    pub(crate) authority_key_identifier: ExtensionValidator<B>,
-    pub(crate) subject_key_identifier: ExtensionValidator<B>,
-    pub(crate) key_usage: ExtensionValidator<B>,
-    pub(crate) subject_alternative_name: ExtensionValidator<B>,
-    pub(crate) basic_constraints: ExtensionValidator<B>,
-    pub(crate) name_constraints: ExtensionValidator<B>,
-    pub(crate) extended_key_usage: ExtensionValidator<B>,
+#[derive(Clone)]
+pub struct ExtensionPolicy<'cb, B: CryptoOps> {
+    pub authority_information_access: ExtensionValidator<'cb, B>,
+    pub authority_key_identifier: ExtensionValidator<'cb, B>,
+    pub subject_key_identifier: ExtensionValidator<'cb, B>,
+    pub key_usage: ExtensionValidator<'cb, B>,
+    pub subject_alternative_name: ExtensionValidator<'cb, B>,
+    pub basic_constraints: ExtensionValidator<'cb, B>,
+    pub name_constraints: ExtensionValidator<'cb, B>,
+    pub extended_key_usage: ExtensionValidator<'cb, B>,
 }
 
-impl<B: CryptoOps> ExtensionPolicy<B> {
+impl<'cb, B: CryptoOps + 'cb> ExtensionPolicy<'cb, B> {
+    pub fn new_permit_all() -> Self {
+        const fn make_permissive_validator<'cb, B: CryptoOps + 'cb>(
+            oid: asn1::ObjectIdentifier,
+        ) -> ExtensionValidator<'cb, B> {
+            ExtensionValidator::MaybePresent {
+                oid,
+                criticality: Criticality::Agnostic,
+                validator: None,
+            }
+        }
+
+        ExtensionPolicy {
+            authority_information_access: make_permissive_validator(
+                AUTHORITY_INFORMATION_ACCESS_OID,
+            ),
+            authority_key_identifier: make_permissive_validator(AUTHORITY_KEY_IDENTIFIER_OID),
+            subject_key_identifier: make_permissive_validator(SUBJECT_KEY_IDENTIFIER_OID),
+            key_usage: make_permissive_validator(KEY_USAGE_OID),
+            subject_alternative_name: make_permissive_validator(SUBJECT_ALTERNATIVE_NAME_OID),
+            basic_constraints: make_permissive_validator(BASIC_CONSTRAINTS_OID),
+            name_constraints: make_permissive_validator(NAME_CONSTRAINTS_OID),
+            extended_key_usage: make_permissive_validator(EXTENDED_KEY_USAGE_OID),
+        }
+    }
+
+    pub fn new_default_webpki_ca() -> Self {
+        // NOTE: Only those checks that we are fine with users disabling should
+        // be part of default ExtensionPolicies, since these are user-configurable.
+        // Any constraints that are mandatory should be put directly into `Policy`.
+
+        ExtensionPolicy {
+            // 5280 4.2.2.1: Authority Information Access
+            authority_information_access: ExtensionValidator::maybe_present(
+                AUTHORITY_INFORMATION_ACCESS_OID,
+                Criticality::NonCritical,
+                Some(Arc::new(common::authority_information_access)),
+            ),
+            // 5280 4.2.1.1: Authority Key Identifier
+            authority_key_identifier: ExtensionValidator::maybe_present(
+                AUTHORITY_KEY_IDENTIFIER_OID,
+                Criticality::NonCritical,
+                Some(Arc::new(ca::authority_key_identifier)),
+            ),
+            // 5280 4.2.1.2: Subject Key Identifier
+            // NOTE: CABF requires SKI in CA certificates, but many older CAs lack it.
+            // We choose to be permissive here.
+            subject_key_identifier: ExtensionValidator::maybe_present(
+                SUBJECT_KEY_IDENTIFIER_OID,
+                Criticality::NonCritical,
+                None,
+            ),
+            // 5280 4.2.1.3: Key Usage
+            key_usage: ExtensionValidator::present(
+                KEY_USAGE_OID,
+                Criticality::Agnostic,
+                Some(Arc::new(ca::key_usage)),
+            ),
+            subject_alternative_name: ExtensionValidator::maybe_present(
+                SUBJECT_ALTERNATIVE_NAME_OID,
+                Criticality::Agnostic,
+                None,
+            ),
+            // 5280 4.2.1.9: Basic Constraints
+            basic_constraints: ExtensionValidator::present(
+                BASIC_CONSTRAINTS_OID,
+                Criticality::Critical,
+                None, // NOTE: Mandatory validation is done in `Policy::permits_ca`
+            ),
+            // 5280 4.2.1.10: Name Constraints
+            // NOTE: MUST be critical in 5280, but CABF relaxes to MAY.
+            name_constraints: ExtensionValidator::maybe_present(
+                NAME_CONSTRAINTS_OID,
+                Criticality::Agnostic,
+                Some(Arc::new(ca::name_constraints)),
+            ),
+            // 5280: 4.2.1.12: Extended Key Usage
+            // NOTE: CABF requires EKUs in many non-root CA certs, but validators widely
+            // ignore this requirement and treat a missing EKU as "any EKU".
+            // We choose to be permissive here.
+            extended_key_usage: ExtensionValidator::maybe_present(
+                EXTENDED_KEY_USAGE_OID,
+                Criticality::NonCritical,
+                Some(Arc::new(ca::extended_key_usage)),
+            ),
+        }
+    }
+
+    pub fn new_default_webpki_ee() -> Self {
+        // NOTE: Only those checks that we are fine with users disabling should
+        // be part of default ExtensionPolicies, since these are user-configurable.
+        // Any constraints that are mandatory should be put directly into `Policy`.
+
+        ExtensionPolicy {
+            // 5280 4.2.2.1: Authority Information Access
+            authority_information_access: ExtensionValidator::maybe_present(
+                AUTHORITY_INFORMATION_ACCESS_OID,
+                Criticality::NonCritical,
+                Some(Arc::new(common::authority_information_access)),
+            ),
+            // 5280 4.2.1.1.: Authority Key Identifier
+            authority_key_identifier: ExtensionValidator::present(
+                AUTHORITY_KEY_IDENTIFIER_OID,
+                Criticality::NonCritical,
+                None,
+            ),
+            subject_key_identifier: ExtensionValidator::maybe_present(
+                SUBJECT_KEY_IDENTIFIER_OID,
+                Criticality::Agnostic,
+                None,
+            ),
+            // 5280 4.2.1.3: Key Usage
+            key_usage: ExtensionValidator::maybe_present(
+                KEY_USAGE_OID,
+                Criticality::Agnostic,
+                Some(Arc::new(ee::key_usage)),
+            ),
+            // CA/B 7.1.2.7.12 Subscriber Certificate Subject Alternative Name
+            // This validator only handles the criticality checks. Matching
+            // SANs against the subject in the profile is handled by
+            // `Policy::permits_ee`.
+            subject_alternative_name: ExtensionValidator::present(
+                SUBJECT_ALTERNATIVE_NAME_OID,
+                Criticality::Agnostic,
+                Some(Arc::new(ee::subject_alternative_name)),
+            ),
+            // 5280 4.2.1.9: Basic Constraints
+            basic_constraints: ExtensionValidator::maybe_present(
+                BASIC_CONSTRAINTS_OID,
+                Criticality::Agnostic,
+                Some(Arc::new(ee::basic_constraints)),
+            ),
+            // 5280 4.2.1.10: Name Constraints
+            name_constraints: ExtensionValidator::not_present(NAME_CONSTRAINTS_OID),
+            // CA/B: 7.1.2.7.10: Subscriber Certificate Extended Key Usage
+            // NOTE: CABF requires EKUs in EE certs, while RFC 5280 does not.
+            extended_key_usage: ExtensionValidator::maybe_present(
+                EXTENDED_KEY_USAGE_OID,
+                Criticality::NonCritical,
+                Some(Arc::new(ee::extended_key_usage)),
+            ),
+        }
+    }
+
     pub(crate) fn permits<'chain>(
         &self,
         policy: &Policy<'_, B>,
-        cert: &Certificate<'chain>,
+        cert: &VerificationCertificate<'chain, B>,
         extensions: &Extensions<'_>,
     ) -> ValidationResult<'chain, (), B> {
         let mut authority_information_access_seen = false;
@@ -123,7 +268,8 @@ impl<B: CryptoOps> ExtensionPolicy<B> {
 }
 
 /// Represents different criticality states for an extension.
-pub(crate) enum Criticality {
+#[derive(Clone)]
+pub enum Criticality {
     /// The extension MUST be marked as critical.
     Critical,
     /// The extension MAY be marked as critical.
@@ -144,58 +290,75 @@ impl Criticality {
     }
 }
 
-type PresentExtensionValidatorCallback<B> = for<'chain> fn(
-    &Policy<'_, B>,
-    &Certificate<'chain>,
-    &Extension<'_>,
-) -> ValidationResult<'chain, (), B>;
+pub type PresentExtensionValidatorCallback<'cb, B> = Arc<
+    dyn for<'chain> Fn(
+            &Policy<'_, B>,
+            &VerificationCertificate<'chain, B>,
+            &Extension<'_>,
+        ) -> ValidationResult<'chain, (), B>
+        + Send
+        + Sync
+        + 'cb,
+>;
 
-type MaybeExtensionValidatorCallback<B> = for<'chain> fn(
-    &Policy<'_, B>,
-    &Certificate<'chain>,
-    Option<&Extension<'_>>,
-) -> ValidationResult<'chain, (), B>;
+pub type MaybeExtensionValidatorCallback<'cb, B> = Arc<
+    dyn for<'chain> Fn(
+            &Policy<'_, B>,
+            &VerificationCertificate<'chain, B>,
+            Option<&Extension<'_>>,
+        ) -> ValidationResult<'chain, (), B>
+        + Send
+        + Sync
+        + 'cb,
+>;
 
 /// Represents different validation states for an extension.
-pub(crate) enum ExtensionValidator<B: CryptoOps> {
+#[derive(Clone)]
+pub enum ExtensionValidator<'cb, B: CryptoOps> {
     /// The extension MUST NOT be present.
-    NotPresent,
+    NotPresent { oid: asn1::ObjectIdentifier },
     /// The extension MUST be present.
     Present {
+        oid: asn1::ObjectIdentifier,
         /// The extension's criticality.
         criticality: Criticality,
         /// An optional validator over the extension's inner contents, with
         /// the surrounding `Policy` as context.
-        validator: Option<PresentExtensionValidatorCallback<B>>,
+        validator: Option<PresentExtensionValidatorCallback<'cb, B>>,
     },
     /// The extension MAY be present; the interior validator is
     /// always called if supplied, including if the extension is not present.
     MaybePresent {
+        oid: asn1::ObjectIdentifier,
         criticality: Criticality,
-        validator: Option<MaybeExtensionValidatorCallback<B>>,
+        validator: Option<MaybeExtensionValidatorCallback<'cb, B>>,
     },
 }
 
-impl<B: CryptoOps> ExtensionValidator<B> {
-    pub(crate) fn not_present() -> Self {
-        Self::NotPresent
+impl<'cb, B: CryptoOps> ExtensionValidator<'cb, B> {
+    pub(crate) fn not_present(oid: asn1::ObjectIdentifier) -> Self {
+        Self::NotPresent { oid }
     }
 
     pub(crate) fn present(
+        oid: asn1::ObjectIdentifier,
         criticality: Criticality,
-        validator: Option<PresentExtensionValidatorCallback<B>>,
+        validator: Option<PresentExtensionValidatorCallback<'cb, B>>,
     ) -> Self {
         Self::Present {
+            oid,
             criticality,
             validator,
         }
     }
 
     pub(crate) fn maybe_present(
+        oid: asn1::ObjectIdentifier,
         criticality: Criticality,
-        validator: Option<MaybeExtensionValidatorCallback<B>>,
+        validator: Option<MaybeExtensionValidatorCallback<'cb, B>>,
     ) -> Self {
         Self::MaybePresent {
+            oid,
             criticality,
             validator,
         }
@@ -204,28 +367,32 @@ impl<B: CryptoOps> ExtensionValidator<B> {
     pub(crate) fn permits<'chain>(
         &self,
         policy: &Policy<'_, B>,
-        cert: &Certificate<'chain>,
+        cert: &VerificationCertificate<'chain, B>,
         extension: Option<&Extension<'_>>,
     ) -> ValidationResult<'chain, (), B> {
         match (self, extension) {
             // Extension MUST NOT be present and isn't; OK.
-            (ExtensionValidator::NotPresent, None) => Ok(()),
+            (ExtensionValidator::NotPresent { .. }, None) => Ok(()),
             // Extension MUST NOT be present but is; NOT OK.
-            (ExtensionValidator::NotPresent, Some(extn)) => {
+            (ExtensionValidator::NotPresent { .. }, Some(extn)) => {
                 Err(ValidationError::new(ValidationErrorKind::ExtensionError {
                     oid: extn.extn_id.clone(),
                     reason: "Certificate contains prohibited extension",
                 }))
             }
             // Extension MUST be present but is not; NOT OK.
-            (ExtensionValidator::Present { .. }, None) => Err(ValidationError::new(
-                ValidationErrorKind::Other("Certificate is missing required extension".to_string()),
-            )),
+            (ExtensionValidator::Present { oid, .. }, None) => {
+                Err(ValidationError::new(ValidationErrorKind::ExtensionError {
+                    oid: oid.clone(),
+                    reason: "Certificate is missing required extension",
+                }))
+            }
             // Extension MUST be present and is; check it.
             (
                 ExtensionValidator::Present {
                     criticality,
                     validator,
+                    ..
                 },
                 Some(extn),
             ) => {
@@ -237,13 +404,14 @@ impl<B: CryptoOps> ExtensionValidator<B> {
                 }
 
                 // If a custom validator is supplied, apply it.
-                validator.map_or(Ok(()), |v| v(policy, cert, extn))
+                validator.as_ref().map_or(Ok(()), |v| v(policy, cert, extn))
             }
             // Extension MAY be present.
             (
                 ExtensionValidator::MaybePresent {
                     criticality,
                     validator,
+                    ..
                 },
                 extn,
             ) => {
@@ -256,25 +424,22 @@ impl<B: CryptoOps> ExtensionValidator<B> {
                         }))
                     }
                     // If a custom validator is supplied, apply it.
-                    _ => validator.map_or(Ok(()), |v| v(policy, cert, extn)),
+                    _ => validator.as_ref().map_or(Ok(()), |v| v(policy, cert, extn)),
                 }
             }
         }
     }
 }
 
-pub(crate) mod ee {
-    use cryptography_x509::certificate::Certificate;
-    use cryptography_x509::extensions::{
-        BasicConstraints, ExtendedKeyUsage, Extension, KeyUsage, SubjectAlternativeName,
-    };
+mod ee {
+    use cryptography_x509::extensions::{BasicConstraints, ExtendedKeyUsage, Extension, KeyUsage};
 
-    use crate::ops::CryptoOps;
+    use crate::ops::{CryptoOps, VerificationCertificate};
     use crate::policy::{Policy, ValidationError, ValidationErrorKind, ValidationResult};
 
     pub(crate) fn basic_constraints<'chain, B: CryptoOps>(
         _policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
+        _cert: &VerificationCertificate<'chain, B>,
         extn: Option<&Extension<'_>>,
     ) -> ValidationResult<'chain, (), B> {
         if let Some(extn) = extn {
@@ -291,11 +456,11 @@ pub(crate) mod ee {
     }
 
     pub(crate) fn subject_alternative_name<'chain, B: CryptoOps>(
-        policy: &Policy<'_, B>,
-        cert: &Certificate<'_>,
+        _: &Policy<'_, B>,
+        cert: &VerificationCertificate<'chain, B>,
         extn: &Extension<'_>,
     ) -> ValidationResult<'chain, (), B> {
-        match (cert.subject().is_empty(), extn.critical) {
+        match (cert.certificate().subject().is_empty(), extn.critical) {
             // If the subject is empty, the SAN MUST be critical.
             (true, false) => {
                 return Err(ValidationError::new(ValidationErrorKind::Other(
@@ -311,25 +476,15 @@ pub(crate) mod ee {
             _ => (),
         };
 
-        // NOTE: We only verify the SAN against the policy's subject if the
-        // policy actually contains one. This enables both client and server
-        // profiles to use this validator, **with the expectation** that
-        // server profile construction requires a subject to be present.
-        if let Some(sub) = policy.subject.as_ref() {
-            let san: SubjectAlternativeName<'_> = extn.value()?;
-            if !sub.matches(&san) {
-                return Err(ValidationError::new(ValidationErrorKind::Other(
-                    "leaf certificate has no matching subjectAltName".into(),
-                )));
-            }
-        }
+        // NOTE: policy.subject is checked against SAN elsewhere (see `ExtensionPolicy::permits`)
+        // since we always want to check that, even if a custom ExtensionPolicy with a lax validator is used.
 
         Ok(())
     }
 
     pub(crate) fn extended_key_usage<'chain, B: CryptoOps>(
         policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
+        _cert: &VerificationCertificate<'chain, B>,
         extn: Option<&Extension<'_>>,
     ) -> ValidationResult<'chain, (), B> {
         if let Some(extn) = extn {
@@ -355,7 +510,7 @@ pub(crate) mod ee {
 
     pub(crate) fn key_usage<'chain, B: CryptoOps>(
         _policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
+        _cert: &VerificationCertificate<'chain, B>,
         extn: Option<&Extension<'_>>,
     ) -> ValidationResult<'chain, (), B> {
         if let Some(extn) = extn {
@@ -372,21 +527,19 @@ pub(crate) mod ee {
     }
 }
 
-pub(crate) mod ca {
-    use cryptography_x509::certificate::Certificate;
+mod ca {
     use cryptography_x509::common::Asn1Read;
     use cryptography_x509::extensions::{
-        AuthorityKeyIdentifier, BasicConstraints, ExtendedKeyUsage, Extension, KeyUsage,
-        NameConstraints,
+        AuthorityKeyIdentifier, ExtendedKeyUsage, Extension, KeyUsage, NameConstraints,
     };
     use cryptography_x509::oid::EKU_ANY_KEY_USAGE_OID;
 
-    use crate::ops::CryptoOps;
+    use crate::ops::{CryptoOps, VerificationCertificate};
     use crate::policy::{Policy, ValidationError, ValidationErrorKind, ValidationResult};
 
     pub(crate) fn authority_key_identifier<'chain, B: CryptoOps>(
         _policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
+        _cert: &VerificationCertificate<'chain, B>,
         extn: Option<&Extension<'_>>,
     ) -> ValidationResult<'chain, (), B> {
         // CABF: AKI is required on all CA certificates *except* root CA certificates,
@@ -429,7 +582,7 @@ pub(crate) mod ca {
 
     pub(crate) fn key_usage<'chain, B: CryptoOps>(
         _policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
+        _cert: &VerificationCertificate<'chain, B>,
         extn: &Extension<'_>,
     ) -> ValidationResult<'chain, (), B> {
         let key_usage: KeyUsage<'_> = extn.value()?;
@@ -443,29 +596,9 @@ pub(crate) mod ca {
         Ok(())
     }
 
-    pub(crate) fn basic_constraints<'chain, B: CryptoOps>(
-        _policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
-        extn: &Extension<'_>,
-    ) -> ValidationResult<'chain, (), B> {
-        let basic_constraints: BasicConstraints = extn.value()?;
-
-        if !basic_constraints.ca {
-            return Err(ValidationError::new(ValidationErrorKind::Other(
-                "basicConstraints.cA must be asserted in a CA certificate".to_string(),
-            )));
-        }
-
-        // NOTE: basicConstraints.pathLength is checked as part of
-        // `Policy::permits_ca`, since we need the current chain building
-        // depth to check it.
-
-        Ok(())
-    }
-
     pub(crate) fn name_constraints<'chain, B: CryptoOps>(
         _policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
+        _cert: &VerificationCertificate<'chain, B>,
         extn: Option<&Extension<'_>>,
     ) -> ValidationResult<'chain, (), B> {
         if let Some(extn) = extn {
@@ -497,7 +630,7 @@ pub(crate) mod ca {
 
     pub(crate) fn extended_key_usage<'chain, B: CryptoOps>(
         policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
+        _cert: &VerificationCertificate<'chain, B>,
         extn: Option<&Extension<'_>>,
     ) -> ValidationResult<'chain, (), B> {
         if let Some(extn) = extn {
@@ -518,17 +651,16 @@ pub(crate) mod ca {
     }
 }
 
-pub(crate) mod common {
-    use cryptography_x509::certificate::Certificate;
+mod common {
     use cryptography_x509::common::Asn1Read;
     use cryptography_x509::extensions::{Extension, SequenceOfAccessDescriptions};
 
-    use crate::ops::CryptoOps;
+    use crate::ops::{CryptoOps, VerificationCertificate};
     use crate::policy::{Policy, ValidationResult};
 
     pub(crate) fn authority_information_access<'chain, B: CryptoOps>(
         _policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
+        _cert: &VerificationCertificate<'chain, B>,
         extn: Option<&Extension<'_>>,
     ) -> ValidationResult<'chain, (), B> {
         if let Some(extn) = extn {
@@ -543,16 +675,17 @@ pub(crate) mod common {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::Arc;
+
     use asn1::{ObjectIdentifier, SimpleAsn1Writable};
-    use cryptography_x509::certificate::Certificate;
     use cryptography_x509::extensions::{BasicConstraints, Extension};
     use cryptography_x509::oid::BASIC_CONSTRAINTS_OID;
 
     use super::{Criticality, ExtensionValidator};
     use crate::certificate::tests::PublicKeyErrorOps;
-    use crate::ops::tests::{cert, v1_cert_pem};
-    use crate::ops::CryptoOps;
-    use crate::policy::{Policy, Subject, ValidationResult};
+    use crate::ops::tests::{cert, epoch, v1_cert_pem};
+    use crate::ops::{CryptoOps, VerificationCertificate};
+    use crate::policy::{Policy, PolicyDefinition, Subject, ValidationResult};
     use crate::types::DNSName;
 
     #[test]
@@ -568,10 +701,6 @@ mod tests {
         let criticality = Criticality::NonCritical;
         assert!(!criticality.permits(true));
         assert!(criticality.permits(false));
-    }
-
-    fn epoch() -> asn1::DateTime {
-        asn1::DateTime::new(1970, 1, 1, 0, 0, 0).unwrap()
     }
 
     fn create_encoded_extension<T: SimpleAsn1Writable>(
@@ -590,7 +719,7 @@ mod tests {
 
     fn present_extension_validator<'chain, B: CryptoOps>(
         _policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
+        _cert: &VerificationCertificate<'chain, B>,
         _ext: &Extension<'_>,
     ) -> ValidationResult<'chain, (), B> {
         Ok(())
@@ -601,17 +730,25 @@ mod tests {
         // The certificate doesn't get used for this validator, so the certificate we use isn't important.
         let cert_pem = v1_cert_pem();
         let cert = cert(&cert_pem);
+        let verification_cert = VerificationCertificate::new(&cert, ());
         let ops = PublicKeyErrorOps {};
-        let policy = Policy::server(
+        let policy_def = PolicyDefinition::server(
             ops,
             Subject::DNS(DNSName::new("example.com").unwrap()),
             epoch(),
             None,
-        );
+            None,
+            None,
+        )
+        .expect("failed to create policy definition");
+        let policy = Policy::new(&policy_def, ());
 
         // Test a policy that stipulates that a given extension MUST be present.
-        let extension_validator =
-            ExtensionValidator::present(Criticality::Critical, Some(present_extension_validator));
+        let extension_validator = ExtensionValidator::present(
+            BASIC_CONSTRAINTS_OID,
+            Criticality::Critical,
+            Some(Arc::new(present_extension_validator)),
+        );
 
         // Check the case where the extension is present.
         let bc = BasicConstraints {
@@ -621,16 +758,18 @@ mod tests {
         let der_ext = create_encoded_extension(BASIC_CONSTRAINTS_OID, true, &bc);
         let raw_ext = asn1::parse_single(&der_ext).unwrap();
         assert!(extension_validator
-            .permits(&policy, &cert, Some(&raw_ext))
+            .permits(&policy, &verification_cert, Some(&raw_ext))
             .is_ok());
 
         // Check the case where the extension isn't present.
-        assert!(extension_validator.permits(&policy, &cert, None).is_err());
+        assert!(extension_validator
+            .permits(&policy, &verification_cert, None)
+            .is_err());
     }
 
     fn maybe_extension_validator<'chain, B: CryptoOps>(
         _policy: &Policy<'_, B>,
-        _cert: &Certificate<'_>,
+        _cert: &VerificationCertificate<'chain, B>,
         _ext: Option<&Extension<'_>>,
     ) -> ValidationResult<'chain, (), B> {
         Ok(())
@@ -641,18 +780,24 @@ mod tests {
         // The certificate doesn't get used for this validator, so the certificate we use isn't important.
         let cert_pem = v1_cert_pem();
         let cert = cert(&cert_pem);
+        let verification_cert = VerificationCertificate::new(&cert, ());
         let ops = PublicKeyErrorOps {};
-        let policy = Policy::server(
+        let policy_def = PolicyDefinition::server(
             ops,
             Subject::DNS(DNSName::new("example.com").unwrap()),
             epoch(),
             None,
-        );
+            None,
+            None,
+        )
+        .expect("failed to create policy definition");
+        let policy = Policy::new(&policy_def, ());
 
         // Test a validator that stipulates that a given extension CAN be present.
         let extension_validator = ExtensionValidator::maybe_present(
+            BASIC_CONSTRAINTS_OID,
             Criticality::Critical,
-            Some(maybe_extension_validator),
+            Some(Arc::new(maybe_extension_validator)),
         );
 
         // Check the case where the extension is present.
@@ -663,11 +808,13 @@ mod tests {
         let der_ext = create_encoded_extension(BASIC_CONSTRAINTS_OID, true, &bc);
         let raw_ext = asn1::parse_single(&der_ext).unwrap();
         assert!(extension_validator
-            .permits(&policy, &cert, Some(&raw_ext))
+            .permits(&policy, &verification_cert, Some(&raw_ext))
             .is_ok());
 
         // Check the case where the extension isn't present.
-        assert!(extension_validator.permits(&policy, &cert, None).is_ok());
+        assert!(extension_validator
+            .permits(&policy, &verification_cert, None)
+            .is_ok());
     }
 
     #[test]
@@ -675,16 +822,21 @@ mod tests {
         // The certificate doesn't get used for this validator, so the certificate we use isn't important.
         let cert_pem = v1_cert_pem();
         let cert = cert(&cert_pem);
+        let verification_cert = VerificationCertificate::new(&cert, ());
         let ops = PublicKeyErrorOps {};
-        let policy = Policy::server(
+        let policy_def = PolicyDefinition::server(
             ops,
             Subject::DNS(DNSName::new("example.com").unwrap()),
             epoch(),
             None,
-        );
+            None,
+            None,
+        )
+        .expect("failed to create policy definition");
+        let policy = Policy::new(&policy_def, ());
 
         // Test a validator that stipulates that a given extension MUST NOT be present.
-        let extension_validator = ExtensionValidator::not_present();
+        let extension_validator = ExtensionValidator::not_present(BASIC_CONSTRAINTS_OID);
 
         // Check the case where the extension is present.
         let bc = BasicConstraints {
@@ -694,11 +846,13 @@ mod tests {
         let der_ext = create_encoded_extension(BASIC_CONSTRAINTS_OID, true, &bc);
         let raw_ext = asn1::parse_single(&der_ext).unwrap();
         assert!(extension_validator
-            .permits(&policy, &cert, Some(&raw_ext))
+            .permits(&policy, &verification_cert, Some(&raw_ext))
             .is_err());
 
         // Check the case where the extension isn't present.
-        assert!(extension_validator.permits(&policy, &cert, None).is_ok());
+        assert!(extension_validator
+            .permits(&policy, &verification_cert, None)
+            .is_ok());
     }
 
     #[test]
@@ -707,16 +861,23 @@ mod tests {
         let cert_pem = v1_cert_pem();
         let cert = cert(&cert_pem);
         let ops = PublicKeyErrorOps {};
-        let policy = Policy::server(
+        let policy_def = PolicyDefinition::server(
             ops,
             Subject::DNS(DNSName::new("example.com").unwrap()),
             epoch(),
             None,
-        );
+            None,
+            None,
+        )
+        .expect("failed to create policy definition");
+        let policy = Policy::new(&policy_def, ());
 
         // Test a present policy that stipulates that a given extension MUST be critical.
-        let extension_validator =
-            ExtensionValidator::present(Criticality::Critical, Some(present_extension_validator));
+        let extension_validator = ExtensionValidator::present(
+            BASIC_CONSTRAINTS_OID,
+            Criticality::Critical,
+            Some(Arc::new(present_extension_validator)),
+        );
 
         // Mark the extension as non-critical despite our policy stipulating that it must be critical.
         let bc = BasicConstraints {
@@ -726,7 +887,11 @@ mod tests {
         let der_ext = create_encoded_extension(BASIC_CONSTRAINTS_OID, false, &bc);
         let raw_ext = asn1::parse_single(&der_ext).unwrap();
         assert!(extension_validator
-            .permits(&policy, &cert, Some(&raw_ext))
+            .permits(
+                &policy,
+                &VerificationCertificate::new(&cert, ()),
+                Some(&raw_ext)
+            )
             .is_err());
     }
 
@@ -736,17 +901,22 @@ mod tests {
         let cert_pem = v1_cert_pem();
         let cert = cert(&cert_pem);
         let ops = PublicKeyErrorOps {};
-        let policy = Policy::server(
+        let policy_def = PolicyDefinition::server(
             ops,
             Subject::DNS(DNSName::new("example.com").unwrap()),
             epoch(),
             None,
-        );
+            None,
+            None,
+        )
+        .expect("failed to create policy definition");
+        let policy = Policy::new(&policy_def, ());
 
         // Test a maybe present validator that stipulates that a given extension MUST be critical.
         let extension_validator = ExtensionValidator::maybe_present(
+            BASIC_CONSTRAINTS_OID,
             Criticality::Critical,
-            Some(maybe_extension_validator),
+            Some(Arc::new(maybe_extension_validator)),
         );
 
         // Mark the extension as non-critical despite our policy stipulating that it must be critical.
@@ -757,7 +927,11 @@ mod tests {
         let der_ext = create_encoded_extension(BASIC_CONSTRAINTS_OID, false, &bc);
         let raw_ext = asn1::parse_single(&der_ext).unwrap();
         assert!(extension_validator
-            .permits(&policy, &cert, Some(&raw_ext))
+            .permits(
+                &policy,
+                &VerificationCertificate::new(&cert, ()),
+                Some(&raw_ext)
+            )
             .is_err());
     }
 }

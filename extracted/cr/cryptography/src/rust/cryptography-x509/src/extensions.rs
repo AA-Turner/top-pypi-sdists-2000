@@ -4,6 +4,7 @@
 
 use std::collections::HashSet;
 
+use crate::certificate::SerialNumber;
 use crate::common::Asn1Operation;
 use crate::{common, crl, name};
 
@@ -198,7 +199,7 @@ pub struct AuthorityKeyIdentifier<'a, Op: Asn1Operation> {
     #[implicit(1)]
     pub authority_cert_issuer: Option<name::SequenceOfGeneralName<'a, Op>>,
     #[implicit(2)]
-    pub authority_cert_serial_number: Option<asn1::BigUint<'a>>,
+    pub authority_cert_serial_number: Option<SerialNumber<'a>>,
 }
 
 #[derive(asn1::Asn1Read, asn1::Asn1Write)]
@@ -299,6 +300,14 @@ pub struct Admission<'a, Op: Asn1Operation + 'a> {
 pub struct Admissions<'a, Op: Asn1Operation> {
     pub admission_authority: Option<name::GeneralName<'a>>,
     pub contents_of_admissions: Op::SequenceOfVec<'a, Admission<'a, Op>>,
+}
+
+#[derive(asn1::Asn1Read, asn1::Asn1Write)]
+pub struct PrivateKeyUsagePeriod {
+    #[implicit(0)]
+    pub not_before: Option<asn1::X509GeneralizedTime>,
+    #[implicit(1)]
+    pub not_after: Option<asn1::X509GeneralizedTime>,
 }
 
 #[cfg(test)]

@@ -119,7 +119,14 @@ fn dh_parameters_from_numbers(
         .transpose()?;
     let g = utils::py_int_to_bn(py, numbers.g.bind(py))?;
 
-    Ok(openssl::dh::Dh::from_pqg(p, q, g)?)
+    let dh = openssl::dh::Dh::from_pqg(p, q, g)?;
+
+    if !dh.check_key()? {
+        return Err(CryptographyError::from(
+            pyo3::exceptions::PyValueError::new_err("Invalid DH parameters"),
+        ));
+    }
+    Ok(dh)
 }
 
 fn clone_dh<T: openssl::pkey::HasParams>(
@@ -192,7 +199,7 @@ impl DHPrivateKey {
         })
     }
 
-    #[cfg(not(CRYPTOGRAPHY_IS_BORINGSSL))]
+    #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
     fn public_key(&self) -> CryptographyResult<DHPublicKey> {
         let orig_dh = self.pkey.dh().unwrap();
         let dh = clone_dh(&orig_dh)?;
@@ -234,6 +241,10 @@ impl DHPrivateKey {
             true,
             false,
         )
+    }
+
+    fn __copy__(slf: pyo3::PyRef<'_, Self>) -> pyo3::PyRef<'_, Self> {
+        slf
     }
 }
 
@@ -302,7 +313,7 @@ impl DHPublicKey {
 
 #[pyo3::pymethods]
 impl DHParameters {
-    #[cfg(not(CRYPTOGRAPHY_IS_BORINGSSL))]
+    #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
     fn generate_private_key(&self) -> CryptographyResult<DHPrivateKey> {
         let dh = clone_dh(&self.dh)?.generate_key()?;
         Ok(DHPrivateKey {
@@ -396,7 +407,7 @@ impl DHPrivateNumbers {
         DHPrivateNumbers { x, public_numbers }
     }
 
-    #[cfg(not(CRYPTOGRAPHY_IS_BORINGSSL))]
+    #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
     #[pyo3(signature = (backend=None))]
     fn private_key(
         &self,
@@ -411,14 +422,6 @@ impl DHPrivateNumbers {
         let priv_key = utils::py_int_to_bn(py, self.x.bind(py))?;
 
         let dh = dh.set_key(pub_key, priv_key)?;
-        if !dh.check_key()? {
-            return Err(CryptographyError::from(
-                pyo3::exceptions::PyValueError::new_err(
-                    "DH private numbers did not pass safety checks.",
-                ),
-            ));
-        }
-
         let pkey = openssl::pkey::PKey::from_dh(dh)?;
         Ok(DHPrivateKey { pkey })
     }
@@ -449,7 +452,7 @@ impl DHPublicNumbers {
         }
     }
 
-    #[cfg(not(CRYPTOGRAPHY_IS_BORINGSSL))]
+    #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
     #[pyo3(signature = (backend=None))]
     fn public_key(
         &self,

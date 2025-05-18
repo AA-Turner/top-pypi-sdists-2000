@@ -2,6 +2,7 @@
 // 2.0, and the BSD License. See the LICENSE file in the root of this repository
 // for complete details.
 
+use cryptography_x509::certificate::SerialNumber;
 use cryptography_x509::common::Asn1Write;
 use cryptography_x509::{crl, extensions, oid};
 use pyo3::pybacked::PyBackedStr;
@@ -59,7 +60,7 @@ pub(crate) fn encode_authority_key_identifier<'a>(
     let authority_cert_serial_number =
         if let Some(authority_cert_serial_number) = aki.authority_cert_serial_number {
             serial_bytes = py_uint_to_big_endian_bytes(py, authority_cert_serial_number)?;
-            Some(asn1::BigUint::new(&serial_bytes).unwrap())
+            Some(SerialNumber::new(&serial_bytes).unwrap())
         } else {
             None
         };
@@ -728,6 +729,39 @@ pub(crate) fn encode_extension(
             };
             Ok(Some(asn1::write_single(&admission)?))
         }
+        &oid::PRIVATE_KEY_USAGE_PERIOD_OID => {
+            let der = encode_private_key_usage_period(py, ext)?;
+            Ok(Some(der))
+        }
         _ => Ok(None),
     }
+}
+
+pub(crate) fn encode_private_key_usage_period(
+    py: pyo3::Python<'_>,
+    ext: &pyo3::Bound<'_, pyo3::PyAny>,
+) -> CryptographyResult<Vec<u8>> {
+    let not_before = ext.getattr(pyo3::intern!(py, "not_before"))?;
+    let not_after = ext.getattr(pyo3::intern!(py, "not_after"))?;
+
+    let not_before_value = if !not_before.is_none() {
+        let dt = x509::py_to_datetime(py, not_before)?;
+        Some(asn1::X509GeneralizedTime::new(dt)?)
+    } else {
+        None
+    };
+
+    let not_after_value = if !not_after.is_none() {
+        let dt = x509::py_to_datetime(py, not_after)?;
+        Some(asn1::X509GeneralizedTime::new(dt)?)
+    } else {
+        None
+    };
+
+    let pkup = extensions::PrivateKeyUsagePeriod {
+        not_before: not_before_value,
+        not_after: not_after_value,
+    };
+
+    Ok(asn1::write_single(&pkup)?)
 }

@@ -4,10 +4,9 @@
 
 use pyo3::IntoPyObject;
 
-use crate::backend::utils;
 use crate::buf::CffiBuf;
 use crate::error::{CryptographyError, CryptographyResult};
-use crate::exceptions;
+use crate::{exceptions, x509};
 
 #[pyo3::pyfunction]
 #[pyo3(signature = (data, password, backend=None, *, unsafe_skip_rsa_key_validation=false))]
@@ -19,7 +18,27 @@ fn load_der_private_key<'p>(
     unsafe_skip_rsa_key_validation: bool,
 ) -> CryptographyResult<pyo3::Bound<'p, pyo3::PyAny>> {
     let _ = backend;
-    if let Ok(pkey) = openssl::pkey::PKey::private_key_from_der(data.as_bytes()) {
+
+    load_der_private_key_bytes(
+        py,
+        data.as_bytes(),
+        password.as_ref().map(|v| v.as_bytes()),
+        unsafe_skip_rsa_key_validation,
+    )
+}
+
+pub(crate) fn load_der_private_key_bytes<'p>(
+    py: pyo3::Python<'p>,
+    data: &[u8],
+    password: Option<&[u8]>,
+    unsafe_skip_rsa_key_validation: bool,
+) -> CryptographyResult<pyo3::Bound<'p, pyo3::PyAny>> {
+    let pkey = cryptography_key_parsing::pkcs8::parse_private_key(data)
+        .or_else(|_| cryptography_key_parsing::ec::parse_pkcs1_private_key(data, None))
+        .or_else(|_| cryptography_key_parsing::rsa::parse_pkcs1_private_key(data))
+        .or_else(|_| cryptography_key_parsing::dsa::parse_pkcs1_private_key(data));
+
+    if let Ok(pkey) = pkey {
         if password.is_some() {
             return Err(CryptographyError::from(
                 pyo3::exceptions::PyTypeError::new_err(
@@ -30,13 +49,8 @@ fn load_der_private_key<'p>(
         return private_key_from_pkey(py, &pkey, unsafe_skip_rsa_key_validation);
     }
 
-    let password = password.as_ref().map(CffiBuf::as_bytes);
-    let mut status = utils::PasswordCallbackStatus::Unused;
-    let pkey = openssl::pkey::PKey::private_key_from_pkcs8_callback(
-        data.as_bytes(),
-        utils::password_callback(&mut status, password),
-    );
-    let pkey = utils::handle_key_load_result(py, pkey, status, password)?;
+    let pkey = cryptography_key_parsing::pkcs8::parse_encrypted_private_key(data, password)?;
+
     private_key_from_pkey(py, &pkey, unsafe_skip_rsa_key_validation)
 }
 
@@ -50,17 +64,116 @@ fn load_pem_private_key<'p>(
     unsafe_skip_rsa_key_validation: bool,
 ) -> CryptographyResult<pyo3::Bound<'p, pyo3::PyAny>> {
     let _ = backend;
-    let password = password.as_ref().map(CffiBuf::as_bytes);
-    let mut status = utils::PasswordCallbackStatus::Unused;
-    let pkey = openssl::pkey::PKey::private_key_from_pem_callback(
+
+    let p = x509::find_in_pem(
         data.as_bytes(),
-        utils::password_callback(&mut status, password),
-    );
-    let pkey = utils::handle_key_load_result(py, pkey, status, password)?;
+        |p| ["PRIVATE KEY", "ENCRYPTED PRIVATE KEY", "RSA PRIVATE KEY", "EC PRIVATE KEY", "DSA PRIVATE KEY"].contains(&p.tag()),
+        "Valid PEM but no BEGIN/END delimiters for a private key found. Are you sure this is a private key?"
+    )?;
+    let password = password.as_ref().map(|v| v.as_bytes());
+    let mut password_used = false;
+    // TODO: Surely we can avoid this clone?
+    let tag = p.tag().to_string();
+    let data = match p.headers().get("Proc-Type") {
+        Some("4,ENCRYPTED") => {
+            password_used = true;
+            let Some(dek_info) = p.headers().get("DEK-Info") else {
+                return Err(CryptographyError::from(
+                    pyo3::exceptions::PyValueError::new_err(
+                        "Encrypted PEM doesn't have a DEK-Info header.",
+                    ),
+                ));
+            };
+            let Some((cipher_algorithm, iv)) = dek_info.split_once(',') else {
+                return Err(CryptographyError::from(
+                    pyo3::exceptions::PyValueError::new_err(
+                        "Encrypted PEM's DEK-Info header is not valid.",
+                    ),
+                ));
+            };
+
+            let password = match password {
+                None | Some(b"") => {
+                    return Err(CryptographyError::from(
+                        pyo3::exceptions::PyTypeError::new_err(
+                            "Password was not given but private key is encrypted",
+                        ),
+                    ))
+                }
+                Some(p) => p,
+            };
+
+            // There's no RFC that defines these, but these are the ones in
+            // very wide use that we support.
+            let cipher = match cipher_algorithm {
+                "AES-128-CBC" => openssl::symm::Cipher::aes_128_cbc(),
+                "AES-256-CBC" => openssl::symm::Cipher::aes_256_cbc(),
+                "DES-EDE3-CBC" => openssl::symm::Cipher::des_ede3_cbc(),
+                _ => {
+                    return Err(CryptographyError::from(
+                        pyo3::exceptions::PyValueError::new_err(
+                            "Key encrypted with unknown cipher.",
+                        ),
+                    ))
+                }
+            };
+            let iv = cryptography_crypto::encoding::hex_decode(iv).ok_or_else(|| {
+                pyo3::exceptions::PyValueError::new_err("DEK-Info IV is not valid hex")
+            })?;
+            let key = cryptography_crypto::pbkdf1::openssl_kdf(
+                openssl::hash::MessageDigest::md5(),
+                password,
+                iv.get(..8)
+                    .ok_or_else(|| {
+                        pyo3::exceptions::PyValueError::new_err(
+                            "DEK-Info IV must be at least 8 bytes",
+                        )
+                    })?
+                    .try_into()
+                    .unwrap(),
+                cipher.key_len(),
+            )
+            .map_err(|_| {
+                pyo3::exceptions::PyValueError::new_err(
+                    "Unable to derive key from password (are you in FIPS mode?)",
+                )
+            })?;
+            openssl::symm::decrypt(cipher, &key, Some(&iv), p.contents()).map_err(|_| {
+                pyo3::exceptions::PyValueError::new_err("Incorrect password, could not decrypt key")
+            })?
+        }
+        Some(_) => {
+            return Err(CryptographyError::from(
+                pyo3::exceptions::PyValueError::new_err(
+                    "Proc-Type PEM header is not valid, key could not be decrypted.",
+                ),
+            ))
+        }
+        None => p.into_contents(),
+    };
+
+    let pkey = match tag.as_str() {
+        "PRIVATE KEY" => cryptography_key_parsing::pkcs8::parse_private_key(&data)?,
+        "RSA PRIVATE KEY" => cryptography_key_parsing::rsa::parse_pkcs1_private_key(&data)?,
+        "EC PRIVATE KEY" => cryptography_key_parsing::ec::parse_pkcs1_private_key(&data, None)?,
+        "DSA PRIVATE KEY" => cryptography_key_parsing::dsa::parse_pkcs1_private_key(&data)?,
+        _ => {
+            assert_eq!(tag, "ENCRYPTED PRIVATE KEY");
+            password_used = true;
+            cryptography_key_parsing::pkcs8::parse_encrypted_private_key(&data, password)?
+        }
+    };
+    if password.is_some() && !password_used {
+        return Err(CryptographyError::from(
+            pyo3::exceptions::PyTypeError::new_err(
+                "Password was given but private key is not encrypted.",
+            ),
+        ));
+    }
     private_key_from_pkey(py, &pkey, unsafe_skip_rsa_key_validation)
 }
 
-pub(crate) fn private_key_from_pkey<'p>(
+fn private_key_from_pkey<'p>(
     py: pyo3::Python<'p>,
     pkey: &openssl::pkey::PKeyRef<openssl::pkey::Private>,
     unsafe_skip_rsa_key_validation: bool,
@@ -72,20 +185,6 @@ pub(crate) fn private_key_from_pkey<'p>(
         )?
         .into_pyobject(py)?
         .into_any()),
-        openssl::pkey::Id::RSA_PSS => {
-            // At the moment the way we handle RSA PSS keys is to strip the
-            // PSS constraints from them and treat them as normal RSA keys
-            // Unfortunately the RSA * itself tracks this data so we need to
-            // extract, serialize, and reload it without the constraints.
-            let der_bytes = pkey.rsa()?.private_key_to_der()?;
-            let rsa = openssl::rsa::Rsa::private_key_from_der(&der_bytes)?;
-            let pkey = openssl::pkey::PKey::from_rsa(rsa)?;
-            Ok(
-                crate::backend::rsa::private_key_from_pkey(&pkey, unsafe_skip_rsa_key_validation)?
-                    .into_pyobject(py)?
-                    .into_any(),
-            )
-        }
         openssl::pkey::Id::EC => Ok(crate::backend::ec::private_key_from_pkey(py, pkey)?
             .into_pyobject(py)?
             .into_any()),
@@ -93,7 +192,11 @@ pub(crate) fn private_key_from_pkey<'p>(
             .into_pyobject(py)?
             .into_any()),
 
-        #[cfg(all(not(CRYPTOGRAPHY_IS_LIBRESSL), not(CRYPTOGRAPHY_IS_BORINGSSL)))]
+        #[cfg(not(any(
+            CRYPTOGRAPHY_IS_LIBRESSL,
+            CRYPTOGRAPHY_IS_BORINGSSL,
+            CRYPTOGRAPHY_IS_AWSLC
+        )))]
         openssl::pkey::Id::X448 => Ok(crate::backend::x448::private_key_from_pkey(pkey)
             .into_pyobject(py)?
             .into_any()),
@@ -102,7 +205,11 @@ pub(crate) fn private_key_from_pkey<'p>(
             .into_pyobject(py)?
             .into_any()),
 
-        #[cfg(all(not(CRYPTOGRAPHY_IS_LIBRESSL), not(CRYPTOGRAPHY_IS_BORINGSSL)))]
+        #[cfg(not(any(
+            CRYPTOGRAPHY_IS_LIBRESSL,
+            CRYPTOGRAPHY_IS_BORINGSSL,
+            CRYPTOGRAPHY_IS_AWSLC
+        )))]
         openssl::pkey::Id::ED448 => Ok(crate::backend::ed448::private_key_from_pkey(pkey)
             .into_pyobject(py)?
             .into_any()),
@@ -113,7 +220,11 @@ pub(crate) fn private_key_from_pkey<'p>(
             .into_pyobject(py)?
             .into_any()),
 
-        #[cfg(all(not(CRYPTOGRAPHY_IS_LIBRESSL), not(CRYPTOGRAPHY_IS_BORINGSSL)))]
+        #[cfg(not(any(
+            CRYPTOGRAPHY_IS_LIBRESSL,
+            CRYPTOGRAPHY_IS_BORINGSSL,
+            CRYPTOGRAPHY_IS_AWSLC
+        )))]
         openssl::pkey::Id::DHX => Ok(crate::backend::dh::private_key_from_pkey(pkey)
             .into_pyobject(py)?
             .into_any()),
@@ -207,7 +318,11 @@ fn public_key_from_pkey<'p>(
         openssl::pkey::Id::X25519 => Ok(crate::backend::x25519::public_key_from_pkey(pkey)
             .into_pyobject(py)?
             .into_any()),
-        #[cfg(all(not(CRYPTOGRAPHY_IS_LIBRESSL), not(CRYPTOGRAPHY_IS_BORINGSSL)))]
+        #[cfg(not(any(
+            CRYPTOGRAPHY_IS_LIBRESSL,
+            CRYPTOGRAPHY_IS_BORINGSSL,
+            CRYPTOGRAPHY_IS_AWSLC
+        )))]
         openssl::pkey::Id::X448 => Ok(crate::backend::x448::public_key_from_pkey(pkey)
             .into_pyobject(py)?
             .into_any()),
@@ -215,7 +330,11 @@ fn public_key_from_pkey<'p>(
         openssl::pkey::Id::ED25519 => Ok(crate::backend::ed25519::public_key_from_pkey(pkey)
             .into_pyobject(py)?
             .into_any()),
-        #[cfg(all(not(CRYPTOGRAPHY_IS_LIBRESSL), not(CRYPTOGRAPHY_IS_BORINGSSL)))]
+        #[cfg(not(any(
+            CRYPTOGRAPHY_IS_LIBRESSL,
+            CRYPTOGRAPHY_IS_BORINGSSL,
+            CRYPTOGRAPHY_IS_AWSLC
+        )))]
         openssl::pkey::Id::ED448 => Ok(crate::backend::ed448::public_key_from_pkey(pkey)
             .into_pyobject(py)?
             .into_any()),
@@ -227,7 +346,11 @@ fn public_key_from_pkey<'p>(
             .into_pyobject(py)?
             .into_any()),
 
-        #[cfg(all(not(CRYPTOGRAPHY_IS_LIBRESSL), not(CRYPTOGRAPHY_IS_BORINGSSL)))]
+        #[cfg(not(any(
+            CRYPTOGRAPHY_IS_LIBRESSL,
+            CRYPTOGRAPHY_IS_BORINGSSL,
+            CRYPTOGRAPHY_IS_AWSLC
+        )))]
         openssl::pkey::Id::DHX => Ok(crate::backend::dh::public_key_from_pkey(pkey)
             .into_pyobject(py)?
             .into_any()),
@@ -248,11 +371,11 @@ pub(crate) mod keys {
 
 #[cfg(test)]
 mod tests {
-    #[cfg(not(CRYPTOGRAPHY_IS_BORINGSSL))]
+    #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
     use super::{private_key_from_pkey, public_key_from_pkey};
 
     #[test]
-    #[cfg(not(CRYPTOGRAPHY_IS_BORINGSSL))]
+    #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
     fn test_public_key_from_pkey_unknown_key() {
         pyo3::prepare_freethreaded_python();
 
@@ -267,7 +390,7 @@ mod tests {
     }
 
     #[test]
-    #[cfg(not(CRYPTOGRAPHY_IS_BORINGSSL))]
+    #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
     fn test_private_key_from_pkey_unknown_key() {
         pyo3::prepare_freethreaded_python();
 

@@ -11,9 +11,9 @@ use cryptography_x509::extensions::{
     Admission, Admissions, AuthorityKeyIdentifier, BasicConstraints, DisplayText,
     DistributionPoint, DistributionPointName, DuplicateExtensionsError, ExtendedKeyUsage,
     Extension, IssuerAlternativeName, KeyUsage, MSCertificateTemplate, NameConstraints,
-    NamingAuthority, PolicyConstraints, PolicyInformation, PolicyQualifierInfo, ProfessionInfo,
-    Qualifier, RawExtensions, SequenceOfAccessDescriptions, SequenceOfSubtrees,
-    SubjectAlternativeName, UserNotice,
+    NamingAuthority, PolicyConstraints, PolicyInformation, PolicyQualifierInfo,
+    PrivateKeyUsagePeriod, ProfessionInfo, Qualifier, RawExtensions, SequenceOfAccessDescriptions,
+    SequenceOfSubtrees, SubjectAlternativeName, UserNotice,
 };
 use cryptography_x509::{common, oid};
 use cryptography_x509_verification::ops::CryptoOps;
@@ -24,7 +24,7 @@ use crate::asn1::{
 };
 use crate::backend::{hashes, keys};
 use crate::error::{CryptographyError, CryptographyResult};
-use crate::x509::common::cstr_from_literal;
+use crate::utils::cstr_from_literal;
 use crate::x509::verify::PyCryptoOps;
 use crate::x509::{extensions, sct, sign};
 use crate::{exceptions, types, x509};
@@ -115,7 +115,7 @@ impl Certificate {
         py: pyo3::Python<'p>,
     ) -> Result<pyo3::Bound<'p, pyo3::PyAny>, CryptographyError> {
         let bytes = self.raw.borrow_dependent().tbs_cert.serial.as_bytes();
-        warn_if_negative_serial(py, bytes)?;
+        warn_if_not_positive(py, bytes)?;
         Ok(big_byte_slice_to_py_int(py, bytes)?)
     }
 
@@ -418,9 +418,9 @@ pub(crate) fn load_der_x509_certificate(
     let raw = OwnedCertificate::try_new(data, |data| asn1::parse_single(data.as_bytes(py)))?;
     // Parse cert version immediately so we can raise error on parse if it is invalid.
     cert_version(py, raw.borrow_dependent().tbs_cert.version)?;
-    // determine if the serial is negative and raise a warning if it is. We want to drop support
-    // for this sort of invalid encoding eventually.
-    warn_if_negative_serial(py, raw.borrow_dependent().tbs_cert.serial.as_bytes())?;
+    // determine if the serial is not positive and raise a warning if it is. We
+    // want to drop support for this sort of invalid encoding eventually.
+    warn_if_not_positive(py, raw.borrow_dependent().tbs_cert.serial.as_bytes())?;
     // determine if the signature algorithm has incorrect parameters and raise a warning if it
     // does. this is a bug in the JDK and we want to drop support for it eventually.
     // ECDSA was fixed in Java 16, DSA in Java 21.
@@ -436,10 +436,10 @@ pub(crate) fn load_der_x509_certificate(
     })
 }
 
-fn warn_if_negative_serial(py: pyo3::Python<'_>, bytes: &'_ [u8]) -> pyo3::PyResult<()> {
-    if bytes[0] & 0x80 != 0 {
+fn warn_if_not_positive(py: pyo3::Python<'_>, bytes: &[u8]) -> pyo3::PyResult<()> {
+    if bytes[0] & 0x80 != 0 || bytes == [0] {
         let warning_cls = types::DEPRECATED_IN_36.get(py)?;
-        let message = cstr_from_literal!("Parsed a negative serial number, which is disallowed by RFC 5280. Loading this certificate will cause an exception in the next release of cryptography.");
+        let message = cstr_from_literal!("Parsed a serial number which wasn't positive (i.e., it was negative or zero), which is disallowed by RFC 5280. Loading this certificate will cause an exception in a future release of cryptography.");
         pyo3::PyErr::warn(py, &warning_cls, message, 1)?;
     }
     Ok(())
@@ -674,7 +674,10 @@ pub(crate) fn parse_authority_key_identifier<'p>(
 ) -> Result<pyo3::Bound<'p, pyo3::PyAny>, CryptographyError> {
     let aki = ext.value::<AuthorityKeyIdentifier<'_, Asn1Read>>()?;
     let serial = match aki.authority_cert_serial_number {
-        Some(biguint) => big_byte_slice_to_py_int(py, biguint.as_bytes())?.unbind(),
+        Some(biguint) => {
+            warn_if_not_positive(py, biguint.as_bytes())?;
+            big_byte_slice_to_py_int(py, biguint.as_bytes())?.unbind()
+        }
         None => py.None(),
     };
     let issuer = match aki.authority_cert_issuer {
@@ -946,6 +949,31 @@ pub fn parse_cert_ext<'p>(
                     .call1((admission_authority, py_admissions))?,
             ))
         }
+        oid::PRIVATE_KEY_USAGE_PERIOD_OID => {
+            let pkup = ext.value::<PrivateKeyUsagePeriod>()?;
+
+            let not_before = match &pkup.not_before {
+                Some(t) => {
+                    let dt = t.as_datetime();
+                    Some(x509::datetime_to_py(py, dt)?)
+                }
+                None => None,
+            };
+
+            let not_after = match &pkup.not_after {
+                Some(t) => {
+                    let dt = t.as_datetime();
+                    Some(x509::datetime_to_py(py, dt)?)
+                }
+                None => None,
+            };
+
+            Ok(Some(
+                types::PRIVATE_KEY_USAGE_PERIOD
+                    .get(py)?
+                    .call1((not_before, not_after))?,
+            ))
+        }
         _ => Ok(None),
     }
 }
@@ -975,6 +1003,7 @@ pub(crate) fn create_x509_certificate(
     private_key: &pyo3::Bound<'_, pyo3::PyAny>,
     hash_algorithm: &pyo3::Bound<'_, pyo3::PyAny>,
     rsa_padding: &pyo3::Bound<'_, pyo3::PyAny>,
+    ecdsa_deterministic: Option<bool>,
 ) -> CryptographyResult<Certificate> {
     let sigalg = x509::sign::compute_signature_algorithm(
         py,
@@ -1037,6 +1066,7 @@ pub(crate) fn create_x509_certificate(
         private_key.clone(),
         hash_algorithm.clone(),
         rsa_padding.clone(),
+        ecdsa_deterministic,
         &tbs_bytes,
     )?;
     let data = asn1::write_single(&cryptography_x509::certificate::Certificate {

@@ -47,6 +47,8 @@ pub static DEPRECATED_IN_42: LazyPyImport =
     LazyPyImport::new("cryptography.utils", &["DeprecatedIn42"]);
 pub static DEPRECATED_IN_43: LazyPyImport =
     LazyPyImport::new("cryptography.utils", &["DeprecatedIn43"]);
+pub static DEPRECATED_IN_45: LazyPyImport =
+    LazyPyImport::new("cryptography.utils", &["DeprecatedIn45"]);
 
 pub static ENCODING: LazyPyImport = LazyPyImport::new(
     "cryptography.hazmat.primitives.serialization",
@@ -179,6 +181,9 @@ pub static REASON_FLAGS: LazyPyImport = LazyPyImport::new("cryptography.x509", &
 pub static ATTRIBUTE: LazyPyImport = LazyPyImport::new("cryptography.x509", &["Attribute"]);
 pub static ATTRIBUTES: LazyPyImport = LazyPyImport::new("cryptography.x509", &["Attributes"]);
 
+pub static EXTENSION_TYPE: LazyPyImport =
+    LazyPyImport::new("cryptography.x509", &["ExtensionType"]);
+
 pub static CRL_NUMBER: LazyPyImport = LazyPyImport::new("cryptography.x509", &["CRLNumber"]);
 pub static DELTA_CRL_INDICATOR: LazyPyImport =
     LazyPyImport::new("cryptography.x509", &["DeltaCRLIndicator"]);
@@ -245,6 +250,8 @@ pub static SUBJECT_KEY_IDENTIFIER: LazyPyImport =
 pub static TLS_FEATURE: LazyPyImport = LazyPyImport::new("cryptography.x509", &["TLSFeature"]);
 pub static SUBJECT_ALTERNATIVE_NAME: LazyPyImport =
     LazyPyImport::new("cryptography.x509", &["SubjectAlternativeName"]);
+pub static PRIVATE_KEY_USAGE_PERIOD: LazyPyImport =
+    LazyPyImport::new("cryptography.x509", &["PrivateKeyUsagePeriod"]);
 pub static POLICY_INFORMATION: LazyPyImport =
     LazyPyImport::new("cryptography.x509", &["PolicyInformation"]);
 pub static USER_NOTICE: LazyPyImport = LazyPyImport::new("cryptography.x509", &["UserNotice"]);
@@ -487,11 +494,13 @@ pub static DSA_PUBLIC_KEY: LazyPyImport = LazyPyImport::new(
     &["DSAPublicKey"],
 );
 
+#[cfg(not(Py_3_11))]
 pub static FFI_FROM_BUFFER: LazyPyImport = LazyPyImport::new(
     "cryptography.hazmat.bindings._rust",
     &["_openssl", "ffi", "from_buffer"],
 );
 
+#[cfg(not(Py_3_11))]
 pub static FFI_CAST: LazyPyImport = LazyPyImport::new(
     "cryptography.hazmat.bindings._rust",
     &["_openssl", "ffi", "cast"],
@@ -548,6 +557,7 @@ pub static CAST5: LazyPyImport = LazyPyImport::new(
 #[cfg(not(CRYPTOGRAPHY_OSSLCONF = "OPENSSL_NO_IDEA"))]
 pub static IDEA: LazyPyImport =
     LazyPyImport::new("cryptography.hazmat.decrepit.ciphers.algorithms", &["IDEA"]);
+#[cfg(not(CRYPTOGRAPHY_OSSLCONF = "OPENSSL_NO_RC4"))]
 pub static ARC4: LazyPyImport =
     LazyPyImport::new("cryptography.hazmat.decrepit.ciphers.algorithms", &["ARC4"]);
 pub static RC2: LazyPyImport =

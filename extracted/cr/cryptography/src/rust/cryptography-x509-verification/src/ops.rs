@@ -72,6 +72,9 @@ pub trait CryptoOps {
     /// Extra data that's passed around with the certificate.
     type CertificateExtra;
 
+    /// Extra data that's accessible alongside the PolicyDefinition.
+    type PolicyExtra;
+
     /// Extracts the public key from the given `Certificate` in
     /// a `Key` format known by the cryptographic backend, or `None`
     /// if the key is malformed.
@@ -110,6 +113,10 @@ zl9HYIMxATFyqSiD9jsx
 -----END CERTIFICATE-----",
         )
         .unwrap()
+    }
+
+    pub(crate) fn epoch() -> asn1::DateTime {
+        asn1::DateTime::new(1970, 1, 1, 0, 0, 0).unwrap()
     }
 
     pub(crate) fn cert(cert_pem: &pem::Pem) -> Certificate<'_> {

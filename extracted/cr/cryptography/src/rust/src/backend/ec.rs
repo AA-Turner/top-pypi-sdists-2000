@@ -5,12 +5,12 @@
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 
-use pyo3::types::{PyAnyMethods, PyDictMethods};
+use pyo3::types::PyAnyMethods;
 
 use crate::backend::utils;
 use crate::buf::CffiBuf;
 use crate::error::{CryptographyError, CryptographyResult};
-use crate::x509::common::cstr_from_literal;
+use crate::utils::cstr_from_literal;
 use crate::{exceptions, types};
 
 #[pyo3::pyclass(frozen, module = "cryptography.hazmat.bindings._rust.openssl.ec")]
@@ -45,7 +45,8 @@ fn curve_from_py_curve(
     }
 
     let py_curve_name = py_curve.getattr(pyo3::intern!(py, "name"))?;
-    let nid = match &*py_curve_name.extract::<pyo3::pybacked::PyBackedStr>()? {
+    let curve_name = &*py_curve_name.extract::<pyo3::pybacked::PyBackedStr>()?;
+    let nid = match curve_name {
         "secp192r1" => openssl::nid::Nid::X9_62_PRIME192V1,
         "secp224r1" => openssl::nid::Nid::SECP224R1,
         "secp256r1" => openssl::nid::Nid::X9_62_PRIME256V1,
@@ -67,11 +68,11 @@ fn curve_from_py_curve(
         "sect409k1" => openssl::nid::Nid::SECT409K1,
         "sect571k1" => openssl::nid::Nid::SECT571K1,
 
-        #[cfg(not(CRYPTOGRAPHY_IS_BORINGSSL))]
+        #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
         "brainpoolP256r1" => openssl::nid::Nid::BRAINPOOL_P256R1,
-        #[cfg(not(CRYPTOGRAPHY_IS_BORINGSSL))]
+        #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
         "brainpoolP384r1" => openssl::nid::Nid::BRAINPOOL_P384R1,
-        #[cfg(not(CRYPTOGRAPHY_IS_BORINGSSL))]
+        #[cfg(not(any(CRYPTOGRAPHY_IS_BORINGSSL, CRYPTOGRAPHY_IS_AWSLC)))]
         "brainpoolP512r1" => openssl::nid::Nid::BRAINPOOL_P512R1,
 
         curve_name => {
@@ -84,33 +85,23 @@ fn curve_from_py_curve(
         }
     };
 
-    Ok(openssl::ec::EcGroup::from_curve_name(nid)?)
+    Ok(openssl::ec::EcGroup::from_curve_name(nid).map_err(|_| {
+        exceptions::UnsupportedAlgorithm::new_err((
+            format!("Curve {curve_name} is not supported"),
+            exceptions::Reasons::UNSUPPORTED_ELLIPTIC_CURVE,
+        ))
+    })?)
 }
 
 fn py_curve_from_curve<'p>(
     py: pyo3::Python<'p>,
     curve: &openssl::ec::EcGroupRef,
 ) -> CryptographyResult<pyo3::Bound<'p, pyo3::PyAny>> {
-    if curve.asn1_flag() == openssl::ec::Asn1Flag::EXPLICIT_CURVE {
-        return Err(CryptographyError::from(
-            pyo3::exceptions::PyValueError::new_err(
-                "ECDSA keys with explicit parameters are unsupported at this time",
-            ),
-        ));
-    }
+    assert!(curve.asn1_flag() != openssl::ec::Asn1Flag::EXPLICIT_CURVE);
 
     let name = curve.curve_name().unwrap().short_name()?;
 
-    types::CURVE_TYPES
-        .get(py)?
-        .extract::<pyo3::Bound<'_, pyo3::types::PyDict>>()?
-        .get_item(name)?
-        .ok_or_else(|| {
-            CryptographyError::from(exceptions::UnsupportedAlgorithm::new_err((
-                format!("{name} is not a supported elliptic curve"),
-                exceptions::Reasons::UNSUPPORTED_ELLIPTIC_CURVE,
-            )))
-        })
+    Ok(types::CURVE_TYPES.get(py)?.get_item(name)?)
 }
 
 fn check_key_infinity(
@@ -135,8 +126,11 @@ pub(crate) fn private_key_from_pkey(
     py: pyo3::Python<'_>,
     pkey: &openssl::pkey::PKeyRef<openssl::pkey::Private>,
 ) -> CryptographyResult<ECPrivateKey> {
-    let curve = py_curve_from_curve(py, pkey.ec_key().unwrap().group())?;
-    check_key_infinity(&pkey.ec_key().unwrap())?;
+    let ec_key = pkey
+        .ec_key()
+        .map_err(|_| pyo3::exceptions::PyValueError::new_err("Invalid EC key"))?;
+    let curve = py_curve_from_curve(py, ec_key.group())?;
+    check_key_infinity(&ec_key)?;
     Ok(ECPrivateKey {
         pkey: pkey.to_owned(),
         curve: curve.into(),
@@ -374,6 +368,10 @@ impl ECPrivateKey {
             true,
             false,
         )
+    }
+
+    fn __copy__(slf: pyo3::PyRef<'_, Self>) -> pyo3::PyRef<'_, Self> {
+        slf
     }
 }
 

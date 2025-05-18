@@ -5,7 +5,7 @@
 mod extension;
 
 use std::collections::HashSet;
-use std::ops::Range;
+use std::ops::{Deref, Range};
 use std::sync::Arc;
 
 use asn1::ObjectIdentifier;
@@ -20,40 +20,43 @@ use cryptography_x509::extensions::{BasicConstraints, Extensions, SubjectAlterna
 use cryptography_x509::name::GeneralName;
 use cryptography_x509::oid::{
     BASIC_CONSTRAINTS_OID, EC_SECP256R1, EC_SECP384R1, EC_SECP521R1, EKU_CLIENT_AUTH_OID,
-    EKU_SERVER_AUTH_OID,
+    EKU_SERVER_AUTH_OID, SUBJECT_ALTERNATIVE_NAME_OID,
 };
 use once_cell::sync::Lazy;
 
 use crate::ops::CryptoOps;
-use crate::policy::extension::{ca, common, ee, Criticality, ExtensionPolicy, ExtensionValidator};
+pub use crate::policy::extension::{
+    Criticality, ExtensionPolicy, ExtensionValidator, MaybeExtensionValidatorCallback,
+    PresentExtensionValidatorCallback,
+};
 use crate::types::{DNSName, DNSPattern, IPAddress};
 use crate::{ValidationError, ValidationErrorKind, ValidationResult, VerificationCertificate};
 
 // RSA key constraints, as defined in CA/B 6.1.5.
-static WEBPKI_MINIMUM_RSA_MODULUS: usize = 2048;
+const WEBPKI_MINIMUM_RSA_MODULUS: usize = 2048;
 
 // SubjectPublicKeyInfo AlgorithmIdentifier constants, as defined in CA/B 7.1.3.1.
 
 // RSA
-static SPKI_RSA: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
+const SPKI_RSA: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
     oid: asn1::DefinedByMarker::marker(),
     params: AlgorithmParameters::Rsa(Some(())),
 };
 
 // SECP256R1
-static SPKI_SECP256R1: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
+const SPKI_SECP256R1: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
     oid: asn1::DefinedByMarker::marker(),
     params: AlgorithmParameters::Ec(EcParameters::NamedCurve(EC_SECP256R1)),
 };
 
 // SECP384R1
-static SPKI_SECP384R1: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
+const SPKI_SECP384R1: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
     oid: asn1::DefinedByMarker::marker(),
     params: AlgorithmParameters::Ec(EcParameters::NamedCurve(EC_SECP384R1)),
 };
 
 // SECP521R1
-static SPKI_SECP521R1: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
+const SPKI_SECP521R1: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
     oid: asn1::DefinedByMarker::marker(),
     params: AlgorithmParameters::Ec(EcParameters::NamedCurve(EC_SECP521R1)),
 };
@@ -73,19 +76,19 @@ pub static WEBPKI_PERMITTED_SPKI_ALGORITHMS: Lazy<Arc<HashSet<AlgorithmIdentifie
 // Signature AlgorithmIdentifier constants, as defined in CA/B 7.1.3.2.
 
 // RSASSA‐PKCS1‐v1_5 with SHA‐256
-static RSASSA_PKCS1V15_SHA256: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
+const RSASSA_PKCS1V15_SHA256: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
     oid: asn1::DefinedByMarker::marker(),
     params: AlgorithmParameters::RsaWithSha256(Some(())),
 };
 
 // RSASSA‐PKCS1‐v1_5 with SHA‐384
-static RSASSA_PKCS1V15_SHA384: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
+const RSASSA_PKCS1V15_SHA384: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
     oid: asn1::DefinedByMarker::marker(),
     params: AlgorithmParameters::RsaWithSha384(Some(())),
 };
 
 // RSASSA‐PKCS1‐v1_5 with SHA‐512
-static RSASSA_PKCS1V15_SHA512: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
+const RSASSA_PKCS1V15_SHA512: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
     oid: asn1::DefinedByMarker::marker(),
     params: AlgorithmParameters::RsaWithSha512(Some(())),
 };
@@ -124,19 +127,19 @@ static RSASSA_PSS_SHA512: Lazy<AlgorithmIdentifier<'_>> = Lazy::new(|| Algorithm
 });
 
 // For P-256: the signature MUST use ECDSA with SHA‐256
-static ECDSA_SHA256: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
+const ECDSA_SHA256: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
     oid: asn1::DefinedByMarker::marker(),
     params: AlgorithmParameters::EcDsaWithSha256(None),
 };
 
 // For P-384: the signature MUST use ECDSA with SHA‐384
-static ECDSA_SHA384: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
+const ECDSA_SHA384: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
     oid: asn1::DefinedByMarker::marker(),
     params: AlgorithmParameters::EcDsaWithSha384(None),
 };
 
 // For P-521: the signature MUST use ECDSA with SHA‐512
-static ECDSA_SHA512: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
+const ECDSA_SHA512: AlgorithmIdentifier<'_> = AlgorithmIdentifier {
     oid: asn1::DefinedByMarker::marker(),
     params: AlgorithmParameters::EcDsaWithSha512(None),
 };
@@ -180,7 +183,7 @@ impl Subject<'_> {
     fn subject_alt_name_matches(&self, general_name: &GeneralName<'_>) -> bool {
         match (general_name, self) {
             (GeneralName::DNSName(pattern), Self::DNS(name)) => {
-                DNSPattern::new(pattern.0).map_or(false, |p| p.matches(name))
+                DNSPattern::new(pattern.0).is_some_and(|p| p.matches(name))
             }
             (GeneralName::IPAddress(addr), Self::IP(name)) => {
                 IPAddress::from_bytes(addr) == Some(*name)
@@ -196,8 +199,8 @@ impl Subject<'_> {
     }
 }
 
-/// A `Policy` describes user-configurable aspects of X.509 path validation.
-pub struct Policy<'a, B: CryptoOps> {
+/// A `PolicyDefinition` describes user-configurable aspects of X.509 path validation.
+pub struct PolicyDefinition<'a, B: CryptoOps> {
     pub ops: B,
 
     /// A top-level constraint on the length of intermediate CA paths
@@ -230,19 +233,21 @@ pub struct Policy<'a, B: CryptoOps> {
     /// algorithm identifiers.
     pub permitted_signature_algorithms: Arc<HashSet<AlgorithmIdentifier<'a>>>,
 
-    ca_extension_policy: ExtensionPolicy<B>,
-    ee_extension_policy: ExtensionPolicy<B>,
+    ca_extension_policy: ExtensionPolicy<'a, B>,
+    ee_extension_policy: ExtensionPolicy<'a, B>,
 }
 
-impl<'a, B: CryptoOps> Policy<'a, B> {
+impl<'a, B: CryptoOps + 'a> PolicyDefinition<'a, B> {
     fn new(
         ops: B,
         subject: Option<Subject<'a>>,
         time: asn1::DateTime,
         max_chain_depth: Option<u8>,
         extended_key_usage: ObjectIdentifier,
-    ) -> Self {
-        Self {
+        ca_extension_policy: Option<ExtensionPolicy<'a, B>>,
+        ee_extension_policy: Option<ExtensionPolicy<'a, B>>,
+    ) -> Result<Self, &'static str> {
+        let retval = Self {
             ops,
             max_chain_depth: max_chain_depth.unwrap_or(DEFAULT_MAX_CHAIN_DEPTH),
             subject,
@@ -251,93 +256,38 @@ impl<'a, B: CryptoOps> Policy<'a, B> {
             minimum_rsa_modulus: WEBPKI_MINIMUM_RSA_MODULUS,
             permitted_public_key_algorithms: Arc::clone(&*WEBPKI_PERMITTED_SPKI_ALGORITHMS),
             permitted_signature_algorithms: Arc::clone(&*WEBPKI_PERMITTED_SIGNATURE_ALGORITHMS),
-            ca_extension_policy: ExtensionPolicy {
-                // 5280 4.2.2.1: Authority Information Access
-                authority_information_access: ExtensionValidator::maybe_present(
-                    Criticality::NonCritical,
-                    Some(common::authority_information_access),
-                ),
-                // 5280 4.2.1.1: Authority Key Identifier
-                authority_key_identifier: ExtensionValidator::maybe_present(
-                    Criticality::NonCritical,
-                    Some(ca::authority_key_identifier),
-                ),
-                // 5280 4.2.1.2: Subject Key Identifier
-                // NOTE: CABF requires SKI in CA certificates, but many older CAs lack it.
-                // We choose to be permissive here.
-                subject_key_identifier: ExtensionValidator::maybe_present(
-                    Criticality::NonCritical,
-                    None,
-                ),
-                // 5280 4.2.1.3: Key Usage
-                key_usage: ExtensionValidator::present(Criticality::Agnostic, Some(ca::key_usage)),
-                subject_alternative_name: ExtensionValidator::maybe_present(
-                    Criticality::Agnostic,
-                    None,
-                ),
-                // 5280 4.2.1.9: Basic Constraints
-                basic_constraints: ExtensionValidator::present(
-                    Criticality::Critical,
-                    Some(ca::basic_constraints),
-                ),
-                // 5280 4.2.1.10: Name Constraints
-                // NOTE: MUST be critical in 5280, but CABF relaxes to MAY.
-                name_constraints: ExtensionValidator::maybe_present(
-                    Criticality::Agnostic,
-                    Some(ca::name_constraints),
-                ),
-                // 5280: 4.2.1.12: Extended Key Usage
-                // NOTE: CABF requires EKUs in many non-root CA certs, but validators widely
-                // ignore this requirement and treat a missing EKU as "any EKU".
-                // We choose to be permissive here.
-                extended_key_usage: ExtensionValidator::maybe_present(
-                    Criticality::NonCritical,
-                    Some(ca::extended_key_usage),
-                ),
-            },
-            ee_extension_policy: ExtensionPolicy {
-                // 5280 4.2.2.1: Authority Information Access
-                authority_information_access: ExtensionValidator::maybe_present(
-                    Criticality::NonCritical,
-                    Some(common::authority_information_access),
-                ),
-                // 5280 4.2.1.1.: Authority Key Identifier
-                authority_key_identifier: ExtensionValidator::present(
-                    Criticality::NonCritical,
-                    None,
-                ),
-                subject_key_identifier: ExtensionValidator::maybe_present(
-                    Criticality::Agnostic,
-                    None,
-                ),
-                // 5280 4.2.1.3: Key Usage
-                key_usage: ExtensionValidator::maybe_present(
-                    Criticality::Agnostic,
-                    Some(ee::key_usage),
-                ),
-                // CA/B 7.1.2.7.12 Subscriber Certificate Subject Alternative Name
-                // This validator handles both client and server cases by only matching against
-                // the SAN if the profile contains a subject, which it won't in the client
-                // validation case.
-                subject_alternative_name: ExtensionValidator::present(
-                    Criticality::Agnostic,
-                    Some(ee::subject_alternative_name),
-                ),
-                // 5280 4.2.1.9: Basic Constraints
-                basic_constraints: ExtensionValidator::maybe_present(
-                    Criticality::Agnostic,
-                    Some(ee::basic_constraints),
-                ),
-                // 5280 4.2.1.10: Name Constraints
-                name_constraints: ExtensionValidator::not_present(),
-                // CA/B: 7.1.2.7.10: Subscriber Certificate Extended Key Usage
-                // NOTE: CABF requires EKUs in EE certs, while RFC 5280 does not.
-                extended_key_usage: ExtensionValidator::maybe_present(
-                    Criticality::NonCritical,
-                    Some(ee::extended_key_usage),
-                ),
-            },
+            ca_extension_policy: ca_extension_policy
+                .unwrap_or_else(ExtensionPolicy::new_default_webpki_ca),
+            ee_extension_policy: ee_extension_policy
+                .unwrap_or_else(ExtensionPolicy::new_default_webpki_ee),
+        };
+
+        // Even without the following checks, verification
+        // would fail, but we want to fail early and provide a more specific error message.
+
+        if !matches!(
+            retval.ca_extension_policy.basic_constraints,
+            ExtensionValidator::Present { .. }
+        ) {
+            return Err(
+                "A CA extension policy must require the basicConstraints extension to be present.",
+            );
         }
+
+        // NOTE: If subject is set (server profile), we do not accept
+        // EE extension policies that allow the SAN extension to be absent.
+        if retval.subject.is_some()
+            && !matches!(
+                retval.ee_extension_policy.subject_alternative_name,
+                ExtensionValidator::Present { .. }
+            )
+        {
+            return Err(
+                "An EE extension policy used for server verification must require the subjectAltName extension to be present.",
+            );
+        }
+
+        Ok(retval)
     }
 
     /// Create a new policy with suitable defaults for client certification
@@ -346,13 +296,21 @@ impl<'a, B: CryptoOps> Policy<'a, B> {
     /// **IMPORTANT**: This is **not** the appropriate API for verifying
     /// website (i.e. server) certificates. For that, you **must** use
     /// [`Policy::server`].
-    pub fn client(ops: B, time: asn1::DateTime, max_chain_depth: Option<u8>) -> Self {
+    pub fn client(
+        ops: B,
+        time: asn1::DateTime,
+        max_chain_depth: Option<u8>,
+        ca_extension_policy: Option<ExtensionPolicy<'a, B>>,
+        ee_extension_policy: Option<ExtensionPolicy<'a, B>>,
+    ) -> Result<Self, &'static str> {
         Self::new(
             ops,
             None,
             time,
             max_chain_depth,
             EKU_CLIENT_AUTH_OID.clone(),
+            ca_extension_policy,
+            ee_extension_policy,
         )
     }
 
@@ -363,14 +321,37 @@ impl<'a, B: CryptoOps> Policy<'a, B> {
         subject: Subject<'a>,
         time: asn1::DateTime,
         max_chain_depth: Option<u8>,
-    ) -> Self {
+        ca_extension_policy: Option<ExtensionPolicy<'a, B>>,
+        ee_extension_policy: Option<ExtensionPolicy<'a, B>>,
+    ) -> Result<Self, &'static str> {
         Self::new(
             ops,
             Some(subject),
             time,
             max_chain_depth,
             EKU_SERVER_AUTH_OID.clone(),
+            ca_extension_policy,
+            ee_extension_policy,
         )
+    }
+}
+
+pub struct Policy<'a, B: CryptoOps> {
+    definition: &'a PolicyDefinition<'a, B>,
+    pub extra: B::PolicyExtra,
+}
+
+impl<'a, B: CryptoOps> Deref for Policy<'a, B> {
+    type Target = PolicyDefinition<'a, B>;
+
+    fn deref(&self) -> &Self::Target {
+        self.definition
+    }
+}
+
+impl<'a, B: CryptoOps> Policy<'a, B> {
+    pub fn new(definition: &'a PolicyDefinition<'a, B>, extra: B::PolicyExtra) -> Self {
+        Self { definition, extra }
     }
 
     fn permits_basic<'chain>(&self, cert: &Certificate<'_>) -> ValidationResult<'chain, (), B> {
@@ -438,11 +419,11 @@ impl<'a, B: CryptoOps> Policy<'a, B> {
     /// Checks whether the given CA certificate is compatible with this policy.
     pub(crate) fn permits_ca<'chain>(
         &self,
-        cert: &Certificate<'chain>,
+        cert: &VerificationCertificate<'chain, B>,
         current_depth: u8,
         extensions: &Extensions<'_>,
     ) -> ValidationResult<'chain, (), B> {
-        self.permits_basic(cert)?;
+        self.permits_basic(cert.certificate())?;
 
         // 5280 4.1.2.6: Subject
         // CA certificates MUST have a subject populated with a non-empty distinguished name.
@@ -450,24 +431,30 @@ impl<'a, B: CryptoOps> Policy<'a, B> {
         // and `ChainBuilder::potential_issuers` enforces subject/issuer matching,
         // meaning that an CA with an empty subject cannot occur in a built chain.
 
-        // NOTE: This conceptually belongs in `valid_issuer`, but is easier
-        // to test here. It's also conceptually an extension policy, but
-        // requires a bit of extra external state (`current_depth`) that isn't
-        // presently convenient to push into that layer.
-        //
-        // NOTE: BasicConstraints is required via `ca_extension_policies`,
-        // so we always take this branch.
         if let Some(bc) = extensions.get_extension(&BASIC_CONSTRAINTS_OID) {
             let bc: BasicConstraints = bc.value()?;
 
+            // NOTE: This conceptually belongs in `valid_issuer`, but is easier
+            // to test here.
             if bc
                 .path_length
-                .map_or(false, |len| u64::from(current_depth) > len)
+                .is_some_and(|len| u64::from(current_depth) > len)
             {
                 return Err(ValidationError::new(ValidationErrorKind::Other(
                     "path length constraint violated".to_string(),
                 )));
             }
+
+            if !bc.ca {
+                return Err(ValidationError::new(ValidationErrorKind::Other(
+                    "basicConstraints.cA must be asserted in a CA certificate".to_string(),
+                )));
+            }
+        } else {
+            return Err(ValidationError::new(ValidationErrorKind::ExtensionError {
+                oid: BASIC_CONSTRAINTS_OID,
+                reason: "missing required extension: CA certificate has no basicConstraints",
+            }));
         }
 
         self.ca_extension_policy.permits(self, cert, extensions)?;
@@ -478,10 +465,19 @@ impl<'a, B: CryptoOps> Policy<'a, B> {
     /// Checks whether the given EE certificate is compatible with this policy.
     pub(crate) fn permits_ee<'chain>(
         &self,
-        cert: &Certificate<'chain>,
-        extensions: &Extensions<'_>,
+        cert: &VerificationCertificate<'chain, B>,
+        extensions: &Extensions<'chain>,
     ) -> ValidationResult<'chain, (), B> {
-        self.permits_basic(cert)?;
+        self.permits_basic(cert.certificate())?;
+
+        if let Some(ref subject) = self.subject {
+            let san: Option<SubjectAlternativeName<'chain>> =
+                match &extensions.get_extension(&SUBJECT_ALTERNATIVE_NAME_OID) {
+                    Some(ext) => Some(ext.value()?),
+                    None => None,
+                };
+            permits_subject_alternative_name(subject, &san)?;
+        }
 
         self.ee_extension_policy.permits(self, cert, extensions)?;
 
@@ -509,7 +505,7 @@ impl<'a, B: CryptoOps> Policy<'a, B> {
         issuer_extensions: &Extensions<'_>,
     ) -> ValidationResult<'chain, (), B> {
         // The issuer needs to be a valid CA at the current depth.
-        self.permits_ca(issuer.certificate(), current_depth, issuer_extensions)
+        self.permits_ca(issuer, current_depth, issuer_extensions)
             .map_err(|e| e.set_cert(issuer.clone()))?;
 
         // CA/B 7.1.3.1 SubjectPublicKeyInfo
@@ -590,6 +586,25 @@ fn permits_validity_date<'chain, B: CryptoOps>(
                 "validity dates between 1950 and 2049 must be UtcTime".to_string(),
             )));
         }
+    }
+
+    Ok(())
+}
+
+fn permits_subject_alternative_name<'chain, B: CryptoOps>(
+    subject: &Subject<'_>,
+    san: &Option<SubjectAlternativeName<'_>>,
+) -> ValidationResult<'chain, (), B> {
+    let Some(san) = san else {
+        return Err(ValidationError::new(ValidationErrorKind::Other(
+            "missing required extension: leaf server certificate has no subjectAltName".into(),
+        )));
+    };
+
+    if !subject.matches(san) {
+        return Err(ValidationError::new(ValidationErrorKind::Other(
+            "leaf certificate has no matching subjectAltName".into(),
+        )));
     }
 
     Ok(())
