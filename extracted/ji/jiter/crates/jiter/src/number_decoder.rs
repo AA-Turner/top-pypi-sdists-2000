@@ -83,7 +83,7 @@ impl AbstractNumberDecoder for NumberFloat {
         if !positive {
             // we started with a minus sign, so the first digit is at index + 1
             index += 1;
-        };
+        }
         let first2 = if positive { Some(&first) } else { data.get(index) };
 
         if let Some(digit) = first2 {
@@ -120,19 +120,6 @@ impl AbstractNumberDecoder for NumberFloat {
 pub enum NumberAny {
     Int(NumberInt),
     Float(f64),
-}
-
-#[cfg(feature = "python")]
-#[allow(deprecated)] // kept around for downstream sake
-impl pyo3::ToPyObject for NumberAny {
-    fn to_object(&self, py: pyo3::Python<'_>) -> pyo3::PyObject {
-        match self {
-            Self::Int(NumberInt::Int(int)) => int.to_object(py),
-            #[cfg(feature = "num-bigint")]
-            Self::Int(NumberInt::BigInt(big_int)) => big_int.to_object(py),
-            Self::Float(float) => float.to_object(py),
-        }
-    }
 }
 
 impl From<NumberAny> for f64 {
@@ -210,7 +197,7 @@ impl IntParse {
         if !positive {
             // we started with a minus sign, so the first digit is at index + 1
             index += 1;
-        };
+        }
         let first2 = if positive { Some(&first) } else { data.get(index) };
         let first_value = match first2 {
             Some(b'0') => {
@@ -425,7 +412,7 @@ impl AbstractNumberDecoder for NumberRange {
         if !positive {
             // we started with a minus sign, so the first digit is at index + 1
             index += 1;
-        };
+        }
 
         match data.get(index) {
             Some(b'0') => {
@@ -453,7 +440,7 @@ impl AbstractNumberDecoder for NumberRange {
             Some(digit) if (b'1'..=b'9').contains(digit) => (),
             Some(_) => return json_err!(InvalidNumber, index),
             None => return json_err!(EofWhileParsingValue, index),
-        };
+        }
 
         index += 1;
         for _ in 0..18 {
@@ -511,13 +498,13 @@ fn consume_exponential(data: &[u8], mut index: usize) -> JsonResult<usize> {
         Some(v) if v.is_ascii_digit() => (),
         Some(_) => return json_err!(InvalidNumber, index),
         None => return json_err!(EofWhileParsingValue, index),
-    };
+    }
 
     match data.get(index) {
         Some(v) if v.is_ascii_digit() => (),
         Some(_) => return json_err!(InvalidNumber, index),
         None => return json_err!(EofWhileParsingValue, index),
-    };
+    }
     index += 1;
 
     while let Some(next) = data.get(index) {
@@ -536,7 +523,7 @@ fn consume_decimal(data: &[u8], mut index: usize) -> JsonResult<usize> {
         Some(v) if v.is_ascii_digit() => (),
         Some(_) => return json_err!(InvalidNumber, index),
         None => return json_err!(EofWhileParsingValue, index),
-    };
+    }
     index += 1;
 
     while let Some(next) = data.get(index) {

@@ -144,6 +144,18 @@ def _get_extension_instance_name(instance_view, publisher, extension_type_name,
     return extension_instance_name
 
 
+# separated for aaz based implementation
+def _get_extension_instance_name_aaz(instance_view, publisher, extension_type_name,
+                                     suggested_name=None):
+    extension_instance_name = suggested_name or extension_type_name
+    full_type_name = '.'.join([publisher, extension_type_name])
+    if extensions := instance_view.get('extensions', []):
+        ext = next((x for x in extensions if x.get('type', '').lower() == full_type_name.lower()), None)
+        if ext:
+            extension_instance_name = ext['name']
+    return extension_instance_name
+
+
 def _get_storage_management_client(cli_ctx):
     return get_mgmt_service_client(cli_ctx, ResourceType.MGMT_STORAGE)
 
@@ -1803,15 +1815,19 @@ def update_vm(cmd, resource_group_name, vm_name, os_disk=None, disk_caching=None
                 enable_user_reboot_scheduled_events if enable_user_reboot_scheduled_events is not None else False
         else:
             if additional_scheduled_events is not None:
-                vm.scheduled_events_policy.scheduled_events_additional_publishing_targets.\
-                    event_grid_and_resource_graph.enable = additional_scheduled_events
+                vm.scheduled_events_policy.scheduled_events_additional_publishing_targets = {
+                    "eventGridAndResourceGraph": {
+                        "enable": additional_scheduled_events
+                    }
+                }
             if enable_user_redeploy_scheduled_events is not None:
-                vm.scheduled_events_policy.user_initiated_redeploy.automatically_approve = \
-                    enable_user_redeploy_scheduled_events
+                vm.scheduled_events_policy.user_initiated_redeploy = {
+                    "automaticallyApprove": enable_user_redeploy_scheduled_events
+                }
             if enable_user_reboot_scheduled_events is not None:
-                vm.scheduled_events_policy.user_initiated_reboot.automatically_approve = \
-                    enable_user_reboot_scheduled_events
-
+                vm.scheduled_events_policy.user_initiated_reboot = {
+                    "automaticallyApprove": enable_user_reboot_scheduled_events
+                }
     client = _compute_client_factory(cmd.cli_ctx, aux_subscriptions=aux_subscriptions)
     return sdk_no_wait(no_wait, client.virtual_machines.begin_create_or_update, resource_group_name, vm_name, **kwargs)
 # endregion
@@ -2162,36 +2178,41 @@ def detach_managed_data_disk(cmd, resource_group_name, vm_name, disk_name=None, 
 
 # region VirtualMachines Extensions
 def list_extensions(cmd, resource_group_name, vm_name):
-    vm = get_vm(cmd, resource_group_name, vm_name)
-    extension_type = 'Microsoft.Compute/virtualMachines/extensions'
-    result = [r for r in (vm.resources or []) if r.type == extension_type]
-    return result
+    from .operations.vm_extension import VMExtensionList
+    return VMExtensionList(cli_ctx=cmd.cli_ctx)(command_args={
+        'vm_name': vm_name,
+        'resource_group': resource_group_name,
+    })['value']
 
 
 def show_extensions(cmd, resource_group_name, vm_name, vm_extension_name, instance_view=False, expand=None):
+    from .operations.vm_extension import VMExtensionShow
     if instance_view:
         expand = 'instanceView'
-    client = _compute_client_factory(cmd.cli_ctx).virtual_machine_extensions
-    return client.get(resource_group_name=resource_group_name,
-                      vm_name=vm_name,
-                      vm_extension_name=vm_extension_name,
-                      expand=expand)
+
+    return VMExtensionShow(cli_ctx=cmd.cli_ctx)(command_args={
+        'vm_extension_name': vm_extension_name,
+        'resource_group': resource_group_name,
+        'vm_name': vm_name,
+        'expand': expand
+    })
 
 
 def set_extension(cmd, resource_group_name, vm_name, vm_extension_name, publisher, version=None, settings=None,
                   protected_settings=None, no_auto_upgrade=False, force_update=False, no_wait=False,
                   extension_instance_name=None, enable_auto_upgrade=None):
-    vm = get_vm(cmd, resource_group_name, vm_name, 'instanceView')
-    client = _compute_client_factory(cmd.cli_ctx)
+    from .operations.vm import VMShow as _VMShow
+    vm = _VMShow(cli_ctx=cmd.cli_ctx)(command_args={
+        'vm_name': vm_name,
+        'resource_group': resource_group_name,
+        'expand': 'instanceView'
+    })
 
     if not extension_instance_name:
         extension_instance_name = vm_extension_name
 
-    VirtualMachineExtension = cmd.get_models('VirtualMachineExtension',
-                                             resource_type=ResourceType.MGMT_COMPUTE,
-                                             operation_group='virtual_machines')
-    instance_name = _get_extension_instance_name(vm.instance_view, publisher, vm_extension_name,
-                                                 suggested_name=extension_instance_name)
+    instance_name = _get_extension_instance_name_aaz(vm['instanceView'], publisher, vm_extension_name,
+                                                     suggested_name=extension_instance_name)
     if instance_name != extension_instance_name:
         msg = "A %s extension with name %s already exists. Updating it with your settings..."
         logger.warning(msg, vm_extension_name, instance_name)
@@ -2205,19 +2226,26 @@ def set_extension(cmd, resource_group_name, vm_name, vm_extension_name, publishe
     if vm_extension_name in auto_upgrade_extensions and enable_auto_upgrade is None:
         enable_auto_upgrade = True
 
-    version = _normalize_extension_version(cmd.cli_ctx, publisher, vm_extension_name, version, vm.location)
-    ext = VirtualMachineExtension(location=vm.location,
-                                  publisher=publisher,
-                                  type_properties_type=vm_extension_name,
-                                  protected_settings=protected_settings,
-                                  type_handler_version=version,
-                                  settings=settings,
-                                  auto_upgrade_minor_version=(not no_auto_upgrade),
-                                  enable_automatic_upgrade=enable_auto_upgrade)
+    version = _normalize_extension_version(cmd.cli_ctx, publisher, vm_extension_name, version, vm['location'])
+
+    from .operations.vm_extension import VMExtensionCreate as ExtensionSet
+    ext_args = {
+        'resource_group': resource_group_name,
+        'vm_name': vm_name,
+        'vm_extension_name': instance_name,
+        'location': vm['location'],
+        'publisher': publisher,
+        'type': vm_extension_name,
+        'protected_settings': protected_settings,
+        'type_handler_version': version,
+        'settings': settings,
+        'auto_upgrade_minor_version': (not no_auto_upgrade),
+        'enable_automatic_upgrade': enable_auto_upgrade,
+        'no_wait': no_wait
+    }
     if force_update:
-        ext.force_update_tag = str(_gen_guid())
-    return sdk_no_wait(no_wait, client.virtual_machine_extensions.begin_create_or_update,
-                       resource_group_name, vm_name, instance_name, ext)
+        ext_args['force_update_tag'] = str(_gen_guid())
+    return ExtensionSet(cli_ctx=cmd.cli_ctx)(command_args=ext_args)
 # endregion
 
 
@@ -3219,10 +3247,12 @@ def create_vmss(cmd, vmss_name, resource_group_name, image=None,
                 security_posture_reference_id=None, security_posture_reference_exclude_extensions=None,
                 enable_resilient_creation=None, enable_resilient_deletion=None,
                 additional_scheduled_events=None, enable_user_reboot_scheduled_events=None,
-                enable_user_redeploy_scheduled_events=None, skuprofile_vmsizes=None, skuprofile_allostrat=None,
+                enable_user_redeploy_scheduled_events=None, skuprofile_vmsizes=None,
+                skuprofile_allostrat=None, skuprofile_rank=None,
                 security_posture_reference_is_overridable=None, zone_balance=None, wire_server_mode=None,
                 imds_mode=None, wire_server_access_control_profile_reference_id=None,
-                imds_access_control_profile_reference_id=None):
+                imds_access_control_profile_reference_id=None, enable_automatic_zone_balancing=None,
+                automatic_zone_balancing_strategy=None, automatic_zone_balancing_behavior=None):
     from azure.cli.core.commands.client_factory import get_subscription_id
     from azure.cli.core.util import random_string, hash_string
     from azure.cli.core.commands.arm import ArmTemplateBuilder
@@ -3537,10 +3567,14 @@ def create_vmss(cmd, vmss_name, resource_group_name, image=None,
             enable_user_reboot_scheduled_events=enable_user_reboot_scheduled_events,
             enable_user_redeploy_scheduled_events=enable_user_redeploy_scheduled_events,
             skuprofile_vmsizes=skuprofile_vmsizes, skuprofile_allostrat=skuprofile_allostrat,
+            skuprofile_rank=skuprofile_rank,
             security_posture_reference_is_overridable=security_posture_reference_is_overridable,
             zone_balance=zone_balance, wire_server_mode=wire_server_mode, imds_mode=imds_mode,
             wire_server_access_control_profile_reference_id=wire_server_access_control_profile_reference_id,
-            imds_access_control_profile_reference_id=imds_access_control_profile_reference_id)
+            imds_access_control_profile_reference_id=imds_access_control_profile_reference_id,
+            enable_automatic_zone_balancing=enable_automatic_zone_balancing,
+            automatic_zone_balancing_strategy=automatic_zone_balancing_strategy,
+            automatic_zone_balancing_behavior=automatic_zone_balancing_behavior)
 
         vmss_resource['dependsOn'] = vmss_dependencies
 
@@ -3989,9 +4023,11 @@ def update_vmss(cmd, resource_group_name, name, license_type=None, no_wait=False
                 ephemeral_os_disk=None, ephemeral_os_disk_option=None, zones=None, additional_scheduled_events=None,
                 enable_user_reboot_scheduled_events=None, enable_user_redeploy_scheduled_events=None,
                 upgrade_policy_mode=None, enable_auto_os_upgrade=None, skuprofile_vmsizes=None,
-                skuprofile_allostrat=None, security_posture_reference_is_overridable=None, zone_balance=None,
+                skuprofile_allostrat=None, skuprofile_rank=None,
+                security_posture_reference_is_overridable=None, zone_balance=None,
                 wire_server_mode=None, imds_mode=None, wire_server_access_control_profile_reference_id=None,
-                imds_access_control_profile_reference_id=None, **kwargs):
+                imds_access_control_profile_reference_id=None, enable_automatic_zone_balancing=None,
+                automatic_zone_balancing_strategy=None, automatic_zone_balancing_behavior=None, **kwargs):
     vmss = kwargs['parameters']
     aux_subscriptions = None
     # pylint: disable=too-many-boolean-expressions
@@ -4253,6 +4289,11 @@ def update_vmss(cmd, resource_group_name, name, license_type=None, no_wait=False
                 }
                 sku_profile_vmsizes_list.append(vmsize_obj)
             sku_profile['vmSizes'] = sku_profile_vmsizes_list
+
+            if skuprofile_rank:
+                for vm_size, rank in zip(sku_profile_vmsizes_list, skuprofile_rank):
+                    vm_size['rank'] = rank
+
         if skuprofile_allostrat is not None:
             sku_profile['allocationStrategy'] = skuprofile_allostrat
         vmss.sku_profile = sku_profile
@@ -4307,6 +4348,28 @@ def update_vmss(cmd, resource_group_name, name, license_type=None, no_wait=False
             resiliency_policy.resilient_vm_creation_policy = {'enabled': enable_resilient_creation}
         if enable_resilient_deletion is not None:
             resiliency_policy.resilient_vm_deletion_policy = {'enabled': enable_resilient_deletion}
+
+    if enable_automatic_zone_balancing is not None or automatic_zone_balancing_strategy is not None or \
+            automatic_zone_balancing_behavior is not None:
+        resiliency_policy = vmss.resiliency_policy
+        if resiliency_policy is None:
+            ResiliencyPolicy = cmd.get_models('ResiliencyPolicy')
+            AutomaticZoneRebalancingPolicy = cmd.get_models('AutomaticZoneRebalancingPolicy')
+            resiliency_policy = ResiliencyPolicy()
+            resiliency_policy.automatic_zone_rebalancing_policy = AutomaticZoneRebalancingPolicy()
+        elif resiliency_policy.automatic_zone_rebalancing_policy is None:
+            AutomaticZoneRebalancingPolicy = cmd.get_models('AutomaticZoneRebalancingPolicy')
+            resiliency_policy.automatic_zone_rebalancing_policy = AutomaticZoneRebalancingPolicy()
+
+        if enable_automatic_zone_balancing is not None:
+            resiliency_policy.automatic_zone_rebalancing_policy.enabled = enable_automatic_zone_balancing
+
+        if automatic_zone_balancing_strategy is not None:
+            resiliency_policy.automatic_zone_rebalancing_policy.rebalance_strategy = automatic_zone_balancing_strategy
+
+        if automatic_zone_balancing_behavior is not None:
+            resiliency_policy.automatic_zone_rebalancing_policy.rebalance_behavior = automatic_zone_balancing_behavior
+        vmss.resiliency_policy = resiliency_policy
 
     if zones is not None:
         vmss.zones = zones
@@ -5351,25 +5414,6 @@ def list_generator(pages, num_results=50):
     return result
 
 
-def sig_shared_image_definition_list(client, location, gallery_unique_name,
-                                     shared_to=None, marker=None, show_next_marker=None):
-    # Keep it here as it will add subscription in the future and we need to set it to None to make it work
-    if shared_to == 'subscription':
-        shared_to = None
-    generator = client.list(location=location, gallery_unique_name=gallery_unique_name, shared_to=shared_to)
-    return get_page_result(generator, marker, show_next_marker)
-
-
-def sig_shared_image_version_list(client, location, gallery_unique_name, gallery_image_name,
-                                  shared_to=None, marker=None, show_next_marker=None):
-    # Keep it here as it will add subscription in the future and we need to set it to None to make it work
-    if shared_to == 'subscription':
-        shared_to = None
-    generator = client.list(location=location, gallery_unique_name=gallery_unique_name,
-                            gallery_image_name=gallery_image_name, shared_to=shared_to)
-    return get_page_result(generator, marker, show_next_marker)
-
-
 def gallery_application_version_create(client,
                                        resource_group_name,
                                        gallery_name,
@@ -5913,18 +5957,6 @@ def _transform_community_gallery_list_output(result):
         output.append(output_item)
 
     return output
-
-
-def sig_community_image_definition_list(client, location, public_gallery_name, marker=None, show_next_marker=None):
-    generator = client.list(location=location, public_gallery_name=public_gallery_name)
-    return get_page_result(generator, marker, show_next_marker)
-
-
-def sig_community_image_version_list(client, location, public_gallery_name, gallery_image_name, marker=None,
-                                     show_next_marker=None):
-    generator = client.list(location=location, public_gallery_name=public_gallery_name,
-                            gallery_image_name=gallery_image_name)
-    return get_page_result(generator, marker, show_next_marker)
 
 
 def list_vm_sizes(cmd, location):

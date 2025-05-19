@@ -114,13 +114,6 @@ def load_arguments(self, _):
         min_api='2020-12-01'
     )
 
-    t_shared_to = self.get_models('SharedToValues', operation_group='shared_galleries')
-    shared_to_type = CLIArgumentType(
-        arg_type=get_enum_type(t_shared_to),
-        help='The query parameter to decide what shared galleries to fetch when doing listing operations. '
-             'If not specified, list by subscription id.'
-    )
-
     marker_type = CLIArgumentType(
         help='A string value that identifies the portion of the list of containers to be '
              'returned with the next listing operation. The operation returns the NextMarker value within '
@@ -771,7 +764,8 @@ def load_arguments(self, _):
         c.argument('os_disk_delete_option', arg_type=get_enum_type(self.get_models('DiskDeleteOptionTypes')), min_api='2022-03-01', arg_group='Storage', help='Specify whether OS disk should be deleted or detached upon VMSS Flex deletion (This feature is only for VMSS with flexible orchestration mode).')
         c.argument('data_disk_delete_option', arg_type=get_enum_type(self.get_models('DiskDeleteOptionTypes')), min_api='2022-03-01', arg_group='Storage', help='Specify whether data disk should be deleted or detached upon VMSS Flex deletion (This feature is only for VMSS with flexible orchestration mode)')
         c.argument('skuprofile_vmsizes', nargs='+', min_api='2024-07-01', help='A list of VM sizes in the scale set. See https://azure.microsoft.com/pricing/details/virtual-machines/ for size info.')
-        c.argument('skuprofile_allostrat', options_list=['--skuprofile-allocation-strategy', '--sku-allocat-strat'], arg_type=get_enum_type(['LowestPrice', 'CapacityOptimized']), min_api='2024-07-01', help='Allocation strategy for vm sizes in SKU profile.')
+        c.argument('skuprofile_allostrat', options_list=['--skuprofile-allocation-strategy', '--sku-allocat-strat'], arg_type=get_enum_type(['LowestPrice', 'CapacityOptimized', 'Prioritized']), min_api='2024-07-01', help='Allocation strategy for vm sizes in SKU profile.')
+        c.argument('skuprofile_rank', nargs='+', min_api='2024-11-01', help='A list for ranks associated with the SKU profile vm sizes.')
 
     with self.argument_context('vmss create', arg_group='Network Balancer') as c:
         c.argument('application_gateway', help='Name to use when creating a new application gateway (default) or referencing an existing one. Can also reference an existing application gateway by ID or specify "" for none.', options_list=['--app-gateway'])
@@ -820,7 +814,8 @@ def load_arguments(self, _):
         c.argument('ephemeral_os_disk_option', options_list=['--ephemeral-os-disk-option', '--ephemeral-option'], arg_type=get_enum_type(self.get_models('DiffDiskOptions')), min_api='2024-03-01', help='Specify the ephemeral disk settings for operating system disk.')
         c.argument('zones', zones_type, min_api='2023-03-01')
         c.argument('skuprofile_vmsizes', nargs='+', min_api='2024-07-01', help='A list of VM sizes in the scale set. See https://azure.microsoft.com/pricing/details/virtual-machines/ for size info.')
-        c.argument('skuprofile_allostrat', options_list=['--skuprofile-allocation-strategy', '--sku-allocat-strat'], arg_type=get_enum_type(['LowestPrice', 'CapacityOptimized']), min_api='2024-07-01', help='Allocation strategy for vm sizes in SKU profile.')
+        c.argument('skuprofile_allostrat', options_list=['--skuprofile-allocation-strategy', '--sku-allocat-strat'], arg_type=get_enum_type(['LowestPrice', 'CapacityOptimized', 'Prioritized']), min_api='2024-07-01', help='Allocation strategy for vm sizes in SKU profile.')
+        c.argument('skuprofile_rank', nargs='+', min_api='2024-11-01', help='A list for ranks associated with the SKU profile vm sizes.')
 
     with self.argument_context('vmss update', min_api='2018-10-01', arg_group='Automatic Repairs') as c:
 
@@ -870,6 +865,9 @@ def load_arguments(self, _):
             c.argument('zone_balance', arg_type=get_three_state_flag(), min_api='2017-12-01', help='Whether to force strictly even Virtual Machine distribution cross x-zones in case there is zone outage.')
             c.argument('security_type', arg_type=get_enum_type(["TrustedLaunch", "Standard", "ConfidentialVM"], default=None),
                        help='Specify the security type of the virtual machine scale set. The value Standard can be used if subscription has feature flag UseStandardSecurityType registered under Microsoft.Compute namespace. Refer to https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/preview-features for steps to enable required feature.')
+            c.argument('enable_automatic_zone_balancing', arg_type=get_three_state_flag(), options_list=['--enable-automatic-zone-balancing', '--enable-zone-balancing'], min_api='2024-11-01', help='Specify whether automatic AZ balancing should be enabled on the virtualmachine scale set.')
+            c.argument('automatic_zone_balancing_strategy', arg_type=get_enum_type(self.get_models('RebalanceStrategy')), options_list=['--automatic-zone-balancing-strategy', '--balancing-strategy'], min_api='2024-11-01', help='Type of rebalance strategy that will be used for rebalancing virtualmachines in the scale set across availability zones.')
+            c.argument('automatic_zone_balancing_behavior', arg_type=get_enum_type(self.get_models('RebalanceBehavior')), options_list=['--automatic-zone-balancing-behavior', '--balancing-behavior'], min_api='2024-11-01', help='Type of rebalance behavior that will be used for recreating virtualmachines in the scale set across availability zones.')
 
     with self.argument_context('vmss update') as c:
         c.argument('instance_id', id_part='child_name_1', help="Update the VM instance with this ID. If missing, update the VMSS.")
@@ -1292,14 +1290,6 @@ def load_arguments(self, _):
         c.argument('features', help='A list of gallery image features. E.g. "IsSecureBootSupported=true IsMeasuredBootSupported=false"')
         c.argument('architecture', arg_type=get_enum_type(self.get_models('Architecture', operation_group='gallery_images')), min_api='2021-10-01', help='CPU architecture.')
 
-    with self.argument_context('sig image-definition list-shared') as c:
-        c.argument('location', arg_type=get_location_type(self.cli_ctx), id_part='name')
-        c.argument('gallery_unique_name', type=str, help='The unique name of the Shared Gallery.',
-                   id_part='child_name_1')
-        c.argument('shared_to', shared_to_type)
-        c.argument('marker', arg_type=marker_type)
-        c.argument('show_next_marker', action='store_true', help='Show nextMarker in result when specified.')
-
     with self.argument_context('sig image-definition create') as c:
         c.argument('description', help='the description of the gallery image definition')
     with self.argument_context('sig image-definition update') as c:
@@ -1341,17 +1331,6 @@ def load_arguments(self, _):
                    options_list=['--target-edge-zone-encryption', '--zone-encryption'],
                    help='Space-separated list of customer managed keys for encrypting the OS and data disks in the gallery artifact for each region. '
                         'Format for each edge zone: `<edge zone>,<os_des>,<lun1>,<lun1_des>,<lun2>,<lun2_des>`.')
-
-    with self.argument_context('sig image-version list-shared') as c:
-        c.argument('location', arg_type=get_location_type(self.cli_ctx), id_part='name')
-        c.argument('gallery_unique_name', type=str, help='The unique name of the Shared Gallery.',
-                   id_part='child_name_1')
-        c.argument('gallery_image_name', options_list=['--gallery-image-definition', '-i'], type=str, help='The name '
-                   'of the Shared Gallery Image Definition from which the Image Versions are to be listed.',
-                   id_part='child_name_2')
-        c.argument('shared_to', shared_to_type)
-        c.argument('marker', arg_type=marker_type)
-        c.argument('show_next_marker', action='store_true', help='Show nextMarker in result when specified.')
 
     with self.argument_context('sig image-version show') as c:
         c.argument('expand', help="The expand expression to apply on the operation, e.g. 'ReplicationStatus'")
@@ -1396,24 +1375,11 @@ def load_arguments(self, _):
         c.argument('public_gallery_name', public_gallery_name_type)
         c.argument('gallery_image_name', gallery_image_name_type)
 
-    with self.argument_context('sig image-definition list-community') as c:
-        c.argument('location', arg_type=get_location_type(self.cli_ctx), id_part='name')
-        c.argument('public_gallery_name', public_gallery_name_type)
-        c.argument('marker', arg_type=marker_type)
-        c.argument('show_next_marker', action='store_true', help='Show nextMarker in result when specified.')
-
     with self.argument_context('sig image-version show-community') as c:
         c.argument('location', arg_type=get_location_type(self.cli_ctx), id_part='name')
         c.argument('public_gallery_name', public_gallery_name_type)
         c.argument('gallery_image_name', gallery_image_name_type)
         c.argument('gallery_image_version_name', gallery_image_name_version_type)
-
-    with self.argument_context('sig image-version list-community') as c:
-        c.argument('location', arg_type=get_location_type(self.cli_ctx), id_part='name')
-        c.argument('public_gallery_name', public_gallery_name_type)
-        c.argument('gallery_image_name', gallery_image_name_type)
-        c.argument('marker', arg_type=marker_type)
-        c.argument('show_next_marker', action='store_true', help='Show nextMarker in result when specified.')
 
     # endregion
 
