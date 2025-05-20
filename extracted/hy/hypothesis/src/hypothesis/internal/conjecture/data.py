@@ -137,7 +137,7 @@ def structural_coverage(label: int) -> StructuralCoverageTag:
 
 # This cache can be quite hot and so we prefer LRUCache over LRUReusedCache for
 # performance. We lose scan resistance, but that's probably fine here.
-POOLED_CONSTRAINTS_CACHE = LRUCache(4096)
+POOLED_CONSTRAINTS_CACHE: LRUCache[tuple[Any, ...], ChoiceConstraintsT] = LRUCache(4096)
 
 
 class Span:
@@ -976,17 +976,10 @@ class ConjectureData:
             if node.type == "simplest":
                 if forced is not None:
                     choice = forced
-                elif isinstance(self.provider, HypothesisProvider):
-                    try:
-                        choice = choice_from_index(0, choice_type, constraints)
-                    except ChoiceTooLarge:
-                        self.mark_overrun()
-                else:
-                    # give alternative backends control over ChoiceTemplate draws
-                    # as well
-                    choice = getattr(self.provider, f"draw_{choice_type}")(
-                        **constraints
-                    )
+                try:
+                    choice = choice_from_index(0, choice_type, constraints)
+                except ChoiceTooLarge:
+                    self.mark_overrun()
             else:
                 raise NotImplementedError
 

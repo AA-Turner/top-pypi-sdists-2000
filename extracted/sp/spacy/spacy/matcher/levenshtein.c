@@ -9,7 +9,7 @@
         ],
         "include_dirs": [
             "spacy/matcher",
-            "/tmp/build-env-i98nj39d/lib/python3.12/site-packages/numpy/_core/include",
+            "/tmp/build-env-77dcigw7/lib/python3.12/site-packages/numpy/_core/include",
             "/usr/include/python3.12"
         ],
         "language": "c",

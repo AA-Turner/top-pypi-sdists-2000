@@ -31,6 +31,17 @@ def sigmoid(x):
     return np.array(1.0, x.dtype) / (np.array(1.0, x.dtype) + np.exp(-x))
 
 
+def sparse_sigmoid(x):
+    x = convert_to_tensor(x)
+    return np.where(
+        x <= -1,
+        np.array(0.0, x.dtype),
+        np.where(
+            x >= 1, np.array(1.0, x.dtype), np.array(0.5 * (x + 1), x.dtype)
+        ),
+    )
+
+
 def tanh(x):
     return np.tanh(x)
 
@@ -1133,6 +1144,7 @@ def dot_product_attention(
     scale=None,
     is_causal=False,
     flash_attention=None,
+    attn_logits_soft_cap=None,
 ):
     if flash_attention is None:
         flash_attention = False

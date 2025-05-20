@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: spacy
-Version: 3.8.5
+Version: 3.8.6
 Summary: Industrial-strength Natural Language Processing (NLP) in Python
 Home-page: https://spacy.io
 Author: Explosion
@@ -219,7 +219,7 @@ For detailed installation instructions, see the
 
 - **Operating system**: macOS / OS X · Linux · Windows (Cygwin, MinGW, Visual
   Studio)
-- **Python version**: Python 3.7+ (only 64 bit)
+- **Python version**: Python >=3.7, <3.13 (only 64 bit)
 - **Package managers**: [pip] · [conda] (via `conda-forge`)
 
 [pip]: https://pypi.org/project/spacy/

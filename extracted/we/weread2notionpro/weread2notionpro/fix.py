@@ -166,7 +166,6 @@ def main():
         if ((key in notion_books) and (value.get("status") == notion_books.get(key).get("status"))):
             not_need_sync.append(key)
     books = [item for item in books if item.get("bookId") not in not_need_sync]
-    print(len(books))
     for index, book in enumerate(books):
         insert_book_to_notion(books, index, book.get("bookId"), book.get("status"))
 

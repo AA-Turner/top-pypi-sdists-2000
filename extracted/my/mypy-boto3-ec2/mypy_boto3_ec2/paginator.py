@@ -70,6 +70,7 @@ Usage::
         DescribeLocalGatewayVirtualInterfacesPaginator,
         DescribeLocalGatewaysPaginator,
         DescribeMacHostsPaginator,
+        DescribeMacModificationTasksPaginator,
         DescribeManagedPrefixListsPaginator,
         DescribeMovingAddressesPaginator,
         DescribeNatGatewaysPaginator,
@@ -225,6 +226,7 @@ Usage::
     describe_local_gateway_virtual_interfaces_paginator: DescribeLocalGatewayVirtualInterfacesPaginator = client.get_paginator("describe_local_gateway_virtual_interfaces")
     describe_local_gateways_paginator: DescribeLocalGatewaysPaginator = client.get_paginator("describe_local_gateways")
     describe_mac_hosts_paginator: DescribeMacHostsPaginator = client.get_paginator("describe_mac_hosts")
+    describe_mac_modification_tasks_paginator: DescribeMacModificationTasksPaginator = client.get_paginator("describe_mac_modification_tasks")
     describe_managed_prefix_lists_paginator: DescribeManagedPrefixListsPaginator = client.get_paginator("describe_managed_prefix_lists")
     describe_moving_addresses_paginator: DescribeMovingAddressesPaginator = client.get_paginator("describe_moving_addresses")
     describe_nat_gateways_paginator: DescribeNatGatewaysPaginator = client.get_paginator("describe_nat_gateways")
@@ -444,6 +446,8 @@ from .type_defs import (
     DescribeLocalGatewayVirtualInterfacesResultTypeDef,
     DescribeMacHostsRequestPaginateTypeDef,
     DescribeMacHostsResultTypeDef,
+    DescribeMacModificationTasksRequestPaginateTypeDef,
+    DescribeMacModificationTasksResultTypeDef,
     DescribeManagedPrefixListsRequestPaginateTypeDef,
     DescribeManagedPrefixListsResultTypeDef,
     DescribeMovingAddressesRequestPaginateTypeDef,
@@ -695,6 +699,7 @@ __all__ = (
     "DescribeLocalGatewayVirtualInterfacesPaginator",
     "DescribeLocalGatewaysPaginator",
     "DescribeMacHostsPaginator",
+    "DescribeMacModificationTasksPaginator",
     "DescribeManagedPrefixListsPaginator",
     "DescribeMovingAddressesPaginator",
     "DescribeNatGatewaysPaginator",
@@ -2089,6 +2094,29 @@ class DescribeMacHostsPaginator(_DescribeMacHostsPaginatorBase):
         """
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeMacHosts.html#EC2.Paginator.DescribeMacHosts.paginate)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describemachostspaginator)
+        """
+
+
+if TYPE_CHECKING:
+    _DescribeMacModificationTasksPaginatorBase = Paginator[
+        DescribeMacModificationTasksResultTypeDef
+    ]
+else:
+    _DescribeMacModificationTasksPaginatorBase = Paginator  # type: ignore[assignment]
+
+
+class DescribeMacModificationTasksPaginator(_DescribeMacModificationTasksPaginatorBase):
+    """
+    [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeMacModificationTasks.html#EC2.Paginator.DescribeMacModificationTasks)
+    [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describemacmodificationtaskspaginator)
+    """
+
+    def paginate(  # type: ignore[override]
+        self, **kwargs: Unpack[DescribeMacModificationTasksRequestPaginateTypeDef]
+    ) -> PageIterator[DescribeMacModificationTasksResultTypeDef]:
+        """
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeMacModificationTasks.html#EC2.Paginator.DescribeMacModificationTasks.paginate)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describemacmodificationtaskspaginator)
         """
 
 

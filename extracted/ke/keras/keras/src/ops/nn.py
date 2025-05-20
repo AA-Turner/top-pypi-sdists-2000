@@ -110,6 +110,42 @@ def sigmoid(x):
     return backend.nn.sigmoid(x)
 
 
+class SparseSigmoid(Operation):
+    def call(self, x):
+        return backend.nn.sparse_sigmoid(x)
+
+    def compute_output_spec(self, x):
+        return KerasTensor(x.shape, dtype=x.dtype)
+
+
+@keras_export(["keras.ops.sparse_sigmoid", "keras.ops.nn.sparse_sigmoid"])
+def sparse_sigmoid(x):
+    """Sparse sigmoid activation function.
+
+    It is defined as
+
+    `f(x) = 0` for `x <= -1`,
+    `f(x) = 0.5 * (x + 1)` for `-1 < x < 1`,
+    `f(x) = 1` for `x >= 1`.
+
+    Args:
+        x: Input tensor.
+
+    Returns:
+        A tensor with the same shape as `x`.
+
+    Example:
+
+    >>> x = keras.ops.convert_to_tensor([-6.0, 1.0, 0.0, 1.0, 6.0])
+    >>> keras.ops.sparse_sigmoid(x)
+    array([0. , 1. , 0.5, 1. , 1. ], dtype=float32)
+
+    """
+    if any_symbolic_tensors((x,)):
+        return SparseSigmoid().symbolic_call(x)
+    return backend.nn.sparse_sigmoid(x)
+
+
 class Softplus(Operation):
     def call(self, x):
         return backend.nn.softplus(x)
@@ -2545,6 +2581,7 @@ class DotProductAttention(Operation):
         mask=None,
         scale=None,
         flash_attention=None,
+        attn_logits_soft_cap=None,
     ):
         return backend.nn.dot_product_attention(
             query,
@@ -2555,6 +2592,7 @@ class DotProductAttention(Operation):
             scale=scale,
             is_causal=self.is_causal,
             flash_attention=flash_attention,
+            attn_logits_soft_cap=attn_logits_soft_cap,
         )
 
     def compute_output_spec(
@@ -2566,6 +2604,7 @@ class DotProductAttention(Operation):
         mask=None,
         scale=None,
         flash_attention=None,
+        attn_logits_soft_cap=None,
     ):
         return KerasTensor(query.shape, dtype=query.dtype)
 
@@ -2582,6 +2621,7 @@ def dot_product_attention(
     scale=None,
     is_causal=False,
     flash_attention=None,
+    attn_logits_soft_cap=None,
 ):
     """Scaled dot product attention function.
 
@@ -2620,6 +2660,9 @@ def dot_product_attention(
             attempt to use flash attention if the required conditions are met.
             Typically, the inputs must be in float16 and bfloat16 dtype and the
             input layout requirements may vary depending on the backend.
+        attn_logits_soft_cap: The value limit for maximum value of the
+            attention logits before the softmax function is applied. This is
+            only supported in JAX TPU backend. Defaults to None.
 
     Returns:
         An array of the attention output with the same shape of `query`.
@@ -2632,6 +2675,21 @@ def dot_product_attention(
     >>> keras.ops.nn.dot_product_attention(query, key, value).shape
     (2, 4, 8, 16)
     """
+    if attn_logits_soft_cap is not None:
+        if backend.backend() == "jax":
+            import jax
+
+            if jax.devices()[0].platform != "tpu":
+                raise ValueError(
+                    "attn_logits_soft_cap is only supported for JAX on TPU. "
+                    "Set attn_logits_soft_cap=None when not using JAX on TPU."
+                )
+        else:
+            raise ValueError(
+                "attn_logits_soft_cap is only supported for JAX on TPU. "
+                "Set attn_logits_soft_cap=None when not using JAX on TPU."
+            )
+
     if any_symbolic_tensors((query, key, value)):
         return DotProductAttention(is_causal=is_causal).symbolic_call(
             query,
@@ -2641,6 +2699,7 @@ def dot_product_attention(
             mask=mask,
             scale=scale,
             flash_attention=flash_attention,
+            attn_logits_soft_cap=attn_logits_soft_cap,
         )
     return backend.nn.dot_product_attention(
         query,
@@ -2651,6 +2710,7 @@ def dot_product_attention(
         scale=scale,
         is_causal=is_causal,
         flash_attention=flash_attention,
+        attn_logits_soft_cap=attn_logits_soft_cap,
     )
 
 

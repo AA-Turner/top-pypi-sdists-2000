@@ -84,6 +84,7 @@ from .paginator import (
     DescribeLocalGatewayVirtualInterfaceGroupsPaginator,
     DescribeLocalGatewayVirtualInterfacesPaginator,
     DescribeMacHostsPaginator,
+    DescribeMacModificationTasksPaginator,
     DescribeManagedPrefixListsPaginator,
     DescribeMovingAddressesPaginator,
     DescribeNatGatewaysPaginator,
@@ -317,6 +318,8 @@ from .type_defs import (
     CreateDefaultSubnetResultTypeDef,
     CreateDefaultVpcRequestTypeDef,
     CreateDefaultVpcResultTypeDef,
+    CreateDelegateMacVolumeOwnershipTaskRequestTypeDef,
+    CreateDelegateMacVolumeOwnershipTaskResultTypeDef,
     CreateDhcpOptionsRequestTypeDef,
     CreateDhcpOptionsResultTypeDef,
     CreateEgressOnlyInternetGatewayRequestTypeDef,
@@ -364,6 +367,8 @@ from .type_defs import (
     CreateLocalGatewayVirtualInterfaceGroupResultTypeDef,
     CreateLocalGatewayVirtualInterfaceRequestTypeDef,
     CreateLocalGatewayVirtualInterfaceResultTypeDef,
+    CreateMacSystemIntegrityProtectionModificationTaskRequestTypeDef,
+    CreateMacSystemIntegrityProtectionModificationTaskResultTypeDef,
     CreateManagedPrefixListRequestTypeDef,
     CreateManagedPrefixListResultTypeDef,
     CreateNatGatewayRequestTypeDef,
@@ -784,6 +789,8 @@ from .type_defs import (
     DescribeLockedSnapshotsResultTypeDef,
     DescribeMacHostsRequestTypeDef,
     DescribeMacHostsResultTypeDef,
+    DescribeMacModificationTasksRequestTypeDef,
+    DescribeMacModificationTasksResultTypeDef,
     DescribeManagedPrefixListsRequestTypeDef,
     DescribeManagedPrefixListsResultTypeDef,
     DescribeMovingAddressesRequestTypeDef,
@@ -2313,6 +2320,17 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_default_vpc)
         """
 
+    def create_delegate_mac_volume_ownership_task(
+        self, **kwargs: Unpack[CreateDelegateMacVolumeOwnershipTaskRequestTypeDef]
+    ) -> CreateDelegateMacVolumeOwnershipTaskResultTypeDef:
+        """
+        Delegates ownership of the Amazon EBS root volume for an Apple silicon Mac
+        instance to an administrative user.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_delegate_mac_volume_ownership_task.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_delegate_mac_volume_ownership_task)
+        """
+
     def create_dhcp_options(
         self, **kwargs: Unpack[CreateDhcpOptionsRequestTypeDef]
     ) -> CreateDhcpOptionsResultTypeDef:
@@ -2551,6 +2569,17 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_local_gateway_virtual_interface_group.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_local_gateway_virtual_interface_group)
+        """
+
+    def create_mac_system_integrity_protection_modification_task(
+        self, **kwargs: Unpack[CreateMacSystemIntegrityProtectionModificationTaskRequestTypeDef]
+    ) -> CreateMacSystemIntegrityProtectionModificationTaskResultTypeDef:
+        """
+        Creates a System Integrity Protection (SIP) modification task to configure the
+        SIP settings for an x86 Mac instance or Apple silicon Mac instance.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_mac_system_integrity_protection_modification_task.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_mac_system_integrity_protection_modification_task)
         """
 
     def create_managed_prefix_list(
@@ -4841,6 +4870,17 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_mac_hosts.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_mac_hosts)
+        """
+
+    def describe_mac_modification_tasks(
+        self, **kwargs: Unpack[DescribeMacModificationTasksRequestTypeDef]
+    ) -> DescribeMacModificationTasksResultTypeDef:
+        """
+        Describes a System Integrity Protection (SIP) modification task or volume
+        ownership delegation task for an Amazon EC2 Mac instance.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_mac_modification_tasks.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_mac_modification_tasks)
         """
 
     def describe_managed_prefix_lists(
@@ -9209,6 +9249,17 @@ class EC2Client(BaseClient):
     def get_paginator(  # type: ignore[override]
         self, operation_name: Literal["describe_mac_hosts"]
     ) -> DescribeMacHostsPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["describe_mac_modification_tasks"]
+    ) -> DescribeMacModificationTasksPaginator:
         """
         Create a paginator for an operation.
 

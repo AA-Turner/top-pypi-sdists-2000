@@ -162,6 +162,7 @@ __all__ = (
     "DescribeLocalGatewayVirtualInterfacesPaginatorName",
     "DescribeLocalGatewaysPaginatorName",
     "DescribeMacHostsPaginatorName",
+    "DescribeMacModificationTasksPaginatorName",
     "DescribeManagedPrefixListsPaginatorName",
     "DescribeMovingAddressesPaginatorName",
     "DescribeNatGatewaysPaginatorName",
@@ -400,6 +401,9 @@ __all__ = (
     "LockModeType",
     "LockStateType",
     "LogDestinationTypeType",
+    "MacModificationTaskStateType",
+    "MacModificationTaskTypeType",
+    "MacSystemIntegrityProtectionSettingStatusType",
     "ManagedByType",
     "MarketTypeType",
     "MembershipTypeType",
@@ -878,6 +882,7 @@ DescribeLocalGatewayVirtualInterfacesPaginatorName = Literal[
 ]
 DescribeLocalGatewaysPaginatorName = Literal["describe_local_gateways"]
 DescribeMacHostsPaginatorName = Literal["describe_mac_hosts"]
+DescribeMacModificationTasksPaginatorName = Literal["describe_mac_modification_tasks"]
 DescribeManagedPrefixListsPaginatorName = Literal["describe_managed_prefix_lists"]
 DescribeMovingAddressesPaginatorName = Literal["describe_moving_addresses"]
 DescribeNatGatewaysPaginatorName = Literal["describe_nat_gateways"]
@@ -2226,6 +2231,9 @@ LocationTypeType = Literal["availability-zone", "availability-zone-id", "outpost
 LockModeType = Literal["compliance", "governance"]
 LockStateType = Literal["compliance", "compliance-cooloff", "expired", "governance"]
 LogDestinationTypeType = Literal["cloud-watch-logs", "kinesis-data-firehose", "s3"]
+MacModificationTaskStateType = Literal["failed", "in-progress", "pending", "successful"]
+MacModificationTaskTypeType = Literal["sip-modification", "volume-ownership-delegation"]
+MacSystemIntegrityProtectionSettingStatusType = Literal["disabled", "enabled"]
 ManagedByType = Literal["account", "declarative-policy"]
 MarketTypeType = Literal["capacity-block", "spot"]
 MembershipTypeType = Literal["igmp", "static"]
@@ -2380,6 +2388,7 @@ ResourceTypeType = Literal[
     "local-gateway-route-table-vpc-association",
     "local-gateway-virtual-interface",
     "local-gateway-virtual-interface-group",
+    "mac-modification-task",
     "natgateway",
     "network-acl",
     "network-insights-access-scope",
@@ -3173,6 +3182,7 @@ PaginatorName = Literal[
     "describe_local_gateway_virtual_interfaces",
     "describe_local_gateways",
     "describe_mac_hosts",
+    "describe_mac_modification_tasks",
     "describe_managed_prefix_lists",
     "describe_moving_addresses",
     "describe_nat_gateways",

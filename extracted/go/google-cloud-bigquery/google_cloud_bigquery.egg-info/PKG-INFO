@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: google-cloud-bigquery
-Version: 3.32.0
+Version: 3.33.0
 Summary: Google BigQuery API client library
 Author-email: Google LLC <googleapis-packages@google.com>
 License: Apache 2.0
@@ -48,8 +48,11 @@ Requires-Dist: Shapely<3.0.0,>=1.8.4; extra == "geopandas"
 Provides-Extra: ipython
 Requires-Dist: ipython>=7.23.1; extra == "ipython"
 Requires-Dist: bigquery-magics>=0.6.0; extra == "ipython"
+Provides-Extra: matplotlib
+Requires-Dist: matplotlib<=3.9.2,>=3.7.1; python_version == "3.9" and extra == "matplotlib"
+Requires-Dist: matplotlib>=3.10.3; python_version >= "3.10" and extra == "matplotlib"
 Provides-Extra: tqdm
-Requires-Dist: tqdm<5.0.0,>=4.7.4; extra == "tqdm"
+Requires-Dist: tqdm<5.0.0,>=4.23.4; extra == "tqdm"
 Provides-Extra: opentelemetry
 Requires-Dist: opentelemetry-api>=1.1.0; extra == "opentelemetry"
 Requires-Dist: opentelemetry-sdk>=1.1.0; extra == "opentelemetry"
@@ -58,7 +61,7 @@ Provides-Extra: bigquery-v2
 Requires-Dist: proto-plus<2.0.0,>=1.22.3; extra == "bigquery-v2"
 Requires-Dist: protobuf!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<7.0.0,>=3.20.2; extra == "bigquery-v2"
 Provides-Extra: all
-Requires-Dist: google-cloud-bigquery[bigquery_v2,bqstorage,geopandas,ipython,ipywidgets,opentelemetry,pandas,tqdm]; extra == "all"
+Requires-Dist: google-cloud-bigquery[bigquery_v2,bqstorage,geopandas,ipython,ipywidgets,matplotlib,opentelemetry,pandas,tqdm]; extra == "all"
 
 Python Client for Google BigQuery
 =================================

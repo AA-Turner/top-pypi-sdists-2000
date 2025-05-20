@@ -1746,12 +1746,6 @@ class NodejsFunction(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
-    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
-        '''Uniquely identifies this class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
-
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_lambda_nodejs.NodejsFunctionProps",

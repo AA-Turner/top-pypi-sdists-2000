@@ -1,5 +1,6 @@
 import collections
 import itertools
+import warnings
 from functools import partial
 
 import jax
@@ -9,6 +10,7 @@ from keras.src import backend
 from keras.src import callbacks as callbacks_module
 from keras.src import optimizers as optimizers_module
 from keras.src import tree
+from keras.src.backend import config
 from keras.src.backend import distribution_lib as jax_distribution_lib
 from keras.src.distribution import distribution_lib
 from keras.src.trainers import trainer as base_trainer
@@ -341,6 +343,11 @@ class JAXTrainer(base_trainer.Trainer):
         validation_freq=1,
     ):
         self._assert_compile_called("fit")
+        # Possibly cap epochs for debugging runs.
+        max_epochs = config.max_epochs()
+        if max_epochs and max_epochs < epochs:
+            warnings.warn("Limiting epochs to %d" % max_epochs)
+            epochs = max_epochs
         # TODO: respect compiled trainable state
         self._eval_epoch_iterator = None
         if validation_split and validation_data is None:
@@ -391,113 +398,118 @@ class JAXTrainer(base_trainer.Trainer):
         self.make_train_function()
         self.stop_training = False
         training_logs = {}
+        training_finished = False
         callbacks.on_train_begin()
         initial_epoch = self._initial_epoch or initial_epoch
-        for epoch in range(initial_epoch, epochs):
-            self.reset_metrics()
-            callbacks.on_epoch_begin(epoch)
+        try:
+            for epoch in range(initial_epoch, epochs):
+                self.reset_metrics()
+                callbacks.on_epoch_begin(epoch)
 
-            self._jax_state_synced = True
-            with epoch_iterator.catch_stop_iteration():
-                for step, iterator in epoch_iterator:
-                    # Callbacks
-                    callbacks.on_train_batch_begin(step)
+                self._jax_state_synced = True
+                with epoch_iterator.catch_stop_iteration():
+                    for step, iterator in epoch_iterator:
+                        # Callbacks
+                        callbacks.on_train_batch_begin(step)
 
-                    # Train step
-                    if self._jax_state_synced:
-                        # The state may have been synced by a callback.
-                        state = self._get_jax_state(
-                            trainable_variables=True,
-                            non_trainable_variables=True,
-                            optimizer_variables=True,
-                            metrics_variables=True,
-                            purge_model_variables=True,
-                        )
-                        self._jax_state_synced = False
+                        # Train step
+                        if self._jax_state_synced:
+                            # The state may have been synced by a callback.
+                            state = self._get_jax_state(
+                                trainable_variables=True,
+                                non_trainable_variables=True,
+                                optimizer_variables=True,
+                                metrics_variables=True,
+                                purge_model_variables=True,
+                            )
+                            self._jax_state_synced = False
 
-                    logs, state = self.train_function(state, iterator)
-                    (
-                        trainable_variables,
-                        non_trainable_variables,
-                        optimizer_variables,
-                        metrics_variables,
-                    ) = state
+                        logs, state = self.train_function(state, iterator)
+                        (
+                            trainable_variables,
+                            non_trainable_variables,
+                            optimizer_variables,
+                            metrics_variables,
+                        ) = state
 
-                    # Setting _jax_state enables callbacks to force a state sync
-                    # if they need to.
-                    self._jax_state = {
-                        "trainable_variables": trainable_variables,
-                        "non_trainable_variables": non_trainable_variables,
-                        "optimizer_variables": optimizer_variables,
-                        "metrics_variables": metrics_variables,
-                    }
-                    # Dispatch callbacks. This takes care of async dispatch.
-                    callbacks.on_train_batch_end(step, logs)
+                        # Setting _jax_state enables callbacks to force a state
+                        # sync if they need to.
+                        self._jax_state = {
+                            "trainable_variables": trainable_variables,
+                            "non_trainable_variables": non_trainable_variables,
+                            "optimizer_variables": optimizer_variables,
+                            "metrics_variables": metrics_variables,
+                        }
+                        # Dispatch callbacks. This takes care of async dispatch.
+                        callbacks.on_train_batch_end(step, logs)
 
-                    if self.stop_training:
-                        # Stop training if a callback has set
-                        # this flag in on_(train_)batch_end.
-                        break
+                        if self.stop_training:
+                            # Stop training if a callback has set
+                            # this flag in on_(train_)batch_end.
+                            break
 
-            # Reattach state to the model (if not already done by a callback).
-            # NOTE: doing this after each step would be a big performance
-            # bottleneck.
-            self.jax_state_sync()
+                # Reattach state to the model
+                # (if not already done by a callback).
+                # NOTE: doing this after each step would be a big performance
+                # bottleneck.
+                self.jax_state_sync()
 
-            # Override with model metrics instead of last step logs if needed.
-            # The jax spmd_mode is need for multi-process context, since the
-            # metrics values are replicated, and we don't want to do a all
-            # gather, and only need the local copy of the value.
-            with jax.spmd_mode("allow_all"):
+                # Override with model metrics instead of last step logs if
+                # needed.
                 epoch_logs = dict(self._get_metrics_result_or_logs(logs))
 
-            # Run validation.
-            if validation_data is not None and self._should_eval(
-                epoch, validation_freq
-            ):
-                # Create JAXEpochIterator for evaluation and cache it.
-                if getattr(self, "_eval_epoch_iterator", None) is None:
-                    self._eval_epoch_iterator = JAXEpochIterator(
+                # Run validation.
+                if validation_data is not None and self._should_eval(
+                    epoch, validation_freq
+                ):
+                    # Create JAXEpochIterator for evaluation and cache it.
+                    if getattr(self, "_eval_epoch_iterator", None) is None:
+                        self._eval_epoch_iterator = JAXEpochIterator(
+                            x=val_x,
+                            y=val_y,
+                            sample_weight=val_sample_weight,
+                            batch_size=validation_batch_size or batch_size,
+                            steps_per_execution=self.steps_per_execution,
+                            steps_per_epoch=validation_steps,
+                            shuffle=False,
+                        )
+                    val_logs = self.evaluate(
                         x=val_x,
                         y=val_y,
                         sample_weight=val_sample_weight,
                         batch_size=validation_batch_size or batch_size,
-                        steps_per_execution=self.steps_per_execution,
-                        steps_per_epoch=validation_steps,
-                        shuffle=False,
+                        steps=validation_steps,
+                        callbacks=callbacks,
+                        return_dict=True,
+                        _use_cached_eval_dataset=True,
                     )
-                val_logs = self.evaluate(
-                    x=val_x,
-                    y=val_y,
-                    sample_weight=val_sample_weight,
-                    batch_size=validation_batch_size or batch_size,
-                    steps=validation_steps,
-                    callbacks=callbacks,
-                    return_dict=True,
-                    _use_cached_eval_dataset=True,
-                )
-                val_logs = {
-                    "val_" + name: val for name, val in val_logs.items()
-                }
-                epoch_logs.update(val_logs)
+                    val_logs = {
+                        "val_" + name: val for name, val in val_logs.items()
+                    }
+                    epoch_logs.update(val_logs)
 
-            callbacks.on_epoch_end(epoch, epoch_logs)
-            training_logs = epoch_logs
-            if self.stop_training:
-                break
+                callbacks.on_epoch_end(epoch, epoch_logs)
+                training_logs = epoch_logs
+                if self.stop_training:
+                    break
+            training_finished = True
 
-        if (
-            isinstance(self.optimizer, optimizers_module.Optimizer)
-            and epochs > 0
-        ):
-            self.optimizer.finalize_variable_values(self.trainable_weights)
+        finally:
+            self.jax_state_sync()
+            if (
+                isinstance(self.optimizer, optimizers_module.Optimizer)
+                and epochs > 0
+            ):
+                self.optimizer.finalize_variable_values(self.trainable_weights)
 
-        # If _eval_epoch_iterator exists, delete it after all epochs are done.
-        if getattr(self, "_eval_epoch_iterator", None) is not None:
-            del self._eval_epoch_iterator
-        callbacks.on_train_end(logs=training_logs)
-        self._jax_state = None
-        self._clear_jax_state_sharding()
+            # If _eval_epoch_iterator exists, delete it after all epochs
+            # are done.
+            if getattr(self, "_eval_epoch_iterator", None) is not None:
+                del self._eval_epoch_iterator
+            if training_finished:
+                callbacks.on_train_end(logs=training_logs)
+            self._jax_state = None
+            self._clear_jax_state_sharding()
         return self.history
 
     @traceback_utils.filter_traceback
@@ -522,7 +534,8 @@ class JAXTrainer(base_trainer.Trainer):
         if use_cached_eval_dataset:
             epoch_iterator = self._eval_epoch_iterator
         else:
-            # Create an iterator that yields batches of input/target data.
+            # Create an iterator that yields batches of
+            # input/target data.
             epoch_iterator = JAXEpochIterator(
                 x=x,
                 y=y,
@@ -595,11 +608,7 @@ class JAXTrainer(base_trainer.Trainer):
         # Reattach state back to model (if not already done by a callback).
         self.jax_state_sync()
 
-        # The jax spmd_mode is need for multi-process context, since the
-        # metrics values are replicated, and we don't want to do a all
-        # gather, and only need the local copy of the value.
-        with jax.spmd_mode("allow_all"):
-            logs = self._get_metrics_result_or_logs(logs)
+        logs = self._get_metrics_result_or_logs(logs)
         callbacks.on_test_end(logs)
         self._jax_state = None
         if not use_cached_eval_dataset:
@@ -1026,9 +1035,9 @@ class JAXEpochIterator(EpochIterator):
         for data in self.data_adapter.get_jax_iterator():
             if layouts is None:
                 layouts = tree.map_structure(
-                    lambda d: jax_distribution_lib._to_jax_layout(
-                        distribution.get_data_layout(d.shape)
-                    ),
+                    lambda d: distribution.get_data_layout(
+                        d.shape
+                    ).backend_layout,
                     data,
                 )
             yield _distribute_data(data, layouts)

@@ -701,6 +701,7 @@ class Dnf5Module(YumDnf):
             if self.security:
                 types.append("security")
             advisory_query.filter_type(types)
+            conf.skip_unavailable = True  # ignore packages that are of a different type, for backwards compat
             settings.set_advisory_filter(advisory_query)
 
         goal = libdnf5.base.Goal(base)
@@ -776,7 +777,7 @@ class Dnf5Module(YumDnf):
         if self.module.check_mode:
             if results:
                 msg = "Check mode: No changes made, but would have if not in check mode"
-        else:
+        elif changed:
             transaction.download()
             if not self.download_only:
                 transaction.set_description("ansible dnf5 module")

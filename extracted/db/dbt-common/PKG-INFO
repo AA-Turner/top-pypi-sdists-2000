@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dbt-common
-Version: 1.24.0
+Version: 2.0.0
 Summary: The shared common utilities that dbt-core and adapter implementations use
 Project-URL: Homepage, https://github.com/dbt-labs/dbt-common
 Project-URL: Repository, https://github.com/dbt-labs/dbt-common.git
@@ -26,6 +26,7 @@ Classifier: Programming Language :: Python :: Implementation :: PyPy
 Requires-Python: >=3.9
 Requires-Dist: agate<1.10,>=1.7.0
 Requires-Dist: colorama<0.5,>=0.3.9
+Requires-Dist: dbt-protos<2.0.0,>=1.0.291
 Requires-Dist: deepdiff<8.0,>=7.0
 Requires-Dist: isodate<0.7,>=0.6
 Requires-Dist: jinja2<4,>=3.1.3

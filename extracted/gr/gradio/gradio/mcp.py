@@ -44,6 +44,7 @@ class GradioMCPServer:
         self.root_url = None
         tool_prefix = utils.get_space()
         if tool_prefix:
+            tool_prefix = tool_prefix.split("/")[-1]
             self.tool_prefix = re.sub(r"[^a-zA-Z0-9]", "_", tool_prefix)
         else:
             self.tool_prefix = ""
@@ -58,7 +59,7 @@ class GradioMCPServer:
         Returns:
             The MCP server.
         """
-        server = Server(self.blocks.title or "Gradio App")
+        server = Server(str(self.blocks.title or "Gradio App"))
 
         @server.call_tool()
         async def call_tool(

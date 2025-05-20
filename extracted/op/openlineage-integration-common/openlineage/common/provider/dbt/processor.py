@@ -280,18 +280,18 @@ class DbtArtifactProcessor:
             run_id = str(generate_new_uuid())
             if name.startswith("snapshot."):
                 jobType = "SNAPSHOT"
-                job_name = (
-                    f"{output_node['database']}.{output_node['schema']}"
-                    f".{self.removeprefix(run['unique_id'], 'snapshot.')}"
-                    + (".build.snapshot" if self.command == "build" else ".snapshot")
-                )
+                job_name = self._format_dataset_name(
+                    output_node["database"],
+                    output_node["schema"],
+                    self.removeprefix(run["unique_id"], "snapshot."),
+                ) + (".build.snapshot" if self.command == "build" else ".snapshot")
             else:
                 jobType = "MODEL"
-                job_name = (
-                    f"{output_node['database']}.{output_node['schema']}"
-                    f".{self.removeprefix(run['unique_id'], 'model.')}"
-                    + (".build.run" if self.command == "build" else "")
-                )
+                job_name = self._format_dataset_name(
+                    output_node["database"],
+                    output_node["schema"],
+                    self.removeprefix(run["unique_id"], "model."),
+                ) + (".build.run" if self.command == "build" else "")
 
             if self.manifest_version >= 7:  # type: ignore
                 sql = output_node.get("compiled_code", None)
@@ -359,11 +359,11 @@ class DbtArtifactProcessor:
                 ModelNode(node), assertion_facet, has_facets=False
             )
 
-            job_name = (
-                f"{node['database']}.{node['schema']}."
-                f"{self.removeprefix(node['unique_id'], 'model.')}"
-                + (".build.test" if self.command == "build" else ".test")
-            )
+            job_name = self._format_dataset_name(
+                node["database"],
+                node["schema"],
+                self.removeprefix(node["unique_id"], "model."),
+            ) + (".build.test" if self.command == "build" else ".test")
 
             job_facets: Dict[str, JobFacet] = {
                 "jobType": job_type_job.JobTypeJobFacet(
@@ -533,6 +533,9 @@ class DbtArtifactProcessor:
                 )
         return OutputDataset(name=name, namespace=namespace, facets=facets, outputFacets=output_facets)
 
+    def _format_dataset_name(self, database: Optional[str], schema: Optional[str], table: str) -> str:
+        return ".".join(list(filter(None, [database, schema, table])))
+
     def extract_dataset_data(
         self,
         node: ModelNode,
@@ -546,29 +549,35 @@ class DbtArtifactProcessor:
                 "dataSource": datasource_dataset.DatasourceDatasetFacet(
                     name=self.dataset_namespace, uri=self.dataset_namespace
                 ),
-                "schema": schema_dataset.SchemaDatasetFacet(
-                    fields=self.extract_metadata_fields(node.metadata_node["columns"].values())
-                ),
-                "documentation": documentation_dataset.DocumentationDatasetFacet(
-                    description=node.metadata_node["description"]
-                ),
             }
+
+            documentation = node.metadata_node["description"]
+            if documentation:
+                facets["documentation"] = documentation_dataset.DocumentationDatasetFacet(
+                    description=documentation
+                )
+
             if assertions:
                 input_facets["dataQualityAssertions"] = assertions
+
             if node.catalog_node:
-                facets["schema"] = schema_dataset.SchemaDatasetFacet(
-                    fields=self.extract_catalog_fields(
-                        node.catalog_node["columns"].values(),
-                        node.metadata_node["columns"],
-                    )
+                fields = self.extract_catalog_fields(
+                    node.catalog_node["columns"].values(),
+                    node.metadata_node["columns"],
                 )
+            else:
+                fields = self.extract_metadata_fields(node.metadata_node["columns"].values())
+            if fields:
+                facets["schema"] = schema_dataset.SchemaDatasetFacet(fields=fields)
         else:
             facets = {}
         return (
             self.dataset_namespace,
-            f"{node.metadata_node['database']}."
-            f"{node.metadata_node['schema']}."
-            f"{node.metadata_node['name']}",
+            self._format_dataset_name(
+                node.metadata_node["database"],
+                node.metadata_node["schema"],
+                node.metadata_node["name"],
+            ),
             facets,
             input_facets,
         )
@@ -582,14 +591,11 @@ class DbtArtifactProcessor:
         """
         fields = []
         for field in columns:
-            of_type, description = None, None
-            if "data_type" in field and field["data_type"] is not None:
-                of_type = field["data_type"]
-            if "description" in field and field["description"] is not None:
-                description = field["description"]
             fields.append(
                 schema_dataset.SchemaDatasetFacetFields(
-                    name=field["name"], type=of_type or "", description=description
+                    name=field["name"],
+                    type=field.get("data_type", None),
+                    description=field.get("description", None),
                 )
             )
         return fields
@@ -602,13 +608,11 @@ class DbtArtifactProcessor:
         fields = []
         for field in columns:
             name = field["name"]
-            type = None
-            if "type" in field and field["type"] is not None:
-                type = field["type"]
+            type_ = field.get("type", None)
+            assert isinstance(type_, str), f"Catalog field {field} type is null"
             description = get_from_nullable_chain(metadata_columns, [name, "description"])
-            assert isinstance(type, str)
             fields.append(
-                schema_dataset.SchemaDatasetFacetFields(name=name, type=type, description=description)
+                schema_dataset.SchemaDatasetFacetFields(name=name, type=type_, description=description)
             )
         return fields
 
@@ -719,21 +723,25 @@ class DbtArtifactProcessor:
         """
         try:
             parsed = parse_sql([compiled_sql])
-            if parsed and parsed.column_lineage:
-                fields = {}
+            fields = {}
+            if parsed:
                 for cll_item in parsed.column_lineage:
                     fields[cll_item.descendant.name] = column_lineage_dataset.Fields(
                         inputFields=[
                             column_lineage_dataset.InputField(
                                 namespace=namespace,
-                                name=f"{column_meta.origin.database}.{column_meta.origin.schema}.{column_meta.origin.name}",  # type: ignore
+                                name=self._format_dataset_name(
+                                    column_meta.origin.database,
+                                    column_meta.origin.schema,
+                                    column_meta.origin.name,
+                                ),
                                 field=column_meta.name,
                             )
                             for column_meta in cll_item.lineage
+                            if column_meta.origin
                         ],
-                        transformationType="",
-                        transformationDescription="",
                     )
+            if fields:
                 return column_lineage_dataset.ColumnLineageDatasetFacet(fields=fields)
         except Exception as e:
             self.logger.warning(f"Failed to parse column lineage: {e}")

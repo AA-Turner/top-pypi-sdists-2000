@@ -296,7 +296,7 @@ class NotionHelper:
         start, end = get_first_and_last_day_of_week(date)
         properties = {"日期": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
-            week, self.week_database_id, TARGET_ICON_URL, properties
+            week, self.week_database_id, self.get_date_icon(date, "week"), properties
         )
 
     def get_month_relation_id(self, date):
@@ -304,7 +304,7 @@ class NotionHelper:
         start, end = get_first_and_last_day_of_month(date)
         properties = {"日期": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
-            month, self.month_database_id, TARGET_ICON_URL, properties
+            month, self.month_database_id, self.get_date_icon(date, "month"), properties
         )
 
     def get_year_relation_id(self, date):
@@ -312,8 +312,11 @@ class NotionHelper:
         start, end = get_first_and_last_day_of_year(date)
         properties = {"日期": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
-            year, self.year_database_id, TARGET_ICON_URL, properties
+            year, self.year_database_id, self.get_date_icon(date, "year"), properties
         )
+
+    def get_date_icon(self, date, type):
+        return f"https://notion-icon.malinkang.com/?type={type}&date={date.strftime('%Y-%m-%d')}"
 
     def get_day_relation_id(self, date):
         new_date = date.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -339,7 +342,7 @@ class NotionHelper:
             ]
         )
         return self.get_relation_id(
-            day, self.day_database_id, TARGET_ICON_URL, properties
+            day, self.day_database_id, self.get_date_icon(date, "day"), properties
         )
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def get_relation_id(self, name, id, icon, properties={}):

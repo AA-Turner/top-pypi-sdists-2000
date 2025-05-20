@@ -217,6 +217,9 @@ from .literals import (
     LockModeType,
     LockStateType,
     LogDestinationTypeType,
+    MacModificationTaskStateType,
+    MacModificationTaskTypeType,
+    MacSystemIntegrityProtectionSettingStatusType,
     ManagedByType,
     MarketTypeType,
     MembershipTypeType,
@@ -663,6 +666,8 @@ __all__ = (
     "CreateDefaultSubnetResultTypeDef",
     "CreateDefaultVpcRequestTypeDef",
     "CreateDefaultVpcResultTypeDef",
+    "CreateDelegateMacVolumeOwnershipTaskRequestTypeDef",
+    "CreateDelegateMacVolumeOwnershipTaskResultTypeDef",
     "CreateDhcpOptionsRequestServiceResourceCreateDhcpOptionsTypeDef",
     "CreateDhcpOptionsRequestTypeDef",
     "CreateDhcpOptionsResultTypeDef",
@@ -716,6 +721,8 @@ __all__ = (
     "CreateLocalGatewayVirtualInterfaceGroupResultTypeDef",
     "CreateLocalGatewayVirtualInterfaceRequestTypeDef",
     "CreateLocalGatewayVirtualInterfaceResultTypeDef",
+    "CreateMacSystemIntegrityProtectionModificationTaskRequestTypeDef",
+    "CreateMacSystemIntegrityProtectionModificationTaskResultTypeDef",
     "CreateManagedPrefixListRequestTypeDef",
     "CreateManagedPrefixListResultTypeDef",
     "CreateNatGatewayRequestTypeDef",
@@ -1283,6 +1290,9 @@ __all__ = (
     "DescribeMacHostsRequestPaginateTypeDef",
     "DescribeMacHostsRequestTypeDef",
     "DescribeMacHostsResultTypeDef",
+    "DescribeMacModificationTasksRequestPaginateTypeDef",
+    "DescribeMacModificationTasksRequestTypeDef",
+    "DescribeMacModificationTasksResultTypeDef",
     "DescribeManagedPrefixListsRequestPaginateTypeDef",
     "DescribeManagedPrefixListsRequestTypeDef",
     "DescribeManagedPrefixListsResultTypeDef",
@@ -2143,6 +2153,9 @@ __all__ = (
     "LockSnapshotResultTypeDef",
     "LockedSnapshotsInfoTypeDef",
     "MacHostTypeDef",
+    "MacModificationTaskTypeDef",
+    "MacSystemIntegrityProtectionConfigurationRequestTypeDef",
+    "MacSystemIntegrityProtectionConfigurationTypeDef",
     "MaintenanceDetailsTypeDef",
     "ManagedPrefixListTypeDef",
     "MediaAcceleratorInfoTypeDef",
@@ -4001,6 +4014,18 @@ LocalGatewayRouteTypeDef = TypedDict(
         "DestinationPrefixListId": NotRequired[str],
     },
 )
+
+
+class MacSystemIntegrityProtectionConfigurationRequestTypeDef(TypedDict):
+    AppleInternal: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    BaseSystem: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    DebuggingRestrictions: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    DTraceRestrictions: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    FilesystemProtections: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    KextSigning: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    NvramProtections: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+
+
 IcmpTypeCodeTypeDef = TypedDict(
     "IcmpTypeCodeTypeDef",
     {
@@ -6946,6 +6971,17 @@ class SnapshotRecycleBinInfoTypeDef(TypedDict):
 class LoadPermissionRequestTypeDef(TypedDict):
     Group: NotRequired[Literal["all"]]
     UserId: NotRequired[str]
+
+
+class MacSystemIntegrityProtectionConfigurationTypeDef(TypedDict):
+    AppleInternal: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    BaseSystem: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    DebuggingRestrictions: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    DTraceRestrictions: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    FilesystemProtections: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    KextSigning: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    NvramProtections: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
+    Status: NotRequired[MacSystemIntegrityProtectionSettingStatusType]
 
 
 class MediaDeviceMemoryInfoTypeDef(TypedDict):
@@ -12091,6 +12127,21 @@ class DescribeMacHostsRequestTypeDef(TypedDict):
     NextToken: NotRequired[str]
 
 
+class DescribeMacModificationTasksRequestPaginateTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    MacModificationTaskIds: NotRequired[Sequence[str]]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class DescribeMacModificationTasksRequestTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    MacModificationTaskIds: NotRequired[Sequence[str]]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+
+
 class DescribeManagedPrefixListsRequestPaginateTypeDef(TypedDict):
     DryRun: NotRequired[bool]
     Filters: NotRequired[Sequence[FilterTypeDef]]
@@ -14685,6 +14736,18 @@ class ListSnapshotsInRecycleBinResultTypeDef(TypedDict):
 class LoadPermissionModificationsTypeDef(TypedDict):
     Add: NotRequired[Sequence[LoadPermissionRequestTypeDef]]
     Remove: NotRequired[Sequence[LoadPermissionRequestTypeDef]]
+
+
+class MacModificationTaskTypeDef(TypedDict):
+    InstanceId: NotRequired[str]
+    MacModificationTaskId: NotRequired[str]
+    MacSystemIntegrityProtectionConfig: NotRequired[
+        MacSystemIntegrityProtectionConfigurationTypeDef
+    ]
+    StartTime: NotRequired[datetime]
+    Tags: NotRequired[List[TagTypeDef]]
+    TaskState: NotRequired[MacModificationTaskStateType]
+    TaskType: NotRequired[MacModificationTaskTypeType]
 
 
 class MediaDeviceInfoTypeDef(TypedDict):
@@ -17420,6 +17483,22 @@ class ModifyFpgaImageAttributeRequestTypeDef(TypedDict):
     Name: NotRequired[str]
 
 
+class CreateDelegateMacVolumeOwnershipTaskResultTypeDef(TypedDict):
+    MacModificationTask: MacModificationTaskTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class CreateMacSystemIntegrityProtectionModificationTaskResultTypeDef(TypedDict):
+    MacModificationTask: MacModificationTaskTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DescribeMacModificationTasksResultTypeDef(TypedDict):
+    MacModificationTasks: List[MacModificationTaskTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
 class MediaAcceleratorInfoTypeDef(TypedDict):
     Accelerators: NotRequired[List[MediaDeviceInfoTypeDef]]
     TotalMediaMemoryInMiB: NotRequired[int]
@@ -18437,6 +18516,14 @@ CreateCustomerGatewayRequestTypeDef = TypedDict(
 )
 
 
+class CreateDelegateMacVolumeOwnershipTaskRequestTypeDef(TypedDict):
+    InstanceId: str
+    MacCredentials: str
+    ClientToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
+
+
 class CreateDhcpOptionsRequestServiceResourceCreateDhcpOptionsTypeDef(TypedDict):
     DhcpConfigurations: Sequence[NewDhcpConfigurationTypeDef]
     TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
@@ -18646,6 +18733,18 @@ class CreateLocalGatewayVirtualInterfaceRequestTypeDef(TypedDict):
     TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
     DryRun: NotRequired[bool]
     PeerBgpAsnExtended: NotRequired[int]
+
+
+class CreateMacSystemIntegrityProtectionModificationTaskRequestTypeDef(TypedDict):
+    InstanceId: str
+    MacSystemIntegrityProtectionStatus: MacSystemIntegrityProtectionSettingStatusType
+    ClientToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+    MacCredentials: NotRequired[str]
+    MacSystemIntegrityProtectionConfiguration: NotRequired[
+        MacSystemIntegrityProtectionConfigurationRequestTypeDef
+    ]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
 
 
 class CreateManagedPrefixListRequestTypeDef(TypedDict):

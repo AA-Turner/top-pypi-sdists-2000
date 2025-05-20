@@ -11,6 +11,7 @@
 """This module provides the core primitives of Hypothesis, such as given."""
 import base64
 import contextlib
+import dataclasses
 import datetime
 import inspect
 import io
@@ -24,6 +25,7 @@ import warnings
 import zlib
 from collections import defaultdict
 from collections.abc import Coroutine, Generator, Hashable, Iterable, Sequence
+from dataclasses import dataclass, field
 from functools import partial
 from inspect import Parameter
 from random import Random
@@ -38,8 +40,6 @@ from typing import (
     overload,
 )
 from unittest import TestCase
-
-import attr
 
 from hypothesis import strategies as st
 from hypothesis._settings import (
@@ -143,7 +143,7 @@ from hypothesis.vendor.pretty import RepresentationPrinter
 from hypothesis.version import __version__
 
 if sys.version_info >= (3, 10):
-    from types import EllipsisType as EllipsisType
+    from types import EllipsisType
 elif TYPE_CHECKING:
     from builtins import ellipsis as EllipsisType
 else:  # pragma: no cover
@@ -159,13 +159,13 @@ global_force_seed = None
 _hypothesis_global_random = None
 
 
-@attr.s()
+@dataclass
 class Example:
-    args = attr.ib()
-    kwargs = attr.ib()
+    args: Any
+    kwargs: Any
     # Plus two optional arguments for .xfail()
-    raises = attr.ib(default=None)
-    reason = attr.ib(default=None)
+    raises: Any = field(default=None)
+    reason: Any = field(default=None)
 
 
 class example:
@@ -245,7 +245,7 @@ class example:
                 f"{raises=} must be an exception type or tuple of exception types"
             )
         if condition:
-            self._this_example = attr.evolve(
+            self._this_example = dataclasses.replace(
                 self._this_example, raises=raises, reason=reason
             )
         return self
@@ -372,8 +372,8 @@ def _invalid(message, *, exc=InvalidArgument, test, given_kwargs):
     wrapped_test.is_hypothesis_test = True
     wrapped_test.hypothesis = HypothesisHandle(
         inner_test=test,
-        get_fuzz_target=wrapped_test,
-        given_kwargs=given_kwargs,
+        _get_fuzz_target=wrapped_test,
+        _given_kwargs=given_kwargs,
     )
     return wrapped_test
 
@@ -630,12 +630,12 @@ def get_random_for_wrapped_test(test, wrapped_test):
         return Random(seed)
 
 
-@attr.s
+@dataclass
 class Stuff:
-    selfy: Any = attr.ib(default=None)
-    args: tuple = attr.ib(factory=tuple)
-    kwargs: dict = attr.ib(factory=dict)
-    given_kwargs: dict = attr.ib(factory=dict)
+    selfy: Any
+    args: tuple
+    kwargs: dict
+    given_kwargs: dict
 
 
 def process_arguments_to_given(
@@ -1040,16 +1040,13 @@ class StateForActualGivenExecution:
             ):
                 report(
                     "Unreliable test timings! On an initial run, this "
-                    "test took %.2fms, which exceeded the deadline of "
-                    "%.2fms, but on a subsequent run it took %.2f ms, "
+                    f"test took {exception.runtime.total_seconds() * 1000:.2f}ms, "
+                    "which exceeded the deadline of "
+                    f"{self.settings.deadline.total_seconds() * 1000:.2f}ms, but "
+                    f"on a subsequent run it took {runtime_secs * 1000:.2f} ms, "
                     "which did not. If you expect this sort of "
                     "variability in your test timings, consider turning "
                     "deadlines off for this test by setting deadline=None."
-                    % (
-                        exception.runtime.total_seconds() * 1000,
-                        self.settings.deadline.total_seconds() * 1000,
-                        runtime_secs * 1000,
-                    )
                 )
             else:
                 report("Failed to reproduce exception. Expected: \n" + traceback)
@@ -1504,7 +1501,7 @@ def fake_subTest(self, msg=None, **__):
     yield
 
 
-@attr.s()
+@dataclass
 class HypothesisHandle:
     """This object is provided as the .hypothesis attribute on @given tests.
 
@@ -1520,9 +1517,9 @@ class HypothesisHandle:
     information.
     """
 
-    inner_test = attr.ib()
-    _get_fuzz_target = attr.ib()
-    _given_kwargs = attr.ib()
+    inner_test: Any
+    _get_fuzz_target: Any
+    _given_kwargs: Any
 
     @property
     def fuzz_one_input(
@@ -1741,10 +1738,9 @@ def given(
                 if expected_version != __version__:
                     raise InvalidArgument(
                         "Attempting to reproduce a failure from a different "
-                        "version of Hypothesis. This failure is from %s, but "
-                        "you are currently running %r. Please change your "
+                        f"version of Hypothesis. This failure is from {expected_version}, but "
+                        f"you are currently running {__version__!r}. Please change your "
                         "Hypothesis version to a matching one."
-                        % (expected_version, __version__)
                     )
                 try:
                     state.execute_once(

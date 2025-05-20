@@ -197,6 +197,12 @@ class DeviceMesh:
     def devices(self):
         return self._devices
 
+    @property
+    def backend_mesh(self):
+        if not hasattr(self, "_backend_mesh"):
+            self._backend_mesh = distribution_lib._to_backend_mesh(self)
+        return self._backend_mesh
+
     def __repr__(self):
         return (
             f"<{self.__class__.__name__} "
@@ -250,6 +256,12 @@ class TensorLayout:
             )
         self._device_mesh = device_mesh
         self._validate_axes()
+
+    @property
+    def backend_layout(self):
+        if not hasattr(self, "_backend_layout"):
+            self._backend_layout = distribution_lib._to_backend_layout(self)
+        return self._backend_layout
 
     def _validate_axes(self):
         if self._device_mesh:
@@ -445,6 +457,10 @@ class DataParallel(Distribution):
         return TensorLayout(data_shard_spec, self.device_mesh)
 
     def get_variable_layout(self, variable):
+        # First check if the variable already has a layout assigned.
+        if getattr(variable, "_layout", None) is not None:
+            return variable._layout
+        # Otherwise, replicate variable.
         variable_shard_spec = [None] * len(variable.shape)
         return TensorLayout(variable_shard_spec, self.device_mesh)
 
@@ -598,6 +614,10 @@ class ModelParallel(Distribution):
         return TensorLayout(data_shard_spec, self.device_mesh)
 
     def get_variable_layout(self, variable):
+        # First check if the variable already has a layout assigned.
+        if getattr(variable, "_layout", None) is not None:
+            return variable._layout
+        # Check the layout map.
         variable_layout = self._layout_map[variable.path]
         if variable_layout is not None:
             return variable_layout

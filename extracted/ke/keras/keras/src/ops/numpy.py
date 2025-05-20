@@ -328,6 +328,41 @@ class Any(Operation):
         )
 
 
+class Angle(Operation):
+    def call(self, x):
+        return backend.numpy.angle(x)
+
+    def compute_output_spec(self, x):
+        dtype = backend.standardize_dtype(getattr(x, "dtype", backend.floatx()))
+        if dtype == "int64":
+            dtype = backend.floatx()
+        else:
+            dtype = dtypes.result_type(dtype, float)
+        return KerasTensor(x.shape, dtype=dtype)
+
+
+@keras_export(["keras.ops.angle", "keras.ops.numpy.angle"])
+def angle(x):
+    """Element-wise angle of a complex tensor.
+
+    Arguments:
+        x: Input tensor. Can be real or complex.
+
+    Returns:
+        Output tensor of same shape as x. containing the angle of each element
+        (in radians).
+
+    Example:
+    >>> x = keras.ops.convert_to_tensor([[1 + 3j, 2 - 5j], [4 - 3j, 3 + 2j]])
+    >>> keras.ops.angle(x)
+    array([[ 1.2490457, -1.19029  ],
+       [-0.6435011,  0.5880026]], dtype=float32)
+    """
+    if any_symbolic_tensors((x,)):
+        return Angle().symbolic_call(x)
+    return backend.numpy.angle(x)
+
+
 @keras_export(["keras.ops.any", "keras.ops.numpy.any"])
 def any(x, axis=None, keepdims=False):
     """Test whether any array element along a given axis evaluates to `True`.
@@ -1175,6 +1210,66 @@ def average(x, axis=None, weights=None):
     return backend.numpy.average(x, weights=weights, axis=axis)
 
 
+class Bartlett(Operation):
+    def call(self, x):
+        return backend.numpy.bartlett(x)
+
+    def compute_output_spec(self, x):
+        return KerasTensor(x.shape, dtype=backend.floatx())
+
+
+@keras_export(["keras.ops.bartlett", "keras.ops.numpy.bartlett"])
+def bartlett(x):
+    """Bartlett window function.
+    The Bartlett window is a triangular window that rises then falls linearly.
+
+    Args:
+        x: Scalar or 1D Tensor. Window length.
+
+    Returns:
+        A 1D tensor containing the Bartlett window values.
+
+    Example:
+    >>> x = keras.ops.convert_to_tensor(5)
+    >>> keras.ops.bartlett(x)
+    array([0. , 0.5, 1. , 0.5, 0. ], dtype=float32)
+    """
+    if any_symbolic_tensors((x,)):
+        return Bartlett().symbolic_call(x)
+    return backend.numpy.bartlett(x)
+
+
+class Hamming(Operation):
+    def call(self, x):
+        return backend.numpy.hamming(x)
+
+    def compute_output_spec(self, x):
+        return KerasTensor(x.shape, dtype=backend.floatx())
+
+
+@keras_export(["keras.ops.hamming", "keras.ops.numpy.hamming"])
+def hamming(x):
+    """Hamming window function.
+
+    The Hamming window is defined as:
+    `w[n] = 0.54 - 0.46 * cos(2 * pi * n / (N - 1))` for `0 <= n <= N - 1`.
+
+    Args:
+        x: Scalar or 1D Tensor. The window length.
+
+    Returns:
+        A 1D tensor containing the Hamming window values.
+
+    Example:
+    >>> x = keras.ops.convert_to_tensor(5)
+    >>> keras.ops.hamming(x)
+    array([0.08, 0.54, 1.  , 0.54, 0.08], dtype=float32)
+    """
+    if any_symbolic_tensors((x,)):
+        return Hamming().symbolic_call(x)
+    return backend.numpy.hamming(x)
+
+
 class Bincount(Operation):
     def __init__(self, weights=None, minlength=0, sparse=False):
         super().__init__()
@@ -1417,7 +1512,10 @@ class BitwiseLeftShift(Operation):
         return backend.numpy.bitwise_left_shift(x, y)
 
     def compute_output_spec(self, x, y):
-        dtype = dtypes.result_type(x.dtype, y.dtype)
+        if isinstance(y, int):
+            dtype = x.dtype
+        else:
+            dtype = dtypes.result_type(x.dtype, y.dtype)
         return KerasTensor(x.shape, dtype=dtype)
 
 
@@ -1451,7 +1549,10 @@ class LeftShift(Operation):
         return backend.numpy.left_shift(x, y)
 
     def compute_output_spec(self, x, y):
-        dtype = dtypes.result_type(x.dtype, y.dtype)
+        if isinstance(y, int):
+            dtype = x.dtype
+        else:
+            dtype = dtypes.result_type(x.dtype, y.dtype)
         return KerasTensor(x.shape, dtype=dtype)
 
 
@@ -1483,7 +1584,10 @@ class BitwiseRightShift(Operation):
         return backend.numpy.bitwise_right_shift(x, y)
 
     def compute_output_spec(self, x, y):
-        dtype = dtypes.result_type(x.dtype, y.dtype)
+        if isinstance(y, int):
+            dtype = x.dtype
+        else:
+            dtype = dtypes.result_type(x.dtype, y.dtype)
         return KerasTensor(x.shape, dtype=dtype)
 
 
@@ -1517,7 +1621,10 @@ class RightShift(Operation):
         return backend.numpy.right_shift(x, y)
 
     def compute_output_spec(self, x, y):
-        dtype = dtypes.result_type(x.dtype, y.dtype)
+        if isinstance(y, int):
+            dtype = x.dtype
+        else:
+            dtype = dtypes.result_type(x.dtype, y.dtype)
         return KerasTensor(x.shape, dtype=dtype)
 
 
@@ -1539,6 +1646,36 @@ def right_shift(x, y):
     if any_symbolic_tensors((x, y)):
         return RightShift().symbolic_call(x, y)
     return backend.numpy.right_shift(x, y)
+
+
+class Blackman(Operation):
+    def call(self, x):
+        return backend.numpy.blackman(x)
+
+    def compute_output_spec(self, x):
+        return KerasTensor(x.shape, dtype=backend.floatx())
+
+
+@keras_export(["keras.ops.blackman", "keras.ops.numpy.blackman"])
+def blackman(x):
+    """Blackman window function.
+    The Blackman window is a taper formed by using a weighted cosine.
+
+    Args:
+        x: Scalar or 1D Tensor. Window length.
+
+    Returns:
+        A 1D tensor containing the Blackman window values.
+
+    Example:
+    >>> x = keras.ops.convert_to_tensor(5)
+    >>> keras.ops.blackman(x)
+    array([-1.3877788e-17,  3.4000000e-01,  1.0000000e+00,  3.4000000e-01,
+           -1.3877788e-17], dtype=float32)
+    """
+    if any_symbolic_tensors((x,)):
+        return Blackman().symbolic_call(x)
+    return backend.numpy.blackman(x)
 
 
 class BroadcastTo(Operation):
@@ -2207,7 +2344,7 @@ class Diagonal(Operation):
         if len(x_shape) < 2:
             raise ValueError(
                 "`diagonal` requires an array of at least two dimensions, but "
-                "`x` is of shape {x.shape}."
+                f"`x` is of shape {x.shape}."
             )
 
         shape_2d = [x_shape[self.axis1], x_shape[self.axis2]]
@@ -5413,15 +5550,17 @@ class Take(Operation):
         x_shape = list(x.shape)
         if isinstance(indices, KerasTensor):
             indices_shape = list(indices.shape)
+            ragged = indices.ragged
         else:
             indices_shape = list(getattr(np.array(indices), "shape", []))
+            ragged = False
         if self.axis is None:
             return KerasTensor(indices_shape, dtype=x.dtype)
 
         # make sure axis is non-negative
         axis = len(x_shape) + self.axis if self.axis < 0 else self.axis
         output_shape = x_shape[:axis] + indices_shape + x_shape[axis + 1 :]
-        return KerasTensor(output_shape, dtype=x.dtype)
+        return KerasTensor(output_shape, dtype=x.dtype, ragged=ragged)
 
 
 @keras_export(["keras.ops.take", "keras.ops.numpy.take"])

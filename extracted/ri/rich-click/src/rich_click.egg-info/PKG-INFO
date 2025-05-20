@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: rich-click
-Version: 1.8.8
+Version: 1.8.9
 Summary: Format click help output nicely with rich
 Author-email: Phil Ewels <phil@ewels.co.uk>
 Maintainer-email: Phil Ewels <phil@ewels.co.uk>, Daniel Reeves <xdanielreeves@gmail.com>
@@ -67,6 +67,7 @@ Requires-Dist: mkdocs-material-extensions; extra == "docs"
 Requires-Dist: mkdocs-rss-plugin; extra == "docs"
 Requires-Dist: mkdocstrings[python]; extra == "docs"
 Requires-Dist: rich-codex; extra == "docs"
+Dynamic: license-file
 
 <p align="center">
     <picture>

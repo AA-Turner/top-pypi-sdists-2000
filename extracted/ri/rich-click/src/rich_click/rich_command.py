@@ -10,8 +10,9 @@ import click
 # or else rich_click.cli.patch() causes a recursion error.
 from click import CommandCollection, Group
 from click.utils import PacifyFlushWrapper, make_str
+from typing_extensions import Literal, NoReturn
 
-from rich_click._compat_click import CLICK_IS_BEFORE_VERSION_8X, CLICK_IS_BEFORE_VERSION_9X
+from rich_click._compat_click import CLICK_IS_BEFORE_VERSION_8X, CLICK_IS_BEFORE_VERSION_9X, CLICK_IS_BEFORE_VERSION_82
 from rich_click.rich_context import RichContext
 from rich_click.rich_help_configuration import RichHelpConfiguration
 from rich_click.rich_help_formatter import RichHelpFormatter
@@ -112,6 +113,26 @@ class RichCommand(click.Command):
                 formatter = self.context_class.formatter_class(console=self.console, config=config, file=sys.stderr)
         return formatter
 
+    @overload
+    def main(
+        self,
+        args: Optional[Sequence[str]] = None,
+        prog_name: Optional[str] = None,
+        complete_var: Optional[str] = None,
+        standalone_mode: Literal[True] = True,
+        **extra: Any,
+    ) -> NoReturn: ...
+
+    @overload
+    def main(
+        self,
+        args: Optional[Sequence[str]] = None,
+        prog_name: Optional[str] = None,
+        complete_var: Optional[str] = None,
+        standalone_mode: bool = ...,
+        **extra: Any,
+    ) -> Any: ...
+
     def main(
         self,
         args: Optional[Sequence[str]] = None,
@@ -152,9 +173,9 @@ class RichCommand(click.Command):
 
         # Process shell completion requests and exit early.
         if CLICK_IS_BEFORE_VERSION_8X:
-            from click.core import _bashcomplete  # type: ignore[attr-defined]
+            from click.core import _bashcomplete
 
-            _bashcomplete(self, prog_name, complete_var)
+            _bashcomplete(self, prog_name, complete_var)  # type: ignore[operator]
         else:
             self._main_shell_completion(extra, prog_name, complete_var)
 
@@ -180,6 +201,11 @@ class RichCommand(click.Command):
             except click.exceptions.ClickException as e:
                 if not standalone_mode:
                     raise
+
+                if not CLICK_IS_BEFORE_VERSION_82:
+                    if isinstance(e, click.exceptions.NoArgsIsHelpError):
+                        sys.exit(e.exit_code)
+
                 formatter = self._error_formatter(ctx)
                 from rich_click.rich_help_rendering import rich_format_error
 
@@ -273,15 +299,15 @@ class RichCommand(click.Command):
 
 if CLICK_IS_BEFORE_VERSION_9X:
     with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=DeprecationWarning, module="click")
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
         from click import MultiCommand
 
 else:
 
-    MultiCommand = Group  # type: ignore[misc,assignment]
+    MultiCommand = Group
 
 
-class RichMultiCommand(RichCommand, MultiCommand):
+class RichMultiCommand(RichCommand, MultiCommand):  # type: ignore[valid-type,misc]
     """
     Richly formatted click MultiCommand.
 
@@ -291,20 +317,20 @@ class RichMultiCommand(RichCommand, MultiCommand):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize RichMultiCommand class."""
-        MultiCommand.__init__(self, *args, **kwargs)
+        MultiCommand.__init__(self, *args, **kwargs)  # type: ignore[misc]
         self._register_rich_context_settings_from_callback()
 
-    def format_commands(self, ctx: RichContext, formatter: RichHelpFormatter) -> None:  # type: ignore[override]
+    def format_commands(self, ctx: click.Context, formatter: click.HelpFormatter) -> None:
         from rich_click.rich_help_rendering import get_rich_commands
 
-        get_rich_commands(self, ctx, formatter)
+        get_rich_commands(self, ctx, formatter)  # type: ignore[arg-type]
 
     def format_options(self, ctx: click.Context, formatter: click.HelpFormatter) -> None:
         from rich_click.rich_help_rendering import get_rich_options
 
         get_rich_options(self, ctx, formatter)  # type: ignore[arg-type]
 
-        self.format_commands(ctx, formatter)  # type: ignore[arg-type]
+        self.format_commands(ctx, formatter)
 
     def format_help(self, ctx: RichContext, formatter: RichHelpFormatter) -> None:  # type: ignore[override]
         if OVERRIDES_GUARD:
