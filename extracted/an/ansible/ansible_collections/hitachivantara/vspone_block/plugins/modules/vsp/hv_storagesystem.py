@@ -26,6 +26,12 @@ attributes:
   check_mode:
     description: Determines if the module should run in check mode.
     support: none
+deprecated:
+  removed_in: '4.0.0'
+  why: The connection type C(gateway) is deprecated.
+  alternative: Not available.
+extends_documentation_fragment:
+- hitachivantara.vspone_block.common.deprecated_note
 options:
   state:
     description: The desired state of the storage system.
@@ -275,16 +281,14 @@ storage_systems:
 import json
 import os
 
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.uaig_utils import (
-    UAIGResourceID,
+from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.gw_module_args import (
+    DEPCRECATED_MSG,
 )
+
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_log import (
     Log,
 )
 
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.hv_ucpmanager import (
-    UcpManager,
-)
 from ansible.module_utils.basic import AnsibleModule
 
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_constants import (
@@ -406,35 +410,8 @@ def main(module=None):
             raise Exception(
                 "Missing management_address, please correct it and try again."
             )
-        # if management_username is None:
-        #     raise Exception(
-        #         "Missing management_username, please correct it and try again."
-        #     )
-        # if management_password is None:
-        #     raise Exception(
-        #         "Missing management_password, please correct it and try again."
-        #     )
 
-        # True: test the rest of the module using api_token
-
-        # if False:
-        #     ucpManager = UcpManager(
-        #         management_address,
-        #         management_username,
-        #         management_password,
-        #         auth_token,
-        #     )
-        #     auth_token = ucpManager.getAuthTokenOnly()
-        #     management_username = ""
-
-        ucpManager = UcpManager(
-            management_address, management_username, management_password, auth_token
-        )
-
-        # theUCP = ucpManager.getUcpSystem( ucp_serial )
-        # logger.writeDebug('theUCP={}', theUCP)
-
-        # attach SS to UCP
+        ucpManager = None
 
         storage_serial = storage_system_info.get("serial", None)
         storage_address = storage_system_info.get("address", None)
@@ -469,9 +446,7 @@ def main(module=None):
             )
 
         #  get the ucp_serial by remote gateway, if given
-        conv_system_name, conv_system_serial, conv_mgmt_address = (
-            UAIGResourceID.getSystemSerial(management_address, remote_gateway_address)
-        )
+        conv_system_name, conv_system_serial, conv_mgmt_address = None, None, None
         logger.writeDebug("name={}", conv_system_name)
         logger.writeDebug("serial={}", conv_system_serial)
         logger.writeDebug("gateway={}", conv_mgmt_address)
@@ -608,7 +583,7 @@ def main(module=None):
             msg = ex.strerror
         logger.writeError(msg)
         logger.writeInfo("=== End of Storage System operation. ===")
-        module.fail_json(msg=msg)
+        module.fail_json(msg=DEPCRECATED_MSG)
     except Exception as ex:
         logger.writeDebug("326 Exception={}", ex)
         # sng,a2.4 - there is no str(ex)?
@@ -619,7 +594,7 @@ def main(module=None):
             msg = str(ex)
         logger.writeError(msg)
         logger.writeInfo("=== End of Storage System operation. ===")
-        module.fail_json(msg=msg)
+        module.fail_json(msg=DEPCRECATED_MSG)
 
 
 def formatSS(storageSystem):

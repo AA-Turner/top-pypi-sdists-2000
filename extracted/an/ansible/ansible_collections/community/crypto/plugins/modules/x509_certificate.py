@@ -7,6 +7,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 
@@ -95,6 +97,7 @@ seealso:
 """
 
 EXAMPLES = r"""
+---
 - name: Generate a Self Signed OpenSSL certificate
   community.crypto.x509_certificate:
     path: /etc/ssl/crt/ansible.com.crt
@@ -228,57 +231,49 @@ certificate:
 import os
 
 from ansible.module_utils.common.text.converters import to_native
-
-from ansible_collections.community.crypto.plugins.module_utils.crypto.module_backends.certificate import (
-    select_backend,
-    get_certificate_argument_spec,
+from ansible_collections.community.crypto.plugins.module_utils.crypto.basic import (
+    OpenSSLObjectError,
 )
-
+from ansible_collections.community.crypto.plugins.module_utils.crypto.module_backends.certificate import (
+    get_certificate_argument_spec,
+    select_backend,
+)
 from ansible_collections.community.crypto.plugins.module_utils.crypto.module_backends.certificate_acme import (
     AcmeCertificateProvider,
     add_acme_provider_to_argument_spec,
 )
-
 from ansible_collections.community.crypto.plugins.module_utils.crypto.module_backends.certificate_entrust import (
     EntrustCertificateProvider,
     add_entrust_provider_to_argument_spec,
 )
-
 from ansible_collections.community.crypto.plugins.module_utils.crypto.module_backends.certificate_ownca import (
     OwnCACertificateProvider,
     add_ownca_provider_to_argument_spec,
 )
-
 from ansible_collections.community.crypto.plugins.module_utils.crypto.module_backends.certificate_selfsigned import (
     SelfSignedCertificateProvider,
     add_selfsigned_provider_to_argument_spec,
 )
-
+from ansible_collections.community.crypto.plugins.module_utils.crypto.support import (
+    OpenSSLObject,
+)
 from ansible_collections.community.crypto.plugins.module_utils.io import (
     load_file_if_exists,
     write_file,
-)
-
-from ansible_collections.community.crypto.plugins.module_utils.crypto.basic import (
-    OpenSSLObjectError,
-)
-
-from ansible_collections.community.crypto.plugins.module_utils.crypto.support import (
-    OpenSSLObject,
 )
 
 
 class CertificateAbsent(OpenSSLObject):
     def __init__(self, module):
         super(CertificateAbsent, self).__init__(
-            module.params['path'],
-            module.params['state'],
-            module.params['force'],
-            module.check_mode
+            module.params["path"],
+            module.params["state"],
+            module.params["force"],
+            module.check_mode,
         )
         self.module = module
-        self.return_content = module.params['return_content']
-        self.backup = module.params['backup']
+        self.return_content = module.params["return_content"]
+        self.backup = module.params["backup"]
         self.backup_file = None
 
     def generate(self, module):
@@ -291,31 +286,32 @@ class CertificateAbsent(OpenSSLObject):
 
     def dump(self, check_mode=False):
         result = {
-            'changed': self.changed,
-            'filename': self.path,
-            'privatekey': self.module.params['privatekey_path'],
-            'csr': self.module.params['csr_path']
+            "changed": self.changed,
+            "filename": self.path,
+            "privatekey": self.module.params["privatekey_path"],
+            "csr": self.module.params["csr_path"],
         }
         if self.backup_file:
-            result['backup_file'] = self.backup_file
+            result["backup_file"] = self.backup_file
         if self.return_content:
-            result['certificate'] = None
+            result["certificate"] = None
 
         return result
 
 
 class GenericCertificate(OpenSSLObject):
     """Retrieve a certificate using the given module backend."""
+
     def __init__(self, module, module_backend):
         super(GenericCertificate, self).__init__(
-            module.params['path'],
-            module.params['state'],
-            module.params['force'],
-            module.check_mode
+            module.params["path"],
+            module.params["state"],
+            module.params["force"],
+            module.check_mode,
         )
         self.module = module
-        self.return_content = module.params['return_content']
-        self.backup = module.params['backup']
+        self.return_content = module.params["return_content"]
+        self.backup = module.params["backup"]
         self.backup_file = None
 
         self.module_backend = module_backend
@@ -332,23 +328,30 @@ class GenericCertificate(OpenSSLObject):
             self.changed = True
 
         file_args = module.load_file_common_arguments(module.params)
-        if module.check_file_absent_if_check_mode(file_args['path']):
+        if module.check_file_absent_if_check_mode(file_args["path"]):
             self.changed = True
         else:
-            self.changed = module.set_fs_attributes_if_different(file_args, self.changed)
+            self.changed = module.set_fs_attributes_if_different(
+                file_args, self.changed
+            )
 
     def check(self, module, perms_required=True):
         """Ensure the resource is in its desired state."""
-        return super(GenericCertificate, self).check(module, perms_required) and not self.module_backend.needs_regeneration()
+        return (
+            super(GenericCertificate, self).check(module, perms_required)
+            and not self.module_backend.needs_regeneration()
+        )
 
     def dump(self, check_mode=False):
         result = self.module_backend.dump(include_certificate=self.return_content)
-        result.update({
-            'changed': self.changed,
-            'filename': self.path,
-        })
+        result.update(
+            {
+                "changed": self.changed,
+                "filename": self.path,
+            }
+        )
         if self.backup_file:
-            result['backup_file'] = self.backup_file
+            result["backup_file"] = self.backup_file
         return result
 
 
@@ -358,46 +361,49 @@ def main():
     add_entrust_provider_to_argument_spec(argument_spec)
     add_ownca_provider_to_argument_spec(argument_spec)
     add_selfsigned_provider_to_argument_spec(argument_spec)
-    argument_spec.argument_spec.update(dict(
-        state=dict(type='str', default='present', choices=['present', 'absent']),
-        path=dict(type='path', required=True),
-        backup=dict(type='bool', default=False),
-        return_content=dict(type='bool', default=False),
-    ))
-    argument_spec.required_if.append(['state', 'present', ['provider']])
+    argument_spec.argument_spec.update(
+        dict(
+            state=dict(type="str", default="present", choices=["present", "absent"]),
+            path=dict(type="path", required=True),
+            backup=dict(type="bool", default=False),
+            return_content=dict(type="bool", default=False),
+        )
+    )
+    argument_spec.required_if.append(["state", "present", ["provider"]])
     module = argument_spec.create_ansible_module(
         add_file_common_args=True,
         supports_check_mode=True,
     )
 
     try:
-        if module.params['state'] == 'absent':
+        if module.params["state"] == "absent":
             certificate = CertificateAbsent(module)
 
             if module.check_mode:
                 result = certificate.dump(check_mode=True)
-                result['changed'] = os.path.exists(module.params['path'])
+                result["changed"] = os.path.exists(module.params["path"])
                 module.exit_json(**result)
 
             certificate.remove(module)
 
         else:
-            base_dir = os.path.dirname(module.params['path']) or '.'
+            base_dir = os.path.dirname(module.params["path"]) or "."
             if not os.path.isdir(base_dir):
                 module.fail_json(
                     name=base_dir,
-                    msg='The directory %s does not exist or the file is not a directory' % base_dir
+                    msg="The directory %s does not exist or the file is not a directory"
+                    % base_dir,
                 )
 
-            provider = module.params['provider']
+            provider = module.params["provider"]
             provider_map = {
-                'acme': AcmeCertificateProvider,
-                'entrust': EntrustCertificateProvider,
-                'ownca': OwnCACertificateProvider,
-                'selfsigned': SelfSignedCertificateProvider,
+                "acme": AcmeCertificateProvider,
+                "entrust": EntrustCertificateProvider,
+                "ownca": OwnCACertificateProvider,
+                "selfsigned": SelfSignedCertificateProvider,
             }
 
-            backend = module.params['select_crypto_backend']
+            backend = module.params["select_crypto_backend"]
             module_backend = select_backend(module, backend, provider_map[provider]())
             certificate = GenericCertificate(module, module_backend)
             certificate.generate(module)

@@ -21,8 +21,16 @@ from ansible_collections.kubevirt.core.plugins.module_utils import (
 from ansible_collections.kubevirt.core.tests.unit.utils.ansible_module_mock import (
     AnsibleExitJson,
     exit_json,
-    set_module_args,
 )
+
+# Handle import errors of patch_module_args.
+# It is only available on ansible-core >=2.19.
+try:
+    from ansible.module_utils.testing import patch_module_args
+except ImportError as e:
+    from ansible_collections.kubevirt.core.tests.unit.utils.ansible_module_mock import (
+        patch_module_args,
+    )
 
 FIND_ARGS_DEFAULT = {
     "kind": "VirtualMachineInstance",
@@ -35,6 +43,10 @@ FIND_ARGS_DEFAULT = {
     "wait_sleep": 5,
     "wait_timeout": 120,
     "condition": {"type": "Ready", "status": True},
+    "hidden_fields": [
+        "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+        "metadata.managedFields",
+    ],
 }
 
 FIND_ARGS_NAME_NAMESPACE = FIND_ARGS_DEFAULT | {
@@ -50,6 +62,13 @@ FIND_ARGS_FIELD_SELECTOR = FIND_ARGS_DEFAULT | {
     "field_selectors": ["app=test"],
 }
 
+FIND_ARGS_HIDDEN_FIELDS = FIND_ARGS_DEFAULT | {
+    "hidden_fields": [
+        "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+        "metadata.annotations[kubectl.kubernetes.io/last-applied-configuration]",
+    ],
+}
+
 
 @pytest.mark.parametrize(
     "module_args,find_args",
@@ -58,6 +77,15 @@ FIND_ARGS_FIELD_SELECTOR = FIND_ARGS_DEFAULT | {
         ({"name": "testvm", "namespace": "default"}, FIND_ARGS_NAME_NAMESPACE),
         ({"label_selectors": "app=test"}, FIND_ARGS_LABEL_SELECTOR),
         ({"field_selectors": "app=test"}, FIND_ARGS_FIELD_SELECTOR),
+        (
+            {
+                "hidden_fields": [
+                    "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+                    "metadata.annotations[kubectl.kubernetes.io/last-applied-configuration]",
+                ]
+            },
+            FIND_ARGS_HIDDEN_FIELDS,
+        ),
     ],
 )
 def test_module(mocker, module_args, find_args):
@@ -74,8 +102,7 @@ def test_module(mocker, module_args, find_args):
         },
     )
 
-    with pytest.raises(AnsibleExitJson):
-        set_module_args(module_args)
+    with pytest.raises(AnsibleExitJson), patch_module_args(module_args):
         kubevirt_vmi_info.main()
 
     find.assert_called_once_with(**find_args)

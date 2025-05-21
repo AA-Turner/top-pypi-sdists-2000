@@ -28,6 +28,7 @@ from astropy.utils.compat import (
     NUMPY_LT_1_25,
     NUMPY_LT_2_0,
     NUMPY_LT_2_1,
+    NUMPY_LT_2_2,
 )
 
 if TYPE_CHECKING:
@@ -2705,22 +2706,22 @@ class TestRecFunctions:
     tested_module = np.lib.recfunctions
 
     @classmethod
-    def setup_class(self):
-        self.pv_dtype = np.dtype([("p", "f8"), ("v", "f8")])
-        self.pv_t_dtype = np.dtype(
+    def setup_class(cls):
+        cls.pv_dtype = np.dtype([("p", "f8"), ("v", "f8")])
+        cls.pv_t_dtype = np.dtype(
             [("pv", np.dtype([("pp", "f8"), ("vv", "f8")])), ("t", "f8")]
         )
 
-        self.pv = np.array([(1.0, 0.25), (2.0, 0.5), (3.0, 0.75)], self.pv_dtype)
-        self.pv_t = np.array(
-            [((4.0, 2.5), 0.0), ((5.0, 5.0), 1.0), ((6.0, 7.5), 2.0)], self.pv_t_dtype
+        cls.pv = np.array([(1.0, 0.25), (2.0, 0.5), (3.0, 0.75)], cls.pv_dtype)
+        cls.pv_t = np.array(
+            [((4.0, 2.5), 0.0), ((5.0, 5.0), 1.0), ((6.0, 7.5), 2.0)], cls.pv_t_dtype
         )
 
-        self.pv_unit = u.StructuredUnit((u.km, u.km / u.s), ("p", "v"))
-        self.pv_t_unit = u.StructuredUnit((self.pv_unit, u.s), ("pv", "t"))
+        cls.pv_unit = u.StructuredUnit((u.km, u.km / u.s), ("p", "v"))
+        cls.pv_t_unit = u.StructuredUnit((cls.pv_unit, u.s), ("pv", "t"))
 
-        self.q_pv = self.pv << self.pv_unit
-        self.q_pv_t = self.pv_t << self.pv_t_unit
+        cls.q_pv = cls.pv << cls.pv_unit
+        cls.q_pv_t = cls.pv_t << cls.pv_t_unit
 
     def test_structured_to_unstructured(self):
         # can't unstructure something with incompatible units
@@ -2840,9 +2841,9 @@ class TestRecFunctions:
 all_wrapped_functions = get_wrapped_functions(
     np, np.fft, np.linalg, np.lib.recfunctions
 )
-all_wrapped_functions |= (
-    SUPPORTED_NEP35_FUNCTIONS  # ref https://github.com/numpy/numpy/issues/27451
-)
+if NUMPY_LT_2_2:
+    # ref https://github.com/numpy/numpy/issues/27451
+    all_wrapped_functions |= SUPPORTED_NEP35_FUNCTIONS
 tested_functions = get_covered_functions(locals())
 untested_functions = set()
 deprecated_functions = set()
@@ -2971,19 +2972,19 @@ class CheckSignatureCompatibilityBase:
                     # it is not passed down to dispatched functions
                     pass
                 elif kt is KEYWORD_ONLY:
-                    assert (
-                        have_kwargs_helper
-                    ), f"argument {nt!r} is not re-exposed as keyword"
+                    assert have_kwargs_helper, (
+                        f"argument {nt!r} is not re-exposed as keyword"
+                    )
                 elif kt is POSITIONAL_OR_KEYWORD:
-                    assert (
-                        have_args_helper and have_kwargs_helper
-                    ), f"argument {nt!r} is not re-exposed as positional-or-keyword"
+                    assert have_args_helper and have_kwargs_helper, (
+                        f"argument {nt!r} is not re-exposed as positional-or-keyword"
+                    )
             elif kt is VAR_POSITIONAL:
                 assert have_args_helper, "helper is missing a catch-all *args argument"
             elif kt is VAR_KEYWORD:
-                assert (
-                    have_kwargs_helper
-                ), "helper is missing a catch-all **kwargs argument"
+                assert have_kwargs_helper, (
+                    "helper is missing a catch-all **kwargs argument"
+                )
 
     def test_known_arguments(self, target, helper):
         # validate that all exposed arguments map to something in the target

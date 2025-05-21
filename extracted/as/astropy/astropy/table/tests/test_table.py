@@ -3603,6 +3603,26 @@ def test_table_replace_column_with_scalar(empty_table):
         t.replace_column("a", 2)
 
 
+@pytest.mark.parametrize(
+    "arr", [None, [], [[], []], (), ((), ()), np.array([]), np.array([[], []])]
+)
+@pytest.mark.parametrize("arg_type", ["rows", "data"])
+def test_table_create_no_rows_various_inputs(arg_type, arr):
+    kwargs = {arg_type: arr}
+    t = Table(names=["foo", "bar"], dtype=[int, int], **kwargs)
+    assert len(t) == 0
+    assert t.colnames == ["foo", "bar"]
+
+
+@pytest.mark.parametrize("arg_type", ["rows", "data"])
+def test_table_create_no_rows_recarray(arg_type):
+    arr = np.array([], dtype=[("foo", int), ("bar", int)])
+    kwargs = {arg_type: arr}
+    t = Table(**kwargs)
+    assert len(t) == 0
+    assert t.colnames == ["foo", "bar"]
+
+
 def test_table_from_records_nd_quantity():
     """Regression test for #17930"""
 

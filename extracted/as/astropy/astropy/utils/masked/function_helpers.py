@@ -37,9 +37,9 @@ else:
 # such that sphinx can typeset the functions with docstrings.
 # The latter are added to __all__ at the end.
 __all__ = [
-    "MASKED_SAFE_FUNCTIONS",
     "APPLY_TO_BOTH_FUNCTIONS",
     "DISPATCHED_FUNCTIONS",
+    "MASKED_SAFE_FUNCTIONS",
     "UNSUPPORTED_FUNCTIONS",
 ]
 
@@ -809,7 +809,7 @@ def _masked_quantile(a, q, axis=None, out=None, **kwargs):
 def _preprocess_quantile(a, q, axis=None, out=None, **kwargs):
     from astropy.utils.masked import Masked
 
-    if isinstance(q, Masked) or out is not None and not isinstance(out, Masked):
+    if isinstance(q, Masked) or (out is not None and not isinstance(out, Masked)):
         raise NotImplementedError
 
     a = Masked(a)
@@ -1103,7 +1103,7 @@ def lexsort(keys, axis=-1):
             new_key = key.unmasked
             if new_keys and key.mask.any():
                 new_key = new_key.copy()
-                new_key[key.mask] = new_key.flat[0]
+                new_key[key.mask] = new_key.item(0)
             new_keys.extend([new_key, key.mask])
         else:
             new_keys.append(key)

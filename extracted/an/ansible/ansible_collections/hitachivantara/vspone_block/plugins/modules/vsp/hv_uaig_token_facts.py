@@ -26,6 +26,12 @@ attributes:
   check_mode:
     description: Determines if the module should run in check mode.
     support: full
+deprecated:
+  removed_in: '4.0.0'
+  why: The connection type C(gateway) is deprecated.
+  alternative: Not available.
+extends_documentation_fragment:
+- hitachivantara.vspone_block.common.deprecated_note
 options:
   connection_info:
     description: Information required to establish a connection to the UAI gateway.
@@ -73,16 +79,14 @@ api_token:
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.reconciler.uaig_auth_token import (
-    UAIGAuthTokenReconciler,
+from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.gw_module_args import (
+    GatewayArgs,
+    DEPCRECATED_MSG,
 )
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_log import (
     Log,
 )
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.sdsb_utils import (
-    UAIGTokenArguments,
-    SDSBParametersManager,
-)
+
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.ansible_common import (
     validate_ansible_product_registration,
 )
@@ -92,7 +96,7 @@ class UAIGTokenFactManager:
     def __init__(self):
 
         self.logger = Log()
-        self.argument_spec = UAIGTokenArguments.get_arguments()
+        self.argument_spec = GatewayArgs().uaig_token_args()
         self.logger.writeDebug(
             f"MOD:hv_uai_token_fact:argument_spec= {self.argument_spec}"
         )
@@ -101,10 +105,9 @@ class UAIGTokenFactManager:
             supports_check_mode=True,
         )
 
-        self.params = SDSBParametersManager(self.module.params)
+        self.params = None
 
-        parameterManager = SDSBParametersManager(self.module.params)
-        self.connection_info = parameterManager.get_connection_info()
+        self.connection_info = None
 
     def apply(self):
         self.logger.writeInfo("=== Start of UAI Token Facts ===")
@@ -112,7 +115,7 @@ class UAIGTokenFactManager:
         registration_message = validate_ansible_product_registration()
 
         try:
-            sdsb_reconciler = UAIGAuthTokenReconciler(self.connection_info)
+            sdsb_reconciler = self.UAIGAuthTokenReconciler(self.connection_info)
             token = sdsb_reconciler.get_auth_token()
 
             output = {
@@ -122,7 +125,7 @@ class UAIGTokenFactManager:
         except Exception as e:
             self.logger.writeError(str(e))
             self.logger.writeInfo("=== End of UAI Token Facts ===")
-            self.module.fail_json(msg=str(e))
+            self.module.fail_json(msg=str(DEPCRECATED_MSG))
         comments = None
         if registration_message:
             comments = registration_message

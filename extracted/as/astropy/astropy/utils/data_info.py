@@ -29,12 +29,12 @@ import numpy as np
 from . import metadata
 
 __all__ = [
-    "data_info_factory",
-    "dtype_info_name",
     "BaseColumnInfo",
     "DataInfo",
     "MixinInfo",
     "ParentDtypeInfo",
+    "data_info_factory",
+    "dtype_info_name",
 ]
 
 # Tuple of filterwarnings kwargs to ignore when calling info
@@ -153,7 +153,7 @@ def data_info_factory(names, funcs):
 
     def func(dat):
         outs = []
-        for name, func in zip(names, funcs):
+        for func in funcs:
             try:
                 if isinstance(func, str):
                     out = getattr(dat, func)()
@@ -228,11 +228,11 @@ class ParentAttribute:
 
 
 class DataInfoMeta(type):
-    def __new__(mcls, name, bases, dct):
+    def __new__(cls, name, bases, dct):
         # Ensure that we do not gain a __dict__, which would mean
         # arbitrary attributes could be set.
         dct.setdefault("__slots__", [])
-        return super().__new__(mcls, name, bases, dct)
+        return super().__new__(cls, name, bases, dct)
 
     def __init__(cls, name, bases, dct):
         super().__init__(name, bases, dct)
@@ -286,7 +286,7 @@ class DataInfo(metaclass=DataInfoMeta):
     _attr_defaults = {"dtype": np.dtype("O")}
     _attrs_no_copy = set()
     _info_summary_attrs = ("dtype", "shape", "unit", "format", "description", "class")
-    __slots__ = ["_parent_cls", "_parent_ref", "_attrs"]
+    __slots__ = ["_attrs", "_parent_cls", "_parent_ref"]
     # This specifies the list of object attributes which must be stored in
     # order to re-create the object after serialization.  This is independent
     # of normal `info` attributes like name or description.  Subclasses will
@@ -544,7 +544,7 @@ class BaseColumnInfo(DataInfo):
     # like Time or SkyCoord will have different default serialization
     # representations depending on context.
     _serialize_context = None
-    __slots__ = ["_format_funcs", "_copy_indices"]
+    __slots__ = ["_copy_indices", "_format_funcs"]
 
     @property
     def parent_table(self):

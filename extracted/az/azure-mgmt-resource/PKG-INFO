@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: azure-mgmt-resource
-Version: 23.3.0
+Version: 23.4.0
 Summary: Microsoft Azure Resource Management Client Library for Python
 Home-page: https://github.com/Azure/azure-sdk-for-python
 Author: Microsoft Corporation
@@ -11,24 +11,23 @@ Classifier: Development Status :: 5 - Production/Stable
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: License :: OSI Approved :: MIT License
-Requires-Python: >=3.8
+Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: isodate>=0.6.1
 Requires-Dist: typing-extensions>=4.6.0
 Requires-Dist: azure-common>=1.1
-Requires-Dist: azure-mgmt-core>=1.3.2
+Requires-Dist: azure-mgmt-core>=1.5.0
 
 # Microsoft Azure SDK for Python
 
 This is the Microsoft Azure Resource Management Client Library.
-This package has been tested with Python 3.8+.
+This package has been tested with Python 3.9+.
 For a more complete view of Azure libraries, see the [azure sdk python release](https://aka.ms/azsdk/python/all).
 
 ## _Disclaimer_
@@ -39,7 +38,7 @@ _Azure SDK Python packages support for Python 2.7 has ended 01 January 2022. For
 
 ### Prerequisites
 
-- Python 3.8+ is required to use this package.
+- Python 3.9+ is required to use this package.
 - [Azure subscription](https://azure.microsoft.com/free/)
 
 ### Install the package
@@ -51,7 +50,7 @@ pip install azure-identity
 
 ### Authentication
 
-By default, [Azure Active Directory](https://aka.ms/awps/aad) token authentication depends on correct configure of following environment variables.
+By default, [Azure Active Directory](https://aka.ms/awps/aad) token authentication depends on correct configuration of the following environment variables.
 
 - `AZURE_CLIENT_ID` for Azure client ID.
 - `AZURE_TENANT_ID` for Azure tenant ID.
@@ -89,6 +88,22 @@ section of the project.
 
 
 # Release History
+
+## 23.4.0 (2025-05-19)
+
+### Features Added
+
+  - Model DeploymentProperties has a new parameter extension_configs
+  - Model DeploymentPropertiesExtended has a new parameter extensions
+  - Model DeploymentWhatIfProperties has a new parameter extension_configs
+  - Model ResourceReference has a new parameter api_version
+  - Model ResourceReference has a new parameter extension
+  - Model ResourceReference has a new parameter identifiers
+  - Model ResourceReference has a new parameter resource_type
+  - Model TargetResource has a new parameter api_version
+  - Model TargetResource has a new parameter extension
+  - Model TargetResource has a new parameter identifiers
+  - Model TargetResource has a new parameter symbolic_name
 
 ## 23.3.0 (2025-02-24)
 

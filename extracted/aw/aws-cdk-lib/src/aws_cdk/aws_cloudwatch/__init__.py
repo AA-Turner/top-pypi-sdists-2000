@@ -392,6 +392,58 @@ only supports filtering by `unit` for Alarms, not in Dashboard graphs.
 Please see the following GitHub issue for a discussion on real unit
 calculations in CDK: https://github.com/aws/aws-cdk/issues/5595
 
+## Anomaly Detection Alarms
+
+CloudWatch anomaly detection applies machine learning algorithms to create a model of expected metric behavior. You can use anomaly detection to:
+
+* Detect anomalies with minimal configuration
+* Visualize expected metric behavior
+* Create alarms that trigger when metrics deviate from expected patterns
+
+### Creating an Anomaly Detection Alarm
+
+To build an Anomaly Detection Alarm, you should create a MathExpression that
+uses an `ANOMALY_DETECTION_BAND()` function, and use one of the band comparison
+operators (see the next section). Anomaly Detection Alarms have a dynamic
+threshold, not a fixed one, so the value for `threshold` is ignored. Specify the
+value `0` or use the symbolic `Alarm.ANOMALY_DETECTION_NO_THRESHOLD` value.
+
+You can use the `AnomalyDetectionAlarm` class for convenience, which takes care
+of building the right metric math expression and passing in a magic value for
+the treshold for you:
+
+```python
+# Create a metric
+metric = cloudwatch.Metric(
+    namespace="AWS/EC2",
+    metric_name="CPUUtilization",
+    statistic="Average",
+    period=Duration.minutes(5)
+)
+
+# Create an anomaly detection alarm
+alarm = cloudwatch.AnomalyDetectionAlarm(self, "AnomalyAlarm",
+    metric=metric,
+    evaluation_periods=1,
+
+    # Number of standard deviations for the band (default: 2)
+    std_devs=2,
+    # Alarm outside on either side of the band, or just below or above it (default: outside)
+    comparison_operator=cloudwatch.ComparisonOperator.LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD,
+    alarm_description="Alarm when metric is outside the expected band"
+)
+```
+
+### Comparison Operators for Anomaly Detection
+
+When creating an anomaly detection alarm, you must use one of the following comparison operators:
+
+* `LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD`: Alarm when the metric is outside the band, on either side of it
+* `GREATER_THAN_UPPER_THRESHOLD`: Alarm only when the metric is above the band
+* `LESS_THAN_LOWER_THRESHOLD`: Alarm only when the metric is below the band
+
+For more information on anomaly detection in CloudWatch, see the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html).
+
 ## Dashboards
 
 Dashboards are set of Widgets stored server-side which can be accessed quickly
@@ -1334,6 +1386,279 @@ class AlarmStatusWidgetSortBy(enum.Enum):
 
     The alarm that changed state most recently is listed first.
     '''
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_cloudwatch.AnomalyDetectionAlarmProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "evaluation_periods": "evaluationPeriods",
+        "metric": "metric",
+        "actions_enabled": "actionsEnabled",
+        "alarm_description": "alarmDescription",
+        "alarm_name": "alarmName",
+        "comparison_operator": "comparisonOperator",
+        "datapoints_to_alarm": "datapointsToAlarm",
+        "evaluate_low_sample_count_percentile": "evaluateLowSampleCountPercentile",
+        "period": "period",
+        "statistic": "statistic",
+        "std_devs": "stdDevs",
+        "treat_missing_data": "treatMissingData",
+    },
+)
+class AnomalyDetectionAlarmProps:
+    def __init__(
+        self,
+        *,
+        evaluation_periods: jsii.Number,
+        metric: "IMetric",
+        actions_enabled: typing.Optional[builtins.bool] = None,
+        alarm_description: typing.Optional[builtins.str] = None,
+        alarm_name: typing.Optional[builtins.str] = None,
+        comparison_operator: typing.Optional["ComparisonOperator"] = None,
+        datapoints_to_alarm: typing.Optional[jsii.Number] = None,
+        evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
+        period: typing.Optional[_Duration_4839e8c3] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        std_devs: typing.Optional[jsii.Number] = None,
+        treat_missing_data: typing.Optional["TreatMissingData"] = None,
+    ) -> None:
+        '''Properties for Anomaly Detection Alarms.
+
+        :param evaluation_periods: The number of periods over which data is compared to the specified threshold.
+        :param metric: The metric to add the alarm on. Metric objects can be obtained from most resources, or you can construct custom Metric objects by instantiating one.
+        :param actions_enabled: Whether the actions for this alarm are enabled. Default: true
+        :param alarm_description: Description for the alarm. Default: No description
+        :param alarm_name: Name of the alarm. Default: Automatically generated name
+        :param comparison_operator: Comparison operator to use to check if metric is breaching. Must be one of the anomaly detection operators: - LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD - GREATER_THAN_UPPER_THRESHOLD - LESS_THAN_LOWER_THRESHOLD Default: LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD
+        :param datapoints_to_alarm: The number of datapoints that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M. For more information, see Evaluating an Alarm in the Amazon CloudWatch User Guide. Default: ``evaluationPeriods``
+        :param evaluate_low_sample_count_percentile: Specifies whether to evaluate the data and potentially change the alarm state if there are too few data points to be statistically significant. Used only for alarms that are based on percentiles. Default: - Not configured.
+        :param period: (deprecated) The period over which the specified statistic is applied. Cannot be used with ``MathExpression`` objects. Default: - The period from the metric
+        :param statistic: (deprecated) What function to use for aggregating. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" Cannot be used with ``MathExpression`` objects. Default: - The statistic from the metric
+        :param std_devs: The number of standard deviations to use for the anomaly detection band. The higher the value, the wider the band. - Must be greater than 0. A value of 0 or negative values would not make sense in the context of calculating standard deviations. - There is no strict maximum value defined, as standard deviations can theoretically extend infinitely. However, in practice, values beyond 5 or 6 standard deviations are rarely used, as they would result in an extremely wide anomaly detection band, potentially missing significant anomalies. Default: 2
+        :param treat_missing_data: Sets how this alarm is to handle missing data points. Default: TreatMissingData.Missing
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # Create a metric
+            metric = cloudwatch.Metric(
+                namespace="AWS/EC2",
+                metric_name="CPUUtilization",
+                statistic="Average",
+                period=Duration.minutes(5)
+            )
+            
+            # Create an anomaly detection alarm
+            alarm = cloudwatch.AnomalyDetectionAlarm(self, "AnomalyAlarm",
+                metric=metric,
+                evaluation_periods=1,
+            
+                # Number of standard deviations for the band (default: 2)
+                std_devs=2,
+                # Alarm outside on either side of the band, or just below or above it (default: outside)
+                comparison_operator=cloudwatch.ComparisonOperator.LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD,
+                alarm_description="Alarm when metric is outside the expected band"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d770d314ce70d6c9f6003c8d6c5aa5cc35a2de931e79a5b71b5612d03298011d)
+            check_type(argname="argument evaluation_periods", value=evaluation_periods, expected_type=type_hints["evaluation_periods"])
+            check_type(argname="argument metric", value=metric, expected_type=type_hints["metric"])
+            check_type(argname="argument actions_enabled", value=actions_enabled, expected_type=type_hints["actions_enabled"])
+            check_type(argname="argument alarm_description", value=alarm_description, expected_type=type_hints["alarm_description"])
+            check_type(argname="argument alarm_name", value=alarm_name, expected_type=type_hints["alarm_name"])
+            check_type(argname="argument comparison_operator", value=comparison_operator, expected_type=type_hints["comparison_operator"])
+            check_type(argname="argument datapoints_to_alarm", value=datapoints_to_alarm, expected_type=type_hints["datapoints_to_alarm"])
+            check_type(argname="argument evaluate_low_sample_count_percentile", value=evaluate_low_sample_count_percentile, expected_type=type_hints["evaluate_low_sample_count_percentile"])
+            check_type(argname="argument period", value=period, expected_type=type_hints["period"])
+            check_type(argname="argument statistic", value=statistic, expected_type=type_hints["statistic"])
+            check_type(argname="argument std_devs", value=std_devs, expected_type=type_hints["std_devs"])
+            check_type(argname="argument treat_missing_data", value=treat_missing_data, expected_type=type_hints["treat_missing_data"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "evaluation_periods": evaluation_periods,
+            "metric": metric,
+        }
+        if actions_enabled is not None:
+            self._values["actions_enabled"] = actions_enabled
+        if alarm_description is not None:
+            self._values["alarm_description"] = alarm_description
+        if alarm_name is not None:
+            self._values["alarm_name"] = alarm_name
+        if comparison_operator is not None:
+            self._values["comparison_operator"] = comparison_operator
+        if datapoints_to_alarm is not None:
+            self._values["datapoints_to_alarm"] = datapoints_to_alarm
+        if evaluate_low_sample_count_percentile is not None:
+            self._values["evaluate_low_sample_count_percentile"] = evaluate_low_sample_count_percentile
+        if period is not None:
+            self._values["period"] = period
+        if statistic is not None:
+            self._values["statistic"] = statistic
+        if std_devs is not None:
+            self._values["std_devs"] = std_devs
+        if treat_missing_data is not None:
+            self._values["treat_missing_data"] = treat_missing_data
+
+    @builtins.property
+    def evaluation_periods(self) -> jsii.Number:
+        '''The number of periods over which data is compared to the specified threshold.'''
+        result = self._values.get("evaluation_periods")
+        assert result is not None, "Required property 'evaluation_periods' is missing"
+        return typing.cast(jsii.Number, result)
+
+    @builtins.property
+    def metric(self) -> "IMetric":
+        '''The metric to add the alarm on.
+
+        Metric objects can be obtained from most resources, or you can construct
+        custom Metric objects by instantiating one.
+        '''
+        result = self._values.get("metric")
+        assert result is not None, "Required property 'metric' is missing"
+        return typing.cast("IMetric", result)
+
+    @builtins.property
+    def actions_enabled(self) -> typing.Optional[builtins.bool]:
+        '''Whether the actions for this alarm are enabled.
+
+        :default: true
+        '''
+        result = self._values.get("actions_enabled")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def alarm_description(self) -> typing.Optional[builtins.str]:
+        '''Description for the alarm.
+
+        :default: No description
+        '''
+        result = self._values.get("alarm_description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def alarm_name(self) -> typing.Optional[builtins.str]:
+        '''Name of the alarm.
+
+        :default: Automatically generated name
+        '''
+        result = self._values.get("alarm_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def comparison_operator(self) -> typing.Optional["ComparisonOperator"]:
+        '''Comparison operator to use to check if metric is breaching.
+
+        Must be one of the anomaly detection operators:
+
+        - LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD
+        - GREATER_THAN_UPPER_THRESHOLD
+        - LESS_THAN_LOWER_THRESHOLD
+
+        :default: LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD
+        '''
+        result = self._values.get("comparison_operator")
+        return typing.cast(typing.Optional["ComparisonOperator"], result)
+
+    @builtins.property
+    def datapoints_to_alarm(self) -> typing.Optional[jsii.Number]:
+        '''The number of datapoints that must be breaching to trigger the alarm.
+
+        This is used only if you are setting an "M
+        out of N" alarm. In that case, this value is the M. For more information, see Evaluating an Alarm in the Amazon
+        CloudWatch User Guide.
+
+        :default: ``evaluationPeriods``
+
+        :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarm-evaluation
+        '''
+        result = self._values.get("datapoints_to_alarm")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def evaluate_low_sample_count_percentile(self) -> typing.Optional[builtins.str]:
+        '''Specifies whether to evaluate the data and potentially change the alarm state if there are too few data points to be statistically significant.
+
+        Used only for alarms that are based on percentiles.
+
+        :default: - Not configured.
+        '''
+        result = self._values.get("evaluate_low_sample_count_percentile")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+        '''(deprecated) The period over which the specified statistic is applied.
+
+        Cannot be used with ``MathExpression`` objects.
+
+        :default: - The period from the metric
+
+        :deprecated: Use ``metric.with({ period: ... })`` to encode the period into the Metric object
+
+        :stability: deprecated
+        '''
+        result = self._values.get("period")
+        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+
+    @builtins.property
+    def statistic(self) -> typing.Optional[builtins.str]:
+        '''(deprecated) What function to use for aggregating.
+
+        Can be one of the following:
+
+        - "Minimum" | "min"
+        - "Maximum" | "max"
+        - "Average" | "avg"
+        - "Sum" | "sum"
+        - "SampleCount | "n"
+        - "pNN.NN"
+
+        Cannot be used with ``MathExpression`` objects.
+
+        :default: - The statistic from the metric
+
+        :deprecated: Use ``metric.with({ statistic: ... })`` to encode the period into the Metric object
+
+        :stability: deprecated
+        '''
+        result = self._values.get("statistic")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def std_devs(self) -> typing.Optional[jsii.Number]:
+        '''The number of standard deviations to use for the anomaly detection band.
+
+        The higher the value, the wider the band.
+
+        - Must be greater than 0. A value of 0 or negative values would not make sense in the context of calculating standard deviations.
+        - There is no strict maximum value defined, as standard deviations can theoretically extend infinitely. However, in practice, values beyond 5 or 6 standard deviations are rarely used, as they would result in an extremely wide anomaly detection band, potentially missing significant anomalies.
+
+        :default: 2
+        '''
+        result = self._values.get("std_devs")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def treat_missing_data(self) -> typing.Optional["TreatMissingData"]:
+        '''Sets how this alarm is to handle missing data points.
+
+        :default: TreatMissingData.Missing
+        '''
+        result = self._values.get("treat_missing_data")
+        return typing.cast(typing.Optional["TreatMissingData"], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "AnomalyDetectionAlarmProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
 
 
 @jsii.implements(_IInspectable_c2943556, _ITaggableV2_4e6798f8)
@@ -8932,13 +9257,24 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
 
     Example::
 
-        # fn: lambda.Function
+        # Create a metric
+        metric = cloudwatch.Metric(
+            namespace="AWS/EC2",
+            metric_name="CPUUtilization",
+            statistic="Average",
+            period=Duration.minutes(5)
+        )
         
+        # Create an anomaly detection alarm
+        alarm = cloudwatch.AnomalyDetectionAlarm(self, "AnomalyAlarm",
+            metric=metric,
+            evaluation_periods=1,
         
-        minute_error_rate = fn.metric_errors(
-            statistic=cloudwatch.Stats.AVERAGE,
-            period=Duration.minutes(1),
-            label="Lambda failure rate"
+            # Number of standard deviations for the band (default: 2)
+            std_devs=2,
+            # Alarm outside on either side of the band, or just below or above it (default: outside)
+            comparison_operator=cloudwatch.ComparisonOperator.LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD,
+            alarm_description="Alarm when metric is outside the expected band"
         )
     '''
 
@@ -8988,6 +9324,43 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
         )
 
         jsii.create(self.__class__, self, [props])
+
+    @jsii.member(jsii_name="anomalyDetectionFor")
+    @builtins.classmethod
+    def anomaly_detection_for(
+        cls,
+        *,
+        metric: IMetric,
+        std_devs: typing.Optional[jsii.Number] = None,
+        color: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional[_Duration_4839e8c3] = None,
+        search_account: typing.Optional[builtins.str] = None,
+        search_region: typing.Optional[builtins.str] = None,
+    ) -> MathExpression:
+        '''Creates an anomaly detection metric from the provided metric.
+
+        :param metric: The metric to add the alarm on. Metric objects can be obtained from most resources, or you can construct custom Metric objects by instantiating one.
+        :param std_devs: The number of standard deviations to use for the anomaly detection band. The higher the value, the wider the band. - Must be greater than 0. A value of 0 or negative values would not make sense in the context of calculating standard deviations. - There is no strict maximum value defined, as standard deviations can theoretically extend infinitely. However, in practice, values beyond 5 or 6 standard deviations are rarely used, as they would result in an extremely wide anomaly detection band, potentially missing significant anomalies. Default: 2
+        :param color: Color for this metric when added to a Graph in a Dashboard. Default: - Automatic color
+        :param label: Label for this expression when added to a Graph in a Dashboard. If this expression evaluates to more than one time series (for example, through the use of ``METRICS()`` or ``SEARCH()`` expressions), each time series will appear in the graph using a combination of the expression label and the individual metric label. Specify the empty string (``''``) to suppress the expression label and only keep the metric label. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. If the math expression produces more than one time series, the maximum will be shown for each individual time series produce by this math expression. Default: - Expression value is used as label
+        :param period: The period over which the expression's statistics are applied. This period overrides all periods in the metrics used in this math expression. Default: Duration.minutes(5)
+        :param search_account: Account to evaluate search expressions within. Specifying a searchAccount has no effect to the account used for metrics within the expression (passed via usingMetrics). Default: - Deployment account.
+        :param search_region: Region to evaluate search expressions within. Specifying a searchRegion has no effect to the region used for metrics within the expression (passed via usingMetrics). Default: - Deployment region.
+
+        :return: An anomaly detection metric
+        '''
+        props = AnomalyDetectionMetricOptions(
+            metric=metric,
+            std_devs=std_devs,
+            color=color,
+            label=label,
+            period=period,
+            search_account=search_account,
+            search_region=search_region,
+        )
+
+        return typing.cast(MathExpression, jsii.sinvoke(cls, "anomalyDetectionFor", [props]))
 
     @jsii.member(jsii_name="grantPutMetricData")
     @builtins.classmethod
@@ -9751,29 +10124,24 @@ class MetricProps(CommonMetricOptions):
 
         Example::
 
-            import aws_cdk.aws_cloudwatch as cloudwatch
-            
-            
+            # Create a metric
             metric = cloudwatch.Metric(
-                namespace="MyNamespace",
-                metric_name="MyMetric",
-                dimensions_map={"MyDimension": "MyDimensionValue"}
-            )
-            alarm = cloudwatch.Alarm(self, "MyAlarm",
-                metric=metric,
-                threshold=100,
-                evaluation_periods=3,
-                datapoints_to_alarm=2
+                namespace="AWS/EC2",
+                metric_name="CPUUtilization",
+                statistic="Average",
+                period=Duration.minutes(5)
             )
             
-            topic_rule = iot.TopicRule(self, "TopicRule",
-                sql=iot.IotSql.from_string_as_ver20160323("SELECT topic(2) as device_id FROM 'device/+/data'"),
-                actions=[
-                    actions.CloudWatchSetAlarmStateAction(alarm,
-                        reason="AWS Iot Rule action is triggered",
-                        alarm_state_to_set=cloudwatch.AlarmState.ALARM
-                    )
-                ]
+            # Create an anomaly detection alarm
+            alarm = cloudwatch.AnomalyDetectionAlarm(self, "AnomalyAlarm",
+                metric=metric,
+                evaluation_periods=1,
+            
+                # Number of standard deviations for the band (default: 2)
+                std_devs=2,
+                # Alarm outside on either side of the band, or just below or above it (default: outside)
+                comparison_operator=cloudwatch.ComparisonOperator.LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD,
+                alarm_description="Alarm when metric is outside the expected band"
             )
         '''
         if __debug__:
@@ -12898,6 +13266,199 @@ class AlarmWidgetProps(MetricWidgetProps):
         )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_cloudwatch.AnomalyDetectionMetricOptions",
+    jsii_struct_bases=[MathExpressionOptions],
+    name_mapping={
+        "color": "color",
+        "label": "label",
+        "period": "period",
+        "search_account": "searchAccount",
+        "search_region": "searchRegion",
+        "metric": "metric",
+        "std_devs": "stdDevs",
+    },
+)
+class AnomalyDetectionMetricOptions(MathExpressionOptions):
+    def __init__(
+        self,
+        *,
+        color: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional[_Duration_4839e8c3] = None,
+        search_account: typing.Optional[builtins.str] = None,
+        search_region: typing.Optional[builtins.str] = None,
+        metric: IMetric,
+        std_devs: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''Properties needed to make an anomaly detection alarm from a metric.
+
+        :param color: Color for this metric when added to a Graph in a Dashboard. Default: - Automatic color
+        :param label: Label for this expression when added to a Graph in a Dashboard. If this expression evaluates to more than one time series (for example, through the use of ``METRICS()`` or ``SEARCH()`` expressions), each time series will appear in the graph using a combination of the expression label and the individual metric label. Specify the empty string (``''``) to suppress the expression label and only keep the metric label. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. If the math expression produces more than one time series, the maximum will be shown for each individual time series produce by this math expression. Default: - Expression value is used as label
+        :param period: The period over which the expression's statistics are applied. This period overrides all periods in the metrics used in this math expression. Default: Duration.minutes(5)
+        :param search_account: Account to evaluate search expressions within. Specifying a searchAccount has no effect to the account used for metrics within the expression (passed via usingMetrics). Default: - Deployment account.
+        :param search_region: Region to evaluate search expressions within. Specifying a searchRegion has no effect to the region used for metrics within the expression (passed via usingMetrics). Default: - Deployment region.
+        :param metric: The metric to add the alarm on. Metric objects can be obtained from most resources, or you can construct custom Metric objects by instantiating one.
+        :param std_devs: The number of standard deviations to use for the anomaly detection band. The higher the value, the wider the band. - Must be greater than 0. A value of 0 or negative values would not make sense in the context of calculating standard deviations. - There is no strict maximum value defined, as standard deviations can theoretically extend infinitely. However, in practice, values beyond 5 or 6 standard deviations are rarely used, as they would result in an extremely wide anomaly detection band, potentially missing significant anomalies. Default: 2
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            import aws_cdk as cdk
+            from aws_cdk import aws_cloudwatch as cloudwatch
+            
+            # metric: cloudwatch.Metric
+            
+            anomaly_detection_metric_options = cloudwatch.AnomalyDetectionMetricOptions(
+                metric=metric,
+            
+                # the properties below are optional
+                color="color",
+                label="label",
+                period=cdk.Duration.minutes(30),
+                search_account="searchAccount",
+                search_region="searchRegion",
+                std_devs=123
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c5ab1cfa142c158cb621ab2339ccaa469bd13773cd7f760d978164625bcdeb80)
+            check_type(argname="argument color", value=color, expected_type=type_hints["color"])
+            check_type(argname="argument label", value=label, expected_type=type_hints["label"])
+            check_type(argname="argument period", value=period, expected_type=type_hints["period"])
+            check_type(argname="argument search_account", value=search_account, expected_type=type_hints["search_account"])
+            check_type(argname="argument search_region", value=search_region, expected_type=type_hints["search_region"])
+            check_type(argname="argument metric", value=metric, expected_type=type_hints["metric"])
+            check_type(argname="argument std_devs", value=std_devs, expected_type=type_hints["std_devs"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "metric": metric,
+        }
+        if color is not None:
+            self._values["color"] = color
+        if label is not None:
+            self._values["label"] = label
+        if period is not None:
+            self._values["period"] = period
+        if search_account is not None:
+            self._values["search_account"] = search_account
+        if search_region is not None:
+            self._values["search_region"] = search_region
+        if std_devs is not None:
+            self._values["std_devs"] = std_devs
+
+    @builtins.property
+    def color(self) -> typing.Optional[builtins.str]:
+        '''Color for this metric when added to a Graph in a Dashboard.
+
+        :default: - Automatic color
+        '''
+        result = self._values.get("color")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def label(self) -> typing.Optional[builtins.str]:
+        '''Label for this expression when added to a Graph in a Dashboard.
+
+        If this expression evaluates to more than one time series (for
+        example, through the use of ``METRICS()`` or ``SEARCH()`` expressions),
+        each time series will appear in the graph using a combination of the
+        expression label and the individual metric label. Specify the empty
+        string (``''``) to suppress the expression label and only keep the
+        metric label.
+
+        You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_
+        to show summary information about the displayed time series
+        in the legend. For example, if you use::
+
+           [max: ${MAX}] MyMetric
+
+        As the metric label, the maximum value in the visible range will
+        be shown next to the time series name in the graph's legend. If the
+        math expression produces more than one time series, the maximum
+        will be shown for each individual time series produce by this
+        math expression.
+
+        :default: - Expression value is used as label
+        '''
+        result = self._values.get("label")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+        '''The period over which the expression's statistics are applied.
+
+        This period overrides all periods in the metrics used in this
+        math expression.
+
+        :default: Duration.minutes(5)
+        '''
+        result = self._values.get("period")
+        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+
+    @builtins.property
+    def search_account(self) -> typing.Optional[builtins.str]:
+        '''Account to evaluate search expressions within.
+
+        Specifying a searchAccount has no effect to the account used
+        for metrics within the expression (passed via usingMetrics).
+
+        :default: - Deployment account.
+        '''
+        result = self._values.get("search_account")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def search_region(self) -> typing.Optional[builtins.str]:
+        '''Region to evaluate search expressions within.
+
+        Specifying a searchRegion has no effect to the region used
+        for metrics within the expression (passed via usingMetrics).
+
+        :default: - Deployment region.
+        '''
+        result = self._values.get("search_region")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def metric(self) -> IMetric:
+        '''The metric to add the alarm on.
+
+        Metric objects can be obtained from most resources, or you can construct
+        custom Metric objects by instantiating one.
+        '''
+        result = self._values.get("metric")
+        assert result is not None, "Required property 'metric' is missing"
+        return typing.cast(IMetric, result)
+
+    @builtins.property
+    def std_devs(self) -> typing.Optional[jsii.Number]:
+        '''The number of standard deviations to use for the anomaly detection band.
+
+        The higher the value, the wider the band.
+
+        - Must be greater than 0. A value of 0 or negative values would not make sense in the context of calculating standard deviations.
+        - There is no strict maximum value defined, as standard deviations can theoretically extend infinitely. However, in practice, values beyond 5 or 6 standard deviations are rarely used, as they would result in an extremely wide anomaly detection band, potentially missing significant anomalies.
+
+        :default: 2
+        '''
+        result = self._values.get("std_devs")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "AnomalyDetectionMetricOptions(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(IWidget)
 class Column(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Column"):
     '''A widget that contains other widgets in a vertical column.
@@ -15021,6 +15582,21 @@ class Alarm(
         return typing.cast(HorizontalAnnotation, jsii.invoke(self, "toAnnotation", []))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="ANOMALY_DETECTION_NO_THRESHOLD")
+    def ANOMALY_DETECTION_NO_THRESHOLD(cls) -> jsii.Number:
+        '''Conventional value for the threshold property when creating anomaly detection alarms.
+
+        Anomaly detection alarms don't have numbered threshold. Instead, they have a dynamically
+        calculated threshold based on the metric math expression that contains a metric expression.
+
+        The ``threshold`` property is required, but the value is ignored. This
+        constant has the value 0, and has a symbolic name to indicate why the
+        threshold is 0. You can use ``new AnomalyDetectionAlarm()`` to avoid having to pass
+        the ``threshold`` property at all.
+        '''
+        return typing.cast(jsii.Number, jsii.sget(cls, "ANOMALY_DETECTION_NO_THRESHOLD"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
     def PROPERTY_INJECTION_ID(cls) -> builtins.str:
         '''Uniquely identifies this class.'''
@@ -15051,6 +15627,103 @@ class Alarm(
         return typing.cast(IMetric, jsii.get(self, "metric"))
 
 
+class AnomalyDetectionAlarm(
+    Alarm,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_cloudwatch.AnomalyDetectionAlarm",
+):
+    '''CloudWatch Alarm that uses anomaly detection to trigger alarms.
+
+    This alarm type is specifically designed for use with anomaly detection operators
+    like LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        # Create a metric
+        metric = cloudwatch.Metric(
+            namespace="AWS/EC2",
+            metric_name="CPUUtilization",
+            statistic="Average",
+            period=Duration.minutes(5)
+        )
+        
+        # Create an anomaly detection alarm
+        alarm = cloudwatch.AnomalyDetectionAlarm(self, "AnomalyAlarm",
+            metric=metric,
+            evaluation_periods=1,
+        
+            # Number of standard deviations for the band (default: 2)
+            std_devs=2,
+            # Alarm outside on either side of the band, or just below or above it (default: outside)
+            comparison_operator=cloudwatch.ComparisonOperator.LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD,
+            alarm_description="Alarm when metric is outside the expected band"
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        evaluation_periods: jsii.Number,
+        metric: IMetric,
+        actions_enabled: typing.Optional[builtins.bool] = None,
+        alarm_description: typing.Optional[builtins.str] = None,
+        alarm_name: typing.Optional[builtins.str] = None,
+        comparison_operator: typing.Optional[ComparisonOperator] = None,
+        datapoints_to_alarm: typing.Optional[jsii.Number] = None,
+        evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
+        period: typing.Optional[_Duration_4839e8c3] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        std_devs: typing.Optional[jsii.Number] = None,
+        treat_missing_data: typing.Optional[TreatMissingData] = None,
+    ) -> None:
+        '''
+        :param scope: -
+        :param id: -
+        :param evaluation_periods: The number of periods over which data is compared to the specified threshold.
+        :param metric: The metric to add the alarm on. Metric objects can be obtained from most resources, or you can construct custom Metric objects by instantiating one.
+        :param actions_enabled: Whether the actions for this alarm are enabled. Default: true
+        :param alarm_description: Description for the alarm. Default: No description
+        :param alarm_name: Name of the alarm. Default: Automatically generated name
+        :param comparison_operator: Comparison operator to use to check if metric is breaching. Must be one of the anomaly detection operators: - LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD - GREATER_THAN_UPPER_THRESHOLD - LESS_THAN_LOWER_THRESHOLD Default: LESS_THAN_LOWER_OR_GREATER_THAN_UPPER_THRESHOLD
+        :param datapoints_to_alarm: The number of datapoints that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M. For more information, see Evaluating an Alarm in the Amazon CloudWatch User Guide. Default: ``evaluationPeriods``
+        :param evaluate_low_sample_count_percentile: Specifies whether to evaluate the data and potentially change the alarm state if there are too few data points to be statistically significant. Used only for alarms that are based on percentiles. Default: - Not configured.
+        :param period: (deprecated) The period over which the specified statistic is applied. Cannot be used with ``MathExpression`` objects. Default: - The period from the metric
+        :param statistic: (deprecated) What function to use for aggregating. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" Cannot be used with ``MathExpression`` objects. Default: - The statistic from the metric
+        :param std_devs: The number of standard deviations to use for the anomaly detection band. The higher the value, the wider the band. - Must be greater than 0. A value of 0 or negative values would not make sense in the context of calculating standard deviations. - There is no strict maximum value defined, as standard deviations can theoretically extend infinitely. However, in practice, values beyond 5 or 6 standard deviations are rarely used, as they would result in an extremely wide anomaly detection band, potentially missing significant anomalies. Default: 2
+        :param treat_missing_data: Sets how this alarm is to handle missing data points. Default: TreatMissingData.Missing
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a7086e47981f437b1862310e2c90e4c5bcd6054dc3450e46e526bc835a0fdda0)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = AnomalyDetectionAlarmProps(
+            evaluation_periods=evaluation_periods,
+            metric=metric,
+            actions_enabled=actions_enabled,
+            alarm_description=alarm_description,
+            alarm_name=alarm_name,
+            comparison_operator=comparison_operator,
+            datapoints_to_alarm=datapoints_to_alarm,
+            evaluate_low_sample_count_percentile=evaluate_low_sample_count_percentile,
+            period=period,
+            statistic=statistic,
+            std_devs=std_devs,
+            treat_missing_data=treat_missing_data,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+
 __all__ = [
     "Alarm",
     "AlarmActionConfig",
@@ -15063,6 +15736,9 @@ __all__ = [
     "AlarmStatusWidgetSortBy",
     "AlarmWidget",
     "AlarmWidgetProps",
+    "AnomalyDetectionAlarm",
+    "AnomalyDetectionAlarmProps",
+    "AnomalyDetectionMetricOptions",
     "CfnAlarm",
     "CfnAlarmProps",
     "CfnAnomalyDetector",
@@ -15201,6 +15877,24 @@ def _typecheckingstub__b487d6400a85492ffe968131ec5a7294320f90cef90f0505f02beffc7
     states: typing.Optional[typing.Sequence[AlarmState]] = None,
     title: typing.Optional[builtins.str] = None,
     width: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d770d314ce70d6c9f6003c8d6c5aa5cc35a2de931e79a5b71b5612d03298011d(
+    *,
+    evaluation_periods: jsii.Number,
+    metric: IMetric,
+    actions_enabled: typing.Optional[builtins.bool] = None,
+    alarm_description: typing.Optional[builtins.str] = None,
+    alarm_name: typing.Optional[builtins.str] = None,
+    comparison_operator: typing.Optional[ComparisonOperator] = None,
+    datapoints_to_alarm: typing.Optional[jsii.Number] = None,
+    evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
+    period: typing.Optional[_Duration_4839e8c3] = None,
+    statistic: typing.Optional[builtins.str] = None,
+    std_devs: typing.Optional[jsii.Number] = None,
+    treat_missing_data: typing.Optional[TreatMissingData] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16545,6 +17239,19 @@ def _typecheckingstub__8b6bef2cc64a78bffd68dc95a764829a6c125294deaebcd42b56c4935
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c5ab1cfa142c158cb621ab2339ccaa469bd13773cd7f760d978164625bcdeb80(
+    *,
+    color: typing.Optional[builtins.str] = None,
+    label: typing.Optional[builtins.str] = None,
+    period: typing.Optional[_Duration_4839e8c3] = None,
+    search_account: typing.Optional[builtins.str] = None,
+    search_region: typing.Optional[builtins.str] = None,
+    metric: IMetric,
+    std_devs: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__76ce8e89badc991e6248d5096f1d0b7ed5c9b4e588f4383e932e8f87c07043c6(
     *widgets: IWidget,
 ) -> None:
@@ -16795,6 +17502,26 @@ def _typecheckingstub__0f69e87f80e55b26f710e5c03872b4814d854ded266dd530cb19c3aeb
 
 def _typecheckingstub__35e42b79cd71f370c96d9123c26abff1c323e3360845e3957f3fa6b0bb344dde(
     *actions: IAlarmAction,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a7086e47981f437b1862310e2c90e4c5bcd6054dc3450e46e526bc835a0fdda0(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    evaluation_periods: jsii.Number,
+    metric: IMetric,
+    actions_enabled: typing.Optional[builtins.bool] = None,
+    alarm_description: typing.Optional[builtins.str] = None,
+    alarm_name: typing.Optional[builtins.str] = None,
+    comparison_operator: typing.Optional[ComparisonOperator] = None,
+    datapoints_to_alarm: typing.Optional[jsii.Number] = None,
+    evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
+    period: typing.Optional[_Duration_4839e8c3] = None,
+    statistic: typing.Optional[builtins.str] = None,
+    std_devs: typing.Optional[jsii.Number] = None,
+    treat_missing_data: typing.Optional[TreatMissingData] = None,
 ) -> None:
     """Type checking stubs"""
     pass

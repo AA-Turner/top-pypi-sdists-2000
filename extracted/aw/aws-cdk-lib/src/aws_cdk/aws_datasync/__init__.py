@@ -6334,9 +6334,7 @@ class CfnStorageSystem(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_datasync.CfnStorageSystem",
 ):
-    '''The ``AWS::DataSync::StorageSystem`` resource creates an AWS resource for an on-premises storage system that you want DataSync Discovery to collect information about.
-
-    For more information, see `discovering your storage with DataSync Discovery. <https://docs.aws.amazon.com/datasync/latest/userguide/understanding-your-storage.html>`_
+    '''http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html
     :cloudformationResource: AWS::DataSync::StorageSystem
@@ -6388,13 +6386,13 @@ class CfnStorageSystem(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param agent_arns: Specifies the Amazon Resource Name (ARN) of the DataSync agent that connects to and reads from your on-premises storage system's management interface. You can only specify one ARN.
-        :param server_configuration: Specifies the server name and network port required to connect with the management interface of your on-premises storage system.
-        :param system_type: Specifies the type of on-premises storage system that you want DataSync Discovery to collect information about. .. epigraph:: DataSync Discovery currently supports NetApp Fabric-Attached Storage (FAS) and All Flash FAS (AFF) systems running ONTAP 9.7 or later.
-        :param cloud_watch_log_group_arn: Specifies the ARN of the Amazon CloudWatch log group for monitoring and logging discovery job events.
-        :param name: Specifies a familiar name for your on-premises storage system.
-        :param server_credentials: Specifies the user name and password for accessing your on-premises storage system's management interface.
-        :param tags: Specifies labels that help you categorize, filter, and search for your AWS resources. We recommend creating at least a name tag for your on-premises storage system.
+        :param agent_arns: 
+        :param server_configuration: 
+        :param system_type: 
+        :param cloud_watch_log_group_arn: 
+        :param name: 
+        :param server_credentials: 
+        :param tags: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cd03aea3d03c00385e272f326dc093d0575219e3eac09a9f89062f9453a9360f)
@@ -6445,19 +6443,23 @@ class CfnStorageSystem(
     @builtins.property
     @jsii.member(jsii_name="attrConnectivityStatus")
     def attr_connectivity_status(self) -> builtins.str:
-        '''Indicates whether your DataSync agent can connect to your on-premises storage system.
-
+        '''
         :cloudformationAttribute: ConnectivityStatus
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrConnectivityStatus"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrId")
+    def attr_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Id
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrSecretsManagerArn")
     def attr_secrets_manager_arn(self) -> builtins.str:
-        '''The ARN of the secret that stores your on-premises storage system's credentials.
-
-        DataSync Discovery stores these credentials in `AWS Secrets Manager <https://docs.aws.amazon.com/datasync/latest/userguide/discovery-configure-storage.html#discovery-add-storage>`_ .
-
+        '''
         :cloudformationAttribute: SecretsManagerArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrSecretsManagerArn"))
@@ -6465,8 +6467,7 @@ class CfnStorageSystem(
     @builtins.property
     @jsii.member(jsii_name="attrStorageSystemArn")
     def attr_storage_system_arn(self) -> builtins.str:
-        '''The ARN of the on-premises storage system that you're using with DataSync Discovery.
-
+        '''
         :cloudformationAttribute: StorageSystemArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStorageSystemArn"))
@@ -6485,7 +6486,6 @@ class CfnStorageSystem(
     @builtins.property
     @jsii.member(jsii_name="agentArns")
     def agent_arns(self) -> typing.List[builtins.str]:
-        '''Specifies the Amazon Resource Name (ARN) of the DataSync agent that connects to and reads from your on-premises storage system's management interface.'''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "agentArns"))
 
     @agent_arns.setter
@@ -6500,7 +6500,6 @@ class CfnStorageSystem(
     def server_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnStorageSystem.ServerConfigurationProperty"]:
-        '''Specifies the server name and network port required to connect with the management interface of your on-premises storage system.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnStorageSystem.ServerConfigurationProperty"], jsii.get(self, "serverConfiguration"))
 
     @server_configuration.setter
@@ -6516,7 +6515,6 @@ class CfnStorageSystem(
     @builtins.property
     @jsii.member(jsii_name="systemType")
     def system_type(self) -> builtins.str:
-        '''Specifies the type of on-premises storage system that you want DataSync Discovery to collect information about.'''
         return typing.cast(builtins.str, jsii.get(self, "systemType"))
 
     @system_type.setter
@@ -6529,7 +6527,6 @@ class CfnStorageSystem(
     @builtins.property
     @jsii.member(jsii_name="cloudWatchLogGroupArn")
     def cloud_watch_log_group_arn(self) -> typing.Optional[builtins.str]:
-        '''Specifies the ARN of the Amazon CloudWatch log group for monitoring and logging discovery job events.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "cloudWatchLogGroupArn"))
 
     @cloud_watch_log_group_arn.setter
@@ -6542,7 +6539,6 @@ class CfnStorageSystem(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> typing.Optional[builtins.str]:
-        '''Specifies a familiar name for your on-premises storage system.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
 
     @name.setter
@@ -6557,7 +6553,6 @@ class CfnStorageSystem(
     def server_credentials(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageSystem.ServerCredentialsProperty"]]:
-        '''Specifies the user name and password for accessing your on-premises storage system's management interface.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageSystem.ServerCredentialsProperty"]], jsii.get(self, "serverCredentials"))
 
     @server_credentials.setter
@@ -6573,7 +6568,6 @@ class CfnStorageSystem(
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Specifies labels that help you categorize, filter, and search for your AWS resources.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
@@ -6598,10 +6592,9 @@ class CfnStorageSystem(
             server_hostname: builtins.str,
             server_port: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''The network settings that DataSync Discovery uses to connect with your on-premises storage system's management interface.
-
-            :param server_hostname: The domain name or IP address of your storage system's management interface.
-            :param server_port: The network port for accessing the storage system's management interface.
+            '''
+            :param server_hostname: 
+            :param server_port: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-serverconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -6631,8 +6624,7 @@ class CfnStorageSystem(
 
         @builtins.property
         def server_hostname(self) -> builtins.str:
-            '''The domain name or IP address of your storage system's management interface.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-serverconfiguration.html#cfn-datasync-storagesystem-serverconfiguration-serverhostname
             '''
             result = self._values.get("server_hostname")
@@ -6641,8 +6633,7 @@ class CfnStorageSystem(
 
         @builtins.property
         def server_port(self) -> typing.Optional[jsii.Number]:
-            '''The network port for accessing the storage system's management interface.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-serverconfiguration.html#cfn-datasync-storagesystem-serverconfiguration-serverport
             '''
             result = self._values.get("server_port")
@@ -6666,12 +6657,9 @@ class CfnStorageSystem(
     )
     class ServerCredentialsProperty:
         def __init__(self, *, password: builtins.str, username: builtins.str) -> None:
-            '''The credentials that provide DataSync Discovery read access to your on-premises storage system's management interface.
-
-            DataSync Discovery stores these credentials in `AWS Secrets Manager <https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html>`_ . For more information, see `Accessing your on-premises storage system <https://docs.aws.amazon.com/datasync/latest/userguide/discovery-configure-storage.html>`_ .
-
-            :param password: Specifies the password for your storage system's management interface.
-            :param username: Specifies the user name for your storage system's management interface.
+            '''
+            :param password: 
+            :param username: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-servercredentials.html
             :exampleMetadata: fixture=_generated
@@ -6698,8 +6686,7 @@ class CfnStorageSystem(
 
         @builtins.property
         def password(self) -> builtins.str:
-            '''Specifies the password for your storage system's management interface.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-servercredentials.html#cfn-datasync-storagesystem-servercredentials-password
             '''
             result = self._values.get("password")
@@ -6708,8 +6695,7 @@ class CfnStorageSystem(
 
         @builtins.property
         def username(self) -> builtins.str:
-            '''Specifies the user name for your storage system's management interface.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-servercredentials.html#cfn-datasync-storagesystem-servercredentials-username
             '''
             result = self._values.get("username")
@@ -6755,13 +6741,13 @@ class CfnStorageSystemProps:
     ) -> None:
         '''Properties for defining a ``CfnStorageSystem``.
 
-        :param agent_arns: Specifies the Amazon Resource Name (ARN) of the DataSync agent that connects to and reads from your on-premises storage system's management interface. You can only specify one ARN.
-        :param server_configuration: Specifies the server name and network port required to connect with the management interface of your on-premises storage system.
-        :param system_type: Specifies the type of on-premises storage system that you want DataSync Discovery to collect information about. .. epigraph:: DataSync Discovery currently supports NetApp Fabric-Attached Storage (FAS) and All Flash FAS (AFF) systems running ONTAP 9.7 or later.
-        :param cloud_watch_log_group_arn: Specifies the ARN of the Amazon CloudWatch log group for monitoring and logging discovery job events.
-        :param name: Specifies a familiar name for your on-premises storage system.
-        :param server_credentials: Specifies the user name and password for accessing your on-premises storage system's management interface.
-        :param tags: Specifies labels that help you categorize, filter, and search for your AWS resources. We recommend creating at least a name tag for your on-premises storage system.
+        :param agent_arns: 
+        :param server_configuration: 
+        :param system_type: 
+        :param cloud_watch_log_group_arn: 
+        :param name: 
+        :param server_credentials: 
+        :param tags: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html
         :exampleMetadata: fixture=_generated
@@ -6820,10 +6806,7 @@ class CfnStorageSystemProps:
 
     @builtins.property
     def agent_arns(self) -> typing.List[builtins.str]:
-        '''Specifies the Amazon Resource Name (ARN) of the DataSync agent that connects to and reads from your on-premises storage system's management interface.
-
-        You can only specify one ARN.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-agentarns
         '''
         result = self._values.get("agent_arns")
@@ -6834,8 +6817,7 @@ class CfnStorageSystemProps:
     def server_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, CfnStorageSystem.ServerConfigurationProperty]:
-        '''Specifies the server name and network port required to connect with the management interface of your on-premises storage system.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-serverconfiguration
         '''
         result = self._values.get("server_configuration")
@@ -6844,12 +6826,7 @@ class CfnStorageSystemProps:
 
     @builtins.property
     def system_type(self) -> builtins.str:
-        '''Specifies the type of on-premises storage system that you want DataSync Discovery to collect information about.
-
-        .. epigraph::
-
-           DataSync Discovery currently supports NetApp Fabric-Attached Storage (FAS) and All Flash FAS (AFF) systems running ONTAP 9.7 or later.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-systemtype
         '''
         result = self._values.get("system_type")
@@ -6858,8 +6835,7 @@ class CfnStorageSystemProps:
 
     @builtins.property
     def cloud_watch_log_group_arn(self) -> typing.Optional[builtins.str]:
-        '''Specifies the ARN of the Amazon CloudWatch log group for monitoring and logging discovery job events.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-cloudwatchloggrouparn
         '''
         result = self._values.get("cloud_watch_log_group_arn")
@@ -6867,8 +6843,7 @@ class CfnStorageSystemProps:
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
-        '''Specifies a familiar name for your on-premises storage system.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-name
         '''
         result = self._values.get("name")
@@ -6878,8 +6853,7 @@ class CfnStorageSystemProps:
     def server_credentials(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStorageSystem.ServerCredentialsProperty]]:
-        '''Specifies the user name and password for accessing your on-premises storage system's management interface.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-servercredentials
         '''
         result = self._values.get("server_credentials")
@@ -6887,10 +6861,7 @@ class CfnStorageSystemProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Specifies labels that help you categorize, filter, and search for your AWS resources.
-
-        We recommend creating at least a name tag for your on-premises storage system.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-tags
         '''
         result = self._values.get("tags")

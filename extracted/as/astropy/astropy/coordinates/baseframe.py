@@ -9,9 +9,9 @@ from __future__ import annotations
 __all__ = [
     "BaseCoordinateFrame",
     "CoordinateFrameInfo",
-    "frame_transform_graph",
     "GenericFrame",
     "RepresentationMapping",
+    "frame_transform_graph",
 ]
 
 import copy
@@ -106,7 +106,7 @@ def _get_repr_classes(base, **differentials):
     for name, differential_type in differentials.items():
         if differential_type == "base":
             # We don't want to fail for this case.
-            differential_type = r.DIFFERENTIAL_CLASSES.get(base.get_name(), None)
+            differential_type = r.DIFFERENTIAL_CLASSES.get(base.name, None)
 
         elif differential_type in r.DIFFERENTIAL_CLASSES:
             differential_type = r.DIFFERENTIAL_CLASSES[differential_type]
@@ -223,9 +223,9 @@ class CoordinateFrameInfo(MixinInfo):
 
         out = super()._represent_as_dict(attrs)
 
-        out["representation_type"] = representation_type.get_name()
+        out["representation_type"] = representation_type.name
         if differential_type is not None:
-            out["differential_type"] = differential_type.get_name()
+            out["differential_type"] = differential_type.name
 
         # Note that coord.info.unit is a fake composite unit (e.g. 'deg,deg,None'
         # or None,None,m) and is not stored. The individual attributes have
@@ -894,7 +894,7 @@ class BaseCoordinateFrame(MaskableShapedLikeNDArray):
 
         It stores anything that should be computed from the coordinate data (*not* from
         the frame attributes). This can be used in functions to store anything that
-        might be expensive to compute but might be re-used by some other function.
+        might be expensive to compute but might be reused by some other function.
         E.g.::
 
             if 'user_data' in myframe.cache:

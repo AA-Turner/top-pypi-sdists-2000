@@ -517,6 +517,7 @@ class PipelinesClient:
         only_manually_uploaded: typing.Optional[bool] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
+        order_by: typing.Optional[str] = None,
     ) -> PaginatedListPipelineFilesResponse:
         """
         Get files for a pipeline.
@@ -531,6 +532,8 @@ class PipelinesClient:
             - limit: typing.Optional[int].
 
             - offset: typing.Optional[int].
+
+            - order_by: typing.Optional[str].
         ---
         from llama_cloud.client import LlamaCloud
 
@@ -550,6 +553,7 @@ class PipelinesClient:
                     "only_manually_uploaded": only_manually_uploaded,
                     "limit": limit,
                     "offset": offset,
+                    "order_by": order_by,
                 }
             ),
             headers=self._client_wrapper.get_headers(),
@@ -2131,6 +2135,7 @@ class AsyncPipelinesClient:
         only_manually_uploaded: typing.Optional[bool] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
+        order_by: typing.Optional[str] = None,
     ) -> PaginatedListPipelineFilesResponse:
         """
         Get files for a pipeline.
@@ -2145,6 +2150,8 @@ class AsyncPipelinesClient:
             - limit: typing.Optional[int].
 
             - offset: typing.Optional[int].
+
+            - order_by: typing.Optional[str].
         ---
         from llama_cloud.client import AsyncLlamaCloud
 
@@ -2164,6 +2171,7 @@ class AsyncPipelinesClient:
                     "only_manually_uploaded": only_manually_uploaded,
                     "limit": limit,
                     "offset": offset,
+                    "order_by": order_by,
                 }
             ),
             headers=self._client_wrapper.get_headers(),

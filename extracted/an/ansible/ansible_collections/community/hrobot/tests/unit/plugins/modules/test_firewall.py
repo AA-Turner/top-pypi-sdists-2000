@@ -8,6 +8,9 @@ __metaclass__ = type
 
 import pytest
 
+from ansible_collections.community.internal_test_tools.tests.unit.plugins.modules.utils import (
+    extract_warnings_texts,
+)
 from ansible_collections.community.internal_test_tools.tests.unit.utils.fetch_url_module_framework import (
     FetchUrlCall,
     BaseTestModule,
@@ -926,7 +929,7 @@ class TestHetznerFirewall(BaseTestModule):
         assert result['firewall']['status'] == 'in process'
         assert result['firewall']['server_ip'] == '1.2.3.4'
         assert result['firewall']['server_number'] == 1
-        assert 'Timeout while waiting for firewall to be configured.' in result['warnings']
+        assert 'Timeout while waiting for firewall to be configured.' in extract_warnings_texts(result)
 
     def test_nowait_update(self, mocker):
         result = self.run_module_success(mocker, firewall, {

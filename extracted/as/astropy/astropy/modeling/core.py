@@ -28,13 +28,7 @@ import numpy as np
 from astropy.nddata.utils import add_array, extract_array
 from astropy.table import Table
 from astropy.units import Quantity, UnitsError, dimensionless_unscaled
-from astropy.units.utils import quantity_asanyarray
-from astropy.utils import (
-    find_current_module,
-    isiterable,
-    metadata,
-    sharedmethod,
-)
+from astropy.utils import find_current_module, metadata, sharedmethod
 from astropy.utils.codegen import make_function_with_signature
 from astropy.utils.compat import COPY_IF_NEEDED
 
@@ -47,19 +41,20 @@ from .utils import (
     combine_labels,
     get_inputs_and_params,
     make_binary_operator_eval,
+    quantity_asanyarray,
 )
 
 __all__ = [
-    "Model",
-    "FittableModel",
+    "CompoundModel",
     "Fittable1DModel",
     "Fittable2DModel",
-    "CompoundModel",
-    "fix_inputs",
-    "custom_model",
+    "FittableModel",
+    "Model",
     "ModelDefinitionError",
     "bind_bounding_box",
     "bind_compound_bounding_box",
+    "custom_model",
+    "fix_inputs",
 ]
 
 
@@ -100,10 +95,10 @@ class _ModelMeta(abc.ABCMeta):
     # Default empty dict for _parameters_, which will be empty on model
     # classes that don't have any Parameters
 
-    def __new__(mcls, name, bases, members, **kwds):
+    def __new__(cls, name, bases, members, **kwds):
         # See the docstring for _is_dynamic above
         if "_is_dynamic" not in members:
-            members["_is_dynamic"] = mcls._is_dynamic
+            members["_is_dynamic"] = cls._is_dynamic
         opermethods = [
             ("__add__", _model_oper("+")),
             ("__sub__", _model_oper("-")),
@@ -121,7 +116,7 @@ class _ModelMeta(abc.ABCMeta):
 
         for opermethod, opercall in opermethods:
             members[opermethod] = opercall
-        cls = super().__new__(mcls, name, bases, members, **kwds)
+        self = super().__new__(cls, name, bases, members, **kwds)
 
         param_names = list(members["_parameters_"])
 
@@ -133,16 +128,16 @@ class _ModelMeta(abc.ABCMeta):
                     param_names = list(tbase._parameters_) + param_names
         # Remove duplicates (arising from redefinition in subclass).
         param_names = list(dict.fromkeys(param_names))
-        if cls._parameters_:
-            if hasattr(cls, "_param_names"):
+        if self._parameters_:
+            if hasattr(self, "_param_names"):
                 # Slight kludge to support compound models, where
-                # cls.param_names is a property; could be improved with a
+                # param_names is a property; could be improved with a
                 # little refactoring but fine for now
-                cls._param_names = tuple(param_names)
+                self._param_names = tuple(param_names)
             else:
-                cls.param_names = tuple(param_names)
+                self.param_names = tuple(param_names)
 
-        return cls
+        return self
 
     def __init__(cls, name, bases, members, **kwds):
         super().__init__(name, bases, members, **kwds)
@@ -185,8 +180,7 @@ class _ModelMeta(abc.ABCMeta):
 
         # Delete custom __init__ and __call__ if they exist:
         for key in ("__init__", "__call__"):
-            if key in members:
-                del members[key]
+            members.pop(key, None)
 
         return (type(cls), (cls.__name__, cls.__bases__, members))
 
@@ -827,14 +821,14 @@ class Model(metaclass=_ModelMeta):
         mapping input name to a boolean value.
         """
         if isinstance(self._input_units_strict, bool):
-            self._input_units_strict = {
-                key: self._input_units_strict for key in self.inputs
-            }
+            self._input_units_strict = dict.fromkeys(
+                self.inputs, self._input_units_strict
+            )
 
         if isinstance(self._input_units_allow_dimensionless, bool):
-            self._input_units_allow_dimensionless = {
-                key: self._input_units_allow_dimensionless for key in self.inputs
-            }
+            self._input_units_allow_dimensionless = dict.fromkeys(
+                self.inputs, self._input_units_allow_dimensionless
+            )
 
     @property
     def input_units_strict(self):
@@ -847,7 +841,7 @@ class Model(metaclass=_ModelMeta):
         """
         val = self._input_units_strict
         if isinstance(val, bool):
-            return {key: val for key in self.inputs}
+            return dict.fromkeys(self.inputs, val)
         return dict(zip(self.inputs, val.values()))
 
     @property
@@ -861,7 +855,7 @@ class Model(metaclass=_ModelMeta):
         """
         val = self._input_units_allow_dimensionless
         if isinstance(val, bool):
-            return {key: val for key in self.inputs}
+            return dict.fromkeys(self.inputs, val)
         return dict(zip(self.inputs, val.values()))
 
     @property
@@ -2225,7 +2219,7 @@ class Model(metaclass=_ModelMeta):
         inputs_are_quantity = any(isinstance(i, Quantity) for i in inputs)
         if self.return_units and inputs_are_quantity:
             # We allow a non-iterable unit only if there is one output
-            if self.n_outputs == 1 and not isiterable(self.return_units):
+            if self.n_outputs == 1 and not np.iterable(self.return_units):
                 return_units = {self.outputs[0]: self.return_units}
             else:
                 return_units = self.return_units

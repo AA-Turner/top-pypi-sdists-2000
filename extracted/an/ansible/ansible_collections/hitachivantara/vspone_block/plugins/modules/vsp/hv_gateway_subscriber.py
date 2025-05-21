@@ -26,6 +26,12 @@ attributes:
   check_mode:
     description: Determines if the module should run in check mode.
     support: none
+deprecated:
+  removed_in: '4.0.0'
+  why: The connection type C(gateway) is deprecated.
+  alternative: Not available.
+extends_documentation_fragment:
+- hitachivantara.vspone_block.common.deprecated_note
 options:
   state:
     description: The level of the subscriber task. Choices are C(present), C(absent).
@@ -188,17 +194,14 @@ data:
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.uaig_utils import (
-    GatewayArguments,
-    GatewayParametersManager,
+from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.gw_module_args import (
+    GatewayArgs,
+    DEPCRECATED_MSG,
 )
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_constants import (
     StateValue,
 )
 
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.reconciler.uaig_subscriber_reconciler import (
-    SubscriberReconciler,
-)
 
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_log import (
     Log,
@@ -211,25 +214,25 @@ from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common
 class SubscriberManager:
     def __init__(self):
         self.logger = Log()
-        self.argument_spec = GatewayArguments().gateway_subscriber()
+        self.argument_spec = GatewayArgs().get_subscriber_args()
         self.module = AnsibleModule(
             argument_spec=self.argument_spec,
             supports_check_mode=False,
         )
         try:
-            self.params_manager = GatewayParametersManager(self.module.params)
+            self.params_manager = self.GatewayParametersManager(self.module.params)
             self.state = self.params_manager.get_state()
             self.connection_info = self.params_manager.get_connection_info()
             self.logger.writeInfo(f"State: {self.state}")
 
         except Exception as e:
             self.logger.writeError(f"An error occurred during initialization: {str(e)}")
-            self.module.fail_json(msg=str(e))
+            self.module.fail_json(msg=str(DEPCRECATED_MSG))
 
     def apply(self):
         registration_message = validate_ansible_product_registration()
         subscriber_data = None
-        reconciler = SubscriberReconciler(self.params_manager.connection_info)
+        reconciler = self.SubscriberReconciler(self.params_manager.connection_info)
         self.params_manager.set_subscriber_fact_spec()
         try:
             self.logger.writeInfo("=== Start of Gateway Subscriber operation ===")
@@ -272,7 +275,7 @@ class SubscriberManager:
         except Exception as e:
             self.logger.writeError(str(e))
             self.logger.writeInfo("=== End of Gateway Subscriber operation ===")
-            self.module.fail_json(msg=str(e))
+            self.module.fail_json(msg=str(DEPCRECATED_MSG))
 
         response = {"changed": self.connection_info.changed, "data": subscriber_data}
         if registration_message:

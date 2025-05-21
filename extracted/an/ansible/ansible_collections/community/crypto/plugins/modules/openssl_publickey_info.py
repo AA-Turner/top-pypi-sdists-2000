@@ -6,6 +6,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 
@@ -53,6 +55,7 @@ seealso:
 """
 
 EXAMPLES = r"""
+---
 - name: Generate an OpenSSL private key with the default values (4096 bits, RSA)
   community.crypto.openssl_privatekey:
     path: /etc/ssl/private/ansible.com.pem
@@ -155,11 +158,9 @@ public_data:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.common.text.converters import to_native
-
 from ansible_collections.community.crypto.plugins.module_utils.crypto.basic import (
     OpenSSLObjectError,
 )
-
 from ansible_collections.community.crypto.plugins.module_utils.crypto.module_backends.publickey_info import (
     PublicKeyParseError,
     select_backend,
@@ -169,16 +170,14 @@ from ansible_collections.community.crypto.plugins.module_utils.crypto.module_bac
 def main():
     module = AnsibleModule(
         argument_spec=dict(
-            path=dict(type='path'),
-            content=dict(type='str', no_log=True),
-            select_crypto_backend=dict(type='str', default='auto', choices=['auto', 'cryptography']),
+            path=dict(type="path"),
+            content=dict(type="str", no_log=True),
+            select_crypto_backend=dict(
+                type="str", default="auto", choices=["auto", "cryptography"]
+            ),
         ),
-        required_one_of=(
-            ['path', 'content'],
-        ),
-        mutually_exclusive=(
-            ['path', 'content'],
-        ),
+        required_one_of=(["path", "content"],),
+        mutually_exclusive=(["path", "content"],),
         supports_check_mode=True,
     )
 
@@ -188,19 +187,21 @@ def main():
         key_is_consistent=None,
     )
 
-    if module.params['content'] is not None:
-        data = module.params['content'].encode('utf-8')
+    if module.params["content"] is not None:
+        data = module.params["content"].encode("utf-8")
     else:
         try:
-            with open(module.params['path'], 'rb') as f:
+            with open(module.params["path"], "rb") as f:
                 data = f.read()
         except (IOError, OSError) as e:
-            module.fail_json(msg='Error while reading public key file from disk: {0}'.format(e), **result)
+            module.fail_json(
+                msg="Error while reading public key file from disk: {0}".format(e),
+                **result
+            )
 
     backend, module_backend = select_backend(
-        module,
-        module.params['select_crypto_backend'],
-        data)
+        module, module.params["select_crypto_backend"], data
+    )
 
     try:
         result.update(module_backend.get_info())

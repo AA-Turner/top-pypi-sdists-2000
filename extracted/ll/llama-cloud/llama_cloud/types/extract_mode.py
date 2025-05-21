@@ -9,6 +9,7 @@ T_Result = typing.TypeVar("T_Result")
 class ExtractMode(str, enum.Enum):
     FAST = "FAST"
     BALANCED = "BALANCED"
+    PREMIUM = "PREMIUM"
     MULTIMODAL = "MULTIMODAL"
     ACCURATE = "ACCURATE"
 
@@ -16,6 +17,7 @@ class ExtractMode(str, enum.Enum):
         self,
         fast: typing.Callable[[], T_Result],
         balanced: typing.Callable[[], T_Result],
+        premium: typing.Callable[[], T_Result],
         multimodal: typing.Callable[[], T_Result],
         accurate: typing.Callable[[], T_Result],
     ) -> T_Result:
@@ -23,6 +25,8 @@ class ExtractMode(str, enum.Enum):
             return fast()
         if self is ExtractMode.BALANCED:
             return balanced()
+        if self is ExtractMode.PREMIUM:
+            return premium()
         if self is ExtractMode.MULTIMODAL:
             return multimodal()
         if self is ExtractMode.ACCURATE:

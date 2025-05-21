@@ -18,6 +18,7 @@ class CloudS3DataSource(pydantic.BaseModel):
     supports_access_control: typing.Optional[bool]
     bucket: str = pydantic.Field(description="The name of the S3 bucket to read from.")
     prefix: typing.Optional[str]
+    regex_pattern: typing.Optional[str]
     aws_access_id: typing.Optional[str]
     aws_access_secret: typing.Optional[str]
     s_3_endpoint_url: typing.Optional[str] = pydantic.Field(alias="s3_endpoint_url")

@@ -20,42 +20,42 @@ from . import _parse_times, conf, utils
 from .utils import day_frac, quantity_day_frac, two_product, two_sum
 
 __all__ = [
+    "TIME_DELTA_FORMATS",
+    "TIME_FORMATS",
     "AstropyDatetimeLeapSecondWarning",
-    "TimeFormat",
-    "TimeJD",
-    "TimeMJD",
-    "TimeFromEpoch",
-    "TimeUnix",
-    "TimeUnixTai",
+    "TimeBesselianEpoch",
+    "TimeBesselianEpochString",
     "TimeCxcSec",
-    "TimeGPS",
-    "TimeDecimalYear",
-    "TimePlotDate",
-    "TimeUnique",
     "TimeDatetime",
-    "TimeString",
+    "TimeDatetime64",
+    "TimeDecimalYear",
+    "TimeDeltaDatetime",
+    "TimeDeltaFormat",
+    "TimeDeltaJD",
+    "TimeDeltaNumeric",
+    "TimeDeltaQuantityString",
+    "TimeDeltaSec",
+    "TimeEpochDate",
+    "TimeEpochDateString",
+    "TimeFITS",
+    "TimeFormat",
+    "TimeFromEpoch",
+    "TimeGPS",
     "TimeISO",
     "TimeISOT",
-    "TimeFITS",
-    "TimeYearDayTime",
-    "TimeEpochDate",
-    "TimeBesselianEpoch",
+    "TimeJD",
     "TimeJulianEpoch",
-    "TimeDeltaFormat",
-    "TimeDeltaSec",
-    "TimeDeltaJD",
-    "TimeDeltaQuantityString",
-    "TimeEpochDateString",
-    "TimeBesselianEpochString",
     "TimeJulianEpochString",
-    "TIME_FORMATS",
-    "TIME_DELTA_FORMATS",
-    "TimezoneInfo",
-    "TimeDeltaDatetime",
-    "TimeDatetime64",
-    "TimeYMDHMS",
+    "TimeMJD",
     "TimeNumeric",
-    "TimeDeltaNumeric",
+    "TimePlotDate",
+    "TimeString",
+    "TimeUnique",
+    "TimeUnix",
+    "TimeUnixTai",
+    "TimeYMDHMS",
+    "TimeYearDayTime",
+    "TimezoneInfo",
 ]
 
 __doctest_skip__ = ["TimePlotDate"]
@@ -301,11 +301,8 @@ class TimeFormat:
         elif val1.size == 0:
             isfinite1 = False
         ok1 = (
-            val1.dtype.kind == "f"
-            and val1.dtype.itemsize >= 8
-            and isfinite1
-            or val1.size == 0
-        )
+            val1.dtype.kind == "f" and val1.dtype.itemsize >= 8 and isfinite1
+        ) or val1.size == 0
         ok2 = (
             val2 is None
             or (
@@ -955,18 +952,19 @@ class TimeGPS(TimeFromEpoch):
 
 class TimePlotDate(TimeFromEpoch):
     """
-    Matplotlib `~matplotlib.pyplot.plot_date` input:
+    Input for a `~matplotlib.axes.Axes` object with ax.xaxis.axis_date():
     1 + number of days from 0001-01-01 00:00:00 UTC.
 
-    This can be used directly in the matplotlib `~matplotlib.pyplot.plot_date`
-    function::
+    This can be used as follow::
 
       >>> import matplotlib.pyplot as plt
       >>> jyear = np.linspace(2000, 2001, 20)
       >>> t = Time(jyear, format='jyear', scale='utc')
-      >>> plt.plot_date(t.plot_date, jyear)
-      >>> plt.gcf().autofmt_xdate()  # orient date labels at a slant
-      >>> plt.draw()
+      >>> fig, ax = plt.subplots()
+      >>> ax.xaxis.axis_date()
+      >>> ax.scatter(t.plot_date, jyear)
+      >>> fig.autofmt_xdate()  # orient date labels at a slant
+      >>> fig.show()
 
     For example, 730120.0003703703 is midnight on January 1, 2000.
     """
@@ -1042,7 +1040,7 @@ class TimeAstropyTime(TimeUnique):
         Use __new__ instead of __init__ to output a class instance that
         is the same as the class of the first Time object in the list.
         """
-        val1_0 = val1.flat[0]
+        val1_0 = val1.item(0)
         if not (
             isinstance(val1_0, Time)
             and all(type(val) is type(val1_0) for val in val1.flat)
@@ -2504,7 +2502,7 @@ def _validate_jd_for_storage(jd):
     if isinstance(jd, (float, int)):
         return np.array(jd, dtype=float)
     if isinstance(jd, np.generic) and (
-        jd.dtype.kind == "f" and jd.dtype.itemsize <= 8 or jd.dtype.kind in "iu"
+        (jd.dtype.kind == "f" and jd.dtype.itemsize <= 8) or jd.dtype.kind in "iu"
     ):
         return np.array(jd, dtype=float)
     elif isinstance(jd, np.ndarray) and jd.dtype.kind == "f" and jd.dtype.itemsize == 8:

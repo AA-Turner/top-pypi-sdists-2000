@@ -34,7 +34,7 @@ from astropy.units import Quantity
 from astropy.utils.decorators import deprecated_renamed_argument
 from astropy.utils.exceptions import AstropyDeprecationWarning, AstropyUserWarning
 
-from ._fitting_parallel import parallel_fit_dask
+from ._fitting_parallel import FitInfoArrayContainer, parallel_fit_dask
 from .optimizers import DEFAULT_ACC, DEFAULT_EPS, DEFAULT_MAXITER, SLSQP, Simplex
 from .spline import (
     SplineExactKnotsFitter,
@@ -46,22 +46,23 @@ from .statistic import leastsquare
 from .utils import _combine_equivalency_dict, poly_map_domain
 
 __all__ = [
-    "LinearLSQFitter",
-    "LevMarLSQFitter",
-    "TRFLSQFitter",
     "DogBoxLSQFitter",
-    "LMLSQFitter",
-    "FittingWithOutlierRemoval",
-    "SLSQPLSQFitter",
-    "SimplexLSQFitter",
-    "JointFitter",
+    "FitInfoArrayContainer",
     "Fitter",
+    "FittingWithOutlierRemoval",
+    "JointFitter",
+    "LMLSQFitter",
+    "LevMarLSQFitter",
+    "LinearLSQFitter",
     "ModelLinearityError",
     "ModelsError",
+    "SLSQPLSQFitter",
+    "SimplexLSQFitter",
     "SplineExactKnotsFitter",
     "SplineInterpolateFitter",
     "SplineSmoothingFitter",
     "SplineSplrepFitter",
+    "TRFLSQFitter",
     "parallel_fit_dask",
 ]
 
@@ -91,7 +92,7 @@ class Covariance:
         # Print rows for params up to `max_lines`, round floats to 'round_val'
         longest_name = max(len(x) for x in self.param_names)
         ret_str = "parameter variances / covariances \n"
-        fstring = f'{"": <{longest_name}}| {{0}}\n'
+        fstring = f"{'': <{longest_name}}| {{0}}\n"
         for i, row in enumerate(self.cov_matrix):
             if i <= max_lines - 1:
                 param = self.param_names[i]
@@ -177,22 +178,6 @@ class UnsupportedConstraintError(ModelsError, ValueError):
     """
     Raised when a fitter does not support a type of constraint.
     """
-
-
-class _FitterMeta(abc.ABCMeta):
-    """
-    Currently just provides a registry for all Fitter classes.
-    """
-
-    registry = set()
-
-    def __new__(mcls, name, bases, members):
-        cls = super().__new__(mcls, name, bases, members)
-
-        if not inspect.isabstract(cls) and not name.startswith("_"):
-            mcls.registry.add(cls)
-
-        return cls
 
 
 def fitter_unit_support(func):
@@ -305,7 +290,7 @@ def fitter_unit_support(func):
     return wrapper
 
 
-class Fitter(metaclass=_FitterMeta):
+class Fitter:
     """
     Base class for all fitters.
 
@@ -317,6 +302,12 @@ class Fitter(metaclass=_FitterMeta):
         Statistic function
 
     """
+
+    _subclass_registry = set()
+
+    def __init_subclass__(cls) -> None:
+        if not (inspect.isabstract(cls) or cls.__name__.startswith("_")):
+            Fitter._subclass_registry.add(cls)
 
     supported_constraints = []
 
@@ -381,10 +372,7 @@ class Fitter(metaclass=_FitterMeta):
         raise NotImplementedError("Subclasses should implement this method.")
 
 
-# TODO: I have ongoing branch elsewhere that's refactoring this module so that
-# all the fitter classes in here are Fitter subclasses.  In the meantime we
-# need to specify that _FitterMeta is its metaclass.
-class LinearLSQFitter(metaclass=_FitterMeta):
+class LinearLSQFitter(Fitter):
     """
     A class performing a linear least square fitting.
     Uses `numpy.linalg.lstsq` to do the fitting.
@@ -1023,10 +1011,11 @@ class FittingWithOutlierRemoval:
             filtered_data.mask = False
         filtered_weights = weights
         last_n_masked = filtered_data.mask.sum()
-        n = 0  # (allow recording no. of iterations when 0)
+        niter = 0  # (allow recording no. of iterations when 0)
 
         # Perform the iterative fitting:
-        for n in range(1, self.niter + 1):
+        for _ in range(1, self.niter + 1):
+            niter += 1
             # (Re-)evaluate the last model:
             model_vals = fitted_model(*coords, model_set_axis=False)
 
@@ -1118,13 +1107,13 @@ class FittingWithOutlierRemoval:
                 break
             last_n_masked = this_n_masked
 
-        self.fit_info = {"niter": n}
+        self.fit_info = {"niter": niter}
         self.fit_info.update(getattr(self.fitter, "fit_info", {}))
 
         return fitted_model, filtered_data.mask
 
 
-class _NonLinearLSQFitter(metaclass=_FitterMeta):
+class _NonLinearLSQFitter(Fitter):
     """
     Base class for Non-Linear least-squares fitters.
 
@@ -1148,7 +1137,6 @@ class _NonLinearLSQFitter(metaclass=_FitterMeta):
         self.fit_info = None
         self._calc_uncertainties = calc_uncertainties
         self._use_min_max_bounds = use_min_max_bounds
-        super().__init__()
 
     def objective_function(self, fps, *args, fit_param_indices=None):
         """
@@ -1189,8 +1177,10 @@ class _NonLinearLSQFitter(metaclass=_FitterMeta):
             raise NonFiniteValueError(
                 "Objective function has encountered a non-finite value, "
                 "this will cause the fit to fail!\n"
-                "Please remove non-finite values from your input data before "
-                "fitting to avoid this error."
+                "This can be caused by non-finite values in the input data "
+                "or weights, which can be removed with fit(..., "
+                "filter_non_finite=True), or by diverging model parameters "
+                "that yield non-finite model values."
             )
 
         return value
@@ -1946,7 +1936,7 @@ class SimplexLSQFitter(Fitter):
         return model_copy
 
 
-class JointFitter(metaclass=_FitterMeta):
+class JointFitter(Fitter):
     """
     Fit models which share a parameter.
     For example, fit two gaussians to two data sets but keep
@@ -2215,7 +2205,7 @@ def fitter_to_model_params_array(
         # Update model parameters before calling ``tied`` constraints.
         model.parameters = parameters
 
-        for idx, name in enumerate(model.param_names):
+        for name in model.param_names:
             if model.tied[name]:
                 value = model.tied[name](model)
                 slice_ = param_metrics[name]["slice"]

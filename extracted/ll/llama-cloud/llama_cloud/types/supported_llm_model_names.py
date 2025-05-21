@@ -15,7 +15,7 @@ class SupportedLlmModelNames(str, enum.Enum):
     AZURE_OPENAI_GPT_4 = "AZURE_OPENAI_GPT_4"
     CLAUDE_3_5_SONNET = "CLAUDE_3_5_SONNET"
     BEDROCK_CLAUDE_3_5_SONNET = "BEDROCK_CLAUDE_3_5_SONNET"
-    VERTEX_AI_CLAUDE_3_5_SONNET = "VERTEX_AI_CLAUDE_3_5_SONNET"
+    VERTEX_AI_CLAUDE_3_5_SONNET_V_2 = "VERTEX_AI_CLAUDE_3_5_SONNET_V2"
 
     def visit(
         self,
@@ -27,7 +27,7 @@ class SupportedLlmModelNames(str, enum.Enum):
         azure_openai_gpt_4: typing.Callable[[], T_Result],
         claude_3_5_sonnet: typing.Callable[[], T_Result],
         bedrock_claude_3_5_sonnet: typing.Callable[[], T_Result],
-        vertex_ai_claude_3_5_sonnet: typing.Callable[[], T_Result],
+        vertex_ai_claude_3_5_sonnet_v_2: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is SupportedLlmModelNames.GPT_4_O:
             return gpt_4_o()
@@ -45,5 +45,5 @@ class SupportedLlmModelNames(str, enum.Enum):
             return claude_3_5_sonnet()
         if self is SupportedLlmModelNames.BEDROCK_CLAUDE_3_5_SONNET:
             return bedrock_claude_3_5_sonnet()
-        if self is SupportedLlmModelNames.VERTEX_AI_CLAUDE_3_5_SONNET:
-            return vertex_ai_claude_3_5_sonnet()
+        if self is SupportedLlmModelNames.VERTEX_AI_CLAUDE_3_5_SONNET_V_2:
+            return vertex_ai_claude_3_5_sonnet_v_2()

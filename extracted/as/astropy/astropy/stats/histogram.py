@@ -20,21 +20,21 @@ if TYPE_CHECKING:
     from numpy.typing import ArrayLike, NDArray
 
 __all__ = [
-    "histogram",
-    "scott_bin_width",
-    "freedman_bin_width",
-    "knuth_bin_width",
     "calculate_bin_edges",
+    "freedman_bin_width",
+    "histogram",
+    "knuth_bin_width",
+    "scott_bin_width",
 ]
 
 
 def calculate_bin_edges(
     a: ArrayLike,
     bins: int
-    | list[int | float]
+    | list[float]
     | Literal["blocks", "knuth", "scott", "freedman"]
     | None = 10,
-    range: tuple[int | float, int | float] | None = None,
+    range: tuple[float, float] | None = None,
     weights: ArrayLike | None = None,
 ) -> NDArray[float]:
     """
@@ -114,10 +114,10 @@ def calculate_bin_edges(
 def histogram(
     a: ArrayLike,
     bins: int
-    | list[int | float]
+    | list[float]
     | Literal["blocks", "knuth", "scott", "freedman"]
     | None = 10,
-    range: tuple[int | float, int | float] | None = None,
+    range: tuple[float, float] | None = None,
     weights: ArrayLike | None = None,
     **kwargs,
 ) -> tuple[NDArray, NDArray]:

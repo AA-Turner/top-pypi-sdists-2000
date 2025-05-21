@@ -907,6 +907,8 @@ class Tokenizer(metaclass=_Tokenizer):
         "JSONB": TokenType.JSONB,
         "CHAR": TokenType.CHAR,
         "CHARACTER": TokenType.CHAR,
+        "CHAR VARYING": TokenType.VARCHAR,
+        "CHARACTER VARYING": TokenType.VARCHAR,
         "NCHAR": TokenType.NCHAR,
         "VARCHAR": TokenType.VARCHAR,
         "VARCHAR2": TokenType.VARCHAR,
@@ -1109,7 +1111,7 @@ class Tokenizer(metaclass=_Tokenizer):
         if self.WHITE_SPACE.get(self._char) is TokenType.BREAK:
             # Ensures we don't count an extra line if we get a \r\n line break sequence
             if not (self._char == "\r" and self._peek == "\n"):
-                self._col = 1
+                self._col = i
                 self._line += 1
         else:
             self._col += i

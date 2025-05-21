@@ -6,11 +6,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
----
+DOCUMENTATION = """
 module: acme_certificate_order_info
 author: Felix Fontein (@felixfontein)
 version_added: 2.24.0
@@ -56,9 +57,10 @@ options:
       - The order URI provided by RV(community.crypto.acme_certificate_order_create#module:order_uri).
     type: str
     required: true
-'''
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
+---
 - name: Create a challenge for sample.com using a account key from a variable
   community.crypto.acme_certificate_order_create:
     account_key_content: "{{ account_private_key }}"
@@ -74,9 +76,9 @@ EXAMPLES = r'''
 - name: Show information
   ansible.builtin.debug:
     var: order_info
-'''
+"""
 
-RETURN = '''
+RETURN = """
 account_uri:
   description: ACME account URI.
   returned: success
@@ -358,30 +360,28 @@ authorizations_by_status:
       type: list
       elements: str
       returned: always
-'''
+"""
 
 from ansible_collections.community.crypto.plugins.module_utils.acme.acme import (
     create_backend,
     create_default_argspec,
 )
-
-from ansible_collections.community.crypto.plugins.module_utils.acme.errors import (
-    ModuleFailException,
-)
-
 from ansible_collections.community.crypto.plugins.module_utils.acme.certificate import (
     ACMECertificateClient,
+)
+from ansible_collections.community.crypto.plugins.module_utils.acme.errors import (
+    ModuleFailException,
 )
 
 
 def main():
     argument_spec = create_default_argspec(with_certificate=False)
     argument_spec.update_argspec(
-        order_uri=dict(type='str', required=True),
+        order_uri=dict(type="str", required=True),
     )
     module = argument_spec.create_ansible_module(supports_check_mode=True)
-    if module.params['acme_version'] == 1:
-        module.fail_json('The module does not support acme_version=1')
+    if module.params["acme_version"] == 1:
+        module.fail_json("The module does not support acme_version=1")
 
     backend = create_backend(module, False)
 
@@ -390,12 +390,12 @@ def main():
         order = client.load_order()
         authorizations_by_identifier = dict()
         authorizations_by_status = {
-            'pending': [],
-            'invalid': [],
-            'valid': [],
-            'revoked': [],
-            'deactivated': [],
-            'expired': [],
+            "pending": [],
+            "invalid": [],
+            "valid": [],
+            "revoked": [],
+            "deactivated": [],
+            "expired": [],
         }
         for identifier, authz in order.authorizations.items():
             authorizations_by_identifier[identifier] = authz.to_json()
@@ -412,5 +412,5 @@ def main():
         e.do_fail(module)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

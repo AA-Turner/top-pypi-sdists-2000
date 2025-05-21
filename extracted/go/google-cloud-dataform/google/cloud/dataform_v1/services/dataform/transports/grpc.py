@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -73,12 +73,11 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
                 f"Sending request for {client_call_details.method}",
                 extra={
                     "serviceName": "google.cloud.dataform.v1.Dataform",
-                    "rpcName": client_call_details.method,
+                    "rpcName": str(client_call_details.method),
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
                 },
             )
-
         response = continuation(client_call_details, request)
         if logging_enabled:  # pragma: NO COVER
             response_metadata = response.trailing_metadata()
@@ -335,6 +334,10 @@ class DataformGrpcTransport(DataformTransport):
 
         Lists Repositories in a given project and location.
 
+        **Note:** *This method can return repositories not shown in
+        the*\ `Dataform
+        UI <https://console.cloud.google.com/bigquery/dataform>`__.
+
         Returns:
             Callable[[~.ListRepositoriesRequest],
                     ~.ListRepositoriesResponse]:
@@ -414,13 +417,11 @@ class DataformGrpcTransport(DataformTransport):
 
         Updates a single Repository.
 
-        **Note:** *This method does not fully implement*, (see
-        `AIP/134 <https://google.aip.dev/134>`__, in particular:
-
-        -  The wildcard entry (**\***) is treated as a bad request
-        -  When the **field_mask** is omitted, instead of only updating
-           the set fields, the request is treated as a full update on
-           all modifiable fields
+        **Note:** *This method does not fully
+        implement*\ `AIP/134 <https://google.aip.dev/134>`__\ *. The
+        wildcard entry (*) is treated as a bad request, and when the
+        ``field_mask`` is omitted, the request is treated as a full
+        update on all modifiable fields.*
 
         Returns:
             Callable[[~.UpdateRepositoryRequest],
@@ -1307,13 +1308,11 @@ class DataformGrpcTransport(DataformTransport):
 
         Updates a single ReleaseConfig.
 
-        **Note:** *This method does not fully implement*, (see
-        `AIP/134 <https://google.aip.dev/134>`__, in particular:
-
-        -  The wildcard entry (**\***) is treated as a bad request
-        -  When the **field_mask** is omitted, instead of only updating
-           the set fields, the request is treated as a full update on
-           all modifiable fields
+        **Note:** *This method does not fully
+        implement*\ `AIP/134 <https://google.aip.dev/134>`__\ *. The
+        wildcard entry (*) is treated as a bad request, and when the
+        ``field_mask`` is omitted, the request is treated as a full
+        update on all modifiable fields.*
 
         Returns:
             Callable[[~.UpdateReleaseConfigRequest],
@@ -1564,13 +1563,11 @@ class DataformGrpcTransport(DataformTransport):
 
         Updates a single WorkflowConfig.
 
-        **Note:** *This method does not fully implement*, (see
-        `AIP/134 <https://google.aip.dev/134>`__, in particular:
-
-        -  The wildcard entry (**\***) is treated as a bad request
-        -  When the **field_mask** is omitted, instead of only updating
-           the set fields, the request is treated as a full update on
-           all modifiable fields
+        **Note:** *This method does not fully
+        implement*\ `AIP/134 <https://google.aip.dev/134>`__\ *. The
+        wildcard entry (*) is treated as a bad request, and when the
+        ``field_mask`` is omitted, the request is treated as a full
+        update on all modifiable fields.*
 
         Returns:
             Callable[[~.UpdateWorkflowConfigRequest],
@@ -1827,13 +1824,11 @@ class DataformGrpcTransport(DataformTransport):
 
         Update default config for a given project and location.
 
-        **Note:** *This method does not fully implement*, (see
-        `AIP/134 <https://google.aip.dev/134>`__, in particular:
-
-        -  The wildcard entry (**\***) is treated as a bad request
-        -  When the **field_mask** is omitted, instead of only updating
-           the set fields, the request is treated as a full update on
-           all modifiable fields
+        **Note:** *This method does not fully
+        implement*\ `AIP/134 <https://google.aip.dev/134>`__\ *. The
+        wildcard entry (*) is treated as a bad request, and when the
+        ``field_mask`` is omitted, the request is treated as a full
+        update on all modifiable fields.*
 
         Returns:
             Callable[[~.UpdateConfigRequest],

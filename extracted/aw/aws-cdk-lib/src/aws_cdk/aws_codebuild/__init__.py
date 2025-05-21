@@ -2201,6 +2201,7 @@ class CfnFleet(
             base_capacity=123,
             compute_configuration=codebuild.CfnFleet.ComputeConfigurationProperty(
                 disk=123,
+                instance_type="instanceType",
                 machine_type="machineType",
                 memory=123,
                 v_cpu=123
@@ -2528,6 +2529,7 @@ class CfnFleet(
         jsii_struct_bases=[],
         name_mapping={
             "disk": "disk",
+            "instance_type": "instanceType",
             "machine_type": "machineType",
             "memory": "memory",
             "v_cpu": "vCpu",
@@ -2538,6 +2540,7 @@ class CfnFleet(
             self,
             *,
             disk: typing.Optional[jsii.Number] = None,
+            instance_type: typing.Optional[builtins.str] = None,
             machine_type: typing.Optional[builtins.str] = None,
             memory: typing.Optional[jsii.Number] = None,
             v_cpu: typing.Optional[jsii.Number] = None,
@@ -2547,6 +2550,7 @@ class CfnFleet(
             These attributes only need be specified when your project's or fleet's ``computeType`` is set to ``ATTRIBUTE_BASED_COMPUTE`` or ``CUSTOM_INSTANCE_TYPE`` .
 
             :param disk: The amount of disk space of the instance type included in your fleet.
+            :param instance_type: The EC2 instance type to be launched in your fleet.
             :param machine_type: The machine type of the instance type included in your fleet.
             :param memory: The amount of memory of the instance type included in your fleet.
             :param v_cpu: The number of vCPUs of the instance type included in your fleet.
@@ -2562,6 +2566,7 @@ class CfnFleet(
                 
                 compute_configuration_property = codebuild.CfnFleet.ComputeConfigurationProperty(
                     disk=123,
+                    instance_type="instanceType",
                     machine_type="machineType",
                     memory=123,
                     v_cpu=123
@@ -2570,12 +2575,15 @@ class CfnFleet(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__83eb701fe90c557bf4af205ee34cfc7a5be2354e8e7cbd789a682e59834fb69b)
                 check_type(argname="argument disk", value=disk, expected_type=type_hints["disk"])
+                check_type(argname="argument instance_type", value=instance_type, expected_type=type_hints["instance_type"])
                 check_type(argname="argument machine_type", value=machine_type, expected_type=type_hints["machine_type"])
                 check_type(argname="argument memory", value=memory, expected_type=type_hints["memory"])
                 check_type(argname="argument v_cpu", value=v_cpu, expected_type=type_hints["v_cpu"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if disk is not None:
                 self._values["disk"] = disk
+            if instance_type is not None:
+                self._values["instance_type"] = instance_type
             if machine_type is not None:
                 self._values["machine_type"] = machine_type
             if memory is not None:
@@ -2591,6 +2599,15 @@ class CfnFleet(
             '''
             result = self._values.get("disk")
             return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def instance_type(self) -> typing.Optional[builtins.str]:
+            '''The EC2 instance type to be launched in your fleet.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-fleet-computeconfiguration.html#cfn-codebuild-fleet-computeconfiguration-instancetype
+            '''
+            result = self._values.get("instance_type")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def machine_type(self) -> typing.Optional[builtins.str]:
@@ -3111,6 +3128,7 @@ class CfnFleetProps:
                 base_capacity=123,
                 compute_configuration=codebuild.CfnFleet.ComputeConfigurationProperty(
                     disk=123,
+                    instance_type="instanceType",
                     machine_type="machineType",
                     memory=123,
                     v_cpu=123
@@ -18902,6 +18920,7 @@ def _typecheckingstub__dd8d232a7a18b97fcd2d21d60ea770b5fdd85dd8808e961cb9b071d34
 def _typecheckingstub__83eb701fe90c557bf4af205ee34cfc7a5be2354e8e7cbd789a682e59834fb69b(
     *,
     disk: typing.Optional[jsii.Number] = None,
+    instance_type: typing.Optional[builtins.str] = None,
     machine_type: typing.Optional[builtins.str] = None,
     memory: typing.Optional[jsii.Number] = None,
     v_cpu: typing.Optional[jsii.Number] = None,

@@ -320,7 +320,6 @@ class DuckDB(Dialect):
             "BITSTRING": TokenType.BIT,
             "BPCHAR": TokenType.TEXT,
             "CHAR": TokenType.TEXT,
-            "CHARACTER VARYING": TokenType.TEXT,
             "DATETIME": TokenType.TIMESTAMPNTZ,
             "DETACH": TokenType.DETACH,
             "EXCLUDE": TokenType.EXCEPT,
@@ -614,6 +613,7 @@ class DuckDB(Dialect):
         MULTI_ARG_DISTINCT = False
         CAN_IMPLEMENT_ARRAY_ANY = True
         SUPPORTS_TO_NUMBER = False
+        SUPPORTS_WINDOW_EXCLUDE = True
         COPY_HAS_INTO_KEYWORD = False
         STAR_EXCEPT = "EXCLUDE"
         PAD_FILL_PATTERN_IS_REQUIRED = True

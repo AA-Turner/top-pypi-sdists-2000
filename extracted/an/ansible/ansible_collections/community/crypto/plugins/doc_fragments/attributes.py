@@ -4,7 +4,9 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 
@@ -35,7 +37,7 @@ attributes:
 """
 
     # Should be used together with the standard fragment
-    INFO_MODULE = r'''
+    INFO_MODULE = r"""
 options: {}
 attributes:
   check_mode:
@@ -46,9 +48,9 @@ attributes:
     support: N/A
     details:
       - This action does not modify state.
-'''
+"""
 
-    ACTIONGROUP_ACME = r'''
+    ACTIONGROUP_ACME = r"""
 options: {}
 attributes:
   action_group:
@@ -57,7 +59,7 @@ attributes:
     membership:
       - community.crypto.acme
       - acme
-'''
+"""
 
     FACTS = r"""
 options: {}
@@ -67,7 +69,7 @@ attributes:
 """
 
     # Should be used together with the standard fragment and the FACTS fragment
-    FACTS_MODULE = r'''
+    FACTS_MODULE = r"""
 options: {}
 attributes:
   check_mode:
@@ -80,7 +82,7 @@ attributes:
       - This action does not modify state.
   facts:
     support: full
-'''
+"""
 
     FILES = r"""
 options: {}

@@ -2699,7 +2699,10 @@ class CfnPipeline(
                     configuration=configuration,
                     environment_variables=[codepipeline.CfnPipeline.EnvironmentVariableProperty(
                         name="name",
-                        value="value"
+                        value="value",
+        
+                        # the properties below are optional
+                        type="type"
                     )],
                     input_artifacts=[codepipeline.CfnPipeline.InputArtifactProperty(
                         name="name"
@@ -3252,7 +3255,10 @@ class CfnPipeline(
                     configuration=configuration,
                     environment_variables=[codepipeline.CfnPipeline.EnvironmentVariableProperty(
                         name="name",
-                        value="value"
+                        value="value",
+                
+                        # the properties below are optional
+                        type="type"
                     )],
                     input_artifacts=[codepipeline.CfnPipeline.InputArtifactProperty(
                         name="name"
@@ -4109,14 +4115,21 @@ class CfnPipeline(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_codepipeline.CfnPipeline.EnvironmentVariableProperty",
         jsii_struct_bases=[],
-        name_mapping={"name": "name", "value": "value"},
+        name_mapping={"name": "name", "value": "value", "type": "type"},
     )
     class EnvironmentVariableProperty:
-        def __init__(self, *, name: builtins.str, value: builtins.str) -> None:
+        def __init__(
+            self,
+            *,
+            name: builtins.str,
+            value: builtins.str,
+            type: typing.Optional[builtins.str] = None,
+        ) -> None:
             '''The environment variables for the action.
 
             :param name: The environment variable name in the key-value pair.
             :param value: The environment variable value in the key-value pair.
+            :param type: The type of the environment variable.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-environmentvariable.html
             :exampleMetadata: fixture=_generated
@@ -4129,17 +4142,23 @@ class CfnPipeline(
                 
                 environment_variable_property = codepipeline.CfnPipeline.EnvironmentVariableProperty(
                     name="name",
-                    value="value"
+                    value="value",
+                
+                    # the properties below are optional
+                    type="type"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__f259d9da088fb308ad8abebb0fb3aca04739c87fd2ed5561a20074f8e2458d5a)
                 check_type(argname="argument name", value=name, expected_type=type_hints["name"])
                 check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "name": name,
                 "value": value,
             }
+            if type is not None:
+                self._values["type"] = type
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -4160,6 +4179,15 @@ class CfnPipeline(
             result = self._values.get("value")
             assert result is not None, "Required property 'value' is missing"
             return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def type(self) -> typing.Optional[builtins.str]:
+            '''The type of the environment variable.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-environmentvariable.html#cfn-codepipeline-pipeline-environmentvariable-type
+            '''
+            result = self._values.get("type")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5479,7 +5507,10 @@ class CfnPipeline(
                         configuration=configuration,
                         environment_variables=[codepipeline.CfnPipeline.EnvironmentVariableProperty(
                             name="name",
-                            value="value"
+                            value="value",
+                
+                            # the properties below are optional
+                            type="type"
                         )],
                         input_artifacts=[codepipeline.CfnPipeline.InputArtifactProperty(
                             name="name"
@@ -5997,7 +6028,10 @@ class CfnPipelineProps:
                         configuration=configuration,
                         environment_variables=[codepipeline.CfnPipeline.EnvironmentVariableProperty(
                             name="name",
-                            value="value"
+                            value="value",
+            
+                            # the properties below are optional
+                            type="type"
                         )],
                         input_artifacts=[codepipeline.CfnPipeline.InputArtifactProperty(
                             name="name"
@@ -12319,6 +12353,7 @@ def _typecheckingstub__f259d9da088fb308ad8abebb0fb3aca04739c87fd2ed5561a20074f8e
     *,
     name: builtins.str,
     value: builtins.str,
+    type: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

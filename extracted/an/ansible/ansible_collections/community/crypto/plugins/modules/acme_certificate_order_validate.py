@@ -6,11 +6,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
----
+DOCUMENTATION = """
 module: acme_certificate_order_validate
 author: Felix Fontein (@felixfontein)
 version_added: 2.24.0
@@ -94,9 +95,10 @@ options:
          concern."
     type: bool
     default: true
-'''
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
+---
 ### Example with HTTP-01 challenge ###
 
 - name: Create a challenge for sample.com using a account key from a variable
@@ -144,6 +146,7 @@ EXAMPLES = r'''
     fullchain_dest: /etc/httpd/ssl/sample.com-fullchain.crt
     chain_dest: /etc/httpd/ssl/sample.com-intermediate.crt
 
+---
 ### Example with DNS challenge against production ACME server ###
 
 - name: Create a challenge for sample.com using a account key file.
@@ -187,9 +190,9 @@ EXAMPLES = r'''
     cert_dest: /etc/httpd/ssl/sample.com.crt
     fullchain_dest: /etc/httpd/ssl/sample.com-fullchain.crt
     chain_dest: /etc/httpd/ssl/sample.com-intermediate.crt
-'''
+"""
 
-RETURN = '''
+RETURN = """
 account_uri:
   description: ACME account URI.
   returned: success
@@ -232,32 +235,30 @@ validating_challenges:
         - The URL of the challenge object.
       type: str
       returned: always
-'''
+"""
 
 from ansible_collections.community.crypto.plugins.module_utils.acme.acme import (
     create_backend,
     create_default_argspec,
 )
-
-from ansible_collections.community.crypto.plugins.module_utils.acme.errors import (
-    ModuleFailException,
-)
-
 from ansible_collections.community.crypto.plugins.module_utils.acme.certificate import (
     ACMECertificateClient,
+)
+from ansible_collections.community.crypto.plugins.module_utils.acme.errors import (
+    ModuleFailException,
 )
 
 
 def main():
     argument_spec = create_default_argspec(with_certificate=False)
     argument_spec.update_argspec(
-        order_uri=dict(type='str', required=True),
-        challenge=dict(type='str', choices=['http-01', 'dns-01', 'tls-alpn-01']),
-        deactivate_authzs=dict(type='bool', default=True),
+        order_uri=dict(type="str", required=True),
+        challenge=dict(type="str", choices=["http-01", "dns-01", "tls-alpn-01"]),
+        deactivate_authzs=dict(type="bool", default=True),
     )
     module = argument_spec.create_ansible_module()
-    if module.params['acme_version'] == 1:
-        module.fail_json('The module does not support acme_version=1')
+    if module.params["acme_version"] == 1:
+        module.fail_json("The module does not support acme_version=1")
 
     backend = create_backend(module, False)
 
@@ -276,34 +277,43 @@ def main():
             # Step 3: figure out challenges to use
             challenges = {}
             for authz in pending_authzs:
-                challenges[authz.combined_identifier] = module.params['challenge']
+                challenges[authz.combined_identifier] = module.params["challenge"]
 
             missing_challenge_authzs = [k for k, v in challenges.items() if v is None]
             if missing_challenge_authzs:
                 raise ModuleFailException(
-                    'The challenge parameter must be supplied if there are pending authorizations.'
-                    ' The following authorizations are pending: {missing_challenge_authzs}'.format(
-                        missing_challenge_authzs=', '.join(sorted(missing_challenge_authzs)),
+                    "The challenge parameter must be supplied if there are pending authorizations."
+                    " The following authorizations are pending: {missing_challenge_authzs}".format(
+                        missing_challenge_authzs=", ".join(
+                            sorted(missing_challenge_authzs)
+                        ),
                     )
                 )
 
             bad_challenge_authzs = [
-                authz.combined_identifier for authz in pending_authzs
+                authz.combined_identifier
+                for authz in pending_authzs
                 if authz.find_challenge(challenges[authz.combined_identifier]) is None
             ]
             if bad_challenge_authzs:
                 raise ModuleFailException(
-                    'The following authorizations do not support the selected challenges: {authz_challenges_pairs}'.format(
-                        authz_challenges_pairs=', '.join(sorted(
-                            '{authz} with {challenge}'.format(authz=authz, challenge=challenges[authz])
-                            for authz in bad_challenge_authzs
-                        )),
+                    "The following authorizations do not support the selected challenges: {authz_challenges_pairs}".format(
+                        authz_challenges_pairs=", ".join(
+                            sorted(
+                                "{authz} with {challenge}".format(
+                                    authz=authz, challenge=challenges[authz]
+                                )
+                                for authz in bad_challenge_authzs
+                            )
+                        ),
                     )
                 )
 
             really_pending_authzs = [
-                authz for authz in pending_authzs
-                if authz.find_challenge(challenges[authz.combined_identifier]).status == 'pending'
+                authz
+                for authz in pending_authzs
+                if authz.find_challenge(challenges[authz.combined_identifier]).status
+                == "pending"
             ]
 
             # Step 4: validate pending authorizations
@@ -315,7 +325,7 @@ def main():
 
             done = True
         finally:
-            if order and module.params['deactivate_authzs'] and not done:
+            if order and module.params["deactivate_authzs"] and not done:
                 client.deactivate_authzs(order)
         module.exit_json(
             changed=len(authzs_with_challenges_to_wait_for) > 0,
@@ -335,5 +345,5 @@ def main():
         e.do_fail(module)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

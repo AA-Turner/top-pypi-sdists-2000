@@ -92,7 +92,12 @@ class LlamaExtractClient:
 
             - config: ExtractConfig. The configuration parameters for the extraction agent.
         ---
-        from llama_cloud import ExtractConfig, ExtractMode, ExtractTarget
+        from llama_cloud import (
+            DocumentChunkMode,
+            ExtractConfig,
+            ExtractMode,
+            ExtractTarget,
+        )
         from llama_cloud.client import LlamaCloud
 
         client = LlamaCloud(
@@ -103,6 +108,7 @@ class LlamaExtractClient:
             config=ExtractConfig(
                 extraction_target=ExtractTarget.PER_DOC,
                 extraction_mode=ExtractMode.FAST,
+                chunk_mode=DocumentChunkMode.PAGE,
             ),
         )
         """
@@ -238,7 +244,12 @@ class LlamaExtractClient:
 
             - config: ExtractConfig. The configuration parameters for the extraction agent.
         ---
-        from llama_cloud import ExtractConfig, ExtractMode, ExtractTarget
+        from llama_cloud import (
+            DocumentChunkMode,
+            ExtractConfig,
+            ExtractMode,
+            ExtractTarget,
+        )
         from llama_cloud.client import LlamaCloud
 
         client = LlamaCloud(
@@ -249,6 +260,7 @@ class LlamaExtractClient:
             config=ExtractConfig(
                 extraction_target=ExtractTarget.PER_DOC,
                 extraction_mode=ExtractMode.FAST,
+                chunk_mode=DocumentChunkMode.PAGE,
             ),
         )
         """
@@ -342,6 +354,7 @@ class LlamaExtractClient:
             - request: ExtractJobCreate.
         ---
         from llama_cloud import (
+            DocumentChunkMode,
             ExtractConfig,
             ExtractJobCreate,
             ExtractMode,
@@ -359,6 +372,7 @@ class LlamaExtractClient:
                 config_override=ExtractConfig(
                     extraction_target=ExtractTarget.PER_DOC,
                     extraction_mode=ExtractMode.FAST,
+                    chunk_mode=DocumentChunkMode.PAGE,
                 ),
             ),
         )
@@ -428,6 +442,7 @@ class LlamaExtractClient:
         ---
         from llama_cloud import (
             ChunkMode,
+            DocumentChunkMode,
             ExtractConfig,
             ExtractJobCreate,
             ExtractMode,
@@ -449,6 +464,7 @@ class LlamaExtractClient:
                 config_override=ExtractConfig(
                     extraction_target=ExtractTarget.PER_DOC,
                     extraction_mode=ExtractMode.FAST,
+                    chunk_mode=DocumentChunkMode.PAGE,
                 ),
             ),
             extract_settings=LlamaExtractSettings(
@@ -548,7 +564,12 @@ class LlamaExtractClient:
 
             - config_override: typing.Optional[ExtractConfig].
         ---
-        from llama_cloud import ExtractConfig, ExtractMode, ExtractTarget
+        from llama_cloud import (
+            DocumentChunkMode,
+            ExtractConfig,
+            ExtractMode,
+            ExtractTarget,
+        )
         from llama_cloud.client import LlamaCloud
 
         client = LlamaCloud(
@@ -560,6 +581,7 @@ class LlamaExtractClient:
             config_override=ExtractConfig(
                 extraction_target=ExtractTarget.PER_DOC,
                 extraction_mode=ExtractMode.FAST,
+                chunk_mode=DocumentChunkMode.PAGE,
             ),
         )
         """
@@ -831,7 +853,12 @@ class AsyncLlamaExtractClient:
 
             - config: ExtractConfig. The configuration parameters for the extraction agent.
         ---
-        from llama_cloud import ExtractConfig, ExtractMode, ExtractTarget
+        from llama_cloud import (
+            DocumentChunkMode,
+            ExtractConfig,
+            ExtractMode,
+            ExtractTarget,
+        )
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
@@ -842,6 +869,7 @@ class AsyncLlamaExtractClient:
             config=ExtractConfig(
                 extraction_target=ExtractTarget.PER_DOC,
                 extraction_mode=ExtractMode.FAST,
+                chunk_mode=DocumentChunkMode.PAGE,
             ),
         )
         """
@@ -977,7 +1005,12 @@ class AsyncLlamaExtractClient:
 
             - config: ExtractConfig. The configuration parameters for the extraction agent.
         ---
-        from llama_cloud import ExtractConfig, ExtractMode, ExtractTarget
+        from llama_cloud import (
+            DocumentChunkMode,
+            ExtractConfig,
+            ExtractMode,
+            ExtractTarget,
+        )
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
@@ -988,6 +1021,7 @@ class AsyncLlamaExtractClient:
             config=ExtractConfig(
                 extraction_target=ExtractTarget.PER_DOC,
                 extraction_mode=ExtractMode.FAST,
+                chunk_mode=DocumentChunkMode.PAGE,
             ),
         )
         """
@@ -1081,6 +1115,7 @@ class AsyncLlamaExtractClient:
             - request: ExtractJobCreate.
         ---
         from llama_cloud import (
+            DocumentChunkMode,
             ExtractConfig,
             ExtractJobCreate,
             ExtractMode,
@@ -1098,6 +1133,7 @@ class AsyncLlamaExtractClient:
                 config_override=ExtractConfig(
                     extraction_target=ExtractTarget.PER_DOC,
                     extraction_mode=ExtractMode.FAST,
+                    chunk_mode=DocumentChunkMode.PAGE,
                 ),
             ),
         )
@@ -1167,6 +1203,7 @@ class AsyncLlamaExtractClient:
         ---
         from llama_cloud import (
             ChunkMode,
+            DocumentChunkMode,
             ExtractConfig,
             ExtractJobCreate,
             ExtractMode,
@@ -1188,6 +1225,7 @@ class AsyncLlamaExtractClient:
                 config_override=ExtractConfig(
                     extraction_target=ExtractTarget.PER_DOC,
                     extraction_mode=ExtractMode.FAST,
+                    chunk_mode=DocumentChunkMode.PAGE,
                 ),
             ),
             extract_settings=LlamaExtractSettings(
@@ -1287,7 +1325,12 @@ class AsyncLlamaExtractClient:
 
             - config_override: typing.Optional[ExtractConfig].
         ---
-        from llama_cloud import ExtractConfig, ExtractMode, ExtractTarget
+        from llama_cloud import (
+            DocumentChunkMode,
+            ExtractConfig,
+            ExtractMode,
+            ExtractTarget,
+        )
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
@@ -1299,6 +1342,7 @@ class AsyncLlamaExtractClient:
             config_override=ExtractConfig(
                 extraction_target=ExtractTarget.PER_DOC,
                 extraction_mode=ExtractMode.FAST,
+                chunk_mode=DocumentChunkMode.PAGE,
             ),
         )
         """

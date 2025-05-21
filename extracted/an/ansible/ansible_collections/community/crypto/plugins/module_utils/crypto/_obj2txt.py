@@ -27,12 +27,15 @@
 #    pyca/cryptography@d607dd7e5bc5c08854ec0c9baff70ba4a35be36f
 
 from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 
 # WARNING: this function no longer works with cryptography 35.0.0 and newer!
 #          It must **ONLY** be used in compatibility code for older
 #          cryptography versions!
+
 
 def obj2txt(openssl_lib, openssl_ffi, obj):
     # Set to 80 on the recommendation of

@@ -12,13 +12,13 @@ LONG_DESCRIPTION = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name="types-boto3",
-    version="1.38.19",
+    version="1.38.20",
     packages=["boto3-stubs"],
     url="https://github.com/youtype/mypy_boto3_builder",
     license="MIT License",
     author="Vlad Emelianov",
     author_email="vlad.emelianov.nz@gmail.com",
-    description="Type annotations for boto3 1.38.19 generated with mypy-boto3-builder 8.11.0",
+    description="Type annotations for boto3 1.38.20 generated with mypy-boto3-builder 8.11.0",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -55,7 +55,7 @@ setup(
     ],
     extras_require={
         "full": ["types-boto3-full>=1.38.0, <1.39.0"],
-        "boto3": ["boto3==1.38.19"],
+        "boto3": ["boto3==1.38.20"],
         "all": [
             "types-boto3-accessanalyzer>=1.38.0, <1.39.0",
             "types-boto3-account>=1.38.0, <1.39.0",
@@ -353,7 +353,6 @@ setup(
             "types-boto3-pipes>=1.38.0, <1.39.0",
             "types-boto3-polly>=1.38.0, <1.39.0",
             "types-boto3-pricing>=1.38.0, <1.39.0",
-            "types-boto3-privatenetworks>=1.38.0, <1.39.0",
             "types-boto3-proton>=1.38.0, <1.39.0",
             "types-boto3-qapps>=1.38.0, <1.39.0",
             "types-boto3-qbusiness>=1.38.0, <1.39.0",
@@ -781,7 +780,6 @@ setup(
         "pipes": ["types-boto3-pipes>=1.38.0, <1.39.0"],
         "polly": ["types-boto3-polly>=1.38.0, <1.39.0"],
         "pricing": ["types-boto3-pricing>=1.38.0, <1.39.0"],
-        "privatenetworks": ["types-boto3-privatenetworks>=1.38.0, <1.39.0"],
         "proton": ["types-boto3-proton>=1.38.0, <1.39.0"],
         "qapps": ["types-boto3-qapps>=1.38.0, <1.39.0"],
         "qbusiness": ["types-boto3-qbusiness>=1.38.0, <1.39.0"],

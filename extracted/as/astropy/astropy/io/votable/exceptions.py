@@ -41,19 +41,19 @@ from astropy.utils.exceptions import AstropyWarning
 
 __all__ = [
     "Conf",
+    "IOWarning",
+    "UnimplementedWarning",
+    "VOTableChangeWarning",
+    "VOTableSpecError",
+    "VOTableSpecWarning",
+    "VOWarning",
     "conf",
-    "warn_or_raise",
+    "parse_vowarning",
     "vo_raise",
     "vo_reraise",
     "vo_warn",
+    "warn_or_raise",
     "warn_unknown_attrs",
-    "parse_vowarning",
-    "VOWarning",
-    "VOTableChangeWarning",
-    "VOTableSpecWarning",
-    "UnimplementedWarning",
-    "IOWarning",
-    "VOTableSpecError",
 ]
 
 
@@ -642,8 +642,7 @@ class W19(VOTableSpecWarning):
     """
 
     message_template = (
-        "The fields defined in the VOTable do not match those in the "
-        "embedded FITS file"
+        "The fields defined in the VOTable do not match those in the embedded FITS file"
     )
 
 

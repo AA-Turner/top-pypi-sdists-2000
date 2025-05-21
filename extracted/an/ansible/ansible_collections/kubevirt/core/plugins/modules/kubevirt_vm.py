@@ -158,6 +158,15 @@ options:
     - If set to O(force=yes), and O(state=present) is set, an existing object will be replaced.
     type: bool
     default: no
+  hidden_fields:
+    description:
+    - Hide fields matching this option in the result.
+    - An example might be O(hidden_fields=[metadata.managedFields])
+      or O(hidden_fields=[metadata.annotations[kubemacpool.io/transaction-timestamp]]).
+    type: list
+    elements: str
+    default: ['metadata.annotations[kubemacpool.io/transaction-timestamp]', metadata.managedFields]
+    version_added: 2.2.0
 
 requirements:
 - "python >= 3.9"
@@ -273,6 +282,11 @@ result:
       type: str
 """
 
+# Monkey patch service.diff_objects to temporarily fix the changed logic
+from ansible_collections.kubevirt.core.plugins.module_utils.diff import (
+    _patch_diff_objects,
+)
+
 from copy import deepcopy
 from typing import Dict
 
@@ -333,7 +347,9 @@ def create_vm(params: Dict) -> Dict:
 
     if (run_strategy := params.get("run_strategy")) is not None:
         vm["spec"]["runStrategy"] = run_strategy
+        vm["spec"]["running"] = None
     else:
+        vm["spec"]["runStrategy"] = None
         vm["spec"]["running"] = (
             running if (running := params.get("running")) is not None else True
         )
@@ -402,6 +418,14 @@ def arg_spec() -> Dict:
                 },
             },
         },
+        "hidden_fields": {
+            "type": "list",
+            "elements": "str",
+            "default": [
+                "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+                "metadata.managedFields",
+            ],
+        },
     }
     spec.update(deepcopy(AUTH_ARG_SPEC))
     spec.update(deepcopy(COMMON_ARG_SPEC))
@@ -440,4 +464,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    _patch_diff_objects()
     main()

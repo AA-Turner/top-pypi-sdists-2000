@@ -14,10 +14,10 @@ from .frame import EllipticalFrame, RectangularFrame, RectangularFrame1D
 from .transforms import CurvedTransform
 
 __all__ = [
-    "transform_coord_meta_from_wcs",
-    "WCSWorld2PixelTransform",
     "WCSPixel2WorldTransform",
+    "WCSWorld2PixelTransform",
     "custom_ucd_coord_meta_mapping",
+    "transform_coord_meta_from_wcs",
 ]
 
 IDENTITY = WCS(naxis=2)
@@ -369,9 +369,7 @@ class WCSWorld2PixelTransform(CurvedTransform):
         if self.invert_xy:
             pixel = pixel[::-1]
 
-        pixel = np.array(pixel).T
-
-        return pixel
+        return np.array(pixel).T
 
     transform_non_affine = transform
 
@@ -431,9 +429,7 @@ class WCSPixel2WorldTransform(CurvedTransform):
         if self.wcs.world_n_dim == 1:
             world = [world]
 
-        world = np.array(world).T
-
-        return world
+        return np.array(world).T
 
     transform_non_affine = transform
 

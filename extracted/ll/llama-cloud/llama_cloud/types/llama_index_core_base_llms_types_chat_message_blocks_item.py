@@ -7,12 +7,22 @@ import typing
 import typing_extensions
 
 from .audio_block import AudioBlock
+from .document_block import DocumentBlock
 from .image_block import ImageBlock
 from .text_block import TextBlock
 
 
 class LlamaIndexCoreBaseLlmsTypesChatMessageBlocksItem_Audio(AudioBlock):
     block_type: typing_extensions.Literal["audio"]
+
+    class Config:
+        frozen = True
+        smart_union = True
+        allow_population_by_field_name = True
+
+
+class LlamaIndexCoreBaseLlmsTypesChatMessageBlocksItem_Document(DocumentBlock):
+    block_type: typing_extensions.Literal["document"]
 
     class Config:
         frozen = True
@@ -40,6 +50,7 @@ class LlamaIndexCoreBaseLlmsTypesChatMessageBlocksItem_Text(TextBlock):
 
 LlamaIndexCoreBaseLlmsTypesChatMessageBlocksItem = typing.Union[
     LlamaIndexCoreBaseLlmsTypesChatMessageBlocksItem_Audio,
+    LlamaIndexCoreBaseLlmsTypesChatMessageBlocksItem_Document,
     LlamaIndexCoreBaseLlmsTypesChatMessageBlocksItem_Image,
     LlamaIndexCoreBaseLlmsTypesChatMessageBlocksItem_Text,
 ]

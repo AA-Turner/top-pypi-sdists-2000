@@ -27,6 +27,12 @@ attributes:
   check_mode:
     description: Determines if the module should run in check mode.
     support: full
+deprecated:
+  removed_in: '4.0.0'
+  why: The connection type C(gateway) is deprecated.
+  alternative: Not available.
+extends_documentation_fragment:
+- hitachivantara.vspone_block.common.deprecated_note
 options:
   connection_info:
     description: Information required to establish a connection to the storage system.
@@ -121,13 +127,11 @@ ansible_facts:
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.uaig_utils import (
-    GatewayArguments,
-    GatewayParametersManager,
+from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.gw_module_args import (
+    GatewayArgs,
+    DEPCRECATED_MSG,
 )
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.reconciler.uaig_subscriber_resource_reconciler import (
-    SubscriberResourceReconciler,
-)
+
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_log import (
     Log,
 )
@@ -139,17 +143,17 @@ from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common
 class SubscriberResourceFactsManager:
     def __init__(self):
         self.logger = Log()
-        self.argument_spec = GatewayArguments().get_subscription_fact()
+        self.argument_spec = GatewayArgs().get_subscription_facts_args()
         self.module = AnsibleModule(
             argument_spec=self.argument_spec,
             supports_check_mode=True,
         )
         try:
-            self.params_manager = GatewayParametersManager(self.module.params)
+            self.params_manager = None  # GatewayParametersManager(self.module.params)
             self.connection_info = self.params_manager.connection_info
             self.storage_serial_number = self.params_manager.storage_system_info.serial
         except Exception as e:
-            self.module.fail_json(msg=str(e))
+            self.module.fail_json(msg=str(DEPCRECATED_MSG))
 
     def apply(self):
         self.logger.writeInfo("=== Start of Gateway Subscriber Facts ===")
@@ -159,14 +163,14 @@ class SubscriberResourceFactsManager:
             f"{self.params_manager.connection_info.connection_type} connection type"
         )
         try:
-            subscriber_data = SubscriberResourceReconciler(
+            subscriber_data = self.SubscriberResourceReconciler(
                 self.connection_info, self.storage_serial_number
             ).get_subscriber_resource_facts()
 
         except Exception as e:
             self.logger.writeError(str(e))
             self.logger.writeInfo("=== End of Gateway Subscriber Facts ===")
-            self.module.fail_json(msg=str(e))
+            self.module.fail_json(msg=str(DEPCRECATED_MSG))
 
         data = {
             "subscriber_data": subscriber_data,

@@ -112,7 +112,7 @@ def test_filename_formatting():
     assert click.format_filename(b"/x/foo.txt") == "/x/foo.txt"
     assert click.format_filename("/x/foo.txt") == "/x/foo.txt"
     assert click.format_filename("/x/foo.txt", shorten=True) == "foo.txt"
-    assert click.format_filename(b"/x/\xff.txt", shorten=True) == "�.txt"
+    assert click.format_filename("/x/\ufffd.txt", shorten=True) == "�.txt"
 
 
 def test_prompts(runner):
@@ -177,6 +177,19 @@ def test_prompts_abort(monkeypatch, capsys):
 
     out, err = capsys.readouterr()
     assert out == "Password:\ninterrupted\n"
+
+
+def test_prompts_eof(runner):
+    """If too few lines of input are given, prompt should exit, not hang."""
+
+    @click.command
+    def echo():
+        for _ in range(3):
+            click.echo(click.prompt("", type=int))
+
+    # only provide two lines of input for three prompts
+    result = runner.invoke(echo, input="1\n2\n")
+    assert result.exit_code == 1
 
 
 def _test_gen_func():

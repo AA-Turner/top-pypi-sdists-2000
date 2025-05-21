@@ -15,11 +15,7 @@ from numpy import ma
 from astropy import log
 from astropy.io.registry import UnifiedReadWriteMethod
 from astropy.units import Quantity, QuantityInfo
-from astropy.utils import (
-    ShapedLikeNDArray,
-    deprecated,
-    isiterable,
-)
+from astropy.utils import ShapedLikeNDArray, deprecated
 from astropy.utils.compat import COPY_IF_NEEDED, NUMPY_LT_1_25
 from astropy.utils.console import color_print
 from astropy.utils.data_info import BaseColumnInfo, DataInfo, MixinInfo
@@ -92,6 +88,8 @@ __doctest_skip__ = [
     "Table.convert_bytestring_to_unicode",
     "Table.convert_unicode_to_bytestring",
 ]
+
+__doctest_requires__ = {("Table.from_pandas", "Table.to_pandas"): ["pandas"]}
 
 _pprint_docs = """
     {__doc__}
@@ -413,7 +411,7 @@ class TableAttribute(MetaAttribute):
       >>> t.identifier
       10
       >>> t.meta
-      OrderedDict([('__attributes__', {'identifier': 10})])
+      {'__attributes__': {'identifier': 10}}
     """
 
 
@@ -751,7 +749,9 @@ class Table:
             names_from_list_of_dict = _get_names_from_list_of_dict(rows)
             if names_from_list_of_dict:
                 data = rows
-            elif isinstance(rows, self.Row):
+            elif isinstance(rows, self.Row) or (
+                isinstance(rows, np.ndarray) and rows.dtype.names
+            ):
                 data = rows
             else:
                 data = list(zip(*rows))
@@ -786,7 +786,16 @@ class Table:
                 f"__init__() got unexpected keyword argument {next(iter(kwargs.keys()))!r}"
             )
 
-        if isinstance(data, np.ndarray) and data.shape == (0,) and not data.dtype.names:
+        # Treat any empty numpy array as None, except for structured arrays since they
+        # provide column names and dtypes.
+        #
+        # Init with rows=[] or data=[] (or tuples) is allowed and taken to mean no data.
+        # This allows supplying names and dtype if desired. `data=[]` is ambiguous,
+        # because it could mean no columns, or it could mean no rows for list of dict.
+        # For compatibility with the latter, interpret data=[] as data=None.
+        if (
+            isinstance(data, np.ndarray) and data.size == 0 and not data.dtype.names
+        ) or (isinstance(data, (list, tuple)) and len(data) == 0):
             data = None
 
         if isinstance(data, self.Row):
@@ -1190,7 +1199,7 @@ class Table:
         the same length as data.
         """
         for inp_list, inp_str in ((dtype, "dtype"), (names, "names")):
-            if not isiterable(inp_list):
+            if not np.iterable(inp_list):
                 raise ValueError(f"{inp_str} must be a list or None")
 
         if len(names) != n_cols or len(dtype) != n_cols:
@@ -1854,7 +1863,7 @@ class Table:
         max_lines=5000,
         jsviewer=False,
         browser="default",
-        jskwargs={"use_local_files": True},
+        jskwargs={"use_local_files": False},
         tableid=None,
         table_class="display compact",
         css=None,
@@ -1872,7 +1881,11 @@ class Table:
         jsviewer : bool
             If `True`, prepends some javascript headers so that the table is
             rendered as a `DataTables <https://datatables.net>`_ data table.
-            This allows in-browser searching & sorting.
+            This allows in-browser searching & sorting, but requires a
+            connection to the internet to load the necessary javascript
+            libraries from a CDN. Working offline may work in limited
+            circumstances, if the browser has cached the necessary libraries
+            from a previous use of this method.
         browser : str
             Any legal browser name, e.g. ``'firefox'``, ``'chrome'``,
             ``'safari'`` (for mac, you may need to use ``'open -a
@@ -1880,8 +1893,8 @@ class Table:
             ``'default'``, will use the system default browser.
         jskwargs : dict
             Passed to the `astropy.table.JSViewer` init. Defaults to
-            ``{'use_local_files': True}`` which means that the JavaScript
-            libraries will be served from local copies.
+            ``{'use_local_files': False}`` which means that the JavaScript
+            libraries will be loaded from a CDN.
         tableid : str or None
             An html ID tag for the table.  Default is ``table{id}``, where id
             is the unique integer id of the table object, id(self).
@@ -2098,10 +2111,8 @@ class Table:
         ):
             # If item is an empty array/list/tuple then return the table with no rows
             return self._new_from_slice([])
-        elif (
-            isinstance(item, (slice, np.ndarray, list))
-            or isinstance(item, tuple)
-            and all(isinstance(x, np.ndarray) for x in item)
+        elif isinstance(item, (slice, np.ndarray, list)) or (
+            isinstance(item, tuple) and all(isinstance(x, np.ndarray) for x in item)
         ):
             # here for the many ways to give a slice; a tuple of ndarray
             # is produced by np.where, as in t[np.where(t['a'] > 2)]
@@ -2137,10 +2148,8 @@ class Table:
             elif isinstance(item, (int, np.integer)):
                 self._set_row(idx=item, colnames=self.colnames, vals=value)
 
-            elif (
-                isinstance(item, (slice, np.ndarray, list))
-                or isinstance(item, tuple)
-                and all(isinstance(x, np.ndarray) for x in item)
+            elif isinstance(item, (slice, np.ndarray, list)) or (
+                isinstance(item, tuple) and all(isinstance(x, np.ndarray) for x in item)
             ):
                 if isinstance(value, Table):
                     vals = (col for col in value.columns.values())
@@ -3136,7 +3145,8 @@ class Table:
 
     def _set_row(self, idx, colnames, vals):
         try:
-            assert len(vals) == len(colnames)
+            if not len(vals) == len(colnames):
+                raise Exception
         except Exception:
             raise ValueError(
                 "right hand side must be a sequence of values with "
@@ -3283,8 +3293,10 @@ class Table:
             vals = vals_list
             mask = mask_list
 
-        if isiterable(vals):
-            if mask is not None and (not isiterable(mask) or isinstance(mask, Mapping)):
+        if np.iterable(vals):
+            if mask is not None and (
+                not np.iterable(mask) or isinstance(mask, Mapping)
+            ):
                 raise TypeError("Mismatch between type of vals and mask")
 
             if len(self.columns) != len(vals):
@@ -3907,7 +3919,7 @@ class Table:
                 # other = {'a': 2, 'b': 2} and then equality does a
                 # column-by-column broadcasting.
                 names = self.colnames
-                other = {name: other for name in names}
+                other = dict.fromkeys(names, other)
 
         # Require column names match but do not require same column order
         if set(self.colnames) != set(names):
@@ -3981,6 +3993,11 @@ class Table:
         -------
         out : `~astropy.table.Table`
             New table with groups set
+
+        Notes
+        -----
+        The underlying sorting algorithm is guaranteed stable, meaning that the
+        original table order is preserved within each group.
         """
         return groups.table_group_by(self, keys)
 
@@ -4111,15 +4128,13 @@ class Table:
 
         badcols = [name for name, col in self.columns.items() if len(col.shape) > 1]
         if badcols:
-            # fmt: off
             raise ValueError(
-                f'Cannot convert a table with multidimensional columns to a '
-                f'pandas DataFrame. Offending columns are: {badcols}\n'
-                f'One can filter out such columns using:\n'
-                f'names = [name for name in tbl.colnames if len(tbl[name].shape) <= 1]\n'
-                f'tbl[names].to_pandas(...)'
+                f"Cannot convert a table with multidimensional columns to a "
+                f"pandas DataFrame. Offending columns are: {badcols}\n"
+                f"One can filter out such columns using:\n"
+                f"names = [name for name in tbl.colnames if len(tbl[name].shape) <= 1]\n"
+                f"tbl[names].to_pandas(...)"
             )
-            # fmt: on
 
         out = OrderedDict()
 

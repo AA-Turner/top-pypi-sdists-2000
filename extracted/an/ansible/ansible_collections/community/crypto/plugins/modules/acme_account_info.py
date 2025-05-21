@@ -6,6 +6,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 
@@ -47,6 +49,7 @@ seealso:
 """
 
 EXAMPLES = r"""
+---
 - name: Check whether an account with the given account key exists
   community.crypto.acme_account_info:
     account_key_src: /etc/pki/cert/private/account.key
@@ -206,42 +209,47 @@ order_uris:
   version_added: 1.5.0
 """
 
-from ansible_collections.community.crypto.plugins.module_utils.acme.acme import (
-    create_backend,
-    create_default_argspec,
-    ACMEClient,
-)
-
 from ansible_collections.community.crypto.plugins.module_utils.acme.account import (
     ACMEAccount,
 )
-
-from ansible_collections.community.crypto.plugins.module_utils.acme.errors import ModuleFailException
-
+from ansible_collections.community.crypto.plugins.module_utils.acme.acme import (
+    ACMEClient,
+    create_backend,
+    create_default_argspec,
+)
+from ansible_collections.community.crypto.plugins.module_utils.acme.errors import (
+    ModuleFailException,
+)
 from ansible_collections.community.crypto.plugins.module_utils.acme.utils import (
     process_links,
 )
 
 
 def get_orders_list(module, client, orders_url):
-    '''
+    """
     Retrieves orders list (handles pagination).
-    '''
+    """
     orders = []
     while orders_url:
         # Get part of orders list
-        res, info = client.get_request(orders_url, parse_json_result=True, fail_on_error=True)
-        if not res.get('orders'):
+        res, info = client.get_request(
+            orders_url, parse_json_result=True, fail_on_error=True
+        )
+        if not res.get("orders"):
             if orders:
-                module.warn('When retrieving orders list part {0}, got empty result list'.format(orders_url))
+                module.warn(
+                    "When retrieving orders list part {0}, got empty result list".format(
+                        orders_url
+                    )
+                )
             break
         # Add order URLs to result list
-        orders.extend(res['orders'])
+        orders.extend(res["orders"])
         # Extract URL of next part of results list
         new_orders_url = []
 
         def f(link, relation):
-            if relation == 'next':
+            if relation == "next":
                 new_orders_url.append(link)
 
         process_links(info, f)
@@ -254,16 +262,18 @@ def get_orders_list(module, client, orders_url):
 
 
 def get_order(client, order_url):
-    '''
+    """
     Retrieve order data.
-    '''
+    """
     return client.get_request(order_url, parse_json_result=True, fail_on_error=True)[0]
 
 
 def main():
     argument_spec = create_default_argspec()
     argument_spec.update_argspec(
-        retrieve_orders=dict(type='str', default='ignore', choices=['ignore', 'url_list', 'object_list']),
+        retrieve_orders=dict(
+            type="str", default="ignore", choices=["ignore", "url_list", "object_list"]
+        ),
     )
     module = argument_spec.create_ansible_module(supports_check_mode=True)
     backend = create_backend(module, True)
@@ -278,28 +288,31 @@ def main():
             remove_account_uri_if_not_exists=True,
         )
         if created:
-            raise AssertionError('Unwanted account creation')
+            raise AssertionError("Unwanted account creation")
         result = {
-            'changed': False,
-            'exists': client.account_uri is not None,
-            'account_uri': client.account_uri,
+            "changed": False,
+            "exists": client.account_uri is not None,
+            "account_uri": client.account_uri,
         }
         if client.account_uri is not None:
             # Make sure promised data is there
-            if 'contact' not in account_data:
-                account_data['contact'] = []
-            account_data['public_account_key'] = client.account_key_data['jwk']
-            result['account'] = account_data
+            if "contact" not in account_data:
+                account_data["contact"] = []
+            account_data["public_account_key"] = client.account_key_data["jwk"]
+            result["account"] = account_data
             # Retrieve orders list
-            if account_data.get('orders') and module.params['retrieve_orders'] != 'ignore':
-                orders = get_orders_list(module, client, account_data['orders'])
-                result['order_uris'] = orders
-                if module.params['retrieve_orders'] == 'object_list':
-                    result['orders'] = [get_order(client, order) for order in orders]
+            if (
+                account_data.get("orders")
+                and module.params["retrieve_orders"] != "ignore"
+            ):
+                orders = get_orders_list(module, client, account_data["orders"])
+                result["order_uris"] = orders
+                if module.params["retrieve_orders"] == "object_list":
+                    result["orders"] = [get_order(client, order) for order in orders]
         module.exit_json(**result)
     except ModuleFailException as e:
         e.do_fail(module)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

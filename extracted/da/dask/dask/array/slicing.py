@@ -325,31 +325,46 @@ def slice_slices_and_integers(
     sorted_block_slices = [sorted(i.items()) for i in block_slices]
 
     # (in_name, 1, 1, 2), (in_name, 1, 1, 4), (in_name, 2, 1, 2), ...
-    in_names = list(product([in_name], *[pluck(0, s) for s in sorted_block_slices]))
+    in_names = product([in_name], *[pluck(0, s) for s in sorted_block_slices])
 
     # (out_name, 0, 0, 0), (out_name, 0, 0, 1), (out_name, 0, 1, 0), ...
-    out_names = list(
-        product(
-            [out_name],
-            *[
-                range(len(d))[::-1] if i.step and i.step < 0 else range(len(d))
-                for d, i in zip(block_slices, index)
-                if not isinstance(i, Integral)
-            ],
-        )
+    out_names = product(
+        [out_name],
+        *[
+            range(len(d))[::-1] if i.step and i.step < 0 else range(len(d))
+            for d, i in zip(block_slices, index)
+            if not isinstance(i, Integral)
+        ],
     )
 
-    all_slices = list(product(*[pluck(1, s) for s in sorted_block_slices]))
+    all_slices = product(*(pluck(1, s) for s in sorted_block_slices))
+    if not allow_getitem_optimization:
+        dsk_out = {
+            out_name: (Task(out_name, getitem, TaskRef(in_name), slices))
+            for out_name, in_name, slices in zip(out_names, in_names, all_slices)
+        }
+    else:
+        empty_slice = slice(None, None, None)
 
-    dsk_out = {
-        out_name: (
-            Task(out_name, getitem, TaskRef(in_name), slices)
-            if not allow_getitem_optimization
-            or not all(sl == slice(None, None, None) for sl in slices)
-            else Alias(out_name, in_name)
+        all_empty_slices = map(
+            all,
+            product(
+                *(
+                    (sp == empty_slice for sp in pluck(1, s))
+                    for s in sorted_block_slices
+                )
+            ),
         )
-        for out_name, in_name, slices in zip(out_names, in_names, all_slices)
-    }
+        dsk_out = {
+            out_name: (
+                Task(out_name, getitem, TaskRef(in_name), slices)
+                if not all_empty
+                else Alias(out_name, in_name)
+            )
+            for out_name, in_name, all_empty, slices in zip(
+                out_names, in_names, all_empty_slices, all_slices
+            )
+        }
 
     new_blockdims = [
         new_blockdim(d, db, i)
@@ -590,7 +605,14 @@ def take(outname, inname, chunks, index, axis=0):
 
         arange = arange_safe(np.sum(chunks[axis]), like=index)
         if len(index) == len(arange) and np.abs(index - arange).sum() == 0:
-            raise SlicingNoop()
+            # TODO: This should be a real no-op, but the call stack is
+            # too deep to do this efficiently for now
+            chunk_tuples = product(*(range(len(c)) for i, c in enumerate(chunks)))
+            graph = {
+                (outname,) + c: Alias((outname,) + c, (inname,) + c)
+                for c in chunk_tuples
+            }
+            return tuple(chunks), graph
 
         average_chunk_size = int(sum(chunks[axis]) / len(chunks[axis]))
 

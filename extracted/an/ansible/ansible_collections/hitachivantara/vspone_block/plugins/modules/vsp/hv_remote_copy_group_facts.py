@@ -13,7 +13,6 @@ module: hv_remote_copy_group_facts
 short_description: Retrieves Remote Copy Groups information from Hitachi VSP storage systems.
 description:
   - This module retrieves information about Remote Copy Groups from Hitachi VSP storage systems.
-  - This module is supported only for C(direct) connection type.
   - For examples go to URL
     U(https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/remote_copy_group_facts.yml)
 version_added: '3.2.0'
@@ -25,6 +24,8 @@ attributes:
   check_mode:
     description: Determines if the module should run in check mode.
     support: full
+extends_documentation_fragment:
+- hitachivantara.vspone_block.common.gateway_note
 options:
   connection_info:
     description: Information required to establish a connection to the storage system.
@@ -32,19 +33,19 @@ options:
     required: true
     suboptions:
       address:
-        description: IP address or hostname of storage system.
+        description: IP address or hostname of the storage system.
         type: str
         required: true
       username:
-        description: Username for authentication. This field is valid for C(direct) connection type only, and it is a required field.
+        description: Username for authentication. This is a required field.
         type: str
         required: false
       password:
-        description: Password for authentication. This field is valid for C(direct) connection type only, and it is a required field.
+        description: Password for authentication. This is a required field.
         type: str
         required: false
       api_token:
-        description: Value of the lock token to operate on locked resources.
+        description: This field is used to pass the value of the lock token to operate on locked resources.
         type: str
         required: false
   secondary_connection_info:
@@ -84,14 +85,14 @@ options:
 """
 
 EXAMPLES = """
-- name: Get all Copy Groups for direct connection type
+- name: Get all Remote Copy Groups
   hitachivantara.vspone_block.vsp.hv_remote_copy_group_facts:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
 
-- name: Get one Copy Group for direct connection type
+- name: Get one Remote Copy Group
   hitachivantara.vspone_block.vsp.hv_remote_copy_group_facts:
     connection_info:
       address: storage1.company.com
@@ -100,7 +101,7 @@ EXAMPLES = """
     spec:
       name: "copygroup1"
 
-- name: Get one Copy Group detail for direct connection type
+- name: Get one Remote Copy Group detail
   hitachivantara.vspone_block.vsp.hv_remote_copy_group_facts:
     connection_info:
       address: storage1.company.com

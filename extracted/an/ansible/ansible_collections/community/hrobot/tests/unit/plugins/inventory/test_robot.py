@@ -17,7 +17,6 @@ from ansible.inventory.data import InventoryData
 from ansible.inventory.manager import InventoryManager
 from ansible.module_utils.common.text.converters import to_native
 from ansible.template import Templar
-from ansible.utils.unsafe_proxy import AnsibleUnsafe
 
 from ansible_collections.community.internal_test_tools.tests.unit.mock.path import mock_unfrackpath_noop
 from ansible_collections.community.internal_test_tools.tests.unit.mock.loader import DictDataLoader
@@ -25,12 +24,17 @@ from ansible_collections.community.internal_test_tools.tests.unit.utils.open_url
     OpenUrlCall,
     OpenUrlProxy,
 )
+from ansible_collections.community.internal_test_tools.tests.unit.utils.trust import (
+    SUPPORTS_DATA_TAGGING,
+    is_trusted,
+)
 
 from ansible_collections.community.hrobot.plugins.inventory.robot import InventoryModule
 from ansible_collections.community.hrobot.plugins.module_utils.robot import BASE_URL
 
 
 # The hashes involved are computed from the prefix and the plugin's name.
+# This no longer works with Data Tagging
 CACHE_PREFIX = 'prefix'
 CACHE_KEY = 'prefixcommunity.hrobot.robot_4e69bs_95733'
 
@@ -470,16 +474,24 @@ def test_unsafe(inventory, mocker):
     assert host_2_vars['hrobot_dc'] == 'EVALU{{ "" }}ATED'
 
     # Make sure everything is unsafe
-    assert isinstance(host_1_vars['ansible_host'], AnsibleUnsafe)
-    assert isinstance(host_1_vars['hrobot_server_ip'], AnsibleUnsafe)
-    assert not isinstance(host_1_vars['hrobot_dc'], AnsibleUnsafe)
+    assert not is_trusted(host_1_vars['ansible_host'])
+    assert not is_trusted(host_1_vars['hrobot_server_ip'])
+    if SUPPORTS_DATA_TAGGING:
+        assert not is_trusted(host_1_vars['hrobot_dc'])
+    else:
+        assert is_trusted(host_1_vars['hrobot_dc'])
 
-    assert not isinstance(host_2_vars['ansible_host'], AnsibleUnsafe)
-    assert not isinstance(host_2_vars['hrobot_server_ip'], AnsibleUnsafe)
-    assert isinstance(host_2_vars['hrobot_server_name'], AnsibleUnsafe)
-    assert isinstance(host_2_vars['hrobot_dc'], AnsibleUnsafe)
+    if SUPPORTS_DATA_TAGGING:
+        assert not is_trusted(host_2_vars['ansible_host'])
+        assert not is_trusted(host_2_vars['hrobot_server_ip'])
+    else:
+        assert is_trusted(host_2_vars['ansible_host'])
+        assert is_trusted(host_2_vars['hrobot_server_ip'])
+    assert not is_trusted(host_2_vars['hrobot_server_name'])
+    assert not is_trusted(host_2_vars['hrobot_dc'])
 
 
+@pytest.mark.skipif(SUPPORTS_DATA_TAGGING, reason="The Data Tagging PR changes how the on-disk cache looks like")
 def test_inventory_cache_empty(tmpdir, mocker):
     cache_directory = os.path.join(tmpdir, 'cache')
     open_url = OpenUrlProxy([
@@ -561,6 +573,7 @@ def test_inventory_cache_empty(tmpdir, mocker):
     ]
 
 
+@pytest.mark.skipif(SUPPORTS_DATA_TAGGING, reason="The Data Tagging PR changes how the on-disk cache looks like")
 def test_inventory_cache_full(tmpdir, mocker):
     cache_directory = os.path.join(tmpdir, 'cache')
     open_url = OpenUrlProxy([])

@@ -24,6 +24,7 @@ from gcsfs.tests.utils import tempdir, tmpfile
 TEST_BUCKET = gcsfs.tests.settings.TEST_BUCKET
 TEST_PROJECT = gcsfs.tests.settings.TEST_PROJECT
 TEST_REQUESTER_PAYS_BUCKET = gcsfs.tests.settings.TEST_REQUESTER_PAYS_BUCKET
+TEST_KMS_KEY = gcsfs.tests.settings.TEST_KMS_KEY
 
 
 def test_simple(gcs, monkeypatch):
@@ -87,6 +88,16 @@ def test_simple_upload(gcs):
     assert gcs.cat(fn) == b"zz"
 
 
+def test_simple_upload_with_kms(gcs):
+    if not gcs.on_google:
+        pytest.skip("emulator does not support kmsKeyName")
+    fn = TEST_BUCKET + "/test"
+    with gcs.open(fn, "wb", content_type="text/plain", kms_key_name=TEST_KMS_KEY) as f:
+        f.write(b"zz")
+    assert gcs.cat(fn) == b"zz"
+    assert TEST_KMS_KEY in gcs.info(fn)["kmsKeyName"]
+
+
 def test_large_upload(gcs):
     orig = gcsfs.core.GCS_MAX_BLOCK_SIZE
     gcsfs.core.GCS_MAX_BLOCK_SIZE = 262144  # minimum block size
@@ -96,6 +107,24 @@ def test_large_upload(gcs):
         with gcs.open(fn, "wb", content_type="application/octet-stream") as f:
             f.write(d)
         assert gcs.cat(fn) == d
+    finally:
+        gcsfs.core.GCS_MAX_BLOCK_SIZE = orig
+
+
+def test_large_upload_with_kms(gcs):
+    if not gcs.on_google:
+        pytest.skip("emulator does not support kmsKeyName")
+    orig = gcsfs.core.GCS_MAX_BLOCK_SIZE
+    gcsfs.core.GCS_MAX_BLOCK_SIZE = 262144  # minimum block size
+    try:
+        fn = TEST_BUCKET + "/test"
+        d = b"7123" * 262144
+        with gcs.open(
+            fn, "wb", content_type="application/octet-stream", kms_key_name=TEST_KMS_KEY
+        ) as f:
+            f.write(d)
+        assert gcs.cat(fn) == d
+        assert TEST_KMS_KEY in gcs.info(fn)["kmsKeyName"]
     finally:
         gcsfs.core.GCS_MAX_BLOCK_SIZE = orig
 
@@ -127,6 +156,53 @@ def test_multi_upload(gcs):
         f.write(b"xx")
     assert gcs.cat(fn) == d + b"xx"
     assert gcs.info(fn)["contentType"] == "application/octet-stream"
+    # empty buffer on close
+    with gcs.open(fn, "wb", block_size=2**19) as f:
+        f.write(d)
+        f.write(b"xx")
+        f.write(d)
+    assert gcs.cat(fn) == d + b"xx" + d
+    assert gcs.info(fn)["contentType"] == "application/octet-stream"
+
+
+def test_multi_upload_with_kms(gcs):
+    if not gcs.on_google:
+        pytest.skip("emulator does not support kmsKeyName")
+
+    fn = TEST_BUCKET + "/test"
+    d = b"01234567" * 2**15
+
+    # something to write on close
+    with gcs.open(fn, "wb", content_type="text/plain", block_size=2**18) as f:
+        f.write(d)
+        f.write(b"xx")
+    assert gcs.cat(fn) == d + b"xx"
+    assert gcs.info(fn)["contentType"] == "text/plain"
+    # empty buffer on close
+    with gcs.open(
+        fn,
+        "wb",
+        content_type="text/plain",
+        block_size=2**19,
+        kms_key_name=TEST_KMS_KEY,
+    ) as f:
+        f.write(d)
+        f.write(b"xx")
+        f.write(d)
+    assert gcs.cat(fn) == d + b"xx" + d
+    assert gcs.info(fn)["contentType"] == "text/plain"
+    assert TEST_KMS_KEY in gcs.info(fn)["kmsKeyName"]
+
+    fn = TEST_BUCKET + "/test"
+    d = b"01234567" * 2**15
+
+    # something to write on close
+    with gcs.open(fn, "wb", block_size=2**18) as f:
+        f.write(d)
+        f.write(b"xx")
+    assert gcs.cat(fn) == d + b"xx"
+    assert gcs.info(fn)["contentType"] == "application/octet-stream"
+    assert "kmsKeyName" not in gcs.info(fn)
     # empty buffer on close
     with gcs.open(fn, "wb", block_size=2**19) as f:
         f.write(d)
@@ -1221,6 +1297,47 @@ def test_dir_marker(gcs):
     out3 = gcs.info(f"{TEST_BUCKET}/placeholder/")
     assert out2 == out3
     assert out2["type"] == "directory"
+
+
+def test_dir_marker_directory_not_listed(gcs):
+    gcs.touch(f"{TEST_BUCKET}/psudodir/")
+    gcs.touch(f"{TEST_BUCKET}/psudodir/innerfolder/innerfile")
+    gcs.invalidate_cache()
+    info = gcs.info(f"{TEST_BUCKET}/psudodir")
+    assert info["type"] == "directory"
+
+
+def test_dir_marker_directory_listed(gcs):
+    gcs.touch(f"{TEST_BUCKET}/psudodir/")
+    gcs.touch(f"{TEST_BUCKET}/psudodir/innerfolder/innerfile")
+    gcs.invalidate_cache()
+    gcs.ls(f"{TEST_BUCKET}/psudodir")
+    info = gcs.info(f"{TEST_BUCKET}/psudodir")
+    assert info["type"] == "directory"
+
+
+def test_dir_marker_parent_directory_listed(gcs):
+    gcs.touch(f"{TEST_BUCKET}/parent_psudodir/psudodir/")
+    gcs.touch(f"{TEST_BUCKET}/parent_psudodir/psudodir/innerfolder/innerfile")
+    gcs.invalidate_cache()
+    gcs.ls(f"{TEST_BUCKET}/parent_psudodir")
+    info = gcs.info(f"{TEST_BUCKET}/parent_psudodir/psudodir")
+    assert info["type"] == "directory"
+
+
+def test_dir_marker_info_eq_ls(gcs):
+    gcs.touch(f"{TEST_BUCKET}/psudodir/")
+    gcs.invalidate_cache()
+    out1 = gcs.info(f"{TEST_BUCKET}/psudodir")
+    out2 = gcs.ls(f"{TEST_BUCKET}/psudodir", detail=True)[0]
+    assert out1["type"] == "directory"
+    assert out1 == out2
+
+    gcs.invalidate_cache()
+    out3 = gcs.ls(f"{TEST_BUCKET}/psudodir", detail=True)[0]
+    out4 = gcs.info(f"{TEST_BUCKET}/psudodir")
+    assert out3["type"] == "directory"
+    assert out3 == out4
 
 
 def test_mkdir_with_path(gcs):

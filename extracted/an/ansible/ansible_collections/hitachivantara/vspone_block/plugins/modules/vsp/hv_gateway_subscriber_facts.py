@@ -26,6 +26,12 @@ attributes:
   check_mode:
     description: Determines if the module should run in check mode.
     support: full
+deprecated:
+    removed_in: '4.0.0'
+    why: The connection type C(gateway) is deprecated.
+    alternative: Not available.
+extends_documentation_fragment:
+- hitachivantara.vspone_block.common.deprecated_note
 options:
   connection_info:
     description: Information required to establish a connection to the storage system.
@@ -57,6 +63,7 @@ options:
   spec:
     description: Specification for retrieving subscriber information.
     type: dict
+    required: false
     suboptions:
       subscriber_id:
         description: ID of the specific subscriber to retrieve information for. Works for C(gateway) connection type only.
@@ -148,13 +155,11 @@ ansible_facts:
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.uaig_utils import (
-    GatewayArguments,
-    GatewayParametersManager,
+from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.gw_module_args import (
+    GatewayArgs,
+    DEPCRECATED_MSG,
 )
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.reconciler.uaig_subscriber_reconciler import (
-    SubscriberReconciler,
-)
+
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_log import (
     Log,
 )
@@ -167,14 +172,14 @@ class SubscriberFactsManager:
     def __init__(self):
 
         self.logger = Log()
-        self.argument_spec = GatewayArguments().get_subscriber_fact()
+        self.argument_spec = GatewayArgs().get_subscriber_facts_args()
         self.module = AnsibleModule(
             argument_spec=self.argument_spec,
             supports_check_mode=True,
         )
         try:
-            self.params_manager = GatewayParametersManager(self.module.params)
-            self.spec = self.params_manager.set_subscriber_fact_spec()
+            self.params_manager = None
+            self.spec = None
         except Exception as e:
             self.logger.writeException(e)
             self.module.fail_json(msg=str(e))
@@ -186,14 +191,14 @@ class SubscriberFactsManager:
 
         try:
 
-            subscriber_data = SubscriberReconciler(
+            subscriber_data = self.SubscriberReconciler(
                 self.params_manager.connection_info
             ).get_subscriber_facts(self.params_manager.spec)
 
         except Exception as e:
             self.logger.writeError(str(e))
             self.logger.writeInfo("=== End of Gateway Subscriber Facts ===")
-            self.module.fail_json(msg=str(e))
+            self.module.fail_json(msg=str(DEPCRECATED_MSG))
 
         data = {
             "subscriber_data": subscriber_data,

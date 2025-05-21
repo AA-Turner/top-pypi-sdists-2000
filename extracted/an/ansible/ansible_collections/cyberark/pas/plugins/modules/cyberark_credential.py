@@ -98,37 +98,29 @@ options:
             - Reason for requesting credential if required by policy;
             - It must be specified if the Policy managing the object
             - requires it.
-    path:
-        type: str
-        required: false
-        description:
-            - String override for the context path
-
 """
 
 EXAMPLES = """
-  tasks:
-    - name: credential retrieval basic
-      cyberark_credential:
-        api_base_url: "http://10.10.0.1"
-        app_id: "TestID"
-        query: "Safe=test;UserName=admin"
-      register: result
+- name: credential retrieval basic
+  cyberark.pas.cyberark_credential:
+    api_base_url: "http://10.10.0.1"
+    app_id: "TestID"
+    query: "Safe=test;UserName=admin"
+    register: result
 
-    - name: credential retrieval advanced
-      cyberark_credential:
-        api_base_url: "https://components.cyberark.local"
-        validate_certs: true
-        client_cert: /etc/pki/ca-trust/source/client.pem
-        client_key: /etc/pki/ca-trust/source/priv-key.pem
-        app_id: "TestID"
-        query: "Safe=test;UserName=admin"
-        connection_timeout: 60
-        query_format: Exact
-        fail_request_on_password_change: true
-        reason: "requesting credential for Ansible deployment"
-      register: result
-
+- name: credential retrieval advanced
+  cyberark.pas.cyberark_credential:
+    api_base_url: "https://components.cyberark.local"
+    validate_certs: true
+    client_cert: /etc/pki/ca-trust/source/client.pem
+    client_key: /etc/pki/ca-trust/source/priv-key.pem
+    app_id: "TestID"
+    query: "Safe=test;UserName=admin"
+    connection_timeout: 60
+    query_format: Exact
+    fail_request_on_password_change: true
+    reason: "requesting credential for Ansible deployment"
+    register: result
 """
 
 RETURN = """

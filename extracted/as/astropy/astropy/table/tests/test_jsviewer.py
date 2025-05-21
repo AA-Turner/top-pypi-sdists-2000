@@ -196,35 +196,6 @@ def test_write_jsviewer_options(tmp_path):
         assert f.read().strip() == ref.strip()
 
 
-def test_write_jsviewer_local(tmp_path):
-    t = Table()
-    t["a"] = [1, 2, 3, 4, 5]
-    t["b"] = ["a", "b", "c", "d", "e"]
-    t["a"].unit = "m"
-
-    tmpfile = tmp_path / "test.html"
-
-    with pytest.warns(AstropyDeprecationWarning, match="use_local_files is deprecated"):
-        t.write(
-            tmpfile,
-            format="jsviewer",
-            table_id="test",
-            jskwargs={"use_local_files": True},
-        )
-    ref = REFERENCE % dict(
-        lines=format_lines(t["a"], t["b"]),
-        table_class="display compact",
-        table_id="test",
-        length="50",
-        display_length="10, 25, 50, 100, 500, 1000",
-        datatables_css_url="file://" + join(EXTERN_DIR, "css", "datatables.css"),
-        datatables_js_url="file://" + join(EXTERN_DIR, "js", "datatables.min.js"),
-        jquery_url="file://" + join(EXTERN_DIR, "js", JQUERY_MIN_JS),
-    )
-    with open(tmpfile) as f:
-        assert f.read().strip() == ref.strip()
-
-
 @pytest.mark.skipif(not HAS_IPYTHON, reason="requires IPython")
 def test_show_in_notebook_classic():
     t = Table()

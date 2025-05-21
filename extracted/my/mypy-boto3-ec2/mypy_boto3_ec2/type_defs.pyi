@@ -158,6 +158,7 @@ from .literals import (
     InstanceMetadataOptionsStateType,
     InstanceMetadataProtocolStateType,
     InstanceMetadataTagsStateType,
+    InstanceRebootMigrationStateType,
     InstanceStateNameType,
     InstanceStorageEncryptionSupportType,
     InstanceTypeHypervisorType,
@@ -252,6 +253,7 @@ from .literals import (
     PrincipalTypeType,
     ProductCodeValuesType,
     ProtocolType,
+    RebootMigrationSupportType,
     ReplacementStrategyType,
     ReplaceRootVolumeTaskStateType,
     ReportInstanceReasonCodesType,
@@ -5895,6 +5897,7 @@ class InstanceMaintenanceOptionsRequestTypeDef(TypedDict):
 
 class InstanceMaintenanceOptionsTypeDef(TypedDict):
     AutoRecovery: NotRequired[InstanceAutoRecoveryStateType]
+    RebootMigration: NotRequired[InstanceRebootMigrationStateType]
 
 class InstanceMetadataOptionsRequestTypeDef(TypedDict):
     HttpTokens: NotRequired[HttpTokensStateType]
@@ -6346,6 +6349,7 @@ class SuccessfulInstanceCreditSpecificationItemTypeDef(TypedDict):
 class ModifyInstanceMaintenanceOptionsRequestTypeDef(TypedDict):
     InstanceId: str
     AutoRecovery: NotRequired[InstanceAutoRecoveryStateType]
+    RebootMigration: NotRequired[InstanceRebootMigrationStateType]
     DryRun: NotRequired[bool]
 
 class ModifyInstanceMetadataDefaultsRequestTypeDef(TypedDict):
@@ -8008,6 +8012,7 @@ class ModifyInstanceCpuOptionsResultTypeDef(TypedDict):
 class ModifyInstanceMaintenanceOptionsResultTypeDef(TypedDict):
     InstanceId: str
     AutoRecovery: InstanceAutoRecoveryStateType
+    RebootMigration: InstanceRebootMigrationStateType
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ModifyInstanceMetadataDefaultsResultTypeDef(TypedDict):
@@ -17702,6 +17707,7 @@ class InstanceTypeInfoTypeDef(TypedDict):
     MediaAcceleratorInfo: NotRequired[MediaAcceleratorInfoTypeDef]
     NeuronInfo: NotRequired[NeuronInfoTypeDef]
     PhcSupport: NotRequired[PhcSupportType]
+    RebootMigrationSupport: NotRequired[RebootMigrationSupportType]
 
 class CreateNetworkInsightsAccessScopeRequestTypeDef(TypedDict):
     ClientToken: str

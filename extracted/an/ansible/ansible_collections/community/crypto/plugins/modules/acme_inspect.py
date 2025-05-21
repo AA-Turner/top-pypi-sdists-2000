@@ -6,6 +6,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 
@@ -77,6 +79,7 @@ options:
 """
 
 EXAMPLES = r"""
+---
 - name: Get directory
   community.crypto.acme_inspect:
     acme_directory: https://acme-staging-v02.api.letsencrypt.org/directory
@@ -181,24 +184,43 @@ directory:
   description: The ACME directory's content.
   returned: always
   type: dict
-  sample: {"a85k3x9f91A4": "https://community.letsencrypt.org/t/adding-random-entries-to-the-directory/33417",
+  sample: {
+    "a85k3x9f91A4": "https://community.letsencrypt.org/t/adding-random-entries-to-the-directory/33417",
     "keyChange": "https://acme-v02.api.letsencrypt.org/acme/key-change",
-    "meta": {"caaIdentities": ["letsencrypt.org"], "termsOfService": "https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf",
-      "website": "https://letsencrypt.org"},
+    "meta": {
+      "caaIdentities": ["letsencrypt.org"],
+      "termsOfService": "https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf",
+      "website": "https://letsencrypt.org",
+    },
     "newAccount": "https://acme-v02.api.letsencrypt.org/acme/new-acct",
     "newNonce": "https://acme-v02.api.letsencrypt.org/acme/new-nonce",
     "newOrder": "https://acme-v02.api.letsencrypt.org/acme/new-order",
-    "revokeCert": "https://acme-v02.api.letsencrypt.org/acme/revoke-cert"}
+    "revokeCert": "https://acme-v02.api.letsencrypt.org/acme/revoke-cert"
+  }
 headers:
   description: The request's HTTP headers (with lowercase keys).
   returned: always
   type: dict
-  sample: {"boulder-requester": "12345", "cache-control": "max-age=0, no-cache, no-store", "connection": "close", "content-length": "904",
-    "content-type": "application/json", "cookies": {}, "cookies_string": "", "date": "Wed, 07 Nov 2018 12:34:56 GMT", "expires": "Wed,
-      07 Nov 2018 12:44:56 GMT", "link": '<https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf>;rel="terms-of-service"',
-    "msg": "OK (904 bytes)", "pragma": "no-cache", "replay-nonce": "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGH", "server": "nginx",
-    "status": 200, "strict-transport-security": "max-age=604800", "url": "https://acme-v02.api.letsencrypt.org/acme/acct/46161",
-    "x-frame-options": "DENY"}
+  sample: {
+    "boulder-requester": "12345",
+    "cache-control": "max-age=0, no-cache, no-store",
+    "connection": "close",
+    "content-length": "904",
+    "content-type": "application/json",
+    "cookies": {},
+    "cookies_string": "",
+    "date": "Wed, 07 Nov 2018 12:34:56 GMT",
+    "expires": "Wed, 07 Nov 2018 12:44:56 GMT",
+    "link": '<https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf>;rel="terms-of-service"',
+    "msg": "OK (904 bytes)",
+    "pragma": "no-cache",
+    "replay-nonce": "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGH",
+    "server": "nginx",
+    "status": 200,
+    "strict-transport-security": "max-age=604800",
+    "url": "https://acme-v02.api.letsencrypt.org/acme/acct/46161",
+    "x-frame-options": "DENY",
+  }
 output_text:
   description: The raw text output.
   returned: always
@@ -215,14 +237,12 @@ output_json:
         - '...'
 """
 
-from ansible.module_utils.common.text.converters import to_native, to_bytes, to_text
-
+from ansible.module_utils.common.text.converters import to_bytes, to_native, to_text
 from ansible_collections.community.crypto.plugins.module_utils.acme.acme import (
+    ACMEClient,
     create_backend,
     create_default_argspec,
-    ACMEClient,
 )
-
 from ansible_collections.community.crypto.plugins.module_utils.acme.errors import (
     ACMEProtocolException,
     ModuleFailException,
@@ -232,17 +252,19 @@ from ansible_collections.community.crypto.plugins.module_utils.acme.errors impor
 def main():
     argument_spec = create_default_argspec(require_account_key=False)
     argument_spec.update_argspec(
-        url=dict(type='str'),
-        method=dict(type='str', choices=['get', 'post', 'directory-only'], default='get'),
-        content=dict(type='str'),
-        fail_on_acme_error=dict(type='bool', default=True),
+        url=dict(type="str"),
+        method=dict(
+            type="str", choices=["get", "post", "directory-only"], default="get"
+        ),
+        content=dict(type="str"),
+        fail_on_acme_error=dict(type="bool", default=True),
     )
     argument_spec.update(
         required_if=(
-            ['method', 'get', ['url']],
-            ['method', 'post', ['url', 'content']],
-            ['method', 'get', ['account_key_src', 'account_key_content'], True],
-            ['method', 'post', ['account_key_src', 'account_key_content'], True],
+            ["method", "get", ["url"]],
+            ["method", "post", ["url", "content"]],
+            ["method", "get", ["account_key_src", "account_key_content"], True],
+            ["method", "post", ["account_key_src", "account_key_content"], True],
         ),
     )
     module = argument_spec.create_ansible_module()
@@ -253,31 +275,40 @@ def main():
     try:
         # Get hold of ACMEClient and ACMEAccount objects (includes directory)
         client = ACMEClient(module, backend)
-        method = module.params['method']
-        result['directory'] = client.directory.directory
+        method = module.params["method"]
+        result["directory"] = client.directory.directory
         # Do we have to do more requests?
-        if method != 'directory-only':
-            url = module.params['url']
-            fail_on_acme_error = module.params['fail_on_acme_error']
+        if method != "directory-only":
+            url = module.params["url"]
+            fail_on_acme_error = module.params["fail_on_acme_error"]
             # Do request
-            if method == 'get':
-                data, info = client.get_request(url, parse_json_result=False, fail_on_error=False)
-            elif method == 'post':
+            if method == "get":
+                data, info = client.get_request(
+                    url, parse_json_result=False, fail_on_error=False
+                )
+            elif method == "post":
                 changed = True  # only POSTs can change
                 data, info = client.send_signed_request(
-                    url, to_bytes(module.params['content']), parse_json_result=False, encode_payload=False, fail_on_error=False)
+                    url,
+                    to_bytes(module.params["content"]),
+                    parse_json_result=False,
+                    encode_payload=False,
+                    fail_on_error=False,
+                )
             # Update results
-            result.update(dict(
-                headers=info,
-                output_text=to_native(data),
-            ))
+            result.update(
+                dict(
+                    headers=info,
+                    output_text=to_native(data),
+                )
+            )
             # See if we can parse the result as JSON
             try:
-                result['output_json'] = module.from_json(to_text(data))
-            except Exception as dummy:
+                result["output_json"] = module.from_json(to_text(data))
+            except Exception:
                 pass
             # Fail if error was returned
-            if fail_on_acme_error and info['status'] >= 400:
+            if fail_on_acme_error and info["status"] >= 400:
                 raise ACMEProtocolException(module, info=info, content=data)
         # Done!
         module.exit_json(changed=changed, **result)
@@ -285,5 +316,5 @@ def main():
         e.do_fail(module, **result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

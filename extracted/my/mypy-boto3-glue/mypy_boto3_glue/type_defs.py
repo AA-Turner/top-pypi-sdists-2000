@@ -305,6 +305,7 @@ __all__ = (
     "ConnectionPasswordEncryptionTypeDef",
     "ConnectionTypeBriefTypeDef",
     "ConnectionTypeDef",
+    "ConnectionTypeVariantTypeDef",
     "ConnectionsListOutputTypeDef",
     "ConnectionsListTypeDef",
     "ConnectionsListUnionTypeDef",
@@ -2002,6 +2003,13 @@ class ConfusionMatrixTypeDef(TypedDict):
 class ConnectionPasswordEncryptionTypeDef(TypedDict):
     ReturnConnectionPasswordEncrypted: bool
     AwsKmsKeyId: NotRequired[str]
+
+
+class ConnectionTypeVariantTypeDef(TypedDict):
+    ConnectionTypeVariantName: NotRequired[str]
+    DisplayName: NotRequired[str]
+    Description: NotRequired[str]
+    LogoUrl: NotRequired[str]
 
 
 class PhysicalConnectionRequirementsOutputTypeDef(TypedDict):
@@ -4743,12 +4751,6 @@ class BlueprintTypeDef(TypedDict):
     LastActiveDefinition: NotRequired[LastActiveDefinitionTypeDef]
 
 
-class ConnectionTypeBriefTypeDef(TypedDict):
-    ConnectionType: NotRequired[ConnectionTypeType]
-    Description: NotRequired[str]
-    Capabilities: NotRequired[CapabilitiesTypeDef]
-
-
 class GetCatalogImportStatusResponseTypeDef(TypedDict):
     ImportStatus: CatalogImportStatusTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
@@ -5056,6 +5058,17 @@ class FindMatchesMetricsTypeDef(TypedDict):
     F1: NotRequired[float]
     ConfusionMatrix: NotRequired[ConfusionMatrixTypeDef]
     ColumnImportances: NotRequired[List[ColumnImportanceTypeDef]]
+
+
+class ConnectionTypeBriefTypeDef(TypedDict):
+    ConnectionType: NotRequired[ConnectionTypeType]
+    DisplayName: NotRequired[str]
+    Vendor: NotRequired[str]
+    Description: NotRequired[str]
+    Categories: NotRequired[List[str]]
+    Capabilities: NotRequired[CapabilitiesTypeDef]
+    LogoUrl: NotRequired[str]
+    ConnectionTypeVariants: NotRequired[List[ConnectionTypeVariantTypeDef]]
 
 
 ConnectionsListUnionTypeDef = Union[ConnectionsListTypeDef, ConnectionsListOutputTypeDef]
@@ -6365,12 +6378,6 @@ class GetBlueprintResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
-class ListConnectionTypesResponseTypeDef(TypedDict):
-    ConnectionTypes: List[ConnectionTypeBriefTypeDef]
-    ResponseMetadata: ResponseMetadataTypeDef
-    NextToken: NotRequired[str]
-
-
 GovernedCatalogTargetUnionTypeDef = Union[
     GovernedCatalogTargetTypeDef, GovernedCatalogTargetOutputTypeDef
 ]
@@ -6536,6 +6543,12 @@ ProfileConfigurationUnionTypeDef = Union[
 class EvaluationMetricsTypeDef(TypedDict):
     TransformType: Literal["FIND_MATCHES"]
     FindMatchesMetrics: NotRequired[FindMatchesMetricsTypeDef]
+
+
+class ListConnectionTypesResponseTypeDef(TypedDict):
+    ConnectionTypes: List[ConnectionTypeBriefTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
 
 
 class CreateSessionRequestTypeDef(TypedDict):

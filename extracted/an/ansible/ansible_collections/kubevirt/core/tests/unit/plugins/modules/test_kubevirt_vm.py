@@ -16,14 +16,21 @@ from ansible_collections.kubevirt.core.tests.unit.utils.ansible_module_mock impo
     AnsibleExitJson,
     exit_json,
     fail_json,
-    set_module_args,
 )
+
+# Handle import errors of patch_module_args.
+# It is only available on ansible-core >=2.19.
+try:
+    from ansible.module_utils.testing import patch_module_args
+except ImportError as e:
+    from ansible_collections.kubevirt.core.tests.unit.utils.ansible_module_mock import (
+        patch_module_args,
+    )
 
 
 def test_module_fails_when_required_args_missing(mocker):
     mocker.patch.object(AnsibleModule, "fail_json", fail_json)
-    with pytest.raises(AnsibleFailJson):
-        set_module_args({})
+    with pytest.raises(AnsibleFailJson), patch_module_args({}):
         kubevirt_vm.main()
 
 
@@ -37,6 +44,7 @@ VM_DEFINITION_CREATE = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "instancetype": {"name": "u1.medium"},
         "preference": {"name": "fedora"},
         "dataVolumeTemplates": [
@@ -76,6 +84,7 @@ VM_DEFINITION_RUNNING = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "template": {
             "spec": {
                 "domain": {"devices": {}},
@@ -93,6 +102,7 @@ VM_DEFINITION_STOPPED = {
     },
     "spec": {
         "running": False,
+        "runStrategy": None,
         "template": {
             "spec": {
                 "domain": {"devices": {}},
@@ -109,6 +119,7 @@ VM_DEFINITION_HALTED = {
         "namespace": "default",
     },
     "spec": {
+        "running": None,
         "runStrategy": "Halted",
         "template": {
             "spec": {
@@ -203,12 +214,26 @@ MODULE_PARAMS_DELETE = MODULE_PARAMS_DEFAULT | {
     "wait": True,
 }
 
+MODULE_PARAMS_HIDDEN_FIELDS = MODULE_PARAMS_DEFAULT | {
+    "name": "testvm",
+    "namespace": "default",
+    "running": False,
+    "hidden_fields": [
+        "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+        "metadata.annotations[kubectl.kubernetes.io/last-applied-configuration]",
+    ],
+}
+
 K8S_MODULE_PARAMS_CREATE = MODULE_PARAMS_CREATE | {
     "generate_name": None,
     "running": None,
     "run_strategy": None,
     "resource_definition": VM_DEFINITION_CREATE,
     "wait_condition": {"type": "Ready", "status": True},
+    "hidden_fields": [
+        "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+        "metadata.managedFields",
+    ],
 }
 
 K8S_MODULE_PARAMS_RUNNING = MODULE_PARAMS_RUNNING | {
@@ -216,6 +241,10 @@ K8S_MODULE_PARAMS_RUNNING = MODULE_PARAMS_RUNNING | {
     "run_strategy": None,
     "resource_definition": VM_DEFINITION_RUNNING,
     "wait_condition": {"type": "Ready", "status": True},
+    "hidden_fields": [
+        "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+        "metadata.managedFields",
+    ],
 }
 
 K8S_MODULE_PARAMS_STOPPED = MODULE_PARAMS_STOPPED | {
@@ -223,6 +252,10 @@ K8S_MODULE_PARAMS_STOPPED = MODULE_PARAMS_STOPPED | {
     "run_strategy": None,
     "resource_definition": VM_DEFINITION_STOPPED,
     "wait_condition": {"type": "Ready", "status": False, "reason": "VMINotExists"},
+    "hidden_fields": [
+        "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+        "metadata.managedFields",
+    ],
 }
 
 K8S_MODULE_PARAMS_HALTED = MODULE_PARAMS_HALTED | {
@@ -230,6 +263,10 @@ K8S_MODULE_PARAMS_HALTED = MODULE_PARAMS_HALTED | {
     "running": None,
     "resource_definition": VM_DEFINITION_HALTED,
     "wait_condition": {"type": "Ready", "status": False, "reason": "VMINotExists"},
+    "hidden_fields": [
+        "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+        "metadata.managedFields",
+    ],
 }
 
 K8S_MODULE_PARAMS_DELETE = MODULE_PARAMS_DELETE | {
@@ -238,6 +275,17 @@ K8S_MODULE_PARAMS_DELETE = MODULE_PARAMS_DELETE | {
     "run_strategy": None,
     "resource_definition": VM_DEFINITION_RUNNING,
     "wait_condition": {"type": "Ready", "status": True},
+    "hidden_fields": [
+        "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+        "metadata.managedFields",
+    ],
+}
+
+K8S_MODULE_PARAMS_HIDDEN_FIELDS = MODULE_PARAMS_HIDDEN_FIELDS | {
+    "generate_name": None,
+    "run_strategy": None,
+    "resource_definition": VM_DEFINITION_STOPPED,
+    "wait_condition": {"type": "Ready", "status": False, "reason": "VMINotExists"},
 }
 
 
@@ -274,6 +322,12 @@ K8S_MODULE_PARAMS_DELETE = MODULE_PARAMS_DELETE | {
             VM_DEFINITION_RUNNING,
             "delete",
         ),
+        (
+            MODULE_PARAMS_HIDDEN_FIELDS,
+            K8S_MODULE_PARAMS_HIDDEN_FIELDS,
+            VM_DEFINITION_STOPPED,
+            "update",
+        ),
     ],
 )
 def test_module(mocker, module_params, k8s_module_params, vm_definition, method):
@@ -290,8 +344,7 @@ def test_module(mocker, module_params, k8s_module_params, vm_definition, method)
         },
     )
 
-    with pytest.raises(AnsibleExitJson):
-        set_module_args(module_params)
+    with pytest.raises(AnsibleExitJson), patch_module_args(module_params):
         kubevirt_vm.main()
 
     perform_action.assert_called_once_with(
@@ -377,6 +430,7 @@ CREATED_VM = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "template": {
             "spec": {
                 "domain": {
@@ -394,6 +448,7 @@ CREATED_VM_RUN_STRATEGY = {
         "namespace": "default",
     },
     "spec": {
+        "running": None,
         "runStrategy": "Manual",
         "template": {
             "spec": {
@@ -416,6 +471,7 @@ CREATED_VM_LABELS = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "template": {
             "metadata": {
                 "labels": {"test": "test"},
@@ -440,6 +496,7 @@ CREATED_VM_ANNOTATIONS = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "template": {
             "metadata": {
                 "annotations": {"test": "test"},
@@ -461,6 +518,7 @@ CREATED_VM_INSTANCETYPE = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "instancetype": {"name": "u1.medium"},
         "template": {
             "spec": {
@@ -480,6 +538,7 @@ CREATED_VM_PREFERENCE = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "preference": {"name": "fedora"},
         "template": {
             "spec": {
@@ -499,6 +558,7 @@ CREATED_VM_DATAVOLUMETEMPLATE = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "dataVolumeTemplates": [
             {
                 "metadata": {"name": "testdv"},
@@ -534,6 +594,7 @@ CREATED_VM_NAME = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "template": {
             "spec": {
                 "domain": {
@@ -553,6 +614,7 @@ CREATED_VM_GENERATE_NAME = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "template": {
             "spec": {
                 "domain": {
@@ -571,6 +633,7 @@ CREATED_VM_SPECS = {
     },
     "spec": {
         "running": True,
+        "runStrategy": None,
         "template": {
             "spec": {
                 "domain": {

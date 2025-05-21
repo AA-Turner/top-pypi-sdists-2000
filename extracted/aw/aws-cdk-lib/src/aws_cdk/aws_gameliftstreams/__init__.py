@@ -824,8 +824,8 @@ class CfnStreamGroup(
         ) -> None:
             '''Represents the default Amazon GameLift Streams application that a stream group hosts.
 
-            :param arn: An `Amazon Resource Name (ARN) <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html>`_ that uniquely identifies the application resource. Format example: ``arn:aws:gameliftstreams:us-west-2:123456789012:application/a-9ZY8X7Wv6`` .
-            :param id: An ID that uniquely identifies the application resource. For example: ``a-9ZY8X7Wv6`` .
+            :param arn: An `Amazon Resource Name (ARN) <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html>`_ that uniquely identifies the application resource. Example ARN: ``arn:aws:gameliftstreams:us-west-2:111122223333:application/a-9ZY8X7Wv6`` .
+            :param id: An ID that uniquely identifies the application resource. Example ID: ``a-9ZY8X7Wv6`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gameliftstreams-streamgroup-defaultapplication.html
             :exampleMetadata: fixture=_generated
@@ -853,7 +853,7 @@ class CfnStreamGroup(
 
         @builtins.property
         def arn(self) -> typing.Optional[builtins.str]:
-            '''An `Amazon Resource Name (ARN) <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html>`_ that uniquely identifies the application resource. Format example: ``arn:aws:gameliftstreams:us-west-2:123456789012:application/a-9ZY8X7Wv6`` .
+            '''An `Amazon Resource Name (ARN) <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html>`_ that uniquely identifies the application resource. Example ARN: ``arn:aws:gameliftstreams:us-west-2:111122223333:application/a-9ZY8X7Wv6`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gameliftstreams-streamgroup-defaultapplication.html#cfn-gameliftstreams-streamgroup-defaultapplication-arn
             '''
@@ -864,7 +864,7 @@ class CfnStreamGroup(
         def id(self) -> typing.Optional[builtins.str]:
             '''An ID that uniquely identifies the application resource.
 
-            For example: ``a-9ZY8X7Wv6`` .
+            Example ID: ``a-9ZY8X7Wv6`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gameliftstreams-streamgroup-defaultapplication.html#cfn-gameliftstreams-streamgroup-defaultapplication-id
             '''
@@ -903,7 +903,7 @@ class CfnStreamGroup(
 
             When configuring a location for the first time, you must specify a numeric value for at least one of the two capacity types.
 
-            :param location_name: A location's name. For example, ``us-east-1`` . For a complete list of locations that Amazon GameLift Streams supports, refer to `Regions and quotas <https://docs.aws.amazon.com/gameliftstreams/latest/developerguide/regions-quotas.html>`_ in the *Amazon GameLift Streams Developer Guide* .
+            :param location_name: A location's name. For example, ``us-east-1`` . For a complete list of locations that Amazon GameLift Streams supports, refer to `Regions, quotas, and limitations <https://docs.aws.amazon.com/gameliftstreams/latest/developerguide/regions-quotas.html>`_ in the *Amazon GameLift Streams Developer Guide* .
             :param always_on_capacity: The streaming capacity that is allocated and ready to handle stream requests without delay. You pay for this capacity whether it's in use or not. Best for quickest time from streaming request to streaming session.
             :param on_demand_capacity: The streaming capacity that Amazon GameLift Streams can allocate in response to stream requests, and then de-allocate when the session has terminated. This offers a cost control measure at the expense of a greater startup time (typically under 5 minutes).
 
@@ -941,7 +941,7 @@ class CfnStreamGroup(
         def location_name(self) -> builtins.str:
             '''A location's name.
 
-            For example, ``us-east-1`` . For a complete list of locations that Amazon GameLift Streams supports, refer to `Regions and quotas <https://docs.aws.amazon.com/gameliftstreams/latest/developerguide/regions-quotas.html>`_ in the *Amazon GameLift Streams Developer Guide* .
+            For example, ``us-east-1`` . For a complete list of locations that Amazon GameLift Streams supports, refer to `Regions, quotas, and limitations <https://docs.aws.amazon.com/gameliftstreams/latest/developerguide/regions-quotas.html>`_ in the *Amazon GameLift Streams Developer Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gameliftstreams-streamgroup-locationconfiguration.html#cfn-gameliftstreams-streamgroup-locationconfiguration-locationname
             '''

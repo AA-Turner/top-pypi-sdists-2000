@@ -37,6 +37,10 @@ class JobsClient:
         """
         Get jobs for a project.
 
+        Note:
+        The include_usage_metrics parameter is deprecated and will be removed in a future version.
+        We've moved to usage v2 and this parameter will no longer return meaningful data.
+
         Parameters:
             - job_name: typing.Optional[str].
 
@@ -44,7 +48,7 @@ class JobsClient:
 
             - offset: typing.Optional[int].
 
-            - include_usage_metrics: typing.Optional[bool].
+            - include_usage_metrics: typing.Optional[bool]. Deprecated: This parameter is no longer supported as we've moved to usage v2. It will be removed in a future version.
 
             - project_id: typing.Optional[str].
 
@@ -101,6 +105,10 @@ class AsyncJobsClient:
         """
         Get jobs for a project.
 
+        Note:
+        The include_usage_metrics parameter is deprecated and will be removed in a future version.
+        We've moved to usage v2 and this parameter will no longer return meaningful data.
+
         Parameters:
             - job_name: typing.Optional[str].
 
@@ -108,7 +116,7 @@ class AsyncJobsClient:
 
             - offset: typing.Optional[int].
 
-            - include_usage_metrics: typing.Optional[bool].
+            - include_usage_metrics: typing.Optional[bool]. Deprecated: This parameter is no longer supported as we've moved to usage v2. It will be removed in a future version.
 
             - project_id: typing.Optional[str].
 

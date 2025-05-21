@@ -2497,6 +2497,7 @@ class Join(Expression):
         "hint": False,
         "match_condition": False,  # Snowflake
         "expressions": False,
+        "pivots": False,
     }
 
     @property
@@ -4423,6 +4424,7 @@ class WindowSpec(Expression):
         "start_side": False,
         "end": False,
         "end_side": False,
+        "exclude": False,
     }
 
 
@@ -5494,6 +5496,11 @@ class Convert(Func):
     arg_types = {"this": True, "expression": True, "style": False}
 
 
+# https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/CONVERT.html
+class ConvertToCharset(Func):
+    arg_types = {"this": True, "dest": True, "source": False}
+
+
 class ConvertTimezone(Func):
     arg_types = {"source_tz": False, "target_tz": True, "timestamp": True}
 
@@ -5696,6 +5703,11 @@ class Try(Func):
 
 class CastToStrType(Func):
     arg_types = {"this": True, "to": True}
+
+
+# https://docs.teradata.com/r/Enterprise_IntelliFlex_VMware/SQL-Functions-Expressions-and-Predicates/String-Operators-and-Functions/TRANSLATE/TRANSLATE-Function-Syntax
+class TranslateCharacters(Expression):
+    arg_types = {"this": True, "expression": True, "with_error": False}
 
 
 class Collate(Binary, Func):

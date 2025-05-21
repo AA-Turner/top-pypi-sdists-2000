@@ -23,14 +23,21 @@ from ansible_collections.kubevirt.core.tests.unit.utils.ansible_module_mock impo
     AnsibleFailJson,
     exit_json,
     fail_json,
-    set_module_args,
 )
+
+# Handle import errors of patch_module_args.
+# It is only available on ansible-core >=2.19.
+try:
+    from ansible.module_utils.testing import patch_module_args
+except ImportError as e:
+    from ansible_collections.kubevirt.core.tests.unit.utils.ansible_module_mock import (
+        patch_module_args,
+    )
 
 
 def test_module_fails_when_required_args_missing(mocker):
     mocker.patch.object(AnsibleModule, "fail_json", fail_json)
-    with pytest.raises(AnsibleFailJson):
-        set_module_args({"running": False})
+    with pytest.raises(AnsibleFailJson), patch_module_args({"running": False}):
         kubevirt_vm_info.main()
 
 
@@ -45,6 +52,10 @@ FIND_ARGS_DEFAULT = {
     "wait_sleep": 5,
     "wait_timeout": 120,
     "condition": {"type": "Ready", "status": True},
+    "hidden_fields": [
+        "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+        "metadata.managedFields",
+    ],
 }
 
 FIND_ARGS_NAME_NAMESPACE = FIND_ARGS_DEFAULT | {
@@ -70,6 +81,13 @@ FIND_ARGS_STOPPED = FIND_ARGS_DEFAULT | {
     "condition": {"type": "Ready", "status": False, "reason": "VMINotExists"},
 }
 
+FIND_ARGS_HIDDEN_FIELDS = FIND_ARGS_DEFAULT | {
+    "hidden_fields": [
+        "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+        "metadata.annotations[kubectl.kubernetes.io/last-applied-configuration]",
+    ],
+}
+
 
 @pytest.mark.parametrize(
     "module_args,find_args",
@@ -80,6 +98,15 @@ FIND_ARGS_STOPPED = FIND_ARGS_DEFAULT | {
         ({"field_selectors": "app=test"}, FIND_ARGS_FIELD_SELECTOR),
         ({"wait": True, "running": True}, FIND_ARGS_RUNNING),
         ({"wait": True, "running": False}, FIND_ARGS_STOPPED),
+        (
+            {
+                "hidden_fields": [
+                    "metadata.annotations[kubemacpool.io/transaction-timestamp]",
+                    "metadata.annotations[kubectl.kubernetes.io/last-applied-configuration]",
+                ]
+            },
+            FIND_ARGS_HIDDEN_FIELDS,
+        ),
     ],
 )
 def test_module(mocker, module_args, find_args):
@@ -96,8 +123,7 @@ def test_module(mocker, module_args, find_args):
         },
     )
 
-    with pytest.raises(AnsibleExitJson):
-        set_module_args(module_args)
+    with pytest.raises(AnsibleExitJson), patch_module_args(module_args):
         kubevirt_vm_info.main()
 
     find.assert_called_once_with(**find_args)

@@ -1345,6 +1345,12 @@ class Parser(metaclass=_Parser):
         **dict.fromkeys(("DEFERRABLE", "NORELY", "RELY"), tuple()),
     }
 
+    WINDOW_EXCLUDE_OPTIONS: OPTIONS_TYPE = {
+        "NO": ("OTHERS",),
+        "CURRENT": ("ROW",),
+        **dict.fromkeys(("GROUP", "TIES"), tuple()),
+    }
+
     INSERT_ALTERNATIVES = {"ABORT", "FAIL", "IGNORE", "REPLACE", "ROLLBACK"}
 
     CLONE_KEYWORDS = {"CLONE", "COPY"}
@@ -3732,6 +3738,8 @@ class Parser(metaclass=_Parser):
 
             kwargs["this"].set("joins", joins if joins else None)
 
+        kwargs["pivots"] = self._parse_pivots()
+
         comments = [c for token in (method, side, kind) if token for c in token.comments]
         return self.expression(exp.Join, comments=comments, **kwargs)
 
@@ -4455,6 +4463,14 @@ class Parser(metaclass=_Parser):
             return None
         return self.expression(exp.Qualify, this=self._parse_assignment())
 
+    def _parse_connect_with_prior(self) -> t.Optional[exp.Expression]:
+        self.NO_PAREN_FUNCTION_PARSERS["PRIOR"] = lambda self: self.expression(
+            exp.Prior, this=self._parse_bitwise()
+        )
+        connect = self._parse_assignment()
+        self.NO_PAREN_FUNCTION_PARSERS.pop("PRIOR")
+        return connect
+
     def _parse_connect(self, skip_start_token: bool = False) -> t.Optional[exp.Connect]:
         if skip_start_token:
             start = None
@@ -4465,11 +4481,7 @@ class Parser(metaclass=_Parser):
 
         self._match(TokenType.CONNECT_BY)
         nocycle = self._match_text_seq("NOCYCLE")
-        self.NO_PAREN_FUNCTION_PARSERS["PRIOR"] = lambda self: self.expression(
-            exp.Prior, this=self._parse_bitwise()
-        )
-        connect = self._parse_assignment()
-        self.NO_PAREN_FUNCTION_PARSERS.pop("PRIOR")
+        connect = self._parse_connect_with_prior()
 
         if not start and self._match(TokenType.START_WITH):
             start = self._parse_assignment()
@@ -6088,7 +6100,11 @@ class Parser(metaclass=_Parser):
         return self.expression(exp.Reference, this=this, expressions=expressions, options=options)
 
     def _parse_foreign_key(self) -> exp.ForeignKey:
-        expressions = self._parse_wrapped_id_vars()
+        expressions = (
+            self._parse_wrapped_id_vars()
+            if not self._match(TokenType.REFERENCES, advance=False)
+            else None
+        )
         reference = self._parse_references()
         on_options = {}
 
@@ -6887,6 +6903,11 @@ class Parser(metaclass=_Parser):
             start = self._parse_window_spec()
             self._match(TokenType.AND)
             end = self._parse_window_spec()
+            exclude = (
+                self._parse_var_from_options(self.WINDOW_EXCLUDE_OPTIONS)
+                if self._match_text_seq("EXCLUDE")
+                else None
+            )
 
             spec = self.expression(
                 exp.WindowSpec,
@@ -6895,6 +6916,7 @@ class Parser(metaclass=_Parser):
                 start_side=start["side"],
                 end=end["value"],
                 end_side=end["side"],
+                exclude=exclude,
             )
         else:
             spec = None

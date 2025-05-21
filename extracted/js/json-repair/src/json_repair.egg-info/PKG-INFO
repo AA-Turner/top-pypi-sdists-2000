@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: json_repair
-Version: 0.44.1
+Version: 0.45.1
 Summary: A package to repair broken json strings
 Author-email: Stefano Baccianella <4247706+mangiucugna@users.noreply.github.com>
 License: MIT License
@@ -32,7 +32,7 @@ Keywords: JSON,REPAIR,LLM,PARSER
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
-Requires-Python: >=3.9
+Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Dynamic: license-file
@@ -102,6 +102,7 @@ then you can use use it in your code like this
 
     good_json_string = repair_json(bad_json_string)
     # If the string was super broken this will return an empty string
+
 
 You can use this library to completely replace `json.loads()`:
 

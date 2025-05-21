@@ -45,6 +45,11 @@ DOCUMENTATION = '''
         description: Fallback to cached results if connection to cobbler fails.
         type: boolean
         default: false
+      connection_timeout:
+        description: Timeout to connect to cobbler server.
+        type: int
+        required: false
+        version_added: 10.7.0
       exclude_mgmt_classes:
         description: Management classes to exclude from inventory.
         type: list
@@ -94,16 +99,24 @@ DOCUMENTATION = '''
         description: Prefix to apply to cobbler groups.
         default: cobbler_
       want_facts:
-        description: Toggle, if V(true) the plugin will retrieve host facts from the server.
+        description: Toggle, if V(true) the plugin will retrieve all host facts from the server.
         type: boolean
         default: true
       want_ip_addresses:
         description:
-          - Toggle, if V(true) the plugin will add a C(cobbler_ipv4_addresses) and C(cobbleer_ipv6_addresses) dictionary to the defined O(group) mapping
+          - Toggle, if V(true) the plugin will add a C(cobbler_ipv4_addresses) and C(cobbler_ipv6_addresses) dictionary to the defined O(group) mapping
             interface DNS names to IP addresses.
         type: boolean
         default: true
         version_added: 7.1.0
+      facts_level:
+        description:
+          - "Set to V(normal) to gather only system-level variables."
+          - "Set to V(as_rendered) to gather all variables as rolled up by Cobbler."
+        type: string
+        choices: [ 'normal', 'as_rendered' ]
+        default: normal
+        version_added: 10.7.0
 '''
 
 EXAMPLES = '''
@@ -134,6 +147,18 @@ except ImportError:
         HAS_XMLRPC_CLIENT = False
 
 
+class TimeoutTransport (xmlrpc_client.SafeTransport):
+    def __init__(self, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
+        super(TimeoutTransport, self).__init__()
+        self._timeout = timeout
+        self.context = None
+
+    def make_connection(self, host):
+        conn = xmlrpc_client.SafeTransport.make_connection(self, host)
+        conn.timeout = self._timeout
+        return conn
+
+
 class InventoryModule(BaseInventoryPlugin, Cacheable):
     ''' Host inventory parser for ansible using cobbler as source. '''
 
@@ -142,7 +167,9 @@ class InventoryModule(BaseInventoryPlugin, Cacheable):
     def __init__(self):
         super(InventoryModule, self).__init__()
         self.cache_key = None
-        self.connection = None
+
+        if not HAS_XMLRPC_CLIENT:
+            raise AnsibleError('Could not import xmlrpc client library')
 
     def verify_file(self, path):
         valid = False
@@ -152,18 +179,6 @@ class InventoryModule(BaseInventoryPlugin, Cacheable):
             else:
                 self.display.vvv('Skipping due to inventory source not ending in "cobbler.yaml" nor "cobbler.yml"')
         return valid
-
-    def _get_connection(self):
-        if not HAS_XMLRPC_CLIENT:
-            raise AnsibleError('Could not import xmlrpc client library')
-
-        if self.connection is None:
-            self.display.vvvv(f'Connecting to {self.cobbler_url}\n')
-            self.connection = xmlrpc_client.Server(self.cobbler_url, allow_none=True)
-            self.token = None
-            if self.get_option('user') is not None:
-                self.token = self.connection.login(text_type(self.get_option('user')), text_type(self.get_option('password')))
-        return self.connection
 
     def _init_cache(self):
         if self.cache_key not in self._cache:
@@ -178,12 +193,11 @@ class InventoryModule(BaseInventoryPlugin, Cacheable):
 
     def _get_profiles(self):
         if not self.use_cache or 'profiles' not in self._cache.get(self.cache_key, {}):
-            c = self._get_connection()
             try:
                 if self.token is not None:
-                    data = c.get_profiles(self.token)
+                    data = self.cobbler.get_profiles(self.token)
                 else:
-                    data = c.get_profiles()
+                    data = self.cobbler.get_profiles()
             except (socket.gaierror, socket.error, xmlrpc_client.ProtocolError):
                 self._reload_cache()
             else:
@@ -194,12 +208,20 @@ class InventoryModule(BaseInventoryPlugin, Cacheable):
 
     def _get_systems(self):
         if not self.use_cache or 'systems' not in self._cache.get(self.cache_key, {}):
-            c = self._get_connection()
             try:
                 if self.token is not None:
-                    data = c.get_systems(self.token)
+                    data = self.cobbler.get_systems(self.token)
                 else:
-                    data = c.get_systems()
+                    data = self.cobbler.get_systems()
+
+                # If more facts are requested, gather them all from Cobbler
+                if self.facts_level == "as_rendered":
+                    for i, host in enumerate(data):
+                        self.display.vvvv(f"Gathering all facts for {host['name']}\n")
+                        if self.token is not None:
+                            data[i] = self.cobbler.get_system_as_rendered(host['name'], self.token)
+                        else:
+                            data[i] = self.cobbler.get_system_as_rendered(host['name'])
             except (socket.gaierror, socket.error, xmlrpc_client.ProtocolError):
                 self._reload_cache()
             else:
@@ -229,6 +251,17 @@ class InventoryModule(BaseInventoryPlugin, Cacheable):
 
         # get connection host
         self.cobbler_url = self.get_option('url')
+        self.display.vvvv(f'Connecting to {self.cobbler_url}\n')
+
+        if 'connection_timeout' in self._options:
+            self.cobbler = xmlrpc_client.Server(self.cobbler_url, allow_none=True,
+                                                transport=TimeoutTransport(timeout=self.get_option('connection_timeout')))
+        else:
+            self.cobbler = xmlrpc_client.Server(self.cobbler_url, allow_none=True)
+        self.token = None
+        if self.get_option('user') is not None:
+            self.token = self.cobbler.login(text_type(self.get_option('user')), text_type(self.get_option('password')))
+
         self.cache_key = self.get_cache_key(path)
         self.use_cache = cache and self.get_option('cache')
 
@@ -238,6 +271,7 @@ class InventoryModule(BaseInventoryPlugin, Cacheable):
         self.include_profiles = self.get_option('include_profiles')
         self.group_by = self.get_option('group_by')
         self.inventory_hostname = self.get_option('inventory_hostname')
+        self.facts_level = self.get_option('facts_level')
 
         for profile in self._get_profiles():
             if profile['parent']:
@@ -319,7 +353,7 @@ class InventoryModule(BaseInventoryPlugin, Cacheable):
 
             # Add host to groups specified by group_by fields
             for group_by in self.group_by:
-                if host[group_by] == '<<inherit>>':
+                if host[group_by] == '<<inherit>>' or host[group_by] == '':
                     groups = []
                 else:
                     groups = [host[group_by]] if isinstance(host[group_by], str) else host[group_by]

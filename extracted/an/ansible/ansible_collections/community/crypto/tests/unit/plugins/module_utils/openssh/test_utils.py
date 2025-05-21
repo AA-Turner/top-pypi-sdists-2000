@@ -5,26 +5,23 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 import pytest
-
 from ansible_collections.community.crypto.plugins.module_utils.openssh.utils import (
-    parse_openssh_version,
     OpensshParser,
-    _OpensshWriter
+    _OpensshWriter,
+    parse_openssh_version,
 )
+
 
 SSH_VERSION_STRING = "OpenSSH_7.9p1, OpenSSL 1.1.0i-fips  14 Aug 2018"
 SSH_VERSION_NUMBER = "7.9"
 
-VALID_BOOLEAN = [
-    True,
-    False
-]
-INVALID_BOOLEAN = [
-    0x02
-]
+VALID_BOOLEAN = [True, False]
+INVALID_BOOLEAN = [0x02]
 VALID_UINT32 = [
     0x00,
     0x01,
@@ -46,7 +43,7 @@ INVALID_UINT64 = [
     -1,
 ]
 VALID_STRING = [
-    b'test string',
+    b"test string",
 ]
 INVALID_STRING = [
     [],
@@ -54,10 +51,10 @@ INVALID_STRING = [
 # See https://datatracker.ietf.org/doc/html/rfc4251#section-5 for examples source
 VALID_MPINT = [
     0x00,
-    0x9a378f9b2e332a7,
+    0x9A378F9B2E332A7,
     0x80,
     -0x1234,
-    -0xdeadbeef,
+    -0xDEADBEEF,
     # Additional large int test
     0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
 ]
@@ -105,7 +102,10 @@ def test_invalid_uint64(uint64):
 
 @pytest.mark.parametrize("ssh_string", VALID_STRING)
 def test_valid_string(ssh_string):
-    assert OpensshParser(_OpensshWriter().string(ssh_string).bytes()).string() == ssh_string
+    assert (
+        OpensshParser(_OpensshWriter().string(ssh_string).bytes()).string()
+        == ssh_string
+    )
 
 
 @pytest.mark.parametrize("ssh_string", INVALID_STRING)
@@ -126,7 +126,7 @@ def test_invalid_mpint(mpint):
 
 
 def test_valid_seek():
-    buffer = bytearray(b'buffer')
+    buffer = bytearray(b"buffer")
     parser = OpensshParser(buffer)
     parser.seek(len(buffer))
     assert parser.remaining_bytes() == 0
@@ -135,8 +135,7 @@ def test_valid_seek():
 
 
 def test_invalid_seek():
-    result = False
-    buffer = b'buffer'
+    buffer = b"buffer"
     parser = OpensshParser(buffer)
 
     with pytest.raises(ValueError):
@@ -147,5 +146,5 @@ def test_invalid_seek():
 
 
 def test_writer_bytes():
-    buffer = bytearray(b'buffer')
+    buffer = bytearray(b"buffer")
     assert _OpensshWriter(buffer).bytes() == buffer

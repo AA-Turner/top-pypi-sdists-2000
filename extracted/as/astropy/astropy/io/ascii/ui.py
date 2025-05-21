@@ -256,7 +256,7 @@ def _get_format_class(format):
     if format in core.FORMAT_CLASSES:
         return core.FORMAT_CLASSES[format]
     raise ValueError(
-        f"ASCII format {format!r} not in allowed list " f"{sorted(core.FORMAT_CLASSES)}"
+        f"ASCII format {format!r} not in allowed list {sorted(core.FORMAT_CLASSES)}"
     )
 
 
@@ -291,11 +291,10 @@ def _validate_read_write_kwargs(read_write, **kwargs):
                 # See if ``val`` walks and quacks like a ``cls```.
                 try:
                     new_val = cls(val)
-                    assert new_val == val
                 except Exception:
                     ok = False
                 else:
-                    ok = True
+                    ok = new_val == val
         return ok
 
     kwarg_types = READ_KWARG_TYPES if read_write == "read" else WRITE_KWARG_TYPES

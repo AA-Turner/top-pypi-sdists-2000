@@ -25,6 +25,7 @@ class UserOrganizationRole(pydantic.BaseModel):
     updated_at: typing.Optional[dt.datetime]
     user_id: str = pydantic.Field(description="The user's ID.")
     organization_id: str = pydantic.Field(description="The organization's ID.")
+    project_ids: typing.Optional[typing.List[str]]
     role_id: str = pydantic.Field(description="The role's ID.")
     role: Role = pydantic.Field(description="The role.")
 

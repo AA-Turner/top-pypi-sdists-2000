@@ -520,12 +520,16 @@ class OrganizationsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def get_user_role(self, organization_id: str) -> typing.Optional[UserOrganizationRole]:
+    def get_user_role(
+        self, organization_id: str, *, project_id: typing.Optional[str] = None
+    ) -> typing.Optional[UserOrganizationRole]:
         """
         Get the role of a user in an organization.
 
         Parameters:
             - organization_id: str.
+
+            - project_id: typing.Optional[str].
         ---
         from llama_cloud.client import LlamaCloud
 
@@ -541,6 +545,7 @@ class OrganizationsClient:
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/users/roles"
             ),
+            params=remove_none_from_dict({"project_id": project_id}),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
@@ -1216,12 +1221,16 @@ class AsyncOrganizationsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_user_role(self, organization_id: str) -> typing.Optional[UserOrganizationRole]:
+    async def get_user_role(
+        self, organization_id: str, *, project_id: typing.Optional[str] = None
+    ) -> typing.Optional[UserOrganizationRole]:
         """
         Get the role of a user in an organization.
 
         Parameters:
             - organization_id: str.
+
+            - project_id: typing.Optional[str].
         ---
         from llama_cloud.client import AsyncLlamaCloud
 
@@ -1237,6 +1246,7 @@ class AsyncOrganizationsClient:
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/users/roles"
             ),
+            params=remove_none_from_dict({"project_id": project_id}),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )

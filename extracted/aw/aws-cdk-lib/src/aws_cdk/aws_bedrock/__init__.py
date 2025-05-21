@@ -22061,7 +22061,7 @@ class CfnIntelligentPromptRouter(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrock.CfnIntelligentPromptRouter",
 ):
-    '''Definition of AWS::Bedrock::IntelligentPromptRouter Resource Type.
+    '''Specifies an intelligent prompt router resource for Amazon Bedrock .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html
     :cloudformationResource: AWS::Bedrock::IntelligentPromptRouter
@@ -22109,12 +22109,12 @@ class CfnIntelligentPromptRouter(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param fallback_model: Model configuration.
-        :param models: List of model configuration.
-        :param prompt_router_name: Name of the Prompt Router.
+        :param fallback_model: The default model to use when the routing criteria is not met.
+        :param models: A list of foundation models that the prompt router can route requests to. At least one model must be specified.
+        :param prompt_router_name: The name of the prompt router. The name must be unique within your AWS account in the current region.
         :param routing_criteria: Routing criteria for a prompt router.
-        :param description: Description of the Prompt Router.
-        :param tags: List of Tags.
+        :param description: An optional description of the prompt router to help identify its purpose.
+        :param tags: An array of key-value pairs to apply to this resource as tags. You can use tags to categorize and manage your AWS resources.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a5d2e514af9553d15e3be6a1c57dd1062d7a60fee139dbca24ce0ced551672eb)
@@ -22164,7 +22164,7 @@ class CfnIntelligentPromptRouter(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedAt")
     def attr_created_at(self) -> builtins.str:
-        '''Time Stamp.
+        '''Indicates the time that the prompt router was created.
 
         :cloudformationAttribute: CreatedAt
         '''
@@ -22173,7 +22173,7 @@ class CfnIntelligentPromptRouter(
     @builtins.property
     @jsii.member(jsii_name="attrPromptRouterArn")
     def attr_prompt_router_arn(self) -> builtins.str:
-        '''Arn of the Prompt Router.
+        '''The Amazon Resource Name (ARN) of the prompt router.
 
         :cloudformationAttribute: PromptRouterArn
         '''
@@ -22182,7 +22182,7 @@ class CfnIntelligentPromptRouter(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''Status of a PromptRouter.
+        '''The router's status.
 
         :cloudformationAttribute: Status
         '''
@@ -22191,7 +22191,7 @@ class CfnIntelligentPromptRouter(
     @builtins.property
     @jsii.member(jsii_name="attrType")
     def attr_type(self) -> builtins.str:
-        '''Type of a Prompt Router.
+        '''The router's type.
 
         :cloudformationAttribute: Type
         '''
@@ -22200,7 +22200,7 @@ class CfnIntelligentPromptRouter(
     @builtins.property
     @jsii.member(jsii_name="attrUpdatedAt")
     def attr_updated_at(self) -> builtins.str:
-        '''Time Stamp.
+        '''When the router was updated.
 
         :cloudformationAttribute: UpdatedAt
         '''
@@ -22222,7 +22222,7 @@ class CfnIntelligentPromptRouter(
     def fallback_model(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.PromptRouterTargetModelProperty"]:
-        '''Model configuration.'''
+        '''The default model to use when the routing criteria is not met.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.PromptRouterTargetModelProperty"], jsii.get(self, "fallbackModel"))
 
     @fallback_model.setter
@@ -22240,7 +22240,7 @@ class CfnIntelligentPromptRouter(
     def models(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.PromptRouterTargetModelProperty"]]]:
-        '''List of model configuration.'''
+        '''A list of foundation models that the prompt router can route requests to.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIntelligentPromptRouter.PromptRouterTargetModelProperty"]]], jsii.get(self, "models"))
 
     @models.setter
@@ -22256,7 +22256,7 @@ class CfnIntelligentPromptRouter(
     @builtins.property
     @jsii.member(jsii_name="promptRouterName")
     def prompt_router_name(self) -> builtins.str:
-        '''Name of the Prompt Router.'''
+        '''The name of the prompt router.'''
         return typing.cast(builtins.str, jsii.get(self, "promptRouterName"))
 
     @prompt_router_name.setter
@@ -22287,7 +22287,7 @@ class CfnIntelligentPromptRouter(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
-        '''Description of the Prompt Router.'''
+        '''An optional description of the prompt router to help identify its purpose.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -22300,7 +22300,7 @@ class CfnIntelligentPromptRouter(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''List of Tags.'''
+        '''An array of key-value pairs to apply to this resource as tags.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -22440,12 +22440,12 @@ class CfnIntelligentPromptRouterProps:
     ) -> None:
         '''Properties for defining a ``CfnIntelligentPromptRouter``.
 
-        :param fallback_model: Model configuration.
-        :param models: List of model configuration.
-        :param prompt_router_name: Name of the Prompt Router.
+        :param fallback_model: The default model to use when the routing criteria is not met.
+        :param models: A list of foundation models that the prompt router can route requests to. At least one model must be specified.
+        :param prompt_router_name: The name of the prompt router. The name must be unique within your AWS account in the current region.
         :param routing_criteria: Routing criteria for a prompt router.
-        :param description: Description of the Prompt Router.
-        :param tags: List of Tags.
+        :param description: An optional description of the prompt router to help identify its purpose.
+        :param tags: An array of key-value pairs to apply to this resource as tags. You can use tags to categorize and manage your AWS resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html
         :exampleMetadata: fixture=_generated
@@ -22499,7 +22499,7 @@ class CfnIntelligentPromptRouterProps:
     def fallback_model(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.PromptRouterTargetModelProperty]:
-        '''Model configuration.
+        '''The default model to use when the routing criteria is not met.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-fallbackmodel
         '''
@@ -22511,7 +22511,9 @@ class CfnIntelligentPromptRouterProps:
     def models(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnIntelligentPromptRouter.PromptRouterTargetModelProperty]]]:
-        '''List of model configuration.
+        '''A list of foundation models that the prompt router can route requests to.
+
+        At least one model must be specified.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-models
         '''
@@ -22521,7 +22523,9 @@ class CfnIntelligentPromptRouterProps:
 
     @builtins.property
     def prompt_router_name(self) -> builtins.str:
-        '''Name of the Prompt Router.
+        '''The name of the prompt router.
+
+        The name must be unique within your AWS account in the current region.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-promptroutername
         '''
@@ -22543,7 +22547,7 @@ class CfnIntelligentPromptRouterProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''Description of the Prompt Router.
+        '''An optional description of the prompt router to help identify its purpose.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-description
         '''
@@ -22552,7 +22556,9 @@ class CfnIntelligentPromptRouterProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''List of Tags.
+        '''An array of key-value pairs to apply to this resource as tags.
+
+        You can use tags to categorize and manage your AWS resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-intelligentpromptrouter.html#cfn-bedrock-intelligentpromptrouter-tags
         '''

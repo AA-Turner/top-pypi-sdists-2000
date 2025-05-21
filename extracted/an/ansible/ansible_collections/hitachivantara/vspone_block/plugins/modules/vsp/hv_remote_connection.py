@@ -14,7 +14,6 @@ short_description: Manages Remote connections on Hitachi VSP storage systems.
 description: >
   - This module allows settings of remote connections used for remote copy operations.
   - Remote connections are used to connect storage systems used in remote copy operations for TrueCopy, Universal Replicator, and global-active device.
-  - This module is supported only for C(direct) connection type.
   - For examples go to URL
     U(https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/remote_connection.yml)
 version_added: '3.3.0'
@@ -26,6 +25,8 @@ attributes:
   check_mode:
     description: Determines if the module should run in check mode.
     support: none
+extends_documentation_fragment:
+- hitachivantara.vspone_block.common.gateway_note
 options:
   state:
     description: The level of the Remote connection task. Choices are C(present), C(absent).
@@ -35,26 +36,26 @@ options:
     default: 'present'
   connection_info:
     description: Information required to establish a connection to the storage system.
-    required: true
     type: dict
+    required: true
     suboptions:
       address:
-        description: IP address or hostname of the Hitachi storage system .
+        description: IP address or hostname of the storage system.
         type: str
         required: true
       username:
-        description: Username for authentication. This field is valid for C(direct) connection type only, and it is a required field.
+        description: Username for authentication. This is a required field.
         type: str
         required: false
       password:
-        description: Password for authentication. This field is valid for C(direct) connection type only, and it is a required field.
+        description: Password for authentication. This is a required field.
         type: str
         required: false
       connection_type:
-        description: Type of connection to the storage system, Only C(direct) connection is supported.
+        description: Type of connection to the storage system.
         type: str
         required: false
-        choices: ['direct', 'gateway']
+        choices: ['direct']
         default: 'direct'
   spec:
     description: Specification for the Create/update Remote connection task.
@@ -98,13 +99,12 @@ options:
 """
 
 EXAMPLES = """
-- name: Create a new remote connection for direct connection type
+- name: Create a new remote connection
   hitachivantara.vspone_block.vsp.hv_remote_connection:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: present
     spec:
       path_group_id: 101
@@ -118,13 +118,12 @@ EXAMPLES = """
       remote_io_timeout_in_sec: 15
       round_trip_in_msec: 1
 
-- name: update remote path of a existing remote connection for direct connection type
+- name: update remote path of a existing remote connection
   hitachivantara.vspone_block.vsp.hv_remote_connection:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: present
     spec:
       path_group_id: 101
@@ -135,13 +134,12 @@ EXAMPLES = """
         - local_port: "CL7-D"
           remote_port: "CL7-D"
 
-- name: update remote connection settings for direct connection type
+- name: update remote connection settings
   hitachivantara.vspone_block.vsp.hv_remote_connection:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: present
     spec:
       path_group_id: 101
@@ -150,13 +148,12 @@ EXAMPLES = """
       round_trip_in_msec: 1
       min_remote_paths: 1
 
-- name: Delete a remote connection for direct connection type
+- name: Delete a remote connection
   hitachivantara.vspone_block.vsp.hv_remote_connection:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: absent
     spec:
       path_group_id: 101

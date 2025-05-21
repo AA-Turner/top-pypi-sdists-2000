@@ -59,18 +59,18 @@ from .utils import day_frac
 if TYPE_CHECKING:
     from astropy.coordinates import EarthLocation
 __all__ = [
-    "TimeBase",
+    "STANDARD_TIME_SCALES",
+    "TIME_DELTA_SCALES",
+    "TIME_SCALES",
+    "OperandTypeError",
+    "ScaleValueError",
     "Time",
+    "TimeBase",
     "TimeDelta",
+    "TimeDeltaMissingUnitWarning",
     "TimeInfo",
     "TimeInfoBase",
     "update_leap_seconds",
-    "TIME_SCALES",
-    "STANDARD_TIME_SCALES",
-    "TIME_DELTA_SCALES",
-    "ScaleValueError",
-    "OperandTypeError",
-    "TimeDeltaMissingUnitWarning",
 ]
 
 
@@ -1825,11 +1825,8 @@ class TimeBase(MaskableShapedLikeNDArray):
                 # Let other have a go.
                 return NotImplemented
 
-        if (
-            self.scale is not None
-            and self.scale not in other.SCALES
-            or other.scale is not None
-            and other.scale not in self.SCALES
+        if (self.scale is not None and self.scale not in other.SCALES) or (
+            other.scale is not None and other.scale not in self.SCALES
         ):
             # Other will also not be able to do it, so raise a TypeError
             # immediately, allowing us to explain why it doesn't work.
@@ -3010,11 +3007,8 @@ class TimeDelta(TimeBase):
                 return NotImplemented
 
         # the scales should be compatible (e.g., cannot convert TDB to TAI)
-        if (
-            self.scale is not None
-            and self.scale not in other.SCALES
-            or other.scale is not None
-            and other.scale not in self.SCALES
+        if (self.scale is not None and self.scale not in other.SCALES) or (
+            other.scale is not None and other.scale not in self.SCALES
         ):
             raise TypeError(
                 "Cannot add TimeDelta instances with scales "

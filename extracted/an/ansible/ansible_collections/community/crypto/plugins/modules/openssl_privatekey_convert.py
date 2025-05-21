@@ -6,6 +6,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 
@@ -45,6 +47,7 @@ seealso: []
 """
 
 EXAMPLES = r"""
+---
 - name: Convert private key to PKCS8 format with passphrase
   community.crypto.openssl_privatekey_convert:
     src_path: /etc/ssl/private/ansible.com.pem
@@ -64,42 +67,38 @@ backup_file:
 import os
 
 from ansible.module_utils.common.text.converters import to_native
-
-from ansible_collections.community.crypto.plugins.module_utils.io import (
-    load_file_if_exists,
-    write_file,
-)
-
 from ansible_collections.community.crypto.plugins.module_utils.crypto.basic import (
     OpenSSLObjectError,
 )
-
+from ansible_collections.community.crypto.plugins.module_utils.crypto.module_backends.privatekey_convert import (
+    get_privatekey_argument_spec,
+    select_backend,
+)
 from ansible_collections.community.crypto.plugins.module_utils.crypto.support import (
     OpenSSLObject,
 )
-
-from ansible_collections.community.crypto.plugins.module_utils.crypto.module_backends.privatekey_convert import (
-    select_backend,
-    get_privatekey_argument_spec,
+from ansible_collections.community.crypto.plugins.module_utils.io import (
+    load_file_if_exists,
+    write_file,
 )
 
 
 class PrivateKeyConvertModule(OpenSSLObject):
     def __init__(self, module, module_backend):
         super(PrivateKeyConvertModule, self).__init__(
-            module.params['dest_path'],
-            'present',
+            module.params["dest_path"],
+            "present",
             False,
             module.check_mode,
         )
         self.module_backend = module_backend
 
-        self.backup = module.params['backup']
+        self.backup = module.params["backup"]
         self.backup_file = None
 
-        module.params['path'] = module.params['dest_path']
-        if module.params['mode'] is None:
-            module.params['mode'] = '0600'
+        module.params["path"] = module.params["dest_path"]
+        if module.params["mode"] is None:
+            module.params["mode"] = "0600"
 
         module_backend.set_existing_destination(load_file_if_exists(self.path, module))
 
@@ -116,18 +115,20 @@ class PrivateKeyConvertModule(OpenSSLObject):
             self.changed = True
 
         file_args = module.load_file_common_arguments(module.params)
-        if module.check_file_absent_if_check_mode(file_args['path']):
+        if module.check_file_absent_if_check_mode(file_args["path"]):
             self.changed = True
         else:
-            self.changed = module.set_fs_attributes_if_different(file_args, self.changed)
+            self.changed = module.set_fs_attributes_if_different(
+                file_args, self.changed
+            )
 
     def dump(self):
         """Serialize the object into a dictionary."""
 
         result = self.module_backend.dump()
-        result['changed'] = self.changed
+        result["changed"] = self.changed
         if self.backup_file:
-            result['backup_file'] = self.backup_file
+            result["backup_file"] = self.backup_file
 
         return result
 
@@ -135,20 +136,23 @@ class PrivateKeyConvertModule(OpenSSLObject):
 def main():
 
     argument_spec = get_privatekey_argument_spec()
-    argument_spec.argument_spec.update(dict(
-        dest_path=dict(type='path', required=True),
-        backup=dict(type='bool', default=False),
-    ))
+    argument_spec.argument_spec.update(
+        dict(
+            dest_path=dict(type="path", required=True),
+            backup=dict(type="bool", default=False),
+        )
+    )
     module = argument_spec.create_ansible_module(
         supports_check_mode=True,
         add_file_common_args=True,
     )
 
-    base_dir = os.path.dirname(module.params['dest_path']) or '.'
+    base_dir = os.path.dirname(module.params["dest_path"]) or "."
     if not os.path.isdir(base_dir):
         module.fail_json(
             name=base_dir,
-            msg='The directory %s does not exist or the file is not a directory' % base_dir
+            msg="The directory %s does not exist or the file is not a directory"
+            % base_dir,
         )
 
     module_backend = select_backend(module=module)
@@ -164,5 +168,5 @@ def main():
         module.fail_json(msg=to_native(exc))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

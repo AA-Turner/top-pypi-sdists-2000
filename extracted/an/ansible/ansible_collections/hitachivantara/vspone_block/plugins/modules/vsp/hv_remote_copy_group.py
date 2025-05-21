@@ -15,7 +15,6 @@ description: >
   - This module allows for the splitting, swap-splitting, re-syncing, swap-resyncing and deletion of Remote Copy Group on Hitachi VSP storage systems.
   - It supports various remote copy pairs operations based on the specified task level.
   - The module supports the following replication types: HUR, TC, GAD.
-  - This module is supported only for C(direct) connection type.
   - For examples go to URL
     U(https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/remote_copy_group.yml)
 version_added: '3.2.0'
@@ -27,6 +26,8 @@ attributes:
   check_mode:
     description: Determines if the module should run in check mode.
     support: none
+extends_documentation_fragment:
+- hitachivantara.vspone_block.common.gateway_note
 options:
   state:
     description: The level of the Remote Copy Group pairs task. Choices are C(present), C(absent), C(split), C(resync), C(swap_split), C(swap_resync).
@@ -35,7 +36,7 @@ options:
     choices: ['present', 'absent', 'split', 'resync', 'swap_split', 'swap_resync']
     default: 'present'
   storage_system_info:
-    description: Information about the storage system.
+    description: Information about the storage system. This field is an optional field.
     type: dict
     required: false
     suboptions:
@@ -45,32 +46,32 @@ options:
         required: false
   connection_info:
     description: Information required to establish a connection to the storage system.
-    required: true
     type: dict
+    required: true
     suboptions:
       address:
-        description: IP address or hostname of the Hitachi storage system .
+        description: IP address or hostname of the storage system.
         type: str
         required: true
       username:
-        description: Username for authentication. This field is valid for C(direct) connection type only, and it is a required field.
+        description: Username for authentication. This is a required field.
         type: str
         required: false
       password:
-        description: Password for authentication. This field is valid for C(direct) connection type only, and it is a required field.
+        description: Password for authentication. This is a required field.
         type: str
         required: false
       api_token:
-        description: Value of the lock token to operate on locked resources.
+        description: This field is used to pass the value of the lock token to operate on locked resources.
         type: str
         required: false
   secondary_connection_info:
-    description: Information required to establish a connection to the secondary storage system. Required for C(direct) connection only.
+    description: Information required to establish a connection to the secondary storage system.
     required: true
     type: dict
     suboptions:
       address:
-        description: IP address or hostname of the UAI gateway.
+        description: IP address or hostname of the secondary storage system.
         type: str
         required: true
       username:
@@ -165,13 +166,12 @@ options:
 """
 
 EXAMPLES = """
-- name: Split remote copy group for HUR for direct connection type
+- name: Split remote copy group for HUR
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: split
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -181,13 +181,12 @@ EXAMPLES = """
       is_svol_writable: false
       do_data_suspend: false
 
-- name: Resync remote copy group for HUR for direct connection type
+- name: Resync remote copy group for HUR
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: resync
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -195,13 +194,12 @@ EXAMPLES = """
       copy_group_name: remote_copy_group_copy_group_name_1
       replication_type: hur
 
-- name: Swap split remote copy group for HUR for direct connection type
+- name: Swap split remote copy group for HUR
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: swap_split
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -209,13 +207,12 @@ EXAMPLES = """
       copy_group_name: remote_copy_group_copy_group_name_1
       replication_type: hur
 
-- name: Swap resync remote copy group for HUR for direct connection type
+- name: Swap resync remote copy group for HUR
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: swap_resync
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -223,24 +220,22 @@ EXAMPLES = """
       copy_group_name: remote_copy_group_copy_group_name_1
       replication_type: hur
 
-- name: Delete remote copy group for HUR for direct connection type
+- name: Delete remote copy group for HUR
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: absent
     spec:
       copy_group_name: remote_copy_group_copy_group_name_1
 
-- name: Split remote copy group for TrueCopy for direct connection type
+- name: Split remote copy group for TrueCopy
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: split
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -250,13 +245,12 @@ EXAMPLES = """
       is_svol_writable: false
       do_pvol_write_protect: false
 
-- name: Resync remote copy group for TrueCopy for direct connection type
+- name: Resync remote copy group for TrueCopy
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: resync
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -268,13 +262,12 @@ EXAMPLES = """
       fence_level: NEVER
       copy_pace: 3
 
-- name: Swap split remote copy group for TrueCopy for direct connection type
+- name: Swap split remote copy group for TrueCopy
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: swap_split
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -282,13 +275,12 @@ EXAMPLES = """
       copy_group_name: remote_copy_group_copy_group_name_1
       replication_type: TC
 
-- name: Swap resync remote copy group for TrueCopy for direct connection type
+- name: Swap resync remote copy group for TrueCopy
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: swap_resync
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -296,24 +288,22 @@ EXAMPLES = """
       copy_group_name: remote_copy_group_copy_group_name_1
       replication_type: TC
 
-- name: Delete remote copy group for TrueCopy for direct connection type
+- name: Delete remote copy group for TrueCopy
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: absent
     spec:
       copy_group_name: remote_copy_group_copy_group_name_1
 
-- name: Split remote copy group for GAD for direct connection type
+- name: Split remote copy group for GAD
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: split
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -321,13 +311,12 @@ EXAMPLES = """
       copy_group_name: remote_copy_group_copy_group_name_1
       replication_type: GAD
 
-- name: Resync remote copy group for GAD for direct connection type
+- name: Resync remote copy group for GAD
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: resync
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -337,13 +326,12 @@ EXAMPLES = """
       is_consistency_group: true
       consistency_group_id: 47
 
-- name: Swap split remote copy group for GAD for direct connection type
+- name: Swap split remote copy group for GAD
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: swap_split
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -351,13 +339,12 @@ EXAMPLES = """
       copy_group_name: remote_copy_group_copy_group_name_1
       replication_type: GAD
 
-- name: Swap resync remote copy group for GAD for direct connection type
+- name: Swap resync remote copy group for GAD
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: swap_resync
     spec:
       local_device_group_name: remote_copy_group_local_device_group_name_1
@@ -365,13 +352,12 @@ EXAMPLES = """
       copy_group_name: remote_copy_group_copy_group_name_1
       replication_type: GAD
 
-- name: Delete remote copy group for GAD for direct connection type
+- name: Delete remote copy group for GAD
   hitachivantara.vspone_block.vsp.hv_remote_copy_group:
     connection_info:
       address: storage1.company.com
       username: "admin"
       password: "password"
-      connection_type: "direct"
     state: absent
     spec:
       copy_group_name: remote_copy_group_copy_group_name_1
@@ -499,9 +485,6 @@ from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common
     VSPRemoteCopyGroupArguments,
     VSPParametersManager,
 )
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_constants import (
-    ConnectionTypes,
-)
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.reconciler.vsp_copy_groups import (
     VSPCopyGroupsReconciler,
 )
@@ -516,9 +499,6 @@ from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common
 )
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.ansible_common import (
     validate_ansible_product_registration,
-)
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.message.module_msgs import (
-    ModuleMessage,
 )
 
 
@@ -601,10 +581,6 @@ class VSPCopyGroupManager:
             self.state,
             self.secondary_connection_info,
         )
-        if self.connection_info.connection_type == ConnectionTypes.GATEWAY:
-            found = reconciler.check_storage_in_ucpsystem()
-            if not found:
-                raise ValueError(ModuleMessage.STORAGE_SYSTEM_ONBOARDING.value)
 
         result = reconciler.copy_group_reconcile_direct(
             self.state, self.spec, self.secondary_connection_info

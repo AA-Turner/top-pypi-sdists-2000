@@ -7560,8 +7560,8 @@ class CfnCluster(
         ) -> None:
             '''The managed storage configuration for the cluster.
 
-            :param fargate_ephemeral_storage_kms_key_id: Specify the AWS Key Management Service key ID for the Fargate ephemeral storage. The key must be a single Region key.
-            :param kms_key_id: Specify a AWS Key Management Service key ID to encrypt the managed storage. The key must be a single Region key.
+            :param fargate_ephemeral_storage_kms_key_id: Specify the AWS Key Management Service key ID for Fargate ephemeral storage. When you specify a ``fargateEphemeralStorageKmsKeyId`` , AWS Fargate uses the key to encrypt data at rest in ephemeral storage. For more information about Fargate ephemeral storage encryption, see `Customer managed keys for AWS Fargate ephemeral storage for Amazon ECS <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-storage-encryption.html>`_ in the *Amazon Elastic Container Service Developer Guide* . The key must be a single Region key.
+            :param kms_key_id: Specify a AWS Key Management Service key ID to encrypt Amazon ECS managed storage. When you specify a ``kmsKeyId`` , Amazon ECS uses the key to encrypt data volumes managed by Amazon ECS that are attached to tasks in the cluster. The following data volumes are managed by Amazon ECS: Amazon EBS. For more information about encryption of Amazon EBS volumes attached to Amazon ECS tasks, see `Encrypt data stored in Amazon EBS volumes for Amazon ECS <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ebs-kms-encryption.html>`_ in the *Amazon Elastic Container Service Developer Guide* . The key must be a single Region key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-cluster-managedstorageconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -7589,7 +7589,9 @@ class CfnCluster(
 
         @builtins.property
         def fargate_ephemeral_storage_kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''Specify the AWS Key Management Service key ID for the Fargate ephemeral storage.
+            '''Specify the AWS Key Management Service key ID for Fargate ephemeral storage.
+
+            When you specify a ``fargateEphemeralStorageKmsKeyId`` , AWS Fargate uses the key to encrypt data at rest in ephemeral storage. For more information about Fargate ephemeral storage encryption, see `Customer managed keys for AWS Fargate ephemeral storage for Amazon ECS <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-storage-encryption.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
 
             The key must be a single Region key.
 
@@ -7600,7 +7602,9 @@ class CfnCluster(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''Specify a AWS Key Management Service key ID to encrypt the managed storage.
+            '''Specify a AWS Key Management Service key ID to encrypt Amazon ECS managed storage.
+
+            When you specify a ``kmsKeyId`` , Amazon ECS uses the key to encrypt data volumes managed by Amazon ECS that are attached to tasks in the cluster. The following data volumes are managed by Amazon ECS: Amazon EBS. For more information about encryption of Amazon EBS volumes attached to Amazon ECS tasks, see `Encrypt data stored in Amazon EBS volumes for Amazon ECS <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ebs-kms-encryption.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
 
             The key must be a single Region key.
 
@@ -11176,15 +11180,15 @@ class CfnService(
             Many of these parameters map 1:1 with the Amazon EBS ``CreateVolume`` API request parameters.
 
             :param role_arn: The ARN of the IAM role to associate with this volume. This is the Amazon ECS infrastructure IAM role that is used to manage your AWS infrastructure. We recommend using the Amazon ECS-managed ``AmazonECSInfrastructureRolePolicyForVolumes`` IAM policy with this role. For more information, see `Amazon ECS infrastructure IAM role <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html>`_ in the *Amazon ECS Developer Guide* .
-            :param encrypted: Indicates whether the volume should be encrypted. If no value is specified, encryption is turned on by default. This parameter maps 1:1 with the ``Encrypted`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
-            :param filesystem_type: The filesystem type for the volume. For volumes created from a snapshot, you must specify the same filesystem type that the volume was using when the snapshot was created. If there is a filesystem type mismatch, the task will fail to start. The available Linux filesystem types are ``ext3`` , ``ext4`` , and ``xfs`` . If no value is specified, the ``xfs`` filesystem type is used by default. The available Windows filesystem types are ``NTFS`` .
+            :param encrypted: Indicates whether the volume should be encrypted. If you turn on Region-level Amazon EBS encryption by default but set this value as ``false`` , the setting is overridden and the volume is encrypted with the KMS key specified for Amazon EBS encryption by default. This parameter maps 1:1 with the ``Encrypted`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
+            :param filesystem_type: The filesystem type for the volume. For volumes created from a snapshot, you must specify the same filesystem type that the volume was using when the snapshot was created. If there is a filesystem type mismatch, the tasks will fail to start. The available Linux filesystem types are ``ext3`` , ``ext4`` , and ``xfs`` . If no value is specified, the ``xfs`` filesystem type is used by default. The available Windows filesystem types are ``NTFS`` .
             :param iops: The number of I/O operations per second (IOPS). For ``gp3`` , ``io1`` , and ``io2`` volumes, this represents the number of IOPS that are provisioned for the volume. For ``gp2`` volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. The following are the supported values for each volume type. - ``gp3`` : 3,000 - 16,000 IOPS - ``io1`` : 100 - 64,000 IOPS - ``io2`` : 100 - 256,000 IOPS This parameter is required for ``io1`` and ``io2`` volume types. The default for ``gp3`` volumes is ``3,000 IOPS`` . This parameter is not supported for ``st1`` , ``sc1`` , or ``standard`` volume types. This parameter maps 1:1 with the ``Iops`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
-            :param kms_key_id: The Amazon Resource Name (ARN) identifier of the AWS Key Management Service key to use for Amazon EBS encryption. When encryption is turned on and no AWS Key Management Service key is specified, the default AWS managed key for Amazon EBS volumes is used. This parameter maps 1:1 with the ``KmsKeyId`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* . .. epigraph:: AWS authenticates the AWS Key Management Service key asynchronously. Therefore, if you specify an ID, alias, or ARN that is invalid, the action can appear to complete, but eventually fails.
+            :param kms_key_id: The Amazon Resource Name (ARN) identifier of the AWS Key Management Service key to use for Amazon EBS encryption. When a key is specified using this parameter, it overrides Amazon EBS default encryption or any KMS key that you specified for cluster-level managed storage encryption. This parameter maps 1:1 with the ``KmsKeyId`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* . For more information about encrypting Amazon EBS volumes attached to tasks, see `Encrypt data stored in Amazon EBS volumes attached to Amazon ECS tasks <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ebs-kms-encryption.html>`_ . .. epigraph:: AWS authenticates the AWS Key Management Service key asynchronously. Therefore, if you specify an ID, alias, or ARN that is invalid, the action can appear to complete, but eventually fails.
             :param size_in_gib: The size of the volume in GiB. You must specify either a volume size or a snapshot ID. If you specify a snapshot ID, the snapshot size is used for the volume size by default. You can optionally specify a volume size greater than or equal to the snapshot size. This parameter maps 1:1 with the ``Size`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* . The following are the supported volume size values for each volume type. - ``gp2`` and ``gp3`` : 1-16,384 - ``io1`` and ``io2`` : 4-16,384 - ``st1`` and ``sc1`` : 125-16,384 - ``standard`` : 1-1,024
-            :param snapshot_id: The snapshot that Amazon ECS uses to create the volume. You must specify either a snapshot ID or a volume size. This parameter maps 1:1 with the ``SnapshotId`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
+            :param snapshot_id: The snapshot that Amazon ECS uses to create volumes for attachment to tasks maintained by the service. You must specify either ``snapshotId`` or ``sizeInGiB`` in your volume configuration. This parameter maps 1:1 with the ``SnapshotId`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
             :param tag_specifications: The tags to apply to the volume. Amazon ECS applies service-managed tags by default. This parameter maps 1:1 with the ``TagSpecifications.N`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
             :param throughput: The throughput to provision for a volume, in MiB/s, with a maximum of 1,000 MiB/s. This parameter maps 1:1 with the ``Throughput`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* . .. epigraph:: This parameter is only supported for the ``gp3`` volume type.
-            :param volume_initialization_rate: 
+            :param volume_initialization_rate: The rate, in MiB/s, at which data is fetched from a snapshot of an existing EBS volume to create new volumes for attachment to the tasks maintained by the service. This property can be specified only if you specify a ``snapshotId`` . For more information, see `Initialize Amazon EBS volumes <https://docs.aws.amazon.com/ebs/latest/userguide/initalize-volume.html>`_ in the *Amazon EBS User Guide* .
             :param volume_type: The volume type. This parameter maps 1:1 with the ``VolumeType`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* . For more information, see `Amazon EBS volume types <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html>`_ in the *Amazon EC2 User Guide* . The following are the supported volume types. - General Purpose SSD: ``gp2`` | ``gp3`` - Provisioned IOPS SSD: ``io1`` | ``io2`` - Throughput Optimized HDD: ``st1`` - Cold HDD: ``sc1`` - Magnetic: ``standard`` .. epigraph:: The magnetic volume type is not supported on Fargate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-servicemanagedebsvolumeconfiguration.html
@@ -11276,7 +11280,7 @@ class CfnService(
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
             '''Indicates whether the volume should be encrypted.
 
-            If no value is specified, encryption is turned on by default. This parameter maps 1:1 with the ``Encrypted`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
+            If you turn on Region-level Amazon EBS encryption by default but set this value as ``false`` , the setting is overridden and the volume is encrypted with the KMS key specified for Amazon EBS encryption by default. This parameter maps 1:1 with the ``Encrypted`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-servicemanagedebsvolumeconfiguration.html#cfn-ecs-service-servicemanagedebsvolumeconfiguration-encrypted
             '''
@@ -11287,7 +11291,7 @@ class CfnService(
         def filesystem_type(self) -> typing.Optional[builtins.str]:
             '''The filesystem type for the volume.
 
-            For volumes created from a snapshot, you must specify the same filesystem type that the volume was using when the snapshot was created. If there is a filesystem type mismatch, the task will fail to start.
+            For volumes created from a snapshot, you must specify the same filesystem type that the volume was using when the snapshot was created. If there is a filesystem type mismatch, the tasks will fail to start.
 
             The available Linux filesystem types are ``ext3`` , ``ext4`` , and ``xfs`` . If no value is specified, the ``xfs`` filesystem type is used by default.
 
@@ -11323,7 +11327,7 @@ class CfnService(
         def kms_key_id(self) -> typing.Optional[builtins.str]:
             '''The Amazon Resource Name (ARN) identifier of the AWS Key Management Service key to use for Amazon EBS encryption.
 
-            When encryption is turned on and no AWS Key Management Service key is specified, the default AWS managed key for Amazon EBS volumes is used. This parameter maps 1:1 with the ``KmsKeyId`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
+            When a key is specified using this parameter, it overrides Amazon EBS default encryption or any KMS key that you specified for cluster-level managed storage encryption. This parameter maps 1:1 with the ``KmsKeyId`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* . For more information about encrypting Amazon EBS volumes attached to tasks, see `Encrypt data stored in Amazon EBS volumes attached to Amazon ECS tasks <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ebs-kms-encryption.html>`_ .
             .. epigraph::
 
                AWS authenticates the AWS Key Management Service key asynchronously. Therefore, if you specify an ID, alias, or ARN that is invalid, the action can appear to complete, but eventually fails.
@@ -11353,9 +11357,9 @@ class CfnService(
 
         @builtins.property
         def snapshot_id(self) -> typing.Optional[builtins.str]:
-            '''The snapshot that Amazon ECS uses to create the volume.
+            '''The snapshot that Amazon ECS uses to create volumes for attachment to tasks maintained by the service.
 
-            You must specify either a snapshot ID or a volume size. This parameter maps 1:1 with the ``SnapshotId`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
+            You must specify either ``snapshotId`` or ``sizeInGiB`` in your volume configuration. This parameter maps 1:1 with the ``SnapshotId`` parameter of the `CreateVolume API <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVolume.html>`_ in the *Amazon EC2 API Reference* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-servicemanagedebsvolumeconfiguration.html#cfn-ecs-service-servicemanagedebsvolumeconfiguration-snapshotid
             '''
@@ -11391,7 +11395,10 @@ class CfnService(
 
         @builtins.property
         def volume_initialization_rate(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The rate, in MiB/s, at which data is fetched from a snapshot of an existing EBS volume to create new volumes for attachment to the tasks maintained by the service.
+
+            This property can be specified only if you specify a ``snapshotId`` . For more information, see `Initialize Amazon EBS volumes <https://docs.aws.amazon.com/ebs/latest/userguide/initalize-volume.html>`_ in the *Amazon EBS User Guide* .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-servicemanagedebsvolumeconfiguration.html#cfn-ecs-service-servicemanagedebsvolumeconfiguration-volumeinitializationrate
             '''
             result = self._values.get("volume_initialization_rate")
@@ -16988,7 +16995,7 @@ class CfnTaskDefinition(
                This parameter is not supported for Windows containers. > This parameter is only supported for tasks that are hosted on AWS Fargate if the tasks are using platform version ``1.4.0`` or later (Linux). This isn't supported for Windows containers on Fargate.
 
             :param namespace: The namespaced kernel parameter to set a ``value`` for.
-            :param value: The namespaced kernel parameter to set a ``value`` for. Valid IPC namespace values: ``"kernel.msgmax" | "kernel.msgmnb" | "kernel.msgmni" | "kernel.sem" | "kernel.shmall" | "kernel.shmmax" | "kernel.shmmni" | "kernel.shm_rmid_forced"`` , and ``Sysctls`` that start with ``"fs.mqueue.*"`` Valid network namespace values: ``Sysctls`` that start with ``"net.*"`` All of these values are supported by Fargate.
+            :param value: The namespaced kernel parameter to set a ``value`` for. Valid IPC namespace values: ``"kernel.msgmax" | "kernel.msgmnb" | "kernel.msgmni" | "kernel.sem" | "kernel.shmall" | "kernel.shmmax" | "kernel.shmmni" | "kernel.shm_rmid_forced"`` , and ``Sysctls`` that start with ``"fs.mqueue.*"`` Valid network namespace values: ``Sysctls`` that start with ``"net.*"`` . Only namespaced ``Sysctls`` that exist within the container starting with "net.* are accepted. All of these values are supported by Fargate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-systemcontrol.html
             :exampleMetadata: fixture=_generated
@@ -17029,7 +17036,7 @@ class CfnTaskDefinition(
 
             Valid IPC namespace values: ``"kernel.msgmax" | "kernel.msgmnb" | "kernel.msgmni" | "kernel.sem" | "kernel.shmall" | "kernel.shmmax" | "kernel.shmmni" | "kernel.shm_rmid_forced"`` , and ``Sysctls`` that start with ``"fs.mqueue.*"``
 
-            Valid network namespace values: ``Sysctls`` that start with ``"net.*"``
+            Valid network namespace values: ``Sysctls`` that start with ``"net.*"`` . Only namespaced ``Sysctls`` that exist within the container starting with "net.* are accepted.
 
             All of these values are supported by Fargate.
 

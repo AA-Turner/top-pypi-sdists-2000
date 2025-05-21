@@ -14,10 +14,10 @@ from astropy.utils.masked import get_data_and_mask
 from .transform import BaseTransform
 
 __all__ = [
+    "AsymmetricPercentileInterval",
     "BaseInterval",
     "ManualInterval",
     "MinMaxInterval",
-    "AsymmetricPercentileInterval",
     "PercentileInterval",
     "ZScaleInterval",
 ]

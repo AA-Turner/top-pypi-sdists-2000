@@ -3,7 +3,9 @@
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 DOCUMENTATION = r"""
@@ -27,6 +29,7 @@ seealso:
 """
 
 EXAMPLES = r"""
+---
 - name: Parse serial number
   ansible.builtin.debug:
     msg: "{{ '11:22:33' | community.crypto.parse_serial }}"
@@ -42,14 +45,17 @@ _value:
 from ansible.errors import AnsibleFilterError
 from ansible.module_utils.common.text.converters import to_native
 from ansible.module_utils.six import string_types
-
-from ansible_collections.community.crypto.plugins.module_utils.serial import parse_serial
+from ansible_collections.community.crypto.plugins.module_utils.serial import (
+    parse_serial,
+)
 
 
 def parse_serial_filter(input):
     if not isinstance(input, string_types):
         raise AnsibleFilterError(
-            'The input for the community.crypto.parse_serial filter must be a string; got {type} instead'.format(type=type(input))
+            "The input for the community.crypto.parse_serial filter must be a string; got {type} instead".format(
+                type=type(input)
+            )
         )
     try:
         return parse_serial(to_native(input))
@@ -58,9 +64,9 @@ def parse_serial_filter(input):
 
 
 class FilterModule(object):
-    '''Ansible jinja2 filters'''
+    """Ansible jinja2 filters"""
 
     def filters(self):
         return {
-            'parse_serial': parse_serial_filter,
+            "parse_serial": parse_serial_filter,
         }

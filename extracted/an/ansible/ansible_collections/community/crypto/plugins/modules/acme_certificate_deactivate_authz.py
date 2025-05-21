@@ -6,6 +6,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
+
+
 __metaclass__ = type
 
 
@@ -45,6 +47,7 @@ options:
 """
 
 EXAMPLES = r"""
+---
 - name: Deactivate all authzs for an order
   community.crypto.acme_certificate_deactivate_authz:
     account_key_content: "{{ account_private_key }}"
@@ -53,33 +56,28 @@ EXAMPLES = r"""
 
 RETURN = """#"""
 
-from ansible_collections.community.crypto.plugins.module_utils.acme.acme import (
-    create_backend,
-    create_default_argspec,
-    ACMEClient,
-)
-
 from ansible_collections.community.crypto.plugins.module_utils.acme.account import (
     ACMEAccount,
 )
-
+from ansible_collections.community.crypto.plugins.module_utils.acme.acme import (
+    ACMEClient,
+    create_backend,
+    create_default_argspec,
+)
 from ansible_collections.community.crypto.plugins.module_utils.acme.errors import (
     ModuleFailException,
 )
-
-from ansible_collections.community.crypto.plugins.module_utils.acme.orders import (
-    Order,
-)
+from ansible_collections.community.crypto.plugins.module_utils.acme.orders import Order
 
 
 def main():
     argument_spec = create_default_argspec()
     argument_spec.update_argspec(
-        order_uri=dict(type='str', required=True),
+        order_uri=dict(type="str", required=True),
     )
     module = argument_spec.create_ansible_module(supports_check_mode=True)
-    if module.params['acme_version'] == 1:
-        module.fail_json('The module does not support acme_version=1')
+    if module.params["acme_version"] == 1:
+        module.fail_json("The module does not support acme_version=1")
 
     backend = create_backend(module, False)
 
@@ -89,9 +87,9 @@ def main():
 
         dummy, account_data = account.setup_account(allow_creation=False)
         if account_data is None:
-            raise ModuleFailException(msg='Account does not exist or is deactivated.')
+            raise ModuleFailException(msg="Account does not exist or is deactivated.")
 
-        order = Order.from_url(client, module.params['order_uri'])
+        order = Order.from_url(client, module.params["order_uri"])
         order.load_authorizations(client)
 
         changed = False
@@ -106,13 +104,15 @@ def main():
             except Exception:
                 # ignore errors
                 pass
-            if authz.status != 'deactivated':
-                module.warn(warning='Could not deactivate authz object {0}.'.format(authz.url))
+            if authz.status != "deactivated":
+                module.warn(
+                    warning="Could not deactivate authz object {0}.".format(authz.url)
+                )
 
         module.exit_json(changed=changed)
     except ModuleFailException as e:
         e.do_fail(module)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

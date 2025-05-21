@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: gql
-Version: 3.5.2
+Version: 3.5.3
 Summary: GraphQL client for Python
 Home-page: https://github.com/graphql-python/gql
 Author: Syrus Akbary

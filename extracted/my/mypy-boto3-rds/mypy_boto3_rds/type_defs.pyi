@@ -40,6 +40,7 @@ from .literals import (
     GlobalClusterMemberSynchronizationStatusType,
     IAMAuthModeType,
     IntegrationStatusType,
+    LifecycleSupportNameType,
     LimitlessDatabaseStatusType,
     LocalWriteForwardingStatusType,
     ReplicaModeType,
@@ -170,6 +171,7 @@ __all__ = (
     "DBInstanceRoleTypeDef",
     "DBInstanceStatusInfoTypeDef",
     "DBInstanceTypeDef",
+    "DBMajorEngineVersionTypeDef",
     "DBParameterGroupDetailsTypeDef",
     "DBParameterGroupNameMessageTypeDef",
     "DBParameterGroupStatusTypeDef",
@@ -266,6 +268,9 @@ __all__ = (
     "DescribeDBLogFilesMessagePaginateTypeDef",
     "DescribeDBLogFilesMessageTypeDef",
     "DescribeDBLogFilesResponseTypeDef",
+    "DescribeDBMajorEngineVersionsRequestPaginateTypeDef",
+    "DescribeDBMajorEngineVersionsRequestTypeDef",
+    "DescribeDBMajorEngineVersionsResponseTypeDef",
     "DescribeDBParameterGroupsMessagePaginateTypeDef",
     "DescribeDBParameterGroupsMessageTypeDef",
     "DescribeDBParametersMessagePaginateTypeDef",
@@ -520,6 +525,7 @@ __all__ = (
     "StopDBInstanceMessageTypeDef",
     "StopDBInstanceResultTypeDef",
     "SubnetTypeDef",
+    "SupportedEngineLifecycleTypeDef",
     "SwitchoverBlueGreenDeploymentRequestTypeDef",
     "SwitchoverBlueGreenDeploymentResponseTypeDef",
     "SwitchoverDetailTypeDef",
@@ -878,6 +884,11 @@ class OptionGroupMembershipTypeDef(TypedDict):
     OptionGroupName: NotRequired[str]
     Status: NotRequired[str]
 
+class SupportedEngineLifecycleTypeDef(TypedDict):
+    LifecycleSupportName: LifecycleSupportNameType
+    LifecycleSupportStartDate: datetime
+    LifecycleSupportEndDate: datetime
+
 class TargetHealthTypeDef(TypedDict):
     State: NotRequired[TargetStateType]
     Reason: NotRequired[TargetHealthReasonType]
@@ -1014,6 +1025,12 @@ class DescribeDBLogFilesDetailsTypeDef(TypedDict):
     LogFileName: NotRequired[str]
     LastWritten: NotRequired[int]
     Size: NotRequired[int]
+
+class DescribeDBMajorEngineVersionsRequestTypeDef(TypedDict):
+    Engine: NotRequired[str]
+    MajorEngineVersion: NotRequired[str]
+    Marker: NotRequired[str]
+    MaxRecords: NotRequired[int]
 
 class DescribeDBSnapshotAttributesMessageTypeDef(TypedDict):
     DBSnapshotIdentifier: str
@@ -2693,6 +2710,11 @@ class DBInstanceAutomatedBackupTypeDef(TypedDict):
     DedicatedLogVolume: NotRequired[bool]
     MultiTenant: NotRequired[bool]
 
+class DBMajorEngineVersionTypeDef(TypedDict):
+    Engine: NotRequired[str]
+    MajorEngineVersion: NotRequired[str]
+    SupportedEngineLifecycles: NotRequired[List[SupportedEngineLifecycleTypeDef]]
+
 DBProxyTargetTypeDef = TypedDict(
     "DBProxyTargetTypeDef",
     {
@@ -3136,6 +3158,11 @@ class DescribeDBLogFilesMessagePaginateTypeDef(TypedDict):
     FileLastWritten: NotRequired[int]
     FileSize: NotRequired[int]
     Filters: NotRequired[Sequence[FilterTypeDef]]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+class DescribeDBMajorEngineVersionsRequestPaginateTypeDef(TypedDict):
+    Engine: NotRequired[str]
+    MajorEngineVersion: NotRequired[str]
     PaginationConfig: NotRequired[PaginatorConfigTypeDef]
 
 class DescribeDBParameterGroupsMessagePaginateTypeDef(TypedDict):
@@ -3813,6 +3840,11 @@ class StartDBInstanceAutomatedBackupsReplicationResultTypeDef(TypedDict):
 
 class StopDBInstanceAutomatedBackupsReplicationResultTypeDef(TypedDict):
     DBInstanceAutomatedBackup: DBInstanceAutomatedBackupTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class DescribeDBMajorEngineVersionsResponseTypeDef(TypedDict):
+    DBMajorEngineVersions: List[DBMajorEngineVersionTypeDef]
+    Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class DescribeDBProxyTargetsResponseTypeDef(TypedDict):

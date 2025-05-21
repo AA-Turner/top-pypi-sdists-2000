@@ -25,6 +25,12 @@ attributes:
   check_mode:
     description: Determines if the module should run in check mode.
     support: none
+deprecated:
+  removed_in: '4.0.0'
+  why: The connection type C(gateway) is deprecated.
+  alternative: Not available.
+extends_documentation_fragment:
+- hitachivantara.vspone_block.common.deprecated_note
 options:
   connection_info:
     description: Information required to establish a connection to the storage system.
@@ -39,7 +45,7 @@ options:
         description: Type of connection to the storage system.
         type: str
         required: false
-        choices: ['gateway', 'direct']
+        choices: ['gateway']
         default: 'gateway'
       subscriber_id:
         description: This field is valid for C(gateway) connection type only. This is an optional field and only needed to support multi-tenancy environment.
@@ -136,16 +142,16 @@ data:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.vsp_utils import (
-    VSPUnsubscriberArguments,
-    VSPParametersManager,
+
+from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.gw_module_args import (
+    GatewayArgs,
+    DEPCRECATED_MSG,
 )
+
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_constants import (
     ConnectionTypes,
 )
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.reconciler.vsp_unsubscriber import (
-    VSPUnsubscriberReconciler,
-)
+
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_log import (
     Log,
 )
@@ -165,7 +171,7 @@ class UnsubscriberManager:
 
     def __init__(self):
         self.logger = Log()
-        self.argument_spec = VSPUnsubscriberArguments().unsubscribe()
+        self.argument_spec = GatewayArgs().get_unsubscribe_resource_args()
 
         self.module = AnsibleModule(
             argument_spec=self.argument_spec,
@@ -173,7 +179,7 @@ class UnsubscriberManager:
         )
         try:
 
-            self.params_manager = VSPParametersManager(self.module.params)
+            self.params_manager = None  # VSPParametersManager(self.module.params)
             self.connection_info = self.params_manager.connection_info
             self.storage_serial_number = self.params_manager.storage_system_info.serial
             self.spec = self.params_manager.unsubscribe_spec()
@@ -181,7 +187,7 @@ class UnsubscriberManager:
 
         except Exception as e:
             self.logger.writeException(e)
-            self.module.fail_json(msg=str(e))
+            self.module.fail_json(msg=str(DEPCRECATED_MSG))
 
     def apply(self):
         self.logger.writeInfo("=== Start of Gateway Unsubscribe operation ===")
@@ -196,7 +202,7 @@ class UnsubscriberManager:
         except Exception as e:
             self.logger.writeError(str(e))
             self.logger.writeInfo("=== End of Gateway Unsubscribe operation ===")
-            self.module.fail_json(msg=str(e))
+            self.module.fail_json(msg=str(DEPCRECATED_MSG))
 
         resp = {
             "changed": self.connection_info.changed,
@@ -213,7 +219,7 @@ class UnsubscriberManager:
 
     def unsubscribe_module(self):
 
-        reconciler = VSPUnsubscriberReconciler(
+        reconciler = self.VSPUnsubscriberReconciler(
             self.connection_info, self.storage_serial_number, self.state
         )
         if self.connection_info.connection_type == ConnectionTypes.GATEWAY:

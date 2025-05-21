@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .extract_models import ExtractModels
 from .prompt_conf import PromptConf
 from .schema_relax_mode import SchemaRelaxMode
 from .struct_mode import StructMode
@@ -22,7 +23,7 @@ class StructParseConf(pydantic.BaseModel):
     Configuration for the structured parsing agent.
     """
 
-    model: typing.Optional[str] = pydantic.Field(description="The model to use for the structured parsing.")
+    model: typing.Optional[ExtractModels] = pydantic.Field(description="The model to use for the structured parsing.")
     temperature: typing.Optional[float] = pydantic.Field(
         description="The temperature to use for the structured parsing."
     )

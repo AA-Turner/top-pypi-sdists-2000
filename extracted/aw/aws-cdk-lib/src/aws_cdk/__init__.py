@@ -11559,6 +11559,8 @@ class CustomResourceProviderRuntime(enum.Enum):
     '''Node.js 18.x.'''
     NODEJS_20_X = "NODEJS_20_X"
     '''Node.js 20.x.'''
+    NODEJS_22_X = "NODEJS_22_X"
+    '''Node.js 22.x.'''
 
 
 @jsii.data_type(

@@ -30,20 +30,20 @@ else:
     _WITHIN_IPYTHON = True
 
 __all__ = [
-    "Conf",
-    "conf",
-    "log",
-    "AstropyLogger",
-    "LoggingError",
+    "CRITICAL",
+    "DEBUG",
+    "ERROR",
+    "FATAL",
+    "INFO",
     # import the logging levels from logging so that one can do:
     # log.setLevel(log.DEBUG), for example
     "NOTSET",
-    "DEBUG",
-    "INFO",
     "WARNING",
-    "ERROR",
-    "CRITICAL",
-    "FATAL",
+    "AstropyLogger",
+    "Conf",
+    "LoggingError",
+    "conf",
+    "log",
 ]
 
 
@@ -377,7 +377,7 @@ class AstropyLogger(Logger):
             # IPython has its own way of dealing with exceptions
             from IPython import get_ipython
 
-            get_ipython().set_custom_exc(tuple(), None)
+            get_ipython().set_custom_exc((), None)
         else:
             # standard python interpreter
             if sys.excepthook != self._excepthook:

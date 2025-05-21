@@ -49,6 +49,7 @@ options:
     - redis-datasource
     - tempo
     - quickwit-quickwit-datasource
+    - alertmanager
     type: str
   ds_url:
     description:
@@ -98,6 +99,10 @@ options:
       requests.
     type: bool
     default: false
+  tls_servername:
+    description:
+    - A Servername is used to verify the hostname on the returned certificate
+    type: str
   tls_client_cert:
     description:
     - The client TLS certificate.
@@ -227,6 +232,19 @@ options:
     required: false
     description:
     - Use trends or not for zabbix datasource type.
+    type: bool
+    default: false
+  alertmanager_implementation:
+    description:
+    - The implementation to set for the alertmanager datasource type.
+    choices:
+    - mimir
+    - cortex
+    - prometheus
+    type: str
+  alertmanager_handle_grafana_alerts:
+    description:
+    - Whether Grafana should send alerts to this alertmanager.
     type: bool
     default: false
   aws_auth_type:
@@ -537,25 +555,30 @@ ES_VERSION_MAPPING = {
 
 
 def compare_datasources(new, current, compareSecureData=True):
-    if new["uid"] is None:
-        del current["uid"]
-        del new["uid"]
-    del current["typeLogoUrl"]
-    del current["id"]
-    if "version" in current:
-        del current["version"]
-    if "readOnly" in current:
-        del current["readOnly"]
-    if current["basicAuth"] is False:
-        if "basicAuthUser" in current:
-            del current["basicAuthUser"]
-    if "password" in current:
-        del current["password"]
-    if "basicAuthPassword" in current:
-        del current["basicAuthPassword"]
-    if current["type"] == "grafana-postgresql-datasource" and new["type"] == "postgres":
-        del current["type"]
-        del new["type"]
+    if new.get("uid") is None:
+        new.pop("uid", None)
+        current.pop("uid", None)
+
+    for field in [
+        "apiVersion",
+        "basicAuthPassword",
+        "id",
+        "password",
+        "readOnly",
+        "typeLogoUrl",
+        "version",
+    ]:
+        current.pop(field, None)
+
+    if not current.get("basicAuth", True):
+        current.pop("basicAuthUser", None)
+
+    if (
+        current.get("type") == "grafana-postgresql-datasource"
+        and new.get("type") == "postgres"
+    ):
+        new.pop("type", None)
+        current.pop("type", None)
 
     # check if secureJsonData should be compared
     if not compareSecureData:
@@ -620,12 +643,10 @@ def get_datasource_payload(data, org_id=None):
         json_data["tlsAuth"] = True
         if data.get("tls_ca_cert"):
             secure_json_data["tlsCACert"] = data["tls_ca_cert"]
-            secure_json_data["tlsClientCert"] = data["tls_client_cert"]
-            secure_json_data["tlsClientKey"] = data["tls_client_key"]
             json_data["tlsAuthWithCACert"] = True
-        else:
-            secure_json_data["tlsClientCert"] = data["tls_client_cert"]
-            secure_json_data["tlsClientKey"] = data["tls_client_key"]
+        json_data["serverName"] = data["tls_servername"]
+        secure_json_data["tlsClientCert"] = data["tls_client_cert"]
+        secure_json_data["tlsClientKey"] = data["tls_client_key"]
     else:
         json_data["tlsAuth"] = False
         json_data["tlsAuthWithCACert"] = False
@@ -637,6 +658,12 @@ def get_datasource_payload(data, org_id=None):
         json_data["tlsSkipVerify"] = True
 
     # datasource type related parameters
+    if data["ds_type"] == "alertmanager":
+        json_data["implementation"] = data["alertmanager_implementation"]
+        json_data["handleGrafanaManagedAlerts"] = data[
+            "alertmanager_handle_grafana_alerts"
+        ]
+
     if data["ds_type"] == "elasticsearch":
         json_data["maxConcurrentShardRequests"] = data["max_concurrent_shard_requests"]
         json_data["timeField"] = data["time_field"]
@@ -811,6 +838,7 @@ def setup_module_object():
                 "loki",
                 "tempo",
                 "quickwit-quickwit-datasource",
+                "alertmanager",
             ]
         ),
         ds_url=dict(type="str"),
@@ -821,6 +849,7 @@ def setup_module_object():
         basic_auth_user=dict(type="str"),
         basic_auth_password=dict(type="str", no_log=True),
         with_credentials=dict(default=False, type="bool"),
+        tls_servername=dict(type="str"),
         tls_client_cert=dict(type="str", no_log=True),
         tls_client_key=dict(type="str", no_log=True),
         tls_ca_cert=dict(type="str", no_log=True),
@@ -850,6 +879,8 @@ def setup_module_object():
             choices=["disable", "require", "verify-ca", "verify-full"],
         ),
         trends=dict(default=False, type="bool"),
+        alertmanager_implementation=dict(choices=["mimir", "cortex", "prometheus"]),
+        alertmanager_handle_grafana_alerts=dict(default=False, type="bool"),
         aws_auth_type=dict(
             default="keys", choices=["keys", "credentials", "arn", "default"]
         ),

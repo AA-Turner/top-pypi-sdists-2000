@@ -63,6 +63,12 @@ options:
     - Services are only used if no O(network_name) was provided.
     type: bool
     default: True
+  unset_ansible_port:
+    description:
+    - Try to unset the value of C(ansible_port) if no non-default value was found.
+    type: bool
+    default: True
+    version_added: 2.2.0
   create_groups:
     description:
     - Enable the creation of groups from labels on C(VirtualMachines) and C(VirtualMachineInstances).
@@ -135,7 +141,7 @@ from typing import (
 # Set HAS_K8S_MODULE_HELPER and k8s_import exception accordingly to
 # potentially print a warning to the user if the client is missing.
 try:
-    from kubernetes.dynamic.exceptions import DynamicApiError
+    from kubernetes.dynamic.exceptions import DynamicApiError, ResourceNotFoundError
 
     HAS_K8S_MODULE_HELPER = True
     K8S_IMPORT_EXCEPTION = None
@@ -146,10 +152,23 @@ except ImportError as e:
         Dummy class, mainly used for ansible-test sanity.
         """
 
+    class ResourceNotFoundError(Exception):
+        """
+        Dummy class, mainly used for ansible-test sanity.
+        """
+
     HAS_K8S_MODULE_HELPER = False
     K8S_IMPORT_EXCEPTION = e
 
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
+
+# Handle import errors of trust_as_template.
+# It is only available on ansible-core >=2.19.
+try:
+    from ansible.template import trust_as_template
+except ImportError:
+    trust_as_template = None
+
 
 from ansible_collections.kubernetes.core.plugins.module_utils.k8s.client import (
     get_api_client,
@@ -163,6 +182,9 @@ LABEL_KUBEVIRT_IO_DOMAIN = "kubevirt.io/domain"
 TYPE_LOADBALANCER = "LoadBalancer"
 TYPE_NODEPORT = "NodePort"
 ID_MSWINDOWS = "mswindows"
+SERVICE_TARGET_PORT_SSH = 22
+SERVICE_TARGET_PORT_WINRM_HTTP = 5985
+SERVICE_TARGET_PORT_WINRM_HTTPS = 5986
 
 
 class KubeVirtInventoryException(Exception):
@@ -182,6 +204,7 @@ class InventoryOptions:
     network_name: Optional[str] = None
     kube_secondary_dns: Optional[bool] = None
     use_service: Optional[bool] = None
+    unset_ansible_port: Optional[bool] = None
     create_groups: Optional[bool] = None
     base_domain: Optional[str] = None
     append_base_domain: Optional[bool] = None
@@ -219,6 +242,11 @@ class InventoryOptions:
             self.use_service
             if self.use_service is not None
             else config_data.get("use_service", True)
+        )
+        self.unset_ansible_port = (
+            self.unset_ansible_port
+            if self.unset_ansible_port is not None
+            else config_data.get("unset_ansible_port", True)
         )
         self.create_groups = (
             self.create_groups
@@ -307,6 +335,24 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             and obj["metadata"].get("namespace")
             and obj["metadata"].get("uid")
         )
+
+    @staticmethod
+    def _find_service_with_target_port(
+        services: List[Dict], target_port: int
+    ) -> Optional[Dict]:
+        """
+        _find_service_with_target_port returns the first found service with a given
+        target port in the passed in list of services or otherwise None.
+        """
+        for service in services:
+            if (
+                (ports := service.get("spec", {}).get("ports")) is not None
+                and len(ports) == 1
+                and ports[0].get("targetPort", 0) == target_port
+            ):
+                return service
+
+        return None
 
     @staticmethod
     def _get_host_from_service(
@@ -412,13 +458,13 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         results = {}
         if attempt_to_read_cache:
             try:
-                results = self._cache[cache_key]
+                results = self.cache[cache_key]
             except KeyError:
                 cache_needs_update = True
         if not attempt_to_read_cache or cache_needs_update:
             results = self._fetch_objects(get_api_client(**config_data), opts)
         if cache_needs_update:
-            self._cache[cache_key] = results
+            self.cache[cache_key] = results
 
         self._populate_inventory(results, opts)
 
@@ -483,7 +529,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             namespaces[namespace] = {
                 "vms": vms,
                 "vmis": vmis,
-                "services": self._get_ssh_services_for_namespace(client, namespace),
+                "services": self._get_services_for_namespace(client, namespace),
             }
 
         return {
@@ -534,9 +580,18 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         _get_available_namespaces lists all namespaces accessible with the
         configured credentials and returns them.
         """
+
+        namespaces = []
+        try:
+            namespaces = self._get_resources(
+                client, "project.openshift.io/v1", "Project"
+            )
+        except ResourceNotFoundError:
+            namespaces = self._get_resources(client, "v1", "Namespace")
+
         return [
             namespace["metadata"]["name"]
-            for namespace in self._get_resources(client, "v1", "Namespace")
+            for namespace in namespaces
             if "metadata" in namespace and "name" in namespace["metadata"]
         ]
 
@@ -568,11 +623,11 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             label_selector=opts.label_selector,
         )
 
-    def _get_ssh_services_for_namespace(
+    def _get_services_for_namespace(
         self, client: K8SClient, namespace: str
-    ) -> Dict:
+    ) -> Dict[str, List[Dict]]:
         """
-        _get_ssh_services_for_namespace retrieves all services of a namespace exposing port 22/ssh.
+        _get_services_for_namespace retrieves all services of a namespace exposing ssh or winrm.
         The services are mapped to the name of the corresponding domain.
         """
         items = self._get_resources(
@@ -595,17 +650,24 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 continue
 
             # Continue if ports are not defined, there are more than one port mapping
-            # or the target port is not port 22/ssh
+            # or the target port is not port 22 (ssh) or port 5985 or 5986 (winrm).
             if (
                 (ports := spec.get("ports")) is None
                 or len(ports) != 1
-                or ports[0].get("targetPort") != 22
+                or ports[0].get("targetPort")
+                not in [
+                    SERVICE_TARGET_PORT_SSH,
+                    SERVICE_TARGET_PORT_WINRM_HTTP,
+                    SERVICE_TARGET_PORT_WINRM_HTTPS,
+                ]
             ):
                 continue
 
-            # Only add the service to the dict if the domain selector is present
+            # Only add the service to the list if the domain selector is present
             if domain := spec.get("selector", {}).get(LABEL_KUBEVIRT_IO_DOMAIN):
-                services[domain] = service
+                if domain not in services:
+                    services[domain] = []
+                services[domain].append(service)
 
         return services
 
@@ -642,9 +704,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             return
 
         services = {
-            domain: service
-            for domain, service in data["services"].items()
-            if self._obj_is_valid(service)
+            domain: [service for service in services if self._obj_is_valid(service)]
+            for domain, services in data["services"].items()
         }
 
         name = self._sanitize_group_name(opts.name)
@@ -695,7 +756,11 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         self._set_common_vars(hostname, "vm", vm, opts)
 
     def _set_vars_from_vmi(
-        self, hostname: str, vmi: Dict, services: Dict, opts: InventoryOptions
+        self,
+        hostname: str,
+        vmi: Dict,
+        services: Dict[str, List[Dict]],
+        opts: InventoryOptions,
     ) -> None:
         """
         _set_vars_from_vmi sets inventory variables from a VMI prefixed with vmi_ and
@@ -720,6 +785,10 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         if not interface or not interface.get("ipAddress"):
             return
 
+        _services = services.get(
+            vmi["metadata"].get("labels", {}).get(LABEL_KUBEVIRT_IO_DOMAIN), []
+        )
+
         # Set up the connection
         service = None
         if self._is_windows(
@@ -727,10 +796,18 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             vmi["metadata"].get("annotations", {}),
         ):
             self.inventory.set_variable(hostname, "ansible_connection", "winrm")
-        else:
-            service = services.get(
-                vmi["metadata"].get("labels", {}).get(LABEL_KUBEVIRT_IO_DOMAIN)
+            service = self._find_service_with_target_port(
+                _services, SERVICE_TARGET_PORT_WINRM_HTTPS
             )
+            if service is None:
+                service = self._find_service_with_target_port(
+                    _services, SERVICE_TARGET_PORT_WINRM_HTTP
+                )
+        else:
+            service = self._find_service_with_target_port(
+                _services, SERVICE_TARGET_PORT_SSH
+            )
+
         self._set_ansible_host_and_port(
             vmi,
             hostname,
@@ -818,7 +895,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             ansible_host = ip_address
 
         self.inventory.set_variable(hostname, "ansible_host", ansible_host)
-        self.inventory.set_variable(hostname, "ansible_port", ansible_port)
+        if opts.unset_ansible_port or ansible_port is not None:
+            self.inventory.set_variable(hostname, "ansible_port", ansible_port)
 
     def _set_composable_vars(self, hostname: str) -> None:
         """
@@ -827,12 +905,32 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         """
         hostvars = self.inventory.get_host(hostname).get_vars()
         strict = self.get_option("strict")
+
+        def trust_compose_groups(data: Dict) -> Dict:
+            if trust_as_template is not None:
+                return {k: trust_as_template(v) for k, v in data.items()}
+            return data
+
+        def trust_keyed_groups(data: List) -> List:
+            if trust_as_template is not None:
+                return [{**d, "key": trust_as_template(d["key"])} for d in data]
+            return data
+
         self._set_composite_vars(
-            self.get_option("compose"), hostvars, hostname, strict=True
+            trust_compose_groups(self.get_option("compose")),
+            hostvars,
+            hostname,
+            strict=True,
         )
         self._add_host_to_composed_groups(
-            self.get_option("groups"), hostvars, hostname, strict=strict
+            trust_compose_groups(self.get_option("groups")),
+            hostvars,
+            hostname,
+            strict=strict,
         )
         self._add_host_to_keyed_groups(
-            self.get_option("keyed_groups"), hostvars, hostname, strict=strict
+            trust_keyed_groups(self.get_option("keyed_groups")),
+            hostvars,
+            hostname,
+            strict=strict,
         )

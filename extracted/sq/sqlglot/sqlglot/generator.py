@@ -131,6 +131,9 @@ class Generator(metaclass=_Generator):
         exp.CollateColumnConstraint: lambda self, e: f"COLLATE {self.sql(e, 'this')}",
         exp.CommentColumnConstraint: lambda self, e: f"COMMENT {self.sql(e, 'this')}",
         exp.ConnectByRoot: lambda self, e: f"CONNECT_BY_ROOT {self.sql(e, 'this')}",
+        exp.ConvertToCharset: lambda self, e: self.func(
+            "CONVERT", e.this, e.args["dest"], e.args.get("source")
+        ),
         exp.CopyGrantsProperty: lambda *_: "COPY GRANTS",
         exp.CredentialsProperty: lambda self,
         e: f"CREDENTIALS=({self.expressions(e, 'expressions', sep=' ')})",
@@ -403,6 +406,9 @@ class Generator(metaclass=_Generator):
 
     # Whether the function TO_NUMBER is supported
     SUPPORTS_TO_NUMBER = True
+
+    # Whether EXCLUDE in window specification is supported
+    SUPPORTS_WINDOW_EXCLUDE = False
 
     # Whether or not set op modifiers apply to the outer set op or select.
     # SELECT * FROM x UNION SELECT * FROM y LIMIT 1
@@ -2290,7 +2296,8 @@ class Generator(metaclass=_Generator):
         if op_sql != "STRAIGHT_JOIN":
             op_sql = f"{op_sql} JOIN" if op_sql else "JOIN"
 
-        return f"{self.seg(op_sql)} {this_sql}{match_cond}{on_sql}"
+        pivots = self.expressions(expression, key="pivots", sep="", flat=True)
+        return f"{self.seg(op_sql)} {this_sql}{match_cond}{on_sql}{pivots}"
 
     def lambda_sql(self, expression: exp.Lambda, arrow_sep: str = "->") -> str:
         args = self.expressions(expression, flat=True)
@@ -2806,7 +2813,17 @@ class Generator(metaclass=_Generator):
             csv(self.sql(expression, "end"), self.sql(expression, "end_side"), sep=" ")
             or "CURRENT ROW"
         )
-        return f"{kind} BETWEEN {start} AND {end}"
+
+        window_spec = f"{kind} BETWEEN {start} AND {end}"
+
+        exclude = self.sql(expression, "exclude")
+        if exclude:
+            if self.SUPPORTS_WINDOW_EXCLUDE:
+                window_spec += f" EXCLUDE {exclude}"
+            else:
+                self.unsupported("EXCLUDE clause is not supported in the WINDOW clause")
+
+        return window_spec
 
     def withingroup_sql(self, expression: exp.WithinGroup) -> str:
         this = self.sql(expression, "this")
@@ -4925,3 +4942,9 @@ class Generator(metaclass=_Generator):
             return f"PUT {this} {target}{props_sql}"
         else:
             return f"GET {target} {this}{props_sql}"
+
+    def translatecharacters_sql(self, expression: exp.TranslateCharacters):
+        this = self.sql(expression, "this")
+        expr = self.sql(expression, "expression")
+        with_error = " WITH ERROR" if expression.args.get("with_error") else ""
+        return f"TRANSLATE({this} USING {expr}{with_error})"

@@ -24,6 +24,12 @@ attributes:
   check_mode:
     description: Determines if the module should run in check mode.
     support: none
+deprecated:
+  removed_in: '4.0.0'
+  why: The connection type C(gateway) is deprecated.
+  alternative: Not available.
+extends_documentation_fragment:
+- hitachivantara.vspone_block.common.deprecated_note
 options:
   connection_info:
     description: Information required to establish a connection to the storage system.
@@ -70,16 +76,14 @@ data:
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.uaig_utils import (
-    GatewayArguments,
-    GatewayParametersManager,
+from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.gw_module_args import (
+    GatewayArgs,
+    DEPCRECATED_MSG,
 )
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_constants import (
     StateValue,
 )
-from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.reconciler.uaig_password_reconciler import (
-    GatewayPasswordReconciler,
-)
+
 from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common.hv_log import (
     Log,
 )
@@ -91,21 +95,25 @@ from ansible_collections.hitachivantara.vspone_block.plugins.module_utils.common
 class GatewayPasswordManager:
     def __init__(self):
         self.logger = Log()
-        self.argument_spec = GatewayArguments().gateway_password()
+        self.argument_spec = GatewayArgs().gateway_password()
         self.module = AnsibleModule(
             argument_spec=self.argument_spec,
             supports_check_mode=False,
         )
-        c_info = self.module.params.get("connection_info")
-        self.logger.writeInfo(f"{c_info} module_params_connection_info")
-        field = c_info.pop("uai_gateway_address")
-        c_info["address"] = field
-        c_info["connection_type"] = "gateway"
-        self.params_manager = GatewayParametersManager(self.module.params)
-        self.connection_info = self.params_manager.get_connection_info()
-        self.state = self.params_manager.get_state()
-        self.logger.writeInfo(f"State: {self.state}")
-        self.spec = self.params_manager.set_admin_password_spec()
+        try:
+            c_info = self.module.params.get("connection_info")
+            self.logger.writeInfo(f"{c_info} module_params_connection_info")
+            field = c_info.pop("uai_gateway_address")
+            c_info["address"] = field
+            c_info["connection_type"] = "gateway"
+            self.params_manager = self.GatewayParametersManager(self.module.params)
+            self.connection_info = self.params_manager.get_connection_info()
+            self.state = self.params_manager.get_state()
+            self.logger.writeInfo(f"State: {self.state}")
+            self.spec = self.params_manager.set_admin_password_spec()
+        except Exception as e:
+            self.logger.writeException(e)
+            self.module.fail_json(msg=str(DEPCRECATED_MSG))
 
     def apply(self):
         self.logger.writeInfo("=== Start of Admin Password operation ===")
@@ -114,11 +122,11 @@ class GatewayPasswordManager:
         try:
 
             if not self.state:
-                data = GatewayPasswordReconciler(
+                data = self.GatewayPasswordReconciler(
                     self.params_manager.connection_info
                 ).gateway_password(self.spec)
             elif self.state == StateValue.PRESENT:
-                data = GatewayPasswordReconciler(
+                data = self.GatewayPasswordReconciler(
                     self.params_manager.connection_info
                 ).gateway_password(self.spec)
             else:
@@ -129,7 +137,7 @@ class GatewayPasswordManager:
         except Exception as e:
             self.logger.writeError(f"{e}")
             self.logger.writeInfo("=== End of Admin Password operation ===")
-            self.module.fail_json(msg=str(e))
+            self.module.fail_json(msg=str(DEPCRECATED_MSG))
 
         response = {"changed": self.connection_info.changed, "data": data}
         if registration_message:

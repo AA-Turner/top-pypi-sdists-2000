@@ -7767,6 +7767,7 @@ class CfnDomainName(
             ),
             ownership_verification_certificate_arn="ownershipVerificationCertificateArn",
             regional_certificate_arn="regionalCertificateArn",
+            routing_mode="routingMode",
             security_policy="securityPolicy",
             tags=[CfnTag(
                 key="key",
@@ -7786,6 +7787,7 @@ class CfnDomainName(
         mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainName.MutualTlsAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ownership_verification_certificate_arn: typing.Optional[builtins.str] = None,
         regional_certificate_arn: typing.Optional[builtins.str] = None,
+        routing_mode: typing.Optional[builtins.str] = None,
         security_policy: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -7798,6 +7800,7 @@ class CfnDomainName(
         :param mutual_tls_authentication: The mutual TLS authentication configuration for a custom domain name. If specified, API Gateway performs two-way authentication between the client and the server. Clients must present a trusted certificate to access your API.
         :param ownership_verification_certificate_arn: The ARN of the public certificate issued by ACM to validate ownership of your custom domain. Only required when configuring mutual TLS and using an ACM imported or private CA certificate ARN as the RegionalCertificateArn.
         :param regional_certificate_arn: The reference to an AWS -managed certificate that will be used for validating the regional domain name. AWS Certificate Manager is the only supported source.
+        :param routing_mode: Default: - "BASE_PATH_MAPPING_ONLY"
         :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName. The valid values are ``TLS_1_0`` and ``TLS_1_2`` .
         :param tags: The collection of tags. Each tag element is associated with a given resource.
         '''
@@ -7812,6 +7815,7 @@ class CfnDomainName(
             mutual_tls_authentication=mutual_tls_authentication,
             ownership_verification_certificate_arn=ownership_verification_certificate_arn,
             regional_certificate_arn=regional_certificate_arn,
+            routing_mode=routing_mode,
             security_policy=security_policy,
             tags=tags,
         )
@@ -7875,7 +7879,10 @@ class CfnDomainName(
     @builtins.property
     @jsii.member(jsii_name="attrDomainNameArn")
     def attr_domain_name_arn(self) -> builtins.str:
-        '''
+        '''The ARN of the domain name.
+
+        Supported only for private custom domain names.
+
         :cloudformationAttribute: DomainNameArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrDomainNameArn"))
@@ -8001,6 +8008,18 @@ class CfnDomainName(
             type_hints = typing.get_type_hints(_typecheckingstub__2fa342814b3288d616098cb51248e53b5ed60cc5a1e78e11251fc88cdc16fb4f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "regionalCertificateArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="routingMode")
+    def routing_mode(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "routingMode"))
+
+    @routing_mode.setter
+    def routing_mode(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dd7aa5f6176c73c0592dc8b18cb02baf6d8eb11e8fb20244d07a64f574cf3e93)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "routingMode", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="securityPolicy")
@@ -8483,6 +8502,7 @@ class CfnDomainNameAccessAssociationProps:
         "mutual_tls_authentication": "mutualTlsAuthentication",
         "ownership_verification_certificate_arn": "ownershipVerificationCertificateArn",
         "regional_certificate_arn": "regionalCertificateArn",
+        "routing_mode": "routingMode",
         "security_policy": "securityPolicy",
         "tags": "tags",
     },
@@ -8497,6 +8517,7 @@ class CfnDomainNameProps:
         mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.MutualTlsAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         ownership_verification_certificate_arn: typing.Optional[builtins.str] = None,
         regional_certificate_arn: typing.Optional[builtins.str] = None,
+        routing_mode: typing.Optional[builtins.str] = None,
         security_policy: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -8508,6 +8529,7 @@ class CfnDomainNameProps:
         :param mutual_tls_authentication: The mutual TLS authentication configuration for a custom domain name. If specified, API Gateway performs two-way authentication between the client and the server. Clients must present a trusted certificate to access your API.
         :param ownership_verification_certificate_arn: The ARN of the public certificate issued by ACM to validate ownership of your custom domain. Only required when configuring mutual TLS and using an ACM imported or private CA certificate ARN as the RegionalCertificateArn.
         :param regional_certificate_arn: The reference to an AWS -managed certificate that will be used for validating the regional domain name. AWS Certificate Manager is the only supported source.
+        :param routing_mode: Default: - "BASE_PATH_MAPPING_ONLY"
         :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName. The valid values are ``TLS_1_0`` and ``TLS_1_2`` .
         :param tags: The collection of tags. Each tag element is associated with a given resource.
 
@@ -8533,6 +8555,7 @@ class CfnDomainNameProps:
                 ),
                 ownership_verification_certificate_arn="ownershipVerificationCertificateArn",
                 regional_certificate_arn="regionalCertificateArn",
+                routing_mode="routingMode",
                 security_policy="securityPolicy",
                 tags=[CfnTag(
                     key="key",
@@ -8548,6 +8571,7 @@ class CfnDomainNameProps:
             check_type(argname="argument mutual_tls_authentication", value=mutual_tls_authentication, expected_type=type_hints["mutual_tls_authentication"])
             check_type(argname="argument ownership_verification_certificate_arn", value=ownership_verification_certificate_arn, expected_type=type_hints["ownership_verification_certificate_arn"])
             check_type(argname="argument regional_certificate_arn", value=regional_certificate_arn, expected_type=type_hints["regional_certificate_arn"])
+            check_type(argname="argument routing_mode", value=routing_mode, expected_type=type_hints["routing_mode"])
             check_type(argname="argument security_policy", value=security_policy, expected_type=type_hints["security_policy"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -8563,6 +8587,8 @@ class CfnDomainNameProps:
             self._values["ownership_verification_certificate_arn"] = ownership_verification_certificate_arn
         if regional_certificate_arn is not None:
             self._values["regional_certificate_arn"] = regional_certificate_arn
+        if routing_mode is not None:
+            self._values["routing_mode"] = routing_mode
         if security_policy is not None:
             self._values["security_policy"] = security_policy
         if tags is not None:
@@ -8635,6 +8661,16 @@ class CfnDomainNameProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def routing_mode(self) -> typing.Optional[builtins.str]:
+        '''
+        :default: - "BASE_PATH_MAPPING_ONLY"
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-routingmode
+        '''
+        result = self._values.get("routing_mode")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def security_policy(self) -> typing.Optional[builtins.str]:
         '''The Transport Layer Security (TLS) version + cipher suite for this DomainName.
 
@@ -8698,6 +8734,7 @@ class CfnDomainNameV2(
                 types=["types"]
             ),
             policy=policy,
+            routing_mode="routingMode",
             security_policy="securityPolicy",
             tags=[CfnTag(
                 key="key",
@@ -8715,6 +8752,7 @@ class CfnDomainNameV2(
         domain_name: typing.Optional[builtins.str] = None,
         endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainNameV2.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         policy: typing.Any = None,
+        routing_mode: typing.Optional[builtins.str] = None,
         security_policy: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -8725,6 +8763,7 @@ class CfnDomainNameV2(
         :param domain_name: Represents a custom domain name as a user-friendly host name of an API (RestApi).
         :param endpoint_configuration: The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.
         :param policy: A stringified JSON policy document that applies to the ``execute-api`` service for this DomainName regardless of the caller and Method configuration. You can use ``Fn::ToJsonString`` to enter your ``policy`` . For more information, see `Fn::ToJsonString <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ToJsonString.html>`_ .
+        :param routing_mode: The valid routing modes are [BASE_PATH_MAPPING_ONLY], [ROUTING_RULE_THEN_BASE_PATH_MAPPING] and [ROUTING_RULE_ONLY]. All other inputs are invalid. Default: - "BASE_PATH_MAPPING_ONLY"
         :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName. Only ``TLS_1_2`` is supported.
         :param tags: The collection of tags. Each tag element is associated with a given resource.
         '''
@@ -8737,6 +8776,7 @@ class CfnDomainNameV2(
             domain_name=domain_name,
             endpoint_configuration=endpoint_configuration,
             policy=policy,
+            routing_mode=routing_mode,
             security_policy=security_policy,
             tags=tags,
         )
@@ -8860,6 +8900,19 @@ class CfnDomainNameV2(
         jsii.set(self, "policy", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="routingMode")
+    def routing_mode(self) -> typing.Optional[builtins.str]:
+        '''The valid routing modes are [BASE_PATH_MAPPING_ONLY], [ROUTING_RULE_THEN_BASE_PATH_MAPPING] and [ROUTING_RULE_ONLY].'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "routingMode"))
+
+    @routing_mode.setter
+    def routing_mode(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3941c41ed4b2ba9b551f85789cc8fe17846ac57ce1372a7894034cd0c04cc4a9)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "routingMode", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="securityPolicy")
     def security_policy(self) -> typing.Optional[builtins.str]:
         '''The Transport Layer Security (TLS) version + cipher suite for this DomainName.'''
@@ -8968,6 +9021,7 @@ class CfnDomainNameV2(
         "domain_name": "domainName",
         "endpoint_configuration": "endpointConfiguration",
         "policy": "policy",
+        "routing_mode": "routingMode",
         "security_policy": "securityPolicy",
         "tags": "tags",
     },
@@ -8980,6 +9034,7 @@ class CfnDomainNameV2Props:
         domain_name: typing.Optional[builtins.str] = None,
         endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainNameV2.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         policy: typing.Any = None,
+        routing_mode: typing.Optional[builtins.str] = None,
         security_policy: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -8989,6 +9044,7 @@ class CfnDomainNameV2Props:
         :param domain_name: Represents a custom domain name as a user-friendly host name of an API (RestApi).
         :param endpoint_configuration: The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.
         :param policy: A stringified JSON policy document that applies to the ``execute-api`` service for this DomainName regardless of the caller and Method configuration. You can use ``Fn::ToJsonString`` to enter your ``policy`` . For more information, see `Fn::ToJsonString <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ToJsonString.html>`_ .
+        :param routing_mode: The valid routing modes are [BASE_PATH_MAPPING_ONLY], [ROUTING_RULE_THEN_BASE_PATH_MAPPING] and [ROUTING_RULE_ONLY]. All other inputs are invalid. Default: - "BASE_PATH_MAPPING_ONLY"
         :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName. Only ``TLS_1_2`` is supported.
         :param tags: The collection of tags. Each tag element is associated with a given resource.
 
@@ -9011,6 +9067,7 @@ class CfnDomainNameV2Props:
                     types=["types"]
                 ),
                 policy=policy,
+                routing_mode="routingMode",
                 security_policy="securityPolicy",
                 tags=[CfnTag(
                     key="key",
@@ -9024,6 +9081,7 @@ class CfnDomainNameV2Props:
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
             check_type(argname="argument endpoint_configuration", value=endpoint_configuration, expected_type=type_hints["endpoint_configuration"])
             check_type(argname="argument policy", value=policy, expected_type=type_hints["policy"])
+            check_type(argname="argument routing_mode", value=routing_mode, expected_type=type_hints["routing_mode"])
             check_type(argname="argument security_policy", value=security_policy, expected_type=type_hints["security_policy"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -9035,6 +9093,8 @@ class CfnDomainNameV2Props:
             self._values["endpoint_configuration"] = endpoint_configuration
         if policy is not None:
             self._values["policy"] = policy
+        if routing_mode is not None:
+            self._values["routing_mode"] = routing_mode
         if security_policy is not None:
             self._values["security_policy"] = security_policy
         if tags is not None:
@@ -9081,6 +9141,19 @@ class CfnDomainNameV2Props:
         '''
         result = self._values.get("policy")
         return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def routing_mode(self) -> typing.Optional[builtins.str]:
+        '''The valid routing modes are [BASE_PATH_MAPPING_ONLY], [ROUTING_RULE_THEN_BASE_PATH_MAPPING] and [ROUTING_RULE_ONLY].
+
+        All other inputs are invalid.
+
+        :default: - "BASE_PATH_MAPPING_ONLY"
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainnamev2.html#cfn-apigateway-domainnamev2-routingmode
+        '''
+        result = self._values.get("routing_mode")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def security_policy(self) -> typing.Optional[builtins.str]:
@@ -34353,6 +34426,7 @@ def _typecheckingstub__133ab79e698bd61c150ef7c699a84e864403caafbb03bd0bc5874cee6
     mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.MutualTlsAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ownership_verification_certificate_arn: typing.Optional[builtins.str] = None,
     regional_certificate_arn: typing.Optional[builtins.str] = None,
+    routing_mode: typing.Optional[builtins.str] = None,
     security_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -34402,6 +34476,12 @@ def _typecheckingstub__c30f641a8ac50e928250c6aa2cebbbef31cde48d9dfbb531dacfcaff0
     pass
 
 def _typecheckingstub__2fa342814b3288d616098cb51248e53b5ed60cc5a1e78e11251fc88cdc16fb4f(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dd7aa5f6176c73c0592dc8b18cb02baf6d8eb11e8fb20244d07a64f574cf3e93(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -34501,6 +34581,7 @@ def _typecheckingstub__703d29eb1e26e9742eff449d68ee5c6089daeb58e8544900d248c3a37
     mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.MutualTlsAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ownership_verification_certificate_arn: typing.Optional[builtins.str] = None,
     regional_certificate_arn: typing.Optional[builtins.str] = None,
+    routing_mode: typing.Optional[builtins.str] = None,
     security_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -34515,6 +34596,7 @@ def _typecheckingstub__a4f501d10d57d39a48913872efdcb7d389a076fed9b5aabb21034b8e6
     domain_name: typing.Optional[builtins.str] = None,
     endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainNameV2.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     policy: typing.Any = None,
+    routing_mode: typing.Optional[builtins.str] = None,
     security_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -34557,6 +34639,12 @@ def _typecheckingstub__a0c6989179a94e32b700994895064456ee57af9eb39330638ade9b780
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3941c41ed4b2ba9b551f85789cc8fe17846ac57ce1372a7894034cd0c04cc4a9(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a85cede5bfb66595d91f3753ac1832695db8f9eb734e73ecbc1600f19d466199(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -34583,6 +34671,7 @@ def _typecheckingstub__dfb97b3f8aa373f21ebe15318ceaaf08a4d4b4b31e9ba1ed8fb04ef59
     domain_name: typing.Optional[builtins.str] = None,
     endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainNameV2.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     policy: typing.Any = None,
+    routing_mode: typing.Optional[builtins.str] = None,
     security_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

@@ -4162,6 +4162,7 @@ class CfnDomainName(
                 truststore_uri="truststoreUri",
                 truststore_version="truststoreVersion"
             ),
+            routing_mode="routingMode",
             tags={
                 "tags_key": "tags"
             }
@@ -4176,6 +4177,7 @@ class CfnDomainName(
         domain_name: builtins.str,
         domain_name_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainName.DomainNameConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainName.MutualTlsAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        routing_mode: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
@@ -4184,6 +4186,7 @@ class CfnDomainName(
         :param domain_name: The custom domain name for your API in Amazon API Gateway. Uppercase letters and the underscore ( ``_`` ) character are not supported.
         :param domain_name_configurations: The domain name configurations.
         :param mutual_tls_authentication: The mutual TLS authentication configuration for a custom domain name.
+        :param routing_mode: Default: - "API_MAPPING_ONLY"
         :param tags: The collection of tags associated with a domain name.
         '''
         if __debug__:
@@ -4194,6 +4197,7 @@ class CfnDomainName(
             domain_name=domain_name,
             domain_name_configurations=domain_name_configurations,
             mutual_tls_authentication=mutual_tls_authentication,
+            routing_mode=routing_mode,
             tags=tags,
         )
 
@@ -4317,6 +4321,18 @@ class CfnDomainName(
             type_hints = typing.get_type_hints(_typecheckingstub__7db79836bb2717dd9f77cf2a7e1dbf16c2828d8d2066adf6a1fd6f14bd19d816)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "mutualTlsAuthentication", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="routingMode")
+    def routing_mode(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "routingMode"))
+
+    @routing_mode.setter
+    def routing_mode(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__21d0a77ddf227f9efb540f8cbef0cbec7c54480fe391d247664201c6a06372bc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "routingMode", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
@@ -4570,6 +4586,7 @@ class CfnDomainName(
         "domain_name": "domainName",
         "domain_name_configurations": "domainNameConfigurations",
         "mutual_tls_authentication": "mutualTlsAuthentication",
+        "routing_mode": "routingMode",
         "tags": "tags",
     },
 )
@@ -4580,6 +4597,7 @@ class CfnDomainNameProps:
         domain_name: builtins.str,
         domain_name_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.DomainNameConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.MutualTlsAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        routing_mode: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDomainName``.
@@ -4587,6 +4605,7 @@ class CfnDomainNameProps:
         :param domain_name: The custom domain name for your API in Amazon API Gateway. Uppercase letters and the underscore ( ``_`` ) character are not supported.
         :param domain_name_configurations: The domain name configurations.
         :param mutual_tls_authentication: The mutual TLS authentication configuration for a custom domain name.
+        :param routing_mode: Default: - "API_MAPPING_ONLY"
         :param tags: The collection of tags associated with a domain name.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-domainname.html
@@ -4614,6 +4633,7 @@ class CfnDomainNameProps:
                     truststore_uri="truststoreUri",
                     truststore_version="truststoreVersion"
                 ),
+                routing_mode="routingMode",
                 tags={
                     "tags_key": "tags"
                 }
@@ -4624,6 +4644,7 @@ class CfnDomainNameProps:
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
             check_type(argname="argument domain_name_configurations", value=domain_name_configurations, expected_type=type_hints["domain_name_configurations"])
             check_type(argname="argument mutual_tls_authentication", value=mutual_tls_authentication, expected_type=type_hints["mutual_tls_authentication"])
+            check_type(argname="argument routing_mode", value=routing_mode, expected_type=type_hints["routing_mode"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "domain_name": domain_name,
@@ -4632,6 +4653,8 @@ class CfnDomainNameProps:
             self._values["domain_name_configurations"] = domain_name_configurations
         if mutual_tls_authentication is not None:
             self._values["mutual_tls_authentication"] = mutual_tls_authentication
+        if routing_mode is not None:
+            self._values["routing_mode"] = routing_mode
         if tags is not None:
             self._values["tags"] = tags
 
@@ -4668,6 +4691,16 @@ class CfnDomainNameProps:
         '''
         result = self._values.get("mutual_tls_authentication")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainName.MutualTlsAuthenticationProperty]], result)
+
+    @builtins.property
+    def routing_mode(self) -> typing.Optional[builtins.str]:
+        '''
+        :default: - "API_MAPPING_ONLY"
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-domainname.html#cfn-apigatewayv2-domainname-routingmode
+        '''
+        result = self._values.get("routing_mode")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -7472,6 +7505,725 @@ class CfnRouteResponseProps:
 
     def __repr__(self) -> str:
         return "CfnRouteResponseProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556)
+class CfnRoutingRule(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_apigatewayv2.CfnRoutingRule",
+):
+    '''Schema for AWS::ApiGatewayV2::RoutingRule.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-routingrule.html
+    :cloudformationResource: AWS::ApiGatewayV2::RoutingRule
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_apigatewayv2 as apigatewayv2
+        
+        cfn_routing_rule = apigatewayv2.CfnRoutingRule(self, "MyCfnRoutingRule",
+            actions=[apigatewayv2.CfnRoutingRule.ActionProperty(
+                invoke_api=apigatewayv2.CfnRoutingRule.ActionInvokeApiProperty(
+                    api_id="apiId",
+                    stage="stage",
+        
+                    # the properties below are optional
+                    strip_base_path=False
+                )
+            )],
+            conditions=[apigatewayv2.CfnRoutingRule.ConditionProperty(
+                match_base_paths=apigatewayv2.CfnRoutingRule.MatchBasePathsProperty(
+                    any_of=["anyOf"]
+                ),
+                match_headers=apigatewayv2.CfnRoutingRule.MatchHeadersProperty(
+                    any_of=[apigatewayv2.CfnRoutingRule.MatchHeaderValueProperty(
+                        header="header",
+                        value_glob="valueGlob"
+                    )]
+                )
+            )],
+            domain_name_arn="domainNameArn",
+            priority=123
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingRule.ActionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingRule.ConditionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        domain_name_arn: builtins.str,
+        priority: jsii.Number,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param actions: 
+        :param conditions: 
+        :param domain_name_arn: The amazon resource name (ARN) of the domain name resource.
+        :param priority: 
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9e261e580ed01a26eb5f3398b18b1c8e713162e6c87041c85e7920fdbe505572)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnRoutingRuleProps(
+            actions=actions,
+            conditions=conditions,
+            domain_name_arn=domain_name_arn,
+            priority=priority,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4b259143f5908bb57fbb7e02132dcc974b63d52f1bc1ff10dfc1b3d5d2211196)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__77a41344704fe501d78ae97926a9a7e50d861a5eccfb96001b867e8f676f4793)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrRoutingRuleArn")
+    def attr_routing_rule_arn(self) -> builtins.str:
+        '''Amazon Resource Name (ARN) of the resource.
+
+        :cloudformationAttribute: RoutingRuleArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrRoutingRuleArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrRoutingRuleId")
+    def attr_routing_rule_id(self) -> builtins.str:
+        '''RoutingRule Id generated by service.
+
+        :cloudformationAttribute: RoutingRuleId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrRoutingRuleId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="actions")
+    def actions(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.ActionProperty"]]]:
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.ActionProperty"]]], jsii.get(self, "actions"))
+
+    @actions.setter
+    def actions(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.ActionProperty"]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e28b0c99684d7b39e5562468da1df5107b5540636dcdef991ed1510a8e79322d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "actions", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="conditions")
+    def conditions(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.ConditionProperty"]]]:
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.ConditionProperty"]]], jsii.get(self, "conditions"))
+
+    @conditions.setter
+    def conditions(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.ConditionProperty"]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c005d3a99e1e87e0ec447a11cfe8d6c19827612bd33fc77a0c2a3ba1bf7307ea)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "conditions", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="domainNameArn")
+    def domain_name_arn(self) -> builtins.str:
+        '''The amazon resource name (ARN) of the domain name resource.'''
+        return typing.cast(builtins.str, jsii.get(self, "domainNameArn"))
+
+    @domain_name_arn.setter
+    def domain_name_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__df992a1622c11b7c58cc17dd8f491fcaf67155654e78449cd545ee6d512c7671)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "domainNameArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="priority")
+    def priority(self) -> jsii.Number:
+        return typing.cast(jsii.Number, jsii.get(self, "priority"))
+
+    @priority.setter
+    def priority(self, value: jsii.Number) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f80f8919aa1931fd1355cb98d3ba3c657c893861ccf69754a8b746f7907dd0f5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "priority", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_apigatewayv2.CfnRoutingRule.ActionInvokeApiProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "api_id": "apiId",
+            "stage": "stage",
+            "strip_base_path": "stripBasePath",
+        },
+    )
+    class ActionInvokeApiProperty:
+        def __init__(
+            self,
+            *,
+            api_id: builtins.str,
+            stage: builtins.str,
+            strip_base_path: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''
+            :param api_id: 
+            :param stage: 
+            :param strip_base_path: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-actioninvokeapi.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_apigatewayv2 as apigatewayv2
+                
+                action_invoke_api_property = apigatewayv2.CfnRoutingRule.ActionInvokeApiProperty(
+                    api_id="apiId",
+                    stage="stage",
+                
+                    # the properties below are optional
+                    strip_base_path=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c0c7c15f3bdc57c3fd672a2692d4f0b1b0807a1a07345c24bff2e78b7cbaff01)
+                check_type(argname="argument api_id", value=api_id, expected_type=type_hints["api_id"])
+                check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
+                check_type(argname="argument strip_base_path", value=strip_base_path, expected_type=type_hints["strip_base_path"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "api_id": api_id,
+                "stage": stage,
+            }
+            if strip_base_path is not None:
+                self._values["strip_base_path"] = strip_base_path
+
+        @builtins.property
+        def api_id(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-actioninvokeapi.html#cfn-apigatewayv2-routingrule-actioninvokeapi-apiid
+            '''
+            result = self._values.get("api_id")
+            assert result is not None, "Required property 'api_id' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def stage(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-actioninvokeapi.html#cfn-apigatewayv2-routingrule-actioninvokeapi-stage
+            '''
+            result = self._values.get("stage")
+            assert result is not None, "Required property 'stage' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def strip_base_path(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-actioninvokeapi.html#cfn-apigatewayv2-routingrule-actioninvokeapi-stripbasepath
+            '''
+            result = self._values.get("strip_base_path")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ActionInvokeApiProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_apigatewayv2.CfnRoutingRule.ActionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"invoke_api": "invokeApi"},
+    )
+    class ActionProperty:
+        def __init__(
+            self,
+            *,
+            invoke_api: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingRule.ActionInvokeApiProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param invoke_api: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-action.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_apigatewayv2 as apigatewayv2
+                
+                action_property = apigatewayv2.CfnRoutingRule.ActionProperty(
+                    invoke_api=apigatewayv2.CfnRoutingRule.ActionInvokeApiProperty(
+                        api_id="apiId",
+                        stage="stage",
+                
+                        # the properties below are optional
+                        strip_base_path=False
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__288fc4eee0785ab33192a2ebceb8cafb3406672d09c2be411d2e42a7944100fb)
+                check_type(argname="argument invoke_api", value=invoke_api, expected_type=type_hints["invoke_api"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "invoke_api": invoke_api,
+            }
+
+        @builtins.property
+        def invoke_api(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.ActionInvokeApiProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-action.html#cfn-apigatewayv2-routingrule-action-invokeapi
+            '''
+            result = self._values.get("invoke_api")
+            assert result is not None, "Required property 'invoke_api' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.ActionInvokeApiProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ActionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_apigatewayv2.CfnRoutingRule.ConditionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "match_base_paths": "matchBasePaths",
+            "match_headers": "matchHeaders",
+        },
+    )
+    class ConditionProperty:
+        def __init__(
+            self,
+            *,
+            match_base_paths: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingRule.MatchBasePathsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            match_headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingRule.MatchHeadersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param match_base_paths: 
+            :param match_headers: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-condition.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_apigatewayv2 as apigatewayv2
+                
+                condition_property = apigatewayv2.CfnRoutingRule.ConditionProperty(
+                    match_base_paths=apigatewayv2.CfnRoutingRule.MatchBasePathsProperty(
+                        any_of=["anyOf"]
+                    ),
+                    match_headers=apigatewayv2.CfnRoutingRule.MatchHeadersProperty(
+                        any_of=[apigatewayv2.CfnRoutingRule.MatchHeaderValueProperty(
+                            header="header",
+                            value_glob="valueGlob"
+                        )]
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__94fb944999d03dc7761e925b4cbec320f3d36797eae6cea4ae74471fb82922e0)
+                check_type(argname="argument match_base_paths", value=match_base_paths, expected_type=type_hints["match_base_paths"])
+                check_type(argname="argument match_headers", value=match_headers, expected_type=type_hints["match_headers"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if match_base_paths is not None:
+                self._values["match_base_paths"] = match_base_paths
+            if match_headers is not None:
+                self._values["match_headers"] = match_headers
+
+        @builtins.property
+        def match_base_paths(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.MatchBasePathsProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-condition.html#cfn-apigatewayv2-routingrule-condition-matchbasepaths
+            '''
+            result = self._values.get("match_base_paths")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.MatchBasePathsProperty"]], result)
+
+        @builtins.property
+        def match_headers(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.MatchHeadersProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-condition.html#cfn-apigatewayv2-routingrule-condition-matchheaders
+            '''
+            result = self._values.get("match_headers")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.MatchHeadersProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ConditionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_apigatewayv2.CfnRoutingRule.MatchBasePathsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"any_of": "anyOf"},
+    )
+    class MatchBasePathsProperty:
+        def __init__(self, *, any_of: typing.Sequence[builtins.str]) -> None:
+            '''
+            :param any_of: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-matchbasepaths.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_apigatewayv2 as apigatewayv2
+                
+                match_base_paths_property = apigatewayv2.CfnRoutingRule.MatchBasePathsProperty(
+                    any_of=["anyOf"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c6bc39dc8caad1c628ec1061fa3b8fb8c43af70cbc460ce8edeb878b5d1d55a4)
+                check_type(argname="argument any_of", value=any_of, expected_type=type_hints["any_of"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "any_of": any_of,
+            }
+
+        @builtins.property
+        def any_of(self) -> typing.List[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-matchbasepaths.html#cfn-apigatewayv2-routingrule-matchbasepaths-anyof
+            '''
+            result = self._values.get("any_of")
+            assert result is not None, "Required property 'any_of' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MatchBasePathsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_apigatewayv2.CfnRoutingRule.MatchHeaderValueProperty",
+        jsii_struct_bases=[],
+        name_mapping={"header": "header", "value_glob": "valueGlob"},
+    )
+    class MatchHeaderValueProperty:
+        def __init__(self, *, header: builtins.str, value_glob: builtins.str) -> None:
+            '''
+            :param header: 
+            :param value_glob: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-matchheadervalue.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_apigatewayv2 as apigatewayv2
+                
+                match_header_value_property = apigatewayv2.CfnRoutingRule.MatchHeaderValueProperty(
+                    header="header",
+                    value_glob="valueGlob"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5e4e12222e78fcf8a4a4316e29343d73081a44a7f3972b2eb1c8278686898c05)
+                check_type(argname="argument header", value=header, expected_type=type_hints["header"])
+                check_type(argname="argument value_glob", value=value_glob, expected_type=type_hints["value_glob"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "header": header,
+                "value_glob": value_glob,
+            }
+
+        @builtins.property
+        def header(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-matchheadervalue.html#cfn-apigatewayv2-routingrule-matchheadervalue-header
+            '''
+            result = self._values.get("header")
+            assert result is not None, "Required property 'header' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value_glob(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-matchheadervalue.html#cfn-apigatewayv2-routingrule-matchheadervalue-valueglob
+            '''
+            result = self._values.get("value_glob")
+            assert result is not None, "Required property 'value_glob' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MatchHeaderValueProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_apigatewayv2.CfnRoutingRule.MatchHeadersProperty",
+        jsii_struct_bases=[],
+        name_mapping={"any_of": "anyOf"},
+    )
+    class MatchHeadersProperty:
+        def __init__(
+            self,
+            *,
+            any_of: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingRule.MatchHeaderValueProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        ) -> None:
+            '''
+            :param any_of: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-matchheaders.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_apigatewayv2 as apigatewayv2
+                
+                match_headers_property = apigatewayv2.CfnRoutingRule.MatchHeadersProperty(
+                    any_of=[apigatewayv2.CfnRoutingRule.MatchHeaderValueProperty(
+                        header="header",
+                        value_glob="valueGlob"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__eaea58b339e54b65cebd05e915edb193ffb4c68e784891ef2750cd1ad7603f81)
+                check_type(argname="argument any_of", value=any_of, expected_type=type_hints["any_of"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "any_of": any_of,
+            }
+
+        @builtins.property
+        def any_of(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.MatchHeaderValueProperty"]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-routingrule-matchheaders.html#cfn-apigatewayv2-routingrule-matchheaders-anyof
+            '''
+            result = self._values.get("any_of")
+            assert result is not None, "Required property 'any_of' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingRule.MatchHeaderValueProperty"]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MatchHeadersProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_apigatewayv2.CfnRoutingRuleProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "actions": "actions",
+        "conditions": "conditions",
+        "domain_name_arn": "domainNameArn",
+        "priority": "priority",
+    },
+)
+class CfnRoutingRuleProps:
+    def __init__(
+        self,
+        *,
+        actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingRule.ActionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingRule.ConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        domain_name_arn: builtins.str,
+        priority: jsii.Number,
+    ) -> None:
+        '''Properties for defining a ``CfnRoutingRule``.
+
+        :param actions: 
+        :param conditions: 
+        :param domain_name_arn: The amazon resource name (ARN) of the domain name resource.
+        :param priority: 
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-routingrule.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_apigatewayv2 as apigatewayv2
+            
+            cfn_routing_rule_props = apigatewayv2.CfnRoutingRuleProps(
+                actions=[apigatewayv2.CfnRoutingRule.ActionProperty(
+                    invoke_api=apigatewayv2.CfnRoutingRule.ActionInvokeApiProperty(
+                        api_id="apiId",
+                        stage="stage",
+            
+                        # the properties below are optional
+                        strip_base_path=False
+                    )
+                )],
+                conditions=[apigatewayv2.CfnRoutingRule.ConditionProperty(
+                    match_base_paths=apigatewayv2.CfnRoutingRule.MatchBasePathsProperty(
+                        any_of=["anyOf"]
+                    ),
+                    match_headers=apigatewayv2.CfnRoutingRule.MatchHeadersProperty(
+                        any_of=[apigatewayv2.CfnRoutingRule.MatchHeaderValueProperty(
+                            header="header",
+                            value_glob="valueGlob"
+                        )]
+                    )
+                )],
+                domain_name_arn="domainNameArn",
+                priority=123
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb8be2d22e1b6b6c53d0a575fd177688bab8ea730709eb13ee27de706f3fa0c4)
+            check_type(argname="argument actions", value=actions, expected_type=type_hints["actions"])
+            check_type(argname="argument conditions", value=conditions, expected_type=type_hints["conditions"])
+            check_type(argname="argument domain_name_arn", value=domain_name_arn, expected_type=type_hints["domain_name_arn"])
+            check_type(argname="argument priority", value=priority, expected_type=type_hints["priority"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "actions": actions,
+            "conditions": conditions,
+            "domain_name_arn": domain_name_arn,
+            "priority": priority,
+        }
+
+    @builtins.property
+    def actions(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRoutingRule.ActionProperty]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-routingrule.html#cfn-apigatewayv2-routingrule-actions
+        '''
+        result = self._values.get("actions")
+        assert result is not None, "Required property 'actions' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRoutingRule.ActionProperty]]], result)
+
+    @builtins.property
+    def conditions(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRoutingRule.ConditionProperty]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-routingrule.html#cfn-apigatewayv2-routingrule-conditions
+        '''
+        result = self._values.get("conditions")
+        assert result is not None, "Required property 'conditions' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRoutingRule.ConditionProperty]]], result)
+
+    @builtins.property
+    def domain_name_arn(self) -> builtins.str:
+        '''The amazon resource name (ARN) of the domain name resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-routingrule.html#cfn-apigatewayv2-routingrule-domainnamearn
+        '''
+        result = self._values.get("domain_name_arn")
+        assert result is not None, "Required property 'domain_name_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def priority(self) -> jsii.Number:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-routingrule.html#cfn-apigatewayv2-routingrule-priority
+        '''
+        result = self._values.get("priority")
+        assert result is not None, "Required property 'priority' is missing"
+        return typing.cast(jsii.Number, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnRoutingRuleProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -19290,6 +20042,8 @@ __all__ = [
     "CfnRouteProps",
     "CfnRouteResponse",
     "CfnRouteResponseProps",
+    "CfnRoutingRule",
+    "CfnRoutingRuleProps",
     "CfnStage",
     "CfnStageProps",
     "CfnVpcLink",
@@ -19965,6 +20719,7 @@ def _typecheckingstub__a1dd1a2be8baf8f5fddc282520a295c206cc1466b04d57a3227f938bd
     domain_name: builtins.str,
     domain_name_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.DomainNameConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.MutualTlsAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    routing_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -20000,6 +20755,12 @@ def _typecheckingstub__7db79836bb2717dd9f77cf2a7e1dbf16c2828d8d2066adf6a1fd6f14b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__21d0a77ddf227f9efb540f8cbef0cbec7c54480fe391d247664201c6a06372bc(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__91e15ff48f085b835a961d76641a12ee2d099786f346c15be08cd6e10f58f927(
     value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
 ) -> None:
@@ -20031,6 +20792,7 @@ def _typecheckingstub__1629526da8e64502c98094213f6afc52d78388551bbefd7f02cebe445
     domain_name: builtins.str,
     domain_name_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.DomainNameConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.MutualTlsAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    routing_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -20589,6 +21351,110 @@ def _typecheckingstub__3357f1247faebabfedb5db2b33a7b9038414306326813b06294bdc9f3
     model_selection_expression: typing.Optional[builtins.str] = None,
     response_models: typing.Any = None,
     response_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouteResponse.ParameterConstraintsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9e261e580ed01a26eb5f3398b18b1c8e713162e6c87041c85e7920fdbe505572(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingRule.ActionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingRule.ConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    domain_name_arn: builtins.str,
+    priority: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4b259143f5908bb57fbb7e02132dcc974b63d52f1bc1ff10dfc1b3d5d2211196(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__77a41344704fe501d78ae97926a9a7e50d861a5eccfb96001b867e8f676f4793(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e28b0c99684d7b39e5562468da1df5107b5540636dcdef991ed1510a8e79322d(
+    value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRoutingRule.ActionProperty]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c005d3a99e1e87e0ec447a11cfe8d6c19827612bd33fc77a0c2a3ba1bf7307ea(
+    value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRoutingRule.ConditionProperty]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__df992a1622c11b7c58cc17dd8f491fcaf67155654e78449cd545ee6d512c7671(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f80f8919aa1931fd1355cb98d3ba3c657c893861ccf69754a8b746f7907dd0f5(
+    value: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c0c7c15f3bdc57c3fd672a2692d4f0b1b0807a1a07345c24bff2e78b7cbaff01(
+    *,
+    api_id: builtins.str,
+    stage: builtins.str,
+    strip_base_path: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__288fc4eee0785ab33192a2ebceb8cafb3406672d09c2be411d2e42a7944100fb(
+    *,
+    invoke_api: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingRule.ActionInvokeApiProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__94fb944999d03dc7761e925b4cbec320f3d36797eae6cea4ae74471fb82922e0(
+    *,
+    match_base_paths: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingRule.MatchBasePathsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    match_headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingRule.MatchHeadersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c6bc39dc8caad1c628ec1061fa3b8fb8c43af70cbc460ce8edeb878b5d1d55a4(
+    *,
+    any_of: typing.Sequence[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5e4e12222e78fcf8a4a4316e29343d73081a44a7f3972b2eb1c8278686898c05(
+    *,
+    header: builtins.str,
+    value_glob: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eaea58b339e54b65cebd05e915edb193ffb4c68e784891ef2750cd1ad7603f81(
+    *,
+    any_of: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingRule.MatchHeaderValueProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fb8be2d22e1b6b6c53d0a575fd177688bab8ea730709eb13ee27de706f3fa0c4(
+    *,
+    actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingRule.ActionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingRule.ConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    domain_name_arn: builtins.str,
+    priority: jsii.Number,
 ) -> None:
     """Type checking stubs"""
     pass

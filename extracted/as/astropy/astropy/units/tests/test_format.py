@@ -183,6 +183,22 @@ def test_cds_log10_dimensionless():
     assert u.dex(u.dimensionless_unscaled).to_string(format="cds") == "[-]"
 
 
+def test_cds_angstrom_str():
+    # Regression test for a problem noticed in
+    # https://github.com/astropy/astropy/pull/17527#discussion_r1880555481
+    # that the string representation of the cds version of Angstrom was "AA".
+    assert str(u.cds.Angstrom) == str(u.Angstrom) == "Angstrom"
+    # Since this is a NamedUnit, let's check the name for completeness.
+    assert u.cds.Angstrom.name == "Angstrom"
+
+
+def test_cds_solMass_str():
+    # CDS allows writing solar mass as Msun or solMass,
+    # but cds.solMass and u.solMass should be consistent.
+    assert u.solMass.to_string("cds") == "solMass"
+    assert u.cds.solMass.to_string("cds") == "solMass"
+
+
 # These examples are taken from the EXAMPLES section of
 # https://heasarc.gsfc.nasa.gov/docs/heasarc/ofwg/docs/general/ogip_93_001/
 @pytest.mark.parametrize(
@@ -583,29 +599,24 @@ def test_format_styles_non_default_fraction(format_spec, fraction, string, decom
     assert fluxunit.decompose().to_string(format_spec, fraction=fraction) == decomposed
 
 
-@pytest.mark.parametrize("format_spec", ["generic", "cds", "fits", "ogip", "vounit"])
-def test_no_multiline_fraction(format_spec):
+@pytest.mark.parametrize("format_spec", u_format.Base.registry)
+def test_multiline_fraction_different_if_available(format_spec):
     fluxunit = u.W / u.m**2
-    with pytest.raises(
-        ValueError,
-        match=(
-            f"^'{format_spec}' format only supports 'inline' fractions, "
-            r"not fraction='multiline'\.$"
-        ),
-    ):
-        fluxunit.to_string(format_spec, fraction="multiline")
+    inline_format = fluxunit.to_string(format_spec, fraction="inline")
+    if format_spec in ["generic", "cds", "fits", "ogip", "vounit"]:
+        with pytest.warns(UnitsWarning, match="does not support multiline"):
+            multiline_format = fluxunit.to_string(format_spec, fraction="multiline")
+        assert multiline_format == inline_format
+    else:
+        multiline_format = fluxunit.to_string(format_spec, fraction="multiline")
+        assert multiline_format != inline_format
 
 
-@pytest.mark.parametrize("format_spec", ["latex", "console", "unicode"])
+@pytest.mark.parametrize("format_spec", u_format.Base.registry)
 def test_unknown_fraction_style(format_spec):
     fluxunit = u.W / u.m**2
-    with pytest.raises(
-        ValueError,
-        match=(
-            f"^'{format_spec}' format only supports 'inline' or 'multiline' fractions, "
-            r"not fraction='parrot'\.$"
-        ),
-    ):
+    msg = "fraction can only be False, 'inline', or 'multiline', not 'parrot'"
+    with pytest.raises(ValueError, match=msg):
         fluxunit.to_string(format_spec, fraction="parrot")
 
 
@@ -1036,9 +1047,48 @@ def test_parse_error_message_for_output_only_format(format_):
         u.Unit("m", format=format_)
 
 
-def test_unknown_parser():
-    with pytest.raises(ValueError, match=r"Unknown.*unicode'\] for output only"):
-        u.Unit("m", format="foo")
+@pytest.mark.parametrize(
+    "parser,error_type,err_msg_start",
+    [
+        pytest.param("foo", ValueError, "Unknown format 'foo'", id="ValueError"),
+        pytest.param(
+            {}, TypeError, "Expected a formatter name, not {}", id="TypeError"
+        ),
+    ],
+)
+def test_unknown_parser(parser, error_type, err_msg_start):
+    with pytest.raises(
+        error_type,
+        match=(
+            f"^{err_msg_start}\\.\nValid parser names are: "
+            "'cds', 'generic', 'fits', 'ogip', 'vounit'$"
+        ),
+    ):
+        u.Unit("m", format=parser)
+
+
+@pytest.mark.parametrize(
+    "formatter,error_type,err_msg_start",
+    [
+        pytest.param("abc", ValueError, "Unknown format 'abc'", id="ValueError"),
+        pytest.param(
+            float,
+            TypeError,
+            "Expected a formatter name, not <class 'float'>",
+            id="TypeError",
+        ),
+    ],
+)
+def test_unknown_output_format(formatter, error_type, err_msg_start):
+    with pytest.raises(
+        error_type,
+        match=(
+            f"^{err_msg_start}\\.\nValid formatter names are: "
+            "'cds', 'console', 'generic', 'fits', 'latex', 'latex_inline', 'ogip', "
+            "'unicode', 'vounit'$"
+        ),
+    ):
+        u.m.to_string(formatter)
 
 
 def test_celsius_fits():

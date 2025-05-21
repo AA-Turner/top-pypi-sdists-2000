@@ -4655,7 +4655,7 @@ class CfnContainerGroupDefinitionProps:
         )
 
 
-@jsii.implements(_IInspectable_c2943556)
+@jsii.implements(_IInspectable_c2943556, _ITaggableV2_4e6798f8)
 class CfnFleet(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -4752,7 +4752,11 @@ class CfnFleet(
             )],
             script_id="scriptId",
             server_launch_parameters="serverLaunchParameters",
-            server_launch_path="serverLaunchPath"
+            server_launch_path="serverLaunchPath",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
         )
     '''
 
@@ -4788,6 +4792,7 @@ class CfnFleet(
         script_id: typing.Optional[builtins.str] = None,
         server_launch_parameters: typing.Optional[builtins.str] = None,
         server_launch_path: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
@@ -4799,7 +4804,7 @@ class CfnFleet(
         :param certificate_configuration: Prompts Amazon GameLift Servers to generate a TLS/SSL certificate for the fleet. Amazon GameLift Servers uses the certificates to encrypt traffic between game clients and the game servers running on Amazon GameLift Servers. By default, the ``CertificateConfiguration`` is ``DISABLED`` . You can't change this property after you create the fleet. AWS Certificate Manager (ACM) certificates expire after 13 months. Certificate expiration can cause fleets to fail, preventing players from connecting to instances in the fleet. We recommend you replace fleets before 13 months, consider using fleet aliases for a smooth transition. .. epigraph:: ACM isn't available in all AWS regions. A fleet creation request with certificate generation enabled in an unsupported Region, fails with a 4xx error. For more information about the supported Regions, see `Supported Regions <https://docs.aws.amazon.com/acm/latest/userguide/acm-regions.html>`_ in the *AWS Certificate Manager User Guide* .
         :param compute_type: The type of compute resource used to host your game servers. - ``EC2`` – The game server build is deployed to Amazon EC2 instances for cloud hosting. This is the default setting. - ``ANYWHERE`` – Game servers and supporting software are deployed to compute resources that you provide and manage. With this compute type, you can also set the ``AnywhereConfiguration`` parameter.
         :param description: A description for the fleet.
-        :param desired_ec2_instances: The number of EC2 instances that you want this fleet to host. When creating a new fleet, GameLift automatically sets this value to "1" and initiates a single instance. Once the fleet is active, update this value to trigger GameLift to add or remove instances from the fleet.
+        :param desired_ec2_instances: (deprecated) The number of EC2 instances that you want this fleet to host. When creating a new fleet, GameLift automatically sets this value to "1" and initiates a single instance. Once the fleet is active, update this value to trigger GameLift to add or remove instances from the fleet.
         :param ec2_inbound_permissions: The IP address ranges and port settings that allow inbound traffic to access game server processes and other processes on this fleet. Set this parameter for managed EC2 fleets. You can leave this parameter empty when creating the fleet, but you must call ` <https://docs.aws.amazon.com/gamelift/latest/apireference/API_UpdateFleetPortSettings>`_ to set it before players can connect to game sessions. As a best practice, we recommend opening ports for remote access only when you need them and closing them when you're finished. For Amazon GameLift Servers Realtime fleets, Amazon GameLift Servers automatically sets TCP and UDP ranges.
         :param ec2_instance_type: The Amazon GameLift Servers-supported Amazon EC2 instance type to use with managed EC2 fleets. Instance type determines the computing resources that will be used to host your game servers, including CPU, memory, storage, and networking capacity. See `Amazon Elastic Compute Cloud Instance Types <https://docs.aws.amazon.com/ec2/instance-types/>`_ for detailed descriptions of Amazon EC2 instance types.
         :param fleet_type: Indicates whether to use On-Demand or Spot instances for this fleet. By default, this property is set to ``ON_DEMAND`` . Learn more about when to use `On-Demand versus Spot Instances <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-ec2-instances.html#gamelift-ec2-instances-spot>`_ . This fleet property can't be changed after the fleet is created.
@@ -4807,9 +4812,9 @@ class CfnFleet(
         :param instance_role_credentials_provider: Indicates that fleet instances maintain a shared credentials file for the IAM role defined in ``InstanceRoleArn`` . Shared credentials allow applications that are deployed with the game server executable to communicate with other AWS resources. This property is used only when the game server is integrated with the server SDK version 5.x. For more information about using shared credentials, see `Communicate with other AWS resources from your fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html>`_ . This attribute is used with fleets where ``ComputeType`` is ``EC2`` .
         :param locations: A set of remote locations to deploy additional instances to and manage as a multi-location fleet. Use this parameter when creating a fleet in AWS Regions that support multiple locations. You can add any AWS Region or Local Zone that's supported by Amazon GameLift Servers. Provide a list of one or more AWS Region codes, such as ``us-west-2`` , or Local Zone names. When using this parameter, Amazon GameLift Servers requires you to include your home location in the request. For a list of supported Regions and Local Zones, see `Amazon GameLift Servers service locations <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-regions.html>`_ for managed hosting.
         :param log_paths: (deprecated) This parameter is no longer used. When hosting a custom game build, specify where Amazon GameLift should store log files using the Amazon GameLift server API call ProcessReady()
-        :param max_size: The maximum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 1.
+        :param max_size: (deprecated) The maximum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 1.
         :param metric_groups: The name of an AWS CloudWatch metric group to add this fleet to. A metric group is used to aggregate the metrics for multiple fleets. You can specify an existing metric group name or set a new name to create a new metric group. A fleet can be included in only one metric group at a time.
-        :param min_size: The minimum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 0.
+        :param min_size: (deprecated) The minimum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 0.
         :param new_game_session_protection_policy: The status of termination protection for active game sessions on the fleet. By default, this property is set to ``NoProtection`` . - *NoProtection* - Game sessions can be terminated during active gameplay as a result of a scale-down event. - *FullProtection* - Game sessions in ``ACTIVE`` status cannot be terminated during a scale-down event.
         :param peer_vpc_aws_account_id: Used when peering your Amazon GameLift Servers fleet with a VPC, the unique identifier for the AWS account that owns the VPC. You can find your account ID in the AWS Management Console under account settings.
         :param peer_vpc_id: A unique identifier for a VPC with resources to be accessed by your Amazon GameLift Servers fleet. The VPC must be in the same Region as your fleet. To look up a VPC ID, use the `VPC Dashboard <https://docs.aws.amazon.com/vpc/>`_ in the AWS Management Console . Learn more about VPC peering in `VPC Peering with Amazon GameLift Servers Fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html>`_ .
@@ -4819,6 +4824,7 @@ class CfnFleet(
         :param script_id: The unique identifier for a Realtime configuration script to be deployed on fleet instances. You can use either the script ID or ARN. Scripts must be uploaded to Amazon GameLift Servers prior to creating the fleet. This fleet property cannot be changed later. .. epigraph:: You can't use the ``!Ref`` command to reference a script created with a CloudFormation template for the fleet property ``ScriptId`` . Instead, use ``Fn::GetAtt Script.Arn`` or ``Fn::GetAtt Script.Id`` to retrieve either of these properties as input for ``ScriptId`` . Alternatively, enter a ``ScriptId`` string manually.
         :param server_launch_parameters: (deprecated) This parameter is no longer used but is retained for backward compatibility. Instead, specify server launch parameters in the RuntimeConfiguration parameter. A request must specify either a runtime configuration or values for both ServerLaunchParameters and ServerLaunchPath.
         :param server_launch_path: (deprecated) This parameter is no longer used. Instead, specify a server launch path using the RuntimeConfiguration parameter. Requests that specify a server launch path and launch parameters instead of a runtime configuration will continue to work.
+        :param tags: An array of key-value pairs to apply to this resource.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__21fe09a90444788b3c862f454214d4e160757c9b02d0598d282f68b7f79d749f)
@@ -4852,6 +4858,7 @@ class CfnFleet(
             script_id=script_id,
             server_launch_parameters=server_launch_parameters,
             server_launch_path=server_launch_path,
+            tags=tags,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -4887,6 +4894,17 @@ class CfnFleet(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrFleetArn")
+    def attr_fleet_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) that is assigned to a Amazon GameLift Servers Fleet resource and uniquely identifies it.
+
+        ARNs are unique across all Regions. In a GameLift Fleet ARN, the resource ID matches the FleetId value.
+
+        :cloudformationAttribute: FleetArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrFleetArn"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrFleetId")
     def attr_fleet_id(self) -> builtins.str:
         '''A unique identifier for the fleet.
@@ -4894,6 +4912,12 @@ class CfnFleet(
         :cloudformationAttribute: FleetId
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrFleetId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5004,7 +5028,12 @@ class CfnFleet(
     @builtins.property
     @jsii.member(jsii_name="desiredEc2Instances")
     def desired_ec2_instances(self) -> typing.Optional[jsii.Number]:
-        '''The number of EC2 instances that you want this fleet to host.'''
+        '''(deprecated) The number of EC2 instances that you want this fleet to host.
+
+        :deprecated: this property has been deprecated
+
+        :stability: deprecated
+        '''
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "desiredEc2Instances"))
 
     @desired_ec2_instances.setter
@@ -5126,7 +5155,12 @@ class CfnFleet(
     @builtins.property
     @jsii.member(jsii_name="maxSize")
     def max_size(self) -> typing.Optional[jsii.Number]:
-        '''The maximum number of instances that are allowed in the specified fleet location.'''
+        '''(deprecated) The maximum number of instances that are allowed in the specified fleet location.
+
+        :deprecated: this property has been deprecated
+
+        :stability: deprecated
+        '''
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "maxSize"))
 
     @max_size.setter
@@ -5152,7 +5186,12 @@ class CfnFleet(
     @builtins.property
     @jsii.member(jsii_name="minSize")
     def min_size(self) -> typing.Optional[jsii.Number]:
-        '''The minimum number of instances that are allowed in the specified fleet location.'''
+        '''(deprecated) The minimum number of instances that are allowed in the specified fleet location.
+
+        :deprecated: this property has been deprecated
+
+        :stability: deprecated
+        '''
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "minSize"))
 
     @min_size.setter
@@ -5306,6 +5345,19 @@ class CfnFleet(
             type_hints = typing.get_type_hints(_typecheckingstub__63d5bf96be81c4a6b00ef1deb4d8846acf0053313fb89efd0ded1f0931c66844)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "serverLaunchPath", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__27ef86cf1bf34b50ec355a45305857c52751912f8408dec34a63b8a26665856d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_gamelift.CfnFleet.AnywhereConfigurationProperty",
@@ -6386,6 +6438,7 @@ class CfnFleet(
         "script_id": "scriptId",
         "server_launch_parameters": "serverLaunchParameters",
         "server_launch_path": "serverLaunchPath",
+        "tags": "tags",
     },
 )
 class CfnFleetProps:
@@ -6419,6 +6472,7 @@ class CfnFleetProps:
         script_id: typing.Optional[builtins.str] = None,
         server_launch_parameters: typing.Optional[builtins.str] = None,
         server_launch_path: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFleet``.
 
@@ -6429,7 +6483,7 @@ class CfnFleetProps:
         :param certificate_configuration: Prompts Amazon GameLift Servers to generate a TLS/SSL certificate for the fleet. Amazon GameLift Servers uses the certificates to encrypt traffic between game clients and the game servers running on Amazon GameLift Servers. By default, the ``CertificateConfiguration`` is ``DISABLED`` . You can't change this property after you create the fleet. AWS Certificate Manager (ACM) certificates expire after 13 months. Certificate expiration can cause fleets to fail, preventing players from connecting to instances in the fleet. We recommend you replace fleets before 13 months, consider using fleet aliases for a smooth transition. .. epigraph:: ACM isn't available in all AWS regions. A fleet creation request with certificate generation enabled in an unsupported Region, fails with a 4xx error. For more information about the supported Regions, see `Supported Regions <https://docs.aws.amazon.com/acm/latest/userguide/acm-regions.html>`_ in the *AWS Certificate Manager User Guide* .
         :param compute_type: The type of compute resource used to host your game servers. - ``EC2`` – The game server build is deployed to Amazon EC2 instances for cloud hosting. This is the default setting. - ``ANYWHERE`` – Game servers and supporting software are deployed to compute resources that you provide and manage. With this compute type, you can also set the ``AnywhereConfiguration`` parameter.
         :param description: A description for the fleet.
-        :param desired_ec2_instances: The number of EC2 instances that you want this fleet to host. When creating a new fleet, GameLift automatically sets this value to "1" and initiates a single instance. Once the fleet is active, update this value to trigger GameLift to add or remove instances from the fleet.
+        :param desired_ec2_instances: (deprecated) The number of EC2 instances that you want this fleet to host. When creating a new fleet, GameLift automatically sets this value to "1" and initiates a single instance. Once the fleet is active, update this value to trigger GameLift to add or remove instances from the fleet.
         :param ec2_inbound_permissions: The IP address ranges and port settings that allow inbound traffic to access game server processes and other processes on this fleet. Set this parameter for managed EC2 fleets. You can leave this parameter empty when creating the fleet, but you must call ` <https://docs.aws.amazon.com/gamelift/latest/apireference/API_UpdateFleetPortSettings>`_ to set it before players can connect to game sessions. As a best practice, we recommend opening ports for remote access only when you need them and closing them when you're finished. For Amazon GameLift Servers Realtime fleets, Amazon GameLift Servers automatically sets TCP and UDP ranges.
         :param ec2_instance_type: The Amazon GameLift Servers-supported Amazon EC2 instance type to use with managed EC2 fleets. Instance type determines the computing resources that will be used to host your game servers, including CPU, memory, storage, and networking capacity. See `Amazon Elastic Compute Cloud Instance Types <https://docs.aws.amazon.com/ec2/instance-types/>`_ for detailed descriptions of Amazon EC2 instance types.
         :param fleet_type: Indicates whether to use On-Demand or Spot instances for this fleet. By default, this property is set to ``ON_DEMAND`` . Learn more about when to use `On-Demand versus Spot Instances <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-ec2-instances.html#gamelift-ec2-instances-spot>`_ . This fleet property can't be changed after the fleet is created.
@@ -6437,9 +6491,9 @@ class CfnFleetProps:
         :param instance_role_credentials_provider: Indicates that fleet instances maintain a shared credentials file for the IAM role defined in ``InstanceRoleArn`` . Shared credentials allow applications that are deployed with the game server executable to communicate with other AWS resources. This property is used only when the game server is integrated with the server SDK version 5.x. For more information about using shared credentials, see `Communicate with other AWS resources from your fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html>`_ . This attribute is used with fleets where ``ComputeType`` is ``EC2`` .
         :param locations: A set of remote locations to deploy additional instances to and manage as a multi-location fleet. Use this parameter when creating a fleet in AWS Regions that support multiple locations. You can add any AWS Region or Local Zone that's supported by Amazon GameLift Servers. Provide a list of one or more AWS Region codes, such as ``us-west-2`` , or Local Zone names. When using this parameter, Amazon GameLift Servers requires you to include your home location in the request. For a list of supported Regions and Local Zones, see `Amazon GameLift Servers service locations <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-regions.html>`_ for managed hosting.
         :param log_paths: (deprecated) This parameter is no longer used. When hosting a custom game build, specify where Amazon GameLift should store log files using the Amazon GameLift server API call ProcessReady()
-        :param max_size: The maximum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 1.
+        :param max_size: (deprecated) The maximum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 1.
         :param metric_groups: The name of an AWS CloudWatch metric group to add this fleet to. A metric group is used to aggregate the metrics for multiple fleets. You can specify an existing metric group name or set a new name to create a new metric group. A fleet can be included in only one metric group at a time.
-        :param min_size: The minimum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 0.
+        :param min_size: (deprecated) The minimum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 0.
         :param new_game_session_protection_policy: The status of termination protection for active game sessions on the fleet. By default, this property is set to ``NoProtection`` . - *NoProtection* - Game sessions can be terminated during active gameplay as a result of a scale-down event. - *FullProtection* - Game sessions in ``ACTIVE`` status cannot be terminated during a scale-down event.
         :param peer_vpc_aws_account_id: Used when peering your Amazon GameLift Servers fleet with a VPC, the unique identifier for the AWS account that owns the VPC. You can find your account ID in the AWS Management Console under account settings.
         :param peer_vpc_id: A unique identifier for a VPC with resources to be accessed by your Amazon GameLift Servers fleet. The VPC must be in the same Region as your fleet. To look up a VPC ID, use the `VPC Dashboard <https://docs.aws.amazon.com/vpc/>`_ in the AWS Management Console . Learn more about VPC peering in `VPC Peering with Amazon GameLift Servers Fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html>`_ .
@@ -6449,6 +6503,7 @@ class CfnFleetProps:
         :param script_id: The unique identifier for a Realtime configuration script to be deployed on fleet instances. You can use either the script ID or ARN. Scripts must be uploaded to Amazon GameLift Servers prior to creating the fleet. This fleet property cannot be changed later. .. epigraph:: You can't use the ``!Ref`` command to reference a script created with a CloudFormation template for the fleet property ``ScriptId`` . Instead, use ``Fn::GetAtt Script.Arn`` or ``Fn::GetAtt Script.Id`` to retrieve either of these properties as input for ``ScriptId`` . Alternatively, enter a ``ScriptId`` string manually.
         :param server_launch_parameters: (deprecated) This parameter is no longer used but is retained for backward compatibility. Instead, specify server launch parameters in the RuntimeConfiguration parameter. A request must specify either a runtime configuration or values for both ServerLaunchParameters and ServerLaunchPath.
         :param server_launch_path: (deprecated) This parameter is no longer used. Instead, specify a server launch path using the RuntimeConfiguration parameter. Requests that specify a server launch path and launch parameters instead of a runtime configuration will continue to work.
+        :param tags: An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html
         :exampleMetadata: fixture=_generated
@@ -6536,7 +6591,11 @@ class CfnFleetProps:
                 )],
                 script_id="scriptId",
                 server_launch_parameters="serverLaunchParameters",
-                server_launch_path="serverLaunchPath"
+                server_launch_path="serverLaunchPath",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
             )
         '''
         if __debug__:
@@ -6568,6 +6627,7 @@ class CfnFleetProps:
             check_type(argname="argument script_id", value=script_id, expected_type=type_hints["script_id"])
             check_type(argname="argument server_launch_parameters", value=server_launch_parameters, expected_type=type_hints["server_launch_parameters"])
             check_type(argname="argument server_launch_path", value=server_launch_path, expected_type=type_hints["server_launch_path"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "name": name,
         }
@@ -6623,6 +6683,8 @@ class CfnFleetProps:
             self._values["server_launch_parameters"] = server_launch_parameters
         if server_launch_path is not None:
             self._values["server_launch_path"] = server_launch_path
+        if tags is not None:
+            self._values["tags"] = tags
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -6712,11 +6774,14 @@ class CfnFleetProps:
 
     @builtins.property
     def desired_ec2_instances(self) -> typing.Optional[jsii.Number]:
-        '''The number of EC2 instances that you want this fleet to host.
+        '''(deprecated) The number of EC2 instances that you want this fleet to host.
 
         When creating a new fleet, GameLift automatically sets this value to "1" and initiates a single instance. Once the fleet is active, update this value to trigger GameLift to add or remove instances from the fleet.
 
+        :deprecated: this property has been deprecated
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-desiredec2instances
+        :stability: deprecated
         '''
         result = self._values.get("desired_ec2_instances")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -6807,11 +6872,14 @@ class CfnFleetProps:
 
     @builtins.property
     def max_size(self) -> typing.Optional[jsii.Number]:
-        '''The maximum number of instances that are allowed in the specified fleet location.
+        '''(deprecated) The maximum number of instances that are allowed in the specified fleet location.
 
         If this parameter is not set, the default is 1.
 
+        :deprecated: this property has been deprecated
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-maxsize
+        :stability: deprecated
         '''
         result = self._values.get("max_size")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -6829,11 +6897,14 @@ class CfnFleetProps:
 
     @builtins.property
     def min_size(self) -> typing.Optional[jsii.Number]:
-        '''The minimum number of instances that are allowed in the specified fleet location.
+        '''(deprecated) The minimum number of instances that are allowed in the specified fleet location.
 
         If this parameter is not set, the default is 0.
 
+        :deprecated: this property has been deprecated
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-minsize
+        :stability: deprecated
         '''
         result = self._values.get("min_size")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -6955,6 +7026,15 @@ class CfnFleetProps:
         '''
         result = self._values.get("server_launch_path")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11207,6 +11287,7 @@ def _typecheckingstub__21fe09a90444788b3c862f454214d4e160757c9b02d0598d282f68b7f
     script_id: typing.Optional[builtins.str] = None,
     server_launch_parameters: typing.Optional[builtins.str] = None,
     server_launch_path: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11385,6 +11466,12 @@ def _typecheckingstub__63d5bf96be81c4a6b00ef1deb4d8846acf0053313fb89efd0ded1f093
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__27ef86cf1bf34b50ec355a45305857c52751912f8408dec34a63b8a26665856d(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e3897ffc82938e5bf4e6384b3a83b22f50c7189a71eb0fc30ea8f17642db5ef9(
     *,
     cost: builtins.str,
@@ -11506,6 +11593,7 @@ def _typecheckingstub__8a51a418ba5b606bdfc45dc50c3172e280a12e078a7392f3258d5d329
     script_id: typing.Optional[builtins.str] = None,
     server_launch_parameters: typing.Optional[builtins.str] = None,
     server_launch_path: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -949,8 +949,6 @@ class Snowflake(Dialect):
             **tokens.Tokenizer.KEYWORDS,
             "FILE://": TokenType.URI_START,
             "BYTEINT": TokenType.INT,
-            "CHAR VARYING": TokenType.VARCHAR,
-            "CHARACTER VARYING": TokenType.VARCHAR,
             "EXCLUDE": TokenType.EXCEPT,
             "FILE FORMAT": TokenType.FILE_FORMAT,
             "GET": TokenType.GET,
@@ -1080,6 +1078,7 @@ class Snowflake(Dialect):
             exp.Rand: rename_func("RANDOM"),
             exp.Select: transforms.preprocess(
                 [
+                    transforms.eliminate_window_clause,
                     transforms.eliminate_distinct_on,
                     transforms.explode_projection_to_unnest(),
                     transforms.eliminate_semi_and_anti_joins,
@@ -1132,6 +1131,7 @@ class Snowflake(Dialect):
             **generator.Generator.TYPE_MAPPING,
             exp.DataType.Type.NESTED: "OBJECT",
             exp.DataType.Type.STRUCT: "OBJECT",
+            exp.DataType.Type.BIGDECIMAL: "DOUBLE",
         }
 
         TOKEN_MAPPING = {

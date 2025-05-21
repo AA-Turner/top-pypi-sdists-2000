@@ -34,8 +34,8 @@ options:
       - When supplied, this argument will define the information to be collected.
         Possible values for this include all, minimum, config, performance,
         capacity, network, subnets, lags, filesystems, snapshots, buckets,
-        replication, policies, arrays, accounts, admins, ad, kerberos
-        and drives.
+        replication, policies, arrays, accounts, admins, ad, kerberos,
+        drives, servers and fleet.
     required: false
     type: list
     elements: str
@@ -91,7 +91,7 @@ from ansible_collections.purestorage.flashblade.plugins.module_utils.purefb impo
     get_system,
     purefb_argument_spec,
 )
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 MIN_REQUIRED_API_VERSION = "1.3"
@@ -114,6 +114,8 @@ PUBLIC_API_VERSION = "2.12"
 NAP_API_VERSION = "2.13"
 RA_DURATION_API_VERSION = "2.14"
 SMTP_ENCRYPT_API_VERSION = "2.15"
+SERVERS_API_VERSION = "2.16"
+FLEET_API_VERSION = "2.17"
 
 
 def _millisecs_to_time(millisecs):
@@ -200,7 +202,7 @@ def generate_default_dict(module, blade):
                     str(admin_settings.lockout_duration / 1000) + " seconds"
                 )
         if NFS_POLICY_API_VERSION in api_version:
-            default_info["smb_mode"] = blade_info.smb_mode
+            default_info["smb_mode"] = getattr(blade_info, "smb_mode", None)
         if VSO_VERSION in api_version:
             default_info["timezone"] = blade_info.time_zone
         if DRIVES_API_VERSION in api_version:
@@ -342,7 +344,19 @@ def generate_config_dict(module, blade):
     config_info = {}
     bladev2 = get_system(module)
     api_version = blade.api_version.list_versions().versions
-    config_info["dns"] = blade.dns.list_dns().items[0].to_dict()
+    if SERVERS_API_VERSION in api_version:
+        config_info["dns"] = {}
+        dns_configs = list(bladev2.get_dns().items)
+        for config in range(0, len(dns_configs)):
+            config_info["dns"][dns_configs[config].name] = {
+                "nameservers": dns_configs[config].nameservers,
+                "domain": dns_configs[config].domain,
+            }
+            config_info["dns"][dns_configs[config].name]["source"] = getattr(
+                dns_configs[config].source, "name", None
+            )
+    else:
+        config_info["dns"] = blade.dns.list_dns().items[0].to_dict()
     if SMTP_ENCRYPT_API_VERSION in api_version:
         snmp_config = list(bladev2.get_smtp_servers().items)[0]
         config_info["smtp"] = {
@@ -378,11 +392,12 @@ def generate_config_dict(module, blade):
         .items[0]
         .to_dict()
     )
-    config_info["smb_directory_service"] = (
-        blade.directory_services.list_directory_services(names=["smb"])
-        .items[0]
-        .to_dict()
-    )
+    if SERVERS_API_VERSION not in api_version:
+        config_info["smb_directory_service"] = (
+            blade.directory_services.list_directory_services(names=["smb"])
+            .items[0]
+            .to_dict()
+        )
     config_info["ntp"] = blade.arrays.list_arrays().items[0].ntp_servers
     config_info["ssl_certs"] = blade.certificates.list_certificates().items[0].to_dict()
     if CERT_GROUPS_API_VERSION in api_version:
@@ -733,6 +748,11 @@ def generate_snap_dict(blade):
             "source": snaps.items[snap].source,
             "suffix": snaps.items[snap].suffix,
             "source_destroyed": snaps.items[snap].source_destroyed,
+            "created": datetime.fromtimestamp(
+                snaps.items[snap].created / 1000,
+                tz=timezone.utc,
+            ).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "time_remaining": getattr(snaps.items[snap], "time_remaining", None),
         }
         if REPLICATION_API_VERSION in api_version:
             snap_info[snapshot]["owner"] = snaps.items[snap].owner.name
@@ -993,7 +1013,17 @@ def generate_kerb_dict(blade):
                     "principal": keytabs[key].principal,
                     "realm": keytabs[key].realm,
                     "encryption_type": keytabs[key].encryption_type,
+                    "server": None,
+                    "source": None,
                 }
+                if hasattr(keytabs[key], "server"):
+                    kerb_info[keytab_name][keytabs[key].suffix]["server"] = getattr(
+                        keytabs[key].server, "name", None
+                    )
+                if hasattr(keytabs[key], "source"):
+                    kerb_info[keytab_name][keytabs[key].suffix]["source"] = getattr(
+                        keytabs[key].source, "name", None
+                    )
     return kerb_info
 
 
@@ -1001,30 +1031,36 @@ def generate_ad_dict(blade):
     ad_info = {}
     active_directory = blade.get_active_directory()
     if active_directory.total_item_count != 0:
-        ad_account = list(active_directory.items)[0]
-        ad_info[ad_account.name] = {
-            "computer": ad_account.computer_name,
-            "domain": ad_account.domain,
-            "directory_servers": ad_account.directory_servers,
-            "kerberos_servers": ad_account.kerberos_servers,
-            "service_principals": ad_account.service_principal_names,
-            "join_ou": ad_account.join_ou,
-            "encryption_types": ad_account.encryption_types,
-            "global_catalog_servers": getattr(
-                ad_account, "global_catalog_servers", None
-            ),
-        }
+        ad_accounts = list(active_directory.items)
+        for adir in range(0, len(ad_accounts)):
+            name = ad_accounts[adir].name
+            ad_info[name] = {
+                "computer": ad_accounts[adir].computer_name,
+                "domain": ad_accounts[adir].domain,
+                "directory_servers": ad_accounts[adir].directory_servers,
+                "kerberos_servers": ad_accounts[adir].kerberos_servers,
+                "service_principals": ad_accounts[adir].service_principal_names,
+                "join_ou": ad_accounts[adir].join_ou,
+                "encryption_types": ad_accounts[adir].encryption_types,
+                "global_catalog_servers": getattr(
+                    ad_accounts[adir], "global_catalog_servers", None
+                ),
+                "server": None,
+            }
+            if hasattr(ad_accounts[adir], "server"):
+                ad_info[name]["server"] = getattr(
+                    ad_accounts[adir].server, "name", None
+                )
     return ad_info
 
 
-def generate_bucket_access_policies_dict(module, blade):
-    blade1 = get_blade(module)
+def generate_bucket_access_policies_dict(blade):
     policies_info = {}
-    buckets = blade1.get_buckets().items
+    buckets = list(blade.get_buckets().items)
     for bucket in range(0, len(buckets)):
         policies = list(
             blade.get_buckets_bucket_access_policies(
-                bucket_names=[bucket[bucket].name]
+                bucket_names=[buckets[bucket].name]
             ).items
         )
         for policy in range(0, len(policies)):
@@ -1048,14 +1084,13 @@ def generate_bucket_access_policies_dict(module, blade):
     return policies_info
 
 
-def generate_bucket_cross_object_policies_dict(module, blade):
-    blade1 = get_blade(module)
+def generate_bucket_cross_object_policies_dict(blade):
     policies_info = {}
-    buckets = blade1.get_buckets().items
+    buckets = list(blade.get_buckets().items)
     for bucket in range(0, len(buckets)):
         policies = list(
             blade.get_buckets_cross_origin_resource_sharing_policies(
-                names=[bucket[bucket].name]
+                bucket_names=[buckets[bucket].name]
             ).items
         )
         for policy in range(0, len(policies)):
@@ -1402,6 +1437,45 @@ def generate_drives_dict(blade):
     return drives_info
 
 
+def generate_servers_dict(blade):
+    servers_info = {}
+    servers = list(blade.get_servers().items)
+    for server in range(0, len(servers)):
+        name = servers[server].name
+        servers_info[name] = {
+            "created": datetime.fromtimestamp(servers[server].created / 1000).strftime(
+                "%Y-%m-%d %H:%M:%S"
+            ),
+            "dns": [],
+            "directory_services": [],
+        }
+        for d_serv in range(0, len(servers[server].directory_services)):
+            servers_info[name]["directory_services"].append(
+                servers[server].directory_services[d_serv].name
+            )
+        for dns in range(0, len(servers[server].dns)):
+            servers_info[name]["dns"].append(servers[server].dns[dns].name)
+    return servers_info
+
+
+def generate_fleet_dict(blade):
+    fleet_info = {}
+    fleet = list(blade.get_fleets().items)
+    if fleet:
+        fleet_name = list(blade.get_fleets().items)[0].name
+        fleet_info[fleet_name] = {
+            "members": {},
+        }
+        members = list(blade.get_fleets_members().items)
+        for member in range(0, len(members)):
+            name = members[member].member.name
+            fleet_info[fleet_name]["members"][name] = {
+                "status": members[member].status,
+                "status_details": members[member].status_details,
+            }
+    return fleet_info
+
+
 def main():
     argument_spec = purefb_argument_spec()
     argument_spec.update(
@@ -1442,6 +1516,8 @@ def main():
         "ad",
         "kerberos",
         "drives",
+        "servers",
+        "fleet",
     )
     subset_test = (test in valid_subsets for test in subset)
     if not all(subset_test):
@@ -1504,17 +1580,25 @@ def main():
                 )
             if PUBLIC_API_VERSION in api_version:
                 info["bucket_access_policies"] = generate_bucket_access_policies_dict(
-                    module, blade
+                    blade
                 )
                 info["bucket_cross_origin_policies"] = (
-                    generate_bucket_cross_object_policies_dict(module, blade)
+                    generate_bucket_cross_object_policies_dict(blade)
                 )
             if NFS_POLICY_API_VERSION in api_version:
                 info["export_policies"] = generate_nfs_export_policies_dict(blade)
             if SMB_CLIENT_API_VERSION in api_version:
                 info["share_policies"] = generate_smb_client_policies_dict(blade)
+            if FLEET_API_VERSION in api_version:
+                info["fleet"] = generate_fleet_dict(blade)
         if "drives" in subset or "all" in subset and DRIVES_API_VERSION in api_version:
             info["drives"] = generate_drives_dict(blade)
+        if (
+            "servers" in subset
+            or "all" in subset
+            and SERVERS_API_VERSION in api_version
+        ):
+            info["servers"] = generate_servers_dict(blade)
     module.exit_json(changed=False, purefb_info=info)
 
 

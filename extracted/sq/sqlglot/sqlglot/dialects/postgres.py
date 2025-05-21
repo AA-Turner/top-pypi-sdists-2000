@@ -321,7 +321,6 @@ class Postgres(Dialect):
             "BEGIN": TokenType.COMMAND,
             "BEGIN TRANSACTION": TokenType.BEGIN,
             "BIGSERIAL": TokenType.BIGSERIAL,
-            "CHARACTER VARYING": TokenType.VARCHAR,
             "CONSTRAINT TRIGGER": TokenType.COMMAND,
             "CSTRING": TokenType.PSEUDO_TYPE,
             "DECLARE": TokenType.COMMAND,
@@ -519,6 +518,7 @@ class Postgres(Dialect):
         LIKE_PROPERTY_INSIDE_SCHEMA = True
         MULTI_ARG_DISTINCT = False
         CAN_IMPLEMENT_ARRAY_ANY = True
+        SUPPORTS_WINDOW_EXCLUDE = True
         COPY_HAS_INTO_KEYWORD = False
         ARRAY_CONCAT_IS_VAR_LEN = False
         SUPPORTS_MEDIAN = False

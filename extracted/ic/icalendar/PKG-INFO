@@ -1,10 +1,10 @@
 Metadata-Version: 2.4
 Name: icalendar
-Version: 6.3.0
+Version: 6.3.1
 Summary: iCalendar parser/generator
 Project-URL: Homepage, https://icalendar.readthedocs.io/
 Project-URL: Repository, https://github.com/collective/icalendar/
-Project-URL: source_archive, https://github.com/collective/icalendar/archive/4f2f47183467cb02f103b5722faa513acb6f1b62.zip
+Project-URL: source_archive, https://github.com/collective/icalendar/archive/29e13c4815107bb54fc3d01dda8fcbde12044f9f.zip
 Project-URL: Issues, https://github.com/collective/icalendar/issues
 Project-URL: Documentation, https://icalendar.readthedocs.io/
 Project-URL: Changelog, https://icalendar.readthedocs.io/en/latest/changelog.html
@@ -121,14 +121,14 @@ Such a calendar can then be edited and saved again.
 
 .. code:: python
 
-    >>> calendar["X-WR-CALNAME"] = "My Modified Calendar"  # modify
-    >>> print(calendar.to_ical()[:129])  # save modification
+    >>> calendar.calendar_name = "My Modified Calendar"  # modify
+    >>> print(calendar.to_ical()[:121])  # save modification
     BEGIN:VCALENDAR
     VERSION:2.0
     PRODID:collective/icalendar
     CALSCALE:GREGORIAN
     METHOD:PUBLISH
-    X-WR-CALNAME:My Modified Calendar
+    NAME:My Modified Calendar
 
 
 Create Events, TODOs, Journals, Alarms, ...

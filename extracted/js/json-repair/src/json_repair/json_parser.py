@@ -1,26 +1,27 @@
-from typing import Any, ClassVar, Dict, List, Literal, Optional, TextIO, Tuple, Union
+from typing import Any, ClassVar, Literal, TextIO
 
 from .json_context import ContextValues, JsonContext
 from .object_comparer import ObjectComparer
 from .string_file_wrapper import StringFileWrapper
 
-JSONReturnType = Union[Dict[str, Any], List[Any], str, float, int, bool, None]
+JSONReturnType = dict[str, Any] | list[Any] | str | float | int | bool | None
 
 
 class JSONParser:
     # Constants
     STRING_DELIMITERS: ClassVar[list[str]] = ['"', "'", "“", "”"]
+    NUMBER_CHARS: ClassVar[set[str]] = set("0123456789-.eE/,")
 
     def __init__(
         self,
-        json_str: Union[str, StringFileWrapper],
-        json_fd: Optional[TextIO],
-        logging: Optional[bool],
+        json_str: str | StringFileWrapper,
+        json_fd: TextIO | None,
+        logging: bool | None,
         json_fd_chunk_length: int = 0,
         stream_stable: bool = False,
     ) -> None:
         # The string to parse
-        self.json_str: Union[str, StringFileWrapper] = json_str
+        self.json_str: str | StringFileWrapper = json_str
         # Alternatively, the file description with a json file in it
         if json_fd:
             # This is a trick we do to treat the file wrapper as an array
@@ -31,12 +32,12 @@ class JSONParser:
         self.context = JsonContext()
         # Use this to log the activity, but only if logging is active
 
-        # This is a trick but a beatiful one. We call self.log in the code over and over even if it's not needed.
+        # This is a trick but a beautiful one. We call self.log in the code over and over even if it's not needed.
         # We could add a guard in the code for each call but that would make this code unreadable, so here's this neat trick
         # Replace self.log with a noop
         self.logging = logging
         if logging:
-            self.logger: List[Dict[str, str]] = []
+            self.logger: list[dict[str, str]] = []
             self.log = self._log
         else:
             # No-op
@@ -52,14 +53,13 @@ class JSONParser:
 
     def parse(
         self,
-    ) -> Union[JSONReturnType, Tuple[JSONReturnType, List[Dict[str, str]]]]:
+    ) -> JSONReturnType | tuple[JSONReturnType, list[dict[str, str]]]:
         json = self.parse_json()
         if self.index < len(self.json_str):
             self.log(
                 "The parser returned early, checking if there's more json elements",
             )
             json = [json]
-            last_index = self.index
             while self.index < len(self.json_str):
                 j = self.parse_json()
                 if j != "":
@@ -67,9 +67,6 @@ class JSONParser:
                         # replace the last entry with the new one since the new one seems an update
                         json.pop()
                     json.append(j)
-                if self.index == last_index:
-                    self.index += 1
-                last_index = self.index
             # If nothing extra was found, don't return an array
             if len(json) == 1:
                 self.log(
@@ -120,9 +117,9 @@ class JSONParser:
             else:
                 self.index += 1
 
-    def parse_object(self) -> Dict[str, JSONReturnType]:
+    def parse_object(self) -> dict[str, JSONReturnType]:
         # <object> ::= '{' [ <member> *(', ' <member>) ] '}' ; A sequence of 'members'
-        obj: Dict[str, JSONReturnType] = {}
+        obj: dict[str, JSONReturnType] = {}
         # Stop when you either find the closing parentheses or you have iterated over the entire string
         while (self.get_char_at() or "}") != "}":
             # This is what we expect to find:
@@ -173,8 +170,6 @@ class JSONParser:
                                 self.index += 1
                             self.skip_whitespaces_at()
                             continue
-                        else:
-                            self.index = rollback_index
                 key = str(self.parse_string())
                 if key == "":
                     self.skip_whitespaces_at()
@@ -228,7 +223,7 @@ class JSONParser:
         self.index += 1
         return obj
 
-    def parse_array(self) -> List[JSONReturnType]:
+    def parse_array(self) -> list[JSONReturnType]:
         # <array> ::= '[' [ <json> *(', ' <json>) ] ']' ; A sequence of JSON values separated by commas
         arr = []
         self.context.set(ContextValues.ARRAY)
@@ -265,7 +260,7 @@ class JSONParser:
         self.context.reset()
         return arr
 
-    def parse_string(self) -> Union[str, bool, None]:
+    def parse_string(self) -> str | bool | None:
         # <string> is a string of valid characters enclosed in quotes
         # i.e. { name: "John" }
         # Somehow all weird cases in an invalid JSON happen to be resolved in this function, so be careful here
@@ -312,59 +307,50 @@ class JSONParser:
             self.index += 1
 
         # There is sometimes a weird case of doubled quotes, we manage this also later in the while loop
-        if self.get_char_at() in self.STRING_DELIMITERS:
-            # If the next character is the same type of quote, then we manage it as double quotes
-            if self.get_char_at() == lstring_delimiter:
-                # If it's an empty key, this was easy
-                if (
-                    self.context.current == ContextValues.OBJECT_KEY
-                    and self.get_char_at(1) == ":"
-                ):
-                    self.index += 1
-                    return ""
-                if self.get_char_at(1) == lstring_delimiter:
-                    # There's something fishy about this, we found doubled quotes and then again quotes
-                    self.log(
-                        "While parsing a string, we found a doubled quote and then a quote again, ignoring it",
-                    )
-                    return ""
-                # Find the next delimiter
-                i = self.skip_to_character(character=rstring_delimiter, idx=1)
-                next_c = self.get_char_at(i)
-                # Now check that the next character is also a delimiter to ensure that we have "".....""
-                # In that case we ignore this rstring delimiter
-                if next_c and (self.get_char_at(i + 1) or "") == rstring_delimiter:
-                    self.log(
-                        "While parsing a string, we found a valid starting doubled quote",
-                    )
-                    doubled_quotes = True
-                    self.index += 1
-                else:
-                    # Ok this is not a doubled quote, check if this is an empty string or not
-                    i = self.skip_whitespaces_at(idx=1, move_main_index=False)
-                    next_c = self.get_char_at(i)
-                    if next_c in [*self.STRING_DELIMITERS, "{", "["]:
-                        # something fishy is going on here
-                        self.log(
-                            "While parsing a string, we found a doubled quote but also another quote afterwards, ignoring it",
-                        )
-                        self.index += 1
-                        return ""
-                    elif next_c not in [",", "]", "}"]:
-                        self.log(
-                            "While parsing a string, we found a doubled quote but it was a mistake, removing one quote",
-                        )
-                        self.index += 1
+        if (
+            self.get_char_at() in self.STRING_DELIMITERS
+            and self.get_char_at() == lstring_delimiter
+        ):
+            # If it's an empty key, this was easy
+            if (
+                self.context.current == ContextValues.OBJECT_KEY
+                and self.get_char_at(1) == ":"
+            ):
+                self.index += 1
+                return ""
+            if self.get_char_at(1) == lstring_delimiter:
+                # There's something fishy about this, we found doubled quotes and then again quotes
+                self.log(
+                    "While parsing a string, we found a doubled quote and then a quote again, ignoring it",
+                )
+                return ""
+            # Find the next delimiter
+            i = self.skip_to_character(character=rstring_delimiter, idx=1)
+            next_c = self.get_char_at(i)
+            # Now check that the next character is also a delimiter to ensure that we have "".....""
+            # In that case we ignore this rstring delimiter
+            if next_c and (self.get_char_at(i + 1) or "") == rstring_delimiter:
+                self.log(
+                    "While parsing a string, we found a valid starting doubled quote",
+                )
+                doubled_quotes = True
+                self.index += 1
             else:
-                # Otherwise we need to do another check before continuing
-                i = self.skip_to_character(character=rstring_delimiter, idx=1)
+                # Ok this is not a doubled quote, check if this is an empty string or not
+                i = self.skip_whitespaces_at(idx=1, move_main_index=False)
                 next_c = self.get_char_at(i)
-                if not next_c:
-                    # mmmm that delimiter never appears again, this is a mistake
+                if next_c in self.STRING_DELIMITERS + ["{", "["]:
+                    # something fishy is going on here
                     self.log(
-                        "While parsing a string, we found a quote but it was a mistake, ignoring it",
+                        "While parsing a string, we found a doubled quote but also another quote afterwards, ignoring it",
                     )
+                    self.index += 1
                     return ""
+                elif next_c not in [",", "]", "}"]:
+                    self.log(
+                        "While parsing a string, we found a doubled quote but it was a mistake, removing one quote",
+                    )
+                    self.index += 1
 
         # Initialize our return value
         string_acc = ""
@@ -413,10 +399,6 @@ class JSONParser:
                         # So we need to check if we find a new lstring_delimiter afterwards
                         # If we do, maybe this is a missing delimiter
                         i = self.skip_to_character(character=lstring_delimiter, idx=i)
-                        if doubled_quotes:
-                            i = self.skip_to_character(
-                                character=lstring_delimiter, idx=i
-                            )
                         next_c = self.get_char_at(i)
                         if not next_c:
                             rstring_delimiter_missing = False
@@ -456,8 +438,6 @@ class JSONParser:
                                 if c == "{":
                                     # Ok then this is part of the string
                                     rstring_delimiter_missing = False
-                                    break
-                                elif c == "}":
                                     break
                 if rstring_delimiter_missing:
                     self.log(
@@ -610,15 +590,6 @@ class JSONParser:
                         i += 1
                         i = self.skip_whitespaces_at(idx=i, move_main_index=False)
                         next_c = self.get_char_at(i)
-                        if next_c == "}":
-                            # OK this is valid then
-                            self.log(
-                                "While parsing a string, we misplaced a quote that would have closed the string but has a different meaning here since this is the last element of the object, ignoring it",
-                            )
-                            unmatched_delimiter = not unmatched_delimiter
-                            string_acc += str(char)
-                            self.index += 1
-                            char = self.get_char_at()
                     elif (
                         next_c == rstring_delimiter and self.get_char_at(i - 1) != "\\"
                     ):
@@ -707,13 +678,12 @@ class JSONParser:
 
         return string_acc
 
-    def parse_number(self) -> Union[float, int, str, JSONReturnType]:
+    def parse_number(self) -> float | int | str | JSONReturnType:
         # <number> is a valid real number expressed in one of a number of given formats
         number_str = ""
         char = self.get_char_at()
         is_array = self.context.current == ContextValues.ARRAY
-        NUMBER_CHARS = set("0123456789-.eE/,")
-        while char and char in NUMBER_CHARS and (not is_array or char != ","):
+        while char and char in self.NUMBER_CHARS and (not is_array or char != ","):
             number_str += char
             self.index += 1
             char = self.get_char_at()
@@ -730,19 +700,16 @@ class JSONParser:
                 return str(number_str)
             if "." in number_str or "e" in number_str or "E" in number_str:
                 return float(number_str)
-            elif number_str == "-":
-                # If there is a stray "-" this will throw an exception, throw away this character
-                return self.parse_json()
             else:
                 return int(number_str)
         except ValueError:
             return number_str
 
-    def parse_boolean_or_null(self) -> Union[bool, str, None]:
+    def parse_boolean_or_null(self) -> bool | str | None:
         # <boolean> is one of the literal strings 'true', 'false', or 'null' (unquoted)
         starting_index = self.index
         char = (self.get_char_at() or "").lower()
-        value: Optional[Tuple[str, Optional[bool]]]
+        value: tuple[str, bool | None] | None = None
         if char == "t":
             value = ("true", True)
         elif char == "f":
@@ -824,16 +791,13 @@ class JSONParser:
                 self.log(f"Found block comment: {comment}")
                 return ""
             else:
-                # Not a recognized comment pattern, skip the slash.
+                # Skip standalone '/' characters that are not part of a comment
+                # to avoid getting stuck in an infinite loop
                 self.index += 1
                 return ""
+        return ""  # pragma: no cover
 
-        else:
-            # Should not be reached: if for some reason the current character does not start a comment, skip it.
-            self.index += 1
-            return ""
-
-    def get_char_at(self, count: int = 0) -> Union[str, Literal[False]]:
+    def get_char_at(self, count: int = 0) -> str | Literal[False]:
         # Why not use something simpler? Because try/except in python is a faster alternative to an "if" statement that is often True
         try:
             return self.json_str[self.index + count]
@@ -873,9 +837,6 @@ class JSONParser:
                 char = self.json_str[self.index + idx]
             except IndexError:
                 return idx
-        if self.index + idx > 0 and self.json_str[self.index + idx - 1] == "\\":
-            # Ah this is an escaped character, try again
-            return self.skip_to_character(character=character, idx=idx + 1)
         return idx
 
     def _log(self, text: str) -> None:

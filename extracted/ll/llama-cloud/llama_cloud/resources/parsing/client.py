@@ -667,6 +667,9 @@ class ParsingClient:
         """
         Get a job by id
 
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
+
         Parameters:
             - job_id: str.
 
@@ -737,6 +740,9 @@ class ParsingClient:
     ) -> ParsingJobStructuredResult:
         """
         Get a job by id
+
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
 
         Parameters:
             - job_id: str.
@@ -843,6 +849,9 @@ class ParsingClient:
         """
         Get a job by id
 
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
+
         Parameters:
             - job_id: str.
 
@@ -914,6 +923,9 @@ class ParsingClient:
         """
         Get a job by id
 
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
+
         Parameters:
             - job_id: str.
 
@@ -982,6 +994,9 @@ class ParsingClient:
     def get_parsing_history_result(self) -> typing.List[ParsingHistoryItem]:
         """
         Get parsing history for user
+
+        This endpoint is deprecated.
+        Use /api/v1/jobs/?job_name=parsing&project_id=YOUR_PROJECT_ID instead.
 
         ---
         from llama_cloud.client import LlamaCloud
@@ -1680,6 +1695,9 @@ class AsyncParsingClient:
         """
         Get a job by id
 
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
+
         Parameters:
             - job_id: str.
 
@@ -1750,6 +1768,9 @@ class AsyncParsingClient:
     ) -> ParsingJobStructuredResult:
         """
         Get a job by id
+
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
 
         Parameters:
             - job_id: str.
@@ -1858,6 +1879,9 @@ class AsyncParsingClient:
         """
         Get a job by id
 
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
+
         Parameters:
             - job_id: str.
 
@@ -1931,6 +1955,9 @@ class AsyncParsingClient:
         """
         Get a job by id
 
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
+
         Parameters:
             - job_id: str.
 
@@ -1999,6 +2026,9 @@ class AsyncParsingClient:
     async def get_parsing_history_result(self) -> typing.List[ParsingHistoryItem]:
         """
         Get parsing history for user
+
+        This endpoint is deprecated.
+        Use /api/v1/jobs/?job_name=parsing&project_id=YOUR_PROJECT_ID instead.
 
         ---
         from llama_cloud.client import AsyncLlamaCloud

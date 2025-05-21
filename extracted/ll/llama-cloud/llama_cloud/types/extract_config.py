@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .document_chunk_mode import DocumentChunkMode
 from .extract_mode import ExtractMode
 from .extract_target import ExtractTarget
 
@@ -26,6 +27,9 @@ class ExtractConfig(pydantic.BaseModel):
     system_prompt: typing.Optional[str]
     use_reasoning: typing.Optional[bool] = pydantic.Field(description="Whether to use reasoning for the extraction.")
     cite_sources: typing.Optional[bool] = pydantic.Field(description="Whether to cite sources for the extraction.")
+    chunk_mode: typing.Optional[DocumentChunkMode] = pydantic.Field(
+        description="The mode to use for chunking the document."
+    )
     invalidate_cache: typing.Optional[bool] = pydantic.Field(
         description="Whether to invalidate the cache for the extraction."
     )

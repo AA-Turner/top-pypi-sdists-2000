@@ -9,7 +9,7 @@ import numpy as np
 from numpy import ma
 
 from astropy.utils.compat.optional_deps import HAS_MATPLOTLIB
-from astropy.utils.decorators import deprecated_renamed_argument
+from astropy.utils.decorators import deprecated_renamed_argument, future_keyword_only
 
 from .interval import (
     AsymmetricPercentileInterval,
@@ -37,7 +37,7 @@ else:
             raise ImportError("matplotlib is required in order to use this class.")
 
 
-__all__ = ["ImageNormalize", "SimpleNorm", "simple_norm", "imshow_norm"]
+__all__ = ["ImageNormalize", "SimpleNorm", "imshow_norm", "simple_norm"]
 
 __doctest_requires__ = {"*": ["matplotlib"]}
 
@@ -84,13 +84,13 @@ class ImageNormalize(Normalize):
 
     def __init__(
         self,
-        data=None,
-        interval=None,
-        vmin=None,
-        vmax=None,
-        stretch=LinearStretch(),
-        clip=False,
-        invalid=-1.0,
+        data: np.ndarray | None = None,
+        interval: BaseInterval | None = None,
+        vmin: float | None = None,
+        vmax: float | None = None,
+        stretch: BaseStretch = LinearStretch(),
+        clip: bool = False,
+        invalid: float | None = -1.0,
     ):
         # this super call checks for matplotlib
         super().__init__(vmin=vmin, vmax=vmax, clip=clip)
@@ -431,10 +431,25 @@ class SimpleNorm:
                 "matplotlib.pyplot.imshow directly to use your norm."
             )
 
-        axim = ax.imshow(data, norm=self(data), **kwargs)
-        return axim
+        return ax.imshow(data, norm=self(data), **kwargs)
 
 
+@future_keyword_only(
+    [
+        "power",
+        "asinh_a",
+        "vmin",
+        "vmax",
+        "min_percent",
+        "max_percent",
+        "percent",
+        "clip",
+        "log_a",
+        "invalid",
+        "sinh_a",
+    ],
+    since=["7.1"] * 11,
+)
 @deprecated_renamed_argument(["min_cut", "max_cut"], ["vmin", "vmax"], ["6.1", "6.1"])
 def simple_norm(
     data,

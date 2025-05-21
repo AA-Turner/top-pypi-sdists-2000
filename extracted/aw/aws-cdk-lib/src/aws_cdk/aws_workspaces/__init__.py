@@ -1021,6 +1021,7 @@ class CfnWorkspacesPool(
                 settings_group="settingsGroup"
             ),
             description="description",
+            running_mode="runningMode",
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -1044,6 +1045,7 @@ class CfnWorkspacesPool(
         pool_name: builtins.str,
         application_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspacesPool.ApplicationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        running_mode: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspacesPool.TimeoutSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1056,6 +1058,7 @@ class CfnWorkspacesPool(
         :param pool_name: The name of the pool.
         :param application_settings: The persistent application settings for users of the pool.
         :param description: The description of the pool.
+        :param running_mode: 
         :param tags: 
         :param timeout_settings: The amount of time that a pool session remains active after users disconnect. If they try to reconnect to the pool session after a disconnection or network interruption within this time interval, they are connected to their previous session. Otherwise, they are connected to a new session with a new pool instance.
         '''
@@ -1070,6 +1073,7 @@ class CfnWorkspacesPool(
             pool_name=pool_name,
             application_settings=application_settings,
             description=description,
+            running_mode=running_mode,
             tags=tags,
             timeout_settings=timeout_settings,
         )
@@ -1231,6 +1235,18 @@ class CfnWorkspacesPool(
             type_hints = typing.get_type_hints(_typecheckingstub__c0a41c1359bb84431b1e88b8ac1a3bbf0d34dc2ab1b9004f79a2f0891725fd76)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="runningMode")
+    def running_mode(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "runningMode"))
+
+    @running_mode.setter
+    def running_mode(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__360e48883f6f5eb30b47d1d804ac1d51f3162354f1b454a279520a266673b89b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "runningMode", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -1496,6 +1512,7 @@ class CfnWorkspacesPool(
         "pool_name": "poolName",
         "application_settings": "applicationSettings",
         "description": "description",
+        "running_mode": "runningMode",
         "tags": "tags",
         "timeout_settings": "timeoutSettings",
     },
@@ -1510,6 +1527,7 @@ class CfnWorkspacesPoolProps:
         pool_name: builtins.str,
         application_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspacesPool.ApplicationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        running_mode: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspacesPool.TimeoutSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1521,6 +1539,7 @@ class CfnWorkspacesPoolProps:
         :param pool_name: The name of the pool.
         :param application_settings: The persistent application settings for users of the pool.
         :param description: The description of the pool.
+        :param running_mode: 
         :param tags: 
         :param timeout_settings: The amount of time that a pool session remains active after users disconnect. If they try to reconnect to the pool session after a disconnection or network interruption within this time interval, they are connected to their previous session. Otherwise, they are connected to a new session with a new pool instance.
 
@@ -1549,6 +1568,7 @@ class CfnWorkspacesPoolProps:
                     settings_group="settingsGroup"
                 ),
                 description="description",
+                running_mode="runningMode",
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -1568,6 +1588,7 @@ class CfnWorkspacesPoolProps:
             check_type(argname="argument pool_name", value=pool_name, expected_type=type_hints["pool_name"])
             check_type(argname="argument application_settings", value=application_settings, expected_type=type_hints["application_settings"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument running_mode", value=running_mode, expected_type=type_hints["running_mode"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument timeout_settings", value=timeout_settings, expected_type=type_hints["timeout_settings"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -1580,6 +1601,8 @@ class CfnWorkspacesPoolProps:
             self._values["application_settings"] = application_settings
         if description is not None:
             self._values["description"] = description
+        if running_mode is not None:
+            self._values["running_mode"] = running_mode
         if tags is not None:
             self._values["tags"] = tags
         if timeout_settings is not None:
@@ -1645,6 +1668,14 @@ class CfnWorkspacesPoolProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspacespool.html#cfn-workspaces-workspacespool-description
         '''
         result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def running_mode(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspacespool.html#cfn-workspaces-workspacespool-runningmode
+        '''
+        result = self._values.get("running_mode")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -1857,6 +1888,7 @@ def _typecheckingstub__2d46eb37beb6bc915a0a0c68f02dfa689a2d725a4252e6874da1ed606
     pool_name: builtins.str,
     application_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspacesPool.ApplicationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    running_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     timeout_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspacesPool.TimeoutSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -1911,6 +1943,12 @@ def _typecheckingstub__c0a41c1359bb84431b1e88b8ac1a3bbf0d34dc2ab1b9004f79a2f0891
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__360e48883f6f5eb30b47d1d804ac1d51f3162354f1b454a279520a266673b89b(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a940a91e0c4bd8a1424475cae423b68c22b5107bb7454e6d62fa5d1a232ac829(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -1955,6 +1993,7 @@ def _typecheckingstub__cb4cf19658d50453aaf837ebc448848141de5ab5627b58be920162b65
     pool_name: builtins.str,
     application_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspacesPool.ApplicationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    running_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     timeout_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspacesPool.TimeoutSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

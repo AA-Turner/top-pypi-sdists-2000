@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: pinecone
-Version: 6.0.2
+Version: 7.0.0
 Summary: Pinecone client and SDK
 License: Apache-2.0
 Keywords: Pinecone,vector,database,cloud
@@ -28,6 +28,7 @@ Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Provides-Extra: asyncio
 Provides-Extra: grpc
 Requires-Dist: aiohttp (>=3.9.0) ; extra == "asyncio"
+Requires-Dist: aiohttp-retry (>=2.9.1,<3.0.0) ; extra == "asyncio"
 Requires-Dist: certifi (>=2019.11.17)
 Requires-Dist: googleapis-common-protos (>=1.66.0) ; extra == "grpc"
 Requires-Dist: grpcio (>=1.44.0) ; (python_version >= "3.8" and python_version < "3.11") and (extra == "grpc")
@@ -94,10 +95,10 @@ pip3 install "pinecone[asyncio,grpc]"
 
 ```shell
 # Install the latest version
-uv install pinecone
+uv add pinecone
 
 # Install the latest version, optional dependencies
-uv install "pinecone[asyncio,grpc]"
+uv add "pinecone[asyncio,grpc]"
 ```
 
 #### Installing with [poetry](https://python-poetry.org/)
@@ -235,6 +236,14 @@ response = index.search_records(
     ),
 )
 ```
+
+## Pinecone Assistant
+### Installing the Pinecone Assistant Python plugin
+
+The `pinecone-plugin-assistant` package is now bundled by default when installing `pinecone`. It does not need to be installed separately in order to use Pinecone Assistant.
+
+For more information on Pinecone Assistant, see the [Pinecone Assistant documentation](https://docs.pinecone.io/guides/assistant/overview).
+
 
 ## More information on usage
 

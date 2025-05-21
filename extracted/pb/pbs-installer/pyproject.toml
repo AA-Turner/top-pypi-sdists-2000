@@ -7,7 +7,7 @@ authors = [
 requires-python = ">=3.8"
 readme = "README.md"
 dynamic = []
-version = "2025.4.9"
+version = "2025.5.17"
 
 [project.license]
 text = "MIT"

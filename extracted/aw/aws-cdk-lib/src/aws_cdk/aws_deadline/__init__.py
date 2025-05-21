@@ -514,6 +514,12 @@ class CfnFleet(
         
             # the properties below are optional
             description="description",
+            host_configuration=deadline.CfnFleet.HostConfigurationProperty(
+                script_body="scriptBody",
+        
+                # the properties below are optional
+                script_timeout_seconds=123
+            ),
             min_worker_count=123,
             tags=[CfnTag(
                 key="key",
@@ -533,6 +539,7 @@ class CfnFleet(
         max_worker_count: jsii.Number,
         role_arn: builtins.str,
         description: typing.Optional[builtins.str] = None,
+        host_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.HostConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         min_worker_count: typing.Optional[jsii.Number] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -545,6 +552,7 @@ class CfnFleet(
         :param max_worker_count: The maximum number of workers specified in the fleet.
         :param role_arn: The IAM role that workers in the fleet use when processing jobs.
         :param description: A description that helps identify what the fleet is used for. .. epigraph:: This field can store any content. Escape or encode this content before displaying it on a webpage or any other system that might interpret the content of this field. Default: - ""
+        :param host_configuration: 
         :param min_worker_count: The minimum number of workers in the fleet. Default: - 0
         :param tags: The tags to add to your fleet. Each tag consists of a tag key and a tag value. Tag keys and values are both required, but tag values can be empty strings.
         '''
@@ -559,6 +567,7 @@ class CfnFleet(
             max_worker_count=max_worker_count,
             role_arn=role_arn,
             description=description,
+            host_configuration=host_configuration,
             min_worker_count=min_worker_count,
             tags=tags,
         )
@@ -732,6 +741,23 @@ class CfnFleet(
             type_hints = typing.get_type_hints(_typecheckingstub__084da5a242d843b332de24a8c53af7e8830cd00d0dca22235f0c3d665732570b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="hostConfiguration")
+    def host_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.HostConfigurationProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.HostConfigurationProperty"]], jsii.get(self, "hostConfiguration"))
+
+    @host_configuration.setter
+    def host_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.HostConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5cb78c2488fd0676b6c07d92f69a0cf51c19a186b0a6d2f13bbc62aec7608cfe)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "hostConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="minWorkerCount")
@@ -1966,6 +1992,81 @@ class CfnFleet(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_deadline.CfnFleet.HostConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "script_body": "scriptBody",
+            "script_timeout_seconds": "scriptTimeoutSeconds",
+        },
+    )
+    class HostConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            script_body: builtins.str,
+            script_timeout_seconds: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param script_body: 
+            :param script_timeout_seconds: Default: - 300
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-hostconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_deadline as deadline
+                
+                host_configuration_property = deadline.CfnFleet.HostConfigurationProperty(
+                    script_body="scriptBody",
+                
+                    # the properties below are optional
+                    script_timeout_seconds=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__6971feb07454886d39f9f5ddb100459001b23544ed3498597d6b4a0ce4b41965)
+                check_type(argname="argument script_body", value=script_body, expected_type=type_hints["script_body"])
+                check_type(argname="argument script_timeout_seconds", value=script_timeout_seconds, expected_type=type_hints["script_timeout_seconds"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "script_body": script_body,
+            }
+            if script_timeout_seconds is not None:
+                self._values["script_timeout_seconds"] = script_timeout_seconds
+
+        @builtins.property
+        def script_body(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-hostconfiguration.html#cfn-deadline-fleet-hostconfiguration-scriptbody
+            '''
+            result = self._values.get("script_body")
+            assert result is not None, "Required property 'script_body' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def script_timeout_seconds(self) -> typing.Optional[jsii.Number]:
+            '''
+            :default: - 300
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-hostconfiguration.html#cfn-deadline-fleet-hostconfiguration-scripttimeoutseconds
+            '''
+            result = self._values.get("script_timeout_seconds")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "HostConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_deadline.CfnFleet.MemoryMiBRangeProperty",
         jsii_struct_bases=[],
         name_mapping={"min": "min", "max": "max"},
@@ -2559,6 +2660,7 @@ class CfnFleet(
         "max_worker_count": "maxWorkerCount",
         "role_arn": "roleArn",
         "description": "description",
+        "host_configuration": "hostConfiguration",
         "min_worker_count": "minWorkerCount",
         "tags": "tags",
     },
@@ -2573,6 +2675,7 @@ class CfnFleetProps:
         max_worker_count: jsii.Number,
         role_arn: builtins.str,
         description: typing.Optional[builtins.str] = None,
+        host_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.HostConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         min_worker_count: typing.Optional[jsii.Number] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -2584,6 +2687,7 @@ class CfnFleetProps:
         :param max_worker_count: The maximum number of workers specified in the fleet.
         :param role_arn: The IAM role that workers in the fleet use when processing jobs.
         :param description: A description that helps identify what the fleet is used for. .. epigraph:: This field can store any content. Escape or encode this content before displaying it on a webpage or any other system that might interpret the content of this field. Default: - ""
+        :param host_configuration: 
         :param min_worker_count: The minimum number of workers in the fleet. Default: - 0
         :param tags: The tags to add to your fleet. Each tag consists of a tag key and a tag value. Tag keys and values are both required, but tag values can be empty strings.
 
@@ -2711,6 +2815,12 @@ class CfnFleetProps:
             
                 # the properties below are optional
                 description="description",
+                host_configuration=deadline.CfnFleet.HostConfigurationProperty(
+                    script_body="scriptBody",
+            
+                    # the properties below are optional
+                    script_timeout_seconds=123
+                ),
                 min_worker_count=123,
                 tags=[CfnTag(
                     key="key",
@@ -2726,6 +2836,7 @@ class CfnFleetProps:
             check_type(argname="argument max_worker_count", value=max_worker_count, expected_type=type_hints["max_worker_count"])
             check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument host_configuration", value=host_configuration, expected_type=type_hints["host_configuration"])
             check_type(argname="argument min_worker_count", value=min_worker_count, expected_type=type_hints["min_worker_count"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -2737,6 +2848,8 @@ class CfnFleetProps:
         }
         if description is not None:
             self._values["description"] = description
+        if host_configuration is not None:
+            self._values["host_configuration"] = host_configuration
         if min_worker_count is not None:
             self._values["min_worker_count"] = min_worker_count
         if tags is not None:
@@ -2812,6 +2925,16 @@ class CfnFleetProps:
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def host_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.HostConfigurationProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-fleet.html#cfn-deadline-fleet-hostconfiguration
+        '''
+        result = self._values.get("host_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.HostConfigurationProperty]], result)
 
     @builtins.property
     def min_worker_count(self) -> typing.Optional[jsii.Number]:
@@ -6067,6 +6190,7 @@ def _typecheckingstub__b982dfa2ac88548efd13c63c65f7144bf79a74dd670eebe5a13537f1f
     max_worker_count: jsii.Number,
     role_arn: builtins.str,
     description: typing.Optional[builtins.str] = None,
+    host_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.HostConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     min_worker_count: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -6117,6 +6241,12 @@ def _typecheckingstub__471ed3a4e000dd618e2be0578e42aa2e8288223309b77395023cba44d
 
 def _typecheckingstub__084da5a242d843b332de24a8c53af7e8830cd00d0dca22235f0c3d665732570b(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5cb78c2488fd0676b6c07d92f69a0cf51c19a186b0a6d2f13bbc62aec7608cfe(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.HostConfigurationProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6231,6 +6361,14 @@ def _typecheckingstub__3ef3ed1850d4005d38d3a6c912a28b59698026461815dad08ff096a4c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6971feb07454886d39f9f5ddb100459001b23544ed3498597d6b4a0ce4b41965(
+    *,
+    script_body: builtins.str,
+    script_timeout_seconds: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e0c49c5364d9d5abab3267eb2a6afca69f203020da3e42493624297dd2a5bf0f(
     *,
     min: jsii.Number,
@@ -6286,6 +6424,7 @@ def _typecheckingstub__a1472efddb89af74b2ae4dc1156d30448332099bec47f03ae56886a44
     max_worker_count: jsii.Number,
     role_arn: builtins.str,
     description: typing.Optional[builtins.str] = None,
+    host_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.HostConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     min_worker_count: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

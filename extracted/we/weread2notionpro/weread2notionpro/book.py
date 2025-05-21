@@ -140,7 +140,7 @@ def insert_to_notion(page_id, timestamp, duration, book_database_id):
         "书架": utils.get_relation([book_database_id]),
     }
     if page_id != None:
-        notion_helper.update_page(page_id=page_id, properties=properties)
+        notion_helper.update_page(page_id=page_id, properties=properties,cover=utils.get_icon("https://www.notion.so/icons/target_red.svg"))
     else:
         notion_helper.create_page(parent, properties, utils.get_icon("https://www.notion.so/icons/target_red.svg"))
 

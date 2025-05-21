@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ from google.auth.exceptions import MutualTLSChannelError  # type: ignore
 from google.auth.transport import mtls  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.oauth2 import service_account  # type: ignore
+import google.protobuf
 
 from google.cloud.dataform_v1beta1 import gapic_version as package_version
 
@@ -291,6 +292,28 @@ class DataformClient(metaclass=DataformClientMeta):
         """Parses a crypto_key_version path into its component segments."""
         m = re.match(
             r"^projects/(?P<project>.+?)/locations/(?P<location>.+?)/keyRings/(?P<key_ring>.+?)/cryptoKeys/(?P<crypto_key>.+?)/cryptoKeyVersions/(?P<crypto_key_version>.+?)$",
+            path,
+        )
+        return m.groupdict() if m else {}
+
+    @staticmethod
+    def notebook_runtime_template_path(
+        project: str,
+        location: str,
+        notebook_runtime_template: str,
+    ) -> str:
+        """Returns a fully-qualified notebook_runtime_template string."""
+        return "projects/{project}/locations/{location}/notebookRuntimeTemplates/{notebook_runtime_template}".format(
+            project=project,
+            location=location,
+            notebook_runtime_template=notebook_runtime_template,
+        )
+
+    @staticmethod
+    def parse_notebook_runtime_template_path(path: str) -> Dict[str, str]:
+        """Parses a notebook_runtime_template path into its component segments."""
+        m = re.match(
+            r"^projects/(?P<project>.+?)/locations/(?P<location>.+?)/notebookRuntimeTemplates/(?P<notebook_runtime_template>.+?)$",
             path,
         )
         return m.groupdict() if m else {}
@@ -937,6 +960,10 @@ class DataformClient(metaclass=DataformClientMeta):
     ) -> pagers.ListRepositoriesPager:
         r"""Lists Repositories in a given project and location.
 
+        **Note:** *This method can return repositories not shown in
+        the*\ `Dataform
+        UI <https://console.cloud.google.com/bigquery/dataform>`__.
+
         .. code-block:: python
 
             # This snippet has been automatically generated and should be regarded as a
@@ -1290,13 +1317,11 @@ class DataformClient(metaclass=DataformClientMeta):
     ) -> dataform.Repository:
         r"""Updates a single Repository.
 
-        **Note:** This method does not fully implement
-        `AIP-134 <https://google.aip.dev/134>`__; in particular:
-
-        -  The wildcard entry (**\***) is treated as a bad request
-        -  When the **field_mask** is omitted, instead of only updating
-           the set fields, the request is treated as a full update on
-           all modifiable fields
+        **Note:** *This method does not fully
+        implement*\ `AIP/134 <https://google.aip.dev/134>`__\ *. The
+        wildcard entry (*) is treated as a bad request, and when the
+        ``field_mask`` is omitted, the request is treated as a full
+        update on all modifiable fields.*
 
         .. code-block:: python
 
@@ -4318,13 +4343,11 @@ class DataformClient(metaclass=DataformClientMeta):
     ) -> dataform.ReleaseConfig:
         r"""Updates a single ReleaseConfig.
 
-        **Note:** This method does not fully implement
-        `AIP-134 <https://google.aip.dev/134>`__; in particular:
-
-        -  The wildcard entry (**\***) is treated as a bad request
-        -  When the **field_mask** is omitted, instead of only updating
-           the set fields, the request is treated as a full update on
-           all modifiable fields
+        **Note:** *This method does not fully
+        implement*\ `AIP/134 <https://google.aip.dev/134>`__\ *. The
+        wildcard entry (*) is treated as a bad request, and when the
+        ``field_mask`` is omitted, the request is treated as a full
+        update on all modifiable fields.*
 
         .. code-block:: python
 
@@ -5360,13 +5383,11 @@ class DataformClient(metaclass=DataformClientMeta):
     ) -> dataform.WorkflowConfig:
         r"""Updates a single WorkflowConfig.
 
-        **Note:** This method does not fully implement
-        `AIP-134 <https://google.aip.dev/134>`__; in particular:
-
-        -  The wildcard entry (**\***) is treated as a bad request
-        -  When the **field_mask** is omitted, instead of only updating
-           the set fields, the request is treated as a full update on
-           all modifiable fields
+        **Note:** *This method does not fully
+        implement*\ `AIP/134 <https://google.aip.dev/134>`__\ *. The
+        wildcard entry (*) is treated as a bad request, and when the
+        ``field_mask`` is omitted, the request is treated as a full
+        update on all modifiable fields.*
 
         .. code-block:: python
 
@@ -6328,13 +6349,11 @@ class DataformClient(metaclass=DataformClientMeta):
     ) -> dataform.Config:
         r"""Update default config for a given project and location.
 
-        **Note:** This method does not fully implement
-        `AIP-134 <https://google.aip.dev/134>`__; in particular:
-
-        -  The wildcard entry (**\***) is treated as a bad request
-        -  When the **field_mask** is omitted, instead of only updating
-           the set fields, the request is treated as a full update on
-           all modifiable fields
+        **Note:** *This method does not fully
+        implement*\ `AIP/134 <https://google.aip.dev/134>`__\ *. The
+        wildcard entry (*) is treated as a bad request, and when the
+        ``field_mask`` is omitted, the request is treated as a full
+        update on all modifiable fields.*
 
         .. code-block:: python
 
@@ -6891,5 +6910,7 @@ DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
     gapic_version=package_version.__version__
 )
 
+if hasattr(DEFAULT_CLIENT_INFO, "protobuf_runtime_version"):  # pragma: NO COVER
+    DEFAULT_CLIENT_INFO.protobuf_runtime_version = google.protobuf.__version__
 
 __all__ = ("DataformClient",)

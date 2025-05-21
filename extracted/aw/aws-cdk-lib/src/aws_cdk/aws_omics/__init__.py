@@ -63,6 +63,7 @@ from .. import (
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
+    ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
@@ -2741,6 +2742,7 @@ class CfnWorkflow(
                 )
             },
             storage_capacity=123,
+            storage_type="storageType",
             tags={
                 "tags_key": "tags"
             }
@@ -2760,6 +2762,7 @@ class CfnWorkflow(
         name: typing.Optional[builtins.str] = None,
         parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.WorkflowParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         storage_capacity: typing.Optional[jsii.Number] = None,
+        storage_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
@@ -2773,6 +2776,7 @@ class CfnWorkflow(
         :param name: The workflow's name.
         :param parameter_template: The workflow's parameter template.
         :param storage_capacity: The default static storage capacity (in gibibytes) for runs that use this workflow or workflow version.
+        :param storage_type: 
         :param tags: Tags for the workflow.
         '''
         if __debug__:
@@ -2788,6 +2792,7 @@ class CfnWorkflow(
             name=name,
             parameter_template=parameter_template,
             storage_capacity=storage_capacity,
+            storage_type=storage_type,
             tags=tags,
         )
 
@@ -2867,6 +2872,14 @@ class CfnWorkflow(
         :cloudformationAttribute: Type
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrUuid")
+    def attr_uuid(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Uuid
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrUuid"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2988,6 +3001,18 @@ class CfnWorkflow(
         jsii.set(self, "storageCapacity", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="storageType")
+    def storage_type(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "storageType"))
+
+    @storage_type.setter
+    def storage_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__82b78c9fdaf5e3e15a75209f5d891cf1513f47077977c45c2d020ffe13e990ac)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "storageType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         '''Tags for the workflow.'''
@@ -3088,6 +3113,7 @@ class CfnWorkflow(
         "name": "name",
         "parameter_template": "parameterTemplate",
         "storage_capacity": "storageCapacity",
+        "storage_type": "storageType",
         "tags": "tags",
     },
 )
@@ -3103,6 +3129,7 @@ class CfnWorkflowProps:
         name: typing.Optional[builtins.str] = None,
         parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         storage_capacity: typing.Optional[jsii.Number] = None,
+        storage_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnWorkflow``.
@@ -3115,6 +3142,7 @@ class CfnWorkflowProps:
         :param name: The workflow's name.
         :param parameter_template: The workflow's parameter template.
         :param storage_capacity: The default static storage capacity (in gibibytes) for runs that use this workflow or workflow version.
+        :param storage_type: 
         :param tags: Tags for the workflow.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html
@@ -3140,6 +3168,7 @@ class CfnWorkflowProps:
                     )
                 },
                 storage_capacity=123,
+                storage_type="storageType",
                 tags={
                     "tags_key": "tags"
                 }
@@ -3155,6 +3184,7 @@ class CfnWorkflowProps:
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument parameter_template", value=parameter_template, expected_type=type_hints["parameter_template"])
             check_type(argname="argument storage_capacity", value=storage_capacity, expected_type=type_hints["storage_capacity"])
+            check_type(argname="argument storage_type", value=storage_type, expected_type=type_hints["storage_type"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if accelerators is not None:
@@ -3173,6 +3203,8 @@ class CfnWorkflowProps:
             self._values["parameter_template"] = parameter_template
         if storage_capacity is not None:
             self._values["storage_capacity"] = storage_capacity
+        if storage_type is not None:
+            self._values["storage_type"] = storage_type
         if tags is not None:
             self._values["tags"] = tags
 
@@ -3250,6 +3282,14 @@ class CfnWorkflowProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
+    def storage_type(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-storagetype
+        '''
+        result = self._values.get("storage_type")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         '''Tags for the workflow.
 
@@ -3270,6 +3310,643 @@ class CfnWorkflowProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _ITaggableV2_4e6798f8)
+class CfnWorkflowVersion(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersion",
+):
+    '''Definition of AWS::Omics::WorkflowVersion Resource Type.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html
+    :cloudformationResource: AWS::Omics::WorkflowVersion
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_omics as omics
+        
+        cfn_workflow_version = omics.CfnWorkflowVersion(self, "MyCfnWorkflowVersion",
+            version_name="versionName",
+            workflow_id="workflowId",
+        
+            # the properties below are optional
+            accelerators="accelerators",
+            definition_uri="definitionUri",
+            description="description",
+            engine="engine",
+            main="main",
+            parameter_template={
+                "parameter_template_key": omics.CfnWorkflowVersion.WorkflowParameterProperty(
+                    description="description",
+                    optional=False
+                )
+            },
+            storage_capacity=123,
+            storage_type="storageType",
+            tags={
+                "tags_key": "tags"
+            },
+            workflow_bucket_owner_id="workflowBucketOwnerId"
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        version_name: builtins.str,
+        workflow_id: builtins.str,
+        accelerators: typing.Optional[builtins.str] = None,
+        definition_uri: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        engine: typing.Optional[builtins.str] = None,
+        main: typing.Optional[builtins.str] = None,
+        parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.WorkflowParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        storage_capacity: typing.Optional[jsii.Number] = None,
+        storage_type: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param version_name: 
+        :param workflow_id: 
+        :param accelerators: 
+        :param definition_uri: 
+        :param description: 
+        :param engine: 
+        :param main: 
+        :param parameter_template: 
+        :param storage_capacity: 
+        :param storage_type: 
+        :param tags: A map of resource tags.
+        :param workflow_bucket_owner_id: 
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f9bbd83c3821b6d01e1b0445c2a66c0e7c312d81583ae6cf8dbe78c8d6a4bf99)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnWorkflowVersionProps(
+            version_name=version_name,
+            workflow_id=workflow_id,
+            accelerators=accelerators,
+            definition_uri=definition_uri,
+            description=description,
+            engine=engine,
+            main=main,
+            parameter_template=parameter_template,
+            storage_capacity=storage_capacity,
+            storage_type=storage_type,
+            tags=tags,
+            workflow_bucket_owner_id=workflow_bucket_owner_id,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1a7de38e00c231b3afd92bbb59cad40657b334333096dde12413f391ade16867)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e1461fce0dec6c9339e6bbc0df050886fb1f30852661c80911b28268bdee03c9)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreationTime")
+    def attr_creation_time(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: CreationTime
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreationTime"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrType")
+    def attr_type(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Type
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrUuid")
+    def attr_uuid(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Uuid
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrUuid"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="versionName")
+    def version_name(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "versionName"))
+
+    @version_name.setter
+    def version_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4a9f5bdcc4a225102f171d30f4738ab832792497c08ecb206114ad57125adf01)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "versionName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="workflowId")
+    def workflow_id(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "workflowId"))
+
+    @workflow_id.setter
+    def workflow_id(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5def0afb0cd8ab9471e48b541cd9dceaeb6826bfe7a8a24d0c36614c73b1a6d6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "workflowId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="accelerators")
+    def accelerators(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "accelerators"))
+
+    @accelerators.setter
+    def accelerators(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b69952a53a68976751566fbcf17774d0dfa2d7ede106cb440b751f76c7eb99ef)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "accelerators", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="definitionUri")
+    def definition_uri(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "definitionUri"))
+
+    @definition_uri.setter
+    def definition_uri(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7a8ff1e5a2ba3fcf1c5fb306e96445a76ec1ac6872615b206206a2a173f64978)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "definitionUri", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="description")
+    def description(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
+
+    @description.setter
+    def description(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d26e61de900859028fd4b5aff7eb7fefa87386da043d620b3407bc69ef3f950b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="engine")
+    def engine(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "engine"))
+
+    @engine.setter
+    def engine(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4ade62566da0dd0e16cdb86d20bb176d8778e02a5223101deea2467f1ee7cadc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "engine", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="main")
+    def main(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "main"))
+
+    @main.setter
+    def main(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bb201e46965fe4b385e0e52f84a505023c34c0c16c33aea7e75a09209c34d1af)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "main", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="parameterTemplate")
+    def parameter_template(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.WorkflowParameterProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.WorkflowParameterProperty"]]]], jsii.get(self, "parameterTemplate"))
+
+    @parameter_template.setter
+    def parameter_template(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.WorkflowParameterProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__909f80095cd6043c196e37a387a0f1f32bfcddcd8f9a81c5e8f5ac8b4874faa9)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "parameterTemplate", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="storageCapacity")
+    def storage_capacity(self) -> typing.Optional[jsii.Number]:
+        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "storageCapacity"))
+
+    @storage_capacity.setter
+    def storage_capacity(self, value: typing.Optional[jsii.Number]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ba60096260fa288ca386a5b2841efb8fa9833ea893400efeba006766f392a7b7)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "storageCapacity", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="storageType")
+    def storage_type(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "storageType"))
+
+    @storage_type.setter
+    def storage_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50ce9715f4efa14e458d6207fae79f6b0ebc36a3bf74435e024116d9f8060ca2)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "storageType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''A map of resource tags.'''
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(
+        self,
+        value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bfbcbf729952f991d2243244c21c373b5bf1a3947ed2973ab1664037cdf636f8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="workflowBucketOwnerId")
+    def workflow_bucket_owner_id(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "workflowBucketOwnerId"))
+
+    @workflow_bucket_owner_id.setter
+    def workflow_bucket_owner_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bc6b06c168132bf54bf849b9d49774230af45a049e67f52bc48dd0220c18775d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "workflowBucketOwnerId", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersion.WorkflowParameterProperty",
+        jsii_struct_bases=[],
+        name_mapping={"description": "description", "optional": "optional"},
+    )
+    class WorkflowParameterProperty:
+        def __init__(
+            self,
+            *,
+            description: typing.Optional[builtins.str] = None,
+            optional: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''
+            :param description: 
+            :param optional: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-workflowparameter.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_omics as omics
+                
+                workflow_parameter_property = omics.CfnWorkflowVersion.WorkflowParameterProperty(
+                    description="description",
+                    optional=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3d434101b6df92e22ac3acf923cd7bb4105c1a82dad119b383839a4f14189485)
+                check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+                check_type(argname="argument optional", value=optional, expected_type=type_hints["optional"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if description is not None:
+                self._values["description"] = description
+            if optional is not None:
+                self._values["optional"] = optional
+
+        @builtins.property
+        def description(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-workflowparameter.html#cfn-omics-workflowversion-workflowparameter-description
+            '''
+            result = self._values.get("description")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def optional(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-workflowparameter.html#cfn-omics-workflowversion-workflowparameter-optional
+            '''
+            result = self._values.get("optional")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "WorkflowParameterProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersionProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "version_name": "versionName",
+        "workflow_id": "workflowId",
+        "accelerators": "accelerators",
+        "definition_uri": "definitionUri",
+        "description": "description",
+        "engine": "engine",
+        "main": "main",
+        "parameter_template": "parameterTemplate",
+        "storage_capacity": "storageCapacity",
+        "storage_type": "storageType",
+        "tags": "tags",
+        "workflow_bucket_owner_id": "workflowBucketOwnerId",
+    },
+)
+class CfnWorkflowVersionProps:
+    def __init__(
+        self,
+        *,
+        version_name: builtins.str,
+        workflow_id: builtins.str,
+        accelerators: typing.Optional[builtins.str] = None,
+        definition_uri: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        engine: typing.Optional[builtins.str] = None,
+        main: typing.Optional[builtins.str] = None,
+        parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        storage_capacity: typing.Optional[jsii.Number] = None,
+        storage_type: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnWorkflowVersion``.
+
+        :param version_name: 
+        :param workflow_id: 
+        :param accelerators: 
+        :param definition_uri: 
+        :param description: 
+        :param engine: 
+        :param main: 
+        :param parameter_template: 
+        :param storage_capacity: 
+        :param storage_type: 
+        :param tags: A map of resource tags.
+        :param workflow_bucket_owner_id: 
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_omics as omics
+            
+            cfn_workflow_version_props = omics.CfnWorkflowVersionProps(
+                version_name="versionName",
+                workflow_id="workflowId",
+            
+                # the properties below are optional
+                accelerators="accelerators",
+                definition_uri="definitionUri",
+                description="description",
+                engine="engine",
+                main="main",
+                parameter_template={
+                    "parameter_template_key": omics.CfnWorkflowVersion.WorkflowParameterProperty(
+                        description="description",
+                        optional=False
+                    )
+                },
+                storage_capacity=123,
+                storage_type="storageType",
+                tags={
+                    "tags_key": "tags"
+                },
+                workflow_bucket_owner_id="workflowBucketOwnerId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__32259ddc7b7d888918efaf09deb63ba780f3721ec1da9ea606ed8100a4b9fb3e)
+            check_type(argname="argument version_name", value=version_name, expected_type=type_hints["version_name"])
+            check_type(argname="argument workflow_id", value=workflow_id, expected_type=type_hints["workflow_id"])
+            check_type(argname="argument accelerators", value=accelerators, expected_type=type_hints["accelerators"])
+            check_type(argname="argument definition_uri", value=definition_uri, expected_type=type_hints["definition_uri"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
+            check_type(argname="argument main", value=main, expected_type=type_hints["main"])
+            check_type(argname="argument parameter_template", value=parameter_template, expected_type=type_hints["parameter_template"])
+            check_type(argname="argument storage_capacity", value=storage_capacity, expected_type=type_hints["storage_capacity"])
+            check_type(argname="argument storage_type", value=storage_type, expected_type=type_hints["storage_type"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument workflow_bucket_owner_id", value=workflow_bucket_owner_id, expected_type=type_hints["workflow_bucket_owner_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "version_name": version_name,
+            "workflow_id": workflow_id,
+        }
+        if accelerators is not None:
+            self._values["accelerators"] = accelerators
+        if definition_uri is not None:
+            self._values["definition_uri"] = definition_uri
+        if description is not None:
+            self._values["description"] = description
+        if engine is not None:
+            self._values["engine"] = engine
+        if main is not None:
+            self._values["main"] = main
+        if parameter_template is not None:
+            self._values["parameter_template"] = parameter_template
+        if storage_capacity is not None:
+            self._values["storage_capacity"] = storage_capacity
+        if storage_type is not None:
+            self._values["storage_type"] = storage_type
+        if tags is not None:
+            self._values["tags"] = tags
+        if workflow_bucket_owner_id is not None:
+            self._values["workflow_bucket_owner_id"] = workflow_bucket_owner_id
+
+    @builtins.property
+    def version_name(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-versionname
+        '''
+        result = self._values.get("version_name")
+        assert result is not None, "Required property 'version_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def workflow_id(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-workflowid
+        '''
+        result = self._values.get("workflow_id")
+        assert result is not None, "Required property 'workflow_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def accelerators(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-accelerators
+        '''
+        result = self._values.get("accelerators")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def definition_uri(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-definitionuri
+        '''
+        result = self._values.get("definition_uri")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def engine(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-engine
+        '''
+        result = self._values.get("engine")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def main(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-main
+        '''
+        result = self._values.get("main")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def parameter_template(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.WorkflowParameterProperty]]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-parametertemplate
+        '''
+        result = self._values.get("parameter_template")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.WorkflowParameterProperty]]]], result)
+
+    @builtins.property
+    def storage_capacity(self) -> typing.Optional[jsii.Number]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-storagecapacity
+        '''
+        result = self._values.get("storage_capacity")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def storage_type(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-storagetype
+        '''
+        result = self._values.get("storage_type")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''A map of resource tags.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def workflow_bucket_owner_id(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-workflowbucketownerid
+        '''
+        result = self._values.get("workflow_bucket_owner_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnWorkflowVersionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnAnnotationStore",
     "CfnAnnotationStoreProps",
@@ -3283,6 +3960,8 @@ __all__ = [
     "CfnVariantStoreProps",
     "CfnWorkflow",
     "CfnWorkflowProps",
+    "CfnWorkflowVersion",
+    "CfnWorkflowVersionProps",
 ]
 
 publication.publish()
@@ -3739,6 +4418,7 @@ def _typecheckingstub__b2d05cb293836959a925b22dbe1861bc4457d2d510bd3a480ae858ea9
     name: typing.Optional[builtins.str] = None,
     parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     storage_capacity: typing.Optional[jsii.Number] = None,
+    storage_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3804,6 +4484,12 @@ def _typecheckingstub__37c3d929054386cb4ebdbc60c2c3558d7cd34bed65861db5661f96d5d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__82b78c9fdaf5e3e15a75209f5d891cf1513f47077977c45c2d020ffe13e990ac(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__651d8f1caf8b2c987665acfeae50e19a5626bb723832dae7067c423aab3ac2b5(
     value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
 ) -> None:
@@ -3828,7 +4514,138 @@ def _typecheckingstub__09bedca50200dd06a4bbe4bb6135e76dacff76287249f3d28b8f285f8
     name: typing.Optional[builtins.str] = None,
     parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     storage_capacity: typing.Optional[jsii.Number] = None,
+    storage_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f9bbd83c3821b6d01e1b0445c2a66c0e7c312d81583ae6cf8dbe78c8d6a4bf99(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    version_name: builtins.str,
+    workflow_id: builtins.str,
+    accelerators: typing.Optional[builtins.str] = None,
+    definition_uri: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    engine: typing.Optional[builtins.str] = None,
+    main: typing.Optional[builtins.str] = None,
+    parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    storage_capacity: typing.Optional[jsii.Number] = None,
+    storage_type: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1a7de38e00c231b3afd92bbb59cad40657b334333096dde12413f391ade16867(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e1461fce0dec6c9339e6bbc0df050886fb1f30852661c80911b28268bdee03c9(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4a9f5bdcc4a225102f171d30f4738ab832792497c08ecb206114ad57125adf01(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5def0afb0cd8ab9471e48b541cd9dceaeb6826bfe7a8a24d0c36614c73b1a6d6(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b69952a53a68976751566fbcf17774d0dfa2d7ede106cb440b751f76c7eb99ef(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7a8ff1e5a2ba3fcf1c5fb306e96445a76ec1ac6872615b206206a2a173f64978(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d26e61de900859028fd4b5aff7eb7fefa87386da043d620b3407bc69ef3f950b(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4ade62566da0dd0e16cdb86d20bb176d8778e02a5223101deea2467f1ee7cadc(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bb201e46965fe4b385e0e52f84a505023c34c0c16c33aea7e75a09209c34d1af(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__909f80095cd6043c196e37a387a0f1f32bfcddcd8f9a81c5e8f5ac8b4874faa9(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.WorkflowParameterProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ba60096260fa288ca386a5b2841efb8fa9833ea893400efeba006766f392a7b7(
+    value: typing.Optional[jsii.Number],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__50ce9715f4efa14e458d6207fae79f6b0ebc36a3bf74435e024116d9f8060ca2(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bfbcbf729952f991d2243244c21c373b5bf1a3947ed2973ab1664037cdf636f8(
+    value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bc6b06c168132bf54bf849b9d49774230af45a049e67f52bc48dd0220c18775d(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3d434101b6df92e22ac3acf923cd7bb4105c1a82dad119b383839a4f14189485(
+    *,
+    description: typing.Optional[builtins.str] = None,
+    optional: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__32259ddc7b7d888918efaf09deb63ba780f3721ec1da9ea606ed8100a4b9fb3e(
+    *,
+    version_name: builtins.str,
+    workflow_id: builtins.str,
+    accelerators: typing.Optional[builtins.str] = None,
+    definition_uri: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    engine: typing.Optional[builtins.str] = None,
+    main: typing.Optional[builtins.str] = None,
+    parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    storage_capacity: typing.Optional[jsii.Number] = None,
+    storage_type: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

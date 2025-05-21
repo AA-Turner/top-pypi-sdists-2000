@@ -5,6 +5,7 @@ import re
 import typing as t
 
 from sqlglot import exp, generator, parser, tokens, transforms
+from sqlglot._typing import E
 from sqlglot.dialects.dialect import (
     Dialect,
     NormalizationStrategy,
@@ -35,7 +36,7 @@ from sqlglot.tokens import TokenType
 from sqlglot.generator import unsupported_args
 
 if t.TYPE_CHECKING:
-    from sqlglot._typing import E, Lit
+    from sqlglot._typing import Lit
 
     from sqlglot.optimizer.annotate_types import TypeAnnotator
 
@@ -352,6 +353,17 @@ def _json_extract_sql(self: BigQuery.Generator, expression: JSON_EXTRACT_TYPE) -
     return sql
 
 
+def _annotate_concat(self: TypeAnnotator, expression: exp.Concat) -> exp.Concat:
+    annotated = self._annotate_by_args(expression, "expressions")
+
+    # Args must be BYTES or types that can be cast to STRING, return type is either BYTES or STRING
+    # https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#concat
+    if not annotated.is_type(exp.DataType.Type.BINARY, exp.DataType.Type.UNKNOWN):
+        annotated.type = exp.DataType.Type.VARCHAR
+
+    return annotated
+
+
 class BigQuery(Dialect):
     WEEK_OFFSET = -1
     UNNEST_COLUMN_ONLY = True
@@ -432,7 +444,7 @@ class BigQuery(Dialect):
                 exp.Substring,
             )
         },
-        exp.Concat: lambda self, e: self._annotate_by_args(e, "expressions"),
+        exp.Concat: _annotate_concat,
         exp.Sign: lambda self, e: self._annotate_by_args(e, "this"),
         exp.Split: lambda self, e: self._annotate_by_args(e, "this", array=True),
     }
@@ -440,7 +452,7 @@ class BigQuery(Dialect):
     def normalize_identifier(self, expression: E) -> E:
         if (
             isinstance(expression, exp.Identifier)
-            and self.normalization_strategy is not NormalizationStrategy.CASE_SENSITIVE
+            and self.normalization_strategy is NormalizationStrategy.CASE_INSENSITIVE
         ):
             parent = expression.parent
             while isinstance(parent, exp.Dot):
@@ -462,7 +474,9 @@ class BigQuery(Dialect):
             if not case_sensitive:
                 expression.set("this", expression.this.lower())
 
-        return expression
+            return t.cast(E, expression)
+
+        return super().normalize_identifier(expression)
 
     class Tokenizer(tokens.Tokenizer):
         QUOTES = ["'", '"', '"""', "'''"]

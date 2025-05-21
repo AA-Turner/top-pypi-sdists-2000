@@ -321,7 +321,6 @@ from mypy_boto3_pinpoint_sms_voice_v2.client import PinpointSMSVoiceV2Client
 from mypy_boto3_pipes.client import EventBridgePipesClient
 from mypy_boto3_polly.client import PollyClient
 from mypy_boto3_pricing.client import PricingClient
-from mypy_boto3_privatenetworks.client import Private5GClient
 from mypy_boto3_proton.client import ProtonClient
 from mypy_boto3_qapps.client import QAppsClient
 from mypy_boto3_qbusiness.client import QBusinessClient
@@ -5786,24 +5785,6 @@ def client(
 ) -> PricingClient:
     """
     Create client for Pricing service.
-    """
-
-@overload
-def client(
-    service_name: Literal["privatenetworks"],
-    region_name: str | None = ...,
-    api_version: str | None = ...,
-    use_ssl: bool | None = ...,
-    verify: bool | str | None = ...,
-    endpoint_url: str | None = ...,
-    aws_access_key_id: str | None = ...,
-    aws_secret_access_key: str | None = ...,
-    aws_session_token: str | None = ...,
-    config: Config | None = ...,
-    aws_account_id: str | None = ...,
-) -> Private5GClient:
-    """
-    Create client for Private5G service.
     """
 
 @overload

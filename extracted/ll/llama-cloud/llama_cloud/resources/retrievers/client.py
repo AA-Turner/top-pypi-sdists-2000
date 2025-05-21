@@ -295,6 +295,8 @@ class RetrieversClient:
         self,
         retriever_id: str,
         *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
         mode: typing.Optional[CompositeRetrievalMode] = OMIT,
         rerank_top_n: typing.Optional[int] = OMIT,
         rerank_config: typing.Optional[ReRankConfig] = OMIT,
@@ -305,6 +307,10 @@ class RetrieversClient:
 
         Parameters:
             - retriever_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
 
             - mode: typing.Optional[CompositeRetrievalMode]. The mode of composite retrieval.
 
@@ -341,6 +347,7 @@ class RetrieversClient:
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", f"api/v1/retrievers/{retriever_id}/retrieve"
             ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
@@ -692,6 +699,8 @@ class AsyncRetrieversClient:
         self,
         retriever_id: str,
         *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
         mode: typing.Optional[CompositeRetrievalMode] = OMIT,
         rerank_top_n: typing.Optional[int] = OMIT,
         rerank_config: typing.Optional[ReRankConfig] = OMIT,
@@ -702,6 +711,10 @@ class AsyncRetrieversClient:
 
         Parameters:
             - retriever_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
 
             - mode: typing.Optional[CompositeRetrievalMode]. The mode of composite retrieval.
 
@@ -738,6 +751,7 @@ class AsyncRetrieversClient:
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", f"api/v1/retrievers/{retriever_id}/retrieve"
             ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,

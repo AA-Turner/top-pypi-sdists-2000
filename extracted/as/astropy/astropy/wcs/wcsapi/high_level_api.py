@@ -7,10 +7,10 @@ import numpy as np
 from .utils import deserialize_class
 
 __all__ = [
-    "values_to_high_level_objects",
-    "high_level_objects_to_values",
     "BaseHighLevelWCS",
     "HighLevelWCSMixin",
+    "high_level_objects_to_values",
+    "values_to_high_level_objects",
 ]
 
 
@@ -54,8 +54,7 @@ def _toindex(value):
             arr = fill_value
     else:
         arr[np.isnan(arr)] = fill_value
-    indx = np.asarray(arr, dtype=int)
-    return indx
+    return np.asarray(arr, dtype=int)
 
 
 class BaseHighLevelWCS(metaclass=abc.ABCMeta):

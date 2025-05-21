@@ -331,6 +331,7 @@ __all__ = (
     "InstanceMetadataOptionsStateType",
     "InstanceMetadataProtocolStateType",
     "InstanceMetadataTagsStateType",
+    "InstanceRebootMigrationStateType",
     "InstanceRunningWaiterName",
     "InstanceStateNameType",
     "InstanceStatusOkWaiterName",
@@ -446,6 +447,7 @@ __all__ = (
     "ProtocolType",
     "ProtocolValueType",
     "RIProductDescriptionType",
+    "RebootMigrationSupportType",
     "RecurringChargeFrequencyType",
     "RegionName",
     "ReplaceRootVolumeTaskStateType",
@@ -1155,6 +1157,7 @@ InstanceMetadataEndpointStateType = Literal["disabled", "enabled"]
 InstanceMetadataOptionsStateType = Literal["applied", "pending"]
 InstanceMetadataProtocolStateType = Literal["disabled", "enabled"]
 InstanceMetadataTagsStateType = Literal["disabled", "enabled"]
+InstanceRebootMigrationStateType = Literal["default", "disabled"]
 InstanceRunningWaiterName = Literal["instance_running"]
 InstanceStateNameType = Literal[
     "pending", "running", "shutting-down", "stopped", "stopping", "terminated"
@@ -2321,6 +2324,7 @@ ProtocolValueType = Literal["gre"]
 RIProductDescriptionType = Literal[
     "Linux/UNIX", "Linux/UNIX (Amazon VPC)", "Windows", "Windows (Amazon VPC)"
 ]
+RebootMigrationSupportType = Literal["supported", "unsupported"]
 RecurringChargeFrequencyType = Literal["Hourly"]
 ReplaceRootVolumeTaskStateType = Literal[
     "failed", "failed-detached", "failing", "in-progress", "pending", "succeeded"
@@ -3000,7 +3004,6 @@ ServiceName = Literal[
     "pipes",
     "polly",
     "pricing",
-    "privatenetworks",
     "proton",
     "qapps",
     "qbusiness",

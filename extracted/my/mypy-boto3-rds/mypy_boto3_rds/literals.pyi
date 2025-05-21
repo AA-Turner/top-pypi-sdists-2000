@@ -58,6 +58,7 @@ __all__ = (
     "DescribeDBInstanceAutomatedBackupsPaginatorName",
     "DescribeDBInstancesPaginatorName",
     "DescribeDBLogFilesPaginatorName",
+    "DescribeDBMajorEngineVersionsPaginatorName",
     "DescribeDBParameterGroupsPaginatorName",
     "DescribeDBParametersPaginatorName",
     "DescribeDBProxiesPaginatorName",
@@ -91,6 +92,7 @@ __all__ = (
     "GlobalClusterMemberSynchronizationStatusType",
     "IAMAuthModeType",
     "IntegrationStatusType",
+    "LifecycleSupportNameType",
     "LimitlessDatabaseStatusType",
     "LocalWriteForwardingStatusType",
     "PaginatorName",
@@ -169,6 +171,7 @@ DescribeDBEngineVersionsPaginatorName = Literal["describe_db_engine_versions"]
 DescribeDBInstanceAutomatedBackupsPaginatorName = Literal["describe_db_instance_automated_backups"]
 DescribeDBInstancesPaginatorName = Literal["describe_db_instances"]
 DescribeDBLogFilesPaginatorName = Literal["describe_db_log_files"]
+DescribeDBMajorEngineVersionsPaginatorName = Literal["describe_db_major_engine_versions"]
 DescribeDBParameterGroupsPaginatorName = Literal["describe_db_parameter_groups"]
 DescribeDBParametersPaginatorName = Literal["describe_db_parameters"]
 DescribeDBProxiesPaginatorName = Literal["describe_db_proxies"]
@@ -207,6 +210,9 @@ GlobalClusterMemberSynchronizationStatusType = Literal["connected", "pending-res
 IAMAuthModeType = Literal["DISABLED", "ENABLED", "REQUIRED"]
 IntegrationStatusType = Literal[
     "active", "creating", "deleting", "failed", "modifying", "needs_attention", "syncing"
+]
+LifecycleSupportNameType = Literal[
+    "open-source-rds-extended-support", "open-source-rds-standard-support"
 ]
 LimitlessDatabaseStatusType = Literal[
     "active",
@@ -544,7 +550,6 @@ ServiceName = Literal[
     "pipes",
     "polly",
     "pricing",
-    "privatenetworks",
     "proton",
     "qapps",
     "qbusiness",
@@ -605,7 +610,6 @@ ServiceName = Literal[
     "signer",
     "simspaceweaver",
     "sms",
-    "sms-voice",
     "snow-device-management",
     "snowball",
     "sns",
@@ -613,6 +617,7 @@ ServiceName = Literal[
     "sqs",
     "ssm",
     "ssm-contacts",
+    "ssm-guiconnect",
     "ssm-incidents",
     "ssm-quicksetup",
     "ssm-sap",
@@ -679,6 +684,7 @@ PaginatorName = Literal[
     "describe_db_instance_automated_backups",
     "describe_db_instances",
     "describe_db_log_files",
+    "describe_db_major_engine_versions",
     "describe_db_parameter_groups",
     "describe_db_parameters",
     "describe_db_proxies",

@@ -40,9 +40,7 @@ class PipelineCreate(pydantic.BaseModel):
     eval_parameters: typing.Optional[EvalExecutionParams] = pydantic.Field(
         description="Eval parameters for the pipeline."
     )
-    llama_parse_parameters: typing.Optional[LlamaParseParameters] = pydantic.Field(
-        description="Settings that can be configured for how to use LlamaParse to parse files within a LlamaCloud pipeline."
-    )
+    llama_parse_parameters: typing.Optional[LlamaParseParameters]
     status: typing.Optional[str]
     metadata_config: typing.Optional[PipelineMetadataConfig]
     name: str

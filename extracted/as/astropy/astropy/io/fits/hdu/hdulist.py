@@ -27,7 +27,6 @@ from astropy.utils import indent
 from astropy.utils.compat.numpycompat import NUMPY_LT_2_0
 
 # NOTE: Python can be built without bz2.
-from astropy.utils.compat.optional_deps import HAS_BZ2
 from astropy.utils.exceptions import AstropyUserWarning
 
 from .base import ExtensionHDU, _BaseHDU, _NonstandardHDU, _ValidHDU
@@ -35,9 +34,6 @@ from .compressed.compressed import CompImageHDU
 from .groups import GroupsHDU
 from .image import ImageHDU, PrimaryHDU
 from .table import BinTableHDU
-
-if HAS_BZ2:
-    import bz2
 
 __all__ = ["HDUList", "fitsopen"]
 
@@ -452,7 +448,7 @@ class HDUList(list, _Verify):
 
         self._try_while_unread_hdus(super().__delitem__, key)
 
-        if key == end_index or key == -1 and not self._resize:
+        if key == end_index or (key == -1 and not self._resize):
             self._truncate = True
         else:
             self._truncate = False
@@ -949,7 +945,7 @@ class HDUList(list, _Verify):
 
                 # only append HDU's which are "new"
                 if hdu._new:
-                    hdu._prewriteto(checksum=hdu._output_checksum)
+                    hdu._prewriteto()
                     with _free_space_check(self):
                         hdu._writeto(self._file)
                         if verbose:
@@ -1021,10 +1017,10 @@ class HDUList(list, _Verify):
 
         Notes
         -----
-        gzip, zip and bzip2 compression algorithms are natively supported.
+        gzip, zip, bzip2 and lzma compression algorithms are natively supported.
         Compression mode is determined from the filename extension
-        ('.gz', '.zip' or '.bz2' respectively).  It is also possible to pass a
-        compressed file object, e.g. `gzip.GzipFile`.
+        ('.gz', '.zip', '.bz2' or '.xz' respectively).  It is also possible to
+        pass a compressed file object, e.g. `gzip.GzipFile`.
         """
         if len(self) == 0:
             warnings.warn("There is nothing to write.", AstropyUserWarning)
@@ -1059,7 +1055,8 @@ class HDUList(list, _Verify):
         try:
             with _free_space_check(self, dirname=dirname):
                 for hdu in self:
-                    hdu._prewriteto(checksum=checksum)
+                    hdu._output_checksum = checksum
+                    hdu._prewriteto()
                     hdu._writeto(hdulist._file)
                     hdu._postwriteto()
         finally:
@@ -1443,7 +1440,7 @@ class HDUList(list, _Verify):
         for hdu in self:
             # Need to all _prewriteto() for each HDU first to determine if
             # resizing will be necessary
-            hdu._prewriteto(checksum=hdu._output_checksum, inplace=True)
+            hdu._prewriteto(inplace=True)
 
         try:
             self._wasresized()
@@ -1480,12 +1477,6 @@ class HDUList(list, _Verify):
             # original file, and rename the tmp file to the original file.
             if self._file.compression == "gzip":
                 new_file = gzip.GzipFile(name, mode="ab+")
-            elif self._file.compression == "bzip2":
-                if not HAS_BZ2:
-                    raise ModuleNotFoundError(
-                        "This Python installation does not provide the bz2 module."
-                    )
-                new_file = bz2.BZ2File(name, mode="w")
             else:
                 new_file = name
 

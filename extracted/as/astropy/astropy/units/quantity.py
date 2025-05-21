@@ -37,15 +37,16 @@ from .structured import StructuredUnit, _structured_unit_like_dtype
 from .utils import is_effectively_unity
 
 if TYPE_CHECKING:
+    from collections.abc import Collection
     from typing import Self
 
     from .typing import QuantityLike
 
 __all__ = [
     "Quantity",
-    "SpecificTypeQuantity",
-    "QuantityInfoBase",
     "QuantityInfo",
+    "QuantityInfoBase",
+    "SpecificTypeQuantity",
     "allclose",
     "isclose",
 ]
@@ -106,8 +107,8 @@ class QuantityIterator:
     def __iter__(self):
         return self
 
-    def __getitem__(self, indx):
-        out = self._dataiter.__getitem__(indx)
+    def __getitem__(self, index):
+        out = self._dataiter.__getitem__(index)
         # For single elements, ndarray.flat.__getitem__ returns scalars; these
         # need a new view as a Quantity.
         if isinstance(out, type(self._quantity)):
@@ -1353,14 +1354,16 @@ class Quantity(np.ndarray):
     def __index__(self):
         # for indices, we do not want to mess around with scaling at all,
         # so unlike for float, int, we insist here on unscaled dimensionless
-        try:
-            assert self.unit.is_unity()
-            return self.value.__index__()
-        except Exception:
-            raise TypeError(
-                "only integer dimensionless scalar quantities "
-                "can be converted to a Python index"
-            )
+        if self.unit.is_unity():
+            try:
+                return self.value.__index__()
+            except AttributeError:
+                pass
+
+        raise TypeError(
+            "only integer dimensionless scalar quantities "
+            "can be converted to a Python index"
+        )
 
     # TODO: we may want to add a hook for dimensionless quantities?
     @property
@@ -1591,7 +1594,7 @@ class Quantity(np.ndarray):
                 # Format the whole thing as a single string.
                 return format(f"{self.value}{self._unitstr:s}", format_spec)
 
-    def decompose(self, bases=[]):
+    def decompose(self, bases: Collection[UnitBase] = ()) -> Self:
         """
         Generates a new `Quantity` with the units
         decomposed. Decomposed units have only irreducible units in
@@ -1613,7 +1616,9 @@ class Quantity(np.ndarray):
         """
         return self._decompose(False, bases=bases)
 
-    def _decompose(self, allowscaledunits=False, bases=[]):
+    def _decompose(
+        self, allowscaledunits: bool = False, bases: Collection[UnitBase] = ()
+    ) -> Self:
         """
         Generates a new `Quantity` with the units decomposed. Decomposed
         units have only irreducible units in them (see
@@ -1900,9 +1905,10 @@ class Quantity(np.ndarray):
             try:
                 result = super().__array_function__(function, types, args, kwargs)
             except AttributeError as e:
+                # this exception handling becomes unneeded in numpy 2.2 (not NUMPY_LT_2_2)
+                # see https://github.com/numpy/numpy/issues/27500
                 if "_implementation" not in str(e):
                     raise
-                # numpy bug, see https://github.com/numpy/numpy/issues/27500
                 result = function(*args, **kwargs)
 
             # Fall through to return section

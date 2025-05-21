@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 [project]
 name = "json_repair"
-version = "0.44.1"
+version = "0.45.1"
 license = {file = "LICENSE"}
 authors = [
   { name="Stefano Baccianella", email="4247706+mangiucugna@users.noreply.github.com" },
@@ -11,7 +11,7 @@ authors = [
 description = "A package to repair broken json strings"
 keywords = ["JSON", "REPAIR", "LLM", "PARSER"]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -24,6 +24,25 @@ classifiers = [
 [tool.pytest.ini_options]
 pythonpath = [
   "."
+]
+[tool.coverage.run]
+omit = [
+    "*/.cursor/extensions/*",
+    "*/pythonFiles/lib/python/*",
+    "*/site-packages/*",
+]
+[tool.coverage.report]
+exclude_also = [
+    'def __repr__',
+    'if self.debug:',
+    'if settings.DEBUG',
+    'raise AssertionError',
+    'raise NotImplementedError',
+    'if 0:',
+    'if __name__ == .__main__.:',
+    'if TYPE_CHECKING:',
+    'class .*\bProtocol\):',
+    '@(abc\.)?abstractmethod',
 ]
 [tool.setuptools.package-data]
 "pkgname" = ["py.typed"]
@@ -40,14 +59,29 @@ target-version = "py313"
 [tool.ruff.lint]
 # Read more here https://docs.astral.sh/ruff/rules/
 # By default, Ruff enables Flake8's E and F rules
-# Pyflakes - F, pycodestyle - E, W
-# flake8-builtins - A
+# Flake8-bandit - S
+# Flake8-bugbear – catches real-world Python footguns - B
+# Flake8-builtins - A
+# Flake8-tidy-imports - TID
+# Isort - I
+# Mccabe – code complexity warnings - C90
+# Pycodestyle - E, W
+# Pyflakes - F
 # Pylint - PLC, PLE, PLW
-# isort - I
-# flake8-bandit - S
-# flake8-tidy-imports - TID
-select = ['E', 'F', 'W', 'A', 'PLC', 'PLE', 'PLW', 'I', 'S', 'TID', 'RUF']
-ignore = ["E501"]
+# Ruff specific - RUF
+# Simplifications (e.g., if x == True → if x) - SIM
+# Pyupgrade – safe modernization (e.g., str() → f"") - UP
+
+select = ['A', 'B', 'C90', 'E', 'F', 'I', 'PLC', 'PLE', 'PLW', 'S', 'SIM', 'TID', 'UP', 'W']
+# Only enable these RUF rules
+extend-select = [
+  "RUF001",  # ambiguous Unicode
+  "RUF012",  # mutable default arguments
+  "RUF013",  # unnecessary super()
+  "RUF016",  # unnecessary else after return (optional)
+  "RUF018",  # unnecessary else after raise (optional)
+]
+ignore = ["E501", "C901", "S101"]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]

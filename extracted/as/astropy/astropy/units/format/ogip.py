@@ -23,21 +23,25 @@ import warnings
 from fractions import Fraction
 from typing import TYPE_CHECKING
 
+from astropy.units.core import CompositeUnit
 from astropy.units.errors import UnitParserWarning, UnitsWarning
 from astropy.utils import classproperty, parsing
 
-from . import core, utils
-from .fits import FITS
+from . import utils
+from .base import Base, _ParsingFormatMixin
 
 if TYPE_CHECKING:
     from typing import ClassVar, Literal
 
+    import numpy as np
+
     from astropy.extern.ply.lex import Lexer
     from astropy.units import UnitBase
+    from astropy.units.typing import UnitScale
     from astropy.utils.parsing import ThreadSafeParser
 
 
-class OGIP(FITS):
+class OGIP(Base, _ParsingFormatMixin):
     """
     Support the units in `Office of Guest Investigator Programs (OGIP)
     FITS files
@@ -170,9 +174,7 @@ class OGIP(FITS):
             """
             match p[1:]:
                 case (factor, unit) | (factor, _, unit):
-                    p[0] = core.CompositeUnit(
-                        factor * unit.scale, unit.bases, unit.powers
-                    )
+                    p[0] = CompositeUnit(factor * unit.scale, unit.bases, unit.powers)
                 case _:
                     p[0] = p[1]
 
@@ -342,12 +344,12 @@ class OGIP(FITS):
 
     @classmethod
     def to_string(
-        cls, unit: UnitBase, fraction: bool | Literal["inline"] = "inline"
+        cls, unit: UnitBase, fraction: bool | Literal["inline", "multiline"] = "inline"
     ) -> str:
         # Remove units that aren't known to the format
         unit = cls._decompose_to_known_units(unit)
 
-        if isinstance(unit, core.CompositeUnit):
+        if isinstance(unit, CompositeUnit):
             # Can't use np.log10 here, because p[0] may be a Python long.
             if math.log10(unit.scale) % 1.0 != 0.0:
                 warnings.warn(
@@ -355,4 +357,19 @@ class OGIP(FITS):
                     UnitsWarning,
                 )
 
-        return cls._to_string(unit, fraction=fraction)
+        return super().to_string(unit, fraction=fraction)
+
+    @classmethod
+    def format_exponential_notation(
+        cls, val: UnitScale | np.number, format_spec: str = "g"
+    ) -> str:
+        return format(val, format_spec)
+
+    @classmethod
+    def _validate_unit(cls, unit: str, detailed_exception: bool = True) -> UnitBase:
+        if unit in cls._deprecated_units:
+            warnings.warn(
+                f"The unit '{unit}' has been deprecated in the OGIP standard.",
+                UnitsWarning,
+            )
+        return super()._validate_unit(unit, detailed_exception)

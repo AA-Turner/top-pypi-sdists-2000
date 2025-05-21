@@ -6,7 +6,6 @@ from warnings import warn
 import astropy.config as _config
 import astropy.io.registry as io_registry
 from astropy import extern
-from astropy.utils.exceptions import AstropyDeprecationWarning
 
 from .table import Table
 
@@ -133,11 +132,10 @@ class JSViewer:
     """
 
     def __init__(self, use_local_files=False, display_length=50):
-        self._use_local_files = use_local_files
         if use_local_files:
             warn(
-                "use_local_files is deprecated and will be ignored in astropy 7.1; it might be removed in a future version.",
-                AstropyDeprecationWarning,
+                "`use_local_files` is deprecated and has no effect; for security reasons no static versions of the required js libraries are included in astropy.",
+                DeprecationWarning,
             )
         self.display_length_menu = [
             [10, 25, 50, 100, 500, 1000, -1],
@@ -150,26 +148,14 @@ class JSViewer:
 
     @property
     def jquery_urls(self):
-        if self._use_local_files:
-            return [
-                f"file://{EXTERN_JS_DIR / 'jquery-3.6.0.min.js'}",
-                f"file://{EXTERN_JS_DIR / 'datatables.min.js'}",
-            ]
-        else:
-            return [conf.jquery_url, conf.datatables_url]
+        return [conf.jquery_url, conf.datatables_url]
 
     @property
     def css_urls(self):
-        if self._use_local_files:
-            return [f"file://{EXTERN_CSS_DIR / 'datatables.css'}"]
-        else:
-            return conf.css_urls
+        return conf.css_urls
 
     def _jstable_file(self):
-        if self._use_local_files:
-            return f"file://{EXTERN_JS_DIR / 'datatables.min'}"
-        else:
-            return conf.datatables_url[:-3]
+        return conf.datatables_url[:-3]
 
     def ipynb(self, table_id, css=None, sort_columns="[]"):
         html = f"<style>{css if css is not None else DEFAULT_CSS_NB}</style>"
@@ -202,6 +188,37 @@ def write_table_jsviewer(
     htmldict=None,
     overwrite=False,
 ):
+    """
+    Write an Astropy Table to an HTML file with JavaScript viewer.
+
+    This function uses the JSViewer class to generate the necessary JavaScript
+    and CSS for displaying the table interactively in a web browser.
+
+    Parameters
+    ----------
+    table : Table
+        The Astropy Table to be written to an HTML file.
+    filename : str, Path
+        The name of the output HTML file.
+    table_id : str, optional
+        The HTML id attribute for the table. Defaults to ``f"table({id(table)}"``.
+    max_lines : int, optional
+        The maximum number of lines to include in the output table. Default is 5000.
+    table_class : str, optional
+        The CSS class for the table. Default is "display compact".
+    jskwargs : dict, optional
+        Additional keyword arguments to pass to the JSViewer.
+    css : str, optional
+        CSS styles to include in the HTML file. Default is `DEFAULT_CSS`.
+    htmldict : dict, optional
+        Additional HTML options passed to :class:`~astropy.io.ascii.HTML`.
+    overwrite : bool, optional
+        If True, overwrite the output file if it exists. Default is False.
+
+    Returns
+    -------
+    None
+    """
     if table_id is None:
         table_id = f"table{id(table)}"
 

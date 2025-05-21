@@ -7225,7 +7225,8 @@ class CfnDistribution(
             *,
             string_schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.StringSchemaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
+            '''The value that you assigned to the parameter.
+
             :param string_schema: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-definition.html
@@ -18009,7 +18010,7 @@ class CfnVpcOrigin(
             :param http_port: The HTTP port for the CloudFront VPC origin endpoint configuration. The default value is ``80`` . Default: - 80
             :param https_port: The HTTPS port of the CloudFront VPC origin endpoint configuration. The default value is ``443`` . Default: - 443
             :param origin_protocol_policy: The origin protocol policy for the CloudFront VPC origin endpoint configuration. Default: - "match-viewer"
-            :param origin_ssl_protocols: 
+            :param origin_ssl_protocols: Specifies the minimum SSL/TLS protocol that CloudFront uses when connecting to your origin over HTTPS. Valid values include ``SSLv3`` , ``TLSv1`` , ``TLSv1.1`` , and ``TLSv1.2`` . For more information, see `Minimum Origin SSL Protocol <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginSSLProtocols>`_ in the *Amazon CloudFront Developer Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-vpcorigin-vpcoriginendpointconfig.html
             :exampleMetadata: fixture=_generated
@@ -18111,7 +18112,12 @@ class CfnVpcOrigin(
 
         @builtins.property
         def origin_ssl_protocols(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''Specifies the minimum SSL/TLS protocol that CloudFront uses when connecting to your origin over HTTPS.
+
+            Valid values include ``SSLv3`` , ``TLSv1`` , ``TLSv1.1`` , and ``TLSv1.2`` .
+
+            For more information, see `Minimum Origin SSL Protocol <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginSSLProtocols>`_ in the *Amazon CloudFront Developer Guide* .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-vpcorigin-vpcoriginendpointconfig.html#cfn-cloudfront-vpcorigin-vpcoriginendpointconfig-originsslprotocols
             '''
             result = self._values.get("origin_ssl_protocols")
