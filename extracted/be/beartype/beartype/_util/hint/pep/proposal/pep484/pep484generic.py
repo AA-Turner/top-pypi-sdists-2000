@@ -12,10 +12,7 @@ This private submodule is *not* intended for importation by downstream callers.
 
 # ....................{ IMPORTS                            }....................
 from beartype.roar import BeartypeDecorHintPep484Exception
-from beartype.typing import (
-    Any,
-    Generic,
-)
+from beartype.typing import Generic
 from beartype._data.cls.datacls import TYPES_PEP484544_GENERIC
 from beartype._data.hint.datahintpep import Hint
 from beartype._data.hint.datahinttyping import TypeException
@@ -25,7 +22,7 @@ from beartype._util.py.utilpyversion import IS_PYTHON_AT_LEAST_3_11
 
 # ....................{ TESTERS                            }....................
 #FIXME: Unit test us up, please.
-def is_hint_pep484_generic_subscripted(hint: Hint) -> bool:
+def is_hint_pep484_generic_subbed(hint: Hint) -> bool:
     '''
     :data:`True` only if the passed object is a :pep:`484`-compliant
     **subscripted generic** (i.e., object subscripted by one or more child type
@@ -50,7 +47,7 @@ def is_hint_pep484_generic_subscripted(hint: Hint) -> bool:
 
     See Also
     --------
-    :func:`.is_hint_pep484_generic_unsubscripted`
+    :func:`.is_hint_pep484_generic_unsubbed`
         Further details.
     '''
 
@@ -67,12 +64,12 @@ def is_hint_pep484_generic_subscripted(hint: Hint) -> bool:
         # This origin object is an unsubscripted generic type, which would then
         # imply this hint to be a subscripted generic. If this strikes you as
         # insane, you're not alone
-        is_hint_pep484_generic_unsubscripted(hint_origin)
+        is_hint_pep484_generic_unsubbed(hint_origin)
     )
 
 
 #FIXME: Unit test us up, please.
-def is_hint_pep484_generic_unsubscripted(hint: Hint) -> bool:
+def is_hint_pep484_generic_unsubbed(hint: Hint) -> bool:
     '''
     :data:`True` only if the passed object is a :pep:`484`-compliant
     **unsubscripted generic** (i.e., :class:`typing.Generic` subclass, typically
@@ -187,7 +184,7 @@ def is_hint_pep484_generic_unsubscripted(hint: Hint) -> bool:
 @callable_cached
 def get_hint_pep484_generic_bases_unerased(
     # Mandatory parameters.
-    hint: Any,
+    hint: Hint,
 
     # Optional parameters.
     exception_cls: TypeException = BeartypeDecorHintPep484Exception,
@@ -204,14 +201,14 @@ def get_hint_pep484_generic_bases_unerased(
 
     Parameters
     ----------
-    hint : object
+    hint : Hint
         Object to be inspected.
     exception_cls : TypeException
         Type of exception to be raised. Defaults to
-        :exc:`BeartypeDecorHintPep484Exception`.
+        :exc:`.BeartypeDecorHintPep484Exception`.
     exception_prefix : str, optional
-        Human-readable substring prefixing the representation of this object in
-        the exception message. Defaults to the empty string.
+        Human-readable substring prefixing raised exception messages. Defaults
+        to the empty string.
 
     Returns
     -------
@@ -257,7 +254,6 @@ def get_hint_pep484_generic_bases_unerased(
     #common case of user-defined types directly subclassing "typing" types,
     #this tuple probably is *NOT* implemented correctly for the edge case of
     #user-defined types indirectly subclassing "typing" types: e.g.,
-    #
     #    >>> import collections.abc, typing
     #    >>> T = typing.TypeVar('T')
     #    >>> class Direct(collections.abc.Sized, typing.Generic[T]): pass
@@ -378,11 +374,11 @@ def get_hint_pep484_generic_bases_unerased(
 
     # If this hint is *NOT* a class, reduce this hint to the object originating
     # this hint if any. See is_hint_pep484_generic() for details.
-    hint = get_hint_pep484585_generic_type_or_none(hint)
+    hint = get_hint_pep484585_generic_type_or_none(hint)  # pyright: ignore
 
     # If this hint is *NOT* a PEP 484- or 544-compliant generic, raise an
     # exception.
-    if not is_hint_pep484_generic_unsubscripted(hint):
+    if not is_hint_pep484_generic_unsubbed(hint):
         raise exception_cls(
             f'{exception_prefix}type hint {repr(hint)} neither '
             f'PEP 484 generic nor PEP 544 protocol.'
@@ -412,7 +408,7 @@ def get_hint_pep484_generic_bases_unerased(
 
     # Unerased superclasses of this generic defined by the method resolution
     # order (MRO) for this generic.
-    hint_bases = hint.__mro__
+    hint_bases = hint.__mro__  # pyright: ignore
 
     # If this MRO lists strictly less than four classes, raise an exception.
     # The MRO for any unerased generic should list at least four classes:

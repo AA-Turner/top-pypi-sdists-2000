@@ -14,25 +14,19 @@ This private submodule is *not* intended for importation by downstream callers.
 # ....................{ IMPORTS                            }....................
 from beartype.typing import Optional
 from beartype._cave._cavemap import NoneTypeOr
-from beartype._check.metadata.metadecor import BeartypeDecorMeta
-from beartype._check.metadata.metasane import HintOrSanifiedData
 from beartype._check.convert._convcoerce import (
     coerce_func_hint_root,
-    coerce_hint_any,
     coerce_hint_root,
 )
 from beartype._check.convert._reduce.redhint import reduce_hint
-from beartype._conf.confcls import BeartypeConf
+from beartype._check.metadata.hint.hintsane import HintSane
+from beartype._check.metadata.metadecor import BeartypeDecorMeta
+from beartype._conf.confmain import BeartypeConf
 from beartype._conf.confcommon import BEARTYPE_CONF_DEFAULT
 from beartype._data.error.dataerrmagic import EXCEPTION_PLACEHOLDER
 from beartype._data.func.datafuncarg import ARG_NAME_RETURN
-from beartype._data.hint.datahintpep import (
-    Hint,
-    TypeVarToHint,
-)
+from beartype._data.hint.datahintpep import Hint
 from beartype._data.hint.datahinttyping import TypeStack
-from beartype._data.kind.datakindmap import FROZENDICT_EMPTY
-from beartype._util.cache.map.utilmapbig import CacheUnboundedStrong
 from beartype._util.func.arg.utilfuncargiter import ArgKind
 from beartype._util.hint.pep.proposal.pep484585.pep484585func import (
     reduce_hint_pep484585_func_return)
@@ -48,14 +42,14 @@ def sanify_hint_root_func(
     # Optional parameters.
     arg_kind: Optional[ArgKind] = None,
     exception_prefix: str = EXCEPTION_PLACEHOLDER,
-) -> HintOrSanifiedData:
+) -> HintSane:
     '''
     Type hint sanified (i.e., sanitized) from the passed **possibly insane root
     type hint** (i.e., possibly PEP-noncompliant hint annotating the parameter
     or return with the passed name of the passed callable) if this hint is both
     reducible and unignorable, this hint unmodified if this hint is both
-    irreducible and unignorable, or :obj:`typing.Any` otherwise (i.e., if this
-    hint is ignorable).
+    irreducible and unignorable, or :data:`.HINT_SANE_IGNORABLE` otherwise (i.e., if
+    this hint is ignorable).
 
     Specifically, this function:
 
@@ -108,24 +102,19 @@ def sanify_hint_root_func(
 
         Defaults to :data:`None`.
     exception_prefix : str, optional
-        Human-readable label prefixing exception messages raised by this
-        function. Defaults to :data:`EXCEPTION_PLACEHOLDER`.
+        Human-readable substring prefixing raised exception messages. Defaults
+        to :data:`.EXCEPTION_PLACEHOLDER`.
 
     Returns
     -------
-    HintOrSanifiedData
+    HintSane
         Either:
 
-        * If the passed hint is reducible to:
-
-          * An ignorable lower-level hint, :obj:`typing.Any`.
-          * An unignorable lower-level hint, either:
-
-            * If reducing this hint to that lower-level hint generates
-              supplementary metadata, that metadata.
-            * Else, that lower-level hint alone.
-
-        * Else, this hint is irreducible. In this case, this hint unmodified.
+        * If this hint is ignorable, :data:`.HINT_SANE_IGNORABLE`.
+        * Else if this unignorable hint is reducible to another hint, metadata
+          encapsulating this reduction.
+        * Else, this unignorable hint is irreducible. In this case, metadata
+          encapsulating this hint unmodified.
 
     Raises
     ------
@@ -197,7 +186,7 @@ def sanify_hint_root_func(
     # sense whatsoever; they're simply non-trivial for @beartype to support in
     # their current form and thus temporarily reduced in-memory into a more
     # convenient form for beartype-specific type-checking elsewhere.
-    hint_or_sane = reduce_hint(
+    hint_sane = reduce_hint(
         hint=hint,
         conf=decor_meta.conf,
         decor_meta=decor_meta,
@@ -208,7 +197,7 @@ def sanify_hint_root_func(
     )
 
     # Return this hint if this hint is unignorable *OR* "typing.Any" otherwise.
-    return hint_or_sane
+    return hint_sane
 
 
 #FIXME: Unit test us up, please.
@@ -216,13 +205,13 @@ def sanify_hint_root_statement(
     hint: Hint,
     conf: BeartypeConf,
     exception_prefix: str,
-) -> HintOrSanifiedData:
+) -> HintSane:
     '''
     PEP-compliant type hint sanified (i.e., sanitized) from the passed **root
     type hint** (i.e., possibly PEP-noncompliant type hint that has *no* parent
     type hint) if this hint is both reducible and unignorable, this hint
     unmodified if this hint is both irreducible and unignorable, or
-    :obj:`typing.Any` otherwise (i.e., if this hint is ignorable).
+    :data:`.HINT_SANE_IGNORABLE` otherwise (i.e., if this hint is ignorable).
 
     This sanifier is principally intended to be called by a **statement-level
     type-checker factory** (i.e., a function creating and returning a runtime
@@ -233,7 +222,9 @@ def sanify_hint_root_statement(
     * The private :func:`beartype._check.checkmake.make_func_tester` factory,
       internally called by:
 
+      * The public :func:`beartype.door.die_if_unbearable` function.
       * The public :func:`beartype.door.is_bearable` function.
+      * The public :meth:`beartype.door.TypeHint.die_if_unbearable` method.
       * The public :meth:`beartype.door.TypeHint.is_bearable` method.
 
     Parameters
@@ -244,24 +235,18 @@ def sanify_hint_root_statement(
         **Beartype configuration** (i.e., self-caching dataclass encapsulating
         all settings configuring type-checking for the passed object).
     exception_prefix : str
-        Human-readable label prefixing the representation of this object in the
-        exception message.
+        Human-readable substring prefixing raised exception messages.
 
     Returns
     -------
-    HintOrSanifiedData
+    HintSane
         Either:
 
-        * If the passed hint is reducible to:
-
-          * An ignorable lower-level hint, :obj:`typing.Any`.
-          * An unignorable lower-level hint, either:
-
-            * If reducing this hint to that lower-level hint generates
-              supplementary metadata, that metadata.
-            * Else, that lower-level hint alone.
-
-        * Else, this hint is irreducible. In this case, this hint unmodified.
+        * If this hint is ignorable, :data:`.HINT_SANE_IGNORABLE`.
+        * Else if this unignorable hint is reducible to another hint, metadata
+          encapsulating this reduction.
+        * Else, this unignorable hint is irreducible. In this case, metadata
+          encapsulating this hint unmodified.
 
     Raises
     ------
@@ -287,41 +272,50 @@ def sanify_hint_root_statement(
     # *BEFORE* validating this hint to be PEP-compliant.
     hint = coerce_hint_root(hint=hint, exception_prefix=exception_prefix)
 
-    # Sane child hint reduced from this possibly insane child hint if reducing
-    # this hint did not generate supplementary metadata *OR* that metadata
-    # otherwise (i.e., if reducing this hint generated supplementary metadata).
-    # See also sanify_hint_root_func().
-    hint_or_sane = reduce_hint(
+    # Metadata encapsulating the sanification of this hint.
+    hint_sane = reduce_hint(
         hint=hint, conf=conf, exception_prefix=exception_prefix)
 
-    # Return this hint if this hint is unignorable *OR* "typing.Any" otherwise.
-    return hint_or_sane
+    # Return this metadat.
+    return hint_sane
 
 # ....................{ SANIFIERS ~ any                    }....................
 #FIXME: Unit test us up, please.
 def sanify_hint_child(
     # Mandatory parameters.
     hint: Hint,
+    hint_parent_sane: Optional[HintSane],
 
     # Optional parameters.
     cls_stack: TypeStack = None,
     conf: BeartypeConf = BEARTYPE_CONF_DEFAULT,
     pith_name: Optional[str] = None,
-    typevar_to_hint: TypeVarToHint = FROZENDICT_EMPTY,
     exception_prefix: str = '',
-) -> HintOrSanifiedData:
+) -> HintSane:
     '''
-    Type hint sanified (i.e., sanitized) from the passed **possibly insane child
-    type hint** (i.e., possibly PEP-noncompliant hint transitively subscripting
-    the root type hint annotating a parameter or return of the currently
-    decorated callable) if this hint is both reducible and unignorable, this
-    hint unmodified if this hint is both irreducible and unignorable, or
-    :obj:`typing.Any` otherwise (i.e., if this hint is ignorable).
+    Metadata encapsulating the sanification (i.e., sanitization) of the passed
+    **possibly insane child type hint** (i.e., possibly PEP-noncompliant hint
+    transitively subscripting the root hint annotating a parameter or return of
+    the currently decorated callable) if this hint is both reducible and
+    unignorable, this hint unmodified if this hint is both irreducible and
+    unignorable, or :obj:`.HINT_SANE_IGNORABLE` otherwise (i.e., if this hint is
+    ignorable).
 
     Parameters
     ----------
     hint : Hint
         Child type hint to be sanified.
+    hint_parent_sane : Optional[HintSane], default: None
+        Either:
+
+        * If this hint is actually a **root type hint,** :data:`None`.
+        * Else, **Sanified parent type hint metadata** (i.e., immutable and thus
+          hashable object encapsulating *all* metadata previously returned by
+          :mod:`beartype._check.convert.convsanify` sanifiers after sanitizing
+          the possibly PEP-noncompliant parent hint of this child hint into a
+          fully PEP-compliant parent hint).
+
+        Defaults to :data:`None`.
     cls_stack : TypeStack, optional
         **Type stack** (i.e., either a tuple of the one or more
         :func:`beartype.beartype`-decorated classes lexically containing the
@@ -331,7 +325,7 @@ def sanify_hint_child(
         **Beartype configuration** (i.e., self-caching dataclass encapsulating
         all settings configuring type-checking for the passed object). Defaults
         to :obj:`.BEARTYPE_CONF_DEFAULT`, the default beartype configuration.
-    pith_name : Optional[str], optional
+    pith_name : Optional[str]
         Either:
 
         * If this hint directly annotates a callable parameter (as the root type
@@ -349,103 +343,114 @@ def sanify_hint_child(
           factory).
 
         Defaults to :data:`None`.
-    typevar_to_hint : TypeVarToHint, optional
-        **Type variable lookup table** (i.e., immutable dictionary mapping from
-        the :pep:`484`-compliant **type variables** (i.e.,
-        :class:`typing.TypeVar` objects) originally parametrizing the origins of
-        all transitive parent hints of this hint to the corresponding child
-        hints subscripting these parent hints). Defaults to
-        :data:`.FROZENDICT_EMPTY`.
     exception_prefix : str, optional
         Human-readable substring prefixing raised exception messages. Defaults
         to the empty string.
 
     Returns
     -------
-    HintOrSanifiedData
+    HintSane
         Either:
 
-        * If the passed hint is reducible to:
-
-          * An ignorable lower-level hint, :obj:`typing.Any`.
-          * An unignorable lower-level hint, either:
-
-            * If reducing this hint to that lower-level hint generates
-              supplementary metadata, that metadata.
-            * Else, that lower-level hint alone.
-
-        * Else, this hint is irreducible. In this case, this hint unmodified.
+        * If this hint is ignorable, :data:`.HINT_SANE_IGNORABLE`.
+        * Else if this unignorable hint is reducible to another hint, metadata
+          encapsulating this reduction.
+        * Else, this unignorable hint is irreducible. In this case, metadata
+          encapsulating this hint unmodified.
     '''
     # print(f'Sanifying child hint {repr(hint)} with type variable lookup table {repr(typevar_to_hint)}...')
 
     # This sanifier covers the proper subset of logic performed by the
     # sanify_hint_root_statement() sanifier applicable to child type hints.
+    #
+    # Note that this subset is currently the lower-level reduce_hint() reducer.
+    # Technically, this implies that this sanifier could simply be a trivial
+    # alias of that reducer. Pragmatically, doing so would only negligibly
+    # improve decoration-time speed (which is *SORTA* good) while demonstrably
+    # harming code maintainability (which is *DEFINITELY* bad). Ergo, we
+    # intentionally maintain this sanifier as a distinct and separate function.
 
-    # PEP-compliant hint coerced (i.e., permanently converted in the annotations
-    # dictionary of the passed callable) from this possibly PEP-noncompliant
-    # hint if this hint is coercible *OR* this hint as is otherwise. Since the
-    # passed hint is *NOT* necessarily PEP-compliant, perform this coercion
-    # *BEFORE* validating this hint to be PEP-compliant.
-    hint = coerce_hint_any(hint)
-
-    # Sane child hint sanified from this possibly insane child hint if reducing
-    # this hint did not generate supplementary metadata *OR* that metadata
-    # otherwise (i.e., if reducing this hint generated supplementary metadata).
-    hint_or_sane = reduce_hint(
+    # Metadata encapsulating the sanification of this child hint.
+    #
+    # Note that this function intentionally performs *NO* hint coercion (e.g.,
+    # by calling the coerce_hint_any() coercer). Although feasible, doing so
+    # would be pointless. Why? Because hint coercion coerces unmemoized hints
+    # into memoized hints as a means of deduplicating hints across
+    # "__annotations__" dunder dictionaries. However, there exists *NO*
+    # "__annotations__" dunder dictionary to deduplicate across here. There
+    # exists *NO* space to be compacted here and thus *NO* demonstrable
+    # reason to perform hint coercion.
+    hint_sane = reduce_hint(
         hint=hint,
+        hint_parent_sane=hint_parent_sane,
         conf=conf,
         cls_stack=cls_stack,
         pith_name=pith_name,
-        typevar_to_hint=typevar_to_hint,
         exception_prefix=exception_prefix,
     )
-    # print(f'[sanify] Detecting hint {repr(hint)} reduction {repr(hint_or_sane)} ignorability...')
+    # print(f'[sanify] Detecting hint {repr(hint)} reduction {repr(hint_sane)} ignorability...')
 
-    # Return this hint if this hint is unignorable *OR* "Any" otherwise.
-    return hint_or_sane
+    # Return this metadata.
+    return hint_sane
 
-# ....................{ PRIVATE ~ mappings                 }....................
-_HINT_REPR_TO_HINT = CacheUnboundedStrong()
-'''
-**Type hint cache** (i.e., thread-safe cache mapping from the machine-readable
-representations of all non-self-cached type hints to those hints).**
 
-This cache caches:
+def sanify_hint_any(
+    # Mandatory parameters.
+    hint: Hint,
 
-* :pep:`585`-compliant type hints, which do *not* cache themselves.
+    # Optional parameters.
+    hint_parent_sane: Optional[HintSane] = None,
+    **kwargs
+) -> HintSane:
+    '''
+    Metadata encapsulating the sanification (i.e., sanitization) of the passed
+    **possibly insane type hint** (i.e., possibly PEP-noncompliant hint
+    transitively subscripting the root hint annotating a parameter or return of
+    the currently decorated callable) if this hint is both reducible and
+    unignorable, this hint unmodified if this hint is both irreducible and
+    unignorable, or :obj:`.HINT_SANE_IGNORABLE` otherwise (i.e., if this hint is
+    ignorable).
 
-This cache does *not* cache:
+    Caveats
+    -------
+    **The more fine-grained** :func:`.sanify_hint_child` **sanifier should
+    typically be called instead.** This more coarse-grained sanifier drops the
+    mandatory ``hint_parent_sane`` parameter required by the former, which is
+    *not* necessarily a good thing. That parameter should typically be passed.
+    Failing to pass that parameter drops essential metadata required to properly
+    sanitize many insane type hints.
 
-* Type hints declared by the :mod:`typing` module, which implicitly cache
-  themselves on subscription thanks to inscrutable metaclass magic.
-* :pep:`563`-compliant **deferred type hints** (i.e., type hints persisted as
-  evaluable strings rather than actual type hints). Ideally, this cache would
-  cache the evaluations of *all* deferred type hints. Sadly, doing so is
-  infeasible in the general case due to global and local namespace lookups
-  (e.g., ``Dict[str, int]`` only means what you think it means if an
-  importation resembling ``from typing import Dict`` preceded that type hint).
+    Parameters
+    ----------
+    hint : Hint
+        Child type hint to be sanified.
+    hint_parent_sane : Optional[HintSane], default: None
+        Either:
 
-Design
-------
-**This dictionary is intentionally thread-safe.** Why? Because this dictionary
-is used to modify the ``__attributes__`` dunder variable of arbitrary callables.
-Since most of those callables are either module- or class-scoped, that variable
-is effectively global. To prevent race conditions between competing threads
-contending over that global variable, this dictionary *must* be thread-safe.
+        * If this hint is actually a **root type hint,** :data:`None`.
+        * Else, **Sanified parent type hint metadata** (i.e., immutable and thus
+          hashable object encapsulating *all* metadata previously returned by
+          :mod:`beartype._check.convert.convsanify` sanifiers after sanitizing
+          the possibly PEP-noncompliant parent hint of this child hint into a
+          fully PEP-compliant parent hint).
 
-This dictionary is intentionally designed as a naive dictionary rather than a
-robust LRU cache, for the same reasons that callables accepting hints are
-memoized by the :func:`beartype._util.cache.utilcachecall.callable_cached`
-rather than the :func:`functools.lru_cache` decorator. Why? Because:
+        Defaults to :data:`None`.
 
-* The number of different type hints instantiated across even worst-case
-  codebases is negligible in comparison to the space consumed by those hints.
-* The :attr:`sys.modules` dictionary persists strong references to all
-  callables declared by previously imported modules. In turn, the
-  ``func.__annotations__`` dunder dictionary of each such callable persists
-  strong references to all type hints annotating that callable. In turn, these
-  two statements imply that type hints are *never* garbage collected but
-  instead persisted for the lifetime of the active Python process. Ergo,
-  temporarily caching hints in an LRU cache is pointless, as there are *no*
-  space savings in dropping stale references to unused hints.
-'''
+    All remaining keyword parameters are as accepted by the comparable
+    :func:`.sanify_hint_child` sanifier.
+
+    Returns
+    -------
+    HintSane
+        Either:
+
+        * If this hint is ignorable, :data:`.HINT_SANE_IGNORABLE`.
+        * Else if this unignorable hint is reducible to another hint, metadata
+          encapsulating this reduction.
+        * Else, this unignorable hint is irreducible. In this case, metadata
+          encapsulating this hint unmodified.
+    '''
+
+    # Defer to our betters.
+    return sanify_hint_child(
+        hint=hint, hint_parent_sane=hint_parent_sane, **kwargs)

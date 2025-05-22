@@ -49,9 +49,12 @@ class WeReadApi:
             accessToken = response_data.get("accessToken")
             if vid and accessToken:
                 self.session.headers.update({"vid": str(vid), "accessToken": accessToken})
+            else:
+                print("Failed to refresh token")
+                sys.exit(0)
         else:
-            sys.exit(0)
             print("Failed to refresh token")
+            sys.exit(0)
        
         
     def handle_errcode(self, errcode):

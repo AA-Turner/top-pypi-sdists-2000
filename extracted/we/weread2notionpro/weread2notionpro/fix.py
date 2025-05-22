@@ -3,7 +3,6 @@ from weread2notionpro.notion_helper import NotionHelper
 from weread2notionpro.weread_api import WeReadApi
 from weread2notionpro import utils
 from weread2notionpro.config import book_properties_type_dict, tz
-import json
 TAG_ICON_URL = "https://www.notion.so/icons/tag_gray.svg"
 USER_ICON_URL = "https://www.notion.so/icons/user-circle-filled_gray.svg"
 BOOK_ICON_URL = "https://www.notion.so/icons/book_gray.svg"
@@ -33,6 +32,8 @@ def insert_book_to_notion(books, index, bookId,status):
     book["阅读状态"] = status
     book["阅读时长"] = book.get("readingTime")
     book["阅读天数"] = book.get("totalReadDay")
+    book["价格"] = book.get("price")
+    book["字数"] = book.get("totalWords")
     book["评分"] = book.get("newRating")
     if book.get("newRatingDetail") and book.get("newRatingDetail").get("myRating"):
         book["我的评分"] = rating.get(book.get("newRatingDetail").get("myRating"))
@@ -149,12 +150,8 @@ notion_books = {}
 def main():
     global notion_books
     global archive_dict
-
     books = weread_api.get_read_book()
-
-
     notion_books = notion_helper.get_all_book()
-
     for book in books:
         if book.get("markStatus") == 4:
             book["status"] = "已读"
@@ -163,7 +160,10 @@ def main():
     bookshelf_books_dict = {x.get("bookId"):x for x in books}
     not_need_sync = []
     for key, value in bookshelf_books_dict.items():
-        if ((key in notion_books) and (value.get("status") == notion_books.get(key).get("status"))):
+        if ((key in notion_books)
+             and (value.get("status") == notion_books.get(key).get("status"))             
+             and (value.get("cover") is not None)
+            and (value.get("price") is not None)):
             not_need_sync.append(key)
     books = [item for item in books if item.get("bookId") not in not_need_sync]
     for index, book in enumerate(books):

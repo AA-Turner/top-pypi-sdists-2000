@@ -20,6 +20,7 @@ from beartype.typing import (
     TYPE_CHECKING,
     Any,
     Dict,
+    FrozenSet,
     Iterable,
     List,
     Optional,
@@ -132,16 +133,6 @@ __all__ = [
 ]
 
 # ....................{ HINTS                              }....................
-#FIXME: Remove this at the earliest possible date, please. This *DEFINITELY*
-#isn't right. Clearly, "mypy" should just accept "Any". We facepalm. </facepalm>
-AnyObject: Hint = Any
-'''
-``mypy``-compatible alias of the standard :obj:`typing.Any` singleton, currently
-required as a crude workaround to force ``mypy`` to accept :obj:`typing.Any` in
-various contexts that ``mypy`` erroneously fails to accept :obj:`typing.Any`.
-'''
-
-
 HintOrNone = Optional[Hint]
 '''
 PEP-compliant type hint matching either any PEP-compliant type hint *or*
@@ -159,6 +150,13 @@ hints).
 # ....................{ HINTS ~ container                  }....................
 #FIXME: Ideally, all of the below should themselves be annotated as ": Hint".
 #Mypy likes that but pyright hates that. This is why we can't have good things.
+
+FrozenSetHints = FrozenSet[Hint]
+'''
+:pep:`585`-compliant type hint matching *any* **type hint frozen set** (i.e.,
+frozen set of zero or more type hints).
+'''
+
 
 IterableHints = Iterable[Hint]
 '''

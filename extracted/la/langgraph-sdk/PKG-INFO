@@ -1,19 +1,13 @@
-Metadata-Version: 2.3
+Metadata-Version: 2.4
 Name: langgraph-sdk
-Version: 0.1.69
+Version: 0.1.70
 Summary: SDK for interacting with LangGraph API
-License: MIT
-Requires-Python: >=3.9
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.9
-Classifier: Programming Language :: Python :: 3.10
-Classifier: Programming Language :: Python :: 3.11
-Classifier: Programming Language :: Python :: 3.12
-Classifier: Programming Language :: Python :: 3.13
-Requires-Dist: httpx (>=0.25.2)
-Requires-Dist: orjson (>=3.10.1)
 Project-URL: Repository, https://www.github.com/langchain-ai/langgraph
+License-Expression: MIT
+License-File: LICENSE
+Requires-Python: >=3.9
+Requires-Dist: httpx>=0.25.2
+Requires-Dist: orjson>=3.10.1
 Description-Content-Type: text/markdown
 
 # LangGraph Python SDK
@@ -51,4 +45,3 @@ input = {"messages": [{"role": "human", "content": "what's the weather in la"}]}
 async for chunk in client.runs.stream(thread['thread_id'], agent['assistant_id'], input=input):
     print(chunk)
 ```
-

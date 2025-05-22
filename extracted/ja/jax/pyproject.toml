@@ -26,15 +26,22 @@ module = [
     "jaxlib.cpu_feature_guard",
     "jaxlib.cuda.*",
     "jaxlib.mlir.*",
+    "jaxlib.mosaic.dialect.gpu.*",
+    "jaxlib.mosaic.python._tpu_gen",
+    "jaxlib.triton.*",
     "jaxlib.utils",
-    "jaxlib.xla_extension.utils",
+    "jaxlib.version",
+    "jaxlib._jax.utils",
     "jraph.*",
     "libtpu.*",
     "matplotlib.*",
+    "mlir.*",
+    "ml_dtypes.*",
     "nvidia.*",
     "numpy.*",
     "opt_einsum.*",
     "optax.*",
+    "portpicker.*",
     "pygments.*",
     "pytest.*",
     "rich.*",
@@ -106,6 +113,8 @@ ignore = [
     "C901",
     # Local variable is assigned to but never used
     "F841",
+    # Class could be dataclass or namedtuple
+    "B903",
     # Raise with from clause inside except block
     "B904",
     # Zip without explicit strict parameter

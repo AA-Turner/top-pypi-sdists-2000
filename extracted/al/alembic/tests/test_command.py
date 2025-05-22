@@ -1,10 +1,13 @@
+from configparser import RawConfigParser
 from contextlib import contextmanager
 import inspect
 from io import BytesIO
 from io import StringIO
 from io import TextIOWrapper
 import os
+import pathlib
 import re
+import shutil
 from typing import cast
 
 from sqlalchemy import exc as sqla_exc
@@ -22,6 +25,7 @@ from alembic.script import ScriptDirectory
 from alembic.testing import assert_raises
 from alembic.testing import assert_raises_message
 from alembic.testing import eq_
+from alembic.testing import expect_raises_message
 from alembic.testing import is_false
 from alembic.testing import is_true
 from alembic.testing import mock
@@ -1142,7 +1146,6 @@ class CommandLineTest(TestBase):
     def setup_class(cls):
         cls.env = staging_env()
         cls.cfg = _sqlite_testing_config()
-        cls.a, cls.b, cls.c = three_rev_fixture(cls.cfg)
 
     def tearDown(self):
         os.environ.pop("ALEMBIC_CONFIG", None)
@@ -1186,6 +1189,106 @@ class CommandLineTest(TestBase):
         finally:
             config.command.revision = orig_revision
         eq_(canary.mock_calls, [mock.call(self.cfg, message="foo")])
+
+    def test_config_file_failure_modes(self):
+        """with two config files supported at the same time, test failure
+        modes with multiple --config directives
+
+        """
+        c1 = config.CommandLine()
+
+        with expect_raises_message(
+            util.CommandError, "only one ini file may be indicated"
+        ):
+            c1.main(
+                argv=[
+                    "--config",
+                    "inione",
+                    "--config",
+                    "initwo.ini",
+                    "history",
+                ]
+            )
+
+        with expect_raises_message(
+            util.CommandError, "pyproject.toml indicated more than once"
+        ):
+            c1.main(
+                argv=[
+                    "--config",
+                    "pyproject.toml",
+                    "--config",
+                    "a/b/pyproject.toml",
+                    "history",
+                ]
+            )
+
+    @testing.combinations(
+        (
+            {"ALEMBIC_CONFIG": "some/pyproject.toml", "argv": []},
+            "some/pyproject.toml",
+            "alembic.ini",
+        ),
+        (
+            {"ALEMBIC_CONFIG": "some/path_to_alembic.ini", "argv": []},
+            "pyproject.toml",
+            "some/path_to_alembic.ini",
+        ),
+        (
+            {
+                "ALEMBIC_CONFIG": "some/path_to_alembic.ini",
+                "argv": [
+                    "--config",
+                    "foo/pyproject.toml",
+                    "--config",
+                    "bar/alembic.ini",
+                ],
+            },
+            "foo/pyproject.toml",
+            "bar/alembic.ini",
+        ),
+        (
+            {
+                "argv": [
+                    "--config",
+                    "foo/pyproject.toml",
+                    "--config",
+                    "bar/alembic.ini",
+                ],
+            },
+            "foo/pyproject.toml",
+            "bar/alembic.ini",
+        ),
+        (
+            {"argv": []},
+            "pyproject.toml",
+            "alembic.ini",
+        ),
+        (
+            {"argv": ["--config", "foo/pyproject.toml"]},
+            "foo/pyproject.toml",
+            "alembic.ini",
+        ),
+        (
+            {"argv": ["--config", "foo/some_alembic.ini"]},
+            "pyproject.toml",
+            "foo/some_alembic.ini",
+        ),
+        argnames=("args, expected_toml, expected_conf"),
+    )
+    def test_config_file_resolution(
+        self, args, expected_toml, expected_conf, pop_alembic_config_env
+    ):
+        """with two config files supported at the same time, test resolution
+        of --config / ALEMBIC_CONFIG to always "do what's expected"
+
+        """
+        c1 = config.CommandLine()
+        if "ALEMBIC_CONFIG" in args:
+            os.environ["ALEMBIC_CONFIG"] = args["ALEMBIC_CONFIG"]
+
+        options = c1.parser.parse_args(args["argv"])
+        eq_(c1._inis_from_config(options), (expected_toml, expected_conf))
 
     def test_help_text(self):
         commands = {
@@ -1276,15 +1379,86 @@ class CommandLineTest(TestBase):
         cfg = run_cmd.mock_calls[0][1][0]
         eq_(cfg.config_file_name, "myconf.conf")
 
+    @testing.combinations(
+        (
+            "pyproject",
+            "somepath/foobar",
+            "pyproject.toml",
+            "alembic.ini",
+            "%(here)s/somepath/foobar",
+            None,
+        ),
+        (
+            "pyproject",
+            "somepath/foobar",
+            "somepath/pyproject.toml",
+            "alembic.ini",
+            "%(here)s/foobar",
+            None,
+        ),
+        (
+            "generic",
+            "somepath/foobar",
+            "pyproject.toml",
+            "alembic.ini",
+            None,
+            "%(here)s/somepath/foobar",
+        ),
+        (
+            "generic",
+            "somepath/foobar",
+            "pyproject.toml",
+            "somepath/alembic.ini",
+            None,
+            "%(here)s/foobar",
+        ),
+        argnames="template,directory,toml_file_name,config_file_name,"
+        "expected_toml_location,expected_ini_location",
+    )
+    def test_init_file_relative_version_token(
+        self,
+        template,
+        directory,
+        toml_file_name,
+        config_file_name,
+        expected_toml_location,
+        expected_ini_location,
+        clear_staging_dir,
+    ):
+        """in 1.16.0 with the advent of pyproject.toml, we are also rendering
+        the script_location value relative to the ``%(here)s`` token, if
+        the given path is a relative path.   ``%(here)s`` is relative to the
+        owning config file either alembic.ini or pyproject.toml.
+
+        """
+        self.cfg.config_file_name = config_file_name
+        self.cfg.toml_file_name = toml_file_name
+        with self.pushd(os.path.join(_get_staging_directory())):
+            command.init(self.cfg, directory=directory, template=template)
+            if expected_toml_location is not None:
+                with open(self.cfg.toml_file_name, "rb") as f:
+                    toml = util.compat.tomllib.load(f)
+                eq_(
+                    toml["tool"]["alembic"]["script_location"],
+                    expected_toml_location,
+                )
+
+            cfg = RawConfigParser()
+            util.compat.read_config_parser(cfg, config_file_name)
+            eq_(
+                cfg.get("alembic", "script_location", fallback=None),
+                expected_ini_location,
+            )
+
     def test_init_file_exists_and_is_empty(self):
         def access_(path, mode):
-            if "generic" in path or path == "foobar":
+            if "generic" in str(path) or str(path) == "foobar":
                 return True
             else:
                 return False
 
         def listdir_(path):
-            if path == "foobar":
+            if str(path) == "foobar":
                 return []
             else:
                 return ["file1", "file2", "alembic.ini.mako"]
@@ -1298,12 +1472,12 @@ class CommandLineTest(TestBase):
             command.init(self.cfg, directory="foobar")
             eq_(
                 makedirs.mock_calls,
-                [mock.call(os.path.normpath("foobar/versions"))],
+                [mock.call(pathlib.Path("foobar/versions"))],
             )
 
     def test_init_file_doesnt_exist(self):
         def access_(path, mode):
-            if "generic" in path:
+            if "generic" in str(path):
                 return True
             else:
                 return False
@@ -1317,8 +1491,8 @@ class CommandLineTest(TestBase):
             eq_(
                 makedirs.mock_calls,
                 [
-                    mock.call("foobar"),
-                    mock.call(os.path.normpath("foobar/versions")),
+                    mock.call(pathlib.Path("foobar")),
+                    mock.call(pathlib.Path("foobar/versions")),
                 ],
             )
 
@@ -1331,20 +1505,84 @@ class CommandLineTest(TestBase):
                 open_.mock_calls,
                 [
                     mock.call(
-                        os.path.abspath(os.path.join(path, "__init__.py")), "w"
+                        (pathlib.Path(path, "__init__.py")).absolute(), "w"
                     ),
                     mock.call().__enter__(),
                     mock.call().__exit__(None, None, None),
                     mock.call(
-                        os.path.abspath(
-                            os.path.join(path, "versions", "__init__.py")
-                        ),
+                        pathlib.Path(
+                            path, "versions", "__init__.py"
+                        ).absolute(),
                         "w",
                     ),
                     mock.call().__enter__(),
                     mock.call().__exit__(None, None, None),
                 ],
             )
+
+    @testing.fixture
+    def custom_template_fixture(self):
+        templates_path = pathlib.Path(
+            _get_staging_directory(), "my_special_templates_place"
+        )
+
+        os.makedirs(templates_path / "mytemplate")
+
+        with pathlib.Path(templates_path, "mytemplate", "myfile.txt").open(
+            "w"
+        ) as file_:
+            file_.write("This is myfile.txt")
+        with pathlib.Path(templates_path, "mytemplate", "README").open(
+            "w"
+        ) as file_:
+            file_.write("This is my template")
+        with pathlib.Path(
+            templates_path, "mytemplate", "alembic.ini.mako"
+        ).open("w") as file_:
+            file_.write("[alembic]\nscript_directory=%(here)s\n")
+
+        class MyConfig(config.Config):
+            def get_template_directory(self) -> str:
+                return templates_path.as_posix()
+
+        yield MyConfig(self.cfg.config_file_name)
+
+        shutil.rmtree(templates_path)
+
+    @testing.variation("cmd", ["list_templates", "init"])
+    def test_init_custom_template_location(self, cmd, custom_template_fixture):
+        """test #1660"""
+
+        cfg = custom_template_fixture
+
+        if cmd.init:
+            path = pathlib.Path(_get_staging_directory(), "foobar")
+            command.init(cfg, directory=path.as_posix(), template="mytemplate")
+
+            eq_(
+                (path / "myfile.txt").open().read(),
+                "This is myfile.txt",
+            )
+        elif cmd.list_templates:
+            cfg.stdout = buf = StringIO()
+            command.list_templates(cfg)
+            assert buf.getvalue().startswith(
+                "Available templates:\n\nmytemplate - This is my template"
+            )
+
+        else:
+            cmd.fail()
+
+    def test_init_no_such_template(self):
+        """test #1659"""
+
+        path = os.path.join(_get_staging_directory(), "foobar")
+
+        with expect_raises_message(
+            util.CommandError,
+            r"No such template .*asfd",
+        ):
+            command.init(self.cfg, directory=path, template="asfd")
 
     def test_version_text(self):
         buf = StringIO()

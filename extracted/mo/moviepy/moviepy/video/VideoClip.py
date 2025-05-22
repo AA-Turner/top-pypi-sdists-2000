@@ -386,6 +386,9 @@ class VideoClip(Clip):
                 write_logfile=write_logfile,
                 logger=logger,
             )
+            # The audio is already encoded,
+            # so there is no need to encode it during video export
+            audio_codec = "copy"
 
         ffmpeg_write_video(
             self,
@@ -396,6 +399,7 @@ class VideoClip(Clip):
             preset=preset,
             write_logfile=write_logfile,
             audiofile=audiofile,
+            audio_codec=audio_codec,
             threads=threads,
             ffmpeg_params=ffmpeg_params,
             logger=logger,
@@ -1450,7 +1454,8 @@ class TextClip(ImageClip):
     ----------
 
     font
-      Path to the font to use. Must be an OpenType font.
+      Path to the font to use. Must be an OpenType font. If set to None
+      (default) will use Pillow default font
 
     text
       A string of the text to write. Can be replaced by argument
@@ -1496,10 +1501,15 @@ class TextClip(ImageClip):
       Width of the stroke, in pixels. Must be an int.
 
     method
-      Either 'label' (default, the picture will be autosized so as to fit
-      exactly the size) or 'caption' (the text will be drawn in a picture
-      with fixed size provided with the ``size`` argument). If `caption`,
-      the text will be wrapped automagically.
+      Either :
+        - 'label' (default), the picture will be autosized so as to fit the text
+          either by auto-computing font size if width is provided or auto-computing
+          width and eight if font size is defined
+
+        - 'caption' the text will be drawn in a picture with fixed size provided
+          with the ``size`` argument. The text will be wrapped automagically,
+          either by auto-computing font size if width and height are provided or adding
+          line break when necesarry if font size is defined
 
     text_align
       center | left | right. Text align similar to css. Default to ``left``.
@@ -1521,12 +1531,30 @@ class TextClip(ImageClip):
 
     duration
         Duration of the clip
+
+    .. note::
+
+      ** About final TextClip size **
+
+      The final TextClip size will be of the absolute maximum height possible
+      for the font and the number of line. It specifically mean that the final
+      height might be a bit bigger than the real text height, i.e, absolute
+      bottom pixel of text - absolute top pixel of text.
+      This is because in a font, some letter go above standard top line (e.g
+      letters with accents), and bellow standard baseline (e.g letters such as
+      p, y, g).
+
+      This notion is knowned under the name ascent and descent meaning the
+      highest and lowest pixel above and below baseline
+
+      If your first line dont have an "accent character" and your last line
+      dont have a "descent character", you'll have some "fat" arround
     """
 
     @convert_path_to_string("filename")
     def __init__(
         self,
-        font,
+        font=None,
         text=None,
         filename=None,
         font_size=None,
@@ -1544,145 +1572,15 @@ class TextClip(ImageClip):
         transparent=True,
         duration=None,
     ):
-        def break_text(
-            width, text, font, font_size, stroke_width, align, spacing
-        ) -> List[str]:
-            """Break text to never overflow a width"""
-            img = Image.new("RGB", (1, 1))
-            font_pil = ImageFont.truetype(font, font_size)
-            draw = ImageDraw.Draw(img)
-
-            lines = []
-            current_line = ""
-            words = text.split(" ")
-            for word in words:
-                temp_line = current_line + " " + word if current_line else word
-                temp_left, temp_top, temp_right, temp_bottom = draw.multiline_textbbox(
-                    (0, 0),
-                    temp_line,
-                    font=font_pil,
-                    spacing=spacing,
-                    align=align,
-                    stroke_width=stroke_width,
+        if font is not None:
+            try:
+                _ = ImageFont.truetype(font)
+            except Exception as e:
+                raise ValueError(
+                    "Invalid font {}, pillow failed to use it with error {}".format(
+                        font, e
+                    )
                 )
-                temp_width = temp_right - temp_left
-
-                if temp_width <= width:
-                    current_line = temp_line
-                else:
-                    lines.append(current_line)
-                    current_line = word
-
-            if current_line:
-                lines.append(current_line)
-
-            return lines
-
-        def find_text_size(
-            text,
-            font,
-            font_size,
-            stroke_width,
-            align,
-            spacing,
-            max_width=None,
-            allow_break=False,
-        ) -> tuple[int, int]:
-            """Find dimensions a text will occupy, return a tuple (width, height)"""
-            img = Image.new("RGB", (1, 1))
-            font_pil = ImageFont.truetype(font, font_size)
-            draw = ImageDraw.Draw(img)
-
-            if max_width is None or not allow_break:
-                left, top, right, bottom = draw.multiline_textbbox(
-                    (0, 0),
-                    text,
-                    font=font_pil,
-                    spacing=spacing,
-                    align=align,
-                    stroke_width=stroke_width,
-                    anchor="lm",
-                )
-
-                return (int(right - left), int(bottom - top))
-
-            lines = break_text(
-                width=max_width,
-                text=text,
-                font=font,
-                font_size=font_size,
-                stroke_width=stroke_width,
-                align=align,
-                spacing=spacing,
-            )
-
-            left, top, right, bottom = draw.multiline_textbbox(
-                (0, 0),
-                "\n".join(lines),
-                font=font_pil,
-                spacing=spacing,
-                align=align,
-                stroke_width=stroke_width,
-                anchor="lm",
-            )
-
-            return (int(right - left), int(bottom - top))
-
-        def find_optimum_font_size(
-            text,
-            font,
-            stroke_width,
-            align,
-            spacing,
-            width,
-            height=None,
-            allow_break=False,
-        ):
-            """Find the best font size to fit as optimally as possible"""
-            max_font_size = width
-            min_font_size = 1
-
-            # Try find best size using bisection
-            while min_font_size < max_font_size:
-                avg_font_size = int((max_font_size + min_font_size) // 2)
-                text_width, text_height = find_text_size(
-                    text,
-                    font,
-                    avg_font_size,
-                    stroke_width,
-                    align,
-                    spacing,
-                    max_width=width,
-                    allow_break=allow_break,
-                )
-
-                if text_width <= width and (height is None or text_height <= height):
-                    min_font_size = avg_font_size + 1
-                else:
-                    max_font_size = avg_font_size - 1
-
-            # Check if the last font size tested fits within the given width and height
-            text_width, text_height = find_text_size(
-                text,
-                font,
-                min_font_size,
-                stroke_width,
-                align,
-                spacing,
-                max_width=width,
-                allow_break=allow_break,
-            )
-            if text_width <= width and (height is None or text_height <= height):
-                return min_font_size
-            else:
-                return min_font_size - 1
-
-        try:
-            _ = ImageFont.truetype(font)
-        except Exception as e:
-            raise ValueError(
-                "Invalid font {}, pillow failed to use it with error {}".format(font, e)
-            )
 
         if filename:
             with open(filename, "r") as file:
@@ -1691,94 +1589,7 @@ class TextClip(ImageClip):
         if text is None:
             raise ValueError("No text nor filename provided")
 
-        # Compute all img and text sizes if some are missing
-        img_width, img_height = size
-
-        if method == "caption":
-            if img_width is None:
-                raise ValueError("Size is mandatory when method is caption")
-
-            if img_height is None and font_size is None:
-                raise ValueError(
-                    "Height is mandatory when method is caption and font size is None"
-                )
-
-            if font_size is None:
-                font_size = find_optimum_font_size(
-                    text=text,
-                    font=font,
-                    stroke_width=stroke_width,
-                    align=text_align,
-                    spacing=interline,
-                    width=img_width,
-                    height=img_height,
-                    allow_break=True,
-                )
-
-            if img_height is None:
-                img_height = find_text_size(
-                    text=text,
-                    font=font,
-                    font_size=font_size,
-                    stroke_width=stroke_width,
-                    align=text_align,
-                    spacing=interline,
-                    max_width=img_width,
-                    allow_break=True,
-                )[1]
-
-            # Add line breaks whenever needed
-            text = "\n".join(
-                break_text(
-                    width=img_width,
-                    text=text,
-                    font=font,
-                    font_size=font_size,
-                    stroke_width=stroke_width,
-                    align=text_align,
-                    spacing=interline,
-                )
-            )
-
-        elif method == "label":
-            if font_size is None and img_width is None:
-                raise ValueError(
-                    "Font size is mandatory when method is label and size is None"
-                )
-
-            if font_size is None:
-                font_size = find_optimum_font_size(
-                    text=text,
-                    font=font,
-                    stroke_width=stroke_width,
-                    align=text_align,
-                    spacing=interline,
-                    width=img_width,
-                    height=img_height,
-                )
-
-            if img_width is None:
-                img_width = find_text_size(
-                    text=text,
-                    font=font,
-                    font_size=font_size,
-                    stroke_width=stroke_width,
-                    align=text_align,
-                    spacing=interline,
-                )[0]
-
-            if img_height is None:
-                img_height = find_text_size(
-                    text=text,
-                    font=font,
-                    font_size=font_size,
-                    stroke_width=stroke_width,
-                    align=text_align,
-                    spacing=interline,
-                    max_width=img_width,
-                )[1]
-
-        else:
+        if method not in ["caption", "label"]:
             raise ValueError("Method must be either `caption` or `label`.")
 
         # Compute the margin and apply it
@@ -1793,6 +1604,93 @@ class TextClip(ImageClip):
         else:
             raise ValueError("Margin must be a tuple of either 2 or 4 elements.")
 
+        # Compute all img and text sizes if some are missing
+        img_width, img_height = size
+
+        if method == "caption":
+            if img_width is None:
+                raise ValueError("Size is mandatory when method is caption")
+
+            if img_height is None and font_size is None:
+                raise ValueError(
+                    "Height is mandatory when method is caption and font size is None"
+                )
+
+            if font_size is None:
+                font_size = self.__find_optimum_font_size(
+                    text=text,
+                    font=font,
+                    stroke_width=stroke_width,
+                    align=text_align,
+                    spacing=interline,
+                    width=img_width,
+                    height=img_height,
+                    allow_break=True,
+                )
+
+            # Add line breaks whenever needed
+            text = "\n".join(
+                self.__break_text(
+                    width=img_width,
+                    text=text,
+                    font=font,
+                    font_size=font_size,
+                    stroke_width=stroke_width,
+                    align=text_align,
+                    spacing=interline,
+                )
+            )
+
+            if img_height is None:
+                img_height = self.__find_text_size(
+                    text=text,
+                    font=font,
+                    font_size=font_size,
+                    stroke_width=stroke_width,
+                    align=text_align,
+                    spacing=interline,
+                    max_width=img_width,
+                    allow_break=True,
+                )[1]
+
+        elif method == "label":
+            if font_size is None and img_width is None:
+                raise ValueError(
+                    "Font size is mandatory when method is label and size is None"
+                )
+
+            if font_size is None:
+                font_size = self.__find_optimum_font_size(
+                    text=text,
+                    font=font,
+                    stroke_width=stroke_width,
+                    align=text_align,
+                    spacing=interline,
+                    width=img_width,
+                    height=img_height,
+                )
+
+            if img_width is None:
+                img_width = self.__find_text_size(
+                    text=text,
+                    font=font,
+                    font_size=font_size,
+                    stroke_width=stroke_width,
+                    align=text_align,
+                    spacing=interline,
+                )[0]
+
+            if img_height is None:
+                img_height = self.__find_text_size(
+                    text=text,
+                    font=font,
+                    font_size=font_size,
+                    stroke_width=stroke_width,
+                    align=text_align,
+                    spacing=interline,
+                    max_width=img_width,
+                )[1]
+
         img_width += left_margin + right_margin
         img_height += top_margin + bottom_margin
 
@@ -1803,11 +1701,14 @@ class TextClip(ImageClip):
             bg_color = (0, 0, 0, 0)
 
         img = Image.new(img_mode, (img_width, img_height), color=bg_color)
-        pil_font = ImageFont.truetype(font, font_size)
+        if font:
+            pil_font = ImageFont.truetype(font, font_size)
+        else:
+            pil_font = ImageFont.load_default(font_size)
         draw = ImageDraw.Draw(img)
 
         # Dont need allow break here, because we already breaked in caption
-        text_width, text_height = find_text_size(
+        text_width, text_height = self.__find_text_size(
             text=text,
             font=font,
             font_size=font_size,
@@ -1823,25 +1724,25 @@ class TextClip(ImageClip):
         elif horizontal_align == "center":
             x = (img_width - left_margin - right_margin - text_width) / 2
 
-        x += left_margin
-
         y = 0
         if vertical_align == "bottom":
             y = img_height - text_height - top_margin - bottom_margin
         elif vertical_align == "center":
             y = (img_height - top_margin - bottom_margin - text_height) / 2
 
-        y += top_margin
-
-        # So, pillow multiline support is horrible, in particular multiline_text
-        # and multiline_textbbox are not intuitive at all. They cannot use left
-        # top (see https://pillow.readthedocs.io/en/stable/handbook/text-anchors.html)
-        # as anchor, so we always have to use left middle instead. Else we would
+        # We use baseline as our anchor because it is predictable and reliable
+        # That mean we always have to use left baseline instead. Else we would
         # always have a useless margin (the diff between ascender and top) on any
         # text. That mean our Y is actually not from 0 for top, but need to be
-        # increment by half our text height, since we have to reference from
-        # middle line.
-        y += text_height / 2
+        # increment by ascent, since we have to reference from baseline.
+        (ascent, _) = pil_font.getmetrics()
+        y += ascent
+
+        # Add margins and stroke size to start point
+        y += top_margin
+        x += left_margin
+        y += stroke_width
+        x += stroke_width
 
         draw.multiline_text(
             xy=(x, y),
@@ -1852,7 +1753,7 @@ class TextClip(ImageClip):
             align=text_align,
             stroke_width=stroke_width,
             stroke_fill=stroke_color,
-            anchor="lm",
+            anchor="ls",
         )
 
         # We just need the image as a numpy array
@@ -1864,6 +1765,211 @@ class TextClip(ImageClip):
         self.text = text
         self.color = color
         self.stroke_color = stroke_color
+
+    def __break_text(
+        self, width, text, font, font_size, stroke_width, align, spacing
+    ) -> List[str]:
+        """Break text to never overflow a width"""
+        img = Image.new("RGB", (1, 1))
+        if font:
+            font_pil = ImageFont.truetype(font, font_size)
+        else:
+            font_pil = ImageFont.load_default(font_size)
+        draw = ImageDraw.Draw(img)
+
+        lines = []
+        current_line = ""
+
+        # We try to break on spaces as much as possible
+        # if a text dont contain spaces (ex chinese), we will break when possible
+        last_space = 0
+        for index, char in enumerate(text):
+            if char == " ":
+                last_space = index
+
+            temp_line = current_line + char
+            temp_left, temp_top, temp_right, temp_bottom = draw.multiline_textbbox(
+                (0, 0),
+                temp_line,
+                font=font_pil,
+                spacing=spacing,
+                align=align,
+                stroke_width=stroke_width,
+            )
+            temp_width = temp_right - temp_left
+
+            if temp_width >= width:
+                # If we had a space previously, add everything up to the space
+                # and reset last_space and current_line else add everything up
+                # to previous char
+                if last_space:
+                    lines.append(temp_line[0:last_space])
+                    current_line = temp_line[last_space + 1 : index + 1]
+                    last_space = 0
+                else:
+                    lines.append(current_line[0:index])
+                    current_line = char
+                    last_space = 0
+            else:
+                current_line = temp_line
+
+        if current_line:
+            lines.append(current_line)
+
+        return lines
+
+    def __find_text_size(
+        self,
+        text,
+        font,
+        font_size,
+        stroke_width,
+        align,
+        spacing,
+        max_width=None,
+        allow_break=False,
+    ) -> tuple[int, int]:
+        """Find *real* dimensions a text will occupy, return a tuple (width, height)
+
+        .. note::
+            Text height calculation is quite complex due to how `Pillow` works.
+            When calculating line height, `Pillow` actually uses the letter ``A``
+            as a reference height, adding the spacing and the stroke width.
+            However, ``A`` is a simple letter and does not account for ascent and
+            descent, such as in ``Ô``.
+
+            This means each line will be considered as having a "standard"
+            height instead of the real maximum font size (``ascent + descent``).
+
+            When drawing each line, `Pillow` will offset the new line by
+            ``standard height * number of previous lines``.
+            This mostly works, but if the spacing is not big enough,
+            lines will overlap if a letter with an ascent (e.g., ``d``) is above
+            a letter with a descent (e.g., ``p``).
+
+            For our case, we use the baseline as the text anchor. This means that,
+            no matter what, we need to draw the absolute top of our first line at
+            ``0 + ascent + stroke_width`` to ensure the first pixel of any possible
+            letter is aligned with the top border of the image (ignoring any
+            additional margins, if needed).
+
+            Therefore, our first line height will not start at ``0`` but at
+            ``ascent + stroke_width``, and we need to account for that. Each
+            subsequent line will then be drawn at
+            ``index * standard height`` from this point. The position of the last
+            line can be calculated as:
+            ``(total_lines - 1) * standard height``.
+
+            Finally, as we use the baseline as the text anchor, we also need to
+            consider that the real size of the last line is not "standard" but
+            rather ``standard + descent + stroke_width``.
+
+            To summarize, the real height of the text is:
+              ``initial padding + (lines - 1) * height + end padding``
+            or:
+              ``(ascent + stroke_width) + (lines - 1) * height + (descent + stroke_width)``
+            or:
+              ``real_font_size + (stroke_width * 2) + (lines - 1) * height``
+        """
+        img = Image.new("RGB", (1, 1))
+        if font:
+            font_pil = ImageFont.truetype(font, font_size)
+        else:
+            font_pil = ImageFont.load_default(font_size)
+        ascent, descent = font_pil.getmetrics()
+        real_font_size = ascent + descent
+        draw = ImageDraw.Draw(img)
+
+        # Compute individual line height with spaces using pillow internal method
+
+        if max_width is not None and allow_break:
+            lines = self.__break_text(
+                width=max_width,
+                text=text,
+                font=font,
+                font_size=font_size,
+                stroke_width=stroke_width,
+                align=align,
+                spacing=spacing,
+            )
+
+            text = "\n".join(lines)
+
+        # Use multiline textbbox to get width
+        left, top, right, bottom = draw.multiline_textbbox(
+            (0, 0),
+            text,
+            font=font_pil,
+            spacing=spacing,
+            align=align,
+            stroke_width=stroke_width,
+            anchor="ls",
+        )
+
+        # For height calculate manually as textbbox is not realiable
+        try:
+            # this disappeared in more recent versions of Pillow
+            line_height = draw._multiline_spacing(font_pil, spacing, stroke_width)
+            line_breaks = text.count("\n")
+            lines_height = line_breaks * line_height
+            paddings = real_font_size + stroke_width * 2
+            height = int(lines_height + paddings)
+        except AttributeError:
+            height = int(bottom - top)
+
+        return (int(right - left), height)
+
+    def __find_optimum_font_size(
+        self,
+        text,
+        font,
+        stroke_width,
+        align,
+        spacing,
+        width,
+        height=None,
+        allow_break=False,
+    ):
+        """Find the best font size to fit as optimally as possible
+        in a box of some width and optionally height
+        """
+        max_font_size = width
+        min_font_size = 1
+
+        # Try find best size using bisection
+        while min_font_size < max_font_size:
+            avg_font_size = int((max_font_size + min_font_size) // 2)
+            text_width, text_height = self.__find_text_size(
+                text,
+                font,
+                avg_font_size,
+                stroke_width,
+                align,
+                spacing,
+                max_width=width,
+                allow_break=allow_break,
+            )
+
+            if text_width <= width and (height is None or text_height <= height):
+                min_font_size = avg_font_size + 1
+            else:
+                max_font_size = avg_font_size - 1
+
+        # Check if the last font size tested fits within the given width and height
+        text_width, text_height = self.__find_text_size(
+            text,
+            font,
+            min_font_size,
+            stroke_width,
+            align,
+            spacing,
+            max_width=width,
+            allow_break=allow_break,
+        )
+        if text_width <= width and (height is None or text_height <= height):
+            return min_font_size
+        else:
+            return min_font_size - 1
 
 
 class BitmapClip(VideoClip):

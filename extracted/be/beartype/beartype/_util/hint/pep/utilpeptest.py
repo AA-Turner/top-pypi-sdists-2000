@@ -321,8 +321,7 @@ def is_hint_pep(hint: object) -> bool:
     '''
 
     # Avoid circular import dependencies.
-    from beartype._util.hint.pep.utilpepget import (
-        get_hint_pep_sign_or_none)
+    from beartype._util.hint.pep.utilpepsign import get_hint_pep_sign_or_none
 
     # Sign uniquely identifying this hint if this hint is PEP-compliant *OR*
     # "None" otherwise (i.e., if this hint is *NOT* PEP-compliant).
@@ -357,7 +356,7 @@ def is_hint_pep(hint: object) -> bool:
 #     '''
 #
 #     # Avoid circular import dependencies.
-#     from beartype._util.hint.pep.utilpepget import get_hint_pep_sign
+#     from beartype._util.hint.pep.utilpepsign import get_hint_pep_sign
 #
 #     # Sign uniquely identifying this hint.
 #     hint_sign = get_hint_pep_sign(hint)
@@ -380,7 +379,7 @@ def is_hint_pep(hint: object) -> bool:
 
 
 #FIXME: Unit test us up, please.
-def is_hint_pep_subscripted(hint: object) -> bool:
+def is_hint_pep_subbed(hint: object) -> bool:
     '''
     :data:`True` only if the passed PEP-compliant type hint is **subscripted**
     (i.e., indexed by one or more child type hints).
@@ -446,7 +445,7 @@ def is_hint_pep_supported(hint: object) -> bool:
     # Else, this hint is PEP-compliant.
 
     # Avoid circular import dependencies.
-    from beartype._util.hint.pep.utilpepget import get_hint_pep_sign
+    from beartype._util.hint.pep.utilpepsign import get_hint_pep_sign
 
     # Sign uniquely identifying this hint.
     hint_sign = get_hint_pep_sign(hint)
@@ -458,7 +457,7 @@ def is_hint_pep_supported(hint: object) -> bool:
 #FIXME: Replace all hardcoded "'typing" strings throughout the codebase with
 #access of "TYPING_MODULE_NAMES" instead. We only see one remaining in:
 #* beartype._util.hint.pep.proposal.pep484.pep484.py
-#Thankfully, nobody really cares about generalizing this one edge case to
+#Thankfully, nobody really cares about generalizing that one edge case to
 #"testing_extensions", so it's mostly fine for various definitions of fine.
 def is_hint_pep_typing(hint: object) -> bool:
     '''
@@ -483,8 +482,7 @@ def is_hint_pep_typing(hint: object) -> bool:
     # print(f'is_hint_pep_typing({repr(hint)}')
 
     # Avoid circular import dependencies.
-    from beartype._util.hint.pep.utilpepget import (
-        get_hint_pep_sign_or_none)
+    from beartype._util.hint.pep.utilpepsign import get_hint_pep_sign_or_none
 
     # Return true only if this hint is either...
     return (

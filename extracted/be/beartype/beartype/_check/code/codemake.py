@@ -40,15 +40,13 @@ from beartype.roar import (
     BeartypeDecorHintPepException,
     BeartypeDecorHintPepUnsupportedException,
 )
-from beartype.typing import (
-    Any,
-    Optional,
-)
+from beartype.typing import Optional
 from beartype._check.checkmagic import (
     ARG_NAME_GETRANDBITS,
     VAR_NAME_PITH_ROOT,
 )
 from beartype._check.metadata.hint.hintsmeta import HintsMeta
+from beartype._check.metadata.hint.hintsane import HINT_SANE_IGNORABLE
 from beartype._check.code.codemagic import (
     EXCEPTION_PREFIX_FUNC_WRAPPER_LOCAL,
     EXCEPTION_PREFIX_HINT,
@@ -58,26 +56,20 @@ from beartype._check.code._pep.codepep484604 import (
     make_hint_pep484604_check_expr)
 from beartype._check.code._pep.pep484585.codepep484585container import (
     make_hint_pep484585_container_check_expr)
+from beartype._check.code._pep.pep484585.codepep484585generic import (
+    make_hint_pep484585_generic_unsubbed_check_expr)
 from beartype._check.code.snip.codesnipcls import PITH_INDEX_TO_VAR_NAME
 from beartype._check.code.snip.codesnipstr import (
     CODE_PEP484_INSTANCE_format,
     CODE_PEP572_PITH_ASSIGN_EXPR_format,
 )
-from beartype._check.metadata.metasane import (
-    HintOrSanifiedData,
-    get_hint_or_sane_hint,
-)
-from beartype._check.proposal.checkpep484585generic import (
-    iter_hint_pep484585_generic_bases_unerased)
-from beartype._conf.confcls import BeartypeConf
+from beartype._check.metadata.hint.hintsane import HintSane
+from beartype._conf.confmain import BeartypeConf
 from beartype._data.code.datacodemagic import (
     LINE_RSTRIP_INDEX_AND,
     LINE_RSTRIP_INDEX_OR,
 )
 from beartype._data.code.pep.datacodepep484585 import (
-    CODE_PEP484585_GENERIC_CHILD_format,
-    CODE_PEP484585_GENERIC_PREFIX,
-    CODE_PEP484585_GENERIC_SUFFIX,
     CODE_PEP484585_MAPPING_format,
     CODE_PEP484585_MAPPING_KEY_ONLY_format,
     CODE_PEP484585_MAPPING_KEY_VALUE_format,
@@ -106,9 +98,7 @@ from beartype._data.code.pep.datacodepep593 import (
 )
 from beartype._data.error.dataerrmagic import (
     EXCEPTION_PLACEHOLDER as EXCEPTION_PREFIX)
-from beartype._data.hint.datahintpep import (
-    Hint,
-)
+from beartype._data.hint.datahintpep import Hint
 from beartype._data.hint.datahinttyping import (
     CodeGenerated,
     TypeStack,
@@ -154,10 +144,9 @@ from beartype._util.hint.pep.proposal.pep593 import (
 )
 from beartype._util.hint.pep.utilpepget import (
     get_hint_pep_args,
-    get_hint_pep_sign,
-    get_hint_pep_sign_or_none,
     get_hint_pep_origin_type_isinstanceable,
 )
+from beartype._util.hint.pep.utilpepsign import get_hint_pep_sign_or_none
 from beartype._util.hint.pep.utilpeptest import (
     die_if_hint_pep_unsupported,
     is_hint_pep,
@@ -172,7 +161,7 @@ from random import getrandbits
 @callable_cached
 def make_check_expr(
     # ..................{ ARGS ~ mandatory                   }..................
-    hint_or_sane: HintOrSanifiedData,
+    hint_sane: HintSane,
     conf: BeartypeConf,
 
     # ..................{ ARGS ~ optional                    }..................
@@ -217,9 +206,9 @@ def make_check_expr(
 
     Parameters
     ----------
-    hint_or_sane : HintOrSanifiedData
-        Either a type hint *or* **sanified type hint metadata** (i.e.,
-        :data:`.HintSanifiedData` object) to be type-checked.
+    hint_sane : HintSane
+        **Sanified type hint metadata** (i.e., :data:`.HintSane` object)
+        encapsulating the hint to be type-checked.
     conf : BeartypeConf
         **Beartype configuration** (i.e., self-caching dataclass encapsulating
         all settings configuring type-checking for the passed object).
@@ -268,6 +257,9 @@ def make_check_expr(
     # Currently visited hint.
     hint_curr: Hint = None  # pyright: ignore
 
+    # Metadata encapsulating the currently visited hint.
+    hint_curr_sane: HintSane = None  # type: ignore[assignment]
+
     # Current unsubscripted typing attribute associated with this hint (e.g.,
     # "Union" if "hint_curr == Union[int, str]").
     hint_curr_sign: HintSign = None  # type: ignore[assignment]
@@ -281,9 +273,9 @@ def make_check_expr(
     hint_child_sign: Optional[HintSign] = None
 
     # Currently iterated child hint subscripting the currently visited hint *OR*
-    # sanified child hint metadata** (i.e., "HintSanifiedData" object describing
+    # sanified child hint metadata** (i.e., "HintSane" object describing
     # that child hint).
-    hint_or_sane_child: HintOrSanifiedData = None  # type: ignore[assignment]
+    hint_child_sane: HintSane = None  # type: ignore[assignment]
 
     # ..................{ LOCALS ~ hint : childs             }..................
     # Current tuple of all child hints subscripting the currently visited hint
@@ -332,8 +324,8 @@ def make_check_expr(
     #   Python code snippet to be returned (i.e., "func_wrapper_code") by a
     #   Python code snippet type-checking the root pith expression (i.e.,
     #   "VAR_NAME_PITH_ROOT") against the root hint (i.e., "hint_root").
-    func_root_code = hints_meta.enqueue_hint_or_sane_child(
-        hint_or_sane=hint_or_sane, pith_expr=VAR_NAME_PITH_ROOT)
+    func_root_code = hints_meta.enqueue_hint_child_sane(
+        hint_sane=hint_sane, pith_expr=VAR_NAME_PITH_ROOT)
 
     # Python code snippet to be returned, seeded with a placeholder to be
     # replaced on the first iteration of the breadth-first search performed
@@ -356,12 +348,12 @@ def make_check_expr(
     while hints_meta_index_curr <= hints_meta.index_last:
         # Update instance variables of this queue to reflect that this hint is
         # now the currently visited hint.
-        hints_meta.set_hint_curr_meta(
-            hint_curr_meta=hints_meta[hints_meta_index_curr])
+        hints_meta.set_index_current(hints_meta_index_curr)
 
         # Localize metadata for both efficiency and f-string purposes.
-        hint_curr = hints_meta.hint_curr_meta.hint
-        # print(f'Visiting type hint {repr(hint_curr)}...')
+        hint_curr_sane = hints_meta.hint_curr_meta.hint_sane
+        hint_curr = hint_curr_sane.hint
+        # print(f'Visiting type hint {repr(hint_curr_sane)}...')
 
         # ................{ PEP                                }................
         # If this hint is PEP-compliant...
@@ -399,13 +391,13 @@ def make_check_expr(
             # explicitly ignored ignorable root hints, these two guarantees
             # together ensure that all hints visited by this breadth-first
             # search *SHOULD* be unignorable. Naturally, we validate that here.
-            assert hint_curr is not Any, (
+            assert hint_curr is not HINT_SANE_IGNORABLE, (
                 f'{EXCEPTION_PREFIX}ignorable type hint '
                 f'{repr(hint_curr)} not ignored.'
             )
 
-            # Sign uniquely identifying this hint.
-            hint_curr_sign = get_hint_pep_sign(hint_curr)
+            # Sign uniquely identifying this hint, localized for usability.
+            hint_curr_sign = hints_meta.hint_curr_meta.hint_sign  # type: ignore[assignment]
             # print(f'Visiting PEP type hint {repr(hint_curr)} sign {repr(hint_curr_sign)}...')
 
             #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -526,15 +518,15 @@ def make_check_expr(
             elif hint_curr_sign is HintSignForwardRef:
                 # Render this forward reference accessible to the body of this
                 # wrapper function by populating:
-                # * A Python expression evaluating to the class referred to by
-                #   this forward reference when accessed via the private
-                #   "__beartypistry" parameter.
-                # * A set of the unqualified classnames referred to by all
-                #   relative forward references, including this reference if
-                #   relative. If this set was previously uninstantiated (i.e.,
-                #   "None"), this assignment initializes this local to the new
-                #   set instantiated by this call; else, this assignment
-                #   preserves this local set as is.
+                # * A Python expression evaluating to a new forward reference
+                #   proxy encapsulating the class referred to by this forward
+                #   reference.
+                # * A set of the unqualified classnames referred to by *ALL*
+                #   relative forward references visited by this BFS, including
+                #   this reference if relative. If this set was previously
+                #   uninstantiated (i.e., "None"), this assignment initializes
+                #   this local to the new set instantiated by this call; else,
+                #   this assignment preserves this local set as is.
                 (
                     hints_meta.hint_curr_expr,
                     hint_refs_type_basename,
@@ -574,117 +566,6 @@ def make_check_expr(
                 hint_childs_len = len(hint_childs)
 
                 # ............{ DEEP ~ expression                  }............
-                #FIXME: Unit test that this is behaving as expected. Doing so
-                #will require further generalizations, including:
-                #* In the "beartype._decor.decormain" submodule:
-                #  * Detect when running under tests.
-                #  * When running under tests, define a new
-                #    "func_wrapper.__beartype_wrapper_code" attribute added to
-                #    decorated callables to be the "func_wrapper_code" string
-                #    rather than True. Note that this obviously isn't the right way
-                #    to do source code association. Ideally, we'd at least
-                #    interface with the stdlib "linecache" module (e.g., by calling
-                #    the linecache.lazycache() function intended to be used to
-                #    cache the source code for non-file-based modules) and possibly
-                #    even go so far as to define a PEP 302-compatible beartype
-                #    module loader. That's out of scope, so this suffices for now.
-                #* In the "beartype_test.a00_unit.data._data_hint_pep" submodule:
-                #  * Add a new "_PepHintMetadata.code_str_match_regexes" field,
-                #    defined as an iterable of regular expressions matching
-                #    substrings of the "func_wrapper.__beartype_wrapper_code"
-                #    attribute that are expected to exist.
-                #  * For most "HINTS_PEP_META" entries, default this field to
-                #    merely the empty tuple.
-                #  * For deeply nested "HINTS_PEP_META" entries, define this
-                #    field as follows:
-                #        code_str_match_regexes=(r'\s+:=\s+',)
-                #* In the "beartype_test.a00_unit.pep.p484.test_p484" submodule:
-                #  * Match the "pep_hinted.__beartype_wrapper_code" string against
-                #    all regular expressions in the "code_str_match_regexes"
-                #    iterable for the currently iterated "pep_hint_meta".
-                #
-                #This is fairly important, as we have no other reusable means of
-                #ascertaining whether this is actually being applied in general.
-                #FIXME: That's all great, except for the
-                #"func_wrapper.__beartype_wrapper_code" part. Don't do that,
-                #please. We really do just want to do this right the first time. As
-                #expected, the key to doing so is the linecache.lazycache()
-                #function, whose implementation under Python 3.7 reads:
-                #
-                #    def lazycache(filename, module_globals):
-                #        """Seed the cache for filename with module_globals.
-                #
-                #        The module loader will be asked for the source only when getlines is
-                #        called, not immediately.
-                #
-                #        If there is an entry in the cache already, it is not altered.
-                #
-                #        :return: True if a lazy load is registered in the cache,
-                #            otherwise False. To register such a load a module loader with a
-                #            get_source method must be found, the filename must be a cachable
-                #            filename, and the filename must not be already cached.
-                #        """
-                #        if filename in cache:
-                #            if len(cache[filename]) == 1:
-                #                return True
-                #            else:
-                #                return False
-                #        if not filename or (filename.startswith('<') and filename.endswith('>')):
-                #            return False
-                #        # Try for a __loader__, if available
-                #        if module_globals and '__loader__' in module_globals:
-                #            name = module_globals.get('__name__')
-                #            loader = module_globals['__loader__']
-                #            get_source = getattr(loader, 'get_source', None)
-                #
-                #            if name and get_source:
-                #                get_lines = functools.partial(get_source, name)
-                #                cache[filename] = (get_lines,)
-                #                return True
-                #        return False
-                #
-                #Given that, what we need to do is:
-                #* Define a new "beartype._decor._pep302" submodule implementing a
-                #  PEP 302-compatible loader for @beartype-generated wrapper
-                #  functions, enabling external callers (including the stdlib
-                #  "linecache" module) to obtain the source for these functions.
-                #  For space efficiency, this submodule should internally store
-                #  code in a compressed format -- which probably means "gzip" for
-                #  maximal portability. This submodule should at least define these
-                #  attributes:
-                #  * "_FUNC_WRAPPER_MODULE_NAME_TO_CODE", a dictionary mapping from
-                #    the unique fake module names assigned to @beartype-generated
-                #    wrapper functions by the @beartype decorator to the compressed
-                #    source strings for those fake modules.
-                #  * get_source(), a function accepting one unique fake module name
-                #    assigned to an arbitrary @beartype-generated wrapper function
-                #    by the @beartype decorator and returning the uncompressed
-                #    source string for that fake module. Clearly, this function
-                #    should internally access the
-                #    "_FUNC_WRAPPER_MODULE_NAME_TO_CODE" dictionary and either:
-                #    * If the passed module name has *NOT* already been registered
-                #      to that dictionary, raise an exception.
-                #    * Else, uncompress the compressed source string previously
-                #      registered under that module name with that dictionary and
-                #      return that uncompressed string. Don't worry about caching
-                #      uncompressed strings here; that's exactly what the stdlib
-                #      "linecache" module already does on our behalf.
-                #    Ergo, this function should have signature resembling:
-                #        def get_source(func_wrapper_module_name: str) -> str:
-                #  * set_source(), a function accepting one unique fake module name
-                #    assigned to an arbitrary @beartype-generated wrapper function
-                #    by the @beartype decorator as well as as the uncompressed
-                #    source string for that fake module. Clearly, this function
-                #    should internally
-                #    "_FUNC_WRAPPER_MODULE_NAME_TO_CODE" dictionary and either:
-                #    * If the passed module name has already been registered to
-                #      that dictionary, raise an exception.
-                #    * Else, compress the passed uncompressed source string and
-                #      register that compressed string under that module name with
-                #      that dictionary.
-                #* In the "beartype._decor.decormain" submodule:
-                #  * Do... something? Oh, boy. Why didn't we finish this comment?
-
                 # If the expression yielding the current pith is neither...
                 #
                 # Note that we explicitly test against piths rather than
@@ -719,7 +600,7 @@ def make_check_expr(
                     #
                     # Note that this edge case is induced by method calls
                     # performed below of the form:
-                    #    hints_meta.enqueue_hint_or_sane_child(
+                    #    hints_meta.enqueue_hint_child_sane(
                     #        ..., pith_expr=pith_curr_assign_expr, ...)
                     #
                     # As of this writing, the only such edge cases are:
@@ -792,11 +673,10 @@ def make_check_expr(
                 #   ignorable arguments like tuple[str, ...].
                 #
                 # Then this hint is effectively (for all intents and purposes) a
-                # standard single-argument container. In this case...
+                # standard single-argument container. In this case, generate a
+                # Python code snippet type-checking the current pith against
+                # this container hint.
                 elif hint_curr_sign in HINT_SIGNS_CONTAINER_ARGS_1:
-                    # Python code snippet type-checking the current pith against
-                    # this hint if the child hint subscripting this parent
-                    # container hint is unignorable *OR* "None" otherwise.
                     make_hint_pep484585_container_check_expr(hints_meta)
                 # Else, this hint is *NOT* a standard single-argument container.
                 #
@@ -863,13 +743,13 @@ def make_check_expr(
                             # Unignorable sane child hint sanified from this
                             # possibly ignorable insane child hint *OR* "None"
                             # otherwise (i.e., if this child hint is ignorable).
-                            hint_or_sane_child = hints_meta.sanify_hint_child(
+                            hint_child_sane = hints_meta.sanify_hint_child(
                                 hint_child)  # type: ignore[arg-type]
                             # print(f'Sanified fixed tuple {hints_meta.hint_curr_meta}...')
-                            # print(f'...child hint {hint_child} -> {hint_or_sane_child}!')
+                            # print(f'...child hint {hint_child} -> {hint_child_sane}!')
 
                             # If this child hint is unignorable...
-                            if hint_or_sane_child is not Any:
+                            if hint_child_sane is not HINT_SANE_IGNORABLE:
                                 # Python expression yielding the value of the
                                 # currently indexed item of this tuple to be
                                 # type-checked against this child hint.
@@ -884,8 +764,8 @@ def make_check_expr(
                                 hints_meta.func_curr_code += (
                                     CODE_PEP484585_TUPLE_FIXED_NONEMPTY_CHILD_format(
                                         hint_child_placeholder=(
-                                            hints_meta.enqueue_hint_or_sane_child(
-                                                hint_or_sane=hint_or_sane_child,
+                                            hints_meta.enqueue_hint_child_sane(
+                                                hint_sane=hint_child_sane,
                                                 pith_expr=pith_child_expr,
                                             )
                                         ),
@@ -990,20 +870,20 @@ def make_check_expr(
                     # Unignorable sane child key and value hints sanified from
                     # these possibly ignorable insane child key and value hints
                     # *OR* "None" otherwise (i.e., if ignorable).
-                    hint_or_sane_child_key = hints_meta.sanify_hint_child(
+                    hint_child_sane_key = hints_meta.sanify_hint_child(
                         hint_childs[0])
-                    hint_or_sane_child_value = hints_meta.sanify_hint_child(
+                    hint_child_sane_value = hints_meta.sanify_hint_child(
                         hint_childs[1])
 
                     # If at least one of these child hints are unignorable...
                     if not (
-                        hint_or_sane_child_key is Any and
-                        hint_or_sane_child_value is Any
+                        hint_child_sane_key   is HINT_SANE_IGNORABLE and
+                        hint_child_sane_value is HINT_SANE_IGNORABLE
                     ):
                         # If this child key hint is unignorable...
-                        if hint_or_sane_child_key is not Any:
+                        if hint_child_sane_key is not HINT_SANE_IGNORABLE:
                             # If this child value hint is also unignorable...
-                            if hint_or_sane_child_value is not Any:
+                            if hint_child_sane_value is not HINT_SANE_IGNORABLE:
                                 # Increase the indentation level of code
                                 # type-checking this child value pith.
                                 hints_meta.indent_level_child += 1
@@ -1022,8 +902,8 @@ def make_check_expr(
                                 # by code type-checking this child key pith
                                 # against this hint.
                                 hint_key_placeholder = (
-                                    hints_meta.enqueue_hint_or_sane_child(
-                                        hint_or_sane=hint_or_sane_child_key,
+                                    hints_meta.enqueue_hint_child_sane(
+                                        hint_sane=hint_child_sane_key,
                                         pith_expr=pith_key_var_name,
                                     ))
 
@@ -1031,8 +911,8 @@ def make_check_expr(
                                 # by code type-checking this child value pith
                                 # against this hint.
                                 hint_value_placeholder = (
-                                    hints_meta.enqueue_hint_or_sane_child(
-                                        hint_or_sane=hint_or_sane_child_value,
+                                    hints_meta.enqueue_hint_child_sane(
+                                        hint_sane=hint_child_sane_value,
                                         pith_expr=CODE_PEP484585_MAPPING_KEY_VALUE_PITH_CHILD_EXPR_format(
                                             pith_curr_var_name=(
                                                 hints_meta.pith_curr_var_name),
@@ -1065,9 +945,8 @@ def make_check_expr(
                                         # replaced by code type-checking this
                                         # child key pith against this hint.
                                         hint_key_placeholder=(
-                                            hints_meta.enqueue_hint_or_sane_child(
-                                                hint_or_sane=(
-                                                    hint_or_sane_child_key),
+                                            hints_meta.enqueue_hint_child_sane(
+                                                hint_sane=hint_child_sane_key,
                                                 pith_expr=CODE_PEP484585_MAPPING_KEY_ONLY_PITH_CHILD_EXPR_format(
                                                     pith_curr_var_name=(
                                                         hints_meta.pith_curr_var_name)),
@@ -1088,8 +967,8 @@ def make_check_expr(
                                     # replaced by code type-checking this
                                     # child value pith against this hint.
                                     hint_value_placeholder=(
-                                        hints_meta.enqueue_hint_or_sane_child(
-                                            hint_or_sane=hint_or_sane_child_value,
+                                        hints_meta.enqueue_hint_child_sane(
+                                            hint_sane=hint_child_sane_value,
                                             pith_expr=CODE_PEP484585_MAPPING_VALUE_ONLY_PITH_CHILD_EXPR_format(
                                                 pith_curr_var_name=(
                                                     hints_meta.pith_curr_var_name)),
@@ -1130,11 +1009,11 @@ def make_check_expr(
                     # Unignorable sane metahint annotating this parent hint
                     # sanified from this possibly ignorable insane metahint *OR*
                     # "None" otherwise (i.e., if this metahint is ignorable).
-                    hint_or_sane_child = hints_meta.sanify_hint_child(
+                    hint_child_sane = hints_meta.sanify_hint_child(
                         get_hint_pep593_metahint(hint_curr))
                     # print(f'[593] metahint: {repr(get_hint_pep593_metahint(hint_curr))}')
                     # print(f'[593] hint_curr_meta: {repr(hints_meta.hint_curr_meta)}')
-                    # print(f'[593] hint_curr: {repr(hint_curr)}; hint_or_sane_child: {repr(hint_or_sane_child)}')
+                    # print(f'[593] hint_curr: {repr(hint_curr)}; hint_child_sane: {repr(hint_child_sane)}')
 
                     # Tuple of the one or more beartype validators annotating
                     # this metahint.
@@ -1142,7 +1021,7 @@ def make_check_expr(
                     # print(f'hints_child: {repr(hints_child)}')
 
                     # If this metahint is ignorable...
-                    if hint_or_sane_child is Any:
+                    if hint_child_sane is HINT_SANE_IGNORABLE:
                         # Expression yielding the value of the current pith,
                         # defined as either...
                         hint_curr_expr = (
@@ -1192,8 +1071,8 @@ def make_check_expr(
                                 # child hint and one or more arbitrary objects.
                                 # Ergo, we need *NOT* explicitly validate that here.
                                 hint_child_placeholder=(
-                                    hints_meta.enqueue_hint_or_sane_child(
-                                        hint_or_sane=hint_or_sane_child,
+                                    hints_meta.enqueue_hint_child_sane(
+                                        hint_sane=hint_child_sane,
                                         pith_expr=hints_meta.pith_curr_assign_expr,
                                     )
                                 ),
@@ -1281,10 +1160,9 @@ def make_check_expr(
                 # If this hint is either a PEP 484- or 585-compliant subclass
                 # type hint...
                 elif hint_curr_sign is HintSignType:
-                    # Unignorable sane child hint sanified from this possibly
-                    # ignorable insane child hint *OR* "None" otherwise (i.e.,
-                    # if this child hint is ignorable).
-                    hint_or_sane_child = hints_meta.sanify_hint_child(
+                    # Metadata encapsulating the sanification of this possibly
+                    # insane child hint.
+                    hint_child_sane = hints_meta.sanify_hint_child(
                         # Possibly ignorable insane child hint subscripting
                         # this parent hint, validated to be the *ONLY* child
                         # hint subscripting this parent hint.
@@ -1295,9 +1173,9 @@ def make_check_expr(
                     )
 
                     # If this child hint is unignorable...
-                    if hint_or_sane_child is not Any:
+                    if hint_child_sane is not HINT_SANE_IGNORABLE:
                         # Child hint encapsulated by this metadata.
-                        hint_child = get_hint_or_sane_hint(hint_or_sane_child)
+                        hint_child = hint_child_sane.hint
 
                         # Sign identifying this child hint.
                         hint_child_sign = get_hint_pep_sign_or_none(hint_child)
@@ -1372,75 +1250,12 @@ def make_check_expr(
                 # Else, this hint is *NOT* a subclass type hint.
                 #
                 # ............{ GENERIC or PROTOCOL                }............
-                # If this hint is either a:
-                # * PEP 484-compliant generic (i.e., user-defined class
-                #   subclassing a combination of one or more of the
-                #   "typing.Generic" superclass and other "typing" non-class
-                #   pseudo-superclasses) *OR*...
-                # * PEP 544-compliant protocol (i.e., class subclassing a
-                #   combination of one or more of the "typing.Protocol"
-                #   superclass and other "typing" non-class
-                #   pseudo-superclasses) *OR*...
-                # * PEP 585-compliant generic (i.e., user-defined class
-                #   subclassing at least one non-class PEP 585-compliant
-                #   pseudo-superclasses) *OR*...
-                #
-                # ...then this hint is a PEP-compliant generic. In this case...
+                # If this hint is an unsubscripted generic, generate a Python
+                # code snippet type-checking the current pith against this
+                # unsubscripted generic.
                 elif hint_curr_sign is HintSignPep484585GenericUnsubscripted:
-                    # print(f'Visiting generic type {repr(hint_curr)}...')
-
-                    # Initialize the code type-checking this pith against this
-                    # generic to the substring prefixing all such code.
-                    hints_meta.func_curr_code = CODE_PEP484585_GENERIC_PREFIX
-
-                    # For each unignorable unerased transitive pseudo-superclass
-                    # originally declared as a superclass of this generic...
-                    for hint_or_sane_child in (
-                        iter_hint_pep484585_generic_bases_unerased(
-                            hint=hint_curr,  # pyright: ignore
-                            conf=conf,
-                            typevar_to_hint=hints_meta.hint_curr_meta.typevar_to_hint,
-                            exception_prefix=EXCEPTION_PREFIX,
-                        )):
-                        # print(f'Visiting generic type hint {repr(hint_curr)}...')
-                        # print(f'...unerased base {repr(hint_child)}...')
-
-                        # Generate and append code type-checking this pith
-                        # against this pseudo-superclass.
-                        hints_meta.func_curr_code += (
-                            CODE_PEP484585_GENERIC_CHILD_format(
-                                hint_child_placeholder=(
-                                    hints_meta.enqueue_hint_or_sane_child(
-                                        hint_or_sane=hint_or_sane_child,
-                                        # Python expression efficiently reusing
-                                        # the value of this pith previously
-                                        # assigned to a local variable by the
-                                        # prior expression.
-                                        pith_expr=hints_meta.pith_curr_var_name,
-                                    )
-                                ),
-                            )
-                        )
-
-                    # Munge this code to...
-                    hints_meta.func_curr_code = (
-                        # Strip the erroneous " and" suffix appended by the
-                        # last child hint from this code.
-                        f'{hints_meta.func_curr_code[:LINE_RSTRIP_INDEX_AND]}'
-                        # Suffix this code by the substring suffixing all such
-                        # code.
-                        f'{CODE_PEP484585_GENERIC_SUFFIX}'
-                    # Format...
-                    ).format(
-                        # Indentation deferred above for efficiency.
-                        indent_curr=hints_meta.indent_curr,
-                        pith_curr_assign_expr=hints_meta.pith_curr_assign_expr,
-                        # Python expression evaluating to this generic type.
-                        hint_curr_expr=hints_meta.add_func_scope_type_or_types(
-                            hint_curr),  # type: ignore[arg-type]
-                    )
-                    # print(f'{hint_curr_exception_prefix} PEP generic {repr(hint)} handled.')
-                # Else, this hint is *NOT* a generic.
+                    make_hint_pep484585_generic_unsubbed_check_expr(hints_meta)
+                # Else, this hint is *NOT* an unsubscripted generic.
                 #
                 # ............{ PEP 484 ~ type variable            }............
                 # If this hint is a PEP 484-compliant type variable (i.e.,
@@ -1654,7 +1469,7 @@ def make_check_expr(
     #   have... but may not have. This is why we're testing.
     if func_wrapper_code == func_root_code:
         raise BeartypeDecorHintPepException(
-            f'{EXCEPTION_PREFIX_HINT}{repr(hint_or_sane)} unchecked.')
+            f'{EXCEPTION_PREFIX_HINT}{repr(hint_sane)} unchecked.')
     # Else, the breadth-first search above successfully generated code.
 
     # ..................{ CODE ~ scope                       }..................

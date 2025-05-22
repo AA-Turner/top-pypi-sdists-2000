@@ -1,14 +1,12 @@
 """Data models for interacting with the LangGraph API."""
 
+from collections.abc import Sequence
 from datetime import datetime
 from typing import (
     Any,
-    Dict,
     Literal,
     NamedTuple,
     Optional,
-    Sequence,
-    Tuple,
     TypedDict,
     Union,
 )
@@ -234,7 +232,7 @@ class Thread(TypedDict):
     """The status of the thread, one of 'idle', 'busy', 'interrupted'."""
     values: Json
     """The current state of the thread."""
-    interrupts: Dict[str, list[Interrupt]]
+    interrupts: dict[str, list[Interrupt]]
     """Interrupts which were thrown in this thread"""
 
 
@@ -427,7 +425,7 @@ class Command(TypedDict, total=False):
         - A Send object to execute a node with specific input
         - A sequence of node names or Send objects to execute in order
     """
-    update: Union[dict[str, Any], Sequence[Tuple[str, Any]]]
+    update: Union[dict[str, Any], Sequence[tuple[str, Any]]]
     """Updates to apply to the graph's state. Can be:
 
         - A dictionary of state updates to merge
@@ -437,3 +435,13 @@ class Command(TypedDict, total=False):
     """Value to resume execution with after an interruption.
        Used in conjunction with interrupt() to implement control flow.
     """
+
+
+class RunCreateMetadata(TypedDict):
+    """Metadata for a run creation request."""
+
+    run_id: str
+    """The ID of the run."""
+
+    thread_id: Optional[str]
+    """The ID of the thread."""

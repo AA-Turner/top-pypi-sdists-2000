@@ -177,11 +177,15 @@ class NotionHelper:
         ):
             update_properties["我的评分"] = {"select": {}}
         if (
-            properties.get("豆瓣短评") is None
-            or properties.get("豆瓣短评").get("type") != "rich_text"
+            properties.get("字数") is None
+            or properties.get("字数").get("type") != "rich_text"
         ):
-            update_properties["豆瓣短评"] = {"rich_text": {}}
-        """NeoDB先不添加了，现在受众还不广，可能有的小伙伴不知道是干什么的"""
+            update_properties["字数"] = {"number": {}}
+        if (
+            properties.get("价格") is None
+            or properties.get("价格").get("type") != "rich_text"
+        ):
+            update_properties["价格"] = {"number": {}}
         if len(update_properties) > 0:
             self.client.databases.update(database_id=id, properties=update_properties)
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
@@ -503,8 +507,10 @@ class NotionHelper:
                 "cover": result.get("cover"),
                 "myRating": get_property_value(
                     result.get("properties").get("我的评分")
-                ),
-                "comment": get_property_value(result.get("properties").get("豆瓣短评")),
+                ), 
+                "price": get_property_value(result.get("properties").get("价格")),
+                "wordCount": get_property_value(result.get("properties").get("字数")),
+                # "comment": get_property_value(result.get("properties").get("豆瓣短评")),
                 "status": get_property_value(result.get("properties").get("阅读状态")),
             }
         return books_dict

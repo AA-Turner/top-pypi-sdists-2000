@@ -21,7 +21,6 @@ from ast import (
     FunctionDef,
 )
 from beartype.typing import (
-    # TYPE_CHECKING,
     AbstractSet,
     Any,
     Callable,
@@ -51,9 +50,11 @@ from beartype._cave._cavefast import (
     MethodDecoratorClassType,
     MethodDecoratorPropertyType,
     MethodDecoratorStaticType,
+    ModuleType,
 )
 from beartype._data.func.datafuncarg import ARG_VALUE_UNPASSED
 from beartype._data.hint.pep.sign.datapepsigncls import HintSign
+from beartype._data.kind.datakindiota import Iota
 from beartype._util.py.utilpyversion import IS_PYTHON_AT_LEAST_3_10
 from collections.abc import Callable as CallableABC
 from importlib.abc import PathEntryFinder
@@ -168,7 +169,7 @@ BeartypeableT = TypeVar(
         MethodDecoratorStaticType,
 
         #FIXME: Currently unused, but preserved for posterity.
-        # # A C-based bound method descriptor (i.e., a pure-Python unbound
+        # # C-based bound method descriptor (i.e., a pure-Python unbound
         # # function bound to an object instance on Python's instantiation of that
         # # object) *OR*...
         # MethodBoundInstanceOrClassType,
@@ -346,11 +347,33 @@ variable of a class to the type hint annotating that parameter, return, or
 variable).
 '''
 
-# ....................{ DICT ~ sign                        }....................
+# ....................{ SIGN                               }....................
+HintSignOrNoneOrSentinel = Union[Optional[HintSign], Iota]
+'''
+PEP-compliant type hint matching either a **sign** (i.e., :class:`.HintSign`
+object uniquely identifying type hint), the :data:`None` singleton, or the
+sentinel placeholder.
+'''
+
+# ....................{ SIGN ~ container                   }....................
+FrozenSetHintSign = FrozenSet[HintSign]
+'''
+PEP-compliant type matching matching a frozen set of **signs** (i.e.,
+:class:`.HintSign` objects uniquely identifying type hints).
+'''
+
+
+IterableHintSign = Iterable[HintSign]
+'''
+PEP-compliant type matching matching a iterable of **signs** (i.e.,
+:class:`.HintSign` objects uniquely identifying type hints).
+'''
+
+# ....................{ SIGN ~ container : dict            }....................
 DictStrToHintSign = Dict[str, HintSign]
 '''
 PEP-compliant type hint matching a dictionary mapping from strings to **signs**
-(i.e., objects uniquely identifying type hints).
+(i.e., :class:`.HintSign` objects uniquely identifying type hints).
 '''
 
 
@@ -665,7 +688,7 @@ instances definitely encapsulating pathnames).
 #
 # Why? Because obsolete PEP 484-compliant type unions fail to support various
 # edge cases, including recursive "beartype.HintOverrides" globally defined by
-# the "beartype._conf.confoverrides" submodule.
+# the "beartype._conf._confoverrides" submodule.
 
 #FIXME: Shift into the more appropriate "datahintpep" submodule, please.
 Pep484TowerComplex = (
@@ -769,6 +792,28 @@ TupleTypeParams = Tuple[TypeParam, ...]
 :pep:`585`-compliant type hint matching a tuple of zero or more **type
 parameters** (i.e., :pep:`484`-compliant type variables, pep:`612`-compliant
 parameter specifications, or :pep:`646`-compliant type variable tuples).
+'''
+
+# ....................{ PEP 649                            }....................
+# Type hints required to fully comply with PEP 649.
+
+# Objects defining PEP 649-compliant "__annotations__" dunder dictionaries
+# are either...
+Pep649Hintable = Union[
+    FunctionType,                    # <-- pure-Python function
+
+    # C-based bound method descriptor (i.e., a pure-Python unbound function
+    # bound to an object instance on Python's instantiation of that object)
+    # *OR*...
+    MethodBoundInstanceOrClassType,  # <-- pure-Python method
+    ModuleType,  # <-- C-based *OR* pure-Python module
+    type,        # <-- C-based *OR* pure-Python class
+]
+'''
+:pep:`649`-compliant type hint matching any **hintable** (i.e., ideally
+pure-Python object defining the ``__annotations__`` dunder attribute as well as
+the :pep:`649`-compliant ``__annotate__`` dunder callable if the active Python
+interpreter targets Python >= 3.14).
 '''
 
 # ....................{ PEP 695                            }....................

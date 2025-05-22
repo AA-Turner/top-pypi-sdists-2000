@@ -15,6 +15,7 @@ import os.path
 import re
 import shutil
 import subprocess
+import sys
 import textwrap
 import warnings
 
@@ -42,10 +43,18 @@ def run_command(cmd: str) -> tuple[int, str]:
     # Subprocesses are expensive, but convenient, and so may be over-used in
     # the test suite.  Use these lines to get a list of the tests using them:
     if 0:  # pragma: debugging
-        with open("/tmp/processes.txt", "a") as proctxt:  # type: ignore[unreachable]
+        pth = "/tmp/processes.txt"                      # type: ignore[unreachable]
+        with open(pth, "a", encoding="utf-8") as proctxt:
             print(os.getenv("PYTEST_CURRENT_TEST", "unknown"), file=proctxt, flush=True)
 
-    encoding = os.device_encoding(1) or locale.getpreferredencoding()
+    # Type checking trick due to "unreachable" being set
+    _locale_type_erased: Any = locale
+
+    encoding = os.device_encoding(1) or (
+        _locale_type_erased.getpreferredencoding()
+        if sys.version_info < (3, 11)
+        else _locale_type_erased.getencoding()
+    )
 
     # In some strange cases (PyPy3 in a virtualenv!?) the stdout encoding of
     # the subprocess is set incorrectly to ascii.  Use an environment variable
@@ -113,7 +122,7 @@ def make_file(
 
     if text and basename.endswith(".py") and SHOW_DIS:      # pragma: debugging
         os.makedirs("/tmp/dis", exist_ok=True)
-        with open(f"/tmp/dis/{basename}.dis", "w") as fdis:
+        with open(f"/tmp/dis/{basename}.dis", "w", encoding="utf-8") as fdis:
             print(f"# {os.path.abspath(filename)}", file=fdis)
             cur_test = os.getenv("PYTEST_CURRENT_TEST", "unknown")
             print(f"# PYTEST_CURRENT_TEST = {cur_test}", file=fdis)
@@ -379,9 +388,19 @@ def flaky_method(max_runs: int) -> Callable[[TestMethod], TestMethod]:
 def all_our_source_files() -> Iterator[tuple[Path, str]]:
     """Iterate over all of our own source files.
 
+    This is used in tests that need a bunch of Python code to analyze, so we
+    might as well use our own source code as the subject.
+
     Produces a stream of (filename, file contents) tuples.
     """
+    print(f"all_our_source_files: {coverage.__file__ = }")
     cov_dir = Path(coverage.__file__).parent.parent
+    if ".tox" in cov_dir.parts:
+        # We are in a tox-installed environment, look above the .tox dir to
+        # also find the uninstalled source files.
+        cov_dir = Path(os.fspath(cov_dir).partition(".tox")[0])
+
+    print(f"all_our_source_files: {os.path.abspath(cov_dir) = }")
     # To run against all the files in the tox venvs:
     #   for source_file in cov_dir.rglob("*.py"):
     for sub in [".", "benchmark", "ci", "coverage", "lab", "tests"]:

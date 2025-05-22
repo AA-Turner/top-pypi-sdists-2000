@@ -6,6 +6,7 @@ use super::types::{
 use chroma_blockstore::provider::BlockfileProvider;
 use chroma_error::{ChromaError, ErrorCodes};
 use chroma_index::spann::types::GarbageCollectionContext;
+use chroma_index::spann::types::SpannMetrics;
 use chroma_index::spann::types::{
     SpannIndexFlusher, SpannIndexReader, SpannIndexReaderError, SpannIndexWriterError, SpannPosting,
 };
@@ -96,6 +97,7 @@ impl SpannSegmentWriter {
         hnsw_provider: &HnswIndexProvider,
         dimensionality: usize,
         gc_context: GarbageCollectionContext,
+        metrics: SpannMetrics,
     ) -> Result<SpannSegmentWriter, SpannSegmentWriterError> {
         if segment.r#type != SegmentType::Spann || segment.scope != SegmentScope::VECTOR {
             return Err(SpannSegmentWriterError::InvalidArgument);
@@ -186,6 +188,7 @@ impl SpannSegmentWriter {
             blockfile_provider,
             params,
             gc_context,
+            metrics,
         )
         .await
         {
@@ -563,7 +566,7 @@ mod test {
             PlGarbageCollectionConfig, PlGarbageCollectionPolicyConfig, RandomSamplePolicyConfig,
         },
         hnsw_provider::HnswIndexProvider,
-        spann::types::GarbageCollectionContext,
+        spann::types::{GarbageCollectionContext, SpannMetrics},
         Index,
     };
     use chroma_storage::{local::LocalStorage, Storage};
@@ -631,11 +634,7 @@ mod test {
             dimension: None,
             tenant: "test".to_string(),
             database: "test".to_string(),
-            log_position: 0,
-            version: 0,
-            total_records_post_compaction: 0,
-            size_bytes_post_compaction: 0,
-            last_compaction_time_secs: 0,
+            ..Default::default()
         };
 
         let spann_writer = SpannSegmentWriter::from_segment(
@@ -645,6 +644,7 @@ mod test {
             &hnsw_provider,
             3,
             gc_context,
+            SpannMetrics::default(),
         )
         .await
         .expect("Error creating spann segment writer");
@@ -726,6 +726,7 @@ mod test {
             &hnsw_provider,
             3,
             gc_context,
+            SpannMetrics::default(),
         )
         .await
         .expect("Error creating spann segment writer");
@@ -855,6 +856,7 @@ mod test {
             &hnsw_provider,
             3,
             gc_context,
+            SpannMetrics::default(),
         )
         .await
         .expect("Error creating spann segment writer");
@@ -1028,6 +1030,7 @@ mod test {
             &hnsw_provider,
             3,
             gc_context,
+            SpannMetrics::default(),
         )
         .await
         .expect("Error creating spann segment writer");
@@ -1124,6 +1127,7 @@ mod test {
             &hnsw_provider,
             3,
             gc_context,
+            SpannMetrics::default(),
         )
         .await
         .expect("Error creating spann segment writer");

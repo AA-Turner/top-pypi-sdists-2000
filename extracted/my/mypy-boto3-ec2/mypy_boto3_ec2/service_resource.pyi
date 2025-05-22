@@ -242,6 +242,7 @@ from .type_defs import (
     PrivateDnsNameOptionsResponseTypeDef,
     ProductCodeTypeDef,
     PropagatingVgwTypeDef,
+    PublicIpDnsNameOptionsTypeDef,
     RebootInstancesRequestInstanceRebootTypeDef,
     RegisterImageRequestServiceResourceRegisterImageTypeDef,
     RejectVpcPeeringConnectionRequestVpcPeeringConnectionRejectTypeDef,
@@ -3549,6 +3550,8 @@ class NetworkInterface(ServiceResource):
     outpost_arn: str
     owner_id: str
     private_dns_name: str
+    public_dns_name: str
+    public_ip_dns_name_options: PublicIpDnsNameOptionsTypeDef
     private_ip_address: str
     private_ip_addresses: List[NetworkInterfacePrivateIpAddressTypeDef]
     ipv4_prefixes: List[Ipv4PrefixSpecificationTypeDef]

@@ -13,8 +13,7 @@ This private submodule is *not* intended for importation by downstream callers.
 '''
 
 # ....................{ IMPORTS                            }....................
-from beartype.typing import FrozenSet
-from beartype._data.hint.pep.sign.datapepsigncls import HintSign
+from beartype._data.hint.datahinttyping import FrozenSetHintSign
 from beartype._data.hint.pep.sign.datapepsigns import (
     HintSignAbstractSet,
     HintSignAnnotated,
@@ -84,16 +83,11 @@ from beartype._data.hint.pep.sign.datapepsigns import (
     HintSignTypedDict,
     HintSignTypeGuard,
     HintSignTypeVar,
+    HintSignTypeVarTuple,
     HintSignUnion,
     HintSignUnpack,
     HintSignValuesView,
 )
-
-# ....................{ PRIVATE ~ hints                    }....................
-_FrozenSetHintSign = FrozenSet[HintSign]
-'''
-PEP-compliant type matching matching a frozen set of signs.
-'''
 
 # ....................{ SETS ~ args                        }....................
 HINT_SIGNS_UNSUBSCRIPTABLE = frozenset((
@@ -122,6 +116,11 @@ HINT_SIGNS_UNSUBSCRIPTABLE = frozenset((
     # PEP 612-compliant parameter specifications (i.e., "typing.ParamSpec"
     # objects) are *ALWAYS* unsubscripted and thus clearly unsubscriptable.
     HintSignParamSpec,
+
+    # ..................{ PEP 646                            }..................
+    # PEP 646-compliant type variable tuples (i.e., "typing.TypeVarTuple"
+    # objects) are *ALWAYS* unsubscripted and thus clearly unsubscriptable.
+    HintSignTypeVarTuple,
 ))
 '''
 Frozen set of the signs uniquely identifying all **unsubscriptable type hints**,
@@ -145,7 +144,7 @@ This frozen set intentionally excludes:
 '''
 
 # ....................{ SETS ~ args : container            }....................
-HINT_SIGNS_QUASIITERABLE: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_QUASIITERABLE: FrozenSetHintSign = frozenset((
     # ..................{ PEP (484|585)                      }..................
     HintSignContainer,
     HintSignIterable,
@@ -175,7 +174,7 @@ reiteration such that each call of the:
 '''
 
 
-HINT_SIGNS_REITERABLE: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_REITERABLE: FrozenSetHintSign = frozenset((
     # ..................{ PEP (484|585)                      }..................
     HintSignAbstractSet,
     HintSignCollection,
@@ -218,7 +217,7 @@ thus preserved (rather than modified) by reiteration such that each call of the:
 '''
 
 
-HINT_SIGNS_SEQUENCE: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_SEQUENCE: FrozenSetHintSign = frozenset((
     # ..................{ PEP (484|585)                      }..................
     HintSignList,
     HintSignMutableSequence,
@@ -282,7 +281,7 @@ This set intentionally excludes the:
 '''
 
 
-HINT_SIGNS_CONTAINER_ARGS_1: _FrozenSetHintSign = (
+HINT_SIGNS_CONTAINER_ARGS_1: FrozenSetHintSign = (
     HINT_SIGNS_QUASIITERABLE |
     HINT_SIGNS_REITERABLE |
     HINT_SIGNS_SEQUENCE
@@ -309,85 +308,8 @@ type hint constraining *all* items contained in that container).
 # PEP-compliant type hints standardized by more recently released PEPs).
 # '''
 
-# ....................{ SETS ~ ignorable                   }....................
-HINT_SIGNS_BARE_IGNORABLE: _FrozenSetHintSign = frozenset((
-    # ..................{ PEP 484                            }..................
-    # The "Any" singleton is semantically synonymous with the ignorable
-    # PEP-noncompliant "beartype.cave.AnyType" and hence "object" types.
-    HintSignAny,
-
-    # The "Generic" superclass imposes no constraints and is thus also
-    # semantically synonymous with the ignorable PEP-noncompliant
-    # "beartype.cave.AnyType" and hence "object" types. Since PEP
-    # 484 stipulates that *ANY* unsubscripted subscriptable PEP-compliant
-    # singleton including "typing.Generic" semantically expands to that
-    # singelton subscripted by an implicit "Any" argument, "Generic"
-    # semantically expands to the implicit "Generic[Any]" singleton.
-    HintSignPep484585GenericUnsubscripted,
-
-    # The unsubscripted "Optional" singleton semantically expands to the
-    # implicit "Optional[Any]" singleton by the same argument. Since PEP
-    # 484 also stipulates that all "Optional[t]" singletons semantically expand
-    #     to "Union[t, type(None)]" singletons for arbitrary arguments "t",
-    #     "Optional[Any]" semantically expands to merely "Union[Any,
-    #     type(None)]". Since all unions subscripted by "Any" semantically
-    #     reduce to merely "Any", the "Optional" singleton also reduces to
-    # merely "Any".
-    #
-    # This intentionally excludes "Optional[type(None)]", which the "typing"
-    # module physically reduces to merely "type(None)". *shrug*
-    HintSignOptional,
-
-    # The unsubscripted "Union" singleton semantically expands to the implicit
-    # "Union[Any]" singleton by the same argument. Since PEP 484 stipulates that
-    # a union of one type semantically reduces to only that type, "Union[Any]"
-    # semantically reduces to merely "Any". Despite their semantic equivalency,
-    # however, these objects remain syntactically distinct with respect to
-    # object identification: e.g.,
-    #     >>> Union is not Union[Any]
-    #     True
-    #     >>> Union is not Any
-    #     True
-    #
-    # This intentionally excludes:
-    #
-    # * The "Union[Any]" and "Union[object]" singletons, since the "typing"
-    #   module physically reduces:
-    #   * "Union[Any]" to merely "Any" (i.e., "Union[Any] is Any"), which
-    #     this frozen set already contains.
-    #   * "Union[object]" to merely "object" (i.e., "Union[object] is
-    #     object"), which this frozen set also already contains.
-    # * "Union" singleton subscripted by one or more ignorable type hints
-    #   contained in this set (e.g., "Union[Any, bool, str]"). Since there exist
-    #   a countably infinite number of these subscriptions, these subscriptions
-    #   *CANNOT* be explicitly listed in this set. Instead, these subscriptions
-    #   are dynamically detected by the high-level
-    #   beartype._util.hint.pep.utilhinttest.is_hint_ignorable() tester function
-    #   and thus referred to as deeply ignorable type hints.
-    HintSignUnion,
-
-    # ..................{ PEP 544                            }..................
-    # Note that ignoring the "typing.Protocol" superclass is vital here. For
-    # unknown and presumably uninteresting reasons, *ALL* possible objects
-    # satisfy this superclass. Ergo, this superclass is synonymous with the
-    # "object" root superclass: e.g.,
-    #     >>> import typing as t
-    #     >>> isinstance(object(), t.Protocol)
-    #     True
-    #     >>> isinstance('wtfbro', t.Protocol)
-    #     True
-    #     >>> isinstance(0x696969, t.Protocol)
-    #     True
-    HintSignProtocol,
-))
-'''
-Frozen set of all **bare ignorable signs** (i.e., arbitrary objects uniquely
-identifying unsubscripted type hints that are unconditionally ignorable by the
-:func:`beartype.beartype` decorator).
-'''
-
 # ....................{ SETS ~ kind                        }....................
-HINT_SIGNS_GENERIC: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_GENERIC: FrozenSetHintSign = frozenset((
     HintSignPep484585GenericSubscripted,
     HintSignPep484585GenericUnsubscripted,
 ))
@@ -398,7 +320,7 @@ types, including both subscripted and unsubscripted variants).
 '''
 
 
-HINT_SIGNS_MAPPING: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_MAPPING: FrozenSetHintSign = frozenset((
     # ..................{ PEP (484|585)                      }..................
     HintSignChainMap,
     HintSignCounter,
@@ -418,7 +340,7 @@ pair).
 '''
 
 
-HINT_SIGNS_UNION: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_UNION: FrozenSetHintSign = frozenset((
     # ..................{ PEP 484                            }..................
     HintSignOptional,
     HintSignUnion,
@@ -441,7 +363,7 @@ If the active Python interpreter targets:
 '''
 
 # ....................{ SIGNS ~ origin                     }....................
-HINT_SIGNS_ORIGIN_ISINSTANCEABLE: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_ORIGIN_ISINSTANCEABLE: FrozenSetHintSign = frozenset((
     # ..................{ PEP (484|585)                      }..................
     HintSignAbstractSet,
     HintSignAsyncContextManager,
@@ -503,7 +425,7 @@ shallowly type-checkable from wrapper functions generated by the
 '''
 
 # ....................{ SIGNS ~ return                     }....................
-HINT_SIGNS_RETURN_GENERATOR_ASYNC: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_RETURN_GENERATOR_ASYNC: FrozenSetHintSign = frozenset((
     # ..................{ PEP (484|585)                      }..................
     HintSignAsyncGenerator,
     HintSignAsyncIterable,
@@ -521,7 +443,7 @@ See Also
 '''
 
 
-HINT_SIGNS_RETURN_GENERATOR_SYNC: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_RETURN_GENERATOR_SYNC: FrozenSetHintSign = frozenset((
     # ..................{ PEP (484|585)                      }..................
     HintSignGenerator,
     HintSignIterable,
@@ -565,7 +487,7 @@ https://github.com/beartype/beartype/issues/65#issuecomment-954468111
 '''
 
 # ....................{ SIGNS ~ type                       }....................
-HINT_SIGNS_TYPE_MIMIC: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_TYPE_MIMIC: FrozenSetHintSign = frozenset((
     # ..................{ PEP 484                            }..................
     HintSignNewType,
 
@@ -604,7 +526,7 @@ I have no code and I must scream.
 '''
 
 # ....................{ SETS ~ pep : 557                   }....................
-HINT_SIGNS_DATACLASS_NONFIELDS: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_DATACLASS_NONFIELDS: FrozenSetHintSign = frozenset((
     # ..................{ PEP 526                            }..................
     # PEP 526-compliant "typing.ClassVar[...]" type hints, signifying class
     # variables to actually be class variables rather than dataclass fields.
@@ -624,7 +546,7 @@ at class scope in dataclasses decorated by the :pep:`557`-compliant
 '''
 
 # ....................{ SETS ~ pep : 612                   }....................
-HINT_SIGNS_CALLABLE_PARAMS: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_CALLABLE_PARAMS: FrozenSetHintSign = frozenset((
     # ..................{ PEP 612                            }..................
     HintSignConcatenate,
     HintSignParamSpec,
@@ -643,7 +565,7 @@ This set necessarily excludes:
 '''
 
 # ....................{ SETS ~ supported                   }....................
-_HINT_SIGNS_SUPPORTED_SHALLOW: _FrozenSetHintSign = frozenset((
+_HINT_SIGNS_SUPPORTED_SHALLOW: FrozenSetHintSign = frozenset((
     # ..................{ PEP 484                            }..................
     HintSignTypeVar,
 
@@ -682,7 +604,7 @@ shallow type-checking code).
 '''
 
 
-HINT_SIGNS_SUPPORTED_DEEP: _FrozenSetHintSign = (
+HINT_SIGNS_SUPPORTED_DEEP: FrozenSetHintSign = (
     HINT_SIGNS_MAPPING |
     HINT_SIGNS_QUASIITERABLE |
     HINT_SIGNS_REITERABLE |
@@ -746,7 +668,7 @@ type hint annotated by a subscription of that attribute.
 '''
 
 
-HINT_SIGNS_SUPPORTED: _FrozenSetHintSign = frozenset((
+HINT_SIGNS_SUPPORTED: FrozenSetHintSign = frozenset((
     # Set of all deeply supported signs.
     HINT_SIGNS_SUPPORTED_DEEP |
     # Set of all shallowly supported signs *NOT* originating from a class.

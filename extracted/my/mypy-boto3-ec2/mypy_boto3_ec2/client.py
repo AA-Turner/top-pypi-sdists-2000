@@ -1283,6 +1283,8 @@ from .type_defs import (
     ModifyNetworkInterfaceAttributeRequestTypeDef,
     ModifyPrivateDnsNameOptionsRequestTypeDef,
     ModifyPrivateDnsNameOptionsResultTypeDef,
+    ModifyPublicIpDnsNameOptionsRequestTypeDef,
+    ModifyPublicIpDnsNameOptionsResultTypeDef,
     ModifyReservedInstancesRequestTypeDef,
     ModifyReservedInstancesResultTypeDef,
     ModifyRouteServerRequestTypeDef,
@@ -7470,6 +7472,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/modify_private_dns_name_options.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_private_dns_name_options)
+        """
+
+    def modify_public_ip_dns_name_options(
+        self, **kwargs: Unpack[ModifyPublicIpDnsNameOptionsRequestTypeDef]
+    ) -> ModifyPublicIpDnsNameOptionsResultTypeDef:
+        """
+        Modify public hostname options for a network interface.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/modify_public_ip_dns_name_options.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_public_ip_dns_name_options)
         """
 
     def modify_reserved_instances(

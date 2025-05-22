@@ -207,6 +207,8 @@ class PythonParserTest(PythonParserTestBase):
             )
             """)
         assert parser.exit_counts() == {1: 1}
+        # In conftest.py, we silence the SyntaxWarning this code causes. If
+        # we remove this code, we can probably remove that warning.
         parser = self.parse_text("""\
             def g2():
                 try:
@@ -1181,7 +1183,7 @@ class ParserFileTest(CoverageTest):
                 stderr=subprocess.PIPE).communicate()""")   # no final newline.
 
         # Double-check that some test helper wasn't being helpful.
-        with open("abrupt.py") as f:
+        with open("abrupt.py", encoding="utf-8") as f:
             assert f.read()[-1] == ")"
 
         parser = self.parse_file("abrupt.py")

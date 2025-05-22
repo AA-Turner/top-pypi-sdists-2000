@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: beartype
-Version: 0.20.2
+Version: 0.21.0
 Summary: Unbearably fast near-real-time hybrid runtime-static type-checking in pure Python.
 Project-URL: Docs, https://beartype.readthedocs.io
 Project-URL: GitHub, https://github.com/beartype/beartype
@@ -63,6 +63,7 @@ Requires-Dist: rich-click; extra == 'dev'
 Requires-Dist: sphinx; extra == 'dev'
 Requires-Dist: sphinx<6.0.0,>=4.2.0; extra == 'dev'
 Requires-Dist: sphinxext-opengraph>=0.7.5; extra == 'dev'
+Requires-Dist: sqlalchemy; extra == 'dev'
 Requires-Dist: tox>=3.20.1; extra == 'dev'
 Requires-Dist: typing-extensions>=3.10.0.0; extra == 'dev'
 Requires-Dist: xarray; extra == 'dev'
@@ -88,6 +89,7 @@ Requires-Dist: pyright>=1.1.370; extra == 'test'
 Requires-Dist: pytest>=4.0.0; extra == 'test'
 Requires-Dist: rich-click; extra == 'test'
 Requires-Dist: sphinx; extra == 'test'
+Requires-Dist: sqlalchemy; extra == 'test'
 Requires-Dist: tox>=3.20.1; extra == 'test'
 Requires-Dist: typing-extensions>=3.10.0.0; extra == 'test'
 Requires-Dist: xarray; extra == 'test'
@@ -107,6 +109,7 @@ Requires-Dist: pyright>=1.1.370; extra == 'test-tox'
 Requires-Dist: pytest>=4.0.0; extra == 'test-tox'
 Requires-Dist: rich-click; extra == 'test-tox'
 Requires-Dist: sphinx; extra == 'test-tox'
+Requires-Dist: sqlalchemy; extra == 'test-tox'
 Requires-Dist: typing-extensions>=3.10.0.0; extra == 'test-tox'
 Requires-Dist: xarray; extra == 'test-tox'
 Provides-Extra: test-tox-coverage

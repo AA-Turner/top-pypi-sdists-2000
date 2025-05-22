@@ -67,11 +67,11 @@ project = 'Coverage.py'
 # @@@ editable
 copyright = "2009–2025, Ned Batchelder" # pylint: disable=redefined-builtin
 # The short X.Y.Z version.
-version = "7.8.0"
+version = "7.8.1"
 # The full version, including alpha/beta/rc tags.
-release = "7.8.0"
+release = "7.8.1"
 # The date of release, in "monthname day, year" format.
-release_date = "March 30, 2025"
+release_date = "May 21, 2025"
 # @@@ end
 
 rst_epilog = f"""
@@ -215,7 +215,7 @@ if any("spell" in arg for arg in sys.argv):
     # missing, so only use the extension if we are specifically spell-checking.
     extensions += ['sphinxcontrib.spelling']
     names_file = tempfile.NamedTemporaryFile(mode='w', prefix="coverage_names_", suffix=".txt")
-    with open("../CONTRIBUTORS.txt") as contributors:
+    with open("../CONTRIBUTORS.txt", encoding="utf-8") as contributors:
         names = set(re.split(r"[^\w']", contributors.read()))
         names = [n for n in names if len(n) >= 2 and n[0].isupper()]
         names_file.write("\n".join(names))

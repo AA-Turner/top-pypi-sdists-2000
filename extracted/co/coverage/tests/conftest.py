@@ -60,6 +60,9 @@ def set_warnings() -> None:
 
     warnings.filterwarnings("ignore", r".*no-sysmon")
 
+    # We have a test that has a return in a finally: test_bug_1891.
+    warnings.filterwarnings("ignore", "'return' in a 'finally' block", category=SyntaxWarning)
+
 
 @pytest.fixture(autouse=True)
 def reset_sys_path() -> Iterator[None]:
@@ -79,10 +82,17 @@ def reset_environment() -> Iterator[None]:
 
 
 @pytest.fixture(autouse=True)
-def reset_filesdotpy_globals() -> Iterator[None]:
+def reset_filesdotpy_globals() -> None:
     """coverage/files.py has some unfortunate globals. Reset them every test."""
     set_relative_directory()
-    yield
+
+@pytest.fixture(autouse=True)
+def force_local_pyc_files() -> None:
+    """Ensure that .pyc files are written next to source files."""
+    # For some tests, we need .pyc files written in the current directory,
+    # so override any local setting.
+    sys.pycache_prefix = None
+
 
 WORKER = os.getenv("PYTEST_XDIST_WORKER", "none")
 
@@ -94,7 +104,8 @@ def pytest_sessionstart() -> None:
         # Create a .pth file for measuring subprocess coverage.
         pth_dir = find_writable_pth_directory()
         assert pth_dir
-        (pth_dir / "subcover.pth").write_text("import coverage; coverage.process_startup()\n")
+        sub_dir = pth_dir / "subcover.pth"
+        sub_dir.write_text("import coverage; coverage.process_startup()\n", encoding="utf-8")
         # subcover.pth is deleted by pytest_sessionfinish below.
 
 
@@ -127,7 +138,7 @@ def find_writable_pth_directory() -> Path | None:
     for pth_dir in possible_pth_dirs():             # pragma: part covered
         try_it = pth_dir / f"touch_{WORKER}.it"
         try:
-            try_it.write_text("foo")
+            try_it.write_text("foo", encoding="utf-8")
         except OSError:                             # pragma: cant happen
             continue
 

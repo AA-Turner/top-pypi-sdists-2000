@@ -699,6 +699,7 @@ class KafkaConsumer(six.Iterator):
             dict: Map of topic to list of records (may be empty).
         """
         if not self._coordinator.poll(timeout_ms=timer.timeout_ms):
+            log.debug('poll: timeout during coordinator.poll(); returning early')
             return {}
 
         has_all_fetch_positions = self._update_fetch_positions(timeout_ms=timer.timeout_ms)
@@ -706,13 +707,13 @@ class KafkaConsumer(six.Iterator):
         # If data is available already, e.g. from a previous network client
         # poll() call to commit, then just return it immediately
         records, partial = self._fetcher.fetched_records(max_records, update_offsets=update_offsets)
-        log.debug('Fetched records: %s, %s', records, partial)
+        log.debug('poll: fetched records: %s, %s', records, partial)
         # Before returning the fetched records, we can send off the
         # next round of fetches and avoid block waiting for their
         # responses to enable pipelining while the user is handling the
         # fetched records.
         if not partial:
-            log.debug("Sending fetches")
+            log.debug("poll: Sending fetches")
             futures = self._fetcher.send_fetches()
             if len(futures):
                 self._client.poll(timeout_ms=0)
@@ -724,12 +725,14 @@ class KafkaConsumer(six.Iterator):
         # since the offset lookup may be backing off after a failure
         poll_timeout_ms = min(timer.timeout_ms, self._coordinator.time_to_next_poll() * 1000)
         if not has_all_fetch_positions:
+            log.debug('poll: do not have all fetch positions...')
             poll_timeout_ms = min(poll_timeout_ms, self.config['retry_backoff_ms'])
 
         self._client.poll(timeout_ms=poll_timeout_ms)
         # after the long poll, we should check whether the group needs to rebalance
         # prior to returning data so that the group can stabilize faster
         if self._coordinator.need_rejoin():
+            log.debug('poll: coordinator needs rejoin; returning early')
             return {}
 
         records, _ = self._fetcher.fetched_records(max_records, update_offsets=update_offsets)
@@ -1124,7 +1127,7 @@ class KafkaConsumer(six.Iterator):
             partitions (List[TopicPartition]): The partitions that need
                 updating fetch positions.
 
-        Returns True if fetch positions updated, False if timeout
+        Returns True if fetch positions updated, False if timeout or async reset is pending
 
         Raises:
             NoOffsetForPartitionError: If no offset is stored for a given
@@ -1135,15 +1138,13 @@ class KafkaConsumer(six.Iterator):
 
         if (self.config['api_version'] >= (0, 8, 1) and
             self.config['group_id'] is not None):
-            try:
-                # If there are any partitions which do not have a valid position and are not
-                # awaiting reset, then we need to fetch committed offsets. We will only do a
-                # coordinator lookup if there are partitions which have missing positions, so
-                # a consumer with manually assigned partitions can avoid a coordinator dependence
-                # by always ensuring that assigned partitions have an initial position.
-                self._coordinator.refresh_committed_offsets_if_needed(timeout_ms=timeout_ms)
-            except KafkaTimeoutError:
-                pass
+            # If there are any partitions which do not have a valid position and are not
+            # awaiting reset, then we need to fetch committed offsets. We will only do a
+            # coordinator lookup if there are partitions which have missing positions, so
+            # a consumer with manually assigned partitions can avoid a coordinator dependence
+            # by always ensuring that assigned partitions have an initial position.
+            if not self._coordinator.refresh_committed_offsets_if_needed(timeout_ms=timeout_ms):
+                return False
 
         # If there are partitions still needing a position and a reset policy is defined,
         # request reset using the default policy. If no reset strategy is defined and there
@@ -1152,8 +1153,7 @@ class KafkaConsumer(six.Iterator):
 
         # Finally send an asynchronous request to lookup and update the positions of any
         # partitions which are awaiting reset.
-        self._fetcher.reset_offsets_if_needed()
-        return False
+        return not self._fetcher.reset_offsets_if_needed()
 
     def _message_generator_v2(self):
         timeout_ms = 1000 * max(0, self._consumer_timeout - time.time())

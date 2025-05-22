@@ -21,7 +21,6 @@ from beartype._data.hint.datahintpep import (
     TupleHints,
 )
 from beartype._data.hint.datahinttyping import (
-    # SetTypeVars,
     TupleTypeVars,
     TypeException,
 )
@@ -79,7 +78,7 @@ def die_unless_hint_pep585_generic(
     # Else, this object is a PEP 585-compliant generic.
 
 # ....................{ TESTERS                            }....................
-def is_hint_pep585_builtin_subscripted(hint: Hint) -> bool:
+def is_hint_pep585_builtin_subbed(hint: Hint) -> bool:
     '''
     :data:`True` only if the passed object is a :pep:`585`-compliant
     **subscripted builtin type hint** (i.e., C-based type hint instantiated by
@@ -163,14 +162,14 @@ def is_hint_pep585_generic(hint: Hint) -> bool:
     # Return true only if object is either...
     return (
         # A PEP 585-compliant unsubscripted generic *OR*...
-        is_hint_pep585_generic_unsubscripted(hint) or
+        is_hint_pep585_generic_unsubbed(hint) or
         # A PEP 585-compliant subscripted generic.
-        is_hint_pep585_generic_subscripted(hint)
+        is_hint_pep585_generic_subbed(hint)
     )
 
 
 #FIXME: Unit test us up, please.
-def is_hint_pep585_generic_subscripted(hint: Hint) -> bool:
+def is_hint_pep585_generic_subbed(hint: Hint) -> bool:
     '''
     :data:`True` only if the passed object is a :pep:`585`-compliant
     **subscripted generic** (i.e., object subscripted by one or more child type
@@ -205,13 +204,13 @@ def is_hint_pep585_generic_subscripted(hint: Hint) -> bool:
         # This origin object is an unsubscripted generic type, which would then
         # imply this hint to be a subscripted generic. If this strikes you as
         # insane, you're not alone.
-        is_hint_pep585_generic_unsubscripted(hint_origin)
+        is_hint_pep585_generic_unsubbed(hint_origin)
     )
 
 
 #FIXME: Unit test us up, please.
 @callable_cached
-def is_hint_pep585_generic_unsubscripted(hint: Hint) -> bool:
+def is_hint_pep585_generic_unsubbed(hint: Hint) -> bool:
     '''
     :data:`True` only if the passed object is a :pep:`585`-compliant
     **unsubscripted generic** (i.e., type originally subclassing at least one
@@ -309,7 +308,7 @@ def is_hint_pep585_generic_unsubscripted(hint: Hint) -> bool:
     for hint_base_erased in hint_bases_erased:  # type: ignore[union-attr]
         # If this pseudo-superclass is itself a PEP 585-compliant C-based
         # subscripted generic (e.g., "list[str]"), return true.
-        if is_hint_pep585_builtin_subscripted(hint_base_erased):
+        if is_hint_pep585_builtin_subbed(hint_base_erased):
             return True
         # Else, this pseudo-superclass is *NOT* PEP 585-compliant. In this
         # case, continue to the next pseudo-superclass.
@@ -510,46 +509,3 @@ def get_hint_pep585_generic_typevars(
 
     # Return a tuple coerced from the keys of this dictionary.
     return tuple(hint_typevars_to_none.keys())
-
-# ....................{ REDUCERS                           }....................
-#FIXME: Unit test us up, please.
-#FIXME: Heavily refactor according to the discussion in "convreduce", please.
-def reduce_hint_pep585_builtin_subscripted_unknown(
-    hint: Hint, **kwargs) -> type:
-    '''
-    Reduce the passed :pep:`585`-compliant **unrecognized subscripted builtin
-    type hints** (i.e., C-based type hints that are *not* isinstanceable types,
-    instantiated by subscripting pure-Python origin classes subclassing the
-    C-based :class:`types.GenericAlias` superclass such that those classes are
-    unrecognized by :mod:`beartype` and thus *not* type-checkable as is) to
-    their unsubscripted origin classes (which are almost always pure-Python
-    isinstanceable types and thus type-checkable as is).
-
-    This reducer is intentionally *not* memoized (e.g., by the
-    :func:`callable_cached` decorator), as the implementation trivially reduces
-    to an efficient one-liner.
-
-    Parameters
-    ----------
-    hint : Hint
-        Type hint to be reduced.
-
-    All remaining passed arguments are silently ignored.
-
-    Returns
-    -------
-    type
-        Unsubscripted origin class originating this unrecognized subscripted
-        builtin type hint.
-    '''
-
-    # Avoid circular import dependencies.
-    from beartype._util.hint.pep.utilpepget import get_hint_pep_origin_type
-
-    # Pure-Python origin class originating this unrecognized subscripted builtin
-    # type hint if this hint originates from such a class *OR* raise an
-    # exception otherwise (i.e., if this hint originates from *NO* such class).
-    origin_type = get_hint_pep_origin_type(hint)
-
-    # Return this origin.
-    return origin_type

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    version="0.4.8",
+    version="0.5.1",
     packages=find_packages(),
     install_requires=[
         "requests",

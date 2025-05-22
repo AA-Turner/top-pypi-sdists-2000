@@ -8,6 +8,7 @@ from __future__ import annotations
 import os.path
 import re
 import sys
+import warnings
 
 from flaky import flaky
 import pytest
@@ -210,9 +211,16 @@ class MemoryLeakTest(CoverageTest):
         if fails > 8:
             pytest.fail("RAM grew by %d" % (ram_growth))      # pragma: only failure
 
-    @pytest.mark.skipif(not testenv.C_TRACER, reason="Only the C tracer has refcounting issues")
-    # In fact, sysmon explicitly holds onto all code objects,
-    # so this will definitely fail with sysmon.
+    @pytest.mark.skipif(
+        not testenv.C_TRACER,
+        reason="Only the C tracer has refcounting issues",
+        # In fact, sysmon explicitly holds onto all code objects,
+        # so this will definitely fail with sysmon.
+    )
+    @pytest.mark.skipif(
+        env.PYVERSION[:2] == (3, 13) and not env.GIL,
+        reason = "3.13t never frees code objects: https://github.com/python/cpython/pull/131989",
+    )
     @pytest.mark.parametrize("branch", [False, True])
     def test_eval_codeobject_leak(self, branch: bool) -> None:
         # https://github.com/nedbat/coveragepy/issues/1924
@@ -225,7 +233,7 @@ class MemoryLeakTest(CoverageTest):
         # one of our loops only increased the footprint by a small amount.
         base = osinfo.process_ram()
         deltas = []
-        for _ in range(10):
+        for _ in range(30):
             self.check_coverage(code, lines=[1, 2, 3], missing="", branch=branch)
             now = osinfo.process_ram()
             deltas.append(now - base)
@@ -458,7 +466,11 @@ class DoctestTest(CoverageTest):
             doctest.testmod(sys.modules[__name__])  # we're not __main__ :(
             ''')
         cov = coverage.Coverage()
-        self.start_import_stop(cov, "the_doctest")
+        with warnings.catch_warnings():
+            # Doctest calls pdb which opens ~/.pdbrc without an encoding argument,
+            # but we don't care. PYVERSIONS: this was needed for 3.10 only.
+            warnings.filterwarnings("ignore", r".*'encoding' argument not specified.*")
+            self.start_import_stop(cov, "the_doctest")
         data = cov.get_data()
         assert len(data.measured_files()) == 1
         lines = sorted_lines(data, data.measured_files().pop())
@@ -592,7 +604,7 @@ class ExecTest(CoverageTest):
             """)
         self.make_file("main.py", """\
             namespace = {'var': 17}
-            with open("to_exec.py") as to_exec_py:
+            with open("to_exec.py", encoding="utf-8") as to_exec_py:
                 code = compile(to_exec_py.read(), 'to_exec.py', 'exec')
                 exec(code, globals(), namespace)
             \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n

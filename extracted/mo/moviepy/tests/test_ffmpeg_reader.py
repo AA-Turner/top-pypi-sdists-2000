@@ -10,12 +10,14 @@ import pytest
 
 from moviepy.audio.AudioClip import AudioClip
 from moviepy.config import FFMPEG_BINARY
+from moviepy.tools import ffmpeg_escape_filename
 from moviepy.video.compositing.CompositeVideoClip import clips_array
 from moviepy.video.io.ffmpeg_reader import (
     FFMPEG_VideoReader,
     FFmpegInfosParser,
     ffmpeg_parse_infos,
 )
+from moviepy.video.io.ffmpeg_tools import ffmpeg_version
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from moviepy.video.VideoClip import BitmapClip, ColorClip
 
@@ -55,11 +57,43 @@ def test_ffmpeg_parse_infos_video_nframes():
     assert d["video_n_frames"] == 5
 
 
+def test_ffmpeg_parse_infos_no_default_stream(util):
+    """WMV files don't have "default" streams marked in ffmpeg output.
+    Make sure that ffmpeg_parse_infos can handle this case.
+    """
+    mp4_filepath = os.path.abspath("media/smpte-2997.mp4")
+    wmv_filepath = os.path.join(
+        util.TMP_DIR, "ffmpeg_parse_infos_no_default_stream-smpte-2997.wmv"
+    )
+
+    cmd = [
+        FFMPEG_BINARY,
+        "-y",
+        "-i",
+        ffmpeg_escape_filename(mp4_filepath),
+        ffmpeg_escape_filename(wmv_filepath),
+    ]
+    with open(os.devnull, "w") as stderr:
+        subprocess.check_call(cmd, stderr=stderr)
+
+    d = ffmpeg_parse_infos(wmv_filepath)
+
+    for key in (
+        "default_video_stream_number",
+        "default_video_input_number",
+        "default_audio_stream_number",
+        "default_audio_input_number",
+        "video_fps",
+        "audio_fps",
+    ):
+        assert key in d
+
+
 @pytest.mark.parametrize(
     ("decode_file", "expected_duration"),
     (
         (False, 30),
-        (True, 30.02),
+        (True, 30),
     ),
     ids=(
         "decode_file=False",
@@ -69,6 +103,11 @@ def test_ffmpeg_parse_infos_video_nframes():
 def test_ffmpeg_parse_infos_decode_file(decode_file, expected_duration):
     """Test `decode_file` argument of `ffmpeg_parse_infos` function."""
     d = ffmpeg_parse_infos("media/big_buck_bunny_0_30.webm", decode_file=decode_file)
+
+    # On old version of ffmpeg, duration and video duration was different
+    if int(ffmpeg_version()[1].split(".")[0]) < 7:
+        expected_duration += 0.02
+
     assert d["duration"] == expected_duration
 
     # check metadata is fine
@@ -782,6 +821,16 @@ def test_read_transparent_video():
 
     # Check transparency on fully opaque part is 255
     assert mask[100, 100] == 255
+
+
+def test_frame_seek():
+    reader = FFMPEG_VideoReader("media/smpte-2997.mp4", pixel_format="rgba")
+
+    # Get first frame and second frame
+    frame = reader.get_frame(0)
+    frame2 = reader.get_frame(0.34)
+
+    assert not np.array_equal(frame, frame2)
 
 
 if __name__ == "__main__":

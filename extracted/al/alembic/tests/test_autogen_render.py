@@ -451,6 +451,20 @@ class AutogenRenderTest(TestBase):
             "schema=foo.camel_schema, type_='unique')",
         )
 
+    def test_render_drop_unique_constraint_if_exists(self):
+        """
+        autogenerate.render._drop_constraint
+        """
+        t = self.table()
+        uq = UniqueConstraint(t.c.code, name="uq_test_code")
+        op_obj = ops.DropConstraintOp.from_constraint(uq)
+        op_obj.if_exists = True
+        eq_ignore_whitespace(
+            autogenerate.render_op_text(self.autogen_context, op_obj),
+            "op.drop_constraint('uq_test_code', 'test', "
+            "type_='unique', if_exists=True)",
+        )
+
     def test_add_fk_constraint(self):
         m = MetaData()
         Table("a", m, Column("id", Integer, primary_key=True))
@@ -1168,6 +1182,19 @@ class AutogenRenderTest(TestBase):
             "server_default='5', nullable=True, somedialect_foobar='option'))",
         )
 
+    def test_render_add_column_if_not_exists(self):
+        op_obj = ops.AddColumnOp(
+            "foo",
+            Column("x", Integer, server_default="5", nullable=True),
+            if_not_exists=True,
+        )
+        eq_ignore_whitespace(
+            autogenerate.render_op_text(self.autogen_context, op_obj),
+            "op.add_column('foo', sa.Column('x', sa.Integer(), "
+            "server_default='5', nullable=True), "
+            "if_not_exists=True)",
+        )
+
     def test_render_add_column_system(self):
         # this would never actually happen since "system" columns
         # can't be added in any case.   However it will render as
@@ -1205,6 +1232,16 @@ class AutogenRenderTest(TestBase):
         eq_ignore_whitespace(
             autogenerate.render_op_text(self.autogen_context, op_obj),
             "op.drop_column('bar', 'x', schema='foo')",
+        )
+
+    def test_render_drop_column_if_exists(self):
+        op_obj = ops.DropColumnOp.from_column_and_tablename(
+            None, "foo", Column("x", Integer, server_default="5")
+        )
+        op_obj.if_exists = True
+        eq_ignore_whitespace(
+            autogenerate.render_op_text(self.autogen_context, op_obj),
+            "op.drop_column('foo', 'x', if_exists=True)",
         )
 
     def test_render_quoted_server_default(self):
@@ -2033,6 +2070,24 @@ class AutogenRenderTest(TestBase):
             autogenerate.render_op_text,
             self.autogen_context,
             op_obj,
+        )
+
+    @testing.combinations(
+        ("test.",),
+        (None,),
+        argnames="alembic_module_prefix",
+    )
+    def test_render_executesql_alembic_module_prefix(
+        self,
+        alembic_module_prefix,
+    ):
+        self.autogen_context.opts.update(
+            alembic_module_prefix=alembic_module_prefix
+        )
+        op_obj = ops.ExecuteSQLOp("drop table foo")
+        eq_(
+            autogenerate.render_op_text(self.autogen_context, op_obj),
+            f"{alembic_module_prefix or ''}execute('drop table foo')",
         )
 
     def test_render_alter_column_modify_comment(self):

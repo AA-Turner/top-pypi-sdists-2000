@@ -13,46 +13,36 @@ This private submodule is *not* intended for importation by downstream callers.
 '''
 
 # ....................{ IMPORTS                            }....................
+from beartype.meta import URL_ISSUES
+from beartype.roar import BeartypeDecorHintRecursionException
 from beartype.typing import (
     TYPE_CHECKING,
-    # Any,
     Optional,
 )
-from beartype._cave._cavemap import NoneTypeOr
-from beartype._check.code.codemagic import (
-    EXCEPTION_PREFIX_FUNC_WRAPPER_LOCAL)
+from beartype._check.code.codemagic import EXCEPTION_PREFIX_FUNC_WRAPPER_LOCAL
 from beartype._check.code.codescope import add_func_scope_type_or_types
-from beartype._check.code.snip.codesnipcls import (
-    PITH_INDEX_TO_VAR_NAME)
+from beartype._check.code.snip.codesnipcls import PITH_INDEX_TO_VAR_NAME
 from beartype._check.convert.convsanify import sanify_hint_child
 from beartype._check.metadata.hint.hintmeta import HintMeta
-from beartype._check.metadata.metasane import (
-    HintOrSanifiedData,
-    unpack_hint_or_sane,
-)
-from beartype._conf.confcls import BeartypeConf
+from beartype._check.metadata.hint.hintsane import HintSane
+from beartype._conf.confmain import BeartypeConf
 from beartype._conf.confcommon import BEARTYPE_CONF_DEFAULT
 from beartype._data.code.datacodeindent import INDENT_LEVEL_TO_CODE
 from beartype._data.error.dataerrmagic import (
     EXCEPTION_PLACEHOLDER as EXCEPTION_PREFIX)
-from beartype._data.hint.datahintpep import (
-    # ANY,
-    Hint,
-    TypeVarToHint,
-)
+from beartype._data.hint.datahintpep import Hint
 from beartype._data.hint.datahinttyping import (
-    FrozenSetInts,
+    HintSignOrNoneOrSentinel,
     LexicalScope,
-    TypeStack,
     TypeOrSetOrTupleTypes,
+    TypeStack,
 )
-# from beartype._data.kind.datakindmap import FROZENDICT_EMPTY
-from beartype._data.kind.datakindset import FROZENSET_EMPTY
+from beartype._data.kind.datakindiota import SENTINEL
 from beartype._util.cache.pool.utilcachepoollistfixed import (
     FIXED_LIST_SIZE_MEDIUM,
     FixedList,
 )
-from beartype._util.kind.map.utilmapfrozen import FrozenDict
+from beartype._util.hint.pep.utilpepsign import get_hint_pep_sign_or_none
 
 # ....................{ SUBCLASSES                         }....................
 #FIXME: Unit test us up, please.
@@ -299,7 +289,12 @@ class HintsMeta(FixedList):
         self.index_last = -1
 
         # Nullify all remaining passed parameters.
+
+        #FIXME: Does this actually ever change? If not, this should either:
+        #* Just be initialized once in the __init__() method.
+        #* Just be hard-coded as "EXCEPTION_PREFIX" everywhere.
         self.exception_prefix = EXCEPTION_PREFIX
+
         self.func_curr_code = None  # type: ignore[assignment]
         self.func_wrapper_scope = {}
         self.hint_curr_expr = None
@@ -356,8 +351,8 @@ class HintsMeta(FixedList):
             Type hint type-checking metadata at this index.
         '''
         assert isinstance(hint_index, int), f'{repr(hint_index)} not integer.'
-        assert 0 <= hint_index <= len(self), (
-            f'{hint_index} not in [0, {len(self)}].')
+        assert 0 <= hint_index < FIXED_LIST_SIZE_MEDIUM, (
+            f'{hint_index} not in [0, {FIXED_LIST_SIZE_MEDIUM}].')
 
         # Type hint type-checking metadata at this hint_index.
         hint_curr_meta = super().__getitem__(hint_index)  # type: ignore[call-overload]
@@ -373,34 +368,47 @@ class HintsMeta(FixedList):
         return hint_curr_meta
 
     # ..................{ SETTERS                            }..................
-    def set_hint_curr_meta(self, hint_curr_meta: HintMeta) -> None:
+    def set_index_current(self, hint_index: int) -> None:
         '''
-        Set the hint encapsulated by the passed metadata as the currently
-        visited hint of the breadth-first search (BFS) iterated by this queue.
+        Set the hint encapsulated by the metadata with the passed 0-based index
+        as the currently visited hint of the breadth-first search (BFS) iterated
+        by this queue.
 
         This setter updates instance variables of this queue to reflect that
         this hint is now the currently visited hint.
 
         Parameters
         ----------
-        hint_curr_meta: HintMeta
-            Metadata describing the currently visited hint, appended by the
-            previously visited parent hint to this queue.
+        hint_index: int
+            0-based index of the metadata describing the currently visited hint,
+            appended by the previously visited parent hint to this queue.
         '''
-        assert isinstance(hint_curr_meta, HintMeta), (
-            f'{repr(hint_curr_meta)} not "HintMeta" object.')
+        assert isinstance(hint_index, int), f'{repr(hint_index)} not integer.'
+        assert 0 <= hint_index <= self.index_last, (
+            f'{hint_index} not in [0, {self.index_last}].')
+
+        # Metadata describing the currently visited hint.
+        self.hint_curr_meta = self[hint_index]
 
         # Current level of indentation appropriate for this hint.
-        indent_level_curr = hint_curr_meta.indent_level
+        indent_level_curr = self.hint_curr_meta.indent_level
 
         # Update instance variables of this queue to reflect that this hint is
         # now the currently visited hint.
-        self.hint_curr_meta = hint_curr_meta
         self.indent_level_child = indent_level_curr + 1
         self.indent_curr  = INDENT_LEVEL_TO_CODE[indent_level_curr]
         self.indent_child = INDENT_LEVEL_TO_CODE[self.indent_level_child]
-        self.pith_curr_expr = hint_curr_meta.pith_expr
-        self.pith_curr_var_name_index = hint_curr_meta.pith_var_name_index
+
+        #FIXME: *HMM.* Can't callers just refer to
+        #"hints_meta.hint_curr_meta.pith_expr" instead? This is obfuscatory.
+        self.pith_curr_expr = self.hint_curr_meta.pith_expr
+
+        #FIXME: *HMM.* Can't callers just refer to
+        #"hints_meta.hint_curr_meta.pith_var_name_index" instead? This is
+        #obfuscatory as well.
+        self.pith_curr_var_name_index = self.hint_curr_meta.pith_var_name_index
+
+        #FIXME: *HMM.* Shouldn't this reside in the "HintMeta" class instead?
         self.pith_curr_var_name = PITH_INDEX_TO_VAR_NAME[
             self.pith_curr_var_name_index]
 
@@ -461,17 +469,25 @@ class HintsMeta(FixedList):
         )
 
     # ..................{ ENQUEUERS                          }..................
-    def enqueue_hint_or_sane_child(
-        self, hint_or_sane: HintOrSanifiedData, pith_expr: str) -> str:
-        '''
-        **Enqueue** (i.e., append) to the end of the this queue new
-        **type-checking metadata** (i.e., a :class:`.HintMeta` object)
-        describing the currently iterated child type hint with the passed
-        metadata, enabling this hint to be visited by the ongoing breadth-first
-        search (BFS) traversing over this queue.
+    def enqueue_hint_child_sane(
+        self,
 
-        Callers are expected to modify this metadata by modifying these instance
-        variables of this higher-level parent object:
+        # Mandatory parameters.
+        hint_sane: HintSane,
+        pith_expr: str,
+
+        # Optional parameters.
+        hint_sign: HintSignOrNoneOrSentinel = SENTINEL,
+    ) -> str:
+        '''
+        **Enqueue** (i.e., append) to the end of this queue new **type-checking
+        metadata** (i.e., :class:`.HintMeta` object) describing the currently
+        iterated child type hint with the passed metadata, enabling the ongoing
+        breadth-first search (BFS) traversing over this queue to subsequently
+        visit this child hint.
+
+        Callers are expected to initialize this metadata by explicitly setting
+        these queue instance variables *before* calling this method:
 
         * :attr:`indent_level_child`, the 1-based indentation level describing
           the current level of indentation appropriate for this child hint.
@@ -482,92 +498,92 @@ class HintsMeta(FixedList):
 
         Parameters
         ----------
-        hint_or_sane : HintOrSanifiedData
-            Either a type hint *or* **sanified type hint metadata** (i.e.,
-            :data:`.HintSanifiedData` object) to be type-checked.
+        hint_sane : HintSane
+            **Sanified child type hint metadata** (i.e., immutable and thus
+            hashable object encapsulating *all* metadata returned by
+            :mod:`beartype._check.convert.convsanify` sanifiers after sanitizing
+            this possibly PEP-noncompliant hint into a fully PEP-compliant hint)
+            describing this child hint.
         pith_expr : str
             **Pith expression** (i.e., Python code snippet evaluating to the
             value of) the current **pith** (i.e., possibly nested object of the
-            passed parameter or return to be type-checked against the currently
-            visited type hint).
+            passed parameter or return to be type-checked against this child
+            hint).
+        hint_sign : Union[Optional[HintSign], Iota], default: SENTINEL
+            Either:
+
+            * If this child hint is uniquely identified by a **non-default
+              sign** (i.e., a singleton instance of the :class:`.HintSign` class
+              *other* than the standard sign returned by the
+              :func:`.get_hint_pep_sign_or_none` getter), this sign.
+            * Else, the sentinel placeholder, in which case this parameter
+              defaults to the **default sign** (i.e., the standard sign returned
+              by the :func:`.get_hint_pep_sign_or_none` getter).
+
+            Defaults to the sentinel placeholder. This parameter should
+            typically *not* be passed. Almost all hints are uniquely identified
+            by the default sign. A small subset of hints, however, concurrently
+            satisfy the detection criteria for multiple signs and are thus
+            identifiable with multiple signs. This parameter supports those
+            hints by enabling callers to call this method multiple times with
+            the same hint passed different signs.
+
+            Prominent examples include:
+
+            * :pep:`484`- and :pep:`585`-compliant unsubscripted generics --
+              which, due to being user-defined types, may subclass another
+              PEP-compliant :mod:`typing` superclass also identifiable by
+              another sign. Prominent examples include:
+
+              * **Generic typed dictionaries** identifiable as both the
+                :data:`.HintSignPep484585GenericUnsubscripted` sign *and* the
+                :data:`HintSignTypedDict` sign for :pep:`589`-compliant typed
+                dictionaries: e.g.,
+
+                .. code-block:: python
+
+                   from typing import Generic, TypedDict
+                   class GenericTypedDict[T](TypedDict, Generic[T]):
+                       generic_item: T
+
+              * **Generic named tuples** identifiable as both the
+                :data:`.HintSignPep484585GenericUnsubscripted` sign *and* the
+                :data:`HintSignNamedTuple` sign for :pep:`484`-compliant named
+                tuples: e.g.,
+
+                .. code-block:: python
+
+                   from typing import Generic, NamedTuple
+                   class GenericNamedTuple[T](NamedTuple, Generic[T]):
+                       generic_item: T
 
         Returns
         -------
         str
             Placeholder string to be subsequently replaced by code type-checking
-            this child pith against this child type hint.
+            this child pith against this child hint.
+
+        Raises
+        ------
+        BeartypeDecorHintRecursionException
+            If the number of child type hints internally visited by this
+            breadth-first search (BFS) exceeds the length of this queue. This
+            exception guards against accidental infinite recursion when
+            dynamically generating code type-checking against this hint.
         '''
-
-        # Child hint and type variable lookup table encapsulated by this data.
-        hint, typevar_to_hint = unpack_hint_or_sane(hint_or_sane)
-
-        #FIXME: This is trash, obviously. Instead, this should probably be
-        #returned by the unpack_hint_or_sane() function.
-        # Recursion guard (i.e., frozen set of the integers uniquely identifying
-        # *ALL* transitive recursable parent hints of this hint), defined as
-        # either...
-        recursable_hint_ids: FrozenSetInts = FROZENSET_EMPTY
-        #     # If there is *NO* currently visited hint, then the passed hint is
-        #     # the root hint and thus has *NO* parent hint. In this case,
-        #     # initialize this recursion guard to the empty frozen set. The first
-        #     # iteration of the parent make_check_expr() code factory calling
-        #     # this method will then ensure that the follownig "else" branch will
-        #     # produce the first non-empty recursion guard resembling:
-        #     #     FROZENSET_EMPTY | {id(root_hint)} ==
-        #     #     frozenset((id(root_hint),))
-        #     FROZENSET_EMPTY
-        #     if self.hint_curr_meta is None else
-        #     # Else, a parent hint of this child hint is currently being visited.
-        #     # In this case, produce the frozen set of the integers uniquely
-        #     # identifying *ALL* transitive parent hints of this child hint
-        #     # (including this parent hint of this child hint) by:
-        #     # * Efficiently extending the frozen set of the integers uniquely
-        #     #   identifying *ALL* transitive parent hints of this parent hint by
-        #     #   the integer uniquely identifying this parent hint.
-        #     #
-        #     # Note that OR-ing a "frozenset" with a "set" produces yet another
-        #     # "frozenset" and is, indeed, the most efficient means of doing so:
-        #     #     >>> frozenset(('ok',)) | {'ko',}
-        #     #     frozenset({'ok', 'ko'})
-        #     self.hint_curr_meta.parent_hint_ids | {id(
-        #         self.hint_curr_meta.hint),}
-        # )
-
-        # Return the placeholder string to be subsequently replaced by code
-        # type-checking this child pith against this child hint, produced by
-        # enqueueing new type-checking metadata describing this child hint.
-        return self._enqueue_hint_child(
-            hint=hint,
-            indent_level=self.indent_level_child,
-            pith_expr=pith_expr,
-            pith_var_name_index=self.pith_curr_var_name_index,
-            recursable_hint_ids=recursable_hint_ids,
-            typevar_to_hint=typevar_to_hint,
-        )
-
-
-    #FIXME: Possibly just inline into the above method call. Previously, we
-    #required these to be separate methods. Now we no longer do. We sigh. *sigh*
-    def _enqueue_hint_child(self, **kwargs) -> str:
-        '''
-        **Enqueue** (i.e., append) to the end of the this queue new
-        **type-checking metadata** (i.e., a :class:`.HintMeta` object)
-        describing the currently iterated child type hint with the passed
-        metadata, enabling this hint to be visited by the ongoing breadth-first
-        search (BFS) traversing over this queue.
-
-        Parameters
-        ----------
-        All passed keyword parameters are passed as is to the lower-level
-        :meth:`.HintMeta.reinit` method.
-
-        Returns
-        -------
-        str
-            Placeholder string to be subsequently replaced by code type-checking
-            this child pith against this child type hint.
-        '''
+        assert isinstance(hint_sane, HintSane), (
+            f'{repr(hint_sane)} not sanified hint metadata.')
         # print(f'Enqueing child hint {self.index_last+1} with {repr(kwargs)}...')
+
+        # Child hint to be enqueued, localized mostly for readability.
+        hint_child = hint_sane.hint
+
+        # If the caller did *NOT* pass a non-default sign identifying this child
+        # hint, default this sign to the default sign identifying this hint.
+        if hint_sign is SENTINEL:
+            hint_sign = get_hint_pep_sign_or_none(hint_child)
+        # Else, the caller passed a non-default sign identifying this hint.
+        # Preserve this sign as is.
 
         # Increment the 0-based index of metadata describing the last visitable
         # hint in this list (which also serves as the unique identifier of the
@@ -579,13 +595,49 @@ class HintsMeta(FixedList):
         # be substantially larger than "hints_meta_index_last".
         self.index_last += 1
 
+        #FIXME: Unit test this, please. No idea how yet. I sigh. *sigh*
+        # If the current number of child type hints internally visited by this
+        # breadth-first search (BFS) exceeds the length of this queue...
+        #
+        # Note that this should *NEVER* happen, but probably nonetheless will.
+        if self.index_last >= FIXED_LIST_SIZE_MEDIUM:  # pragma: no cover
+            # Metadata encapsulating the previously enqueued root hint.
+            root_hint_meta = self.__getitem__(0)
+
+            # This root hint.
+            root_hint = root_hint_meta.hint_sane.hint
+
+            # Raise an exception embedding this root hint.
+            raise BeartypeDecorHintRecursionException(
+                f'{self.exception_prefix}child type hint {repr(hint_child)} '
+                f'non-type-checkable. '
+                f'Recursion detected when generating code type-checking from '
+                f'root type hint {repr(root_hint)} to this child type hint. '
+                f'Please submit this exception traceback as a new issue '
+                f'to our friendly issue tracker:\n'
+                f'\t{URL_ISSUES}\n'
+                f'Beartype thanks you for your tragic (yet ultimately noble) '
+                f'sacrifice.'
+            )
+        # Else, the current number of child type hints internally visited by
+        # this breadth-first search (BFS) is still less than the length of this
+        # queue. In this case, continue.
+
         # Type hint type-checking metadata at this index.
         hint_meta = self.__getitem__(self.index_last)
 
         # Replace prior fields of this metadata with the passed fields.
-        hint_meta.reinit(**kwargs)
+        hint_meta.reinit(
+            hint_sane=hint_sane,
+            hint_sign=hint_sign,  # type: ignore[arg-type]
+            indent_level=self.indent_level_child,
+            pith_expr=pith_expr,
+            pith_var_name_index=self.pith_curr_var_name_index,
+        )
 
-        # Return the placeholder substring associated with this type hint.
+        # Return the placeholder string to be subsequently replaced by code
+        # type-checking this child pith against this child hint, produced by
+        # enqueueing new type-checking metadata describing this child hint.
         return hint_meta.hint_placeholder
 
     # ..................{ SANIFIERS                          }..................
@@ -593,121 +645,68 @@ class HintsMeta(FixedList):
         self,
 
         # Mandatory parameters.
-        hint: Hint,
+        hint_child_insane: Hint,
 
         # Optional parameters.
-        typevar_to_hint: Optional[TypeVarToHint] = None,
-    ) -> HintOrSanifiedData:
+        hint_parent_sane: Optional[HintSane] = None,
+    ) -> HintSane:
         '''
-        Type hint sanified (i.e., sanitized) from the passed **possibly insane
-        child type hint** (i.e., possibly PEP-noncompliant hint transitively
-        subscripting the root type hint annotating a parameter or return of the
-        currently decorated callable) if this hint is both reducible and
-        unignorable, this hint unmodified if this hint is both irreducible and
-        unignorable, or :obj:`typing.Any` otherwise (i.e., if this hint is
-        ignorable).
+        Metadata encapsulating the sanification (i.e., sanitization) of the
+        passed **possibly insane child type hint** (i.e., possibly
+        PEP-noncompliant hint transitively subscripting the root hint annotating
+        a parameter or return of the currently decorated callable) if this hint
+        is both reducible and unignorable, this hint unmodified if this hint is
+        both irreducible and unignorable, or :obj:`.HINT_SANE_IGNORABLE` otherwise
+        (i.e., if this hint is ignorable).
 
         This method is merely a convenience wrapper for the lower-level
         :func:`.sanify_hint_child` sanifier.
 
         Parameters
         ----------
-        hint : Hint
+        hint_child_insane : Hint
             Child type hint to be sanified.
-        typevar_to_hint : TypeVarToHint, optional
-            **Type variable lookup table** (i.e., immutable dictionary mapping
-            from the :pep:`484`-compliant **type variables** (i.e.,
-            :class:`typing.TypeVar` objects) originally parametrizing the
-            origins of all transitive parent hints of this hint to the
-            corresponding child hints subscripting these parent hints). Defaults
-            to :data:`None`, in which case this table actually defaults to that
-            of the currently visited parent hint of this child hint (i.e.,
-            ``self.hint_curr_meta.typevar_to_hint``).
+        hint_parent_sane : Optional[HintSane], default: None
+            **Sanified parent type hint metadata** (i.e., immutable and thus
+            hashable object encapsulating *all* metadata previously returned by
+            :mod:`beartype._check.convert.convsanify` sanifiers after sanitizing
+            the possibly PEP-noncompliant parent hint of this child hint into a
+            fully PEP-compliant parent hint). Defaults to :data:`None`, in which
+            case this parameter actually defaults to
+            ``self.hint_curr_meta.hint_sane``, the previously sanified metadata
+            encapsulating a parent transitive hint of this child hint. Since
+            this default suffices in the common case, callers should only pass
+            this parameter when explicitly sanifying the parent hint of this
+            child hint outside the current breadth-first search (BFS).
 
         Returns
         -------
-        HintOrSanifiedData
+        HintSane
             Either:
 
-            * If this child hint is reducible to:
-
-              * An ignorable lower-level hint, :obj:`typing.Any`.
-              * An unignorable lower-level hint, either:
-
-                * If reducing this hint to that lower-level hint generates
-                  supplementary metadata, that metadata.
-                * Else, that lower-level hint alone.
-
-            * Else, this child hint is irreducible. In this case, this child
-              hint unmodified.
+            * If this child hint is ignorable,
+              :obj:`beartype._check.metadata.hint.hintsane.HINT_SANE_IGNORABLE`.
+            * Else if this unignorable child hint is reducible to another hint,
+              metadata encapsulating this reduction.
+            * Else, this unignorable child hint is irreducible. In this case,
+              metadata encapsulating this child hint unmodified.
         '''
-        assert isinstance(typevar_to_hint, NoneTypeOr[FrozenDict]), (
-            f'{repr(typevar_to_hint)} neither frozen dictionary nor "None".')
 
-        #FIXME: *NON-IDEAL.* Ideally, @beartype would actually generate code
-        #recursively type-checking recursive hints. However, doing so is
-        #*EXTREMELY* non-trivial. Why?
-        #
-        #Non-triviality is one obvious concern. For each recursive hint,
-        #@beartype must now:
-        #* Dynamically generate one low-level recursive type-checking function
-        #  unique to that recursive hint.
-        #* Call each such function in higher-level wrapper functions to
-        #  type-check each pith against the corresponding recursive hint.
-        #
-        #Safety is another obvious concern. Generated code *MUST* explicitly
-        #guard against infinitely recursive containers:
-        #    >>> infinite_list = []
-        #    >>> infinite_list.append(infinite_list)  # <-- gg fam
-        #
-        #But guarding against infinitely recursive containers requires
-        #maintaining a (...waitforit) frozen set of the IDs of all previously
-        #type-checked objects, which must then be passed to each dynamically
-        #generated recursive type-checking function that type-checks a specific
-        #recursive hint. Maintaining these frozen sets then incurs a probably
-        #significant space and time complexity hit.
-        #
-        #In short, it's pretty brutal stuff. For now, simply ignoring recursion
-        #strikes us the sanest and certainly simplest approach. *sigh*
+        # If the caller explicitly passed *NO* sanified parent hint metadata,
+        # default this metadata to that of the currently visited parent hint.
+        if hint_parent_sane is None:
+            hint_parent_sane = self.hint_curr_meta.hint_sane
+        # Else, the caller explicitly passed sanified parent hint metadata.
+        # Silently preserve this metadata as is.
 
-        #FIXME: Clean up *ALL* references to "parent_hint_ids", please. *sigh*
-        #FIXME: Unit test us up, please.
-        # If the integer identifying this child hint is that of a transitive
-        # parent hint of this child hint, this child hint has already been
-        # visited by the current breadth-first search (BFS) and thus constitutes
-        # a recursive hint. Certainly, various approaches to generating code
-        # type-checking recursive hints exists. @beartype currently embraces the
-        # easiest, fastest, and laziest approach: simply ignore all recursion!
-
-        #FIXME: *HMMMM.* Right. This needs to be tested *AFTER* sanification,
-        #really. Either that, or we need to be adding pre-sanified hint IDs. The
-        #point is that we need to be consistent about what we're adding and
-        #testing. Post-sanified IDs is probably best, honestly.
-        #FIXME: Actually, this should be tested in the existing
-        #reduce_hint_pep695_unsubscripted() reducer *BEFORE* sanification,
-        #obviously.
-
-        # if id(hint) in self.hint_curr_meta.parent_hint_ids:
-        #     return ANY
-        # Else, this child hint has *NOT* yet been visited by this BFS.
-
-        # If *NO* type variable lookup table was passed, default this table to
-        # that of of the currently visited parent hint of this child hint.
-        if typevar_to_hint is None:
-            typevar_to_hint = self.hint_curr_meta.typevar_to_hint
-        # Else, a type variable lookup table was passed. In this case, preserve
-        # this table as is.
-
-        # Sane hint sanified from this possibly insane hint if sanifying this
-        # hint did not generate supplementary metadata *OR* that metadata
-        # otherwise (i.e., if doing so generated supplementary metadata).
-        hint_or_sane_child = sanify_hint_child(
-            hint=hint,
+        # Metadata encapsulating the sanification of this child hint.
+        hint_child_sane = sanify_hint_child(
+            hint=hint_child_insane,
+            hint_parent_sane=hint_parent_sane,
             cls_stack=self.cls_stack,
             conf=self.conf,
-            typevar_to_hint=typevar_to_hint,
             exception_prefix=self.exception_prefix,
         )
 
         # Return this metadata.
-        return hint_or_sane_child
+        return hint_child_sane

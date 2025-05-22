@@ -532,7 +532,7 @@ impl PyGroupbyOptions {
 
 pub(crate) fn into_py(py: Python<'_>, expr: &AExpr) -> PyResult<PyObject> {
     match expr {
-        AExpr::Explode(_) => Err(PyNotImplementedError::new_err("explode")),
+        AExpr::Explode { .. } => Err(PyNotImplementedError::new_err("explode")),
         AExpr::Alias(inner, name) => Alias {
             expr: inner.0,
             name: name.into_py_any(py)?,
@@ -806,6 +806,7 @@ pub(crate) fn into_py(py: Python<'_>, expr: &AExpr) -> PyResult<PyObject> {
                     StringFunction::Replace { n, literal } => {
                         (PyStringFunction::Replace, n, literal).into_py_any(py)
                     },
+                    #[cfg(feature = "string_normalize")]
                     StringFunction::Normalize { form } => (
                         PyStringFunction::Normalize,
                         match form {

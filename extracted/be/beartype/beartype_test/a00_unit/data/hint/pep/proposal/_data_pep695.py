@@ -34,7 +34,7 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
     # Defer version-specific imports.
     from beartype import (
         BeartypeConf,
-        BeartypeHintOverrides,
+        FrozenDict,
     )
     from beartype.typing import Any
     from beartype._data.hint.pep.sign.datapepsigns import (
@@ -53,12 +53,16 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         AliasPep484604,
         AliasPep484604Depth1,
         AliasPep484604Depth1T,
-        AliasPep585Dict,
+        AliasPep484604Recursive1T,
+        AliasPep484604Recursive2T,
+        AliasPep484604RecursiveTopT,
+        AliasPep585DictST,
         AliasPep585IterableTContainerT,
         AliasPep585IterableTupleSTContainerTupleST,
-        AliasPep585TupleFixed,
-        AliasPep585Type,
+        AliasPep585TupleFixedST,
+        AliasPep585TypeT,
         AliasPep593,
+        AliasRecursiveIdentityT,
         Pep585IterableTContainerT,
         Pep585IterableTupleSTContainerTupleST,
     )
@@ -167,7 +171,7 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         HintPepMetadata(
             hint=AliasPep484604[str],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Floating-point constant.
                 HintPithSatisfiedMetadata(70.319),
@@ -241,10 +245,9 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         # that child hint and another hint, exercising a subtle edge case.
         HintPepMetadata(
             hint=AliasPep484604[complex],
-            conf=BeartypeConf(hint_overrides=BeartypeHintOverrides(
-                {float: int | float})),
+            conf=BeartypeConf(hint_overrides=FrozenDict({float: int | float})),
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Integer constant.
                 HintPithSatisfiedMetadata(0xBEEFCAFE),
@@ -254,17 +257,14 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
                 HintPithUnsatisfiedMetadata(
                     pith=27 + 4j,
                     # Match that the exception message raised for this object
-                    # declares the types *NOT* satisfied by this object.
+                    # declares the types *NOT* satisfied by this object as well
+                    # as a newline and bullet delimiter.
                     exception_str_match_regexes=(
                         r'\bdict\b',
                         r'\bfloat\b',
                         r'\bfrozenset\b',
                         r'\blist\b',
                         r'\bset\b',
-                    ),
-                    # Match that the exception message raised for this object
-                    # does *NOT* contain a newline or bullet delimiter.
-                    exception_str_not_match_regexes=(
                         r'\n',
                         r'\*',
                     ),
@@ -327,7 +327,7 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         HintPepMetadata(
             hint=AliasPep484604Depth1T[int],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # String constant.
                 HintPithSatisfiedMetadata(
@@ -357,7 +357,6 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         HintPepMetadata(
             hint=AliasPep585IterableTContainerT,
             pep_sign=HintSignPep695TypeAliasUnsubscripted,
-            is_ignorable=True,
             is_type_typing=True,
             # PEP 695-compliant parametrized type aliases are parametrized by
             # type variables implicitly instantiated only "on the fly" by Python
@@ -365,6 +364,13 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
             # *NOT* safely accessible here outside of these aliases.
             is_typevars=True,
             is_typing=False,
+            # This unsubscripted type alias is ignorable as follows:
+            # * The type variable "T" parametrizing this alias maps to *NO*
+            #   concrete hint.
+            # * Unmapped type variables are semantically meaningless and thus
+            #   ignorable.
+            # * A union over one or more ignorable child hints is ignorable.
+            is_ignorable=True,
             piths_meta=(
                 # Instance of this generic containing one or more items.
                 HintPithSatisfiedMetadata(Pep585IterableTContainerT((
@@ -381,7 +387,7 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         HintPepMetadata(
             hint=AliasPep585IterableTContainerT[str],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Generic container whose items satisfy this child hint.
                 HintPithSatisfiedMetadata(Pep585IterableTContainerT((
@@ -429,7 +435,7 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         HintPepMetadata(
             hint=AliasPep585IterableTupleSTContainerTupleST[str, bytes],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Generic container whose items satisfy this child hint.
                 HintPithSatisfiedMetadata(Pep585IterableTupleSTContainerTupleST((
@@ -450,7 +456,7 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         # ................{ PEP 585 ~ mapping                  }................
         # Unsubscripted type alias aliasing a PEP 585-compliant dictionary.
         HintPepMetadata(
-            hint=AliasPep585Dict,
+            hint=AliasPep585DictST,
             pep_sign=HintSignPep695TypeAliasUnsubscripted,
             is_type_typing=True,
             # PEP 695-compliant parametrized type aliases are parametrized by
@@ -472,9 +478,9 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         # Subscripted type alias aliasing a PEP 585-compliant dictionary of
         # ignorable key-value pairs.
         HintPepMetadata(
-            hint=AliasPep585Dict[object, object],
+            hint=AliasPep585DictST[object, object],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Dictionary mapping arbitrary hashables to arbitrary objects.
                 HintPithSatisfiedMetadata({
@@ -488,9 +494,9 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         # Subscripted type alias aliasing a PEP 585-compliant dictionary of
         # ignorable keys and unignorable values.
         HintPepMetadata(
-            hint=AliasPep585Dict[object, str],
+            hint=AliasPep585DictST[object, str],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Dictionary mapping arbitrary hashables to strings.
                 HintPithSatisfiedMetadata({
@@ -507,9 +513,9 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         # Subscripted type alias aliasing a PEP 585-compliant dictionary of
         # unignorable keys and ignorable values.
         HintPepMetadata(
-            hint=AliasPep585Dict[str, object],
+            hint=AliasPep585DictST[str, object],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Dictionary mapping strings to arbitrary objects.
                 HintPithSatisfiedMetadata({
@@ -526,9 +532,9 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         # Subscripted type alias aliasing a PEP 585-compliant dictionary of
         # unignorable key-value pairs.
         HintPepMetadata(
-            hint=AliasPep585Dict[int, str],
+            hint=AliasPep585DictST[int, str],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Dictionary mapping integers to strings.
                 HintPithSatisfiedMetadata({
@@ -546,7 +552,7 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         # Unsubscripted type alias aliasing a PEP 585-compliant fixed-length
         # tuple type hint.
         HintPepMetadata(
-            hint=AliasPep585TupleFixed,
+            hint=AliasPep585TupleFixedST,
             pep_sign=HintSignPep695TypeAliasUnsubscripted,
             is_type_typing=True,
             # PEP 695-compliant parametrized type aliases are parametrized by
@@ -573,9 +579,9 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         # Subscripted type alias aliasing a PEP 585-compliant fixed-length
         # tuple type hint.
         HintPepMetadata(
-            hint=AliasPep585TupleFixed[str, bytes],
+            hint=AliasPep585TupleFixedST[str, bytes],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # 2-tuple of items whose types satisfy these child hints.
                 HintPithSatisfiedMetadata((
@@ -597,7 +603,7 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         # ................{ PEP 585 ~ subclass                 }................
         # Unsubscripted type alias aliasing a PEP 585-compliant arbitrary type.
         HintPepMetadata(
-            hint=AliasPep585Type,
+            hint=AliasPep585TypeT,
             pep_sign=HintSignPep695TypeAliasUnsubscripted,
             is_type_typing=True,
             # PEP 695-compliant parametrized type aliases are parametrized by
@@ -618,9 +624,9 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         # Any type, semantically equivalent under PEP 484 to the unsubscripted
         # "Type" singleton.
         HintPepMetadata(
-            hint=AliasPep585Type[Any],
+            hint=AliasPep585TypeT[Any],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Arbitrary class.
                 HintPithSatisfiedMetadata(bool),
@@ -632,9 +638,9 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
 
         # "type" superclass.
         HintPepMetadata(
-            hint=AliasPep585Type[type],
+            hint=AliasPep585TypeT[type],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Arbitrary metaclass.
                 HintPithSatisfiedMetadata(NonIsinstanceableMetaclass),
@@ -648,9 +654,9 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
 
         # Specific class.
         HintPepMetadata(
-            hint=AliasPep585Type[Class],
+            hint=AliasPep585TypeT[Class],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Subclass of this class.
                 HintPithSatisfiedMetadata(Subclass),
@@ -664,9 +670,9 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
 
         # Two or more specific classes.
         HintPepMetadata(
-            hint=AliasPep585Type[Class | OtherClass],
+            hint=AliasPep585TypeT[Class | OtherClass],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Arbitrary subclass of one class subscripting this hint.
                 HintPithSatisfiedMetadata(Subclass),
@@ -724,7 +730,7 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         HintPepMetadata(
             hint=AliasPep593[object],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Non-empty byte string.
                 HintPithSatisfiedMetadata(
@@ -744,7 +750,7 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
         HintPepMetadata(
             hint=AliasPep593[int],
             pep_sign=HintSignPep695TypeAliasSubscripted,
-            is_pep585_builtin_subscripted=True,
+            is_pep585_builtin_subbed=True,
             piths_meta=(
                 # Non-zero integer.
                 HintPithSatisfiedMetadata(0xFADEFACE),
@@ -758,6 +764,211 @@ def hints_pep695_meta() -> 'List[HintPepMetadata]':
                 # String constant.
                 HintPithUnsatisfiedMetadata(
                     'That unbelief has not a space to breathe.'),
+            ),
+        ),
+
+        # ................{ RECURSIVE                          }................
+        # Unsubscripted type alias recursively aliasing *ONLY* itself.
+        HintPepMetadata(
+            hint=AliasRecursiveIdentityT,
+            pep_sign=HintSignPep695TypeAliasUnsubscripted,
+            is_type_typing=True,
+            # PEP 695-compliant parametrized type aliases are parametrized by
+            # type variables implicitly instantiated only "on the fly" by Python
+            # itself. These variables are *NOT* explicitly defined and thus
+            # *NOT* safely accessible here outside of these aliases.
+            is_typevars=True,
+            is_typing=False,
+            # This unsubscripted type alias is ignorable as follows:
+            # * The type variable "T" parametrizing this alias maps to *NO*
+            #   concrete hint.
+            # * Unmapped type variables are semantically meaningless and thus
+            #   ignorable.
+            # * A union over one or more ignorable child hints is ignorable.
+            is_ignorable=True,
+        ),
+
+        # Subscripted type alias recursively aliasing *ONLY* itself, subscripted
+        # by any arbitrary type.
+        HintPepMetadata(
+            hint=AliasRecursiveIdentityT[str],
+            pep_sign=HintSignPep695TypeAliasSubscripted,
+            is_pep585_builtin_subbed=True,
+            # This subscripted type alias is ignorable as follows:
+            # * The type variable "T" parametrizing this alias maps to some
+            #   concrete hint.
+            # * This concrete hint is *NEVER* expanded in this alias.
+            # * Unexpanded concrete hints are semantically meaningless and thus
+            #   ignorable.
+            # * A union over one or more ignorable child hints is ignorable.
+            is_ignorable=True,
+        ),
+
+        # ................{ RECURSIVE ~ pep (484|604) : 1      }................
+        # Unsubscripted type alias aliasing a PEP 604-compliant union over a
+        # type variable and itself recursively.
+        HintPepMetadata(
+            hint=AliasPep484604Recursive1T,
+            pep_sign=HintSignPep695TypeAliasUnsubscripted,
+            is_type_typing=True,
+            # PEP 695-compliant parametrized type aliases are parametrized by
+            # type variables implicitly instantiated only "on the fly" by Python
+            # itself. These variables are *NOT* explicitly defined and thus
+            # *NOT* safely accessible here outside of these aliases.
+            is_typevars=True,
+            is_typing=False,
+            # This unsubscripted type alias is ignorable as follows:
+            # * The type variable "T" parametrizing this alias maps to *NO*
+            #   concrete hint.
+            # * Unmapped type variables are semantically meaningless and thus
+            #   ignorable.
+            # * A union over one or more ignorable child hints is ignorable.
+            is_ignorable=True,
+        ),
+
+        # Subscripted type alias aliasing a PEP 604-compliant union over a
+        # type variable and itself recursively.
+        HintPepMetadata(
+            hint=AliasPep484604Recursive1T[str],
+            pep_sign=HintSignPep695TypeAliasSubscripted,
+            is_pep585_builtin_subbed=True,
+            piths_meta=(
+                # String constant.
+                HintPithSatisfiedMetadata(
+                    'A heaven he lost erewhile: it must—it must'),
+                # Byte string constant.
+                HintPithUnsatisfiedMetadata(
+                    b'Be of ripe progress--Saturn must be King.'),
+            ),
+        ),
+
+        # ................{ RECURSIVE ~ pep (484|604) : 2      }................
+        # Unsubscripted type alias aliasing a PEP 604-compliant union over a
+        # type variable, a generic type hint recursively subscripted by this
+        # same alias, and this alias itself recursively.
+        HintPepMetadata(
+            hint=AliasPep484604Recursive2T,
+            pep_sign=HintSignPep695TypeAliasUnsubscripted,
+            is_type_typing=True,
+            # PEP 695-compliant parametrized type aliases are parametrized by
+            # type variables implicitly instantiated only "on the fly" by Python
+            # itself. These variables are *NOT* explicitly defined and thus
+            # *NOT* safely accessible here outside of these aliases.
+            is_typevars=True,
+            is_typing=False,
+            # This unsubscripted type alias is ignorable as follows:
+            # * The type variable "T" parametrizing this alias maps to *NO*
+            #   concrete hint.
+            # * Unmapped type variables are semantically meaningless and thus
+            #   ignorable.
+            # * A union over one or more ignorable child hints is ignorable.
+            is_ignorable=True,
+        ),
+
+        # Subscripted type alias aliasing a PEP 604-compliant union over a
+        # type variable, a generic type hint recursively subscripted by this
+        # same alias, and this alias itself recursively.
+        HintPepMetadata(
+            hint=AliasPep484604Recursive2T[str],
+            pep_sign=HintSignPep695TypeAliasSubscripted,
+            is_pep585_builtin_subbed=True,
+            piths_meta=(
+                # String constant.
+                HintPithSatisfiedMetadata(
+                    'Yes, there must be a golden victory;'),
+                # List of string constants.
+                HintPithSatisfiedMetadata(
+                    ['There must be Gods thrown down, and trumpets blown',]),
+                # Byte string constant.
+                HintPithUnsatisfiedMetadata(
+                    b'Of triumph calm, and hymns of festival'),
+                # List of byte string constants.
+                HintPithUnsatisfiedMetadata(
+                    [b'Upon the gold clouds metropolitan,']),
+            ),
+        ),
+
+        # ................{ RECURSIVE ~ pep (484|604) : chain  }................
+        # Unsubscripted type alias aliasing a PEP 604-compliant union over one
+        # or more arbitrary types *AND* another type alias itself aliasing a
+        # PEP 604-compliant union over this same alias, inducing recursion by an
+        # indirect chain of aliases.
+        HintPepMetadata(
+            hint=AliasPep484604RecursiveTopT,
+            pep_sign=HintSignPep695TypeAliasUnsubscripted,
+            is_type_typing=True,
+            # PEP 695-compliant parametrized type aliases are parametrized by
+            # type variables implicitly instantiated only "on the fly" by Python
+            # itself. These variables are *NOT* explicitly defined and thus
+            # *NOT* safely accessible here outside of these aliases.
+            is_typevars=True,
+            is_typing=False,
+            piths_meta=(
+                # Byte string constant.
+                HintPithSatisfiedMetadata(
+                    b'Voices of soft proclaim, and silver stir'),
+                # Integer constant.
+                HintPithSatisfiedMetadata(
+                    len('Of strings in hollow shells; and there shall be')),
+                # Set of byte string constants.
+                HintPithSatisfiedMetadata(
+                    {b'Beautiful things made new, for the surprise',}),
+                # Dictionary mapping integer constants to sets of booleans.
+                HintPithSatisfiedMetadata({
+                    len('Of the sky-children; I will give command:'): {True,},
+                }),
+                # List of set of byte string constants.
+                HintPithSatisfiedMetadata(
+                    [{b'Thea! Thea! Thea! where is Saturn?"',},]),
+                # String constant.
+                HintPithUnsatisfiedMetadata(
+                    'This passion lifted him upon his feet,'),
+                # Set of string constants.
+                HintPithUnsatisfiedMetadata(
+                    {'And made his hands to struggle in the air,',}),
+                # Dictionary mapping string constants to sets of booleans.
+                HintPithUnsatisfiedMetadata({
+                    'His Druid locks to shake and ooze with sweat,': {False,},
+                }),
+                # List of set of string constants.
+                HintPithUnsatisfiedMetadata(
+                    [{'His eyes to fever out, his voice to cease.',},]),
+            ),
+        ),
+
+        # Unsubscripted type alias aliasing a PEP 604-compliant union over one
+        # or more arbitrary types *AND* another type alias itself aliasing a
+        # PEP 604-compliant union over this same alias, inducing recursion by an
+        # indirect chain of aliases.
+        HintPepMetadata(
+            hint=AliasPep484604RecursiveTopT[str],
+            pep_sign=HintSignPep695TypeAliasSubscripted,
+            is_pep585_builtin_subbed=True,
+            piths_meta=(
+                # Byte string constant.
+                HintPithSatisfiedMetadata(
+                    b"He stood, and heard not Thea's sobbing deep;"),
+                # Integer constant.
+                HintPithSatisfiedMetadata(
+                    len("A little time, and then again he snatch'd")),
+                # Set of integer constants.
+                HintPithSatisfiedMetadata(
+                    {len('Utterance thus.—"But cannot I create?'),}),
+                # Dictionary mapping integer to string constants.
+                HintPithSatisfiedMetadata({
+                    42: 'Cannot I form? Cannot I fashion forth'}),
+                # List of set of integer constants.
+                HintPithSatisfiedMetadata(
+                    [{len('Another world, another universe,'),},]),
+                # Complex constant.
+                HintPithUnsatisfiedMetadata(72+90j),
+                # Set of complex constants.
+                HintPithUnsatisfiedMetadata(
+                    {58+41j,}),
+                # Dictionary mapping complex constants to sets of booleans.
+                HintPithUnsatisfiedMetadata({66+27j: {False,},}),
+                # List of set of complex constants.
+                HintPithUnsatisfiedMetadata([{31+78j},]),
             ),
         ),
     ))

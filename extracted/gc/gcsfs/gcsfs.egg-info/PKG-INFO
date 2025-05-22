@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: gcsfs
-Version: 2025.5.0
+Version: 2025.5.0.post1
 Summary: Convenient Filesystem interface over GCS
 Home-page: https://github.com/fsspec/gcsfs
 Maintainer: Martin Durant

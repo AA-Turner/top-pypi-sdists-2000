@@ -1,8 +1,6 @@
 use std::borrow::Cow;
 
 use arrow::legacy::utils::CustomIterTools;
-#[cfg(feature = "timezones")]
-use polars_core::chunked_array::temporal::validate_time_zone;
 use polars_core::utils::handle_casting_failures;
 #[cfg(feature = "dtype-struct")]
 use polars_utils::format_pl_smallstr;
@@ -220,7 +218,8 @@ impl StringFunction {
         use StringFunction as S;
         match self {
             #[cfg(feature = "concat_str")]
-            S::ConcatHorizontal { .. } => FunctionOptions::elementwise(),
+            S::ConcatHorizontal { .. } => FunctionOptions::elementwise()
+                .with_flags(|f| f | FunctionFlags::INPUT_WILDCARD_EXPANSION),
             #[cfg(feature = "concat_str")]
             S::ConcatVertical { .. } => FunctionOptions::aggregation(),
             #[cfg(feature = "regex")]
@@ -834,10 +833,7 @@ fn to_datetime(
         Some(format) => TZ_AWARE_RE.is_match(format),
         _ => false,
     };
-    #[cfg(feature = "timezones")]
-    if let Some(time_zone) = time_zone {
-        validate_time_zone(time_zone)?;
-    }
+
     let out = if options.exact {
         datetime_strings
             .as_datetime(

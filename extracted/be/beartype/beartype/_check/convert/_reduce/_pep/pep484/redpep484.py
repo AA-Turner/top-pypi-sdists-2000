@@ -15,6 +15,10 @@ This private submodule is *not* intended for importation by downstream callers.
 from beartype.meta import URL_PEP585_DEPRECATIONS
 from beartype.roar import BeartypeDecorHintPep585DeprecationWarning
 from beartype._cave._cavefast import NoneType
+from beartype._check.metadata.hint.hintsane import (
+    HINT_SANE_IGNORABLE,
+    HintSane,
+)
 from beartype._data.hint.datahintpep import Hint
 from beartype._data.hint.pep.datapeprepr import (
     HINTS_PEP484_REPR_PREFIX_DEPRECATED)
@@ -22,30 +26,23 @@ from beartype._util.error.utilerrwarn import issue_warning
 
 # ....................{ REDUCERS                           }....................
 def reduce_hint_pep484_deprecated(
-    hint: Hint, exception_prefix : str, **kwargs) -> Hint:
+    hint: Hint, exception_prefix: str, **kwargs) -> Hint:
     '''
-    Preserve the passed :pep:`484`-compliant type hint as is while emitting one
-    non-fatal deprecation warning for this type hint if **deprecated** (i.e.,
-    obsoleted by an equivalent :pep:`585`-compliant type hint *and* the active
-    Python interpreter targets Python >= 3.9).
-
-    While *not* explicitly defined by the :mod:`typing` module, :pep:`484`
-    explicitly supports this singleton:
-
-        When used in a type hint, the expression :data:`None` is considered
-        equivalent to ``type(None)``.
+    Preserve the passed :pep:`484`- or :pep:`585`-compliant type hint as is
+    while emitting one non-fatal deprecation warning for this type hint if
+    deprecated, due to being a :pep:`484`-compliant type hint obsoleted by an
+    equivalent :pep:`585`-compliant type hint.
 
     This reducer is intentionally *not* memoized (e.g., by the
-    ``callable_cached`` decorator), as the implementation trivially reduces
-    to an efficient one-liner.
+    ``callable_cached`` decorator), as doing so would prevent this reducer from
+    emitting one warning per deprecated type hint.
 
     Parameters
     ----------
     hint : Hint
         Type hint to be reduced.
     exception_prefix : str
-        Human-readable substring prefixing the representation of this object in
-        the warning message.
+        Human-readable substring prefixing emitted warning messages.
 
     All remaining passed arguments are silently ignored.
 
@@ -57,11 +54,8 @@ def reduce_hint_pep484_deprecated(
     Warns
     -----
     BeartypeDecorHintPep585DeprecationWarning
-        If this :pep:`484`-compliant type hint is deprecated by :pep:`585` *and*
-        the active Python interpreter targets Python >= 3.9.
+        If this is a :pep:`484`-compliant type hint is deprecated by :pep:`585`.
     '''
-    assert isinstance(exception_prefix, str), (
-        f'{repr(exception_prefix)} not string.')
     # print(f'Testing PEP 484 type hint {repr(hint)} for PEP 585 deprecation...')
     # print(f'{HINTS_PEP484_REPR_PREFIX_DEPRECATED}')
 
@@ -81,9 +75,13 @@ def reduce_hint_pep484_deprecated(
 
     # If this hint is a PEP 484-compliant type hint originating from an origin
     # type (e.g., "typing.List[int]"), this hint has been deprecated by the
-    # equivalent PEP 585-compliant type hint (e.g., "list[int]"). In this case,
-    # emit a non-fatal PEP 585-specific deprecation warning.
+    # equivalent PEP 585-compliant type hint (e.g., "list[int]"). In this
+    # case...
     if hint_repr_bare in HINTS_PEP484_REPR_PREFIX_DEPRECATED:
+        assert isinstance(exception_prefix, str), (
+            f'{repr(exception_prefix)} not string.')
+
+        # Emit a non-fatal PEP 585-specific deprecation warning.
         issue_warning(
             cls=BeartypeDecorHintPep585DeprecationWarning,
             message=(
@@ -101,15 +99,41 @@ def reduce_hint_pep484_deprecated(
     # Preserve this hint as is, regardless of deprecation.
     return hint
 
+# ....................{ REDUCERS ~ singleton               }....................
+def reduce_hint_pep484_any(hint: Hint, exception_prefix: str) -> HintSane:
+    '''
+    Reduce the passed :pep:`484`-compliant :obj:`typing.Any` singleton to the
+    ignorable :data:`.HINT_SANE_IGNORABLE` singleton.
+
+    This reducer is intentionally *not* memoized (e.g., by the
+    ``callable_cached`` decorator), as the implementation trivially reduces
+    to an efficient one-liner.
+
+    Parameters
+    ----------
+    hint : Hint
+        :obj:`typing.Any` hint to be reduced.
+    exception_prefix : str
+        Human-readable substring prefixing raised exception messages.
+
+    Returns
+    -------
+    HintSane
+        Ignorable :data:`.HINT_SANE_IGNORABLE` singleton.
+    '''
+
+    # Unconditionally ignore the "Any" singleton.
+    return HINT_SANE_IGNORABLE
+
 
 # Note that this reducer is intentionally typed as returning "type" rather than
 # "NoneType". While the former would certainly be preferable, mypy erroneously
 # emits false positives when this reducer is typed as returning "NoneType":
 #     beartype._util.hint.pep.proposal.pep484.pep484.py:190: error: Variable
 #     "beartype._cave._cavefast.NoneType" is not valid as a type [valid-type]
-def reduce_hint_pep484_none(hint: Hint, **kwargs) -> type:
+def reduce_hint_pep484_none(hint: Hint, exception_prefix: str) -> type:
     '''
-    Reduce the passed :pep:`484`-compliant :data:`None` hint to the type of
+    Reduce the passed :pep:`484`-compliant :data:`None` singleton to the type of
     :data:`None` (i.e., the builtin :class:`types.NoneType` class).
 
     While *not* explicitly defined by the :mod:`typing` module, :pep:`484`
@@ -126,8 +150,8 @@ def reduce_hint_pep484_none(hint: Hint, **kwargs) -> type:
     ----------
     hint : Hint
         :data:`None` hint to be reduced.
-
-    All remaining passed arguments are silently ignored.
+    exception_prefix : str
+        Human-readable substring prefixing raised exception messages.
 
     Returns
     -------

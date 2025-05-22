@@ -447,6 +447,7 @@ __all__ = (
     "ProductCodeValuesType",
     "ProtocolType",
     "ProtocolValueType",
+    "PublicIpDnsOptionType",
     "RIProductDescriptionType",
     "RebootMigrationSupportType",
     "RecurringChargeFrequencyType",
@@ -2323,6 +2324,9 @@ PrincipalTypeType = Literal["Account", "All", "OrganizationUnit", "Role", "Servi
 ProductCodeValuesType = Literal["devpay", "marketplace"]
 ProtocolType = Literal["tcp", "udp"]
 ProtocolValueType = Literal["gre"]
+PublicIpDnsOptionType = Literal[
+    "public-dual-stack-dns-name", "public-ipv4-dns-name", "public-ipv6-dns-name"
+]
 RIProductDescriptionType = Literal[
     "Linux/UNIX", "Linux/UNIX (Amazon VPC)", "Windows", "Windows (Amazon VPC)"
 ]

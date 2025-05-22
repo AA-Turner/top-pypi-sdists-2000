@@ -253,6 +253,7 @@ from .literals import (
     PrincipalTypeType,
     ProductCodeValuesType,
     ProtocolType,
+    PublicIpDnsOptionType,
     RebootMigrationSupportType,
     ReplacementStrategyType,
     ReplaceRootVolumeTaskStateType,
@@ -2234,6 +2235,8 @@ __all__ = (
     "ModifyNetworkInterfaceAttributeRequestTypeDef",
     "ModifyPrivateDnsNameOptionsRequestTypeDef",
     "ModifyPrivateDnsNameOptionsResultTypeDef",
+    "ModifyPublicIpDnsNameOptionsRequestTypeDef",
+    "ModifyPublicIpDnsNameOptionsResultTypeDef",
     "ModifyReservedInstancesRequestTypeDef",
     "ModifyReservedInstancesResultTypeDef",
     "ModifyRouteServerRequestTypeDef",
@@ -2426,6 +2429,7 @@ __all__ = (
     "ProvisionPublicIpv4PoolCidrResultTypeDef",
     "ProvisionedBandwidthTypeDef",
     "PtrUpdateStatusTypeDef",
+    "PublicIpDnsNameOptionsTypeDef",
     "PublicIpv4PoolRangeTypeDef",
     "PublicIpv4PoolTypeDef",
     "PurchaseCapacityBlockExtensionRequestTypeDef",
@@ -6438,6 +6442,11 @@ class ModifyPrivateDnsNameOptionsRequestTypeDef(TypedDict):
     EnableResourceNameDnsARecord: NotRequired[bool]
     EnableResourceNameDnsAAAARecord: NotRequired[bool]
 
+class ModifyPublicIpDnsNameOptionsRequestTypeDef(TypedDict):
+    NetworkInterfaceId: str
+    HostnameType: PublicIpDnsOptionType
+    DryRun: NotRequired[bool]
+
 class ReservedInstancesConfigurationTypeDef(TypedDict):
     AvailabilityZone: NotRequired[str]
     InstanceCount: NotRequired[int]
@@ -6719,11 +6728,18 @@ class NetworkInterfaceAssociationTypeDef(TypedDict):
 
 class NetworkInterfaceIpv6AddressTypeDef(TypedDict):
     Ipv6Address: NotRequired[str]
+    PublicIpv6DnsName: NotRequired[str]
     IsPrimaryIpv6: NotRequired[bool]
 
 class NetworkInterfacePermissionStateTypeDef(TypedDict):
     State: NotRequired[NetworkInterfacePermissionStateCodeType]
     StatusMessage: NotRequired[str]
+
+class PublicIpDnsNameOptionsTypeDef(TypedDict):
+    DnsHostnameType: NotRequired[str]
+    PublicIpv4DnsName: NotRequired[str]
+    PublicIpv6DnsName: NotRequired[str]
+    PublicDualStackDnsName: NotRequired[str]
 
 class NeuronDeviceCoreInfoTypeDef(TypedDict):
     Count: NotRequired[int]
@@ -8030,6 +8046,10 @@ class ModifyInstancePlacementResultTypeDef(TypedDict):
 
 class ModifyPrivateDnsNameOptionsResultTypeDef(TypedDict):
     Return: bool
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class ModifyPublicIpDnsNameOptionsResultTypeDef(TypedDict):
+    Successful: bool
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ModifyReservedInstancesResultTypeDef(TypedDict):
@@ -17309,6 +17329,8 @@ class NetworkInterfaceTypeDef(TypedDict):
     OutpostArn: NotRequired[str]
     OwnerId: NotRequired[str]
     PrivateDnsName: NotRequired[str]
+    PublicDnsName: NotRequired[str]
+    PublicIpDnsNameOptions: NotRequired[PublicIpDnsNameOptionsTypeDef]
     PrivateIpAddress: NotRequired[str]
     PrivateIpAddresses: NotRequired[List[NetworkInterfacePrivateIpAddressTypeDef]]
     Ipv4Prefixes: NotRequired[List[Ipv4PrefixSpecificationTypeDef]]

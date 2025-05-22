@@ -144,7 +144,7 @@ impl AExpr {
                 let e = ctx.arena.get(*function);
                 e.to_field_impl(ctx, agg_list)
             },
-            Explode(expr) => {
+            Explode { expr, .. } => {
                 // `Explode` is a "flatten" operation, which is not the same as returning a scalar.
                 // Namely, it should be auto-imploded in the aggregation context, so we don't update
                 // the `agg_list` state here.
@@ -348,7 +348,10 @@ impl AExpr {
             } => {
                 let fields = func_args_to_fields(input, ctx, agg_list)?;
                 polars_ensure!(!fields.is_empty(), ComputeError: "expression: '{}' didn't get any inputs", options.fmt_str);
-                let out = output_type.get_field(ctx.schema, ctx.ctx, &fields)?;
+                let out = output_type
+                    .clone()
+                    .materialize()?
+                    .get_field(ctx.schema, ctx.ctx, &fields)?;
 
                 if options.flags.contains(FunctionFlags::RETURNS_SCALAR) {
                     *agg_list = false;

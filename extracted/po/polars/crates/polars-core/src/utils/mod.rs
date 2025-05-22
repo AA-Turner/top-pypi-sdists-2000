@@ -114,6 +114,8 @@ pub trait Container: Clone {
 
     fn iter_chunks(&self) -> impl Iterator<Item = Self>;
 
+    fn should_rechunk(&self) -> bool;
+
     fn n_chunks(&self) -> usize;
 
     fn chunk_lengths(&self) -> impl Iterator<Item = usize>;
@@ -134,6 +136,10 @@ impl Container for DataFrame {
 
     fn iter_chunks(&self) -> impl Iterator<Item = Self> {
         flatten_df_iter(self)
+    }
+
+    fn should_rechunk(&self) -> bool {
+        self.should_rechunk()
     }
 
     fn n_chunks(&self) -> usize {
@@ -164,6 +170,10 @@ impl<T: PolarsDataType> Container for ChunkedArray<T> {
             .map(|arr| Self::with_chunk(self.name().clone(), arr.clone()))
     }
 
+    fn should_rechunk(&self) -> bool {
+        false
+    }
+
     fn n_chunks(&self) -> usize {
         self.chunks().len()
     }
@@ -188,6 +198,10 @@ impl Container for Series {
 
     fn iter_chunks(&self) -> impl Iterator<Item = Self> {
         (0..self.0.n_chunks()).map(|i| self.select_chunk(i))
+    }
+
+    fn should_rechunk(&self) -> bool {
+        false
     }
 
     fn n_chunks(&self) -> usize {
@@ -234,6 +248,8 @@ pub fn split<C: Container>(container: &C, target: usize) -> Vec<C> {
         && container
             .chunk_lengths()
             .all(|len| len.abs_diff(chunk_size) < 100)
+        // We cannot get chunks if they are misaligned
+        && !container.should_rechunk()
     {
         return container.iter_chunks().collect();
     }
@@ -254,6 +270,8 @@ pub fn split_and_flatten<C: Container>(container: &C, target: usize) -> Vec<C> {
         && container
             .chunk_lengths()
             .all(|len| len.abs_diff(chunk_size) < 100)
+        // We cannot get chunks if they are misaligned
+        && !container.should_rechunk()
     {
         return container.iter_chunks().collect();
     }
@@ -720,7 +738,7 @@ macro_rules! df {
 }
 
 pub fn get_time_units(tu_l: &TimeUnit, tu_r: &TimeUnit) -> TimeUnit {
-    use TimeUnit::*;
+    use crate::datatypes::time_unit::TimeUnit::*;
     match (tu_l, tu_r) {
         (Nanoseconds, Microseconds) => Microseconds,
         (_, Milliseconds) => Milliseconds,
@@ -913,6 +931,46 @@ where
                 Cow::Owned(left.match_chunks(right.chunk_lengths())),
                 Cow::Borrowed(right),
             )
+        },
+    }
+}
+
+/// Ensure the chunks in ChunkedArray and Series have the same length.
+/// # Panics
+/// This will panic if `left.len() != right.len()` and array is chunked.
+pub fn align_chunks_binary_ca_series<'a, T>(
+    left: &'a ChunkedArray<T>,
+    right: &'a Series,
+) -> (Cow<'a, ChunkedArray<T>>, Cow<'a, Series>)
+where
+    T: PolarsDataType,
+{
+    let assert = || {
+        assert_eq!(
+            left.len(),
+            right.len(),
+            "expected arrays of the same length"
+        )
+    };
+    match (left.chunks.len(), right.chunks().len()) {
+        // All chunks are equal length
+        (1, 1) => (Cow::Borrowed(left), Cow::Borrowed(right)),
+        // All chunks are equal length
+        (a, b)
+            if a == b
+                && left
+                    .chunk_lengths()
+                    .zip(right.chunk_lengths())
+                    .all(|(l, r)| l == r) =>
+        {
+            assert();
+            (Cow::Borrowed(left), Cow::Borrowed(right))
+        },
+        (_, 1) => (left.rechunk(), Cow::Borrowed(right)),
+        (1, _) => (Cow::Borrowed(left), Cow::Owned(right.rechunk())),
+        (_, _) => {
+            assert();
+            (left.rechunk(), Cow::Owned(right.rechunk()))
         },
     }
 }

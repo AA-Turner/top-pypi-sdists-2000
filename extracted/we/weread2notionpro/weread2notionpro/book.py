@@ -36,6 +36,8 @@ def insert_book_to_notion(books, index, bookId):
     elif book.get("readingTime", 0) >= 60:
         status = "在读"
     book["阅读状态"] = status
+    book["价格"] = book.get("price")
+    book["字数"] = book.get("totalWords")
     book["阅读时长"] = book.get("readingTime")
     book["阅读天数"] = book.get("totalReadDay")
     book["评分"] = book.get("newRating")
@@ -171,6 +173,8 @@ def main():
             )
             and (archive_dict.get(key) == value.get("category"))
             and (value.get("cover") is not None)
+            and (value.get("price") is not None)
+            and (value.get("wordCount") is not None)
             and (
                 value.get("status") != "已读"
                 or (value.get("status") == "已读" and value.get("myRating"))

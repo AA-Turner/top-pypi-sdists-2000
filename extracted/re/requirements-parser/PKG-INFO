@@ -1,8 +1,7 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.3
 Name: requirements-parser
-Version: 0.11.0
+Version: 0.13.0
 Summary: This is a small Python module for parsing Pip requirement files.
-Home-page: https://github.com/madpah/requirements-parser/#readme
 License: Apache-2.0
 Keywords: Pip,requirements,parse
 Author: Paul Horton
@@ -20,15 +19,15 @@ Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
-Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.13
 Classifier: Topic :: Software Development
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: System :: Software Distribution
 Classifier: Typing :: Typed
 Requires-Dist: packaging (>=23.2)
-Requires-Dist: types-setuptools (>=69.1.0)
 Project-URL: Bug Tracker, https://github.com/madpah/requirements-parser/issues
 Project-URL: Documentation, https://requirements-parser.readthedocs.io/
+Project-URL: Homepage, https://github.com/madpah/requirements-parser/#readme
 Project-URL: Repository, https://github.com/madpah/requirements-parser
 Description-Content-Type: text/markdown
 

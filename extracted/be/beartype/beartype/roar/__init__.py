@@ -91,15 +91,13 @@ from beartype.roar._roarexc import (
     BeartypeDecorHintPep692Exception as BeartypeDecorHintPep692Exception,
     BeartypeDecorHintPep695Exception as BeartypeDecorHintPep695Exception,
     BeartypeDecorHintPep742Exception as BeartypeDecorHintPep742Exception,
-    BeartypeDecorHintReduceException as BeartypeDecorHintReduceException,
-    BeartypeDecorHintTypeException as BeartypeDecorHintTypeException,
+    BeartypeDecorHintRecursionException as BeartypeDecorHintRecursionException,
     BeartypeDecorParamException as BeartypeDecorParamException,
     BeartypeDecorParamNameException as BeartypeDecorParamNameException,
     BeartypeCallException as BeartypeCallException,
     BeartypeCallUnavailableTypeException as BeartypeCallUnavailableTypeException,
     BeartypeCallHintException as BeartypeCallHintException,
     BeartypeCallHintForwardRefException as BeartypeCallHintForwardRefException,
-    BeartypeHintOverridesException as BeartypeHintOverridesException,
     BeartypeKindException as BeartypeKindException,
     BeartypeKindFrozenDictException as BeartypeKindFrozenDictException,
     BeartypeLibraryException as BeartypeLibraryException,
@@ -213,6 +211,8 @@ def __getattr__(attr_deprecated_name: str) -> object:
                 'BeartypeDecorHintPepDeprecationWarning'),
             'BeartypeDecorPepException': (
                 'BeartypePepException'),
+            'BeartypeHintOverridesException': (
+                'BeartypeConfParamException'),
         },
         attr_nondeprecated_name_to_value=globals(),
     )

@@ -473,14 +473,15 @@ class BeartypeDecorHintForwardRefException(
     pass
 
 
-class BeartypeDecorHintTypeException(BeartypeDecorHintException):
+class BeartypeDecorHintRecursionException(BeartypeDecorHintException):
     '''
-    **Beartype decorator class type hint exception.**
+    **Beartype decorator type hint recursion exception.**
 
     This exception is raised at decoration time from the
-    :func:`beartype.beartype` decorator on receiving a callable annotated by an
-    **invalid class type hint** (i.e., class invalid for use as a type hint,
-    typically due to failing to support runtime :func:`isinstance` calls).
+    :func:`beartype.beartype` decorator on receiving a callable annotated with
+    one or more **infinitely recursive type hints** (i.e., hints that
+    erroneously induce infinite recursion on attempting to dynamically generate
+    pure-Python code type-checking against these hints).
     '''
 
     pass
@@ -832,20 +833,6 @@ class BeartypeDecorHintPep484TypeVarException(BeartypeDecorHintPep484Exception):
     one or more :pep:`484`-compliant **type hints** (i.e.,
     :class:`typing.TypeVar` objects) either violating :pep:`484` *or* this
     decorator's implementation of :pep:`484`.
-    '''
-
-    pass
-
-# ....................{ DECORATOR ~ hint : reduce          }....................
-class BeartypeDecorHintReduceException(BeartypeDecorHintException):
-    '''
-    **Beartype decorator type hint reduction exception.**
-
-    This exception is raised at decoration time from the
-    :func:`beartype.beartype` decorator on receiving a callable annotated with
-    one or more **irreducible type hints** (e.g., hints inducing infinite
-    recursion on attempting to reduce these hints to alternative variants more
-    readily digestible by :mod:`beartype`).
     '''
 
     pass
@@ -1375,25 +1362,10 @@ class BeartypeKindFrozenDictException(BeartypeException):
     '''
     **Beartype frozen dictionary exception.**
 
-    This exception is raised from various methods of the private
-    :class:`beartype._util.kind.map.utilmapfrozen.FrozenDict` class publicly
-    exposed as the :class:`beartype.BeartypeHintOverrides` subclass, typically
-    due to external callers erroneously attempting to modify key-value pairs of
-    instances of this class.
-    '''
-
-    pass
-
-
-class BeartypeHintOverridesException(BeartypeKindFrozenDictException):
-    '''
-    **Beartype hint overrides exception.**
-
     This exception is raised from various methods of the public
-    :class:`beartype.BeartypeHintOverrides` class, typically due to external
-    callers erroneously attempting to instantiate instances of this class with
-    **recursive hint overrides** (e.g.,
-    ``BeartypeHintOverrides{str: list[str]})``).
+    :class:`beartype._util.kind.map.utilmapfrozen.FrozenDict` class publicly
+    exposed as the :class:`beartype.FrozenDict` subclass, typically due to
+    external attempts to erroneously modify the contents of a frozen dictionary.
     '''
 
     pass
@@ -1666,7 +1638,7 @@ class _BeartypeCallHintPepRaiseException(_BeartypeCallHintRaiseException):
     **Beartype PEP-compliant human-readable exception raiser exception.**
 
     This exception is raised by the
-    :func:`beartype._check.error.errget.get_func_pith_violation`
+    :func:`beartype._check.error.errmain.get_func_pith_violation`
     exception raiser function when an unexpected failure occurs.
 
     This exception denotes a critical internal issue and should thus *never* be
@@ -1682,7 +1654,7 @@ class _BeartypeCallHintPepRaiseDesynchronizationException(
     **Beartype human-readable exception raiser desynchronization exception.**
 
     This exception is raised by the
-    :func:`beartype._check.error.errget.get_func_pith_violation` function
+    :func:`beartype._check.error.errmain.get_func_pith_violation` function
     (which raises human-readable exceptions from wrapper functions when either
     passed a parameter or returning a value, referred to as the "pith" for
     brevity, annotated by a PEP-compliant type hint fails the type-check
@@ -1693,7 +1665,7 @@ class _BeartypeCallHintPepRaiseDesynchronizationException(
       decorator type-checking this pith triggered a false negative by
       erroneously misdetecting this pith as failing this type check.
     * The
-        :func:`beartype._check.error.errget.get_func_pith_violation`
+        :func:`beartype._check.error.errmain.get_func_pith_violation`
       function re-type-checking this pith triggered a false positive by
       erroneously misdetecting this pith as satisfying this type check when in
       fact this pith fails to do so.

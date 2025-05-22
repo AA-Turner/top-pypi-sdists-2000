@@ -89,6 +89,27 @@ class FFMPEG_VideoReader:
         """
         self.close(delete_lastread=False)  # if any
 
+        # self.pos represents the (0-indexed) index of the frame that is next in line
+        # to be read by self.read_frame().
+        # Eg when self.pos is 1, the 2nd frame will be read next.
+        self.pos = self.get_frame_number(start_time)
+
+        # Getting around a difference between ffmpeg and moviepy seeking:
+        # "moviepy seek" means "get the frame displayed at time t"
+        #   Hence given a 29.97 FPS video, seeking to .01s means "get frame 0".
+        # "ffmpeg seek" means "skip all frames until you reach time t".
+        #   This time, seeking to .01s means "get frame 1". Surprise!
+        #
+        # (In 30fps, timestamps like 2.0s, 3.5s will give the same frame output
+        # under both rules, for the timestamp can be represented exactly in
+        # decimal.)
+        #
+        # So we'll subtract an epsilon from the timestamp given to ffmpeg.
+        if self.pos != 0:
+            start_time = self.pos * (1 / self.fps) - 0.00001
+        else:
+            start_time = 0.0
+
         if start_time != 0:
             offset = min(1, start_time)
             i_arg = [
@@ -114,8 +135,6 @@ class FFMPEG_VideoReader:
             elif codec_name == "vp8":
                 i_arg = ["-c:v", "libvpx"] + i_arg
 
-        print(self.infos)
-
         cmd = (
             [FFMPEG_BINARY]
             + i_arg
@@ -136,8 +155,6 @@ class FFMPEG_VideoReader:
             ]
         )
 
-        print(" ".join(cmd))
-
         popen_params = cross_platform_popen_params(
             {
                 "bufsize": self.bufsize,
@@ -147,11 +164,6 @@ class FFMPEG_VideoReader:
             }
         )
         self.proc = sp.Popen(cmd, **popen_params)
-
-        # self.pos represents the (0-indexed) index of the frame that is next in line
-        # to be read by self.read_frame().
-        # Eg when self.pos is 1, the 2nd frame will be read next.
-        self.pos = self.get_frame_number(start_time)
         self.last_read = self.read_frame()
 
     def skip_frames(self, n=1):
@@ -372,8 +384,9 @@ class FFmpegInfosParser:
         # should be ignored
         self._inside_output = False
 
-        # flag which indicates that a default stream has not been found yet
-        self._default_stream_found = False
+        # map from stream type to default stream
+        # if a default stream is not indicated, pick the first one available
+        self._default_streams = {}
 
         # current input file, stream and chapter, which will be built at runtime
         self._current_input_file = {"streams": []}
@@ -422,7 +435,7 @@ class FFmpegInfosParser:
                     self.result["duration"] = self.parse_duration(line)
 
                 # parse global bitrate (in kb/s)
-                bitrate_match = re.search(r"bitrate: (\d+) kb/s", line)
+                bitrate_match = re.search(r"bitrate: (\d+) k(i?)b/s", line)
                 self.result["bitrate"] = (
                     int(bitrate_match.group(1)) if bitrate_match else None
                 )
@@ -472,20 +485,14 @@ class FFmpegInfosParser:
                     "stream_number": stream_number,
                     "stream_type": stream_type_lower,
                     "language": language,
-                    "default": not self._default_stream_found
-                    or line.endswith("(default)"),
+                    "default": (stream_type_lower not in self._default_streams)
+                    and line.endswith("(default)"),
                 }
-                self._default_stream_found = True
 
                 # for default streams, set their numbers globally, so it's
                 # easy to get without iterating all
                 if self._current_stream["default"]:
-                    self.result[
-                        f"default_{stream_type_lower}_input_number"
-                    ] = input_number
-                    self.result[
-                        f"default_{stream_type_lower}_stream_number"
-                    ] = stream_number
+                    self._default_streams[stream_type_lower] = self._current_stream
 
                 # exit chapter
                 if self._current_chapter:
@@ -504,21 +511,18 @@ class FFmpegInfosParser:
                             input_number
                         ]
 
-                    # add new input file to self.result
+                    # add new input file to result
                     self.result["inputs"].append(self._current_input_file)
                     self._current_input_file = {"input_number": input_number}
 
                 # parse relevant data by stream type
                 try:
-                    global_data, stream_data = self.parse_data_by_stream_type(
-                        stream_type, line
-                    )
+                    stream_data = self.parse_data_by_stream_type(stream_type, line)
                 except NotImplementedError as exc:
                     warnings.warn(
                         f"{str(exc)}\nffmpeg output:\n\n{self.infos}", UserWarning
                     )
                 else:
-                    self.result.update(global_data)
                     self._current_stream.update(stream_data)
             elif line.startswith("    Metadata:"):
                 # enter group "    Metadata:"
@@ -532,7 +536,10 @@ class FFmpegInfosParser:
 
                 if self._current_stream["stream_type"] == "video":
                     field, value = self.video_metadata_type_casting(field, value)
+                    # ffmpeg 7 now use displaymatrix instead of rotate
                     if field == "rotate":
+                        self.result["video_rotation"] = value
+                    elif field == "displaymatrix":
                         self.result["video_rotation"] = value
 
                 # multiline metadata value parsing
@@ -581,7 +588,7 @@ class FFmpegInfosParser:
                     self._last_metadata_field_added = field
                 self._current_chapter["metadata"][field] = value
 
-        # last input file, must be included in self.result
+        # last input file, must be included in the result
         if self._current_input_file:
             self._current_input_file["streams"].append(self._current_stream)
             # include their chapters, if there are any
@@ -593,6 +600,33 @@ class FFmpegInfosParser:
                     self._current_input_file["input_number"]
                 ]
             self.result["inputs"].append(self._current_input_file)
+
+        # set any missing default automatically
+        for stream in self._current_input_file["streams"]:
+            if stream["stream_type"] not in self._default_streams:
+                self._default_streams[stream["stream_type"]] = stream
+                stream["default"] = True
+
+        # set some global info based on the defaults
+        for stream_type_lower, stream_data in self._default_streams.items():
+            self.result[f"default_{stream_type_lower}_input_number"] = stream_data[
+                "input_number"
+            ]
+            self.result[f"default_{stream_type_lower}_stream_number"] = stream_data[
+                "stream_number"
+            ]
+
+            if stream_type_lower == "audio":
+                self.result["audio_found"] = True
+                self.result["audio_fps"] = stream_data["fps"]
+                self.result["audio_bitrate"] = stream_data["bitrate"]
+            elif stream_type_lower == "video":
+                self.result["video_found"] = True
+                self.result["video_size"] = stream_data.get("size", None)
+                self.result["video_bitrate"] = stream_data.get("bitrate", None)
+                self.result["video_fps"] = stream_data["fps"]
+                self.result["video_codec_name"] = stream_data.get("codec_name", None)
+                self.result["video_profile"] = stream_data.get("profile", None)
 
         # some video duration utilities
         if self.result["video_found"] and self.check_duration:
@@ -631,7 +665,7 @@ class FFmpegInfosParser:
             return {
                 "Audio": self.parse_audio_stream_data,
                 "Video": self.parse_video_stream_data,
-                "Data": lambda _line: ({}, {}),
+                "Data": lambda _line: {},
             }[stream_type](line)
         except KeyError:
             raise NotImplementedError(
@@ -641,25 +675,22 @@ class FFmpegInfosParser:
 
     def parse_audio_stream_data(self, line):
         """Parses data from "Stream ... Audio" line."""
-        global_data, stream_data = ({"audio_found": True}, {})
+        stream_data = {}
         try:
             stream_data["fps"] = int(re.search(r" (\d+) Hz", line).group(1))
         except (AttributeError, ValueError):
             # AttributeError: 'NoneType' object has no attribute 'group'
             # ValueError: invalid literal for int() with base 10: '<string>'
             stream_data["fps"] = "unknown"
-        match_audio_bitrate = re.search(r"(\d+) kb/s", line)
+        match_audio_bitrate = re.search(r"(\d+) k(i?)b/s", line)
         stream_data["bitrate"] = (
             int(match_audio_bitrate.group(1)) if match_audio_bitrate else None
         )
-        if self._current_stream["default"]:
-            global_data["audio_fps"] = stream_data["fps"]
-            global_data["audio_bitrate"] = stream_data["bitrate"]
-        return (global_data, stream_data)
+        return stream_data
 
     def parse_video_stream_data(self, line):
         """Parses data from "Stream ... Video" line."""
-        global_data, stream_data = ({"video_found": True}, {})
+        stream_data = {}
 
         try:
             match_video_size = re.search(r" (\d+)x(\d+)[,\s]", line)
@@ -676,7 +707,7 @@ class FFmpegInfosParser:
                 % (self.filename, self.infos)
             )
 
-        match_bitrate = re.search(r"(\d+) kb/s", line)
+        match_bitrate = re.search(r"(\d+) k(i?)b/s", line)
         stream_data["bitrate"] = int(match_bitrate.group(1)) if match_bitrate else None
 
         # Get the frame rate. Sometimes it's 'tbr', sometimes 'fps', sometimes
@@ -721,20 +752,7 @@ class FFmpegInfosParser:
             stream_data["codec_name"] = codec_name
             stream_data["profile"] = profile
 
-        if self._current_stream["default"] or "video_codec_name" not in self.result:
-            global_data["video_codec_name"] = stream_data.get("codec_name", None)
-
-        if self._current_stream["default"] or "video_profile" not in self.result:
-            global_data["video_profile"] = stream_data.get("profile", None)
-
-        if self._current_stream["default"] or "video_size" not in self.result:
-            global_data["video_size"] = stream_data.get("size", None)
-        if self._current_stream["default"] or "video_bitrate" not in self.result:
-            global_data["video_bitrate"] = stream_data.get("bitrate", None)
-        if self._current_stream["default"] or "video_fps" not in self.result:
-            global_data["video_fps"] = stream_data["fps"]
-
-        return (global_data, stream_data)
+        return stream_data
 
     def parse_fps(self, line):
         """Parses number of FPS from a line of the ``ffmpeg -i`` command output."""
@@ -778,13 +796,25 @@ class FFmpegInfosParser:
         """Returns a tuple with a metadata field-value pair given a ffmpeg `-i`
         command output line.
         """
-        raw_field, raw_value = line.split(":", 1)
-        return (raw_field.strip(" "), raw_value.strip(" "))
+        info = line.split(":", 1)
+        if len(info) == 2:
+            raw_field, raw_value = info
+            return (raw_field.strip(" "), raw_value.strip(" "))
+        else:
+            return ("", "")
 
     def video_metadata_type_casting(self, field, value):
         """Cast needed video metadata fields to other types than the default str."""
         if field == "rotate":
             return (field, float(value))
+
+        elif field == "displaymatrix":
+            match = re.search(r"[-+]?\d+(\.\d+)?", value)
+            if match:
+                # We must multiply by -1 because displaymatrix return info
+                # about how to rotate to show video, not about video rotation
+                return (field, float(match.group()) * -1)
+
         return (field, value)
 
 

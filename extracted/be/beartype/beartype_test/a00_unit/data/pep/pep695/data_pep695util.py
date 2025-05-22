@@ -20,17 +20,17 @@ Python 3.12.0.** If this is *not* the case, importing this submodule raises an
 '''
 
 # ....................{ TESTS ~ tester                     }....................
-def unit_test_is_hint_pep695_subscripted() -> None:
+def unit_test_is_hint_pep695_subbed() -> None:
     '''
     Test the private
-    :mod:`beartype._util.hint.pep.proposal.pep695.is_hint_pep695_subscripted`
+    :mod:`beartype._util.hint.pep.proposal.pep695.is_hint_pep695_subbed`
     tester.
     '''
 
     # ....................{ IMPORTS                        }....................
     # Defer test-specific imports.
     from beartype._util.hint.pep.proposal.pep695 import (
-        is_hint_pep695_subscripted)
+        is_hint_pep695_subbed)
 
     # ....................{ LOCALS                         }....................
     # Unsubscripted type alias.
@@ -47,42 +47,42 @@ def unit_test_is_hint_pep695_subscripted() -> None:
     # ....................{ PASS                           }....................
     # Assert this tester accepts PEP 695-compliant subscripted type aliases
     # (i.e., subscriptable type aliases subscripted by concrete types).
-    assert is_hint_pep695_subscripted(colossal_skeleton[int]) is True
+    assert is_hint_pep695_subbed(colossal_skeleton[int]) is True
 
     # ....................{ FAIL                           }....................
     # Assert this tester rejects objects that are *NOT* PEP 585-compliant
     # subscripted builtins.
-    assert is_hint_pep695_subscripted(
+    assert is_hint_pep695_subbed(
         'And thou, colossal Skeleton, that, still') is False
 
     # Assert this tester rejects PEP 585-compliant subscripted builtins that are
     # *NOT* PEP 695-compliant subscripted type aliases.
-    assert is_hint_pep695_subscripted(list[str]) is False
+    assert is_hint_pep695_subbed(list[str]) is False
 
     # Assert this tester rejects PEP 695-compliant unsubscripted type aliases.
-    assert is_hint_pep695_subscripted(and_thou) is False
+    assert is_hint_pep695_subbed(and_thou) is False
 
     # Assert this tester accepts PEP 695-compliant subscriptable type aliases
     # yet to be subscripted by a concrete type.
-    assert is_hint_pep695_subscripted(colossal_skeleton) is False
+    assert is_hint_pep695_subbed(colossal_skeleton) is False
 
 # ....................{ TESTS ~ getter                     }....................
-def unit_test_get_hint_pep695_typevars() -> None:
+def unit_test_get_hint_pep695_parameterizable_typeparams() -> None:
     '''
     Test the private
-    :mod:`beartype._util.hint.pep.proposal.pep695.is_hint_pep695_subscripted`
-    tester.
+    :mod:`beartype._util.hint.pep.proposal.pep695._get_hint_pep695_parameterizable_typeparams`
+    getter.
     '''
 
     # ....................{ IMPORTS                        }....................
     # Defer test-specific imports.
     from beartype.typing import (
-        Generic,
         ParamSpec,
         TypeVar,
         TypeVarTuple,
     )
-    from beartype._util.hint.pep.proposal.pep695 import _get_hint_pep695_parameterizable_typeparams
+    from beartype._util.hint.pep.proposal.pep695 import (
+        _get_hint_pep695_parameterizable_typeparams)
 
     # ....................{ CLASSES                        }....................
     class AndThenSpake[S]:  # <-- this is madness. this is PEP 695.
@@ -125,22 +125,24 @@ def unit_test_get_hint_pep695_typevars() -> None:
 
     # ....................{ ASSERTS                        }....................
     # Assert this getter passed a pure-Python class returns the expected tuple.
-    AndThenSpake_typevars = _get_hint_pep695_parameterizable_typeparams(AndThenSpake)
+    AndThenSpake_typevars = _get_hint_pep695_parameterizable_typeparams(
+        AndThenSpake)
     assert len(AndThenSpake_typevars) == 1
     assert isinstance(AndThenSpake_typevars[0], TypeVar)
 
     # Assert this getter passed a pure-Python function returns the expected
     # tuple.
-    as_with_a_palsied_tongue_typevars = _get_hint_pep695_parameterizable_typeparams(
-        as_with_a_palsied_tongue)
+    as_with_a_palsied_tongue_typevars = (
+        _get_hint_pep695_parameterizable_typeparams(as_with_a_palsied_tongue))
     assert len(as_with_a_palsied_tongue_typevars) == 2
     assert isinstance(as_with_a_palsied_tongue_typevars[0], TypeVarTuple)
     assert isinstance(as_with_a_palsied_tongue_typevars[1], ParamSpec)
 
     # Assert this getter passed a PEP 695-compliant type alias returns the
     # expected tuple.
-    and_that_fair_kneeling_goddess_typevars = _get_hint_pep695_parameterizable_typeparams(
-        and_that_fair_kneeling_goddess)
+    and_that_fair_kneeling_goddess_typevars = (
+        _get_hint_pep695_parameterizable_typeparams(
+            and_that_fair_kneeling_goddess))
     assert len(and_that_fair_kneeling_goddess_typevars) == 3
     assert isinstance(and_that_fair_kneeling_goddess_typevars[0], TypeVar)
     assert isinstance(and_that_fair_kneeling_goddess_typevars[1], TypeVarTuple)
@@ -150,7 +152,7 @@ def unit_test_get_hint_pep695_typevars() -> None:
 def unit_test_iter_hint_pep695_forwardrefs() -> None:
     '''
     Test the private
-    :mod:`beartype._util.hint.pep.proposal.pep695.iter_hint_pep695_unsubscripted_forwardrefs`
+    :mod:`beartype._util.hint.pep.proposal.pep695.iter_hint_pep695_unsubbed_forwardrefs`
     iterator.
     '''
 
@@ -160,7 +162,7 @@ def unit_test_iter_hint_pep695_forwardrefs() -> None:
     from beartype._check.forward.reference.fwdrefmeta import (
         BeartypeForwardRefMeta)
     from beartype._util.hint.pep.proposal.pep695 import (
-        iter_hint_pep695_unsubscripted_forwardrefs)
+        iter_hint_pep695_unsubbed_forwardrefs)
     from pytest import raises
 
     # ....................{ LOCALS                         }....................
@@ -176,14 +178,15 @@ def unit_test_iter_hint_pep695_forwardrefs() -> None:
     # ....................{ ASSERTS ~ null                 }....................
     # Assert that this iterator yields nothing when passed a type alias
     # containing *NO* unquoted forward references.
-    their_own_life = list(iter_hint_pep695_unsubscripted_forwardrefs(of_intermitted_song))
+    their_own_life = list(
+        iter_hint_pep695_unsubbed_forwardrefs(of_intermitted_song))
     assert not their_own_life
 
     # ....................{ ASSERTS ~ single               }....................
     # Assert that this iterator yields a single forward reference proxy
     # referring to the single unquoted forward reference embedded in a
     # passed type alias containing only that reference.
-    and_saw_by = iter_hint_pep695_unsubscripted_forwardrefs(sudden_she_rose)
+    and_saw_by = iter_hint_pep695_unsubbed_forwardrefs(sudden_she_rose)
     the_warm_light_of = next(and_saw_by)
     assert isinstance(the_warm_light_of, BeartypeForwardRefMeta)
     assert the_warm_light_of.__name__ == 'ItsBurstingBurthen'
@@ -210,7 +213,7 @@ def unit_test_iter_hint_pep695_forwardrefs() -> None:
     # Assert that this iterator first yields a forward reference proxy referring
     # to the first unquoted forward reference embedded in a passed type alias
     # containing only that reference.
-    her_glowing_limbs = iter_hint_pep695_unsubscripted_forwardrefs(
+    her_glowing_limbs = iter_hint_pep695_unsubbed_forwardrefs(
         as_if_her_heart)
     beneath_the_sinuous_veil = next(her_glowing_limbs)
     assert isinstance(beneath_the_sinuous_veil, BeartypeForwardRefMeta)
@@ -245,10 +248,10 @@ def unit_test_iter_hint_pep695_forwardrefs() -> None:
         next(her_glowing_limbs)
 
 # ....................{ TESTS ~ reducer                    }....................
-def unit_test_reduce_hint_pep695_unsubscripted() -> None:
+def unit_test_reduce_hint_pep695_unsubbed() -> None:
     '''
-    Test the private
-    :mod:`beartype._check.convert._reduce._pep.redpep695.reduce_hint_pep695_unsubscripted`
+    Test the public
+    :mod:`beartype._check.convert._reduce._pep.redpep695.reduce_hint_pep695_unsubbed`
     reducer.
     '''
 
@@ -256,7 +259,7 @@ def unit_test_reduce_hint_pep695_unsubscripted() -> None:
     # Defer test-specific imports.
     from beartype.roar import BeartypeDecorHintPep695Exception
     from beartype._check.convert._reduce._pep.redpep695 import (
-        reduce_hint_pep695_unsubscripted)
+        reduce_hint_pep695_unsubbed)
     from pytest import raises
 
     # ....................{ LOCALS                         }....................
@@ -269,20 +272,28 @@ def unit_test_reduce_hint_pep695_unsubscripted() -> None:
     # ....................{ PASS                           }....................
     # Assert that this reducer returns the type hint underlying the passed type
     # alias containing *NO* unquoted forward references.
-    assert reduce_hint_pep695_unsubscripted(
-        hint=her_dark_locks, exception_prefix='') == str | int
+    hint_sane = reduce_hint_pep695_unsubbed(
+        hint=her_dark_locks,
+        hint_parent_sane=None,
+        exception_prefix='',
+    )
+    assert hint_sane.hint == str | int
 
     # ....................{ FAIL                           }....................
     # Assert that this reducer raises the expected exception when passed a type
     # alias containing one unquoted forward reference.
     with raises(BeartypeDecorHintPep695Exception):
-        reduce_hint_pep695_unsubscripted(hint=floating_in, exception_prefix='')
+        reduce_hint_pep695_unsubbed(
+            hint=floating_in,
+            hint_parent_sane=None,
+            exception_prefix='',
+        )
 
 
-def unit_test_reduce_hint_pep484_subscripted_typevars_to_hints() -> None:
+def unit_test_reduce_hint_pep484_subbed_typevars_to_hints() -> None:
     '''
     Test the public
-    :mod:`beartype._check.convert._reduce._pep.pep484.redpep484typevar.reduce_hint_pep484_subscripted_typevars_to_hints`
+    :mod:`beartype._check.convert._reduce._pep.pep484.redpep484typevar.reduce_hint_pep484_subbed_typevars_to_hints`
     getter with respect to :pep:`695`-compliant subscripted type aliases.
     '''
 
@@ -290,8 +301,8 @@ def unit_test_reduce_hint_pep484_subscripted_typevars_to_hints() -> None:
     # Defer test-specific imports.
     from beartype.roar import BeartypeDecorHintPep484TypeVarException
     from beartype._check.convert._reduce._pep.pep484.redpep484typevar import (
-        reduce_hint_pep484_subscripted_typevars_to_hints)
-    from beartype._check.metadata.metasane import HintSanifiedData
+        reduce_hint_pep484_subbed_typevars_to_hints)
+    from beartype._check.metadata.hint.hintsane import HintSane
     from beartype._util.hint.pep.utilpepget import get_hint_pep_typevars
     from beartype._util.kind.map.utilmapfrozen import FrozenDict
     from pytest import raises
@@ -319,15 +330,15 @@ def unit_test_reduce_hint_pep484_subscripted_typevars_to_hints() -> None:
     # Note that these type variables are literally scoped (i.e., isolated) to
     # these aliases and thus accessible *ONLY* by directly accessing the
     # "__parameters__" dunder attribute on these aliases. It is what it is.
-    assert reduce_hint_pep484_subscripted_typevars_to_hints(
-        irresistible_career[int]) == HintSanifiedData(
-            irresistible_career,
-            FrozenDict({irresistible_career_typevars[0]: int,}),
+    assert reduce_hint_pep484_subbed_typevars_to_hints(
+        irresistible_career[int]) == HintSane(
+            hint=irresistible_career,
+            typevar_to_hint=FrozenDict({irresistible_career_typevars[0]: int,}),
         )
-    assert reduce_hint_pep484_subscripted_typevars_to_hints(
-        in_thy[bool, complex]) == HintSanifiedData(
-            in_thy,
-            FrozenDict({
+    assert reduce_hint_pep484_subbed_typevars_to_hints(
+        in_thy[bool, complex]) == HintSane(
+            hint=in_thy,
+            typevar_to_hint=FrozenDict({
                 in_thy_typevars[0]: bool,
                 in_thy_typevars[1]: complex,
             }),
@@ -337,13 +348,104 @@ def unit_test_reduce_hint_pep484_subscripted_typevars_to_hints() -> None:
     # Assert this getter raises the expected exception when passed an object
     # that is *NOT* a PEP 695-compliant subscripted type alias.
     with raises(BeartypeDecorHintPep484TypeVarException):
-        reduce_hint_pep484_subscripted_typevars_to_hints(
+        reduce_hint_pep484_subbed_typevars_to_hints(
             'In thy devastating omnipotence,')
 
     # Assert this getter raises the expected exception when passed a PEP
     # 695-compliant unsubscripted type alias.
     with raises(BeartypeDecorHintPep484TypeVarException):
-        reduce_hint_pep484_subscripted_typevars_to_hints(guiding_its)
+        reduce_hint_pep484_subbed_typevars_to_hints(guiding_its)
     with raises(BeartypeDecorHintPep484TypeVarException):
-        reduce_hint_pep484_subscripted_typevars_to_hints(irresistible_career)
+        reduce_hint_pep484_subbed_typevars_to_hints(irresistible_career)
 
+# ....................{ TESTS ~ decorator                  }....................
+#FIXME: Actually call this unit test!
+def unit_test_decor_hint_pep695_type_recursive_indirect() -> None:
+    '''
+    Test :pep:`695`-compliant type aliases with respect to a
+    :func:`beartype.beartype`-decorated class parametrized by a
+    :pep:`484`-compliant type variable bound to an unsubscripted type alias such
+    that that class defines a method accepting a parameter annotated as that
+    same type alias subscripted by that same type variable, indirectly inducing
+    recursion between that type alias and type variable.
+
+    This unit test exercises a non-trivial `edge case`_ that actually arose.
+
+    .. _edge case:
+       https://github.com/beartype/beartype/issues/510
+    '''
+
+    # ....................{ IMPORTS                        }....................
+    # Defer test-specific imports.
+    from beartype import beartype
+    from beartype.roar import BeartypeCallHintParamViolation
+    from pytest import raises
+
+    # ....................{ LOCALS                         }....................
+    # Type alias aliasing a PEP 585-compliant fixed-length tuple type hint
+    # subscripted by one type variable and an arbitrary builtin type.
+    type WithStr[T] = tuple[T, str]
+
+    # ....................{ CALLABLES                      }....................
+    @beartype
+    class ToOverbear[T: WithStr]:
+        '''
+        Arbitrary :func:`beartype.beartype`-decorated class parametrized by a
+        :pep:`484`-compliant type variable bound to an unsubscripted type alias.
+        '''
+
+        @staticmethod
+        def and_crumble_this(to_naught: WithStr[T]) -> str:
+            '''
+            Arbitrary method accepting a parameter annotated as that same type
+            alias subscripted by that same type variable, indirectly inducing
+            recursion between that type alias and type variable.
+            '''
+
+            (_, inner_item_second), outer_item_second = to_naught
+            return inner_item_second + outer_item_second
+
+    # ....................{ LOCALS                         }....................
+    # Arbitrary tuple satisfying the "to_naught" parameter defined above with
+    # respect to O(1) type-checking generated by @beartype.
+    #
+    # Note that this tuple is intentionally *NOT* infinitely recursive. For
+    # efficiency, O(1) type-checking generated by @beartype only type-checks
+    # PEP 695-compliant recursive type aliases to one layer of nesting. Ergo, a
+    # tuple of tuple of strings suffices to exercise this functionality.
+    where_is_another_chaos = (
+        (
+            # Technically, this should be an infinitely recursive tuple
+            # exhibiting the same internal structure to satisfy this hint.
+            # Pragmatically, @beartype only type-checks PEP 695-compliant
+            # recursive type aliases to one layer of nesting as detailed above.
+            # Since this is that layer of nesting, *ANY* object suffices.
+            0xFEEDFACE,
+            'Where is another chaos? Where?"—That word',
+        ),
+        'Found way unto Olympus, and made quake',
+    )
+
+    # Arbitrary tuple violating the "to_naught" parameter defined above with
+    # respect to O(1) type-checking generated by @beartype.
+    found_way_unto_olympus = (
+        (
+            0xCAFEBABE,  # See above.
+            b'The rebel three.--Thea was startled up,',
+        ),
+        'Found way unto Olympus, and made quake',
+    )
+
+    # ....................{ PASS                           }....................
+    # Assert that this method passed a valid parameter returns the expected
+    # value.
+    assert ToOverbear.and_crumble_this(where_is_another_chaos) == (
+        'Where is another chaos? Where?"—That word'
+        'Found way unto Olympus, and made quake'
+    )
+
+    # ....................{ FAIL                           }....................
+    # Assert that this method passed an valid parameter raises the expected
+    # exception.
+    with raises(BeartypeCallHintParamViolation):
+        ToOverbear.and_crumble_this(found_way_unto_olympus)

@@ -12,9 +12,15 @@ This private submodule is *not* intended for importation by downstream callers.
 
 # ....................{ IMPORTS                            }....................
 from beartype.roar import BeartypeDecorHintPep604Exception
+from beartype._data.hint.datahintpep import (
+    Hint,
+    SequenceHints,
+    TypeIs,
+)
 from beartype._util.cache.utilcachecall import callable_cached
 from beartype._util.py.utilpyversion import IS_PYTHON_AT_LEAST_3_10
-from beartype._util.utilobject import SENTINEL
+from beartype._data.kind.datakindiota import SENTINEL
+from collections.abc import Sequence
 from functools import reduce
 from operator import __or__ as or_operator
 
@@ -31,7 +37,7 @@ if IS_PYTHON_AT_LEAST_3_10:
 
     # ....................{ RAISERS                        }....................
     #FIXME: Unit test us up, please.
-    def die_if_hint_pep604_inconsistent(hint: object) -> None:
+    def die_if_hint_pep604_inconsistent(hint: Hint) -> None:
 
         # Avoid circular import dependencies.
         from beartype._util.hint.utilhintget import get_hint_repr
@@ -77,10 +83,7 @@ if IS_PYTHON_AT_LEAST_3_10:
         if not hint_pep604_repr.startswith(hint_repr):
             raise BeartypeDecorHintPep604Exception(
                 f'Type hint {hint_repr} inconsistent with respect to '
-                f'repr() strings. Since @beartype requires consistency '
-                f'between type hints and repr() strings, this hint is '
-                f'unsupported by @beartype. Consider reporting this issue '
-                f'to the third-party developer implementing this hint: e.g.,\n'
+                f'repr() strings: e.g.,\n'
                 f'\t>>> repr({hint_repr})\n'
                 f'\t{hint_repr}  # <-- this is fine\n'
                 f'\t>>> repr({hint_repr} | int)\n'
@@ -88,13 +91,22 @@ if IS_PYTHON_AT_LEAST_3_10:
                 f'\n'
                 f'\t# Ideally, that output should instead resemble:\n'
                 f'\t>>> repr({hint_repr} | int)\n'
-                f'\t{hint_repr} | int  # <-- what @beartype wants!'
+                f'\t{hint_repr} | int  # <-- what @beartype wants!\n'
+                f'\n'
+                f'Inconsistent type hints are unsupported by @beartype, '
+                f'which requires consistency between type hints and '
+                f'repr() strings. Consider reporting this issue to the '
+                f'third-party developers implementing this hint, which '
+                f'(probably) fails to define the PEP 585-compliant '
+                f'"__args__" and "__origin__" dunder attributes standardized '
+                f'by the "types.GenericAlias" API. See also:\n'
+                f'\thttps://peps.python.org/pep-0585/#parameters-to-generics-are-available-at-runtime'
             )
         # Else, the representation of this new union is prefixed by the
         # representation of this hint as expected.
 
     # ....................{ TESTERS                        }....................
-    def is_hint_pep604(hint: object) -> bool:
+    def is_hint_pep604(hint: object) -> TypeIs[Hint]:
 
         # Release the werecars, Bender!
         return isinstance(hint, HintPep604Type)
@@ -103,10 +115,10 @@ if IS_PYTHON_AT_LEAST_3_10:
 #
 # Tonight, we howl at the moon. Tomorrow, the one-liner!
 else:
-    def die_if_hint_pep604_inconsistent(hint: object) -> None:
+    def die_if_hint_pep604_inconsistent(hint: Hint) -> None:
         pass
 
-    def is_hint_pep604(hint: object) -> bool:
+    def is_hint_pep604(hint: object) -> TypeIs[Hint]:
         return False
 
 
@@ -185,7 +197,7 @@ die_if_hint_pep604_inconsistent.__doc__ = (
 
     Parameters
     ----------
-    hint : object
+    hint : Hint
         Type hint to be inspected.
 
     Raises
@@ -202,7 +214,7 @@ is_hint_pep604.__doc__ = (
 
     Parameters
     ----------
-    hint : object
+    hint : Hint
         Type hint to be inspected.
 
     Returns
@@ -214,18 +226,18 @@ is_hint_pep604.__doc__ = (
 # ....................{ FACTORIES                          }....................
 #FIXME: Unit test us up, please.
 @callable_cached
-def make_hint_pep484604_union(hints: tuple) -> object:
+def make_hint_pep484604_union(hint_childs: SequenceHints) -> Hint:
     '''
     :pep:`604`- or :pep:`484`-compliant union type hint synthesized from the
-    passed tuple of two or more PEP-compliant type hints if this tuple contains
-    two or more items, the one PEP-compliant type hint in this tuple if this
-    tuple contains only one item, *or* raise an exception otherwise (i.e., if
-    this tuple is empty).
+    passed sequence of two or more PEP-compliant type hints if this sequence
+    contains two or more items, the one PEP-compliant type hint in this sequence
+    if this sequence contains only one item, *or* raise an exception otherwise
+    (i.e., if this sequence is empty).
 
     This factory preferentially creates and returns (in descending order of
     preference):
 
-    * If *all* of the items in the passed tuple are valid items of a
+    * If *all* of the items in the passed sequence are valid items of a
       :pep:`604`-compliant **new-style union** (``|``-delimited union of two or
       more types under Python >= 3.10), that union of these items.
     * Else, a :pep:`484`-compliant **old-style union** (i.e.,
@@ -248,37 +260,45 @@ def make_hint_pep484604_union(hints: tuple) -> object:
 
     Parameters
     ----------
-    hints : tuple
-        Tuple of all child type hints to be unioned together.
+    hint_childs : SequenceHints
+        Sequence of all child type hints to be unioned together.
 
     Returns
     -------
-    object
+    Hint
         Either:
 
-        * If this tuple contains two or more items, the union type hint
+        * If this sequence contains two or more items, the union type hint
           synthesized from these items.
-        * If this tuple contains only one item, this item as is.
+        * If this sequence contains only one item, this item as is.
 
     Raises
     ------
     BeartypeDecorHintPep604Exception
-        If this tuple is empty.
+        If this sequence is empty.
     '''
-    assert isinstance(hints, tuple), f'{repr(hints)} not tuple.'
+    assert isinstance(hint_childs, Sequence), (
+        f'{repr(hint_childs)} not sequence.')
 
-    # If this tuple is empty, raise an exception.
-    if not hints:
-        raise BeartypeDecorHintPep604Exception('"hints" tuple empty.')
-    # Else, this tuple contains one or more child type hints.
+    # If this sequence is empty, raise an exception.
+    if not hint_childs:
+        raise BeartypeDecorHintPep604Exception('"hints" sequence empty.')
+    # Else, this sequence contains one or more child type hints.
     #
-    # If this tuple contains only one child type hint, return this hint as is.
-    elif len(hints) == 1:
-        return hints[0]
-    # Else, this tuple contains two or more child type hints.
+    # If this sequence contains only one child type hint, return this hint
+    # unmodified as is.
+    elif len(hint_childs) == 1:
+        return hint_childs[0]
+    # Else, this sequence contains two or more child type hints.
+    #
+    # If this sequence is *NOT* already a tuple, coerce this sequence into a
+    # tuple. The lower-level functions called below all expected a tuple, oddly.
+    elif not isinstance(hint_childs, tuple):
+        hint_childs = tuple(hint_childs)
+    # Else, this sequence is already a tuple. In this case, preserve this tuple.
 
     # Union of these child type hints to be returned.
-    hint_union: object = SENTINEL
+    hint_union: Hint = SENTINEL  # type: ignore[assignment]
 
     # If the active Python interpreter targets Python >= 3.10 and thus supports
     # PEP 604...
@@ -286,7 +306,7 @@ def make_hint_pep484604_union(hints: tuple) -> object:
         # Attempt to dynamically fabricate a PEP 604-compliant new-style union
         # of these items if these items are all PEP 604-compliant.
         try:
-            hint_union = reduce(or_operator, hints)
+            hint_union = reduce(or_operator, hint_childs)  # type: ignore[assignment]
         # If *ANY* exception whatsoever is raised, one or more of these items
         # are PEP 604-noncompliant. In this case, silently ignore this exception
         # in favour of falling back to a PEP 484-compliant old-style union
@@ -303,7 +323,7 @@ def make_hint_pep484604_union(hints: tuple) -> object:
             make_hint_pep484_union)
 
         # Fallback to a PEP 484-compliant old-style union.
-        hint_union = make_hint_pep484_union(hints)
+        hint_union = make_hint_pep484_union(hint_childs)
     # Else, a PEP 604-compliant new-style union was fabricated above.
 
     # Return this union.

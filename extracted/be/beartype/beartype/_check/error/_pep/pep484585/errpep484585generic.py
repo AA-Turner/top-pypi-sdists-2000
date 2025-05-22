@@ -17,14 +17,15 @@ from beartype._data.hint.pep.sign.datapepsigns import (
     HintSignPep484585GenericUnsubscripted)
 from beartype._check.error.errcause import ViolationCause
 from beartype._check.error._errtype import find_cause_instance_type
-from beartype._check.proposal.checkpep484585generic import (
-    iter_hint_pep484585_generic_bases_unerased)
+from beartype._check.pep.checkpep484585generic import (
+    iter_hint_pep484585_generic_unsubbed_bases_unerased)
 from beartype._util.hint.pep.proposal.pep484585.generic.pep484585genget import (
     get_hint_pep484585_generic_type)
 from beartype._util.text.utiltextansi import color_hint
 
 # ....................{ GETTERS                            }....................
-def find_cause_generic_unsubscripted(cause: ViolationCause) -> ViolationCause:
+def find_cause_pep484585_generic_unsubbed(
+    cause: ViolationCause) -> ViolationCause:
     '''
     Output cause describing whether the pith of the passed input cause either
     satisfies or violates the :pep:`484`- or :pep:`585`-compliant
@@ -56,7 +57,7 @@ def find_cause_generic_unsubscripted(cause: ViolationCause) -> ViolationCause:
 
     # Shallow output cause to be returned, type-checking only whether this pith
     # is instance of this origin type.
-    cause_type = cause.permute(hint=hint_type)
+    cause_type = cause.permute_cause_hint_child_insane(hint_type)
     cause_shallow = find_cause_instance_type(cause_type)
     # print(f'[find_cause_generic] cause.hint [post-reduction]: {cause.hint}')
 
@@ -65,19 +66,20 @@ def find_cause_generic_unsubscripted(cause: ViolationCause) -> ViolationCause:
         return cause_shallow
     # Else, this pith is an instance of this type.
 
-    # For each unignorable unerased transitive pseudo-superclass originally
-    # declared as an erased superclass of this generic...
-    for hint_or_sane_child in iter_hint_pep484585_generic_bases_unerased(
-        hint=cause.hint,
-        conf=cause.conf,
-        typevar_to_hint=cause.typevar_to_hint,
-        exception_prefix=cause.exception_prefix,
+    # For metadata encapsulating the sanification of each unignorable unerased
+    # transitive pseudo-superclass originally declared as a superclass of this
+    # unsubscripted generic *AND* the sign identifying this pseudo-superclass...
+    for hint_child_sane, hint_child_sign in (
+        iter_hint_pep484585_generic_unsubbed_bases_unerased(
+            hint_sane=cause.hint_sane,
+            conf=cause.conf,
+            exception_prefix=cause.exception_prefix,
+        )
     ):
-        # Cause permuted to reflect this pseudo-superclass.
-        cause_child = cause.permute(hint_or_sane=hint_or_sane_child)
-
-        # Deep output cause to be returned, permuted from this input cause.
-        cause_deep = cause_child.find_cause()
+        # Deep output cause to be returned, permuted from this input cause to
+        # reflect this pseudo-superclass.
+        cause_deep = cause.permute_cause(
+            hint_sane=hint_child_sane, hint_sign=hint_child_sign).find_cause()
         # print(f'tuple pith: {pith_item}\ntuple hint child: {hint_child}')
 
         # If this pseudo-superclass is the cause of this failure...
@@ -86,7 +88,7 @@ def find_cause_generic_unsubscripted(cause: ViolationCause) -> ViolationCause:
             # metadata describing this pseudo-superclass.
             cause_deep.cause_str_or_none = (
                 f'generic superclass '
-                f'{color_hint(text=repr(cause_child.hint), is_color=cause.conf.is_color)} of '
+                f'{color_hint(text=repr(hint_child_sane.hint), is_color=cause.conf.is_color)} of '
                 f'{cause_deep.cause_str_or_none}'
             )
 

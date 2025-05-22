@@ -11,10 +11,6 @@ process).
 '''
 
 # ....................{ TODO                               }....................
-#FIXME: Resurrect "typing.TypeForm"-based "Hint" support *AFTER* the third-party
-#"typing_extensions" module releases a new stable release. *sigh*
-#FIXME: On doing so, also drop the @overload-based approach below.
-
 #FIXME: Consider adding the following new tester:
 #    def is_objects_similar(
 #        # Mandatory parameters.
@@ -44,16 +40,11 @@ process).
 # whereas the API defined by this submodule is expected to unconditionally
 # operate as expected regardless of the current context.
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-from beartype.typing import (
-    Any,
-    Type,
-    overload,
-)
 from beartype._check.checkmake import (
     make_func_raiser,
     make_func_tester,
 )
-from beartype._conf.confcls import BeartypeConf
+from beartype._conf.confmain import BeartypeConf
 from beartype._conf.confcommon import BEARTYPE_CONF_DEFAULT
 from beartype._data.hint.datahintpep import (
     Hint,

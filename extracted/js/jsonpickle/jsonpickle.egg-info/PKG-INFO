@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: jsonpickle
-Version: 4.0.5
+Version: 4.1.0
 Summary: jsonpickle encodes/decodes any Python object to/from JSON
 Author: Theelx
 Author-email: David Aguilar <davvid+jsonpickle@gmail.com>

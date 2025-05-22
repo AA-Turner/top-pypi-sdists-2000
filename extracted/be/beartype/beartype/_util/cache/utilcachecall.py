@@ -12,7 +12,7 @@ This private submodule is *not* intended for importation by downstream callers.
 
 # ....................{ TODO                               }....................
 #FIXME: Generalize @callable_cached to revert to the body of the
-#@beartype._util.type.decorator.decmemo.func_cached decorator when the passed
+#betse._util.type.decorator.decmemo.func_cached decorator when the passed
 #callable accepts *NO* parameters, which can be trivially decided by inspecting
 #the code object of this callable. Why do this? Because the @func_cached
 #decorator is *INSANELY* fast for this edge case -- substantially faster than
@@ -27,7 +27,7 @@ from beartype._util.func.arg.utilfuncargtest import (
     is_func_arg_variadic,
 )
 from beartype._util.text.utiltextlabel import label_callable
-from beartype._util.utilobject import SENTINEL
+from beartype._data.kind.datakindiota import SENTINEL
 from functools import wraps
 
 # ....................{ DECORATORS ~ callable              }....................

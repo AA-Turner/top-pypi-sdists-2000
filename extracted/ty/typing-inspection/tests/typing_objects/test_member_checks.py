@@ -4,7 +4,7 @@ import types
 import typing
 import warnings
 from collections.abc import Callable
-from typing import Any, NewType, TypeVar
+from typing import Any, ForwardRef, NewType, TypeVar
 
 import pytest
 import typing_extensions
@@ -124,6 +124,14 @@ def test_is_paramspeckwargs(param_spec_kwargs: ParamSpecKwargs) -> None:
     assert typing_objects.is_paramspeckwargs(param_spec_kwargs)
 
 
+@pytest.mark.parametrize(
+    'forwardref',
+    [typing.ForwardRef('T'), typing_extensions.ForwardRef('T')],
+)
+def test_is_forwardref(forwardref: ForwardRef) -> None:
+    assert typing_objects.is_forwardref(forwardref)
+
+
 T = TypeVar('T')
 
 TypingExtensionsTypeAliasType = typing_extensions.TypeAliasType('TypingExtensionsTypeAliasType', int, type_params=(T,))
@@ -189,6 +197,12 @@ def test_is_deprecated(deprecated: deprecated) -> None:
 # Misc. tests:
 
 
-@pytest.mark.skipif(sys.version_info < (3, 10), reason='`types.UnionType` is only available in Python 3.10.')
+@pytest.mark.skipif(
+    sys.version_info < (3, 10) or sys.version_info >= (3, 14),
+    reason=(
+        '`types.UnionType` is only available in Python 3.10. '
+        'In Python 3.14, `typing.Union` is an alias for `types.UnionType`.'
+    ),
+)
 def test_is_union_does_not_match_uniontype() -> None:
     assert not typing_objects.is_union(types.UnionType)

@@ -12,7 +12,9 @@ use polars_plan::dsl::{
     ExtraColumnsPolicy, FileScan, FileSinkType, PartitionSinkTypeIR, PartitionVariantIR, SinkTypeIR,
 };
 use polars_plan::plans::expr_ir::{ExprIR, OutputName};
-use polars_plan::plans::{AExpr, Context, FunctionIR, IR, IRAggExpr, LiteralValue};
+use polars_plan::plans::{
+    AExpr, Context, FunctionIR, IR, IRAggExpr, LiteralValue, write_ir_non_recursive,
+};
 use polars_plan::prelude::GroupbyOptions;
 use polars_utils::arena::{Arena, Node};
 use polars_utils::itertools::Itertools;
@@ -66,6 +68,7 @@ fn build_filter_stream(
     expr_arena: &mut Arena<AExpr>,
     phys_sm: &mut SlotMap<PhysNodeKey, PhysNode>,
     expr_cache: &mut ExprCache,
+    ctx: StreamingLowerIRContext,
 ) -> PolarsResult<PhysStream> {
     let predicate = predicate.clone();
     let cols_and_predicate = phys_sm[input.node]
@@ -80,8 +83,14 @@ fn build_filter_stream(
         })
         .chain([predicate])
         .collect_vec();
-    let (trans_input, mut trans_cols_and_predicate) =
-        lower_exprs(input, &cols_and_predicate, expr_arena, phys_sm, expr_cache)?;
+    let (trans_input, mut trans_cols_and_predicate) = lower_exprs(
+        input,
+        &cols_and_predicate,
+        expr_arena,
+        phys_sm,
+        expr_cache,
+        ctx,
+    )?;
 
     let filter_schema = phys_sm[trans_input.node].output_schema.clone();
     let filter = PhysNodeKind::Filter {
@@ -97,10 +106,17 @@ fn build_filter_stream(
         expr_arena,
         phys_sm,
         expr_cache,
+        ctx,
     )
 }
 
+#[derive(Debug, Clone, Copy)]
+pub struct StreamingLowerIRContext {
+    pub prepare_visualization: bool,
+}
+
 #[recursive::recursive]
+#[allow(clippy::too_many_arguments)]
 pub fn lower_ir(
     node: Node,
     ir_arena: &mut Arena<IR>,
@@ -109,6 +125,7 @@ pub fn lower_ir(
     schema_cache: &mut PlHashMap<Node, Arc<Schema>>,
     expr_cache: &mut ExprCache,
     cache_nodes: &mut PlHashMap<usize, PhysStream>,
+    ctx: StreamingLowerIRContext,
 ) -> PolarsResult<PhysStream> {
     // Helper macro to simplify recursive calls.
     macro_rules! lower_ir {
@@ -121,6 +138,7 @@ pub fn lower_ir(
                 schema_cache,
                 expr_cache,
                 cache_nodes,
+                ctx,
             )
         };
     }
@@ -140,7 +158,9 @@ pub fn lower_ir(
         IR::Select { input, expr, .. } => {
             let selectors = expr.clone();
             let phys_input = lower_ir!(*input)?;
-            return build_select_stream(phys_input, &selectors, expr_arena, phys_sm, expr_cache);
+            return build_select_stream(
+                phys_input, &selectors, expr_arena, phys_sm, expr_cache, ctx,
+            );
         },
 
         IR::HStack { input, exprs, .. }
@@ -177,7 +197,7 @@ pub fn lower_ir(
             }
             let selectors = selectors.into_values().collect_vec();
             return build_length_preserving_select_stream(
-                phys_input, &selectors, expr_arena, phys_sm, expr_cache,
+                phys_input, &selectors, expr_arena, phys_sm, expr_cache, ctx,
             );
         },
 
@@ -191,7 +211,9 @@ pub fn lower_ir(
         IR::Filter { input, predicate } => {
             let predicate = predicate.clone();
             let phys_input = lower_ir!(*input)?;
-            return build_filter_stream(phys_input, predicate, expr_arena, phys_sm, expr_cache);
+            return build_filter_stream(
+                phys_input, predicate, expr_arena, phys_sm, expr_cache, ctx,
+            );
         },
 
         IR::DataFrameScan {
@@ -372,10 +394,23 @@ pub fn lower_ir(
                 },
 
                 function => {
+                    let format_str = ctx.prepare_visualization.then(|| {
+                        let mut buffer = String::new();
+                        write_ir_non_recursive(
+                            &mut buffer,
+                            ir_arena.get(node),
+                            expr_arena,
+                            phys_sm.get(phys_input.node).unwrap().output_schema.as_ref(),
+                            0,
+                        )
+                        .unwrap();
+                        buffer
+                    });
                     let map = Arc::new(move |df| function.evaluate(df));
                     PhysNodeKind::InMemoryMap {
                         input: phys_input,
                         map,
+                        format_str,
                     }
                 },
             }
@@ -437,6 +472,7 @@ pub fn lower_ir(
                 scan_type,
                 predicate,
                 unified_scan_args,
+                id: _,
             } = v.clone()
             else {
                 unreachable!();
@@ -717,7 +753,7 @@ pub fn lower_ir(
 
                     if let Some(predicate) = predicate_post {
                         stream = build_filter_stream(
-                            stream, predicate, expr_arena, phys_sm, expr_cache,
+                            stream, predicate, expr_arena, phys_sm, expr_cache, ctx,
                         )?;
                     }
 
@@ -775,6 +811,7 @@ pub fn lower_ir(
                 expr_arena,
                 phys_sm,
                 expr_cache,
+                ctx,
             );
         },
         IR::Join {
@@ -793,8 +830,7 @@ pub fn lower_ir(
             let options = options.options.clone();
             let phys_left = lower_ir!(input_left)?;
             let phys_right = lower_ir!(input_right)?;
-            let supported_join_type = args.how.is_equi() || args.how.is_semi_anti();
-            if supported_join_type && !args.validation.needs_checks() {
+            if (args.how.is_equi() || args.how.is_semi_anti()) && !args.validation.needs_checks() {
                 // When lowering the expressions for the keys we need to ensure we keep around the
                 // payload columns, otherwise the input nodes can get replaced by input-independent
                 // nodes since the lowering code does not see we access any non-literal expressions.
@@ -809,10 +845,22 @@ pub fn lower_ir(
                     let col_expr = expr_arena.add(AExpr::Column(name.clone()));
                     aug_right_on.push(ExprIR::new(col_expr, OutputName::ColumnLhs(name.clone())));
                 }
-                let (trans_input_left, mut trans_left_on) =
-                    lower_exprs(phys_left, &aug_left_on, expr_arena, phys_sm, expr_cache)?;
-                let (trans_input_right, mut trans_right_on) =
-                    lower_exprs(phys_right, &aug_right_on, expr_arena, phys_sm, expr_cache)?;
+                let (trans_input_left, mut trans_left_on) = lower_exprs(
+                    phys_left,
+                    &aug_left_on,
+                    expr_arena,
+                    phys_sm,
+                    expr_cache,
+                    ctx,
+                )?;
+                let (trans_input_right, mut trans_right_on) = lower_exprs(
+                    phys_right,
+                    &aug_right_on,
+                    expr_arena,
+                    phys_sm,
+                    expr_cache,
+                    ctx,
+                )?;
                 trans_left_on.drain(left_on.len()..);
                 trans_right_on.drain(right_on.len()..);
 
@@ -840,6 +888,20 @@ pub fn lower_ir(
                         },
                     ))
                 };
+                let mut stream = PhysStream::first(node);
+                if let Some((offset, len)) = args.slice {
+                    stream = build_slice_stream(stream, offset, len, phys_sm);
+                }
+                return Ok(stream);
+            } else if args.how.is_cross() {
+                let node = phys_sm.insert(PhysNode::new(
+                    output_schema,
+                    PhysNodeKind::CrossJoin {
+                        input_left: phys_left,
+                        input_right: phys_right,
+                        args: args.clone(),
+                    },
+                ));
                 let mut stream = PhysStream::first(node);
                 if let Some((offset, len)) = args.slice {
                     stream = build_slice_stream(stream, offset, len, phys_sm);
@@ -887,6 +949,18 @@ pub fn lower_ir(
                     None,
                 )?);
 
+                let format_str = ctx.prepare_visualization.then(|| {
+                    let mut buffer = String::new();
+                    write_ir_non_recursive(
+                        &mut buffer,
+                        ir_arena.get(node),
+                        expr_arena,
+                        phys_sm.get(phys_input.node).unwrap().output_schema.as_ref(),
+                        0,
+                    )
+                    .unwrap();
+                    buffer
+                });
                 let distinct_node = PhysNode {
                     output_schema,
                     kind: PhysNodeKind::InMemoryMap {
@@ -896,6 +970,7 @@ pub fn lower_ir(
                             let mut state = ExecutionState::new();
                             executor.lock().execute(&mut state)
                         }),
+                        format_str,
                     },
                 };
 
@@ -943,7 +1018,7 @@ pub fn lower_ir(
             if options.keep_strategy == UniqueKeepStrategy::None {
                 // Track the length so we can filter out non-unique keys later.
                 let name = unique_column_name();
-                group_by_output_schema.insert(name.clone(), DataType::new_idxsize());
+                group_by_output_schema.insert(name.clone(), DataType::IDX_DTYPE);
                 aggs.push(ExprIR::new(
                     expr_arena.add(AExpr::Len),
                     OutputName::Alias(name),
@@ -961,6 +1036,7 @@ pub fn lower_ir(
                 expr_arena,
                 phys_sm,
                 expr_cache,
+                ctx,
             )?;
 
             if options.keep_strategy == UniqueKeepStrategy::None {
@@ -975,7 +1051,8 @@ pub fn lower_ir(
                 });
                 let predicate =
                     ExprIR::new(predicate_aexpr, OutputName::ColumnLhs(unique_name.clone()));
-                stream = build_filter_stream(stream, predicate, expr_arena, phys_sm, expr_cache)?;
+                stream =
+                    build_filter_stream(stream, predicate, expr_arena, phys_sm, expr_cache, ctx)?;
             }
 
             // Restore column order and drop the temporary length column if any.
@@ -986,7 +1063,7 @@ pub fn lower_ir(
                     ExprIR::new(col_expr, OutputName::ColumnLhs(name.clone()))
                 })
                 .collect_vec();
-            stream = build_select_stream(stream, &exprs, expr_arena, phys_sm, expr_cache)?;
+            stream = build_select_stream(stream, &exprs, expr_arena, phys_sm, expr_cache, ctx)?;
 
             // We didn't pass the slice earlier to build_group_by_stream because
             // we might have the intermediate keep = "none" filter.

@@ -18,13 +18,13 @@ This private submodule is *not* intended for importation by downstream callers.
 
 # ....................{ IMPORTS                            }....................
 # from beartype.roar import BeartypeException
-from beartype._conf.confcls import BeartypeConf
+from beartype._conf.confmain import BeartypeConf
 from beartype._data.hint.datahinttyping import (
     BeartypeableT,
     TypeWarning,
 )
 from beartype._decor._nontype.decornontype import beartype_nontype
-from beartype._decor._decortype import beartype_type
+from beartype._decor._type.decortype import beartype_type
 from beartype._util.cls.utilclstest import is_type_subclass
 from beartype._util.error.utilerrwarn import issue_warning
 from beartype._util.text.utiltextlabel import (

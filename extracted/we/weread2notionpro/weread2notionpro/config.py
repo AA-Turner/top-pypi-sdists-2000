@@ -23,6 +23,8 @@ book_properties_type_dict = {
     "阅读时长":NUMBER,
     "阅读进度":NUMBER,
     "阅读天数":NUMBER,
+    "价格":NUMBER,
+    "字数":NUMBER,
     "时间":DATE,
     "开始阅读时间":DATE,
     "最后阅读时间":DATE,

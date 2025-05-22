@@ -8,11 +8,11 @@ import json
 
 version_json = '''
 {
- "date": "2025-05-20T12:24:13-0400",
+ "date": "2025-05-20T18:03:25-0400",
  "dirty": false,
  "error": null,
- "full-revisionid": "cb034dc8b28fd319847ddf3e3b8cd98d8127c6d7",
- "version": "2025.5.0"
+ "full-revisionid": "1543ab4fcc4b17fcaa680abab0e93fed33980e21",
+ "version": "2025.5.0post1"
 }
 '''  # END VERSION_JSON
 

@@ -6,7 +6,7 @@
 '''
 **Unmemoized beartype non-type decorators** (i.e., low-level decorators
 decorating *all* types of decoratable objects except classes, which the sibling
-:mod:`beartype._decor._decortype` submodule handles, on behalf of the parent
+:mod:`beartype._decor._type.decortype` submodule handles, on behalf of the parent
 :mod:`beartype._decor.decorcore` submodule).
 
 This private submodule is *not* intended for importation by downstream callers.
@@ -25,7 +25,7 @@ from beartype._check.metadata.metadecor import (
     cull_beartype_call,
     make_beartype_call,
 )
-from beartype._conf.confcls import BeartypeConf
+from beartype._conf.confmain import BeartypeConf
 from beartype._conf.confenum import BeartypeStrategy
 from beartype._data.decor.datadecornontype import (
     MODULE_TO_TYPE_NAME_TO_BEARTYPE_DECORATOR_get,

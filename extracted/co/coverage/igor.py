@@ -8,12 +8,12 @@ of in shell scripts, batch files, or Makefiles.
 
 """
 
-import contextlib
 import datetime
 import glob
 import inspect
 import itertools
 import os
+import os.path
 import platform
 import pprint
 import re
@@ -22,7 +22,6 @@ import sys
 import sysconfig
 import textwrap
 import types
-import warnings
 import zipfile
 
 try:
@@ -39,15 +38,8 @@ CPYTHON = platform.python_implementation() == "CPython"
 PYPY = platform.python_implementation() == "PyPy"
 
 
-@contextlib.contextmanager
-def ignore_warnings():
-    """Context manager to ignore warning within the with statement."""
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        yield
-
-
-VERBOSITY = int(os.getenv("COVERAGE_IGOR_VERBOSE", "0"))
+# $set_env.py: COVERAGE_IGOR_VERBOSE - How much chatter from igor.py (default 1)
+VERBOSITY = int(os.getenv("COVERAGE_IGOR_VERBOSE", "1"))
 
 # Functions named do_* are executable from the command line: do_blah is run
 # by "python igor.py blah".
@@ -86,21 +78,26 @@ def do_remove_extension(*args):
         )
         roots = [root]
     else:
-        roots = ["coverage", "build/*/coverage"]
+        roots = [
+            "coverage",
+            "build/*/coverage",
+            ".tox/*/[Ll]ib/*/site-packages/coverage",
+            ".tox/*/[Ll]ib/site-packages/coverage",
+        ]
 
     for root, pattern in itertools.product(roots, so_patterns):
-        pattern = os.path.join(root, pattern.strip())
-        if VERBOSITY:
-            print(f"Searching for {pattern}")
+        pattern = os.path.join(root, pattern)
+        if VERBOSITY > 1:
+            print(f"Searching for {pattern} from {os.getcwd()}")
         for filename in glob.glob(pattern):
             if os.path.exists(filename):
-                if VERBOSITY:
-                    print(f"Removing {filename}")
+                if VERBOSITY > 1:
+                    print(f"Removing {os.path.abspath(filename)}")
                 try:
                     os.remove(filename)
                 except OSError as exc:
-                    if VERBOSITY:
-                        print(f"Couldn't remove {filename}: {exc}")
+                    if VERBOSITY > 1:
+                        print(f"Couldn't remove {os.path.abspath(filename)}: {exc}")
 
 
 def label_for_core(core):
@@ -143,13 +140,9 @@ def should_skip(core):
                     skipper = f"No C core for {platform.python_implementation()}"
 
     if skipper:
-        msg = "Skipping tests " + label_for_core(core)
-        if len(skipper) > 1:
-            msg += ": " + skipper
+        return f"Skipping tests {label_for_core(core)}: {skipper}"
     else:
-        msg = ""
-
-    return msg
+        return ""
 
 
 def make_env_id(core):
@@ -189,7 +182,7 @@ def run_tests_with_coverage(core, *runner_args):
     # There's an entry in "make clean" to get rid of this file.
     pth_dir = sysconfig.get_path("purelib")
     pth_path = os.path.join(pth_dir, "zzz_metacov.pth")
-    with open(pth_path, "w") as pth_file:
+    with open(pth_path, "w", encoding="utf-8") as pth_file:
         pth_file.write("import coverage; coverage.process_startup()\n")
 
     suffix = f"{make_env_id(core)}_{platform.platform()}"
@@ -256,7 +249,8 @@ def do_test_with_core(core, *runner_args):
     # If we should skip these tests, skip them.
     skip_msg = should_skip(core)
     if skip_msg:
-        print(skip_msg)
+        if VERBOSITY > 0:
+            print(skip_msg)
         return None
 
     os.environ["COVERAGE_CORE"] = core
@@ -367,14 +361,14 @@ def get_release_facts():
 
 def update_file(fname, pattern, replacement):
     """Update the contents of a file, replacing pattern with replacement."""
-    with open(fname) as fobj:
+    with open(fname, encoding="utf-8") as fobj:
         old_text = fobj.read()
 
     new_text = re.sub(pattern, replacement, old_text, count=1)
 
     if new_text != old_text:
         print(f"Updating {fname}")
-        with open(fname, "w") as fobj:
+        with open(fname, "w", encoding="utf-8") as fobj:
             fobj.write(new_text)
 
 

@@ -14,6 +14,7 @@ pub use object_store::azure::AzureCredential;
 pub use object_store::gcp::GcpCredential;
 use polars_core::config;
 use polars_error::{PolarsResult, polars_bail};
+use polars_utils::pl_str::PlSmallStr;
 #[cfg(feature = "python")]
 use polars_utils::python_function::PythonObject;
 #[cfg(feature = "python")]
@@ -148,6 +149,10 @@ pub trait IntoCredentialProvider: Sized {
     fn into_gcp_provider(self) -> object_store::gcp::GcpCredentialProvider {
         unimplemented!()
     }
+
+    /// Note, technically shouldn't be under the `IntoCredentialProvider` trait, but it's here
+    /// for convenience.
+    fn storage_update_options(&self) -> PolarsResult<Vec<(PlSmallStr, PlSmallStr)>>;
 }
 
 impl IntoCredentialProvider for PlCredentialProvider {
@@ -175,6 +180,14 @@ impl IntoCredentialProvider for PlCredentialProvider {
             Self::Function(v) => v.into_gcp_provider(),
             #[cfg(feature = "python")]
             Self::Python(v) => v.into_gcp_provider(),
+        }
+    }
+
+    fn storage_update_options(&self) -> PolarsResult<Vec<(PlSmallStr, PlSmallStr)>> {
+        match self {
+            Self::Function(v) => v.storage_update_options(),
+            #[cfg(feature = "python")]
+            Self::Python(v) => v.storage_update_options(),
         }
     }
 }
@@ -297,6 +310,10 @@ impl IntoCredentialProvider for CredentialProviderFunction {
                 bearer: String::new(),
             })),
         ))
+    }
+
+    fn storage_update_options(&self) -> PolarsResult<Vec<(PlSmallStr, PlSmallStr)>> {
+        Ok(vec![])
     }
 }
 
@@ -461,7 +478,8 @@ mod python_impl {
     use std::hash::Hash;
     use std::sync::Arc;
 
-    use polars_error::{PolarsError, PolarsResult, to_compute_err};
+    use polars_error::{PolarsError, PolarsResult};
+    use polars_utils::pl_str::PlSmallStr;
     use polars_utils::python_function::PythonObject;
     use pyo3::Python;
     use pyo3::exceptions::PyValueError;
@@ -509,8 +527,7 @@ mod python_impl {
                         let v = (!v.is_none(py)).then_some(v);
 
                         pyo3::PyResult::Ok(v)
-                    })
-                    .map_err(to_compute_err)?;
+                    })?;
 
                     Ok(opt_initialized_py_object
                         .map(PythonObject)
@@ -531,6 +548,13 @@ mod python_impl {
             }
         }
 
+        pub(crate) fn unwrap_as_provider_ref(&self) -> &Arc<PythonObject> {
+            match self {
+                Self::Builder(_) => panic!(),
+                Self::Provider(v) => v,
+            }
+        }
+
         pub(super) fn func_addr(&self) -> usize {
             (match self {
                 Self::Builder(v) => Arc::as_ptr(v),
@@ -542,7 +566,7 @@ mod python_impl {
     impl IntoCredentialProvider for PythonCredentialProvider {
         #[cfg(feature = "aws")]
         fn into_aws_provider(self) -> object_store::aws::AwsCredentialProvider {
-            use polars_error::{PolarsResult, to_compute_err};
+            use polars_error::PolarsResult;
 
             use crate::cloud::credential_provider::{
                 CredentialProviderFunction, ObjectStoreCredential,
@@ -595,8 +619,7 @@ mod python_impl {
                         }
 
                         pyo3::PyResult::Ok(expiry.unwrap_or(u64::MAX))
-                    })
-                    .map_err(to_compute_err)?;
+                    })?;
 
                     if credentials.key_id.is_empty() {
                         return Err(PolarsError::ComputeError(
@@ -619,7 +642,7 @@ mod python_impl {
         #[cfg(feature = "azure")]
         fn into_azure_provider(self) -> object_store::azure::AzureCredentialProvider {
             use object_store::azure::AzureAccessKey;
-            use polars_error::{PolarsResult, to_compute_err};
+            use polars_error::PolarsResult;
 
             use crate::cloud::credential_provider::{
                 CredentialProviderFunction, ObjectStoreCredential,
@@ -667,8 +690,7 @@ mod python_impl {
                         }
 
                         pyo3::PyResult::Ok(expiry.unwrap_or(u64::MAX))
-                    })
-                    .map_err(to_compute_err)?;
+                    })?;
 
                     let Some(credentials) = credentials else {
                         return Err(PolarsError::ComputeError(
@@ -688,7 +710,7 @@ mod python_impl {
 
         #[cfg(feature = "gcp")]
         fn into_gcp_provider(self) -> object_store::gcp::GcpCredentialProvider {
-            use polars_error::{PolarsResult, to_compute_err};
+            use polars_error::PolarsResult;
 
             use crate::cloud::credential_provider::{
                 CredentialProviderFunction, ObjectStoreCredential,
@@ -725,8 +747,7 @@ mod python_impl {
                         }
 
                         pyo3::PyResult::Ok(expiry.unwrap_or(u64::MAX))
-                    })
-                    .map_err(to_compute_err)?;
+                    })?;
 
                     if credentials.bearer.is_empty() {
                         return Err(PolarsError::ComputeError(
@@ -738,6 +759,31 @@ mod python_impl {
                 })
             }))
             .into_gcp_provider()
+        }
+
+        /// # Panics
+        /// Panics if `self` is not an initialized provider.
+        fn storage_update_options(&self) -> PolarsResult<Vec<(PlSmallStr, PlSmallStr)>> {
+            let py_object = self.unwrap_as_provider_ref();
+
+            Python::with_gil(|py| {
+                py_object
+                    .getattr(py, "_storage_update_options")
+                    .map_or(Ok(vec![]), |f| {
+                        let v = f.call0(py)?.extract::<pyo3::Bound<'_, PyDict>>(py)?;
+
+                        let mut out = Vec::with_capacity(v.len());
+
+                        for dict_item in v.call_method0("items")?.try_iter()? {
+                            let (key, value) =
+                                dict_item?.extract::<(PyBackedStr, PyBackedStr)>()?;
+
+                            out.push(((&*key).into(), (&*value).into()))
+                        }
+
+                        Ok(out)
+                    })
+            })
         }
     }
 
