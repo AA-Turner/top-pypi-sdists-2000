@@ -6642,7 +6642,7 @@ class CfnChannelNamespace(
         :param name: The name of the channel namespace. This name must be unique within the ``Api`` .
         :param code_handlers: The event handler functions that run custom business logic to process published events and subscribe requests.
         :param code_s3_location: The Amazon S3 endpoint where the code is located.
-        :param handler_configs: 
+        :param handler_configs: The configuration for the ``OnPublish`` and ``OnSubscribe`` handlers.
         :param publish_auth_modes: The authorization mode to use for publishing messages on the channel namespace. This configuration overrides the default ``Api`` authorization configuration.
         :param subscribe_auth_modes: The authorization mode to use for subscribing to messages on the channel namespace. This configuration overrides the default ``Api`` authorization configuration.
         :param tags: A set of tags (key-value pairs) for this channel namespace.
@@ -6771,6 +6771,7 @@ class CfnChannelNamespace(
     def handler_configs(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigsProperty"]]:
+        '''The configuration for the ``OnPublish`` and ``OnSubscribe`` handlers.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigsProperty"]], jsii.get(self, "handlerConfigs"))
 
     @handler_configs.setter
@@ -6897,9 +6898,10 @@ class CfnChannelNamespace(
             behavior: builtins.str,
             integration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.IntegrationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
-            '''
-            :param behavior: Integration behavior for a handler configuration.
-            :param integration: 
+            '''The ``HandlerConfig`` property type specifies the configuration for the handler.
+
+            :param behavior: The behavior for the handler.
+            :param integration: The integration data source configuration for the handler.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-handlerconfig.html
             :exampleMetadata: fixture=_generated
@@ -6933,7 +6935,7 @@ class CfnChannelNamespace(
 
         @builtins.property
         def behavior(self) -> builtins.str:
-            '''Integration behavior for a handler configuration.
+            '''The behavior for the handler.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-handlerconfig.html#cfn-appsync-channelnamespace-handlerconfig-behavior
             '''
@@ -6945,7 +6947,8 @@ class CfnChannelNamespace(
         def integration(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.IntegrationProperty"]:
-            '''
+            '''The integration data source configuration for the handler.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-handlerconfig.html#cfn-appsync-channelnamespace-handlerconfig-integration
             '''
             result = self._values.get("integration")
@@ -6975,9 +6978,10 @@ class CfnChannelNamespace(
             on_publish: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.HandlerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             on_subscribe: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.HandlerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param on_publish: 
-            :param on_subscribe: 
+            '''The ``HandlerConfigs`` property type specifies the configuration for the ``OnPublish`` and ``OnSubscribe`` handlers.
+
+            :param on_publish: The configuration for the ``OnPublish`` handler.
+            :param on_subscribe: The configuration for the ``OnSubscribe`` handler.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-handlerconfigs.html
             :exampleMetadata: fixture=_generated
@@ -7027,7 +7031,8 @@ class CfnChannelNamespace(
         def on_publish(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigProperty"]]:
-            '''
+            '''The configuration for the ``OnPublish`` handler.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-handlerconfigs.html#cfn-appsync-channelnamespace-handlerconfigs-onpublish
             '''
             result = self._values.get("on_publish")
@@ -7037,7 +7042,8 @@ class CfnChannelNamespace(
         def on_subscribe(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigProperty"]]:
-            '''
+            '''The configuration for the ``OnSubscribe`` handler.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-handlerconfigs.html#cfn-appsync-channelnamespace-handlerconfigs-onsubscribe
             '''
             result = self._values.get("on_subscribe")
@@ -7069,9 +7075,10 @@ class CfnChannelNamespace(
             data_source_name: builtins.str,
             lambda_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param data_source_name: Data source to invoke for this integration.
-            :param lambda_config: 
+            '''The ``Integration`` property type specifies the integration data source configuration for the handler.
+
+            :param data_source_name: The unique name of the data source that has been configured on the API.
+            :param lambda_config: The configuration for a Lambda data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-integration.html
             :exampleMetadata: fixture=_generated
@@ -7103,7 +7110,7 @@ class CfnChannelNamespace(
 
         @builtins.property
         def data_source_name(self) -> builtins.str:
-            '''Data source to invoke for this integration.
+            '''The unique name of the data source that has been configured on the API.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-integration.html#cfn-appsync-channelnamespace-integration-datasourcename
             '''
@@ -7115,7 +7122,8 @@ class CfnChannelNamespace(
         def lambda_config(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.LambdaConfigProperty"]]:
-            '''
+            '''The configuration for a Lambda data source.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-integration.html#cfn-appsync-channelnamespace-integration-lambdaconfig
             '''
             result = self._values.get("lambda_config")
@@ -7139,8 +7147,9 @@ class CfnChannelNamespace(
     )
     class LambdaConfigProperty:
         def __init__(self, *, invoke_type: builtins.str) -> None:
-            '''
-            :param invoke_type: Invocation type for direct lambda integrations.
+            '''The ``LambdaConfig`` property type specifies the integration configuration for a Lambda data source.
+
+            :param invoke_type: The invocation type for a Lambda data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-lambdaconfig.html
             :exampleMetadata: fixture=_generated
@@ -7164,7 +7173,7 @@ class CfnChannelNamespace(
 
         @builtins.property
         def invoke_type(self) -> builtins.str:
-            '''Invocation type for direct lambda integrations.
+            '''The invocation type for a Lambda data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-lambdaconfig.html#cfn-appsync-channelnamespace-lambdaconfig-invoketype
             '''
@@ -7217,7 +7226,7 @@ class CfnChannelNamespaceProps:
         :param name: The name of the channel namespace. This name must be unique within the ``Api`` .
         :param code_handlers: The event handler functions that run custom business logic to process published events and subscribe requests.
         :param code_s3_location: The Amazon S3 endpoint where the code is located.
-        :param handler_configs: 
+        :param handler_configs: The configuration for the ``OnPublish`` and ``OnSubscribe`` handlers.
         :param publish_auth_modes: The authorization mode to use for publishing messages on the channel namespace. This configuration overrides the default ``Api`` authorization configuration.
         :param subscribe_auth_modes: The authorization mode to use for subscribing to messages on the channel namespace. This configuration overrides the default ``Api`` authorization configuration.
         :param tags: A set of tags (key-value pairs) for this channel namespace.
@@ -7345,7 +7354,8 @@ class CfnChannelNamespaceProps:
     def handler_configs(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannelNamespace.HandlerConfigsProperty]]:
-        '''
+        '''The configuration for the ``OnPublish`` and ``OnSubscribe`` handlers.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-channelnamespace.html#cfn-appsync-channelnamespace-handlerconfigs
         '''
         result = self._values.get("handler_configs")

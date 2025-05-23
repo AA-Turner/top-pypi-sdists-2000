@@ -473,16 +473,24 @@ class CfnLocationAzureBlob(
         from aws_cdk import aws_datasync as datasync
         
         cfn_location_azure_blob = datasync.CfnLocationAzureBlob(self, "MyCfnLocationAzureBlob",
-            agent_arns=["agentArns"],
             azure_blob_authentication_type="azureBlobAuthenticationType",
         
             # the properties below are optional
+            agent_arns=["agentArns"],
             azure_access_tier="azureAccessTier",
             azure_blob_container_url="azureBlobContainerUrl",
             azure_blob_sas_configuration=datasync.CfnLocationAzureBlob.AzureBlobSasConfigurationProperty(
                 azure_blob_sas_token="azureBlobSasToken"
             ),
             azure_blob_type="azureBlobType",
+            cmk_secret_config=datasync.CfnLocationAzureBlob.CmkSecretConfigProperty(
+                kms_key_arn="kmsKeyArn",
+                secret_arn="secretArn"
+            ),
+            custom_secret_config=datasync.CfnLocationAzureBlob.CustomSecretConfigProperty(
+                secret_access_role_arn="secretAccessRoleArn",
+                secret_arn="secretArn"
+            ),
             subdirectory="subdirectory",
             tags=[CfnTag(
                 key="key",
@@ -496,24 +504,28 @@ class CfnLocationAzureBlob(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        agent_arns: typing.Sequence[builtins.str],
         azure_blob_authentication_type: builtins.str,
+        agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         azure_access_tier: typing.Optional[builtins.str] = None,
         azure_blob_container_url: typing.Optional[builtins.str] = None,
         azure_blob_sas_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationAzureBlob.AzureBlobSasConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         azure_blob_type: typing.Optional[builtins.str] = None,
+        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationAzureBlob.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationAzureBlob.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         subdirectory: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param agent_arns: Specifies the Amazon Resource Name (ARN) of the DataSync agent that can connect with your Azure Blob Storage container. You can specify more than one agent. For more information, see `Using multiple agents for your transfer <https://docs.aws.amazon.com/datasync/latest/userguide/multiple-agents.html>`_ .
         :param azure_blob_authentication_type: Specifies the authentication method DataSync uses to access your Azure Blob Storage. DataSync can access blob storage using a shared access signature (SAS). Default: - "SAS"
+        :param agent_arns: Specifies the Amazon Resource Name (ARN) of the DataSync agent that can connect with your Azure Blob Storage container. You can specify more than one agent. For more information, see `Using multiple agents for your transfer <https://docs.aws.amazon.com/datasync/latest/userguide/multiple-agents.html>`_ .
         :param azure_access_tier: Specifies the access tier that you want your objects or files transferred into. This only applies when using the location as a transfer destination. For more information, see `Access tiers <https://docs.aws.amazon.com/datasync/latest/userguide/creating-azure-blob-location.html#azure-blob-access-tiers>`_ . Default: - "HOT"
         :param azure_blob_container_url: Specifies the URL of the Azure Blob Storage container involved in your transfer.
         :param azure_blob_sas_configuration: Specifies the SAS configuration that allows DataSync to access your Azure Blob Storage.
         :param azure_blob_type: Specifies the type of blob that you want your objects or files to be when transferring them into Azure Blob Storage. Currently, DataSync only supports moving data into Azure Blob Storage as block blobs. For more information on blob types, see the `Azure Blob Storage documentation <https://docs.aws.amazon.com/https://learn.microsoft.com/en-us/rest/api/storageservices/understanding-block-blobs--append-blobs--and-page-blobs>`_ . Default: - "BLOCK"
+        :param cmk_secret_config: Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+        :param custom_secret_config: Specifies configuration information for a customer-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
         :param subdirectory: Specifies path segments if you want to limit your transfer to a virtual directory in your container (for example, ``/my/images`` ).
         :param tags: Specifies labels that help you categorize, filter, and search for your AWS resources. We recommend creating at least a name tag for your transfer location.
         '''
@@ -522,12 +534,14 @@ class CfnLocationAzureBlob(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnLocationAzureBlobProps(
-            agent_arns=agent_arns,
             azure_blob_authentication_type=azure_blob_authentication_type,
+            agent_arns=agent_arns,
             azure_access_tier=azure_access_tier,
             azure_blob_container_url=azure_blob_container_url,
             azure_blob_sas_configuration=azure_blob_sas_configuration,
             azure_blob_type=azure_blob_type,
+            cmk_secret_config=cmk_secret_config,
+            custom_secret_config=custom_secret_config,
             subdirectory=subdirectory,
             tags=tags,
         )
@@ -565,6 +579,15 @@ class CfnLocationAzureBlob(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrCmkSecretConfigSecretArn")
+    def attr_cmk_secret_config_secret_arn(self) -> builtins.str:
+        '''Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+
+        :cloudformationAttribute: CmkSecretConfig.SecretArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCmkSecretConfigSecretArn"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrLocationArn")
     def attr_location_arn(self) -> builtins.str:
         '''The ARN of the Azure Blob Storage transfer location that you created.
@@ -583,6 +606,17 @@ class CfnLocationAzureBlob(
         return typing.cast(builtins.str, jsii.get(self, "attrLocationUri"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrManagedSecretConfig")
+    def attr_managed_secret_config(self) -> _IResolvable_da3f097b:
+        '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location.
+
+        DataSync uses the default AWS-managed KMS key to encrypt this secret in AWS Secrets Manager.
+
+        :cloudformationAttribute: ManagedSecretConfig
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrManagedSecretConfig"))
+
+    @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
     def cdk_tag_manager(self) -> _TagManager_0a598cb3:
         '''Tag Manager which manages the tags for this resource.'''
@@ -592,19 +626,6 @@ class CfnLocationAzureBlob(
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="agentArns")
-    def agent_arns(self) -> typing.List[builtins.str]:
-        '''Specifies the Amazon Resource Name (ARN) of the DataSync agent that can connect with your Azure Blob Storage container.'''
-        return typing.cast(typing.List[builtins.str], jsii.get(self, "agentArns"))
-
-    @agent_arns.setter
-    def agent_arns(self, value: typing.List[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__04d94ab53395a58893ca5e5668d51e78b5d567de304ebc1b3c8937ab5824c459)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "agentArns", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="azureBlobAuthenticationType")
@@ -618,6 +639,19 @@ class CfnLocationAzureBlob(
             type_hints = typing.get_type_hints(_typecheckingstub__d66037c88c30360a6dbdeedf60b7cdd8b0d971ae11fb4944eb61af92fe413080)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "azureBlobAuthenticationType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="agentArns")
+    def agent_arns(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Specifies the Amazon Resource Name (ARN) of the DataSync agent that can connect with your Azure Blob Storage container.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "agentArns"))
+
+    @agent_arns.setter
+    def agent_arns(self, value: typing.Optional[typing.List[builtins.str]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__04d94ab53395a58893ca5e5668d51e78b5d567de304ebc1b3c8937ab5824c459)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "agentArns", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="azureAccessTier")
@@ -675,6 +709,42 @@ class CfnLocationAzureBlob(
             type_hints = typing.get_type_hints(_typecheckingstub__e74328b40eb55d86e422d5f30530d28f29d1393792015d7646eb06c8819408d0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "azureBlobType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="cmkSecretConfig")
+    def cmk_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CmkSecretConfigProperty"]]:
+        '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CmkSecretConfigProperty"]], jsii.get(self, "cmkSecretConfig"))
+
+    @cmk_secret_config.setter
+    def cmk_secret_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CmkSecretConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bbe60c9e1409294412076468854254983957a988d2e0d53f2fa73767e4a48525)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "cmkSecretConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="customSecretConfig")
+    def custom_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CustomSecretConfigProperty"]]:
+        '''Specifies configuration information for a customer-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CustomSecretConfigProperty"]], jsii.get(self, "customSecretConfig"))
+
+    @custom_secret_config.setter
+    def custom_secret_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CustomSecretConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3276084bb32edc8f06759cb50268fc7821cd740602d985f3b1b967d5267f90dc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "customSecretConfig", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="subdirectory")
@@ -760,17 +830,219 @@ class CfnLocationAzureBlob(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datasync.CfnLocationAzureBlob.CmkSecretConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"kms_key_arn": "kmsKeyArn", "secret_arn": "secretArn"},
+    )
+    class CmkSecretConfigProperty:
+        def __init__(
+            self,
+            *,
+            kms_key_arn: typing.Optional[builtins.str] = None,
+            secret_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+
+            :param kms_key_arn: Specifies the ARN for the customer-managed AWS KMS key used to encrypt the secret specified for SecretArn. DataSync provides this key to AWS Secrets Manager.
+            :param secret_arn: Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationazureblob-cmksecretconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datasync as datasync
+                
+                cmk_secret_config_property = datasync.CfnLocationAzureBlob.CmkSecretConfigProperty(
+                    kms_key_arn="kmsKeyArn",
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d03d5287185c3e65174404788128d96c2205212b3aa189dc5803a4b4b4b8ab36)
+                check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if kms_key_arn is not None:
+                self._values["kms_key_arn"] = kms_key_arn
+            if secret_arn is not None:
+                self._values["secret_arn"] = secret_arn
+
+        @builtins.property
+        def kms_key_arn(self) -> typing.Optional[builtins.str]:
+            '''Specifies the ARN for the customer-managed AWS KMS key used to encrypt the secret specified for SecretArn.
+
+            DataSync provides this key to AWS Secrets Manager.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationazureblob-cmksecretconfig.html#cfn-datasync-locationazureblob-cmksecretconfig-kmskeyarn
+            '''
+            result = self._values.get("kms_key_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def secret_arn(self) -> typing.Optional[builtins.str]:
+            '''Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationazureblob-cmksecretconfig.html#cfn-datasync-locationazureblob-cmksecretconfig-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CmkSecretConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datasync.CfnLocationAzureBlob.CustomSecretConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "secret_access_role_arn": "secretAccessRoleArn",
+            "secret_arn": "secretArn",
+        },
+    )
+    class CustomSecretConfigProperty:
+        def __init__(
+            self,
+            *,
+            secret_access_role_arn: builtins.str,
+            secret_arn: builtins.str,
+        ) -> None:
+            '''Specifies configuration information for a customer-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
+
+            :param secret_access_role_arn: Specifies the ARN for the AWS Identity and Access Management role that DataSync uses to access the secret specified for SecretArn.
+            :param secret_arn: Specifies the ARN for a customer created AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationazureblob-customsecretconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datasync as datasync
+                
+                custom_secret_config_property = datasync.CfnLocationAzureBlob.CustomSecretConfigProperty(
+                    secret_access_role_arn="secretAccessRoleArn",
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0b2d06a0f90feb2e23667a772b3c70d85bf30ee5c9bef02d35fd7339fdffaf93)
+                check_type(argname="argument secret_access_role_arn", value=secret_access_role_arn, expected_type=type_hints["secret_access_role_arn"])
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "secret_access_role_arn": secret_access_role_arn,
+                "secret_arn": secret_arn,
+            }
+
+        @builtins.property
+        def secret_access_role_arn(self) -> builtins.str:
+            '''Specifies the ARN for the AWS Identity and Access Management role that DataSync uses to access the secret specified for SecretArn.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationazureblob-customsecretconfig.html#cfn-datasync-locationazureblob-customsecretconfig-secretaccessrolearn
+            '''
+            result = self._values.get("secret_access_role_arn")
+            assert result is not None, "Required property 'secret_access_role_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def secret_arn(self) -> builtins.str:
+            '''Specifies the ARN for a customer created AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationazureblob-customsecretconfig.html#cfn-datasync-locationazureblob-customsecretconfig-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            assert result is not None, "Required property 'secret_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CustomSecretConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datasync.CfnLocationAzureBlob.ManagedSecretConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"secret_arn": "secretArn"},
+    )
+    class ManagedSecretConfigProperty:
+        def __init__(self, *, secret_arn: builtins.str) -> None:
+            '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location.
+
+            DataSync uses the default AWS-managed KMS key to encrypt this secret in AWS Secrets Manager.
+
+            :param secret_arn: Specifies the ARN for an AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationazureblob-managedsecretconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datasync as datasync
+                
+                managed_secret_config_property = datasync.CfnLocationAzureBlob.ManagedSecretConfigProperty(
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8ed16453ba6567e90e7b3e0e37a7206cf71efddb64e1cca1af96064be80c9609)
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "secret_arn": secret_arn,
+            }
+
+        @builtins.property
+        def secret_arn(self) -> builtins.str:
+            '''Specifies the ARN for an AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationazureblob-managedsecretconfig.html#cfn-datasync-locationazureblob-managedsecretconfig-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            assert result is not None, "Required property 'secret_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ManagedSecretConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_datasync.CfnLocationAzureBlobProps",
     jsii_struct_bases=[],
     name_mapping={
-        "agent_arns": "agentArns",
         "azure_blob_authentication_type": "azureBlobAuthenticationType",
+        "agent_arns": "agentArns",
         "azure_access_tier": "azureAccessTier",
         "azure_blob_container_url": "azureBlobContainerUrl",
         "azure_blob_sas_configuration": "azureBlobSasConfiguration",
         "azure_blob_type": "azureBlobType",
+        "cmk_secret_config": "cmkSecretConfig",
+        "custom_secret_config": "customSecretConfig",
         "subdirectory": "subdirectory",
         "tags": "tags",
     },
@@ -779,23 +1051,27 @@ class CfnLocationAzureBlobProps:
     def __init__(
         self,
         *,
-        agent_arns: typing.Sequence[builtins.str],
         azure_blob_authentication_type: builtins.str,
+        agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         azure_access_tier: typing.Optional[builtins.str] = None,
         azure_blob_container_url: typing.Optional[builtins.str] = None,
         azure_blob_sas_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.AzureBlobSasConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         azure_blob_type: typing.Optional[builtins.str] = None,
+        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         subdirectory: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationAzureBlob``.
 
-        :param agent_arns: Specifies the Amazon Resource Name (ARN) of the DataSync agent that can connect with your Azure Blob Storage container. You can specify more than one agent. For more information, see `Using multiple agents for your transfer <https://docs.aws.amazon.com/datasync/latest/userguide/multiple-agents.html>`_ .
         :param azure_blob_authentication_type: Specifies the authentication method DataSync uses to access your Azure Blob Storage. DataSync can access blob storage using a shared access signature (SAS). Default: - "SAS"
+        :param agent_arns: Specifies the Amazon Resource Name (ARN) of the DataSync agent that can connect with your Azure Blob Storage container. You can specify more than one agent. For more information, see `Using multiple agents for your transfer <https://docs.aws.amazon.com/datasync/latest/userguide/multiple-agents.html>`_ .
         :param azure_access_tier: Specifies the access tier that you want your objects or files transferred into. This only applies when using the location as a transfer destination. For more information, see `Access tiers <https://docs.aws.amazon.com/datasync/latest/userguide/creating-azure-blob-location.html#azure-blob-access-tiers>`_ . Default: - "HOT"
         :param azure_blob_container_url: Specifies the URL of the Azure Blob Storage container involved in your transfer.
         :param azure_blob_sas_configuration: Specifies the SAS configuration that allows DataSync to access your Azure Blob Storage.
         :param azure_blob_type: Specifies the type of blob that you want your objects or files to be when transferring them into Azure Blob Storage. Currently, DataSync only supports moving data into Azure Blob Storage as block blobs. For more information on blob types, see the `Azure Blob Storage documentation <https://docs.aws.amazon.com/https://learn.microsoft.com/en-us/rest/api/storageservices/understanding-block-blobs--append-blobs--and-page-blobs>`_ . Default: - "BLOCK"
+        :param cmk_secret_config: Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+        :param custom_secret_config: Specifies configuration information for a customer-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
         :param subdirectory: Specifies path segments if you want to limit your transfer to a virtual directory in your container (for example, ``/my/images`` ).
         :param tags: Specifies labels that help you categorize, filter, and search for your AWS resources. We recommend creating at least a name tag for your transfer location.
 
@@ -809,16 +1085,24 @@ class CfnLocationAzureBlobProps:
             from aws_cdk import aws_datasync as datasync
             
             cfn_location_azure_blob_props = datasync.CfnLocationAzureBlobProps(
-                agent_arns=["agentArns"],
                 azure_blob_authentication_type="azureBlobAuthenticationType",
             
                 # the properties below are optional
+                agent_arns=["agentArns"],
                 azure_access_tier="azureAccessTier",
                 azure_blob_container_url="azureBlobContainerUrl",
                 azure_blob_sas_configuration=datasync.CfnLocationAzureBlob.AzureBlobSasConfigurationProperty(
                     azure_blob_sas_token="azureBlobSasToken"
                 ),
                 azure_blob_type="azureBlobType",
+                cmk_secret_config=datasync.CfnLocationAzureBlob.CmkSecretConfigProperty(
+                    kms_key_arn="kmsKeyArn",
+                    secret_arn="secretArn"
+                ),
+                custom_secret_config=datasync.CfnLocationAzureBlob.CustomSecretConfigProperty(
+                    secret_access_role_arn="secretAccessRoleArn",
+                    secret_arn="secretArn"
+                ),
                 subdirectory="subdirectory",
                 tags=[CfnTag(
                     key="key",
@@ -828,18 +1112,21 @@ class CfnLocationAzureBlobProps:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d386b9f5845962fa66385393ccc6424f66b9aee312fecdc96fe3ec242f754bf1)
-            check_type(argname="argument agent_arns", value=agent_arns, expected_type=type_hints["agent_arns"])
             check_type(argname="argument azure_blob_authentication_type", value=azure_blob_authentication_type, expected_type=type_hints["azure_blob_authentication_type"])
+            check_type(argname="argument agent_arns", value=agent_arns, expected_type=type_hints["agent_arns"])
             check_type(argname="argument azure_access_tier", value=azure_access_tier, expected_type=type_hints["azure_access_tier"])
             check_type(argname="argument azure_blob_container_url", value=azure_blob_container_url, expected_type=type_hints["azure_blob_container_url"])
             check_type(argname="argument azure_blob_sas_configuration", value=azure_blob_sas_configuration, expected_type=type_hints["azure_blob_sas_configuration"])
             check_type(argname="argument azure_blob_type", value=azure_blob_type, expected_type=type_hints["azure_blob_type"])
+            check_type(argname="argument cmk_secret_config", value=cmk_secret_config, expected_type=type_hints["cmk_secret_config"])
+            check_type(argname="argument custom_secret_config", value=custom_secret_config, expected_type=type_hints["custom_secret_config"])
             check_type(argname="argument subdirectory", value=subdirectory, expected_type=type_hints["subdirectory"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "agent_arns": agent_arns,
             "azure_blob_authentication_type": azure_blob_authentication_type,
         }
+        if agent_arns is not None:
+            self._values["agent_arns"] = agent_arns
         if azure_access_tier is not None:
             self._values["azure_access_tier"] = azure_access_tier
         if azure_blob_container_url is not None:
@@ -848,22 +1135,14 @@ class CfnLocationAzureBlobProps:
             self._values["azure_blob_sas_configuration"] = azure_blob_sas_configuration
         if azure_blob_type is not None:
             self._values["azure_blob_type"] = azure_blob_type
+        if cmk_secret_config is not None:
+            self._values["cmk_secret_config"] = cmk_secret_config
+        if custom_secret_config is not None:
+            self._values["custom_secret_config"] = custom_secret_config
         if subdirectory is not None:
             self._values["subdirectory"] = subdirectory
         if tags is not None:
             self._values["tags"] = tags
-
-    @builtins.property
-    def agent_arns(self) -> typing.List[builtins.str]:
-        '''Specifies the Amazon Resource Name (ARN) of the DataSync agent that can connect with your Azure Blob Storage container.
-
-        You can specify more than one agent. For more information, see `Using multiple agents for your transfer <https://docs.aws.amazon.com/datasync/latest/userguide/multiple-agents.html>`_ .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationazureblob.html#cfn-datasync-locationazureblob-agentarns
-        '''
-        result = self._values.get("agent_arns")
-        assert result is not None, "Required property 'agent_arns' is missing"
-        return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
     def azure_blob_authentication_type(self) -> builtins.str:
@@ -878,6 +1157,17 @@ class CfnLocationAzureBlobProps:
         result = self._values.get("azure_blob_authentication_type")
         assert result is not None, "Required property 'azure_blob_authentication_type' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def agent_arns(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Specifies the Amazon Resource Name (ARN) of the DataSync agent that can connect with your Azure Blob Storage container.
+
+        You can specify more than one agent. For more information, see `Using multiple agents for your transfer <https://docs.aws.amazon.com/datasync/latest/userguide/multiple-agents.html>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationazureblob.html#cfn-datasync-locationazureblob-agentarns
+        '''
+        result = self._values.get("agent_arns")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def azure_access_tier(self) -> typing.Optional[builtins.str]:
@@ -924,6 +1214,28 @@ class CfnLocationAzureBlobProps:
         '''
         result = self._values.get("azure_blob_type")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def cmk_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.CmkSecretConfigProperty]]:
+        '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationazureblob.html#cfn-datasync-locationazureblob-cmksecretconfig
+        '''
+        result = self._values.get("cmk_secret_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.CmkSecretConfigProperty]], result)
+
+    @builtins.property
+    def custom_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.CustomSecretConfigProperty]]:
+        '''Specifies configuration information for a customer-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationazureblob.html#cfn-datasync-locationazureblob-customsecretconfig
+        '''
+        result = self._values.get("custom_secret_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.CustomSecretConfigProperty]], result)
 
     @builtins.property
     def subdirectory(self) -> typing.Optional[builtins.str]:
@@ -4734,11 +5046,17 @@ class CfnLocationObjectStorage(
         from aws_cdk import aws_datasync as datasync
         
         cfn_location_object_storage = datasync.CfnLocationObjectStorage(self, "MyCfnLocationObjectStorage",
-            agent_arns=["agentArns"],
-        
-            # the properties below are optional
             access_key="accessKey",
+            agent_arns=["agentArns"],
             bucket_name="bucketName",
+            cmk_secret_config=datasync.CfnLocationObjectStorage.CmkSecretConfigProperty(
+                kms_key_arn="kmsKeyArn",
+                secret_arn="secretArn"
+            ),
+            custom_secret_config=datasync.CfnLocationObjectStorage.CustomSecretConfigProperty(
+                secret_access_role_arn="secretAccessRoleArn",
+                secret_arn="secretArn"
+            ),
             secret_key="secretKey",
             server_certificate="serverCertificate",
             server_hostname="serverHostname",
@@ -4757,9 +5075,11 @@ class CfnLocationObjectStorage(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        agent_arns: typing.Sequence[builtins.str],
         access_key: typing.Optional[builtins.str] = None,
+        agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         bucket_name: typing.Optional[builtins.str] = None,
+        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationObjectStorage.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationObjectStorage.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         secret_key: typing.Optional[builtins.str] = None,
         server_certificate: typing.Optional[builtins.str] = None,
         server_hostname: typing.Optional[builtins.str] = None,
@@ -4771,9 +5091,11 @@ class CfnLocationObjectStorage(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param agent_arns: Specifies the Amazon Resource Names (ARNs) of the DataSync agents that can connect with your object storage system.
         :param access_key: Specifies the access key (for example, a user name) if credentials are required to authenticate with the object storage server.
+        :param agent_arns: Specifies the Amazon Resource Names (ARNs) of the DataSync agents that can connect with your object storage system.
         :param bucket_name: Specifies the name of the object storage bucket involved in the transfer.
+        :param cmk_secret_config: Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+        :param custom_secret_config: Specifies configuration information for a customer-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
         :param secret_key: Specifies the secret key (for example, a password) if credentials are required to authenticate with the object storage server.
         :param server_certificate: Specifies a certificate chain for DataSync to authenticate with your object storage system if the system uses a private or self-signed certificate authority (CA). You must specify a single ``.pem`` file with a full certificate chain (for example, ``file:///home/user/.ssh/object_storage_certificates.pem`` ). The certificate chain might include: - The object storage system's certificate - All intermediate certificates (if there are any) - The root certificate of the signing CA You can concatenate your certificates into a ``.pem`` file (which can be up to 32768 bytes before base64 encoding). The following example ``cat`` command creates an ``object_storage_certificates.pem`` file that includes three certificates: ``cat object_server_certificate.pem intermediate_certificate.pem ca_root_certificate.pem > object_storage_certificates.pem`` To use this parameter, configure ``ServerProtocol`` to ``HTTPS`` .
         :param server_hostname: Specifies the domain name or IP version 4 (IPv4) address of the object storage server that your DataSync agent connects to.
@@ -4787,9 +5109,11 @@ class CfnLocationObjectStorage(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnLocationObjectStorageProps(
-            agent_arns=agent_arns,
             access_key=access_key,
+            agent_arns=agent_arns,
             bucket_name=bucket_name,
+            cmk_secret_config=cmk_secret_config,
+            custom_secret_config=custom_secret_config,
             secret_key=secret_key,
             server_certificate=server_certificate,
             server_hostname=server_hostname,
@@ -4832,6 +5156,15 @@ class CfnLocationObjectStorage(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrCmkSecretConfigSecretArn")
+    def attr_cmk_secret_config_secret_arn(self) -> builtins.str:
+        '''Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+
+        :cloudformationAttribute: CmkSecretConfig.SecretArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCmkSecretConfigSecretArn"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrLocationArn")
     def attr_location_arn(self) -> builtins.str:
         '''The Amazon Resource Name (ARN) of the specified object storage location.
@@ -4850,6 +5183,17 @@ class CfnLocationObjectStorage(
         return typing.cast(builtins.str, jsii.get(self, "attrLocationUri"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrManagedSecretConfig")
+    def attr_managed_secret_config(self) -> _IResolvable_da3f097b:
+        '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location.
+
+        DataSync uses the default AWS-managed KMS key to encrypt this secret in AWS Secrets Manager.
+
+        :cloudformationAttribute: ManagedSecretConfig
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrManagedSecretConfig"))
+
+    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
@@ -4859,19 +5203,6 @@ class CfnLocationObjectStorage(
     def tags(self) -> _TagManager_0a598cb3:
         '''Tag Manager which manages the tags for this resource.'''
         return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
-
-    @builtins.property
-    @jsii.member(jsii_name="agentArns")
-    def agent_arns(self) -> typing.List[builtins.str]:
-        '''Specifies the Amazon Resource Names (ARNs) of the DataSync agents that can connect with your object storage system.'''
-        return typing.cast(typing.List[builtins.str], jsii.get(self, "agentArns"))
-
-    @agent_arns.setter
-    def agent_arns(self, value: typing.List[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__af42e226779e989fe6f4a4e7403f44c0a7f4048f3185f2bd0fdbbe0f191363ec)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "agentArns", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="accessKey")
@@ -4887,6 +5218,19 @@ class CfnLocationObjectStorage(
         jsii.set(self, "accessKey", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="agentArns")
+    def agent_arns(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Specifies the Amazon Resource Names (ARNs) of the DataSync agents that can connect with your object storage system.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "agentArns"))
+
+    @agent_arns.setter
+    def agent_arns(self, value: typing.Optional[typing.List[builtins.str]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__af42e226779e989fe6f4a4e7403f44c0a7f4048f3185f2bd0fdbbe0f191363ec)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "agentArns", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="bucketName")
     def bucket_name(self) -> typing.Optional[builtins.str]:
         '''Specifies the name of the object storage bucket involved in the transfer.'''
@@ -4898,6 +5242,42 @@ class CfnLocationObjectStorage(
             type_hints = typing.get_type_hints(_typecheckingstub__daf6330b6613abe7771487991e7b16db5686e2242ecdbb63f4ef7e946766b4ad)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "bucketName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="cmkSecretConfig")
+    def cmk_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CmkSecretConfigProperty"]]:
+        '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CmkSecretConfigProperty"]], jsii.get(self, "cmkSecretConfig"))
+
+    @cmk_secret_config.setter
+    def cmk_secret_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CmkSecretConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__750d7a103b8b00f0ab06ca1128b92bb839b2b91e71e5a388ec467dacd0fb58b6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "cmkSecretConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="customSecretConfig")
+    def custom_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CustomSecretConfigProperty"]]:
+        '''Specifies configuration information for a customer-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CustomSecretConfigProperty"]], jsii.get(self, "customSecretConfig"))
+
+    @custom_secret_config.setter
+    def custom_secret_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CustomSecretConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f8e807a4053a1cf75e73e9841ea082806de0e3097bc4b377492cf4268c03a8c5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "customSecretConfig", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="secretKey")
@@ -4990,14 +5370,216 @@ class CfnLocationObjectStorage(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datasync.CfnLocationObjectStorage.CmkSecretConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"kms_key_arn": "kmsKeyArn", "secret_arn": "secretArn"},
+    )
+    class CmkSecretConfigProperty:
+        def __init__(
+            self,
+            *,
+            kms_key_arn: typing.Optional[builtins.str] = None,
+            secret_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+
+            :param kms_key_arn: Specifies the ARN for the customer-managed AWS KMS key used to encrypt the secret specified for SecretArn. DataSync provides this key to AWS Secrets Manager.
+            :param secret_arn: Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationobjectstorage-cmksecretconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datasync as datasync
+                
+                cmk_secret_config_property = datasync.CfnLocationObjectStorage.CmkSecretConfigProperty(
+                    kms_key_arn="kmsKeyArn",
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__86e020e5a613eca69f847ddcabf398915f10f12953f8b4391e961243da06c955)
+                check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if kms_key_arn is not None:
+                self._values["kms_key_arn"] = kms_key_arn
+            if secret_arn is not None:
+                self._values["secret_arn"] = secret_arn
+
+        @builtins.property
+        def kms_key_arn(self) -> typing.Optional[builtins.str]:
+            '''Specifies the ARN for the customer-managed AWS KMS key used to encrypt the secret specified for SecretArn.
+
+            DataSync provides this key to AWS Secrets Manager.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationobjectstorage-cmksecretconfig.html#cfn-datasync-locationobjectstorage-cmksecretconfig-kmskeyarn
+            '''
+            result = self._values.get("kms_key_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def secret_arn(self) -> typing.Optional[builtins.str]:
+            '''Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationobjectstorage-cmksecretconfig.html#cfn-datasync-locationobjectstorage-cmksecretconfig-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CmkSecretConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datasync.CfnLocationObjectStorage.CustomSecretConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "secret_access_role_arn": "secretAccessRoleArn",
+            "secret_arn": "secretArn",
+        },
+    )
+    class CustomSecretConfigProperty:
+        def __init__(
+            self,
+            *,
+            secret_access_role_arn: builtins.str,
+            secret_arn: builtins.str,
+        ) -> None:
+            '''Specifies configuration information for a customer-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
+
+            :param secret_access_role_arn: Specifies the ARN for the AWS Identity and Access Management role that DataSync uses to access the secret specified for SecretArn.
+            :param secret_arn: Specifies the ARN for a customer created AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationobjectstorage-customsecretconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datasync as datasync
+                
+                custom_secret_config_property = datasync.CfnLocationObjectStorage.CustomSecretConfigProperty(
+                    secret_access_role_arn="secretAccessRoleArn",
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__630b549b792c8efcdd58178e432579f521d2a86cc91c662fd9c77d74c4293cb8)
+                check_type(argname="argument secret_access_role_arn", value=secret_access_role_arn, expected_type=type_hints["secret_access_role_arn"])
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "secret_access_role_arn": secret_access_role_arn,
+                "secret_arn": secret_arn,
+            }
+
+        @builtins.property
+        def secret_access_role_arn(self) -> builtins.str:
+            '''Specifies the ARN for the AWS Identity and Access Management role that DataSync uses to access the secret specified for SecretArn.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationobjectstorage-customsecretconfig.html#cfn-datasync-locationobjectstorage-customsecretconfig-secretaccessrolearn
+            '''
+            result = self._values.get("secret_access_role_arn")
+            assert result is not None, "Required property 'secret_access_role_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def secret_arn(self) -> builtins.str:
+            '''Specifies the ARN for a customer created AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationobjectstorage-customsecretconfig.html#cfn-datasync-locationobjectstorage-customsecretconfig-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            assert result is not None, "Required property 'secret_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CustomSecretConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datasync.CfnLocationObjectStorage.ManagedSecretConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"secret_arn": "secretArn"},
+    )
+    class ManagedSecretConfigProperty:
+        def __init__(self, *, secret_arn: builtins.str) -> None:
+            '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location.
+
+            DataSync uses the default AWS-managed KMS key to encrypt this secret in AWS Secrets Manager.
+
+            :param secret_arn: Specifies the ARN for an AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationobjectstorage-managedsecretconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datasync as datasync
+                
+                managed_secret_config_property = datasync.CfnLocationObjectStorage.ManagedSecretConfigProperty(
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__65c61b34a40852805ad1d8c34da183c741fa3a1957daae2b986eb1a616335549)
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "secret_arn": secret_arn,
+            }
+
+        @builtins.property
+        def secret_arn(self) -> builtins.str:
+            '''Specifies the ARN for an AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationobjectstorage-managedsecretconfig.html#cfn-datasync-locationobjectstorage-managedsecretconfig-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            assert result is not None, "Required property 'secret_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ManagedSecretConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_datasync.CfnLocationObjectStorageProps",
     jsii_struct_bases=[],
     name_mapping={
-        "agent_arns": "agentArns",
         "access_key": "accessKey",
+        "agent_arns": "agentArns",
         "bucket_name": "bucketName",
+        "cmk_secret_config": "cmkSecretConfig",
+        "custom_secret_config": "customSecretConfig",
         "secret_key": "secretKey",
         "server_certificate": "serverCertificate",
         "server_hostname": "serverHostname",
@@ -5011,9 +5593,11 @@ class CfnLocationObjectStorageProps:
     def __init__(
         self,
         *,
-        agent_arns: typing.Sequence[builtins.str],
         access_key: typing.Optional[builtins.str] = None,
+        agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         bucket_name: typing.Optional[builtins.str] = None,
+        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationObjectStorage.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationObjectStorage.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         secret_key: typing.Optional[builtins.str] = None,
         server_certificate: typing.Optional[builtins.str] = None,
         server_hostname: typing.Optional[builtins.str] = None,
@@ -5024,9 +5608,11 @@ class CfnLocationObjectStorageProps:
     ) -> None:
         '''Properties for defining a ``CfnLocationObjectStorage``.
 
-        :param agent_arns: Specifies the Amazon Resource Names (ARNs) of the DataSync agents that can connect with your object storage system.
         :param access_key: Specifies the access key (for example, a user name) if credentials are required to authenticate with the object storage server.
+        :param agent_arns: Specifies the Amazon Resource Names (ARNs) of the DataSync agents that can connect with your object storage system.
         :param bucket_name: Specifies the name of the object storage bucket involved in the transfer.
+        :param cmk_secret_config: Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+        :param custom_secret_config: Specifies configuration information for a customer-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
         :param secret_key: Specifies the secret key (for example, a password) if credentials are required to authenticate with the object storage server.
         :param server_certificate: Specifies a certificate chain for DataSync to authenticate with your object storage system if the system uses a private or self-signed certificate authority (CA). You must specify a single ``.pem`` file with a full certificate chain (for example, ``file:///home/user/.ssh/object_storage_certificates.pem`` ). The certificate chain might include: - The object storage system's certificate - All intermediate certificates (if there are any) - The root certificate of the signing CA You can concatenate your certificates into a ``.pem`` file (which can be up to 32768 bytes before base64 encoding). The following example ``cat`` command creates an ``object_storage_certificates.pem`` file that includes three certificates: ``cat object_server_certificate.pem intermediate_certificate.pem ca_root_certificate.pem > object_storage_certificates.pem`` To use this parameter, configure ``ServerProtocol`` to ``HTTPS`` .
         :param server_hostname: Specifies the domain name or IP version 4 (IPv4) address of the object storage server that your DataSync agent connects to.
@@ -5045,11 +5631,17 @@ class CfnLocationObjectStorageProps:
             from aws_cdk import aws_datasync as datasync
             
             cfn_location_object_storage_props = datasync.CfnLocationObjectStorageProps(
-                agent_arns=["agentArns"],
-            
-                # the properties below are optional
                 access_key="accessKey",
+                agent_arns=["agentArns"],
                 bucket_name="bucketName",
+                cmk_secret_config=datasync.CfnLocationObjectStorage.CmkSecretConfigProperty(
+                    kms_key_arn="kmsKeyArn",
+                    secret_arn="secretArn"
+                ),
+                custom_secret_config=datasync.CfnLocationObjectStorage.CustomSecretConfigProperty(
+                    secret_access_role_arn="secretAccessRoleArn",
+                    secret_arn="secretArn"
+                ),
                 secret_key="secretKey",
                 server_certificate="serverCertificate",
                 server_hostname="serverHostname",
@@ -5064,9 +5656,11 @@ class CfnLocationObjectStorageProps:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d542a26da4e93d9d103e234c98ed367d8b6bea7d295017a32de5525e1ec22b45)
-            check_type(argname="argument agent_arns", value=agent_arns, expected_type=type_hints["agent_arns"])
             check_type(argname="argument access_key", value=access_key, expected_type=type_hints["access_key"])
+            check_type(argname="argument agent_arns", value=agent_arns, expected_type=type_hints["agent_arns"])
             check_type(argname="argument bucket_name", value=bucket_name, expected_type=type_hints["bucket_name"])
+            check_type(argname="argument cmk_secret_config", value=cmk_secret_config, expected_type=type_hints["cmk_secret_config"])
+            check_type(argname="argument custom_secret_config", value=custom_secret_config, expected_type=type_hints["custom_secret_config"])
             check_type(argname="argument secret_key", value=secret_key, expected_type=type_hints["secret_key"])
             check_type(argname="argument server_certificate", value=server_certificate, expected_type=type_hints["server_certificate"])
             check_type(argname="argument server_hostname", value=server_hostname, expected_type=type_hints["server_hostname"])
@@ -5074,13 +5668,17 @@ class CfnLocationObjectStorageProps:
             check_type(argname="argument server_protocol", value=server_protocol, expected_type=type_hints["server_protocol"])
             check_type(argname="argument subdirectory", value=subdirectory, expected_type=type_hints["subdirectory"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "agent_arns": agent_arns,
-        }
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
         if access_key is not None:
             self._values["access_key"] = access_key
+        if agent_arns is not None:
+            self._values["agent_arns"] = agent_arns
         if bucket_name is not None:
             self._values["bucket_name"] = bucket_name
+        if cmk_secret_config is not None:
+            self._values["cmk_secret_config"] = cmk_secret_config
+        if custom_secret_config is not None:
+            self._values["custom_secret_config"] = custom_secret_config
         if secret_key is not None:
             self._values["secret_key"] = secret_key
         if server_certificate is not None:
@@ -5097,16 +5695,6 @@ class CfnLocationObjectStorageProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def agent_arns(self) -> typing.List[builtins.str]:
-        '''Specifies the Amazon Resource Names (ARNs) of the DataSync agents that can connect with your object storage system.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationobjectstorage.html#cfn-datasync-locationobjectstorage-agentarns
-        '''
-        result = self._values.get("agent_arns")
-        assert result is not None, "Required property 'agent_arns' is missing"
-        return typing.cast(typing.List[builtins.str], result)
-
-    @builtins.property
     def access_key(self) -> typing.Optional[builtins.str]:
         '''Specifies the access key (for example, a user name) if credentials are required to authenticate with the object storage server.
 
@@ -5116,6 +5704,15 @@ class CfnLocationObjectStorageProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def agent_arns(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Specifies the Amazon Resource Names (ARNs) of the DataSync agents that can connect with your object storage system.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationobjectstorage.html#cfn-datasync-locationobjectstorage-agentarns
+        '''
+        result = self._values.get("agent_arns")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
     def bucket_name(self) -> typing.Optional[builtins.str]:
         '''Specifies the name of the object storage bucket involved in the transfer.
 
@@ -5123,6 +5720,28 @@ class CfnLocationObjectStorageProps:
         '''
         result = self._values.get("bucket_name")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def cmk_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationObjectStorage.CmkSecretConfigProperty]]:
+        '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationobjectstorage.html#cfn-datasync-locationobjectstorage-cmksecretconfig
+        '''
+        result = self._values.get("cmk_secret_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationObjectStorage.CmkSecretConfigProperty]], result)
+
+    @builtins.property
+    def custom_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationObjectStorage.CustomSecretConfigProperty]]:
+        '''Specifies configuration information for a customer-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationobjectstorage.html#cfn-datasync-locationobjectstorage-customsecretconfig
+        '''
+        result = self._values.get("custom_secret_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationObjectStorage.CustomSecretConfigProperty]], result)
 
     @builtins.property
     def secret_key(self) -> typing.Optional[builtins.str]:
@@ -6324,557 +6943,6 @@ class CfnLocationSMBProps:
 
     def __repr__(self) -> str:
         return "CfnLocationSMBProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, _ITaggable_36806126)
-class CfnStorageSystem(
-    _CfnResource_9df397a6,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_datasync.CfnStorageSystem",
-):
-    '''http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html.
-
-    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html
-    :cloudformationResource: AWS::DataSync::StorageSystem
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_datasync as datasync
-        
-        cfn_storage_system = datasync.CfnStorageSystem(self, "MyCfnStorageSystem",
-            agent_arns=["agentArns"],
-            server_configuration=datasync.CfnStorageSystem.ServerConfigurationProperty(
-                server_hostname="serverHostname",
-        
-                # the properties below are optional
-                server_port=123
-            ),
-            system_type="systemType",
-        
-            # the properties below are optional
-            cloud_watch_log_group_arn="cloudWatchLogGroupArn",
-            name="name",
-            server_credentials=datasync.CfnStorageSystem.ServerCredentialsProperty(
-                password="password",
-                username="username"
-            ),
-            tags=[CfnTag(
-                key="key",
-                value="value"
-            )]
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        agent_arns: typing.Sequence[builtins.str],
-        server_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageSystem.ServerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        system_type: builtins.str,
-        cloud_watch_log_group_arn: typing.Optional[builtins.str] = None,
-        name: typing.Optional[builtins.str] = None,
-        server_credentials: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageSystem.ServerCredentialsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''
-        :param scope: Scope in which this resource is defined.
-        :param id: Construct identifier for this resource (unique in its scope).
-        :param agent_arns: 
-        :param server_configuration: 
-        :param system_type: 
-        :param cloud_watch_log_group_arn: 
-        :param name: 
-        :param server_credentials: 
-        :param tags: 
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__cd03aea3d03c00385e272f326dc093d0575219e3eac09a9f89062f9453a9360f)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnStorageSystemProps(
-            agent_arns=agent_arns,
-            server_configuration=server_configuration,
-            system_type=system_type,
-            cloud_watch_log_group_arn=cloud_watch_log_group_arn,
-            name=name,
-            server_credentials=server_credentials,
-            tags=tags,
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
-        '''Examines the CloudFormation resource and discloses attributes.
-
-        :param inspector: tree inspector to collect and process attributes.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9d30237b704bab23311aad893ff50107b6fc1840c11f7ab06f9fd41ffce46d0d)
-            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
-        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
-
-    @jsii.member(jsii_name="renderProperties")
-    def _render_properties(
-        self,
-        props: typing.Mapping[builtins.str, typing.Any],
-    ) -> typing.Mapping[builtins.str, typing.Any]:
-        '''
-        :param props: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__81b9c192e8b33247af58d9ec7498864f379be5476b6c0a2aeb98684bc257c348)
-            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
-    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
-        '''The CloudFormation resource type name for this resource class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrConnectivityStatus")
-    def attr_connectivity_status(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: ConnectivityStatus
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrConnectivityStatus"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrSecretsManagerArn")
-    def attr_secrets_manager_arn(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: SecretsManagerArn
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrSecretsManagerArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrStorageSystemArn")
-    def attr_storage_system_arn(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: StorageSystemArn
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrStorageSystemArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cfnProperties")
-    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
-        '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
-
-    @builtins.property
-    @jsii.member(jsii_name="agentArns")
-    def agent_arns(self) -> typing.List[builtins.str]:
-        return typing.cast(typing.List[builtins.str], jsii.get(self, "agentArns"))
-
-    @agent_arns.setter
-    def agent_arns(self, value: typing.List[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__91c1b3e5cd2d7dd98537d8ad2c7deae28f00b5d6d23089b99cb0768ef5ca4d7f)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "agentArns", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="serverConfiguration")
-    def server_configuration(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnStorageSystem.ServerConfigurationProperty"]:
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnStorageSystem.ServerConfigurationProperty"], jsii.get(self, "serverConfiguration"))
-
-    @server_configuration.setter
-    def server_configuration(
-        self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnStorageSystem.ServerConfigurationProperty"],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__81366a44879ecfffc2cf1020a13667d2ef18466bde35cc8a36864bab3668086b)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "serverConfiguration", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="systemType")
-    def system_type(self) -> builtins.str:
-        return typing.cast(builtins.str, jsii.get(self, "systemType"))
-
-    @system_type.setter
-    def system_type(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1ac346e347fbe1b4d60467d3562a6b070e1ed3e50a18844309f094f5f94cb7f6)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "systemType", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="cloudWatchLogGroupArn")
-    def cloud_watch_log_group_arn(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "cloudWatchLogGroupArn"))
-
-    @cloud_watch_log_group_arn.setter
-    def cloud_watch_log_group_arn(self, value: typing.Optional[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e8cf99420b818e4ec735e8ef96836c7c265a5bb74331a73d84e9fc56a6321299)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "cloudWatchLogGroupArn", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="name")
-    def name(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
-
-    @name.setter
-    def name(self, value: typing.Optional[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__764666a950d4d83875874f1d9312ef4c5d98748fc51fe8f1dc9c8cf696e4e0bd)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="serverCredentials")
-    def server_credentials(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageSystem.ServerCredentialsProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageSystem.ServerCredentialsProperty"]], jsii.get(self, "serverCredentials"))
-
-    @server_credentials.setter
-    def server_credentials(
-        self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageSystem.ServerCredentialsProperty"]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2f52a2f2a6197dee934b3eaad41d0b7cc429e508ed4c3d4437b45f339ffd8712)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "serverCredentials", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
-
-    @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__3f06b57402f5a745b22a5a454fa8563a935276c499111bb78103406214b07c52)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_datasync.CfnStorageSystem.ServerConfigurationProperty",
-        jsii_struct_bases=[],
-        name_mapping={
-            "server_hostname": "serverHostname",
-            "server_port": "serverPort",
-        },
-    )
-    class ServerConfigurationProperty:
-        def __init__(
-            self,
-            *,
-            server_hostname: builtins.str,
-            server_port: typing.Optional[jsii.Number] = None,
-        ) -> None:
-            '''
-            :param server_hostname: 
-            :param server_port: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-serverconfiguration.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_datasync as datasync
-                
-                server_configuration_property = datasync.CfnStorageSystem.ServerConfigurationProperty(
-                    server_hostname="serverHostname",
-                
-                    # the properties below are optional
-                    server_port=123
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__0b2d9d38924c8714fdacccf65a04ce2f4670647a35b1330abeacb71b09b32c66)
-                check_type(argname="argument server_hostname", value=server_hostname, expected_type=type_hints["server_hostname"])
-                check_type(argname="argument server_port", value=server_port, expected_type=type_hints["server_port"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "server_hostname": server_hostname,
-            }
-            if server_port is not None:
-                self._values["server_port"] = server_port
-
-        @builtins.property
-        def server_hostname(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-serverconfiguration.html#cfn-datasync-storagesystem-serverconfiguration-serverhostname
-            '''
-            result = self._values.get("server_hostname")
-            assert result is not None, "Required property 'server_hostname' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def server_port(self) -> typing.Optional[jsii.Number]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-serverconfiguration.html#cfn-datasync-storagesystem-serverconfiguration-serverport
-            '''
-            result = self._values.get("server_port")
-            return typing.cast(typing.Optional[jsii.Number], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "ServerConfigurationProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_datasync.CfnStorageSystem.ServerCredentialsProperty",
-        jsii_struct_bases=[],
-        name_mapping={"password": "password", "username": "username"},
-    )
-    class ServerCredentialsProperty:
-        def __init__(self, *, password: builtins.str, username: builtins.str) -> None:
-            '''
-            :param password: 
-            :param username: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-servercredentials.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_datasync as datasync
-                
-                server_credentials_property = datasync.CfnStorageSystem.ServerCredentialsProperty(
-                    password="password",
-                    username="username"
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__4aca605fb52bb6e32c26164545155c20da0e4d47eff8787d0c19d543d3f0f293)
-                check_type(argname="argument password", value=password, expected_type=type_hints["password"])
-                check_type(argname="argument username", value=username, expected_type=type_hints["username"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "password": password,
-                "username": username,
-            }
-
-        @builtins.property
-        def password(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-servercredentials.html#cfn-datasync-storagesystem-servercredentials-password
-            '''
-            result = self._values.get("password")
-            assert result is not None, "Required property 'password' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def username(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-storagesystem-servercredentials.html#cfn-datasync-storagesystem-servercredentials-username
-            '''
-            result = self._values.get("username")
-            assert result is not None, "Required property 'username' is missing"
-            return typing.cast(builtins.str, result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "ServerCredentialsProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_datasync.CfnStorageSystemProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "agent_arns": "agentArns",
-        "server_configuration": "serverConfiguration",
-        "system_type": "systemType",
-        "cloud_watch_log_group_arn": "cloudWatchLogGroupArn",
-        "name": "name",
-        "server_credentials": "serverCredentials",
-        "tags": "tags",
-    },
-)
-class CfnStorageSystemProps:
-    def __init__(
-        self,
-        *,
-        agent_arns: typing.Sequence[builtins.str],
-        server_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageSystem.ServerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-        system_type: builtins.str,
-        cloud_watch_log_group_arn: typing.Optional[builtins.str] = None,
-        name: typing.Optional[builtins.str] = None,
-        server_credentials: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageSystem.ServerCredentialsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnStorageSystem``.
-
-        :param agent_arns: 
-        :param server_configuration: 
-        :param system_type: 
-        :param cloud_watch_log_group_arn: 
-        :param name: 
-        :param server_credentials: 
-        :param tags: 
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_datasync as datasync
-            
-            cfn_storage_system_props = datasync.CfnStorageSystemProps(
-                agent_arns=["agentArns"],
-                server_configuration=datasync.CfnStorageSystem.ServerConfigurationProperty(
-                    server_hostname="serverHostname",
-            
-                    # the properties below are optional
-                    server_port=123
-                ),
-                system_type="systemType",
-            
-                # the properties below are optional
-                cloud_watch_log_group_arn="cloudWatchLogGroupArn",
-                name="name",
-                server_credentials=datasync.CfnStorageSystem.ServerCredentialsProperty(
-                    password="password",
-                    username="username"
-                ),
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b07c9f88707493efc0c6204abeacfb93dcb4bfdc339feb06b9cedb3c14e549a6)
-            check_type(argname="argument agent_arns", value=agent_arns, expected_type=type_hints["agent_arns"])
-            check_type(argname="argument server_configuration", value=server_configuration, expected_type=type_hints["server_configuration"])
-            check_type(argname="argument system_type", value=system_type, expected_type=type_hints["system_type"])
-            check_type(argname="argument cloud_watch_log_group_arn", value=cloud_watch_log_group_arn, expected_type=type_hints["cloud_watch_log_group_arn"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument server_credentials", value=server_credentials, expected_type=type_hints["server_credentials"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "agent_arns": agent_arns,
-            "server_configuration": server_configuration,
-            "system_type": system_type,
-        }
-        if cloud_watch_log_group_arn is not None:
-            self._values["cloud_watch_log_group_arn"] = cloud_watch_log_group_arn
-        if name is not None:
-            self._values["name"] = name
-        if server_credentials is not None:
-            self._values["server_credentials"] = server_credentials
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def agent_arns(self) -> typing.List[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-agentarns
-        '''
-        result = self._values.get("agent_arns")
-        assert result is not None, "Required property 'agent_arns' is missing"
-        return typing.cast(typing.List[builtins.str], result)
-
-    @builtins.property
-    def server_configuration(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnStorageSystem.ServerConfigurationProperty]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-serverconfiguration
-        '''
-        result = self._values.get("server_configuration")
-        assert result is not None, "Required property 'server_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnStorageSystem.ServerConfigurationProperty], result)
-
-    @builtins.property
-    def system_type(self) -> builtins.str:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-systemtype
-        '''
-        result = self._values.get("system_type")
-        assert result is not None, "Required property 'system_type' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def cloud_watch_log_group_arn(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-cloudwatchloggrouparn
-        '''
-        result = self._values.get("cloud_watch_log_group_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def server_credentials(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStorageSystem.ServerCredentialsProperty]]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-servercredentials
-        '''
-        result = self._values.get("server_credentials")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStorageSystem.ServerCredentialsProperty]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-storagesystem.html#cfn-datasync-storagesystem-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnStorageSystemProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -9186,8 +9254,6 @@ __all__ = [
     "CfnLocationS3Props",
     "CfnLocationSMB",
     "CfnLocationSMBProps",
-    "CfnStorageSystem",
-    "CfnStorageSystemProps",
     "CfnTask",
     "CfnTaskProps",
 ]
@@ -9272,12 +9338,14 @@ def _typecheckingstub__2a49f57a1ab4813b1537b04053be19b99e3fa8f143f30fac9d1bc72ca
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    agent_arns: typing.Sequence[builtins.str],
     azure_blob_authentication_type: builtins.str,
+    agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     azure_access_tier: typing.Optional[builtins.str] = None,
     azure_blob_container_url: typing.Optional[builtins.str] = None,
     azure_blob_sas_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.AzureBlobSasConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     azure_blob_type: typing.Optional[builtins.str] = None,
+    cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     subdirectory: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -9296,14 +9364,14 @@ def _typecheckingstub__ebde5c22aa68229dea3796deaf496ab61b9ffcfdf6d4f56a59875e604
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__04d94ab53395a58893ca5e5668d51e78b5d567de304ebc1b3c8937ab5824c459(
-    value: typing.List[builtins.str],
+def _typecheckingstub__d66037c88c30360a6dbdeedf60b7cdd8b0d971ae11fb4944eb61af92fe413080(
+    value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__d66037c88c30360a6dbdeedf60b7cdd8b0d971ae11fb4944eb61af92fe413080(
-    value: builtins.str,
+def _typecheckingstub__04d94ab53395a58893ca5e5668d51e78b5d567de304ebc1b3c8937ab5824c459(
+    value: typing.Optional[typing.List[builtins.str]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9332,6 +9400,18 @@ def _typecheckingstub__e74328b40eb55d86e422d5f30530d28f29d1393792015d7646eb06c88
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bbe60c9e1409294412076468854254983957a988d2e0d53f2fa73767e4a48525(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.CmkSecretConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3276084bb32edc8f06759cb50268fc7821cd740602d985f3b1b967d5267f90dc(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.CustomSecretConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__861788b0a9a32f402ab93793acdec22ae6bb15d217371b8ba36d7cb8ba33fc6b(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -9351,14 +9431,39 @@ def _typecheckingstub__3b97bd3f13ec4166f121eb8229b7a3322702a4782d767aca2fc1323e9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d03d5287185c3e65174404788128d96c2205212b3aa189dc5803a4b4b4b8ab36(
+    *,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+    secret_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0b2d06a0f90feb2e23667a772b3c70d85bf30ee5c9bef02d35fd7339fdffaf93(
+    *,
+    secret_access_role_arn: builtins.str,
+    secret_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8ed16453ba6567e90e7b3e0e37a7206cf71efddb64e1cca1af96064be80c9609(
+    *,
+    secret_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d386b9f5845962fa66385393ccc6424f66b9aee312fecdc96fe3ec242f754bf1(
     *,
-    agent_arns: typing.Sequence[builtins.str],
     azure_blob_authentication_type: builtins.str,
+    agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     azure_access_tier: typing.Optional[builtins.str] = None,
     azure_blob_container_url: typing.Optional[builtins.str] = None,
     azure_blob_sas_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.AzureBlobSasConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     azure_blob_type: typing.Optional[builtins.str] = None,
+    cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     subdirectory: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -10017,9 +10122,11 @@ def _typecheckingstub__6afc4365b2246b057f5b97e5d62cc10a54cff3be74dae8a9bb184f54b
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    agent_arns: typing.Sequence[builtins.str],
     access_key: typing.Optional[builtins.str] = None,
+    agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     bucket_name: typing.Optional[builtins.str] = None,
+    cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationObjectStorage.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationObjectStorage.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     secret_key: typing.Optional[builtins.str] = None,
     server_certificate: typing.Optional[builtins.str] = None,
     server_hostname: typing.Optional[builtins.str] = None,
@@ -10043,20 +10150,32 @@ def _typecheckingstub__1891041f95311e30edfb4c440a05c41fa9ad1fb130ed42400500c5785
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__af42e226779e989fe6f4a4e7403f44c0a7f4048f3185f2bd0fdbbe0f191363ec(
-    value: typing.List[builtins.str],
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__5bab62678e3c33f0a6edfb878fe17304321977ba3655bb45d3504aa54de9dadc(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__af42e226779e989fe6f4a4e7403f44c0a7f4048f3185f2bd0fdbbe0f191363ec(
+    value: typing.Optional[typing.List[builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__daf6330b6613abe7771487991e7b16db5686e2242ecdbb63f4ef7e946766b4ad(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__750d7a103b8b00f0ab06ca1128b92bb839b2b91e71e5a388ec467dacd0fb58b6(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationObjectStorage.CmkSecretConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f8e807a4053a1cf75e73e9841ea082806de0e3097bc4b377492cf4268c03a8c5(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationObjectStorage.CustomSecretConfigProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10103,11 +10222,36 @@ def _typecheckingstub__4c7a3d48757bffde04fd1015e50d6672207d2522eec04091eebdb3ac1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__86e020e5a613eca69f847ddcabf398915f10f12953f8b4391e961243da06c955(
+    *,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+    secret_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__630b549b792c8efcdd58178e432579f521d2a86cc91c662fd9c77d74c4293cb8(
+    *,
+    secret_access_role_arn: builtins.str,
+    secret_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__65c61b34a40852805ad1d8c34da183c741fa3a1957daae2b986eb1a616335549(
+    *,
+    secret_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d542a26da4e93d9d103e234c98ed367d8b6bea7d295017a32de5525e1ec22b45(
     *,
-    agent_arns: typing.Sequence[builtins.str],
     access_key: typing.Optional[builtins.str] = None,
+    agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     bucket_name: typing.Optional[builtins.str] = None,
+    cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationObjectStorage.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationObjectStorage.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     secret_key: typing.Optional[builtins.str] = None,
     server_certificate: typing.Optional[builtins.str] = None,
     server_hostname: typing.Optional[builtins.str] = None,
@@ -10325,104 +10469,6 @@ def _typecheckingstub__b20670d7cb18baa1155ccc397df310282442d51b95170ab568e5c0a9c
     subdirectory: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__cd03aea3d03c00385e272f326dc093d0575219e3eac09a9f89062f9453a9360f(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    agent_arns: typing.Sequence[builtins.str],
-    server_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageSystem.ServerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-    system_type: builtins.str,
-    cloud_watch_log_group_arn: typing.Optional[builtins.str] = None,
-    name: typing.Optional[builtins.str] = None,
-    server_credentials: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageSystem.ServerCredentialsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__9d30237b704bab23311aad893ff50107b6fc1840c11f7ab06f9fd41ffce46d0d(
-    inspector: _TreeInspector_488e0dd5,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__81b9c192e8b33247af58d9ec7498864f379be5476b6c0a2aeb98684bc257c348(
-    props: typing.Mapping[builtins.str, typing.Any],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__91c1b3e5cd2d7dd98537d8ad2c7deae28f00b5d6d23089b99cb0768ef5ca4d7f(
-    value: typing.List[builtins.str],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__81366a44879ecfffc2cf1020a13667d2ef18466bde35cc8a36864bab3668086b(
-    value: typing.Union[_IResolvable_da3f097b, CfnStorageSystem.ServerConfigurationProperty],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__1ac346e347fbe1b4d60467d3562a6b070e1ed3e50a18844309f094f5f94cb7f6(
-    value: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__e8cf99420b818e4ec735e8ef96836c7c265a5bb74331a73d84e9fc56a6321299(
-    value: typing.Optional[builtins.str],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__764666a950d4d83875874f1d9312ef4c5d98748fc51fe8f1dc9c8cf696e4e0bd(
-    value: typing.Optional[builtins.str],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__2f52a2f2a6197dee934b3eaad41d0b7cc429e508ed4c3d4437b45f339ffd8712(
-    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStorageSystem.ServerCredentialsProperty]],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__3f06b57402f5a745b22a5a454fa8563a935276c499111bb78103406214b07c52(
-    value: typing.Optional[typing.List[_CfnTag_f6864754]],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__0b2d9d38924c8714fdacccf65a04ce2f4670647a35b1330abeacb71b09b32c66(
-    *,
-    server_hostname: builtins.str,
-    server_port: typing.Optional[jsii.Number] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__4aca605fb52bb6e32c26164545155c20da0e4d47eff8787d0c19d543d3f0f293(
-    *,
-    password: builtins.str,
-    username: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b07c9f88707493efc0c6204abeacfb93dcb4bfdc339feb06b9cedb3c14e549a6(
-    *,
-    agent_arns: typing.Sequence[builtins.str],
-    server_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageSystem.ServerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-    system_type: builtins.str,
-    cloud_watch_log_group_arn: typing.Optional[builtins.str] = None,
-    name: typing.Optional[builtins.str] = None,
-    server_credentials: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageSystem.ServerCredentialsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

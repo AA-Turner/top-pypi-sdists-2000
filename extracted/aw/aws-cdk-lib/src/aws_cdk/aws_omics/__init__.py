@@ -3316,7 +3316,16 @@ class CfnWorkflowVersion(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersion",
 ):
-    '''Definition of AWS::Omics::WorkflowVersion Resource Type.
+    '''Creates a new workflow version for the workflow that you specify with the ``workflowId`` parameter.
+
+    When you create a new version of a workflow, you need to specify the configuration for the new version. It doesn't inherit any configuration values from the workflow.
+
+    Provide a version name that is unique for this workflow. You cannot change the name after HealthOmics creates the version.
+    .. epigraph::
+
+       Don’t include any personally identifiable information (PII) in the version name. Version names appear in the workflow version ARN.
+
+    For more information, see `Workflow versioning in AWS HealthOmics <https://docs.aws.amazon.com/omics/latest/dev/workflow-versions.html>`_ in the AWS HealthOmics User Guide.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html
     :cloudformationResource: AWS::Omics::WorkflowVersion
@@ -3374,11 +3383,11 @@ class CfnWorkflowVersion(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param version_name: 
-        :param workflow_id: 
+        :param version_name: The name of the workflow version.
+        :param workflow_id: The workflow's ID.
         :param accelerators: 
         :param definition_uri: 
-        :param description: 
+        :param description: The description of the workflow version.
         :param engine: 
         :param main: 
         :param parameter_template: 
@@ -3441,7 +3450,8 @@ class CfnWorkflowVersion(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''
+        '''ARN of the workflow version.
+
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
@@ -3449,7 +3459,8 @@ class CfnWorkflowVersion(
     @builtins.property
     @jsii.member(jsii_name="attrCreationTime")
     def attr_creation_time(self) -> builtins.str:
-        '''
+        '''The creation time of the workflow version.
+
         :cloudformationAttribute: CreationTime
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrCreationTime"))
@@ -3457,7 +3468,8 @@ class CfnWorkflowVersion(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''
+        '''The status of the workflow version.
+
         :cloudformationAttribute: Status
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
@@ -3465,7 +3477,8 @@ class CfnWorkflowVersion(
     @builtins.property
     @jsii.member(jsii_name="attrType")
     def attr_type(self) -> builtins.str:
-        '''
+        '''The type of the workflow version.
+
         :cloudformationAttribute: Type
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrType"))
@@ -3492,6 +3505,7 @@ class CfnWorkflowVersion(
     @builtins.property
     @jsii.member(jsii_name="versionName")
     def version_name(self) -> builtins.str:
+        '''The name of the workflow version.'''
         return typing.cast(builtins.str, jsii.get(self, "versionName"))
 
     @version_name.setter
@@ -3504,6 +3518,7 @@ class CfnWorkflowVersion(
     @builtins.property
     @jsii.member(jsii_name="workflowId")
     def workflow_id(self) -> builtins.str:
+        '''The workflow's ID.'''
         return typing.cast(builtins.str, jsii.get(self, "workflowId"))
 
     @workflow_id.setter
@@ -3540,6 +3555,7 @@ class CfnWorkflowVersion(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
+        '''The description of the workflow version.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -3654,9 +3670,10 @@ class CfnWorkflowVersion(
             description: typing.Optional[builtins.str] = None,
             optional: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ) -> None:
-            '''
-            :param description: 
-            :param optional: 
+            '''A workflow parameter.
+
+            :param description: The parameter's description.
+            :param optional: Whether the parameter is optional.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-workflowparameter.html
             :exampleMetadata: fixture=_generated
@@ -3684,7 +3701,8 @@ class CfnWorkflowVersion(
 
         @builtins.property
         def description(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The parameter's description.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-workflowparameter.html#cfn-omics-workflowversion-workflowparameter-description
             '''
             result = self._values.get("description")
@@ -3694,7 +3712,8 @@ class CfnWorkflowVersion(
         def optional(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''
+            '''Whether the parameter is optional.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-workflowparameter.html#cfn-omics-workflowversion-workflowparameter-optional
             '''
             result = self._values.get("optional")
@@ -3749,11 +3768,11 @@ class CfnWorkflowVersionProps:
     ) -> None:
         '''Properties for defining a ``CfnWorkflowVersion``.
 
-        :param version_name: 
-        :param workflow_id: 
+        :param version_name: The name of the workflow version.
+        :param workflow_id: The workflow's ID.
         :param accelerators: 
         :param definition_uri: 
-        :param description: 
+        :param description: The description of the workflow version.
         :param engine: 
         :param main: 
         :param parameter_template: 
@@ -3836,7 +3855,8 @@ class CfnWorkflowVersionProps:
 
     @builtins.property
     def version_name(self) -> builtins.str:
-        '''
+        '''The name of the workflow version.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-versionname
         '''
         result = self._values.get("version_name")
@@ -3845,7 +3865,8 @@ class CfnWorkflowVersionProps:
 
     @builtins.property
     def workflow_id(self) -> builtins.str:
-        '''
+        '''The workflow's ID.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-workflowid
         '''
         result = self._values.get("workflow_id")
@@ -3870,7 +3891,8 @@ class CfnWorkflowVersionProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The description of the workflow version.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-description
         '''
         result = self._values.get("description")

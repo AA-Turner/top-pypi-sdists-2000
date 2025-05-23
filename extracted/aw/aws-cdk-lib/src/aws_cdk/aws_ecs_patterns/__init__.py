@@ -1598,7 +1598,7 @@ class ApplicationLoadBalancedServiceBase(
         :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
         :param public_load_balancer: Determines whether the Load Balancer will be internet-facing. Default: true
         :param record_type: Specifies whether the Route53 record should be a CNAME, an A record using the Alias feature or no record at all. This is useful if you need to work with DNS systems that do not support alias records. Default: ApplicationLoadBalancedServiceRecordType.ALIAS
-        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to port 443 to support HTTP->HTTPS redirects This is only valid if the protocol of the ALB is HTTPS. Default: false
+        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to the {@link listenerPort} to support HTTP->HTTPS redirects. This is only valid if the protocol of the ALB is HTTPS. Default: false
         :param service_name: The name of the service. Default: - CloudFormation-generated name.
         :param ssl_policy: The security policy that defines which ciphers and protocols are supported by the ALB Listener. Default: - The recommended elastic load balancing security policy
         :param target_protocol: The protocol for connections from the load balancer to the ECS tasks. The default target port is determined from the protocol (port 80 for HTTP, port 443 for HTTPS). Default: HTTP.
@@ -1837,7 +1837,7 @@ class ApplicationLoadBalancedServiceBaseProps:
         :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
         :param public_load_balancer: Determines whether the Load Balancer will be internet-facing. Default: true
         :param record_type: Specifies whether the Route53 record should be a CNAME, an A record using the Alias feature or no record at all. This is useful if you need to work with DNS systems that do not support alias records. Default: ApplicationLoadBalancedServiceRecordType.ALIAS
-        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to port 443 to support HTTP->HTTPS redirects This is only valid if the protocol of the ALB is HTTPS. Default: false
+        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to the {@link listenerPort} to support HTTP->HTTPS redirects. This is only valid if the protocol of the ALB is HTTPS. Default: false
         :param service_name: The name of the service. Default: - CloudFormation-generated name.
         :param ssl_policy: The security policy that defines which ciphers and protocols are supported by the ALB Listener. Default: - The recommended elastic load balancing security policy
         :param target_protocol: The protocol for connections from the load balancer to the ECS tasks. The default target port is determined from the protocol (port 80 for HTTP, port 443 for HTTPS). Default: HTTP.
@@ -2327,7 +2327,9 @@ class ApplicationLoadBalancedServiceBaseProps:
 
     @builtins.property
     def redirect_http(self) -> typing.Optional[builtins.bool]:
-        '''Specifies whether the load balancer should redirect traffic on port 80 to port 443 to support HTTP->HTTPS redirects This is only valid if the protocol of the ALB is HTTPS.
+        '''Specifies whether the load balancer should redirect traffic on port 80 to the {@link listenerPort} to support HTTP->HTTPS redirects.
+
+        This is only valid if the protocol of the ALB is HTTPS.
 
         :default: false
         '''
@@ -7613,7 +7615,7 @@ class ApplicationLoadBalancedEc2Service(
         :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
         :param public_load_balancer: Determines whether the Load Balancer will be internet-facing. Default: true
         :param record_type: Specifies whether the Route53 record should be a CNAME, an A record using the Alias feature or no record at all. This is useful if you need to work with DNS systems that do not support alias records. Default: ApplicationLoadBalancedServiceRecordType.ALIAS
-        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to port 443 to support HTTP->HTTPS redirects This is only valid if the protocol of the ALB is HTTPS. Default: false
+        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to the {@link listenerPort} to support HTTP->HTTPS redirects. This is only valid if the protocol of the ALB is HTTPS. Default: false
         :param service_name: The name of the service. Default: - CloudFormation-generated name.
         :param ssl_policy: The security policy that defines which ciphers and protocols are supported by the ALB Listener. Default: - The recommended elastic load balancing security policy
         :param target_protocol: The protocol for connections from the load balancer to the ECS tasks. The default target port is determined from the protocol (port 80 for HTTP, port 443 for HTTPS). Default: HTTP.
@@ -7791,7 +7793,7 @@ class ApplicationLoadBalancedEc2ServiceProps(ApplicationLoadBalancedServiceBaseP
         :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
         :param public_load_balancer: Determines whether the Load Balancer will be internet-facing. Default: true
         :param record_type: Specifies whether the Route53 record should be a CNAME, an A record using the Alias feature or no record at all. This is useful if you need to work with DNS systems that do not support alias records. Default: ApplicationLoadBalancedServiceRecordType.ALIAS
-        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to port 443 to support HTTP->HTTPS redirects This is only valid if the protocol of the ALB is HTTPS. Default: false
+        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to the {@link listenerPort} to support HTTP->HTTPS redirects. This is only valid if the protocol of the ALB is HTTPS. Default: false
         :param service_name: The name of the service. Default: - CloudFormation-generated name.
         :param ssl_policy: The security policy that defines which ciphers and protocols are supported by the ALB Listener. Default: - The recommended elastic load balancing security policy
         :param target_protocol: The protocol for connections from the load balancer to the ECS tasks. The default target port is determined from the protocol (port 80 for HTTP, port 443 for HTTPS). Default: HTTP.
@@ -8222,7 +8224,9 @@ class ApplicationLoadBalancedEc2ServiceProps(ApplicationLoadBalancedServiceBaseP
 
     @builtins.property
     def redirect_http(self) -> typing.Optional[builtins.bool]:
-        '''Specifies whether the load balancer should redirect traffic on port 80 to port 443 to support HTTP->HTTPS redirects This is only valid if the protocol of the ALB is HTTPS.
+        '''Specifies whether the load balancer should redirect traffic on port 80 to the {@link listenerPort} to support HTTP->HTTPS redirects.
+
+        This is only valid if the protocol of the ALB is HTTPS.
 
         :default: false
         '''
@@ -8509,7 +8513,7 @@ class ApplicationLoadBalancedFargateService(
         :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
         :param public_load_balancer: Determines whether the Load Balancer will be internet-facing. Default: true
         :param record_type: Specifies whether the Route53 record should be a CNAME, an A record using the Alias feature or no record at all. This is useful if you need to work with DNS systems that do not support alias records. Default: ApplicationLoadBalancedServiceRecordType.ALIAS
-        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to port 443 to support HTTP->HTTPS redirects This is only valid if the protocol of the ALB is HTTPS. Default: false
+        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to the {@link listenerPort} to support HTTP->HTTPS redirects. This is only valid if the protocol of the ALB is HTTPS. Default: false
         :param service_name: The name of the service. Default: - CloudFormation-generated name.
         :param ssl_policy: The security policy that defines which ciphers and protocols are supported by the ALB Listener. Default: - The recommended elastic load balancing security policy
         :param target_protocol: The protocol for connections from the load balancer to the ECS tasks. The default target port is determined from the protocol (port 80 for HTTP, port 443 for HTTPS). Default: HTTP.
@@ -8728,7 +8732,7 @@ class ApplicationLoadBalancedFargateServiceProps(
         :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
         :param public_load_balancer: Determines whether the Load Balancer will be internet-facing. Default: true
         :param record_type: Specifies whether the Route53 record should be a CNAME, an A record using the Alias feature or no record at all. This is useful if you need to work with DNS systems that do not support alias records. Default: ApplicationLoadBalancedServiceRecordType.ALIAS
-        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to port 443 to support HTTP->HTTPS redirects This is only valid if the protocol of the ALB is HTTPS. Default: false
+        :param redirect_http: Specifies whether the load balancer should redirect traffic on port 80 to the {@link listenerPort} to support HTTP->HTTPS redirects. This is only valid if the protocol of the ALB is HTTPS. Default: false
         :param service_name: The name of the service. Default: - CloudFormation-generated name.
         :param ssl_policy: The security policy that defines which ciphers and protocols are supported by the ALB Listener. Default: - The recommended elastic load balancing security policy
         :param target_protocol: The protocol for connections from the load balancer to the ECS tasks. The default target port is determined from the protocol (port 80 for HTTP, port 443 for HTTPS). Default: HTTP.
@@ -9197,7 +9201,9 @@ class ApplicationLoadBalancedFargateServiceProps(
 
     @builtins.property
     def redirect_http(self) -> typing.Optional[builtins.bool]:
-        '''Specifies whether the load balancer should redirect traffic on port 80 to port 443 to support HTTP->HTTPS redirects This is only valid if the protocol of the ALB is HTTPS.
+        '''Specifies whether the load balancer should redirect traffic on port 80 to the {@link listenerPort} to support HTTP->HTTPS redirects.
+
+        This is only valid if the protocol of the ALB is HTTPS.
 
         :default: false
         '''

@@ -1467,8 +1467,8 @@ class CfnTrustAnchor(
         def __init__(
             self,
             *,
-            source_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrustAnchor.SourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            source_type: typing.Optional[builtins.str] = None,
+            source_data: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrustAnchor.SourceDataProperty", typing.Dict[builtins.str, typing.Any]]],
+            source_type: builtins.str,
         ) -> None:
             '''Object representing the TrustAnchor type and its related certificate data.
 
@@ -1496,31 +1496,32 @@ class CfnTrustAnchor(
                 type_hints = typing.get_type_hints(_typecheckingstub__d423be7ff47fcc8761e7797ad37aac03811962bc633d561f5c9c8721dd3e77df)
                 check_type(argname="argument source_data", value=source_data, expected_type=type_hints["source_data"])
                 check_type(argname="argument source_type", value=source_type, expected_type=type_hints["source_type"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {}
-            if source_data is not None:
-                self._values["source_data"] = source_data
-            if source_type is not None:
-                self._values["source_type"] = source_type
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "source_data": source_data,
+                "source_type": source_type,
+            }
 
         @builtins.property
         def source_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.SourceDataProperty"]]:
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.SourceDataProperty"]:
             '''A union object representing the data field of the TrustAnchor depending on its type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rolesanywhere-trustanchor-source.html#cfn-rolesanywhere-trustanchor-source-sourcedata
             '''
             result = self._values.get("source_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.SourceDataProperty"]], result)
+            assert result is not None, "Required property 'source_data' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.SourceDataProperty"], result)
 
         @builtins.property
-        def source_type(self) -> typing.Optional[builtins.str]:
+        def source_type(self) -> builtins.str:
             '''The type of the TrustAnchor.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rolesanywhere-trustanchor-source.html#cfn-rolesanywhere-trustanchor-source-sourcetype
             '''
             result = self._values.get("source_type")
-            return typing.cast(typing.Optional[builtins.str], result)
+            assert result is not None, "Required property 'source_type' is missing"
+            return typing.cast(builtins.str, result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1954,8 +1955,8 @@ def _typecheckingstub__aa369b3cbba73a987e4f4a9a410e56c8fdd5c7ce2300cda6a55e4ec9a
 
 def _typecheckingstub__d423be7ff47fcc8761e7797ad37aac03811962bc633d561f5c9c8721dd3e77df(
     *,
-    source_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustAnchor.SourceDataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    source_type: typing.Optional[builtins.str] = None,
+    source_data: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustAnchor.SourceDataProperty, typing.Dict[builtins.str, typing.Any]]],
+    source_type: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

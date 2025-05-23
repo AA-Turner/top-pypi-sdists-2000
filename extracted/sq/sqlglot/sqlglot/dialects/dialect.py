@@ -239,7 +239,7 @@ class _Dialect(type):
         if enum not in ("", "bigquery"):
             klass.generator_class.SELECT_KINDS = ()
 
-        if enum not in ("", "athena", "presto", "trino"):
+        if enum not in ("", "athena", "presto", "trino", "duckdb"):
             klass.generator_class.TRY_SUPPORTED = False
             klass.generator_class.SUPPORTS_UESCAPE = False
 
@@ -788,6 +788,9 @@ class Dialect(metaclass=_Dialect):
         exp.Unnest: lambda self, e: self._annotate_unnest(e),
         exp.VarMap: lambda self, e: self._annotate_map(e),
     }
+
+    # Specifies what types a given type can be coerced into
+    COERCES_TO: t.Dict[exp.DataType.Type, t.Set[exp.DataType.Type]] = {}
 
     @classmethod
     def get_or_raise(cls, dialect: DialectType) -> Dialect:

@@ -9431,14 +9431,6 @@ class CfnDBInstance(
         return typing.cast(builtins.str, jsii.get(self, "attrCertificateDetailsValidTill"))
 
     @builtins.property
-    @jsii.member(jsii_name="attrDatabaseInsightsMode")
-    def attr_database_insights_mode(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: DatabaseInsightsMode
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrDatabaseInsightsMode"))
-
-    @builtins.property
     @jsii.member(jsii_name="attrDbInstanceArn")
     def attr_db_instance_arn(self) -> builtins.str:
         '''The Amazon Resource Name (ARN) for the DB instance.
@@ -31969,7 +31961,12 @@ class MariaDbEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_10_4")
     def VER_10_4(cls) -> "MariaDbEngineVersion":
-        '''Version "10.4" (only a major version, without a specific minor version).'''
+        '''(deprecated) Version "10.4" (only a major version, without a specific minor version).
+
+        :deprecated: MariaDB 10.4 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_4"))
 
     @jsii.python.classproperty
@@ -32074,37 +32071,67 @@ class MariaDbEngineVersion(
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_10_4_29")
     def VER_10_4_29(cls) -> "MariaDbEngineVersion":
-        '''Version "10.4.29".'''
+        '''(deprecated) Version "10.4.29".
+
+        :deprecated: MariaDB 10.4.29 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_4_29"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_10_4_30")
     def VER_10_4_30(cls) -> "MariaDbEngineVersion":
-        '''Version "10.4.30".'''
+        '''(deprecated) Version "10.4.30".
+
+        :deprecated: MariaDB 10.4.30 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_4_30"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_10_4_31")
     def VER_10_4_31(cls) -> "MariaDbEngineVersion":
-        '''Version "10.4.31".'''
+        '''(deprecated) Version "10.4.31".
+
+        :deprecated: MariaDB 10.4.31 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_4_31"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_10_4_32")
     def VER_10_4_32(cls) -> "MariaDbEngineVersion":
-        '''Version "10.4.32".'''
+        '''(deprecated) Version "10.4.32".
+
+        :deprecated: MariaDB 10.4.32 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_4_32"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_10_4_33")
     def VER_10_4_33(cls) -> "MariaDbEngineVersion":
-        '''Version "10.4.33".'''
+        '''(deprecated) Version "10.4.33".
+
+        :deprecated: MariaDB 10.4.33 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_4_33"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_10_4_34")
     def VER_10_4_34(cls) -> "MariaDbEngineVersion":
-        '''Version "10.4.34".'''
+        '''(deprecated) Version "10.4.34".
+
+        :deprecated: MariaDB 10.4.34 is no longer supported by Amazon RDS.
+
+        :stability: deprecated
+        '''
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_4_34"))
 
     @jsii.python.classproperty

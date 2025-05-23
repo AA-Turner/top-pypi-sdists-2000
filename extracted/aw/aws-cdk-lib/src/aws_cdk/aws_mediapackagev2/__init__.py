@@ -201,7 +201,7 @@ class CfnChannel(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedAt")
     def attr_created_at(self) -> builtins.str:
-        '''The timestamp of the ccreation of the channel.
+        '''The timestamp of the creation of the channel.
 
         :cloudformationAttribute: CreatedAt
         '''
@@ -540,7 +540,7 @@ class CfnChannelGroup(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_mediapackagev2.CfnChannelGroup",
 ):
-    '''Specifies the configuraiton for a MediaPackage V2 channel group.
+    '''Specifies the configuration for a MediaPackage V2 channel group.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-channelgroup.html
     :cloudformationResource: AWS::MediaPackageV2::ChannelGroup
@@ -1374,7 +1374,7 @@ class CfnOriginEndpoint(
         :param dash_manifests: A DASH manifest configuration.
         :param description: The description associated with the origin endpoint.
         :param force_endpoint_error_configuration: The failover settings for the endpoint.
-        :param hls_manifests: The HLS manfiests associated with the origin endpoint configuration.
+        :param hls_manifests: The HLS manifests associated with the origin endpoint configuration.
         :param low_latency_hls_manifests: The low-latency HLS (LL-HLS) manifests associated with the origin endpoint.
         :param segment: The segment associated with the origin endpoint.
         :param startover_window_seconds: The size of the window (in seconds) to specify a window of the live stream that's available for on-demand viewing. Viewers can start-over or catch-up on content that falls within the window.
@@ -1599,7 +1599,7 @@ class CfnOriginEndpoint(
     def hls_manifests(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.HlsManifestConfigurationProperty"]]]]:
-        '''The HLS manfiests associated with the origin endpoint configuration.'''
+        '''The HLS manifests associated with the origin endpoint configuration.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.HlsManifestConfigurationProperty"]]]], jsii.get(self, "hlsManifests"))
 
     @hls_manifests.setter
@@ -1707,7 +1707,8 @@ class CfnOriginEndpoint(
             suggested_presentation_delay_seconds: typing.Optional[jsii.Number] = None,
             utc_timing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.DashUtcTimingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
+            '''The DASH manifest configuration associated with the origin endpoint.
+
             :param manifest_name:  The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, index.
             :param drm_signaling: 
             :param filter_configuration:  
@@ -2493,7 +2494,7 @@ class CfnOriginEndpoint(
             url: typing.Optional[builtins.str] = None,
             url_encode_child_manifest: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ) -> None:
-            '''The HLS manfiest configuration associated with the origin endpoint.
+            '''The HLS manifest configuration associated with the origin endpoint.
 
             :param manifest_name: The name of the manifest associated with the HLS manifest configuration.
             :param child_manifest_name: The name of the child manifest associated with the HLS manifest configuration.
@@ -2706,7 +2707,7 @@ class CfnOriginEndpoint(
         ) -> None:
             '''Specify a low-latency HTTP live streaming (LL-HLS) manifest configuration.
 
-            :param manifest_name: A short short string that's appended to the endpoint URL. The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, ``index`` . MediaPackage automatically inserts the format extension, such as ``.m3u8`` . You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The ``manifestName`` on the ``HLSManifest`` object overrides the ``manifestName`` you provided on the ``originEndpoint`` object.
+            :param manifest_name: A short string that's appended to the endpoint URL. The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, ``index`` . MediaPackage automatically inserts the format extension, such as ``.m3u8`` . You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The ``manifestName`` on the ``HLSManifest`` object overrides the ``manifestName`` you provided on the ``originEndpoint`` object.
             :param child_manifest_name: The name of the child manifest associated with the low-latency HLS (LL-HLS) manifest configuration of the origin endpoint.
             :param filter_configuration:  
             :param manifest_window_seconds: The total duration (in seconds) of the manifest's content.
@@ -2785,7 +2786,7 @@ class CfnOriginEndpoint(
 
         @builtins.property
         def manifest_name(self) -> builtins.str:
-            '''A short short string that's appended to the endpoint URL.
+            '''A short string that's appended to the endpoint URL.
 
             The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, ``index`` . MediaPackage automatically inserts the format extension, such as ``.m3u8`` . You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The ``manifestName`` on the ``HLSManifest`` object overrides the ``manifestName`` you provided on the ``originEndpoint`` object.
 
@@ -3765,7 +3766,7 @@ class CfnOriginEndpointProps:
         :param dash_manifests: A DASH manifest configuration.
         :param description: The description associated with the origin endpoint.
         :param force_endpoint_error_configuration: The failover settings for the endpoint.
-        :param hls_manifests: The HLS manfiests associated with the origin endpoint configuration.
+        :param hls_manifests: The HLS manifests associated with the origin endpoint configuration.
         :param low_latency_hls_manifests: The low-latency HLS (LL-HLS) manifests associated with the origin endpoint.
         :param segment: The segment associated with the origin endpoint.
         :param startover_window_seconds: The size of the window (in seconds) to specify a window of the live stream that's available for on-demand viewing. Viewers can start-over or catch-up on content that falls within the window.
@@ -4018,7 +4019,7 @@ class CfnOriginEndpointProps:
     def hls_manifests(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.HlsManifestConfigurationProperty]]]]:
-        '''The HLS manfiests associated with the origin endpoint configuration.
+        '''The HLS manifests associated with the origin endpoint configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-originendpoint.html#cfn-mediapackagev2-originendpoint-hlsmanifests
         '''

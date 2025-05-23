@@ -3879,6 +3879,18 @@ class CfnScalingPolicy(
 
             When returned in the output of ``DescribePolicies`` , it indicates that a predictive scaling policy uses individually specified load and scaling metrics instead of a metric pair.
 
+            The following predefined metrics are available for predictive scaling:
+
+            - ``ECSServiceAverageCPUUtilization``
+            - ``ECSServiceAverageMemoryUtilization``
+            - ``ECSServiceCPUUtilization``
+            - ``ECSServiceMemoryUtilization``
+            - ``ECSServiceTotalCPUUtilization``
+            - ``ECSServiceTotalMemoryUtilization``
+            - ``ALBRequestCount``
+            - ``ALBRequestCountPerTarget``
+            - ``TotalALBRequestCount``
+
             :param predefined_metric_type: The metric type.
             :param resource_label: A label that uniquely identifies a target group.
 
@@ -3954,6 +3966,18 @@ class CfnScalingPolicy(
             resource_label: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Represents a metric pair for a predictive scaling policy.
+
+            The following predefined metrics are available for predictive scaling:
+
+            - ``ECSServiceAverageCPUUtilization``
+            - ``ECSServiceAverageMemoryUtilization``
+            - ``ECSServiceCPUUtilization``
+            - ``ECSServiceMemoryUtilization``
+            - ``ECSServiceTotalCPUUtilization``
+            - ``ECSServiceTotalMemoryUtilization``
+            - ``ALBRequestCount``
+            - ``ALBRequestCountPerTarget``
+            - ``TotalALBRequestCount``
 
             :param predefined_metric_type: Indicates which metrics to use. There are two different types of metrics for each metric type: one is a load metric and one is a scaling metric.
             :param resource_label: A label that uniquely identifies a specific target group from which to determine the total and average request count.
@@ -4034,6 +4058,18 @@ class CfnScalingPolicy(
             '''Describes a scaling metric for a predictive scaling policy.
 
             When returned in the output of ``DescribePolicies`` , it indicates that a predictive scaling policy uses individually specified load and scaling metrics instead of a metric pair.
+
+            The following predefined metrics are available for predictive scaling:
+
+            - ``ECSServiceAverageCPUUtilization``
+            - ``ECSServiceAverageMemoryUtilization``
+            - ``ECSServiceCPUUtilization``
+            - ``ECSServiceMemoryUtilization``
+            - ``ECSServiceTotalCPUUtilization``
+            - ``ECSServiceTotalMemoryUtilization``
+            - ``ALBRequestCount``
+            - ``ALBRequestCountPerTarget``
+            - ``TotalALBRequestCount``
 
             :param predefined_metric_type: The metric type.
             :param resource_label: A label that uniquely identifies a specific target group from which to determine the average request count.

@@ -202,6 +202,8 @@ class CfnApp(
     def attr_built_in_lifecycle_config_arn(self) -> builtins.str:
         '''The lifecycle configuration that runs before the default lifecycle configuration.
 
+        It can override changes made in the default lifecycle configuration.
+
         :cloudformationAttribute: BuiltInLifecycleConfigArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrBuiltInLifecycleConfigArn"))
@@ -6830,7 +6832,7 @@ class CfnDomain(
             For more information about Code Editor, see `Get started with Code Editor in Amazon SageMaker <https://docs.aws.amazon.com/sagemaker/latest/dg/code-editor.html>`_ .
 
             :param app_lifecycle_management: Settings that are used to configure and manage the lifecycle of CodeEditor applications.
-            :param built_in_lifecycle_config_arn: The lifecycle configuration that runs before the default lifecycle configuration.
+            :param built_in_lifecycle_config_arn: The lifecycle configuration that runs before the default lifecycle configuration. It can override changes made in the default lifecycle configuration.
             :param custom_images: A list of custom SageMaker images that are configured to run as a Code Editor app.
             :param default_resource_spec: The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the Code Editor app.
             :param lifecycle_config_arns: The Amazon Resource Name (ARN) of the Code Editor application lifecycle configuration.
@@ -6903,6 +6905,8 @@ class CfnDomain(
         @builtins.property
         def built_in_lifecycle_config_arn(self) -> typing.Optional[builtins.str]:
             '''The lifecycle configuration that runs before the default lifecycle configuration.
+
+            It can override changes made in the default lifecycle configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-domain-codeeditorappsettings.html#cfn-sagemaker-domain-codeeditorappsettings-builtinlifecycleconfigarn
             '''
@@ -8018,9 +8022,12 @@ class CfnDomain(
             sage_maker_image_name: typing.Optional[builtins.str] = None,
             version_aliases: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
-            '''
+            '''The SageMaker images that are hidden from the Studio user interface.
+
+            You must specify the SageMaker image name and version aliases.
+
             :param sage_maker_image_name: The SageMaker image name that you are hiding from the Studio user interface.
-            :param version_aliases: 
+            :param version_aliases: The version aliases you are hiding from the Studio user interface.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-domain-hiddensagemakerimage.html
             :exampleMetadata: fixture=_generated
@@ -8057,7 +8064,8 @@ class CfnDomain(
 
         @builtins.property
         def version_aliases(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The version aliases you are hiding from the Studio user interface.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-domain-hiddensagemakerimage.html#cfn-sagemaker-domain-hiddensagemakerimage-versionaliases
             '''
             result = self._values.get("version_aliases")
@@ -8205,7 +8213,7 @@ class CfnDomain(
             '''The settings for the JupyterLab application.
 
             :param app_lifecycle_management: Indicates whether idle shutdown is activated for JupyterLab applications.
-            :param built_in_lifecycle_config_arn: The lifecycle configuration that runs before the default lifecycle configuration.
+            :param built_in_lifecycle_config_arn: The lifecycle configuration that runs before the default lifecycle configuration. It can override changes made in the default lifecycle configuration.
             :param code_repositories: A list of Git repositories that SageMaker automatically displays to users for cloning in the JupyterLab application.
             :param custom_images: A list of custom SageMaker images that are configured to run as a JupyterLab app.
             :param default_resource_spec: The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the JupyterLab app.
@@ -8285,6 +8293,8 @@ class CfnDomain(
         @builtins.property
         def built_in_lifecycle_config_arn(self) -> typing.Optional[builtins.str]:
             '''The lifecycle configuration that runs before the default lifecycle configuration.
+
+            It can override changes made in the default lifecycle configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-domain-jupyterlabappsettings.html#cfn-sagemaker-domain-jupyterlabappsettings-builtinlifecycleconfigarn
             '''
@@ -9196,7 +9206,7 @@ class CfnDomain(
             ``SecurityGroups`` is aggregated when specified in both calls. For all other settings in ``UserSettings`` , the values specified in ``CreateUserProfile`` take precedence over those specified in ``CreateDomain`` .
 
             :param execution_role: The execution role for the user. SageMaker applies this setting only to private spaces that the user creates in the domain. SageMaker doesn't apply this setting to shared spaces.
-            :param auto_mount_home_efs: Indicates whether auto-mounting of an EFS volume is supported for the user profile.
+            :param auto_mount_home_efs: Indicates whether auto-mounting of an EFS volume is supported for the user profile. The ``DefaultAsDomain`` value is only supported for user profiles. Do not use the ``DefaultAsDomain`` value when setting this parameter for a domain. SageMaker applies this setting only to private spaces that the user creates in the domain. SageMaker doesn't apply this setting to shared spaces.
             :param code_editor_app_settings: The Code Editor application settings. SageMaker applies these settings only to private spaces that the user creates in the domain. SageMaker doesn't apply these settings to shared spaces.
             :param custom_file_system_configs: The settings for assigning a custom file system to a user profile. Permitted users can access this file system in Amazon SageMaker AI Studio. SageMaker applies these settings only to private spaces that the user creates in the domain. SageMaker doesn't apply these settings to shared spaces.
             :param custom_posix_user_config: Details about the POSIX identity that is used for file system operations. SageMaker applies these settings only to private spaces that the user creates in the domain. SageMaker doesn't apply these settings to shared spaces.
@@ -9433,6 +9443,10 @@ class CfnDomain(
         @builtins.property
         def auto_mount_home_efs(self) -> typing.Optional[builtins.str]:
             '''Indicates whether auto-mounting of an EFS volume is supported for the user profile.
+
+            The ``DefaultAsDomain`` value is only supported for user profiles. Do not use the ``DefaultAsDomain`` value when setting this parameter for a domain.
+
+            SageMaker applies this setting only to private spaces that the user creates in the domain. SageMaker doesn't apply this setting to shared spaces.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-domain-usersettings.html#cfn-sagemaker-domain-usersettings-automounthomeefs
             '''
@@ -46876,7 +46890,7 @@ class CfnUserProfile(
             For more information about Code Editor, see `Get started with Code Editor in Amazon SageMaker <https://docs.aws.amazon.com/sagemaker/latest/dg/code-editor.html>`_ .
 
             :param app_lifecycle_management: Settings that are used to configure and manage the lifecycle of CodeEditor applications.
-            :param built_in_lifecycle_config_arn: The lifecycle configuration that runs before the default lifecycle configuration.
+            :param built_in_lifecycle_config_arn: The lifecycle configuration that runs before the default lifecycle configuration. It can override changes made in the default lifecycle configuration.
             :param custom_images: A list of custom SageMaker images that are configured to run as a Code Editor app.
             :param default_resource_spec: The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the Code Editor app.
             :param lifecycle_config_arns: The Amazon Resource Name (ARN) of the Code Editor application lifecycle configuration.
@@ -46949,6 +46963,8 @@ class CfnUserProfile(
         @builtins.property
         def built_in_lifecycle_config_arn(self) -> typing.Optional[builtins.str]:
             '''The lifecycle configuration that runs before the default lifecycle configuration.
+
+            It can override changes made in the default lifecycle configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-userprofile-codeeditorappsettings.html#cfn-sagemaker-userprofile-codeeditorappsettings-builtinlifecycleconfigarn
             '''
@@ -47605,9 +47621,12 @@ class CfnUserProfile(
             sage_maker_image_name: typing.Optional[builtins.str] = None,
             version_aliases: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
-            '''
+            '''The SageMaker images that are hidden from the Studio user interface.
+
+            You must specify the SageMaker image name and version aliases.
+
             :param sage_maker_image_name: The SageMaker image name that you are hiding from the Studio user interface.
-            :param version_aliases: 
+            :param version_aliases: The version aliases you are hiding from the Studio user interface.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-userprofile-hiddensagemakerimage.html
             :exampleMetadata: fixture=_generated
@@ -47644,7 +47663,8 @@ class CfnUserProfile(
 
         @builtins.property
         def version_aliases(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The version aliases you are hiding from the Studio user interface.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-userprofile-hiddensagemakerimage.html#cfn-sagemaker-userprofile-hiddensagemakerimage-versionaliases
             '''
             result = self._values.get("version_aliases")
@@ -47792,7 +47812,7 @@ class CfnUserProfile(
             '''The settings for the JupyterLab application.
 
             :param app_lifecycle_management: Indicates whether idle shutdown is activated for JupyterLab applications.
-            :param built_in_lifecycle_config_arn: The lifecycle configuration that runs before the default lifecycle configuration.
+            :param built_in_lifecycle_config_arn: The lifecycle configuration that runs before the default lifecycle configuration. It can override changes made in the default lifecycle configuration.
             :param code_repositories: A list of Git repositories that SageMaker automatically displays to users for cloning in the JupyterLab application.
             :param custom_images: A list of custom SageMaker images that are configured to run as a JupyterLab app.
             :param default_resource_spec: The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the JupyterLab app.
@@ -47872,6 +47892,8 @@ class CfnUserProfile(
         @builtins.property
         def built_in_lifecycle_config_arn(self) -> typing.Optional[builtins.str]:
             '''The lifecycle configuration that runs before the default lifecycle configuration.
+
+            It can override changes made in the default lifecycle configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-userprofile-jupyterlabappsettings.html#cfn-sagemaker-userprofile-jupyterlabappsettings-builtinlifecycleconfigarn
             '''
@@ -48577,7 +48599,7 @@ class CfnUserProfile(
 
             ``SecurityGroups`` is aggregated when specified in both calls. For all other settings in ``UserSettings`` , the values specified in ``CreateUserProfile`` take precedence over those specified in ``CreateDomain`` .
 
-            :param auto_mount_home_efs: Indicates whether auto-mounting of an EFS volume is supported for the user profile.
+            :param auto_mount_home_efs: Indicates whether auto-mounting of an EFS volume is supported for the user profile. The ``DefaultAsDomain`` value is only supported for user profiles. Do not use the ``DefaultAsDomain`` value when setting this parameter for a domain. SageMaker applies this setting only to private spaces that the user creates in the domain. SageMaker doesn't apply this setting to shared spaces.
             :param code_editor_app_settings: The Code Editor application settings. SageMaker applies these settings only to private spaces that the user creates in the domain. SageMaker doesn't apply these settings to shared spaces.
             :param custom_file_system_configs: The settings for assigning a custom file system to a user profile. Permitted users can access this file system in Amazon SageMaker AI Studio. SageMaker applies these settings only to private spaces that the user creates in the domain. SageMaker doesn't apply these settings to shared spaces.
             :param custom_posix_user_config: Details about the POSIX identity that is used for file system operations. SageMaker applies these settings only to private spaces that the user creates in the domain. SageMaker doesn't apply these settings to shared spaces.
@@ -48782,6 +48804,10 @@ class CfnUserProfile(
         @builtins.property
         def auto_mount_home_efs(self) -> typing.Optional[builtins.str]:
             '''Indicates whether auto-mounting of an EFS volume is supported for the user profile.
+
+            The ``DefaultAsDomain`` value is only supported for user profiles. Do not use the ``DefaultAsDomain`` value when setting this parameter for a domain.
+
+            SageMaker applies this setting only to private spaces that the user creates in the domain. SageMaker doesn't apply this setting to shared spaces.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-userprofile-usersettings.html#cfn-sagemaker-userprofile-usersettings-automounthomeefs
             '''

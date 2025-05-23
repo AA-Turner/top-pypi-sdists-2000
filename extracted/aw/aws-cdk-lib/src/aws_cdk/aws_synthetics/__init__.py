@@ -1337,7 +1337,10 @@ class CfnCanary(
                 expression="expression",
         
                 # the properties below are optional
-                duration_in_seconds="durationInSeconds"
+                duration_in_seconds="durationInSeconds",
+                retry_config=synthetics.CfnCanary.RetryConfigProperty(
+                    max_retries=123
+                )
             ),
         
             # the properties below are optional
@@ -1348,6 +1351,7 @@ class CfnCanary(
                 )
             ),
             delete_lambda_resources_on_canary_deletion=False,
+            dry_run_and_update=False,
             failure_retention_period=123,
             provisioned_resource_cleanup="provisionedResourceCleanup",
             resources_to_replicate_tags=["resourcesToReplicateTags"],
@@ -1400,6 +1404,7 @@ class CfnCanary(
         schedule: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]],
         artifact_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.ArtifactConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         delete_lambda_resources_on_canary_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        dry_run_and_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         failure_retention_period: typing.Optional[jsii.Number] = None,
         provisioned_resource_cleanup: typing.Optional[builtins.str] = None,
         resources_to_replicate_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -1421,6 +1426,7 @@ class CfnCanary(
         :param schedule: A structure that contains information about how often the canary is to run, and when these runs are to stop.
         :param artifact_config: A structure that contains the configuration for canary artifacts, including the encryption-at-rest settings for artifacts that the canary uploads to Amazon S3.
         :param delete_lambda_resources_on_canary_deletion: (deprecated) Deletes associated lambda resources created by Synthetics if set to True. Default is False
+        :param dry_run_and_update: Setting to control if UpdateCanary will perform a DryRun and validate it is PASSING before performing the Update. Default is FALSE.
         :param failure_retention_period: The number of days to retain data about failed runs of this canary. If you omit this field, the default of 31 days is used. The valid range is 1 to 455 days. This setting affects the range of information returned by `GetCanaryRuns <https://docs.aws.amazon.com/AmazonSynthetics/latest/APIReference/API_GetCanaryRuns.html>`_ , as well as the range of information displayed in the Synthetics console.
         :param provisioned_resource_cleanup: Specifies whether to also delete the Lambda functions and layers used by this canary when the canary is deleted. If it is ``AUTOMATIC`` , the Lambda functions and layers will be deleted when the canary is deleted. If the value of this parameter is ``OFF`` , then the value of the ``DeleteLambda`` parameter of the `DeleteCanary <https://docs.aws.amazon.com/AmazonSynthetics/latest/APIReference/API_DeleteCanary.html>`_ operation determines whether the Lambda functions and layers will be deleted.
         :param resources_to_replicate_tags: To have the tags that you apply to this canary also be applied to the Lambda function that the canary uses, specify this property with the value ``lambda-function`` . If you do this, CloudWatch Synthetics will keep the tags of the canary and the Lambda function synchronized. Any future changes you make to the canary's tags will also be applied to the function.
@@ -1444,6 +1450,7 @@ class CfnCanary(
             schedule=schedule,
             artifact_config=artifact_config,
             delete_lambda_resources_on_canary_deletion=delete_lambda_resources_on_canary_deletion,
+            dry_run_and_update=dry_run_and_update,
             failure_retention_period=failure_retention_period,
             provisioned_resource_cleanup=provisioned_resource_cleanup,
             resources_to_replicate_tags=resources_to_replicate_tags,
@@ -1653,6 +1660,24 @@ class CfnCanary(
             type_hints = typing.get_type_hints(_typecheckingstub__442577c2c36e4274dca25b3d866e1aeec3f4ffc18732e01050131a31f768f2b3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "deleteLambdaResourcesOnCanaryDeletion", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="dryRunAndUpdate")
+    def dry_run_and_update(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Setting to control if UpdateCanary will perform a DryRun and validate it is PASSING before performing the Update.'''
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "dryRunAndUpdate"))
+
+    @dry_run_and_update.setter
+    def dry_run_and_update(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__59860e5fb72da4da1108545c9e0b8f706d34cf83eb363fda05f04cbb14baf1fe)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "dryRunAndUpdate", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="failureRetentionPeriod")
@@ -2090,6 +2115,57 @@ class CfnCanary(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_synthetics.CfnCanary.RetryConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"max_retries": "maxRetries"},
+    )
+    class RetryConfigProperty:
+        def __init__(self, *, max_retries: jsii.Number) -> None:
+            '''
+            :param max_retries: maximum times the canary will be retried upon the scheduled run failure.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-retryconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_synthetics as synthetics
+                
+                retry_config_property = synthetics.CfnCanary.RetryConfigProperty(
+                    max_retries=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e7a2c989ca2c701e49af0e8032c8c49bb52546c68c9e6359df8e7a9f2c4cf9a1)
+                check_type(argname="argument max_retries", value=max_retries, expected_type=type_hints["max_retries"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "max_retries": max_retries,
+            }
+
+        @builtins.property
+        def max_retries(self) -> jsii.Number:
+            '''maximum times the canary will be retried upon the scheduled run failure.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-retryconfig.html#cfn-synthetics-canary-retryconfig-maxretries
+            '''
+            result = self._values.get("max_retries")
+            assert result is not None, "Required property 'max_retries' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RetryConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_synthetics.CfnCanary.RunConfigProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -2300,6 +2376,7 @@ class CfnCanary(
         name_mapping={
             "expression": "expression",
             "duration_in_seconds": "durationInSeconds",
+            "retry_config": "retryConfig",
         },
     )
     class ScheduleProperty:
@@ -2308,11 +2385,13 @@ class CfnCanary(
             *,
             expression: builtins.str,
             duration_in_seconds: typing.Optional[builtins.str] = None,
+            retry_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.RetryConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''This structure specifies how often a canary is to make runs and the date and time when it should stop making runs.
 
             :param expression: A ``rate`` expression or a ``cron`` expression that defines how often the canary is to run. For a rate expression, The syntax is ``rate( *number unit* )`` . *unit* can be ``minute`` , ``minutes`` , or ``hour`` . For example, ``rate(1 minute)`` runs the canary once a minute, ``rate(10 minutes)`` runs it once every 10 minutes, and ``rate(1 hour)`` runs it once every hour. You can specify a frequency between ``rate(1 minute)`` and ``rate(1 hour)`` . Specifying ``rate(0 minute)`` or ``rate(0 hour)`` is a special value that causes the canary to run only once when it is started. Use ``cron( *expression* )`` to specify a cron expression. You can't schedule a canary to wait for more than a year before running. For information about the syntax for cron expressions, see `Scheduling canary runs using cron <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_cron.html>`_ .
             :param duration_in_seconds: How long, in seconds, for the canary to continue making regular runs according to the schedule in the ``Expression`` value. If you specify 0, the canary continues making runs until you stop it. If you omit this field, the default of 0 is used.
+            :param retry_config: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-schedule.html
             :exampleMetadata: fixture=_generated
@@ -2327,18 +2406,24 @@ class CfnCanary(
                     expression="expression",
                 
                     # the properties below are optional
-                    duration_in_seconds="durationInSeconds"
+                    duration_in_seconds="durationInSeconds",
+                    retry_config=synthetics.CfnCanary.RetryConfigProperty(
+                        max_retries=123
+                    )
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__e4999288d0e0c5de04c56a3436208778026602dfdca27710aee93f9f4e034c29)
                 check_type(argname="argument expression", value=expression, expected_type=type_hints["expression"])
                 check_type(argname="argument duration_in_seconds", value=duration_in_seconds, expected_type=type_hints["duration_in_seconds"])
+                check_type(argname="argument retry_config", value=retry_config, expected_type=type_hints["retry_config"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "expression": expression,
             }
             if duration_in_seconds is not None:
                 self._values["duration_in_seconds"] = duration_in_seconds
+            if retry_config is not None:
+                self._values["retry_config"] = retry_config
 
         @builtins.property
         def expression(self) -> builtins.str:
@@ -2368,6 +2453,16 @@ class CfnCanary(
             '''
             result = self._values.get("duration_in_seconds")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def retry_config(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.RetryConfigProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-schedule.html#cfn-synthetics-canary-schedule-retryconfig
+            '''
+            result = self._values.get("retry_config")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.RetryConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2594,6 +2689,7 @@ class CfnCanary(
         "schedule": "schedule",
         "artifact_config": "artifactConfig",
         "delete_lambda_resources_on_canary_deletion": "deleteLambdaResourcesOnCanaryDeletion",
+        "dry_run_and_update": "dryRunAndUpdate",
         "failure_retention_period": "failureRetentionPeriod",
         "provisioned_resource_cleanup": "provisionedResourceCleanup",
         "resources_to_replicate_tags": "resourcesToReplicateTags",
@@ -2617,6 +2713,7 @@ class CfnCanaryProps:
         schedule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]],
         artifact_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ArtifactConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         delete_lambda_resources_on_canary_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        dry_run_and_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         failure_retention_period: typing.Optional[jsii.Number] = None,
         provisioned_resource_cleanup: typing.Optional[builtins.str] = None,
         resources_to_replicate_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -2637,6 +2734,7 @@ class CfnCanaryProps:
         :param schedule: A structure that contains information about how often the canary is to run, and when these runs are to stop.
         :param artifact_config: A structure that contains the configuration for canary artifacts, including the encryption-at-rest settings for artifacts that the canary uploads to Amazon S3.
         :param delete_lambda_resources_on_canary_deletion: (deprecated) Deletes associated lambda resources created by Synthetics if set to True. Default is False
+        :param dry_run_and_update: Setting to control if UpdateCanary will perform a DryRun and validate it is PASSING before performing the Update. Default is FALSE.
         :param failure_retention_period: The number of days to retain data about failed runs of this canary. If you omit this field, the default of 31 days is used. The valid range is 1 to 455 days. This setting affects the range of information returned by `GetCanaryRuns <https://docs.aws.amazon.com/AmazonSynthetics/latest/APIReference/API_GetCanaryRuns.html>`_ , as well as the range of information displayed in the Synthetics console.
         :param provisioned_resource_cleanup: Specifies whether to also delete the Lambda functions and layers used by this canary when the canary is deleted. If it is ``AUTOMATIC`` , the Lambda functions and layers will be deleted when the canary is deleted. If the value of this parameter is ``OFF`` , then the value of the ``DeleteLambda`` parameter of the `DeleteCanary <https://docs.aws.amazon.com/AmazonSynthetics/latest/APIReference/API_DeleteCanary.html>`_ operation determines whether the Lambda functions and layers will be deleted.
         :param resources_to_replicate_tags: To have the tags that you apply to this canary also be applied to the Lambda function that the canary uses, specify this property with the value ``lambda-function`` . If you do this, CloudWatch Synthetics will keep the tags of the canary and the Lambda function synchronized. Any future changes you make to the canary's tags will also be applied to the function.
@@ -2675,7 +2773,10 @@ class CfnCanaryProps:
                     expression="expression",
             
                     # the properties below are optional
-                    duration_in_seconds="durationInSeconds"
+                    duration_in_seconds="durationInSeconds",
+                    retry_config=synthetics.CfnCanary.RetryConfigProperty(
+                        max_retries=123
+                    )
                 ),
             
                 # the properties below are optional
@@ -2686,6 +2787,7 @@ class CfnCanaryProps:
                     )
                 ),
                 delete_lambda_resources_on_canary_deletion=False,
+                dry_run_and_update=False,
                 failure_retention_period=123,
                 provisioned_resource_cleanup="provisionedResourceCleanup",
                 resources_to_replicate_tags=["resourcesToReplicateTags"],
@@ -2734,6 +2836,7 @@ class CfnCanaryProps:
             check_type(argname="argument schedule", value=schedule, expected_type=type_hints["schedule"])
             check_type(argname="argument artifact_config", value=artifact_config, expected_type=type_hints["artifact_config"])
             check_type(argname="argument delete_lambda_resources_on_canary_deletion", value=delete_lambda_resources_on_canary_deletion, expected_type=type_hints["delete_lambda_resources_on_canary_deletion"])
+            check_type(argname="argument dry_run_and_update", value=dry_run_and_update, expected_type=type_hints["dry_run_and_update"])
             check_type(argname="argument failure_retention_period", value=failure_retention_period, expected_type=type_hints["failure_retention_period"])
             check_type(argname="argument provisioned_resource_cleanup", value=provisioned_resource_cleanup, expected_type=type_hints["provisioned_resource_cleanup"])
             check_type(argname="argument resources_to_replicate_tags", value=resources_to_replicate_tags, expected_type=type_hints["resources_to_replicate_tags"])
@@ -2755,6 +2858,8 @@ class CfnCanaryProps:
             self._values["artifact_config"] = artifact_config
         if delete_lambda_resources_on_canary_deletion is not None:
             self._values["delete_lambda_resources_on_canary_deletion"] = delete_lambda_resources_on_canary_deletion
+        if dry_run_and_update is not None:
+            self._values["dry_run_and_update"] = dry_run_and_update
         if failure_retention_period is not None:
             self._values["failure_retention_period"] = failure_retention_period
         if provisioned_resource_cleanup is not None:
@@ -2881,6 +2986,19 @@ class CfnCanaryProps:
         :stability: deprecated
         '''
         result = self._values.get("delete_lambda_resources_on_canary_deletion")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def dry_run_and_update(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Setting to control if UpdateCanary will perform a DryRun and validate it is PASSING before performing the Update.
+
+        Default is FALSE.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-dryrunandupdate
+        '''
+        result = self._values.get("dry_run_and_update")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
@@ -4677,6 +4795,7 @@ def _typecheckingstub__b8fcb3f48eca9399b4d1d31a5ef709e22f9fa52ad1e174b75d8313ef2
     schedule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]],
     artifact_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ArtifactConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     delete_lambda_resources_on_canary_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    dry_run_and_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     failure_retention_period: typing.Optional[jsii.Number] = None,
     provisioned_resource_cleanup: typing.Optional[builtins.str] = None,
     resources_to_replicate_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -4745,6 +4864,12 @@ def _typecheckingstub__5946ee35eff32e4581a6d2e3e0c69d62cdc3c17f079123211f7251bc1
     pass
 
 def _typecheckingstub__442577c2c36e4274dca25b3d866e1aeec3f4ffc18732e01050131a31f768f2b3(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__59860e5fb72da4da1108545c9e0b8f706d34cf83eb363fda05f04cbb14baf1fe(
     value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
@@ -4831,6 +4956,13 @@ def _typecheckingstub__3d403372a613babc1ab10717d050ec9a7f4055961f3545f2d0600d89c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e7a2c989ca2c701e49af0e8032c8c49bb52546c68c9e6359df8e7a9f2c4cf9a1(
+    *,
+    max_retries: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fa148862e82948accbbe951e7afcee721aa7014754c81106d2648fe1c5cf28e2(
     *,
     active_tracing: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -4853,6 +4985,7 @@ def _typecheckingstub__e4999288d0e0c5de04c56a3436208778026602dfdca27710aee93f9f4
     *,
     expression: builtins.str,
     duration_in_seconds: typing.Optional[builtins.str] = None,
+    retry_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.RetryConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4885,6 +5018,7 @@ def _typecheckingstub__d869d56ce0d1d2e2add2f80bf39b28abbec2752c719e03194ee540bf1
     schedule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]],
     artifact_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ArtifactConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     delete_lambda_resources_on_canary_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    dry_run_and_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     failure_retention_period: typing.Optional[jsii.Number] = None,
     provisioned_resource_cleanup: typing.Optional[builtins.str] = None,
     resources_to_replicate_tags: typing.Optional[typing.Sequence[builtins.str]] = None,

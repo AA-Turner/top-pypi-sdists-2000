@@ -1058,7 +1058,7 @@ class CfnWorkspacesPool(
         :param pool_name: The name of the pool.
         :param application_settings: The persistent application settings for users of the pool.
         :param description: The description of the pool.
-        :param running_mode: 
+        :param running_mode: The running mode of the pool.
         :param tags: 
         :param timeout_settings: The amount of time that a pool session remains active after users disconnect. If they try to reconnect to the pool session after a disconnection or network interruption within this time interval, they are connected to their previous session. Otherwise, they are connected to a new session with a new pool instance.
         '''
@@ -1239,6 +1239,7 @@ class CfnWorkspacesPool(
     @builtins.property
     @jsii.member(jsii_name="runningMode")
     def running_mode(self) -> typing.Optional[builtins.str]:
+        '''The running mode of the pool.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "runningMode"))
 
     @running_mode.setter
@@ -1539,7 +1540,7 @@ class CfnWorkspacesPoolProps:
         :param pool_name: The name of the pool.
         :param application_settings: The persistent application settings for users of the pool.
         :param description: The description of the pool.
-        :param running_mode: 
+        :param running_mode: The running mode of the pool.
         :param tags: 
         :param timeout_settings: The amount of time that a pool session remains active after users disconnect. If they try to reconnect to the pool session after a disconnection or network interruption within this time interval, they are connected to their previous session. Otherwise, they are connected to a new session with a new pool instance.
 
@@ -1672,7 +1673,8 @@ class CfnWorkspacesPoolProps:
 
     @builtins.property
     def running_mode(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The running mode of the pool.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspacespool.html#cfn-workspaces-workspacespool-runningmode
         '''
         result = self._values.get("running_mode")

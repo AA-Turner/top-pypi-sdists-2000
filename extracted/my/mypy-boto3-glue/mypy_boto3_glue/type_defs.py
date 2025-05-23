@@ -3237,6 +3237,7 @@ class ImportLabelsTaskRunPropertiesTypeDef(TypedDict):
 class IntegrationPartitionTypeDef(TypedDict):
     FieldName: NotRequired[str]
     FunctionSpec: NotRequired[str]
+    ConversionSpec: NotRequired[str]
 
 
 class JDBCConnectorOptionsOutputTypeDef(TypedDict):

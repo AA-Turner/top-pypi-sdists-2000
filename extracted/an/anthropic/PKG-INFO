@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: anthropic
-Version: 0.51.0
+Version: 0.52.0
 Summary: The official Python library for the anthropic API
 Project-URL: Homepage, https://github.com/anthropics/anthropic-sdk-python
 Project-URL: Repository, https://github.com/anthropics/anthropic-sdk-python
@@ -435,6 +435,23 @@ message = client.messages.create(
 print(message.metadata)
 ```
 
+## File uploads
+
+Request parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.
+
+```python
+from pathlib import Path
+from anthropic import Anthropic
+
+client = Anthropic()
+
+client.beta.files.upload(
+    file=Path("/path/to/file"),
+)
+```
+
+The async client uses the exact same interface. If you pass a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance, the file contents will be read asynchronously automatically.
+
 ## Handling errors
 
 When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `anthropic.APIConnectionError` is raised.
@@ -721,6 +738,10 @@ print(response.headers.get("x-foo"))
 
 If you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` request
 options.
+
+> [!WARNING]
+>
+> The `extra_` parameters of the same name overrides the documented parameters. For security reasons, ensure these methods are only used with trusted input data.
 
 #### Undocumented response properties
 

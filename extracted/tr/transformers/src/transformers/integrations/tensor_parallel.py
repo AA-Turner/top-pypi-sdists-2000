@@ -52,6 +52,7 @@ def initialize_tensor_parallelism(tp_plan, tp_size=None):
 
     # Detect the accelerator on the machine. If no accelerator is available, it returns CPU.
     device_type = torch._C._get_accelerator().type
+    current_device = getattr(torch, device_type)
     if not torch.distributed.is_initialized():
         try:
             rank = int(os.environ["RANK"])
@@ -73,6 +74,9 @@ def initialize_tensor_parallelism(tp_plan, tp_size=None):
                 "We tried to initialize torch.distributed for you, but it failed. Make "
                 "sure you init torch distributed in your script to use `tp_plan='auto'`."
             ) from e
+
+    if device_type != "cpu":
+        current_device.set_device(int(os.environ["LOCAL_RANK"]))
     index = current_device.current_device() if device_type != "cpu" else None
     tp_device = torch.device(device_type, index)
 
@@ -729,22 +733,23 @@ class ParallelInterface(MutableMapping):
 
     # Class instance object, so that a call to `register` can be reflected into all other files correctly, even if
     # a new instance is created (in order to locally override a given function)
-    _global_mapping = {
-        "colwise": ColwiseParallel(),
-        "rowwise": RowwiseParallel(),
-        "colwise_rep": ColwiseParallel(output_layouts=Replicate()),
-        "rowwise_rep": RowwiseParallel(input_layouts=Replicate()),
-        "local_colwise": ColwiseParallel(use_dtensor=False),
-        "local_rowwise": RowwiseParallel(use_dtensor=False),
-        "local": IsolatedParallel(),
-        "gather": GatherParallel(),
-        "local_packed_rowwise": PackedRowwiseParallel(use_dtensor=False),
-        "sequence_parallel": SequenceParallel(),
-        "replicate": ReplicateParallel(),
-    }
 
     def __init__(self):
         self._local_mapping = {}
+
+        ParallelInterface._global_mapping = {
+            "colwise": ColwiseParallel(),
+            "rowwise": RowwiseParallel(),
+            "colwise_rep": ColwiseParallel(output_layouts=Replicate()),
+            "rowwise_rep": RowwiseParallel(input_layouts=Replicate()),
+            "local_colwise": ColwiseParallel(use_dtensor=False),
+            "local_rowwise": RowwiseParallel(use_dtensor=False),
+            "local": IsolatedParallel(),
+            "gather": GatherParallel(),
+            "local_packed_rowwise": PackedRowwiseParallel(use_dtensor=False),
+            "sequence_parallel": SequenceParallel(),
+            "replicate": ReplicateParallel(),
+        }
 
     def __getitem__(self, key):
         # First check if instance has a local override
@@ -775,7 +780,11 @@ class ParallelInterface(MutableMapping):
 
 
 # Global AttentionInterface shared by all models which do not need to overwrite any of the existing ones
-ALL_PARALLEL_STYLES: ParallelInterface = ParallelInterface()
+
+if is_torch_greater_or_equal("2.5") and _torch_distributed_available:
+    ALL_PARALLEL_STYLES: ParallelInterface = ParallelInterface()
+else:
+    ALL_PARALLEL_STYLES = None
 
 
 def convert_local_tensor_to_dtensor(

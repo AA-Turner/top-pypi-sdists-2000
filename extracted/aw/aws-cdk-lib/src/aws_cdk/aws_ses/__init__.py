@@ -100,6 +100,12 @@ ses.AllowListReceiptFilter(self, "AllowList",
 
 This will first create a block all filter and then create allow filters for the listed ip addresses.
 
+### AWS Service Principal permissions
+
+When adding an s3 action to a receipt rule, the CDK will automatically create a policy statement that allows the ses service principal to get write access to the bucket. This is done with the `SourceAccount` condition key, which is automatically added to the policy statement.
+Previously, the policy used the `Referer` condition key, which caused confused deputy problems when the bucket policy allowed access to the bucket for all principals.
+See more information in [this github issue](https://github.com/aws/aws-cdk/issues/29811)
+
 ## Email sending
 
 ### Dedicated IP pools
@@ -6023,6 +6029,15 @@ class CfnMailManagerRuleSet(
                         action_failure_policy="actionFailurePolicy"
                     ),
                     drop=drop,
+                    publish_to_sns=ses.CfnMailManagerRuleSet.SnsActionProperty(
+                        role_arn="roleArn",
+                        topic_arn="topicArn",
+        
+                        # the properties below are optional
+                        action_failure_policy="actionFailurePolicy",
+                        encoding="encoding",
+                        payload_type="payloadType"
+                    ),
                     relay=ses.CfnMailManagerRuleSet.RelayActionProperty(
                         relay="relay",
         
@@ -6892,6 +6907,7 @@ class CfnMailManagerRuleSet(
             "deliver_to_mailbox": "deliverToMailbox",
             "deliver_to_q_business": "deliverToQBusiness",
             "drop": "drop",
+            "publish_to_sns": "publishToSns",
             "relay": "relay",
             "replace_recipient": "replaceRecipient",
             "send": "send",
@@ -6907,6 +6923,7 @@ class CfnMailManagerRuleSet(
             deliver_to_mailbox: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerRuleSet.DeliverToMailboxActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             deliver_to_q_business: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerRuleSet.DeliverToQBusinessActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             drop: typing.Any = None,
+            publish_to_sns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerRuleSet.SnsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             relay: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerRuleSet.RelayActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             replace_recipient: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerRuleSet.ReplaceRecipientActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             send: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerRuleSet.SendActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6923,6 +6940,7 @@ class CfnMailManagerRuleSet(
             :param deliver_to_mailbox: This action delivers an email to a WorkMail mailbox.
             :param deliver_to_q_business: This action delivers an email to an Amazon Q Business application for ingestion into its knowledge base.
             :param drop: This action terminates the evaluation of rules in the rule set.
+            :param publish_to_sns: 
             :param relay: This action relays the email to another SMTP server.
             :param replace_recipient: The action replaces certain or all recipients with a different set of recipients.
             :param send: This action sends the email to the internet.
@@ -6966,6 +6984,15 @@ class CfnMailManagerRuleSet(
                         action_failure_policy="actionFailurePolicy"
                     ),
                     drop=drop,
+                    publish_to_sns=ses.CfnMailManagerRuleSet.SnsActionProperty(
+                        role_arn="roleArn",
+                        topic_arn="topicArn",
+                
+                        # the properties below are optional
+                        action_failure_policy="actionFailurePolicy",
+                        encoding="encoding",
+                        payload_type="payloadType"
+                    ),
                     relay=ses.CfnMailManagerRuleSet.RelayActionProperty(
                         relay="relay",
                 
@@ -7000,6 +7027,7 @@ class CfnMailManagerRuleSet(
                 check_type(argname="argument deliver_to_mailbox", value=deliver_to_mailbox, expected_type=type_hints["deliver_to_mailbox"])
                 check_type(argname="argument deliver_to_q_business", value=deliver_to_q_business, expected_type=type_hints["deliver_to_q_business"])
                 check_type(argname="argument drop", value=drop, expected_type=type_hints["drop"])
+                check_type(argname="argument publish_to_sns", value=publish_to_sns, expected_type=type_hints["publish_to_sns"])
                 check_type(argname="argument relay", value=relay, expected_type=type_hints["relay"])
                 check_type(argname="argument replace_recipient", value=replace_recipient, expected_type=type_hints["replace_recipient"])
                 check_type(argname="argument send", value=send, expected_type=type_hints["send"])
@@ -7015,6 +7043,8 @@ class CfnMailManagerRuleSet(
                 self._values["deliver_to_q_business"] = deliver_to_q_business
             if drop is not None:
                 self._values["drop"] = drop
+            if publish_to_sns is not None:
+                self._values["publish_to_sns"] = publish_to_sns
             if relay is not None:
                 self._values["relay"] = relay
             if replace_recipient is not None:
@@ -7080,6 +7110,16 @@ class CfnMailManagerRuleSet(
             '''
             result = self._values.get("drop")
             return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def publish_to_sns(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMailManagerRuleSet.SnsActionProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-ruleaction.html#cfn-ses-mailmanagerruleset-ruleaction-publishtosns
+            '''
+            result = self._values.get("publish_to_sns")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMailManagerRuleSet.SnsActionProperty"]], result)
 
         @builtins.property
         def relay(
@@ -7922,6 +7962,15 @@ class CfnMailManagerRuleSet(
                             action_failure_policy="actionFailurePolicy"
                         ),
                         drop=drop,
+                        publish_to_sns=ses.CfnMailManagerRuleSet.SnsActionProperty(
+                            role_arn="roleArn",
+                            topic_arn="topicArn",
+                
+                            # the properties below are optional
+                            action_failure_policy="actionFailurePolicy",
+                            encoding="encoding",
+                            payload_type="payloadType"
+                        ),
                         relay=ses.CfnMailManagerRuleSet.RelayActionProperty(
                             relay="relay",
                 
@@ -8719,6 +8768,124 @@ class CfnMailManagerRuleSet(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ses.CfnMailManagerRuleSet.SnsActionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "role_arn": "roleArn",
+            "topic_arn": "topicArn",
+            "action_failure_policy": "actionFailurePolicy",
+            "encoding": "encoding",
+            "payload_type": "payloadType",
+        },
+    )
+    class SnsActionProperty:
+        def __init__(
+            self,
+            *,
+            role_arn: builtins.str,
+            topic_arn: builtins.str,
+            action_failure_policy: typing.Optional[builtins.str] = None,
+            encoding: typing.Optional[builtins.str] = None,
+            payload_type: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param role_arn: 
+            :param topic_arn: 
+            :param action_failure_policy: 
+            :param encoding: 
+            :param payload_type: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ses as ses
+                
+                sns_action_property = ses.CfnMailManagerRuleSet.SnsActionProperty(
+                    role_arn="roleArn",
+                    topic_arn="topicArn",
+                
+                    # the properties below are optional
+                    action_failure_policy="actionFailurePolicy",
+                    encoding="encoding",
+                    payload_type="payloadType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c1dba6e94fdb5a871528ffcc897120b50f8c7998718a851aaed472055a2a05a6)
+                check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
+                check_type(argname="argument topic_arn", value=topic_arn, expected_type=type_hints["topic_arn"])
+                check_type(argname="argument action_failure_policy", value=action_failure_policy, expected_type=type_hints["action_failure_policy"])
+                check_type(argname="argument encoding", value=encoding, expected_type=type_hints["encoding"])
+                check_type(argname="argument payload_type", value=payload_type, expected_type=type_hints["payload_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "role_arn": role_arn,
+                "topic_arn": topic_arn,
+            }
+            if action_failure_policy is not None:
+                self._values["action_failure_policy"] = action_failure_policy
+            if encoding is not None:
+                self._values["encoding"] = encoding
+            if payload_type is not None:
+                self._values["payload_type"] = payload_type
+
+        @builtins.property
+        def role_arn(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html#cfn-ses-mailmanagerruleset-snsaction-rolearn
+            '''
+            result = self._values.get("role_arn")
+            assert result is not None, "Required property 'role_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def topic_arn(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html#cfn-ses-mailmanagerruleset-snsaction-topicarn
+            '''
+            result = self._values.get("topic_arn")
+            assert result is not None, "Required property 'topic_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def action_failure_policy(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html#cfn-ses-mailmanagerruleset-snsaction-actionfailurepolicy
+            '''
+            result = self._values.get("action_failure_policy")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def encoding(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html#cfn-ses-mailmanagerruleset-snsaction-encoding
+            '''
+            result = self._values.get("encoding")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def payload_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html#cfn-ses-mailmanagerruleset-snsaction-payloadtype
+            '''
+            result = self._values.get("payload_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SnsActionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_ses.CfnMailManagerRuleSetProps",
@@ -8779,6 +8946,15 @@ class CfnMailManagerRuleSetProps:
                             action_failure_policy="actionFailurePolicy"
                         ),
                         drop=drop,
+                        publish_to_sns=ses.CfnMailManagerRuleSet.SnsActionProperty(
+                            role_arn="roleArn",
+                            topic_arn="topicArn",
+            
+                            # the properties below are optional
+                            action_failure_policy="actionFailurePolicy",
+                            encoding="encoding",
+                            payload_type="payloadType"
+                        ),
                         relay=ses.CfnMailManagerRuleSet.RelayActionProperty(
                             relay="relay",
             
@@ -18663,6 +18839,7 @@ def _typecheckingstub__305f0be9d67c9da493953a4770d737df26a1af8dedfd249fd91350062
     deliver_to_mailbox: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerRuleSet.DeliverToMailboxActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     deliver_to_q_business: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerRuleSet.DeliverToQBusinessActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     drop: typing.Any = None,
+    publish_to_sns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerRuleSet.SnsActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     relay: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerRuleSet.RelayActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     replace_recipient: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerRuleSet.ReplaceRecipientActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     send: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerRuleSet.SendActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -18799,6 +18976,17 @@ def _typecheckingstub__55318dc538596167d3b14e3c3844f14a00b3cbe799ecfea26bbb89d52
     *,
     role_arn: builtins.str,
     action_failure_policy: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c1dba6e94fdb5a871528ffcc897120b50f8c7998718a851aaed472055a2a05a6(
+    *,
+    role_arn: builtins.str,
+    topic_arn: builtins.str,
+    action_failure_policy: typing.Optional[builtins.str] = None,
+    encoding: typing.Optional[builtins.str] = None,
+    payload_type: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -4962,11 +4962,10 @@ static CYTHON_INLINE int __pyx_f_7ddtrace_8internal_9_encoding_pack_text(struct 
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6;
   char *__pyx_t_7;
-  PY_LONG_LONG __pyx_t_8;
-  size_t __pyx_t_9;
+  size_t __pyx_t_8;
+  PyObject *__pyx_t_9 = NULL;
   PyObject *__pyx_t_10 = NULL;
   PyObject *__pyx_t_11 = NULL;
-  PyObject *__pyx_t_12 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -5171,7 +5170,7 @@ static CYTHON_INLINE int __pyx_f_7ddtrace_8internal_9_encoding_pack_text(struct 
  *         if len(text) > MAX_SPAN_META_VALUE_LEN:
  *             text = truncate_string(text)             # <<<<<<<<<<<<<<
  *         IF PY_MAJOR_VERSION >= 3:
- *             ret = msgpack_pack_unicode(pk, text, MAX_SPAN_META_VALUE_LEN)
+ *             ret = msgpack_pack_unicode(pk, text, ITEM_LIMIT)
 */
       __pyx_t_3 = __pyx_f_7ddtrace_8internal_9_encoding_truncate_string(__pyx_v_text); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 155, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
@@ -5190,19 +5189,15 @@ static CYTHON_INLINE int __pyx_f_7ddtrace_8internal_9_encoding_pack_text(struct 
     /* "ddtrace/internal/_encoding.pyx":157
  *             text = truncate_string(text)
  *         IF PY_MAJOR_VERSION >= 3:
- *             ret = msgpack_pack_unicode(pk, text, MAX_SPAN_META_VALUE_LEN)             # <<<<<<<<<<<<<<
+ *             ret = msgpack_pack_unicode(pk, text, ITEM_LIMIT)             # <<<<<<<<<<<<<<
  *             if ret == -2:
  *                 raise ValueError("unicode string is too large")
 */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_mstate_global->__pyx_n_u_MAX_SPAN_META_VALUE_LEN); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 157, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_8 = __Pyx_PyLong_As_PY_LONG_LONG(__pyx_t_3); if (unlikely((__pyx_t_8 == (PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 157, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_v_ret = msgpack_pack_unicode(__pyx_v_pk, __pyx_v_text, __pyx_t_8);
+    __pyx_v_ret = msgpack_pack_unicode(__pyx_v_pk, __pyx_v_text, __pyx_v_7ddtrace_8internal_9_encoding_ITEM_LIMIT);
 
     /* "ddtrace/internal/_encoding.pyx":158
  *         IF PY_MAJOR_VERSION >= 3:
- *             ret = msgpack_pack_unicode(pk, text, MAX_SPAN_META_VALUE_LEN)
+ *             ret = msgpack_pack_unicode(pk, text, ITEM_LIMIT)
  *             if ret == -2:             # <<<<<<<<<<<<<<
  *                 raise ValueError("unicode string is too large")
  *         ELSE:
@@ -5211,7 +5206,7 @@ static CYTHON_INLINE int __pyx_f_7ddtrace_8internal_9_encoding_pack_text(struct 
     if (unlikely(__pyx_t_1)) {
 
       /* "ddtrace/internal/_encoding.pyx":159
- *             ret = msgpack_pack_unicode(pk, text, MAX_SPAN_META_VALUE_LEN)
+ *             ret = msgpack_pack_unicode(pk, text, ITEM_LIMIT)
  *             if ret == -2:
  *                 raise ValueError("unicode string is too large")             # <<<<<<<<<<<<<<
  *         ELSE:
@@ -5220,10 +5215,10 @@ static CYTHON_INLINE int __pyx_f_7ddtrace_8internal_9_encoding_pack_text(struct 
       __pyx_t_4 = NULL;
       __Pyx_INCREF(__pyx_builtin_ValueError);
       __pyx_t_5 = __pyx_builtin_ValueError; 
-      __pyx_t_9 = 1;
+      __pyx_t_8 = 1;
       {
         PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_mstate_global->__pyx_kp_u_unicode_string_is_too_large};
-        __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_5, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (__pyx_t_9*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+        __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_5, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 159, __pyx_L1_error)
@@ -5235,7 +5230,7 @@ static CYTHON_INLINE int __pyx_f_7ddtrace_8internal_9_encoding_pack_text(struct 
 
       /* "ddtrace/internal/_encoding.pyx":158
  *         IF PY_MAJOR_VERSION >= 3:
- *             ret = msgpack_pack_unicode(pk, text, MAX_SPAN_META_VALUE_LEN)
+ *             ret = msgpack_pack_unicode(pk, text, ITEM_LIMIT)
  *             if ret == -2:             # <<<<<<<<<<<<<<
  *                 raise ValueError("unicode string is too large")
  *         ELSE:
@@ -5271,27 +5266,27 @@ static CYTHON_INLINE int __pyx_f_7ddtrace_8internal_9_encoding_pack_text(struct 
   __pyx_t_5 = NULL;
   __Pyx_INCREF(__pyx_builtin_TypeError);
   __pyx_t_4 = __pyx_builtin_TypeError; 
-  __pyx_t_11 = NULL;
+  __pyx_t_10 = NULL;
   __Pyx_INCREF((PyObject *)__pyx_mstate_global->__pyx_ptype_7cpython_4type_type);
-  __pyx_t_12 = ((PyObject *)__pyx_mstate_global->__pyx_ptype_7cpython_4type_type); 
-  __pyx_t_9 = 1;
+  __pyx_t_11 = ((PyObject *)__pyx_mstate_global->__pyx_ptype_7cpython_4type_type); 
+  __pyx_t_8 = 1;
   {
-    PyObject *__pyx_callargs[2] = {__pyx_t_11, __pyx_v_text};
-    __pyx_t_10 = __Pyx_PyObject_FastCall(__pyx_t_12, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (__pyx_t_9*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
-    __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-    __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-    if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 171, __pyx_L1_error)
-    __Pyx_GOTREF((PyObject *)__pyx_t_10);
+    PyObject *__pyx_callargs[2] = {__pyx_t_10, __pyx_v_text};
+    __pyx_t_9 = __Pyx_PyObject_FastCall(__pyx_t_11, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+    __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+    if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __Pyx_GOTREF((PyObject *)__pyx_t_9);
   }
-  __pyx_t_12 = PyUnicode_Format(__pyx_mstate_global->__pyx_kp_u_Unhandled_text_type_r, ((PyObject *)__pyx_t_10)); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 171, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_12);
-  __Pyx_DECREF((PyObject *)__pyx_t_10); __pyx_t_10 = 0;
-  __pyx_t_9 = 1;
+  __pyx_t_11 = PyUnicode_Format(__pyx_mstate_global->__pyx_kp_u_Unhandled_text_type_r, ((PyObject *)__pyx_t_9)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 171, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
+  __Pyx_DECREF((PyObject *)__pyx_t_9); __pyx_t_9 = 0;
+  __pyx_t_8 = 1;
   {
-    PyObject *__pyx_callargs[2] = {__pyx_t_5, __pyx_t_12};
-    __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+__pyx_t_9, (2-__pyx_t_9) | (__pyx_t_9*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+    PyObject *__pyx_callargs[2] = {__pyx_t_5, __pyx_t_11};
+    __pyx_t_3 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+__pyx_t_8, (2-__pyx_t_8) | (__pyx_t_8*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 171, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
@@ -5313,9 +5308,9 @@ static CYTHON_INLINE int __pyx_f_7ddtrace_8internal_9_encoding_pack_text(struct 
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_9);
   __Pyx_XDECREF(__pyx_t_10);
   __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_XDECREF(__pyx_t_12);
   __Pyx_AddTraceback("ddtrace.internal._encoding.pack_text", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;

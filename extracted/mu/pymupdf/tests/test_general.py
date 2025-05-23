@@ -7,11 +7,14 @@
 import io
 import os
 
+import fnmatch
+import json
 import pymupdf
 import pathlib
 import pickle
 import platform
 import re
+import shutil
 import subprocess
 import sys
 import textwrap
@@ -58,6 +61,11 @@ def test_iswrapped():
     doc = pymupdf.open(filename)
     page = doc[0]
     assert page.is_wrapped
+    wt = pymupdf.TOOLS.mupdf_warnings()
+    if pymupdf.mupdf_version_tuple >= (1, 26, 0):
+        assert wt == 'bogus font ascent/descent values (0 / 0)'
+    else:
+        assert not wt
 
 
 def test_wrapcontents():
@@ -73,7 +81,10 @@ def test_wrapcontents():
     rebased = hasattr(pymupdf, 'mupdf')
     if rebased:
         wt = pymupdf.TOOLS.mupdf_warnings()
-        assert wt == 'PDF stream Length incorrect'
+        if pymupdf.mupdf_version_tuple >= (1, 26, 0):
+            assert wt == 'bogus font ascent/descent values (0 / 0)\nPDF stream Length incorrect'
+        else:
+            assert wt == 'PDF stream Length incorrect'
 
 
 def test_page_clean_contents():
@@ -133,19 +144,12 @@ def test_pdfstring():
 
 
 def test_open_exceptions():
-    try:
-        pymupdf.open(filename, filetype="xps")
-    except RuntimeError as e:
-        assert repr(e).startswith("FileDataError")
-    else:
-        assert 0
+    path  = os.path.normpath(f'{__file__}/../../tests/resources/001003ED.pdf')
+    doc = pymupdf.open(path, filetype="xps")
+    assert 'PDF' in doc.metadata["format"]
 
-    try:
-        pymupdf.open(filename, filetype="xxx")
-    except Exception as e:
-        assert repr(e).startswith("ValueError")
-    else:
-        assert 0
+    doc = pymupdf.open(path, filetype="xxx")
+    assert 'PDF' in doc.metadata["format"]
 
     try:
         pymupdf.open("x.y")
@@ -157,8 +161,9 @@ def test_open_exceptions():
     try:
         pymupdf.open(stream=b"", filetype="pdf")
     except RuntimeError as e:
-        assert repr(e).startswith("EmptyFileError")
+        assert repr(e).startswith("EmptyFileError"), f'{repr(e)=}'
     else:
+        print(f'{doc.metadata["format"]=}')
         assert 0
 
 
@@ -240,6 +245,11 @@ def test_get_text_dict():
     blocks=page.get_text("dict")["blocks"]
     # Check no opaque types in `blocks`.
     json.dumps( blocks, indent=4)
+    wt = pymupdf.TOOLS.mupdf_warnings()
+    if pymupdf.mupdf_version_tuple >= (1, 26, 0):
+        assert wt == 'bogus font ascent/descent values (0 / 0)'
+    else:
+        assert not wt
 
 def test_font():
     font = pymupdf.Font()
@@ -885,14 +895,12 @@ def test_bboxlog_2885():
     page=doc[0]
     
     bbl = page.get_bboxlog()
-    if pymupdf.mupdf_version_tuple >= (1, 24, 9):
-        wt = pymupdf.TOOLS.mupdf_warnings()
-        assert wt == 'invalid marked content and clip nesting'
+    wt = pymupdf.TOOLS.mupdf_warnings()
+    assert wt == 'invalid marked content and clip nesting'
     
     bbl = page.get_bboxlog(layers=True)
-    if pymupdf.mupdf_version_tuple >= (1, 24, 9):
-        wt = pymupdf.TOOLS.mupdf_warnings()
-        assert wt == 'invalid marked content and clip nesting'
+    wt = pymupdf.TOOLS.mupdf_warnings()
+    assert wt == 'invalid marked content and clip nesting'
 
 def test_3081():
     '''
@@ -1348,7 +1356,7 @@ def test_open():
                 assert 0, \
                         f'Incorrect exception, expected {etype}, received {type(e)=}.'
             else:
-                assert 0, f'Did not received exception, expected {etype=}.'
+                assert 0, f'Did not received exception, expected {etype=}. {filename=} {stream=} {filetype=} {exception=}'
         else:
             document = pymupdf.open(filename=filename, stream=stream, filetype=filetype)
             return document
@@ -1393,7 +1401,7 @@ def test_open():
             re.escape(f'mupdf.{etype2}: code=7: cannot recognize zip archive'),
             re.escape(f'pymupdf.FileDataError: Failed to open file {path!r} as type {filetype!r}.'),
             )
-    check(path, filetype=filetype, exception=(etype, eregex))
+    check(path, filetype=filetype, exception=None)
     
     path = f'{resources}/chinese-tables.pickle'
     etype = pymupdf.FileDataError
@@ -1410,6 +1418,155 @@ def test_open():
     check(stream=stream, exception=(etype, etext))
     
     check(stream=b'', exception=(pymupdf.EmptyFileError, re.escape('Cannot open empty stream.')))
+
+
+def test_open2():
+    '''
+    Checks behaviour of fz_open_document() and fz_open_document_with_stream()
+    with different filenames/magic values.
+    '''
+    if platform.system() == 'Windows':
+        print(f'test_open2(): not running on Windows because `git ls-files` known fail on Github Windows runners.')
+        return
+    
+    root = os.path.normpath(f'{__file__}/../..')
+    root = relpath(root)
+    
+    # Find tests/resources/test_open2.* input files/streams. We calculate
+    # paths relative to the PyMuPDF checkout directory <root>, to allow use
+    # of tests/resources/test_open2_expected.json regardless of the actual
+    # checkout directory.
+    print()
+    sys.path.append(root)
+    try:
+        import pipcl
+    finally:
+        del sys.path[0]
+    paths = pipcl.git_items(f'{root}/tests/resources')
+    paths = fnmatch.filter(paths, f'test_open2.*')
+    paths = [f'tests/resources/{i}' for i in paths]
+    
+    # Get list of extensions of input files.
+    extensions = set()
+    extensions.add('.txt')
+    extensions.add('')
+    for path in paths:
+        _, ext = os.path.splitext(path)
+        extensions.add(ext)
+    extensions = sorted(list(extensions))
+    
+    def get_result(e, document):
+        '''
+        Return fz_lookup_metadata(document, 'format') or [ERROR].
+        '''
+        if e:
+            return f'[error]'
+        else:
+            try:
+                return pymupdf.mupdf.fz_lookup_metadata2(document, 'format')
+            except Exception:
+                return ''
+    
+    def dict_set_path(dict_, *items):
+        for item in items[:-2]:
+            dict_ = dict_.setdefault(item, dict())
+        dict_[items[-2]] = items[-1]
+
+    results = dict()
+    
+    # Prevent warnings while we are running.
+    _g_out_message = pymupdf._g_out_message
+    pymupdf._g_out_message = None
+    try:
+        results = dict()
+        
+        for path in paths:
+            print(path)
+            for ext in extensions:
+                path2 = f'{root}/foo{ext}'
+                path3 = shutil.copy2(f'{root}/{path}', path2)
+                assert(path3 == path2)
+                
+                # Test fz_open_document().
+                e = None
+                document = None
+                try:
+                    document = pymupdf.mupdf.fz_open_document(path2)
+                except Exception as ee:
+                    e = ee
+                wt = pymupdf.TOOLS.mupdf_warnings()
+                text = get_result(e, document)
+                print(f'    fz_open_document({path2}) => {text}')
+                dict_set_path(results, path, ext, 'file', text)
+
+                # Test fz_open_document_with_stream().
+                e = None
+                document = None
+                with open(f'{root}/{path}', 'rb') as f:
+                    data = f.read()
+                stream = pymupdf.mupdf.fz_open_memory(pymupdf.mupdf.python_buffer_data(data), len(data))
+                try:
+                    document = pymupdf.mupdf.fz_open_document_with_stream(ext, stream)
+                except Exception as ee:
+                    e = ee
+                wt = pymupdf.TOOLS.mupdf_warnings()
+                text = get_result(e, document)
+                print(f'    fz_open_document_with_stream(magic={ext!r}) => {text}')
+                dict_set_path(results, path, ext, 'stream', text)
+                
+    finally:
+        pymupdf._g_out_message = _g_out_message
+    
+    # Create html table.
+    path_html = os.path.normpath(f'{__file__}/../../tests/test_open2.html')
+    with open(path_html, 'w') as f:
+        f.write(f'<html>\n')
+        f.write(f'<body>\n')
+        f.write(f'<p>{time.strftime("%F-%T")}\n')
+        f.write(f'<table border="1" style="border-collapse:collapse" cellpadding="4">\n')
+        f.write(f'<tr><td></td><th colspan="{len(extensions)}">Extension/magic')
+        f.write(f'<tr><th style="border-bottom: 4px solid black; border-right: 4px solid black;">Data file</th>')
+        for ext in extensions:
+            f.write(f'<th style="border-bottom: 4px solid black;">{ext}</th>')
+        f.write('\n')
+        for path in sorted(results.keys()):
+            _, ext = os.path.splitext(path)
+            f.write(f'<tr><th style="border-right: 4px solid black;">{os.path.basename(path)}</th>')
+            for ext2 in sorted(results[path].keys()):
+                text_file = results[path][ext2]['file']
+                text_stream = results[path][ext2]['stream']
+                b1, b2 = ('<b>', '</b>') if ext2==ext else ('', '')
+                if text_file == text_stream:
+                    if text_file == '[error]':
+                        f.write(f'<td><div style="color: #808080;">{b1}{text_file}{b2}</div></td>')
+                    else:
+                        f.write(f'<td>{b1}{text_file}{b2}</td>')
+                else:
+                    f.write(f'<td>file: {b1}{text_file}{b2}<br>')
+                    f.write(f'stream: {b1}{text_stream}{b2}</td>')
+            f.write('</tr>\n')
+        f.write(f'</table>\n')
+        f.write(f'/<body>\n')
+        f.write(f'</html>\n')
+    print(f'Have created: {path_html}')
+    
+    path_out = os.path.normpath(f'{__file__}/../../tests/test_open2.json')
+    with open(path_out, 'w') as f:
+        json.dump(results, f, indent=4, sort_keys=1)
+        
+    if pymupdf.mupdf_version_tuple >= (1, 26):
+        with open(os.path.normpath(f'{__file__}/../../tests/resources/test_open2_expected.json')) as f:
+            results_expected = json.load(f)
+        if results != results_expected:
+            print(f'results != results_expected:')
+            def show(r, name):
+                text = json.dumps(r, indent=4, sort_keys=1)
+                print(f'{name}:')
+                print(textwrap.indent(text, '    '))
+            show(results_expected, 'results_expected')
+            show(results, 'results')
+            assert 0
+    
 
 def test_533():
     if not hasattr(pymupdf, 'mupdf'):
@@ -1441,10 +1598,7 @@ def test_scientific_numbers():
     page.insert_text(point, "Test")
     contents = page.read_contents()
     print(f'{contents=}')
-    if pymupdf.mupdf_version_tuple >= (1, 24, 2):
-        assert b" 1e-" not in contents
-    else:
-        assert b" 1e-" in contents
+    assert b" 1e-" not in contents
 
 def test_3615():
     print('')
@@ -1464,16 +1618,8 @@ def test_3654():
         for page in document:
             content += page.get_text() + '\n\n'
     content = content.strip()
-    
-    if pymupdf.mupdf_version_tuple < (1, 25):
-        # As of 2024-07-04 we get a warning for this input file.
-        wt = pymupdf.TOOLS.mupdf_warnings()
-        assert wt == 'dropping unclosed output'
 
 def test_3727():
-    if pymupdf.mupdf_version_tuple < (1, 24, 9):
-        print('test_3727(): not running because known to segv: {pymupdf.mupdf_version=}')
-        return
     path = os.path.normpath(f'{__file__}/../../tests/resources/test_3727.pdf')
     doc = pymupdf.open(path)
     for page in doc:
@@ -1531,24 +1677,21 @@ def test_3450():
     print(f'test_3450(): {t=}')
 
 def test_3859():
-    if pymupdf.mupdf_version_tuple > (1, 24, 9):
-        print(f'{pymupdf.mupdf.PDF_NULL=}.')
-        print(f'{pymupdf.mupdf.PDF_TRUE=}.')
-        print(f'{pymupdf.mupdf.PDF_FALSE=}.')
-        for name in ('NULL', 'TRUE', 'FALSE'):
-            name2 = f'PDF_{name}'
-            v = getattr(pymupdf.mupdf, name2)
-            print(f'{name=} {name2=} {v=} {type(v)=}')
-            assert type(v)==pymupdf.mupdf.PdfObj, f'`v` is not a pymupdf.mupdf.PdfObj.'
-    else:
-        assert not hasattr(pymupdf.mupdf, 'PDF_TRUE')
+    print(f'{pymupdf.mupdf.PDF_NULL=}.')
+    print(f'{pymupdf.mupdf.PDF_TRUE=}.')
+    print(f'{pymupdf.mupdf.PDF_FALSE=}.')
+    for name in ('NULL', 'TRUE', 'FALSE'):
+        name2 = f'PDF_{name}'
+        v = getattr(pymupdf.mupdf, name2)
+        print(f'{name=} {name2=} {v=} {type(v)=}')
+        assert type(v)==pymupdf.mupdf.PdfObj, f'`v` is not a pymupdf.mupdf.PdfObj.'
 
 def test_3905():
     data = b'A,B,C,D\r\n1,2,1,2\r\n2,2,1,2\r\n'
     try:
-        document = pymupdf.open(stream=data)
+        document = pymupdf.open(stream=data, filetype='pdf')
     except pymupdf.FileDataError as e:
-        pass
+        print(f'test_3905(): e: {e}')
     else:
         assert 0
     wt = pymupdf.TOOLS.mupdf_warnings()
@@ -1567,12 +1710,9 @@ def test_3624():
         print(f'Saving to {path_png=}.')
         pixmap.save(path_png)
         rms = gentle_compare.pixmaps_rms(path_png_expected, path_png)
-        if pymupdf.mupdf_version_tuple < (1, 24, 10):
-            assert rms > 12
-        else:
-            # We get small differences in sysinstall tests, where some
-            # thirdparty libraries can differ.
-            assert rms < 1
+        # We get small differences in sysinstall tests, where some thirdparty
+        # libraries can differ.
+        assert rms < 1
 
 
 def test_4043():
@@ -1685,3 +1825,52 @@ def test_4415():
         pixmap.save(path_out)
         rms = gentle_compare.pixmaps_rms(path_out_expected, path_out)
         assert rms == 0, f'{rms=}'
+
+def test_4466():
+    path = os.path.normpath(f'{__file__}/../../tests/test_4466.pdf')
+    with pymupdf.Document(path) as document:
+        for page in document:
+            print(f'{page=}', flush=1)
+            pixmap = page.get_pixmap(clip=(0, 0, 10, 10))
+            print(f'{pixmap.n=} {pixmap.size=} {pixmap.stride=} {pixmap.width=} {pixmap.height=} {pixmap.x=} {pixmap.y=}', flush=1)
+            pixmap.is_unicolor  # Used to crash.
+
+
+def test_4479():
+    # This passes with pymupdf-1.24.14, fails with pymupdf==1.25.*, passes with
+    # pymupdf-1.26.0.
+    print()
+    path = os.path.normpath(f'{__file__}/../../tests/resources/test_4479.pdf')
+    with pymupdf.open(path) as document:
+        
+        def show(items):
+            for item in items:
+                print(f'    {repr(item)}')
+        
+        items = document.layer_ui_configs()
+        show(items)
+        assert items == [
+                {'depth': 0, 'locked': 0, 'number': 0, 'on': 1, 'text': 'layer_0', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 1, 'on': 1, 'text': 'layer_1', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 2, 'on': 0, 'text': 'layer_2', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 3, 'on': 1, 'text': 'layer_3', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 4, 'on': 1, 'text': 'layer_4', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 5, 'on': 1, 'text': 'layer_5', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 6, 'on': 1, 'text': 'layer_6', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 7, 'on': 1, 'text': 'layer_7', 'type': 'checkbox'},
+                ]
+        
+        document.set_layer_ui_config(0, pymupdf.PDF_OC_OFF)
+        items = document.layer_ui_configs()
+        show(items)
+        assert items == [
+                {'depth': 0, 'locked': 0, 'number': 0, 'on': 0, 'text': 'layer_0', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 1, 'on': 1, 'text': 'layer_1', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 2, 'on': 0, 'text': 'layer_2', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 3, 'on': 1, 'text': 'layer_3', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 4, 'on': 1, 'text': 'layer_4', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 5, 'on': 1, 'text': 'layer_5', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 6, 'on': 1, 'text': 'layer_6', 'type': 'checkbox'},
+                {'depth': 0, 'locked': 0, 'number': 7, 'on': 1, 'text': 'layer_7', 'type': 'checkbox'},
+                ]
+        

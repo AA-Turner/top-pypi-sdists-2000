@@ -24,6 +24,25 @@ import ctypes
 from setuptools import setup
 from setuptools.command.install import install
 from shutil import copyfile, copytree, rmtree
+from pathlib import Path
+
+if (
+    # When we package, the parent directory 'classic' dir
+    # (as we pip install -e python/packaging/classic)
+    os.getcwd() == str(Path(__file__).parent.absolute())
+    and str(Path(__file__).parent.name) == "classic"
+):
+    # For:
+    # - pip install -e python/packaging/classic
+    #     It moves the current working directory to 'classic'
+    # - cd python/packaging/classic; python setup.py sdist
+    #
+    # For:
+    # - python packaging/classic/setup.py sdist, it does not
+    #     execute this branch.
+    #
+    # Move to spark/python
+    os.chdir(Path(__file__).parent.parent.parent.absolute())
 
 try:
     exec(open("pyspark/version.py").read())
@@ -58,7 +77,7 @@ run sdist.
       ./build/mvn -DskipTests clean package
     Building the source dist is done in the Python directory:
       cd python
-      python setup.py sdist
+      python packaging/classic/setup.py sdist
       pip install dist/*.tar.gz"""
 
 # Figure out where the jars are we need to package with PySpark.
@@ -129,11 +148,13 @@ if in_spark:
 # If you are changing the versions here, please also change ./python/pyspark/sql/pandas/utils.py
 # For Arrow, you should also check ./pom.xml and ensure there are no breaking changes in the
 # binary format protocol with the Java version, see ARROW_HOME/format/* for specifications.
-# Also don't forget to update python/docs/source/getting_started/install.rst.
-_minimum_pandas_version = "1.0.5"
-_minimum_pyarrow_version = "4.0.0"
-_minimum_grpc_version = "1.56.0"
-_minimum_googleapis_common_protos_version = "1.56.4"
+# Also don't forget to update python/docs/source/getting_started/install.rst,
+# python/packaging/client/setup.py, and python/packaging/connect/setup.py
+_minimum_pandas_version = "2.0.0"
+_minimum_numpy_version = "1.21"
+_minimum_pyarrow_version = "11.0.0"
+_minimum_grpc_version = "1.67.0"
+_minimum_googleapis_common_protos_version = "1.65.0"
 
 
 class InstallCommand(install):
@@ -183,8 +204,16 @@ try:
     copyfile("pyspark/shell.py", "pyspark/python/pyspark/shell.py")
 
     if in_spark:
-        # Construct the symlink farm - this is necessary since we can't refer to the path above the
-        # package root and we need to copy the jars and scripts which are up above the python root.
+        # !!HACK ALTERT!!
+        # `setup.py` has to be located with the same directory with the package.
+        # Therefore, we copy the current file, and place it at `spark/python` directory.
+        # After that, we remove it in the end.
+        copyfile("packaging/classic/setup.py", "setup.py")
+        copyfile("packaging/classic/setup.cfg", "setup.cfg")
+
+        # Construct the symlink farm - this is nein_sparkcessary since we can't refer to
+        # the path above the package root and we need to copy the jars and scripts which
+        # are up above the python root.
         if _supports_symlinks():
             os.symlink(JARS_PATH, JARS_TARGET)
             os.symlink(SCRIPTS_PATH, SCRIPTS_TARGET)
@@ -233,29 +262,38 @@ try:
         url="https://github.com/apache/spark/tree/master/python",
         packages=[
             "pyspark",
+            "pyspark.core",
             "pyspark.cloudpickle",
             "pyspark.mllib",
-            "pyspark.ml.connect",
             "pyspark.mllib.linalg",
             "pyspark.mllib.stat",
             "pyspark.ml",
+            "pyspark.ml.connect",
             "pyspark.ml.linalg",
             "pyspark.ml.param",
             "pyspark.ml.torch",
             "pyspark.ml.deepspeed",
             "pyspark.sql",
             "pyspark.sql.avro",
+            "pyspark.sql.classic",
             "pyspark.sql.connect",
             "pyspark.sql.connect.avro",
             "pyspark.sql.connect.client",
+            "pyspark.sql.connect.functions",
             "pyspark.sql.connect.proto",
             "pyspark.sql.connect.protobuf",
+            "pyspark.sql.connect.resource",
+            "pyspark.sql.connect.shell",
             "pyspark.sql.connect.streaming",
+            "pyspark.sql.connect.streaming.worker",
+            "pyspark.sql.functions",
             "pyspark.sql.pandas",
+            "pyspark.sql.plot",
             "pyspark.sql.protobuf",
             "pyspark.sql.streaming",
+            "pyspark.sql.streaming.proto",
+            "pyspark.sql.worker",
             "pyspark.streaming",
-            "pyspark.sql.connect.streaming.worker",
             "pyspark.bin",
             "pyspark.sbin",
             "pyspark.jars",
@@ -276,6 +314,7 @@ try:
             "pyspark.errors",
             "pyspark.errors.exceptions",
             "pyspark.examples.src.main.python",
+            "pyspark.logger",
         ],
         include_package_data=True,
         package_dir={
@@ -305,19 +344,19 @@ try:
         license="http://www.apache.org/licenses/LICENSE-2.0",
         # Don't forget to update python/docs/source/getting_started/install.rst
         # if you're updating the versions or dependencies.
-        install_requires=["py4j==0.10.9.7"],
+        install_requires=["py4j==0.10.9.9"],
         extras_require={
-            "ml": ["numpy>=1.15,<2"],
-            "mllib": ["numpy>=1.15,<2"],
+            "ml": ["numpy>=%s" % _minimum_numpy_version],
+            "mllib": ["numpy>=%s" % _minimum_numpy_version],
             "sql": [
                 "pandas>=%s" % _minimum_pandas_version,
                 "pyarrow>=%s" % _minimum_pyarrow_version,
-                "numpy>=1.15,<2",
+                "numpy>=%s" % _minimum_numpy_version,
             ],
             "pandas_on_spark": [
                 "pandas>=%s" % _minimum_pandas_version,
                 "pyarrow>=%s" % _minimum_pyarrow_version,
-                "numpy>=1.15,<2",
+                "numpy>=%s" % _minimum_numpy_version,
             ],
             "connect": [
                 "pandas>=%s" % _minimum_pandas_version,
@@ -325,17 +364,18 @@ try:
                 "grpcio>=%s" % _minimum_grpc_version,
                 "grpcio-status>=%s" % _minimum_grpc_version,
                 "googleapis-common-protos>=%s" % _minimum_googleapis_common_protos_version,
-                "numpy>=1.15,<2",
+                "numpy>=%s" % _minimum_numpy_version,
             ],
         },
-        python_requires=">=3.8",
+        python_requires=">=3.9",
         classifiers=[
             "Development Status :: 5 - Production/Stable",
             "License :: OSI Approved :: Apache Software License",
-            "Programming Language :: Python :: 3.8",
             "Programming Language :: Python :: 3.9",
             "Programming Language :: Python :: 3.10",
             "Programming Language :: Python :: 3.11",
+            "Programming Language :: Python :: 3.12",
+            "Programming Language :: Python :: 3.13",
             "Programming Language :: Python :: Implementation :: CPython",
             "Programming Language :: Python :: Implementation :: PyPy",
             "Typing :: Typed",
@@ -348,6 +388,8 @@ finally:
     # We only cleanup the symlink farm if we were in Spark, otherwise we are installing rather than
     # packaging.
     if in_spark:
+        os.remove("setup.py")
+        os.remove("setup.cfg")
         # Depending on cleaning up the symlink farm or copied version
         if _supports_symlinks():
             os.remove(os.path.join(TEMP_PATH, "jars"))

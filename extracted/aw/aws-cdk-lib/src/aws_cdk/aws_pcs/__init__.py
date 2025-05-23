@@ -110,6 +110,12 @@ class CfnCluster(
             # the properties below are optional
             name="name",
             slurm_configuration=pcs.CfnCluster.SlurmConfigurationProperty(
+                accounting=pcs.CfnCluster.AccountingProperty(
+                    mode="mode",
+        
+                    # the properties below are optional
+                    default_purge_time_in_days=123
+                ),
                 auth_key=pcs.CfnCluster.AuthKeyProperty(
                     secret_arn="secretArn",
                     secret_version="secretVersion"
@@ -346,6 +352,88 @@ class CfnCluster(
             type_hints = typing.get_type_hints(_typecheckingstub__b386ea2d0b46e98dda569b5edccc0da74b6c12d09181731c93163fcad15cefbf)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_pcs.CfnCluster.AccountingProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "mode": "mode",
+            "default_purge_time_in_days": "defaultPurgeTimeInDays",
+        },
+    )
+    class AccountingProperty:
+        def __init__(
+            self,
+            *,
+            mode: builtins.str,
+            default_purge_time_in_days: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''The accounting configuration includes configurable settings for Slurm accounting.
+
+            :param mode: The default value is ``STANDARD``. A value of ``STANDARD`` means that Slurm accounting is enabled. Default: - "NONE"
+            :param default_purge_time_in_days: The default value for all purge settings for ``slurmdbd.conf``. For more information, see the `slurmdbd.conf documentation at SchedMD <https://slurm.schedmd.com/slurmdbd.conf.html>`_. The default value is ``-1``. A value of ``-1`` means there is no purge time and records persist as long as the cluster exists. Default: - -1
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-accounting.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_pcs as pcs
+                
+                accounting_property = pcs.CfnCluster.AccountingProperty(
+                    mode="mode",
+                
+                    # the properties below are optional
+                    default_purge_time_in_days=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__1371c6dd1b40632a0c832b301d232842e616e6e2e20240f16e1a18c257dec328)
+                check_type(argname="argument mode", value=mode, expected_type=type_hints["mode"])
+                check_type(argname="argument default_purge_time_in_days", value=default_purge_time_in_days, expected_type=type_hints["default_purge_time_in_days"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "mode": mode,
+            }
+            if default_purge_time_in_days is not None:
+                self._values["default_purge_time_in_days"] = default_purge_time_in_days
+
+        @builtins.property
+        def mode(self) -> builtins.str:
+            '''The default value is ``STANDARD``.
+
+            A value of ``STANDARD`` means that Slurm accounting is enabled.
+
+            :default: - "NONE"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-accounting.html#cfn-pcs-cluster-accounting-mode
+            '''
+            result = self._values.get("mode")
+            assert result is not None, "Required property 'mode' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def default_purge_time_in_days(self) -> typing.Optional[jsii.Number]:
+            '''The default value for all purge settings for ``slurmdbd.conf``. For more information, see the `slurmdbd.conf documentation at SchedMD <https://slurm.schedmd.com/slurmdbd.conf.html>`_. The default value is ``-1``. A value of ``-1`` means there is no purge time and records persist as long as the cluster exists.
+
+            :default: - -1
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-accounting.html#cfn-pcs-cluster-accounting-defaultpurgetimeindays
+            '''
+            result = self._values.get("default_purge_time_in_days")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AccountingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_pcs.CfnCluster.AuthKeyProperty",
@@ -741,6 +829,7 @@ class CfnCluster(
         jsii_type="aws-cdk-lib.aws_pcs.CfnCluster.SlurmConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "accounting": "accounting",
             "auth_key": "authKey",
             "scale_down_idle_time_in_seconds": "scaleDownIdleTimeInSeconds",
             "slurm_custom_settings": "slurmCustomSettings",
@@ -750,12 +839,14 @@ class CfnCluster(
         def __init__(
             self,
             *,
+            accounting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.AccountingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             auth_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.AuthKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             scale_down_idle_time_in_seconds: typing.Optional[jsii.Number] = None,
             slurm_custom_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.SlurmCustomSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Additional options related to the Slurm scheduler.
 
+            :param accounting: The accounting configuration includes configurable settings for Slurm accounting.
             :param auth_key: The shared Slurm key for authentication, also known as the cluster secret.
             :param scale_down_idle_time_in_seconds: The time before an idle node is scaled down.
             :param slurm_custom_settings: Additional Slurm-specific configuration that directly maps to Slurm settings.
@@ -770,6 +861,12 @@ class CfnCluster(
                 from aws_cdk import aws_pcs as pcs
                 
                 slurm_configuration_property = pcs.CfnCluster.SlurmConfigurationProperty(
+                    accounting=pcs.CfnCluster.AccountingProperty(
+                        mode="mode",
+                
+                        # the properties below are optional
+                        default_purge_time_in_days=123
+                    ),
                     auth_key=pcs.CfnCluster.AuthKeyProperty(
                         secret_arn="secretArn",
                         secret_version="secretVersion"
@@ -783,16 +880,30 @@ class CfnCluster(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__e6bb8855a5cf237041c92e56f09fd1b1d2d40c49f363bfde280100fbfd6f137f)
+                check_type(argname="argument accounting", value=accounting, expected_type=type_hints["accounting"])
                 check_type(argname="argument auth_key", value=auth_key, expected_type=type_hints["auth_key"])
                 check_type(argname="argument scale_down_idle_time_in_seconds", value=scale_down_idle_time_in_seconds, expected_type=type_hints["scale_down_idle_time_in_seconds"])
                 check_type(argname="argument slurm_custom_settings", value=slurm_custom_settings, expected_type=type_hints["slurm_custom_settings"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if accounting is not None:
+                self._values["accounting"] = accounting
             if auth_key is not None:
                 self._values["auth_key"] = auth_key
             if scale_down_idle_time_in_seconds is not None:
                 self._values["scale_down_idle_time_in_seconds"] = scale_down_idle_time_in_seconds
             if slurm_custom_settings is not None:
                 self._values["slurm_custom_settings"] = slurm_custom_settings
+
+        @builtins.property
+        def accounting(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.AccountingProperty"]]:
+            '''The accounting configuration includes configurable settings for Slurm accounting.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html#cfn-pcs-cluster-slurmconfiguration-accounting
+            '''
+            result = self._values.get("accounting")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.AccountingProperty"]], result)
 
         @builtins.property
         def auth_key(
@@ -974,6 +1085,12 @@ class CfnClusterProps:
                 # the properties below are optional
                 name="name",
                 slurm_configuration=pcs.CfnCluster.SlurmConfigurationProperty(
+                    accounting=pcs.CfnCluster.AccountingProperty(
+                        mode="mode",
+            
+                        # the properties below are optional
+                        default_purge_time_in_days=123
+                    ),
                     auth_key=pcs.CfnCluster.AuthKeyProperty(
                         secret_arn="secretArn",
                         secret_version="secretVersion"
@@ -2729,6 +2846,14 @@ def _typecheckingstub__b386ea2d0b46e98dda569b5edccc0da74b6c12d09181731c93163fcad
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1371c6dd1b40632a0c832b301d232842e616e6e2e20240f16e1a18c257dec328(
+    *,
+    mode: builtins.str,
+    default_purge_time_in_days: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1864f71bcded956851b861671a045d1c7d6402331c1d756c5ac88d21e9fe823c(
     *,
     secret_arn: builtins.str,
@@ -2773,6 +2898,7 @@ def _typecheckingstub__fe24d9f1c44d1db4489549227b033216d5b6490b74f43ce9c2871e34c
 
 def _typecheckingstub__e6bb8855a5cf237041c92e56f09fd1b1d2d40c49f363bfde280100fbfd6f137f(
     *,
+    accounting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AccountingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     auth_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AuthKeyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     scale_down_idle_time_in_seconds: typing.Optional[jsii.Number] = None,
     slurm_custom_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.SlurmCustomSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,

@@ -55,7 +55,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
-version = "2.24.1"
+version = "2.24.2"
 
 [project.license]
 text = "MIT"
@@ -96,9 +96,9 @@ locked = [
     "exceptiongroup==1.2.0 ; python_version < \"3.11\"",
     "filelock==3.16.1",
     "findpython==0.6.3",
-    "h11==0.14.0",
+    "h11==0.16.0",
     "hishel==0.0.33",
-    "httpcore==1.0.6",
+    "httpcore==1.0.9",
     "httpx==0.27.2",
     "httpx[socks]==0.27.2",
     "id==1.5.0",
@@ -109,7 +109,7 @@ locked = [
     "mdurl==0.1.2",
     "msgpack==1.1.0",
     "packaging==24.1",
-    "pbs-installer==2025.2.12",
+    "pbs-installer==2025.5.17",
     "platformdirs==4.3.6",
     "pygments==2.17.2",
     "pyproject-hooks==1.2.0",
@@ -126,7 +126,7 @@ locked = [
     "typing-extensions==4.12.2",
     "unearth==0.17.5",
     "urllib3==2.2.1",
-    "virtualenv==20.27.0",
+    "virtualenv==20.31.2",
     "zipp==3.20.2 ; python_version < \"3.12\"",
 ]
 all-locked = [

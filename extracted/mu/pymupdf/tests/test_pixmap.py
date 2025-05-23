@@ -200,7 +200,10 @@ def test_3050():
         else:
             assert rms == 0
         wt = pymupdf.TOOLS.mupdf_warnings()
-        assert wt == 'PDF stream Length incorrect'
+        if pymupdf.mupdf_version_tuple >= (1, 26, 0):
+            assert wt == 'bogus font ascent/descent values (0 / 0)\nPDF stream Length incorrect'
+        else:
+            assert wt == 'PDF stream Length incorrect'
 
 def test_3058():
     doc = pymupdf.Document(os.path.abspath(f'{__file__}/../../tests/resources/test_3058.pdf'))
@@ -363,10 +366,7 @@ def test_3493():
     out1 = do(1)
     out2 = do(2)
     print(f'{len(out0)=} {len(out1)=} {len(out2)=}.')
-    if pymupdf.mupdf_version_tuple >= (1, 24, 3):
-        assert out1 == out0
-    else:
-        assert out1 != out0
+    assert out1 == out0
     assert out2 == out0
 
 
@@ -414,9 +414,7 @@ def test_3448():
     path_diff = os.path.normpath(f'{__file__}/../../tests/test_3448-diff.png')
     diff.save(path_diff)
     print(f'{rms=}')
-    if pymupdf.mupdf_version_tuple < (1, 24, 11):
-        assert 30 <= rms < 45
-    elif pymupdf.mupdf_version_tuple < (1, 25, 5):
+    if pymupdf.mupdf_version_tuple < (1, 25, 5):
         # Prior to fix for mupdf bug 708274.
         assert 1 < rms < 2
     else:
@@ -512,3 +510,72 @@ def test_4336():
     
     if cc_old:
         assert cc == cc_old
+
+
+def test_4435():
+    print(f'{pymupdf.version=}')
+    path = os.path.normpath(f'{__file__}/../../tests/resources/test_4435.pdf')
+    with pymupdf.open(path) as document:
+        page = document[2]
+        print(f'Calling page.get_pixmap().', flush=1)
+        pixmap = page.get_pixmap(alpha=False, dpi=120)
+        print(f'Called page.get_pixmap().', flush=1)
+    wt = pymupdf.TOOLS.mupdf_warnings()
+    assert wt == 'bogus font ascent/descent values (0 / 0)\n... repeated 9 times...'
+
+
+def test_4423():
+    path = os.path.normpath(f'{__file__}/../../tests/resources/test_4423.pdf')
+    with pymupdf.open(path) as document:
+        path2 = f'{path}.pdf'
+        ee = None
+        try:
+            document.save(
+                    path2, 
+                    garbage=4,
+                    expand=1,
+                    deflate=True,
+                    pretty=True,
+                    no_new_id=True,
+                    )
+        except Exception as e:
+            print(f'Exception: {e}')
+            ee = e
+        
+        if (1, 25, 5) <= pymupdf.mupdf_version_tuple < (1, 26):
+            assert ee, f'Did not receive the expected exception.'
+            wt = pymupdf.TOOLS.mupdf_warnings()
+            assert wt == 'dropping unclosed output'
+        else:
+            assert not ee, f'Received unexpected exception: {e}'
+            wt = pymupdf.TOOLS.mupdf_warnings()
+            assert wt == 'format error: cannot find object in xref (56 0 R)\nformat error: cannot find object in xref (68 0 R)'
+
+
+def test_4445():
+    print()
+    # Test case is large so we download it instead of having it in PyMuPDF
+    # git. We put it in `cache/` directory do it is not removed by `git clean`
+    # (unless `-d` is specified).
+    import util
+    path = util.download(
+            'https://github.com/user-attachments/files/19738242/ss.pdf',
+            'test_4445.pdf',
+            size=2671185,
+            )
+    with pymupdf.open(path) as document:
+        page = document[0]
+        pixmap = page.get_pixmap()
+        print(f'{pixmap.width=}')
+        print(f'{pixmap.height=}')
+        if pymupdf.mupdf_version_tuple >= (1, 26):
+            assert (pixmap.width, pixmap.height) == (792, 612)
+        else:
+            assert (pixmap.width, pixmap.height) == (612, 792)
+        if 0:
+            path_pixmap = f'{path}.png'
+            pixmap.save(path_pixmap)
+            print(f'Have created {path_pixmap=}')
+    wt = pymupdf.TOOLS.mupdf_warnings()
+    print(f'{wt=}')
+    assert wt == 'broken xref subsection, proceeding anyway.\nTrailer Size is off-by-one. Ignoring.'

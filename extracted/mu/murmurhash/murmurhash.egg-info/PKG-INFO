@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: murmurhash
-Version: 1.0.12
+Version: 1.0.13
 Summary: Cython bindings for MurmurHash
 Home-page: https://github.com/explosion/murmurhash
 Author: Explosion
@@ -23,7 +23,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Topic :: Scientific/Engineering
-Requires-Python: >=3.6
+Requires-Python: >=3.6,<3.14
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Dynamic: author
@@ -33,6 +33,7 @@ Dynamic: description
 Dynamic: description-content-type
 Dynamic: home-page
 Dynamic: license
+Dynamic: license-file
 Dynamic: requires-python
 Dynamic: summary
 

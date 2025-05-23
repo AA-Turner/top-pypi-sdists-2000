@@ -4129,7 +4129,7 @@ class CfnPipeline(
 
             :param name: The environment variable name in the key-value pair.
             :param value: The environment variable value in the key-value pair.
-            :param type: The type of the environment variable.
+            :param type: Specifies the type of use for the environment variable value. The value can be either ``PLAINTEXT`` or ``SECRETS_MANAGER`` . If the value is ``SECRETS_MANAGER`` , provide the Secrets reference in the EnvironmentVariable value.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-environmentvariable.html
             :exampleMetadata: fixture=_generated
@@ -4182,7 +4182,9 @@ class CfnPipeline(
 
         @builtins.property
         def type(self) -> typing.Optional[builtins.str]:
-            '''The type of the environment variable.
+            '''Specifies the type of use for the environment variable value.
+
+            The value can be either ``PLAINTEXT`` or ``SECRETS_MANAGER`` . If the value is ``SECRETS_MANAGER`` , provide the Secrets reference in the EnvironmentVariable value.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-environmentvariable.html#cfn-codepipeline-pipeline-environmentvariable-type
             '''

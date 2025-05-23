@@ -473,19 +473,20 @@ async def test_persistent_connection_provider_empty_batch_response():
         "web3.providers.persistent.websocket.connect",
         new=lambda *_1, **_2: _mocked_ws_conn(),
     ):
-        async with AsyncWeb3(WebSocketProvider("ws://mocked")) as async_w3:
-            async_w3.provider._ws.recv = AsyncMock()
-            async_w3.provider._ws.recv.return_value = (
-                b'{"jsonrpc": "2.0","id":null,"error": {"code": -32600, "message": '
-                b'"empty batch"}}\n'
-            )
-            async with async_w3.batch_requests() as batch:
-                with pytest.raises(Web3RPCError, match="empty batch"):
+        with pytest.raises(Web3RPCError, match="empty batch"):
+            async with AsyncWeb3(WebSocketProvider("ws://mocked")) as async_w3:
+                async with async_w3.batch_requests() as batch:
+                    assert async_w3.provider._is_batching
+                    async_w3.provider._ws.recv = AsyncMock()
+                    async_w3.provider._ws.recv.return_value = (
+                        b'{"jsonrpc": "2.0","id":null,"error": {"code": -32600, '
+                        b'"message": "empty batch"}}\n'
+                    )
                     await batch.async_execute()
 
-            # assert that even though there was an error, we have reset the batching
-            # state
-            assert not async_w3.provider._is_batching
+        # assert that even though there was an error, we have reset the batching
+        # state
+        assert not async_w3.provider._is_batching
 
 
 @pytest.mark.parametrize(
@@ -564,21 +565,3 @@ async def test_raise_stray_errors_from_cache_handles_list_response_without_error
 
     # assert no errors raised
     provider._raise_stray_errors_from_cache()
-
-
-@pytest.mark.asyncio
-async def test_websocket_provider_is_batching_when_make_batch_request():
-    def assert_is_batching_and_return_response(*_args, **_kwargs) -> bytes:
-        assert provider._is_batching
-        return b'{"jsonrpc":"2.0","id":1,"result":["0x1"]}'
-
-    provider = WebSocketProvider("ws://mocked")
-    _mock_ws(provider)
-    provider._get_response_for_request_id = AsyncMock()
-    provider._get_response_for_request_id.side_effect = (
-        assert_is_batching_and_return_response
-    )
-
-    assert not provider._is_batching
-    await provider.make_batch_request([("eth_blockNumber", [])])
-    assert not provider._is_batching

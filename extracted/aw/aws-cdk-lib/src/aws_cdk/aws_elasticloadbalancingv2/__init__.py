@@ -3859,7 +3859,7 @@ class CfnListener(
         :param load_balancer_arn: The Amazon Resource Name (ARN) of the load balancer.
         :param alpn_policy: [TLS listener] The name of the Application-Layer Protocol Negotiation (ALPN) policy.
         :param certificates: The default SSL server certificate for a secure listener. You must provide exactly one certificate if the listener protocol is HTTPS or TLS. To create a certificate list for a secure listener, use `AWS::ElasticLoadBalancingV2::ListenerCertificate <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listenercertificate.html>`_ .
-        :param listener_attributes: The listener attributes.
+        :param listener_attributes: The listener attributes. Attributes that you do not modify retain their current values.
         :param mutual_authentication: The mutual authentication configuration information.
         :param port: The port on which the load balancer is listening. You can't specify a port for a Gateway Load Balancer.
         :param protocol: The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP. You can’t specify the UDP or TCP_UDP protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
@@ -5808,7 +5808,7 @@ class CfnListenerProps:
         :param load_balancer_arn: The Amazon Resource Name (ARN) of the load balancer.
         :param alpn_policy: [TLS listener] The name of the Application-Layer Protocol Negotiation (ALPN) policy.
         :param certificates: The default SSL server certificate for a secure listener. You must provide exactly one certificate if the listener protocol is HTTPS or TLS. To create a certificate list for a secure listener, use `AWS::ElasticLoadBalancingV2::ListenerCertificate <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listenercertificate.html>`_ .
-        :param listener_attributes: The listener attributes.
+        :param listener_attributes: The listener attributes. Attributes that you do not modify retain their current values.
         :param mutual_authentication: The mutual authentication configuration information.
         :param port: The port on which the load balancer is listening. You can't specify a port for a Gateway Load Balancer.
         :param protocol: The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP. You can’t specify the UDP or TCP_UDP protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
@@ -5995,6 +5995,8 @@ class CfnListenerProps:
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnListener.ListenerAttributeProperty]]]]:
         '''The listener attributes.
+
+        Attributes that you do not modify retain their current values.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-listenerattributes
         '''
@@ -7220,7 +7222,7 @@ class CfnListenerRule(
         ) -> None:
             '''Information about a host header condition.
 
-            :param values: The host names. The maximum size of each name is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). If you specify multiple strings, the condition is satisfied if one of the strings matches the host name.
+            :param values: The host names. The maximum size of each name is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). You must include at least one "." character. You can include only alphabetical characters after the final "." character. If you specify multiple strings, the condition is satisfied if one of the strings matches the host name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-hostheaderconfig.html
             :exampleMetadata: fixture=_generated
@@ -7246,7 +7248,7 @@ class CfnListenerRule(
         def values(self) -> typing.Optional[typing.List[builtins.str]]:
             '''The host names.
 
-            The maximum size of each name is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character).
+            The maximum size of each name is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). You must include at least one "." character. You can include only alphabetical characters after the final "." character.
 
             If you specify multiple strings, the condition is satisfied if one of the strings matches the host name.
 
@@ -8499,7 +8501,7 @@ class CfnLoadBalancer(
         :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink . The default is ``on`` . You can't configure this property on a Network Load Balancer unless you associated a security group with the load balancer when you created it.
         :param ip_address_type: The IP address type. Internal load balancers must use ``ipv4`` . [Application Load Balancers] The possible values are ``ipv4`` (IPv4 addresses), ``dualstack`` (IPv4 and IPv6 addresses), and ``dualstack-without-public-ipv4`` (public IPv6 addresses and private IPv4 and IPv6 addresses). Application Load Balancer authentication supports IPv4 addresses only when connecting to an Identity Provider (IdP) or Amazon Cognito endpoint. Without a public IPv4 address the load balancer can't complete the authentication process, resulting in HTTP 500 errors. [Network Load Balancers and Gateway Load Balancers] The possible values are ``ipv4`` (IPv4 addresses) and ``dualstack`` (IPv4 and IPv6 addresses).
         :param ipv4_ipam_pool_id: The ID of the IPv4 IPAM pool.
-        :param load_balancer_attributes: The load balancer attributes.
+        :param load_balancer_attributes: The load balancer attributes. Attributes that you do not modify retain their current values.
         :param minimum_load_balancer_capacity: The minimum capacity for a load balancer.
         :param name: The name of the load balancer. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, must not begin or end with a hyphen, and must not begin with "internal-". If you don't specify a name, AWS CloudFormation generates a unique physical ID for the load balancer. If you specify a name, you cannot perform updates that require replacement of this resource, but you can perform other updates. To replace the resource, specify a new name.
         :param scheme: The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet. The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can route requests only from clients with access to the VPC for the load balancer. The default is an Internet-facing load balancer. You can't specify a scheme for a Gateway Load Balancer.
@@ -9160,7 +9162,7 @@ class CfnLoadBalancerProps:
         :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink . The default is ``on`` . You can't configure this property on a Network Load Balancer unless you associated a security group with the load balancer when you created it.
         :param ip_address_type: The IP address type. Internal load balancers must use ``ipv4`` . [Application Load Balancers] The possible values are ``ipv4`` (IPv4 addresses), ``dualstack`` (IPv4 and IPv6 addresses), and ``dualstack-without-public-ipv4`` (public IPv6 addresses and private IPv4 and IPv6 addresses). Application Load Balancer authentication supports IPv4 addresses only when connecting to an Identity Provider (IdP) or Amazon Cognito endpoint. Without a public IPv4 address the load balancer can't complete the authentication process, resulting in HTTP 500 errors. [Network Load Balancers and Gateway Load Balancers] The possible values are ``ipv4`` (IPv4 addresses) and ``dualstack`` (IPv4 and IPv6 addresses).
         :param ipv4_ipam_pool_id: The ID of the IPv4 IPAM pool.
-        :param load_balancer_attributes: The load balancer attributes.
+        :param load_balancer_attributes: The load balancer attributes. Attributes that you do not modify retain their current values.
         :param minimum_load_balancer_capacity: The minimum capacity for a load balancer.
         :param name: The name of the load balancer. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, must not begin or end with a hyphen, and must not begin with "internal-". If you don't specify a name, AWS CloudFormation generates a unique physical ID for the load balancer. If you specify a name, you cannot perform updates that require replacement of this resource, but you can perform other updates. To replace the resource, specify a new name.
         :param scheme: The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet. The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can route requests only from clients with access to the VPC for the load balancer. The default is an Internet-facing load balancer. You can't specify a scheme for a Gateway Load Balancer.
@@ -9309,6 +9311,8 @@ class CfnLoadBalancerProps:
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLoadBalancer.LoadBalancerAttributeProperty]]]]:
         '''The load balancer attributes.
+
+        Attributes that you do not modify retain their current values.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-loadbalancerattributes
         '''
@@ -9539,7 +9543,7 @@ class CfnTargetGroup(
         :param protocol: The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, or TCP_UDP. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. If the target is a Lambda function, this parameter does not apply.
         :param protocol_version: [HTTP/HTTPS protocol] The protocol version. The possible values are ``GRPC`` , ``HTTP1`` , and ``HTTP2`` .
         :param tags: The tags.
-        :param target_group_attributes: The target group attributes.
+        :param target_group_attributes: The target group attributes. Attributes that you do not modify retain their current values.
         :param targets: The targets.
         :param target_type: The type of target that you must specify when registering targets with this target group. You can't specify targets for a target group using more than one target type. - ``instance`` - Register targets by instance ID. This is the default value. - ``ip`` - Register targets by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can't specify publicly routable IP addresses. - ``lambda`` - Register a single Lambda function as a target. - ``alb`` - Register a single Application Load Balancer as a target.
         :param unhealthy_threshold_count: The number of consecutive health check failures required before considering a target unhealthy. The range is 2-10. If the target group protocol is TCP, TCP_UDP, UDP, TLS, HTTP or HTTPS, the default is 2. For target groups with a protocol of GENEVE, the default is 2. If the target type is ``lambda`` , the default is 5.
@@ -10293,7 +10297,7 @@ class CfnTargetGroupProps:
         :param protocol: The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, or TCP_UDP. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. If the target is a Lambda function, this parameter does not apply.
         :param protocol_version: [HTTP/HTTPS protocol] The protocol version. The possible values are ``GRPC`` , ``HTTP1`` , and ``HTTP2`` .
         :param tags: The tags.
-        :param target_group_attributes: The target group attributes.
+        :param target_group_attributes: The target group attributes. Attributes that you do not modify retain their current values.
         :param targets: The targets.
         :param target_type: The type of target that you must specify when registering targets with this target group. You can't specify targets for a target group using more than one target type. - ``instance`` - Register targets by instance ID. This is the default value. - ``ip`` - Register targets by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can't specify publicly routable IP addresses. - ``lambda`` - Register a single Lambda function as a target. - ``alb`` - Register a single Application Load Balancer as a target.
         :param unhealthy_threshold_count: The number of consecutive health check failures required before considering a target unhealthy. The range is 2-10. If the target group protocol is TCP, TCP_UDP, UDP, TLS, HTTP or HTTPS, the default is 2. For target groups with a protocol of GENEVE, the default is 2. If the target type is ``lambda`` , the default is 5.
@@ -10569,6 +10573,8 @@ class CfnTargetGroupProps:
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTargetGroup.TargetGroupAttributeProperty]]]]:
         '''The target group attributes.
+
+        Attributes that you do not modify retain their current values.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-targetgroupattributes
         '''

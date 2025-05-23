@@ -17,7 +17,7 @@ dependencies = [
     "pydantic>=2.7.4",
 ]
 name = "langchain-core"
-version = "0.3.60"
+version = "0.3.61"
 description = "Building applications with LLMs through composability"
 readme = "README.md"
 
@@ -94,18 +94,17 @@ ignore = [
     "ISC001",
     "PERF203",
     "PLR09",
+    "RUF012",
     "TC001",
     "TC002",
     "TC003",
     "TD002",
     "TD003",
     "UP007",
-    "A",
     "ANN401",
     "BLE",
     "ERA",
     "PLR2004",
-    "RUF",
 ]
 
 [tool.ruff.lint.flake8-type-checking]

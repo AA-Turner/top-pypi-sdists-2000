@@ -2919,7 +2919,8 @@ class CfnAutoScalingGroup(
     @builtins.property
     @jsii.member(jsii_name="attrAutoScalingGroupArn")
     def attr_auto_scaling_group_arn(self) -> builtins.str:
-        '''
+        '''The Amazon Resource Name (ARN) of the Auto Scaling group.
+
         :cloudformationAttribute: AutoScalingGroupARN
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrAutoScalingGroupArn"))

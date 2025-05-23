@@ -447,7 +447,8 @@ class CfnFleet(
                     ),
         
                     # the properties below are optional
-                    storage_profile_id="storageProfileId"
+                    storage_profile_id="storageProfileId",
+                    tag_propagation_mode="tagPropagationMode"
                 ),
                 service_managed_ec2=deadline.CfnFleet.ServiceManagedEc2FleetConfigurationProperty(
                     instance_capabilities=deadline.CfnFleet.ServiceManagedEc2InstanceCapabilitiesProperty(
@@ -1117,6 +1118,7 @@ class CfnFleet(
             "mode": "mode",
             "worker_capabilities": "workerCapabilities",
             "storage_profile_id": "storageProfileId",
+            "tag_propagation_mode": "tagPropagationMode",
         },
     )
     class CustomerManagedFleetConfigurationProperty:
@@ -1126,12 +1128,14 @@ class CfnFleet(
             mode: builtins.str,
             worker_capabilities: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.CustomerManagedWorkerCapabilitiesProperty", typing.Dict[builtins.str, typing.Any]]],
             storage_profile_id: typing.Optional[builtins.str] = None,
+            tag_propagation_mode: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The details of a customer managed fleet configuration.
 
             :param mode: The AWS Auto Scaling mode for the customer managed fleet configuration.
             :param worker_capabilities: The worker capabilities for a customer managed fleet configuration.
             :param storage_profile_id: The storage profile ID.
+            :param tag_propagation_mode: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1188,7 +1192,8 @@ class CfnFleet(
                     ),
                 
                     # the properties below are optional
-                    storage_profile_id="storageProfileId"
+                    storage_profile_id="storageProfileId",
+                    tag_propagation_mode="tagPropagationMode"
                 )
             '''
             if __debug__:
@@ -1196,12 +1201,15 @@ class CfnFleet(
                 check_type(argname="argument mode", value=mode, expected_type=type_hints["mode"])
                 check_type(argname="argument worker_capabilities", value=worker_capabilities, expected_type=type_hints["worker_capabilities"])
                 check_type(argname="argument storage_profile_id", value=storage_profile_id, expected_type=type_hints["storage_profile_id"])
+                check_type(argname="argument tag_propagation_mode", value=tag_propagation_mode, expected_type=type_hints["tag_propagation_mode"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "mode": mode,
                 "worker_capabilities": worker_capabilities,
             }
             if storage_profile_id is not None:
                 self._values["storage_profile_id"] = storage_profile_id
+            if tag_propagation_mode is not None:
+                self._values["tag_propagation_mode"] = tag_propagation_mode
 
         @builtins.property
         def mode(self) -> builtins.str:
@@ -1232,6 +1240,14 @@ class CfnFleet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html#cfn-deadline-fleet-customermanagedfleetconfiguration-storageprofileid
             '''
             result = self._values.get("storage_profile_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def tag_propagation_mode(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html#cfn-deadline-fleet-customermanagedfleetconfiguration-tagpropagationmode
+            '''
+            result = self._values.get("tag_propagation_mode")
             return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -1887,7 +1903,8 @@ class CfnFleet(
                         ),
                 
                         # the properties below are optional
-                        storage_profile_id="storageProfileId"
+                        storage_profile_id="storageProfileId",
+                        tag_propagation_mode="tagPropagationMode"
                     ),
                     service_managed_ec2=deadline.CfnFleet.ServiceManagedEc2FleetConfigurationProperty(
                         instance_capabilities=deadline.CfnFleet.ServiceManagedEc2InstanceCapabilitiesProperty(
@@ -2748,7 +2765,8 @@ class CfnFleetProps:
                         ),
             
                         # the properties below are optional
-                        storage_profile_id="storageProfileId"
+                        storage_profile_id="storageProfileId",
+                        tag_propagation_mode="tagPropagationMode"
                     ),
                     service_managed_ec2=deadline.CfnFleet.ServiceManagedEc2FleetConfigurationProperty(
                         instance_capabilities=deadline.CfnFleet.ServiceManagedEc2InstanceCapabilitiesProperty(
@@ -6300,6 +6318,7 @@ def _typecheckingstub__1e0d0744c60a31b3157ef03f930266f6c000eafa44c6050607897ea5b
     mode: builtins.str,
     worker_capabilities: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.CustomerManagedWorkerCapabilitiesProperty, typing.Dict[builtins.str, typing.Any]]],
     storage_profile_id: typing.Optional[builtins.str] = None,
+    tag_propagation_mode: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

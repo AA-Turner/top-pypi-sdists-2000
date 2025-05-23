@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: instructor
-Version: 1.8.2
+Version: 1.8.3
 Summary: structured outputs for llm
 Project-URL: repository, https://github.com/instructor-ai/instructor
 Author-email: Jason Liu <jason@jxnl.co>, Ivan Leo <ivan@jxnl.co>
@@ -11,7 +11,7 @@ Requires-Dist: aiohttp<4.0.0,>=3.9.1
 Requires-Dist: docstring-parser<1.0,>=0.16
 Requires-Dist: jinja2<4.0.0,>=3.1.4
 Requires-Dist: jiter<0.9,>=0.6.1
-Requires-Dist: openai<2.0.0,>=1.52.0
+Requires-Dist: openai<2.0.0,>=1.70.0
 Requires-Dist: pydantic-core<3.0.0,>=2.18.0
 Requires-Dist: pydantic<3.0.0,>=2.8.0
 Requires-Dist: requests<3.0.0,>=2.32.3
@@ -627,6 +627,16 @@ for user in users:
 ## [Evals](https://github.com/jxnl/instructor/tree/main/tests/llm/test_openai/evals#how-to-contribute-writing-and-running-evaluation-tests)
 
 We invite you to contribute to evals in `pytest` as a way to monitor the quality of the OpenAI models and the `instructor` library. To get started check out the evals for [Anthropic](https://github.com/jxnl/instructor/blob/main/tests/llm/test_anthropic/evals/test_simple.py) and [OpenAI](https://github.com/jxnl/instructor/tree/main/tests/llm/test_openai/evals#how-to-contribute-writing-and-running-evaluation-tests) and contribute your own evals in the form of pytest tests. These evals will be run once a week and the results will be posted.
+
+## Repository Overview
+
+Below is a quick tour of the repository's main directories. See [docs/repository-overview.md](docs/repository-overview.md) for more details.
+
+- **instructor/** – core library code with clients and utilities.
+- **cli/** – command-line tools for managing jobs and usage.
+- **docs/** – documentation sources for the MkDocs site.
+- **examples/** – cookbook examples showcasing Instructor.
+- **tests/** – unit tests and evaluation suites.
 
 ## Contributing
 

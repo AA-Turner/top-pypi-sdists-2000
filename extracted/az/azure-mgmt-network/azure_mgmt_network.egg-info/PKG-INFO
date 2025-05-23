@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: azure-mgmt-network
-Version: 28.1.0
+Version: 29.0.0
 Summary: Microsoft Azure Network Management Client Library for Python
 Home-page: https://github.com/Azure/azure-sdk-for-python
 Author: Microsoft Corporation
@@ -11,24 +11,23 @@ Classifier: Development Status :: 5 - Production/Stable
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: License :: OSI Approved :: MIT License
-Requires-Python: >=3.8
+Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: isodate>=0.6.1
 Requires-Dist: typing-extensions>=4.6.0
 Requires-Dist: azure-common>=1.1
-Requires-Dist: azure-mgmt-core>=1.3.2
+Requires-Dist: azure-mgmt-core>=1.5.0
 
 # Microsoft Azure SDK for Python
 
 This is the Microsoft Azure Network Management Client Library.
-This package has been tested with Python 3.8+.
+This package has been tested with Python 3.9+.
 For a more complete view of Azure libraries, see the [azure sdk python release](https://aka.ms/azsdk/python/all).
 
 ## _Disclaimer_
@@ -39,7 +38,7 @@ _Azure SDK Python packages support for Python 2.7 has ended 01 January 2022. For
 
 ### Prerequisites
 
-- Python 3.8+ is required to use this package.
+- Python 3.9+ is required to use this package.
 - [Azure subscription](https://azure.microsoft.com/free/)
 
 ### Install the package
@@ -51,7 +50,7 @@ pip install azure-identity
 
 ### Authentication
 
-By default, [Azure Active Directory](https://aka.ms/awps/aad) token authentication depends on correct configure of following environment variables.
+By default, [Azure Active Directory](https://aka.ms/awps/aad) token authentication depends on correct configuration of the following environment variables.
 
 - `AZURE_CLIENT_ID` for Azure client ID.
 - `AZURE_TENANT_ID` for Azure tenant ID.
@@ -89,6 +88,54 @@ section of the project.
 
 
 # Release History
+
+## 29.0.0 (2025-05-22)
+
+### Features Added
+
+  - Added operation NetworkVirtualAppliancesOperations.begin_get_boot_diagnostic_logs
+  - Added operation NetworkVirtualAppliancesOperations.begin_reimage
+  - Added operation VirtualNetworkGatewaysOperations.begin_get_resiliency_information
+  - Added operation VirtualNetworkGatewaysOperations.begin_get_routes_information
+  - Added operation VirtualNetworkGatewaysOperations.begin_invoke_abort_migration
+  - Added operation VirtualNetworkGatewaysOperations.begin_invoke_commit_migration
+  - Added operation VirtualNetworkGatewaysOperations.begin_invoke_execute_migration
+  - Added operation VirtualNetworkGatewaysOperations.begin_invoke_prepare_migration
+  - Added operation group NetworkSecurityPerimeterAccessRulesOperations
+  - Added operation group NetworkSecurityPerimeterAssociableResourceTypesOperations
+  - Added operation group NetworkSecurityPerimeterAssociationsOperations
+  - Added operation group NetworkSecurityPerimeterLinkReferencesOperations
+  - Added operation group NetworkSecurityPerimeterLinksOperations
+  - Added operation group NetworkSecurityPerimeterLoggingConfigurationsOperations
+  - Added operation group NetworkSecurityPerimeterOperationStatusesOperations
+  - Added operation group NetworkSecurityPerimeterProfilesOperations
+  - Added operation group NetworkSecurityPerimetersOperations
+  - Model ActiveConnectivityConfiguration has a new parameter connectivity_capabilities
+  - Model ConnectivityConfiguration has a new parameter connectivity_capabilities
+  - Model EffectiveConnectivityConfiguration has a new parameter connectivity_capabilities
+  - Model ExpressRouteCircuitPeeringConfig has a new parameter advertised_public_prefix_info
+  - Model IpamPool has a new parameter etag
+  - Model LoadBalancingRule has a new parameter enable_connection_tracking
+  - Model ManagedRuleSet has a new parameter computed_disabled_rules
+  - Model NatGateway has a new parameter public_ip_addresses_v6
+  - Model NatGateway has a new parameter public_ip_prefixes_v6
+  - Model NatGateway has a new parameter source_virtual_network
+  - Model VerifierWorkspace has a new parameter etag
+  - Model VirtualNetwork has a new parameter default_public_nat_gateway
+  - Model VirtualNetworkGateway has a new parameter enable_high_bandwidth_vpn_gateway
+  - Model VirtualNetworkGateway has a new parameter virtual_network_gateway_migration_status
+  - Model VirtualNetworkGatewayConnection has a new parameter tunnel_properties
+  - Operation IpamPoolsOperations.begin_create has a new optional parameter if_match
+  - Operation IpamPoolsOperations.begin_delete has a new optional parameter if_match
+  - Operation IpamPoolsOperations.update has a new optional parameter if_match
+  - Operation VerifierWorkspacesOperations.begin_delete has a new optional parameter if_match
+  - Operation VerifierWorkspacesOperations.create has a new optional parameter if_match
+  - Operation VerifierWorkspacesOperations.update has a new optional parameter if_match
+
+### Breaking Changes
+
+  - Removed operation ConnectionMonitorsOperations.begin_query
+  - Removed operation ConnectionMonitorsOperations.begin_start
 
 ## 28.1.0 (2024-12-20)
 
@@ -171,7 +218,7 @@ section of the project.
 
 ### Breaking Changes
 
-- This package now only targets the latest Api-Version available on Azure and removes APIs of other Api-Version. After this change, the package can have much smaller size. If your application requires a specific and non-latest Api-Version, it's recommended to pin this package to the previous released version; If your application always only use latest Api-Version, please ingore this change.
+- This package now only targets the latest Api-Version available on Azure and removes APIs of other Api-Version. After this change, the package can have much smaller size. If your application requires a specific and non-latest Api-Version, it's recommended to pin this package to the previous released version; If your application always only use latest Api-Version, please ignore this change.
 
 ## 27.0.0 (2024-09-22)
 

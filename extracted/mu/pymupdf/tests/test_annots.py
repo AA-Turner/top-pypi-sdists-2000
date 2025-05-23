@@ -144,13 +144,22 @@ def test_fileattachment():
 def test_stamp():
     doc = pymupdf.open()
     page = doc.new_page()
-    annot = page.add_stamp_annot(r, stamp=10)
+    annot = page.add_stamp_annot(r, stamp=0)
     assert annot.type == (13, "Stamp")
+    assert annot.info["content"] == "Approved"
     annot_id = annot.info["id"]
     annot_xref = annot.xref
     page.load_annot(annot_id)
     page.load_annot(annot_xref)
     page = doc.reload_page(page)
+
+
+def test_image_stamp():
+    doc = pymupdf.open()
+    page = doc.new_page()
+    filename = os.path.join(scriptdir, "resources", "nur-ruhig.jpg")
+    annot = page.add_stamp_annot(r, stamp=filename)
+    assert annot.info["content"] == "Image Stamp"
 
 
 def test_redact1():
@@ -184,10 +193,7 @@ def test_redact2():
     page.add_redact_annot(page.rect)
     page.apply_redactions(text=1)
     t = page.get_text("words")
-    if pymupdf.mupdf_version_tuple < (1, 24, 2):
-        assert t == []
-    else:
-        assert t == all_text0
+    assert t == all_text0
     assert not page.get_drawings()
 
 
@@ -381,10 +387,6 @@ def test_3209():
     pdf.save(path)  # Check the output PDF that the annotation is correctly drawn
 
 def test_3863():
-    if pymupdf.mupdf_version_tuple < (1, 24, 10):
-        print(f'test_3863(): not running because {pymupdf.mupdf_version_tuple=} < 1.24.10.')
-        return
-    
     path_in = os.path.normpath(f'{__file__}/../../tests/resources/test_3863.pdf')
     path_out = os.path.normpath(f'{__file__}/../../tests/test_3863.pdf.pdf')
     
@@ -461,15 +463,11 @@ def test_parent():
     try:
         print(a)  # should raise
     except Exception as e:
-        if pymupdf.mupdf_version_tuple >= (1, 25):
-            if platform.system() == 'OpenBSD':
-                assert isinstance(e, pymupdf.mupdf.FzErrorBase), f'Incorrect {type(e)=}.'
-            else:
-                assert isinstance(e, pymupdf.mupdf.FzErrorArgument), f'Incorrect {type(e)=}.'
-            assert str(e) == 'code=4: annotation not bound to any page', f'Incorrect error text {str(e)=}.'
+        if platform.system() == 'OpenBSD':
+            assert isinstance(e, pymupdf.mupdf.FzErrorBase), f'Incorrect {type(e)=}.'
         else:
-            assert isinstance(e, ReferenceError)
-            assert str(e) == 'weakly-referenced object no longer exists'
+            assert isinstance(e, pymupdf.mupdf.FzErrorArgument), f'Incorrect {type(e)=}.'
+        assert str(e) == 'code=4: annotation not bound to any page', f'Incorrect error text {str(e)=}.'
     else:
         assert 0, f'Failed to get expected exception.'
 
@@ -535,14 +533,25 @@ def test_4254():
     annot = page.add_freetext_annot(rect, "Test Annotation from minimal example")
     annot.set_border(width=1, dashes=(3, 3))
     annot.set_opacity(0.5)
-    annot.set_colors(stroke=(1, 0, 0))
+    try:
+        annot.set_colors(stroke=(1, 0, 0))
+    except ValueError as e:
+        assert 'cannot be used for FreeText annotations' in str(e), f'{e}'
+    else:
+        assert 0
     annot.update()
 
     rect = pymupdf.Rect(200, 200, 400, 400)
     annot2 = page.add_freetext_annot(rect, "Test Annotation from minimal example pt 2")
     annot2.set_border(width=1, dashes=(3, 3))
     annot2.set_opacity(0.5)
-    annot2.set_colors(stroke=(1, 0, 0))
+    try:
+        annot2.set_colors(stroke=(1, 0, 0))
+    except ValueError as e:
+        assert 'cannot be used for FreeText annotations' in str(e), f'{e}'
+    else:
+        assert 0
+    annot.update()
     annot2.update()
 
     # stores top color for each pixmap
@@ -604,3 +613,66 @@ def test_richtext():
     annot.update(fill_color=gold, opacity=0.5, rotate=90)
     pix2 = page.get_pixmap()
     assert pix1.samples == pix2.samples
+
+
+def test_4447():
+    document = pymupdf.open()
+    
+    page = document.new_page()
+
+    text_color = (1, 0, 0)
+    fill_color = (0, 1, 0)
+    border_color = (0, 0, 1)
+
+    annot_rect = pymupdf.Rect(90.1, 486.73, 139.26, 499.46)
+
+    try:
+        annot = page.add_freetext_annot(
+            annot_rect,
+            "AETERM",
+            fontname="Arial",
+            fontsize=10,
+            text_color=text_color,
+            fill_color=fill_color,
+            border_color=border_color,
+            border_width=1,
+        )
+    except ValueError as e:
+        assert 'cannot set border_color if rich_text is False' in str(e), str(e)
+    else:
+        assert 0
+    
+    try:
+        annot = page.add_freetext_annot(
+                (30, 400, 100, 450),
+                "Two",
+                fontname="Arial",
+                fontsize=10,
+                text_color=text_color,
+                fill_color=fill_color,
+                border_color=border_color,
+                border_width=1,
+                )
+    except ValueError as e:
+        assert 'cannot set border_color if rich_text is False' in str(e), str(e)
+    else:
+        assert 0
+    
+    annot = page.add_freetext_annot(
+            (30, 500, 100, 550),
+            "Three",
+            fontname="Arial",
+            fontsize=10,
+            text_color=text_color,
+            border_width=1,
+            )
+    annot.update(text_color=text_color, fill_color=fill_color)
+    try:
+        annot.update(border_color=border_color)
+    except ValueError as e:
+        assert 'cannot set border_color if rich_text is False' in str(e), str(e)
+    else:
+        assert 0
+    
+    path_out = os.path.normpath(f'{__file__}/../../tests/test_4447.pdf')
+    document.save(path_out)

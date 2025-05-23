@@ -46,6 +46,7 @@ from google.auth.transport import mtls  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.auth.exceptions import MutualTLSChannelError  # type: ignore
 from google.oauth2 import service_account  # type: ignore
+import google.protobuf
 
 try:
     OptionalRetry = Union[retries.Retry, gapic_v1.method._MethodDefault, None]
@@ -862,7 +863,7 @@ class BigtableClient(metaclass=BigtableClientMeta):
         if regex_match and regex_match.group("table_name"):
             header_params["table_name"] = regex_match.group("table_name")
 
-        if request.app_profile_id:
+        if True:  # always attach app_profile_id, even if empty string
             header_params["app_profile_id"] = request.app_profile_id
 
         routing_param_regex = re.compile(
@@ -983,7 +984,7 @@ class BigtableClient(metaclass=BigtableClientMeta):
         if regex_match and regex_match.group("table_name"):
             header_params["table_name"] = regex_match.group("table_name")
 
-        if request.app_profile_id:
+        if True:  # always attach app_profile_id, even if empty string
             header_params["app_profile_id"] = request.app_profile_id
 
         routing_param_regex = re.compile(
@@ -1125,7 +1126,7 @@ class BigtableClient(metaclass=BigtableClientMeta):
         if regex_match and regex_match.group("table_name"):
             header_params["table_name"] = regex_match.group("table_name")
 
-        if request.app_profile_id:
+        if True:  # always attach app_profile_id, even if empty string
             header_params["app_profile_id"] = request.app_profile_id
 
         routing_param_regex = re.compile(
@@ -1261,7 +1262,7 @@ class BigtableClient(metaclass=BigtableClientMeta):
         if regex_match and regex_match.group("table_name"):
             header_params["table_name"] = regex_match.group("table_name")
 
-        if request.app_profile_id:
+        if True:  # always attach app_profile_id, even if empty string
             header_params["app_profile_id"] = request.app_profile_id
 
         routing_param_regex = re.compile(
@@ -1438,7 +1439,7 @@ class BigtableClient(metaclass=BigtableClientMeta):
         if regex_match and regex_match.group("table_name"):
             header_params["table_name"] = regex_match.group("table_name")
 
-        if request.app_profile_id:
+        if True:  # always attach app_profile_id, even if empty string
             header_params["app_profile_id"] = request.app_profile_id
 
         routing_param_regex = re.compile(
@@ -1554,7 +1555,7 @@ class BigtableClient(metaclass=BigtableClientMeta):
         if regex_match and regex_match.group("name"):
             header_params["name"] = regex_match.group("name")
 
-        if request.app_profile_id:
+        if True:  # always attach app_profile_id, even if empty string
             header_params["app_profile_id"] = request.app_profile_id
 
         if header_params:
@@ -1693,7 +1694,7 @@ class BigtableClient(metaclass=BigtableClientMeta):
         if regex_match and regex_match.group("table_name"):
             header_params["table_name"] = regex_match.group("table_name")
 
-        if request.app_profile_id:
+        if True:  # always attach app_profile_id, even if empty string
             header_params["app_profile_id"] = request.app_profile_id
 
         routing_param_regex = re.compile(
@@ -2033,9 +2034,7 @@ class BigtableClient(metaclass=BigtableClientMeta):
         if regex_match and regex_match.group("name"):
             header_params["name"] = regex_match.group("name")
 
-        if request.app_profile_id is not None:
-            # prepare_query currently requires app_profile_id header to be set
-            # even when the request param is unpopulated TODO: remove after support is added
+        if True:  # always attach app_profile_id, even if empty string
             header_params["app_profile_id"] = request.app_profile_id
 
         if header_params:
@@ -2152,9 +2151,7 @@ class BigtableClient(metaclass=BigtableClientMeta):
         if regex_match and regex_match.group("name"):
             header_params["name"] = regex_match.group("name")
 
-        if request.app_profile_id is not None:
-            # execute_query currently requires app_profile_id header to be set
-            # even when the request param is unpopulated TODO: remove after support is added
+        if True:  # always attach app_profile_id, even if empty string
             header_params["app_profile_id"] = request.app_profile_id
 
         if header_params:
@@ -2194,5 +2191,7 @@ DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
     gapic_version=package_version.__version__
 )
 
+if hasattr(DEFAULT_CLIENT_INFO, "protobuf_runtime_version"):  # pragma: NO COVER
+    DEFAULT_CLIENT_INFO.protobuf_runtime_version = google.protobuf.__version__
 
 __all__ = ("BigtableClient",)

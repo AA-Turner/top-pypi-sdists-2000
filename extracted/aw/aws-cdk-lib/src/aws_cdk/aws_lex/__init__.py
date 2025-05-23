@@ -8882,6 +8882,7 @@ class CfnBot(
             "description": "description",
             "multiple_values_setting": "multipleValuesSetting",
             "obfuscation_setting": "obfuscationSetting",
+            "sub_slot_setting": "subSlotSetting",
         },
     )
     class SlotProperty:
@@ -8894,6 +8895,7 @@ class CfnBot(
             description: typing.Optional[builtins.str] = None,
             multiple_values_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.MultipleValuesSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             obfuscation_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.ObfuscationSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sub_slot_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.SubSlotSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the definition of a slot.
 
@@ -8905,6 +8907,7 @@ class CfnBot(
             :param description: The description of the slot.
             :param multiple_values_setting: Indicates whether a slot can return multiple values.
             :param obfuscation_setting: Determines whether the contents of the slot are obfuscated in Amazon CloudWatch Logs logs. Use obfuscated slots to protect information such as personally identifiable information (PII) in logs.
+            :param sub_slot_setting: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-slot.html
             :exampleMetadata: fixture=_generated
@@ -8921,6 +8924,7 @@ class CfnBot(
                 check_type(argname="argument description", value=description, expected_type=type_hints["description"])
                 check_type(argname="argument multiple_values_setting", value=multiple_values_setting, expected_type=type_hints["multiple_values_setting"])
                 check_type(argname="argument obfuscation_setting", value=obfuscation_setting, expected_type=type_hints["obfuscation_setting"])
+                check_type(argname="argument sub_slot_setting", value=sub_slot_setting, expected_type=type_hints["sub_slot_setting"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "name": name,
                 "slot_type_name": slot_type_name,
@@ -8932,6 +8936,8 @@ class CfnBot(
                 self._values["multiple_values_setting"] = multiple_values_setting
             if obfuscation_setting is not None:
                 self._values["obfuscation_setting"] = obfuscation_setting
+            if sub_slot_setting is not None:
+                self._values["sub_slot_setting"] = sub_slot_setting
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -9006,6 +9012,16 @@ class CfnBot(
             '''
             result = self._values.get("obfuscation_setting")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBot.ObfuscationSettingProperty"]], result)
+
+        @builtins.property
+        def sub_slot_setting(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBot.SubSlotSettingProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-slot.html#cfn-lex-bot-slot-subslotsetting
+            '''
+            result = self._values.get("sub_slot_setting")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBot.SubSlotSettingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9868,6 +9884,338 @@ class CfnBot(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lex.CfnBot.SpecificationsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "slot_type_id": "slotTypeId",
+            "value_elicitation_setting": "valueElicitationSetting",
+        },
+    )
+    class SpecificationsProperty:
+        def __init__(
+            self,
+            *,
+            slot_type_id: builtins.str,
+            value_elicitation_setting: typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.SubSlotValueElicitationSettingProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param slot_type_id: 
+            :param value_elicitation_setting: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-specifications.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lex as lex
+                
+                specifications_property = lex.CfnBot.SpecificationsProperty(
+                    slot_type_id="slotTypeId",
+                    value_elicitation_setting=lex.CfnBot.SubSlotValueElicitationSettingProperty(
+                        default_value_specification=lex.CfnBot.SlotDefaultValueSpecificationProperty(
+                            default_value_list=[lex.CfnBot.SlotDefaultValueProperty(
+                                default_value="defaultValue"
+                            )]
+                        ),
+                        prompt_specification=lex.CfnBot.PromptSpecificationProperty(
+                            max_retries=123,
+                            message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                message=lex.CfnBot.MessageProperty(
+                                    custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                        value="value"
+                                    ),
+                                    image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                        title="title",
+                
+                                        # the properties below are optional
+                                        buttons=[lex.CfnBot.ButtonProperty(
+                                            text="text",
+                                            value="value"
+                                        )],
+                                        image_url="imageUrl",
+                                        subtitle="subtitle"
+                                    ),
+                                    plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                        value="value"
+                                    ),
+                                    ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                        value="value"
+                                    )
+                                ),
+                
+                                # the properties below are optional
+                                variations=[lex.CfnBot.MessageProperty(
+                                    custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                        value="value"
+                                    ),
+                                    image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                        title="title",
+                
+                                        # the properties below are optional
+                                        buttons=[lex.CfnBot.ButtonProperty(
+                                            text="text",
+                                            value="value"
+                                        )],
+                                        image_url="imageUrl",
+                                        subtitle="subtitle"
+                                    ),
+                                    plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                        value="value"
+                                    ),
+                                    ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                        value="value"
+                                    )
+                                )]
+                            )],
+                
+                            # the properties below are optional
+                            allow_interrupt=False,
+                            message_selection_strategy="messageSelectionStrategy",
+                            prompt_attempts_specification={
+                                "prompt_attempts_specification_key": lex.CfnBot.PromptAttemptSpecificationProperty(
+                                    allowed_input_types=lex.CfnBot.AllowedInputTypesProperty(
+                                        allow_audio_input=False,
+                                        allow_dtmf_input=False
+                                    ),
+                
+                                    # the properties below are optional
+                                    allow_interrupt=False,
+                                    audio_and_dtmf_input_specification=lex.CfnBot.AudioAndDTMFInputSpecificationProperty(
+                                        start_timeout_ms=123,
+                
+                                        # the properties below are optional
+                                        audio_specification=lex.CfnBot.AudioSpecificationProperty(
+                                            end_timeout_ms=123,
+                                            max_length_ms=123
+                                        ),
+                                        dtmf_specification=lex.CfnBot.DTMFSpecificationProperty(
+                                            deletion_character="deletionCharacter",
+                                            end_character="endCharacter",
+                                            end_timeout_ms=123,
+                                            max_length=123
+                                        )
+                                    ),
+                                    text_input_specification=lex.CfnBot.TextInputSpecificationProperty(
+                                        start_timeout_ms=123
+                                    )
+                                )
+                            }
+                        ),
+                        sample_utterances=[lex.CfnBot.SampleUtteranceProperty(
+                            utterance="utterance"
+                        )],
+                        wait_and_continue_specification=lex.CfnBot.WaitAndContinueSpecificationProperty(
+                            continue_response=lex.CfnBot.ResponseSpecificationProperty(
+                                message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                    message=lex.CfnBot.MessageProperty(
+                                        custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                            value="value"
+                                        ),
+                                        image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                            title="title",
+                
+                                            # the properties below are optional
+                                            buttons=[lex.CfnBot.ButtonProperty(
+                                                text="text",
+                                                value="value"
+                                            )],
+                                            image_url="imageUrl",
+                                            subtitle="subtitle"
+                                        ),
+                                        plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                            value="value"
+                                        ),
+                                        ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                            value="value"
+                                        )
+                                    ),
+                
+                                    # the properties below are optional
+                                    variations=[lex.CfnBot.MessageProperty(
+                                        custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                            value="value"
+                                        ),
+                                        image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                            title="title",
+                
+                                            # the properties below are optional
+                                            buttons=[lex.CfnBot.ButtonProperty(
+                                                text="text",
+                                                value="value"
+                                            )],
+                                            image_url="imageUrl",
+                                            subtitle="subtitle"
+                                        ),
+                                        plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                            value="value"
+                                        ),
+                                        ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                            value="value"
+                                        )
+                                    )]
+                                )],
+                
+                                # the properties below are optional
+                                allow_interrupt=False
+                            ),
+                            waiting_response=lex.CfnBot.ResponseSpecificationProperty(
+                                message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                    message=lex.CfnBot.MessageProperty(
+                                        custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                            value="value"
+                                        ),
+                                        image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                            title="title",
+                
+                                            # the properties below are optional
+                                            buttons=[lex.CfnBot.ButtonProperty(
+                                                text="text",
+                                                value="value"
+                                            )],
+                                            image_url="imageUrl",
+                                            subtitle="subtitle"
+                                        ),
+                                        plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                            value="value"
+                                        ),
+                                        ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                            value="value"
+                                        )
+                                    ),
+                
+                                    # the properties below are optional
+                                    variations=[lex.CfnBot.MessageProperty(
+                                        custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                            value="value"
+                                        ),
+                                        image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                            title="title",
+                
+                                            # the properties below are optional
+                                            buttons=[lex.CfnBot.ButtonProperty(
+                                                text="text",
+                                                value="value"
+                                            )],
+                                            image_url="imageUrl",
+                                            subtitle="subtitle"
+                                        ),
+                                        plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                            value="value"
+                                        ),
+                                        ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                            value="value"
+                                        )
+                                    )]
+                                )],
+                
+                                # the properties below are optional
+                                allow_interrupt=False
+                            ),
+                
+                            # the properties below are optional
+                            is_active=False,
+                            still_waiting_response=lex.CfnBot.StillWaitingResponseSpecificationProperty(
+                                frequency_in_seconds=123,
+                                message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                    message=lex.CfnBot.MessageProperty(
+                                        custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                            value="value"
+                                        ),
+                                        image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                            title="title",
+                
+                                            # the properties below are optional
+                                            buttons=[lex.CfnBot.ButtonProperty(
+                                                text="text",
+                                                value="value"
+                                            )],
+                                            image_url="imageUrl",
+                                            subtitle="subtitle"
+                                        ),
+                                        plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                            value="value"
+                                        ),
+                                        ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                            value="value"
+                                        )
+                                    ),
+                
+                                    # the properties below are optional
+                                    variations=[lex.CfnBot.MessageProperty(
+                                        custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                            value="value"
+                                        ),
+                                        image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                            title="title",
+                
+                                            # the properties below are optional
+                                            buttons=[lex.CfnBot.ButtonProperty(
+                                                text="text",
+                                                value="value"
+                                            )],
+                                            image_url="imageUrl",
+                                            subtitle="subtitle"
+                                        ),
+                                        plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                            value="value"
+                                        ),
+                                        ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                            value="value"
+                                        )
+                                    )]
+                                )],
+                                timeout_in_seconds=123,
+                
+                                # the properties below are optional
+                                allow_interrupt=False
+                            )
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__84831b306cf7254dc35fff23cffebed9b612832f61edaf61cf5455c684e3fe37)
+                check_type(argname="argument slot_type_id", value=slot_type_id, expected_type=type_hints["slot_type_id"])
+                check_type(argname="argument value_elicitation_setting", value=value_elicitation_setting, expected_type=type_hints["value_elicitation_setting"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "slot_type_id": slot_type_id,
+                "value_elicitation_setting": value_elicitation_setting,
+            }
+
+        @builtins.property
+        def slot_type_id(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-specifications.html#cfn-lex-bot-specifications-slottypeid
+            '''
+            result = self._values.get("slot_type_id")
+            assert result is not None, "Required property 'slot_type_id' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value_elicitation_setting(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnBot.SubSlotValueElicitationSettingProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-specifications.html#cfn-lex-bot-specifications-valueelicitationsetting
+            '''
+            result = self._values.get("value_elicitation_setting")
+            assert result is not None, "Required property 'value_elicitation_setting' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnBot.SubSlotValueElicitationSettingProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SpecificationsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_lex.CfnBot.StillWaitingResponseSpecificationProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -10029,6 +10377,342 @@ class CfnBot(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lex.CfnBot.SubSlotSettingProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "expression": "expression",
+            "slot_specifications": "slotSpecifications",
+        },
+    )
+    class SubSlotSettingProperty:
+        def __init__(
+            self,
+            *,
+            expression: typing.Optional[builtins.str] = None,
+            slot_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.SpecificationsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''
+            :param expression: 
+            :param slot_specifications: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotsetting.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lex as lex
+                
+                sub_slot_setting_property = lex.CfnBot.SubSlotSettingProperty(
+                    expression="expression",
+                    slot_specifications={
+                        "slot_specifications_key": lex.CfnBot.SpecificationsProperty(
+                            slot_type_id="slotTypeId",
+                            value_elicitation_setting=lex.CfnBot.SubSlotValueElicitationSettingProperty(
+                                default_value_specification=lex.CfnBot.SlotDefaultValueSpecificationProperty(
+                                    default_value_list=[lex.CfnBot.SlotDefaultValueProperty(
+                                        default_value="defaultValue"
+                                    )]
+                                ),
+                                prompt_specification=lex.CfnBot.PromptSpecificationProperty(
+                                    max_retries=123,
+                                    message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                        message=lex.CfnBot.MessageProperty(
+                                            custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                                value="value"
+                                            ),
+                                            image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                                title="title",
+                
+                                                # the properties below are optional
+                                                buttons=[lex.CfnBot.ButtonProperty(
+                                                    text="text",
+                                                    value="value"
+                                                )],
+                                                image_url="imageUrl",
+                                                subtitle="subtitle"
+                                            ),
+                                            plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                                value="value"
+                                            ),
+                                            ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                                value="value"
+                                            )
+                                        ),
+                
+                                        # the properties below are optional
+                                        variations=[lex.CfnBot.MessageProperty(
+                                            custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                                value="value"
+                                            ),
+                                            image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                                title="title",
+                
+                                                # the properties below are optional
+                                                buttons=[lex.CfnBot.ButtonProperty(
+                                                    text="text",
+                                                    value="value"
+                                                )],
+                                                image_url="imageUrl",
+                                                subtitle="subtitle"
+                                            ),
+                                            plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                                value="value"
+                                            ),
+                                            ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                                value="value"
+                                            )
+                                        )]
+                                    )],
+                
+                                    # the properties below are optional
+                                    allow_interrupt=False,
+                                    message_selection_strategy="messageSelectionStrategy",
+                                    prompt_attempts_specification={
+                                        "prompt_attempts_specification_key": lex.CfnBot.PromptAttemptSpecificationProperty(
+                                            allowed_input_types=lex.CfnBot.AllowedInputTypesProperty(
+                                                allow_audio_input=False,
+                                                allow_dtmf_input=False
+                                            ),
+                
+                                            # the properties below are optional
+                                            allow_interrupt=False,
+                                            audio_and_dtmf_input_specification=lex.CfnBot.AudioAndDTMFInputSpecificationProperty(
+                                                start_timeout_ms=123,
+                
+                                                # the properties below are optional
+                                                audio_specification=lex.CfnBot.AudioSpecificationProperty(
+                                                    end_timeout_ms=123,
+                                                    max_length_ms=123
+                                                ),
+                                                dtmf_specification=lex.CfnBot.DTMFSpecificationProperty(
+                                                    deletion_character="deletionCharacter",
+                                                    end_character="endCharacter",
+                                                    end_timeout_ms=123,
+                                                    max_length=123
+                                                )
+                                            ),
+                                            text_input_specification=lex.CfnBot.TextInputSpecificationProperty(
+                                                start_timeout_ms=123
+                                            )
+                                        )
+                                    }
+                                ),
+                                sample_utterances=[lex.CfnBot.SampleUtteranceProperty(
+                                    utterance="utterance"
+                                )],
+                                wait_and_continue_specification=lex.CfnBot.WaitAndContinueSpecificationProperty(
+                                    continue_response=lex.CfnBot.ResponseSpecificationProperty(
+                                        message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                            message=lex.CfnBot.MessageProperty(
+                                                custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                                    value="value"
+                                                ),
+                                                image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                                    title="title",
+                
+                                                    # the properties below are optional
+                                                    buttons=[lex.CfnBot.ButtonProperty(
+                                                        text="text",
+                                                        value="value"
+                                                    )],
+                                                    image_url="imageUrl",
+                                                    subtitle="subtitle"
+                                                ),
+                                                plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                                    value="value"
+                                                ),
+                                                ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                                    value="value"
+                                                )
+                                            ),
+                
+                                            # the properties below are optional
+                                            variations=[lex.CfnBot.MessageProperty(
+                                                custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                                    value="value"
+                                                ),
+                                                image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                                    title="title",
+                
+                                                    # the properties below are optional
+                                                    buttons=[lex.CfnBot.ButtonProperty(
+                                                        text="text",
+                                                        value="value"
+                                                    )],
+                                                    image_url="imageUrl",
+                                                    subtitle="subtitle"
+                                                ),
+                                                plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                                    value="value"
+                                                ),
+                                                ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                                    value="value"
+                                                )
+                                            )]
+                                        )],
+                
+                                        # the properties below are optional
+                                        allow_interrupt=False
+                                    ),
+                                    waiting_response=lex.CfnBot.ResponseSpecificationProperty(
+                                        message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                            message=lex.CfnBot.MessageProperty(
+                                                custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                                    value="value"
+                                                ),
+                                                image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                                    title="title",
+                
+                                                    # the properties below are optional
+                                                    buttons=[lex.CfnBot.ButtonProperty(
+                                                        text="text",
+                                                        value="value"
+                                                    )],
+                                                    image_url="imageUrl",
+                                                    subtitle="subtitle"
+                                                ),
+                                                plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                                    value="value"
+                                                ),
+                                                ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                                    value="value"
+                                                )
+                                            ),
+                
+                                            # the properties below are optional
+                                            variations=[lex.CfnBot.MessageProperty(
+                                                custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                                    value="value"
+                                                ),
+                                                image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                                    title="title",
+                
+                                                    # the properties below are optional
+                                                    buttons=[lex.CfnBot.ButtonProperty(
+                                                        text="text",
+                                                        value="value"
+                                                    )],
+                                                    image_url="imageUrl",
+                                                    subtitle="subtitle"
+                                                ),
+                                                plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                                    value="value"
+                                                ),
+                                                ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                                    value="value"
+                                                )
+                                            )]
+                                        )],
+                
+                                        # the properties below are optional
+                                        allow_interrupt=False
+                                    ),
+                
+                                    # the properties below are optional
+                                    is_active=False,
+                                    still_waiting_response=lex.CfnBot.StillWaitingResponseSpecificationProperty(
+                                        frequency_in_seconds=123,
+                                        message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                            message=lex.CfnBot.MessageProperty(
+                                                custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                                    value="value"
+                                                ),
+                                                image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                                    title="title",
+                
+                                                    # the properties below are optional
+                                                    buttons=[lex.CfnBot.ButtonProperty(
+                                                        text="text",
+                                                        value="value"
+                                                    )],
+                                                    image_url="imageUrl",
+                                                    subtitle="subtitle"
+                                                ),
+                                                plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                                    value="value"
+                                                ),
+                                                ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                                    value="value"
+                                                )
+                                            ),
+                
+                                            # the properties below are optional
+                                            variations=[lex.CfnBot.MessageProperty(
+                                                custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                                    value="value"
+                                                ),
+                                                image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                                    title="title",
+                
+                                                    # the properties below are optional
+                                                    buttons=[lex.CfnBot.ButtonProperty(
+                                                        text="text",
+                                                        value="value"
+                                                    )],
+                                                    image_url="imageUrl",
+                                                    subtitle="subtitle"
+                                                ),
+                                                plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                                    value="value"
+                                                ),
+                                                ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                                    value="value"
+                                                )
+                                            )]
+                                        )],
+                                        timeout_in_seconds=123,
+                
+                                        # the properties below are optional
+                                        allow_interrupt=False
+                                    )
+                                )
+                            )
+                        )
+                    }
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__19d0e1038157e6cad6b2db8680524f4b2b70d95e8f3f45ad9f237785993ba49b)
+                check_type(argname="argument expression", value=expression, expected_type=type_hints["expression"])
+                check_type(argname="argument slot_specifications", value=slot_specifications, expected_type=type_hints["slot_specifications"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if expression is not None:
+                self._values["expression"] = expression
+            if slot_specifications is not None:
+                self._values["slot_specifications"] = slot_specifications
+
+        @builtins.property
+        def expression(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotsetting.html#cfn-lex-bot-subslotsetting-expression
+            '''
+            result = self._values.get("expression")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def slot_specifications(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnBot.SpecificationsProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotsetting.html#cfn-lex-bot-subslotsetting-slotspecifications
+            '''
+            result = self._values.get("slot_specifications")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnBot.SpecificationsProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SubSlotSettingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_lex.CfnBot.SubSlotTypeCompositionProperty",
         jsii_struct_bases=[],
         name_mapping={"name": "name", "slot_type_id": "slotTypeId"},
@@ -10093,6 +10777,368 @@ class CfnBot(
 
         def __repr__(self) -> str:
             return "SubSlotTypeCompositionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lex.CfnBot.SubSlotValueElicitationSettingProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "default_value_specification": "defaultValueSpecification",
+            "prompt_specification": "promptSpecification",
+            "sample_utterances": "sampleUtterances",
+            "wait_and_continue_specification": "waitAndContinueSpecification",
+        },
+    )
+    class SubSlotValueElicitationSettingProperty:
+        def __init__(
+            self,
+            *,
+            default_value_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.SlotDefaultValueSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            prompt_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.PromptSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sample_utterances: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.SampleUtteranceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            wait_and_continue_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.WaitAndContinueSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param default_value_specification: 
+            :param prompt_specification: 
+            :param sample_utterances: 
+            :param wait_and_continue_specification: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotvalueelicitationsetting.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lex as lex
+                
+                sub_slot_value_elicitation_setting_property = lex.CfnBot.SubSlotValueElicitationSettingProperty(
+                    default_value_specification=lex.CfnBot.SlotDefaultValueSpecificationProperty(
+                        default_value_list=[lex.CfnBot.SlotDefaultValueProperty(
+                            default_value="defaultValue"
+                        )]
+                    ),
+                    prompt_specification=lex.CfnBot.PromptSpecificationProperty(
+                        max_retries=123,
+                        message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                            message=lex.CfnBot.MessageProperty(
+                                custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                    value="value"
+                                ),
+                                image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                    title="title",
+                
+                                    # the properties below are optional
+                                    buttons=[lex.CfnBot.ButtonProperty(
+                                        text="text",
+                                        value="value"
+                                    )],
+                                    image_url="imageUrl",
+                                    subtitle="subtitle"
+                                ),
+                                plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                    value="value"
+                                ),
+                                ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                    value="value"
+                                )
+                            ),
+                
+                            # the properties below are optional
+                            variations=[lex.CfnBot.MessageProperty(
+                                custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                    value="value"
+                                ),
+                                image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                    title="title",
+                
+                                    # the properties below are optional
+                                    buttons=[lex.CfnBot.ButtonProperty(
+                                        text="text",
+                                        value="value"
+                                    )],
+                                    image_url="imageUrl",
+                                    subtitle="subtitle"
+                                ),
+                                plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                    value="value"
+                                ),
+                                ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                    value="value"
+                                )
+                            )]
+                        )],
+                
+                        # the properties below are optional
+                        allow_interrupt=False,
+                        message_selection_strategy="messageSelectionStrategy",
+                        prompt_attempts_specification={
+                            "prompt_attempts_specification_key": lex.CfnBot.PromptAttemptSpecificationProperty(
+                                allowed_input_types=lex.CfnBot.AllowedInputTypesProperty(
+                                    allow_audio_input=False,
+                                    allow_dtmf_input=False
+                                ),
+                
+                                # the properties below are optional
+                                allow_interrupt=False,
+                                audio_and_dtmf_input_specification=lex.CfnBot.AudioAndDTMFInputSpecificationProperty(
+                                    start_timeout_ms=123,
+                
+                                    # the properties below are optional
+                                    audio_specification=lex.CfnBot.AudioSpecificationProperty(
+                                        end_timeout_ms=123,
+                                        max_length_ms=123
+                                    ),
+                                    dtmf_specification=lex.CfnBot.DTMFSpecificationProperty(
+                                        deletion_character="deletionCharacter",
+                                        end_character="endCharacter",
+                                        end_timeout_ms=123,
+                                        max_length=123
+                                    )
+                                ),
+                                text_input_specification=lex.CfnBot.TextInputSpecificationProperty(
+                                    start_timeout_ms=123
+                                )
+                            )
+                        }
+                    ),
+                    sample_utterances=[lex.CfnBot.SampleUtteranceProperty(
+                        utterance="utterance"
+                    )],
+                    wait_and_continue_specification=lex.CfnBot.WaitAndContinueSpecificationProperty(
+                        continue_response=lex.CfnBot.ResponseSpecificationProperty(
+                            message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                message=lex.CfnBot.MessageProperty(
+                                    custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                        value="value"
+                                    ),
+                                    image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                        title="title",
+                
+                                        # the properties below are optional
+                                        buttons=[lex.CfnBot.ButtonProperty(
+                                            text="text",
+                                            value="value"
+                                        )],
+                                        image_url="imageUrl",
+                                        subtitle="subtitle"
+                                    ),
+                                    plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                        value="value"
+                                    ),
+                                    ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                        value="value"
+                                    )
+                                ),
+                
+                                # the properties below are optional
+                                variations=[lex.CfnBot.MessageProperty(
+                                    custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                        value="value"
+                                    ),
+                                    image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                        title="title",
+                
+                                        # the properties below are optional
+                                        buttons=[lex.CfnBot.ButtonProperty(
+                                            text="text",
+                                            value="value"
+                                        )],
+                                        image_url="imageUrl",
+                                        subtitle="subtitle"
+                                    ),
+                                    plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                        value="value"
+                                    ),
+                                    ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                        value="value"
+                                    )
+                                )]
+                            )],
+                
+                            # the properties below are optional
+                            allow_interrupt=False
+                        ),
+                        waiting_response=lex.CfnBot.ResponseSpecificationProperty(
+                            message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                message=lex.CfnBot.MessageProperty(
+                                    custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                        value="value"
+                                    ),
+                                    image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                        title="title",
+                
+                                        # the properties below are optional
+                                        buttons=[lex.CfnBot.ButtonProperty(
+                                            text="text",
+                                            value="value"
+                                        )],
+                                        image_url="imageUrl",
+                                        subtitle="subtitle"
+                                    ),
+                                    plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                        value="value"
+                                    ),
+                                    ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                        value="value"
+                                    )
+                                ),
+                
+                                # the properties below are optional
+                                variations=[lex.CfnBot.MessageProperty(
+                                    custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                        value="value"
+                                    ),
+                                    image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                        title="title",
+                
+                                        # the properties below are optional
+                                        buttons=[lex.CfnBot.ButtonProperty(
+                                            text="text",
+                                            value="value"
+                                        )],
+                                        image_url="imageUrl",
+                                        subtitle="subtitle"
+                                    ),
+                                    plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                        value="value"
+                                    ),
+                                    ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                        value="value"
+                                    )
+                                )]
+                            )],
+                
+                            # the properties below are optional
+                            allow_interrupt=False
+                        ),
+                
+                        # the properties below are optional
+                        is_active=False,
+                        still_waiting_response=lex.CfnBot.StillWaitingResponseSpecificationProperty(
+                            frequency_in_seconds=123,
+                            message_groups_list=[lex.CfnBot.MessageGroupProperty(
+                                message=lex.CfnBot.MessageProperty(
+                                    custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                        value="value"
+                                    ),
+                                    image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                        title="title",
+                
+                                        # the properties below are optional
+                                        buttons=[lex.CfnBot.ButtonProperty(
+                                            text="text",
+                                            value="value"
+                                        )],
+                                        image_url="imageUrl",
+                                        subtitle="subtitle"
+                                    ),
+                                    plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                        value="value"
+                                    ),
+                                    ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                        value="value"
+                                    )
+                                ),
+                
+                                # the properties below are optional
+                                variations=[lex.CfnBot.MessageProperty(
+                                    custom_payload=lex.CfnBot.CustomPayloadProperty(
+                                        value="value"
+                                    ),
+                                    image_response_card=lex.CfnBot.ImageResponseCardProperty(
+                                        title="title",
+                
+                                        # the properties below are optional
+                                        buttons=[lex.CfnBot.ButtonProperty(
+                                            text="text",
+                                            value="value"
+                                        )],
+                                        image_url="imageUrl",
+                                        subtitle="subtitle"
+                                    ),
+                                    plain_text_message=lex.CfnBot.PlainTextMessageProperty(
+                                        value="value"
+                                    ),
+                                    ssml_message=lex.CfnBot.SSMLMessageProperty(
+                                        value="value"
+                                    )
+                                )]
+                            )],
+                            timeout_in_seconds=123,
+                
+                            # the properties below are optional
+                            allow_interrupt=False
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0c4bd628f2e9787ccab08e521e3770db72db937863bc4842368f8edad1fe7b45)
+                check_type(argname="argument default_value_specification", value=default_value_specification, expected_type=type_hints["default_value_specification"])
+                check_type(argname="argument prompt_specification", value=prompt_specification, expected_type=type_hints["prompt_specification"])
+                check_type(argname="argument sample_utterances", value=sample_utterances, expected_type=type_hints["sample_utterances"])
+                check_type(argname="argument wait_and_continue_specification", value=wait_and_continue_specification, expected_type=type_hints["wait_and_continue_specification"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if default_value_specification is not None:
+                self._values["default_value_specification"] = default_value_specification
+            if prompt_specification is not None:
+                self._values["prompt_specification"] = prompt_specification
+            if sample_utterances is not None:
+                self._values["sample_utterances"] = sample_utterances
+            if wait_and_continue_specification is not None:
+                self._values["wait_and_continue_specification"] = wait_and_continue_specification
+
+        @builtins.property
+        def default_value_specification(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBot.SlotDefaultValueSpecificationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotvalueelicitationsetting.html#cfn-lex-bot-subslotvalueelicitationsetting-defaultvaluespecification
+            '''
+            result = self._values.get("default_value_specification")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBot.SlotDefaultValueSpecificationProperty"]], result)
+
+        @builtins.property
+        def prompt_specification(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBot.PromptSpecificationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotvalueelicitationsetting.html#cfn-lex-bot-subslotvalueelicitationsetting-promptspecification
+            '''
+            result = self._values.get("prompt_specification")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBot.PromptSpecificationProperty"]], result)
+
+        @builtins.property
+        def sample_utterances(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBot.SampleUtteranceProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotvalueelicitationsetting.html#cfn-lex-bot-subslotvalueelicitationsetting-sampleutterances
+            '''
+            result = self._values.get("sample_utterances")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBot.SampleUtteranceProperty"]]]], result)
+
+        @builtins.property
+        def wait_and_continue_specification(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBot.WaitAndContinueSpecificationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotvalueelicitationsetting.html#cfn-lex-bot-subslotvalueelicitationsetting-waitandcontinuespecification
+            '''
+            result = self._values.get("wait_and_continue_specification")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBot.WaitAndContinueSpecificationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SubSlotValueElicitationSettingProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -13928,6 +14974,7 @@ def _typecheckingstub__ef126475ab56636b361ebc97f72cf09bd8480c4e5dad06e8da998fba1
     description: typing.Optional[builtins.str] = None,
     multiple_values_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.MultipleValuesSettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     obfuscation_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.ObfuscationSettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sub_slot_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.SubSlotSettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14005,6 +15052,14 @@ def _typecheckingstub__7982c47931169a42f1aa99bdc61da96e42f63e5371b26a267f1cdadef
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__84831b306cf7254dc35fff23cffebed9b612832f61edaf61cf5455c684e3fe37(
+    *,
+    slot_type_id: builtins.str,
+    value_elicitation_setting: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.SubSlotValueElicitationSettingProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4b29454e1c72d163c3d5c059ab5734a392267a9f5ea3476cbc3a7c07126ce2e5(
     *,
     frequency_in_seconds: jsii.Number,
@@ -14015,10 +15070,28 @@ def _typecheckingstub__4b29454e1c72d163c3d5c059ab5734a392267a9f5ea3476cbc3a7c071
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__19d0e1038157e6cad6b2db8680524f4b2b70d95e8f3f45ad9f237785993ba49b(
+    *,
+    expression: typing.Optional[builtins.str] = None,
+    slot_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.SpecificationsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6a11ecebf71592606f12daf680d8d8cd568f03843d20fa7af9a041f1daa2d51f(
     *,
     name: builtins.str,
     slot_type_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0c4bd628f2e9787ccab08e521e3770db72db937863bc4842368f8edad1fe7b45(
+    *,
+    default_value_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.SlotDefaultValueSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    prompt_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.PromptSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sample_utterances: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.SampleUtteranceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    wait_and_continue_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.WaitAndContinueSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

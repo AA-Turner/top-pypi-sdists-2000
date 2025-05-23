@@ -106,8 +106,8 @@ setup(
         "universal_pathlib>=0.2.0; python_version>='3.12'",
         "rich",
         "filelock",
-        "dagster-pipes==1.10.15",
-        "dagster-shared==0.26.15",
+        "dagster-pipes==1.10.16",
+        "dagster-shared==0.26.16",
         "antlr4-python3-runtime",
     ],
     extras_require={
@@ -132,6 +132,7 @@ setup(
             "rapidfuzz",
             "flaky",
             "psutil",
+            "ruff==0.11.5",
         ],
         "test-components": [
             "tomlkit",
