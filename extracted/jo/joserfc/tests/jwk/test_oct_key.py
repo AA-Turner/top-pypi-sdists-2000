@@ -5,14 +5,14 @@ from tests.keys import read_key
 
 class TestOctKey(TestCase):
     def test_import_key_from_str(self):
-        key = OctKey.import_key('rfc')
-        self.assertEqual(key['k'], 'cmZj')
+        key = OctKey.import_key("rfc")
+        self.assertEqual(key["k"], "cmZj")
         self.assertEqual(key.raw_value, b"rfc")
         self.assertEqual(dict(key), key.as_dict())
 
     def test_import_key_from_bytes(self):
-        key = OctKey.import_key(b'rfc')
-        self.assertEqual(key['k'], 'cmZj')
+        key = OctKey.import_key(b"rfc")
+        self.assertEqual(key["k"], "cmZj")
         self.assertEqual(key.raw_value, b"rfc")
         self.assertEqual(dict(key), key.as_dict())
 
@@ -32,7 +32,7 @@ class TestOctKey(TestCase):
             "alg": "A128KW",
             "k": "GawgguFyGrWKav7AX4VKUg",
             "use": "sig",
-            "key_ops": ["sign", "verify"]
+            "key_ops": ["sign", "verify"],
         }
         key = OctKey.import_key(data)
         self.assertEqual(key.as_dict(), data)
@@ -53,13 +53,7 @@ class TestOctKey(TestCase):
         self.assertRaises(ValueError, OctKey.import_key, data)
 
     def test_mismatch_use_key_ops(self):
-        data = {
-            "kty": "oct",
-            "alg": "A128KW",
-            "k": "GawgguFyGrWKav7AX4VKUg",
-            "use": "sig",
-            "key_ops": ["wrapKey"]
-        }
+        data = {"kty": "oct", "alg": "A128KW", "k": "GawgguFyGrWKav7AX4VKUg", "use": "sig", "key_ops": ["wrapKey"]}
         self.assertRaises(ValueError, OctKey.import_key, data)
 
     def test_invalid_use(self):
@@ -87,8 +81,20 @@ class TestOctKey(TestCase):
         self.assertEqual(len(key.raw_value), 32)
         self.assertIsNone(key.kid)
 
+        key = OctKey.generate_key(None)
+        self.assertEqual(len(key.raw_value), 32)
+        self.assertIsNone(key.kid)
+
         self.assertRaises(ValueError, OctKey.generate_key, private=False)
         self.assertRaises(ValueError, OctKey.generate_key, 251)
 
         key = OctKey.generate_key(auto_kid=True)
         self.assertIsNotNone(key.kid)
+
+    def test_key_eq(self):
+        key1 = OctKey.generate_key()
+        key2 = OctKey.import_key(key1.as_dict())
+        self.assertIsNot(key1, key2)
+        self.assertEqual(key1, key2)
+        key3 = OctKey.generate_key()
+        self.assertNotEqual(key1, key3)

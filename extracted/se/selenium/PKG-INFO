@@ -6,7 +6,6 @@ Description-Content-Type: text/x-rst
 Summary: Official Python bindings for Selenium WebDriver
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Operating System :: POSIX
 Classifier: Operating System :: Microsoft :: Windows
 Classifier: Operating System :: MacOS :: MacOS X
@@ -19,13 +18,13 @@ Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Requires-Python: >=3.9
-Requires-Dist: urllib3[socks]>=1.26,<3
-Requires-Dist: trio~=0.17
-Requires-Dist: trio-websocket~=0.9
-Requires-Dist: certifi>=2021.10.8
-Requires-Dist: typing_extensions~=4.9
-Requires-Dist: websocket-client~=1.8
-Version: 4.32.0
+Requires-Dist: urllib3[socks]~=2.4.0
+Requires-Dist: trio~=0.30.0
+Requires-Dist: trio-websocket~=0.12.2
+Requires-Dist: certifi>=2025.4.26
+Requires-Dist: typing_extensions~=4.13.2
+Requires-Dist: websocket-client~=1.8.0
+Version: 4.33.0
 
 ======================
 Selenium Client Driver

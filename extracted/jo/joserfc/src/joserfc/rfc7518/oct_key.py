@@ -41,8 +41,8 @@ class OctBinding(NativeKeyBinding):
 
 
 class OctKey(SymmetricKey):
-    """OctKey is a symmetric key, defined by RFC7518 Section 6.4.
-    """
+    """OctKey is a symmetric key, defined by RFC7518 Section 6.4."""
+
     key_type = "oct"
     binding = OctBinding
 
@@ -51,11 +51,12 @@ class OctKey(SymmetricKey):
 
     @classmethod
     def generate_key(
-            cls,
-            key_size: int = 256,
-            parameters: KeyParameters | None = None,
-            private: bool = True,
-            auto_kid: bool = False) -> "OctKey":
+        cls,
+        key_size: int | None = 256,
+        parameters: KeyParameters | None = None,
+        private: bool = True,
+        auto_kid: bool = False,
+    ) -> "OctKey":
         """Generate a ``OctKey`` with the given bit size (not bytes).
 
         :param key_size: size in bit
@@ -65,6 +66,9 @@ class OctKey(SymmetricKey):
         """
         if not private:
             raise ValueError("oct key can not be generated as public")
+
+        if key_size is None:
+            key_size = 256
 
         if key_size % 8 != 0:
             raise ValueError("Invalid bit size for oct key")

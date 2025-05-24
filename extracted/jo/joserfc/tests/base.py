@@ -1,6 +1,6 @@
 import json
 import typing as t
-from joserfc.jwk import JWKRegistry
+from joserfc.jwk import import_key
 from unittest import TestCase
 from pathlib import Path
 
@@ -18,10 +18,10 @@ def load_key(filename: str, parameters=None):
 
     if filename.endswith(".json"):
         data = json.loads(content)
-        return JWKRegistry.import_key(data, parameters=parameters)
+        return import_key(data, parameters=parameters)
 
-    kty = filename.split('-', 1)[0]
-    return JWKRegistry.import_key(content, kty.upper(), parameters)
+    kty = filename.split("-", 1)[0]
+    return import_key(content, kty.upper(), parameters)
 
 
 class TestFixture(TestCase):
@@ -29,7 +29,7 @@ class TestFixture(TestCase):
     def load_fixture(cls, filename: str):
         fixture_data = read_fixture(filename)
 
-        for case_data in fixture_data['tests']:
+        for case_data in fixture_data["tests"]:
             if "payload" not in case_data and "payload" in fixture_data:
                 case_data["payload"] = fixture_data["payload"]
             cls.attach_case(case_data)
@@ -41,10 +41,10 @@ class TestFixture(TestCase):
         def method(self):
             getattr(self, runner)(data)
 
-        case_name = data['name']
-        name = f'test_{case_name}'
+        case_name = data["name"]
+        name = f"test_{case_name}"
         method.__name__ = name
-        method.__doc__ = f'Run fixture {data}'
+        method.__doc__ = f"Run fixture {data}"
         setattr(cls, name, method)
 
     def run_test(self, data: t.Dict[str, t.Any]):

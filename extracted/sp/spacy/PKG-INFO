@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: spacy
-Version: 3.8.6
+Version: 3.8.7
 Summary: Industrial-strength Natural Language Processing (NLP) in Python
 Home-page: https://spacy.io
 Author: Explosion
@@ -24,7 +24,7 @@ Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Topic :: Scientific/Engineering
-Requires-Python: <3.13,>=3.9
+Requires-Python: <3.14,>=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: spacy-legacy<3.1.0,>=3.0.11

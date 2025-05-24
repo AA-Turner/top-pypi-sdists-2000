@@ -56,7 +56,7 @@ def perform_encrypt(obj: EncryptionData, registry: JWERegistry) -> None:
         plaintext = obj.plaintext
 
     # Step 13, Compute the Encoded Protected Header value BASE64URL(UTF8(JWE Protected Header)).
-    aad = json_b64encode(obj.protected, "ascii")
+    aad = json_b64encode(obj.protected)
 
     # Step 14, Let the Additional Authenticated Data encryption parameter be
     # ASCII(Encoded Protected Header).  However, if a JWE AAD value is
@@ -108,16 +108,16 @@ def _perform_decrypt(obj: EncryptionData, registry: JWERegistry) -> None:
                 raise error
 
     if not cek_set:
-        raise DecodeError('Invalid recipients')
+        raise DecodeError("Invalid recipients")
 
     if len(cek_set) > 1:  # pragma: no cover
-        raise DecodeError('Multiple "cek" found')
+        raise DecodeError("Multiple 'cek' found")
 
     cek = cek_set.pop()
     if len(cek) * 8 != enc.cek_size:  # pragma: no cover
-        raise InvalidCEKLengthError(f"A key of size {enc.cek_size} bits MUST be used")
+        raise InvalidCEKLengthError(enc.cek_size)
 
-    aad = json_b64encode(obj.protected, "ascii")
+    aad = json_b64encode(obj.protected)
     if isinstance(obj, BaseJSONEncryption) and obj.aad:
         aad = aad + b"." + urlsafe_b64encode(obj.aad)
 
@@ -130,9 +130,8 @@ def _perform_decrypt(obj: EncryptionData, registry: JWERegistry) -> None:
 
 
 def pre_encrypt_recipients(
-        enc: JWEEncModel,
-        recipients: t.List[Recipient[t.Any]],
-        registry: JWERegistry) -> t.Tuple[bytes, t.List[t.Tuple[JWEKeyAgreement, Recipient[t.Any]]]]:
+    enc: JWEEncModel, recipients: t.List[Recipient[t.Any]], registry: JWERegistry
+) -> t.Tuple[bytes, t.List[t.Tuple[JWEKeyAgreement, Recipient[t.Any]]]]:
     cek: bytes = b""
     delayed_tasks: t.List[t.Tuple[JWEKeyAgreement, Recipient[t.Any]]] = []
     for recipient in recipients:
@@ -182,7 +181,7 @@ def __pre_encrypt_direct_mode(alg: JWEAlgModel, enc: JWEEncModel, recipient: Rec
         # let the CEK be the agreed upon key.
         cek = alg.encrypt_agreed_upon_key(enc, recipient)
         if len(cek) * 8 != enc.cek_size:  # pragma: no cover
-            raise InvalidCEKLengthError(f"A key of size {enc.cek_size} bits MUST be used")
+            raise InvalidCEKLengthError(enc.cek_size)
     else:
         # 6. When Direct Encryption is employed, let the CEK be the shared
         # symmetric key.
@@ -196,10 +195,8 @@ def __pre_encrypt_direct_mode(alg: JWEAlgModel, enc: JWEEncModel, recipient: Rec
 
 
 def post_encrypt_recipients(
-        enc: JWEEncModel,
-        tasks: t.List[t.Tuple[JWEKeyAgreement, Recipient[t.Any]]],
-        cek: bytes,
-        tag: bytes) -> None:
+    enc: JWEEncModel, tasks: t.List[t.Tuple[JWEKeyAgreement, Recipient[t.Any]]], cek: bytes, tag: bytes
+) -> None:
     for alg, recipient in tasks:
         if alg.tag_aware:
             agreed_upon_key = alg.encrypt_agreed_upon_key_with_tag(enc, recipient, tag)
@@ -210,11 +207,7 @@ def post_encrypt_recipients(
         recipient.encrypted_key = alg.wrap_cek_with_auk(cek, agreed_upon_key)
 
 
-def decrypt_recipient(
-        alg: JWEAlgModel,
-        enc: JWEEncModel,
-        recipient: Recipient[t.Any],
-        tag: bytes) -> bytes:
+def decrypt_recipient(alg: JWEAlgModel, enc: JWEEncModel, recipient: Recipient[t.Any], tag: bytes) -> bytes:
     cek: bytes
     if alg.direct_mode:
         # 10.  When Direct Key Agreement or Direct Encryption are employed,

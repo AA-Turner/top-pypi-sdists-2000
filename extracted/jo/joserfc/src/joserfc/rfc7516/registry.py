@@ -1,6 +1,7 @@
 from __future__ import annotations
 import typing as t
 from .models import JWEAlgModel, JWEEncModel, JWEZipModel
+from ..errors import UnsupportedAlgorithmError
 from ..registry import (
     Header,
     HeaderRegistryDict,
@@ -12,11 +13,14 @@ from ..registry import (
 
 JWEAlgorithm = t.Union[JWEAlgModel, JWEEncModel, JWEZipModel]
 
-AlgorithmsDict = t.TypedDict("AlgorithmsDict", {
-    "alg": t.Dict[str, JWEAlgModel],
-    "enc": t.Dict[str, JWEEncModel],
-    "zip": t.Dict[str, JWEZipModel],
-})
+AlgorithmsDict = t.TypedDict(
+    "AlgorithmsDict",
+    {
+        "alg": t.Dict[str, JWEAlgModel],
+        "enc": t.Dict[str, JWEEncModel],
+        "zip": t.Dict[str, JWEZipModel],
+    },
+)
 
 
 class JWERegistry:
@@ -29,6 +33,7 @@ class JWERegistry:
     :param verify_all_recipients: validating all recipients in a JSON serialization
     :param strict_check_header: only allow header key in the registry to be used
     """
+
     algorithms: t.ClassVar[AlgorithmsDict] = {
         "alg": {},
         "enc": {},
@@ -37,11 +42,12 @@ class JWERegistry:
     recommended: t.ClassVar[t.List[str]] = []
 
     def __init__(
-            self,
-            header_registry: t.Optional[HeaderRegistryDict] = None,
-            algorithms: list[str] | None = None,
-            verify_all_recipients: bool = True,
-            strict_check_header: bool = True):
+        self,
+        header_registry: t.Optional[HeaderRegistryDict] = None,
+        algorithms: list[str] | None = None,
+        verify_all_recipients: bool = True,
+        strict_check_header: bool = True,
+    ):
         self.header_registry: HeaderRegistryDict = {}
         self.header_registry.update(JWE_HEADER_REGISTRY)
         if header_registry is not None:
@@ -101,15 +107,14 @@ class JWERegistry:
 
     def _check_algorithm(self, name: str, registry: dict[str, t.Any]) -> None:
         if name not in registry:
-            raise ValueError(f'Algorithm of "{name}" is not supported')
+            raise UnsupportedAlgorithmError(f"Algorithm of '{name}' is not supported")
 
         if self.allowed:
-            allowed = self.allowed
+            if name not in self.allowed:
+                raise UnsupportedAlgorithmError(f"Algorithm of '{name}' is not allowed")
         else:
-            allowed = self.recommended
-
-        if name not in allowed:
-            raise ValueError(f'Algorithm of "{name}" is not allowed')
+            if name not in self.recommended:
+                raise UnsupportedAlgorithmError(f"Algorithm of '{name}' is not recommended")
 
 
 default_registry = JWERegistry()

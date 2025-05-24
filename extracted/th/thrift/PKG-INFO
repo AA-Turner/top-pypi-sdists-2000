@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: thrift
-Version: 0.21.0
+Version: 0.22.0
 Summary: Python bindings for the Apache Thrift RPC system
 Home-page: http://thrift.apache.org
 Author: Apache Thrift Developers
@@ -46,7 +46,6 @@ Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
 Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 2
 Classifier: Programming Language :: Python :: 3
 Classifier: Topic :: Software Development :: Libraries
 Classifier: Topic :: System :: Networking

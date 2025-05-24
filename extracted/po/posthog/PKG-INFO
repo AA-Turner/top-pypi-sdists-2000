@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: posthog
-Version: 4.1.0
+Version: 4.2.0
 Summary: Integrate PostHog into any python application.
 Home-page: https://github.com/posthog/posthog-python
 Author: Posthog
@@ -56,6 +56,7 @@ Requires-Dist: langgraph; extra == "test"
 Requires-Dist: langchain-community>=0.2.0; extra == "test"
 Requires-Dist: langchain-openai>=0.2.0; extra == "test"
 Requires-Dist: langchain-anthropic>=0.2.0; extra == "test"
+Requires-Dist: google-genai; extra == "test"
 Requires-Dist: pydantic; extra == "test"
 Requires-Dist: parameterized>=0.8.1; extra == "test"
 Provides-Extra: sentry

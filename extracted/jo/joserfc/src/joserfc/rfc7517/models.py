@@ -46,23 +46,24 @@ class NativeKeyBinding(metaclass=ABCMeta):
 
     @staticmethod
     def as_bytes(
-            key: GenericKey,
-            encoding: t.Optional[t.Literal["PEM", "DER"]] = None,
-            private: t.Optional[bool] = None,
-            password: t.Optional[str] = None) -> bytes:
+        key: GenericKey,
+        encoding: t.Optional[t.Literal["PEM", "DER"]] = None,
+        private: t.Optional[bool] = None,
+        password: t.Optional[str] = None,
+    ) -> bytes:
         raise NotImplementedError()
 
     @classmethod
     def validate_dict_key_registry(cls, dict_key: DictKey, registry: KeyParameterRegistryDict) -> None:
         for k in registry:
             if registry[k].required and k not in dict_key:
-                raise ValueError(f'"{k}" is required')
+                raise ValueError(f"'{k}' is required")
 
             if k in dict_key:
                 try:
                     registry[k].validate(dict_key[k])
                 except ValueError as error:
-                    raise ValueError(f'"{k}" {error}')
+                    raise ValueError(f"'{k}' {error}")
 
     @classmethod
     def validate_dict_key_use_operations(cls, dict_key: DictKey) -> None:
@@ -71,7 +72,7 @@ class NativeKeyBinding(metaclass=ABCMeta):
             operations = cls.use_key_ops_registry[_use]
             for op in dict_key["key_ops"]:
                 if op not in operations:
-                    raise ValueError('"use" and "key_ops" does not match')
+                    raise ValueError("'use' and 'key_ops' does not match")
 
 
 class BaseKey(t.Generic[NativePrivateKey, NativePublicKey], metaclass=ABCMeta):
@@ -80,13 +81,14 @@ class BaseKey(t.Generic[NativePrivateKey, NativePublicKey], metaclass=ABCMeta):
     value_registry: t.ClassVar[KeyParameterRegistryDict]
     param_registry: t.ClassVar[KeyParameterRegistryDict] = JWK_PARAMETER_REGISTRY
     operation_registry: t.ClassVar[KeyOperationRegistryDict] = JWK_OPERATION_REGISTRY
-    thumbprint_digest_method: t.ClassVar[t.Literal["sha256", "sha384", "sha512"]] = 'sha256'
+    thumbprint_digest_method: t.ClassVar[t.Literal["sha256", "sha384", "sha512"]] = "sha256"
 
     def __init__(
-            self,
-            raw_value: NativePrivateKey | NativePublicKey,
-            original_value: t.Any,
-            parameters: t.Optional[KeyParameters] = None):
+        self,
+        raw_value: NativePrivateKey | NativePublicKey,
+        original_value: t.Any,
+        parameters: t.Optional[KeyParameters] = None,
+    ):
         self._raw_value = raw_value
         self.original_value = original_value
         self.extra_parameters = parameters
@@ -99,13 +101,18 @@ class BaseKey(t.Generic[NativePrivateKey, NativePublicKey], metaclass=ABCMeta):
             self.validate_dict_key(data)
             self._dict_value = data
 
+    def __eq__(self, other: t.Any) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return self.dict_value == other.dict_value
+
     def keys(self) -> KeysView[str]:
         return self.dict_value.keys()
 
     def __getitem__(self, k: str) -> str | list[str]:
         return self.dict_value[k]
 
-    def get(self, k: str, default: str | None = None) -> str | list[str] | None:
+    def get(self, k: str, default: str | list[str] | None = None) -> str | list[str] | None:
         return self.dict_value.get(k, default)
 
     def ensure_kid(self) -> None:
@@ -195,7 +202,7 @@ class BaseKey(t.Generic[NativePrivateKey, NativePublicKey], metaclass=ABCMeta):
         """
         designed_use = self.get("use")
         if designed_use and designed_use != use:
-            raise UnsupportedKeyUseError(f'This key is designed to be used for "{designed_use}"')
+            raise UnsupportedKeyUseError(f"This key is designed to be used for '{designed_use}'")
 
     def check_alg(self, alg: str) -> None:
         """Check if this key supports the given "alg".
@@ -205,7 +212,7 @@ class BaseKey(t.Generic[NativePrivateKey, NativePublicKey], metaclass=ABCMeta):
         """
         designed_alg = self.get("alg")
         if designed_alg and designed_alg != alg:
-            raise UnsupportedKeyAlgorithmError(f'This key is designed for algorithm "{designed_alg}"')
+            raise UnsupportedKeyAlgorithmError(f"This key is designed for algorithm '{designed_alg}'")
 
     def check_key_op(self, operation: str) -> None:
         """Check if the given key_op is supported by this key.
@@ -215,12 +222,12 @@ class BaseKey(t.Generic[NativePrivateKey, NativePublicKey], metaclass=ABCMeta):
         """
         key_ops = self.get("key_ops")
         if key_ops is not None and operation not in key_ops:
-            raise UnsupportedKeyOperationError(f'Unsupported key_op "{operation}"')
+            raise UnsupportedKeyOperationError(f"Unsupported key_op '{operation}'")
 
         assert operation in self.operation_registry
         reg = self.operation_registry[operation]
         if reg.private and not self.is_private:
-            raise UnsupportedKeyOperationError(f'Invalid key_op "{operation}" for public key')
+            raise UnsupportedKeyOperationError(f"Invalid key_op '{operation}' for public key")
 
     @t.overload
     def get_op_key(self, operation: t.Literal["verify", "encrypt", "wrapKey", "deriveKey"]) -> NativePublicKey: ...
@@ -244,10 +251,11 @@ class BaseKey(t.Generic[NativePrivateKey, NativePublicKey], metaclass=ABCMeta):
 
     @classmethod
     def import_key(
-            cls: t.Type[GenericKey],
-            value: AnyKey,
-            parameters: t.Optional[KeyParameters] = None,
-            password: t.Optional[t.Any] = None) -> GenericKey:
+        cls: t.Type[GenericKey],
+        value: AnyKey,
+        parameters: t.Optional[KeyParameters] = None,
+        password: t.Optional[t.Any] = None,
+    ) -> GenericKey:
         if isinstance(value, dict):
             cls.validate_dict_key(value)
             raw_key = cls.binding.import_from_dict(value)
@@ -258,11 +266,12 @@ class BaseKey(t.Generic[NativePrivateKey, NativePublicKey], metaclass=ABCMeta):
 
     @classmethod
     def generate_key(
-            cls: t.Type[GenericKey],
-            size_or_crv: t.Any,
-            parameters: t.Optional[KeyParameters] = None,
-            private: bool = True,
-            auto_kid: bool = False) -> GenericKey:
+        cls: t.Type[GenericKey],
+        size_or_crv: t.Any,
+        parameters: t.Optional[KeyParameters] = None,
+        private: bool = True,
+        auto_kid: bool = False,
+    ) -> GenericKey:
         raise NotImplementedError()
 
 
@@ -294,10 +303,11 @@ class AsymmetricKey(BaseKey[NativePrivateKey, NativePublicKey], metaclass=ABCMet
         return self._raw_value
 
     def as_bytes(
-            self,
-            encoding: t.Optional[t.Literal["PEM", "DER"]] = None,
-            private: t.Optional[bool] = None,
-            password: t.Optional[str] = None) -> bytes:
+        self,
+        encoding: t.Optional[t.Literal["PEM", "DER"]] = None,
+        private: t.Optional[bool] = None,
+        password: t.Optional[str] = None,
+    ) -> bytes:
         return self.binding.as_bytes(self, encoding, private, password)
 
     def as_pem(self, private: t.Optional[bool] = None, password: t.Optional[str] = None) -> bytes:

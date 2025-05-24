@@ -1,7 +1,12 @@
 from __future__ import annotations
 import json
-from .rfc7519.claims import Claims, convert_claims, check_sensitive_data
-from .rfc7519.registry import ClaimsOption, JWTClaimsRegistry
+from json import JSONEncoder, JSONDecoder
+from typing import Type
+from .rfc7519.claims import convert_claims
+from .rfc7519.claims import Claims as Claims
+from .rfc7519.claims import check_sensitive_data as check_sensitive_data
+from .rfc7519.registry import ClaimsOption as ClaimsOption
+from .rfc7519.registry import JWTClaimsRegistry as JWTClaimsRegistry
 from .jws import (
     JWSRegistry,
     serialize_compact,
@@ -34,6 +39,7 @@ class Token:
     :param header: the header part of the JWT
     :param claims: the payload part of the JWT
     """
+
     def __init__(self, header: Header, claims: Claims):
         #: header in dict
         self.header = header
@@ -42,11 +48,13 @@ class Token:
 
 
 def encode(
-        header: Header,
-        claims: Claims,
-        key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | JWERegistry | None = None) -> str:
+    header: Header,
+    claims: Claims,
+    key: KeyFlexible,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | JWERegistry | None = None,
+    encoder_cls: Type[JSONEncoder] | None = None,
+) -> str:
     """Encode a JSON Web Token with the given header, and claims.
 
     :param header: A dict of the JWT header
@@ -54,10 +62,11 @@ def encode(
     :param key: key used to sign the signature
     :param algorithms: a list of allowed algorithms
     :param registry: a ``JWSRegistry`` or ``JWERegistry`` to use
+    :param encoder_cls: A JSONEncoder subclass to use
     """
     # add ``typ`` in header
     _header = {"typ": "JWT", **header}
-    payload = convert_claims(claims)
+    payload = convert_claims(claims, encoder_cls)
     if isinstance(registry, JWERegistry):
         return encrypt_compact(_header, payload, key, algorithms, registry)
     else:
@@ -65,10 +74,12 @@ def encode(
 
 
 def decode(
-        value: bytes | str,
-        key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | JWERegistry | None = None) -> Token:
+    value: bytes | str,
+    key: KeyFlexible,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | JWERegistry | None = None,
+    decoder_cls: Type[JSONDecoder] | None = None,
+) -> Token:
     """Decode the JSON Web Token string with the given key, and validate
     it with the claims requests.
 
@@ -76,6 +87,7 @@ def decode(
     :param key: key used to verify the signature
     :param algorithms: a list of allowed algorithms
     :param registry: a ``JWSRegistry`` or ``JWERegistry`` to use
+    :param decoder_cls: A JSONDecoder subclass to use
     :raise: BadSignatureError
     """
     _value = to_bytes(value)
@@ -87,7 +99,7 @@ def decode(
         header, payload = _decode_jws(_value, key, algorithms, registry)
 
     try:
-        claims: Claims = json.loads(payload)
+        claims: Claims = json.loads(payload, cls=decoder_cls)
     except (TypeError, ValueError):
         raise InvalidPayloadError()
 
@@ -95,20 +107,16 @@ def decode(
 
 
 def _decode_jwe(
-        value: bytes,
-        key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWERegistry | None = None) -> tuple[Header, bytes]:
+    value: bytes, key: KeyFlexible, algorithms: list[str] | None = None, registry: JWERegistry | None = None
+) -> tuple[Header, bytes]:
     jwe_obj = decrypt_compact(value, key, algorithms, registry)
     assert jwe_obj.plaintext is not None
     return jwe_obj.headers(), jwe_obj.plaintext
 
 
 def _decode_jws(
-        value: bytes,
-        key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | None = None) -> tuple[Header, bytes]:
+    value: bytes, key: KeyFlexible, algorithms: list[str] | None = None, registry: JWSRegistry | None = None
+) -> tuple[Header, bytes]:
     jws_obj = deserialize_compact(value, key, algorithms, registry)
     assert jws_obj.payload is not None
     return jws_obj.headers(), jws_obj.payload

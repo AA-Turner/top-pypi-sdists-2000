@@ -135,7 +135,6 @@ P = ParamSpec("P")
 INPUT_DONE = object()
 INPUT_RESUMING = object()
 INPUT_SHOULD_VALIDATE = object()
-SPECIAL_CHANNELS = (ERROR, INTERRUPT, SCHEDULED)
 WritesT = Sequence[tuple[str, Any]]
 
 
@@ -509,9 +508,14 @@ class PregelLoop(LoopProtocol):
                     **read_channels(self.channels, self.stream_keys)
                 )
             # produce values output
-            self._emit(
-                "values", map_output_values, self.output_keys, writes, self.channels
-            )
+            if not updated_channels.isdisjoint(
+                (self.output_keys,)
+                if isinstance(self.output_keys, str)
+                else self.output_keys
+            ):
+                self._emit(
+                    "values", map_output_values, self.output_keys, writes, self.channels
+                )
             # clear pending writes
             self.checkpoint_pending_writes.clear()
             # "not skip_done_tasks" only applies to first tick after resuming
@@ -887,7 +891,7 @@ class PregelLoop(LoopProtocol):
                 and self.checkpoint_pending_writes
                 and any(task.writes for task in self.tasks.values())
             ):
-                mv_writes, _ = apply_writes(
+                mv_writes, updated_channels = apply_writes(
                     self.checkpoint,
                     self.channels,
                     self.tasks.values(),
@@ -896,13 +900,18 @@ class PregelLoop(LoopProtocol):
                 )
                 for key, values in mv_writes.items():
                     self._update_mv(key, values)
-                self._emit(
-                    "values",
-                    map_output_values,
-                    self.output_keys,
-                    [w for t in self.tasks.values() for w in t.writes],
-                    self.channels,
-                )
+                if not updated_channels.isdisjoint(
+                    (self.output_keys,)
+                    if isinstance(self.output_keys, str)
+                    else self.output_keys
+                ):
+                    self._emit(
+                        "values",
+                        map_output_values,
+                        self.output_keys,
+                        [w for t in self.tasks.values() for w in t.writes],
+                        self.channels,
+                    )
             # emit INTERRUPT if exception is empty (otherwise emitted by put_writes)
             if exc_value is not None and (not exc_value.args or not exc_value.args[0]):
                 self._emit(
@@ -1083,7 +1092,8 @@ class SyncPregelLoop(PregelLoop, AbstractContextManager):
         self, task: PregelExecutableTask, write_idx: int, call: Optional[Call] = None
     ) -> Optional[PregelExecutableTask]:
         if pushed := super().accept_push(task, write_idx, call):
-            self.match_cached_writes()
+            for task in self.match_cached_writes():
+                self.output_writes(task.id, task.writes, cached=True)
         return pushed
 
     def put_writes(self, task_id: str, writes: WritesT) -> None:
@@ -1279,7 +1289,8 @@ class AsyncPregelLoop(PregelLoop, AbstractAsyncContextManager):
         self, task: PregelExecutableTask, write_idx: int, call: Optional[Call] = None
     ) -> Optional[PregelExecutableTask]:
         if pushed := super().accept_push(task, write_idx, call):
-            await self.amatch_cached_writes()
+            for task in await self.amatch_cached_writes():
+                self.output_writes(task.id, task.writes, cached=True)
         return pushed
 
     def put_writes(self, task_id: str, writes: WritesT) -> None:

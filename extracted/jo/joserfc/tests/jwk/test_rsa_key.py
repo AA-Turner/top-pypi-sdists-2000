@@ -4,6 +4,8 @@ from tests.keys import read_key
 
 
 class TestRSAKey(TestCase):
+    default_key = RSAKey.generate_key()
+
     def test_import_key_from_dict(self):
         # https://www.rfc-editor.org/rfc/rfc7517#appendix-A.1
         data = {
@@ -37,12 +39,9 @@ class TestRSAKey(TestCase):
                 "4-csFCur-kEgU8awapJzKnqDKgw"
             ),
             "e": "AQAB",
-            "oth": "invalid information"
+            "oth": "invalid information",
         }
-        self.assertRaises(
-            ValueError,
-            RSAKey.import_key, data
-        )
+        self.assertRaises(ValueError, RSAKey.import_key, data)
 
     def test_import_only_from_d(self):
         data = {
@@ -98,11 +97,11 @@ class TestRSAKey(TestCase):
 
         # as_dict
         data = key.as_dict()
-        self.assertIn('d', data)
+        self.assertIn("d", data)
         data = key.as_dict(private=True)
-        self.assertIn('d', data)
+        self.assertIn("d", data)
         data = key.as_dict(private=False)
-        self.assertNotIn('d', data)
+        self.assertNotIn("d", data)
 
         # as_pem
         data = key.as_pem()
@@ -120,7 +119,7 @@ class TestRSAKey(TestCase):
         self.assertRaises(ValueError, RSAKey.generate_key, 8)
         self.assertRaises(ValueError, RSAKey.generate_key, 601)
 
-        key: RSAKey = RSAKey.generate_key(private=False)
+        key = RSAKey.generate_key(private=False)
         self.assertFalse(key.is_private)
         self.assertIsNone(key.kid)
 
@@ -128,8 +127,7 @@ class TestRSAKey(TestCase):
         self.assertIsNotNone(key.kid)
 
     def test_import_from_der_bytes(self):
-        origin_key = RSAKey.generate_key()
-        value1 = origin_key.as_der()
+        value1 = self.default_key.as_der()
         key1 = RSAKey.import_key(value1)
         self.assertEqual(value1, key1.as_der())
 
@@ -137,16 +135,20 @@ class TestRSAKey(TestCase):
         firebase_cert = read_key("firebase-cert.pem")
         key: RSAKey = RSAKey.import_key(firebase_cert)
         data = key.as_dict()
-        self.assertEqual(data['kty'], 'RSA')
+        self.assertEqual(data["kty"], "RSA")
 
     def test_output_with_password(self):
         private_pem = read_key("rsa-openssl-private.pem")
         key: RSAKey = RSAKey.import_key(private_pem)
         pem = key.as_pem(password="secret")
-        self.assertRaises(
-            TypeError,
-            RSAKey.import_key,
-            pem
-        )
+        self.assertRaises(TypeError, RSAKey.import_key, pem)
         key2 = RSAKey.import_key(pem, password="secret")
         self.assertEqual(key.as_dict(), key2.as_dict())
+
+    def test_key_eq(self):
+        key1 = self.default_key
+        key2 = RSAKey.import_key(key1.as_dict())
+        self.assertIsNot(key1, key2)
+        self.assertEqual(key1, key2)
+        key3 = RSAKey.generate_key()
+        self.assertNotEqual(key1, key3)

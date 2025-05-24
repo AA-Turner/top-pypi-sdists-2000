@@ -10,6 +10,7 @@ class HeaderMember:
     """A header member of the JSON signature. It is combined with protected header,
     and unprotected header.
     """
+
     def __init__(self, protected: Header | None = None, header: Header | None = None):
         #: protected header
         self.protected = protected
@@ -34,6 +35,7 @@ class CompactSignature:
     """JSON Web Signature object for compact mode. This object is used to
     represent the JWS instance.
     """
+
     def __init__(self, protected: Header, payload: bytes):
         self.protected = protected
         self.payload = payload
@@ -97,7 +99,7 @@ class JWSAlgModel(object, metaclass=ABCMeta):
 
     def check_key_type(self, key: Any) -> None:
         if key.key_type != self.key_type:
-            raise InvalidKeyTypeError(f'Algorithm "{self.name}" requires "{self.key_type}" key')
+            raise InvalidKeyTypeError(f"Algorithm '{self.name}' requires '{self.key_type}' key")
 
     @abstractmethod
     def sign(self, msg: bytes, key: Any) -> bytes:

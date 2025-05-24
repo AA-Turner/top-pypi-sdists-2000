@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: huggingface-hub
-Version: 0.31.4
+Version: 0.32.0
 Summary: Client library to download and publish models, datasets and other repos on the huggingface.co hub
 Home-page: https://github.com/huggingface/huggingface_hub
 Author: Hugging Face, Inc.
@@ -26,12 +26,14 @@ Requires-Python: >=3.8.0
 Description-Content-Type: text/markdown
 Provides-Extra: cli
 Provides-Extra: inference
+Provides-Extra: oauth
 Provides-Extra: torch
 Provides-Extra: hf_transfer
 Provides-Extra: fastai
 Provides-Extra: tensorflow
 Provides-Extra: tensorflow-testing
 Provides-Extra: hf_xet
+Provides-Extra: mcp
 Provides-Extra: testing
 Provides-Extra: typing
 Provides-Extra: quality

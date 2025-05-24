@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: cloudevents
-Version: 1.11.0
+Version: 1.11.1
 Summary: CloudEvents Python SDK
 Home-page: https://github.com/cloudevents/sdk-python
 Author: The Cloud Events Contributors
@@ -27,6 +27,18 @@ License-File: LICENSE
 Requires-Dist: deprecation<3.0,>=2.0
 Provides-Extra: pydantic
 Requires-Dist: pydantic<3.0,>=1.0.0; extra == "pydantic"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: summary
 
 # Python SDK for [CloudEvents](https://github.com/cloudevents/spec)
 

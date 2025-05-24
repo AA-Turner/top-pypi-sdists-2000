@@ -6,6 +6,12 @@ from .rfc7518.oct_key import OctKey
 from .rfc7518.rsa_key import RSAKey
 from .rfc7518.ec_key import ECKey
 from .rfc8037.okp_key import OKPKey
+from .errors import (
+    MissingKeyError,
+    InvalidKeyIdError,
+    InvalidKeyTypeError,
+    MissingKeyTypeError,
+)
 from .util import to_bytes
 
 __all__ = [
@@ -16,6 +22,7 @@ __all__ = [
     "Key",
     "KeySet",
     "JWKRegistry",
+    "KeySetSerialization",
 ]
 
 Key = t.Union[OctKey, RSAKey, ECKey, OKPKey]
@@ -36,6 +43,7 @@ class JWKRegistry:
         data = {"kty": "oct", "k": "..."}
         key = JWKRegistry.import_key(data)
     """
+
     key_types: t.Dict[str, t.Type[Key]] = {
         OctKey.key_type: OctKey,
         RSAKey.key_type: RSAKey,
@@ -44,11 +52,7 @@ class JWKRegistry:
     }
 
     @classmethod
-    def import_key(
-            cls,
-            data: AnyKey,
-            key_type: str | None = None,
-            parameters: KeyParameters | None = None) -> Key:
+    def import_key(cls, data: AnyKey, key_type: str | None = None, parameters: KeyParameters | None = None) -> Key:
         """A class method for importing a key from bytes, string, and dict.
         When ``value`` is a dict, this method can tell the key type automatically,
         otherwise, developers SHOULD pass the ``key_type`` themselves.
@@ -62,10 +66,10 @@ class JWKRegistry:
             if "kty" in data:
                 key_type = data["kty"]  # type: ignore[assignment]
             else:
-                raise ValueError("Missing key type")
+                raise MissingKeyTypeError("Missing key type")
 
         if key_type not in cls.key_types:
-            raise ValueError(f'Invalid key type: "{key_type}"')
+            raise InvalidKeyTypeError(f"Invalid key type: '{key_type}'")
 
         if isinstance(data, str):
             data = to_bytes(data)
@@ -75,12 +79,13 @@ class JWKRegistry:
 
     @classmethod
     def generate_key(
-            cls,
-            key_type: str,
-            crv_or_size: str | int,
-            parameters: KeyParameters | None = None,
-            private: bool = True,
-            auto_kid: bool = False) -> Key:
+        cls,
+        key_type: str,
+        crv_or_size: str | int | None = None,
+        parameters: KeyParameters | None = None,
+        private: bool = True,
+        auto_kid: bool = False,
+    ) -> Key:
         """A class method for generating key according to the given key type.
         When ``key_type`` is "oct" and "RSA", the second parameter SHOULD be
         a key size in bits. When ``key_type`` is "EC" and "OKP", the second
@@ -92,7 +97,7 @@ class JWKRegistry:
             JWKRegistry.generate_key("EC", "P-256")
         """
         if key_type not in cls.key_types:
-            raise ValueError(f'Invalid key type: "{key_type}"')
+            raise InvalidKeyTypeError(f"Invalid key type: '{key_type}'")
 
         key_cls = cls.key_types[key_type]
         return key_cls.generate_key(crv_or_size, parameters, private, auto_kid)  # type: ignore[arg-type]
@@ -119,6 +124,10 @@ class KeySet:
     def __bool__(self) -> bool:
         return bool(self.keys)
 
+    def __eq__(self, other: t.Any) -> bool:
+        assert isinstance(other, KeySet)
+        return self.keys == other.keys
+
     def as_dict(self, private: bool | None = None, **params: t.Any) -> KeySetSerialization:
         keys: list[DictKey] = []
 
@@ -138,7 +147,7 @@ class KeySet:
         for key in self.keys:
             if key.kid == kid:
                 return key
-        raise ValueError(f'No key for kid: "{kid}"')
+        raise InvalidKeyIdError(f"No key for kid: '{kid}'")
 
     def pick_random_key(self, algorithm: str) -> t.Optional[Key]:
         key_types = self.algorithm_keys.get(algorithm)
@@ -151,26 +160,26 @@ class KeySet:
         return None
 
     @classmethod
-    def import_key_set(
-            cls,
-            value: KeySetSerialization,
-            parameters: KeyParameters | None = None) -> "KeySet":
+    def import_key_set(cls, value: KeySetSerialization, parameters: KeyParameters | None = None) -> "KeySet":
         keys: list[Key] = []
 
         for data in value["keys"]:
             keys.append(cls.registry_cls.import_key(data, parameters=parameters))
 
+        if not keys:
+            raise MissingKeyError("No keys to import")
+
         return cls(keys)
 
     @classmethod
     def generate_key_set(
-            cls,
-            key_type: str,
-            crv_or_size: str | int,
-            parameters: KeyParameters | None = None,
-            private: bool = True,
-            count: int = 4) -> "KeySet":
-
+        cls,
+        key_type: str,
+        crv_or_size: str | int,
+        parameters: KeyParameters | None = None,
+        private: bool = True,
+        count: int = 4,
+    ) -> "KeySet":
         keys: list[Key] = []
         for _ in range(count):
             key = cls.registry_cls.generate_key(key_type, crv_or_size, parameters, private)

@@ -1,4 +1,6 @@
 import unittest
+import warnings
+
 
 from cachetools import LRUCache, cachedmethod, keys
 
@@ -25,16 +27,42 @@ class Locked:
     def __init__(self, cache):
         self.cache = cache
         self.count = 0
+        self.lock_count = 0
 
     @cachedmethod(lambda self: self.cache, lock=lambda self: self)
     def get(self, value):
-        return self.count
+        count = self.count
+        self.count += 1
+        return count
 
     def __enter__(self):
-        self.count += 1
+        self.lock_count += 1
 
     def __exit__(self, *exc):
         pass
+
+
+class Conditioned(Locked):
+    def __init__(self, cache):
+        Locked.__init__(self, cache)
+        self.wait_count = 0
+        self.notify_count = 0
+
+    @cachedmethod(lambda self: self.cache, condition=lambda self: self)
+    def get(self, value):
+        return Locked.get.__wrapped__(self, value)
+
+    @cachedmethod(
+        lambda self: self.cache, lock=lambda self: self, condition=lambda self: self
+    )
+    def get_lock(self, value):
+        return Locked.get.__wrapped__(self, value)
+
+    def wait_for(self, predicate):
+        self.wait_count += 1
+
+    def notify_all(self):
+        self.notify_count += 1
 
 
 class Unhashable:
@@ -113,11 +141,17 @@ class CachedMethodTest(unittest.TestCase):
     def test_nocache(self):
         cached = Cached(None)
 
-        self.assertEqual(cached.get(0), 0)
-        self.assertEqual(cached.get(1), 1)
-        self.assertEqual(cached.get(1), 2)
-        self.assertEqual(cached.get(1.0), 3)
-        self.assertEqual(cached.get(1.0), 4)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+
+            self.assertEqual(cached.get(0), 0)
+            self.assertEqual(cached.get(1), 1)
+            self.assertEqual(cached.get(1), 2)
+            self.assertEqual(cached.get(1.0), 3)
+            self.assertEqual(cached.get(1.0), 4)
+
+        self.assertEqual(len(w), 5)
+        self.assertIs(w[0].category, DeprecationWarning)
 
     def test_weakref(self):
         import weakref
@@ -152,29 +186,122 @@ class CachedMethodTest(unittest.TestCase):
     def test_locked_dict(self):
         cached = Locked({})
 
-        self.assertEqual(cached.get(0), 1)
-        self.assertEqual(cached.get(1), 3)
-        self.assertEqual(cached.get(1), 3)
-        self.assertEqual(cached.get(1.0), 3)
-        self.assertEqual(cached.get(2.0), 7)
-
-    def test_locked_nocache(self):
-        cached = Locked(None)
-
         self.assertEqual(cached.get(0), 0)
-        self.assertEqual(cached.get(1), 0)
-        self.assertEqual(cached.get(1), 0)
-        self.assertEqual(cached.get(1.0), 0)
-        self.assertEqual(cached.get(1.0), 0)
+        self.assertEqual(cached.lock_count, 2)
+        self.assertEqual(cached.get(1), 1)
+        self.assertEqual(cached.lock_count, 4)
+        self.assertEqual(cached.get(1), 1)
+        self.assertEqual(cached.lock_count, 5)
+        self.assertEqual(cached.get(1.0), 1)
+        self.assertEqual(cached.lock_count, 6)
+        self.assertEqual(cached.get(1.0), 1)
+        self.assertEqual(cached.lock_count, 7)
+
+        cached.cache.clear()
+        self.assertEqual(cached.get(1), 2)
+        self.assertEqual(cached.lock_count, 9)
 
     def test_locked_nospace(self):
         cached = Locked(LRUCache(maxsize=0))
 
-        self.assertEqual(cached.get(0), 1)
-        self.assertEqual(cached.get(1), 3)
-        self.assertEqual(cached.get(1), 5)
-        self.assertEqual(cached.get(1.0), 7)
-        self.assertEqual(cached.get(1.0), 9)
+        self.assertEqual(cached.get(0), 0)
+        self.assertEqual(cached.lock_count, 2)
+        self.assertEqual(cached.get(1), 1)
+        self.assertEqual(cached.lock_count, 4)
+        self.assertEqual(cached.get(1), 2)
+        self.assertEqual(cached.lock_count, 6)
+        self.assertEqual(cached.get(1.0), 3)
+        self.assertEqual(cached.lock_count, 8)
+        self.assertEqual(cached.get(1.0), 4)
+        self.assertEqual(cached.lock_count, 10)
+
+    def test_locked_nocache(self):
+        cached = Locked(None)
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+
+            self.assertEqual(cached.get(0), 0)
+            self.assertEqual(cached.get(1), 1)
+            self.assertEqual(cached.get(1), 2)
+            self.assertEqual(cached.get(1.0), 3)
+            self.assertEqual(cached.get(1.0), 4)
+            self.assertEqual(cached.lock_count, 0)
+
+        self.assertEqual(len(w), 5)
+        self.assertIs(w[0].category, DeprecationWarning)
+
+    def test_condition_dict(self):
+        cached = Conditioned({})
+
+        self.assertEqual(cached.get(0), 0)
+        self.assertEqual(cached.lock_count, 3)
+        self.assertEqual(cached.wait_count, 1)
+        self.assertEqual(cached.notify_count, 1)
+        self.assertEqual(cached.get(1), 1)
+        self.assertEqual(cached.lock_count, 6)
+        self.assertEqual(cached.wait_count, 2)
+        self.assertEqual(cached.notify_count, 2)
+        self.assertEqual(cached.get(1), 1)
+        self.assertEqual(cached.lock_count, 7)
+        self.assertEqual(cached.wait_count, 3)
+        self.assertEqual(cached.notify_count, 2)
+        self.assertEqual(cached.get(1.0), 1)
+        self.assertEqual(cached.lock_count, 8)
+        self.assertEqual(cached.wait_count, 4)
+        self.assertEqual(cached.notify_count, 2)
+        self.assertEqual(cached.get(1.0), 1)
+        self.assertEqual(cached.lock_count, 9)
+        self.assertEqual(cached.wait_count, 5)
+        self.assertEqual(cached.notify_count, 2)
+
+        cached.cache.clear()
+        self.assertEqual(cached.get(1), 2)
+        self.assertEqual(cached.lock_count, 12)
+        self.assertEqual(cached.wait_count, 6)
+        self.assertEqual(cached.notify_count, 3)
+
+    def test_condition_nospace(self):
+        cached = Conditioned(LRUCache(maxsize=0))
+
+        self.assertEqual(cached.get(0), 0)
+        self.assertEqual(cached.lock_count, 3)
+        self.assertEqual(cached.wait_count, 1)
+        self.assertEqual(cached.notify_count, 1)
+        self.assertEqual(cached.get(1), 1)
+        self.assertEqual(cached.lock_count, 6)
+        self.assertEqual(cached.wait_count, 2)
+        self.assertEqual(cached.notify_count, 2)
+        self.assertEqual(cached.get(1), 2)
+        self.assertEqual(cached.lock_count, 9)
+        self.assertEqual(cached.wait_count, 3)
+        self.assertEqual(cached.notify_count, 3)
+        self.assertEqual(cached.get(1.0), 3)
+        self.assertEqual(cached.lock_count, 12)
+        self.assertEqual(cached.wait_count, 4)
+        self.assertEqual(cached.notify_count, 4)
+        self.assertEqual(cached.get(1.0), 4)
+        self.assertEqual(cached.lock_count, 15)
+        self.assertEqual(cached.wait_count, 5)
+        self.assertEqual(cached.notify_count, 5)
+
+    def test_condition_nocache(self):
+        cached = Conditioned(None)
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+
+            self.assertEqual(cached.get(0), 0)
+            self.assertEqual(cached.get(1), 1)
+            self.assertEqual(cached.get(1), 2)
+            self.assertEqual(cached.get(1.0), 3)
+            self.assertEqual(cached.get(1.0), 4)
+            self.assertEqual(cached.lock_count, 0)
+            self.assertEqual(cached.wait_count, 0)
+            self.assertEqual(cached.notify_count, 0)
+
+        self.assertEqual(len(w), 5)
+        self.assertIs(w[0].category, DeprecationWarning)
 
     def test_unhashable(self):
         cached = Unhashable(LRUCache(maxsize=0))
@@ -190,7 +317,7 @@ class CachedMethodTest(unittest.TestCase):
         cached = Cached(cache)
 
         self.assertEqual(len(cache), 0)
-        self.assertEqual(cached.get.__wrapped__(cached, 0), 0)
+        self.assertEqual(Cached.get.__wrapped__(cached, 0), 0)
         self.assertEqual(len(cache), 0)
         self.assertEqual(cached.get(0), 1)
         self.assertEqual(len(cache), 1)
@@ -201,17 +328,28 @@ class CachedMethodTest(unittest.TestCase):
         cache = {}
         cached = Cached(cache)
 
-        self.assertIs(cached.get.cache(cached), cache)
-        self.assertIs(cached.get.cache_key, keys.methodkey)
-        self.assertIs(cached.get.cache_lock, None)
+        self.assertIs(Cached.get.cache(cached), cache)
+        self.assertIs(Cached.get.cache_key, keys.methodkey)
+        self.assertIs(Cached.get.cache_lock, None)
+        self.assertIs(Cached.get.cache_condition, None)
 
     def test_attributes_lock(self):
         cache = {}
         cached = Locked(cache)
 
-        self.assertIs(cached.get.cache(cached), cache)
-        self.assertIs(cached.get.cache_key, keys.methodkey)
-        self.assertIs(cached.get.cache_lock(cached), cached)
+        self.assertIs(Locked.get.cache(cached), cache)
+        self.assertIs(Locked.get.cache_key, keys.methodkey)
+        self.assertIs(Locked.get.cache_lock(cached), cached)
+        self.assertIs(Locked.get.cache_condition, None)
+
+    def test_attributes_cond(self):
+        cache = {}
+        cached = Conditioned(cache)
+
+        self.assertIs(Conditioned.get.cache(cached), cache)
+        self.assertIs(Conditioned.get.cache_key, keys.methodkey)
+        self.assertIs(Conditioned.get.cache_lock(cached), cached)
+        self.assertIs(Conditioned.get.cache_condition(cached), cached)
 
     def test_clear(self):
         cache = {}
@@ -219,16 +357,27 @@ class CachedMethodTest(unittest.TestCase):
 
         self.assertEqual(cached.get(0), 0)
         self.assertEqual(len(cache), 1)
-        cached.get.cache_clear(cached)
+        Cached.get.cache_clear(cached)
         self.assertEqual(len(cache), 0)
 
     def test_clear_locked(self):
         cache = {}
         cached = Locked(cache)
 
-        self.assertEqual(cached.get(0), 1)
+        self.assertEqual(cached.get(0), 0)
         self.assertEqual(len(cache), 1)
-        self.assertEqual(cached.count, 2)
-        cached.get.cache_clear(cached)
+        self.assertEqual(cached.lock_count, 2)
+        Locked.get.cache_clear(cached)
         self.assertEqual(len(cache), 0)
-        self.assertEqual(cached.count, 3)
+        self.assertEqual(cached.lock_count, 3)
+
+    def test_clear_condition(self):
+        cache = {}
+        cached = Conditioned(cache)
+
+        self.assertEqual(cached.get(0), 0)
+        self.assertEqual(len(cache), 1)
+        self.assertEqual(cached.lock_count, 3)
+        Conditioned.get.cache_clear(cached)
+        self.assertEqual(len(cache), 0)
+        self.assertEqual(cached.lock_count, 4)

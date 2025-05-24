@@ -2,18 +2,18 @@ from __future__ import annotations
 from typing import overload, TypeVar, Any, Dict
 from .rfc7515.model import (
     JWSAlgModel,
-    HeaderMember,
-    CompactSignature,
-    GeneralJSONSignature,
-    FlattenedJSONSignature,
+    HeaderMember as HeaderMember,
+    CompactSignature as CompactSignature,
+    GeneralJSONSignature as GeneralJSONSignature,
+    FlattenedJSONSignature as FlattenedJSONSignature,
 )
 from .rfc7515.registry import (
-    JWSRegistry,
+    JWSRegistry as JWSRegistry,
     construct_registry,
 )
 from .rfc7515.compact import (
+    extract_compact as extract_compact,
     sign_compact,
-    extract_compact,
     verify_compact,
     detach_compact_content,
 )
@@ -27,14 +27,14 @@ from .rfc7515.json import (
     detach_json_content,
 )
 from .rfc7515.types import (
-    HeaderDict,
-    GeneralJSONSerialization,
-    FlattenedJSONSerialization,
+    HeaderDict as HeaderDict,
+    GeneralJSONSerialization as GeneralJSONSerialization,
+    FlattenedJSONSerialization as FlattenedJSONSerialization,
 )
 from .rfc7518.jws_algs import JWS_ALGORITHMS
 from .rfc8037.jws_eddsa import EdDSA
 from .rfc8812 import ES256K
-from .errors import BadSignatureError
+from .errors import BadSignatureError, MissingKeyError
 from .jwk import Key, KeyFlexible, KeySet, guess_key
 from .util import to_bytes
 from .registry import Header
@@ -82,11 +82,12 @@ register_algorithms()
 
 
 def serialize_compact(
-        protected: Header,
-        payload: bytes | str,
-        private_key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | None = None) -> str:
+    protected: Header,
+    payload: bytes | str,
+    private_key: KeyFlexible | None,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | None = None,
+) -> str:
     """Generate a JWS Compact Serialization. The JWS Compact Serialization
     represents digitally signed or MACed content as a compact, URL-safe
     string, per Section 7.1.
@@ -110,6 +111,15 @@ def serialize_compact(
     registry.check_header(protected)
     obj = CompactSignature(protected, to_bytes(payload))
     alg: JWSAlgModel = registry.get_alg(protected["alg"])
+
+    # "none" algorithm requires no key
+    if alg.name == "none":
+        out = sign_compact(obj, alg, None)
+        return out.decode("utf-8")
+
+    if private_key is None:
+        raise MissingKeyError()
+
     key: Key = guess_key(private_key, obj, True)
     key.check_use("sig")
     alg.check_key_type(key)
@@ -119,10 +129,11 @@ def serialize_compact(
 
 
 def validate_compact(
-        obj: CompactSignature,
-        public_key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | None = None) -> bool:
+    obj: CompactSignature,
+    public_key: KeyFlexible | None,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | None = None,
+) -> bool:
     """Validate the JWS Compact Serialization with the given key.
     This method is usually used together with ``extract_compact``.
 
@@ -136,18 +147,27 @@ def validate_compact(
 
     headers = obj.headers()
     registry.check_header(headers)
+    alg: JWSAlgModel = registry.get_alg(headers["alg"])
+
+    # "none" algorithm requires no key
+    if headers["alg"] == "none":
+        return verify_compact(obj, alg, None)
+
+    if public_key is None:
+        raise MissingKeyError()
+
     key: Key = guess_key(public_key, obj)
     key.check_use("sig")
-    alg: JWSAlgModel = registry.get_alg(headers["alg"])
     alg.check_key_type(key)
     return verify_compact(obj, alg, key)
 
 
 def deserialize_compact(
-        value: bytes | str,
-        public_key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | None = None) -> CompactSignature:
+    value: bytes | str,
+    public_key: KeyFlexible | None,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | None = None,
+) -> CompactSignature:
     """Extract and validate the JWS Compact Serialization (in string, or bytes)
     with the given key. An JWE Compact Serialization looks like:
 
@@ -175,28 +195,30 @@ def deserialize_compact(
 
 @overload
 def serialize_json(
-        members: list[HeaderDict],
-        payload: bytes | str,
-        private_key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | None = None) -> GeneralJSONSerialization: ...
+    members: list[HeaderDict],
+    payload: bytes | str,
+    private_key: KeyFlexible,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | None = None,
+) -> GeneralJSONSerialization: ...
 
 
 @overload
 def serialize_json(
-        members: HeaderDict,
-        payload: bytes | str,
-        private_key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | None = None) -> FlattenedJSONSerialization: ...
+    members: HeaderDict,
+    payload: bytes | str,
+    private_key: KeyFlexible,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | None = None,
+) -> FlattenedJSONSerialization: ...
 
 
 def serialize_json(
-        members: HeaderDict | list[HeaderDict],
-        payload: bytes | str,
-        private_key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | None = None,
+    members: HeaderDict | list[HeaderDict],
+    payload: bytes | str,
+    private_key: KeyFlexible,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | None = None,
 ) -> GeneralJSONSerialization | FlattenedJSONSerialization:
     """Generate a JWS JSON Serialization (in dict). The JWS JSON Serialization
     represents digitally signed or MACed content as a JSON object. This representation
@@ -239,25 +261,27 @@ def serialize_json(
 
 @overload
 def deserialize_json(
-        value: GeneralJSONSerialization,
-        public_key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | None = None) -> GeneralJSONSignature: ...
+    value: GeneralJSONSerialization,
+    public_key: KeyFlexible,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | None = None,
+) -> GeneralJSONSignature: ...
 
 
 @overload
 def deserialize_json(
-        value: FlattenedJSONSerialization,
-        public_key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | None = None) -> FlattenedJSONSignature: ...
+    value: FlattenedJSONSerialization,
+    public_key: KeyFlexible,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | None = None,
+) -> FlattenedJSONSignature: ...
 
 
 def deserialize_json(
-        value: GeneralJSONSerialization | FlattenedJSONSerialization,
-        public_key: KeyFlexible,
-        algorithms: list[str] | None = None,
-        registry: JWSRegistry | None = None,
+    value: GeneralJSONSerialization | FlattenedJSONSerialization,
+    public_key: KeyFlexible,
+    algorithms: list[str] | None = None,
+    registry: JWSRegistry | None = None,
 ) -> GeneralJSONSignature | FlattenedJSONSignature:
     """Extract and validate the JWS (in string) with the given key.
 

@@ -22,14 +22,19 @@ def to_str(x: bytes | str, charset: str = "utf-8") -> str:
     return x
 
 
-def json_dumps(data: Any, ensure_ascii: bool = False) -> str:
-    return json.dumps(data, ensure_ascii=ensure_ascii, separators=(",", ":"))
-
-
 def urlsafe_b64decode(s: bytes) -> bytes:
     if b"+" in s or b"/" in s:
         raise binascii.Error
-    s += b"=" * (-len(s) % 4)
+
+    pad = -len(s) % 4
+    if pad == 3:
+        raise binascii.Error
+
+    safe_ending = (b"AEIMQUYcgkosw048", b"AQgw")
+    if pad and s[-1] not in safe_ending[pad - 1]:
+        raise binascii.Error
+
+    s += b"=" * pad
     return base64.b64decode(s, b"-_", validate=True)
 
 
@@ -51,11 +56,11 @@ def int_to_base64(num: int) -> str:
     return urlsafe_b64encode(s).decode("utf-8", "strict")
 
 
-def json_b64encode(text: Any, charset: str = "utf-8") -> bytes:
+def json_b64encode(text: Any) -> bytes:
     if isinstance(text, dict):
-        text = json_dumps(text)
-    return urlsafe_b64encode(to_bytes(text, charset))
+        text = json.dumps(text, ensure_ascii=True, separators=(",", ":"))
+    return urlsafe_b64encode(to_bytes(text, "ascii"))
 
 
-def json_b64decode(text: Any, charset: str = "utf-8") -> Any:
-    return json.loads(urlsafe_b64decode(to_bytes(text, charset)))
+def json_b64decode(text: Any) -> Any:
+    return json.loads(urlsafe_b64decode(to_bytes(text, "ascii")))
