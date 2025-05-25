@@ -7,8 +7,8 @@ use crate::ffi::*;
 use crate::msgpack::Marker;
 use crate::opt::*;
 use crate::typeref::*;
-use crate::unicode::*;
 use byteorder::{BigEndian, ReadBytesExt};
+use chrono::{Datelike, Timelike};
 use simdutf8::basic::{from_utf8, Utf8Error};
 use std::borrow::Cow;
 use std::os::raw::c_char;
@@ -22,30 +22,25 @@ pub fn deserialize(
     opts: Opt,
 ) -> Result<NonNull<pyo3::ffi::PyObject>, DeserializeError<'static>> {
     let obj_type_ptr = ob_type!(ptr);
-    let buffer: *const u8;
-    let length: usize;
+    let contents: &[u8];
 
     if py_is!(obj_type_ptr, BYTES_TYPE) {
-        buffer = unsafe { PyBytes_AS_STRING(ptr) as *const u8 };
-        length = unsafe { PyBytes_GET_SIZE(ptr) as usize };
+        contents = unsafe { pybytes_as_bytes(ptr) };
     } else if py_is!(obj_type_ptr, MEMORYVIEW_TYPE) {
-        let membuf = unsafe { PyMemoryView_GET_BUFFER(ptr) };
-        if unsafe { pyo3::ffi::PyBuffer_IsContiguous(membuf, b'C' as c_char) == 0 } {
+        if let Some(buffer) = unsafe { pymemoryview_as_bytes(ptr) } {
+            contents = buffer;
+        } else {
             return Err(DeserializeError::new(Cow::Borrowed(
                 "Input type memoryview must be a C contiguous buffer",
             )));
         }
-        buffer = unsafe { (*membuf).buf as *const u8 };
-        length = unsafe { (*membuf).len as usize };
     } else if py_is!(obj_type_ptr, BYTEARRAY_TYPE) {
-        buffer = ffi!(PyByteArray_AsString(ptr)) as *const u8;
-        length = ffi!(PyByteArray_Size(ptr)) as usize;
+        contents = unsafe { pybytearray_as_bytes(ptr) };
     } else {
         return Err(DeserializeError::new(Cow::Borrowed(
             "Input must be bytes, bytearray, memoryview",
         )));
     }
-    let contents: &[u8] = unsafe { std::slice::from_raw_parts(buffer, length) };
 
     let mut deserializer = Deserializer::new(contents, ext_hook, opts);
     deserializer
@@ -60,6 +55,7 @@ enum Error {
     Internal,
     InvalidStr,
     InvalidType(Marker),
+    InvalidValue,
     RecursionLimitReached,
     UnexpectedEof,
 }
@@ -75,6 +71,7 @@ impl std::fmt::Display for Error {
             Error::InvalidType(ref marker) => {
                 write!(f, "invalid type {marker:?}")
             }
+            Error::InvalidValue => f.write_str("invalid value"),
             Error::RecursionLimitReached => f.write_str(RECURSION_LIMIT_REACHED),
             Error::UnexpectedEof => write!(f, "unexpected end of file"),
         }
@@ -186,8 +183,53 @@ impl<'de> Deserializer<'de> {
         Ok(Marker::from_u8(n))
     }
 
+    fn deserialize_timestamp_ext(
+        &mut self,
+        len: u32,
+    ) -> Result<NonNull<pyo3::ffi::PyObject>, Error> {
+        let (seconds, nanoseconds): (i64, u32) = match len {
+            4 => {
+                let seconds = self.read_u32()?;
+                (seconds.into(), 0)
+            }
+            8 => {
+                let value = self.read_u64()?;
+                ((value & 0x3ffffffff) as i64, (value >> 34) as u32)
+            }
+            12 => {
+                let nanoseconds = self.read_u32()?;
+                let seconds = self.read_i64()?;
+                (seconds, nanoseconds)
+            }
+            _ => return Err(Error::InvalidValue),
+        };
+        let datetime = match chrono::DateTime::<chrono::Utc>::from_timestamp(seconds, nanoseconds) {
+            Some(value) => value,
+            None => return Err(Error::InvalidValue),
+        };
+        let obj = unsafe {
+            let datetime_api = *pyo3::ffi::PyDateTimeAPI();
+            (datetime_api.DateTime_FromDateAndTime)(
+                datetime.year(),
+                datetime.month() as i32,
+                datetime.day() as i32,
+                datetime.hour() as i32,
+                datetime.minute() as i32,
+                datetime.second() as i32,
+                (datetime.nanosecond() / 1000) as i32,
+                datetime_api.TimeZone_UTC,
+                datetime_api.DateTimeType,
+            )
+        };
+        Ok(nonnull!(obj))
+    }
+
     fn deserialize_ext(&mut self, len: u32) -> Result<NonNull<pyo3::ffi::PyObject>, Error> {
         let tag = self.read_i8()?;
+        if tag == -1 && self.opts & DATETIME_AS_TIMESTAMP_EXT != 0 {
+            return self.deserialize_timestamp_ext(len);
+        }
+
         let data = self.read_slice(len as usize)?;
 
         match self.ext_hook {
@@ -272,7 +314,7 @@ impl<'de> Deserializer<'de> {
         &mut self,
         len: u32,
     ) -> Result<NonNull<pyo3::ffi::PyObject>, Error> {
-        let dict_ptr = ffi!(_PyDict_NewPresized(len as pyo3::ffi::Py_ssize_t));
+        let dict_ptr = unsafe { pydict_new_presized(len as pyo3::ffi::Py_ssize_t) };
         for _ in 0..len {
             let marker = self.read_marker()?;
             let key = match marker {
@@ -293,12 +335,9 @@ impl<'de> Deserializer<'de> {
             }?;
             let value = self.deserialize()?;
             let pyhash = unsafe { (*key.as_ptr().cast::<pyo3::ffi::PyASCIIObject>()).hash };
-            let _ = ffi!(_PyDict_SetItem_KnownHash(
-                dict_ptr,
-                key.as_ptr(),
-                value.as_ptr(),
-                pyhash
-            ));
+            let _ = unsafe {
+                pydict_set_item_known_hash(dict_ptr, key.as_ptr(), value.as_ptr(), pyhash)
+            };
             // counter Py_INCREF in insertdict
             ffi!(Py_DECREF(key.as_ptr()));
             ffi!(Py_DECREF(value.as_ptr()));
@@ -310,7 +349,7 @@ impl<'de> Deserializer<'de> {
         &mut self,
         len: u32,
     ) -> Result<NonNull<pyo3::ffi::PyObject>, Error> {
-        let dict_ptr = ffi!(_PyDict_NewPresized(len as pyo3::ffi::Py_ssize_t));
+        let dict_ptr = unsafe { pydict_new_presized(len as pyo3::ffi::Py_ssize_t) };
         for _ in 0..len {
             let key = self.deserialize_map_key()?;
             let value = self.deserialize()?;
@@ -471,13 +510,20 @@ impl<'de> Deserializer<'de> {
         let ptr = ffi!(PyTuple_New(len as pyo3::ffi::Py_ssize_t));
         for i in 0..len {
             let elem = self.deserialize_map_key()?;
-            ffi!(PyTuple_SET_ITEM(
-                ptr,
-                i as pyo3::ffi::Py_ssize_t,
-                elem.as_ptr()
-            ));
+            unsafe {
+                pytuple_set_item(ptr, i as pyo3::ffi::Py_ssize_t, elem.as_ptr());
+            }
         }
         Ok(nonnull!(ptr))
+    }
+
+    fn deserialize_map_ext_key(&mut self, len: u32) -> Result<NonNull<pyo3::ffi::PyObject>, Error> {
+        let tag = self.read_i8()?;
+        if tag == -1 && self.opts & DATETIME_AS_TIMESTAMP_EXT != 0 {
+            self.deserialize_timestamp_ext(len)
+        } else {
+            Err(Error::InvalidValue)
+        }
     }
 
     fn deserialize_map_key(&mut self) -> Result<NonNull<pyo3::ffi::PyObject>, Error> {
@@ -566,6 +612,12 @@ impl<'de> Deserializer<'de> {
             Marker::Array32 => {
                 let len = self.read_u32()?;
                 self.deserialize_map_array_key(len)
+            }
+            Marker::FixExt4 => self.deserialize_map_ext_key(4),
+            Marker::FixExt8 => self.deserialize_map_ext_key(8),
+            Marker::Ext8 => {
+                let len = self.read_u8()?;
+                self.deserialize_map_ext_key(len.into())
             }
             marker => Err(Error::InvalidType(marker)),
         };

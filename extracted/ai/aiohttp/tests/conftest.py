@@ -4,16 +4,22 @@ import os
 import socket
 import ssl
 import sys
+import zlib
 from hashlib import md5, sha1, sha256
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Any, Generator, Iterator
+from typing import Any, AsyncIterator, Generator, Iterator
 from unittest import mock
 from uuid import uuid4
 
+import isal.isal_zlib
 import pytest
+import zlib_ng.zlib_ng
+from blockbuster import blockbuster_ctx
 
+from aiohttp import payload
 from aiohttp.client_proto import ResponseHandler
+from aiohttp.compression_utils import ZLibBackend, ZLibBackendProtocol, set_zlib_backend
 from aiohttp.http import WS_KEY
 from aiohttp.test_utils import get_unused_port_socket, loop_context
 
@@ -29,7 +35,10 @@ except ImportError:
 
 
 try:
-    import uvloop
+    if sys.platform == "win32":
+        import winloop as uvloop
+    else:
+        import uvloop
 except ImportError:
     uvloop = None  # type: ignore[assignment]
 
@@ -37,6 +46,41 @@ pytest_plugins = ["aiohttp.pytest_plugin", "pytester"]
 
 IS_HPUX = sys.platform.startswith("hp-ux")
 IS_LINUX = sys.platform.startswith("linux")
+
+
+@pytest.fixture(autouse=True)
+def blockbuster(request: pytest.FixtureRequest) -> Iterator[None]:
+    # Allow selectively disabling blockbuster for specific tests
+    # using the @pytest.mark.skip_blockbuster marker.
+    if "skip_blockbuster" in request.node.keywords:
+        yield
+        return
+
+    # No blockbuster for benchmark tests.
+    node = request.node.parent
+    while node:
+        if node.name.startswith("test_benchmarks"):
+            yield
+            return
+        node = node.parent
+    with blockbuster_ctx(
+        "aiohttp", excluded_modules=["aiohttp.pytest_plugin", "aiohttp.test_utils"]
+    ) as bb:
+        # TODO: Fix blocking call in ClientRequest's constructor.
+        # https://github.com/aio-libs/aiohttp/issues/10435
+        for func in ["io.TextIOWrapper.read", "os.stat"]:
+            bb.functions[func].can_block_in("aiohttp/client_reqrep.py", "update_auth")
+        for func in [
+            "os.getcwd",
+            "os.readlink",
+            "os.stat",
+            "os.path.abspath",
+            "os.path.samestat",
+        ]:
+            bb.functions[func].can_block_in(
+                "aiohttp/web_urldispatcher.py", "add_static"
+            )
+        yield
 
 
 @pytest.fixture
@@ -190,21 +234,17 @@ def create_mocked_conn(loop: Any):
 
 
 @pytest.fixture
-def selector_loop():
-    policy = asyncio.WindowsSelectorEventLoopPolicy()
-    asyncio.set_event_loop_policy(policy)
-
-    with loop_context(policy.new_event_loop) as _loop:
+def selector_loop() -> Iterator[asyncio.AbstractEventLoop]:
+    factory = asyncio.SelectorEventLoop
+    with loop_context(factory) as _loop:
         asyncio.set_event_loop(_loop)
         yield _loop
 
 
 @pytest.fixture
 def uvloop_loop() -> Iterator[asyncio.AbstractEventLoop]:
-    policy = uvloop.EventLoopPolicy()
-    asyncio.set_event_loop_policy(policy)
-
-    with loop_context(policy.new_event_loop) as _loop:
+    factory = uvloop.new_event_loop
+    with loop_context(factory) as _loop:
         asyncio.set_event_loop(_loop)
         yield _loop
 
@@ -281,3 +321,28 @@ def unused_port_socket() -> Generator[socket.socket, None, None]:
         yield s
     finally:
         s.close()
+
+
+@pytest.fixture(params=[zlib, zlib_ng.zlib_ng, isal.isal_zlib])
+def parametrize_zlib_backend(
+    request: pytest.FixtureRequest,
+) -> Generator[None, None, None]:
+    original_backend: ZLibBackendProtocol = ZLibBackend._zlib_backend
+    set_zlib_backend(request.param)
+
+    yield
+
+    set_zlib_backend(original_backend)
+
+
+@pytest.fixture()
+async def cleanup_payload_pending_file_closes(
+    loop: asyncio.AbstractEventLoop,
+) -> AsyncIterator[None]:
+    """Ensure all pending file close operations complete during test teardown."""
+    yield
+    if payload._CLOSE_FUTURES:
+        # Only wait for futures from the current loop
+        loop_futures = [f for f in payload._CLOSE_FUTURES if f.get_loop() is loop]
+        if loop_futures:
+            await asyncio.gather(*loop_futures, return_exceptions=True)

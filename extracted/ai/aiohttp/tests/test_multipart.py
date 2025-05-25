@@ -3,13 +3,13 @@ import io
 import json
 import pathlib
 import sys
-import zlib
 from unittest import mock
 
 import pytest
 
 import aiohttp
 from aiohttp import payload
+from aiohttp.compression_utils import ZLibBackend
 from aiohttp.hdrs import (
     CONTENT_DISPOSITION,
     CONTENT_ENCODING,
@@ -19,7 +19,6 @@ from aiohttp.hdrs import (
 from aiohttp.helpers import parse_mimetype
 from aiohttp.multipart import MultipartResponseWrapper
 from aiohttp.streams import StreamReader
-from aiohttp.test_utils import make_mocked_coro
 
 BOUNDARY = b"--:"
 
@@ -97,21 +96,21 @@ class TestMultipartResponseWrapper:
 
     async def test_next(self) -> None:
         wrapper = MultipartResponseWrapper(mock.Mock(), mock.Mock())
-        wrapper.stream.next = make_mocked_coro(b"")
+        wrapper.stream.next = mock.AsyncMock(b"")
         wrapper.stream.at_eof.return_value = False
         await wrapper.next()
         assert wrapper.stream.next.called
 
     async def test_release(self) -> None:
         wrapper = MultipartResponseWrapper(mock.Mock(), mock.Mock())
-        wrapper.resp.release = make_mocked_coro(None)
+        wrapper.resp.release = mock.AsyncMock(None)
         await wrapper.release()
         assert wrapper.resp.release.called
 
     async def test_release_when_stream_at_eof(self) -> None:
         wrapper = MultipartResponseWrapper(mock.Mock(), mock.Mock())
-        wrapper.resp.release = make_mocked_coro(None)
-        wrapper.stream.next = make_mocked_coro(b"")
+        wrapper.resp.release = mock.AsyncMock(None)
+        wrapper.stream.next = mock.AsyncMock(b"")
         wrapper.stream.at_eof.return_value = True
         await wrapper.next()
         assert wrapper.stream.next.called
@@ -1190,6 +1189,7 @@ async def test_writer_write_no_parts(buf, stream, writer) -> None:
     assert b"--:--\r\n" == bytes(buf)
 
 
+@pytest.mark.usefixtures("parametrize_zlib_backend")
 async def test_writer_serialize_with_content_encoding_gzip(buf, stream, writer):
     writer.append("Time to Relax!", {CONTENT_ENCODING: "gzip"})
     await writer.write(stream)
@@ -1200,7 +1200,7 @@ async def test_writer_serialize_with_content_encoding_gzip(buf, stream, writer):
         b"Content-Encoding: gzip" == headers
     )
 
-    decompressor = zlib.decompressobj(wbits=16 + zlib.MAX_WBITS)
+    decompressor = ZLibBackend.decompressobj(wbits=16 + ZLibBackend.MAX_WBITS)
     data = decompressor.decompress(message.split(b"\r\n")[0])
     data += decompressor.flush()
     assert b"Time to Relax!" == data

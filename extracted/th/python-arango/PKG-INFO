@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: python-arango
-Version: 8.1.6
+Version: 8.1.7
 Summary: Python Driver for ArangoDB
 Author-email: Joohwan Oh <joohwan.oh@outlook.com>
 Maintainer-email: Joohwan Oh <joohwan.oh@outlook.com>, Alexandru Petenchea <alex.petenchea@gmail.com>, Anthony Mahanna <anthony.mahanna@arangodb.com>
@@ -62,6 +62,7 @@ Requires-Dist: sphinx; extra == "dev"
 Requires-Dist: sphinx_rtd_theme; extra == "dev"
 Requires-Dist: types-requests; extra == "dev"
 Requires-Dist: types-setuptools; extra == "dev"
+Dynamic: license-file
 
 ![Logo](https://user-images.githubusercontent.com/2701938/108583516-c3576680-72ee-11eb-883f-2d9b52e74e45.png)
 
@@ -83,6 +84,8 @@ Requires-Dist: types-setuptools; extra == "dev"
 
 Python driver for [ArangoDB](https://www.arangodb.com), a scalable multi-model
 database natively supporting documents, graphs and search.
+
+If you're interested in using asyncio, please check [python-arango-async](https://github.com/arangodb/python-arango-async).
 
 ## Requirements
 

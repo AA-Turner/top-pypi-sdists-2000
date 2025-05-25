@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: fsspec
-Version: 2025.5.0
+Version: 2025.5.1
 Summary: File-system specification
 Project-URL: Changelog, https://filesystem-spec.readthedocs.io/en/latest/changelog.html
 Project-URL: Documentation, https://filesystem-spec.readthedocs.io/en/latest/

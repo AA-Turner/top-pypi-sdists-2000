@@ -4,9 +4,12 @@ from moto.acm.models import AWSCertificateManagerBackend, acm_backends
 from moto.appsync.models import AppSyncBackend, appsync_backends
 from moto.awslambda.models import LambdaBackend, lambda_backends
 from moto.backup.models import BackupBackend, backup_backends
+from moto.clouddirectory import CloudDirectoryBackend, clouddirectory_backends
 from moto.cloudfront.models import CloudFrontBackend, cloudfront_backends
+from moto.cloudwatch.models import CloudWatchBackend, cloudwatch_backends
 from moto.core.base_backend import BackendDict, BaseBackend
 from moto.core.exceptions import RESTError
+from moto.dms.models import DatabaseMigrationServiceBackend, dms_backends
 from moto.dynamodb.models import DynamoDBBackend, dynamodb_backends
 from moto.ec2 import ec2_backends
 from moto.ecs.models import EC2ContainerServiceBackend, ecs_backends
@@ -64,6 +67,10 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
     @property
     def s3_backend(self) -> S3Backend:
         return s3_backends[self.account_id][self.partition]
+
+    @property
+    def dms_backend(self) -> DatabaseMigrationServiceBackend:
+        return dms_backends[self.account_id][self.region_name]
 
     @property
     def ec2_backend(self) -> Any:  # type: ignore[misc]
@@ -190,8 +197,18 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
         return None
 
     @property
+    def clouddirectory_backend(self) -> Optional[CloudDirectoryBackend]:
+        if self.region_name in clouddirectory_backends[self.account_id].regions:
+            return clouddirectory_backends[self.account_id][self.region_name]
+        return None
+
+    @property
     def cloudfront_backend(self) -> CloudFrontBackend:
         return cloudfront_backends[self.account_id][self.partition]
+
+    @property
+    def cloudwatch_backend(self) -> CloudWatchBackend:
+        return cloudwatch_backends[self.account_id][self.region_name]
 
     def _get_resources_generator(
         self,
@@ -296,6 +313,20 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
                     continue
                 yield {"ResourceARN": bucket.arn, "Tags": tags}
 
+        # Cloud Directory
+        if self.clouddirectory_backend:
+            if not resource_type_filters or "clouddirectory" in resource_type_filters:
+                clouddirectory_backend = clouddirectory_backends[self.account_id][
+                    self.region_name
+                ]
+                for directory in clouddirectory_backend.directories.values():
+                    tags = clouddirectory_backend.tagger.list_tags_for_resource(
+                        directory.directory_arn
+                    )["Tags"]
+                    if not tags or not tag_filter(tags):
+                        continue
+                    yield {"ResourceARN": f"{directory.directory_arn}", "Tags": tags}
+
         # CloudFormation
         if not resource_type_filters or "cloudformation:stack" in resource_type_filters:
             try:
@@ -327,6 +358,57 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
                 ):  # Skip if no tags, or invalid filter
                     continue
                 yield {"ResourceARN": f"{dist.arn}", "Tags": tags}
+
+        if self.cloudwatch_backend:
+            cloudwatch_resource_map: Dict[str, Dict[str, Any]] = {
+                "cloudwatch:alarm": self.cloudwatch_backend.alarms,
+                "cloudwatch:insight-rule": self.cloudwatch_backend.insight_rules,
+            }
+            for resource_type, resource_source in cloudwatch_resource_map.items():
+                if (
+                    not resource_type_filters
+                    or "cloudwatch" in resource_type_filters
+                    or resource_type in resource_type_filters
+                ):
+                    for resource in resource_source.values():
+                        if resource_type == "cloudwatch:alarm":
+                            end_of_arn = f"alarm:{resource.name}"
+                        elif resource_type == "cloudwatch:insight-rule":
+                            end_of_arn = f"insight-rule/{resource.name}"
+
+                        arn = f"arn:{get_partition(self.region_name)}:cloudwatch:{self.region_name}:{self.account_id}:{end_of_arn}"
+
+                        cw_tags = self.cloudwatch_backend.list_tags_for_resource(arn)
+
+                        tags = format_tags(cw_tags)
+                        if not tags or not tag_filter(tags):
+                            continue
+                        yield {
+                            "ResourceARN": arn,
+                            "Tags": tags,
+                        }
+
+        # DMS
+        if not resource_type_filters or "dms:endpoint" in resource_type_filters:
+            for endpoint in self.dms_backend.endpoints.values():
+                tags = self.dms_backend.tagger.list_tags_for_resource(
+                    endpoint.endpoint_arn
+                )["Tags"]
+                if not tag_filter(tags):
+                    continue
+                yield {"ResourceARN": f"{endpoint.endpoint_arn}", "Tags": tags}
+
+        if (
+            not resource_type_filters
+            or "dms:replication-instance" in resource_type_filters
+        ):
+            for replication_instance in self.dms_backend.replication_instances.values():
+                tags = self.dms_backend.tagger.list_tags_for_resource(
+                    replication_instance.arn
+                )["Tags"]
+                if not tag_filter(tags):
+                    continue
+                yield {"ResourceARN": f"{replication_instance.arn}", "Tags": tags}
 
         # ECS
         if not resource_type_filters or "ecs:service" in resource_type_filters:

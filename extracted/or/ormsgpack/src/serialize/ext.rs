@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 use crate::ext::PyExt;
-use crate::ffi::*;
-
+use crate::ffi::pybytes_as_bytes;
 use serde::ser::{Serialize, Serializer};
-use serde_bytes::ByteBuf;
+use serde_bytes::Bytes;
 
 #[repr(transparent)]
 pub struct Ext {
@@ -27,10 +26,8 @@ impl Serialize for Ext {
         if unlikely!(!(0..=127).contains(&tag)) {
             err!("Extension type out of range")
         }
-        let buffer = unsafe { PyBytes_AS_STRING((*ext).data) as *const u8 };
-        let length = unsafe { PyBytes_GET_SIZE((*ext).data) as usize };
-        let data = unsafe { std::slice::from_raw_parts(buffer, length) };
+        let data = unsafe { pybytes_as_bytes((*ext).data) };
 
-        serializer.serialize_newtype_variant("", tag as u32, "", &ByteBuf::from(data))
+        serializer.serialize_newtype_variant("", tag as u32, "", Bytes::new(data))
     }
 }

@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
+use crate::ffi::*;
 use crate::opt::*;
-use crate::serialize::datetimelike::{DateLike, DateTimeBuffer, DateTimeLike, Offset, TimeLike};
+use crate::serialize::datetimelike::{DateLike, DateTimeLike, TimeLike};
 use crate::typeref::*;
 use serde::ser::{Serialize, Serializer};
+use serde_bytes::Bytes;
 
 #[repr(transparent)]
 pub struct Date {
@@ -36,9 +38,11 @@ impl Serialize for Date {
     where
         S: Serializer,
     {
-        let mut buf = DateTimeBuffer::new();
-        self.write_buf(&mut buf);
-        serializer.serialize_str(str_from_slice!(buf.as_ptr(), buf.len()))
+        let mut cursor = std::io::Cursor::new([0u8; 32]);
+        DateLike::write_rfc3339(self, &mut cursor).unwrap();
+        let len = cursor.position() as usize;
+        let value = unsafe { std::str::from_utf8_unchecked(&cursor.get_ref()[0..len]) };
+        serializer.serialize_str(value)
     }
 }
 
@@ -61,7 +65,8 @@ pub struct Time {
 
 impl Time {
     pub fn new(ptr: *mut pyo3::ffi::PyObject, opts: Opt) -> Result<Self, TimeError> {
-        if unsafe { (*(ptr as *mut pyo3::ffi::PyDateTime_Time)).hastzinfo != 0 } {
+        let tzinfo = unsafe { pyo3::ffi::PyDateTime_TIME_GET_TZINFO(ptr) };
+        if !py_is!(tzinfo, NONE) {
             return Err(TimeError::HasTimezone);
         }
         Ok(Time {
@@ -95,9 +100,11 @@ impl Serialize for Time {
     where
         S: Serializer,
     {
-        let mut buf = DateTimeBuffer::new();
-        self.write_buf(&mut buf, self.opts);
-        serializer.serialize_str(str_from_slice!(buf.as_ptr(), buf.len()))
+        let mut cursor = std::io::Cursor::new([0u8; 32]);
+        TimeLike::write_rfc3339(self, &mut cursor, self.opts).unwrap();
+        let len = cursor.position() as usize;
+        let value = unsafe { std::str::from_utf8_unchecked(&cursor.get_ref()[0..len]) };
+        serializer.serialize_str(value)
     }
 }
 
@@ -113,44 +120,46 @@ impl std::fmt::Display for DateTimeError {
     }
 }
 
-fn utcoffset(ptr: *mut pyo3::ffi::PyObject) -> Result<Offset, DateTimeError> {
-    if !unsafe { (*(ptr as *mut pyo3::ffi::PyDateTime_DateTime)).hastzinfo == 1 } {
-        return Ok(Offset::default());
+unsafe fn utcoffset(ptr: *mut pyo3::ffi::PyObject) -> Result<Option<i32>, DateTimeError> {
+    let tzinfo = pyo3::ffi::PyDateTime_DATE_GET_TZINFO(ptr);
+    if py_is!(tzinfo, NONE) {
+        return Ok(None);
     }
-
-    let tzinfo = ffi!(PyDateTime_DATE_GET_TZINFO(ptr));
     let py_offset: *mut pyo3::ffi::PyObject;
-    if ffi!(PyObject_HasAttr(tzinfo, CONVERT_METHOD_STR)) == 1 {
-        // pendulum
-        py_offset = ffi!(PyObject_CallMethodNoArgs(ptr, UTCOFFSET_METHOD_STR));
-    } else if ffi!(PyObject_HasAttr(tzinfo, NORMALIZE_METHOD_STR)) == 1 {
+    if pyo3::ffi::PyObject_HasAttr(tzinfo, NORMALIZE_METHOD_STR) == 1 {
         // pytz
-        let normalized = ffi!(PyObject_CallMethodOneArg(tzinfo, NORMALIZE_METHOD_STR, ptr));
-        py_offset = ffi!(PyObject_CallMethodNoArgs(normalized, UTCOFFSET_METHOD_STR));
-        ffi!(Py_DECREF(normalized));
-    } else if ffi!(PyObject_HasAttr(tzinfo, DST_STR)) == 1 {
-        // dateutil/arrow, datetime.timezone.utc
-        py_offset = ffi!(PyObject_CallMethodOneArg(tzinfo, UTCOFFSET_METHOD_STR, ptr));
+        let normalized = pyobject_call_method_one_arg(tzinfo, NORMALIZE_METHOD_STR, ptr);
+        py_offset = pyobject_call_method_no_args(normalized, UTCOFFSET_METHOD_STR);
+        pyo3::ffi::Py_DECREF(normalized);
     } else {
+        py_offset = pyobject_call_method_one_arg(tzinfo, UTCOFFSET_METHOD_STR, ptr);
+    }
+    if unlikely!(py_offset.is_null()) {
+        pyo3::ffi::PyErr_Clear();
         return Err(DateTimeError::LibraryUnsupported);
     }
-    let offset = Offset {
-        day: ffi!(PyDateTime_DELTA_GET_DAYS(py_offset)),
-        second: ffi!(PyDateTime_DELTA_GET_SECONDS(py_offset)),
+    let day = pyo3::ffi::PyDateTime_DELTA_GET_DAYS(py_offset);
+    let second = pyo3::ffi::PyDateTime_DELTA_GET_SECONDS(py_offset);
+    pyo3::ffi::Py_DECREF(py_offset);
+    let offset = if day == -1 {
+        // datetime.timedelta(days=-1, seconds=68400) -> -05:00
+        -86400 + second
+    } else {
+        // datetime.timedelta(seconds=37800) -> +10:30
+        second
     };
-    ffi!(Py_DECREF(py_offset));
-    Ok(offset)
+    Ok(Some(offset))
 }
 
 pub struct DateTime {
     ptr: *mut pyo3::ffi::PyObject,
     opts: Opt,
-    offset: Offset,
+    offset: Option<i32>,
 }
 
 impl DateTime {
     pub fn new(ptr: *mut pyo3::ffi::PyObject, opts: Opt) -> Result<Self, DateTimeError> {
-        let offset = utcoffset(ptr)?;
+        let offset = unsafe { utcoffset(ptr)? };
         Ok(DateTime {
             ptr: ptr,
             opts: opts,
@@ -192,12 +201,26 @@ impl TimeLike for DateTime {
 }
 
 impl DateTimeLike for DateTime {
-    fn has_tz(&self) -> bool {
-        unsafe { (*(self.ptr as *mut pyo3::ffi::PyDateTime_DateTime)).hastzinfo == 1 }
+    fn offset(&self) -> Option<i32> {
+        self.offset
     }
 
-    fn offset(&self) -> Offset {
-        self.offset
+    fn timestamp(&self) -> (i64, u32) {
+        let offset = chrono::FixedOffset::east_opt(self.offset.unwrap_or_default()).unwrap();
+        let datetime = chrono::NaiveDateTime::new(
+            chrono::NaiveDate::from_ymd_opt(self.year(), self.month() as u32, self.day() as u32)
+                .unwrap(),
+            chrono::NaiveTime::from_hms_micro_opt(
+                self.hour() as u32,
+                self.minute() as u32,
+                self.second() as u32,
+                self.microsecond() as u32,
+            )
+            .unwrap(),
+        )
+        .and_local_timezone(offset)
+        .unwrap();
+        (datetime.timestamp(), datetime.timestamp_subsec_nanos())
     }
 }
 
@@ -207,8 +230,19 @@ impl Serialize for DateTime {
     where
         S: Serializer,
     {
-        let mut buf = DateTimeBuffer::new();
-        DateTimeLike::write_buf(self, &mut buf, self.opts);
-        serializer.serialize_str(str_from_slice!(buf.as_ptr(), buf.len()))
+        let mut cursor = std::io::Cursor::new([0u8; 32]);
+        if self.opts & DATETIME_AS_TIMESTAMP_EXT != 0
+            && (self.offset().is_some() || self.opts & NAIVE_UTC != 0)
+        {
+            DateTimeLike::write_timestamp(self, &mut cursor).unwrap();
+            let len = cursor.position() as usize;
+            let timestamp = &cursor.get_ref()[0..len];
+            serializer.serialize_newtype_variant("", 128, "", Bytes::new(timestamp))
+        } else {
+            DateTimeLike::write_rfc3339(self, &mut cursor, self.opts).unwrap();
+            let len = cursor.position() as usize;
+            let value = unsafe { std::str::from_utf8_unchecked(&cursor.get_ref()[0..len]) };
+            serializer.serialize_str(value)
+        }
     }
 }

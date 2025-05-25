@@ -41,6 +41,7 @@ class GitDiffTool:
          :param bool ignore_whitespace:
             Perform a diff but ignore any and all whitespace.
         """
+        self._untracked_cache = None
         self.range_notation = range_notation
         self._default_git_args = [
             "git",
@@ -80,7 +81,7 @@ class GitDiffTool:
                         the `--compare-branch` argument allows you to set a different branch.
                     """
                     )
-                )
+                ) from e
             raise
 
     def diff_unstaged(self):
@@ -107,10 +108,16 @@ class GitDiffTool:
 
     def untracked(self):
         """Return the untracked files."""
+        if self._untracked_cache is not None:
+            return self._untracked_cache
+
         output = execute(["git", "ls-files", "--exclude-standard", "--others"])[0]
-        if not output:
-            return []
-        return [to_unescaped_filename(line) for line in output.splitlines() if line]
+        self._untracked_cache = []
+        if output:
+            self._untracked_cache = [
+                to_unescaped_filename(line) for line in output.splitlines() if line
+            ]
+        return self._untracked_cache
 
 
 class GitDiffFileTool(GitDiffTool):
@@ -129,14 +136,12 @@ class GitDiffFileTool(GitDiffTool):
         try:
             with open(self.diff_file_path, "r") as file:
                 return file.read()
-        except IOError as e:
-            raise ValueError(
-                dedent(
-                    f"""
-                    Could not read the diff file. Make sure '{self.diff_file_path}' exists?
-                    """
-                )
+        except OSError as e:
+            error_message = (
+                "Could not read the diff file. "
+                f"Make sure '{self.diff_file_path}' exists?"
             )
+            raise ValueError(error_message) from e
 
     def diff_unstaged(self):
         return ""

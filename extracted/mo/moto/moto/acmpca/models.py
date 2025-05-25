@@ -1,6 +1,7 @@
 """ACMPCABackend class with methods for supported APIs."""
 
 import base64
+import contextlib
 import datetime
 from typing import Any, Dict, List, Optional, Tuple, cast
 
@@ -13,6 +14,7 @@ from moto.core.base_backend import BackendDict, BaseBackend
 from moto.core.common_models import BaseModel
 from moto.core.utils import unix_time, utcnow
 from moto.moto_api._internal import mock_random
+from moto.utilities.paginator import paginate
 from moto.utilities.tagging_service import TaggingService
 from moto.utilities.utils import get_partition
 
@@ -247,13 +249,16 @@ class CertificateAuthority(BaseModel):
                 ]
             )
 
-        cn = csr.subject.get_attributes_for_oid(x509.NameOID.COMMON_NAME)
-        if cn:
+        # Subject Alternative Name passthrough from CSR to the new certificate
+        with contextlib.suppress(x509.ExtensionNotFound):
+            san = csr.extensions.get_extension_for_oid(
+                x509.ExtensionOID.SUBJECT_ALTERNATIVE_NAME
+            )
             extensions.append(
                 (
-                    x509.SubjectAlternativeName([x509.DNSName(cn[0].value)]),  # type: ignore[arg-type]
-                    False,
-                ),
+                    san.value,
+                    san.critical,
+                )
             )
 
         return extensions
@@ -335,6 +340,15 @@ class CertificateAuthority(BaseModel):
 
 class ACMPCABackend(BaseBackend):
     """Implementation of ACMPCA APIs."""
+
+    PAGINATION_MODEL = {
+        "list_certificate_authorities": {
+            "input_token": "next_token",
+            "limit_key": "max_results",
+            "limit_default": 100,
+            "unique_attribute": "arn",
+        }
+    }
 
     def __init__(self, region_name: str, account_id: str):
         super().__init__(region_name, account_id)
@@ -483,6 +497,25 @@ class ACMPCABackend(BaseBackend):
         """
         ca = self.describe_certificate_authority(resource_arn)
         ca.policy = None
+
+    @paginate(pagination_model=PAGINATION_MODEL)
+    def list_certificate_authorities(
+        self,
+        resource_owner: Optional[str] = None,
+    ) -> List[CertificateAuthority]:
+        """
+        Lists the private certificate authorities that you created by using the CreateCertificateAuthority action.
+        """
+        cas = list(self.certificate_authorities.values())
+
+        if resource_owner == "OTHER_ACCOUNTS":
+            cas = [ca for ca in cas if ca.account_id != self.account_id]
+        elif resource_owner == "SELF" or resource_owner is None:
+            cas = [ca for ca in cas if ca.account_id == self.account_id]
+
+        cas.sort(key=lambda x: x.created_at, reverse=True)
+
+        return cas
 
 
 acmpca_backends = BackendDict(ACMPCABackend, "acm-pca")

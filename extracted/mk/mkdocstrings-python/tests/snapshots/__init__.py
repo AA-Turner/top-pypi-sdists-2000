@@ -8,12 +8,12 @@ snapshots_signatures = snapshot(
             ("separate_signature", True),
             ("show_signature_annotations", False),
             ("signature_crossrefs", False),
-        ): external("4370d843cc76*.html"),
+        ): external("d03d16d1919a*.html"),
         (
             ("separate_signature", True),
             ("show_signature_annotations", True),
             ("signature_crossrefs", True),
-        ): external("261a38d7a86b*.html"),
+        ): external("e412376be64f*.html"),
         (
             ("separate_signature", False),
             ("show_signature_annotations", True),
@@ -33,12 +33,12 @@ snapshots_signatures = snapshot(
             ("separate_signature", True),
             ("show_signature_annotations", True),
             ("signature_crossrefs", False),
-        ): external("f5ce06acbb7a*.html"),
+        ): external("74ee37cd1e94*.html"),
         (
             ("separate_signature", True),
             ("show_signature_annotations", False),
             ("signature_crossrefs", True),
-        ): external("9c0bfc0ee407*.html"),
+        ): external("4041a38e355f*.html"),
         (
             ("separate_signature", False),
             ("show_signature_annotations", True),
@@ -383,5 +383,23 @@ snapshots_members = snapshot(
         (("filters", "public"), ("inherited_members", False), ("members", ("module_attribute",))): external(
             "80399c502938*.html",
         ),
+        (("heading", ""), ("members", False), ("separate_signature", False), ("show_if_no_docstring", True)): external(
+            "d1dd339f9260*.html",
+        ),
+        (
+            ("heading", "Some heading"),
+            ("members", False),
+            ("separate_signature", True),
+            ("show_if_no_docstring", True),
+        ): external("480324b25439*.html"),
+        (("heading", ""), ("members", False), ("separate_signature", True), ("show_if_no_docstring", True)): external(
+            "2eef87791b97*.html",
+        ),
+        (
+            ("heading", "Some heading"),
+            ("members", False),
+            ("separate_signature", False),
+            ("show_if_no_docstring", True),
+        ): external("51deee0f00f3*.html"),
     },
 )

@@ -1,18 +1,19 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: types-cachetools
-Version: 5.5.0.20240820
+Version: 6.0.0.20250525
 Summary: Typing stubs for cachetools
-Home-page: https://github.com/python/typeshed
-License: Apache-2.0
+License-Expression: Apache-2.0
+Project-URL: Homepage, https://github.com/python/typeshed
 Project-URL: GitHub, https://github.com/python/typeshed
 Project-URL: Changes, https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/cachetools.md
 Project-URL: Issue tracker, https://github.com/python/typeshed/issues
 Project-URL: Chat, https://gitter.im/python/typing
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3
 Classifier: Typing :: Stubs Only
-Requires-Python: >=3.8
+Requires-Python: >=3.9
 Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
 
 ## Typing stubs for cachetools
 
@@ -22,17 +23,21 @@ It can be used by type-checking tools like
 [mypy](https://github.com/python/mypy/),
 [pyright](https://github.com/microsoft/pyright),
 [pytype](https://github.com/google/pytype/),
-PyCharm, etc. to check code that uses
-`cachetools`.
+[Pyre](https://pyre-check.org/),
+PyCharm, etc. to check code that uses `cachetools`. This version of
+`types-cachetools` aims to provide accurate annotations for
+`cachetools==6.0.*`.
 
-This version of `types-cachetools` aims to provide accurate annotations
-for `cachetools==5.5.*`.
-The source for this package can be found at
-https://github.com/python/typeshed/tree/main/stubs/cachetools. All fixes for
-types and metadata should be contributed there.
+This package is part of the [typeshed project](https://github.com/python/typeshed).
+All fixes for types and metadata should be contributed there.
+See [the README](https://github.com/python/typeshed/blob/main/README.md)
+for more details. The source for this package can be found in the
+[`stubs/cachetools`](https://github.com/python/typeshed/tree/main/stubs/cachetools)
+directory.
 
-See https://github.com/python/typeshed/blob/main/README.md for more details.
-This package was generated from typeshed commit
-[`a7ff1be4394cef089dd62090a2e2ad10cc77cfe6`](https://github.com/python/typeshed/commit/a7ff1be4394cef089dd62090a2e2ad10cc77cfe6) and was tested
-with mypy 1.11.1, pyright 1.1.376, and
-pytype 2024.4.11.
+This package was tested with
+mypy 1.15.0,
+pyright 1.1.400,
+and pytype 2024.10.11.
+It was generated from typeshed commit
+[`57cb510fd2e81a2a1749c792aacf78ebe4649d05`](https://github.com/python/typeshed/commit/57cb510fd2e81a2a1749c792aacf78ebe4649d05).

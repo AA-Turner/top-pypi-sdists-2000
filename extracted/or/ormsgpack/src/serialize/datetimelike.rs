@@ -1,18 +1,22 @@
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 use crate::opt::*;
+use byteorder::{BigEndian, WriteBytesExt};
 use chrono::{Datelike, Timelike};
 use serde::ser::{Serialize, Serializer};
 
-pub type DateTimeBuffer = smallvec::SmallVec<[u8; 32]>;
-
-fn write_integer(buf: &mut DateTimeBuffer, value: i32, width: usize) {
+fn write_integer<W>(writer: &mut W, value: i32, width: usize) -> Result<(), std::io::Error>
+where
+    W: std::io::Write,
+{
     let mut itoa_buf = itoa::Buffer::new();
     let formatted = itoa_buf.format(value);
     for _ in 0..width - formatted.len() {
-        buf.push(b'0');
+        writer.write_u8(b'0')?;
     }
-    buf.extend_from_slice(formatted.as_bytes());
+    let len = writer.write(formatted.as_bytes())?;
+    debug_assert!(len == formatted.len());
+    Ok(())
 }
 
 pub trait DateLike {
@@ -20,12 +24,16 @@ pub trait DateLike {
     fn month(&self) -> i32;
     fn day(&self) -> i32;
 
-    fn write_buf(&self, buf: &mut DateTimeBuffer) {
-        write_integer(buf, self.year(), 4);
-        buf.push(b'-');
-        write_integer(buf, self.month(), 2);
-        buf.push(b'-');
-        write_integer(buf, self.day(), 2);
+    fn write_rfc3339<W>(&self, writer: &mut W) -> Result<(), std::io::Error>
+    where
+        W: std::io::Write,
+    {
+        write_integer(writer, self.year(), 4)?;
+        writer.write_u8(b'-')?;
+        write_integer(writer, self.month(), 2)?;
+        writer.write_u8(b'-')?;
+        write_integer(writer, self.day(), 2)?;
+        Ok(())
     }
 }
 
@@ -35,56 +43,57 @@ pub trait TimeLike {
     fn second(&self) -> i32;
     fn microsecond(&self) -> i32;
 
-    fn write_buf(&self, buf: &mut DateTimeBuffer, opts: Opt) {
-        write_integer(buf, self.hour(), 2);
-        buf.push(b':');
-        write_integer(buf, self.minute(), 2);
-        buf.push(b':');
-        write_integer(buf, self.second(), 2);
+    fn write_rfc3339<W>(&self, writer: &mut W, opts: Opt) -> Result<(), std::io::Error>
+    where
+        W: std::io::Write,
+    {
+        write_integer(writer, self.hour(), 2)?;
+        writer.write_u8(b':')?;
+        write_integer(writer, self.minute(), 2)?;
+        writer.write_u8(b':')?;
+        write_integer(writer, self.second(), 2)?;
         if opts & OMIT_MICROSECONDS == 0 {
             let microsecond = self.microsecond();
             if microsecond != 0 {
-                buf.push(b'.');
-                write_integer(buf, microsecond, 6);
+                writer.write_u8(b'.')?;
+                write_integer(writer, microsecond, 6)?;
             }
         }
+        Ok(())
     }
 }
 
-#[derive(Clone, Copy, Default)]
-pub struct Offset {
-    pub day: i32,
-    pub second: i32,
-}
-
 pub trait DateTimeLike: DateLike + TimeLike {
-    fn has_tz(&self) -> bool;
-    fn offset(&self) -> Offset;
+    fn offset(&self) -> Option<i32>;
+    fn timestamp(&self) -> (i64, u32);
 
-    fn write_buf(&self, buf: &mut DateTimeBuffer, opts: Opt) {
-        DateLike::write_buf(self, buf);
-        buf.push(b'T');
-        TimeLike::write_buf(self, buf, opts);
-        if self.has_tz() || opts & NAIVE_UTC != 0 {
-            let offset = self.offset();
-            if offset.second == 0 {
+    fn write_rfc3339<W>(&self, writer: &mut W, opts: Opt) -> Result<(), std::io::Error>
+    where
+        W: std::io::Write,
+    {
+        DateLike::write_rfc3339(self, writer)?;
+        writer.write_u8(b'T')?;
+        TimeLike::write_rfc3339(self, writer, opts)?;
+        if self.offset().is_some() || opts & NAIVE_UTC != 0 {
+            let offset = self.offset().unwrap_or_default();
+            if offset == 0 {
                 if opts & UTC_Z != 0 {
-                    buf.push(b'Z');
+                    writer.write_u8(b'Z')?;
                 } else {
-                    buf.extend_from_slice(b"+00:00");
+                    let tz = b"+00:00";
+                    let len = writer.write(tz)?;
+                    debug_assert!(len == tz.len());
                 }
             } else {
                 let offset_hour: i32;
                 let mut offset_minute: i32;
                 let mut offset_second: i32;
-                if offset.day == -1 {
-                    // datetime.timedelta(days=-1, seconds=68400) -> -05:00
-                    buf.push(b'-');
-                    offset_second = 86400 - offset.second;
+                if offset < 0 {
+                    writer.write_u8(b'-')?;
+                    offset_second = -offset;
                 } else {
-                    // datetime.timedelta(seconds=37800) -> +10:30
-                    buf.push(b'+');
-                    offset_second = offset.second;
+                    writer.write_u8(b'+')?;
+                    offset_second = offset;
                 }
                 (offset_minute, offset_second) = (offset_second / 60, offset_second % 60);
                 (offset_hour, offset_minute) = (offset_minute / 60, offset_minute % 60);
@@ -95,11 +104,31 @@ pub trait DateTimeLike: DateLike + TimeLike {
                 if offset_second >= 30 {
                     offset_minute += 1;
                 }
-                write_integer(buf, offset_hour, 2);
-                buf.push(b':');
-                write_integer(buf, offset_minute, 2);
+                write_integer(writer, offset_hour, 2)?;
+                writer.write_u8(b':')?;
+                write_integer(writer, offset_minute, 2)?;
             }
         }
+        Ok(())
+    }
+
+    fn write_timestamp<W>(&self, writer: &mut W) -> Result<(), std::io::Error>
+    where
+        W: std::io::Write,
+    {
+        let (seconds, nanoseconds) = self.timestamp();
+        if seconds >> 34 == 0 {
+            let value = (i64::from(nanoseconds) << 34) | seconds;
+            if value <= 4294967295 {
+                writer.write_u32::<BigEndian>(value as u32)?;
+            } else {
+                writer.write_u64::<BigEndian>(value as u64)?;
+            }
+        } else {
+            writer.write_u32::<BigEndian>(nanoseconds)?;
+            writer.write_i64::<BigEndian>(seconds)?;
+        }
+        Ok(())
     }
 }
 
@@ -141,12 +170,15 @@ impl TimeLike for NaiveDateTime {
 }
 
 impl DateTimeLike for NaiveDateTime {
-    fn has_tz(&self) -> bool {
-        false
+    fn offset(&self) -> Option<i32> {
+        None
     }
 
-    fn offset(&self) -> Offset {
-        Offset::default()
+    fn timestamp(&self) -> (i64, u32) {
+        (
+            self.dt.and_utc().timestamp(),
+            self.dt.and_utc().timestamp_subsec_nanos(),
+        )
     }
 }
 
@@ -155,8 +187,10 @@ impl Serialize for NaiveDateTime {
     where
         S: Serializer,
     {
-        let mut buf = DateTimeBuffer::new();
-        DateTimeLike::write_buf(self, &mut buf, self.opts);
-        serializer.serialize_str(str_from_slice!(buf.as_ptr(), buf.len()))
+        let mut cursor = std::io::Cursor::new([0u8; 32]);
+        DateTimeLike::write_rfc3339(self, &mut cursor, self.opts).unwrap();
+        let len = cursor.position() as usize;
+        let value = unsafe { std::str::from_utf8_unchecked(&cursor.get_ref()[0..len]) };
+        serializer.serialize_str(value)
     }
 }

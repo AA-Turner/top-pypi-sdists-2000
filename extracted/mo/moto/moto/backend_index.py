@@ -26,6 +26,7 @@ backend_url_patterns = [
     ("bedrockagent", re.compile("https?://bedrock-agent\\.(.+)\\.amazonaws\\.com")),
     ("budgets", re.compile("https?://budgets\\.amazonaws\\.com")),
     ("ce", re.compile("https?://ce\\.(.+)\\.amazonaws\\.com")),
+    ("clouddirectory", re.compile("https?://clouddirectory\\.(.+)\\.amazonaws\\.com")),
     ("cloudformation", re.compile("https?://cloudformation\\.(.+)\\.amazonaws\\.com")),
     ("cloudfront", re.compile("https?://cloudfront\\.amazonaws\\.com")),
     ("cloudfront", re.compile("https?://cloudfront\\.(.+)\\.amazonaws\\.com")),
@@ -41,6 +42,10 @@ backend_url_patterns = [
     ("cognitoidp", re.compile("https?://cognito-idp\\.(.+)\\.amazonaws.com")),
     ("comprehend", re.compile("https?://comprehend\\.(.+)\\.amazonaws\\.com")),
     ("config", re.compile("https?://config\\.(.+)\\.amazonaws\\.com")),
+    (
+        "connectcampaigns",
+        re.compile("https?://connect-campaigns\\.(.+)\\.amazonaws\\.com"),
+    ),
     ("databrew", re.compile("https?://databrew\\.(.+)\\.amazonaws.com")),
     ("datapipeline", re.compile("https?://datapipeline\\.(.+)\\.amazonaws\\.com")),
     ("datasync", re.compile("https?://(.*\\.)?(datasync)\\.(.+)\\.amazonaws.com")),
@@ -139,6 +144,10 @@ backend_url_patterns = [
     ),
     ("moto_api._internal", re.compile("https?://motoapi\\.amazonaws\\.com")),
     ("mq", re.compile("https?://mq\\.(.+)\\.amazonaws\\.com")),
+    (
+        "networkfirewall",
+        re.compile("https?://network-firewall\\.(.+)\\.amazonaws\\.com"),
+    ),
     ("networkmanager", re.compile("https?://networkmanager\\.(.+)\\.amazonaws\\.com")),
     ("opensearchserverless", re.compile("https?://aoss\\.(.+)\\.amazonaws\\.com")),
     ("opsworks", re.compile("https?://opsworks\\.us-east-1\\.amazonaws.com")),
@@ -196,6 +205,10 @@ backend_url_patterns = [
     ("secretsmanager", re.compile("https?://secretsmanager\\.(.+)\\.amazonaws\\.com")),
     ("securityhub", re.compile("https?://securityhub\\.(.+)\\.amazonaws\\.com")),
     ("servicecatalog", re.compile("https?://servicecatalog\\.(.+)\\.amazonaws\\.com")),
+    (
+        "servicecatalogappregistry",
+        re.compile("https?://servicecatalog-appregistry\\.(.+)\\.amazonaws\\.com"),
+    ),
     (
         "servicediscovery",
         re.compile("https?://(data-)?servicediscovery\\.(.+)\\.amazonaws\\.com"),

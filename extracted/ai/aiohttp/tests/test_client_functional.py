@@ -12,11 +12,21 @@ import sys
 import tarfile
 import time
 import zipfile
-from typing import Any, AsyncIterator, Awaitable, Callable, List, Type
+from typing import (
+    Any,
+    AsyncIterator,
+    Awaitable,
+    Callable,
+    List,
+    NoReturn,
+    Optional,
+    Type,
+)
 from unittest import mock
 
 import pytest
 from multidict import MultiDict
+from pytest_mock import MockerFixture
 from yarl import URL
 
 import aiohttp
@@ -38,6 +48,13 @@ from aiohttp.http_writer import StreamWriter
 from aiohttp.pytest_plugin import AiohttpClient, AiohttpServer
 from aiohttp.test_utils import TestClient, TestServer, unused_port
 from aiohttp.typedefs import Handler
+
+
+@pytest.fixture(autouse=True)
+def cleanup(
+    cleanup_payload_pending_file_closes: None,
+) -> None:
+    """Ensure all pending file close operations complete during test teardown."""
 
 
 @pytest.fixture
@@ -231,8 +248,8 @@ async def test_keepalive_server_force_close_connection(aiohttp_client) -> None:
     assert 0 == len(client._session.connector._conns)
 
 
-async def test_keepalive_timeout_async_sleep() -> None:
-    async def handler(request):
+async def test_keepalive_timeout_async_sleep(unused_port_socket: socket.socket) -> None:
+    async def handler(request: web.Request) -> web.Response:
         body = await request.read()
         assert b"" == body
         return web.Response(body=b"OK")
@@ -243,17 +260,18 @@ async def test_keepalive_timeout_async_sleep() -> None:
     runner = web.AppRunner(app, tcp_keepalive=True, keepalive_timeout=0.001)
     await runner.setup()
 
-    port = unused_port()
-    site = web.TCPSite(runner, host="localhost", port=port)
+    site = web.SockSite(runner, unused_port_socket)
     await site.start()
 
+    host, port = unused_port_socket.getsockname()[:2]
+
     try:
-        async with aiohttp.client.ClientSession() as sess:
-            resp1 = await sess.get(f"http://localhost:{port}/")
+        async with aiohttp.ClientSession() as sess:
+            resp1 = await sess.get(f"http://{host}:{port}/")
             await resp1.read()
             # wait for server keepalive_timeout
             await asyncio.sleep(0.01)
-            resp2 = await sess.get(f"http://localhost:{port}/")
+            resp2 = await sess.get(f"http://{host}:{port}/")
             await resp2.read()
     finally:
         await asyncio.gather(runner.shutdown(), site.stop())
@@ -263,8 +281,8 @@ async def test_keepalive_timeout_async_sleep() -> None:
     sys.version_info[:2] == (3, 11),
     reason="https://github.com/pytest-dev/pytest/issues/10763",
 )
-async def test_keepalive_timeout_sync_sleep() -> None:
-    async def handler(request):
+async def test_keepalive_timeout_sync_sleep(unused_port_socket: socket.socket) -> None:
+    async def handler(request: web.Request) -> web.Response:
         body = await request.read()
         assert b"" == body
         return web.Response(body=b"OK")
@@ -275,18 +293,19 @@ async def test_keepalive_timeout_sync_sleep() -> None:
     runner = web.AppRunner(app, tcp_keepalive=True, keepalive_timeout=0.001)
     await runner.setup()
 
-    port = unused_port()
-    site = web.TCPSite(runner, host="localhost", port=port)
+    site = web.SockSite(runner, unused_port_socket)
     await site.start()
 
+    host, port = unused_port_socket.getsockname()[:2]
+
     try:
-        async with aiohttp.client.ClientSession() as sess:
-            resp1 = await sess.get(f"http://localhost:{port}/")
+        async with aiohttp.ClientSession() as sess:
+            resp1 = await sess.get(f"http://{host}:{port}/")
             await resp1.read()
             # wait for server keepalive_timeout
             # time.sleep is a more challenging scenario than asyncio.sleep
             time.sleep(0.01)
-            resp2 = await sess.get(f"http://localhost:{port}/")
+            resp2 = await sess.get(f"http://{host}:{port}/")
             await resp2.read()
     finally:
         await asyncio.gather(runner.shutdown(), site.stop())
@@ -477,7 +496,7 @@ async def test_post_data_with_bytesio_file(aiohttp_client) -> None:
     async def handler(request):
         post_data = await request.post()
         assert ["file"] == list(post_data.keys())
-        assert data == post_data["file"].file.read()
+        assert data == await asyncio.to_thread(post_data["file"].file.read)
         post_data["file"].file.close()  # aiohttp < 4 doesn't autoclose files
         return web.Response()
 
@@ -1065,7 +1084,31 @@ async def test_timeout_none(aiohttp_client, mocker) -> None:
         assert resp.status == 200
 
 
-async def test_readline_error_on_conn_close(aiohttp_client) -> None:
+async def test_connection_timeout_error(
+    aiohttp_client: AiohttpClient, mocker: MockerFixture
+) -> None:
+    """Test that ConnectionTimeoutError is raised when connection times out."""
+
+    async def handler(request: web.Request) -> NoReturn:
+        assert False, "Handler should not be called"
+
+    app = web.Application()
+    app.router.add_route("GET", "/", handler)
+    client = await aiohttp_client(app)
+
+    # Mock the connector's connect method to raise asyncio.TimeoutError
+    mock_connect = mocker.patch.object(
+        client.session._connector, "connect", side_effect=asyncio.TimeoutError()
+    )
+
+    with pytest.raises(aiohttp.ConnectionTimeoutError) as exc_info:
+        await client.get("/", timeout=aiohttp.ClientTimeout(connect=0.01))
+
+    assert "Connection timeout to host" in str(exc_info.value)
+    mock_connect.assert_called_once()
+
+
+async def test_readline_error_on_conn_close(aiohttp_client: AiohttpClient) -> None:
     loop = asyncio.get_event_loop()
 
     async def handler(request):
@@ -1532,18 +1575,36 @@ async def test_GET_DEFLATE(aiohttp_client: AiohttpClient) -> None:
         return web.json_response({"ok": True})
 
     write_mock = None
+    writelines_mock = None
     original_write_bytes = ClientRequest.write_bytes
 
     async def write_bytes(
-        self: ClientRequest, writer: StreamWriter, conn: Connection
+        self: ClientRequest,
+        writer: StreamWriter,
+        conn: Connection,
+        content_length: Optional[int] = None,
     ) -> None:
-        nonlocal write_mock
+        nonlocal write_mock, writelines_mock
         original_write = writer._write
+        original_writelines = writer._writelines
 
-        with mock.patch.object(
-            writer, "_write", autospec=True, spec_set=True, side_effect=original_write
-        ) as write_mock:
-            await original_write_bytes(self, writer, conn)
+        with (
+            mock.patch.object(
+                writer,
+                "_write",
+                autospec=True,
+                spec_set=True,
+                side_effect=original_write,
+            ) as write_mock,
+            mock.patch.object(
+                writer,
+                "_writelines",
+                autospec=True,
+                spec_set=True,
+                side_effect=original_writelines,
+            ) as writelines_mock,
+        ):
+            await original_write_bytes(self, writer, conn, content_length)
 
     with mock.patch.object(ClientRequest, "write_bytes", write_bytes):
         app = web.Application()
@@ -1555,9 +1616,20 @@ async def test_GET_DEFLATE(aiohttp_client: AiohttpClient) -> None:
             content = await resp.json()
             assert content == {"ok": True}
 
-    assert write_mock is not None
-    # No chunks should have been sent for an empty body.
-    write_mock.assert_not_called()
+    # With packet coalescing, headers are buffered and may be written
+    # during write_bytes if there's an empty body to process.
+    # The test should verify no body chunks are written, but headers
+    # may be written as part of the coalescing optimization.
+    # If _write was called, it should only be for headers ending with \r\n\r\n
+    # and not any body content
+    for call in write_mock.call_args_list:  # type: ignore[union-attr]
+        data = call[0][0]
+        assert data.endswith(
+            b"\r\n\r\n"
+        ), "Only headers should be written, not body chunks"
+
+    # No body data should be written via writelines either
+    writelines_mock.assert_not_called()  # type: ignore[union-attr]
 
 
 async def test_GET_DEFLATE_no_body(aiohttp_client: AiohttpClient) -> None:
@@ -1595,14 +1667,14 @@ async def test_POST_DATA_DEFLATE(aiohttp_client: AiohttpClient) -> None:
 
 
 async def test_POST_FILES(aiohttp_client, fname) -> None:
+    content1 = fname.read_bytes()
+
     async def handler(request):
         data = await request.post()
         assert data["some"].filename == fname.name
-        with fname.open("rb") as f:
-            content1 = f.read()
-        content2 = data["some"].file.read()
-        assert content1 == content2
-        assert data["test"].file.read() == b"data"
+        content2 = await asyncio.to_thread(data["some"].file.read)
+        assert content2 == content1
+        assert await asyncio.to_thread(data["test"].file.read) == b"data"
         data["some"].file.close()
         data["test"].file.close()
         return web.Response()
@@ -1619,14 +1691,14 @@ async def test_POST_FILES(aiohttp_client, fname) -> None:
 
 
 async def test_POST_FILES_DEFLATE(aiohttp_client, fname) -> None:
+    content1 = fname.read_bytes()
+
     async def handler(request):
         data = await request.post()
         assert data["some"].filename == fname.name
-        with fname.open("rb") as f:
-            content1 = f.read()
-        content2 = data["some"].file.read()
+        content2 = await asyncio.to_thread(data["some"].file.read)
         data["some"].file.close()
-        assert content1 == content2
+        assert content2 == content1
         return web.Response()
 
     app = web.Application()
@@ -1676,12 +1748,12 @@ async def test_POST_bytes_too_large(aiohttp_client) -> None:
 
 
 async def test_POST_FILES_STR(aiohttp_client, fname) -> None:
+    content1 = fname.read_bytes().decode()
+
     async def handler(request):
         data = await request.post()
-        with fname.open("rb") as f:
-            content1 = f.read().decode()
         content2 = data["some"]
-        assert content1 == content2
+        assert content2 == content1
         return web.Response()
 
     app = web.Application()
@@ -1694,11 +1766,11 @@ async def test_POST_FILES_STR(aiohttp_client, fname) -> None:
 
 
 async def test_POST_FILES_STR_SIMPLE(aiohttp_client, fname) -> None:
+    content = fname.read_bytes()
+
     async def handler(request):
         data = await request.read()
-        with fname.open("rb") as f:
-            content = f.read()
-        assert content == data
+        assert data == content
         return web.Response()
 
     app = web.Application()
@@ -1711,12 +1783,12 @@ async def test_POST_FILES_STR_SIMPLE(aiohttp_client, fname) -> None:
 
 
 async def test_POST_FILES_LIST(aiohttp_client, fname) -> None:
+    content = fname.read_bytes()
+
     async def handler(request):
         data = await request.post()
         assert fname.name == data["some"].filename
-        with fname.open("rb") as f:
-            content = f.read()
-        assert content == data["some"].file.read()
+        assert await asyncio.to_thread(data["some"].file.read) == content
         data["some"].file.close()
         return web.Response()
 
@@ -1730,13 +1802,13 @@ async def test_POST_FILES_LIST(aiohttp_client, fname) -> None:
 
 
 async def test_POST_FILES_CT(aiohttp_client, fname) -> None:
+    content = fname.read_bytes()
+
     async def handler(request):
         data = await request.post()
         assert fname.name == data["some"].filename
         assert "text/plain" == data["some"].content_type
-        with fname.open("rb") as f:
-            content = f.read()
-        assert content == data["some"].file.read()
+        assert await asyncio.to_thread(data["some"].file.read) == content
         data["some"].file.close()
         return web.Response()
 
@@ -1752,11 +1824,11 @@ async def test_POST_FILES_CT(aiohttp_client, fname) -> None:
 
 
 async def test_POST_FILES_SINGLE(aiohttp_client, fname) -> None:
+    content = fname.read_bytes().decode()
+
     async def handler(request):
         data = await request.text()
-        with fname.open("rb") as f:
-            content = f.read().decode()
-            assert content == data
+        assert data == content
         # if system cannot determine 'text/x-python' MIME type
         # then use 'application/octet-stream' default
         assert request.content_type in [
@@ -1778,11 +1850,11 @@ async def test_POST_FILES_SINGLE(aiohttp_client, fname) -> None:
 
 
 async def test_POST_FILES_SINGLE_content_disposition(aiohttp_client, fname) -> None:
+    content = fname.read_bytes().decode()
+
     async def handler(request):
         data = await request.text()
-        with fname.open("rb") as f:
-            content = f.read().decode()
-            assert content == data
+        assert data == content
         # if system cannot determine 'application/pgp-keys' MIME type
         # then use 'application/octet-stream' default
         assert request.content_type in [
@@ -1808,11 +1880,11 @@ async def test_POST_FILES_SINGLE_content_disposition(aiohttp_client, fname) -> N
 
 
 async def test_POST_FILES_SINGLE_BINARY(aiohttp_client, fname) -> None:
+    content = fname.read_bytes()
+
     async def handler(request):
         data = await request.read()
-        with fname.open("rb") as f:
-            content = f.read()
-        assert content == data
+        assert data == content
         # if system cannot determine 'application/pgp-keys' MIME type
         # then use 'application/octet-stream' default
         assert request.content_type in [
@@ -1835,7 +1907,7 @@ async def test_POST_FILES_SINGLE_BINARY(aiohttp_client, fname) -> None:
 async def test_POST_FILES_IO(aiohttp_client) -> None:
     async def handler(request):
         data = await request.post()
-        assert b"data" == data["unknown"].file.read()
+        assert b"data" == await asyncio.to_thread(data["unknown"].file.read)
         assert data["unknown"].content_type == "application/octet-stream"
         assert data["unknown"].filename == "unknown"
         data["unknown"].file.close()
@@ -1856,7 +1928,7 @@ async def test_POST_FILES_IO_WITH_PARAMS(aiohttp_client) -> None:
         assert data["test"] == "true"
         assert data["unknown"].content_type == "application/octet-stream"
         assert data["unknown"].filename == "unknown"
-        assert data["unknown"].file.read() == b"data"
+        assert await asyncio.to_thread(data["unknown"].file.read) == b"data"
         data["unknown"].file.close()
         assert data.getall("q") == ["t1", "t2"]
 
@@ -1875,6 +1947,8 @@ async def test_POST_FILES_IO_WITH_PARAMS(aiohttp_client) -> None:
 
 
 async def test_POST_FILES_WITH_DATA(aiohttp_client, fname) -> None:
+    content = fname.read_bytes()
+
     async def handler(request):
         data = await request.post()
         assert data["test"] == "true"
@@ -1884,9 +1958,8 @@ async def test_POST_FILES_WITH_DATA(aiohttp_client, fname) -> None:
             "application/octet-stream",
         ]
         assert data["some"].filename == fname.name
-        with fname.open("rb") as f:
-            assert data["some"].file.read() == f.read()
-            data["some"].file.close()
+        assert await asyncio.to_thread(data["some"].file.read) == content
+        data["some"].file.close()
 
         return web.Response()
 
@@ -1900,13 +1973,13 @@ async def test_POST_FILES_WITH_DATA(aiohttp_client, fname) -> None:
 
 
 async def test_POST_STREAM_DATA(aiohttp_client, fname) -> None:
+    expected = fname.read_bytes()
+
     async def handler(request):
         assert request.content_type == "application/octet-stream"
         content = await request.read()
-        with fname.open("rb") as f:
-            expected = f.read()
-            assert request.content_length == len(expected)
-            assert content == expected
+        assert request.content_length == len(expected)
+        assert content == expected
 
         return web.Response()
 
@@ -1914,18 +1987,17 @@ async def test_POST_STREAM_DATA(aiohttp_client, fname) -> None:
     app.router.add_post("/", handler)
     client = await aiohttp_client(app)
 
-    with fname.open("rb") as f:
-        data_size = len(f.read())
+    data_size = len(expected)
 
     with pytest.warns(DeprecationWarning):
 
         @aiohttp.streamer
         async def stream(writer, fname):
             with fname.open("rb") as f:
-                data = f.read(100)
+                data = await asyncio.to_thread(f.read, 100)
                 while data:
                     await writer.write(data)
-                    data = f.read(100)
+                    data = await asyncio.to_thread(f.read, 100)
 
     async with client.post(
         "/", data=stream(fname), headers={"Content-Length": str(data_size)}
@@ -1934,13 +2006,13 @@ async def test_POST_STREAM_DATA(aiohttp_client, fname) -> None:
 
 
 async def test_POST_STREAM_DATA_no_params(aiohttp_client, fname) -> None:
+    expected = fname.read_bytes()
+
     async def handler(request):
         assert request.content_type == "application/octet-stream"
         content = await request.read()
-        with fname.open("rb") as f:
-            expected = f.read()
-            assert request.content_length == len(expected)
-            assert content == expected
+        assert request.content_length == len(expected)
+        assert content == expected
 
         return web.Response()
 
@@ -1956,10 +2028,10 @@ async def test_POST_STREAM_DATA_no_params(aiohttp_client, fname) -> None:
         @aiohttp.streamer
         async def stream(writer):
             with fname.open("rb") as f:
-                data = f.read(100)
+                data = await asyncio.to_thread(f.read, 100)
                 while data:
                     await writer.write(data)
-                    data = f.read(100)
+                    data = await asyncio.to_thread(f.read, 100)
 
     async with client.post(
         "/", data=stream, headers={"Content-Length": str(data_size)}
@@ -2039,6 +2111,7 @@ async def test_expect_continue(aiohttp_client) -> None:
     assert expect_called
 
 
+@pytest.mark.usefixtures("parametrize_zlib_backend")
 async def test_encoding_deflate(aiohttp_client) -> None:
     async def handler(request):
         resp = web.Response(text="text")
@@ -2057,6 +2130,7 @@ async def test_encoding_deflate(aiohttp_client) -> None:
     resp.close()
 
 
+@pytest.mark.usefixtures("parametrize_zlib_backend")
 async def test_encoding_deflate_nochunk(aiohttp_client) -> None:
     async def handler(request):
         resp = web.Response(text="text")
@@ -2074,6 +2148,7 @@ async def test_encoding_deflate_nochunk(aiohttp_client) -> None:
     resp.close()
 
 
+@pytest.mark.usefixtures("parametrize_zlib_backend")
 async def test_encoding_gzip(aiohttp_client) -> None:
     async def handler(request):
         resp = web.Response(text="text")
@@ -2092,6 +2167,7 @@ async def test_encoding_gzip(aiohttp_client) -> None:
     resp.close()
 
 
+@pytest.mark.usefixtures("parametrize_zlib_backend")
 async def test_encoding_gzip_write_by_chunks(aiohttp_client) -> None:
     async def handler(request):
         resp = web.StreamResponse()
@@ -2112,6 +2188,7 @@ async def test_encoding_gzip_write_by_chunks(aiohttp_client) -> None:
     resp.close()
 
 
+@pytest.mark.usefixtures("parametrize_zlib_backend")
 async def test_encoding_gzip_nochunk(aiohttp_client) -> None:
     async def handler(request):
         resp = web.Response(text="text")
@@ -3342,6 +3419,9 @@ async def test_aiohttp_request_ctx_manager_close_sess_on_error(
             pass
 
     assert cm._session.closed
+    # Allow event loop to process transport cleanup
+    # on Python < 3.11
+    await asyncio.sleep(0)
 
 
 async def test_aiohttp_request_ctx_manager_not_found() -> None:
@@ -4115,3 +4195,310 @@ async def test_exception_when_read_outside_of_session(
 
     with pytest.raises(RuntimeError, match="Connection closed"):
         await resp.read()
+
+
+async def test_content_length_limit_enforced(aiohttp_server: AiohttpServer) -> None:
+    """Test that Content-Length header value limits the amount of data sent to the server."""
+    received_data = bytearray()
+
+    async def handler(request: web.Request) -> web.Response:
+        # Read all data from the request and store it
+        data = await request.read()
+        received_data.extend(data)
+        return web.Response(text="OK")
+
+    app = web.Application()
+    app.router.add_post("/", handler)
+
+    server = await aiohttp_server(app)
+
+    # Create data larger than what we'll limit with Content-Length
+    data = b"X" * 1000
+    # Only send 500 bytes even though data is 1000 bytes
+    headers = {"Content-Length": "500"}
+
+    async with aiohttp.ClientSession() as session:
+        await session.post(server.make_url("/"), data=data, headers=headers)
+
+    # Verify only 500 bytes (not the full 1000) were received by the server
+    assert len(received_data) == 500
+    assert received_data == b"X" * 500
+
+
+async def test_content_length_limit_with_multiple_reads(
+    aiohttp_server: AiohttpServer,
+) -> None:
+    """Test that Content-Length header value limits multi read data properly."""
+    received_data = bytearray()
+
+    async def handler(request: web.Request) -> web.Response:
+        # Read all data from the request and store it
+        data = await request.read()
+        received_data.extend(data)
+        return web.Response(text="OK")
+
+    app = web.Application()
+    app.router.add_post("/", handler)
+
+    server = await aiohttp_server(app)
+
+    # Create an async generator of data
+    async def data_generator() -> AsyncIterator[bytes]:
+        yield b"Chunk1" * 100  # 600 bytes
+        yield b"Chunk2" * 100  # another 600 bytes
+
+    # Limit to 800 bytes even though we'd generate 1200 bytes
+    headers = {"Content-Length": "800"}
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            server.make_url("/"), data=data_generator(), headers=headers
+        ) as resp:
+            await resp.read()  # Ensure response is fully read and connection cleaned up
+
+    # Verify only 800 bytes (not the full 1200) were received by the server
+    assert len(received_data) == 800
+    # First chunk fully sent (600 bytes)
+    assert received_data.startswith(b"Chunk1" * 100)
+
+    # The rest should be from the second chunk (the exact split might vary by implementation)
+    assert b"Chunk2" in received_data  # Some part of the second chunk was sent
+    # 200 bytes from the second chunk
+    assert len(received_data) - len(b"Chunk1" * 100) == 200
+
+
+async def test_post_connection_cleanup_with_bytesio(
+    aiohttp_client: AiohttpClient,
+) -> None:
+    """Test that connections are properly cleaned up when using BytesIO data."""
+
+    async def handler(request: web.Request) -> web.Response:
+        return web.Response(body=b"")
+
+    app = web.Application()
+    app.router.add_post("/hello", handler)
+    client = await aiohttp_client(app)
+
+    # Test with direct bytes and BytesIO multiple times to ensure connection cleanup
+    for _ in range(10):
+        async with client.post(
+            "/hello",
+            data=b"x",
+            headers={"Content-Length": "1"},
+        ) as response:
+            response.raise_for_status()
+
+        assert client._session.connector is not None
+        assert len(client._session.connector._conns) == 1
+
+        x = io.BytesIO(b"x")
+        async with client.post(
+            "/hello",
+            data=x,
+            headers={"Content-Length": "1"},
+        ) as response:
+            response.raise_for_status()
+
+        assert len(client._session.connector._conns) == 1
+
+
+async def test_post_connection_cleanup_with_file(
+    aiohttp_client: AiohttpClient, here: pathlib.Path
+) -> None:
+    """Test that connections are properly cleaned up when using file data."""
+
+    async def handler(request: web.Request) -> web.Response:
+        await request.read()
+        return web.Response(body=b"")
+
+    app = web.Application()
+    app.router.add_post("/hello", handler)
+    client = await aiohttp_client(app)
+
+    test_file = here / "data.unknown_mime_type"
+
+    # Test with direct bytes and file multiple times to ensure connection cleanup
+    for _ in range(10):
+        async with client.post(
+            "/hello",
+            data=b"xx",
+            headers={"Content-Length": "2"},
+        ) as response:
+            response.raise_for_status()
+
+        assert client._session.connector is not None
+        assert len(client._session.connector._conns) == 1
+        fh = await asyncio.get_running_loop().run_in_executor(
+            None, open, test_file, "rb"
+        )
+
+        async with client.post(
+            "/hello",
+            data=fh,
+            headers={"Content-Length": str(test_file.stat().st_size)},
+        ) as response:
+            response.raise_for_status()
+
+        assert len(client._session.connector._conns) == 1
+
+
+async def test_post_content_exception_connection_kept(
+    aiohttp_client: AiohttpClient,
+) -> None:
+    """Test that connections are kept after content.set_exception() with POST."""
+
+    async def handler(request: web.Request) -> web.Response:
+        await request.read()
+        return web.Response(
+            body=b"x" * 1000
+        )  # Larger response to ensure it's not pre-buffered
+
+    app = web.Application()
+    app.router.add_post("/", handler)
+    client = await aiohttp_client(app)
+
+    # POST request with body - connection should be closed after content exception
+    resp = await client.post("/", data=b"request body")
+
+    with pytest.raises(RuntimeError):
+        async with resp:
+            assert resp.status == 200
+            resp.content.set_exception(RuntimeError("Simulated error"))
+            await resp.read()
+
+    assert resp.closed
+
+    # Wait for any pending operations to complete
+    await resp.wait_for_close()
+
+    assert client._session.connector is not None
+    # Connection is kept because content.set_exception() is a client-side operation
+    # that doesn't affect the underlying connection state
+    assert len(client._session.connector._conns) == 1
+
+
+async def test_network_error_connection_closed(
+    aiohttp_client: AiohttpClient,
+) -> None:
+    """Test that connections are closed after network errors."""
+
+    async def handler(request: web.Request) -> NoReturn:
+        # Read the request body
+        await request.read()
+
+        # Start sending response but close connection before completing
+        response = web.StreamResponse()
+        response.content_length = 1000  # Promise 1000 bytes
+        await response.prepare(request)
+
+        # Send partial data then force close the connection
+        await response.write(b"x" * 100)  # Only send 100 bytes
+        # Force close the transport to simulate network error
+        assert request.transport is not None
+        request.transport.close()
+        assert False, "Will not return"
+
+    app = web.Application()
+    app.router.add_post("/", handler)
+    client = await aiohttp_client(app)
+
+    # POST request that will fail due to network error
+    with pytest.raises(aiohttp.ClientPayloadError):
+        resp = await client.post("/", data=b"request body")
+        async with resp:
+            await resp.read()  # This should fail
+
+    # Give event loop a chance to process connection cleanup
+    await asyncio.sleep(0)
+
+    assert client._session.connector is not None
+    # Connection should be closed due to network error
+    assert len(client._session.connector._conns) == 0
+
+
+async def test_client_side_network_error_connection_closed(
+    aiohttp_client: AiohttpClient,
+) -> None:
+    """Test that connections are closed after client-side network errors."""
+    handler_done = asyncio.Event()
+
+    async def handler(request: web.Request) -> NoReturn:
+        # Read the request body
+        await request.read()
+
+        # Start sending a large response
+        response = web.StreamResponse()
+        response.content_length = 10000  # Promise 10KB
+        await response.prepare(request)
+
+        # Send some data
+        await response.write(b"x" * 1000)
+
+        # Keep the response open - we'll interrupt from client side
+        await asyncio.wait_for(handler_done.wait(), timeout=5.0)
+        assert False, "Will not return"
+
+    app = web.Application()
+    app.router.add_post("/", handler)
+    client = await aiohttp_client(app)
+
+    # POST request that will fail due to client-side network error
+    with pytest.raises(aiohttp.ClientPayloadError):
+        resp = await client.post("/", data=b"request body")
+        async with resp:
+            # Simulate client-side network error by closing the transport
+            # This simulates connection reset, network failure, etc.
+            assert resp.connection is not None
+            assert resp.connection.protocol is not None
+            assert resp.connection.protocol.transport is not None
+            resp.connection.protocol.transport.close()
+
+            # This should fail with connection error
+            await resp.read()
+
+    # Signal handler to finish
+    handler_done.set()
+
+    # Give event loop a chance to process connection cleanup
+    await asyncio.sleep(0)
+
+    assert client._session.connector is not None
+    # Connection should be closed due to client-side network error
+    assert len(client._session.connector._conns) == 0
+
+
+async def test_empty_response_non_chunked(aiohttp_client: AiohttpClient) -> None:
+    """Test non-chunked response with empty body."""
+
+    async def handler(request: web.Request) -> web.Response:
+        # Return empty response with Content-Length: 0
+        return web.Response(body=b"", headers={"Content-Length": "0"})
+
+    app = web.Application()
+    app.router.add_get("/empty", handler)
+    client = await aiohttp_client(app)
+
+    resp = await client.get("/empty")
+    assert resp.status == 200
+    assert resp.headers.get("Content-Length") == "0"
+    data = await resp.read()
+    assert data == b""
+    resp.close()
+
+
+async def test_set_eof_on_empty_response(aiohttp_client: AiohttpClient) -> None:
+    """Test that triggers set_eof() method."""
+
+    async def handler(request: web.Request) -> web.Response:
+        # Return response that completes immediately
+        return web.Response(status=204)  # No Content
+
+    app = web.Application()
+    app.router.add_get("/no-content", handler)
+    client = await aiohttp_client(app)
+
+    resp = await client.get("/no-content")
+    assert resp.status == 204
+    data = await resp.read()
+    assert data == b""
+    resp.close()

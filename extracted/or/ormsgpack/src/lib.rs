@@ -4,6 +4,7 @@
 #![allow(static_mut_refs)]
 #![allow(unused_unsafe)]
 #![allow(clippy::missing_safety_doc)]
+#![allow(clippy::ptr_eq)]
 #![allow(clippy::redundant_field_names)]
 #![allow(clippy::upper_case_acronyms)]
 #![allow(clippy::zero_prefixed_literal)]
@@ -19,8 +20,8 @@ mod msgpack;
 mod opt;
 mod serialize;
 mod typeref;
-mod unicode;
 
+use crate::ffi::*;
 use pyo3::ffi::*;
 use std::ffi::CStr;
 use std::os::raw::c_char;
@@ -32,7 +33,7 @@ use std::ptr::NonNull;
 const PACKB_DOC: &CStr =
     c"packb(obj, /, default=None, option=None)\n--\n\nSerialize Python objects to msgpack.";
 const UNPACKB_DOC: &CStr =
-    c"unpackb(obj, /, ext_hook=None, option=None)\n--\n\nDeserialize msgpack to Python objects.";
+    c"unpackb(obj, /, *, ext_hook=None, option=None)\n--\n\nDeserialize msgpack to Python objects.";
 
 macro_rules! module_add_object {
     ($mptr: expr, $name: expr, $object:expr) => {
@@ -108,6 +109,11 @@ pub unsafe extern "C" fn ormsgpack_exec(mptr: *mut PyObject) -> c_int {
         PyUnicode_FromStringAndSize(version.as_ptr() as *const c_char, version.len() as isize)
     );
 
+    module_add_int!(
+        mptr,
+        c"OPT_DATETIME_AS_TIMESTAMP_EXT",
+        opt::DATETIME_AS_TIMESTAMP_EXT
+    );
     module_add_int!(mptr, c"OPT_NAIVE_UTC", opt::NAIVE_UTC);
     module_add_int!(mptr, c"OPT_NON_STR_KEYS", opt::NON_STR_KEYS);
     module_add_int!(mptr, c"OPT_OMIT_MICROSECONDS", opt::OMIT_MICROSECONDS);
@@ -143,7 +149,7 @@ fn raise_unpackb_exception(msg: &str) -> *mut PyObject {
         let err_msg =
             PyUnicode_FromStringAndSize(msg.as_ptr() as *const c_char, msg.len() as isize);
         let args = PyTuple_New(1);
-        PyTuple_SET_ITEM(args, 0, err_msg);
+        pytuple_set_item(args, 0, err_msg);
         PyErr_SetObject(typeref::MsgpackDecodeError, args);
         Py_DECREF(args);
     };
@@ -197,12 +203,12 @@ pub unsafe extern "C" fn unpackb(
         return raise_unpackb_exception(msg);
     }
     if !kwnames.is_null() {
-        let tuple_size = PyTuple_GET_SIZE(kwnames);
+        let tuple_size = Py_SIZE(kwnames);
         for i in 0..tuple_size {
-            let arg = PyTuple_GET_ITEM(kwnames, i as Py_ssize_t);
-            if arg == typeref::EXT_HOOK {
+            let arg = pytuple_get_item(kwnames, i as Py_ssize_t);
+            if PyUnicode_Compare(arg, typeref::EXT_HOOK) == 0 {
                 ext_hook = Some(NonNull::new_unchecked(*args.offset(num_args + i)));
-            } else if arg == typeref::OPTION {
+            } else if PyUnicode_Compare(arg, typeref::OPTION) == 0 {
                 optsptr = Some(NonNull::new_unchecked(*args.offset(num_args + i)));
             } else {
                 return raise_unpackb_exception("unpackb() got an unexpected keyword argument");
@@ -245,17 +251,17 @@ pub unsafe extern "C" fn packb(
         optsptr = Some(NonNull::new_unchecked(*args.offset(2)));
     }
     if !kwnames.is_null() {
-        let tuple_size = PyTuple_GET_SIZE(kwnames);
+        let tuple_size = Py_SIZE(kwnames);
         for i in 0..tuple_size {
-            let arg = PyTuple_GET_ITEM(kwnames, i as Py_ssize_t);
-            if arg == typeref::DEFAULT {
+            let arg = pytuple_get_item(kwnames, i as Py_ssize_t);
+            if PyUnicode_Compare(arg, typeref::DEFAULT) == 0 {
                 if unlikely!(default.is_some()) {
                     return raise_packb_exception(
                         "packb() got multiple values for argument: 'default'",
                     );
                 }
                 default = Some(NonNull::new_unchecked(*args.offset(num_args + i)));
-            } else if arg == typeref::OPTION {
+            } else if PyUnicode_Compare(arg, typeref::OPTION) == 0 {
                 if unlikely!(optsptr.is_some()) {
                     return raise_packb_exception(
                         "packb() got multiple values for argument: 'option'",

@@ -4,14 +4,15 @@ use crate::exc::*;
 use crate::ffi::*;
 use crate::msgpack;
 use crate::opt::*;
+use crate::serialize::bytearray::*;
 use crate::serialize::bytes::*;
 use crate::serialize::dataclass::*;
 use crate::serialize::datetime::*;
 use crate::serialize::default::*;
 use crate::serialize::dict::*;
 use crate::serialize::ext::*;
-use crate::serialize::int::*;
 use crate::serialize::list::*;
+use crate::serialize::memoryview::*;
 use crate::serialize::numpy::*;
 use crate::serialize::pydantic::*;
 use crate::serialize::str::*;
@@ -445,7 +446,10 @@ where
     where
         T: ?Sized + Serialize,
     {
-        let tag: i8 = variant_index.try_into().unwrap_or_else(|_| unreachable!());
+        let tag: i8 = match variant_index {
+            128 => -1,
+            _ => variant_index.try_into().unwrap_or_else(|_| unreachable!()),
+        };
         let mut ext_se = ExtSerializer::new(tag, &mut self.writer);
         value.serialize(&mut ext_se)
     }
@@ -533,16 +537,6 @@ macro_rules! is_subclass {
     ($ob_type:expr, $flag:ident) => {
         unsafe { (((*$ob_type).tp_flags & pyo3::ffi::$flag) != 0) }
     };
-}
-
-fn is_big_int(ptr: *mut pyo3::ffi::PyObject) -> bool {
-    ffi!(_PyLong_NumBits(ptr)) > {
-        if pylong_is_positive(ptr) {
-            64
-        } else {
-            63
-        }
-    }
 }
 
 pub struct PyObject {
@@ -641,10 +635,24 @@ impl PyObject {
             if is_subclass!(ob_type, Py_TPFLAGS_UNICODE_SUBCLASS) {
                 return StrSubclass::new(self.ptr).serialize(serializer);
             }
-            if is_subclass!(ob_type, Py_TPFLAGS_LONG_SUBCLASS)
-                && (self.opts & PASSTHROUGH_BIG_INT == 0 || !is_big_int(self.ptr))
-            {
-                return Int::new(self.ptr).serialize(serializer);
+            if is_subclass!(ob_type, Py_TPFLAGS_LONG_SUBCLASS) {
+                match Int::new(self.ptr) {
+                    Ok(val) => return val.serialize(serializer),
+                    Err(err) => {
+                        if self.opts & PASSTHROUGH_BIG_INT != 0 {
+                            return Default::new(
+                                self.ptr,
+                                self.opts,
+                                self.default_calls,
+                                self.recursion,
+                                self.default,
+                            )
+                            .serialize(serializer);
+                        } else {
+                            err!(err)
+                        }
+                    }
+                }
             }
             if is_subclass!(ob_type, Py_TPFLAGS_LIST_SUBCLASS) {
                 if unlikely!(self.recursion == RECURSION_LIMIT) {
@@ -769,6 +777,13 @@ impl PyObject {
             }
         }
 
+        if py_is!(ob_type, BYTEARRAY_TYPE) {
+            return ByteArray::new(self.ptr).serialize(serializer);
+        }
+        if py_is!(ob_type, MEMORYVIEW_TYPE) {
+            return MemoryView::new(self.ptr).serialize(serializer);
+        }
+
         Default::new(
             self.ptr,
             self.opts,
@@ -790,10 +805,24 @@ impl Serialize for PyObject {
             Str::new(self.ptr).serialize(serializer)
         } else if py_is!(ob_type, BYTES_TYPE) {
             Bytes::new(self.ptr).serialize(serializer)
-        } else if py_is!(ob_type, INT_TYPE)
-            && (self.opts & PASSTHROUGH_BIG_INT == 0 || !is_big_int(self.ptr))
-        {
-            Int::new(self.ptr).serialize(serializer)
+        } else if py_is!(ob_type, INT_TYPE) {
+            match Int::new(self.ptr) {
+                Ok(val) => val.serialize(serializer),
+                Err(err) => {
+                    if self.opts & PASSTHROUGH_BIG_INT != 0 {
+                        Default::new(
+                            self.ptr,
+                            self.opts,
+                            self.default_calls,
+                            self.recursion,
+                            self.default,
+                        )
+                        .serialize(serializer)
+                    } else {
+                        err!(err)
+                    }
+                }
+            }
         } else if py_is!(ob_type, BOOL_TYPE) {
             serializer.serialize_bool(unsafe { self.ptr == TRUE })
         } else if py_is!(self.ptr, NONE) {
@@ -852,10 +881,10 @@ impl Serialize for DictTupleKey {
     where
         S: Serializer,
     {
-        let len = ffi!(PyTuple_GET_SIZE(self.ptr)) as usize;
+        let len = ffi!(Py_SIZE(self.ptr)) as usize;
         let mut seq = serializer.serialize_seq(Some(len)).unwrap();
         for i in 0..len {
-            let item = ffi!(PyTuple_GET_ITEM(self.ptr, i as isize));
+            let item = unsafe { pytuple_get_item(self.ptr, i as isize) };
             let value = DictKey::new(item, self.opts, self.recursion + 1);
             seq.serialize_element(&value)?;
         }
@@ -922,11 +951,14 @@ impl DictKey {
             return StrSubclass::new(self.ptr).serialize(serializer);
         }
         if is_subclass!(ob_type, Py_TPFLAGS_LONG_SUBCLASS) {
-            return Int::new(self.ptr).serialize(serializer);
+            match Int::new(self.ptr) {
+                Ok(val) => return val.serialize(serializer),
+                Err(err) => err!(err),
+            }
         }
 
-        if py_is!(ob_type, EXT_TYPE) {
-            return Ext::new(self.ptr).serialize(serializer);
+        if py_is!(ob_type, MEMORYVIEW_TYPE) {
+            return MemoryView::new(self.ptr).serialize(serializer);
         }
 
         err!("Dict key must a type serializable with OPT_NON_STR_KEYS")
@@ -944,7 +976,10 @@ impl Serialize for DictKey {
         } else if py_is!(ob_type, BYTES_TYPE) {
             Bytes::new(self.ptr).serialize(serializer)
         } else if py_is!(ob_type, INT_TYPE) {
-            Int::new(self.ptr).serialize(serializer)
+            match Int::new(self.ptr) {
+                Ok(val) => val.serialize(serializer),
+                Err(err) => err!(err),
+            }
         } else if py_is!(ob_type, BOOL_TYPE) {
             serializer.serialize_bool(unsafe { self.ptr == TRUE })
         } else if py_is!(self.ptr, NONE) {

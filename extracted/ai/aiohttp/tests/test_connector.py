@@ -10,11 +10,20 @@ import uuid
 from collections import defaultdict, deque
 from concurrent import futures
 from contextlib import closing, suppress
-from typing import Any, DefaultDict, Deque, List, Literal, Optional, Sequence, Tuple
+from typing import (
+    Any,
+    Callable,
+    DefaultDict,
+    Deque,
+    List,
+    Literal,
+    Optional,
+    Sequence,
+    Tuple,
+)
 from unittest import mock
 
 import pytest
-from aiohappyeyeballs import AddrInfoType
 from pytest_mock import MockerFixture
 from yarl import URL
 
@@ -26,12 +35,13 @@ from aiohttp.client_reqrep import ConnectionKey
 from aiohttp.connector import (
     _SSL_CONTEXT_UNVERIFIED,
     _SSL_CONTEXT_VERIFIED,
+    AddrInfoType,
     Connection,
     TCPConnector,
     _DNSCacheTable,
 )
 from aiohttp.resolver import ResolveResult
-from aiohttp.test_utils import make_mocked_coro, unused_port
+from aiohttp.test_utils import unused_port
 from aiohttp.tracing import Trace
 
 
@@ -97,7 +107,7 @@ def create_mocked_conn(conn_closing_result=None, **kwargs):
     try:
         loop = asyncio.get_running_loop()
     except RuntimeError:
-        loop = asyncio.get_event_loop_policy().get_event_loop()
+        loop = asyncio.get_event_loop()
 
     proto = mock.Mock(**kwargs)
     proto.closed = loop.create_future()
@@ -297,80 +307,90 @@ async def test_close(loop) -> None:
 
 async def test_get(loop: asyncio.AbstractEventLoop, key: ConnectionKey) -> None:
     conn = aiohttp.BaseConnector()
-    assert await conn._get(key, []) is None
+    try:
+        assert await conn._get(key, []) is None
 
-    proto = create_mocked_conn(loop)
-    conn._conns[key] = deque([(proto, loop.time())])
-    connection = await conn._get(key, [])
-    assert connection is not None
-    assert connection.protocol == proto
-    connection.close()
-    await conn.close()
+        proto = create_mocked_conn(loop)
+        conn._conns[key] = deque([(proto, loop.time())])
+        connection = await conn._get(key, [])
+        assert connection is not None
+        assert connection.protocol == proto
+        connection.close()
+    finally:
+        await conn.close()
 
 
 async def test_get_unconnected_proto(loop) -> None:
     conn = aiohttp.BaseConnector()
     key = ConnectionKey("localhost", 80, False, False, None, None, None)
-    assert await conn._get(key, []) is None
+    try:
+        assert await conn._get(key, []) is None
 
-    proto = create_mocked_conn(loop)
-    conn._conns[key] = deque([(proto, loop.time())])
-    connection = await conn._get(key, [])
-    assert connection is not None
-    assert connection.protocol == proto
-    connection.close()
+        proto = create_mocked_conn(loop)
+        conn._conns[key] = deque([(proto, loop.time())])
+        connection = await conn._get(key, [])
+        assert connection is not None
+        assert connection.protocol == proto
+        connection.close()
 
-    assert await conn._get(key, []) is None
-    conn._conns[key] = deque([(proto, loop.time())])
-    proto.is_connected = lambda *args: False
-    assert await conn._get(key, []) is None
-    await conn.close()
+        assert await conn._get(key, []) is None
+        conn._conns[key] = deque([(proto, loop.time())])
+        proto.is_connected = lambda *args: False
+        assert await conn._get(key, []) is None
+    finally:
+        await conn.close()
 
 
 async def test_get_unconnected_proto_ssl(loop) -> None:
     conn = aiohttp.BaseConnector()
     key = ConnectionKey("localhost", 80, True, False, None, None, None)
-    assert await conn._get(key, []) is None
+    try:
+        assert await conn._get(key, []) is None
 
-    proto = create_mocked_conn(loop)
-    conn._conns[key] = deque([(proto, loop.time())])
-    connection = await conn._get(key, [])
-    assert connection is not None
-    assert connection.protocol == proto
-    connection.close()
+        proto = create_mocked_conn(loop)
+        conn._conns[key] = deque([(proto, loop.time())])
+        connection = await conn._get(key, [])
+        assert connection is not None
+        assert connection.protocol == proto
+        connection.close()
 
-    assert await conn._get(key, []) is None
-    conn._conns[key] = deque([(proto, loop.time())])
-    proto.is_connected = lambda *args: False
-    assert await conn._get(key, []) is None
-    await conn.close()
+        assert await conn._get(key, []) is None
+        conn._conns[key] = deque([(proto, loop.time())])
+        proto.is_connected = lambda *args: False
+        assert await conn._get(key, []) is None
+    finally:
+        await conn.close()
 
 
 async def test_get_expired(loop: asyncio.AbstractEventLoop) -> None:
     conn = aiohttp.BaseConnector()
     key = ConnectionKey("localhost", 80, False, False, None, None, None)
-    assert await conn._get(key, []) is None
+    try:
+        assert await conn._get(key, []) is None
 
-    proto = mock.Mock()
-    conn._conns[key] = deque([(proto, loop.time() - 1000)])
-    assert await conn._get(key, []) is None
-    assert not conn._conns
-    await conn.close()
+        proto = create_mocked_conn(loop)
+        conn._conns[key] = deque([(proto, loop.time() - 1000)])
+        assert await conn._get(key, []) is None
+        assert not conn._conns
+    finally:
+        await conn.close()
 
 
 @pytest.mark.usefixtures("enable_cleanup_closed")
 async def test_get_expired_ssl(loop: asyncio.AbstractEventLoop) -> None:
     conn = aiohttp.BaseConnector(enable_cleanup_closed=True)
     key = ConnectionKey("localhost", 80, True, False, None, None, None)
-    assert await conn._get(key, []) is None
+    try:
+        assert await conn._get(key, []) is None
 
-    proto = mock.Mock()
-    transport = proto.transport
-    conn._conns[key] = deque([(proto, loop.time() - 1000)])
-    assert await conn._get(key, []) is None
-    assert not conn._conns
-    assert conn._cleanup_closed_transports == [transport]
-    await conn.close()
+        proto = create_mocked_conn(loop)
+        transport = proto.transport
+        conn._conns[key] = deque([(proto, loop.time() - 1000)])
+        assert await conn._get(key, []) is None
+        assert not conn._conns
+        assert conn._cleanup_closed_transports == [transport]
+    finally:
+        await conn.close()
 
 
 async def test_release_acquired(loop, key) -> None:
@@ -1327,10 +1347,10 @@ async def test_tcp_connector_cancel_dns_error_captured(
 async def test_tcp_connector_dns_tracing(loop, dns_response) -> None:
     session = mock.Mock()
     trace_config_ctx = mock.Mock()
-    on_dns_resolvehost_start = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
-    on_dns_resolvehost_end = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
-    on_dns_cache_hit = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
-    on_dns_cache_miss = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
+    on_dns_resolvehost_start = mock.AsyncMock()
+    on_dns_resolvehost_end = mock.AsyncMock()
+    on_dns_cache_hit = mock.AsyncMock()
+    on_dns_cache_miss = mock.AsyncMock()
 
     trace_config = aiohttp.TraceConfig(
         trace_config_ctx_factory=mock.Mock(return_value=trace_config_ctx)
@@ -1372,8 +1392,8 @@ async def test_tcp_connector_dns_tracing(loop, dns_response) -> None:
 async def test_tcp_connector_dns_tracing_cache_disabled(loop, dns_response) -> None:
     session = mock.Mock()
     trace_config_ctx = mock.Mock()
-    on_dns_resolvehost_start = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
-    on_dns_resolvehost_end = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
+    on_dns_resolvehost_start = mock.AsyncMock()
+    on_dns_resolvehost_end = mock.AsyncMock()
 
     trace_config = aiohttp.TraceConfig(
         trace_config_ctx_factory=mock.Mock(return_value=trace_config_ctx)
@@ -1427,8 +1447,8 @@ async def test_tcp_connector_dns_tracing_cache_disabled(loop, dns_response) -> N
 async def test_tcp_connector_dns_tracing_throttle_requests(loop, dns_response) -> None:
     session = mock.Mock()
     trace_config_ctx = mock.Mock()
-    on_dns_cache_hit = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
-    on_dns_cache_miss = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
+    on_dns_cache_hit = mock.AsyncMock()
+    on_dns_cache_miss = mock.AsyncMock()
 
     trace_config = aiohttp.TraceConfig(
         trace_config_ctx_factory=mock.Mock(return_value=trace_config_ctx)
@@ -1457,8 +1477,8 @@ async def test_tcp_connector_dns_tracing_throttle_requests(loop, dns_response) -
 
 async def test_dns_error(loop) -> None:
     connector = aiohttp.TCPConnector(loop=loop)
-    connector._resolve_host = make_mocked_coro(
-        raise_exception=OSError("dont take it serious")
+    connector._resolve_host = mock.AsyncMock(
+        side_effect=OSError("dont take it serious")
     )
 
     req = ClientRequest("GET", URL("http://www.python.org"), loop=loop)
@@ -1557,8 +1577,8 @@ async def test_connect(loop, key) -> None:
 async def test_connect_tracing(loop) -> None:
     session = mock.Mock()
     trace_config_ctx = mock.Mock()
-    on_connection_create_start = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
-    on_connection_create_end = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
+    on_connection_create_start = mock.AsyncMock()
+    on_connection_create_end = mock.AsyncMock()
 
     trace_config = aiohttp.TraceConfig(
         trace_config_ctx_factory=mock.Mock(return_value=trace_config_ctx)
@@ -2553,8 +2573,8 @@ async def test_connect_with_limit(
 async def test_connect_queued_operation_tracing(loop, key) -> None:
     session = mock.Mock()
     trace_config_ctx = mock.Mock()
-    on_connection_queued_start = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
-    on_connection_queued_end = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
+    on_connection_queued_start = mock.AsyncMock()
+    on_connection_queued_end = mock.AsyncMock()
 
     trace_config = aiohttp.TraceConfig(
         trace_config_ctx_factory=mock.Mock(return_value=trace_config_ctx)
@@ -2599,7 +2619,7 @@ async def test_connect_queued_operation_tracing(loop, key) -> None:
 async def test_connect_reuseconn_tracing(loop, key) -> None:
     session = mock.Mock()
     trace_config_ctx = mock.Mock()
-    on_connection_reuseconn = mock.Mock(side_effect=make_mocked_coro(mock.Mock()))
+    on_connection_reuseconn = mock.AsyncMock()
 
     trace_config = aiohttp.TraceConfig(
         trace_config_ctx_factory=mock.Mock(return_value=trace_config_ctx)
@@ -3091,9 +3111,10 @@ async def test_unix_connector_not_found(loop) -> None:
 
 
 @pytest.mark.skipif(not hasattr(socket, "AF_UNIX"), reason="requires UNIX sockets")
-async def test_unix_connector_permission(loop) -> None:
-    loop.create_unix_connection = make_mocked_coro(raise_exception=PermissionError())
-    connector = aiohttp.UnixConnector("/" + uuid.uuid4().hex, loop=loop)
+async def test_unix_connector_permission(loop: asyncio.AbstractEventLoop) -> None:
+    m = mock.AsyncMock(side_effect=PermissionError())
+    with mock.patch.object(loop, "create_unix_connection", m):
+        connector = aiohttp.UnixConnector("/" + uuid.uuid4().hex)
 
     req = ClientRequest("GET", URL("http://www.python.org"), loop=loop)
     with pytest.raises(aiohttp.ClientConnectorError):
@@ -3122,11 +3143,13 @@ async def test_named_pipe_connector_not_found(proactor_loop, pipe_name) -> None:
 @pytest.mark.skipif(
     platform.system() != "Windows", reason="Proactor Event loop present only in Windows"
 )
-async def test_named_pipe_connector_permission(proactor_loop, pipe_name) -> None:
-    proactor_loop.create_pipe_connection = make_mocked_coro(
-        raise_exception=PermissionError()
-    )
-    connector = aiohttp.NamedPipeConnector(pipe_name, loop=proactor_loop)
+async def test_named_pipe_connector_permission(
+    proactor_loop: asyncio.AbstractEventLoop, pipe_name: str
+) -> None:
+    m = mock.AsyncMock(side_effect=PermissionError())
+    with mock.patch.object(proactor_loop, "create_pipe_connection", m):
+        asyncio.set_event_loop(proactor_loop)
+        connector = aiohttp.NamedPipeConnector(pipe_name)
 
     req = ClientRequest("GET", URL("http://www.python.org"), loop=proactor_loop)
     with pytest.raises(aiohttp.ClientConnectorError):
@@ -3611,6 +3634,50 @@ def test_connector_multiple_event_loop() -> None:
         raw_response_list = [res.result() for res in futures.as_completed(res_list)]
 
     assert raw_response_list == [True, True]
+
+
+async def test_tcp_connector_socket_factory(
+    loop: asyncio.AbstractEventLoop, start_connection: mock.AsyncMock
+) -> None:
+    """Check that socket factory is called"""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        start_connection.return_value = s
+
+        local_addr = None
+        socket_factory: Callable[[AddrInfoType], socket.socket] = lambda _: s
+        happy_eyeballs_delay = 0.123
+        interleave = 3
+        conn = aiohttp.TCPConnector(
+            interleave=interleave,
+            local_addr=local_addr,
+            happy_eyeballs_delay=happy_eyeballs_delay,
+            socket_factory=socket_factory,
+        )
+
+        with mock.patch.object(
+            conn._loop,
+            "create_connection",
+            autospec=True,
+            spec_set=True,
+            return_value=(mock.Mock(), mock.Mock()),
+        ):
+            host = "127.0.0.1"
+            port = 443
+            req = ClientRequest("GET", URL(f"https://{host}:{port}"), loop=loop)
+            with closing(await conn.connect(req, [], ClientTimeout())):
+                pass
+            await conn.close()
+
+    start_connection.assert_called_with(
+        addr_infos=[
+            (socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP, "", (host, port))
+        ],
+        local_addr_infos=local_addr,
+        happy_eyeballs_delay=happy_eyeballs_delay,
+        interleave=interleave,
+        loop=loop,
+        socket_factory=socket_factory,
+    )
 
 
 def test_default_ssl_context_creation_without_ssl() -> None:

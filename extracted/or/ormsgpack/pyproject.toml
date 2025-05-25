@@ -17,6 +17,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
     "Programming Language :: Python",
     "Programming Language :: Rust",
     "Typing :: Typed",
@@ -27,9 +28,8 @@ dynamic = ["version"]
 dev = [
     "msgpack",
     "mypy",
-    "numpy; platform_machine != 'armv7l'",
-    # importing pendulum makes python crash on alpine
-    # "pendulum; platform_machine != 'armv7l' and python_version < '3.13'",
+    "numpy; platform_machine != 'armv7l' and platform_python_implementation != 'GraalVM'",
+    "pendulum; platform_machine != 'armv7l'",
     "pydantic",
     "pytest",
     "pytest-benchmark",
