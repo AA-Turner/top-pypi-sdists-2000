@@ -5,59 +5,6 @@ from textwrap import dedent
 from pytest import Pytester
 
 
-def test_asyncio_mark_works_on_module_level(pytester: Pytester):
-    pytester.makeini("[pytest]\nasyncio_default_fixture_loop_scope = function")
-    pytester.makepyfile(
-        dedent(
-            """\
-            import asyncio
-
-            import pytest
-
-            pytestmark = pytest.mark.asyncio
-
-
-            class TestPyTestMark:
-                async def test_is_asyncio(self, event_loop, sample_fixture):
-                    assert asyncio.get_event_loop()
-
-                    counter = 1
-
-                    async def inc():
-                        nonlocal counter
-                        counter += 1
-                        await asyncio.sleep(0)
-
-                    await asyncio.ensure_future(inc())
-                    assert counter == 2
-
-
-            async def test_is_asyncio(event_loop, sample_fixture):
-                assert asyncio.get_event_loop()
-                counter = 1
-
-                async def inc():
-                    nonlocal counter
-                    counter += 1
-                    await asyncio.sleep(0)
-
-                await asyncio.ensure_future(inc())
-                assert counter == 2
-
-
-            @pytest.fixture
-            def sample_fixture():
-                return None
-            """
-        )
-    )
-    result = pytester.runpytest_subprocess("--asyncio-mode=strict", "-W default")
-    result.assert_outcomes(passed=2, warnings=2)
-    result.stdout.fnmatch_lines(
-        '*is asynchronous and explicitly requests the "event_loop" fixture*'
-    )
-
-
 def test_asyncio_mark_provides_module_scoped_loop_strict_mode(pytester: Pytester):
     pytester.makeini("[pytest]\nasyncio_default_fixture_loop_scope = function")
     pytester.makepyfile(
@@ -87,28 +34,6 @@ def test_asyncio_mark_provides_module_scoped_loop_strict_mode(pytester: Pytester
     )
     result = pytester.runpytest("--asyncio-mode=strict")
     result.assert_outcomes(passed=3)
-
-
-def test_raise_when_event_loop_fixture_is_requested_in_addition_to_scoped_loop(
-    pytester: Pytester,
-):
-    pytester.makeini("[pytest]\nasyncio_default_fixture_loop_scope = function")
-    pytester.makepyfile(
-        dedent(
-            """\
-            import asyncio
-            import pytest
-
-            pytestmark = pytest.mark.asyncio(loop_scope="module")
-
-            async def test_remember_loop(event_loop):
-                pass
-            """
-        )
-    )
-    result = pytester.runpytest("--asyncio-mode=strict")
-    result.assert_outcomes(errors=1)
-    result.stdout.fnmatch_lines("*MultipleEventLoopsRequestedError: *")
 
 
 def test_asyncio_mark_respects_the_loop_policy(

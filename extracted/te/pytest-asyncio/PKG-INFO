@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pytest-asyncio
-Version: 0.26.0
+Version: 1.0.0
 Summary: Pytest support for asyncio
 Author-email: "Tin Tvrtković <tinchester@gmail.com>" <tinchester@gmail.com>
 License-Expression: Apache-2.0
