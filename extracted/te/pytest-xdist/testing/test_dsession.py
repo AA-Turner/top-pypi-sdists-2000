@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Any
 from typing import cast
-from typing import Sequence
 from typing import TYPE_CHECKING
 
 import execnet
@@ -543,7 +543,8 @@ def test_report_collection_diff_different() -> None:
         "+XXX\n"
         " ccc\n"
         "-YYY\n"
-        "To see why this happens see Known limitations in documentation"
+        "To see why this happens see 'Known limitations' in documentation "
+        "for pytest-xdist"
     )
 
     msg = report_collection_diff(from_collection, to_collection, "1", "2")

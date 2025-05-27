@@ -7,7 +7,6 @@ import sys
 from typing import Any
 from typing import Callable
 from typing import cast
-from typing import Dict
 from typing import Union
 import uuid
 
@@ -90,7 +89,7 @@ def worker(request: pytest.FixtureRequest, pytester: pytest.Pytester) -> WorkerS
 
 class TestWorkerInteractor:
     UnserializerReport = Callable[
-        [Dict[str, Any]], Union[pytest.CollectReport, pytest.TestReport]
+        [dict[str, Any]], Union[pytest.CollectReport, pytest.TestReport]
     ]
 
     @pytest.fixture
@@ -266,6 +265,12 @@ class TestWorkerInteractor:
         assert rep.when == "setup"
 
         worker.sendcommand("steal", indices=[1, 2])
+        ev = worker.popevent("unscheduled")
+        # Cannot steal index 1 because it is completed already, so do not steal any.
+        assert ev.kwargs["indices"] == []
+
+        # Index 2 can be stolen, as it is still pending.
+        worker.sendcommand("steal", indices=[2])
         ev = worker.popevent("unscheduled")
         assert ev.kwargs["indices"] == [2]
 

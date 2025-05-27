@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-  "setuptools>=61.2",
+  "setuptools>=77.0",
   "setuptools-scm[toml]>=6.2.3",
 ]
 build-backend = "setuptools.build_meta"
@@ -9,13 +9,12 @@ build-backend = "setuptools.build_meta"
 name = "pytest-xdist"
 description = "pytest xdist plugin for distributed testing, most importantly across multiple CPUs"
 readme = "README.rst"
-license = {file="LICENSE"}
+license = "MIT"
 authors = [{name = "holger krekel and contributors", email = "pytest-dev@python.org"}, {email = "holger@merlinux.eu"}]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Framework :: Pytest",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: POSIX",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: MacOS :: MacOS X",
@@ -25,13 +24,13 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
     "execnet>=2.1",
     "pytest>=7.0.0",
@@ -54,17 +53,14 @@ testing = ["filelock"]
 psutil = ["psutil>=3.0"]
 setproctitle = ["setproctitle"]
 
-[tool.setuptools]
-zip-safe = false
-platforms = [
-    "linux",
-    "osx",
-    "win32",
-]
-include-package-data = false
-
 [tool.setuptools_scm]
 write_to = "src/xdist/_version.py"
+
+[tool.pytest.ini_options]
+# pytest-services also defines a worker_id fixture, disable
+# it so they don't conflict with each other (#611).
+addopts = "-ra -p no:pytest-services"
+testpaths = ["testing"]
 
 [tool.ruff]
 src = ["src"]
@@ -115,6 +111,7 @@ ignore = [
     "PLW0120",  # remove the else and dedent its contents
     "PLW2901",  # for loop variable overwritten by assignment target
     "PLR5501",  # Use `elif` instead of `else` then `if`
+    "UP031",  # Use format specifiers instead of percent format
 ]
 
 [tool.ruff.lint.pycodestyle]

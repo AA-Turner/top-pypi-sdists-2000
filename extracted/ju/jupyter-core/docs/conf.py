@@ -14,6 +14,8 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
+from intersphinx_registry import get_intersphinx_mapping
+
 from jupyter_core.version import __version__, version_info
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -33,7 +35,6 @@ extensions = [
     "myst_parser",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
-    "sphinxcontrib_github_alt",
     "sphinx_autodoc_typehints",
 ]
 
@@ -41,10 +42,8 @@ try:
     import enchant  # noqa: F401
 
     extensions += ["sphinxcontrib.spelling"]
-except ImportError:
+except ModuleNotFoundError:
     pass
-
-github_project_url = "https://github.com/jupyter/jupyter_core"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -70,7 +69,8 @@ author = "Jupyter Development Team"
 # built documents.
 #
 # The short X.Y version.
-version = "%d.%d" % version_info[:2]  # type:ignore[str-format]
+major, minor = version_info[:2]
+version = f"{major}.{minor}"
 # The full version, including alpha/beta/rc tags.
 release = __version__
 
@@ -294,9 +294,7 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 # texinfo_no_detailmenu = False
 
-
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://docs.python.org/3/": None}
+intersphinx_mapping = get_intersphinx_mapping(packages=["python"])
 
 
 def setup(_):

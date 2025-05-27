@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 from collections import OrderedDict
+from collections.abc import Sequence
 from typing import NoReturn
-from typing import Sequence
 
 import pytest
 
 from xdist.remote import Producer
 from xdist.report import report_collection_diff
-from xdist.workermanage import parse_spec_config
+from xdist.workermanage import parse_tx_spec_config
 from xdist.workermanage import WorkerController
 
 
@@ -91,7 +91,7 @@ class LoadScopeScheduling:
     """
 
     def __init__(self, config: pytest.Config, log: Producer | None = None) -> None:
-        self.numnodes = len(parse_spec_config(config))
+        self.numnodes = len(parse_tx_spec_config(config))
         self.collection: list[str] | None = None
 
         self.workqueue: OrderedDict[str, dict[str, bool]] = OrderedDict()

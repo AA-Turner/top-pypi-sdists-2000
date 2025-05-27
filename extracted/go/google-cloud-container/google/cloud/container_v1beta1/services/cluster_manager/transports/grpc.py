@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -70,12 +70,11 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
                 f"Sending request for {client_call_details.method}",
                 extra={
                     "serviceName": "google.container.v1beta1.ClusterManager",
-                    "rpcName": client_call_details.method,
+                    "rpcName": str(client_call_details.method),
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
                 },
             )
-
         response = continuation(client_call_details, request)
         if logging_enabled:  # pragma: NO COVER
             response_metadata = response.trailing_metadata()
@@ -1310,6 +1309,68 @@ class ClusterManagerGrpcTransport(ClusterManagerTransport):
                 response_deserializer=cluster_service.ListLocationsResponse.deserialize,
             )
         return self._stubs["list_locations"]
+
+    @property
+    def fetch_cluster_upgrade_info(
+        self,
+    ) -> Callable[
+        [cluster_service.FetchClusterUpgradeInfoRequest],
+        cluster_service.ClusterUpgradeInfo,
+    ]:
+        r"""Return a callable for the fetch cluster upgrade info method over gRPC.
+
+        Fetch upgrade information of a specific cluster.
+
+        Returns:
+            Callable[[~.FetchClusterUpgradeInfoRequest],
+                    ~.ClusterUpgradeInfo]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "fetch_cluster_upgrade_info" not in self._stubs:
+            self._stubs[
+                "fetch_cluster_upgrade_info"
+            ] = self._logged_channel.unary_unary(
+                "/google.container.v1beta1.ClusterManager/FetchClusterUpgradeInfo",
+                request_serializer=cluster_service.FetchClusterUpgradeInfoRequest.serialize,
+                response_deserializer=cluster_service.ClusterUpgradeInfo.deserialize,
+            )
+        return self._stubs["fetch_cluster_upgrade_info"]
+
+    @property
+    def fetch_node_pool_upgrade_info(
+        self,
+    ) -> Callable[
+        [cluster_service.FetchNodePoolUpgradeInfoRequest],
+        cluster_service.NodePoolUpgradeInfo,
+    ]:
+        r"""Return a callable for the fetch node pool upgrade info method over gRPC.
+
+        Fetch upgrade information of a specific nodepool.
+
+        Returns:
+            Callable[[~.FetchNodePoolUpgradeInfoRequest],
+                    ~.NodePoolUpgradeInfo]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "fetch_node_pool_upgrade_info" not in self._stubs:
+            self._stubs[
+                "fetch_node_pool_upgrade_info"
+            ] = self._logged_channel.unary_unary(
+                "/google.container.v1beta1.ClusterManager/FetchNodePoolUpgradeInfo",
+                request_serializer=cluster_service.FetchNodePoolUpgradeInfoRequest.serialize,
+                response_deserializer=cluster_service.NodePoolUpgradeInfo.deserialize,
+            )
+        return self._stubs["fetch_node_pool_upgrade_info"]
 
     def close(self):
         self._logged_channel.close()

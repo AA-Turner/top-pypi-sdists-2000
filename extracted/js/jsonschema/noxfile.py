@@ -22,22 +22,24 @@ REQUIREMENTS = dict(
     docs=DOCS / "requirements.txt",
 )
 REQUIREMENTS_IN = [  # this is actually ordered, as files depend on each other
-    path.parent / f"{path.stem}.in" for path in REQUIREMENTS.values()
+    (path.parent / f"{path.stem}.in", path) for path in REQUIREMENTS.values()
 ]
 
 NONGPL_LICENSES = [
     "Apache Software License",
     "BSD License",
     "ISC License (ISCL)",
+    "MIT",
     "MIT License",
     "Mozilla Public License 2.0 (MPL 2.0)",
     "Python Software Foundation License",
     "The Unlicense (Unlicense)",
 ]
 
-SUPPORTED = ["3.8", "3.9", "3.10", "pypy3.10", "3.11", "3.12", "3.13"]
-LATEST_STABLE = "3.12"
+SUPPORTED = ["3.9", "3.10", "pypy3.11", "3.11", "3.12", "3.13"]
+LATEST_STABLE = SUPPORTED[-1]
 
+nox.options.default_venv_backend = "uv|virtualenv"
 nox.options.sessions = []
 
 
@@ -115,9 +117,19 @@ def license_check(session):
         "-m",
         "piplicenses",
         "--ignore-packages",
+
+        # because they're not our deps
         "pip-requirements-parser",
         "pip_audit",
         "pip-api",
+
+        # because pip-licenses doesn't yet support PEP 639 :/
+        "attrs",
+        "jsonschema",
+        "jsonschema-specifications",
+        "referencing",
+        "types-python-dateutil",
+
         "--allow-only",
         ";".join(NONGPL_LICENSES),
     )
@@ -128,9 +140,15 @@ def build(session):
     """
     Build a distribution suitable for PyPI and check its validity.
     """
-    session.install("build", "docutils", "twine")
+    session.install("build[uv]", "docutils", "twine")
     with TemporaryDirectory() as tmpdir:
-        session.run("python", "-m", "build", ROOT, "--outdir", tmpdir)
+        session.run(
+            "pyproject-build",
+            "--installer=uv",
+            ROOT,
+            "--outdir",
+            tmpdir,
+        )
         session.run("twine", "check", "--strict", tmpdir + "/*")
         session.run(
             "python", "-m", "docutils", "--strict", CHANGELOG, os.devnull,
@@ -143,7 +161,7 @@ def secrets(session):
     Check for accidentally committed secrets.
     """
     session.install("detect-secrets")
-    session.run("detect-secrets", "scan", ROOT)
+    session.run("detect-secrets", "scan", ROOT, "--exclude-files", "json/")
 
 
 @session(tags=["style"])
@@ -239,13 +257,13 @@ def requirements(session):
 
     You should commit the result afterwards.
     """
-    session.install("pip-tools")
-    for each in REQUIREMENTS_IN:
-        session.run(
-            "pip-compile",
-            "--resolver",
-            "backtracking",
-            "--strip-extras",
-            "-U",
-            each.relative_to(ROOT),
-        )
+    if session.venv_backend == "uv":
+        cmd = ["uv", "pip", "compile"]
+    else:
+        session.install("pip-tools")
+        cmd = ["pip-compile", "--resolver", "backtracking", "--strip-extras"]
+
+    for each, out in REQUIREMENTS_IN:
+        # otherwise output files end up with silly absolute path comments...
+        relative = each.relative_to(ROOT)
+        session.run(*cmd, "--upgrade", "--output-file", out, relative)

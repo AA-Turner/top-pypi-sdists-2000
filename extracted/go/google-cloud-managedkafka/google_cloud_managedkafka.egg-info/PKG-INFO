@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: google-cloud-managedkafka
-Version: 0.1.10
+Version: 0.1.11
 Summary: Google Cloud Managedkafka API client library
 Home-page: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-managedkafka
 Author: Google LLC
