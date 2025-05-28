@@ -276,6 +276,9 @@ from .playground_session import PlaygroundSession
 from .pooling import Pooling
 from .preset_composite_retrieval_params import PresetCompositeRetrievalParams
 from .preset_retrieval_params import PresetRetrievalParams
+from .preset_retrieval_params_search_filters_inference_schema_value import (
+    PresetRetrievalParamsSearchFiltersInferenceSchemaValue,
+)
 from .presigned_url import PresignedUrl
 from .progress_event import ProgressEvent
 from .progress_event_status import ProgressEventStatus
@@ -600,6 +603,7 @@ __all__ = [
     "Pooling",
     "PresetCompositeRetrievalParams",
     "PresetRetrievalParams",
+    "PresetRetrievalParamsSearchFiltersInferenceSchemaValue",
     "PresignedUrl",
     "ProgressEvent",
     "ProgressEventStatus",

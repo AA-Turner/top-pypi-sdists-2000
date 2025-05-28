@@ -4,6 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .metadata_filters import MetadataFilters
 from .page_screenshot_node_with_score import PageScreenshotNodeWithScore
 from .text_node_with_score import TextNodeWithScore
 
@@ -34,6 +35,7 @@ class RetrieveResults(pydantic.BaseModel):
     metadata: typing.Optional[typing.Dict[str, str]] = pydantic.Field(
         description="Metadata associated with the retrieval execution"
     )
+    inferred_search_filters: typing.Optional[MetadataFilters]
     class_name: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:

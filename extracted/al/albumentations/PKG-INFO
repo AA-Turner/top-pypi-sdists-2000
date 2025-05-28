@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: albumentations
-Version: 2.0.7
+Version: 2.0.8
 Summary: Fast, flexible, and advanced augmentation library for deep learning, computer vision, and medical imaging. Albumentations offers a wide range of transformations for both 2D (images, masks, bboxes, keypoints) and 3D (volumes, volumetric masks, keypoints) data, with optimized performance and seamless integration into ML workflows.
 Author: Vladimir Iglovikov
 Maintainer: Vladimir Iglovikov

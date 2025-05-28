@@ -98,26 +98,6 @@ user = iam.User(self, "MyUser")
 env.grant_read_config(user)
 ```
 
-### Deletion Protection Check
-
-You can enable [deletion protection](https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html) on the environment by setting the `deletionProtectionCheck` property.
-
-* ACCOUNT_DEFAULT: The default setting, which uses account-level deletion protection. To configure account-level deletion protection, use the UpdateAccountSettings API.
-* APPLY: Instructs the deletion protection check to run, even if deletion protection is disabled at the account level. APPLY also forces the deletion protection check to run against resources created in the past hour, which are normally excluded from deletion protection checks.
-* BYPASS: Instructs AWS AppConfig to bypass the deletion protection check and delete an environment even if deletion protection would have otherwise prevented it.
-
-```python
-# application: appconfig.Application
-# alarm: cloudwatch.Alarm
-# composite_alarm: cloudwatch.CompositeAlarm
-
-
-appconfig.Environment(self, "MyEnvironment",
-    application=application,
-    deletion_protection_check=appconfig.DeletionProtectionCheck.APPLY
-)
-```
-
 ## Deployment Strategy
 
 [AWS AppConfig Deployment Strategy Documentation](https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html)
@@ -566,6 +546,41 @@ appconfig.SourcedConfiguration(self, "MySourcedConfiguration",
             final_bake_time=Duration.minutes(15)
         )
     )
+)
+```
+
+## Deletion Protection Check
+
+You can enable [deletion protection](https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html) on the environment and configuration profile by setting the `deletionProtectionCheck` property.
+
+* ACCOUNT_DEFAULT: The default setting, which uses account-level deletion protection. To configure account-level deletion protection, use the UpdateAccountSettings API.
+* APPLY: Instructs the deletion protection check to run, even if deletion protection is disabled at the account level. APPLY also forces the deletion protection check to run against resources created in the past hour, which are normally excluded from deletion protection checks.
+* BYPASS: Instructs AWS AppConfig to bypass the deletion protection check and delete an environment even if deletion protection would have otherwise prevented it.
+
+```python
+# application: appconfig.Application
+# alarm: cloudwatch.Alarm
+# composite_alarm: cloudwatch.CompositeAlarm
+# bucket: s3.Bucket
+
+
+# Environment deletion protection check
+appconfig.Environment(self, "MyEnvironment",
+    application=application,
+    deletion_protection_check=appconfig.DeletionProtectionCheck.APPLY
+)
+
+# configuration profile with deletion protection check
+appconfig.HostedConfiguration(self, "MyHostedConfigFromFile",
+    application=application,
+    content=appconfig.ConfigurationContent.from_file("config.json"),
+    deletion_protection_check=appconfig.DeletionProtectionCheck.BYPASS
+)
+
+appconfig.SourcedConfiguration(self, "MySourcedConfiguration",
+    application=application,
+    location=appconfig.ConfigurationSource.from_bucket(bucket, "path/to/file.json"),
+    deletion_protection_check=appconfig.DeletionProtectionCheck.ACCOUNT_DEFAULT
 )
 ```
 
@@ -4835,15 +4850,17 @@ class ConfigurationContent(
 
     Example::
 
-        app = appconfig.Application(self, "MyApp")
-        env = appconfig.Environment(self, "MyEnv",
-            application=app
-        )
+        # application: appconfig.Application
+        # fn: lambda.Function
         
-        appconfig.HostedConfiguration(self, "MyHostedConfig",
-            application=app,
-            deploy_to=[env],
-            content=appconfig.ConfigurationContent.from_inline_text("This is my configuration content.")
+        
+        appconfig.HostedConfiguration(self, "MyHostedConfiguration",
+            application=application,
+            content=appconfig.ConfigurationContent.from_inline_text("This is my configuration content."),
+            validators=[
+                appconfig.JsonSchemaValidator.from_file("schema.json"),
+                appconfig.LambdaValidator.from_function(fn)
+            ]
         )
     '''
 
@@ -4964,6 +4981,7 @@ typing.cast(typing.Any, ConfigurationContent).__jsii_proxy_class__ = lambda : _C
     jsii_type="aws-cdk-lib.aws_appconfig.ConfigurationOptions",
     jsii_struct_bases=[],
     name_mapping={
+        "deletion_protection_check": "deletionProtectionCheck",
         "deployment_key": "deploymentKey",
         "deployment_strategy": "deploymentStrategy",
         "deploy_to": "deployTo",
@@ -4977,6 +4995,7 @@ class ConfigurationOptions:
     def __init__(
         self,
         *,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
@@ -4987,6 +5006,7 @@ class ConfigurationOptions:
     ) -> None:
         '''Options for the Configuration construct.
 
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -5010,6 +5030,7 @@ class ConfigurationOptions:
             # validator: appconfig.IValidator
             
             configuration_options = appconfig.ConfigurationOptions(
+                deletion_protection_check=appconfig.DeletionProtectionCheck.ACCOUNT_DEFAULT,
                 deployment_key=key,
                 deployment_strategy=deployment_strategy,
                 deploy_to=[environment],
@@ -5021,6 +5042,7 @@ class ConfigurationOptions:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7d8aafff2e2f314c1c4bef6e213f0aaef56ff294051b33fee835ad5716a7e093)
+            check_type(argname="argument deletion_protection_check", value=deletion_protection_check, expected_type=type_hints["deletion_protection_check"])
             check_type(argname="argument deployment_key", value=deployment_key, expected_type=type_hints["deployment_key"])
             check_type(argname="argument deployment_strategy", value=deployment_strategy, expected_type=type_hints["deployment_strategy"])
             check_type(argname="argument deploy_to", value=deploy_to, expected_type=type_hints["deploy_to"])
@@ -5029,6 +5051,8 @@ class ConfigurationOptions:
             check_type(argname="argument type", value=type, expected_type=type_hints["type"])
             check_type(argname="argument validators", value=validators, expected_type=type_hints["validators"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if deletion_protection_check is not None:
+            self._values["deletion_protection_check"] = deletion_protection_check
         if deployment_key is not None:
             self._values["deployment_key"] = deployment_key
         if deployment_strategy is not None:
@@ -5043,6 +5067,20 @@ class ConfigurationOptions:
             self._values["type"] = type
         if validators is not None:
             self._values["validators"] = validators
+
+    @builtins.property
+    def deletion_protection_check(self) -> typing.Optional["DeletionProtectionCheck"]:
+        '''A parameter to configure deletion protection.
+
+        Deletion protection prevents a user from deleting a configuration profile if your application has called
+        either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval.
+
+        :default: DeletionProtectionCheck.ACCOUNT_DEFAULT
+
+        :see: https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html
+        '''
+        result = self._values.get("deletion_protection_check")
+        return typing.cast(typing.Optional["DeletionProtectionCheck"], result)
 
     @builtins.property
     def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
@@ -5132,6 +5170,7 @@ class ConfigurationOptions:
     jsii_type="aws-cdk-lib.aws_appconfig.ConfigurationProps",
     jsii_struct_bases=[ConfigurationOptions],
     name_mapping={
+        "deletion_protection_check": "deletionProtectionCheck",
         "deployment_key": "deploymentKey",
         "deployment_strategy": "deploymentStrategy",
         "deploy_to": "deployTo",
@@ -5146,6 +5185,7 @@ class ConfigurationProps(ConfigurationOptions):
     def __init__(
         self,
         *,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
@@ -5157,6 +5197,7 @@ class ConfigurationProps(ConfigurationOptions):
     ) -> None:
         '''Properties for the Configuration construct.
 
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -5185,6 +5226,7 @@ class ConfigurationProps(ConfigurationOptions):
                 application=application,
             
                 # the properties below are optional
+                deletion_protection_check=appconfig.DeletionProtectionCheck.ACCOUNT_DEFAULT,
                 deployment_key=key,
                 deployment_strategy=deployment_strategy,
                 deploy_to=[environment],
@@ -5196,6 +5238,7 @@ class ConfigurationProps(ConfigurationOptions):
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fde28a86ff967e860849eabd5d00b00f1f841ba2ded09e00655f2b7d433ef121)
+            check_type(argname="argument deletion_protection_check", value=deletion_protection_check, expected_type=type_hints["deletion_protection_check"])
             check_type(argname="argument deployment_key", value=deployment_key, expected_type=type_hints["deployment_key"])
             check_type(argname="argument deployment_strategy", value=deployment_strategy, expected_type=type_hints["deployment_strategy"])
             check_type(argname="argument deploy_to", value=deploy_to, expected_type=type_hints["deploy_to"])
@@ -5207,6 +5250,8 @@ class ConfigurationProps(ConfigurationOptions):
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "application": application,
         }
+        if deletion_protection_check is not None:
+            self._values["deletion_protection_check"] = deletion_protection_check
         if deployment_key is not None:
             self._values["deployment_key"] = deployment_key
         if deployment_strategy is not None:
@@ -5221,6 +5266,20 @@ class ConfigurationProps(ConfigurationOptions):
             self._values["type"] = type
         if validators is not None:
             self._values["validators"] = validators
+
+    @builtins.property
+    def deletion_protection_check(self) -> typing.Optional["DeletionProtectionCheck"]:
+        '''A parameter to configure deletion protection.
+
+        Deletion protection prevents a user from deleting a configuration profile if your application has called
+        either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval.
+
+        :default: DeletionProtectionCheck.ACCOUNT_DEFAULT
+
+        :see: https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html
+        '''
+        result = self._values.get("deletion_protection_check")
+        return typing.cast(typing.Optional["DeletionProtectionCheck"], result)
 
     @builtins.property
     def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
@@ -5519,11 +5578,26 @@ class DeletionProtectionCheck(enum.Enum):
         # application: appconfig.Application
         # alarm: cloudwatch.Alarm
         # composite_alarm: cloudwatch.CompositeAlarm
+        # bucket: s3.Bucket
         
         
+        # Environment deletion protection check
         appconfig.Environment(self, "MyEnvironment",
             application=application,
             deletion_protection_check=appconfig.DeletionProtectionCheck.APPLY
+        )
+        
+        # configuration profile with deletion protection check
+        appconfig.HostedConfiguration(self, "MyHostedConfigFromFile",
+            application=application,
+            content=appconfig.ConfigurationContent.from_file("config.json"),
+            deletion_protection_check=appconfig.DeletionProtectionCheck.BYPASS
+        )
+        
+        appconfig.SourcedConfiguration(self, "MySourcedConfiguration",
+            application=application,
+            location=appconfig.ConfigurationSource.from_bucket(bucket, "path/to/file.json"),
+            deletion_protection_check=appconfig.DeletionProtectionCheck.ACCOUNT_DEFAULT
         )
     '''
 
@@ -5991,10 +6065,16 @@ class EnvironmentProps(EnvironmentOptions):
                 application=app
             )
             
-            appconfig.HostedConfiguration(self, "MyHostedConfig",
+            appconfig.HostedConfiguration(self, "MyFirstHostedConfig",
                 application=app,
                 deploy_to=[env],
-                content=appconfig.ConfigurationContent.from_inline_text("This is my configuration content.")
+                content=appconfig.ConfigurationContent.from_inline_text("This is my first configuration content.")
+            )
+            
+            appconfig.HostedConfiguration(self, "MySecondHostedConfig",
+                application=app,
+                deploy_to=[env],
+                content=appconfig.ConfigurationContent.from_inline_text("This is my second configuration content.")
             )
         '''
         if __debug__:
@@ -6459,6 +6539,7 @@ class GrowthType(enum.Enum):
     jsii_type="aws-cdk-lib.aws_appconfig.HostedConfigurationOptions",
     jsii_struct_bases=[ConfigurationOptions],
     name_mapping={
+        "deletion_protection_check": "deletionProtectionCheck",
         "deployment_key": "deploymentKey",
         "deployment_strategy": "deploymentStrategy",
         "deploy_to": "deployTo",
@@ -6475,6 +6556,7 @@ class HostedConfigurationOptions(ConfigurationOptions):
     def __init__(
         self,
         *,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
@@ -6488,6 +6570,7 @@ class HostedConfigurationOptions(ConfigurationOptions):
     ) -> None:
         '''Options for HostedConfiguration.
 
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -6518,6 +6601,7 @@ class HostedConfigurationOptions(ConfigurationOptions):
                 content=configuration_content,
             
                 # the properties below are optional
+                deletion_protection_check=appconfig.DeletionProtectionCheck.ACCOUNT_DEFAULT,
                 deployment_key=key,
                 deployment_strategy=deployment_strategy,
                 deploy_to=[environment],
@@ -6531,6 +6615,7 @@ class HostedConfigurationOptions(ConfigurationOptions):
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4c4d8fda2e4860630073eda40d5a32347248e82c24127624ef93e735b071da8f)
+            check_type(argname="argument deletion_protection_check", value=deletion_protection_check, expected_type=type_hints["deletion_protection_check"])
             check_type(argname="argument deployment_key", value=deployment_key, expected_type=type_hints["deployment_key"])
             check_type(argname="argument deployment_strategy", value=deployment_strategy, expected_type=type_hints["deployment_strategy"])
             check_type(argname="argument deploy_to", value=deploy_to, expected_type=type_hints["deploy_to"])
@@ -6544,6 +6629,8 @@ class HostedConfigurationOptions(ConfigurationOptions):
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "content": content,
         }
+        if deletion_protection_check is not None:
+            self._values["deletion_protection_check"] = deletion_protection_check
         if deployment_key is not None:
             self._values["deployment_key"] = deployment_key
         if deployment_strategy is not None:
@@ -6562,6 +6649,20 @@ class HostedConfigurationOptions(ConfigurationOptions):
             self._values["latest_version_number"] = latest_version_number
         if version_label is not None:
             self._values["version_label"] = version_label
+
+    @builtins.property
+    def deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+        '''A parameter to configure deletion protection.
+
+        Deletion protection prevents a user from deleting a configuration profile if your application has called
+        either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval.
+
+        :default: DeletionProtectionCheck.ACCOUNT_DEFAULT
+
+        :see: https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html
+        '''
+        result = self._values.get("deletion_protection_check")
+        return typing.cast(typing.Optional[DeletionProtectionCheck], result)
 
     @builtins.property
     def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
@@ -6676,6 +6777,7 @@ class HostedConfigurationOptions(ConfigurationOptions):
     jsii_type="aws-cdk-lib.aws_appconfig.HostedConfigurationProps",
     jsii_struct_bases=[ConfigurationProps],
     name_mapping={
+        "deletion_protection_check": "deletionProtectionCheck",
         "deployment_key": "deploymentKey",
         "deployment_strategy": "deploymentStrategy",
         "deploy_to": "deployTo",
@@ -6693,6 +6795,7 @@ class HostedConfigurationProps(ConfigurationProps):
     def __init__(
         self,
         *,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
@@ -6707,6 +6810,7 @@ class HostedConfigurationProps(ConfigurationProps):
     ) -> None:
         '''Properties for HostedConfiguration.
 
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -6723,19 +6827,22 @@ class HostedConfigurationProps(ConfigurationProps):
 
         Example::
 
-            app = appconfig.Application(self, "MyApp")
-            env = appconfig.Environment(self, "MyEnv",
-                application=app
-            )
+            # application: appconfig.Application
+            # fn: lambda.Function
             
-            appconfig.HostedConfiguration(self, "MyHostedConfig",
-                application=app,
-                deploy_to=[env],
-                content=appconfig.ConfigurationContent.from_inline_text("This is my configuration content.")
+            
+            appconfig.HostedConfiguration(self, "MyHostedConfiguration",
+                application=application,
+                content=appconfig.ConfigurationContent.from_inline_text("This is my configuration content."),
+                validators=[
+                    appconfig.JsonSchemaValidator.from_file("schema.json"),
+                    appconfig.LambdaValidator.from_function(fn)
+                ]
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7cba9d5464f3f4cbc208d892995245e5078fc2cc794651c71942035a9b151b2e)
+            check_type(argname="argument deletion_protection_check", value=deletion_protection_check, expected_type=type_hints["deletion_protection_check"])
             check_type(argname="argument deployment_key", value=deployment_key, expected_type=type_hints["deployment_key"])
             check_type(argname="argument deployment_strategy", value=deployment_strategy, expected_type=type_hints["deployment_strategy"])
             check_type(argname="argument deploy_to", value=deploy_to, expected_type=type_hints["deploy_to"])
@@ -6751,6 +6858,8 @@ class HostedConfigurationProps(ConfigurationProps):
             "application": application,
             "content": content,
         }
+        if deletion_protection_check is not None:
+            self._values["deletion_protection_check"] = deletion_protection_check
         if deployment_key is not None:
             self._values["deployment_key"] = deployment_key
         if deployment_strategy is not None:
@@ -6769,6 +6878,20 @@ class HostedConfigurationProps(ConfigurationProps):
             self._values["latest_version_number"] = latest_version_number
         if version_label is not None:
             self._values["version_label"] = version_label
+
+    @builtins.property
+    def deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+        '''A parameter to configure deletion protection.
+
+        Deletion protection prevents a user from deleting a configuration profile if your application has called
+        either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval.
+
+        :default: DeletionProtectionCheck.ACCOUNT_DEFAULT
+
+        :see: https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html
+        '''
+        result = self._values.get("deletion_protection_check")
+        return typing.cast(typing.Optional[DeletionProtectionCheck], result)
 
     @builtins.property
     def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
@@ -6962,6 +7085,7 @@ class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
         content: ConfigurationContent,
         latest_version_number: typing.Optional[jsii.Number] = None,
         version_label: typing.Optional[builtins.str] = None,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
@@ -6976,6 +7100,7 @@ class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
         :param content: The content of the hosted configuration.
         :param latest_version_number: The latest version number of the hosted configuration. Default: - None.
         :param version_label: The version label of the hosted configuration. Default: - None.
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -6994,6 +7119,7 @@ class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
         location: ConfigurationSource,
         retrieval_role: typing.Optional[_IRole_235f5d8e] = None,
         version_number: typing.Optional[builtins.str] = None,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
@@ -7008,6 +7134,7 @@ class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
         :param location: The location where the configuration is stored.
         :param retrieval_role: The IAM role to retrieve the configuration. Default: - A role is generated.
         :param version_number: The version number of the sourced configuration to deploy. If this is not specified, then there will be no deployment. Default: - None.
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -7301,6 +7428,7 @@ class _IApplicationProxy(
         content: ConfigurationContent,
         latest_version_number: typing.Optional[jsii.Number] = None,
         version_label: typing.Optional[builtins.str] = None,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
@@ -7315,6 +7443,7 @@ class _IApplicationProxy(
         :param content: The content of the hosted configuration.
         :param latest_version_number: The latest version number of the hosted configuration. Default: - None.
         :param version_label: The version label of the hosted configuration. Default: - None.
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -7330,6 +7459,7 @@ class _IApplicationProxy(
             content=content,
             latest_version_number=latest_version_number,
             version_label=version_label,
+            deletion_protection_check=deletion_protection_check,
             deployment_key=deployment_key,
             deployment_strategy=deployment_strategy,
             deploy_to=deploy_to,
@@ -7349,6 +7479,7 @@ class _IApplicationProxy(
         location: ConfigurationSource,
         retrieval_role: typing.Optional[_IRole_235f5d8e] = None,
         version_number: typing.Optional[builtins.str] = None,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
@@ -7363,6 +7494,7 @@ class _IApplicationProxy(
         :param location: The location where the configuration is stored.
         :param retrieval_role: The IAM role to retrieve the configuration. Default: - A role is generated.
         :param version_number: The version number of the sourced configuration to deploy. If this is not specified, then there will be no deployment. Default: - None.
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -7378,6 +7510,7 @@ class _IApplicationProxy(
             location=location,
             retrieval_role=retrieval_role,
             version_number=version_number,
+            deletion_protection_check=deletion_protection_check,
             deployment_key=deployment_key,
             deployment_strategy=deployment_strategy,
             deploy_to=deploy_to,
@@ -10123,6 +10256,7 @@ class SourcedConfiguration(
         retrieval_role: typing.Optional[_IRole_235f5d8e] = None,
         version_number: typing.Optional[builtins.str] = None,
         application: IApplication,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
         deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -10138,6 +10272,7 @@ class SourcedConfiguration(
         :param retrieval_role: The IAM role to retrieve the configuration. Default: - Auto generated if location type is not ConfigurationSourceType.CODE_PIPELINE otherwise no role specified.
         :param version_number: The version number of the sourced configuration to deploy. If this is not specified, then there will be no deployment. Default: - None.
         :param application: The application associated with the configuration.
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -10155,6 +10290,7 @@ class SourcedConfiguration(
             retrieval_role=retrieval_role,
             version_number=version_number,
             application=application,
+            deletion_protection_check=deletion_protection_check,
             deployment_key=deployment_key,
             deployment_strategy=deployment_strategy,
             deploy_to=deploy_to,
@@ -10571,11 +10707,27 @@ class SourcedConfiguration(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "extensible", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="deletionProtectionCheck")
+    def _deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+        return typing.cast(typing.Optional[DeletionProtectionCheck], jsii.get(self, "deletionProtectionCheck"))
+
+    @_deletion_protection_check.setter
+    def _deletion_protection_check(
+        self,
+        value: typing.Optional[DeletionProtectionCheck],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ff7730984215a53f88ccb3e1915941985bedc75f6b24a06eae12d583d8f4bca9)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "deletionProtectionCheck", value) # pyright: ignore[reportArgumentType]
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_appconfig.SourcedConfigurationOptions",
     jsii_struct_bases=[ConfigurationOptions],
     name_mapping={
+        "deletion_protection_check": "deletionProtectionCheck",
         "deployment_key": "deploymentKey",
         "deployment_strategy": "deploymentStrategy",
         "deploy_to": "deployTo",
@@ -10592,6 +10744,7 @@ class SourcedConfigurationOptions(ConfigurationOptions):
     def __init__(
         self,
         *,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
         deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -10605,6 +10758,7 @@ class SourcedConfigurationOptions(ConfigurationOptions):
     ) -> None:
         '''Options for SourcedConfiguration.
 
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -10637,6 +10791,7 @@ class SourcedConfigurationOptions(ConfigurationOptions):
                 location=configuration_source,
             
                 # the properties below are optional
+                deletion_protection_check=appconfig.DeletionProtectionCheck.ACCOUNT_DEFAULT,
                 deployment_key=key,
                 deployment_strategy=deployment_strategy,
                 deploy_to=[environment],
@@ -10650,6 +10805,7 @@ class SourcedConfigurationOptions(ConfigurationOptions):
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__115deabe7a02ce295c431e7d9a99bcbe112bc017436380d80181c5db491187a1)
+            check_type(argname="argument deletion_protection_check", value=deletion_protection_check, expected_type=type_hints["deletion_protection_check"])
             check_type(argname="argument deployment_key", value=deployment_key, expected_type=type_hints["deployment_key"])
             check_type(argname="argument deployment_strategy", value=deployment_strategy, expected_type=type_hints["deployment_strategy"])
             check_type(argname="argument deploy_to", value=deploy_to, expected_type=type_hints["deploy_to"])
@@ -10663,6 +10819,8 @@ class SourcedConfigurationOptions(ConfigurationOptions):
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "location": location,
         }
+        if deletion_protection_check is not None:
+            self._values["deletion_protection_check"] = deletion_protection_check
         if deployment_key is not None:
             self._values["deployment_key"] = deployment_key
         if deployment_strategy is not None:
@@ -10681,6 +10839,20 @@ class SourcedConfigurationOptions(ConfigurationOptions):
             self._values["retrieval_role"] = retrieval_role
         if version_number is not None:
             self._values["version_number"] = version_number
+
+    @builtins.property
+    def deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+        '''A parameter to configure deletion protection.
+
+        Deletion protection prevents a user from deleting a configuration profile if your application has called
+        either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval.
+
+        :default: DeletionProtectionCheck.ACCOUNT_DEFAULT
+
+        :see: https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html
+        '''
+        result = self._values.get("deletion_protection_check")
+        return typing.cast(typing.Optional[DeletionProtectionCheck], result)
 
     @builtins.property
     def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
@@ -10798,6 +10970,7 @@ class SourcedConfigurationOptions(ConfigurationOptions):
     jsii_type="aws-cdk-lib.aws_appconfig.SourcedConfigurationProps",
     jsii_struct_bases=[ConfigurationProps],
     name_mapping={
+        "deletion_protection_check": "deletionProtectionCheck",
         "deployment_key": "deploymentKey",
         "deployment_strategy": "deploymentStrategy",
         "deploy_to": "deployTo",
@@ -10815,6 +10988,7 @@ class SourcedConfigurationProps(ConfigurationProps):
     def __init__(
         self,
         *,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
         deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -10829,6 +11003,7 @@ class SourcedConfigurationProps(ConfigurationProps):
     ) -> None:
         '''Properties for SourcedConfiguration.
 
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -10859,6 +11034,7 @@ class SourcedConfigurationProps(ConfigurationProps):
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d41101d1b0f699a52d44a2b86fe3e9dcd0e6f1487f088908464eb49cb3e5e12c)
+            check_type(argname="argument deletion_protection_check", value=deletion_protection_check, expected_type=type_hints["deletion_protection_check"])
             check_type(argname="argument deployment_key", value=deployment_key, expected_type=type_hints["deployment_key"])
             check_type(argname="argument deployment_strategy", value=deployment_strategy, expected_type=type_hints["deployment_strategy"])
             check_type(argname="argument deploy_to", value=deploy_to, expected_type=type_hints["deploy_to"])
@@ -10874,6 +11050,8 @@ class SourcedConfigurationProps(ConfigurationProps):
             "application": application,
             "location": location,
         }
+        if deletion_protection_check is not None:
+            self._values["deletion_protection_check"] = deletion_protection_check
         if deployment_key is not None:
             self._values["deployment_key"] = deployment_key
         if deployment_strategy is not None:
@@ -10892,6 +11070,20 @@ class SourcedConfigurationProps(ConfigurationProps):
             self._values["retrieval_role"] = retrieval_role
         if version_number is not None:
             self._values["version_number"] = version_number
+
+    @builtins.property
+    def deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+        '''A parameter to configure deletion protection.
+
+        Deletion protection prevents a user from deleting a configuration profile if your application has called
+        either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval.
+
+        :default: DeletionProtectionCheck.ACCOUNT_DEFAULT
+
+        :see: https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html
+        '''
+        result = self._values.get("deletion_protection_check")
+        return typing.cast(typing.Optional[DeletionProtectionCheck], result)
 
     @builtins.property
     def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
@@ -11258,6 +11450,7 @@ class Application(
         content: ConfigurationContent,
         latest_version_number: typing.Optional[jsii.Number] = None,
         version_label: typing.Optional[builtins.str] = None,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
         deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -11272,6 +11465,7 @@ class Application(
         :param content: The content of the hosted configuration.
         :param latest_version_number: The latest version number of the hosted configuration. Default: - None.
         :param version_label: The version label of the hosted configuration. Default: - None.
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -11287,6 +11481,7 @@ class Application(
             content=content,
             latest_version_number=latest_version_number,
             version_label=version_label,
+            deletion_protection_check=deletion_protection_check,
             deployment_key=deployment_key,
             deployment_strategy=deployment_strategy,
             deploy_to=deploy_to,
@@ -11306,6 +11501,7 @@ class Application(
         location: ConfigurationSource,
         retrieval_role: typing.Optional[_IRole_235f5d8e] = None,
         version_number: typing.Optional[builtins.str] = None,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
         deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -11320,6 +11516,7 @@ class Application(
         :param location: The location where the configuration is stored.
         :param retrieval_role: The IAM role to retrieve the configuration. Default: - A role is generated.
         :param version_number: The version number of the sourced configuration to deploy. If this is not specified, then there will be no deployment. Default: - None.
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -11335,6 +11532,7 @@ class Application(
             location=location,
             retrieval_role=retrieval_role,
             version_number=version_number,
+            deletion_protection_check=deletion_protection_check,
             deployment_key=deployment_key,
             deployment_strategy=deployment_strategy,
             deploy_to=deploy_to,
@@ -11843,10 +12041,16 @@ class Environment(
             application=app
         )
         
-        appconfig.HostedConfiguration(self, "MyHostedConfig",
+        appconfig.HostedConfiguration(self, "MyFirstHostedConfig",
             application=app,
             deploy_to=[env],
-            content=appconfig.ConfigurationContent.from_inline_text("This is my configuration content.")
+            content=appconfig.ConfigurationContent.from_inline_text("This is my first configuration content.")
+        )
+        
+        appconfig.HostedConfiguration(self, "MySecondHostedConfig",
+            application=app,
+            deploy_to=[env],
+            content=appconfig.ConfigurationContent.from_inline_text("This is my second configuration content.")
         )
     '''
 
@@ -12932,15 +13136,17 @@ class HostedConfiguration(
 
     Example::
 
-        app = appconfig.Application(self, "MyApp")
-        env = appconfig.Environment(self, "MyEnv",
-            application=app
-        )
+        # application: appconfig.Application
+        # fn: lambda.Function
         
-        appconfig.HostedConfiguration(self, "MyHostedConfig",
-            application=app,
-            deploy_to=[env],
-            content=appconfig.ConfigurationContent.from_inline_text("This is my configuration content.")
+        
+        appconfig.HostedConfiguration(self, "MyHostedConfiguration",
+            application=application,
+            content=appconfig.ConfigurationContent.from_inline_text("This is my configuration content."),
+            validators=[
+                appconfig.JsonSchemaValidator.from_file("schema.json"),
+                appconfig.LambdaValidator.from_function(fn)
+            ]
         )
     '''
 
@@ -12953,6 +13159,7 @@ class HostedConfiguration(
         latest_version_number: typing.Optional[jsii.Number] = None,
         version_label: typing.Optional[builtins.str] = None,
         application: IApplication,
+        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
         deployment_key: typing.Optional[_IKey_5f11635f] = None,
         deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
         deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -12968,6 +13175,7 @@ class HostedConfiguration(
         :param latest_version_number: The latest version number of the hosted configuration. Default: - None.
         :param version_label: The version label of the hosted configuration. Default: - None.
         :param application: The application associated with the configuration.
+        :param deletion_protection_check: A parameter to configure deletion protection. Deletion protection prevents a user from deleting a configuration profile if your application has called either ``GetLatestConfiguration`` or ``GetConfiguration`` for the configuration profile during the specified interval. Default: DeletionProtectionCheck.ACCOUNT_DEFAULT
         :param deployment_key: The deployment key of the configuration. Default: - None.
         :param deployment_strategy: The deployment strategy for the configuration. Default: - A deployment strategy with the rollout strategy set to RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         :param deploy_to: The list of environments to deploy the configuration to. If this parameter is not specified, then there will be no deployment created alongside this configuration. Deployments can be added later using the ``IEnvironment.addDeployment`` or ``IEnvironment.addDeployments`` methods. Default: - None.
@@ -12985,6 +13193,7 @@ class HostedConfiguration(
             latest_version_number=latest_version_number,
             version_label=version_label,
             application=application,
+            deletion_protection_check=deletion_protection_check,
             deployment_key=deployment_key,
             deployment_strategy=deployment_strategy,
             deploy_to=deploy_to,
@@ -13407,6 +13616,21 @@ class HostedConfiguration(
             type_hints = typing.get_type_hints(_typecheckingstub__27c25acd80a9bdc9870365bad92556272569854dc957ad7cdf2b6e5a2c29c2ce)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "extensible", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="deletionProtectionCheck")
+    def _deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+        return typing.cast(typing.Optional[DeletionProtectionCheck], jsii.get(self, "deletionProtectionCheck"))
+
+    @_deletion_protection_check.setter
+    def _deletion_protection_check(
+        self,
+        value: typing.Optional[DeletionProtectionCheck],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0a1e6913f9293558fa6d2222b6d11c3af6b25866b966dd6319551117306cf272)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "deletionProtectionCheck", value) # pyright: ignore[reportArgumentType]
 
 
 __all__ = [
@@ -14230,6 +14454,7 @@ def _typecheckingstub__af127c28dd1d72bacc88a31e7606c4f0729ead8629d2aa39eca948c88
 
 def _typecheckingstub__7d8aafff2e2f314c1c4bef6e213f0aaef56ff294051b33fee835ad5716a7e093(
     *,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -14243,6 +14468,7 @@ def _typecheckingstub__7d8aafff2e2f314c1c4bef6e213f0aaef56ff294051b33fee835ad571
 
 def _typecheckingstub__fde28a86ff967e860849eabd5d00b00f1f841ba2ded09e00655f2b7d433ef121(
     *,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -14370,6 +14596,7 @@ def _typecheckingstub__003bfe5f4d042a69eceddde85ccfcfdb2e64aaea78e28426808804379
 
 def _typecheckingstub__4c4d8fda2e4860630073eda40d5a32347248e82c24127624ef93e735b071da8f(
     *,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -14386,6 +14613,7 @@ def _typecheckingstub__4c4d8fda2e4860630073eda40d5a32347248e82c24127624ef93e735b
 
 def _typecheckingstub__7cba9d5464f3f4cbc208d892995245e5078fc2cc794651c71942035a9b151b2e(
     *,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -14430,6 +14658,7 @@ def _typecheckingstub__3bd9df804b6975de3426c197a45965f129649a986f5cd9a03f0a4ee6f
     content: ConfigurationContent,
     latest_version_number: typing.Optional[jsii.Number] = None,
     version_label: typing.Optional[builtins.str] = None,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -14447,6 +14676,7 @@ def _typecheckingstub__652068ebd01467de1bc3159a4c8fef165c1053fe6662fcbb6e0b8cb9f
     location: ConfigurationSource,
     retrieval_role: typing.Optional[_IRole_235f5d8e] = None,
     version_number: typing.Optional[builtins.str] = None,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -14865,6 +15095,7 @@ def _typecheckingstub__61200a738f2584e5d86190492c99ded9cebb5cc41d230eec1c74f7130
     retrieval_role: typing.Optional[_IRole_235f5d8e] = None,
     version_number: typing.Optional[builtins.str] = None,
     application: IApplication,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -14994,8 +15225,15 @@ def _typecheckingstub__af782e66a589643c3273915140536d8c7931cca7f2adf6a0fc45e67b9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ff7730984215a53f88ccb3e1915941985bedc75f6b24a06eae12d583d8f4bca9(
+    value: typing.Optional[DeletionProtectionCheck],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__115deabe7a02ce295c431e7d9a99bcbe112bc017436380d80181c5db491187a1(
     *,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -15012,6 +15250,7 @@ def _typecheckingstub__115deabe7a02ce295c431e7d9a99bcbe112bc017436380d80181c5db4
 
 def _typecheckingstub__d41101d1b0f699a52d44a2b86fe3e9dcd0e6f1487f088908464eb49cb3e5e12c(
     *,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -15101,6 +15340,7 @@ def _typecheckingstub__7b18310538532e3e3e53af99bb5da0c248186673a38a5175633a0149c
     content: ConfigurationContent,
     latest_version_number: typing.Optional[jsii.Number] = None,
     version_label: typing.Optional[builtins.str] = None,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -15118,6 +15358,7 @@ def _typecheckingstub__8c0399b30aac3a09a4a5e9f3f33f358c90afa60099a7dd6cfc1f1b40f
     location: ConfigurationSource,
     retrieval_role: typing.Optional[_IRole_235f5d8e] = None,
     version_number: typing.Optional[builtins.str] = None,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -15602,6 +15843,7 @@ def _typecheckingstub__8e7eecc550d3d689f07534db869c7be67f00e08dcbf880bbb2656d019
     latest_version_number: typing.Optional[jsii.Number] = None,
     version_label: typing.Optional[builtins.str] = None,
     application: IApplication,
+    deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
     deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
@@ -15727,6 +15969,12 @@ def _typecheckingstub__a4058b9695ce055c514ee6b279cac6589d3ab9aa62414133fc4992ec6
 
 def _typecheckingstub__27c25acd80a9bdc9870365bad92556272569854dc957ad7cdf2b6e5a2c29c2ce(
     value: ExtensibleBase,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0a1e6913f9293558fa6d2222b6d11c3af6b25866b966dd6319551117306cf272(
+    value: typing.Optional[DeletionProtectionCheck],
 ) -> None:
     """Type checking stubs"""
     pass

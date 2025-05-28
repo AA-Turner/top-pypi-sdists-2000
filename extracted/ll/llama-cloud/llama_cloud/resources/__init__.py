@@ -52,6 +52,7 @@ from .pipelines import (
     PipelineUpdateEmbeddingConfig_OpenaiEmbedding,
     PipelineUpdateEmbeddingConfig_VertexaiEmbedding,
     PipelineUpdateTransformConfig,
+    RetrievalParamsSearchFiltersInferenceSchemaValue,
 )
 from .reports import UpdateReportPlanApiV1ReportsReportIdPlanPatchRequestAction
 
@@ -88,6 +89,7 @@ __all__ = [
     "PipelineUpdateEmbeddingConfig_OpenaiEmbedding",
     "PipelineUpdateEmbeddingConfig_VertexaiEmbedding",
     "PipelineUpdateTransformConfig",
+    "RetrievalParamsSearchFiltersInferenceSchemaValue",
     "UpdateReportPlanApiV1ReportsReportIdPlanPatchRequestAction",
     "admin",
     "beta",

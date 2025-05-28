@@ -169,7 +169,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/databasemanagement/get_heat_wave_fleet_metric.py.html>`__ to see an example of how to use get_heat_wave_fleet_metric API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/databasemanagement/get_heat_wave_fleet_metric.py.html>`__ to see an example of how to use get_heat_wave_fleet_metric API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'startTime', 'endTime']
@@ -277,7 +277,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/databasemanagement/get_managed_my_sql_database.py.html>`__ to see an example of how to use get_managed_my_sql_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/databasemanagement/get_managed_my_sql_database.py.html>`__ to see an example of how to use get_managed_my_sql_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedMySqlDatabaseId']
@@ -412,7 +412,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/databasemanagement/get_my_sql_fleet_metric.py.html>`__ to see an example of how to use get_my_sql_fleet_metric API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/databasemanagement/get_my_sql_fleet_metric.py.html>`__ to see an example of how to use get_my_sql_fleet_metric API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'startTime', 'endTime']
@@ -566,7 +566,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/databasemanagement/list_managed_my_sql_database_configuration_data.py.html>`__ to see an example of how to use list_managed_my_sql_database_configuration_data API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/databasemanagement/list_managed_my_sql_database_configuration_data.py.html>`__ to see an example of how to use list_managed_my_sql_database_configuration_data API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedMySqlDatabaseId']
@@ -736,7 +736,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/databasemanagement/list_managed_my_sql_database_sql_data.py.html>`__ to see an example of how to use list_managed_my_sql_database_sql_data API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/databasemanagement/list_managed_my_sql_database_sql_data.py.html>`__ to see an example of how to use list_managed_my_sql_database_sql_data API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedMySqlDatabaseId', 'startTime', 'endTime']
@@ -892,7 +892,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/databasemanagement/list_managed_my_sql_databases.py.html>`__ to see an example of how to use list_managed_my_sql_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/databasemanagement/list_managed_my_sql_databases.py.html>`__ to see an example of how to use list_managed_my_sql_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1029,7 +1029,7 @@ class ManagedMySqlDatabasesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/databasemanagement/summarize_managed_my_sql_database_availability_metrics.py.html>`__ to see an example of how to use summarize_managed_my_sql_database_availability_metrics API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/databasemanagement/summarize_managed_my_sql_database_availability_metrics.py.html>`__ to see an example of how to use summarize_managed_my_sql_database_availability_metrics API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedMySqlDatabaseId', 'startTime', 'endTime']

@@ -17,6 +17,8 @@ from pydantic import Field
 from albumentations.augmentations.dropout import functional as fdropout
 from albumentations.augmentations.dropout.functional import (
     cutout,
+    cutout_on_volume,
+    cutout_on_volumes,
     filter_bboxes_by_holes,
     filter_keypoints_in_holes,
 )
@@ -132,6 +134,40 @@ class BaseDropout(DualTransform):
             if num_channels not in {1, 3}:
                 raise ValueError("Inpainting works only for 1 or 3 channel images")
         return cutout(img, holes, self.fill, np.random.default_rng(seed))
+
+    def apply_to_images(self, images: np.ndarray, holes: np.ndarray, seed: int, **params: Any) -> np.ndarray:
+        if holes.size == 0:
+            return images
+        if self.fill in {"inpaint_telea", "inpaint_ns"}:
+            num_channels = images.shape[3] if images.ndim == 4 else 1
+            if num_channels not in {1, 3}:
+                raise ValueError("Inpainting works only for 1 or 3 channel images")
+        # Images (N, H, W, C) have the same structure as volumes (D, H, W, C)
+        return cutout_on_volume(images, holes, self.fill, np.random.default_rng(seed))
+
+    def apply_to_volume(self, volume: np.ndarray, holes: np.ndarray, seed: int, **params: Any) -> np.ndarray:
+        # Volume (D, H, W, C) has the same structure as images (N, H, W, C)
+        # We can reuse the same logic
+        return self.apply_to_images(volume, holes, seed, **params)
+
+    def apply_to_volumes(self, volumes: np.ndarray, holes: np.ndarray, seed: int, **params: Any) -> np.ndarray:
+        if holes.size == 0:
+            return volumes
+        if self.fill in {"inpaint_telea", "inpaint_ns"}:
+            num_channels = volumes.shape[4] if volumes.ndim == 5 else 1
+            if num_channels not in {1, 3}:
+                raise ValueError("Inpainting works only for 1 or 3 channel images")
+        return cutout_on_volumes(volumes, holes, self.fill, np.random.default_rng(seed))
+
+    def apply_to_mask3d(self, mask: np.ndarray, holes: np.ndarray, seed: int, **params: Any) -> np.ndarray:
+        if self.fill_mask is None or holes.size == 0:
+            return mask
+        return cutout_on_volume(mask, holes, self.fill_mask, np.random.default_rng(seed))
+
+    def apply_to_masks3d(self, mask: np.ndarray, holes: np.ndarray, seed: int, **params: Any) -> np.ndarray:
+        if self.fill_mask is None or holes.size == 0:
+            return mask
+        return cutout_on_volumes(mask, holes, self.fill_mask, np.random.default_rng(seed))
 
     def apply_to_mask(self, mask: np.ndarray, holes: np.ndarray, seed: int, **params: Any) -> np.ndarray:
         if self.fill_mask is None or holes.size == 0:

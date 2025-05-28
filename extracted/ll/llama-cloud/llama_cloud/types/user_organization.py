@@ -23,7 +23,7 @@ class UserOrganization(pydantic.BaseModel):
     id: str = pydantic.Field(description="Unique identifier")
     created_at: typing.Optional[dt.datetime]
     updated_at: typing.Optional[dt.datetime]
-    email: str = pydantic.Field(description="The user's email address.")
+    email: typing.Optional[str]
     user_id: typing.Optional[str]
     organization_id: str = pydantic.Field(description="The organization's ID.")
     pending: typing.Optional[bool] = pydantic.Field(

@@ -370,6 +370,7 @@ from .literals import (
     VpcStateType,
     VpnEcmpSupportValueType,
     VpnStateType,
+    VpnTunnelProvisioningStatusType,
     WeekDayType,
 )
 
@@ -413,6 +414,7 @@ __all__ = (
     "AccountAttributeTypeDef",
     "AccountAttributeValueTypeDef",
     "ActiveInstanceTypeDef",
+    "ActiveVpnTunnelStatusTypeDef",
     "AddIpamOperatingRegionTypeDef",
     "AddIpamOrganizationalUnitExclusionTypeDef",
     "AddPrefixListEntryTypeDef",
@@ -1786,6 +1788,8 @@ __all__ = (
     "FpgaImageStateTypeDef",
     "FpgaImageTypeDef",
     "FpgaInfoTypeDef",
+    "GetActiveVpnTunnelStatusRequestTypeDef",
+    "GetActiveVpnTunnelStatusResultTypeDef",
     "GetAllowedImagesSettingsRequestTypeDef",
     "GetAllowedImagesSettingsResultTypeDef",
     "GetAssociatedEnclaveCertificateIamRolesRequestTypeDef",
@@ -2963,6 +2967,18 @@ class ActiveInstanceTypeDef(TypedDict):
     InstanceType: NotRequired[str]
     SpotInstanceRequestId: NotRequired[str]
     InstanceHealth: NotRequired[InstanceHealthStatusType]
+
+
+class ActiveVpnTunnelStatusTypeDef(TypedDict):
+    Phase1EncryptionAlgorithm: NotRequired[str]
+    Phase2EncryptionAlgorithm: NotRequired[str]
+    Phase1IntegrityAlgorithm: NotRequired[str]
+    Phase2IntegrityAlgorithm: NotRequired[str]
+    Phase1DHGroup: NotRequired[int]
+    Phase2DHGroup: NotRequired[int]
+    IkeVersion: NotRequired[str]
+    ProvisioningStatus: NotRequired[VpnTunnelProvisioningStatusType]
+    ProvisioningStatusReason: NotRequired[str]
 
 
 AddIpamOperatingRegionTypeDef = TypedDict(
@@ -6057,6 +6073,12 @@ class PciIdTypeDef(TypedDict):
     SubsystemVendorId: NotRequired[str]
 
 
+class GetActiveVpnTunnelStatusRequestTypeDef(TypedDict):
+    VpnConnectionId: str
+    VpnTunnelOutsideIpAddress: str
+    DryRun: NotRequired[bool]
+
+
 class GetAllowedImagesSettingsRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
@@ -6333,6 +6355,7 @@ class GetVpnConnectionDeviceSampleConfigurationRequestTypeDef(TypedDict):
     VpnConnectionId: str
     VpnConnectionDeviceTypeId: str
     InternetKeyExchangeVersion: NotRequired[str]
+    SampleType: NotRequired[str]
     DryRun: NotRequired[bool]
 
 
@@ -9302,6 +9325,11 @@ class DescribeSpotFleetInstancesResponseTypeDef(TypedDict):
     SpotFleetRequestId: str
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
+
+
+class GetActiveVpnTunnelStatusResultTypeDef(TypedDict):
+    ActiveVpnTunnelStatus: ActiveVpnTunnelStatusTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
 
 
 class ModifyVpcEndpointServicePermissionsResultTypeDef(TypedDict):
@@ -19705,6 +19733,7 @@ class ModifyVpnTunnelOptionsRequestTypeDef(TypedDict):
     TunnelOptions: ModifyVpnTunnelOptionsSpecificationTypeDef
     DryRun: NotRequired[bool]
     SkipTunnelReplacement: NotRequired[bool]
+    PreSharedKeyStorage: NotRequired[str]
 
 
 class VpnConnectionOptionsSpecificationTypeDef(TypedDict):
@@ -20309,6 +20338,7 @@ CreateVpnConnectionRequestTypeDef = TypedDict(
         "VpnGatewayId": NotRequired[str],
         "TransitGatewayId": NotRequired[str],
         "TagSpecifications": NotRequired[Sequence[TagSpecificationUnionTypeDef]],
+        "PreSharedKeyStorage": NotRequired[str],
         "DryRun": NotRequired[bool],
         "Options": NotRequired[VpnConnectionOptionsSpecificationTypeDef],
     },
@@ -20325,6 +20355,7 @@ VpnConnectionTypeDef = TypedDict(
         "Routes": NotRequired[List[VpnStaticRouteTypeDef]],
         "Tags": NotRequired[List[TagTypeDef]],
         "VgwTelemetry": NotRequired[List[VgwTelemetryTypeDef]],
+        "PreSharedKeyArn": NotRequired[str],
         "VpnConnectionId": NotRequired[str],
         "State": NotRequired[VpnStateType],
         "CustomerGatewayConfiguration": NotRequired[str],

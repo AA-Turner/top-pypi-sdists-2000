@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: libcst
-Version: 1.7.0
+Version: 1.8.0
 Summary: A concrete syntax tree with AST-like properties for Python 3.0 through 3.13 programs.
 License: All contributions towards LibCST are MIT licensed.
         
@@ -119,30 +119,9 @@ Classifier: Typing :: Typed
 Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: LICENSE
-Requires-Dist: pyyaml>=5.2
-Provides-Extra: dev
-Requires-Dist: libcst[dev-without-jupyter]; extra == "dev"
-Requires-Dist: jupyter>=1.0.0; extra == "dev"
-Requires-Dist: nbsphinx>=0.4.2; extra == "dev"
-Provides-Extra: dev-without-jupyter
-Requires-Dist: black==24.8.0; extra == "dev-without-jupyter"
-Requires-Dist: coverage[toml]>=4.5.4; extra == "dev-without-jupyter"
-Requires-Dist: build>=0.10.0; extra == "dev-without-jupyter"
-Requires-Dist: fixit==2.1.0; extra == "dev-without-jupyter"
-Requires-Dist: flake8==7.1.2; extra == "dev-without-jupyter"
-Requires-Dist: Sphinx>=5.1.1; extra == "dev-without-jupyter"
-Requires-Dist: hypothesis>=4.36.0; extra == "dev-without-jupyter"
-Requires-Dist: hypothesmith>=0.0.4; extra == "dev-without-jupyter"
-Requires-Dist: maturin<1.8,>=1.7.0; extra == "dev-without-jupyter"
-Requires-Dist: prompt-toolkit>=2.0.9; extra == "dev-without-jupyter"
-Requires-Dist: pyre-check==0.9.18; platform_system != "Windows" and extra == "dev-without-jupyter"
-Requires-Dist: setuptools_scm>=6.0.1; extra == "dev-without-jupyter"
-Requires-Dist: sphinx-rtd-theme>=0.4.3; extra == "dev-without-jupyter"
-Requires-Dist: ufmt==2.8.0; extra == "dev-without-jupyter"
-Requires-Dist: usort==1.0.8.post1; extra == "dev-without-jupyter"
-Requires-Dist: setuptools-rust>=1.5.2; extra == "dev-without-jupyter"
-Requires-Dist: slotscheck>=0.7.1; extra == "dev-without-jupyter"
-Requires-Dist: jinja2==3.1.5; extra == "dev-without-jupyter"
+Requires-Dist: pyyaml>=5.2; python_version < "3.13"
+Requires-Dist: pyyaml-ft; python_version >= "3.13"
+Dynamic: license-file
 
 .. image:: docs/source/_static/logo/horizontal.svg
    :width: 600 px

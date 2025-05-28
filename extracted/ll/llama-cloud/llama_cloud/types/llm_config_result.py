@@ -17,7 +17,6 @@ except ImportError:
 
 class LlmConfigResult(pydantic.BaseModel):
     llm_type: LlmConfigResultLlmType
-    is_enabled: bool
     valid: bool
     error_message: typing.Optional[str]
 

@@ -29,6 +29,7 @@ See [RULES](./RULES.md) for more information on all the available packs.
 3. [NIST 800-53 rev 4](./RULES.md#nist-800-53-rev-4)
 4. [NIST 800-53 rev 5](./RULES.md#nist-800-53-rev-5)
 5. [PCI DSS 3.2.1](./RULES.md#pci-dss-321)
+6. [Serverless](./RULES.md#serverless)
 
 [RULES](./RULES.md) also includes a collection of [additional rules](./RULES.md#additional-rules) that are not currently included in any of the pre-built NagPacks, but are still available for inclusion in custom NagPacks.
 
@@ -3307,6 +3308,54 @@ class RegexAppliesTo:
         )
 
 
+class ServerlessChecks(
+    NagPack,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="cdk-nag.ServerlessChecks",
+):
+    '''Serverless Checks are a compilation of rules to validate infrastructure-as-code template against recommended practices.'''
+
+    def __init__(
+        self,
+        *,
+        additional_loggers: typing.Optional[typing.Sequence[INagLogger]] = None,
+        log_ignores: typing.Optional[builtins.bool] = None,
+        report_formats: typing.Optional[typing.Sequence[NagReportFormat]] = None,
+        reports: typing.Optional[builtins.bool] = None,
+        suppression_ignore_condition: typing.Optional[INagSuppressionIgnore] = None,
+        verbose: typing.Optional[builtins.bool] = None,
+    ) -> None:
+        '''
+        :param additional_loggers: Additional NagLoggers for logging rule validation outputs.
+        :param log_ignores: Whether or not to log suppressed rule violations as informational messages (default: false).
+        :param report_formats: If reports are enabled, the output formats of compliance reports in the App's output directory (default: only CSV).
+        :param reports: Whether or not to generate compliance reports for applied Stacks in the App's output directory (default: true).
+        :param suppression_ignore_condition: Conditionally prevent rules from being suppressed (default: no user provided condition).
+        :param verbose: Whether or not to enable extended explanatory descriptions on warning, error, and logged ignore messages (default: false).
+        '''
+        props = NagPackProps(
+            additional_loggers=additional_loggers,
+            log_ignores=log_ignores,
+            report_formats=report_formats,
+            reports=reports,
+            suppression_ignore_condition=suppression_ignore_condition,
+            verbose=verbose,
+        )
+
+        jsii.create(self.__class__, self, [props])
+
+    @jsii.member(jsii_name="visit")
+    def visit(self, node: _constructs_77d1e7e8.IConstruct) -> None:
+        '''All aspects can visit an IConstruct.
+
+        :param node: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__45822d91dde0925f0c42dd49aa5abb9d5fd6391e1a4d49074f95718261fd8ff8)
+            check_type(argname="argument node", value=node, expected_type=type_hints["node"])
+        return typing.cast(None, jsii.invoke(self, "visit", [node]))
+
+
 @jsii.implements(INagSuppressionIgnore)
 class SuppressionIgnoreAlways(
     metaclass=jsii.JSIIMeta,
@@ -4122,6 +4171,7 @@ __all__ = [
     "NagSuppressions",
     "PCIDSS321Checks",
     "RegexAppliesTo",
+    "ServerlessChecks",
     "SuppressionIgnoreAlways",
     "SuppressionIgnoreAnd",
     "SuppressionIgnoreErrors",
@@ -4442,6 +4492,12 @@ def _typecheckingstub__813d53d45e9db3648743d0e260e058579163527ffb805ee4e75114084
 def _typecheckingstub__b8453471acfa85ba5ddf5a90e23aaf4fd9026a9d972c7f9445fcd249f7a656da(
     *,
     regex: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__45822d91dde0925f0c42dd49aa5abb9d5fd6391e1a4d49074f95718261fd8ff8(
+    node: _constructs_77d1e7e8.IConstruct,
 ) -> None:
     """Type checking stubs"""
     pass

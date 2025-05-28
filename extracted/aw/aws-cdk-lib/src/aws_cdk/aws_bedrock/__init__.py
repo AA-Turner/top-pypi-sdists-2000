@@ -12114,6 +12114,10 @@ class CfnFlow(
                                 expression="expression"
                             )]
                         ),
+                        inline_code=bedrock.CfnFlow.InlineCodeFlowNodeConfigurationProperty(
+                            code="code",
+                            language="language"
+                        ),
                         input=input,
                         iterator=iterator,
                         knowledge_base=bedrock.CfnFlow.KnowledgeBaseFlowNodeConfigurationProperty(
@@ -13133,6 +13137,10 @@ class CfnFlow(
                                     expression="expression"
                                 )]
                             ),
+                            inline_code=bedrock.CfnFlow.InlineCodeFlowNodeConfigurationProperty(
+                                code="code",
+                                language="language"
+                            ),
                             input=input,
                             iterator=iterator,
                             knowledge_base=bedrock.CfnFlow.KnowledgeBaseFlowNodeConfigurationProperty(
@@ -13267,6 +13275,7 @@ class CfnFlow(
             "agent": "agent",
             "collector": "collector",
             "condition": "condition",
+            "inline_code": "inlineCode",
             "input": "input",
             "iterator": "iterator",
             "knowledge_base": "knowledgeBase",
@@ -13285,6 +13294,7 @@ class CfnFlow(
             agent: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlow.AgentFlowNodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             collector: typing.Any = None,
             condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlow.ConditionFlowNodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            inline_code: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlow.InlineCodeFlowNodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             input: typing.Any = None,
             iterator: typing.Any = None,
             knowledge_base: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlow.KnowledgeBaseFlowNodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -13302,6 +13312,7 @@ class CfnFlow(
             :param agent: Contains configurations for an agent node in your flow. Invokes an alias of an agent and returns the response.
             :param collector: Contains configurations for a collector node in your flow. Collects an iteration of inputs and consolidates them into an array of outputs.
             :param condition: Contains configurations for a condition node in your flow. Defines conditions that lead to different branches of the flow.
+            :param inline_code: Inline code config strucuture, contains code configs.
             :param input: Contains configurations for an input flow node in your flow. The first node in the flow. ``inputs`` can't be specified for this node.
             :param iterator: Contains configurations for an iterator node in your flow. Takes an input that is an array and iteratively sends each item of the array as an output to the following node. The size of the array is also returned in the output. The output flow node at the end of the flow iteration will return a response for each member of the array. To return only one response, you can include a collector node downstream from the iterator node.
             :param knowledge_base: Contains configurations for a knowledge base node in your flow. Queries a knowledge base and returns the retrieved results or generated response.
@@ -13338,6 +13349,10 @@ class CfnFlow(
                             # the properties below are optional
                             expression="expression"
                         )]
+                    ),
+                    inline_code=bedrock.CfnFlow.InlineCodeFlowNodeConfigurationProperty(
+                        code="code",
+                        language="language"
                     ),
                     input=input,
                     iterator=iterator,
@@ -13417,6 +13432,7 @@ class CfnFlow(
                 check_type(argname="argument agent", value=agent, expected_type=type_hints["agent"])
                 check_type(argname="argument collector", value=collector, expected_type=type_hints["collector"])
                 check_type(argname="argument condition", value=condition, expected_type=type_hints["condition"])
+                check_type(argname="argument inline_code", value=inline_code, expected_type=type_hints["inline_code"])
                 check_type(argname="argument input", value=input, expected_type=type_hints["input"])
                 check_type(argname="argument iterator", value=iterator, expected_type=type_hints["iterator"])
                 check_type(argname="argument knowledge_base", value=knowledge_base, expected_type=type_hints["knowledge_base"])
@@ -13433,6 +13449,8 @@ class CfnFlow(
                 self._values["collector"] = collector
             if condition is not None:
                 self._values["condition"] = condition
+            if inline_code is not None:
+                self._values["inline_code"] = inline_code
             if input is not None:
                 self._values["input"] = input
             if iterator is not None:
@@ -13488,6 +13506,17 @@ class CfnFlow(
             '''
             result = self._values.get("condition")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlow.ConditionFlowNodeConfigurationProperty"]], result)
+
+        @builtins.property
+        def inline_code(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlow.InlineCodeFlowNodeConfigurationProperty"]]:
+            '''Inline code config strucuture, contains code configs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-flownodeconfiguration.html#cfn-bedrock-flow-flownodeconfiguration-inlinecode
+            '''
+            result = self._values.get("inline_code")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlow.InlineCodeFlowNodeConfigurationProperty"]], result)
 
         @builtins.property
         def input(self) -> typing.Any:
@@ -13832,6 +13861,10 @@ class CfnFlow(
                                 expression="expression"
                             )]
                         ),
+                        inline_code=bedrock.CfnFlow.InlineCodeFlowNodeConfigurationProperty(
+                            code="code",
+                            language="language"
+                        ),
                         input=input,
                         iterator=iterator,
                         knowledge_base=bedrock.CfnFlow.KnowledgeBaseFlowNodeConfigurationProperty(
@@ -14126,6 +14159,74 @@ class CfnFlow(
 
         def __repr__(self) -> str:
             return "GuardrailConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnFlow.InlineCodeFlowNodeConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"code": "code", "language": "language"},
+    )
+    class InlineCodeFlowNodeConfigurationProperty:
+        def __init__(self, *, code: builtins.str, language: builtins.str) -> None:
+            '''Inline code config strucuture, contains code configs.
+
+            :param code: The inline code entered by customers. max size is 5MB.
+            :param language: Enum encodes the supported language type.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-inlinecodeflownodeconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                inline_code_flow_node_configuration_property = bedrock.CfnFlow.InlineCodeFlowNodeConfigurationProperty(
+                    code="code",
+                    language="language"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c79951af89e6cdc5aa2c9078976ad1291e6f2aafa2ae383e4a0b36da718d38dc)
+                check_type(argname="argument code", value=code, expected_type=type_hints["code"])
+                check_type(argname="argument language", value=language, expected_type=type_hints["language"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "code": code,
+                "language": language,
+            }
+
+        @builtins.property
+        def code(self) -> builtins.str:
+            '''The inline code entered by customers.
+
+            max size is 5MB.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-inlinecodeflownodeconfiguration.html#cfn-bedrock-flow-inlinecodeflownodeconfiguration-code
+            '''
+            result = self._values.get("code")
+            assert result is not None, "Required property 'code' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def language(self) -> builtins.str:
+            '''Enum encodes the supported language type.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-inlinecodeflownodeconfiguration.html#cfn-bedrock-flow-inlinecodeflownodeconfiguration-language
+            '''
+            result = self._values.get("language")
+            assert result is not None, "Required property 'language' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InlineCodeFlowNodeConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -15583,6 +15684,12 @@ class CfnFlowAlias(
             )],
         
             # the properties below are optional
+            concurrency_configuration=bedrock.CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty(
+                type="type",
+        
+                # the properties below are optional
+                max_concurrency=123
+            ),
             description="description",
             tags={
                 "tags_key": "tags"
@@ -15598,6 +15705,7 @@ class CfnFlowAlias(
         flow_arn: builtins.str,
         name: builtins.str,
         routing_configuration: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlowAlias.FlowAliasRoutingConfigurationListItemProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        concurrency_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -15607,6 +15715,7 @@ class CfnFlowAlias(
         :param flow_arn: The Amazon Resource Name (ARN) of the alias.
         :param name: The name of the alias.
         :param routing_configuration: A list of configurations about the versions that the alias maps to. Currently, you can only specify one.
+        :param concurrency_configuration: 
         :param description: A description of the alias.
         :param tags: Metadata that you can assign to a resource as key-value pairs. For more information, see the following resources:. - `Tag naming limits and requirements <https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html#tag-conventions>`_ - `Tagging best practices <https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html#tag-best-practices>`_
         '''
@@ -15618,6 +15727,7 @@ class CfnFlowAlias(
             flow_arn=flow_arn,
             name=name,
             routing_configuration=routing_configuration,
+            concurrency_configuration=concurrency_configuration,
             description=description,
             tags=tags,
         )
@@ -15755,6 +15865,23 @@ class CfnFlowAlias(
         jsii.set(self, "routingConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="concurrencyConfiguration")
+    def concurrency_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty"]], jsii.get(self, "concurrencyConfiguration"))
+
+    @concurrency_configuration.setter
+    def concurrency_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1393cd9413cb4ef94a25c11eb3585c147e33097b8e29294d9317dbd1d69de9ec)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "concurrencyConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
         '''A description of the alias.'''
@@ -15785,6 +15912,77 @@ class CfnFlowAlias(
             type_hints = typing.get_type_hints(_typecheckingstub__3c3491b1fef915af541cbc09b268c90d18ce0d02ff0917da6521a009344a4af3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"type": "type", "max_concurrency": "maxConcurrency"},
+    )
+    class FlowAliasConcurrencyConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            type: builtins.str,
+            max_concurrency: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param type: 
+            :param max_concurrency: Number of nodes executed concurrently at a time.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowalias-flowaliasconcurrencyconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                flow_alias_concurrency_configuration_property = bedrock.CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty(
+                    type="type",
+                
+                    # the properties below are optional
+                    max_concurrency=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__072543ea393d94d65d2abab118549d637d93da4acfb3a4809b6955e92f927347)
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+                check_type(argname="argument max_concurrency", value=max_concurrency, expected_type=type_hints["max_concurrency"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "type": type,
+            }
+            if max_concurrency is not None:
+                self._values["max_concurrency"] = max_concurrency
+
+        @builtins.property
+        def type(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowalias-flowaliasconcurrencyconfiguration.html#cfn-bedrock-flowalias-flowaliasconcurrencyconfiguration-type
+            '''
+            result = self._values.get("type")
+            assert result is not None, "Required property 'type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def max_concurrency(self) -> typing.Optional[jsii.Number]:
+            '''Number of nodes executed concurrently at a time.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowalias-flowaliasconcurrencyconfiguration.html#cfn-bedrock-flowalias-flowaliasconcurrencyconfiguration-maxconcurrency
+            '''
+            result = self._values.get("max_concurrency")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FlowAliasConcurrencyConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrock.CfnFlowAlias.FlowAliasRoutingConfigurationListItemProperty",
@@ -15849,6 +16047,7 @@ class CfnFlowAlias(
         "flow_arn": "flowArn",
         "name": "name",
         "routing_configuration": "routingConfiguration",
+        "concurrency_configuration": "concurrencyConfiguration",
         "description": "description",
         "tags": "tags",
     },
@@ -15860,6 +16059,7 @@ class CfnFlowAliasProps:
         flow_arn: builtins.str,
         name: builtins.str,
         routing_configuration: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowAlias.FlowAliasRoutingConfigurationListItemProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        concurrency_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -15868,6 +16068,7 @@ class CfnFlowAliasProps:
         :param flow_arn: The Amazon Resource Name (ARN) of the alias.
         :param name: The name of the alias.
         :param routing_configuration: A list of configurations about the versions that the alias maps to. Currently, you can only specify one.
+        :param concurrency_configuration: 
         :param description: A description of the alias.
         :param tags: Metadata that you can assign to a resource as key-value pairs. For more information, see the following resources:. - `Tag naming limits and requirements <https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html#tag-conventions>`_ - `Tagging best practices <https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html#tag-best-practices>`_
 
@@ -15888,6 +16089,12 @@ class CfnFlowAliasProps:
                 )],
             
                 # the properties below are optional
+                concurrency_configuration=bedrock.CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty(
+                    type="type",
+            
+                    # the properties below are optional
+                    max_concurrency=123
+                ),
                 description="description",
                 tags={
                     "tags_key": "tags"
@@ -15899,6 +16106,7 @@ class CfnFlowAliasProps:
             check_type(argname="argument flow_arn", value=flow_arn, expected_type=type_hints["flow_arn"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument routing_configuration", value=routing_configuration, expected_type=type_hints["routing_configuration"])
+            check_type(argname="argument concurrency_configuration", value=concurrency_configuration, expected_type=type_hints["concurrency_configuration"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -15906,6 +16114,8 @@ class CfnFlowAliasProps:
             "name": name,
             "routing_configuration": routing_configuration,
         }
+        if concurrency_configuration is not None:
+            self._values["concurrency_configuration"] = concurrency_configuration
         if description is not None:
             self._values["description"] = description
         if tags is not None:
@@ -15944,6 +16154,16 @@ class CfnFlowAliasProps:
         result = self._values.get("routing_configuration")
         assert result is not None, "Required property 'routing_configuration' is missing"
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFlowAlias.FlowAliasRoutingConfigurationListItemProperty]]], result)
+
+    @builtins.property
+    def concurrency_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-flowalias.html#cfn-bedrock-flowalias-concurrencyconfiguration
+        '''
+        result = self._values.get("concurrency_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -16077,6 +16297,10 @@ class CfnFlowProps:
                                     # the properties below are optional
                                     expression="expression"
                                 )]
+                            ),
+                            inline_code=bedrock.CfnFlow.InlineCodeFlowNodeConfigurationProperty(
+                                code="code",
+                                language="language"
                             ),
                             input=input,
                             iterator=iterator,
@@ -17123,6 +17347,10 @@ class CfnFlowVersion(
                                     expression="expression"
                                 )]
                             ),
+                            inline_code=bedrock.CfnFlowVersion.InlineCodeFlowNodeConfigurationProperty(
+                                code="code",
+                                language="language"
+                            ),
                             input=input,
                             iterator=iterator,
                             knowledge_base=bedrock.CfnFlowVersion.KnowledgeBaseFlowNodeConfigurationProperty(
@@ -17257,6 +17485,7 @@ class CfnFlowVersion(
             "agent": "agent",
             "collector": "collector",
             "condition": "condition",
+            "inline_code": "inlineCode",
             "input": "input",
             "iterator": "iterator",
             "knowledge_base": "knowledgeBase",
@@ -17275,6 +17504,7 @@ class CfnFlowVersion(
             agent: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlowVersion.AgentFlowNodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             collector: typing.Any = None,
             condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlowVersion.ConditionFlowNodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            inline_code: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlowVersion.InlineCodeFlowNodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             input: typing.Any = None,
             iterator: typing.Any = None,
             knowledge_base: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlowVersion.KnowledgeBaseFlowNodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -17292,6 +17522,7 @@ class CfnFlowVersion(
             :param agent: Contains configurations for an agent node in your flow. Invokes an alias of an agent and returns the response.
             :param collector: Contains configurations for a collector node in your flow. Collects an iteration of inputs and consolidates them into an array of outputs.
             :param condition: Contains configurations for a condition node in your flow. Defines conditions that lead to different branches of the flow.
+            :param inline_code: Inline code config strucuture, contains code configs.
             :param input: Contains configurations for an input flow node in your flow. The first node in the flow. ``inputs`` can't be specified for this node.
             :param iterator: Contains configurations for an iterator node in your flow. Takes an input that is an array and iteratively sends each item of the array as an output to the following node. The size of the array is also returned in the output. The output flow node at the end of the flow iteration will return a response for each member of the array. To return only one response, you can include a collector node downstream from the iterator node.
             :param knowledge_base: Contains configurations for a knowledge base node in your flow. Queries a knowledge base and returns the retrieved results or generated response.
@@ -17328,6 +17559,10 @@ class CfnFlowVersion(
                             # the properties below are optional
                             expression="expression"
                         )]
+                    ),
+                    inline_code=bedrock.CfnFlowVersion.InlineCodeFlowNodeConfigurationProperty(
+                        code="code",
+                        language="language"
                     ),
                     input=input,
                     iterator=iterator,
@@ -17407,6 +17642,7 @@ class CfnFlowVersion(
                 check_type(argname="argument agent", value=agent, expected_type=type_hints["agent"])
                 check_type(argname="argument collector", value=collector, expected_type=type_hints["collector"])
                 check_type(argname="argument condition", value=condition, expected_type=type_hints["condition"])
+                check_type(argname="argument inline_code", value=inline_code, expected_type=type_hints["inline_code"])
                 check_type(argname="argument input", value=input, expected_type=type_hints["input"])
                 check_type(argname="argument iterator", value=iterator, expected_type=type_hints["iterator"])
                 check_type(argname="argument knowledge_base", value=knowledge_base, expected_type=type_hints["knowledge_base"])
@@ -17423,6 +17659,8 @@ class CfnFlowVersion(
                 self._values["collector"] = collector
             if condition is not None:
                 self._values["condition"] = condition
+            if inline_code is not None:
+                self._values["inline_code"] = inline_code
             if input is not None:
                 self._values["input"] = input
             if iterator is not None:
@@ -17478,6 +17716,17 @@ class CfnFlowVersion(
             '''
             result = self._values.get("condition")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowVersion.ConditionFlowNodeConfigurationProperty"]], result)
+
+        @builtins.property
+        def inline_code(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowVersion.InlineCodeFlowNodeConfigurationProperty"]]:
+            '''Inline code config strucuture, contains code configs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-flownodeconfiguration.html#cfn-bedrock-flowversion-flownodeconfiguration-inlinecode
+            '''
+            result = self._values.get("inline_code")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowVersion.InlineCodeFlowNodeConfigurationProperty"]], result)
 
         @builtins.property
         def input(self) -> typing.Any:
@@ -17822,6 +18071,10 @@ class CfnFlowVersion(
                                 expression="expression"
                             )]
                         ),
+                        inline_code=bedrock.CfnFlowVersion.InlineCodeFlowNodeConfigurationProperty(
+                            code="code",
+                            language="language"
+                        ),
                         input=input,
                         iterator=iterator,
                         knowledge_base=bedrock.CfnFlowVersion.KnowledgeBaseFlowNodeConfigurationProperty(
@@ -18059,6 +18312,74 @@ class CfnFlowVersion(
 
         def __repr__(self) -> str:
             return "GuardrailConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnFlowVersion.InlineCodeFlowNodeConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"code": "code", "language": "language"},
+    )
+    class InlineCodeFlowNodeConfigurationProperty:
+        def __init__(self, *, code: builtins.str, language: builtins.str) -> None:
+            '''Inline code config strucuture, contains code configs.
+
+            :param code: The inline code entered by customers. max size is 5MB.
+            :param language: Enum encodes the supported language type.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-inlinecodeflownodeconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                inline_code_flow_node_configuration_property = bedrock.CfnFlowVersion.InlineCodeFlowNodeConfigurationProperty(
+                    code="code",
+                    language="language"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__665b1cf8ac6e3e764740251ba84f8a57d85b3c5dfee678f5893055f9ac09f98b)
+                check_type(argname="argument code", value=code, expected_type=type_hints["code"])
+                check_type(argname="argument language", value=language, expected_type=type_hints["language"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "code": code,
+                "language": language,
+            }
+
+        @builtins.property
+        def code(self) -> builtins.str:
+            '''The inline code entered by customers.
+
+            max size is 5MB.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-inlinecodeflownodeconfiguration.html#cfn-bedrock-flowversion-inlinecodeflownodeconfiguration-code
+            '''
+            result = self._values.get("code")
+            assert result is not None, "Required property 'code' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def language(self) -> builtins.str:
+            '''Enum encodes the supported language type.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-inlinecodeflownodeconfiguration.html#cfn-bedrock-flowversion-inlinecodeflownodeconfiguration-language
+            '''
+            result = self._values.get("language")
+            assert result is not None, "Required property 'language' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InlineCodeFlowNodeConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -31697,8 +32018,16 @@ class FoundationModelIdentifier(
         
         task = tasks.BedrockInvokeModel(self, "Prompt Model",
             model=model,
-            input=tasks.BedrockInvokeModelInputProps(s3_input_uri=sfn.JsonPath.string_at("$.prompt")),
-            output=tasks.BedrockInvokeModelOutputProps(s3_output_uri=sfn.JsonPath.string_at("$.prompt"))
+            body=sfn.TaskInput.from_object({
+                "input_text": "Generate a list of five first names.",
+                "text_generation_config": {
+                    "max_token_count": 100,
+                    "temperature": 1
+                }
+            }),
+            result_selector={
+                "names": sfn.JsonPath.string_at("$.Body.results[0].outputText")
+            }
         )
     '''
 
@@ -32140,6 +32469,18 @@ class FoundationModelIdentifier(
         :stability: deprecated
         '''
         return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "ANTHROPIC_CLAUDE_INSTANT_V1_2_100K"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="ANTHROPIC_CLAUDE_OPUS_4_20250514_V1_0")
+    def ANTHROPIC_CLAUDE_OPUS_4_20250514_V1_0(cls) -> "FoundationModelIdentifier":
+        '''Base model "anthropic.claude-opus-4-20250514-v1:0".'''
+        return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "ANTHROPIC_CLAUDE_OPUS_4_20250514_V1_0"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="ANTHROPIC_CLAUDE_SONNET_4_20250514_V1_0")
+    def ANTHROPIC_CLAUDE_SONNET_4_20250514_V1_0(cls) -> "FoundationModelIdentifier":
+        '''Base model "anthropic.claude-sonnet-4-20250514-v1:0".'''
+        return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "ANTHROPIC_CLAUDE_SONNET_4_20250514_V1_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ANTHROPIC_CLAUDE_V1")
@@ -32711,8 +33052,16 @@ class FoundationModel(
         
         task = tasks.BedrockInvokeModel(self, "Prompt Model",
             model=model,
-            input=tasks.BedrockInvokeModelInputProps(s3_input_uri=sfn.JsonPath.string_at("$.prompt")),
-            output=tasks.BedrockInvokeModelOutputProps(s3_output_uri=sfn.JsonPath.string_at("$.prompt"))
+            body=sfn.TaskInput.from_object({
+                "input_text": "Generate a list of five first names.",
+                "text_generation_config": {
+                    "max_token_count": 100,
+                    "temperature": 1
+                }
+            }),
+            result_selector={
+                "names": sfn.JsonPath.string_at("$.Body.results[0].outputText")
+            }
         )
     '''
 
@@ -34291,6 +34640,7 @@ def _typecheckingstub__425c904db23b9629fe6a830be94d214d112c1a6206b762478fd9e04b5
     agent: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.AgentFlowNodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     collector: typing.Any = None,
     condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.ConditionFlowNodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    inline_code: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.InlineCodeFlowNodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     input: typing.Any = None,
     iterator: typing.Any = None,
     knowledge_base: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.KnowledgeBaseFlowNodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -34343,6 +34693,14 @@ def _typecheckingstub__7a58b1756431d0127fbde4a9b98f71b8bd861fde50f58d8b27f662148
     *,
     guardrail_identifier: typing.Optional[builtins.str] = None,
     guardrail_version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c79951af89e6cdc5aa2c9078976ad1291e6f2aafa2ae383e4a0b36da718d38dc(
+    *,
+    code: builtins.str,
+    language: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34501,6 +34859,7 @@ def _typecheckingstub__8b7067d1caa5036e605a7c1234a4af2231017746b6c462a8b7014db38
     flow_arn: builtins.str,
     name: builtins.str,
     routing_configuration: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowAlias.FlowAliasRoutingConfigurationListItemProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    concurrency_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
@@ -34537,6 +34896,12 @@ def _typecheckingstub__25332829430f5e80beb4046dfc1518084a8e57996d1c7754f19340851
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1393cd9413cb4ef94a25c11eb3585c147e33097b8e29294d9317dbd1d69de9ec(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9669636b705c78a8d145d7a1d469c787fd21070582cc73345805622ba2f9ecc0(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -34545,6 +34910,14 @@ def _typecheckingstub__9669636b705c78a8d145d7a1d469c787fd21070582cc73345805622ba
 
 def _typecheckingstub__3c3491b1fef915af541cbc09b268c90d18ce0d02ff0917da6521a009344a4af3(
     value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__072543ea393d94d65d2abab118549d637d93da4acfb3a4809b6955e92f927347(
+    *,
+    type: builtins.str,
+    max_concurrency: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34561,6 +34934,7 @@ def _typecheckingstub__dc38c23ad67fcb375dfaff403a32bd6897c077928003bee3845f452f8
     flow_arn: builtins.str,
     name: builtins.str,
     routing_configuration: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowAlias.FlowAliasRoutingConfigurationListItemProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    concurrency_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
@@ -34686,6 +35060,7 @@ def _typecheckingstub__f9cd0cd05b1dd568a6031e23179baa28ec1045e1a40b1eda1f4240278
     agent: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowVersion.AgentFlowNodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     collector: typing.Any = None,
     condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowVersion.ConditionFlowNodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    inline_code: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowVersion.InlineCodeFlowNodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     input: typing.Any = None,
     iterator: typing.Any = None,
     knowledge_base: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowVersion.KnowledgeBaseFlowNodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -34731,6 +35106,14 @@ def _typecheckingstub__e730caca77d30abef7bb7cb2c01702883c895d80378652c3f9f4bd886
     *,
     guardrail_identifier: typing.Optional[builtins.str] = None,
     guardrail_version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__665b1cf8ac6e3e764740251ba84f8a57d85b3c5dfee678f5893055f9ac09f98b(
+    *,
+    code: builtins.str,
+    language: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

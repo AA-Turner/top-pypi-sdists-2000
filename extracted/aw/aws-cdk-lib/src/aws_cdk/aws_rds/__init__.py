@@ -21423,7 +21423,7 @@ class DatabaseClusterFromSnapshotProps:
         :param snapshot_credentials: Master user credentials. Note - It is not possible to change the master username for a snapshot; however, it is possible to provide (or generate) a new password. Default: - The existing username and password from the snapshot will be used.
         :param storage_encrypted: Whether to enable storage encryption. Default: - true if storageEncryptionKey is provided, false otherwise
         :param storage_encryption_key: The KMS key for storage encryption. If specified, ``storageEncrypted`` will be set to ``true``. Default: - if storageEncrypted is true then the default master key, no key otherwise
-        :param storage_type: The storage type to be associated with the DB cluster. Default: - DBClusterStorageType.AURORA_IOPT1
+        :param storage_type: The storage type to be associated with the DB cluster. Default: - DBClusterStorageType.AURORA
         :param subnet_group: Existing subnet group for the cluster. Default: - a new subnet group will be created.
         :param vpc: What subnets to run the RDS instances in. Must be at least 2 subnets in two different AZs.
         :param vpc_subnets: Where to place the instances within the VPC. Default: - the Vpc default strategy if not specified.
@@ -22198,7 +22198,7 @@ class DatabaseClusterFromSnapshotProps:
     def storage_type(self) -> typing.Optional[DBClusterStorageType]:
         '''The storage type to be associated with the DB cluster.
 
-        :default: - DBClusterStorageType.AURORA_IOPT1
+        :default: - DBClusterStorageType.AURORA
         '''
         result = self._values.get("storage_type")
         return typing.cast(typing.Optional[DBClusterStorageType], result)
@@ -22418,7 +22418,7 @@ class DatabaseClusterProps:
         :param serverless_v2_min_capacity: The minimum number of Aurora capacity units (ACUs) for a DB instance in an Aurora Serverless v2 cluster. You can specify ACU values in half-step increments, such as 8, 8.5, 9, and so on. The smallest value that you can use is 0. For Aurora versions that support the Aurora Serverless v2 auto-pause feature, the smallest value that you can use is 0. For versions that don't support Aurora Serverless v2 auto-pause, the smallest value that you can use is 0.5. Default: 0.5
         :param storage_encrypted: Whether to enable storage encryption. Default: - true if storageEncryptionKey is provided, false otherwise
         :param storage_encryption_key: The KMS key for storage encryption. If specified, ``storageEncrypted`` will be set to ``true``. Default: - if storageEncrypted is true then the default master key, no key otherwise
-        :param storage_type: The storage type to be associated with the DB cluster. Default: - DBClusterStorageType.AURORA_IOPT1
+        :param storage_type: The storage type to be associated with the DB cluster. Default: - DBClusterStorageType.AURORA
         :param subnet_group: Existing subnet group for the cluster. Default: - a new subnet group will be created.
         :param vpc: What subnets to run the RDS instances in. Must be at least 2 subnets in two different AZs.
         :param vpc_subnets: Where to place the instances within the VPC. Default: - the Vpc default strategy if not specified.
@@ -23176,7 +23176,7 @@ class DatabaseClusterProps:
     def storage_type(self) -> typing.Optional[DBClusterStorageType]:
         '''The storage type to be associated with the DB cluster.
 
-        :default: - DBClusterStorageType.AURORA_IOPT1
+        :default: - DBClusterStorageType.AURORA
         '''
         result = self._values.get("storage_type")
         return typing.cast(typing.Optional[DBClusterStorageType], result)
@@ -42728,7 +42728,7 @@ class DatabaseClusterFromSnapshot(
         :param snapshot_credentials: Master user credentials. Note - It is not possible to change the master username for a snapshot; however, it is possible to provide (or generate) a new password. Default: - The existing username and password from the snapshot will be used.
         :param storage_encrypted: Whether to enable storage encryption. Default: - true if storageEncryptionKey is provided, false otherwise
         :param storage_encryption_key: The KMS key for storage encryption. If specified, ``storageEncrypted`` will be set to ``true``. Default: - if storageEncrypted is true then the default master key, no key otherwise
-        :param storage_type: The storage type to be associated with the DB cluster. Default: - DBClusterStorageType.AURORA_IOPT1
+        :param storage_type: The storage type to be associated with the DB cluster. Default: - DBClusterStorageType.AURORA
         :param subnet_group: Existing subnet group for the cluster. Default: - a new subnet group will be created.
         :param vpc: What subnets to run the RDS instances in. Must be at least 2 subnets in two different AZs.
         :param vpc_subnets: Where to place the instances within the VPC. Default: - the Vpc default strategy if not specified.
@@ -46936,7 +46936,7 @@ class DatabaseCluster(
         :param serverless_v2_min_capacity: The minimum number of Aurora capacity units (ACUs) for a DB instance in an Aurora Serverless v2 cluster. You can specify ACU values in half-step increments, such as 8, 8.5, 9, and so on. The smallest value that you can use is 0. For Aurora versions that support the Aurora Serverless v2 auto-pause feature, the smallest value that you can use is 0. For versions that don't support Aurora Serverless v2 auto-pause, the smallest value that you can use is 0.5. Default: 0.5
         :param storage_encrypted: Whether to enable storage encryption. Default: - true if storageEncryptionKey is provided, false otherwise
         :param storage_encryption_key: The KMS key for storage encryption. If specified, ``storageEncrypted`` will be set to ``true``. Default: - if storageEncrypted is true then the default master key, no key otherwise
-        :param storage_type: The storage type to be associated with the DB cluster. Default: - DBClusterStorageType.AURORA_IOPT1
+        :param storage_type: The storage type to be associated with the DB cluster. Default: - DBClusterStorageType.AURORA
         :param subnet_group: Existing subnet group for the cluster. Default: - a new subnet group will be created.
         :param vpc: What subnets to run the RDS instances in. Must be at least 2 subnets in two different AZs.
         :param vpc_subnets: Where to place the instances within the VPC. Default: - the Vpc default strategy if not specified.

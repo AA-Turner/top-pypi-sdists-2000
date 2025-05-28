@@ -11,6 +11,7 @@ from .types import (
     PipelineUpdateEmbeddingConfig_OpenaiEmbedding,
     PipelineUpdateEmbeddingConfig_VertexaiEmbedding,
     PipelineUpdateTransformConfig,
+    RetrievalParamsSearchFiltersInferenceSchemaValue,
 )
 
 __all__ = [
@@ -24,4 +25,5 @@ __all__ = [
     "PipelineUpdateEmbeddingConfig_OpenaiEmbedding",
     "PipelineUpdateEmbeddingConfig_VertexaiEmbedding",
     "PipelineUpdateTransformConfig",
+    "RetrievalParamsSearchFiltersInferenceSchemaValue",
 ]

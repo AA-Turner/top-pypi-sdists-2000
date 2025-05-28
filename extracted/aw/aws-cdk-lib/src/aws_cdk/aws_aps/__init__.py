@@ -1206,6 +1206,16 @@ class CfnWorkspace(
             logging_configuration=aps.CfnWorkspace.LoggingConfigurationProperty(
                 log_group_arn="logGroupArn"
             ),
+            query_logging_configuration=aps.CfnWorkspace.QueryLoggingConfigurationProperty(
+                destinations=[aps.CfnWorkspace.LoggingDestinationProperty(
+                    cloud_watch_logs=aps.CfnWorkspace.CloudWatchLogDestinationProperty(
+                        log_group_arn="logGroupArn"
+                    ),
+                    filters=aps.CfnWorkspace.LoggingFilterProperty(
+                        qsp_threshold=123
+                    )
+                )]
+            ),
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -1234,6 +1244,7 @@ class CfnWorkspace(
         alias: typing.Optional[builtins.str] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
         logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.LoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        query_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.QueryLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         workspace_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.WorkspaceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1244,6 +1255,7 @@ class CfnWorkspace(
         :param alias: The alias that is assigned to this workspace to help identify it. It does not need to be unique.
         :param kms_key_arn: (optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace. For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
         :param logging_configuration: Contains information about the logging configuration for the workspace.
+        :param query_logging_configuration: Query logging configuration.
         :param tags: The list of tag keys and values that are associated with the workspace.
         :param workspace_configuration: Use this structure to define label sets and the ingestion limits for time series that match label sets, and to specify the retention period of the workspace.
         '''
@@ -1256,6 +1268,7 @@ class CfnWorkspace(
             alias=alias,
             kms_key_arn=kms_key_arn,
             logging_configuration=logging_configuration,
+            query_logging_configuration=query_logging_configuration,
             tags=tags,
             workspace_configuration=workspace_configuration,
         )
@@ -1394,6 +1407,24 @@ class CfnWorkspace(
         jsii.set(self, "loggingConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="queryLoggingConfiguration")
+    def query_logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.QueryLoggingConfigurationProperty"]]:
+        '''Query logging configuration.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.QueryLoggingConfigurationProperty"]], jsii.get(self, "queryLoggingConfiguration"))
+
+    @query_logging_configuration.setter
+    def query_logging_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.QueryLoggingConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6591166b06ced49bc35c6390884a7a1c30cea4102022183768ac43e25c00f9fc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "queryLoggingConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
         '''The list of tag keys and values that are associated with the workspace.'''
@@ -1423,6 +1454,58 @@ class CfnWorkspace(
             type_hints = typing.get_type_hints(_typecheckingstub__7dc44ff5af32b5cdcf5234cdf89709e32cf5a9217d64f6f2b6625191085cd191)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "workspaceConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnWorkspace.CloudWatchLogDestinationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"log_group_arn": "logGroupArn"},
+    )
+    class CloudWatchLogDestinationProperty:
+        def __init__(self, *, log_group_arn: builtins.str) -> None:
+            '''Represents a cloudwatch logs destination for query logging.
+
+            :param log_group_arn: The ARN of the CloudWatch Logs log group.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-cloudwatchlogdestination.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                cloud_watch_log_destination_property = aps.CfnWorkspace.CloudWatchLogDestinationProperty(
+                    log_group_arn="logGroupArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__925c774442f9150193a5d3bfa3fb05562aec6581139c1378b5f09e1c30fb40ee)
+                check_type(argname="argument log_group_arn", value=log_group_arn, expected_type=type_hints["log_group_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "log_group_arn": log_group_arn,
+            }
+
+        @builtins.property
+        def log_group_arn(self) -> builtins.str:
+            '''The ARN of the CloudWatch Logs log group.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-cloudwatchlogdestination.html#cfn-aps-workspace-cloudwatchlogdestination-loggrouparn
+            '''
+            result = self._values.get("log_group_arn")
+            assert result is not None, "Required property 'log_group_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CloudWatchLogDestinationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_aps.CfnWorkspace.LabelProperty",
@@ -1689,6 +1772,202 @@ class CfnWorkspace(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnWorkspace.LoggingDestinationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"cloud_watch_logs": "cloudWatchLogs", "filters": "filters"},
+    )
+    class LoggingDestinationProperty:
+        def __init__(
+            self,
+            *,
+            cloud_watch_logs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.CloudWatchLogDestinationProperty", typing.Dict[builtins.str, typing.Any]]],
+            filters: typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.LoggingFilterProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Destinations for query logging.
+
+            :param cloud_watch_logs: Represents a cloudwatch logs destination for query logging.
+            :param filters: Filters for logging.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-loggingdestination.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                logging_destination_property = aps.CfnWorkspace.LoggingDestinationProperty(
+                    cloud_watch_logs=aps.CfnWorkspace.CloudWatchLogDestinationProperty(
+                        log_group_arn="logGroupArn"
+                    ),
+                    filters=aps.CfnWorkspace.LoggingFilterProperty(
+                        qsp_threshold=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__cce5991812152322bf70db3d7cea0d7bb3cda26bb6b0e82d9bd091ef05995168)
+                check_type(argname="argument cloud_watch_logs", value=cloud_watch_logs, expected_type=type_hints["cloud_watch_logs"])
+                check_type(argname="argument filters", value=filters, expected_type=type_hints["filters"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "cloud_watch_logs": cloud_watch_logs,
+                "filters": filters,
+            }
+
+        @builtins.property
+        def cloud_watch_logs(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnWorkspace.CloudWatchLogDestinationProperty"]:
+            '''Represents a cloudwatch logs destination for query logging.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-loggingdestination.html#cfn-aps-workspace-loggingdestination-cloudwatchlogs
+            '''
+            result = self._values.get("cloud_watch_logs")
+            assert result is not None, "Required property 'cloud_watch_logs' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnWorkspace.CloudWatchLogDestinationProperty"], result)
+
+        @builtins.property
+        def filters(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnWorkspace.LoggingFilterProperty"]:
+            '''Filters for logging.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-loggingdestination.html#cfn-aps-workspace-loggingdestination-filters
+            '''
+            result = self._values.get("filters")
+            assert result is not None, "Required property 'filters' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnWorkspace.LoggingFilterProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LoggingDestinationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnWorkspace.LoggingFilterProperty",
+        jsii_struct_bases=[],
+        name_mapping={"qsp_threshold": "qspThreshold"},
+    )
+    class LoggingFilterProperty:
+        def __init__(self, *, qsp_threshold: jsii.Number) -> None:
+            '''Filters for logging.
+
+            :param qsp_threshold: Query logs with QSP above this limit are vended.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-loggingfilter.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                logging_filter_property = aps.CfnWorkspace.LoggingFilterProperty(
+                    qsp_threshold=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8f1710f9a533b3c78aa9735866c9480208fe7ceb912d68581872b145d4c634fd)
+                check_type(argname="argument qsp_threshold", value=qsp_threshold, expected_type=type_hints["qsp_threshold"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "qsp_threshold": qsp_threshold,
+            }
+
+        @builtins.property
+        def qsp_threshold(self) -> jsii.Number:
+            '''Query logs with QSP above this limit are vended.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-loggingfilter.html#cfn-aps-workspace-loggingfilter-qspthreshold
+            '''
+            result = self._values.get("qsp_threshold")
+            assert result is not None, "Required property 'qsp_threshold' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LoggingFilterProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnWorkspace.QueryLoggingConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"destinations": "destinations"},
+    )
+    class QueryLoggingConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            destinations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.LoggingDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        ) -> None:
+            '''Query logging configuration.
+
+            :param destinations: The destinations configuration for query logging.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-queryloggingconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                query_logging_configuration_property = aps.CfnWorkspace.QueryLoggingConfigurationProperty(
+                    destinations=[aps.CfnWorkspace.LoggingDestinationProperty(
+                        cloud_watch_logs=aps.CfnWorkspace.CloudWatchLogDestinationProperty(
+                            log_group_arn="logGroupArn"
+                        ),
+                        filters=aps.CfnWorkspace.LoggingFilterProperty(
+                            qsp_threshold=123
+                        )
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__59e9b7a5bb1ecf6d3e6bf0c4d2f497bea98d1fe68b36d502a98c9b336781a58a)
+                check_type(argname="argument destinations", value=destinations, expected_type=type_hints["destinations"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "destinations": destinations,
+            }
+
+        @builtins.property
+        def destinations(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.LoggingDestinationProperty"]]]:
+            '''The destinations configuration for query logging.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-queryloggingconfiguration.html#cfn-aps-workspace-queryloggingconfiguration-destinations
+            '''
+            result = self._values.get("destinations")
+            assert result is not None, "Required property 'destinations' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.LoggingDestinationProperty"]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "QueryLoggingConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_aps.CfnWorkspace.WorkspaceConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -1782,6 +2061,7 @@ class CfnWorkspace(
         "alias": "alias",
         "kms_key_arn": "kmsKeyArn",
         "logging_configuration": "loggingConfiguration",
+        "query_logging_configuration": "queryLoggingConfiguration",
         "tags": "tags",
         "workspace_configuration": "workspaceConfiguration",
     },
@@ -1794,6 +2074,7 @@ class CfnWorkspaceProps:
         alias: typing.Optional[builtins.str] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
         logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        query_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.QueryLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         workspace_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.WorkspaceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1803,6 +2084,7 @@ class CfnWorkspaceProps:
         :param alias: The alias that is assigned to this workspace to help identify it. It does not need to be unique.
         :param kms_key_arn: (optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace. For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
         :param logging_configuration: Contains information about the logging configuration for the workspace.
+        :param query_logging_configuration: Query logging configuration.
         :param tags: The list of tag keys and values that are associated with the workspace.
         :param workspace_configuration: Use this structure to define label sets and the ingestion limits for time series that match label sets, and to specify the retention period of the workspace.
 
@@ -1821,6 +2103,16 @@ class CfnWorkspaceProps:
                 kms_key_arn="kmsKeyArn",
                 logging_configuration=aps.CfnWorkspace.LoggingConfigurationProperty(
                     log_group_arn="logGroupArn"
+                ),
+                query_logging_configuration=aps.CfnWorkspace.QueryLoggingConfigurationProperty(
+                    destinations=[aps.CfnWorkspace.LoggingDestinationProperty(
+                        cloud_watch_logs=aps.CfnWorkspace.CloudWatchLogDestinationProperty(
+                            log_group_arn="logGroupArn"
+                        ),
+                        filters=aps.CfnWorkspace.LoggingFilterProperty(
+                            qsp_threshold=123
+                        )
+                    )]
                 ),
                 tags=[CfnTag(
                     key="key",
@@ -1846,6 +2138,7 @@ class CfnWorkspaceProps:
             check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
             check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
             check_type(argname="argument logging_configuration", value=logging_configuration, expected_type=type_hints["logging_configuration"])
+            check_type(argname="argument query_logging_configuration", value=query_logging_configuration, expected_type=type_hints["query_logging_configuration"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument workspace_configuration", value=workspace_configuration, expected_type=type_hints["workspace_configuration"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -1857,6 +2150,8 @@ class CfnWorkspaceProps:
             self._values["kms_key_arn"] = kms_key_arn
         if logging_configuration is not None:
             self._values["logging_configuration"] = logging_configuration
+        if query_logging_configuration is not None:
+            self._values["query_logging_configuration"] = query_logging_configuration
         if tags is not None:
             self._values["tags"] = tags
         if workspace_configuration is not None:
@@ -1909,6 +2204,17 @@ class CfnWorkspaceProps:
         '''
         result = self._values.get("logging_configuration")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.LoggingConfigurationProperty]], result)
+
+    @builtins.property
+    def query_logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.QueryLoggingConfigurationProperty]]:
+        '''Query logging configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-queryloggingconfiguration
+        '''
+        result = self._values.get("query_logging_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.QueryLoggingConfigurationProperty]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -2138,6 +2444,7 @@ def _typecheckingstub__0d7d4de6c2c3c0a6cc1f746f35f29f98344da5c5d59e48a9d1e788ab8
     alias: typing.Optional[builtins.str] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
     logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    query_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.QueryLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     workspace_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.WorkspaceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -2180,6 +2487,12 @@ def _typecheckingstub__ab06dccfc037b2ba3e02b4a3154224a63edcfe3fc06381ff9162c2c33
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6591166b06ced49bc35c6390884a7a1c30cea4102022183768ac43e25c00f9fc(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.QueryLoggingConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fb4e1977fb1f7aad47144a42af408e41c9d01794f3569a614a9ed54effb1c1e5(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -2188,6 +2501,13 @@ def _typecheckingstub__fb4e1977fb1f7aad47144a42af408e41c9d01794f3569a614a9ed54ef
 
 def _typecheckingstub__7dc44ff5af32b5cdcf5234cdf89709e32cf5a9217d64f6f2b6625191085cd191(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.WorkspaceConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__925c774442f9150193a5d3bfa3fb05562aec6581139c1378b5f09e1c30fb40ee(
+    *,
+    log_group_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2222,6 +2542,28 @@ def _typecheckingstub__fa0678eca2188c6c3220d708f7d16298acecab165f03de8b400d1fada
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cce5991812152322bf70db3d7cea0d7bb3cda26bb6b0e82d9bd091ef05995168(
+    *,
+    cloud_watch_logs: typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.CloudWatchLogDestinationProperty, typing.Dict[builtins.str, typing.Any]]],
+    filters: typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.LoggingFilterProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8f1710f9a533b3c78aa9735866c9480208fe7ceb912d68581872b145d4c634fd(
+    *,
+    qsp_threshold: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__59e9b7a5bb1ecf6d3e6bf0c4d2f497bea98d1fe68b36d502a98c9b336781a58a(
+    *,
+    destinations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.LoggingDestinationProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8d8bd4b9a39be1594ef4681992e92f89f24816c775c0e0c40e340be13e59392a(
     *,
     limits_per_label_sets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.LimitsPerLabelSetProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -2236,6 +2578,7 @@ def _typecheckingstub__98e95bd874171795b8c6f6104e5fee9fa1d8f50cb6e1edc6d2cc01a77
     alias: typing.Optional[builtins.str] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
     logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    query_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.QueryLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     workspace_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.WorkspaceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

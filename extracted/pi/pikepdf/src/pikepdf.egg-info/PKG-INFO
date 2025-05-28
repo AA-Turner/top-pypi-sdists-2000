@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pikepdf
-Version: 9.7.0
+Version: 9.8.1
 Summary: Read and write PDFs with Python, powered by qpdf
 Author-email: "James R. Barlow" <james@purplerock.ca>
 License-Expression: MPL-2.0
@@ -27,8 +27,10 @@ Requires-Dist: packaging
 Provides-Extra: dev
 Requires-Dist: pre-commit; extra == "dev"
 Requires-Dist: typer; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
 Provides-Extra: docs
-Requires-Dist: Sphinx>=3; extra == "docs"
+Requires-Dist: myst-parser>=3.0.1; extra == "docs"
+Requires-Dist: sphinx>=3; extra == "docs"
 Requires-Dist: sphinx-autoapi; extra == "docs"
 Requires-Dist: sphinx-design; extra == "docs"
 Requires-Dist: sphinx-issues; extra == "docs"

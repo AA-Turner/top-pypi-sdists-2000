@@ -34,6 +34,7 @@ from pandas._typing import (
     CSVQuoting,
     DtypeArg,
     DtypeBackend,
+    ExcelWriterMergeCells,
     FilePath,
     FileWriteMode,
     Frequency,
@@ -43,13 +44,15 @@ from pandas._typing import (
     IgnoreRaise,
     IndexLabel,
     Level,
+    OpenFileErrors,
     P,
     StorageOptions,
     T,
+    TakeIndexer,
     TimedeltaConvertibleTypes,
     TimeGrouperOrigin,
-    TimestampConvention,
     TimestampConvertibleTypes,
+    ToTimestampHow,
     WriteBuffer,
 )
 
@@ -104,7 +107,7 @@ class NDFrame(indexing.IndexingMixin):
         startrow: int = ...,
         startcol: int = ...,
         engine: _str | None = ...,
-        merge_cells: _bool = ...,
+        merge_cells: ExcelWriterMergeCells = ...,
         inf_rep: _str = ...,
         freeze_panes: tuple[int, int] | None = ...,
     ) -> None: ...
@@ -123,15 +126,7 @@ class NDFrame(indexing.IndexingMixin):
         nan_rep: _str | None = ...,
         dropna: _bool | None = ...,
         data_columns: Literal[True] | list[HashableT2] | None = ...,
-        errors: Literal[
-            "strict",
-            "ignore",
-            "replace",
-            "surrogateescape",
-            "xmlcharrefreplace",
-            "backslashreplace",
-            "namereplace",
-        ] = ...,
+        errors: OpenFileErrors = ...,
         encoding: _str = ...,
     ) -> None: ...
     @overload
@@ -179,7 +174,29 @@ class NDFrame(indexing.IndexingMixin):
         storage_options: StorageOptions = ...,
     ) -> None: ...
     def to_clipboard(
-        self, excel: _bool = ..., sep: _str | None = ..., **kwargs
+        self,
+        excel: _bool = ...,
+        sep: _str | None = ...,
+        *,
+        na_rep: _str = ...,
+        float_format: _str | Callable[[object], _str] | None = ...,
+        columns: list[HashableT1] | None = ...,
+        header: _bool | list[_str] = ...,
+        index: _bool = ...,
+        index_label: Literal[False] | _str | list[HashableT2] | None = ...,
+        mode: FileWriteMode = ...,
+        encoding: _str | None = ...,
+        compression: CompressionOptions = ...,
+        quoting: CSVQuoting = ...,
+        quotechar: _str = ...,
+        lineterminator: _str | None = ...,
+        chunksize: int | None = ...,
+        date_format: _str | None = ...,
+        doublequote: _bool = ...,
+        escapechar: _str | None = ...,
+        decimal: _str = ...,
+        errors: _str = ...,
+        storage_options: StorageOptions = ...,
     ) -> None: ...
     @overload
     def to_latex(
@@ -253,7 +270,7 @@ class NDFrame(indexing.IndexingMixin):
         doublequote: _bool = ...,
         escapechar: _str | None = ...,
         decimal: _str = ...,
-        errors: _str = ...,
+        errors: OpenFileErrors = ...,
         storage_options: StorageOptions = ...,
     ) -> None: ...
     @overload
@@ -278,7 +295,7 @@ class NDFrame(indexing.IndexingMixin):
         doublequote: _bool = ...,
         escapechar: _str | None = ...,
         decimal: _str = ...,
-        errors: _str = ...,
+        errors: OpenFileErrors = ...,
         storage_options: StorageOptions = ...,
     ) -> _str: ...
     def __delitem__(self, idx: Hashable) -> None: ...
@@ -388,7 +405,7 @@ class NDFrame(indexing.IndexingMixin):
         axis: Axis | NoDefault = ...,
         closed: Literal["right", "left"] | None = ...,
         label: Literal["right", "left"] | None = ...,
-        convention: TimestampConvention = ...,
+        convention: ToTimestampHow = ...,
         kind: Literal["period", "timestamp"] | None = ...,
         on: Level | None = ...,
         level: Level | None = ...,
@@ -396,3 +413,5 @@ class NDFrame(indexing.IndexingMixin):
         offset: TimedeltaConvertibleTypes | None = ...,
         group_keys: _bool = ...,
     ) -> DatetimeIndexResampler[Self]: ...
+    @final
+    def take(self, indices: TakeIndexer, axis: Axis = ..., **kwargs: Any) -> Self: ...

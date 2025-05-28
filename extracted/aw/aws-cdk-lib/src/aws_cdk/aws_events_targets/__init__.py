@@ -27,6 +27,7 @@ Currently supported are:
     * [Assign public IP addresses to tasks](#assign-public-ip-addresses-to-tasks)
     * [Enable Amazon ECS Exec for ECS Task](#enable-amazon-ecs-exec-for-ecs-task)
   * [Run a Redshift query](#schedule-a-redshift-query-serverless-or-cluster)
+  * [Publish to an SNS topic](#publish-to-an-sns-topic)
 
 See the README of the `aws-cdk-lib/aws-events` library for more information on
 EventBridge.
@@ -623,6 +624,40 @@ rule.add_target(targets.RedshiftQuery(workgroup.attr_workgroup_workgroup_arn,
     dead_letter_queue=dlq,
     sql=["SELECT * FROM foo", "SELECT * FROM baz"]
 ))
+```
+
+## Publish to an SNS Topic
+
+Use the `SnsTopic` target to publish to an SNS Topic.
+
+The code snippet below creates the scheduled event rule that publishes to an SNS Topic using a resource policy.
+
+```python
+import aws_cdk.aws_sns as sns
+
+# topic: sns.ITopic
+
+
+rule = events.Rule(self, "Rule",
+    schedule=events.Schedule.rate(cdk.Duration.hours(1))
+)
+
+rule.add_target(targets.SnsTopic(topic))
+```
+
+Alternatively, a role can be attached to the target when the rule is triggered.
+
+```python
+import aws_cdk.aws_sns as sns
+
+# topic: sns.ITopic
+
+
+rule = events.Rule(self, "Rule",
+    schedule=events.Schedule.rate(cdk.Duration.hours(1))
+)
+
+rule.add_target(targets.SnsTopic(topic, authorize_using_role=True))
 ```
 '''
 from pkgutil import extend_path
@@ -3302,14 +3337,18 @@ class SnsTopic(
         self,
         topic: _ITopic_9eca4852,
         *,
+        authorize_using_role: typing.Optional[builtins.bool] = None,
         message: typing.Optional[_RuleTargetInput_6beca786] = None,
+        role: typing.Optional[_IRole_235f5d8e] = None,
         dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
         max_event_age: typing.Optional[_Duration_4839e8c3] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
         :param topic: -
+        :param authorize_using_role: Specifies whether an IAM role should be used to publish to the topic. Default: - true if ``role`` is provided, false otherwise
         :param message: The message to send to the topic. Default: the entire EventBridge event
+        :param role: The IAM role to be used to publish to the topic. Default: - a new role will be created if ``authorizeUsingRole`` is true
         :param dead_letter_queue: The SQS queue to be used as deadLetterQueue. Check out the `considerations for using a dead-letter queue <https://docs.aws.amazon.com/eventbridge/latest/userguide/rule-dlq.html#dlq-considerations>`_. The events not successfully delivered are automatically retried for a specified period of time, depending on the retry policy of the target. If an event is not delivered before all retry attempts are exhausted, it will be sent to the dead letter queue. Default: - no dead-letter queue
         :param max_event_age: The maximum age of a request that Lambda sends to a function for processing. Minimum value of 60. Maximum value of 86400. Default: Duration.hours(24)
         :param retry_attempts: The maximum number of times to retry when the function returns an error. Minimum value of 0. Maximum value of 185. Default: 185
@@ -3318,7 +3357,9 @@ class SnsTopic(
             type_hints = typing.get_type_hints(_typecheckingstub__b58aa74b2a717b90ef291556746b786df8882b8158b4b3255bf88691dbd8fd07)
             check_type(argname="argument topic", value=topic, expected_type=type_hints["topic"])
         props = SnsTopicProps(
+            authorize_using_role=authorize_using_role,
             message=message,
+            role=role,
             dead_letter_queue=dead_letter_queue,
             max_event_age=max_event_age,
             retry_attempts=retry_attempts,
@@ -5722,7 +5763,9 @@ class SfnStateMachineProps(TargetBaseProps):
         "dead_letter_queue": "deadLetterQueue",
         "max_event_age": "maxEventAge",
         "retry_attempts": "retryAttempts",
+        "authorize_using_role": "authorizeUsingRole",
         "message": "message",
+        "role": "role",
     },
 )
 class SnsTopicProps(TargetBaseProps):
@@ -5732,14 +5775,18 @@ class SnsTopicProps(TargetBaseProps):
         dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
         max_event_age: typing.Optional[_Duration_4839e8c3] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
+        authorize_using_role: typing.Optional[builtins.bool] = None,
         message: typing.Optional[_RuleTargetInput_6beca786] = None,
+        role: typing.Optional[_IRole_235f5d8e] = None,
     ) -> None:
         '''Customize the SNS Topic Event Target.
 
         :param dead_letter_queue: The SQS queue to be used as deadLetterQueue. Check out the `considerations for using a dead-letter queue <https://docs.aws.amazon.com/eventbridge/latest/userguide/rule-dlq.html#dlq-considerations>`_. The events not successfully delivered are automatically retried for a specified period of time, depending on the retry policy of the target. If an event is not delivered before all retry attempts are exhausted, it will be sent to the dead letter queue. Default: - no dead-letter queue
         :param max_event_age: The maximum age of a request that Lambda sends to a function for processing. Minimum value of 60. Maximum value of 86400. Default: Duration.hours(24)
         :param retry_attempts: The maximum number of times to retry when the function returns an error. Minimum value of 0. Maximum value of 185. Default: 185
+        :param authorize_using_role: Specifies whether an IAM role should be used to publish to the topic. Default: - true if ``role`` is provided, false otherwise
         :param message: The message to send to the topic. Default: the entire EventBridge event
+        :param role: The IAM role to be used to publish to the topic. Default: - a new role will be created if ``authorizeUsingRole`` is true
 
         :exampleMetadata: infused
 
@@ -5750,7 +5797,9 @@ class SnsTopicProps(TargetBaseProps):
             
             
             on_commit_rule.add_target(targets.SnsTopic(topic,
-                message=events.RuleTargetInput.from_text(f"A commit was pushed to the repository {codecommit.ReferenceEvent.repositoryName} on branch {codecommit.ReferenceEvent.referenceName}")
+                message=events.RuleTargetInput.from_object({
+                    "DataType": f"custom_{events.EventField.fromPath('$.detail-type')}"
+                })
             ))
         '''
         if __debug__:
@@ -5758,7 +5807,9 @@ class SnsTopicProps(TargetBaseProps):
             check_type(argname="argument dead_letter_queue", value=dead_letter_queue, expected_type=type_hints["dead_letter_queue"])
             check_type(argname="argument max_event_age", value=max_event_age, expected_type=type_hints["max_event_age"])
             check_type(argname="argument retry_attempts", value=retry_attempts, expected_type=type_hints["retry_attempts"])
+            check_type(argname="argument authorize_using_role", value=authorize_using_role, expected_type=type_hints["authorize_using_role"])
             check_type(argname="argument message", value=message, expected_type=type_hints["message"])
+            check_type(argname="argument role", value=role, expected_type=type_hints["role"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if dead_letter_queue is not None:
             self._values["dead_letter_queue"] = dead_letter_queue
@@ -5766,8 +5817,12 @@ class SnsTopicProps(TargetBaseProps):
             self._values["max_event_age"] = max_event_age
         if retry_attempts is not None:
             self._values["retry_attempts"] = retry_attempts
+        if authorize_using_role is not None:
+            self._values["authorize_using_role"] = authorize_using_role
         if message is not None:
             self._values["message"] = message
+        if role is not None:
+            self._values["role"] = role
 
     @builtins.property
     def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
@@ -5807,6 +5862,15 @@ class SnsTopicProps(TargetBaseProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
+    def authorize_using_role(self) -> typing.Optional[builtins.bool]:
+        '''Specifies whether an IAM role should be used to publish to the topic.
+
+        :default: - true if ``role`` is provided, false otherwise
+        '''
+        result = self._values.get("authorize_using_role")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
     def message(self) -> typing.Optional[_RuleTargetInput_6beca786]:
         '''The message to send to the topic.
 
@@ -5814,6 +5878,15 @@ class SnsTopicProps(TargetBaseProps):
         '''
         result = self._values.get("message")
         return typing.cast(typing.Optional[_RuleTargetInput_6beca786], result)
+
+    @builtins.property
+    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+        '''The IAM role to be used to publish to the topic.
+
+        :default: - a new role will be created if ``authorizeUsingRole`` is true
+        '''
+        result = self._values.get("role")
+        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6428,7 +6501,9 @@ def _typecheckingstub__0e0733fbe09a8310edfc7237ca759e925b3db6d25ad43627fcf4f165c
 def _typecheckingstub__b58aa74b2a717b90ef291556746b786df8882b8158b4b3255bf88691dbd8fd07(
     topic: _ITopic_9eca4852,
     *,
+    authorize_using_role: typing.Optional[builtins.bool] = None,
     message: typing.Optional[_RuleTargetInput_6beca786] = None,
+    role: typing.Optional[_IRole_235f5d8e] = None,
     dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
     max_event_age: typing.Optional[_Duration_4839e8c3] = None,
     retry_attempts: typing.Optional[jsii.Number] = None,
@@ -6641,7 +6716,9 @@ def _typecheckingstub__29b5b095e8884167f8f78e4ccfc6cd844ecb24d73c2e229d24c0a7a18
     dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
     max_event_age: typing.Optional[_Duration_4839e8c3] = None,
     retry_attempts: typing.Optional[jsii.Number] = None,
+    authorize_using_role: typing.Optional[builtins.bool] = None,
     message: typing.Optional[_RuleTargetInput_6beca786] = None,
+    role: typing.Optional[_IRole_235f5d8e] = None,
 ) -> None:
     """Type checking stubs"""
     pass

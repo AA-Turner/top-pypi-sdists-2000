@@ -4469,6 +4469,211 @@ class CfnMailManagerAddonSubscriptionProps:
 
 
 @jsii.implements(_IInspectable_c2943556, _ITaggableV2_4e6798f8)
+class CfnMailManagerAddressList(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_ses.CfnMailManagerAddressList",
+):
+    '''Definition of AWS::SES::MailManagerAddressList Resource Type.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ses-mailmanageraddresslist.html
+    :cloudformationResource: AWS::SES::MailManagerAddressList
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_ses as ses
+        
+        cfn_mail_manager_address_list = ses.CfnMailManagerAddressList(self, "MyCfnMailManagerAddressList",
+            address_list_name="addressListName",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        address_list_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param address_list_name: 
+        :param tags: 
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6a8a172d98fe048a3419d1b92dcaf2e59e8461e9b0baf073f812b3916bcd4974)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnMailManagerAddressListProps(
+            address_list_name=address_list_name, tags=tags
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4f6a8901ab278ee698ce069b658195d6cc144f36006c6c634fd9c8598d24d83d)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5a2a230c58a2c2b4b62e185b88fe729ffbc699c86e17f9fe3d25e95ae19ea40b)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrAddressListArn")
+    def attr_address_list_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: AddressListArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrAddressListArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrAddressListId")
+    def attr_address_list_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: AddressListId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrAddressListId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="addressListName")
+    def address_list_name(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "addressListName"))
+
+    @address_list_name.setter
+    def address_list_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__53d1505dab469f39095f9e22ba4d8bdae2405adbe8d8d641e4d4a1abbf6b3770)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "addressListName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f941c234d4973425d4ac187f87f54965bfdb82848d3fcf93664acc11143c1068)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_ses.CfnMailManagerAddressListProps",
+    jsii_struct_bases=[],
+    name_mapping={"address_list_name": "addressListName", "tags": "tags"},
+)
+class CfnMailManagerAddressListProps:
+    def __init__(
+        self,
+        *,
+        address_list_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnMailManagerAddressList``.
+
+        :param address_list_name: 
+        :param tags: 
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ses-mailmanageraddresslist.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_ses as ses
+            
+            cfn_mail_manager_address_list_props = ses.CfnMailManagerAddressListProps(
+                address_list_name="addressListName",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ec45e85ebcc385f7d054df8a6b207754f0fa06560d7270f49432e2594f0626f9)
+            check_type(argname="argument address_list_name", value=address_list_name, expected_type=type_hints["address_list_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if address_list_name is not None:
+            self._values["address_list_name"] = address_list_name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def address_list_name(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ses-mailmanageraddresslist.html#cfn-ses-mailmanageraddresslist-addresslistname
+        '''
+        result = self._values.get("address_list_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ses-mailmanageraddresslist.html#cfn-ses-mailmanageraddresslist-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnMailManagerAddressListProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ITaggableV2_4e6798f8)
 class CfnMailManagerArchive(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -17812,6 +18017,8 @@ __all__ = [
     "CfnMailManagerAddonInstanceProps",
     "CfnMailManagerAddonSubscription",
     "CfnMailManagerAddonSubscriptionProps",
+    "CfnMailManagerAddressList",
+    "CfnMailManagerAddressListProps",
     "CfnMailManagerArchive",
     "CfnMailManagerArchiveProps",
     "CfnMailManagerIngressPoint",
@@ -18468,6 +18675,48 @@ def _typecheckingstub__29c55bb74fd3d612b39c13ec35f22819219ba03de6b766602d804e921
 def _typecheckingstub__60d068c00268064de7df238df2dd073326a0cbc422fee4d79433b91b517fb6bd(
     *,
     addon_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6a8a172d98fe048a3419d1b92dcaf2e59e8461e9b0baf073f812b3916bcd4974(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    address_list_name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4f6a8901ab278ee698ce069b658195d6cc144f36006c6c634fd9c8598d24d83d(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5a2a230c58a2c2b4b62e185b88fe729ffbc699c86e17f9fe3d25e95ae19ea40b(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__53d1505dab469f39095f9e22ba4d8bdae2405adbe8d8d641e4d4a1abbf6b3770(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f941c234d4973425d4ac187f87f54965bfdb82848d3fcf93664acc11143c1068(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ec45e85ebcc385f7d054df8a6b207754f0fa06560d7270f49432e2594f0626f9(
+    *,
+    address_list_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

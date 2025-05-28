@@ -11,12 +11,12 @@ from typing import (
 
 from matplotlib.colors import Colormap
 import numpy as np
-from pandas import Index
 from pandas.core.frame import DataFrame
 from pandas.core.series import Series
 
 from pandas._typing import (
     Axis,
+    ExcelWriterMergeCells,
     FilePath,
     HashableT,
     HashableT1,
@@ -26,6 +26,7 @@ from pandas._typing import (
     Level,
     QuantileInterpolation,
     Scalar,
+    StorageOptions,
     T,
     WriteBuffer,
     WriteExcelBuffer,
@@ -52,11 +53,12 @@ class _DataFrameFunc(Protocol):
         self, series: DataFrame, /, *args: Any, **kwargs: Any
     ) -> npt.NDArray | DataFrame: ...
 
+class _MapCallable(Protocol):
+    def __call__(
+        self, first_arg: Scalar, /, *args: Any, **kwargs: Any
+    ) -> str | None: ...
+
 class Styler(StylerRenderer):
-    @property
-    def columns(self) -> Index[Any]: ...
-    @property
-    def index(self) -> Index[Any]: ...
     def __init__(
         self,
         data: DataFrame | Series,
@@ -74,11 +76,25 @@ class Styler(StylerRenderer):
         formatter: ExtFormatter | None = ...,
     ) -> None: ...
     def concat(self, other: Styler) -> Styler: ...
+    @overload
+    def map(
+        self,
+        func: Callable[[Scalar], str | None],
+        subset: Subset | None = ...,
+    ) -> Styler: ...
+    @overload
+    def map(
+        self,
+        func: _MapCallable,
+        subset: Subset | None = ...,
+        **kwargs: Any,
+    ) -> Styler: ...
     def set_tooltips(
         self,
         ttips: DataFrame,
         props: CSSProperties | None = ...,
         css_class: str | None = ...,
+        as_title_attribute: bool = ...,
     ) -> Styler: ...
     def to_excel(
         self,
@@ -93,13 +109,12 @@ class Styler(StylerRenderer):
         startrow: int = ...,
         startcol: int = ...,
         engine: Literal["openpyxl", "xlsxwriter"] | None = ...,
-        merge_cells: bool = ...,
+        merge_cells: ExcelWriterMergeCells = ...,
         encoding: str | None = ...,
         inf_rep: str = ...,
         verbose: bool = ...,
         freeze_panes: tuple[int, int] | None = ...,
-        # TODO: Listed in docs but not in function decl
-        # storage_options: StorageOptions = ...,
+        storage_options: StorageOptions | None = ...,
     ) -> None: ...
     @overload
     def to_latex(
@@ -314,7 +329,7 @@ class Styler(StylerRenderer):
         axis: Axis | None = ...,
         *,
         color: str | list[str] | tuple[str, str] | None = ...,
-        cmap: str | Colormap = ...,
+        cmap: str | Colormap | None = ...,
         width: float = ...,
         height: float = ...,
         align: (

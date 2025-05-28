@@ -1,26 +1,20 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: llama-index-readers-file
-Version: 0.4.7
+Version: 0.4.8
 Summary: llama-index readers file integration
-License: MIT
+Author-email: Your Name <you@example.com>
+Maintainer: FarisHijazi, Haowjy, ephe-meral, hursh-desai, iamarunbrahma, jon-chuang, mmaatouk, ravi03071991, sangwongenip, thejessezhang
+License-Expression: MIT
+License-File: LICENSE
 Keywords: 10k,10q,chart,eml,figure,html,hwp,image,invoice,ipynb,jupyter,notebook,pdf,pymupdf,receipt,sec,spreadsheet,tabular,unstructured.io,yaml,yml
-Author: Your Name
-Author-email: you@example.com
-Maintainer: FarisHijazi
-Requires-Python: >=3.9,<4.0
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.9
-Classifier: Programming Language :: Python :: 3.10
-Classifier: Programming Language :: Python :: 3.11
-Classifier: Programming Language :: Python :: 3.12
-Provides-Extra: pymupdf
-Requires-Dist: beautifulsoup4 (>=4.12.3,<5.0.0)
-Requires-Dist: llama-index-core (>=0.12.0,<0.13.0)
+Requires-Python: <4.0,>=3.9
+Requires-Dist: beautifulsoup4<5,>=4.12.3
+Requires-Dist: llama-index-core<0.13,>=0.12.0
 Requires-Dist: pandas
-Requires-Dist: pymupdf (>=1.23.21,<2.0.0) ; extra == "pymupdf"
-Requires-Dist: pypdf (>=5.1.0,<6.0.0)
-Requires-Dist: striprtf (>=0.0.26,<0.0.27)
+Requires-Dist: pypdf<6,>=5.1.0
+Requires-Dist: striprtf<0.0.27,>=0.0.26
+Provides-Extra: pymupdf
+Requires-Dist: pymupdf<2,>=1.23.21; extra == 'pymupdf'
 Description-Content-Type: text/markdown
 
 # LlamaIndex Readers Integration: File
@@ -212,4 +206,3 @@ documents = SimpleDirectoryReader(
 ```
 
 This loader is designed to be used as a way to load data into [LlamaIndex](https://github.com/run-llama/llama_index/).
-

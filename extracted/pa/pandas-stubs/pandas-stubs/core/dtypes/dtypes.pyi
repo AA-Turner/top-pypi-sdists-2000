@@ -2,10 +2,8 @@ import datetime as dt
 from typing import (
     Any,
     Literal,
-    TypeVar,
 )
 
-from _typing import TimeZones
 import numpy as np
 from pandas.core.indexes.base import Index
 from pandas.core.series import Series
@@ -18,14 +16,14 @@ from pandas._libs.tslibs.offsets import (
 )
 from pandas._typing import (
     Ordered,
+    TimeZones,
     npt,
 )
 
-from .base import ExtensionDtype as ExtensionDtype
-
-_ExtensionDtypeT = TypeVar("_ExtensionDtypeT", bound=ExtensionDtype)
-
-def register_extension_dtype(cls: type[_ExtensionDtypeT]) -> type[_ExtensionDtypeT]: ...
+from pandas.core.dtypes.base import (
+    ExtensionDtype as ExtensionDtype,
+    register_extension_dtype as register_extension_dtype,
+)
 
 class BaseMaskedDtype(ExtensionDtype): ...
 class PandasExtensionDtype(ExtensionDtype): ...

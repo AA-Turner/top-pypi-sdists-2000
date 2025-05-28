@@ -5,6 +5,9 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from .metadata_filters import MetadataFilters
+from .preset_retrieval_params_search_filters_inference_schema_value import (
+    PresetRetrievalParamsSearchFiltersInferenceSchemaValue,
+)
 from .retrieval_mode import RetrievalMode
 
 try:
@@ -28,6 +31,9 @@ class PresetRetrievalParams(pydantic.BaseModel):
     rerank_top_n: typing.Optional[int]
     alpha: typing.Optional[float]
     search_filters: typing.Optional[MetadataFilters]
+    search_filters_inference_schema: typing.Optional[
+        typing.Dict[str, typing.Optional[PresetRetrievalParamsSearchFiltersInferenceSchemaValue]]
+    ]
     files_top_k: typing.Optional[int]
     retrieval_mode: typing.Optional[RetrievalMode] = pydantic.Field(description="The retrieval mode for the query.")
     retrieve_image_nodes: typing.Optional[bool] = pydantic.Field(description="Whether to retrieve image nodes.")

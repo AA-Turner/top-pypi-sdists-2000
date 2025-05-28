@@ -249,7 +249,9 @@ load_balanced_fargate_service = ecs_patterns.NetworkMultipleTargetGroupsFargateS
         container_port=90,
         listener="listener2"
     )
-    ]
+    ],
+    min_healthy_percent=100,
+    max_healthy_percent=200
 )
 ```
 
@@ -12688,7 +12690,9 @@ class NetworkMultipleTargetGroupsFargateService(
                 container_port=90,
                 listener="listener2"
             )
-            ]
+            ],
+            min_healthy_percent=100,
+            max_healthy_percent=200
         )
     '''
 
@@ -12698,6 +12702,8 @@ class NetworkMultipleTargetGroupsFargateService(
         id: builtins.str,
         *,
         assign_public_ip: typing.Optional[builtins.bool] = None,
+        max_healthy_percent: typing.Optional[jsii.Number] = None,
+        min_healthy_percent: typing.Optional[jsii.Number] = None,
         cloud_map_options: typing.Optional[typing.Union[_CloudMapOptions_444ee9f2, typing.Dict[builtins.str, typing.Any]]] = None,
         cluster: typing.Optional[_ICluster_16cddd09] = None,
         desired_count: typing.Optional[jsii.Number] = None,
@@ -12722,6 +12728,8 @@ class NetworkMultipleTargetGroupsFargateService(
         :param scope: -
         :param id: -
         :param assign_public_ip: Determines whether the service will be assigned a public IP address. Default: false
+        :param max_healthy_percent: The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment. Default: - 200%
+        :param min_healthy_percent: The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment. Default: - 50%
         :param cloud_map_options: The options for configuring an Amazon ECS service to use service discovery. Default: - AWS Cloud Map service discovery is not enabled.
         :param cluster: The name of the cluster that hosts the service. If a cluster is specified, the vpc construct should be omitted. Alternatively, you can omit both cluster and vpc. Default: - create a new cluster; if both cluster and vpc are omitted, a new VPC will be created for you.
         :param desired_count: The desired number of instantiations of the task definition to keep running on the service. The minimum value is 1 Default: - The default is 1 for all new services and uses the existing service's desired count when updating an existing service.
@@ -12747,6 +12755,8 @@ class NetworkMultipleTargetGroupsFargateService(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = NetworkMultipleTargetGroupsFargateServiceProps(
             assign_public_ip=assign_public_ip,
+            max_healthy_percent=max_healthy_percent,
+            min_healthy_percent=min_healthy_percent,
             cloud_map_options=cloud_map_options,
             cluster=cluster,
             desired_count=desired_count,
@@ -12830,6 +12840,8 @@ class NetworkMultipleTargetGroupsFargateService(
         "runtime_platform": "runtimePlatform",
         "task_definition": "taskDefinition",
         "assign_public_ip": "assignPublicIp",
+        "max_healthy_percent": "maxHealthyPercent",
+        "min_healthy_percent": "minHealthyPercent",
     },
 )
 class NetworkMultipleTargetGroupsFargateServiceProps(
@@ -12858,6 +12870,8 @@ class NetworkMultipleTargetGroupsFargateServiceProps(
         runtime_platform: typing.Optional[typing.Union[_RuntimePlatform_5ed98a9c, typing.Dict[builtins.str, typing.Any]]] = None,
         task_definition: typing.Optional[_FargateTaskDefinition_83754b60] = None,
         assign_public_ip: typing.Optional[builtins.bool] = None,
+        max_healthy_percent: typing.Optional[jsii.Number] = None,
+        min_healthy_percent: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''The properties for the NetworkMultipleTargetGroupsFargateService service.
 
@@ -12880,6 +12894,8 @@ class NetworkMultipleTargetGroupsFargateServiceProps(
         :param runtime_platform: The runtime platform of the task definition. Default: - If the property is undefined, ``operatingSystemFamily`` is LINUX and ``cpuArchitecture`` is X86_64
         :param task_definition: The task definition to use for tasks in the service. TaskDefinition or TaskImageOptions must be specified, but not both. [disable-awslint:ref-via-interface] Default: - none
         :param assign_public_ip: Determines whether the service will be assigned a public IP address. Default: false
+        :param max_healthy_percent: The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment. Default: - 200%
+        :param min_healthy_percent: The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment. Default: - 50%
 
         :exampleMetadata: infused
 
@@ -12915,7 +12931,9 @@ class NetworkMultipleTargetGroupsFargateServiceProps(
                     container_port=90,
                     listener="listener2"
                 )
-                ]
+                ],
+                min_healthy_percent=100,
+                max_healthy_percent=200
             )
         '''
         if isinstance(cloud_map_options, dict):
@@ -12945,6 +12963,8 @@ class NetworkMultipleTargetGroupsFargateServiceProps(
             check_type(argname="argument runtime_platform", value=runtime_platform, expected_type=type_hints["runtime_platform"])
             check_type(argname="argument task_definition", value=task_definition, expected_type=type_hints["task_definition"])
             check_type(argname="argument assign_public_ip", value=assign_public_ip, expected_type=type_hints["assign_public_ip"])
+            check_type(argname="argument max_healthy_percent", value=max_healthy_percent, expected_type=type_hints["max_healthy_percent"])
+            check_type(argname="argument min_healthy_percent", value=min_healthy_percent, expected_type=type_hints["min_healthy_percent"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if cloud_map_options is not None:
             self._values["cloud_map_options"] = cloud_map_options
@@ -12984,6 +13004,10 @@ class NetworkMultipleTargetGroupsFargateServiceProps(
             self._values["task_definition"] = task_definition
         if assign_public_ip is not None:
             self._values["assign_public_ip"] = assign_public_ip
+        if max_healthy_percent is not None:
+            self._values["max_healthy_percent"] = max_healthy_percent
+        if min_healthy_percent is not None:
+            self._values["min_healthy_percent"] = min_healthy_percent
 
     @builtins.property
     def cloud_map_options(self) -> typing.Optional[_CloudMapOptions_444ee9f2]:
@@ -13218,6 +13242,24 @@ class NetworkMultipleTargetGroupsFargateServiceProps(
         '''
         result = self._values.get("assign_public_ip")
         return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def max_healthy_percent(self) -> typing.Optional[jsii.Number]:
+        '''The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment.
+
+        :default: - 200%
+        '''
+        result = self._values.get("max_healthy_percent")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def min_healthy_percent(self) -> typing.Optional[jsii.Number]:
+        '''The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment.
+
+        :default: - 50%
+        '''
+        result = self._values.get("min_healthy_percent")
+        return typing.cast(typing.Optional[jsii.Number], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17595,6 +17637,8 @@ def _typecheckingstub__d0896ef010a141982cad4e6363ddf5474e1d63a5c38dc712f84a1d13e
     id: builtins.str,
     *,
     assign_public_ip: typing.Optional[builtins.bool] = None,
+    max_healthy_percent: typing.Optional[jsii.Number] = None,
+    min_healthy_percent: typing.Optional[jsii.Number] = None,
     cloud_map_options: typing.Optional[typing.Union[_CloudMapOptions_444ee9f2, typing.Dict[builtins.str, typing.Any]]] = None,
     cluster: typing.Optional[_ICluster_16cddd09] = None,
     desired_count: typing.Optional[jsii.Number] = None,
@@ -17638,6 +17682,8 @@ def _typecheckingstub__052b2be34bb887cde358099c21efe7f3e968827a5a4e4c975e35f96da
     runtime_platform: typing.Optional[typing.Union[_RuntimePlatform_5ed98a9c, typing.Dict[builtins.str, typing.Any]]] = None,
     task_definition: typing.Optional[_FargateTaskDefinition_83754b60] = None,
     assign_public_ip: typing.Optional[builtins.bool] = None,
+    max_healthy_percent: typing.Optional[jsii.Number] = None,
+    min_healthy_percent: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass

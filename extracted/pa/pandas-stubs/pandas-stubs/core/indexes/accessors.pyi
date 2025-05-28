@@ -9,7 +9,6 @@ from typing import (
     TypeVar,
 )
 
-from _typing import TimeZones
 import numpy as np
 import numpy.typing as npt
 from pandas import (
@@ -36,8 +35,11 @@ from pandas.core.series import (
 from pandas._libs.tslibs import BaseOffset
 from pandas._libs.tslibs.offsets import DateOffset
 from pandas._typing import (
+    TimeAmbiguous,
+    TimeNonexistent,
     TimestampConvention,
     TimeUnit,
+    TimeZones,
     np_ndarray_bool,
 )
 
@@ -167,7 +169,7 @@ class _DatetimeRoundingMethods(Generic[_DTTimestampTimedeltaReturnType]):
     def round(
         self,
         freq: str | BaseOffset | None,
-        ambiguous: Literal["raise", "infer", "NaT"] | np_ndarray_bool = ...,
+        ambiguous: Literal["raise", "infer", "NaT"] | bool | np_ndarray_bool = ...,
         nonexistent: (
             Literal["shift_forward", "shift_backward", "NaT", "raise"]
             | timedelta
@@ -177,7 +179,7 @@ class _DatetimeRoundingMethods(Generic[_DTTimestampTimedeltaReturnType]):
     def floor(
         self,
         freq: str | BaseOffset | None,
-        ambiguous: Literal["raise", "infer", "NaT"] | np_ndarray_bool = ...,
+        ambiguous: Literal["raise", "infer", "NaT"] | bool | np_ndarray_bool = ...,
         nonexistent: (
             Literal["shift_forward", "shift_backward", "NaT", "raise"]
             | timedelta
@@ -187,7 +189,7 @@ class _DatetimeRoundingMethods(Generic[_DTTimestampTimedeltaReturnType]):
     def ceil(
         self,
         freq: str | BaseOffset | None,
-        ambiguous: Literal["raise", "infer", "NaT"] | np_ndarray_bool = ...,
+        ambiguous: Literal["raise", "infer", "NaT"] | bool | np_ndarray_bool = ...,
         nonexistent: (
             Literal["shift_forward", "shift_backward", "NaT", "raise"]
             | timedelta
@@ -218,12 +220,8 @@ class _DatetimeLikeNoTZMethods(
     def tz_localize(
         self,
         tz: TimeZones,
-        ambiguous: Literal["raise", "infer", "NaT"] | np_ndarray_bool = ...,
-        nonexistent: (
-            Literal["shift_forward", "shift_backward", "NaT", "raise"]
-            | timedelta
-            | Timedelta
-        ) = ...,
+        ambiguous: TimeAmbiguous = ...,
+        nonexistent: TimeNonexistent = ...,
     ) -> _DTNormalizeReturnType: ...
     def tz_convert(self, tz: TimeZones) -> _DTNormalizeReturnType: ...
     def normalize(self) -> _DTNormalizeReturnType: ...

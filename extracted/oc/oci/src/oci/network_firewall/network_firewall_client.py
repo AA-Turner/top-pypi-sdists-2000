@@ -161,7 +161,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/apply_network_firewall_policy.py.html>`__ to see an example of how to use apply_network_firewall_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/apply_network_firewall_policy.py.html>`__ to see an example of how to use apply_network_firewall_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -290,7 +290,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_address_lists.py.html>`__ to see an example of how to use bulk_upload_address_lists API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_address_lists.py.html>`__ to see an example of how to use bulk_upload_address_lists API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -438,7 +438,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_application_groups.py.html>`__ to see an example of how to use bulk_upload_application_groups API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_application_groups.py.html>`__ to see an example of how to use bulk_upload_application_groups API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -586,7 +586,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_applications.py.html>`__ to see an example of how to use bulk_upload_applications API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_applications.py.html>`__ to see an example of how to use bulk_upload_applications API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -734,7 +734,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_decryption_profiles.py.html>`__ to see an example of how to use bulk_upload_decryption_profiles API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_decryption_profiles.py.html>`__ to see an example of how to use bulk_upload_decryption_profiles API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -882,7 +882,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_decryption_rules.py.html>`__ to see an example of how to use bulk_upload_decryption_rules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_decryption_rules.py.html>`__ to see an example of how to use bulk_upload_decryption_rules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -1030,7 +1030,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_mapped_secrets.py.html>`__ to see an example of how to use bulk_upload_mapped_secrets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_mapped_secrets.py.html>`__ to see an example of how to use bulk_upload_mapped_secrets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -1127,6 +1127,154 @@ class NetworkFirewallClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def bulk_upload_nat_rules(self, network_firewall_policy_id, bulk_upload_nat_rules_details, **kwargs):
+        """
+        Creates a new NAT Rule at bulk for the Network Firewall Policy.
+
+
+        :param str network_firewall_policy_id: (required)
+            Unique Network Firewall Policy identifier
+
+        :param stream bulk_upload_nat_rules_details: (required)
+            Request Details to create the NAT Rule for the Network Firewall Policy Resource.
+
+        :param str opc_retry_token: (optional)
+            A token that uniquely identifies a request so it can be retried in case of a timeout or
+            server error without risk of executing that same action again. Retry tokens expire after 24
+            hours, but can be invalidated before then due to conflicting operations. For example, if a resource
+            has been deleted and purged from the system, then a retry of the original creation request
+            might be rejected.
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param str if_match: (optional)
+            For optimistic concurrency control. In the PUT or DELETE call
+            for a resource, set the `if-match` parameter to the value of the
+            etag from a previous GET or POST response for that resource.
+            The resource will be updated or deleted only if the etag you
+            provide matches the resource's current etag value.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+        :param int buffer_limit: (optional)
+            A buffer limit for the stream to be buffered. buffer_limit is used to set the buffer size capacity. Streams will be read until the size of the buffer reaches the buffer_limit.
+            If the stream size is greater than the buffer_limit, a BufferError exception will be thrown.
+
+            The buffer_limit parameter is used when the stream object does not have a `seek`, `tell`, or `fileno` property for the Python Request library to calculate out the content length.
+            If buffer_limit is not passed, then the buffer_limit will be defaulted to 100MB.
+            Large streams can cause the process to freeze, consider passing in content-length for large streams instead.
+
+        :return: A :class:`~oci.response.Response` object with data of type None
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_nat_rules.py.html>`__ to see an example of how to use bulk_upload_nat_rules API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['networkFirewallPolicyId']
+        resource_path = "/networkFirewallPolicies/{networkFirewallPolicyId}/natRules/actions/bulkUpload"
+        method = "POST"
+        operation_name = "bulk_upload_nat_rules"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/network-firewall/20230501/natRule/BulkUploadNatRules"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "buffer_limit",
+            "opc_retry_token",
+            "opc_request_id",
+            "if_match"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"bulk_upload_nat_rules got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "networkFirewallPolicyId": network_firewall_policy_id
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "opc-retry-token": kwargs.get("opc_retry_token", missing),
+            "opc-request-id": kwargs.get("opc_request_id", missing),
+            "if-match": kwargs.get("if_match", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        # If the body parameter is optional we need to assign it to a variable so additional type checking can be performed.
+        try:
+            bulk_upload_nat_rules_details
+        except NameError:
+            bulk_upload_nat_rules_details = kwargs.get("bulk_upload_nat_rules_details", missing)
+
+        if bulk_upload_nat_rules_details is not missing and bulk_upload_nat_rules_details is not None:
+            if (not isinstance(bulk_upload_nat_rules_details, (six.binary_type, six.string_types)) and
+                    not hasattr(bulk_upload_nat_rules_details, "read")):
+                raise TypeError('The body must be a string, bytes, or provide a read() method.')
+
+            if hasattr(bulk_upload_nat_rules_details, 'fileno') and hasattr(bulk_upload_nat_rules_details, 'name') and bulk_upload_nat_rules_details.name != '<stdin>':
+                if requests.utils.super_len(bulk_upload_nat_rules_details) == 0:
+                    header_params['Content-Length'] = '0'
+
+            # If content length is not given and stream object have no 'fileno' and is not a string or bytes, try to calculate content length
+            elif 'Content-Length' not in header_params and not is_content_length_calculable_by_req_util(bulk_upload_nat_rules_details):
+                calculated_obj = back_up_body_calculate_stream_content_length(bulk_upload_nat_rules_details, kwargs.get("buffer_limit"))
+                header_params['Content-Length'] = calculated_obj["content_length"]
+                bulk_upload_nat_rules_details = calculated_obj["byte_content"]
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_retry_token_if_needed(header_params)
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=bulk_upload_nat_rules_details,
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=bulk_upload_nat_rules_details,
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def bulk_upload_security_rules(self, network_firewall_policy_id, bulk_upload_security_rules_details, **kwargs):
         """
         Creates a new Security Rule at bulk for the Network Firewall Policy.
@@ -1178,7 +1326,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_security_rules.py.html>`__ to see an example of how to use bulk_upload_security_rules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_security_rules.py.html>`__ to see an example of how to use bulk_upload_security_rules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -1326,7 +1474,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_service_lists.py.html>`__ to see an example of how to use bulk_upload_service_lists API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_service_lists.py.html>`__ to see an example of how to use bulk_upload_service_lists API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -1474,7 +1622,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_services.py.html>`__ to see an example of how to use bulk_upload_services API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_services.py.html>`__ to see an example of how to use bulk_upload_services API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -1622,7 +1770,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_tunnel_inspection_rules.py.html>`__ to see an example of how to use bulk_upload_tunnel_inspection_rules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_tunnel_inspection_rules.py.html>`__ to see an example of how to use bulk_upload_tunnel_inspection_rules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -1770,7 +1918,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/bulk_upload_url_lists.py.html>`__ to see an example of how to use bulk_upload_url_lists API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/bulk_upload_url_lists.py.html>`__ to see an example of how to use bulk_upload_url_lists API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -1901,7 +2049,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -2018,7 +2166,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/change_network_firewall_compartment.py.html>`__ to see an example of how to use change_network_firewall_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/change_network_firewall_compartment.py.html>`__ to see an example of how to use change_network_firewall_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallId']
@@ -2138,7 +2286,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/change_network_firewall_policy_compartment.py.html>`__ to see an example of how to use change_network_firewall_policy_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/change_network_firewall_policy_compartment.py.html>`__ to see an example of how to use change_network_firewall_policy_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -2216,7 +2364,7 @@ class NetworkFirewallClient(object):
 
     def clone_network_firewall_policy(self, network_firewall_policy_id, clone_network_firewall_policy_details, **kwargs):
         """
-        Moves a NetworkFirewallPolicy resource from one compartment identifier to another. When provided, If-Match is checked against ETag values of the resource.
+        Clones a NetworkFirewallPolicy resource from an existing Network Firewall Policy. When provided, If-Match is checked against ETag values of the resource.
 
 
         :param str network_firewall_policy_id: (required)
@@ -2258,7 +2406,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/clone_network_firewall_policy.py.html>`__ to see an example of how to use clone_network_firewall_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/clone_network_firewall_policy.py.html>`__ to see an example of how to use clone_network_firewall_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -2373,7 +2521,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_address_list.py.html>`__ to see an example of how to use create_address_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_address_list.py.html>`__ to see an example of how to use create_address_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -2486,7 +2634,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_application.py.html>`__ to see an example of how to use create_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_application.py.html>`__ to see an example of how to use create_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -2599,7 +2747,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_application_group.py.html>`__ to see an example of how to use create_application_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_application_group.py.html>`__ to see an example of how to use create_application_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -2712,7 +2860,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_decryption_profile.py.html>`__ to see an example of how to use create_decryption_profile API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_decryption_profile.py.html>`__ to see an example of how to use create_decryption_profile API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -2825,7 +2973,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_decryption_rule.py.html>`__ to see an example of how to use create_decryption_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_decryption_rule.py.html>`__ to see an example of how to use create_decryption_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -2938,7 +3086,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_mapped_secret.py.html>`__ to see an example of how to use create_mapped_secret API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_mapped_secret.py.html>`__ to see an example of how to use create_mapped_secret API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -3014,6 +3162,119 @@ class NetworkFirewallClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def create_nat_rule(self, network_firewall_policy_id, create_nat_rule_details, **kwargs):
+        """
+        Creates a new NAT Rule for the Network Firewall Policy.
+
+
+        :param str network_firewall_policy_id: (required)
+            Unique Network Firewall Policy identifier
+
+        :param oci.network_firewall.models.CreateNatRuleDetails create_nat_rule_details: (required)
+            Request Details to create NAT rule under a Network Firewall Policy Resource.
+
+        :param str opc_retry_token: (optional)
+            A token that uniquely identifies a request so it can be retried in case of a timeout or
+            server error without risk of executing that same action again. Retry tokens expire after 24
+            hours, but can be invalidated before then due to conflicting operations. For example, if a resource
+            has been deleted and purged from the system, then a retry of the original creation request
+            might be rejected.
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.network_firewall.models.NatRule`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_nat_rule.py.html>`__ to see an example of how to use create_nat_rule API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['networkFirewallPolicyId']
+        resource_path = "/networkFirewallPolicies/{networkFirewallPolicyId}/natRules"
+        method = "POST"
+        operation_name = "create_nat_rule"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/network-firewall/20230501/NatRule/CreateNatRule"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "opc_retry_token",
+            "opc_request_id"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"create_nat_rule got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "networkFirewallPolicyId": network_firewall_policy_id
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-retry-token": kwargs.get("opc_retry_token", missing),
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_retry_token_if_needed(header_params)
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=create_nat_rule_details,
+                response_type="NatRule",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=create_nat_rule_details,
+                response_type="NatRule",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def create_network_firewall(self, create_network_firewall_details, **kwargs):
         """
         Creates a new NetworkFirewall.
@@ -3048,7 +3309,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_network_firewall.py.html>`__ to see an example of how to use create_network_firewall API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_network_firewall.py.html>`__ to see an example of how to use create_network_firewall API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3146,7 +3407,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_network_firewall_policy.py.html>`__ to see an example of how to use create_network_firewall_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_network_firewall_policy.py.html>`__ to see an example of how to use create_network_firewall_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3247,7 +3508,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_security_rule.py.html>`__ to see an example of how to use create_security_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_security_rule.py.html>`__ to see an example of how to use create_security_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -3360,7 +3621,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_service.py.html>`__ to see an example of how to use create_service API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_service.py.html>`__ to see an example of how to use create_service API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -3473,7 +3734,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_service_list.py.html>`__ to see an example of how to use create_service_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_service_list.py.html>`__ to see an example of how to use create_service_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -3586,7 +3847,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_tunnel_inspection_rule.py.html>`__ to see an example of how to use create_tunnel_inspection_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_tunnel_inspection_rule.py.html>`__ to see an example of how to use create_tunnel_inspection_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -3699,7 +3960,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/create_url_list.py.html>`__ to see an example of how to use create_url_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/create_url_list.py.html>`__ to see an example of how to use create_url_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -3812,7 +4073,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_address_list.py.html>`__ to see an example of how to use delete_address_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_address_list.py.html>`__ to see an example of how to use delete_address_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'addressListName']
@@ -3921,7 +4182,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_application.py.html>`__ to see an example of how to use delete_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_application.py.html>`__ to see an example of how to use delete_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'applicationName']
@@ -4030,7 +4291,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_application_group.py.html>`__ to see an example of how to use delete_application_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_application_group.py.html>`__ to see an example of how to use delete_application_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'applicationGroupName']
@@ -4139,7 +4400,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_decryption_profile.py.html>`__ to see an example of how to use delete_decryption_profile API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_decryption_profile.py.html>`__ to see an example of how to use delete_decryption_profile API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'decryptionProfileName']
@@ -4248,7 +4509,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_decryption_rule.py.html>`__ to see an example of how to use delete_decryption_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_decryption_rule.py.html>`__ to see an example of how to use delete_decryption_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'decryptionRuleName']
@@ -4357,7 +4618,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_mapped_secret.py.html>`__ to see an example of how to use delete_mapped_secret API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_mapped_secret.py.html>`__ to see an example of how to use delete_mapped_secret API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'mappedSecretName']
@@ -4381,6 +4642,115 @@ class NetworkFirewallClient(object):
         path_params = {
             "networkFirewallPolicyId": network_firewall_policy_id,
             "mappedSecretName": mapped_secret_name
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "if-match": kwargs.get("if_match", missing),
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
+    def delete_nat_rule(self, network_firewall_policy_id, nat_rule_name, **kwargs):
+        """
+        Deletes a NAT Rule resource with the given identifier.
+
+
+        :param str network_firewall_policy_id: (required)
+            Unique Network Firewall Policy identifier
+
+        :param str nat_rule_name: (required)
+            Unique identifier for NAT Rules in the network firewall policy.
+
+        :param str if_match: (optional)
+            For optimistic concurrency control. In the PUT or DELETE call
+            for a resource, set the `if-match` parameter to the value of the
+            etag from a previous GET or POST response for that resource.
+            The resource will be updated or deleted only if the etag you
+            provide matches the resource's current etag value.
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type None
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_nat_rule.py.html>`__ to see an example of how to use delete_nat_rule API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['networkFirewallPolicyId', 'natRuleName']
+        resource_path = "/networkFirewallPolicies/{networkFirewallPolicyId}/natRules/{natRuleName}"
+        method = "DELETE"
+        operation_name = "delete_nat_rule"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/network-firewall/20230501/NatRule/DeleteNatRule"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "if_match",
+            "opc_request_id"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"delete_nat_rule got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "networkFirewallPolicyId": network_firewall_policy_id,
+            "natRuleName": nat_rule_name
         }
 
         path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
@@ -4465,7 +4835,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_network_firewall.py.html>`__ to see an example of how to use delete_network_firewall API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_network_firewall.py.html>`__ to see an example of how to use delete_network_firewall API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallId']
@@ -4570,7 +4940,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_network_firewall_policy.py.html>`__ to see an example of how to use delete_network_firewall_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_network_firewall_policy.py.html>`__ to see an example of how to use delete_network_firewall_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -4678,7 +5048,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_security_rule.py.html>`__ to see an example of how to use delete_security_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_security_rule.py.html>`__ to see an example of how to use delete_security_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'securityRuleName']
@@ -4787,7 +5157,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_service.py.html>`__ to see an example of how to use delete_service API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_service.py.html>`__ to see an example of how to use delete_service API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'serviceName']
@@ -4896,7 +5266,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_service_list.py.html>`__ to see an example of how to use delete_service_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_service_list.py.html>`__ to see an example of how to use delete_service_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'serviceListName']
@@ -5005,7 +5375,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_tunnel_inspection_rule.py.html>`__ to see an example of how to use delete_tunnel_inspection_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_tunnel_inspection_rule.py.html>`__ to see an example of how to use delete_tunnel_inspection_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'tunnelInspectionRuleName']
@@ -5114,7 +5484,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/delete_url_list.py.html>`__ to see an example of how to use delete_url_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/delete_url_list.py.html>`__ to see an example of how to use delete_url_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'urlListName']
@@ -5216,7 +5586,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_address_list.py.html>`__ to see an example of how to use get_address_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_address_list.py.html>`__ to see an example of how to use get_address_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'addressListName']
@@ -5324,7 +5694,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_application.py.html>`__ to see an example of how to use get_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_application.py.html>`__ to see an example of how to use get_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'applicationName']
@@ -5436,7 +5806,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_application_group.py.html>`__ to see an example of how to use get_application_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_application_group.py.html>`__ to see an example of how to use get_application_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'applicationGroupName']
@@ -5538,7 +5908,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_decryption_profile.py.html>`__ to see an example of how to use get_decryption_profile API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_decryption_profile.py.html>`__ to see an example of how to use get_decryption_profile API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'decryptionProfileName']
@@ -5646,7 +6016,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_decryption_rule.py.html>`__ to see an example of how to use get_decryption_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_decryption_rule.py.html>`__ to see an example of how to use get_decryption_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'decryptionRuleName']
@@ -5764,7 +6134,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_mapped_secret.py.html>`__ to see an example of how to use get_mapped_secret API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_mapped_secret.py.html>`__ to see an example of how to use get_mapped_secret API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'mappedSecretName']
@@ -5846,6 +6216,108 @@ class NetworkFirewallClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def get_nat_rule(self, network_firewall_policy_id, nat_rule_name, **kwargs):
+        """
+        Get NAT Rule by the given name in the context of network firewall policy.
+
+
+        :param str network_firewall_policy_id: (required)
+            Unique Network Firewall Policy identifier
+
+        :param str nat_rule_name: (required)
+            Unique identifier for NAT Rules in the network firewall policy.
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.network_firewall.models.NatRule`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_nat_rule.py.html>`__ to see an example of how to use get_nat_rule API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['networkFirewallPolicyId', 'natRuleName']
+        resource_path = "/networkFirewallPolicies/{networkFirewallPolicyId}/natRules/{natRuleName}"
+        method = "GET"
+        operation_name = "get_nat_rule"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/network-firewall/20230501/NatRule/GetNatRule"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "opc_request_id"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"get_nat_rule got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "networkFirewallPolicyId": network_firewall_policy_id,
+            "natRuleName": nat_rule_name
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                response_type="NatRule",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                response_type="NatRule",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def get_network_firewall(self, network_firewall_id, **kwargs):
         """
         Gets a NetworkFirewall by identifier
@@ -5875,7 +6347,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_network_firewall.py.html>`__ to see an example of how to use get_network_firewall API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_network_firewall.py.html>`__ to see an example of how to use get_network_firewall API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallId']
@@ -5973,7 +6445,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_network_firewall_policy.py.html>`__ to see an example of how to use get_network_firewall_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_network_firewall_policy.py.html>`__ to see an example of how to use get_network_firewall_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -6074,7 +6546,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_security_rule.py.html>`__ to see an example of how to use get_security_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_security_rule.py.html>`__ to see an example of how to use get_security_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'securityRuleName']
@@ -6182,7 +6654,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_service.py.html>`__ to see an example of how to use get_service API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_service.py.html>`__ to see an example of how to use get_service API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'serviceName']
@@ -6294,7 +6766,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_service_list.py.html>`__ to see an example of how to use get_service_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_service_list.py.html>`__ to see an example of how to use get_service_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'serviceListName']
@@ -6396,7 +6868,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_tunnel_inspection_rule.py.html>`__ to see an example of how to use get_tunnel_inspection_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_tunnel_inspection_rule.py.html>`__ to see an example of how to use get_tunnel_inspection_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'tunnelInspectionRuleName']
@@ -6498,7 +6970,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_url_list.py.html>`__ to see an example of how to use get_url_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_url_list.py.html>`__ to see an example of how to use get_url_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'urlListName']
@@ -6597,7 +7069,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -6714,7 +7186,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_address_lists.py.html>`__ to see an example of how to use list_address_lists API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_address_lists.py.html>`__ to see an example of how to use list_address_lists API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -6861,7 +7333,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_application_groups.py.html>`__ to see an example of how to use list_application_groups API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_application_groups.py.html>`__ to see an example of how to use list_application_groups API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -7008,7 +7480,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_applications.py.html>`__ to see an example of how to use list_applications API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_applications.py.html>`__ to see an example of how to use list_applications API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -7155,7 +7627,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_decryption_profiles.py.html>`__ to see an example of how to use list_decryption_profiles API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_decryption_profiles.py.html>`__ to see an example of how to use list_decryption_profiles API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -7305,7 +7777,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_decryption_rules.py.html>`__ to see an example of how to use list_decryption_rules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_decryption_rules.py.html>`__ to see an example of how to use list_decryption_rules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -7454,7 +7926,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_mapped_secrets.py.html>`__ to see an example of how to use list_mapped_secrets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_mapped_secrets.py.html>`__ to see an example of how to use list_mapped_secrets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -7555,6 +8027,158 @@ class NetworkFirewallClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def list_nat_rules(self, network_firewall_policy_id, **kwargs):
+        """
+        Returns a list of NAT Rules for the Network Firewall Policy.
+
+
+        :param str network_firewall_policy_id: (required)
+            Unique Network Firewall Policy identifier
+
+        :param int limit: (optional)
+            The maximum number of items to return.
+
+        :param str page: (optional)
+            A token representing the position at which to start retrieving results. This must come from the `opc-next-page` or `opc-prev-page` header field of a previous response.
+
+        :param str sort_order: (optional)
+            The sort order to use, either 'ASC' or 'DESC'.
+
+            Allowed values are: "ASC", "DESC"
+
+        :param str sort_by: (optional)
+            The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for displayName is ascending.
+
+            Allowed values are: "timeCreated", "displayName"
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param str display_name: (optional)
+            A filter to return only resources that match the entire display name given.
+
+        :param int nat_rule_priority_order: (optional)
+            Unique priority order for NAT Rules in the network firewall policy.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.network_firewall.models.NatRuleCollection`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_nat_rules.py.html>`__ to see an example of how to use list_nat_rules API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['networkFirewallPolicyId']
+        resource_path = "/networkFirewallPolicies/{networkFirewallPolicyId}/natRules"
+        method = "GET"
+        operation_name = "list_nat_rules"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/network-firewall/20230501/NatRule/ListNatRules"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "limit",
+            "page",
+            "sort_order",
+            "sort_by",
+            "opc_request_id",
+            "display_name",
+            "nat_rule_priority_order"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"list_nat_rules got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "networkFirewallPolicyId": network_firewall_policy_id
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        if 'sort_order' in kwargs:
+            sort_order_allowed_values = ["ASC", "DESC"]
+            if kwargs['sort_order'] not in sort_order_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_order`, must be one of { sort_order_allowed_values }"
+                )
+
+        if 'sort_by' in kwargs:
+            sort_by_allowed_values = ["timeCreated", "displayName"]
+            if kwargs['sort_by'] not in sort_by_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_by`, must be one of { sort_by_allowed_values }"
+                )
+
+        query_params = {
+            "limit": kwargs.get("limit", missing),
+            "page": kwargs.get("page", missing),
+            "sortOrder": kwargs.get("sort_order", missing),
+            "sortBy": kwargs.get("sort_by", missing),
+            "displayName": kwargs.get("display_name", missing),
+            "natRulePriorityOrder": kwargs.get("nat_rule_priority_order", missing)
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="NatRuleCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="NatRuleCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def list_network_firewall_policies(self, compartment_id, **kwargs):
         """
         Returns a list of Network Firewall Policies.
@@ -7578,7 +8202,7 @@ class NetworkFirewallClient(object):
         :param str lifecycle_state: (optional)
             A filter to return only resources with a lifecycleState matching the given value.
 
-            Allowed values are: "CREATING", "UPDATING", "ACTIVE", "DELETING", "DELETED", "FAILED", "NEEDS_ATTENTION", "ATTACHING", "DETACHING"
+            Allowed values are: "CREATING", "UPDATING", "ACTIVE", "DELETING", "DELETED", "FAILED", "NEEDS_ATTENTION"
 
         :param str sort_order: (optional)
             The sort order to use, either 'ASC' or 'DESC'.
@@ -7609,7 +8233,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_network_firewall_policies.py.html>`__ to see an example of how to use list_network_firewall_policies API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_network_firewall_policies.py.html>`__ to see an example of how to use list_network_firewall_policies API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -7637,7 +8261,7 @@ class NetworkFirewallClient(object):
                 f"list_network_firewall_policies got unknown kwargs: {extra_kwargs!r}")
 
         if 'lifecycle_state' in kwargs:
-            lifecycle_state_allowed_values = ["CREATING", "UPDATING", "ACTIVE", "DELETING", "DELETED", "FAILED", "NEEDS_ATTENTION", "ATTACHING", "DETACHING"]
+            lifecycle_state_allowed_values = ["CREATING", "UPDATING", "ACTIVE", "DELETING", "DELETED", "FAILED", "NEEDS_ATTENTION"]
             if kwargs['lifecycle_state'] not in lifecycle_state_allowed_values:
                 raise ValueError(
                     f"Invalid value for `lifecycle_state`, must be one of { lifecycle_state_allowed_values }"
@@ -7743,7 +8367,7 @@ class NetworkFirewallClient(object):
         :param str lifecycle_state: (optional)
             A filter to return only resources with a lifecycleState matching the given value.
 
-            Allowed values are: "CREATING", "UPDATING", "ACTIVE", "DELETING", "DELETED", "FAILED", "NEEDS_ATTENTION", "ATTACHING", "DETACHING"
+            Allowed values are: "CREATING", "UPDATING", "ACTIVE", "DELETING", "DELETED", "FAILED", "NEEDS_ATTENTION"
 
         :param str sort_order: (optional)
             The sort order to use, either 'ASC' or 'DESC'.
@@ -7774,7 +8398,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_network_firewalls.py.html>`__ to see an example of how to use list_network_firewalls API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_network_firewalls.py.html>`__ to see an example of how to use list_network_firewalls API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -7804,7 +8428,7 @@ class NetworkFirewallClient(object):
                 f"list_network_firewalls got unknown kwargs: {extra_kwargs!r}")
 
         if 'lifecycle_state' in kwargs:
-            lifecycle_state_allowed_values = ["CREATING", "UPDATING", "ACTIVE", "DELETING", "DELETED", "FAILED", "NEEDS_ATTENTION", "ATTACHING", "DETACHING"]
+            lifecycle_state_allowed_values = ["CREATING", "UPDATING", "ACTIVE", "DELETING", "DELETED", "FAILED", "NEEDS_ATTENTION"]
             if kwargs['lifecycle_state'] not in lifecycle_state_allowed_values:
                 raise ValueError(
                     f"Invalid value for `lifecycle_state`, must be one of { lifecycle_state_allowed_values }"
@@ -7928,7 +8552,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_security_rules.py.html>`__ to see an example of how to use list_security_rules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_security_rules.py.html>`__ to see an example of how to use list_security_rules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -8077,7 +8701,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_service_lists.py.html>`__ to see an example of how to use list_service_lists API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_service_lists.py.html>`__ to see an example of how to use list_service_lists API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -8224,7 +8848,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_services.py.html>`__ to see an example of how to use list_services API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_services.py.html>`__ to see an example of how to use list_services API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -8374,7 +8998,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_tunnel_inspection_rules.py.html>`__ to see an example of how to use list_tunnel_inspection_rules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_tunnel_inspection_rules.py.html>`__ to see an example of how to use list_tunnel_inspection_rules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -8523,7 +9147,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_url_lists.py.html>`__ to see an example of how to use list_url_lists API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_url_lists.py.html>`__ to see an example of how to use list_url_lists API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -8667,7 +9291,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -8809,7 +9433,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -8962,7 +9586,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -9104,7 +9728,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/migrate_network_firewall_policy.py.html>`__ to see an example of how to use migrate_network_firewall_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/migrate_network_firewall_policy.py.html>`__ to see an example of how to use migrate_network_firewall_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -9218,7 +9842,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_address_list.py.html>`__ to see an example of how to use update_address_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_address_list.py.html>`__ to see an example of how to use update_address_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'addressListName']
@@ -9334,7 +9958,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_application.py.html>`__ to see an example of how to use update_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_application.py.html>`__ to see an example of how to use update_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'applicationName']
@@ -9450,7 +10074,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_application_group.py.html>`__ to see an example of how to use update_application_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_application_group.py.html>`__ to see an example of how to use update_application_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'applicationGroupName']
@@ -9566,7 +10190,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_decryption_profile.py.html>`__ to see an example of how to use update_decryption_profile API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_decryption_profile.py.html>`__ to see an example of how to use update_decryption_profile API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'decryptionProfileName']
@@ -9682,7 +10306,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_decryption_rule.py.html>`__ to see an example of how to use update_decryption_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_decryption_rule.py.html>`__ to see an example of how to use update_decryption_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'decryptionRuleName']
@@ -9798,7 +10422,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_mapped_secret.py.html>`__ to see an example of how to use update_mapped_secret API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_mapped_secret.py.html>`__ to see an example of how to use update_mapped_secret API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'mappedSecretName']
@@ -9874,6 +10498,122 @@ class NetworkFirewallClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def update_nat_rule(self, network_firewall_policy_id, nat_rule_name, update_nat_rule_details, **kwargs):
+        """
+        Updates the NAT Rule with the given name in the network firewall policy.
+
+
+        :param str network_firewall_policy_id: (required)
+            Unique Network Firewall Policy identifier
+
+        :param str nat_rule_name: (required)
+            Unique identifier for NAT Rules in the network firewall policy.
+
+        :param oci.network_firewall.models.UpdateNatRuleDetails update_nat_rule_details: (required)
+            The information to be updated.
+
+        :param str if_match: (optional)
+            For optimistic concurrency control. In the PUT or DELETE call
+            for a resource, set the `if-match` parameter to the value of the
+            etag from a previous GET or POST response for that resource.
+            The resource will be updated or deleted only if the etag you
+            provide matches the resource's current etag value.
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.network_firewall.models.NatRule`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_nat_rule.py.html>`__ to see an example of how to use update_nat_rule API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['networkFirewallPolicyId', 'natRuleName']
+        resource_path = "/networkFirewallPolicies/{networkFirewallPolicyId}/natRules/{natRuleName}"
+        method = "PUT"
+        operation_name = "update_nat_rule"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/network-firewall/20230501/NatRule/UpdateNatRule"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "if_match",
+            "opc_request_id"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"update_nat_rule got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "networkFirewallPolicyId": network_firewall_policy_id,
+            "natRuleName": nat_rule_name
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "if-match": kwargs.get("if_match", missing),
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=update_nat_rule_details,
+                response_type="NatRule",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=update_nat_rule_details,
+                response_type="NatRule",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def update_network_firewall(self, network_firewall_id, update_network_firewall_details, **kwargs):
         """
         Updates the NetworkFirewall
@@ -9913,7 +10653,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_network_firewall.py.html>`__ to see an example of how to use update_network_firewall API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_network_firewall.py.html>`__ to see an example of how to use update_network_firewall API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallId']
@@ -10023,7 +10763,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_network_firewall_policy.py.html>`__ to see an example of how to use update_network_firewall_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_network_firewall_policy.py.html>`__ to see an example of how to use update_network_firewall_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId']
@@ -10136,7 +10876,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_security_rule.py.html>`__ to see an example of how to use update_security_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_security_rule.py.html>`__ to see an example of how to use update_security_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'securityRuleName']
@@ -10252,7 +10992,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_service.py.html>`__ to see an example of how to use update_service API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_service.py.html>`__ to see an example of how to use update_service API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'serviceName']
@@ -10368,7 +11108,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_service_list.py.html>`__ to see an example of how to use update_service_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_service_list.py.html>`__ to see an example of how to use update_service_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'serviceListName']
@@ -10484,7 +11224,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_tunnel_inspection_rule.py.html>`__ to see an example of how to use update_tunnel_inspection_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_tunnel_inspection_rule.py.html>`__ to see an example of how to use update_tunnel_inspection_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'tunnelInspectionRuleName']
@@ -10600,7 +11340,7 @@ class NetworkFirewallClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.152.1/networkfirewall/update_url_list.py.html>`__ to see an example of how to use update_url_list API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.153.0/networkfirewall/update_url_list.py.html>`__ to see an example of how to use update_url_list API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['networkFirewallPolicyId', 'urlListName']

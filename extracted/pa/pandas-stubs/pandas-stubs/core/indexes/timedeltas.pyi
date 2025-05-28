@@ -27,7 +27,7 @@ from pandas._libs import (
 )
 from pandas._libs.tslibs import BaseOffset
 from pandas._typing import (
-    AnyArrayLike,
+    AxesData,
     TimedeltaConvertibleTypes,
     num,
 )
@@ -36,9 +36,7 @@ class TimedeltaIndex(DatetimeTimedeltaMixin[Timedelta], TimedeltaIndexProperties
     def __new__(
         cls,
         data: (
-            AnyArrayLike
-            | list[str]
-            | Sequence[dt.timedelta | Timedelta | np.timedelta64 | float]
+            Sequence[dt.timedelta | Timedelta | np.timedelta64 | float] | AxesData
         ) = ...,
         freq: str | BaseOffset = ...,
         closed: object = ...,
@@ -54,7 +52,7 @@ class TimedeltaIndex(DatetimeTimedeltaMixin[Timedelta], TimedeltaIndexProperties
     def __add__(self, other: DatetimeIndex) -> DatetimeIndex: ...
     @overload
     def __add__(self, other: dt.timedelta | Timedelta | Self) -> Self: ...
-    def __radd__(self, other: dt.datetime | Timestamp | DatetimeIndex) -> DatetimeIndex: ...  # type: ignore[override]  # pyright: ignore[reportIncompatibleMethodOverride]
+    def __radd__(self, other: dt.datetime | Timestamp | DatetimeIndex) -> DatetimeIndex: ...  # type: ignore[override]
     def __sub__(self, other: dt.timedelta | Timedelta | Self) -> Self: ...
     def __mul__(self, other: num) -> Self: ...
     @overload  # type: ignore[override]
@@ -75,8 +73,8 @@ class TimedeltaIndex(DatetimeTimedeltaMixin[Timedelta], TimedeltaIndexProperties
     def searchsorted(self, value, side: str = ..., sorter=...): ...
     @property
     def inferred_type(self) -> str: ...
-    def insert(self, loc, item): ...
     def to_series(self, index=..., name: Hashable = ...) -> TimedeltaSeries: ...
+    def shift(self, periods: int = ..., freq=...) -> Self: ...
 
 def timedelta_range(
     start: TimedeltaConvertibleTypes = ...,

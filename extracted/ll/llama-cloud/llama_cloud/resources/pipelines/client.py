@@ -39,6 +39,9 @@ from ...types.text_node import TextNode
 from .types.pipeline_file_update_custom_metadata_value import PipelineFileUpdateCustomMetadataValue
 from .types.pipeline_update_embedding_config import PipelineUpdateEmbeddingConfig
 from .types.pipeline_update_transform_config import PipelineUpdateTransformConfig
+from .types.retrieval_params_search_filters_inference_schema_value import (
+    RetrievalParamsSearchFiltersInferenceSchemaValue,
+)
 
 try:
     import pydantic
@@ -63,6 +66,7 @@ class PipelinesClient:
         project_name: typing.Optional[str] = None,
         pipeline_name: typing.Optional[str] = None,
         pipeline_type: typing.Optional[PipelineType] = None,
+        organization_id: typing.Optional[str] = None,
     ) -> typing.List[Pipeline]:
         """
         Search for pipelines by various parameters.
@@ -75,6 +79,8 @@ class PipelinesClient:
             - pipeline_name: typing.Optional[str].
 
             - pipeline_type: typing.Optional[PipelineType].
+
+            - organization_id: typing.Optional[str].
         ---
         from llama_cloud import PipelineType
         from llama_cloud.client import LlamaCloud
@@ -95,6 +101,7 @@ class PipelinesClient:
                     "project_name": project_name,
                     "pipeline_name": pipeline_name,
                     "pipeline_type": pipeline_type,
+                    "organization_id": organization_id,
                 }
             ),
             headers=self._client_wrapper.get_headers(),
@@ -1037,6 +1044,9 @@ class PipelinesClient:
         rerank_top_n: typing.Optional[int] = OMIT,
         alpha: typing.Optional[float] = OMIT,
         search_filters: typing.Optional[MetadataFilters] = OMIT,
+        search_filters_inference_schema: typing.Optional[
+            typing.Dict[str, typing.Optional[RetrievalParamsSearchFiltersInferenceSchemaValue]]
+        ] = OMIT,
         files_top_k: typing.Optional[int] = OMIT,
         retrieval_mode: typing.Optional[RetrievalMode] = OMIT,
         retrieve_image_nodes: typing.Optional[bool] = OMIT,
@@ -1066,6 +1076,8 @@ class PipelinesClient:
             - alpha: typing.Optional[float].
 
             - search_filters: typing.Optional[MetadataFilters].
+
+            - search_filters_inference_schema: typing.Optional[typing.Dict[str, typing.Optional[RetrievalParamsSearchFiltersInferenceSchemaValue]]].
 
             - files_top_k: typing.Optional[int].
 
@@ -1108,6 +1120,8 @@ class PipelinesClient:
             _request["alpha"] = alpha
         if search_filters is not OMIT:
             _request["search_filters"] = search_filters
+        if search_filters_inference_schema is not OMIT:
+            _request["search_filters_inference_schema"] = search_filters_inference_schema
         if files_top_k is not OMIT:
             _request["files_top_k"] = files_top_k
         if retrieval_mode is not OMIT:
@@ -1681,6 +1695,7 @@ class AsyncPipelinesClient:
         project_name: typing.Optional[str] = None,
         pipeline_name: typing.Optional[str] = None,
         pipeline_type: typing.Optional[PipelineType] = None,
+        organization_id: typing.Optional[str] = None,
     ) -> typing.List[Pipeline]:
         """
         Search for pipelines by various parameters.
@@ -1693,6 +1708,8 @@ class AsyncPipelinesClient:
             - pipeline_name: typing.Optional[str].
 
             - pipeline_type: typing.Optional[PipelineType].
+
+            - organization_id: typing.Optional[str].
         ---
         from llama_cloud import PipelineType
         from llama_cloud.client import AsyncLlamaCloud
@@ -1713,6 +1730,7 @@ class AsyncPipelinesClient:
                     "project_name": project_name,
                     "pipeline_name": pipeline_name,
                     "pipeline_type": pipeline_type,
+                    "organization_id": organization_id,
                 }
             ),
             headers=self._client_wrapper.get_headers(),
@@ -2657,6 +2675,9 @@ class AsyncPipelinesClient:
         rerank_top_n: typing.Optional[int] = OMIT,
         alpha: typing.Optional[float] = OMIT,
         search_filters: typing.Optional[MetadataFilters] = OMIT,
+        search_filters_inference_schema: typing.Optional[
+            typing.Dict[str, typing.Optional[RetrievalParamsSearchFiltersInferenceSchemaValue]]
+        ] = OMIT,
         files_top_k: typing.Optional[int] = OMIT,
         retrieval_mode: typing.Optional[RetrievalMode] = OMIT,
         retrieve_image_nodes: typing.Optional[bool] = OMIT,
@@ -2686,6 +2707,8 @@ class AsyncPipelinesClient:
             - alpha: typing.Optional[float].
 
             - search_filters: typing.Optional[MetadataFilters].
+
+            - search_filters_inference_schema: typing.Optional[typing.Dict[str, typing.Optional[RetrievalParamsSearchFiltersInferenceSchemaValue]]].
 
             - files_top_k: typing.Optional[int].
 
@@ -2728,6 +2751,8 @@ class AsyncPipelinesClient:
             _request["alpha"] = alpha
         if search_filters is not OMIT:
             _request["search_filters"] = search_filters
+        if search_filters_inference_schema is not OMIT:
+            _request["search_filters_inference_schema"] = search_filters_inference_schema
         if files_top_k is not OMIT:
             _request["files_top_k"] = files_top_k
         if retrieval_mode is not OMIT:

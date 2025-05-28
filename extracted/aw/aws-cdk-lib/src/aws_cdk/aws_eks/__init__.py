@@ -1976,10 +1976,13 @@ load_balancer_address = cluster.get_service_load_balancer_address("my-service")
 
 eks.Addon(self, "Addon",
     cluster=cluster,
-    addon_name="aws-guardduty-agent",
-    addon_version="v1.6.1",
+    addon_name="coredns",
+    addon_version="v1.11.4-eksbuild.2",
     # whether to preserve the add-on software on your cluster but Amazon EKS stops managing any settings for the add-on.
-    preserve_on_delete=False
+    preserve_on_delete=False,
+    configuration_values={
+        "replica_count": 2
+    }
 )
 ```
 
@@ -2808,6 +2811,7 @@ class AddonAttributes:
         "addon_name": "addonName",
         "cluster": "cluster",
         "addon_version": "addonVersion",
+        "configuration_values": "configurationValues",
         "preserve_on_delete": "preserveOnDelete",
     },
 )
@@ -2818,6 +2822,7 @@ class AddonProps:
         addon_name: builtins.str,
         cluster: "ICluster",
         addon_version: typing.Optional[builtins.str] = None,
+        configuration_values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         preserve_on_delete: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Properties for creating an Amazon EKS Add-On.
@@ -2825,6 +2830,7 @@ class AddonProps:
         :param addon_name: Name of the Add-On.
         :param cluster: The EKS cluster the Add-On is associated with.
         :param addon_version: Version of the Add-On. You can check all available versions with describe-addon-versions. For example, this lists all available versions for the ``eks-pod-identity-agent`` addon: $ aws eks describe-addon-versions --addon-name eks-pod-identity-agent --query 'addons[*].addonVersions[*].addonVersion' Default: the latest version.
+        :param configuration_values: The configuration values for the Add-on. Default: - Use default configuration.
         :param preserve_on_delete: Specifying this option preserves the add-on software on your cluster but Amazon EKS stops managing any settings for the add-on. If an IAM account is associated with the add-on, it isn't removed. Default: true
 
         :exampleMetadata: infused
@@ -2836,10 +2842,13 @@ class AddonProps:
             
             eks.Addon(self, "Addon",
                 cluster=cluster,
-                addon_name="aws-guardduty-agent",
-                addon_version="v1.6.1",
+                addon_name="coredns",
+                addon_version="v1.11.4-eksbuild.2",
                 # whether to preserve the add-on software on your cluster but Amazon EKS stops managing any settings for the add-on.
-                preserve_on_delete=False
+                preserve_on_delete=False,
+                configuration_values={
+                    "replica_count": 2
+                }
             )
         '''
         if __debug__:
@@ -2847,6 +2856,7 @@ class AddonProps:
             check_type(argname="argument addon_name", value=addon_name, expected_type=type_hints["addon_name"])
             check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
             check_type(argname="argument addon_version", value=addon_version, expected_type=type_hints["addon_version"])
+            check_type(argname="argument configuration_values", value=configuration_values, expected_type=type_hints["configuration_values"])
             check_type(argname="argument preserve_on_delete", value=preserve_on_delete, expected_type=type_hints["preserve_on_delete"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "addon_name": addon_name,
@@ -2854,6 +2864,8 @@ class AddonProps:
         }
         if addon_version is not None:
             self._values["addon_version"] = addon_version
+        if configuration_values is not None:
+            self._values["configuration_values"] = configuration_values
         if preserve_on_delete is not None:
             self._values["preserve_on_delete"] = preserve_on_delete
 
@@ -2884,6 +2896,17 @@ class AddonProps:
         '''
         result = self._values.get("addon_version")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def configuration_values(
+        self,
+    ) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
+        '''The configuration values for the Add-on.
+
+        :default: - Use default configuration.
+        '''
+        result = self._values.get("configuration_values")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
     def preserve_on_delete(self) -> typing.Optional[builtins.bool]:
@@ -18415,10 +18438,13 @@ class Addon(
         
         eks.Addon(self, "Addon",
             cluster=cluster,
-            addon_name="aws-guardduty-agent",
-            addon_version="v1.6.1",
+            addon_name="coredns",
+            addon_version="v1.11.4-eksbuild.2",
             # whether to preserve the add-on software on your cluster but Amazon EKS stops managing any settings for the add-on.
-            preserve_on_delete=False
+            preserve_on_delete=False,
+            configuration_values={
+                "replica_count": 2
+            }
         )
     '''
 
@@ -18430,6 +18456,7 @@ class Addon(
         addon_name: builtins.str,
         cluster: ICluster,
         addon_version: typing.Optional[builtins.str] = None,
+        configuration_values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         preserve_on_delete: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Creates a new Amazon EKS Add-On.
@@ -18439,6 +18466,7 @@ class Addon(
         :param addon_name: Name of the Add-On.
         :param cluster: The EKS cluster the Add-On is associated with.
         :param addon_version: Version of the Add-On. You can check all available versions with describe-addon-versions. For example, this lists all available versions for the ``eks-pod-identity-agent`` addon: $ aws eks describe-addon-versions --addon-name eks-pod-identity-agent --query 'addons[*].addonVersions[*].addonVersion' Default: the latest version.
+        :param configuration_values: The configuration values for the Add-on. Default: - Use default configuration.
         :param preserve_on_delete: Specifying this option preserves the add-on software on your cluster but Amazon EKS stops managing any settings for the add-on. If an IAM account is associated with the add-on, it isn't removed. Default: true
         '''
         if __debug__:
@@ -18449,6 +18477,7 @@ class Addon(
             addon_name=addon_name,
             cluster=cluster,
             addon_version=addon_version,
+            configuration_values=configuration_values,
             preserve_on_delete=preserve_on_delete,
         )
 
@@ -21808,6 +21837,7 @@ def _typecheckingstub__febc9f6cb4243d885b1b1838be38d633e7c5fc6534eaaf731f00a2465
     addon_name: builtins.str,
     cluster: ICluster,
     addon_version: typing.Optional[builtins.str] = None,
+    configuration_values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     preserve_on_delete: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
@@ -23585,6 +23615,7 @@ def _typecheckingstub__a8342124e215d4789acf852df764143c4809251dbcaa86f6b4a11860e
     addon_name: builtins.str,
     cluster: ICluster,
     addon_version: typing.Optional[builtins.str] = None,
+    configuration_values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     preserve_on_delete: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""

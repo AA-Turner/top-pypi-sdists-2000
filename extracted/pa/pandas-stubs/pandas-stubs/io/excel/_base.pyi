@@ -25,6 +25,7 @@ from pandas._typing import (
     DtypeBackend,
     ExcelReadEngine,
     ExcelWriteEngine,
+    ExcelWriterIfSheetExists,
     FilePath,
     IntStrT,
     ListLikeHashable,
@@ -58,7 +59,7 @@ def read_excel(
     false_values: Iterable[Hashable] | None = ...,
     skiprows: int | Sequence[int] | Callable[[object], bool] | None = ...,
     nrows: int | None = ...,
-    na_values: Sequence[str] | dict[str | int, Sequence[str]] = ...,
+    na_values: Sequence[str] | dict[str | int, Sequence[str]] | None = ...,
     keep_default_na: bool = ...,
     na_filter: bool = ...,
     verbose: bool = ...,
@@ -75,6 +76,7 @@ def read_excel(
     skipfooter: int = ...,
     storage_options: StorageOptions = ...,
     dtype_backend: DtypeBackend | NoDefault = ...,
+    engine_kwargs: dict[str, Any] | None = ...,
 ) -> dict[IntStrT, DataFrame]: ...
 @overload
 def read_excel(
@@ -100,7 +102,7 @@ def read_excel(
     false_values: Iterable[Hashable] | None = ...,
     skiprows: int | Sequence[int] | Callable[[object], bool] | None = ...,
     nrows: int | None = ...,
-    na_values: Sequence[str] | dict[str | int, Sequence[str]] = ...,
+    na_values: Sequence[str] | dict[str | int, Sequence[str]] | None = ...,
     keep_default_na: bool = ...,
     na_filter: bool = ...,
     verbose: bool = ...,
@@ -117,6 +119,7 @@ def read_excel(
     skipfooter: int = ...,
     storage_options: StorageOptions = ...,
     dtype_backend: DtypeBackend | NoDefault = ...,
+    engine_kwargs: dict[str, Any] | None = ...,
 ) -> dict[str, DataFrame]: ...
 @overload
 # mypy says this won't be matched
@@ -143,7 +146,7 @@ def read_excel(  # type: ignore[overload-cannot-match]
     false_values: Iterable[Hashable] | None = ...,
     skiprows: int | Sequence[int] | Callable[[object], bool] | None = ...,
     nrows: int | None = ...,
-    na_values: Sequence[str] | dict[str | int, Sequence[str]] = ...,
+    na_values: Sequence[str] | dict[str | int, Sequence[str]] | None = ...,
     keep_default_na: bool = ...,
     na_filter: bool = ...,
     verbose: bool = ...,
@@ -160,6 +163,7 @@ def read_excel(  # type: ignore[overload-cannot-match]
     skipfooter: int = ...,
     storage_options: StorageOptions = ...,
     dtype_backend: DtypeBackend | NoDefault = ...,
+    engine_kwargs: dict[str, Any] | None = ...,
 ) -> dict[int | str, DataFrame]: ...
 @overload
 def read_excel(
@@ -185,7 +189,7 @@ def read_excel(
     false_values: Iterable[Hashable] | None = ...,
     skiprows: int | Sequence[int] | Callable[[object], bool] | None = ...,
     nrows: int | None = ...,
-    na_values: Sequence[str] | dict[str | int, Sequence[str]] = ...,
+    na_values: Sequence[str] | dict[str | int, Sequence[str]] | None = ...,
     keep_default_na: bool = ...,
     na_filter: bool = ...,
     verbose: bool = ...,
@@ -202,6 +206,7 @@ def read_excel(
     skipfooter: int = ...,
     storage_options: StorageOptions = ...,
     dtype_backend: DtypeBackend | NoDefault = ...,
+    engine_kwargs: dict[str, Any] | None = ...,
 ) -> DataFrame: ...
 
 class ExcelWriter:
@@ -213,7 +218,7 @@ class ExcelWriter:
         datetime_format: str | None = ...,
         mode: Literal["w", "a"] = ...,
         storage_options: StorageOptions = ...,
-        if_sheet_exists: Literal["error", "new", "replace", "overlay"] | None = ...,
+        if_sheet_exists: ExcelWriterIfSheetExists | None = ...,
         engine_kwargs: dict[str, Any] | None = ...,
     ) -> None: ...
     @property

@@ -1297,8 +1297,11 @@ class CfnResourceConfiguration(
         from aws_cdk import aws_vpclattice as vpclattice
         
         cfn_resource_configuration = vpclattice.CfnResourceConfiguration(self, "MyCfnResourceConfiguration",
-            allow_association_to_sharable_service_network=False,
             name="name",
+            resource_configuration_type="resourceConfigurationType",
+        
+            # the properties below are optional
+            allow_association_to_sharable_service_network=False,
             port_ranges=["portRanges"],
             protocol_type="protocolType",
             resource_configuration_auth_type="resourceConfigurationAuthType",
@@ -1311,7 +1314,6 @@ class CfnResourceConfiguration(
                 ip_resource="ipResource"
             ),
             resource_configuration_group_id="resourceConfigurationGroupId",
-            resource_configuration_type="resourceConfigurationType",
             resource_gateway_id="resourceGatewayId",
             tags=[CfnTag(
                 key="key",
@@ -1325,28 +1327,28 @@ class CfnResourceConfiguration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
+        name: builtins.str,
+        resource_configuration_type: builtins.str,
         allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        name: typing.Optional[builtins.str] = None,
         port_ranges: typing.Optional[typing.Sequence[builtins.str]] = None,
         protocol_type: typing.Optional[builtins.str] = None,
         resource_configuration_auth_type: typing.Optional[builtins.str] = None,
         resource_configuration_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceConfiguration.ResourceConfigurationDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_configuration_group_id: typing.Optional[builtins.str] = None,
-        resource_configuration_type: typing.Optional[builtins.str] = None,
         resource_gateway_id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param allow_association_to_sharable_service_network: Specifies whether the resource configuration can be associated with a sharable service network.
         :param name: The name of the resource configuration.
+        :param resource_configuration_type: The type of resource configuration. A resource configuration can be one of the following types:. - *SINGLE* - A single resource. - *GROUP* - A group of resources. You must create a group resource configuration before you create a child resource configuration. - *CHILD* - A single resource that is part of a group resource configuration. - *ARN* - An AWS resource.
+        :param allow_association_to_sharable_service_network: Specifies whether the resource configuration can be associated with a sharable service network.
         :param port_ranges: (SINGLE, GROUP, CHILD) The TCP port ranges that a consumer can use to access a resource configuration (for example: 1-65535). You can separate port ranges using commas (for example: 1,2,22-30).
         :param protocol_type: (SINGLE, GROUP) The protocol accepted by the resource configuration.
         :param resource_configuration_auth_type: The auth type for the resource configuration.
         :param resource_configuration_definition: Identifies the resource configuration in one of the following ways:. - *Amazon Resource Name (ARN)* - Supported resource-types that are provisioned by AWS services, such as RDS databases, can be identified by their ARN. - *Domain name* - Any domain name that is publicly resolvable. - *IP address* - For IPv4 and IPv6, only IP addresses in the VPC are supported.
         :param resource_configuration_group_id: The ID of the group resource configuration.
-        :param resource_configuration_type: The type of resource configuration. A resource configuration can be one of the following types:. - *SINGLE* - A single resource. - *GROUP* - A group of resources. You must create a group resource configuration before you create a child resource configuration. - *CHILD* - A single resource that is part of a group resource configuration. - *ARN* - An AWS resource.
         :param resource_gateway_id: The ID of the resource gateway.
         :param tags: The tags for the resource configuration.
         '''
@@ -1355,14 +1357,14 @@ class CfnResourceConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnResourceConfigurationProps(
-            allow_association_to_sharable_service_network=allow_association_to_sharable_service_network,
             name=name,
+            resource_configuration_type=resource_configuration_type,
+            allow_association_to_sharable_service_network=allow_association_to_sharable_service_network,
             port_ranges=port_ranges,
             protocol_type=protocol_type,
             resource_configuration_auth_type=resource_configuration_auth_type,
             resource_configuration_definition=resource_configuration_definition,
             resource_configuration_group_id=resource_configuration_group_id,
-            resource_configuration_type=resource_configuration_type,
             resource_gateway_id=resource_gateway_id,
             tags=tags,
         )
@@ -1429,6 +1431,35 @@ class CfnResourceConfiguration(
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
 
     @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        '''The name of the resource configuration.'''
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__05c6c80cd49033d3aa0afe190c923dcae73156dcab6ce48936861ca4ccc73ef0)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="resourceConfigurationType")
+    def resource_configuration_type(self) -> builtins.str:
+        '''The type of resource configuration.
+
+        A resource configuration can be one of the following types:.
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "resourceConfigurationType"))
+
+    @resource_configuration_type.setter
+    def resource_configuration_type(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__78c78698636e3ca61354c53cb8cdfc165b65a1ae7d941087c00f199b89c59f80)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "resourceConfigurationType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="allowAssociationToSharableServiceNetwork")
     def allow_association_to_sharable_service_network(
         self,
@@ -1445,19 +1476,6 @@ class CfnResourceConfiguration(
             type_hints = typing.get_type_hints(_typecheckingstub__d1ef450fae7a40fb3e9c4ee0eb161050d61b06bd98ab10bb1187f14c7b5c9ceb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "allowAssociationToSharableServiceNetwork", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="name")
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The name of the resource configuration.'''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
-
-    @name.setter
-    def name(self, value: typing.Optional[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__05c6c80cd49033d3aa0afe190c923dcae73156dcab6ce48936861ca4ccc73ef0)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="portRanges")
@@ -1534,22 +1552,6 @@ class CfnResourceConfiguration(
             type_hints = typing.get_type_hints(_typecheckingstub__1121abed475cd3e475b62bd8b47dabfd15e44d41d9771f06cad88fe0c46fa3b2)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "resourceConfigurationGroupId", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="resourceConfigurationType")
-    def resource_configuration_type(self) -> typing.Optional[builtins.str]:
-        '''The type of resource configuration.
-
-        A resource configuration can be one of the following types:.
-        '''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "resourceConfigurationType"))
-
-    @resource_configuration_type.setter
-    def resource_configuration_type(self, value: typing.Optional[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__78c78698636e3ca61354c53cb8cdfc165b65a1ae7d941087c00f199b89c59f80)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "resourceConfigurationType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="resourceGatewayId")
@@ -1755,14 +1757,14 @@ class CfnResourceConfiguration(
     jsii_type="aws-cdk-lib.aws_vpclattice.CfnResourceConfigurationProps",
     jsii_struct_bases=[],
     name_mapping={
-        "allow_association_to_sharable_service_network": "allowAssociationToSharableServiceNetwork",
         "name": "name",
+        "resource_configuration_type": "resourceConfigurationType",
+        "allow_association_to_sharable_service_network": "allowAssociationToSharableServiceNetwork",
         "port_ranges": "portRanges",
         "protocol_type": "protocolType",
         "resource_configuration_auth_type": "resourceConfigurationAuthType",
         "resource_configuration_definition": "resourceConfigurationDefinition",
         "resource_configuration_group_id": "resourceConfigurationGroupId",
-        "resource_configuration_type": "resourceConfigurationType",
         "resource_gateway_id": "resourceGatewayId",
         "tags": "tags",
     },
@@ -1771,27 +1773,27 @@ class CfnResourceConfigurationProps:
     def __init__(
         self,
         *,
+        name: builtins.str,
+        resource_configuration_type: builtins.str,
         allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        name: typing.Optional[builtins.str] = None,
         port_ranges: typing.Optional[typing.Sequence[builtins.str]] = None,
         protocol_type: typing.Optional[builtins.str] = None,
         resource_configuration_auth_type: typing.Optional[builtins.str] = None,
         resource_configuration_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResourceConfiguration.ResourceConfigurationDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_configuration_group_id: typing.Optional[builtins.str] = None,
-        resource_configuration_type: typing.Optional[builtins.str] = None,
         resource_gateway_id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourceConfiguration``.
 
-        :param allow_association_to_sharable_service_network: Specifies whether the resource configuration can be associated with a sharable service network.
         :param name: The name of the resource configuration.
+        :param resource_configuration_type: The type of resource configuration. A resource configuration can be one of the following types:. - *SINGLE* - A single resource. - *GROUP* - A group of resources. You must create a group resource configuration before you create a child resource configuration. - *CHILD* - A single resource that is part of a group resource configuration. - *ARN* - An AWS resource.
+        :param allow_association_to_sharable_service_network: Specifies whether the resource configuration can be associated with a sharable service network.
         :param port_ranges: (SINGLE, GROUP, CHILD) The TCP port ranges that a consumer can use to access a resource configuration (for example: 1-65535). You can separate port ranges using commas (for example: 1,2,22-30).
         :param protocol_type: (SINGLE, GROUP) The protocol accepted by the resource configuration.
         :param resource_configuration_auth_type: The auth type for the resource configuration.
         :param resource_configuration_definition: Identifies the resource configuration in one of the following ways:. - *Amazon Resource Name (ARN)* - Supported resource-types that are provisioned by AWS services, such as RDS databases, can be identified by their ARN. - *Domain name* - Any domain name that is publicly resolvable. - *IP address* - For IPv4 and IPv6, only IP addresses in the VPC are supported.
         :param resource_configuration_group_id: The ID of the group resource configuration.
-        :param resource_configuration_type: The type of resource configuration. A resource configuration can be one of the following types:. - *SINGLE* - A single resource. - *GROUP* - A group of resources. You must create a group resource configuration before you create a child resource configuration. - *CHILD* - A single resource that is part of a group resource configuration. - *ARN* - An AWS resource.
         :param resource_gateway_id: The ID of the resource gateway.
         :param tags: The tags for the resource configuration.
 
@@ -1805,8 +1807,11 @@ class CfnResourceConfigurationProps:
             from aws_cdk import aws_vpclattice as vpclattice
             
             cfn_resource_configuration_props = vpclattice.CfnResourceConfigurationProps(
-                allow_association_to_sharable_service_network=False,
                 name="name",
+                resource_configuration_type="resourceConfigurationType",
+            
+                # the properties below are optional
+                allow_association_to_sharable_service_network=False,
                 port_ranges=["portRanges"],
                 protocol_type="protocolType",
                 resource_configuration_auth_type="resourceConfigurationAuthType",
@@ -1819,7 +1824,6 @@ class CfnResourceConfigurationProps:
                     ip_resource="ipResource"
                 ),
                 resource_configuration_group_id="resourceConfigurationGroupId",
-                resource_configuration_type="resourceConfigurationType",
                 resource_gateway_id="resourceGatewayId",
                 tags=[CfnTag(
                     key="key",
@@ -1829,21 +1833,22 @@ class CfnResourceConfigurationProps:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__797cfcb00db81ec7627009ae5f799c38c09652aee4a602480e341f9e4049b098)
-            check_type(argname="argument allow_association_to_sharable_service_network", value=allow_association_to_sharable_service_network, expected_type=type_hints["allow_association_to_sharable_service_network"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument resource_configuration_type", value=resource_configuration_type, expected_type=type_hints["resource_configuration_type"])
+            check_type(argname="argument allow_association_to_sharable_service_network", value=allow_association_to_sharable_service_network, expected_type=type_hints["allow_association_to_sharable_service_network"])
             check_type(argname="argument port_ranges", value=port_ranges, expected_type=type_hints["port_ranges"])
             check_type(argname="argument protocol_type", value=protocol_type, expected_type=type_hints["protocol_type"])
             check_type(argname="argument resource_configuration_auth_type", value=resource_configuration_auth_type, expected_type=type_hints["resource_configuration_auth_type"])
             check_type(argname="argument resource_configuration_definition", value=resource_configuration_definition, expected_type=type_hints["resource_configuration_definition"])
             check_type(argname="argument resource_configuration_group_id", value=resource_configuration_group_id, expected_type=type_hints["resource_configuration_group_id"])
-            check_type(argname="argument resource_configuration_type", value=resource_configuration_type, expected_type=type_hints["resource_configuration_type"])
             check_type(argname="argument resource_gateway_id", value=resource_gateway_id, expected_type=type_hints["resource_gateway_id"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+            "resource_configuration_type": resource_configuration_type,
+        }
         if allow_association_to_sharable_service_network is not None:
             self._values["allow_association_to_sharable_service_network"] = allow_association_to_sharable_service_network
-        if name is not None:
-            self._values["name"] = name
         if port_ranges is not None:
             self._values["port_ranges"] = port_ranges
         if protocol_type is not None:
@@ -1854,12 +1859,35 @@ class CfnResourceConfigurationProps:
             self._values["resource_configuration_definition"] = resource_configuration_definition
         if resource_configuration_group_id is not None:
             self._values["resource_configuration_group_id"] = resource_configuration_group_id
-        if resource_configuration_type is not None:
-            self._values["resource_configuration_type"] = resource_configuration_type
         if resource_gateway_id is not None:
             self._values["resource_gateway_id"] = resource_gateway_id
         if tags is not None:
             self._values["tags"] = tags
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the resource configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def resource_configuration_type(self) -> builtins.str:
+        '''The type of resource configuration. A resource configuration can be one of the following types:.
+
+        - *SINGLE* - A single resource.
+        - *GROUP* - A group of resources. You must create a group resource configuration before you create a child resource configuration.
+        - *CHILD* - A single resource that is part of a group resource configuration.
+        - *ARN* - An AWS resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-resourceconfigurationtype
+        '''
+        result = self._values.get("resource_configuration_type")
+        assert result is not None, "Required property 'resource_configuration_type' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def allow_association_to_sharable_service_network(
@@ -1871,15 +1899,6 @@ class CfnResourceConfigurationProps:
         '''
         result = self._values.get("allow_association_to_sharable_service_network")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The name of the resource configuration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def port_ranges(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1935,20 +1954,6 @@ class CfnResourceConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def resource_configuration_type(self) -> typing.Optional[builtins.str]:
-        '''The type of resource configuration. A resource configuration can be one of the following types:.
-
-        - *SINGLE* - A single resource.
-        - *GROUP* - A group of resources. You must create a group resource configuration before you create a child resource configuration.
-        - *CHILD* - A single resource that is part of a group resource configuration.
-        - *ARN* - An AWS resource.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-resourceconfigurationtype
-        '''
-        result = self._values.get("resource_configuration_type")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
     def resource_gateway_id(self) -> typing.Optional[builtins.str]:
         '''The ID of the resource gateway.
 
@@ -1999,15 +2004,17 @@ class CfnResourceGateway(
         from aws_cdk import aws_vpclattice as vpclattice
         
         cfn_resource_gateway = vpclattice.CfnResourceGateway(self, "MyCfnResourceGateway",
-            ip_address_type="ipAddressType",
             name="name",
-            security_group_ids=["securityGroupIds"],
             subnet_ids=["subnetIds"],
+            vpc_identifier="vpcIdentifier",
+        
+            # the properties below are optional
+            ip_address_type="ipAddressType",
+            security_group_ids=["securityGroupIds"],
             tags=[CfnTag(
                 key="key",
                 value="value"
-            )],
-            vpc_identifier="vpcIdentifier"
+            )]
         )
     '''
 
@@ -2016,34 +2023,34 @@ class CfnResourceGateway(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
+        name: builtins.str,
+        subnet_ids: typing.Sequence[builtins.str],
+        vpc_identifier: builtins.str,
         ip_address_type: typing.Optional[builtins.str] = None,
-        name: typing.Optional[builtins.str] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_identifier: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param ip_address_type: The type of IP address used by the resource gateway.
         :param name: The name of the resource gateway.
-        :param security_group_ids: The IDs of the security groups applied to the resource gateway.
         :param subnet_ids: The IDs of the VPC subnets for the resource gateway.
-        :param tags: The tags for the resource gateway.
         :param vpc_identifier: The ID of the VPC for the resource gateway.
+        :param ip_address_type: The type of IP address used by the resource gateway.
+        :param security_group_ids: The IDs of the security groups applied to the resource gateway.
+        :param tags: The tags for the resource gateway.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c33d35acb93670756de87bb99dc9b48c5bdce217c8b7068ec8d831a66a1b9be2)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnResourceGatewayProps(
-            ip_address_type=ip_address_type,
             name=name,
-            security_group_ids=security_group_ids,
             subnet_ids=subnet_ids,
-            tags=tags,
             vpc_identifier=vpc_identifier,
+            ip_address_type=ip_address_type,
+            security_group_ids=security_group_ids,
+            tags=tags,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -2108,6 +2115,45 @@ class CfnResourceGateway(
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
 
     @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        '''The name of the resource gateway.'''
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6348f03faf91ccdea29f2fa6d88ff150ead094ceb4483d7c650b7fcee3937500)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="subnetIds")
+    def subnet_ids(self) -> typing.List[builtins.str]:
+        '''The IDs of the VPC subnets for the resource gateway.'''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "subnetIds"))
+
+    @subnet_ids.setter
+    def subnet_ids(self, value: typing.List[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b80d0378bcb62c6afdab4c3852b32a936d35964b8dc8a67be99af3f3d016b584)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "subnetIds", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="vpcIdentifier")
+    def vpc_identifier(self) -> builtins.str:
+        '''The ID of the VPC for the resource gateway.'''
+        return typing.cast(builtins.str, jsii.get(self, "vpcIdentifier"))
+
+    @vpc_identifier.setter
+    def vpc_identifier(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9f006ab0220c58f3a982987d77cde2d3d365338eafe9cc6abcd387432475e2c1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "vpcIdentifier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="ipAddressType")
     def ip_address_type(self) -> typing.Optional[builtins.str]:
         '''The type of IP address used by the resource gateway.'''
@@ -2119,19 +2165,6 @@ class CfnResourceGateway(
             type_hints = typing.get_type_hints(_typecheckingstub__da193673158e2d7b463232edae7461c41e04d65f3e9a6058fb5136fae629871c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "ipAddressType", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="name")
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The name of the resource gateway.'''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
-
-    @name.setter
-    def name(self, value: typing.Optional[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__6348f03faf91ccdea29f2fa6d88ff150ead094ceb4483d7c650b7fcee3937500)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="securityGroupIds")
@@ -2150,19 +2183,6 @@ class CfnResourceGateway(
         jsii.set(self, "securityGroupIds", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
-    @jsii.member(jsii_name="subnetIds")
-    def subnet_ids(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''The IDs of the VPC subnets for the resource gateway.'''
-        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "subnetIds"))
-
-    @subnet_ids.setter
-    def subnet_ids(self, value: typing.Optional[typing.List[builtins.str]]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b80d0378bcb62c6afdab4c3852b32a936d35964b8dc8a67be99af3f3d016b584)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "subnetIds", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
         '''The tags for the resource gateway.'''
@@ -2175,51 +2195,38 @@ class CfnResourceGateway(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
-    @builtins.property
-    @jsii.member(jsii_name="vpcIdentifier")
-    def vpc_identifier(self) -> typing.Optional[builtins.str]:
-        '''The ID of the VPC for the resource gateway.'''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "vpcIdentifier"))
-
-    @vpc_identifier.setter
-    def vpc_identifier(self, value: typing.Optional[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9f006ab0220c58f3a982987d77cde2d3d365338eafe9cc6abcd387432475e2c1)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "vpcIdentifier", value) # pyright: ignore[reportArgumentType]
-
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_vpclattice.CfnResourceGatewayProps",
     jsii_struct_bases=[],
     name_mapping={
-        "ip_address_type": "ipAddressType",
         "name": "name",
-        "security_group_ids": "securityGroupIds",
         "subnet_ids": "subnetIds",
-        "tags": "tags",
         "vpc_identifier": "vpcIdentifier",
+        "ip_address_type": "ipAddressType",
+        "security_group_ids": "securityGroupIds",
+        "tags": "tags",
     },
 )
 class CfnResourceGatewayProps:
     def __init__(
         self,
         *,
+        name: builtins.str,
+        subnet_ids: typing.Sequence[builtins.str],
+        vpc_identifier: builtins.str,
         ip_address_type: typing.Optional[builtins.str] = None,
-        name: typing.Optional[builtins.str] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_identifier: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourceGateway``.
 
-        :param ip_address_type: The type of IP address used by the resource gateway.
         :param name: The name of the resource gateway.
-        :param security_group_ids: The IDs of the security groups applied to the resource gateway.
         :param subnet_ids: The IDs of the VPC subnets for the resource gateway.
-        :param tags: The tags for the resource gateway.
         :param vpc_identifier: The ID of the VPC for the resource gateway.
+        :param ip_address_type: The type of IP address used by the resource gateway.
+        :param security_group_ids: The IDs of the security groups applied to the resource gateway.
+        :param tags: The tags for the resource gateway.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html
         :exampleMetadata: fixture=_generated
@@ -2231,38 +2238,68 @@ class CfnResourceGatewayProps:
             from aws_cdk import aws_vpclattice as vpclattice
             
             cfn_resource_gateway_props = vpclattice.CfnResourceGatewayProps(
-                ip_address_type="ipAddressType",
                 name="name",
-                security_group_ids=["securityGroupIds"],
                 subnet_ids=["subnetIds"],
+                vpc_identifier="vpcIdentifier",
+            
+                # the properties below are optional
+                ip_address_type="ipAddressType",
+                security_group_ids=["securityGroupIds"],
                 tags=[CfnTag(
                     key="key",
                     value="value"
-                )],
-                vpc_identifier="vpcIdentifier"
+                )]
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ed2c643634b9016a56acc1cdf5c3044eaa6f62d982922519a82cdbd49bdae174)
-            check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument security_group_ids", value=security_group_ids, expected_type=type_hints["security_group_ids"])
             check_type(argname="argument subnet_ids", value=subnet_ids, expected_type=type_hints["subnet_ids"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument vpc_identifier", value=vpc_identifier, expected_type=type_hints["vpc_identifier"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
+            check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
+            check_type(argname="argument security_group_ids", value=security_group_ids, expected_type=type_hints["security_group_ids"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+            "subnet_ids": subnet_ids,
+            "vpc_identifier": vpc_identifier,
+        }
         if ip_address_type is not None:
             self._values["ip_address_type"] = ip_address_type
-        if name is not None:
-            self._values["name"] = name
         if security_group_ids is not None:
             self._values["security_group_ids"] = security_group_ids
-        if subnet_ids is not None:
-            self._values["subnet_ids"] = subnet_ids
         if tags is not None:
             self._values["tags"] = tags
-        if vpc_identifier is not None:
-            self._values["vpc_identifier"] = vpc_identifier
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the resource gateway.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def subnet_ids(self) -> typing.List[builtins.str]:
+        '''The IDs of the VPC subnets for the resource gateway.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-subnetids
+        '''
+        result = self._values.get("subnet_ids")
+        assert result is not None, "Required property 'subnet_ids' is missing"
+        return typing.cast(typing.List[builtins.str], result)
+
+    @builtins.property
+    def vpc_identifier(self) -> builtins.str:
+        '''The ID of the VPC for the resource gateway.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-vpcidentifier
+        '''
+        result = self._values.get("vpc_identifier")
+        assert result is not None, "Required property 'vpc_identifier' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def ip_address_type(self) -> typing.Optional[builtins.str]:
@@ -2271,15 +2308,6 @@ class CfnResourceGatewayProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-ipaddresstype
         '''
         result = self._values.get("ip_address_type")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The name of the resource gateway.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-name
-        '''
-        result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -2292,15 +2320,6 @@ class CfnResourceGatewayProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''The IDs of the VPC subnets for the resource gateway.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-subnetids
-        '''
-        result = self._values.get("subnet_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
-
-    @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
         '''The tags for the resource gateway.
 
@@ -2308,15 +2327,6 @@ class CfnResourceGatewayProps:
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    @builtins.property
-    def vpc_identifier(self) -> typing.Optional[builtins.str]:
-        '''The ID of the VPC for the resource gateway.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-vpcidentifier
-        '''
-        result = self._values.get("vpc_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6935,14 +6945,14 @@ def _typecheckingstub__6d403f9161b4d427bd92d4b1a1a263447b680ac47cb5036d62501f7fb
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
+    name: builtins.str,
+    resource_configuration_type: builtins.str,
     allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    name: typing.Optional[builtins.str] = None,
     port_ranges: typing.Optional[typing.Sequence[builtins.str]] = None,
     protocol_type: typing.Optional[builtins.str] = None,
     resource_configuration_auth_type: typing.Optional[builtins.str] = None,
     resource_configuration_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResourceConfiguration.ResourceConfigurationDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     resource_configuration_group_id: typing.Optional[builtins.str] = None,
-    resource_configuration_type: typing.Optional[builtins.str] = None,
     resource_gateway_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -6961,14 +6971,20 @@ def _typecheckingstub__3754b09494f8006d837368599eb7dfc715e33b3e7d30d21f635a62e53
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__d1ef450fae7a40fb3e9c4ee0eb161050d61b06bd98ab10bb1187f14c7b5c9ceb(
-    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+def _typecheckingstub__05c6c80cd49033d3aa0afe190c923dcae73156dcab6ce48936861ca4ccc73ef0(
+    value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__05c6c80cd49033d3aa0afe190c923dcae73156dcab6ce48936861ca4ccc73ef0(
-    value: typing.Optional[builtins.str],
+def _typecheckingstub__78c78698636e3ca61354c53cb8cdfc165b65a1ae7d941087c00f199b89c59f80(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d1ef450fae7a40fb3e9c4ee0eb161050d61b06bd98ab10bb1187f14c7b5c9ceb(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6998,12 +7014,6 @@ def _typecheckingstub__7788613af96a11a7c69e0fffa865e7ae3848958ee2d19e159a8a81638
     pass
 
 def _typecheckingstub__1121abed475cd3e475b62bd8b47dabfd15e44d41d9771f06cad88fe0c46fa3b2(
-    value: typing.Optional[builtins.str],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__78c78698636e3ca61354c53cb8cdfc165b65a1ae7d941087c00f199b89c59f80(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -7040,14 +7050,14 @@ def _typecheckingstub__9121263d95571010bd6dc19e1c8287b50bf9733de5f1bdf0bc8a14a7f
 
 def _typecheckingstub__797cfcb00db81ec7627009ae5f799c38c09652aee4a602480e341f9e4049b098(
     *,
+    name: builtins.str,
+    resource_configuration_type: builtins.str,
     allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    name: typing.Optional[builtins.str] = None,
     port_ranges: typing.Optional[typing.Sequence[builtins.str]] = None,
     protocol_type: typing.Optional[builtins.str] = None,
     resource_configuration_auth_type: typing.Optional[builtins.str] = None,
     resource_configuration_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResourceConfiguration.ResourceConfigurationDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     resource_configuration_group_id: typing.Optional[builtins.str] = None,
-    resource_configuration_type: typing.Optional[builtins.str] = None,
     resource_gateway_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -7058,12 +7068,12 @@ def _typecheckingstub__c33d35acb93670756de87bb99dc9b48c5bdce217c8b7068ec8d831a66
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
+    name: builtins.str,
+    subnet_ids: typing.Sequence[builtins.str],
+    vpc_identifier: builtins.str,
     ip_address_type: typing.Optional[builtins.str] = None,
-    name: typing.Optional[builtins.str] = None,
     security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-    subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    vpc_identifier: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7080,13 +7090,25 @@ def _typecheckingstub__961cdaca88b2adc0c4bd56e6891207c7285b0ef143ebf35c7492768ed
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__da193673158e2d7b463232edae7461c41e04d65f3e9a6058fb5136fae629871c(
-    value: typing.Optional[builtins.str],
+def _typecheckingstub__6348f03faf91ccdea29f2fa6d88ff150ead094ceb4483d7c650b7fcee3937500(
+    value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__6348f03faf91ccdea29f2fa6d88ff150ead094ceb4483d7c650b7fcee3937500(
+def _typecheckingstub__b80d0378bcb62c6afdab4c3852b32a936d35964b8dc8a67be99af3f3d016b584(
+    value: typing.List[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9f006ab0220c58f3a982987d77cde2d3d365338eafe9cc6abcd387432475e2c1(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__da193673158e2d7b463232edae7461c41e04d65f3e9a6058fb5136fae629871c(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -7098,32 +7120,20 @@ def _typecheckingstub__7e2e4828934d008108e9f5f74e2c02dbd9f159db6f7be2e1129597760
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__b80d0378bcb62c6afdab4c3852b32a936d35964b8dc8a67be99af3f3d016b584(
-    value: typing.Optional[typing.List[builtins.str]],
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__bf6ddd6a110cbcda973426d8df8b1e68b145ff32b0292ba9db84cd36b76d4da5(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__9f006ab0220c58f3a982987d77cde2d3d365338eafe9cc6abcd387432475e2c1(
-    value: typing.Optional[builtins.str],
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__ed2c643634b9016a56acc1cdf5c3044eaa6f62d982922519a82cdbd49bdae174(
     *,
+    name: builtins.str,
+    subnet_ids: typing.Sequence[builtins.str],
+    vpc_identifier: builtins.str,
     ip_address_type: typing.Optional[builtins.str] = None,
-    name: typing.Optional[builtins.str] = None,
     security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-    subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    vpc_identifier: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

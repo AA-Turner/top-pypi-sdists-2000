@@ -1089,6 +1089,8 @@ from .type_defs import (
     ExportTransitGatewayRoutesResultTypeDef,
     ExportVerifiedAccessInstanceClientConfigurationRequestTypeDef,
     ExportVerifiedAccessInstanceClientConfigurationResultTypeDef,
+    GetActiveVpnTunnelStatusRequestTypeDef,
+    GetActiveVpnTunnelStatusResultTypeDef,
     GetAllowedImagesSettingsRequestTypeDef,
     GetAllowedImagesSettingsResultTypeDef,
     GetAssociatedEnclaveCertificateIamRolesRequestTypeDef,
@@ -6454,6 +6456,18 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/export_verified_access_instance_client_configuration.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#export_verified_access_instance_client_configuration)
+        """
+
+    def get_active_vpn_tunnel_status(
+        self, **kwargs: Unpack[GetActiveVpnTunnelStatusRequestTypeDef]
+    ) -> GetActiveVpnTunnelStatusResultTypeDef:
+        """
+        Returns the currently negotiated security parameters for an active VPN tunnel,
+        including IKE version, DH groups, encryption algorithms, and integrity
+        algorithms.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_active_vpn_tunnel_status.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_active_vpn_tunnel_status)
         """
 
     def get_allowed_images_settings(

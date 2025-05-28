@@ -12,6 +12,7 @@ from .pipeline_update_embedding_config import (
     PipelineUpdateEmbeddingConfig_VertexaiEmbedding,
 )
 from .pipeline_update_transform_config import PipelineUpdateTransformConfig
+from .retrieval_params_search_filters_inference_schema_value import RetrievalParamsSearchFiltersInferenceSchemaValue
 
 __all__ = [
     "PipelineFileUpdateCustomMetadataValue",
@@ -24,4 +25,5 @@ __all__ = [
     "PipelineUpdateEmbeddingConfig_OpenaiEmbedding",
     "PipelineUpdateEmbeddingConfig_VertexaiEmbedding",
     "PipelineUpdateTransformConfig",
+    "RetrievalParamsSearchFiltersInferenceSchemaValue",
 ]

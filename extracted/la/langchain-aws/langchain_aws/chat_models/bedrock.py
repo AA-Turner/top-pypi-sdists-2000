@@ -154,9 +154,11 @@ def convert_messages_to_prompt_anthropic(
     Returns:
         str: Combined string with necessary human_prompt and ai_prompt tags.
     """
-
+    if messages is None:
+        return ""
+    
     messages = messages.copy()  # don't mutate the original list
-    if not isinstance(messages[-1], AIMessage):
+    if len(messages) > 0 and not isinstance(messages[-1], AIMessage):
         messages.append(AIMessage(content=""))
 
     text = "".join(
@@ -891,7 +893,7 @@ class ChatBedrock(BaseChatModel, BedrockBase):
             formatted_tools = [convert_to_anthropic_tool(tool) for tool in tools]
 
             # true if the model is a claude 3 model
-            if "claude-3" in self._get_base_model():
+            if "claude-" in self._get_base_model():
                 if not tool_choice:
                     pass
                 elif isinstance(tool_choice, dict):
@@ -1028,7 +1030,7 @@ class ChatBedrock(BaseChatModel, BedrockBase):
             return self._as_converse.with_structured_output(
                 schema, include_raw=include_raw, **kwargs
             )
-        if "claude-3" not in self._get_base_model():
+        if "claude-" not in self._get_base_model():
             raise ValueError(
                 f"Structured output is not supported for model {self._get_base_model()}"
             )
