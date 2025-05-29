@@ -1,20 +1,16 @@
 # Package ######################################################################
 
 [build-system]
-requires = ["setuptools", "pybind11 >= 2.12"]
+requires = ["setuptools >= 77.0", "pybind11 >= 2.12"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "optree"
 description = "Optimized PyTree Utilities."
 readme = "README.md"
-requires-python = ">= 3.8"
-authors = [
-    { name = "OpTree Contributors" },
-    { name = "Xuehai Pan", email = "XuehaiPan@pku.edu.cn" },
-    { name = "Jie Ren", email = "jieren9806@gmail.com" },
-]
-license = { text = "Apache-2.0" }
+requires-python = ">= 3.9"
+authors = [{ name = "OpTree Contributors" }]
+license = "Apache-2.0"
 keywords = [
     "PyTree",
     "Tree Manipulation",
@@ -23,15 +19,14 @@ keywords = [
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
-    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: C++",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Operating System :: Microsoft :: Windows",
@@ -42,7 +37,7 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Utilities",
 ]
-dependencies = ["typing-extensions >= 4.5.0"]
+dependencies = ["typing-extensions >= 4.6.0"]
 dynamic = ["version"]
 
 [project.urls]
@@ -65,7 +60,12 @@ lint = [
     "cpplint",
     "pre-commit",
 ]
-test = ["pytest", "pytest-cov", "pytest-xdist", "covdefaults"]
+test = [
+    "pytest",
+    "pytest-cov",
+    "covdefaults",
+    "rich",
+]
 docs = [
     "sphinx",
     "sphinx-autoapi",
@@ -78,15 +78,6 @@ docs = [
     "jax[cpu]",
     "numpy",
     "torch",
-]
-benchmark = [
-    "jax[cpu] >= 0.4.6, < 0.5.0a0",
-    "torch >= 2.0, < 2.6.0a0",
-    "torchvision",
-    "dm-tree >= 0.1, < 0.2.0a0",
-    "pandas",
-    "tabulate",
-    "termcolor",
 ]
 
 [tool.setuptools]
@@ -106,7 +97,7 @@ archs = ["native"]
 enable = ["pypy", "cpython-freethreading"]
 skip = "*musllinux*"
 build-frontend = "build"
-environment = { PYTHONUNBUFFERED = "1" }
+environment = { PYTHONUNBUFFERED = "1", COLUMNS = "100" }
 environment-pass = [
     "CMAKE_CXX_STANDARD",
     "OPTREE_CXX_WERROR",
@@ -118,8 +109,8 @@ test-command = '''make -C "{project}" test PYTHON=python PYTESTOPTS="--no-cov --
 # Linter tools #################################################################
 
 [tool.mypy]
-python_version = "3.8"
-exclude = ['^tests/.*\.py$']
+python_version = "3.9"
+exclude = ['^tests/.*\.py$', '^third-party/.*$', '^(venv|\.venv)/.*$']
 pretty = true
 show_column_numbers = true
 show_error_codes = true
@@ -141,9 +132,9 @@ warn_unused_ignores = true
 no_site_packages = true
 
 [tool.pylint]
-main.py-version = "3.8"
+main.py-version = "3.9"
 main.extension-pkg-allow-list = ["optree._C"]
-main.ignore-paths = ["^_C/$", "^tests/$"]
+main.ignore-paths = ["^_C/$", "^tests/$", "^third-party/$"]
 basic.good-names = []
 design.max-args = 7
 format.max-line-length = 120
@@ -165,7 +156,7 @@ max-line-length = 500
 ignore-words = "docs/source/spelling_wordlist.txt"
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py39"
 line-length = 100
 output-format = "full"
 src = ["optree", "tests"]
@@ -238,26 +229,15 @@ typing-modules = ["optree.typing"]
 "__init__.py" = [
     "F401",    # unused-import
 ]
-"optree/typing.py" = [
-    "E402",    # module-import-not-at-top-of-file
-    "F722",    # forward-annotation-syntax-error
-    "F811",    # redefined-while-unused
-]
 "setup.py" = [
-    "D",       # pydocstyle
-    "ANN",     # flake8-annotations
-]
-"benchmark.py" = [
     "D",       # pydocstyle
 ]
 "tests/**/*.py" = [
     "D",       # pydocstyle
     "ANN",     # flake8-annotations
     "S",       # flake8-bandit
-    "BLE",     # flake8-blind-except
     "SIM",     # flake8-simplify
     "INP001",  # flake8-no-pep420
-    "E402",    # module-import-not-at-top-of-file
 ]
 "docs/source/conf.py" = [
     "D",       # pydocstyle
@@ -266,7 +246,6 @@ typing-modules = ["optree.typing"]
 ]
 ".github/workflows/**/*.py" = [
     "D",       # pydocstyle
-    "ANN",     # flake8-annotations
 ]
 
 [tool.ruff.lint.isort]
@@ -290,4 +269,4 @@ ban-relative-imports = "all"
 
 [tool.pytest.ini_options]
 verbosity_assertions = 3
-filterwarnings = ["error", "always"]
+filterwarnings = ["always", "error"]

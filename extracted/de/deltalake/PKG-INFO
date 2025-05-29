@@ -1,37 +1,17 @@
 Metadata-Version: 2.3
 Name: deltalake
-Version: 0.25.5
+Version: 1.0.0
 Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
-Requires-Dist: pyarrow >=16, !=19.0.0
+Requires-Dist: arro3-core >=0.5.0
+Requires-Dist: deprecated >=1.2.18
 Requires-Dist: pandas ; extra == 'pandas'
-Requires-Dist: azure-storage-blob ==12.20.0 ; extra == 'devel'
-Requires-Dist: packaging >=20 ; extra == 'devel'
-Requires-Dist: pytest ; extra == 'devel'
-Requires-Dist: pytest-mock ; extra == 'devel'
-Requires-Dist: pytest-cov ; extra == 'devel'
-Requires-Dist: pytest-timeout ; extra == 'devel'
-Requires-Dist: sphinx <=4.5 ; extra == 'devel'
-Requires-Dist: sphinx-rtd-theme ; extra == 'devel'
-Requires-Dist: toml ; extra == 'devel'
-Requires-Dist: wheel ; extra == 'devel'
-Requires-Dist: pip >=24.0 ; extra == 'devel'
-Requires-Dist: pytest-benchmark ; extra == 'devel'
-Requires-Dist: mypy ==1.10.1 ; extra == 'devel'
-Requires-Dist: ruff ==0.5.2 ; extra == 'devel'
-Requires-Dist: polars ==1.17.1 ; extra == 'polars'
-Requires-Dist: lakefs ==0.8.0 ; extra == 'lakefs'
-Requires-Dist: pyspark ; extra == 'pyspark'
-Requires-Dist: delta-spark ; extra == 'pyspark'
-Requires-Dist: numpy ==1.26.4 ; extra == 'pyspark'
+Requires-Dist: pyarrow >=16 ; extra == 'pyarrow'
 Provides-Extra: pandas
-Provides-Extra: devel
-Provides-Extra: polars
-Provides-Extra: lakefs
-Provides-Extra: pyspark
+Provides-Extra: pyarrow
 License-File: deltalake_license.txt
 Summary: Native Delta Lake Python binding based on delta-rs with Pandas integration
 Keywords: deltalake,delta,datalake,pandas,arrow

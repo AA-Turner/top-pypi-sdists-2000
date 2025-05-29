@@ -3384,6 +3384,7 @@ data = {
  '1256971':{'en': 'Huntsville, AL'},
  '1256974':{'en': 'Moulton, AL'},
  '1256997':{'en': 'Fort Payne, AL'},
+ '1257':{'en': 'British Colombia'},
  '1260':{'en': 'Indiana'},
  '1260244':{'en': 'Columbia City, IN'},
  '1260248':{'en': 'Columbia City, IN'},
@@ -10018,5 +10019,4 @@ data = {
  '1414483':{'en': 'Milwaukee, WI'},
  '1414486':{'en': 'Milwaukee, WI'},
  '1414489':{'en': 'Cudahy, WI'},
- '1414527':{'en': 'Milwaukee, WI'},
 }

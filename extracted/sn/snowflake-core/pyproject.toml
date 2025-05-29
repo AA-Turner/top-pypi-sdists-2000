@@ -202,7 +202,9 @@ filterwarnings = ["ignore::pydantic.warnings.PydanticDeprecatedSince20"]
 pythonpath = 'src'
 markers = [
     "env(name): mark test to run only on named environment",
-    "internal_only: test that should only run in internal (non-prod) deployments",
+    "internal_only: test that should only run in dev/reg deployments",
+    "skip_gov: test that should not run on gov deployments",
+    "prodlike_only: test that should only run in production-like deployments (real prod and preprod)",
     "skip_notebook: test that should not be run on Notebook",
     "skip_storedproc: test that should not be run on Storedproc",
     "min_sf_ver: mark test to only run after and including a specific version",

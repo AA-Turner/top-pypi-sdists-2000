@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: dependency-injector
-Version: 4.46.0
+Version: 4.47.0
 Summary: Dependency injection framework for Python
 Author-email: Roman Mogylatov <rmogilatov@gmail.com>
 Maintainer-email: Roman Mogylatov <rmogilatov@gmail.com>
@@ -42,7 +42,6 @@ Classifier: License :: OSI Approved :: BSD License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
@@ -62,7 +61,7 @@ Classifier: Framework :: TurboGears
 Classifier: Topic :: Software Development
 Classifier: Topic :: Software Development :: Libraries
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
-Requires-Python: >=3.7
+Requires-Python: >=3.8
 Description-Content-Type: text/x-rst
 License-File: LICENSE.rst
 Provides-Extra: yaml
@@ -75,6 +74,7 @@ Provides-Extra: flask
 Requires-Dist: flask; extra == "flask"
 Provides-Extra: aiohttp
 Requires-Dist: aiohttp; extra == "aiohttp"
+Dynamic: license-file
 
 .. figure:: https://raw.githubusercontent.com/wiki/ets-labs/python-dependency-injector/img/logo.svg
    :target: https://github.com/ets-labs/python-dependency-injector

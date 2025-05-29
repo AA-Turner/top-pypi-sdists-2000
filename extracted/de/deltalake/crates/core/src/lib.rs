@@ -49,9 +49,10 @@
 //! Querying from local filesystem:
 //! ```
 //! use std::sync::Arc;
-//! use datafusion::prelude::SessionContext;
 //!
+//! # #[cfg(feature="datafusion")]
 //! async {
+//!   use datafusion::prelude::SessionContext;
 //!   let mut ctx = SessionContext::new();
 //!   let table = deltalake_core::open_table("../test/tests/data/simple_table")
 //!       .await
@@ -68,7 +69,6 @@
 // #![deny(missing_docs)]
 #![allow(rustdoc::invalid_html_tags)]
 #![allow(clippy::nonminimal_bool)]
-
 pub mod data_catalog;
 pub mod errors;
 pub mod kernel;
@@ -76,10 +76,9 @@ pub mod logstore;
 pub mod operations;
 pub mod protocol;
 pub mod schema;
-pub mod storage;
 pub mod table;
 
-#[cfg(test)]
+#[cfg(any(test, feature = "integration_test"))]
 pub mod test_utils;
 
 #[cfg(feature = "datafusion")]
@@ -87,6 +86,7 @@ pub mod delta_datafusion;
 pub mod writer;
 
 use std::collections::HashMap;
+use std::sync::OnceLock;
 
 pub use self::data_catalog::{DataCatalog, DataCatalogError};
 pub use self::errors::*;
@@ -97,14 +97,17 @@ pub use self::table::config::TableProperty;
 pub use self::table::DeltaTable;
 pub use object_store::{path::Path, Error as ObjectStoreError, ObjectMeta, ObjectStore};
 pub use operations::DeltaOps;
-use std::sync::OnceLock;
+
+pub use protocol::checkpoints;
 
 // convenience exports for consumers to avoid aligning crate versions
 pub use arrow;
 #[cfg(feature = "datafusion")]
 pub use datafusion;
 pub use parquet;
-pub use protocol::checkpoints;
+
+#[cfg(not(any(feature = "rustls", feature = "native-tls")))]
+compile_error!("You must enable at least one of the features: `rustls` or `native-tls`.");
 
 /// Creates and loads a DeltaTable from the given path with current metadata.
 /// Infers the storage backend to use from the scheme in the given table path.
@@ -203,7 +206,7 @@ mod tests {
         let tombstones = table
             .snapshot()
             .unwrap()
-            .all_tombstones(table.object_store().clone())
+            .all_tombstones(&table.log_store())
             .await
             .unwrap()
             .collect_vec();
@@ -320,7 +323,7 @@ mod tests {
         let tombstones = table
             .snapshot()
             .unwrap()
-            .all_tombstones(table.object_store().clone())
+            .all_tombstones(&table.log_store())
             .await
             .unwrap()
             .collect_vec();

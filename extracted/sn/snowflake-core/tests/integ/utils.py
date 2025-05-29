@@ -9,7 +9,7 @@ from contextlib import contextmanager
 
 import snowflake.connector
 
-from ..utils import is_prod_version, random_string
+from ..utils import is_prod_or_preprod, random_string
 
 
 if typing.TYPE_CHECKING:
@@ -86,6 +86,10 @@ def should_disable_setup_for_credentials(config):
 
 def get_snowflake_version(cursor):
     return cursor.execute("SELECT CURRENT_VERSION()").fetchone()[0].strip()
+
+
+def get_snowflake_region(cursor):
+    return cursor.execute("SELECT CURRENT_REGION()").fetchone()[0].strip()
 
 
 def connection_keys():
@@ -249,8 +253,8 @@ def setup_credentials(cursor):
 
 
 def setup_account_for_notebook(cursor, config):
-    # if it's a prod account there shouldn't be requirement to do this setup
-    if is_prod_version(get_snowflake_version(cursor)):
+    # if it's a prod or a preprod account there shouldn't be requirement to do this setup
+    if is_prod_or_preprod(get_snowflake_version(cursor), get_snowflake_region(cursor)):
         return
 
     sf_connection_parameters = connection_config(connection_name="sf_account", error_if_not_exists=False)

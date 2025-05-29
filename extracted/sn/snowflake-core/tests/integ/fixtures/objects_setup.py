@@ -10,7 +10,7 @@ from tests.integ.utils import (
     should_disable_setup_for_spcs,
 )
 
-from ...utils import is_prod_version
+from ...utils import is_prod_or_preprod
 from .constants import TEST_COMPUTE_POOL, TEST_WAREHOUSE, SpcsSetupTuple, objects_to_setup
 
 
@@ -59,10 +59,9 @@ def setup_basic(connection):
 
 # Setup Compute pool by either create FAKE instance family or use CPU_X64_XS
 @pytest.fixture(scope="session")
-def spcs_setup_objects(cursor, sf_cursor, db_parameters, test_account, snowflake_version):
-    # TODO: More accurate prod system detection
-    is_prod_database = is_prod_version(snowflake_version)
-    if not should_disable_setup_for_spcs(db_parameters) and (not is_prod_database):
+def spcs_setup_objects(cursor, sf_cursor, db_parameters, test_account, snowflake_version, snowflake_region):
+    is_prod_or_preprod_env = is_prod_or_preprod(snowflake_version, snowflake_region)
+    if not should_disable_setup_for_spcs(db_parameters) and (not is_prod_or_preprod_env):
         if sf_cursor is None:
             pytest.fail(
                 'Either disable setup for SPCS by setting "should_disable_setup_for_spcs" to "true" in '
@@ -75,7 +74,7 @@ def spcs_setup_objects(cursor, sf_cursor, db_parameters, test_account, snowflake
                 target_account_name=test_account,
                 instance_families_to_create=["CPU_X64_XS", "FAKE"],
             )
-    if is_prod_database:
+    if is_prod_or_preprod_env:
         instance_family = "CPU_X64_XS"
     else:
         instance_family = "FAKE"
@@ -91,10 +90,9 @@ def spcs_setup_objects(cursor, sf_cursor, db_parameters, test_account, snowflake
 
 
 @pytest.fixture()
-def setup_credentials_fixture(sf_cursor, db_parameters, snowflake_version):
-    # TODO: More accurate prod system detection
-    is_prod_database = is_prod_version(snowflake_version)
-    if not should_disable_setup_for_credentials(db_parameters) and (not is_prod_database):
+def setup_credentials_fixture(sf_cursor, db_parameters, snowflake_version, snowflake_region):
+    is_prod_or_preprod_env = is_prod_or_preprod(snowflake_version, snowflake_region)
+    if not should_disable_setup_for_credentials(db_parameters) and (not is_prod_or_preprod_env):
         if sf_cursor is None:
             pytest.fail(
                 'Either disable setup for credentials by setting "should_disable_setup_for_credentials" to "true" in '

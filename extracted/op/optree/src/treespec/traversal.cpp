@@ -152,6 +152,7 @@ py::object PyTreeIter::NextImpl() {
                 break;
             }
 
+            case PyTreeKind::NumKinds:
             default:
                 INTERNAL_ERROR();
         }
@@ -161,7 +162,7 @@ py::object PyTreeIter::NextImpl() {
 }
 
 py::object PyTreeIter::Next() {
-#ifdef Py_GIL_DISABLED
+#if defined(Py_GIL_DISABLED)
     const scoped_lock_guard lock{m_mutex};
 #endif
 
@@ -238,6 +239,7 @@ py::object PyTreeSpec::WalkImpl(const py::iterable &leaves,
                 break;
             }
 
+            case PyTreeKind::NumKinds:
             default:
                 INTERNAL_ERROR();
         }

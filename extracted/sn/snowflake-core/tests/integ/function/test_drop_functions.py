@@ -1,6 +1,11 @@
+import pytest
+
 from tests.utils import random_string
 
 from .utils import create_service_function
+
+
+pytestmark = [pytest.mark.skip_gov]
 
 
 def test_drop_functions(temp_service_for_function, functions):

@@ -188,6 +188,7 @@ bool PyTreeSpec::FlattenIntoImpl(const py::handle& handle,
                 break;
             }
 
+            case PyTreeKind::NumKinds:
             default:
                 INTERNAL_ERROR();
         }
@@ -207,7 +208,7 @@ bool PyTreeSpec::FlattenInto(const py::handle& handle,
     bool is_dict_insertion_ordered = false;
     bool is_dict_insertion_ordered_in_current_namespace = false;
     {
-#ifdef HAVE_READ_WRITE_LOCK
+#if defined(HAVE_READ_WRITE_LOCK)
         const scoped_read_lock_guard lock{sm_is_dict_insertion_ordered_mutex};
 #endif
         is_dict_insertion_ordered = IsDictInsertionOrdered(registry_namespace);
@@ -463,6 +464,7 @@ bool PyTreeSpec::FlattenIntoWithPathImpl(const py::handle& handle,
                 break;
             }
 
+            case PyTreeKind::NumKinds:
             default:
                 INTERNAL_ERROR();
         }
@@ -483,7 +485,7 @@ bool PyTreeSpec::FlattenIntoWithPath(const py::handle& handle,
     bool is_dict_insertion_ordered = false;
     bool is_dict_insertion_ordered_in_current_namespace = false;
     {
-#ifdef HAVE_READ_WRITE_LOCK
+#if defined(HAVE_READ_WRITE_LOCK)
         const scoped_read_lock_guard lock{sm_is_dict_insertion_ordered_mutex};
 #endif
         is_dict_insertion_ordered = IsDictInsertionOrdered(registry_namespace);
@@ -559,11 +561,11 @@ PyTreeSpec::FlattenWithPath(const py::object& tree,
 }
 
 // NOLINTNEXTLINE[readability-function-cognitive-complexity]
-py::list PyTreeSpec::FlattenUpTo(const py::object& full_tree) const {
+py::list PyTreeSpec::FlattenUpTo(const py::object& tree) const {
     PYTREESPEC_SANITY_CHECK(*this);
 
     auto agenda = reserved_vector<py::object>(4);
-    agenda.emplace_back(py::reinterpret_borrow<py::object>(full_tree));
+    agenda.emplace_back(py::reinterpret_borrow<py::object>(tree));
 
     auto it = m_traversal.crbegin();
     const ssize_t num_leaves = GetNumLeaves();
@@ -573,7 +575,7 @@ py::list PyTreeSpec::FlattenUpTo(const py::object& full_tree) const {
         if (it == m_traversal.crend()) [[unlikely]] {
             std::ostringstream oss{};
             oss << "Tree structures did not match; expected: " << ToString()
-                << ", got: " << PyRepr(full_tree) << ".";
+                << ", got: " << PyRepr(tree) << ".";
             throw py::value_error(oss.str());
         }
         const Node& node = *it;
@@ -789,6 +791,7 @@ py::list PyTreeSpec::FlattenUpTo(const py::object& full_tree) const {
                 break;
             }
 
+            case PyTreeKind::NumKinds:
             default:
                 INTERNAL_ERROR();
         }
@@ -796,7 +799,7 @@ py::list PyTreeSpec::FlattenUpTo(const py::object& full_tree) const {
     if (it != m_traversal.crend() || leaf != -1) [[unlikely]] {
         std::ostringstream oss{};
         oss << "Tree structures did not match; expected: " << ToString()
-            << ", got: " << PyRepr(full_tree) << ".";
+            << ", got: " << PyRepr(tree) << ".";
         throw py::value_error(oss.str());
     }
     return leaves;

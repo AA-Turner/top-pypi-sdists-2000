@@ -1,20 +1,23 @@
+from __future__ import annotations
+
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, NamedTuple, Optional
+from typing import TYPE_CHECKING, Any, NamedTuple
 
-import pyarrow as pa
-import pyarrow.parquet as pq
 import pytest
 
 from deltalake import DeltaTable
 
+if TYPE_CHECKING:
+    import pyarrow as pa
+
 
 class ReadCase(NamedTuple):
     root: Path
-    version: Optional[int]
-    case_info: Dict[str, Any]
-    version_metadata: Dict[str, Any]
+    version: int | None
+    case_info: dict[str, Any]
+    version_metadata: dict[str, Any]
 
 
 cases = []
@@ -50,10 +53,13 @@ failing_cases = {
 }
 
 
+@pytest.mark.pyarrow
 @pytest.mark.parametrize(
     "case", cases, ids=lambda case: f"{case.case_info['name']} (version={case.version})"
 )
 def test_dat(case: ReadCase):
+    import pyarrow.parquet as pq
+
     root, version, case_info, version_metadata = case
 
     if case_info["name"] in failing_cases:
@@ -87,7 +93,9 @@ def test_dat(case: ReadCase):
             dt.to_pyarrow_table()
 
 
-def assert_tables_equal(first: pa.Table, second: pa.Table) -> None:
+def assert_tables_equal(first: "pa.Table", second: "pa.Table") -> None:
+    import pyarrow as pa
+
     assert first.schema == second.schema
     sort_keys = [
         (col, "ascending")

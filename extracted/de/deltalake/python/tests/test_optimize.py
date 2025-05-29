@@ -1,30 +1,20 @@
 import pathlib
 from datetime import timedelta
 
-import pyarrow as pa
 import pytest
+from arro3.core import Array, DataType, Table
+from arro3.core import Field as ArrowField
 
-try:
-    import pandas as pd
-except ModuleNotFoundError:
-    _has_pandas = False
-else:
-    _has_pandas = True
-
-from deltalake import DeltaTable, write_deltalake
-from deltalake.table import CommitProperties
+from deltalake import CommitProperties, DeltaTable, write_deltalake
+from deltalake.query import QueryBuilder
 
 
-@pytest.mark.parametrize("engine", ["pyarrow", "rust"])
 @pytest.mark.parametrize("use_relative", [True, False])
-@pytest.mark.parametrize("large_dtypes", [True, False])
 def test_optimize_run_table(
     tmp_path: pathlib.Path,
-    sample_data: pa.Table,
+    sample_table: Table,
     monkeypatch,
     use_relative: bool,
-    large_dtypes: bool,
-    engine,
 ):
     if use_relative:
         monkeypatch.chdir(tmp_path)  # Make tmp_path the working directory
@@ -33,24 +23,28 @@ def test_optimize_run_table(
     else:
         table_path = str(tmp_path)
 
-    write_deltalake(
-        table_path, sample_data, mode="append", engine=engine, large_dtypes=large_dtypes
-    )
-    write_deltalake(
-        table_path, sample_data, mode="append", engine=engine, large_dtypes=large_dtypes
-    )
-    write_deltalake(
-        table_path, sample_data, mode="append", engine=engine, large_dtypes=large_dtypes
-    )
+    write_deltalake(table_path, sample_table, mode="append")
+    write_deltalake(table_path, sample_table, mode="append")
+    write_deltalake(table_path, sample_table, mode="append")
 
     dt = DeltaTable(table_path)
-    old_data = dt.to_pyarrow_table()
+    old_data = (
+        QueryBuilder()
+        .register("tbl", dt)
+        .execute("select * from tbl order by id")
+        .read_all()
+    )
     old_version = dt.version()
 
     commit_properties = CommitProperties(custom_metadata={"userName": "John Doe"})
     dt.optimize.compact(commit_properties=commit_properties)
 
-    new_data = dt.to_pyarrow_table()
+    new_data = (
+        QueryBuilder()
+        .register("tbl", dt)
+        .execute("select * from tbl order by id")
+        .read_all()
+    )
     last_action = dt.history(1)[0]
     assert last_action["operation"] == "OPTIMIZE"
     assert last_action["userName"] == "John Doe"
@@ -58,29 +52,31 @@ def test_optimize_run_table(
     assert old_data == new_data
 
 
-@pytest.mark.parametrize("engine", ["pyarrow", "rust"])
-# @pytest.mark.parametrize("large_dtypes", [True, False])
 def test_z_order_optimize(
     tmp_path: pathlib.Path,
-    sample_data: pa.Table,
-    # large_dtypes: bool,
-    engine,
+    sample_table: Table,
 ):
     write_deltalake(
-        tmp_path, sample_data, mode="append", large_dtypes=False, engine=engine
+        tmp_path,
+        sample_table,
+        mode="append",
     )
     write_deltalake(
-        tmp_path, sample_data, mode="append", large_dtypes=False, engine=engine
+        tmp_path,
+        sample_table,
+        mode="append",
     )
     write_deltalake(
-        tmp_path, sample_data, mode="append", large_dtypes=False, engine=engine
+        tmp_path,
+        sample_table,
+        mode="append",
     )
 
     dt = DeltaTable(tmp_path)
     old_version = dt.version()
 
     commit_properties = CommitProperties(custom_metadata={"userName": "John Doe"})
-    dt.optimize.z_order(["date32", "timestamp"], commit_properties=commit_properties)
+    dt.optimize.z_order(["sold", "price"], commit_properties=commit_properties)
     last_action = dt.history(1)[0]
     assert last_action["operation"] == "OPTIMIZE"
     assert last_action["userName"] == "John Doe"
@@ -90,16 +86,16 @@ def test_z_order_optimize(
 
 def test_optimize_min_commit_interval(
     tmp_path: pathlib.Path,
-    sample_data: pa.Table,
+    sample_table: Table,
 ):
-    write_deltalake(tmp_path, sample_data, partition_by="utf8", mode="append")
-    write_deltalake(tmp_path, sample_data, partition_by="utf8", mode="append")
-    write_deltalake(tmp_path, sample_data, partition_by="utf8", mode="append")
+    write_deltalake(tmp_path, sample_table, partition_by="id", mode="append")
+    write_deltalake(tmp_path, sample_table, partition_by="id", mode="append")
+    write_deltalake(tmp_path, sample_table, partition_by="id", mode="append")
 
     dt = DeltaTable(tmp_path)
     old_version = dt.version()
 
-    dt.optimize.z_order(["date32", "timestamp"], min_commit_interval=timedelta(0))
+    dt.optimize.z_order(["sold", "price"], min_commit_interval=timedelta(0))
 
     last_action = dt.history(1)[0]
     assert last_action["operation"] == "OPTIMIZE"
@@ -111,14 +107,29 @@ def test_optimize_min_commit_interval(
 
 def test_optimize_schema_evolved_table(
     tmp_path: pathlib.Path,
-    sample_data: pa.Table,
+    sample_table: Table,
 ):
-    data = pa.table({"foo": pa.array(["1"])})
+    data = Table(
+        {
+            "foo": Array(
+                ["1"],
+                ArrowField("foo", type=DataType.string(), nullable=True),
+            ),
+        }
+    )
 
-    write_deltalake(tmp_path, data, engine="rust", mode="append", schema_mode="merge")
+    write_deltalake(tmp_path, data, mode="append", schema_mode="merge")
 
-    data = pa.table({"bar": pa.array(["1"])})
-    write_deltalake(tmp_path, data, engine="rust", mode="append", schema_mode="merge")
+    data = Table(
+        {
+            "bar": Array(
+                ["1"],
+                ArrowField("bar", type=DataType.string(), nullable=True),
+            ),
+        }
+    )
+
+    write_deltalake(tmp_path, data, mode="append", schema_mode="merge")
 
     dt = DeltaTable(tmp_path)
     old_version = dt.version()
@@ -129,20 +140,33 @@ def test_optimize_schema_evolved_table(
     assert last_action["operation"] == "OPTIMIZE"
     assert dt.version() == old_version + 1
 
-    data = pa.table(
+    data = Table(
         {
-            "foo": pa.array([None, "1"]),
-            "bar": pa.array(["1", None]),
+            "foo": Array(
+                ["1", None],
+                ArrowField("foo", type=DataType.string(), nullable=True),
+            ),
+            "bar": Array(
+                [None, "1"],
+                ArrowField("bar", type=DataType.string(), nullable=True),
+            ),
         }
     )
 
-    assert dt.to_pyarrow_table().sort_by([("foo", "ascending")]) == data.sort_by(
-        [("foo", "ascending")]
+    assert (
+        QueryBuilder()
+        .register("tbl", dt)
+        .execute("select * from tbl order by foo asc")
+        .read_all()
+        == data
     )
 
 
 @pytest.mark.pandas
+@pytest.mark.pyarrow
 def test_zorder_with_space_partition(tmp_path: pathlib.Path):
+    import pandas as pd
+
     df = pd.DataFrame(
         {
             "user": ["James", "Anna", "Sara", "Martin"],
@@ -169,8 +193,10 @@ def test_zorder_with_space_partition(tmp_path: pathlib.Path):
     test_table.optimize.z_order(columns=["user"])
 
 
+@pytest.mark.pyarrow
 def test_optimize_schema_evolved_3185(tmp_path):
     """https://github.com/delta-io/delta-rs/issues/3185"""
+    import pyarrow as pa
 
     # Define the data for the first write
     data_first_write = pa.array(
@@ -225,11 +251,13 @@ def test_optimize_schema_evolved_3185(tmp_path):
         data_second_write, schema=schema_second_write
     )
 
-    write_deltalake(tmp_path, table_first_write, mode="append", engine="rust")
-
     write_deltalake(
-        tmp_path, table_second_write, mode="append", engine="rust", schema_mode="merge"
+        tmp_path,
+        table_first_write,
+        mode="append",
     )
+
+    write_deltalake(tmp_path, table_second_write, mode="append", schema_mode="merge")
 
     dt = DeltaTable(tmp_path)
 

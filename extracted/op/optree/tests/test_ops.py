@@ -59,15 +59,7 @@ def test_import_no_warnings():
     }
     assert (
         subprocess.check_output(
-            [
-                sys.executable,
-                '-W',
-                'always',
-                '-W',
-                'error',
-                '-c',
-                'import optree',
-            ],
+            [sys.executable, '-Walways', '-Werror', '-c', 'import optree'],
             stderr=subprocess.STDOUT,
             text=True,
             cwd=TEST_ROOT,
@@ -116,7 +108,7 @@ def test_max_depth():
     dict_should_be_sorted=[False, True],
     dict_session_namespace=['', 'undefined', 'namespace'],
 )
-def test_round_trip(
+def test_roundtrip(
     tree,
     none_is_leaf,
     namespace,
@@ -139,7 +131,7 @@ def test_round_trip(
     dict_should_be_sorted=[False, True],
     dict_session_namespace=['', 'undefined', 'namespace'],
 )
-def test_round_trip_with_flatten_up_to(
+def test_roundtrip_with_flatten_up_to(
     tree,
     none_is_leaf,
     namespace,
@@ -692,7 +684,7 @@ def test_paths_and_accessors_with_is_leaf(
     dict_should_be_sorted=[False, True],
     dict_session_namespace=['', 'undefined', 'namespace'],
 )
-def test_round_trip_is_leaf(
+def test_roundtrip_is_leaf(
     tree,
     is_leaf,
     none_is_leaf,
@@ -2823,6 +2815,21 @@ def test_tree_replace_nones():
 
 
 @parametrize(
+    fillvalue=[None, object(), (), (1, 2, 3), [1, (2, 3)]],
+    none_is_leaf=[False, True],
+)
+def test_tree_partition(fillvalue, none_is_leaf):
+    left, right = optree.tree_partition(
+        lambda x: x > 10,
+        {'x': 7, 'y': (42, 64)},
+        fillvalue=fillvalue,
+        none_is_leaf=none_is_leaf,
+    )
+    assert left == {'x': fillvalue, 'y': (42, 64)}
+    assert right == {'x': 7, 'y': (fillvalue, fillvalue)}
+
+
+@parametrize(
     tree=TREES,
     none_is_leaf=[False, True],
     namespace=['', 'undefined', 'namespace'],
@@ -3384,8 +3391,8 @@ def test_tree_flatten_one_level(  # noqa: C901
                     assert node_kind == optree.PyTreeKind.DEQUE
                 elif optree.is_structseq(node):
                     assert optree.is_structseq_class(node_type)
-                    assert isinstance(node, optree.typing.structseq)
-                    assert issubclass(node_type, optree.typing.structseq)
+                    assert isinstance(node, optree.typing.StructSequence)
+                    assert issubclass(node_type, optree.typing.StructSequence)
                     assert metadata is node_type
                     assert node_kind == optree.PyTreeKind.STRUCTSEQUENCE
                 elif optree.is_namedtuple(node):

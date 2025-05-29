@@ -12,6 +12,8 @@ from tests.utils import random_string
 
 RETRY_TIMES = 5
 
+pytestmark = [pytest.mark.skip_gov]
+
 
 def wait_for_job_creation(job: ServiceResource):
     # wait for the job to be created if it is an async request otherwise fecth() below might fail if it is executed

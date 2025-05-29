@@ -3,8 +3,8 @@ use std::future::Future;
 use std::iter::FromIterator;
 use std::time::Duration;
 
+use deltalake_core::kernel::transaction::CommitBuilder;
 use deltalake_core::kernel::{Action, Add, DataType, PrimitiveType, StructField, StructType};
-use deltalake_core::operations::transaction::CommitBuilder;
 use deltalake_core::operations::DeltaOps;
 use deltalake_core::protocol::{DeltaOperation, SaveMode};
 use deltalake_core::{DeltaTable, DeltaTableBuilder};
@@ -130,7 +130,6 @@ impl Worker {
             modification_time: 1564524294000,
             data_change: true,
             stats: None,
-            stats_parsed: None,
             tags: None,
             deletion_vector: None,
             base_row_id: None,

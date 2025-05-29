@@ -7,6 +7,8 @@ from .utils import create_service_function
 
 TRANSLATE_DATA_TYPE_TO_BIND = {"INT": "FIXED"}
 
+pytestmark = [pytest.mark.skip_gov]
+
 
 @pytest.mark.usefixtures("qa_mode_enabled")
 def test_execute_function(temp_service_for_function, functions, setup_with_connector_execution):

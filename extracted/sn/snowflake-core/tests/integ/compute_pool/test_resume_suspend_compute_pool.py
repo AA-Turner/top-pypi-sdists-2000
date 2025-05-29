@@ -7,6 +7,9 @@ import pytest
 from snowflake.core.exceptions import APIError
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 def test_resume_suspend(compute_pools, temp_cp):
     assert compute_pools[temp_cp.name].fetch().state in ("SUSPENDED", "STOPPING")
 

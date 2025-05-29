@@ -13,6 +13,9 @@ from snowflake.core.service import Service, ServiceSpecStageFile
 from ..utils import random_string
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 @pytest.fixture(scope="session")
 def seed_temp_service_data():
     return

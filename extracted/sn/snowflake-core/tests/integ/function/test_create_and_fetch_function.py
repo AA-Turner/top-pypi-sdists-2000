@@ -7,6 +7,8 @@ from .utils import create_service_function
 
 TRANSLATE_DATA_TYPE_TO_BIND = {"INT": "FIXED"}
 
+pytestmark = [pytest.mark.skip_gov]
+
 
 def test_create_service_function_argument(temp_service_for_function, functions):
     for t in [["REAL"], ["INT"], ["BOOLEAN"], ["TIME"], ["REAL", "INT"]]:

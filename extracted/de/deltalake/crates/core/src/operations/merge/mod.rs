@@ -27,7 +27,6 @@
 //!     })?
 //!     .await?
 //! ````
-
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::ops::Deref;
@@ -58,19 +57,17 @@ use datafusion_expr::{
     Extension, LogicalPlan, LogicalPlanBuilder, UserDefinedLogicalNode, UNNAMED_TABLE,
 };
 
+use delta_kernel::engine::arrow_conversion::{TryIntoArrow as _, TryIntoKernel as _};
 use delta_kernel::schema::{ColumnMetadataKey, StructType};
 use filter::try_construct_early_filter;
 use futures::future::BoxFuture;
 use parquet::file::properties::WriterProperties;
 use serde::Serialize;
-use tracing::field::debug;
 use tracing::log::*;
 use uuid::Uuid;
 
 use self::barrier::{MergeBarrier, MergeBarrierExec};
-
 use super::datafusion_utils::{into_expr, maybe_into_expr, Expression};
-use super::transaction::{CommitProperties, PROTOCOL};
 use super::{CustomExecuteHandler, Operation};
 use crate::delta_datafusion::expr::{fmt_expr_to_sql, parse_predicate_expression};
 use crate::delta_datafusion::logical::MetricObserver;
@@ -80,16 +77,15 @@ use crate::delta_datafusion::{
     register_store, DataFusionMixins, DeltaColumn, DeltaScan, DeltaScanConfigBuilder,
     DeltaSessionConfig, DeltaTableProvider,
 };
-
+use crate::kernel::transaction::{CommitBuilder, CommitProperties, PROTOCOL};
 use crate::kernel::{Action, Metadata, StructTypeExt};
 use crate::logstore::LogStoreRef;
 use crate::operations::cast::merge_schema::{merge_arrow_field, merge_arrow_schema};
 use crate::operations::cdc::*;
 use crate::operations::merge::barrier::find_node;
-use crate::operations::transaction::CommitBuilder;
 use crate::operations::write::execution::write_execution_plan_v2;
 use crate::operations::write::generated_columns::{
-    add_generated_columns, add_missing_generated_columns,
+    able_to_gc, add_generated_columns, add_missing_generated_columns,
 };
 use crate::operations::write::WriterStatsConfig;
 use crate::protocol::{DeltaOperation, MergePredicate};
@@ -544,18 +540,22 @@ impl MergeOperation {
                         Column {
                             relation: None,
                             name,
+                            spans,
                         } => Column {
                             relation: Some(r),
                             name,
+                            spans,
                         },
                         Column {
                             relation: Some(TableReference::Bare { table }),
                             name,
+                            spans,
                         } => {
                             if table.as_ref() == alias {
                                 Column {
                                     relation: Some(r),
                                     name,
+                                    spans,
                                 }
                             } else {
                                 return Err(DeltaTableError::Generic(
@@ -723,7 +723,7 @@ impl ExtensionPlanner for MergeMetricExtensionPlanner {
 #[allow(clippy::too_many_arguments)]
 async fn execute(
     predicate: Expression,
-    source: DataFrame,
+    mut source: DataFrame,
     log_store: LogStoreRef,
     snapshot: DeltaTableState,
     _state: SessionState,
@@ -780,13 +780,18 @@ async fn execute(
         None => TableReference::bare(UNNAMED_TABLE),
     };
 
-    let generated_col_expressions = snapshot
-        .schema()
-        .get_generated_columns()
-        .unwrap_or_default();
+    let mut generated_col_exp = None;
+    let mut missing_generated_col = None;
 
-    let (source, missing_generated_columns) =
-        add_missing_generated_columns(source, &generated_col_expressions)?;
+    if able_to_gc(&snapshot)? {
+        let generated_col_expressions = snapshot.schema().get_generated_columns()?;
+        let (source_with_gc, missing_generated_columns) =
+            add_missing_generated_columns(source, &generated_col_expressions)?;
+
+        source = source_with_gc;
+        generated_col_exp = Some(generated_col_expressions);
+        missing_generated_col = Some(missing_generated_columns);
+    }
     // This is only done to provide the source columns with a correct table reference. Just renaming the columns does not work
     let source = LogicalPlanBuilder::scan(
         source_name.clone(),
@@ -959,7 +964,7 @@ async fn execute(
         )?;
         let schema = Arc::new(schema_builder.finish());
         new_schema = Some(schema.clone());
-        let schema_struct: StructType = schema.try_into()?;
+        let schema_struct: StructType = schema.try_into_kernel()?;
         if &schema_struct != snapshot.schema() {
             let action = Action::Metadata(Metadata::try_new(
                 schema_struct,
@@ -1083,7 +1088,7 @@ async fn execute(
     let mut write_projection_with_cdf = Vec::new();
 
     let schema = if let Some(schema) = new_schema {
-        &schema.try_into()?
+        &schema.try_into_kernel()?
     } else {
         snapshot.schema()
     };
@@ -1107,7 +1112,7 @@ async fn execute(
             None => TableReference::none(),
         };
         let name = delta_field.name();
-        let mut cast_type: DataType = delta_field.data_type().try_into()?;
+        let mut cast_type: DataType = delta_field.data_type().try_into_arrow()?;
 
         // Receive the correct column reference given that some columns are only in source table
         let column = if let Some(field) = snapshot.schema().field(name) {
@@ -1122,7 +1127,7 @@ async fn execute(
         } else {
             null_target_column = Some(cast(
                 lit(ScalarValue::Null).alias(name),
-                delta_field.data_type().try_into()?,
+                delta_field.data_type().try_into_arrow()?,
             ));
             Column::new(source_qualifier.clone(), name)
         };
@@ -1346,12 +1351,16 @@ async fn execute(
             .select(write_projection)?
     };
 
-    projected = add_generated_columns(
-        projected,
-        &generated_col_expressions,
-        &missing_generated_columns,
-        &state,
-    )?;
+    if let Some(generated_col_expressions) = generated_col_exp {
+        if let Some(missing_generated_columns) = missing_generated_col {
+            projected = add_generated_columns(
+                projected,
+                &generated_col_expressions,
+                &missing_generated_columns,
+                &state,
+            )?;
+        }
+    }
 
     let merge_final = &projected.into_unoptimized_plan();
     let write = state.create_physical_plan(merge_final).await?;
@@ -1593,6 +1602,7 @@ mod tests {
     use datafusion_expr::expr::Placeholder;
     use datafusion_expr::lit;
     use datafusion_expr::Expr;
+    use delta_kernel::engine::arrow_conversion::TryIntoKernel;
     use delta_kernel::schema::StructType;
     use itertools::Itertools;
     use regex::Regex;
@@ -2147,7 +2157,7 @@ mod tests {
             "+----+-------+------------+-------------+",
         ];
         let actual = get_data(&table).await;
-        let expected_schema_struct: StructType = Arc::clone(&schema).try_into().unwrap();
+        let expected_schema_struct: StructType = Arc::clone(&schema).try_into_kernel().unwrap();
         assert_eq!(&expected_schema_struct, table.schema().unwrap());
         assert_batches_sorted_eq!(&expected, &actual);
     }
@@ -2215,7 +2225,7 @@ mod tests {
             "+----+-------+------------+-------------+",
         ];
         let actual = get_data(&table).await;
-        let expected_schema_struct: StructType = Arc::clone(&schema).try_into().unwrap();
+        let expected_schema_struct: StructType = Arc::clone(&schema).try_into_kernel().unwrap();
         assert_eq!(&expected_schema_struct, table.schema().unwrap());
         assert_batches_sorted_eq!(&expected, &actual);
     }
@@ -3302,7 +3312,7 @@ mod tests {
             "+----+-------+-------------+------------+",
         ];
         let actual = get_data(&table).await;
-        let expected_schema_struct: StructType = Arc::clone(&schema).try_into().unwrap();
+        let expected_schema_struct: StructType = Arc::clone(&schema).try_into_kernel().unwrap();
         assert_eq!(&expected_schema_struct, table.schema().unwrap());
         assert_batches_sorted_eq!(&expected, &actual);
     }
@@ -3316,7 +3326,7 @@ mod tests {
                 true,
             ),
             StructField::new(
-                "vAlue".to_string(),
+                "vAlue".to_string(), // spellchecker:disable-line
                 DataType::Primitive(PrimitiveType::Integer),
                 true,
             ),
@@ -3329,7 +3339,7 @@ mod tests {
 
         let arrow_schema = Arc::new(ArrowSchema::new(vec![
             Field::new("Id", ArrowDataType::Utf8, true),
-            Field::new("vAlue", ArrowDataType::Int32, true),
+            Field::new("vAlue", ArrowDataType::Int32, true), // spellchecker:disable-line
             Field::new("mOdifieD", ArrowDataType::Utf8, true),
         ]));
 
@@ -3366,7 +3376,7 @@ mod tests {
             .when_not_matched_insert(|insert| {
                 insert
                     .set("Id", "source.Id")
-                    .set("vAlue", "source.vAlue + 1")
+                    .set("vAlue", "source.vAlue + 1") // spellchecker:disable-line
                     .set("mOdifieD", "source.mOdifieD")
             })
             .unwrap()
@@ -3375,7 +3385,7 @@ mod tests {
 
         let expected = vec![
             "+----+-------+------------+",
-            "| Id | vAlue | mOdifieD   |",
+            "| Id | vAlue | mOdifieD   |", // spellchecker:disable-line
             "+----+-------+------------+",
             "| A  | 1     | 2021-02-01 |",
             "| B  | 10    | 2021-02-01 |",
@@ -3956,7 +3966,7 @@ mod tests {
         assert_merge(table.clone(), metrics).await;
 
         // Just checking that the data wasn't actually written instead!
-        if let Ok(files) = crate::storage::utils::flatten_list_stream(
+        if let Ok(files) = crate::logstore::tests::flatten_list_stream(
             &table.object_store(),
             Some(&object_store::path::Path::from("_change_data")),
         )
@@ -4136,7 +4146,7 @@ mod tests {
             "+----+-------+------------+-------------+",
         ];
         let actual = get_data(&table).await;
-        let expected_schema_struct: StructType = source_schema.try_into().unwrap();
+        let expected_schema_struct: StructType = source_schema.try_into_kernel().unwrap();
         assert_eq!(&expected_schema_struct, table.schema().unwrap());
         assert_batches_sorted_eq!(&expected, &actual);
 

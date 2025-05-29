@@ -11,6 +11,9 @@ from snowflake.core.service import Service, ServiceSpecStageFile
 from tests.utils import random_string
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 def test_drop(services, session, imagerepo, shared_compute_pool):
     try:
         service_name = random_string(5, "test_service_")

@@ -3,29 +3,24 @@
 import os
 import pathlib
 
-import pyarrow as pa
 import pytest
+from arro3.core import Array, DataType, Table
+from arro3.core import Field as ArrowField
 
 from deltalake import DeltaTable, write_deltalake
 from deltalake.exceptions import DeltaProtocolError
 
 from .utils import assert_spark_read_equal, get_spark, run_stream_with_checkpoint
 
-try:
-    import delta
-    import delta.pip_utils
-    import delta.tables
-    import pyspark
-
-    spark = get_spark()
-except ModuleNotFoundError:
-    pass
-
 
 @pytest.mark.pyspark
+@pytest.mark.pyarrow
 @pytest.mark.integration
 def test_write_basic(tmp_path: pathlib.Path):
     # Write table in Spark
+    import pyarrow as pa
+    import pyspark
+
     spark = get_spark()
     schema = pyspark.sql.types.StructType(
         [
@@ -43,6 +38,7 @@ def test_write_basic(tmp_path: pathlib.Path):
     )
     # Overwrite table in deltalake
     data = pa.table({"c1": pa.array([5, 6], type=pa.int32())})
+
     write_deltalake(str(tmp_path), data, mode="overwrite")
 
     # Read table in Spark
@@ -50,10 +46,17 @@ def test_write_basic(tmp_path: pathlib.Path):
 
 
 @pytest.mark.pyspark
+@pytest.mark.pyarrow
 @pytest.mark.integration
 def test_write_invariant(tmp_path: pathlib.Path):
     # Write table in Spark with invariant
+    #
     spark = get_spark()
+    import delta
+    import delta.pip_utils
+    import delta.tables
+    import pyarrow as pa
+    import pyspark
 
     schema = pyspark.sql.types.StructType(
         [
@@ -79,7 +82,15 @@ def test_write_invariant(tmp_path: pathlib.Path):
     )
 
     # Cannot write invalid data to the table
-    invalid_data = pa.table({"c1": pa.array([6, 2], type=pa.int32())})
+    invalid_data = Table(
+        {
+            "c1": Array(
+                [6, 2],
+                ArrowField("c1", type=DataType.int32(), nullable=True),
+            ),
+        }
+    )
+
     with pytest.raises(
         DeltaProtocolError, match=r"Invariant \(c1 > 3\) violated by value .+2"
     ):
@@ -95,30 +106,11 @@ def test_write_invariant(tmp_path: pathlib.Path):
 
 
 @pytest.mark.pyspark
-@pytest.mark.integration
-def test_checks_min_writer_version(tmp_path: pathlib.Path):
-    # Write table in Spark with constraint
-    spark = get_spark()
-
-    spark.createDataFrame([(4,)], schema=["c1"]).write.save(
-        str(tmp_path),
-        mode="append",
-        format="delta",
-    )
-
-    # Add a constraint upgrades the minWriterProtocol
-    spark.sql(f"ALTER TABLE delta.`{tmp_path!s}` ADD CONSTRAINT x CHECK (c1 > 2)")
-
-    with pytest.raises(
-        DeltaProtocolError, match="This table's min_writer_version is 3, but"
-    ):
-        valid_data = pa.table({"c1": pa.array([5, 6])})
-        write_deltalake(str(tmp_path), valid_data, mode="append", engine="pyarrow")
-
-
-@pytest.mark.pyspark
+@pytest.mark.pyarrow
 @pytest.mark.integration
 def test_spark_read_optimize_history(tmp_path: pathlib.Path):
+    import pyarrow as pa
+
     ids = ["1"] * 10
     values = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
@@ -145,8 +137,11 @@ def test_spark_read_optimize_history(tmp_path: pathlib.Path):
 
 
 @pytest.mark.pyspark
+@pytest.mark.pyarrow
 @pytest.mark.integration
 def test_spark_read_z_ordered_history(tmp_path: pathlib.Path):
+    import pyarrow as pa
+
     ids = ["1"] * 10
     values = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
@@ -173,8 +168,11 @@ def test_spark_read_z_ordered_history(tmp_path: pathlib.Path):
 
 
 @pytest.mark.pyspark
+@pytest.mark.pyarrow
 @pytest.mark.integration
 def test_spark_read_repair_run(tmp_path):
+    import pyarrow as pa
+
     ids = ["1"] * 10
     values = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
@@ -201,6 +199,7 @@ def test_spark_read_repair_run(tmp_path):
 
 
 @pytest.mark.pyspark
+@pytest.mark.pyarrow
 @pytest.mark.integration
 def test_spark_stream_schema_evolution(tmp_path: pathlib.Path):
     """https://github.com/delta-io/delta-rs/issues/3274"""
@@ -209,6 +208,7 @@ def test_spark_stream_schema_evolution(tmp_path: pathlib.Path):
     a schema evolution write, since old behavior was to generate a new table ID
     between schema evolution runs, which caused Spark to error thinking the table had changed.
     """
+    import pyarrow as pa
 
     data_first_write = pa.array(
         [
@@ -262,13 +262,15 @@ def test_spark_stream_schema_evolution(tmp_path: pathlib.Path):
         data_second_write, schema=schema_second_write
     )
 
-    write_deltalake(tmp_path, table_first_write, mode="append", engine="rust")
+    write_deltalake(
+        tmp_path,
+        table_first_write,
+        mode="append",
+    )
 
     run_stream_with_checkpoint(tmp_path.as_posix())
 
-    write_deltalake(
-        tmp_path, table_second_write, mode="append", engine="rust", schema_mode="merge"
-    )
+    write_deltalake(tmp_path, table_second_write, mode="append", schema_mode="merge")
 
     run_stream_with_checkpoint(tmp_path.as_posix())
 

@@ -45,7 +45,6 @@ from __future__ import annotations
 
 import sys
 from datetime import datetime
-from typing import Any
 
 from boto3.resources.base import ResourceMeta, ServiceResource
 from boto3.resources.collection import ResourceCollection
@@ -159,6 +158,7 @@ from .type_defs import (
     DeleteVpcPeeringConnectionResultTypeDef,
     DeleteVpcRequestVpcDeleteTypeDef,
     DeregisterImageRequestImageDeregisterTypeDef,
+    DeregisterImageResultTypeDef,
     DescribeImageAttributeRequestImageDescribeAttributeTypeDef,
     DescribeInstanceAttributeRequestInstanceDescribeAttributeTypeDef,
     DescribeNetworkInterfaceAttributeRequestNetworkInterfaceDescribeAttributeTypeDef,
@@ -299,11 +299,10 @@ from .type_defs import (
 )
 
 if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
     from builtins import list as List
     from collections.abc import Iterator, Sequence
 else:
-    from typing import Dict, Iterator, List, Sequence
+    from typing import Iterator, List, Sequence
 if sys.version_info >= (3, 12):
     from typing import Literal, Unpack
 else:
@@ -2933,7 +2932,7 @@ class Image(ServiceResource):
 
     def deregister(
         self, **kwargs: Unpack[DeregisterImageRequestImageDeregisterTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> DeregisterImageResultTypeDef:
         """
         Deregisters the specified AMI.
 

@@ -23,16 +23,19 @@
 //! let table = ops.write(vec![batch]).await?;
 //! ````
 
+pub(crate) mod async_utils;
 pub mod configs;
 pub(crate) mod execution;
 pub(crate) mod generated_columns;
 pub(crate) mod metrics;
 pub(crate) mod schema_evolution;
+pub mod writer;
 
 use arrow_schema::Schema;
 pub use configs::WriterStatsConfig;
 use datafusion::execution::SessionStateBuilder;
-use generated_columns::{add_generated_columns, add_missing_generated_columns};
+use delta_kernel::engine::arrow_conversion::TryIntoKernel as _;
+use generated_columns::{able_to_gc, add_generated_columns, add_missing_generated_columns};
 use metrics::{WriteMetricExtensionPlanner, SOURCE_COUNT_ID, SOURCE_COUNT_METRIC};
 use std::collections::HashMap;
 use std::str::FromStr;
@@ -56,7 +59,6 @@ use tracing::log::*;
 
 use super::cdc::CDC_COLUMN_NAME;
 use super::datafusion_utils::Expression;
-use super::transaction::{CommitBuilder, CommitProperties, TableReference, PROTOCOL};
 use super::{CreateBuilder, CustomExecuteHandler, Operation};
 use crate::delta_datafusion::expr::fmt_expr_to_sql;
 use crate::delta_datafusion::expr::parse_predicate_expression;
@@ -66,6 +68,7 @@ use crate::delta_datafusion::planner::DeltaPlanner;
 use crate::delta_datafusion::register_store;
 use crate::delta_datafusion::DataFusionMixins;
 use crate::errors::{DeltaResult, DeltaTableError};
+use crate::kernel::transaction::{CommitBuilder, CommitProperties, TableReference, PROTOCOL};
 use crate::kernel::{Action, ActionType, Metadata, StructType, StructTypeExt};
 use crate::logstore::LogStoreRef;
 use crate::operations::cast::merge_schema::merge_arrow_schema;
@@ -358,7 +361,7 @@ impl WriteBuilder {
             .input
             .clone()
             .ok_or::<DeltaTableError>(WriteError::MissingData.into())?;
-        let schema: StructType = input.schema().as_arrow().try_into()?;
+        let schema: StructType = input.schema().as_arrow().try_into_kernel()?;
 
         match &self.snapshot {
             Some(snapshot) => {
@@ -443,18 +446,21 @@ impl std::future::IntoFuture for WriteBuilder {
                     state
                 }
             };
-            let generated_col_expressions = this
-                .snapshot
-                .as_ref()
-                .map(|v| v.schema().get_generated_columns().unwrap_or_default())
-                .unwrap_or_default();
-
             let mut schema_drift = false;
-            let source = DataFrame::new(state.clone(), this.input.unwrap().as_ref().clone());
-
-            // Add missing generated columns to source_df
-            let (mut source, missing_generated_columns) =
-                add_missing_generated_columns(source, &generated_col_expressions)?;
+            let mut generated_col_exp = None;
+            let mut missing_gen_col = None;
+            let mut source = DataFrame::new(state.clone(), this.input.unwrap().as_ref().clone());
+            if let Some(snapshot) = &this.snapshot {
+                if able_to_gc(snapshot)? {
+                    let generated_col_expressions = snapshot.schema().get_generated_columns()?;
+                    // Add missing generated columns to source_df
+                    let (source_with_gc, missing_generated_columns) =
+                        add_missing_generated_columns(source, &generated_col_expressions)?;
+                    source = source_with_gc;
+                    missing_gen_col = Some(missing_generated_columns);
+                    generated_col_exp = Some(generated_col_expressions);
+                }
+            }
 
             let source_schema: Arc<Schema> = Arc::new(source.schema().as_arrow().clone());
 
@@ -525,12 +531,16 @@ impl std::future::IntoFuture for WriteBuilder {
                 source = source.select(schema_evolution_projection)?;
             }
 
-            source = add_generated_columns(
-                source,
-                &generated_col_expressions,
-                &missing_generated_columns,
-                &state,
-            )?;
+            if let Some(generated_columns_exp) = generated_col_exp {
+                if let Some(missing_generated_col) = missing_gen_col {
+                    source = add_generated_columns(
+                        source,
+                        &generated_columns_exp,
+                        &missing_generated_col,
+                        &state,
+                    )?;
+                }
+            }
 
             let source = LogicalPlan::Extension(Extension {
                 node: Arc::new(MetricObserver {
@@ -547,7 +557,7 @@ impl std::future::IntoFuture for WriteBuilder {
             // Maybe create schema action
             if this.schema_mode == Some(SchemaMode::Merge) && schema_drift {
                 if let Some(snapshot) = &this.snapshot {
-                    let schema_struct: StructType = schema.clone().try_into()?;
+                    let schema_struct: StructType = schema.clone().try_into_kernel()?;
                     // Verify if delta schema changed
                     if &schema_struct != snapshot.schema() {
                         let current_protocol = snapshot.protocol();
@@ -612,7 +622,7 @@ impl std::future::IntoFuture for WriteBuilder {
             // Collect remove actions if we are overwriting the table
             if let Some(snapshot) = &this.snapshot {
                 if matches!(this.mode, SaveMode::Overwrite) {
-                    let delta_schema: StructType = schema.as_ref().try_into()?;
+                    let delta_schema: StructType = schema.as_ref().try_into_kernel()?;
                     // Update metadata with new schema if there is a change
                     if &delta_schema != snapshot.schema() {
                         let mut metadata = snapshot.metadata().clone();
@@ -764,6 +774,7 @@ mod tests {
     use arrow_schema::{DataType, Field, Fields, Schema as ArrowSchema, TimeUnit};
     use datafusion::prelude::*;
     use datafusion::{assert_batches_eq, assert_batches_sorted_eq};
+    use delta_kernel::engine::arrow_conversion::TryIntoArrow;
     use itertools::Itertools;
     use serde_json::{json, Value};
 
@@ -1606,7 +1617,7 @@ mod tests {
             .unwrap();
         assert_eq!(table.version(), 0);
 
-        let schema = Arc::new(ArrowSchema::try_from(delta_schema)?);
+        let schema: Arc<ArrowSchema> = Arc::new(delta_schema.try_into_arrow()?);
 
         let batch = RecordBatch::try_new(
             Arc::clone(&schema),
@@ -1679,7 +1690,7 @@ mod tests {
             .unwrap();
         assert_eq!(table.version(), 0);
 
-        let schema = Arc::new(ArrowSchema::try_from(delta_schema)?);
+        let schema: Arc<ArrowSchema> = Arc::new(delta_schema.try_into_arrow()?);
 
         let batch = RecordBatch::try_new(
             Arc::clone(&schema),
@@ -1753,7 +1764,7 @@ mod tests {
             .unwrap();
         assert_eq!(table.version(), 0);
 
-        let schema = Arc::new(ArrowSchema::try_from(delta_schema)?);
+        let schema: Arc<ArrowSchema> = Arc::new(delta_schema.try_into_arrow()?);
 
         let batch = RecordBatch::try_new(
             Arc::clone(&schema),

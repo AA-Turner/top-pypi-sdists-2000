@@ -19,6 +19,8 @@ TEST_TABLE_NAME = "SNOWPY_TEST_TABLE"
 
 API_NOT_ENABLED = "Cortex Search API is not enabled"
 
+pytestmark = [pytest.mark.skip_gov]
+
 
 @pytest.fixture(autouse=True)
 def setup_cortex_search_service(connection, warehouse, tables, backup_warehouse_fixture):

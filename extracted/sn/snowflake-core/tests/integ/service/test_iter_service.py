@@ -12,6 +12,9 @@ from snowflake.core.service import Service, ServiceSpecStageFile
 from tests.utils import random_string
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 @pytest.mark.usefixtures("qa_mode_enabled")
 def test_iter(services, temp_service, session, imagerepo, shared_compute_pool, database, schema):
     service_name = random_string(5, "test_service_a_")

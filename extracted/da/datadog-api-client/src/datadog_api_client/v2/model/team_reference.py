@@ -15,7 +15,6 @@ from datadog_api_client.model_utils import (
 
 if TYPE_CHECKING:
     from datadog_api_client.v2.model.team_reference_attributes import TeamReferenceAttributes
-    from datadog_api_client.v2.model.team_reference_relationships import TeamReferenceRelationships
     from datadog_api_client.v2.model.team_reference_type import TeamReferenceType
 
 
@@ -23,29 +22,25 @@ class TeamReference(ModelNormal):
     @cached_property
     def openapi_types(_):
         from datadog_api_client.v2.model.team_reference_attributes import TeamReferenceAttributes
-        from datadog_api_client.v2.model.team_reference_relationships import TeamReferenceRelationships
         from datadog_api_client.v2.model.team_reference_type import TeamReferenceType
 
         return {
             "attributes": (TeamReferenceAttributes,),
             "id": (str,),
-            "relationships": (TeamReferenceRelationships,),
             "type": (TeamReferenceType,),
         }
 
     attribute_map = {
         "attributes": "attributes",
         "id": "id",
-        "relationships": "relationships",
         "type": "type",
     }
 
     def __init__(
         self_,
+        type: TeamReferenceType,
         attributes: Union[TeamReferenceAttributes, UnsetType] = unset,
         id: Union[str, UnsetType] = unset,
-        relationships: Union[TeamReferenceRelationships, UnsetType] = unset,
-        type: Union[TeamReferenceType, UnsetType] = unset,
         **kwargs,
     ):
         """
@@ -57,18 +52,13 @@ class TeamReference(ModelNormal):
         :param id: The team's unique identifier.
         :type id: str, optional
 
-        :param relationships: Collects the key relationship fields for a team reference, specifically on-call users.
-        :type relationships: TeamReferenceRelationships, optional
-
         :param type: Teams resource type.
-        :type type: TeamReferenceType, optional
+        :type type: TeamReferenceType
         """
         if attributes is not unset:
             kwargs["attributes"] = attributes
         if id is not unset:
             kwargs["id"] = id
-        if relationships is not unset:
-            kwargs["relationships"] = relationships
-        if type is not unset:
-            kwargs["type"] = type
         super().__init__(kwargs)
+
+        self_.type = type

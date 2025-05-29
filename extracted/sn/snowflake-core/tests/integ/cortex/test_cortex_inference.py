@@ -1,12 +1,17 @@
 #
 # Copyright (c) 2012-2023 Snowflake Computing Inc. All rights reserved.
 #
+import json
 
+import pytest
 
 from urllib3 import HTTPResponse
 
 from snowflake.core._root import Root
 from snowflake.core.rest import SSEClient
+
+
+pytestmark = [pytest.mark.skip_gov]
 
 
 def test_cortex_inference(root: Root):
@@ -48,3 +53,18 @@ def test_cortex_inference_xp(root: Root):
             assert e.id == "3"
 
     assert event_num == 3
+
+def test_cortex_complete_xp(root: Root):
+    body_str = '{"choices": [{"message": {"content": "Hello! \\n"}}]}'
+
+    response = HTTPResponse(
+        body=body_str.encode('utf-8'),
+        status=200,
+        headers={"Content-Type": "application/json"},
+        preload_content=False,
+    )
+    res = SSEClient(response)
+
+    for e in res.events():
+        data = json.loads(e.data)
+        assert data["choices"][0]["message"]["content"] == "Hello! \n"

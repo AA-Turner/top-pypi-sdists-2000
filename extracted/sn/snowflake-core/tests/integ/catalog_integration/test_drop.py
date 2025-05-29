@@ -5,8 +5,8 @@ from snowflake.core.exceptions import NotFoundError
 from tests.integ.utils import random_string
 
 
-pytestmark = [pytest.mark.min_sf_ver("8.37.0"),
-            pytest.mark.usefixtures("internal_only", "setup_credentials_fixture")]
+pytestmark = [pytest.mark.min_sf_ver("8.37.0"), pytest.mark.internal_only,
+            pytest.mark.usefixtures("setup_credentials_fixture")]
 
 def test_drop(catalog_integrations):
     catalog_integration_name = random_string(10, "test_network_policy_")

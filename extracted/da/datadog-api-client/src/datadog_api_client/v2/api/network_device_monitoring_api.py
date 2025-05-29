@@ -3,15 +3,19 @@
 # Copyright 2019-Present Datadog, Inc.
 from __future__ import annotations
 
+import collections
 from typing import Any, Dict, Union
 
 from datadog_api_client.api_client import ApiClient, Endpoint as _Endpoint
 from datadog_api_client.configuration import Configuration
 from datadog_api_client.model_utils import (
+    set_attribute_from_path,
+    get_attribute_from_path,
     UnsetType,
     unset,
 )
 from datadog_api_client.v2.model.list_devices_response import ListDevicesResponse
+from datadog_api_client.v2.model.devices_list_data import DevicesListData
 from datadog_api_client.v2.model.get_device_response import GetDeviceResponse
 from datadog_api_client.v2.model.get_interfaces_response import GetInterfacesResponse
 from datadog_api_client.v2.model.list_tags_response import ListTagsResponse
@@ -66,6 +70,11 @@ class NetworkDeviceMonitoringApi:
                     "attribute": "device_id",
                     "location": "query",
                 },
+                "get_ip_addresses": {
+                    "openapi_types": (bool,),
+                    "attribute": "get_ip_addresses",
+                    "location": "query",
+                },
             },
             headers_map={
                 "accept": ["application/json"],
@@ -83,14 +92,14 @@ class NetworkDeviceMonitoringApi:
                 "version": "v2",
             },
             params_map={
-                "page_number": {
-                    "openapi_types": (int,),
-                    "attribute": "page[number]",
-                    "location": "query",
-                },
                 "page_size": {
                     "openapi_types": (int,),
                     "attribute": "page[size]",
+                    "location": "query",
+                },
+                "page_number": {
+                    "openapi_types": (int,),
+                    "attribute": "page[number]",
                     "location": "query",
                 },
                 "sort": {
@@ -179,6 +188,8 @@ class NetworkDeviceMonitoringApi:
     def get_interfaces(
         self,
         device_id: str,
+        *,
+        get_ip_addresses: Union[bool, UnsetType] = unset,
     ) -> GetInterfacesResponse:
         """Get the list of interfaces of the device.
 
@@ -186,18 +197,23 @@ class NetworkDeviceMonitoringApi:
 
         :param device_id: The ID of the device to get interfaces from.
         :type device_id: str
+        :param get_ip_addresses: Whether to get the IP addresses of the interfaces.
+        :type get_ip_addresses: bool, optional
         :rtype: GetInterfacesResponse
         """
         kwargs: Dict[str, Any] = {}
         kwargs["device_id"] = device_id
+
+        if get_ip_addresses is not unset:
+            kwargs["get_ip_addresses"] = get_ip_addresses
 
         return self._get_interfaces_endpoint.call_with_http_info(**kwargs)
 
     def list_devices(
         self,
         *,
-        page_number: Union[int, UnsetType] = unset,
         page_size: Union[int, UnsetType] = unset,
+        page_number: Union[int, UnsetType] = unset,
         sort: Union[str, UnsetType] = unset,
         filter_tag: Union[str, UnsetType] = unset,
     ) -> ListDevicesResponse:
@@ -205,10 +221,10 @@ class NetworkDeviceMonitoringApi:
 
         Get the list of devices.
 
-        :param page_number: The page number to fetch.
-        :type page_number: int, optional
-        :param page_size: The number of devices to return per page.
+        :param page_size: Size for a given page. The maximum allowed value is 100.
         :type page_size: int, optional
+        :param page_number: Specific page number to return.
+        :type page_number: int, optional
         :param sort: The field to sort the devices by.
         :type sort: str, optional
         :param filter_tag: Filter devices by tag.
@@ -216,11 +232,11 @@ class NetworkDeviceMonitoringApi:
         :rtype: ListDevicesResponse
         """
         kwargs: Dict[str, Any] = {}
-        if page_number is not unset:
-            kwargs["page_number"] = page_number
-
         if page_size is not unset:
             kwargs["page_size"] = page_size
+
+        if page_number is not unset:
+            kwargs["page_number"] = page_number
 
         if sort is not unset:
             kwargs["sort"] = sort
@@ -229,6 +245,55 @@ class NetworkDeviceMonitoringApi:
             kwargs["filter_tag"] = filter_tag
 
         return self._list_devices_endpoint.call_with_http_info(**kwargs)
+
+    def list_devices_with_pagination(
+        self,
+        *,
+        page_size: Union[int, UnsetType] = unset,
+        page_number: Union[int, UnsetType] = unset,
+        sort: Union[str, UnsetType] = unset,
+        filter_tag: Union[str, UnsetType] = unset,
+    ) -> collections.abc.Iterable[DevicesListData]:
+        """Get the list of devices.
+
+        Provide a paginated version of :meth:`list_devices`, returning all items.
+
+        :param page_size: Size for a given page. The maximum allowed value is 100.
+        :type page_size: int, optional
+        :param page_number: Specific page number to return.
+        :type page_number: int, optional
+        :param sort: The field to sort the devices by.
+        :type sort: str, optional
+        :param filter_tag: Filter devices by tag.
+        :type filter_tag: str, optional
+
+        :return: A generator of paginated results.
+        :rtype: collections.abc.Iterable[DevicesListData]
+        """
+        kwargs: Dict[str, Any] = {}
+        if page_size is not unset:
+            kwargs["page_size"] = page_size
+
+        if page_number is not unset:
+            kwargs["page_number"] = page_number
+
+        if sort is not unset:
+            kwargs["sort"] = sort
+
+        if filter_tag is not unset:
+            kwargs["filter_tag"] = filter_tag
+
+        local_page_size = get_attribute_from_path(kwargs, "page_size", 10)
+        endpoint = self._list_devices_endpoint
+        set_attribute_from_path(kwargs, "page_size", local_page_size, endpoint.params_map)
+        pagination = {
+            "limit_value": local_page_size,
+            "results_path": "data",
+            "page_param": "page_number",
+            "endpoint": endpoint,
+            "kwargs": kwargs,
+        }
+        return endpoint.call_with_http_info_paginated(pagination)
 
     def list_device_user_tags(
         self,

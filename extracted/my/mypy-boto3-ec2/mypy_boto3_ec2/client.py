@@ -625,6 +625,7 @@ from .type_defs import (
     DeprovisionPublicIpv4PoolCidrRequestTypeDef,
     DeprovisionPublicIpv4PoolCidrResultTypeDef,
     DeregisterImageRequestTypeDef,
+    DeregisterImageResultTypeDef,
     DeregisterInstanceEventNotificationAttributesRequestTypeDef,
     DeregisterInstanceEventNotificationAttributesResultTypeDef,
     DeregisterTransitGatewayMulticastGroupMembersRequestTypeDef,
@@ -1538,11 +1539,10 @@ from .waiter import (
 )
 
 if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
     from builtins import type as Type
     from collections.abc import Mapping
 else:
-    from typing import Dict, Mapping, Type
+    from typing import Mapping, Type
 if sys.version_info >= (3, 12):
     from typing import Literal, Unpack
 else:
@@ -4006,7 +4006,9 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#deprovision_public_ipv4_pool_cidr)
         """
 
-    def deregister_image(self, **kwargs: Unpack[DeregisterImageRequestTypeDef]) -> Dict[str, Any]:
+    def deregister_image(
+        self, **kwargs: Unpack[DeregisterImageRequestTypeDef]
+    ) -> DeregisterImageResultTypeDef:
         """
         Deregisters the specified AMI.
 

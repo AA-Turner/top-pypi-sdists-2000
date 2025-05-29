@@ -11,6 +11,9 @@ from spark.connect.base_pb2 import (
 from spark.connect.envelope_pb2 import ResponseEnvelope
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 def execute_plan_common(spark_connect_resource):
     exec_plan_request = ExecutePlanRequest(
         session_id="91234",

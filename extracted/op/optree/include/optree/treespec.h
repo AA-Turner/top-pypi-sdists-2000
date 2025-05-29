@@ -41,8 +41,12 @@ using size_t = py::size_t;
 using ssize_t = py::ssize_t;
 
 // The maximum depth of a pytree.
-#ifndef Py_C_RECURSION_LIMIT
-#define Py_C_RECURSION_LIMIT 1000
+#if !defined(Py_C_RECURSION_LIMIT)
+#    if !defined(Py_DEBUG)
+#        define Py_C_RECURSION_LIMIT 1000
+#    else
+#        define Py_C_RECURSION_LIMIT 500
+#    endif
 #endif
 #if !defined(PYPY_VERSION) && !(defined(MS_WINDOWS) && defined(Py_DEBUG))
 constexpr ssize_t MAX_RECURSION_DEPTH = std::min(1000, Py_C_RECURSION_LIMIT);
@@ -120,10 +124,10 @@ public:
     [[nodiscard]] py::object Unflatten(const py::iterable &leaves) const;
 
     // Flatten a PyTree up to this PyTreeSpec. 'this' must be a tree prefix of the tree-structure of
-    // 'full_tree'.
+    // 'tree'.
     // For example, if we flatten a value [(1, (2, 3)), {"foo": 4}] with a PyTreeSpec([(*, *), *]),
     // the result is the list of leaves [1, (2, 3), {"foo": 4}].
-    [[nodiscard]] py::list FlattenUpTo(const py::object &full_tree) const;
+    [[nodiscard]] py::list FlattenUpTo(const py::object &tree) const;
 
     // Broadcast to a common suffix of this PyTreeSpec and other PyTreeSpec.
     [[nodiscard]] std::unique_ptr<PyTreeSpec> BroadcastToCommonSuffix(
@@ -136,7 +140,7 @@ public:
         const std::optional<py::function> &f_leaf = std::nullopt) const;
 
     // Compose two PyTreeSpecs, replacing the leaves of this tree with copies of `inner`.
-    [[nodiscard]] std::unique_ptr<PyTreeSpec> Compose(const PyTreeSpec &inner_treespec) const;
+    [[nodiscard]] std::unique_ptr<PyTreeSpec> Compose(const PyTreeSpec &inner) const;
 
     // Map a function over a PyTree structure, applying `f_leaf(leaf)` to each leaf,
     // and `f_node(node)` to each reconstructed non-leaf node.
@@ -428,6 +432,9 @@ private:
     // Used in tp_traverse for GC support.
     static int PyTpTraverse(PyObject *self_base, visitproc visit, void *arg);
 
+    // Used in tp_clear for GC support.
+    static int PyTpClear(PyObject *self_base);
+
     // A set of namespaces that preserve the insertion order of the dictionary keys during
     // flattening.
     static inline std::unordered_set<std::string> sm_is_dict_insertion_ordered{};
@@ -462,13 +469,13 @@ public:
     friend void BuildModule(py::module_ &mod);  // NOLINT[runtime/references]
 
 private:
-    const py::object m_root;
+    py::object m_root;
     std::vector<std::pair<py::object, ssize_t>> m_agenda;
     const std::optional<py::function> m_leaf_predicate;
     const bool m_none_is_leaf;
     const std::string m_namespace;
     const bool m_is_dict_insertion_ordered;
-#ifdef Py_GIL_DISABLED
+#if defined(Py_GIL_DISABLED)
     mutable mutex m_mutex{};
 #endif
 
@@ -477,6 +484,9 @@ private:
 
     // Used in tp_traverse for GC support.
     static int PyTpTraverse(PyObject *self_base, visitproc visit, void *arg);
+
+    // Used in tp_clear for GC support.
+    static int PyTpClear(PyObject *self_base);
 };
 
 }  // namespace optree

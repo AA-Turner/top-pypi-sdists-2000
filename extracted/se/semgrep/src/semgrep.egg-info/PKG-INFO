@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: semgrep
-Version: 1.122.0
+Version: 1.123.0
 Summary: Lightweight static analysis for many languages. Find bug variants with patterns that look like source code.
 Home-page: https://github.com/returntocorp/semgrep
 Author: Semgrep Inc.
@@ -241,7 +241,7 @@ Browse the full Semgrep [documentation on the website](https://semgrep.dev/docs)
 
 Using remote configuration from the [Registry](https://semgrep.dev/r) (like `--config=p/ci`) reports pseudonymous rule metrics to semgrep.dev.
 
-Using configs from local files (like `--config=xyz.yml`) does **not** enable metrics.
+When using configs from local files (like `--config=xyz.yml`), metrics are sent only when the user is logged in.
 
 To disable Registry rule metrics, use `--metrics=off`.
 

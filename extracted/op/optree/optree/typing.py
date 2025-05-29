@@ -20,32 +20,37 @@ import abc
 import functools
 import platform
 import sys
+import threading
 import types
-from collections.abc import Hashable
-from typing import (
-    Any,
-    Callable,
-    ClassVar,
+from builtins import dict as Dict  # noqa: N812
+from builtins import list as List  # noqa: N812
+from builtins import tuple as Tuple  # noqa: N812
+from collections import OrderedDict
+from collections import defaultdict as DefaultDict  # noqa: N812
+from collections import deque as Deque  # noqa: N812
+from collections.abc import (
     Collection,
-    DefaultDict,
-    Deque,
-    Dict,
-    Final,
-    ForwardRef,
-    Generic,
+    Hashable,
     ItemsView,
     Iterable,
     Iterator,
     KeysView,
-    List,
-    Optional,
-    OrderedDict,
-    Protocol,
     Sequence,
-    Tuple,
+    ValuesView,
+)
+from typing import (
+    Any,
+    Callable,
+    ClassVar,
+    Final,
+    ForwardRef,
+    Generic,
+    Optional,
+    Protocol,
     TypeVar,
     Union,
-    ValuesView,
+    final,
+    get_origin,
     runtime_checkable,
 )
 from typing_extensions import (
@@ -54,11 +59,13 @@ from typing_extensions import (
     ParamSpec,  # Python 3.10+
     Self,  # Python 3.11+
     TypeAlias,  # Python 3.10+
+    TypeAliasType,  # Python 3.12+
 )
+from weakref import WeakKeyDictionary  # pylint: disable=wrong-import-order
 
 import optree._C as _C
 from optree._C import PyTreeKind, PyTreeSpec
-from optree.accessor import (
+from optree.accessors import (
     AutoEntry,
     DataclassEntry,
     FlattenedEntry,
@@ -112,17 +119,18 @@ __all__ = [
     'F',
     'Iterable',
     'Sequence',
-    'List',
     'Tuple',
-    'NamedTuple',
+    'List',
     'Dict',
+    'NamedTuple',
     'OrderedDict',
     'DefaultDict',
     'Deque',
+    'StructSequence',
 ]
 
 
-PyTreeDef = PyTreeSpec  # alias
+PyTreeDef: TypeAlias = PyTreeSpec  # alias
 
 T = TypeVar('T')
 S = TypeVar('S')
@@ -162,7 +170,7 @@ _UnionType = type(Union[int, str])
 
 
 try:  # pragma: no cover
-    from typing import _tp_cache  # type: ignore[attr-defined]
+    from typing import _tp_cache  # type: ignore[attr-defined] # pylint: disable=ungrouped-imports
 except ImportError:  # pragma: no cover
 
     def _tp_cache(func: Callable[P, T], /) -> Callable[P, T]:
@@ -186,23 +194,32 @@ class PyTree(Generic[T]):  # pragma: no cover
     >>> TensorTree = PyTree[torch.Tensor]
     >>> TensorTree  # doctest: +IGNORE_WHITESPACE
     typing.Union[torch.Tensor,
-                 typing.Tuple[ForwardRef('PyTree[torch.Tensor]'), ...],
-                 typing.List[ForwardRef('PyTree[torch.Tensor]')],
-                 typing.Dict[typing.Any, ForwardRef('PyTree[torch.Tensor]')],
-                 typing.Deque[ForwardRef('PyTree[torch.Tensor]')],
+                 tuple[ForwardRef('PyTree[torch.Tensor]'), ...],
+                 list[ForwardRef('PyTree[torch.Tensor]')],
+                 dict[typing.Any, ForwardRef('PyTree[torch.Tensor]')],
+                 collections.deque[ForwardRef('PyTree[torch.Tensor]')],
                  optree.typing.CustomTreeNode[ForwardRef('PyTree[torch.Tensor]')]]
     """
 
+    __slots__: ClassVar[tuple[()]] = ()
+    __instances__: ClassVar[
+        WeakKeyDictionary[
+            TypeAliasType,
+            tuple[type | TypeAliasType, str | None],
+        ]
+    ] = WeakKeyDictionary()
+    __instance_lock__: ClassVar[threading.Lock] = threading.Lock()
+
     @_tp_cache
-    def __class_getitem__(  # noqa: C901
+    def __class_getitem__(  # noqa: C901 # pylint: disable=too-many-branches
         cls,
         item: (
             type[T]
-            | TypeAlias
-            | tuple[type[T] | TypeAlias]
-            | tuple[type[T] | TypeAlias, str | None]
+            | TypeAliasType
+            | tuple[type[T] | TypeAliasType]
+            | tuple[type[T] | TypeAliasType, str | None]
         ),
-    ) -> TypeAlias:
+    ) -> TypeAliasType:
         """Instantiate a PyTree type with the given type."""
         if not isinstance(item, tuple):
             item = (item, None)
@@ -220,17 +237,18 @@ class PyTree(Generic[T]):  # pragma: no cover
                 f'a parameter and a string of type name, got {item!r}.',
             )
 
-        if (
-            isinstance(param, _UnionType)
-            and param.__origin__ is Union  # type: ignore[attr-defined]
-            and hasattr(param, '__pytree_args__')
-        ):
-            return param  # PyTree[PyTree[T]] -> PyTree[T]
+        if isinstance(param, _UnionType) and get_origin(param) is Union:  # type: ignore[unreachable]
+            with cls.__instance_lock__:  # type: ignore[unreachable]
+                try:
+                    if param in cls.__instances__:
+                        return param  # PyTree[PyTree[T]] -> PyTree[T]
+                except TypeError:
+                    pass  # non-hashable type
 
         if name is not None:
             recurse_ref = ForwardRef(name)
         elif isinstance(param, TypeVar):
-            recurse_ref = ForwardRef(f'{cls.__name__}[{param.__name__}]')
+            recurse_ref = ForwardRef(f'{cls.__name__}[{param.__name__}]')  # type: ignore[unreachable]
         elif isinstance(param, type):
             if param.__module__ == 'builtins':
                 typename = param.__qualname__
@@ -251,21 +269,10 @@ class PyTree(Generic[T]):  # pragma: no cover
             Deque[recurse_ref],  # type: ignore[valid-type]
             CustomTreeNode[recurse_ref],  # type: ignore[valid-type]
         ]
-        pytree_alias.__pytree_args__ = item  # type: ignore[attr-defined]
 
-        # pylint: disable-next=no-member
-        original_copy_with = pytree_alias.copy_with  # type: ignore[attr-defined]
-        original_num_params = len(pytree_alias.__args__)  # type: ignore[attr-defined]
-
-        def copy_with(params: tuple) -> TypeAlias:
-            if not isinstance(params, tuple) or len(params) != original_num_params:
-                return original_copy_with(params)
-            if params[0] is param:
-                return pytree_alias
-            return PyTree[params[0]]  # type: ignore[misc,valid-type]
-
-        object.__setattr__(pytree_alias, 'copy_with', copy_with)
-        return pytree_alias
+        with cls.__instance_lock__:
+            cls.__instances__[pytree_alias] = (param, name)  # type: ignore[index]
+        return pytree_alias  # type: ignore[return-value]
 
     def __new__(cls, /) -> Never:  # pylint: disable=arguments-differ
         """Prohibit instantiation."""
@@ -328,15 +335,15 @@ class PyTreeTypeVar:  # pragma: no cover
     >>> TensorTree = PyTreeTypeVar('TensorTree', torch.Tensor)
     >>> TensorTree  # doctest: +IGNORE_WHITESPACE
     typing.Union[torch.Tensor,
-                 typing.Tuple[ForwardRef('TensorTree'), ...],
-                 typing.List[ForwardRef('TensorTree')],
-                 typing.Dict[typing.Any, ForwardRef('TensorTree')],
-                 typing.Deque[ForwardRef('TensorTree')],
+                 tuple[ForwardRef('TensorTree'), ...],
+                 list[ForwardRef('TensorTree')],
+                 dict[typing.Any, ForwardRef('TensorTree')],
+                 collections.deque[ForwardRef('TensorTree')],
                  optree.typing.CustomTreeNode[ForwardRef('TensorTree')]]
     """
 
     @_tp_cache
-    def __new__(cls, /, name: str, param: type | TypeAlias) -> TypeAlias:
+    def __new__(cls, /, name: str, param: type | TypeAliasType) -> TypeAliasType:  # type: ignore[misc]
         """Instantiate a PyTree type variable with the given name and parameter."""
         if not isinstance(name, str):
             raise TypeError(f'{cls.__name__} only supports a string of type name, got {name!r}.')
@@ -448,13 +455,13 @@ class StructSequenceMeta(type):
         """Return whether the class is a PyStructSequence type.
 
         >>> import time
-        >>> issubclass(time.struct_time, structseq)
+        >>> issubclass(time.struct_time, StructSequence)
         True
         >>> class MyTuple(tuple):
         ...     n_fields = 2
         ...     n_sequence_fields = 2
         ...     n_unnamed_fields = 0
-        >>> issubclass(MyTuple, structseq)
+        >>> issubclass(MyTuple, StructSequence)
         False
         """
         return is_structseq_class(subclass)
@@ -463,9 +470,9 @@ class StructSequenceMeta(type):
         """Return whether the object is a PyStructSequence instance.
 
         >>> import sys
-        >>> isinstance(sys.float_info, structseq)
+        >>> isinstance(sys.float_info, StructSequence)
         True
-        >>> isinstance((1, 2), structseq)
+        >>> isinstance((1, 2), StructSequence)
         False
         """
         return is_structseq_instance(instance)
@@ -473,9 +480,10 @@ class StructSequenceMeta(type):
 
 # Reference: https://github.com/python/typeshed/blob/main/stdlib/_typeshed/__init__.pyi
 # This is an internal CPython type that is like, but subtly different from a NamedTuple.
-# `structseq` classes are unsubclassable, so are all decorated with `@final`.
+# `StructSequence` classes are unsubclassable, so are all decorated with `@final`.
 # pylint: disable-next=invalid-name,missing-class-docstring
-class structseq(Tuple[_T_co, ...], metaclass=StructSequenceMeta):  # type: ignore[misc] # noqa: N801
+@final
+class StructSequence(tuple[_T_co, ...], metaclass=StructSequenceMeta):  # type: ignore[misc]
     """A generic type stub for CPython's ``PyStructSequence`` type."""
 
     __slots__: ClassVar[tuple[()]] = ()
@@ -486,12 +494,15 @@ class structseq(Tuple[_T_co, ...], metaclass=StructSequenceMeta):  # type: ignor
 
     def __init_subclass__(cls, /) -> Never:
         """Prohibit subclassing."""
-        raise TypeError("type 'structseq' is not an acceptable base type")
+        raise TypeError("type 'StructSequence' is not an acceptable base type")
 
     # pylint: disable-next=unused-argument,redefined-builtin
     def __new__(cls, /, sequence: Iterable[_T_co], dict: dict[str, Any] = ...) -> Self:
+        """Create a new :class:`StructSequence` instance."""
         raise NotImplementedError
 
+
+structseq: TypeAlias = StructSequence  # noqa: PYI042
 
 del StructSequenceMeta
 

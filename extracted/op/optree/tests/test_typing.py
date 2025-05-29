@@ -15,20 +15,24 @@
 
 # pylint: disable=missing-function-docstring
 
+import enum
 import re
 import sys
 import time
 import weakref
 from collections import namedtuple
+from typing import TypeVar, Union
 
 import pytest
 
 import optree
+import optree._C
 from helpers import (
     CustomNamedTupleSubclass,
     CustomTuple,
     Py_GIL_DISABLED,
     Vector2D,
+    disable_systrace,
     gc_collect,
     getrefcount,
     skipif_pypy,
@@ -65,6 +69,61 @@ class FakeStructSequence(tuple):
     n_fields = 11
     n_sequence_fields = 9
     n_unnamed_fields = 0
+
+
+def test_pytreekind_enum():
+    if optree._C.PYBIND11_HAS_NATIVE_ENUM:
+        all_kinds = list(optree.PyTreeKind)
+        assert len(all_kinds) == optree.PyTreeKind.NUM_KINDS
+        assert issubclass(optree.PyTreeKind, enum.IntEnum)
+        assert issubclass(optree.PyTreeKind, int)
+
+        assert optree.PyTreeKind.CUSTOM == 0
+        assert optree.PyTreeKind.LEAF == 1
+        assert optree.PyTreeKind.NONE == 2
+        assert optree.PyTreeKind.CUSTOM.name == 'CUSTOM'
+        assert optree.PyTreeKind.LEAF.name == 'LEAF'
+        assert optree.PyTreeKind.NONE.name == 'NONE'
+        for i, kind in enumerate(all_kinds):
+            assert isinstance(kind, int)
+            assert kind == i
+            assert kind is optree.PyTreeKind(i)
+            assert kind is getattr(optree.PyTreeKind, kind.name)
+
+        with pytest.raises(ValueError, match=r'.* is not a valid .*\bPyTreeKind\b.*'):
+            optree.PyTreeKind(optree.PyTreeKind.NUM_KINDS)
+    else:
+        all_kinds = [optree.PyTreeKind(i) for i in range(optree.PyTreeKind.NUM_KINDS)]
+
+    assert optree.PyTreeKind.CUSTOM.value == 0
+    assert optree.PyTreeKind.LEAF.value == 1
+    assert optree.PyTreeKind.NONE.value == 2
+    assert optree.PyTreeKind.CUSTOM.name == 'CUSTOM'
+    assert optree.PyTreeKind.LEAF.name == 'LEAF'
+    assert optree.PyTreeKind.NONE.name == 'NONE'
+    for i, kind in enumerate(all_kinds):
+        assert isinstance(kind, optree.PyTreeKind)
+        assert int(kind) == i
+        assert kind.value == i
+        assert kind == optree.PyTreeKind(i)
+        assert kind == getattr(optree.PyTreeKind, kind.name)
+
+
+def test_pytree_typing():
+    T = TypeVar('T')
+
+    optree.PyTree[int]
+    optree.PyTree[Union[int, str]]
+    optree.PyTree[T]
+    assert optree.PyTree[optree.PyTree[int]] == optree.PyTree[int]
+    assert optree.PyTree[optree.PyTree[Union[int, str]]] == optree.PyTree[Union[int, str]]
+    assert optree.PyTree[optree.PyTree[T]] == optree.PyTree[T]
+    if sys.version_info >= (3, 10):
+        optree.PyTree[int | str]
+        assert optree.PyTree[optree.PyTree[int | str]] == optree.PyTree[int | str]
+
+    IntTree = optree.PyTreeTypeVar('IntTree', int)  # noqa: N806
+    assert IntTree == optree.PyTree[IntTree]
 
 
 def test_is_namedtuple():
@@ -121,6 +180,7 @@ def test_is_namedtuple():
 
 
 @skipif_pypy
+@disable_systrace
 def test_is_namedtuple_cache():
     Point = namedtuple('Point', ('x', 'y'))  # noqa: PYI024
 
@@ -245,6 +305,7 @@ def test_namedtuple_fields():
 
 
 @skipif_pypy
+@disable_systrace
 def test_namedtuple_fields_cache():
     Point = namedtuple('Point', ('x', 'y'))  # noqa: PYI024
 
@@ -319,13 +380,13 @@ def test_is_structseq():
         assert is_structseq_instance(obj) == (not isinstance(obj, type) and is_structseq(obj))
         return is_structseq(obj)
 
-    with pytest.raises(TypeError, match="type 'structseq' is not an acceptable base type"):
+    with pytest.raises(TypeError, match="type 'StructSequence' is not an acceptable base type"):
 
-        class MyTuple(optree.typing.structseq):
+        class MyTuple(optree.typing.StructSequence):
             pass
 
     with pytest.raises(NotImplementedError):
-        optree.typing.structseq(range(1))
+        optree.typing.StructSequence(range(1))
 
     for is_structseq, is_structseq_class, is_structseq_instance in (  # noqa: B007
         (
@@ -372,6 +433,7 @@ def test_is_structseq():
 
 
 @skipif_pypy
+@disable_systrace
 def test_is_structseq_cache():
     Point = namedtuple('Point', ('x', 'y'))  # noqa: PYI024
 
@@ -536,6 +598,7 @@ def test_structseq_fields():
 
 
 @skipif_pypy
+@disable_systrace
 def test_structseq_fields_cache():
     Point = namedtuple('Point', ('x', 'y'))  # noqa: PYI024
 

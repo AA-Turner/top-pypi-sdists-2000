@@ -17,6 +17,9 @@ from snowflake.core.service import (
 from tests.utils import random_string
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 @pytest.mark.min_sf_ver("8.39.0")
 @pytest.mark.usefixtures("qa_mode_enabled")
 def test_service_roles(session, database, schema, services, roles, imagerepo, shared_compute_pool):

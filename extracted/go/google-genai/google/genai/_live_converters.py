@@ -281,6 +281,42 @@ def _Blob_to_vertex(
   return to_object
 
 
+def _FileData_to_mldev(
+    api_client: BaseApiClient,
+    from_object: Union[dict[str, Any], object],
+    parent_object: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+  to_object: dict[str, Any] = {}
+  if getv(from_object, ['display_name']) is not None:
+    raise ValueError('display_name parameter is not supported in Gemini API.')
+
+  if getv(from_object, ['file_uri']) is not None:
+    setv(to_object, ['fileUri'], getv(from_object, ['file_uri']))
+
+  if getv(from_object, ['mime_type']) is not None:
+    setv(to_object, ['mimeType'], getv(from_object, ['mime_type']))
+
+  return to_object
+
+
+def _FileData_to_vertex(
+    api_client: BaseApiClient,
+    from_object: Union[dict[str, Any], object],
+    parent_object: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+  to_object: dict[str, Any] = {}
+  if getv(from_object, ['display_name']) is not None:
+    setv(to_object, ['displayName'], getv(from_object, ['display_name']))
+
+  if getv(from_object, ['file_uri']) is not None:
+    setv(to_object, ['fileUri'], getv(from_object, ['file_uri']))
+
+  if getv(from_object, ['mime_type']) is not None:
+    setv(to_object, ['mimeType'], getv(from_object, ['mime_type']))
+
+  return to_object
+
+
 def _Part_to_mldev(
     api_client: BaseApiClient,
     from_object: Union[dict[str, Any], object],
@@ -308,6 +344,15 @@ def _Part_to_mldev(
         ),
     )
 
+  if getv(from_object, ['file_data']) is not None:
+    setv(
+        to_object,
+        ['fileData'],
+        _FileData_to_mldev(
+            api_client, getv(from_object, ['file_data']), to_object
+        ),
+    )
+
   if getv(from_object, ['code_execution_result']) is not None:
     setv(
         to_object,
@@ -317,9 +362,6 @@ def _Part_to_mldev(
 
   if getv(from_object, ['executable_code']) is not None:
     setv(to_object, ['executableCode'], getv(from_object, ['executable_code']))
-
-  if getv(from_object, ['file_data']) is not None:
-    setv(to_object, ['fileData'], getv(from_object, ['file_data']))
 
   if getv(from_object, ['function_call']) is not None:
     setv(to_object, ['functionCall'], getv(from_object, ['function_call']))
@@ -364,6 +406,15 @@ def _Part_to_vertex(
         ),
     )
 
+  if getv(from_object, ['file_data']) is not None:
+    setv(
+        to_object,
+        ['fileData'],
+        _FileData_to_vertex(
+            api_client, getv(from_object, ['file_data']), to_object
+        ),
+    )
+
   if getv(from_object, ['code_execution_result']) is not None:
     setv(
         to_object,
@@ -373,9 +424,6 @@ def _Part_to_vertex(
 
   if getv(from_object, ['executable_code']) is not None:
     setv(to_object, ['executableCode'], getv(from_object, ['executable_code']))
-
-  if getv(from_object, ['file_data']) is not None:
-    setv(to_object, ['fileData'], getv(from_object, ['file_data']))
 
   if getv(from_object, ['function_call']) is not None:
     setv(to_object, ['functionCall'], getv(from_object, ['function_call']))
@@ -2345,13 +2393,6 @@ def _LiveMusicGenerationConfig_to_mldev(
         getv(from_object, ['only_bass_and_drums']),
     )
 
-  if getv(from_object, ['music_generation_mode']) is not None:
-    setv(
-        to_object,
-        ['musicGenerationMode'],
-        getv(from_object, ['music_generation_mode']),
-    )
-
   return to_object
 
 
@@ -2394,11 +2435,6 @@ def _LiveMusicGenerationConfig_to_vertex(
   if getv(from_object, ['only_bass_and_drums']) is not None:
     raise ValueError(
         'only_bass_and_drums parameter is not supported in Vertex AI.'
-    )
-
-  if getv(from_object, ['music_generation_mode']) is not None:
-    raise ValueError(
-        'music_generation_mode parameter is not supported in Vertex AI.'
     )
 
   return to_object
@@ -2653,6 +2689,40 @@ def _Blob_from_vertex(
   return to_object
 
 
+def _FileData_from_mldev(
+    api_client: BaseApiClient,
+    from_object: Union[dict[str, Any], object],
+    parent_object: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+  to_object: dict[str, Any] = {}
+
+  if getv(from_object, ['fileUri']) is not None:
+    setv(to_object, ['file_uri'], getv(from_object, ['fileUri']))
+
+  if getv(from_object, ['mimeType']) is not None:
+    setv(to_object, ['mime_type'], getv(from_object, ['mimeType']))
+
+  return to_object
+
+
+def _FileData_from_vertex(
+    api_client: BaseApiClient,
+    from_object: Union[dict[str, Any], object],
+    parent_object: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+  to_object: dict[str, Any] = {}
+  if getv(from_object, ['displayName']) is not None:
+    setv(to_object, ['display_name'], getv(from_object, ['displayName']))
+
+  if getv(from_object, ['fileUri']) is not None:
+    setv(to_object, ['file_uri'], getv(from_object, ['fileUri']))
+
+  if getv(from_object, ['mimeType']) is not None:
+    setv(to_object, ['mime_type'], getv(from_object, ['mimeType']))
+
+  return to_object
+
+
 def _Part_from_mldev(
     api_client: BaseApiClient,
     from_object: Union[dict[str, Any], object],
@@ -2680,6 +2750,15 @@ def _Part_from_mldev(
         ),
     )
 
+  if getv(from_object, ['fileData']) is not None:
+    setv(
+        to_object,
+        ['file_data'],
+        _FileData_from_mldev(
+            api_client, getv(from_object, ['fileData']), to_object
+        ),
+    )
+
   if getv(from_object, ['codeExecutionResult']) is not None:
     setv(
         to_object,
@@ -2689,9 +2768,6 @@ def _Part_from_mldev(
 
   if getv(from_object, ['executableCode']) is not None:
     setv(to_object, ['executable_code'], getv(from_object, ['executableCode']))
-
-  if getv(from_object, ['fileData']) is not None:
-    setv(to_object, ['file_data'], getv(from_object, ['fileData']))
 
   if getv(from_object, ['functionCall']) is not None:
     setv(to_object, ['function_call'], getv(from_object, ['functionCall']))
@@ -2736,6 +2812,15 @@ def _Part_from_vertex(
         ),
     )
 
+  if getv(from_object, ['fileData']) is not None:
+    setv(
+        to_object,
+        ['file_data'],
+        _FileData_from_vertex(
+            api_client, getv(from_object, ['fileData']), to_object
+        ),
+    )
+
   if getv(from_object, ['codeExecutionResult']) is not None:
     setv(
         to_object,
@@ -2745,9 +2830,6 @@ def _Part_from_vertex(
 
   if getv(from_object, ['executableCode']) is not None:
     setv(to_object, ['executable_code'], getv(from_object, ['executableCode']))
-
-  if getv(from_object, ['fileData']) is not None:
-    setv(to_object, ['file_data'], getv(from_object, ['fileData']))
 
   if getv(from_object, ['functionCall']) is not None:
     setv(to_object, ['function_call'], getv(from_object, ['functionCall']))
@@ -3674,13 +3756,6 @@ def _LiveMusicGenerationConfig_from_mldev(
         to_object,
         ['only_bass_and_drums'],
         getv(from_object, ['onlyBassAndDrums']),
-    )
-
-  if getv(from_object, ['musicGenerationMode']) is not None:
-    setv(
-        to_object,
-        ['music_generation_mode'],
-        getv(from_object, ['musicGenerationMode']),
     )
 
   return to_object

@@ -45,32 +45,26 @@ use serde::Serialize;
 use tracing::log::*;
 use uuid::Uuid;
 
-use super::{
-    datafusion_utils::Expression,
-    transaction::{CommitBuilder, CommitProperties},
-};
-use super::{transaction::PROTOCOL, write::WriterStatsConfig};
+use super::datafusion_utils::Expression;
+use super::write::WriterStatsConfig;
 use super::{
     write::execution::{write_execution_plan, write_execution_plan_cdc},
     CustomExecuteHandler, Operation,
 };
+use crate::delta_datafusion::{
+    expr::fmt_expr_to_sql,
+    logical::MetricObserver,
+    physical::{find_metric_node, get_metric, MetricObserverExec},
+    DataFusionMixins, DeltaColumn, DeltaScanConfigBuilder, DeltaSessionContext, DeltaTableProvider,
+};
 use crate::delta_datafusion::{find_files, planner::DeltaPlanner, register_store};
+use crate::kernel::transaction::{CommitBuilder, CommitProperties, PROTOCOL};
 use crate::kernel::{Action, Remove};
 use crate::logstore::LogStoreRef;
 use crate::operations::cdc::*;
 use crate::protocol::DeltaOperation;
 use crate::table::state::DeltaTableState;
-use crate::{
-    delta_datafusion::{
-        expr::fmt_expr_to_sql,
-        logical::MetricObserver,
-        physical::{find_metric_node, get_metric, MetricObserverExec},
-        DataFusionMixins, DeltaColumn, DeltaScanConfigBuilder, DeltaSessionContext,
-        DeltaTableProvider,
-    },
-    DeltaTableError,
-};
-use crate::{DeltaResult, DeltaTable};
+use crate::{DeltaResult, DeltaTable, DeltaTableError};
 
 /// Custom column name used for marking internal [RecordBatch] rows as updated
 pub(crate) const UPDATE_PREDICATE_COLNAME: &str = "__delta_rs_update_predicate";
@@ -377,7 +371,9 @@ async fn execute(
 
     //let updated_df = df_with_predicate_and_metrics.clone();
     // Disabling the select allows the coerce test to pass, still not sure why
-    let updated_df = df_with_predicate_and_metrics.select(expressions.clone())?;
+    let updated_df = df_with_predicate_and_metrics
+        .select(expressions.clone())?
+        .drop_columns(&[UPDATE_PREDICATE_COLNAME])?;
     let physical_plan = updated_df.clone().create_physical_plan().await?;
     let writer_stats_config = WriterStatsConfig::new(
         snapshot.table_config().num_indexed_cols(),
@@ -387,7 +383,7 @@ async fn execute(
             .map(|v| v.iter().map(|v| v.to_string()).collect::<Vec<String>>()),
     );
 
-    let tracker = CDCTracker::new(df, updated_df.drop_columns(&[UPDATE_PREDICATE_COLNAME])?);
+    let tracker = CDCTracker::new(df, updated_df);
 
     let add_actions = write_execution_plan(
         Some(&snapshot),
@@ -554,6 +550,7 @@ mod tests {
     use arrow_schema::DataType;
     use datafusion::assert_batches_sorted_eq;
     use datafusion::prelude::*;
+    use delta_kernel::engine::arrow_conversion::TryIntoArrow;
     use serde_json::json;
     use std::sync::Arc;
 
@@ -603,6 +600,55 @@ mod tests {
             .with_update("modified", lit("2023-05-14"))
             .await
             .expect_err("Remove action is included when Delta table is append-only. Should error");
+    }
+
+    // <https://github.com/delta-io/delta-rs/issues/3414>
+    #[tokio::test]
+    async fn test_update_predicate_left_in_data() -> DeltaResult<()> {
+        let schema = get_arrow_schema(&None);
+        let table = setup_table(None).await;
+
+        let batch = RecordBatch::try_new(
+            Arc::clone(&schema),
+            vec![
+                Arc::new(arrow::array::StringArray::from(vec!["A", "B", "A", "A"])),
+                Arc::new(arrow::array::Int32Array::from(vec![1, 10, 10, 100])),
+                Arc::new(arrow::array::StringArray::from(vec![
+                    "2021-02-02",
+                    "2021-02-02",
+                    "2021-02-02",
+                    "2021-02-02",
+                ])),
+            ],
+        )?;
+
+        let table = write_batch(table, batch).await;
+        assert_eq!(table.version(), 1);
+
+        let (table, _) = DeltaOps(table)
+            .update()
+            .with_update("modified", lit("2023-05-14"))
+            .with_predicate(col("value").eq(lit(10)))
+            .await?;
+
+        use parquet::arrow::async_reader::ParquetObjectReader;
+        use parquet::arrow::async_reader::ParquetRecordBatchStreamBuilder;
+
+        for pq in table.get_files_iter()? {
+            let store = table.log_store().object_store(None);
+            let reader = ParquetObjectReader::new(store, pq);
+            let builder = ParquetRecordBatchStreamBuilder::new(reader).await?;
+            let schema = builder.schema();
+
+            assert!(
+                schema
+                    .field_with_name("__delta_rs_update_predicate")
+                    .is_err(),
+                "The schema contains __delta_rs_update_predicate which is incorrect!"
+            );
+            assert_eq!(schema.fields.len(), 3, "Expected the Parquet file to only have three fields in the schema, something is amiss!");
+        }
+        Ok(())
     }
 
     #[tokio::test]
@@ -818,7 +864,7 @@ mod tests {
                 true,
             ),
             StructField::new(
-                "ValUe".to_string(),
+                "ValUe".to_string(), // spellchecker:disable-line
                 DeltaDataType::Primitive(PrimitiveType::Integer),
                 true,
             ),
@@ -831,7 +877,7 @@ mod tests {
 
         let arrow_schema = Arc::new(ArrowSchema::new(vec![
             Field::new("Id", DataType::Utf8, true),
-            Field::new("ValUe", DataType::Int32, true),
+            Field::new("ValUe", DataType::Int32, true), // spellchecker:disable-line
             Field::new("mOdified", DataType::Utf8, true),
         ]));
 
@@ -867,7 +913,7 @@ mod tests {
 
         let expected = vec![
             "+----+-------+------------+",
-            "| Id | ValUe | mOdified   |",
+            "| Id | ValUe | mOdified   |", // spellchecker:disable-line
             "+----+-------+------------+",
             "| A  | 1     | 2021-02-02 |",
             "| B  | 10    | 2021-02-02 |",
@@ -1055,7 +1101,7 @@ mod tests {
                 true,
             ),
         ]);
-        let arrow_schema: ArrowSchema = (&schema).try_into().unwrap();
+        let arrow_schema: ArrowSchema = (&schema).try_into_arrow().unwrap();
 
         // Create the first batch
         let arrow_field = Field::new("element", DataType::Int32, false);
@@ -1125,7 +1171,7 @@ mod tests {
                 true,
             ),
         ]);
-        let arrow_schema: ArrowSchema = (&schema).try_into().unwrap();
+        let arrow_schema: ArrowSchema = (&schema).try_into_arrow().unwrap();
 
         // Create the first batch
         let arrow_field = Field::new("element", DataType::Int64, true);
@@ -1209,7 +1255,7 @@ mod tests {
 
         // Too close for missiles, switching to guns. Just checking that the data wasn't actually
         // written instead!
-        if let Ok(files) = crate::storage::utils::flatten_list_stream(
+        if let Ok(files) = crate::logstore::tests::flatten_list_stream(
             &table.object_store(),
             Some(&object_store::path::Path::from("_change_data")),
         )

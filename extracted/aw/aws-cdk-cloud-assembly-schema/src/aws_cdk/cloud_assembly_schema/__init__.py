@@ -6749,6 +6749,11 @@ class CcApiContextQuery(ContextLookupRoleOptions):
     ) -> None:
         '''Query input for lookup up CloudFormation resources using CC API.
 
+        The example below is required to successfully compile CDK (otherwise,
+        the CDK build will generate a synthetic example for the below, but it
+        doesn't have enough type information about the literal string union
+        to generate a validly compiling example).
+
         :param account: Query account.
         :param region: Query region.
         :param assume_role_additional_options: Additional options to pass to STS when assuming the lookup role. - ``RoleArn`` should not be used. Use the dedicated ``lookupRoleArn`` property instead. - ``ExternalId`` should not be used. Use the dedicated ``lookupRoleExternalId`` instead. Default: - No additional options.
@@ -6761,6 +6766,17 @@ class CcApiContextQuery(ContextLookupRoleOptions):
         :param expected_match_count: Expected count of results if ``propertyMatch`` is specified. If the expected result count does not match the actual count, by default an error is produced and the result is not committed to cached context, and the user can correct the situation and try again without having to manually clear out the context key using ``cdk context --remove`` If the value of * ``ignoreErrorOnMissingContext`` is ``true``, the value of ``expectedMatchCount`` is ``at-least-one | exactly-one`` and the number of found resources is 0, ``dummyValue`` is returned and committed to context instead. Default: 'any'
         :param ignore_error_on_missing_context: Ignore an error and return the ``dummyValue`` instead if the resource was not found. - In case of an ``exactIdentifier`` lookup, return the ``dummyValue`` if the resource with that identifier was not found. - In case of a ``propertyMatch`` lookup, return the ``dummyValue`` if ``expectedMatchCount`` is ``at-least-one | exactly-one`` and the number of resources found was 0. if ``ignoreErrorOnMissingContext`` is set, ``dummyValue`` should be set and be an array. Default: false
         :param property_match: Returns any resources matching these properties, using ``ListResources``. By default, specifying propertyMatch will successfully return 0 or more results. To throw an error if the number of results is unexpected (and prevent the query results from being committed to context), specify ``expectedMatchCount``. Notes on property completeness CloudControl API's ``ListResources`` may return fewer properties than ``GetResource`` would, depending on the resource implementation. The resources that ``propertyMatch`` matches against will *only ever* be the properties returned by the ``ListResources`` call. Default: - Either exactIdentifier or propertyMatch should be specified.
+
+        Example::
+
+            const x: CcApiContextQuery = {
+              typeName: 'AWS::Some::Type',
+              expectedMatchCount: 'exactly-one',
+              propertiesToReturn: ['SomeProp'],
+              account: '11111111111',
+              region: 'us-east-1',
+            };
+            console.log(x);
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__527f00e61a39e5b3b1a863d96d9f33b15a5b10086b87f1f121e7b1201d7796bd)

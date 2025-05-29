@@ -10,16 +10,16 @@ from snowflake.core._utils import check_version_lte
 from snowflake.core.database import Database
 from snowflake.core.schema import Schema
 from snowflake.core.version import __version__
-from tests.utils import is_prod_version, random_string
+from tests.utils import is_prod_or_preprod, random_string
 
 
 @pytest.mark.min_sf_ver("99.99.99")
-def test_should_never_run_in_prod(snowflake_version):
+def test_should_never_run_in_prod_or_preprod(snowflake_version, snowflake_region):
     # This might still run in dev (where the version contains non-numerals,
     # so check if it has non-numerals). If it does not, then this should never
     # run.
-    if is_prod_version(snowflake_version):
-        pytest.fail("This test should not have run in a production version.")
+    if is_prod_or_preprod(snowflake_version, snowflake_region):
+        pytest.fail("This test should not have run in a prod or preprod env.")
 
 
 @pytest.mark.min_sf_ver("1.0.0")

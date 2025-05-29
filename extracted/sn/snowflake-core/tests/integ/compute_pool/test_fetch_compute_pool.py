@@ -1,11 +1,15 @@
 #
 # Copyright (c) 2012-2023 Snowflake Computing Inc. All rights reserved.
 #
+import pytest
 
 from snowflake.core.compute_pool import (
     ComputePool,
 )
 from tests.utils import random_string
+
+
+pytestmark = [pytest.mark.skip_gov]
 
 
 def test_fetch(compute_pools, temp_cp, instance_family):

@@ -6,9 +6,14 @@ from io import BytesIO
 from textwrap import dedent
 from time import sleep
 
+import pytest
+
 from snowflake.core.exceptions import APIError
 from snowflake.core.service import Service, ServiceSpecStageFile
 from tests.utils import random_string
+
+
+pytestmark = [pytest.mark.skip_gov]
 
 
 def test_fetch(services, temp_service, database, shared_compute_pool):
@@ -33,6 +38,7 @@ def test_fetch(services, temp_service, database, shared_compute_pool):
     assert service.is_upgrading is not None
 
 
+@pytest.mark.flaky
 def test_fetch_service_logs(services, temp_service, instance_family):
     service_name = temp_service.name
     logs = None

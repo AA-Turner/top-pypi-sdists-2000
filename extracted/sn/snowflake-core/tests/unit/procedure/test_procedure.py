@@ -6,7 +6,7 @@ from urllib.parse import quote
 import pytest
 
 from snowflake.core import PollingOperation
-from snowflake.core.procedure import CallArgumentList, Procedure, ReturnDataType, SQLFunction
+from snowflake.core.procedure import CallArgumentList, ColumnType, Procedure, ReturnDataType, ReturnTable, SQLFunction
 
 from ...utils import BASE_URL, extra_params, mock_http_response
 
@@ -197,3 +197,34 @@ def test_variant_mapping(procedure, extract, expected_result, fake_root, data_ty
 
     assert result == expected_result
 
+
+@pytest.mark.parametrize("extract", [True, False])
+def test_table_mapping(procedure, fake_root, extract):
+    from snowflake.core.procedure._generated.models import Procedure as ProcedureModel
+    from snowflake.core.procedure._generated.models import SQLFunction as SQLFunctionModel
+
+    model = ProcedureModel(
+        name="my_proc",
+        arguments=[],
+        return_type=ReturnTable(
+            column_list=[
+                ColumnType(name="id", datatype="NUMBER"),
+                ColumnType(name="name", datatype="STRING")
+            ]),
+        language_config=SQLFunctionModel(),
+        body="SELECT 'xyz'"
+    )
+    fetch_response = mock_http_response(model.to_json())
+    call_response = mock_http_response(json.dumps([
+        {'id': '1', 'name': 'jdoe'}, {'id': '2', 'name': 'jdoe'}, {'id': '3', 'name': 'jdoe'}
+    ]))
+
+    with mock.patch(API_CLIENT_REQUEST) as mocked_request:
+        mocked_request.side_effect = [fetch_response, call_response]
+        result = procedure.call(call_argument_list=CallArgumentList(call_arguments=[]), extract=extract)
+
+    assert result == [
+        {'id': 1, 'name': 'jdoe'},
+        {'id': 2, 'name': 'jdoe'},
+        {'id': 3, 'name': 'jdoe'}
+    ]

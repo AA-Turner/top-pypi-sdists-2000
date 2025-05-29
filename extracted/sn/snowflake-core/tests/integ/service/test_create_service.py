@@ -10,6 +10,9 @@ from snowflake.core.service import Service, ServiceSpecStageFile
 from tests.utils import random_string
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 def test_create(services, service_spec_file_on_stage, shared_compute_pool):
     try:
         service_name = random_string(5, "test_service_")

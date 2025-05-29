@@ -8,8 +8,8 @@ from snowflake.core.exceptions import ConflictError, NotFoundError
 from tests.integ.utils import random_string
 
 
-pytestmark = [pytest.mark.min_sf_ver("8.37.0"),
-            pytest.mark.usefixtures("internal_only", "setup_credentials_fixture")]
+pytestmark = [pytest.mark.min_sf_ver("8.37.0"), pytest.mark.internal_only,
+            pytest.mark.usefixtures("setup_credentials_fixture")]
 
 
 def test_create_by_glue_and_fetch(catalog_integrations):

@@ -21,9 +21,15 @@ limitations under the License.
 #include <memory>      // std::unique_ptr
 #include <optional>    // std::optional, std::nullopt
 #include <string>      // std::string
+#include <utility>     // std::move
 
+#include <pybind11/eval.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
+#if defined(PYBIND11_HAS_NATIVE_ENUM)
+#    include <pybind11/native_enum.h>
+#endif
 
 namespace optree {
 
@@ -38,18 +44,84 @@ py::module_ GetCxxModule(const std::optional<py::module_>& module) {
 }
 
 void BuildModule(py::module_& mod) {  // NOLINT[runtime/references]
+    const scoped_critical_section lock{mod};
+
     GetCxxModule(mod);
 
-    mod.doc() = "Optimized PyTree Utilities.";
+    mod.doc() = "Optimized PyTree Utilities. (C extension module built from " +
+                std::string(__FILE_RELPATH_FROM_PROJECT_ROOT__) + ")";
+    mod.attr("Py_TPFLAGS_BASETYPE") = py::int_(Py_TPFLAGS_BASETYPE);
+
+    // Meta information during build
+    py::dict BUILDTIME_METADATA{};
+    BUILDTIME_METADATA["PY_VERSION"] = py::str(PY_VERSION);
+    BUILDTIME_METADATA["PY_VERSION_HEX"] = py::int_(PY_VERSION_HEX);
+#if defined(PYPY_VERSION)
+    BUILDTIME_METADATA["PYPY_VERSION"] = py::str(PYPY_VERSION);
+    BUILDTIME_METADATA["PYPY_VERSION_NUM"] = py::int_(PYPY_VERSION_NUM);
+    BUILDTIME_METADATA["PYPY_VERSION_HEX"] = py::int_(PYPY_VERSION_NUM);
+#endif
+#if defined(Py_DEBUG)
+    BUILDTIME_METADATA["Py_DEBUG"] = py::bool_(true);
+#else
+    BUILDTIME_METADATA["Py_DEBUG"] = py::bool_(false);
+#endif
+#if defined(Py_GIL_DISABLED)
+    BUILDTIME_METADATA["Py_GIL_DISABLED"] = py::bool_(true);
+#else
+    BUILDTIME_METADATA["Py_GIL_DISABLED"] = py::bool_(false);
+#endif
+    BUILDTIME_METADATA["PYBIND11_VERSION_HEX"] = py::int_(PYBIND11_VERSION_HEX);
+    BUILDTIME_METADATA["PYBIND11_INTERNALS_VERSION"] = py::int_(PYBIND11_INTERNALS_VERSION);
+#if defined(PYBIND11_HAS_NATIVE_ENUM)
+    BUILDTIME_METADATA["PYBIND11_HAS_NATIVE_ENUM"] = py::bool_(true);
+#else
+    BUILDTIME_METADATA["PYBIND11_HAS_NATIVE_ENUM"] = py::bool_(false);
+#endif
+#if defined(PYBIND11_HAS_INTERNALS_WITH_SMART_HOLDER_SUPPORT)
+    BUILDTIME_METADATA["PYBIND11_HAS_INTERNALS_WITH_SMART_HOLDER_SUPPORT"] = py::bool_(true);
+#else
+    BUILDTIME_METADATA["PYBIND11_HAS_INTERNALS_WITH_SMART_HOLDER_SUPPORT"] = py::bool_(false);
+#endif
+#if defined(PYBIND11_HAS_SUBINTERPRETER_SUPPORT)
+    BUILDTIME_METADATA["PYBIND11_HAS_SUBINTERPRETER_SUPPORT"] = py::bool_(true);
+#else
+    BUILDTIME_METADATA["PYBIND11_HAS_SUBINTERPRETER_SUPPORT"] = py::bool_(false);
+#endif
+#if defined(_GLIBCXX_USE_CXX11_ABI)
+    BUILDTIME_METADATA["GLIBCXX_USE_CXX11_ABI"] =
+        // NOLINTNEXTLINE[modernize-use-bool-literals]
+        py::bool_(static_cast<bool>(_GLIBCXX_USE_CXX11_ABI));
+#else
+    BUILDTIME_METADATA["GLIBCXX_USE_CXX11_ABI"] = py::bool_(false);
+#endif
+    mod.attr("BUILDTIME_METADATA") = std::move(BUILDTIME_METADATA);
+    py::exec(
+        R"py(
+        import types
+
+        class HexInt(int):
+            def __repr__(self) -> str:
+                return f'0x{self:08X}'
+
+        BUILDTIME_METADATA.update(
+            **{
+                name: HexInt(value)
+                for name, value in BUILDTIME_METADATA.items()
+                if name.endswith('_HEX') and isinstance(value, int)
+            },
+        )
+
+        BUILDTIME_METADATA = types.MappingProxyType(BUILDTIME_METADATA)
+
+        globals().update(BUILDTIME_METADATA)
+
+        del types, HexInt
+        )py",
+        py::getattr(mod, "__dict__"));
+
     py::register_local_exception<InternalError>(mod, "InternalError", PyExc_SystemError);
     mod.attr("MAX_RECURSION_DEPTH") = py::int_(MAX_RECURSION_DEPTH);
-    mod.attr("Py_TPFLAGS_BASETYPE") = py::int_(Py_TPFLAGS_BASETYPE);
-#ifdef _GLIBCXX_USE_CXX11_ABI
-    // NOLINTNEXTLINE[modernize-use-bool-literals]
-    mod.attr("GLIBCXX_USE_CXX11_ABI") = py::bool_(static_cast<bool>(_GLIBCXX_USE_CXX11_ABI));
-#else
-    mod.attr("GLIBCXX_USE_CXX11_ABI") = py::bool_(false);
-#endif
 
     mod.def("register_node",
             &PyTreeTypeRegistry::Register,
@@ -169,12 +241,28 @@ void BuildModule(py::module_& mod) {  // NOLINT[runtime/references]
              py::arg("obj"),
              py::pos_only());
 
-#if PYBIND11_VERSION_HEX >= 0x020E00F0  // pybind11 2.14.0
-#define def_method_pos_only(...) def(__VA_ARGS__ __VA_OPT__(, ) py::pos_only())
+#if PYBIND11_VERSION_HEX >= 0x03000000  // pybind11 3.0.0.dev0
+#    define def_method_pos_only(...) def(__VA_ARGS__ __VA_OPT__(, ) py::pos_only())
 #else
-#define def_method_pos_only(...) def(__VA_ARGS__)
+#    define def_method_pos_only(...) def(__VA_ARGS__)
 #endif
 
+#if defined(PYBIND11_HAS_NATIVE_ENUM)
+    py::native_enum<PyTreeKind>(mod, "PyTreeKind", "enum.IntEnum", "The kind of a pytree node.")
+        .value("CUSTOM", PyTreeKind::Custom, "A custom type.")
+        .value("LEAF", PyTreeKind::Leaf, "A opaque leaf node.")
+        .value("NONE", PyTreeKind::None, "None.")
+        .value("TUPLE", PyTreeKind::Tuple, "A tuple.")
+        .value("LIST", PyTreeKind::List, "A list.")
+        .value("DICT", PyTreeKind::Dict, "A dict.")
+        .value("NAMEDTUPLE", PyTreeKind::NamedTuple, "A collections.namedtuple.")
+        .value("ORDEREDDICT", PyTreeKind::OrderedDict, "A collections.OrderedDict.")
+        .value("DEFAULTDICT", PyTreeKind::DefaultDict, "A collections.defaultdict.")
+        .value("DEQUE", PyTreeKind::Deque, "A collections.deque.")
+        .value("STRUCTSEQUENCE", PyTreeKind::StructSequence, "A PyStructSequence.")
+        .finalize();
+    auto PyTreeKindTypeObject = py::getattr(mod, "PyTreeKind");
+#else
     auto PyTreeKindTypeObject =
         py::enum_<PyTreeKind>(mod, "PyTreeKind", "The kind of a pytree node.", py::module_local())
             .value("CUSTOM", PyTreeKind::Custom, "A custom type.")
@@ -188,22 +276,33 @@ void BuildModule(py::module_& mod) {  // NOLINT[runtime/references]
             .value("DEFAULTDICT", PyTreeKind::DefaultDict, "A collections.defaultdict.")
             .value("DEQUE", PyTreeKind::Deque, "A collections.deque.")
             .value("STRUCTSEQUENCE", PyTreeKind::StructSequence, "A PyStructSequence.");
+#endif
     auto* const PyTreeKind_Type = reinterpret_cast<PyTypeObject*>(PyTreeKindTypeObject.ptr());
     PyTreeKind_Type->tp_name = "optree.PyTreeKind";
     py::setattr(PyTreeKindTypeObject.ptr(), Py_Get_ID(__module__), Py_Get_ID(optree));
+    py::setattr(PyTreeKindTypeObject.ptr(),
+                "NUM_KINDS",
+                py::int_(py::ssize_t(PyTreeKind::NumKinds)));
 
-    auto PyTreeSpecTypeObject = py::class_<PyTreeSpec>(
-        mod,
-        "PyTreeSpec",
-        "Representing the structure of the pytree.",
-        // NOLINTBEGIN[readability-function-cognitive-complexity,cppcoreguidelines-avoid-do-while]
-        py::custom_type_setup([](PyHeapTypeObject* heap_type) -> void {
-            auto* const type = &heap_type->ht_type;
-            type->tp_flags |= Py_TPFLAGS_HAVE_GC;
-            type->tp_traverse = &PyTreeSpec::PyTpTraverse;
-        }),
-        // NOLINTEND[readability-function-cognitive-complexity,cppcoreguidelines-avoid-do-while]
-        py::module_local());
+    auto PyTreeSpecTypeObject =
+#if defined(PYBIND11_HAS_INTERNALS_WITH_SMART_HOLDER_SUPPORT)
+        py::classh
+#else
+        py::class_
+#endif
+        <PyTreeSpec>(
+            mod,
+            "PyTreeSpec",
+            "Representing the structure of the pytree.",
+            // NOLINTBEGIN[readability-function-cognitive-complexity,cppcoreguidelines-avoid-do-while]
+            py::custom_type_setup([](PyHeapTypeObject* heap_type) -> void {
+                auto* const type = &heap_type->ht_type;
+                type->tp_flags |= Py_TPFLAGS_HAVE_GC;
+                type->tp_traverse = &PyTreeSpec::PyTpTraverse;
+                type->tp_clear = &PyTreeSpec::PyTpClear;
+            }),
+            // NOLINTEND[readability-function-cognitive-complexity,cppcoreguidelines-avoid-do-while]
+            py::module_local());
     auto* const PyTreeSpec_Type = reinterpret_cast<PyTypeObject*>(PyTreeSpecTypeObject.ptr());
     PyTreeSpec_Type->tp_name = "optree.PyTreeSpec";
     py::setattr(PyTreeSpecTypeObject.ptr(), Py_Get_ID(__module__), Py_Get_ID(optree));
@@ -216,9 +315,9 @@ void BuildModule(py::module_& mod) {  // NOLINT[runtime/references]
              py::pos_only())
         .def("flatten_up_to",
              &PyTreeSpec::FlattenUpTo,
-             "Flatten the subtrees in ``full_tree`` up to the structure of this treespec "
+             "Flatten the subtrees in ``tree`` up to the structure of this treespec "
              "and return a list of subtrees.",
-             py::arg("full_tree"),
+             py::arg("tree"),
              py::pos_only())
         .def("broadcast_to_common_suffix",
              &PyTreeSpec::BroadcastToCommonSuffix,
@@ -235,7 +334,7 @@ void BuildModule(py::module_& mod) {  // NOLINT[runtime/references]
         .def("compose",
              &PyTreeSpec::Compose,
              "Compose two treespecs. Constructs the inner treespec as a subtree at each leaf node.",
-             py::arg("inner_treespec"),
+             py::arg("inner"),
              py::pos_only())
         .def("traverse",
              &PyTreeSpec::Traverse,
@@ -383,18 +482,25 @@ void BuildModule(py::module_& mod) {  // NOLINT[runtime/references]
              py::arg("state"),
              py::pos_only());
 
-    auto PyTreeIterTypeObject = py::class_<PyTreeIter>(
-        mod,
-        "PyTreeIter",
-        "Iterator over the leaves of a pytree.",
-        // NOLINTBEGIN[readability-function-cognitive-complexity,cppcoreguidelines-avoid-do-while]
-        py::custom_type_setup([](PyHeapTypeObject* heap_type) -> void {
-            auto* const type = &heap_type->ht_type;
-            type->tp_flags |= Py_TPFLAGS_HAVE_GC;
-            type->tp_traverse = &PyTreeIter::PyTpTraverse;
-        }),
-        // NOLINTEND[readability-function-cognitive-complexity,cppcoreguidelines-avoid-do-while]
-        py::module_local());
+    auto PyTreeIterTypeObject =
+#if defined(PYBIND11_HAS_INTERNALS_WITH_SMART_HOLDER_SUPPORT)
+        py::classh
+#else
+        py::class_
+#endif
+        <PyTreeIter>(
+            mod,
+            "PyTreeIter",
+            "Iterator over the leaves of a pytree.",
+            // NOLINTBEGIN[readability-function-cognitive-complexity,cppcoreguidelines-avoid-do-while]
+            py::custom_type_setup([](PyHeapTypeObject* heap_type) -> void {
+                auto* const type = &heap_type->ht_type;
+                type->tp_flags |= Py_TPFLAGS_HAVE_GC;
+                type->tp_traverse = &PyTreeIter::PyTpTraverse;
+                type->tp_clear = &PyTreeIter::PyTpClear;
+            }),
+            // NOLINTEND[readability-function-cognitive-complexity,cppcoreguidelines-avoid-do-while]
+            py::module_local());
     auto* const PyTreeIter_Type = reinterpret_cast<PyTypeObject*>(PyTreeIterTypeObject.ptr());
     PyTreeIter_Type->tp_name = "optree.PyTreeIter";
     py::setattr(PyTreeIterTypeObject.ptr(), Py_Get_ID(__module__), Py_Get_ID(optree));
@@ -412,24 +518,15 @@ void BuildModule(py::module_& mod) {  // NOLINT[runtime/references]
 
 #undef def_method_pos_only
 
-#ifdef Py_TPFLAGS_IMMUTABLETYPE
+#if defined(Py_TPFLAGS_IMMUTABLETYPE)
+    // Make the types immutable to avoid attribute assignment, modification, and deletion.
     PyTreeKind_Type->tp_flags |= Py_TPFLAGS_IMMUTABLETYPE;
     PyTreeSpec_Type->tp_flags |= Py_TPFLAGS_IMMUTABLETYPE;
     PyTreeIter_Type->tp_flags |= Py_TPFLAGS_IMMUTABLETYPE;
-    PyTreeKind_Type->tp_flags &= ~Py_TPFLAGS_READY;
-    PyTreeSpec_Type->tp_flags &= ~Py_TPFLAGS_READY;
-    PyTreeIter_Type->tp_flags &= ~Py_TPFLAGS_READY;
 #endif
-
-    if (PyType_Ready(PyTreeKind_Type) < 0) [[unlikely]] {
-        INTERNAL_ERROR("`PyType_Ready(&PyTreeKind_Type)` failed.");
-    }
-    if (PyType_Ready(PyTreeSpec_Type) < 0) [[unlikely]] {
-        INTERNAL_ERROR("`PyType_Ready(&PyTreeSpec_Type)` failed.");
-    }
-    if (PyType_Ready(PyTreeIter_Type) < 0) [[unlikely]] {
-        INTERNAL_ERROR("`PyType_Ready(&PyTreeIter_Type)` failed.");
-    }
+    PyType_Modified(PyTreeKind_Type);
+    PyType_Modified(PyTreeSpec_Type);
+    PyType_Modified(PyTreeIter_Type);
 
     py::getattr(py::module_::import("atexit"),
                 "register")(py::cpp_function(&PyTreeTypeRegistry::Clear));

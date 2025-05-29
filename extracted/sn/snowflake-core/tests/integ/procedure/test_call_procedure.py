@@ -65,11 +65,11 @@ def test_call_procedures(procedures, cursor, populate_tables_for_procedure_call,
         proc = procedures.create(sql_proc_table_func, mode=CreateMode.or_replace)
         assert proc.call(call_argument_list=CallArgumentList(call_arguments=[
             CallArgument(name="id", datatype="TEXT", value=1)
-        ])) == [{'id': '1', 'price': '1'}, {'id': '1', 'price': '2'}]
+        ])) == [{'id': 1, 'price': 1}, {'id': 1, 'price': 2}]
 
         assert proc.call(call_argument_list=CallArgumentList(call_arguments=[
             CallArgument(name="id", datatype="TEXT", value=2)
-        ])) == [{'id': '2', 'price': '3'}]
+        ])) == [{'id': 2, 'price': 3}]
     finally:
         proc.drop()
 

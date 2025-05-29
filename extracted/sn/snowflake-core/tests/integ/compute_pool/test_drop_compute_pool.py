@@ -10,6 +10,9 @@ from snowflake.core.exceptions import NotFoundError
 from ..utils import random_string
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 def test_drop(compute_pools, instance_family):
     cp_name = random_string(5, "test_cp_")
     test_cp = ComputePool(

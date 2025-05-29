@@ -52,15 +52,6 @@ def cyclonedx_1_4(conanfile, name=None, add_build=False, add_tests=False, **kwar
             deps["dependsOn"] = depends_on
         dependencies.append(deps)
 
-    def _calculate_licenses(component):
-        if isinstance(component.conanfile.license, str): # Just one license
-            return [{"license": {
-                        "id": component.conanfile.license
-                    }}]
-        return [{"license": {
-                    "id": l
-                }} for l in component.conanfile.license]
-
     sbom_cyclonedx_1_4 = {
         **({"components": [{
             "author": node.conanfile.author or "Unknown",
@@ -152,18 +143,9 @@ def cyclonedx_1_6(conanfile, name=None, add_build=False, add_tests=False, **kwar
             deps["dependsOn"] = depends_on
         dependencies.append(deps)
 
-    def _calculate_licenses(component):
-        if isinstance(component.conanfile.license, str): # Just one license
-            return [{"license": {
-                        "id": component.conanfile.license
-                    }}]
-        return [{"license": {
-                    "id": l
-                }} for l in component.conanfile.license]
-
     sbom_cyclonedx_1_6 = {
         **({"components": [{
-            **({"authors": [node.conanfile.author]} if node.conanfile.author else {}),
+            **({"authors": [{"name": node.conanfile.author}]} if node.conanfile.author else {}),
             "bom-ref": special_id if has_special_root_node else f"pkg:conan/{node.name}@{node.ref.version}?rref={node.ref.revision}",
             "description": node.conanfile.description,
             **({"externalReferences": [{
@@ -179,7 +161,7 @@ def cyclonedx_1_6(conanfile, name=None, add_build=False, add_tests=False, **kwar
         **({"dependencies": dependencies} if dependencies else {}),
         "metadata": {
             "component": {
-                **({"authors": [conanfile.author]} if conanfile.author else {}),
+                **({"authors": [{"name": conanfile.author}]} if conanfile.author else {}),
                 "bom-ref": special_id if has_special_root_node else f"pkg:conan/{conanfile.name}@{conanfile.ref.version}?rref={conanfile.ref.revision}",
                 "name": name if name else name_default,
                 "type": "application" if conanfile.package_type == "application" else "library"
@@ -199,3 +181,21 @@ def cyclonedx_1_6(conanfile, name=None, add_build=False, add_tests=False, **kwar
         "version": 1,
     }
     return sbom_cyclonedx_1_6
+
+
+def _calculate_licenses(component):
+    from conan.tools.sbom.spdx_licenses import NORMALIZED_VALID_SPDX_LICENSES
+    licenses = component.conanfile.license
+
+    if isinstance(licenses, str): # Just one license
+        field = "id" if licenses.lower() in NORMALIZED_VALID_SPDX_LICENSES else "name"
+        return [{"license":{ field: licenses }}]
+
+    return [ # More than one license
+        {"license": {
+            "id" if l.lower() in NORMALIZED_VALID_SPDX_LICENSES else "name": l
+        }}
+        for l in licenses
+    ]
+
+

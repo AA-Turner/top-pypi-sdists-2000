@@ -3,9 +3,14 @@
 #
 from textwrap import dedent
 
+import pytest
+
 from snowflake.core.service import Service, ServiceSpecInlineText
 
 from ..utils import random_string
+
+
+pytestmark = [pytest.mark.skip_gov]
 
 
 def test_stop_all_services(compute_pools, services, imagerepo, temp_cp):

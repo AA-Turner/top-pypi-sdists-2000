@@ -1,10 +1,8 @@
 # mypy: ignore-errors
-import json
 import warnings
 
 from collections.abc import Iterator
 from concurrent.futures import Future
-from datetime import date, datetime, time
 from typing import TYPE_CHECKING, Any, Literal, Optional, Union, overload
 
 from pydantic import StrictStr
@@ -18,9 +16,7 @@ from snowflake.core._common import (
 from snowflake.core._operation import PollingOperations
 
 from .._internal.telemetry import api_telemetry
-from .._utils import get_function_name_with_args
-from ..exceptions import InvalidResultError
-from . import ReturnDataType
+from .._utils import get_function_name_with_args, map_result
 from ._generated.api import ProcedureApi
 from ._generated.api_client import StoredProcApiClient
 from ._generated.models.call_argument_list import CallArgumentList
@@ -29,33 +25,6 @@ from ._generated.models.procedure import Procedure
 
 if TYPE_CHECKING:
     from snowflake.core.schema import SchemaResource
-
-
-def _cast_result(result: str, returns: ReturnDataType) -> Any:
-    if returns.datatype in ["NUMBER", "DECIMAL", "NUMERIC", "INT", "INTEGER",
-                            "BIGINT", "SMALLINT", "TINYINT", "BYTEINT"]:
-        return int(result)
-    if returns.datatype in ["FLOAT", "FLOAT4", "FLOAT8", "DOUBLE", "DOUBLE PRECISION", "REAL"]:
-        return float(result)
-    if returns.datatype in ["VARCHAR", "STRING", "TEXT"]:
-        return str(result)
-    if returns.datatype in ["CHAR", "CHARACTER"]:
-        return chr(result)
-    if returns.datatype in ["VARBINARY", "BINARY"]:
-        return bytes(result)
-    if returns.datatype == "TIME":
-        return time(result)
-    if returns.datatype in ["TIMESTAMP", "TIMESTAMP_LTZ", "TIMESTAMP_NTZ", "TIMESTAMP_TZ"]:
-        return datetime(result)
-    if returns.datatype == "ARRAY":
-        return list(result)
-    if returns.datatype == "DATE":
-        return date(result)
-    if returns.datatype in ["GEOMETRY", "GEOGRAPHY", "OBJECT", "VARIANT"]:
-        return json.loads(result)
-    if returns.datatype == "BOOLEAN":
-        return result.lower() in ("yes", "y", "true", "t", "1")
-    return result
 
 
 class ProcedureCollection(SchemaObjectCollectionParent["ProcedureResource"]):
@@ -423,27 +392,8 @@ class ProcedureResource(SchemaObjectReferenceMixin[ProcedureCollection]):
             async_req=async_req,
         )
 
-        def map_result(result: Any) -> Any:
-            if not isinstance(result, list):
-                raise InvalidResultError(f"Procedure result {str(result)} is invalid or empty")
-
-            result_list = []
-            if isinstance(procedure.return_type, ReturnDataType):
-                for result_entry_name in result[0]:
-                    result_dict = {}
-                    casted_result = _cast_result(result[0][result_entry_name], procedure.return_type)
-                    result_dict[result_entry_name] = casted_result
-                    result_list.append(result_dict)
-            else:
-                result_list = result
-            if not extract:
-                return result_list
-
-            payload = result_list[0]
-            if not isinstance(payload, dict):
-                raise TypeError(f"Expected first item to be of type dict but got {type(payload)}")
-            return payload[next(iter(payload.keys()))]
+        def mapper(r): return map_result(procedure, r, extract=extract)
 
         if isinstance(result_or_future, Future):
-            return PollingOperation(result_or_future, map_result)
-        return map_result(result_or_future)
+            return PollingOperation(result_or_future, mapper)
+        return mapper(result_or_future)

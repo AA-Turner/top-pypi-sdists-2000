@@ -499,6 +499,7 @@ __all__ = (
     "SnapshotCompletedWaiterName",
     "SnapshotImportedWaiterName",
     "SnapshotLocationEnumType",
+    "SnapshotReturnCodesType",
     "SnapshotStateType",
     "SpotAllocationStrategyType",
     "SpotInstanceInterruptionBehaviorType",
@@ -2561,6 +2562,9 @@ SnapshotBlockPublicAccessStateType = Literal["block-all-sharing", "block-new-sha
 SnapshotCompletedWaiterName = Literal["snapshot_completed"]
 SnapshotImportedWaiterName = Literal["snapshot_imported"]
 SnapshotLocationEnumType = Literal["local", "regional"]
+SnapshotReturnCodesType = Literal[
+    "client-error", "internal-error", "missing-permissions", "skipped", "success"
+]
 SnapshotStateType = Literal["completed", "error", "pending", "recoverable", "recovering"]
 SpotAllocationStrategyType = Literal[
     "capacity-optimized",

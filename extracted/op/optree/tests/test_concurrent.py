@@ -25,14 +25,24 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import pytest
 
 import optree
-from helpers import GLOBAL_NAMESPACE, PYPY, TREES, Py_GIL_DISABLED, gc_collect, parametrize
+from helpers import (
+    GLOBAL_NAMESPACE,
+    PYPY,
+    TREES,
+    Py_DEBUG,
+    Py_GIL_DISABLED,
+    disable_systrace,
+    gc_collect,
+    parametrize,
+    recursionlimit,
+)
 
 
 if PYPY:
     pytest.skip('Test for CPython only', allow_module_level=True)
 
 
-if Py_GIL_DISABLED:
+if Py_GIL_DISABLED and not Py_DEBUG:
     NUM_WORKERS = 32
     NUM_FUTURES = 128
 else:
@@ -63,6 +73,7 @@ concurrent_run(object)  # warm-up
     dict_should_be_sorted=[False, True],
     dict_session_namespace=['', 'undefined', 'namespace'],
 )
+@disable_systrace
 def test_tree_flatten_unflatten_thread_safe(
     tree,
     namespace,
@@ -90,6 +101,7 @@ def test_tree_flatten_unflatten_thread_safe(
     dict_should_be_sorted=[False, True],
     dict_session_namespace=['', 'undefined', 'namespace'],
 )
+@disable_systrace
 def test_tree_flatten_with_path_thread_safe(
     tree,
     namespace,
@@ -114,6 +126,7 @@ def test_tree_flatten_with_path_thread_safe(
     dict_should_be_sorted=[False, True],
     dict_session_namespace=['', 'undefined', 'namespace'],
 )
+@disable_systrace
 def test_tree_flatten_with_accessor_thread_safe(
     tree,
     namespace,
@@ -133,6 +146,7 @@ def test_tree_flatten_with_accessor_thread_safe(
 
 
 @parametrize(tree=TREES)
+@disable_systrace
 def test_treespec_string_representation(tree):
     expected_string = repr(optree.tree_structure(tree))
 
@@ -152,6 +166,7 @@ def test_treespec_string_representation(tree):
     concurrent_run(check2)
 
 
+@disable_systrace
 def test_treespec_self_referential():  # noqa: C901
     class Holder:
         def __init__(self, value):
@@ -246,8 +261,12 @@ def test_treespec_self_referential():  # noqa: C901
 
     concurrent_run(check7)
 
-    with pytest.raises(RecursionError):
-        assert treespec != other
+    del check1, check2, check3, check4, check5, check6, check7
+    gc_collect()
+
+    with recursionlimit(64):
+        with pytest.raises(RecursionError):
+            assert treespec != other
 
     wr = weakref.ref(treespec)
     del treespec, key, other
@@ -261,7 +280,8 @@ def test_treespec_self_referential():  # noqa: C901
     dict_should_be_sorted=[False, True],
     dict_session_namespace=['', 'undefined', 'namespace'],
 )
-def test_treespec_pickle_round_trip(
+@disable_systrace
+def test_treespec_pickle_roundtrip(
     tree,
     namespace,
     dict_should_be_sorted,
@@ -306,6 +326,7 @@ def test_treespec_pickle_round_trip(
     dict_should_be_sorted=[False, True],
     dict_session_namespace=['', 'undefined', 'namespace'],
 )
+@disable_systrace
 def test_tree_iter_thread_safe(
     tree,
     none_is_leaf,

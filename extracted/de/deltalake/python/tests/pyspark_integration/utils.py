@@ -1,24 +1,15 @@
-from typing import List
+from typing import TYPE_CHECKING
 
-import pyarrow as pa
+if TYPE_CHECKING:
+    import pyarrow as pa
 
-try:
+
+def get_spark():
     import delta
     import delta.pip_utils
     import delta.tables
     import pyspark
-except ModuleNotFoundError:
-    pass
 
-try:
-    from pandas.testing import assert_frame_equal
-except ModuleNotFoundError:
-    _has_pandas = False
-else:
-    _has_pandas = True
-
-
-def get_spark():
     builder = (
         pyspark.sql.SparkSession.builder.appName("MyApp")
         .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
@@ -31,8 +22,10 @@ def get_spark():
 
 
 def assert_spark_read_equal(
-    expected: pa.Table, uri: str, sort_by: List[str] = ["int32"]
+    expected: "pa.Table", uri: str, sort_by: list[str] = ["int32"]
 ):
+    from pandas.testing import assert_frame_equal
+
     spark = get_spark()
     df = spark.read.format("delta").load(uri)
 

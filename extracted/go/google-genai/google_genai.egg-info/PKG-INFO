@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: google-genai
-Version: 1.16.1
+Version: 1.17.0
 Summary: GenAI Python SDK
 Author-email: Google LLC <googleapis-packages@google.com>
 License: Apache-2.0
@@ -148,7 +148,7 @@ Pydantic model types are available in the `types` module.
 
 ## Models
 
-The `client.models` modules exposes model inferencing and model getters.
+The `client.models` module exposes model inferencing and model getters.
 See the 'Create a client' section above to initialize a client.
 
 ### Generate Content

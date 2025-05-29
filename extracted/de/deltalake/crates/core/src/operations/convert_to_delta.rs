@@ -6,6 +6,8 @@ use std::str::{FromStr, Utf8Error};
 use std::sync::Arc;
 
 use arrow_schema::{ArrowError, Schema as ArrowSchema};
+use delta_kernel::engine::arrow_conversion::TryIntoKernel as _;
+use delta_kernel::schema::StructType;
 use futures::future::{self, BoxFuture};
 use futures::TryStreamExt;
 use indexmap::IndexMap;
@@ -13,13 +15,15 @@ use itertools::Itertools;
 use parquet::arrow::async_reader::{ParquetObjectReader, ParquetRecordBatchStreamBuilder};
 use parquet::errors::ParquetError;
 use percent_encoding::percent_decode_str;
-use serde_json::{Map, Value};
 use tracing::debug;
 use uuid::Uuid;
 
+use super::{CustomExecuteHandler, Operation};
+use crate::kernel::transaction::CommitProperties;
+use crate::logstore::StorageConfig;
 use crate::operations::get_num_idx_cols_and_stats_columns;
 use crate::{
-    kernel::{scalars::ScalarExt, Add, DataType, Schema, StructField},
+    kernel::{scalars::ScalarExt, Add, DataType, StructField},
     logstore::{LogStore, LogStoreRef},
     operations::create::CreateBuilder,
     protocol::SaveMode,
@@ -28,8 +32,6 @@ use crate::{
     writer::stats::stats_from_parquet_metadata,
     DeltaResult, DeltaTable, DeltaTableError, ObjectStoreError, NULL_PARTITION_VALUE_DATA_PATH,
 };
-
-use super::{CustomExecuteHandler, Operation};
 
 /// Error converting a Parquet table to a Delta table
 #[derive(Debug, thiserror::Error)]
@@ -108,7 +110,8 @@ pub struct ConvertToDeltaBuilder {
     name: Option<String>,
     comment: Option<String>,
     configuration: HashMap<String, Option<String>>,
-    metadata: Option<Map<String, Value>>,
+    /// Additional information to add to the commit
+    commit_properties: CommitProperties,
     custom_execute_handler: Option<Arc<dyn CustomExecuteHandler>>,
 }
 
@@ -142,7 +145,7 @@ impl ConvertToDeltaBuilder {
             name: None,
             comment: None,
             configuration: Default::default(),
-            metadata: Default::default(),
+            commit_properties: CommitProperties::default(),
             custom_execute_handler: None,
         }
     }
@@ -233,12 +236,9 @@ impl ConvertToDeltaBuilder {
         self
     }
 
-    /// Append custom (application-specific) metadata to the commit.
-    ///
-    /// This might include provenance information such as an id of the
-    /// user that made the commit or the program that created it.
-    pub fn with_metadata(mut self, metadata: Map<String, Value>) -> Self {
-        self.metadata = Some(metadata);
+    /// Additional metadata to be added to commit info
+    pub fn with_commit_properties(mut self, commit_properties: CommitProperties) -> Self {
+        self.commit_properties = commit_properties;
         self
     }
 
@@ -255,10 +255,12 @@ impl ConvertToDeltaBuilder {
         self.log_store = if let Some(log_store) = self.log_store {
             Some(log_store)
         } else if let Some(location) = self.location.clone() {
+            let storage_config =
+                StorageConfig::parse_options(self.storage_options.clone().unwrap_or_default())?;
+
             Some(crate::logstore::logstore_for(
                 ensure_table_uri(location)?,
-                self.storage_options.clone().unwrap_or_default(),
-                None, // TODO: allow runtime to be passed into builder
+                storage_config,
             )?)
         } else {
             return Err(Error::MissingLocation);
@@ -354,11 +356,11 @@ impl ConvertToDeltaBuilder {
                 subpath = iter.next();
             }
 
-            let batch_builder = ParquetRecordBatchStreamBuilder::new(ParquetObjectReader::new(
-                object_store.clone(),
-                file.clone(),
-            ))
-            .await?;
+            let object_reader =
+                ParquetObjectReader::new(object_store.clone(), file.location.clone())
+                    .with_file_size(file.size);
+
+            let batch_builder = ParquetRecordBatchStreamBuilder::new(object_reader).await?;
 
             // Fetch the stats
             let parquet_metadata = batch_builder.metadata();
@@ -414,7 +416,7 @@ impl ConvertToDeltaBuilder {
 
         // Merge parquet file schemas
         // This step is needed because timestamp will not be preserved when copying files in S3. We can't use the schema of the latest parqeut file as Delta table's schema
-        let schema = Schema::try_from(&ArrowSchema::try_merge(arrow_schemas)?)?;
+        let schema: StructType = (&ArrowSchema::try_merge(arrow_schemas)?).try_into_kernel()?;
         let mut schema_fields = schema.fields().collect_vec();
         schema_fields.append(&mut partition_schema_fields.values().collect::<Vec<_>>());
 
@@ -425,15 +427,13 @@ impl ConvertToDeltaBuilder {
             .with_partition_columns(partition_columns.into_iter())
             .with_actions(actions)
             .with_save_mode(self.mode)
-            .with_configuration(self.configuration);
+            .with_configuration(self.configuration)
+            .with_commit_properties(self.commit_properties);
         if let Some(name) = self.name {
             builder = builder.with_table_name(name);
         }
         if let Some(comment) = self.comment {
             builder = builder.with_comment(comment);
-        }
-        if let Some(metadata) = self.metadata {
-            builder = builder.with_metadata(metadata);
         }
         Ok((builder, operation_id))
     }
@@ -475,12 +475,8 @@ mod tests {
     use tempfile::tempdir;
 
     use super::*;
-    use crate::{
-        kernel::{DataType, PrimitiveType},
-        open_table,
-        storage::StorageOptions,
-        Path,
-    };
+    use crate::kernel::{DataType, PrimitiveType};
+    use crate::{open_table, Path};
 
     fn schema_field(key: &str, primitive: PrimitiveType, nullable: bool) -> StructField {
         StructField::new(key.to_string(), DataType::Primitive(primitive), nullable)
@@ -507,7 +503,7 @@ mod tests {
     fn log_store(path: impl Into<String>) -> LogStoreRef {
         let path: String = path.into();
         let location = ensure_table_uri(path).expect("Failed to get the URI from the path");
-        crate::logstore::logstore_for(location, StorageOptions::default(), None)
+        crate::logstore::logstore_for(location, StorageConfig::default())
             .expect("Failed to create an object store")
     }
 
@@ -608,7 +604,19 @@ mod tests {
             })
             .collect::<Vec<_>>();
         partition_values.sort_by_key(|(k, v)| (k.clone(), v.serialize()));
-        assert_eq!(partition_values, expected_partition_values);
+
+        for (position, expected) in expected_partition_values.iter().enumerate() {
+            let (key, value) = expected;
+            let (found_key, found_value) = partition_values[position].clone();
+            assert_eq!(key, &found_key);
+
+            match (value, found_value) {
+                // no-op the null comparison due to a breaking change in delta-kernel-rs 0.7.0
+                // which changes null comparables
+                (Scalar::Null(_), Scalar::Null(_)) => {}
+                (v, fv) => assert_eq!(v, &fv),
+            }
+        }
     }
 
     // Test Parquet files in object store location

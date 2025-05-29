@@ -10,6 +10,9 @@ from snowflake.core.service import Service
 from tests.utils import random_string
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 @pytest.mark.min_sf_ver("8.37.0")
 def test_create_or_alter(services, service_spec_file_on_stage, shared_compute_pool, warehouse):
     service_name = random_string(5, "test_create_or_alter_service_")

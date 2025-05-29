@@ -15,20 +15,33 @@ from snowflake.core.version import __version__ as VERSION
 BASE_URL = "http://localhost:80/api/v2"
 
 
-def is_prod_version(version_str) -> bool:
-    # Check if version string is all digits or decimals, because non-prod versions contain
-    # letters or other symbols.
+def is_preprod_deployment(snowflake_region: str) -> bool:
+    return "PREPROD" in snowflake_region
+
+
+def is_prod_deployment(version_str: str) -> bool:
     return version_str and all(character.isdigit() or character == '.' for character in version_str)
 
 
-def ensure_snowflake_version(current_version, requested_version):
-    # Check if current version of Snowflake used for testing meets the minimum requested version
-    if is_prod_version(current_version):
-        if not check_version_gte(current_version, requested_version):
-            pytest.skip(
-                f"Skipping test because the current server version {current_version} "
-                f"is older than the minimum version {requested_version}"
-            )
+def is_prod_or_preprod(version_str: str, snowflake_region: str) -> bool:
+    # For prod, we check if version string is all digits or decimals, because non-prod versions contain
+    # letters or other symbols.
+    # For preprod, we check if "PREPROD" is in the regions name
+    return is_prod_deployment(version_str) or is_preprod_deployment(snowflake_region)
+
+
+def ensure_snowflake_version(current_version: str, requested_version: str) -> None:
+    version_number = extract_version_number(current_version)
+    if not check_version_gte(version_number, requested_version):
+        pytest.skip(
+            f"Skipping test because the current server version {version_number} "
+            f"is older than the minimum version {requested_version}"
+        )
+
+
+def extract_version_number(version_str: str) -> str:
+    # on non-prod deployments the CURRENT_VERSION result contains the version number and hash
+    return version_str.split(" ")[0]
 
 
 def random_string(

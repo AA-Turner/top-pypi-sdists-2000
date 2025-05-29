@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: pyaml
-Version: 25.1.0
+Version: 25.5.0
 Summary: PyYAML-based module to produce a bit more pretty and readable YAML-serialized data
 Home-page: https://github.com/mk-fg/pretty-yaml
 Author: Mike Kazantsev
@@ -22,6 +22,9 @@ License-File: COPYING
 Requires-Dist: PyYAML
 Provides-Extra: anchors
 Requires-Dist: unidecode; extra == "anchors"
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
 
 pretty-yaml (or pyaml)
 ======================

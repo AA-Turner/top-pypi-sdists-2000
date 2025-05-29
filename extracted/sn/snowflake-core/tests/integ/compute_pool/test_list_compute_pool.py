@@ -9,6 +9,9 @@ import pytest
 from pydantic_core._pydantic_core import ValidationError
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 @pytest.mark.usefixtures("qa_mode_enabled")
 def test_iter(compute_pools, temp_cp, instance_family):
     for cp in compute_pools.iter(like=temp_cp.name):

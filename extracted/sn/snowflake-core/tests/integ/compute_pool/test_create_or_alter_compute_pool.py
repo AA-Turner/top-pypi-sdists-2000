@@ -14,6 +14,9 @@ from snowflake.core.exceptions import NotFoundError
 from tests.utils import random_string
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 @pytest.mark.min_sf_ver("8.37.0")
 def test_create_or_alter(compute_pools, instance_family):
     cp_name = random_string(5, "test_cp_create_or_alter_")

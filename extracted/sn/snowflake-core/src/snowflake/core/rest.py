@@ -74,7 +74,8 @@ class SSEClient:
         if content_type == 'text/event-stream':
             logger.debug("Handling as SSE stream.")
             return self._handle_sse()
-        elif content_type == 'application/json':
+        elif content_type and content_type.startswith('application/json'):
+        # content_type can also be of type 'application/json;charset=utf-8' so we need to use startswith() here.
             logger.debug("Handling as JSON response.")
             return self._handle_json()
         else:
@@ -139,12 +140,18 @@ class SSEClient:
 
     def _handle_json(self) -> typing.Generator["Event", None, None]:
         data_list = json.loads(self._event_source.data.decode(self._char_enc))
-        for data in data_list:
-            yield Event(id=data.get("id"),
-                        event=data.get("event"),
-                        data=data.get("data"),
-                        comment=data.get("comment"),
-                        retry=data.get("retry"))
+        if isinstance(data_list, dict):
+            # For complete API which goes through XP path, data_list is a dictionary which looks like
+            # {'choices': [{'message': {'content': 'Hello! \n'}}]}
+            # We do not have any id, event, comment or retry fields.
+            yield Event(data=json.dumps(data_list))
+        elif isinstance(data_list, list):
+            for data in data_list:
+                yield Event(id=data.get("id"),
+                            event=data.get("event"),
+                            data=data.get("data"),
+                            comment=data.get("comment"),
+                            retry=data.get("retry"))
 
     def close(self) -> None:
         """Manually close the event source stream."""

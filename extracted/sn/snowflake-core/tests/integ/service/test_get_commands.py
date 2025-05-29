@@ -18,6 +18,9 @@ from snowflake.core.service import (
 from tests.utils import random_string
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 @pytest.mark.usefixtures("qa_mode_enabled")
 def test_get_commands(services, session, imagerepo, shared_compute_pool, database, schema,
                       setup_with_connector_execution):

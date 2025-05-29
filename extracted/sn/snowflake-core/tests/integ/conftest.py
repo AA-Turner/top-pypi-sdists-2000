@@ -15,6 +15,7 @@ from snowflake.connector import SnowflakeConnection
 from snowflake.core import Root
 from snowflake.core._rest_connection import RESTConnection
 from snowflake.core.alert import AlertCollection
+from snowflake.core.api_integration import ApiIntegrationCollection
 from snowflake.core.catalog_integration import CatalogIntegration
 from snowflake.core.compute_pool import ComputePoolCollection
 from snowflake.core.cortex.chat_service import CortexChatService
@@ -53,7 +54,7 @@ from snowflake.core.view import ViewCollection
 from snowflake.core.warehouse import WarehouseCollection, WarehouseResource
 from tests.integ.utils import backup_role
 
-from ..utils import ensure_snowflake_version, is_prod_version
+from ..utils import ensure_snowflake_version, is_prod_or_preprod
 from .fixtures.backup_objects import (  # noqa: F401 # pylint: disable=unused-import
     backup_database_schema,
     backup_warehouse_fixture,
@@ -173,6 +174,12 @@ def snowflake_version(connection) -> str:
         return cur.execute("select current_version()").fetchone()[0].strip()
 
 
+@pytest.fixture(scope="session")
+def snowflake_region(connection) -> str:
+    with connection.cursor() as cur:
+        return cur.execute("select current_region()").fetchone()[0].strip()
+
+
 @pytest.fixture(scope="function", autouse=True)
 def print_snowflake_version(snowflake_version):
     print(f"Running against Snowflake version: {snowflake_version}")
@@ -260,6 +267,11 @@ def root(request, connection) -> Root:
         notebook_session = request.getfixturevalue("session_notebook")
         return Root(notebook_session)
     return Root(connection)
+
+
+@pytest.fixture(scope="session")
+def api_integrations(root) -> ApiIntegrationCollection:
+    return root.api_integrations
 
 
 @pytest.fixture(scope="session")
@@ -504,11 +516,11 @@ def use_accountadmin(connection, request):
 
 
 @pytest.fixture(scope="session")
-def sf_cursor(connection, sf_connection_parameters, test_account, snowflake_version):
+def sf_cursor(connection, sf_connection_parameters, test_account, snowflake_version, snowflake_region):
     sf_conn = None
     try:
-        # We can only run this if the test is against a non-prod version (i.e., only run if dev/reg)
-        if is_prod_version(snowflake_version) or sf_connection_parameters is None:
+        # We can only run this if the test is against dev/reg env
+        if is_prod_or_preprod(snowflake_version, snowflake_region) or sf_connection_parameters is None:
             yield None
         else:
             # return the cursor if we're already using the right account
@@ -599,9 +611,15 @@ def set_params(cursor):
 
 
 @pytest.fixture(autouse=True)
-def internal_only(request, snowflake_version):
-    if "internal_only" in request.keywords and is_prod_version(snowflake_version):
-        pytest.skip("Test is skipped because it can only run in non-prod environments.")
+def internal_only(request, snowflake_version, snowflake_region):
+    if "internal_only" in request.keywords and is_prod_or_preprod(snowflake_version, snowflake_region):
+        pytest.skip("Test is skipped because it can only run in dev/reg environments.")
+
+
+@pytest.fixture(autouse=True)
+def prodlike_only(request, snowflake_version, snowflake_region):
+    if "prodlike_only" in request.keywords and not is_prod_or_preprod(snowflake_version, snowflake_region):
+        pytest.skip("Test is skipped because it can only run in prod or preprod environments.")
 
 
 @pytest.fixture(autouse=True)

@@ -294,6 +294,7 @@ from .literals import (
     SnapshotAttributeNameType,
     SnapshotBlockPublicAccessStateType,
     SnapshotLocationEnumType,
+    SnapshotReturnCodesType,
     SnapshotStateType,
     SpotAllocationStrategyType,
     SpotInstanceInterruptionBehaviorType,
@@ -976,6 +977,7 @@ __all__ = (
     "DeleteSecurityGroupResultTypeDef",
     "DeleteSnapshotRequestSnapshotDeleteTypeDef",
     "DeleteSnapshotRequestTypeDef",
+    "DeleteSnapshotReturnCodeTypeDef",
     "DeleteSpotDatafeedSubscriptionRequestTypeDef",
     "DeleteSubnetCidrReservationRequestTypeDef",
     "DeleteSubnetCidrReservationResultTypeDef",
@@ -1048,6 +1050,7 @@ __all__ = (
     "DeprovisionPublicIpv4PoolCidrResultTypeDef",
     "DeregisterImageRequestImageDeregisterTypeDef",
     "DeregisterImageRequestTypeDef",
+    "DeregisterImageResultTypeDef",
     "DeregisterInstanceEventNotificationAttributesRequestTypeDef",
     "DeregisterInstanceEventNotificationAttributesResultTypeDef",
     "DeregisterInstanceTagAttributeRequestTypeDef",
@@ -4666,6 +4669,11 @@ class DeleteSnapshotRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
 
+class DeleteSnapshotReturnCodeTypeDef(TypedDict):
+    SnapshotId: NotRequired[str]
+    ReturnCode: NotRequired[SnapshotReturnCodesType]
+
+
 class DeleteSpotDatafeedSubscriptionRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
@@ -4875,11 +4883,13 @@ class DeprovisionPublicIpv4PoolCidrRequestTypeDef(TypedDict):
 
 
 class DeregisterImageRequestImageDeregisterTypeDef(TypedDict):
+    DeleteAssociatedSnapshots: NotRequired[bool]
     DryRun: NotRequired[bool]
 
 
 class DeregisterImageRequestTypeDef(TypedDict):
     ImageId: str
+    DeleteAssociatedSnapshots: NotRequired[bool]
     DryRun: NotRequired[bool]
 
 
@@ -11132,6 +11142,12 @@ class DeleteLaunchTemplateVersionsResponseErrorItemTypeDef(TypedDict):
 class FailedQueuedPurchaseDeletionTypeDef(TypedDict):
     Error: NotRequired[DeleteQueuedReservedInstancesErrorTypeDef]
     ReservedInstancesId: NotRequired[str]
+
+
+class DeregisterImageResultTypeDef(TypedDict):
+    Return: bool
+    DeleteSnapshotResults: List[DeleteSnapshotReturnCodeTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
 
 
 class DeregisterInstanceEventNotificationAttributesRequestTypeDef(TypedDict):

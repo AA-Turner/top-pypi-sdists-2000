@@ -12,6 +12,9 @@ from snowflake.core.exceptions import APIError, ConflictError
 from tests.utils import random_string
 
 
+pytestmark = [pytest.mark.skip_gov]
+
+
 def test_create_compute_pool(compute_pools, instance_family):
     cp_name = random_string(5, "test_cp_case_sensitiv_")
     cp_name = f'"{cp_name}"'

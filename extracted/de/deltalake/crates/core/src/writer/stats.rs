@@ -1,4 +1,5 @@
 use std::cmp::min;
+use std::ops::Not;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 use std::{collections::HashMap, ops::AddAssign};
@@ -6,6 +7,7 @@ use std::{collections::HashMap, ops::AddAssign};
 use delta_kernel::expressions::Scalar;
 use indexmap::IndexMap;
 use itertools::Itertools;
+use parquet::basic::Type;
 use parquet::file::metadata::ParquetMetaData;
 use parquet::format::FileMetaData;
 use parquet::schema::types::{ColumnDescriptor, SchemaDescriptor};
@@ -14,6 +16,7 @@ use parquet::{
     file::{metadata::RowGroupMetaData, statistics::Statistics},
     format::TimeUnit,
 };
+use tracing::warn;
 
 use super::*;
 use crate::kernel::{scalars::ScalarExt, Add};
@@ -64,7 +67,6 @@ pub fn create_add(
         deletion_vector: None,
         base_row_id: None,
         default_row_commit_version: None,
-        stats_parsed: None,
         clustering_provider: None,
     })
 }
@@ -187,19 +189,25 @@ fn stats_from_metadata(
 
         let maybe_stats: Option<AggregatedStats> = row_group_metadata
             .iter()
-            .map(|g| {
-                g.column(idx)
-                    .statistics()
-                    .map(|s| AggregatedStats::from((s, &column_descr.logical_type())))
+            .flat_map(|g| {
+                g.column(idx).statistics().into_iter().filter_map(|s| {
+                    let is_binary = matches!(&column_descr.physical_type(), Type::BYTE_ARRAY)
+                        && matches!(column_descr.logical_type(), Some(LogicalType::String)).not();
+                    if is_binary {
+                        warn!(
+                            "Skipping column {} because it's a binary field.",
+                            &column_descr.name().to_string()
+                        );
+                        None
+                    } else {
+                        Some(AggregatedStats::from((s, &column_descr.logical_type())))
+                    }
+                })
             })
-            .reduce(|left, right| match (left, right) {
-                (Some(mut left), Some(right)) => {
-                    left += right;
-                    Some(left)
-                }
-                _ => None,
-            })
-            .flatten();
+            .reduce(|mut left, right| {
+                left += right;
+                left
+            });
 
         if let Some(stats) = maybe_stats {
             apply_min_max_for_column(
@@ -1062,28 +1070,30 @@ mod tests {
             .join("\n")
     });
     static JSON_ROWS: LazyLock<Vec<Value>> = LazyLock::new(|| {
-        std::iter::repeat(json!({
-            "meta": {
-                "kafka": {
-                    "offset": 0,
-                    "partition": 0,
-                    "topic": "some_topic"
+        std::iter::repeat_n(
+            json!({
+                "meta": {
+                    "kafka": {
+                        "offset": 0,
+                        "partition": 0,
+                        "topic": "some_topic"
+                    },
+                    "producer": {
+                        "timestamp": "2021-06-22"
+                    },
                 },
-                "producer": {
-                    "timestamp": "2021-06-22"
-                },
-            },
-            "some_string": "GET",
-            "some_int": 302,
-            "some_bool": true,
-            "some_list": ["a", "b", "c"],
-            "some_nested_list": [[42], [84]],
-            "date": "2021-06-22",
-            "uuid": "176c770d-92af-4a21-bf76-5d8c5261d659",
-        }))
-        .take(100)
-        .chain(
-            std::iter::repeat(json!({
+                "some_string": "GET",
+                "some_int": 302,
+                "some_bool": true,
+                "some_list": ["a", "b", "c"],
+                "some_nested_list": [[42], [84]],
+                "date": "2021-06-22",
+                "uuid": "176c770d-92af-4a21-bf76-5d8c5261d659",
+            }),
+            100,
+        )
+        .chain(std::iter::repeat_n(
+            json!({
                 "meta": {
                     "kafka": {
                         "offset": 100,
@@ -1101,11 +1111,11 @@ mod tests {
                 "some_nested_list": [[42], [84]],
                 "date": "2021-06-22",
                 "uuid": "54f3e867-3f7b-4122-a452-9d74fb4fe1ba",
-            }))
-            .take(100),
-        )
-        .chain(
-            std::iter::repeat(json!({
+            }),
+            100,
+        ))
+        .chain(std::iter::repeat_n(
+            json!({
                 "meta": {
                     "kafka": {
                         "offset": 0,
@@ -1119,9 +1129,9 @@ mod tests {
                 "some_nested_list": [[42], null],
                 "date": "2021-06-22",
                 "uuid": "a98bea04-d119-4f21-8edc-eb218b5849af",
-            }))
-            .take(100),
-        )
+            }),
+            100,
+        ))
         .collect()
     });
 }
