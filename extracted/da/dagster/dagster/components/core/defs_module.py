@@ -2,8 +2,9 @@ import inspect
 from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional, TypeVar
+from typing import Any, Optional, TypeVar, Union
 
+from dagster_shared.record import record
 from dagster_shared.serdes.objects import PluginObjectKey
 from dagster_shared.yaml_utils import parse_yamls_with_source_position
 from dagster_shared.yaml_utils.source_position import SourcePosition
@@ -51,7 +52,7 @@ class ComponentFileModel(BaseModel):
     requirements: Optional[ComponentRequirementsModel] = None
 
 
-def _add_component_yaml_code_reference_to_spec(
+def _add_defs_yaml_code_reference_to_spec(
     component_yaml_path: Path,
     load_context: ComponentLoadContext,
     component: Component,
@@ -89,22 +90,32 @@ class CompositeYamlComponent(Component):
         self.source_positions = source_positions
 
     def build_defs(self, context: ComponentLoadContext) -> Definitions:
-        component_yaml = context.path / "component.yaml"
+        component_yaml = check.not_none(_find_defs_or_component_yaml(context.path))
 
         return Definitions.merge(
             *(
-                component.build_defs(context).map_asset_specs(
-                    func=lambda spec: _add_component_yaml_code_reference_to_spec(
+                component.build_defs(context).map_asset_specs_inner(
+                    func=lambda spec: _add_defs_yaml_code_reference_to_spec(
                         component_yaml_path=component_yaml,
                         load_context=context,
                         component=component,
                         source_position=source_position,
                         asset_spec=spec,
-                    )
+                    ),
+                    selection=None,
+                    ignore_non_spec_asset_types=True,
                 )
                 for component, source_position in zip(self.components, self.source_positions)
             )
         )
+
+
+class CompositeComponent(Component):
+    def __init__(self, components: Sequence[Component]):
+        self.components = components
+
+    def build_defs(self, context: ComponentLoadContext) -> Definitions:
+        return Definitions.merge(*[component.build_defs(context) for component in self.components])
 
 
 def get_component(context: ComponentLoadContext) -> Optional[Component]:
@@ -114,7 +125,7 @@ def get_component(context: ComponentLoadContext) -> Optional[Component]:
     """
     # in priority order
     # yaml component
-    if (context.path / "component.yaml").exists():
+    if _find_defs_or_component_yaml(context.path):
         return load_yaml_component(context)
     # pythonic component
     elif (context.path / "component.py").exists():
@@ -140,6 +151,17 @@ def get_component(context: ComponentLoadContext) -> Optional[Component]:
 @dataclass
 class DefsFolderComponentYamlSchema(Resolvable):
     asset_post_processors: Optional[Sequence[AssetPostProcessor]] = None
+
+
+@record
+class ComponentPath:
+    """Identifier for where a Component instance was defined:
+    file_path: The Path to the file or directory.
+    instance_key: The optional identifier to distinguish instances originating from the same file.
+    """
+
+    file_path: Path
+    instance_key: Optional[Union[int, str]] = None
 
 
 @public
@@ -198,11 +220,19 @@ class DefsFolderComponent(Component):
         )
 
     def iterate_components(self) -> Iterator[Component]:
-        for component in self.children.values():
-            if isinstance(component, DefsFolderComponent):
-                yield from component.iterate_components()
-
+        for _, component in self.iterate_path_component_pairs():
             yield component
+
+    def iterate_path_component_pairs(self) -> Iterator[tuple[ComponentPath, Component]]:
+        for path, component in self.children.items():
+            yield ComponentPath(file_path=path), component
+
+            if isinstance(component, DefsFolderComponent):
+                yield from component.iterate_path_component_pairs()
+
+            if isinstance(component, CompositeYamlComponent):
+                for idx, inner_comp in enumerate(component.components):
+                    yield ComponentPath(file_path=path, instance_key=idx), inner_comp
 
 
 EXPLICITLY_IGNORED_GLOB_PATTERNS = [
@@ -272,7 +302,9 @@ class DagsterDefsComponent(Component):
 
 
 def load_pythonic_component(context: ComponentLoadContext) -> Component:
-    module = context.load_defs_relative_python_module(context.path / "component.py")
+    # backcompat for component.yaml
+    component_def_path = context.path / "component.py"
+    module = context.load_defs_relative_python_module(component_def_path)
     component_loaders = list(inspect.getmembers(module, is_component_loader))
     if len(component_loaders) == 0:
         raise DagsterInvalidDefinitionError("No component loaders found in module")
@@ -280,14 +312,18 @@ def load_pythonic_component(context: ComponentLoadContext) -> Component:
         _, component_loader = component_loaders[0]
         return component_loader(context)
     else:
-        raise DagsterInvalidDefinitionError(
-            f"Multiple component loaders found in module: {component_loaders}"
+        return CompositeComponent(
+            [component_loader(context) for _, component_loader in component_loaders]
         )
 
 
 def load_yaml_component(context: ComponentLoadContext) -> Component:
     # parse the yaml file
-    component_def_path = context.path / "component.yaml"
+    component_def_path = check.not_none(_find_defs_or_component_yaml(context.path))
+    return load_yaml_component_from_path(context, component_def_path)
+
+
+def load_yaml_component_from_path(context: ComponentLoadContext, component_def_path: Path):
     source_trees = parse_yamls_with_source_position(
         component_def_path.read_text(), str(component_def_path)
     )
@@ -330,4 +366,13 @@ def load_yaml_component(context: ComponentLoadContext) -> Component:
     check.invariant(len(components) > 0, "No components found in YAML file")
     return CompositeYamlComponent(
         components, [source_tree.source_position_tree.position for source_tree in source_trees]
+    )
+
+
+# When we remove component.yaml, we can remove this function for just a defs.yaml check
+def _find_defs_or_component_yaml(path: Path) -> Optional[Path]:
+    # Check for defs.yaml has precedence, component.yaml is deprecated
+    return next(
+        (p for p in (path / "defs.yaml", path / "component.yaml") if p.exists()),
+        None,
     )

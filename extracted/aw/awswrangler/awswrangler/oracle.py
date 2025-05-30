@@ -48,8 +48,8 @@ def _validate_connection(con: "oracledb.Connection") -> None:
 
 
 def _get_table_identifier(schema: str | None, table: str) -> str:
-    schema_str = f'{identifier(schema, sql_mode="ansi")}.' if schema else ""
-    table_identifier = f'{schema_str}{identifier(table, sql_mode="ansi")}'
+    schema_str = f"{identifier(schema, sql_mode='ansi')}." if schema else ""
+    table_identifier = f"{schema_str}{identifier(table, sql_mode='ansi')}"
     return table_identifier
 
 
@@ -104,10 +104,10 @@ def _create_table(
         varchar_lengths=varchar_lengths,
         converter_func=_data_types.pyarrow2oracle,
     )
-    cols_str: str = "".join([f'{identifier(k, sql_mode="ansi")} {v},\n' for k, v in oracle_types.items()])[:-2]
+    cols_str: str = "".join([f"{identifier(k, sql_mode='ansi')} {v},\n" for k, v in oracle_types.items()])[:-2]
 
     if primary_keys:
-        primary_keys_str = ", ".join([f'{identifier(k, sql_mode="ansi")}' for k in primary_keys])
+        primary_keys_str = ", ".join([f"{identifier(k, sql_mode='ansi')}" for k in primary_keys])
     else:
         primary_keys_str = None
 
@@ -196,8 +196,8 @@ def connect(
         dsn=connection_dsn,
     )
     # oracledb.connect does not have a call_timeout attribute, it has to be set separatly
-    oracle_connection.call_timeout = call_timeout
-    return oracle_connection  # type: ignore[no-any-return]
+    oracle_connection.call_timeout = call_timeout  # type: ignore[assignment]
+    return oracle_connection
 
 
 @overload
@@ -469,17 +469,17 @@ def _generate_upsert_statement(
 
     non_primary_key_columns = [key for key in df.columns if key not in set(primary_keys)]
 
-    primary_keys_str = ", ".join([f'{identifier(key, sql_mode="ansi")}' for key in primary_keys])
-    columns_str = ", ".join([f'{identifier(key, sql_mode="ansi")}' for key in non_primary_key_columns])
+    primary_keys_str = ", ".join([f"{identifier(key, sql_mode='ansi')}" for key in primary_keys])
+    columns_str = ", ".join([f"{identifier(key, sql_mode='ansi')}" for key in non_primary_key_columns])
 
     column_placeholders: str = f"({', '.join([':' + str(i + 1) for i in range(len(df.columns))])})"
 
     primary_key_condition_str = " AND ".join(
-        [f'{identifier(key, sql_mode="ansi")} = :{i+1}' for i, key in enumerate(primary_keys)]
+        [f"{identifier(key, sql_mode='ansi')} = :{i + 1}" for i, key in enumerate(primary_keys)]
     )
     assignment_str = ", ".join(
         [
-            f'{identifier(col, sql_mode="ansi")} = :{i + len(primary_keys) + 1}'
+            f"{identifier(col, sql_mode='ansi')} = :{i + len(primary_keys) + 1}"
             for i, col in enumerate(non_primary_key_columns)
         ]
     )
@@ -606,9 +606,12 @@ def detect_oracle_decimal_datatype(cursor: Any) -> dict[str, pa.DataType]:
     _logger.debug("cursor type: %s", type(cursor))
     if isinstance(cursor, oracledb.Cursor):
         # Oracle stores DECIMAL as the NUMBER type
-        for row in cursor.description:
-            if row[1] == oracledb.DB_TYPE_NUMBER and row[5] > 0:
-                dtype[row[0]] = pa.decimal128(row[4], row[5])
+
+        for name, db_type, display_size, internal_size, precision, scale, null_ok in cursor.description:
+            _logger.debug((name, db_type, display_size, internal_size, precision, scale, null_ok))
+
+            if db_type == oracledb.DB_TYPE_NUMBER and scale is not None and scale > 0:
+                dtype[name] = pa.decimal128(precision, scale)
 
     _logger.debug("decimal dtypes: %s", dtype)
     return dtype

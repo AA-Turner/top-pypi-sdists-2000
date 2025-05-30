@@ -33,6 +33,7 @@ from awswrangler.s3._list import _path2list
 from awswrangler.s3._read import (
     _apply_partition_filter,
     _check_version_id,
+    _concat_union_categoricals,
     _extract_partitions_dtypes_from_table_details,
     _get_num_output_blocks,
     _get_path_ignore_suffix,
@@ -264,7 +265,7 @@ def _read_parquet_chunked(
                         yield df
                     else:
                         if next_slice is not None:
-                            df = pd.concat(objs=[next_slice, df], sort=False, copy=False)
+                            df = _concat_union_categoricals(dfs=[next_slice, df], ignore_index=False)
                         while len(df.index) >= chunked:
                             yield df.iloc[:chunked, :].copy()
                             df = df.iloc[chunked:, :]
@@ -311,6 +312,14 @@ def _read_parquet(
         itertools.repeat(schema),
         itertools.repeat(decryption_properties),
     )
+    # When the first table is empty in a dataset, the inferred schema may not
+    # be compatible with the other tables, which will raise an exception when
+    # concatening them down the line. As a workaround, we filter out empty
+    # tables, unless every table is empty. In that latter case, the schemas
+    # will be compatible so we do nothing in that case.
+    should_filter_out = any(len(table) > 0 for table in tables)
+    if should_filter_out:
+        tables = [table for table in tables if len(table) > 0]
     return _utils.table_refs_to_df(tables, kwargs=arrow_kwargs)
 
 
@@ -401,7 +410,7 @@ def read_parquet(
         must return a bool, True to read the partition or False to ignore it.
         Ignored if `dataset=False`.
         E.g ``lambda x: True if x["year"] == "2020" and x["month"] == "1" else False``
-        https://aws-sdk-pandas.readthedocs.io/en/3.11.0/tutorials/023%20-%20Flexible%20Partitions%20Filter.html
+        https://aws-sdk-pandas.readthedocs.io/en/3.12.0/tutorials/023%20-%20Flexible%20Partitions%20Filter.html
     columns
         List of columns to read from the file(s).
     validate_schema
@@ -642,7 +651,7 @@ def read_parquet_table(
         must return a bool, True to read the partition or False to ignore it.
         Ignored if `dataset=False`.
         E.g ``lambda x: True if x["year"] == "2020" and x["month"] == "1" else False``
-        https://aws-sdk-pandas.readthedocs.io/en/3.11.0/tutorials/023%20-%20Flexible%20Partitions%20Filter.html
+        https://aws-sdk-pandas.readthedocs.io/en/3.12.0/tutorials/023%20-%20Flexible%20Partitions%20Filter.html
     columns
         List of columns to read from the file(s).
     validate_schema

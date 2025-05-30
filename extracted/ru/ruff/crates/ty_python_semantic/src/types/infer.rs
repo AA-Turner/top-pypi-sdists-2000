@@ -64,7 +64,9 @@ use crate::symbol::{
     global_symbol, module_type_implicit_global_declaration, module_type_implicit_global_symbol,
     symbol, symbol_from_bindings, symbol_from_declarations, typing_extensions_symbol,
 };
-use crate::types::call::{Argument, Bindings, CallArgumentTypes, CallArguments, CallError};
+use crate::types::call::{
+    Argument, Binding, Bindings, CallArgumentTypes, CallArguments, CallError,
+};
 use crate::types::class::{MetaclassErrorKind, SliceLiteral};
 use crate::types::diagnostic::{
     self, CALL_NON_CALLABLE, CONFLICTING_DECLARATIONS, CONFLICTING_METACLASS,
@@ -81,16 +83,17 @@ use crate::types::diagnostic::{
 };
 use crate::types::generics::GenericContext;
 use crate::types::mro::MroErrorKind;
+use crate::types::signatures::{CallableSignature, Signature};
 use crate::types::unpacker::{UnpackResult, Unpacker};
 use crate::types::{
-    BareTypeAliasType, CallDunderError, CallableSignature, CallableType, ClassLiteral, ClassType,
-    DataclassParams, DynamicType, FunctionDecorators, FunctionType, GenericAlias,
-    IntersectionBuilder, IntersectionType, KnownClass, KnownFunction, KnownInstanceType,
-    MemberLookupPolicy, MetaclassCandidate, PEP695TypeAliasType, Parameter, ParameterForm,
-    Parameters, Signature, Signatures, StringLiteralType, SubclassOfType, Symbol,
-    SymbolAndQualifiers, Truthiness, TupleType, Type, TypeAliasType, TypeAndQualifiers,
-    TypeArrayDisplay, TypeQualifiers, TypeVarBoundOrConstraints, TypeVarInstance, TypeVarKind,
-    TypeVarVariance, UnionBuilder, UnionType, binding_type, todo_type,
+    BareTypeAliasType, CallDunderError, CallableType, ClassLiteral, ClassType, DataclassParams,
+    DynamicType, FunctionDecorators, FunctionType, GenericAlias, IntersectionBuilder,
+    IntersectionType, KnownClass, KnownFunction, KnownInstanceType, MemberLookupPolicy,
+    MetaclassCandidate, PEP695TypeAliasType, Parameter, ParameterForm, Parameters,
+    StringLiteralType, SubclassOfType, Symbol, SymbolAndQualifiers, Truthiness, TupleType, Type,
+    TypeAliasType, TypeAndQualifiers, TypeArrayDisplay, TypeQualifiers, TypeVarBoundOrConstraints,
+    TypeVarInstance, TypeVarKind, TypeVarVariance, UnionBuilder, UnionType, binding_type,
+    todo_type,
 };
 use crate::unpack::{Unpack, UnpackPosition};
 use crate::util::subscript::{PyIndex, PySlice};
@@ -108,13 +111,15 @@ use super::diagnostic::{
     report_runtime_check_against_non_runtime_checkable_protocol, report_slice_step_size_zero,
     report_unresolved_reference,
 };
-use super::generics::{GenericContextOrigin, LegacyGenericBase};
+use super::generics::LegacyGenericBase;
 use super::slots::check_class_slots;
 use super::string_annotation::{
     BYTE_STRING_TYPE_ANNOTATION, FSTRING_TYPE_ANNOTATION, parse_string_annotation,
 };
 use super::subclass_of::SubclassOfInner;
-use super::{BoundSuperError, BoundSuperType, ClassBase};
+use super::{
+    BoundSuperError, BoundSuperType, ClassBase, add_inferred_python_version_hint_to_diagnostic,
+};
 
 /// Infer all types for a [`ScopeId`], including all definitions and expressions in that scope.
 /// Use when checking a scope, or needing to provide a type for an arbitrary expression in the
@@ -856,6 +861,25 @@ impl<'db> TypeInferenceBuilder<'db> {
                         }
                         continue;
                     }
+                    // Note that unlike several of the other errors caught in this function,
+                    // this does not lead to the class creation failing at runtime,
+                    // but it is semantically invalid.
+                    Type::KnownInstance(KnownInstanceType::Protocol(Some(_))) => {
+                        if class_node.type_params.is_none() {
+                            continue;
+                        }
+                        let Some(builder) = self
+                            .context
+                            .report_lint(&INVALID_GENERIC_CLASS, &class_node.bases()[i])
+                        else {
+                            continue;
+                        };
+                        builder.into_diagnostic(
+                            "Cannot both inherit from subscripted `Protocol` \
+                            and use PEP 695 type variables",
+                        );
+                        continue;
+                    }
                     Type::ClassLiteral(class) => class,
                     // dynamic/unknown bases are never `@final`
                     _ => continue,
@@ -917,13 +941,23 @@ impl<'db> TypeInferenceBuilder<'db> {
                         {
                             builder.into_diagnostic(format_args!(
                                 "Cannot create a consistent method resolution order (MRO) \
-                                     for class `{}` with bases list `[{}]`",
+                                    for class `{}` with bases list `[{}]`",
                                 class.name(self.db()),
                                 bases_list
                                     .iter()
                                     .map(|base| base.display(self.db()))
                                     .join(", ")
                             ));
+                        }
+                    }
+                    MroErrorKind::Pep695ClassWithGenericInheritance => {
+                        if let Some(builder) =
+                            self.context.report_lint(&INVALID_GENERIC_CLASS, class_node)
+                        {
+                            builder.into_diagnostic(
+                                "Cannot both inherit from `typing.Generic` \
+                                and use PEP 695 type variables",
+                            );
                         }
                     }
                     MroErrorKind::InheritanceCycle => {
@@ -1018,21 +1052,6 @@ impl<'db> TypeInferenceBuilder<'db> {
                                 ));
                             }
                         }
-                    }
-                }
-            }
-
-            // (5) Check that a generic class does not have invalid or conflicting generic
-            // contexts.
-            if class.pep695_generic_context(self.db()).is_some() {
-                if let Some(legacy_context) = class.legacy_generic_context(self.db()) {
-                    if let Some(builder) =
-                        self.context.report_lint(&INVALID_GENERIC_CLASS, class_node)
-                    {
-                        builder.into_diagnostic(format_args!(
-                            "Cannot both inherit from {} and use PEP 695 type variables",
-                            legacy_context.origin(self.db())
-                        ));
                     }
                 }
             }
@@ -3231,8 +3250,7 @@ impl<'db> TypeInferenceBuilder<'db> {
                                     )),
                                     value_ty,
                                 ]),
-                                MemberLookupPolicy::NO_INSTANCE_FALLBACK
-                                    | MemberLookupPolicy::MRO_NO_OBJECT_FALLBACK,
+                                MemberLookupPolicy::MRO_NO_OBJECT_FALLBACK,
                             );
 
                             match result {
@@ -3406,24 +3424,31 @@ impl<'db> TypeInferenceBuilder<'db> {
             Type::ModuleLiteral(module) => {
                 if let Symbol::Type(attr_ty, _) = module.static_member(db, attribute) {
                     let assignable = value_ty.is_assignable_to(db, attr_ty);
-                    if !assignable {
-                        report_invalid_attribute_assignment(
-                            &self.context,
-                            target.into(),
-                            attr_ty,
-                            value_ty,
-                            attribute,
-                        );
+                    if assignable {
+                        true
+                    } else {
+                        if emit_diagnostics {
+                            report_invalid_attribute_assignment(
+                                &self.context,
+                                target.into(),
+                                attr_ty,
+                                value_ty,
+                                attribute,
+                            );
+                        }
+                        false
                     }
-
-                    false
                 } else {
-                    if let Some(builder) = self.context.report_lint(&UNRESOLVED_ATTRIBUTE, target) {
-                        builder.into_diagnostic(format_args!(
-                            "Unresolved attribute `{}` on type `{}`.",
-                            attribute,
-                            object_ty.display(db)
-                        ));
+                    if emit_diagnostics {
+                        if let Some(builder) =
+                            self.context.report_lint(&UNRESOLVED_ATTRIBUTE, target)
+                        {
+                            builder.into_diagnostic(format_args!(
+                                "Unresolved attribute `{}` on type `{}`.",
+                                attribute,
+                                object_ty.display(db)
+                            ));
+                        }
                     }
 
                     false
@@ -4825,10 +4850,7 @@ impl<'db> TypeInferenceBuilder<'db> {
         // TODO: Useful inference of a lambda's return type will require a different approach,
         // which does the inference of the body expression based on arguments at each call site,
         // rather than eagerly computing a return type without knowing the argument types.
-        Type::Callable(CallableType::single(
-            self.db(),
-            Signature::new(parameters, Some(Type::unknown())),
-        ))
+        CallableType::single(self.db(), Signature::new(parameters, Some(Type::unknown())))
     }
 
     /// Returns the type of the first parameter if the given scope is function-like (i.e. function or lambda).
@@ -4942,8 +4964,9 @@ impl<'db> TypeInferenceBuilder<'db> {
             }
         }
 
-        let signatures = callable_type.signatures(self.db());
-        let bindings = Bindings::match_parameters(signatures, &call_arguments);
+        let bindings = callable_type
+            .bindings(self.db())
+            .match_parameters(&call_arguments);
         let call_argument_types =
             self.infer_argument_types(arguments, call_arguments, &bindings.argument_forms);
 
@@ -6009,7 +6032,7 @@ impl<'db> TypeInferenceBuilder<'db> {
                         diag.info(
                             "Note that `X | Y` PEP 604 union syntax is only available in Python 3.10 and later",
                         );
-                        diagnostic::add_inferred_python_version_hint(db, diag);
+                        add_inferred_python_version_hint_to_diagnostic(db, &mut diag, "resolving types");
                     }
                 }
                 Type::unknown()
@@ -6537,20 +6560,27 @@ impl<'db> TypeInferenceBuilder<'db> {
         intersection_on: IntersectionOn,
         range: TextRange,
     ) -> Result<Type<'db>, CompareUnsupportedError<'db>> {
+        enum State<'db> {
+            // We have not seen any positive elements (yet)
+            NoPositiveElements,
+            // The operator was unsupported on all elements that we have seen so far.
+            // Contains the first error we encountered.
+            UnsupportedOnAllElements(CompareUnsupportedError<'db>),
+            // The operator was supported on at least one positive element.
+            Supported,
+        }
+
         // If a comparison yields a definitive true/false answer on a (positive) part
         // of an intersection type, it will also yield a definitive answer on the full
         // intersection type, which is even more specific.
         for pos in intersection.positive(self.db()) {
             let result = match intersection_on {
-                IntersectionOn::Left => {
-                    self.infer_binary_type_comparison(*pos, op, other, range)?
-                }
-                IntersectionOn::Right => {
-                    self.infer_binary_type_comparison(other, op, *pos, range)?
-                }
+                IntersectionOn::Left => self.infer_binary_type_comparison(*pos, op, other, range),
+                IntersectionOn::Right => self.infer_binary_type_comparison(other, op, *pos, range),
             };
-            if let Type::BooleanLiteral(b) = result {
-                return Ok(Type::BooleanLiteral(b));
+
+            if let Ok(Type::BooleanLiteral(_)) = result {
+                return result;
             }
         }
 
@@ -6619,19 +6649,55 @@ impl<'db> TypeInferenceBuilder<'db> {
 
         builder = builder.add_positive(KnownClass::Bool.to_instance(self.db()));
 
+        let mut state = State::NoPositiveElements;
+
         for pos in intersection.positive(self.db()) {
             let result = match intersection_on {
-                IntersectionOn::Left => {
-                    self.infer_binary_type_comparison(*pos, op, other, range)?
-                }
-                IntersectionOn::Right => {
-                    self.infer_binary_type_comparison(other, op, *pos, range)?
-                }
+                IntersectionOn::Left => self.infer_binary_type_comparison(*pos, op, other, range),
+                IntersectionOn::Right => self.infer_binary_type_comparison(other, op, *pos, range),
             };
-            builder = builder.add_positive(result);
+
+            match result {
+                Ok(ty) => {
+                    state = State::Supported;
+                    builder = builder.add_positive(ty);
+                }
+                Err(error) => {
+                    match state {
+                        State::NoPositiveElements => {
+                            // This is the first positive element, but the operation is not supported.
+                            // Store the error and continue.
+                            state = State::UnsupportedOnAllElements(error);
+                        }
+                        State::UnsupportedOnAllElements(_) => {
+                            // We already have an error stored, and continue to see elements on which
+                            // the operator is not supported. Continue with the same state (only keep
+                            // the first error).
+                        }
+                        State::Supported => {
+                            // We previously saw a positive element that supported the operator,
+                            // so the overall operation is still supported.
+                        }
+                    }
+                }
+            }
         }
 
-        Ok(builder.build())
+        match state {
+            State::Supported => Ok(builder.build()),
+            State::NoPositiveElements => {
+                // We didn't see any positive elements, check if the operation is supported on `object`:
+                match intersection_on {
+                    IntersectionOn::Left => {
+                        self.infer_binary_type_comparison(Type::object(self.db()), op, other, range)
+                    }
+                    IntersectionOn::Right => {
+                        self.infer_binary_type_comparison(other, op, Type::object(self.db()), range)
+                    }
+                }
+            }
+            State::UnsupportedOnAllElements(error) => Err(error),
+        }
     }
 
     /// Infers the type of a binary comparison (e.g. 'left == right'). See
@@ -7217,11 +7283,9 @@ impl<'db> TypeInferenceBuilder<'db> {
             }
             _ => CallArgumentTypes::positional([self.infer_type_expression(slice_node)]),
         };
-        let signatures = Signatures::single(CallableSignature::single(
-            value_ty,
-            generic_context.signature(self.db()),
-        ));
-        let bindings = match Bindings::match_parameters(signatures, &call_argument_types)
+        let binding = Binding::single(value_ty, generic_context.signature(self.db()));
+        let bindings = match Bindings::from(binding)
+            .match_parameters(&call_argument_types)
             .check_types(self.db(), &call_argument_types)
         {
             Ok(bindings) => bindings,
@@ -7529,7 +7593,7 @@ impl<'db> TypeInferenceBuilder<'db> {
                     if !value_ty.into_class_literal().is_some_and(|class| {
                         class
                             .iter_mro(self.db(), None)
-                            .any(|base| matches!(base, ClassBase::Generic(_)))
+                            .contains(&ClassBase::Generic)
                     }) {
                         report_non_subscriptable(
                             &self.context,
@@ -7579,7 +7643,7 @@ impl<'db> TypeInferenceBuilder<'db> {
                         self.context.report_lint(&INVALID_ARGUMENT_TYPE, value_node)
                     {
                         builder.into_diagnostic(format_args!(
-                            "`{}` is not a valid argument to {origin}",
+                            "`{}` is not a valid argument to `{origin}`",
                             typevar.display(self.db()),
                         ));
                     }
@@ -7587,9 +7651,7 @@ impl<'db> TypeInferenceBuilder<'db> {
                 }
             })
             .collect();
-        typevars.map(|typevars| {
-            GenericContext::new(self.db(), typevars, GenericContextOrigin::from(origin))
-        })
+        typevars.map(|typevars| GenericContext::new(self.db(), typevars))
     }
 
     fn infer_slice_expression(&mut self, slice: &ast::ExprSlice) -> Type<'db> {
@@ -8565,8 +8627,6 @@ impl<'db> TypeInferenceBuilder<'db> {
                     CallableType::unknown(db)
                 };
 
-                let callable_type = Type::Callable(callable_type);
-
                 // `Signature` / `Parameters` are not a `Type` variant, so we're storing
                 // the outer callable type on these expressions instead.
                 self.store_expression_type(arguments_slice, callable_type);
@@ -8599,11 +8659,16 @@ impl<'db> TypeInferenceBuilder<'db> {
                     element => Either::Right(std::iter::once(element)),
                 };
 
-                elements
+                let ty = elements
                     .fold(IntersectionBuilder::new(db), |builder, element| {
                         builder.add_positive(self.infer_type_expression(element))
                     })
-                    .build()
+                    .build();
+
+                if matches!(arguments_slice, ast::Expr::Tuple(_)) {
+                    self.store_expression_type(arguments_slice, ty);
+                }
+                ty
             }
             KnownInstanceType::TypeOf => match arguments_slice {
                 ast::Expr::Tuple(_) => {
@@ -8633,20 +8698,20 @@ impl<'db> TypeInferenceBuilder<'db> {
                 }
                 _ => {
                     let argument_type = self.infer_expression(arguments_slice);
-                    let signatures = argument_type.signatures(db);
+                    let bindings = argument_type.bindings(db);
 
-                    // SAFETY: This is enforced by the constructor methods on `Signatures` even in
+                    // SAFETY: This is enforced by the constructor methods on `Bindings` even in
                     // the case of a non-callable union.
-                    let callable_signature = signatures
-                        .iter()
+                    let callable_binding = bindings
+                        .into_iter()
                         .next()
-                        .expect("`Signatures` should have at least one `CallableSignature`");
+                        .expect("`Bindings` should have at least one `CallableBinding`");
 
-                    let mut signature_iter = callable_signature.iter().map(|signature| {
+                    let mut signature_iter = callable_binding.into_iter().map(|binding| {
                         if argument_type.is_bound_method() {
-                            signature.bind_self()
+                            binding.signature.bind_self()
                         } else {
-                            signature.clone()
+                            binding.signature.clone()
                         }
                     });
 
@@ -8666,10 +8731,10 @@ impl<'db> TypeInferenceBuilder<'db> {
                         return Type::unknown();
                     };
 
-                    Type::Callable(CallableType::from_overloads(
-                        db,
+                    let signature = CallableSignature::from_overloads(
                         std::iter::once(signature).chain(signature_iter),
-                    ))
+                    );
+                    Type::Callable(CallableType::new(db, signature, false))
                 }
             },
 

@@ -1,8 +1,7 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.3
 Name: launchdarkly-eventsource
-Version: 1.2.2
+Version: 1.2.4
 Summary: LaunchDarkly SSE Client
-Home-page: https://docs.launchdarkly.com/sdk/server-side/python
 License: Apache-2.0
 Author: LaunchDarkly
 Author-email: dev@launchdarkly.com
@@ -21,6 +20,7 @@ Classifier: Topic :: Software Development
 Classifier: Topic :: Software Development :: Libraries
 Requires-Dist: urllib3 (>=1.26.0,<3)
 Project-URL: Documentation, https://launchdarkly-python-sdk.readthedocs.io/en/latest/
+Project-URL: Homepage, https://docs.launchdarkly.com/sdk/server-side/python
 Project-URL: Repository, https://github.com/launchdarkly/python-eventsource
 Description-Content-Type: text/markdown
 

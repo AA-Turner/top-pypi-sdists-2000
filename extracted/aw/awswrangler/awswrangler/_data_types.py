@@ -51,7 +51,7 @@ def pyarrow2athena(  # noqa: PLR0911,PLR0912
         return pyarrow2athena(dtype=dtype.value_type, ignore_null=ignore_null)
     if pa.types.is_decimal(dtype):
         return f"decimal({dtype.precision},{dtype.scale})"
-    if pa.types.is_list(dtype):
+    if pa.types.is_list(dtype) or pa.types.is_large_list(dtype):
         return f"array<{pyarrow2athena(dtype=dtype.value_type, ignore_null=ignore_null)}>"
     if pa.types.is_struct(dtype):
         return (
@@ -100,7 +100,7 @@ def pyarrow2redshift(  # noqa: PLR0911,PLR0912
         return f"DECIMAL({dtype.precision},{dtype.scale})"
     if pa.types.is_dictionary(dtype):
         return pyarrow2redshift(dtype=dtype.value_type, string_type=string_type)
-    if pa.types.is_list(dtype) or pa.types.is_struct(dtype) or pa.types.is_map(dtype):
+    if pa.types.is_list(dtype) or pa.types.is_struct(dtype) or pa.types.is_map(dtype) or pa.types.is_large_list(dtype):
         return "SUPER"
     raise exceptions.UnsupportedType(f"Unsupported Redshift type: {dtype}")
 
@@ -213,7 +213,7 @@ def pyarrow2postgresql(  # noqa: PLR0911
         return pyarrow2postgresql(dtype=dtype.value_type, string_type=string_type)
     if pa.types.is_binary(dtype):
         return "BYTEA"
-    if pa.types.is_list(dtype):
+    if pa.types.is_list(dtype) or pa.types.is_large_list(dtype):
         return pyarrow2postgresql(dtype=dtype.value_type, string_type=string_type) + "[]"
     raise exceptions.UnsupportedType(f"Unsupported PostgreSQL type: {dtype}")
 
@@ -309,10 +309,10 @@ def _split_map(s: str) -> list[str]:
 
 def athena2pyarrow(dtype: str, df_type: str | None = None) -> pa.DataType:  # noqa: PLR0911,PLR0912
     """Athena to PyArrow data types conversion."""
-    dtype = dtype.strip()
+    dtype = dtype.strip().lower()
     if dtype.startswith(("array", "struct", "map")):
         orig_dtype: str = dtype
-    dtype = dtype.lower().replace(" ", "")
+    dtype = dtype.replace(" ", "")
     if dtype == "tinyint":
         return pa.int8()
     if dtype == "smallint":

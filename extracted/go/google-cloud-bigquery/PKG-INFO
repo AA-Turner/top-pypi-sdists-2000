@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: google-cloud-bigquery
-Version: 3.33.0
+Version: 3.34.0
 Summary: Google BigQuery API client library
 Author-email: Google LLC <googleapis-packages@google.com>
 License: Apache 2.0

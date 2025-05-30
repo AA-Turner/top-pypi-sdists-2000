@@ -118,22 +118,6 @@ def _io_manager_needs_replacement(job: JobDefinition, resource_defs: Mapping[str
     )
 
 
-def _jobs_which_will_have_io_manager_replaced(
-    jobs: Optional[Iterable[Union[JobDefinition, UnresolvedAssetJobDefinition]]],
-    resource_defs: Mapping[str, Any],
-) -> list[Union[JobDefinition, UnresolvedAssetJobDefinition]]:
-    """Returns whether any jobs will have their I/O manager replaced by an `io_manager` override from
-    the top-level `resource_defs` provided to `Definitions` in 1.3. We will warn users if this is
-    the case.
-    """
-    jobs = jobs or []
-    return [
-        job
-        for job in jobs
-        if isinstance(job, JobDefinition) and _io_manager_needs_replacement(job, resource_defs)
-    ]
-
-
 def _attach_resources_to_jobs_and_instigator_jobs(
     jobs: Optional[Iterable[Union[JobDefinition, UnresolvedAssetJobDefinition]]],
     schedules: Optional[
@@ -769,6 +753,18 @@ class Definitions(IHaveNew):
                 )
 
         """
+        return self.map_asset_specs_inner(
+            func=func,
+            selection=selection,
+            ignore_non_spec_asset_types=False,
+        )
+
+    def map_asset_specs_inner(
+        self,
+        func: Callable[[AssetSpec], AssetSpec],
+        selection: Optional[CoercibleToAssetSelection],
+        ignore_non_spec_asset_types: bool,
+    ) -> "Definitions":
         target_keys = None
         if selection:
             if isinstance(selection, str):
@@ -779,7 +775,7 @@ class Definitions(IHaveNew):
         non_spec_asset_types = {
             type(d) for d in self.assets or [] if not isinstance(d, (AssetsDefinition, AssetSpec))
         }
-        if non_spec_asset_types:
+        if non_spec_asset_types and not ignore_non_spec_asset_types:
             raise DagsterInvariantViolationError(
                 "Can only map over AssetSpec or AssetsDefinition objects. "
                 "Received objects of types: "
@@ -884,6 +880,9 @@ class Definitions(IHaveNew):
             run_id=run_id,
             asset_selection=frozenset(asset_selection),
         )
+
+    def with_resources(self, resources: Optional[Mapping[str, Any]]) -> "Definitions":
+        return Definitions.merge(self, Definitions(resources=resources)) if resources else self
 
 
 def get_job_from_defs(

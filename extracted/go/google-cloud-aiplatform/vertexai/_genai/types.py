@@ -18,6 +18,7 @@
 import logging
 from typing import Any, Optional, Union
 from google.genai import _common
+from google.genai import types as genai_types
 from pydantic import Field
 from typing_extensions import TypedDict
 
@@ -1803,6 +1804,25 @@ EvaluateInstancesResponseOrDict = Union[
 ]
 
 
+class EvalCase(_common.BaseModel):
+    """A comprehensive representation of a GenAI interaction for evaluation."""
+
+    prompt: Optional[genai_types.Content] = Field(
+        default=None,
+        description="""The most recent user message (current input).""",
+    )
+
+
+class EvalCaseDict(TypedDict, total=False):
+    """A comprehensive representation of a GenAI interaction for evaluation."""
+
+    prompt: Optional[genai_types.Content]
+    """The most recent user message (current input)."""
+
+
+EvalCaseOrDict = Union[EvalCase, EvalCaseDict]
+
+
 class BigQuerySource(_common.BaseModel):
     """The BigQuery location for the input content."""
 
@@ -1844,6 +1864,9 @@ GcsSourceOrDict = Union[GcsSource, GcsSourceDict]
 class EvaluationDataset(_common.BaseModel):
     """The dataset used for evaluation."""
 
+    eval_cases: Optional[list[EvalCase]] = Field(
+        default=None, description="""The evaluation cases to be evaluated."""
+    )
     bigquery_source: Optional[BigQuerySource] = Field(
         default=None, description="""BigQuery source holds the dataset."""
     )
@@ -1855,6 +1878,9 @@ class EvaluationDataset(_common.BaseModel):
 
 class EvaluationDatasetDict(TypedDict, total=False):
     """The dataset used for evaluation."""
+
+    eval_cases: Optional[list[EvalCaseDict]]
+    """The evaluation cases to be evaluated."""
 
     bigquery_source: Optional[BigQuerySourceDict]
     """BigQuery source holds the dataset."""
@@ -2082,6 +2108,48 @@ class EvaluateDatasetOperationDict(TypedDict, total=False):
 EvaluateDatasetOperationOrDict = Union[
     EvaluateDatasetOperation, EvaluateDatasetOperationDict
 ]
+
+
+class PromptTemplate(_common.BaseModel):
+    """A prompt template for creating prompts with variables."""
+
+    text: Optional[str] = Field(default=None, description="""""")
+
+
+class PromptTemplateDict(TypedDict, total=False):
+    """A prompt template for creating prompts with variables."""
+
+    text: Optional[str]
+    """"""
+
+
+PromptTemplateOrDict = Union[PromptTemplate, PromptTemplateDict]
+
+
+class EvalRunInferenceConfig(_common.BaseModel):
+    """Optional parameters for inference."""
+
+    dest: Optional[str] = Field(default=None, description="""""")
+    prompt_template: Optional[str] = Field(default=None, description="""""")
+    generate_content_config: Optional[genai_types.GenerateContentConfig] = Field(
+        default=None, description=""""""
+    )
+
+
+class EvalRunInferenceConfigDict(TypedDict, total=False):
+    """Optional parameters for inference."""
+
+    dest: Optional[str]
+    """"""
+
+    prompt_template: Optional[str]
+    """"""
+
+    generate_content_config: Optional[genai_types.GenerateContentConfig]
+    """"""
+
+
+EvalRunInferenceConfigOrDict = Union[EvalRunInferenceConfig, EvalRunInferenceConfigDict]
 
 
 class EvalDataset(_common.BaseModel):

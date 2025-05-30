@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: mypy
-Version: 1.15.0
+Version: 1.16.0
 Summary: Optional static typing for Python
 Author-email: Jukka Lehtosalo <jukka.lehtosalo@iki.fi>
 License: MIT
@@ -26,6 +26,7 @@ Description-Content-Type: text/x-rst
 License-File: LICENSE
 Requires-Dist: typing_extensions>=4.6.0
 Requires-Dist: mypy_extensions>=1.0.0
+Requires-Dist: pathspec>=0.9.0
 Requires-Dist: tomli>=1.1.0; python_version < "3.11"
 Provides-Extra: dmypy
 Requires-Dist: psutil>=4.0; extra == "dmypy"
@@ -38,6 +39,7 @@ Provides-Extra: install-types
 Requires-Dist: pip; extra == "install-types"
 Provides-Extra: faster-cache
 Requires-Dist: orjson; extra == "faster-cache"
+Dynamic: license-file
 
 Mypy -- Optional Static Typing for Python
 =========================================

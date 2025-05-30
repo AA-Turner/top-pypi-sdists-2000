@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "launchdarkly-server-sdk"
-version = "9.11.0"
+version = "9.11.1"
 description = "LaunchDarkly SDK for Python"
 authors = ["LaunchDarkly <dev@launchdarkly.com>"]
 license = "Apache-2.0"
@@ -33,7 +33,7 @@ expiringdict = ">=1.1.4"
 pyRFC3339 = ">=1.0"
 semver = ">=2.10.2"
 urllib3 = ">=1.26.0,<3"
-launchdarkly-eventsource = ">=1.1.0,<2.0.0"
+launchdarkly-eventsource = ">=1.2.4,<2.0.0"
 
 redis = { version = ">=2.10.5", optional = true }
 python-consul = { version = ">=1.0.1", optional = true }

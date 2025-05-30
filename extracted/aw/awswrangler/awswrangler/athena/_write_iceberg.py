@@ -309,7 +309,7 @@ def _merge_iceberg(
     if merge_cols:
         if merge_condition == "update":
             match_condition = f"""WHEN MATCHED THEN
-                UPDATE SET {', '.join([f'"{x}" = source."{x}"' for x in df.columns])}"""
+                UPDATE SET {", ".join([f'"{x}" = source."{x}"' for x in df.columns])}"""
         else:
             match_condition = ""
 
@@ -321,16 +321,16 @@ def _merge_iceberg(
         sql_statement = f"""
             MERGE INTO "{database}"."{table}" target
             USING "{database}"."{source_table}" source
-            ON {' AND '.join(merge_conditions)}
+            ON {" AND ".join(merge_conditions)}
             {match_condition}
             WHEN NOT MATCHED THEN
-                INSERT ({', '.join([f'"{x}"' for x in df.columns])})
-                VALUES ({', '.join([f'source."{x}"' for x in df.columns])})
+                INSERT ({", ".join([f'"{x}"' for x in df.columns])})
+                VALUES ({", ".join([f'source."{x}"' for x in df.columns])})
         """
     else:
         sql_statement = f"""
-        INSERT INTO "{database}"."{table}" ({', '.join([f'"{x}"' for x in df.columns])})
-        SELECT {', '.join([f'"{x}"' for x in df.columns])}
+        INSERT INTO "{database}"."{table}" ({", ".join([f'"{x}"' for x in df.columns])})
+        SELECT {", ".join([f'"{x}"' for x in df.columns])}
           FROM "{database}"."{source_table}"
         """
 
@@ -352,7 +352,7 @@ def _merge_iceberg(
 @_utils.validate_distributed_kwargs(
     unsupported_kwargs=["boto3_session", "s3_additional_kwargs"],
 )
-def to_iceberg(
+def to_iceberg(  # noqa: PLR0913
     df: pd.DataFrame,
     database: str,
     table: str,
@@ -372,6 +372,7 @@ def to_iceberg(
     kms_key: str | None = None,
     boto3_session: boto3.Session | None = None,
     s3_additional_kwargs: dict[str, Any] | None = None,
+    pyarrow_additional_kwargs: dict[str, Any] | None = None,
     additional_table_properties: dict[str, Any] | None = None,
     dtype: dict[str, str] | None = None,
     catalog_id: str | None = None,
@@ -429,6 +430,10 @@ def to_iceberg(
         For SSE-KMS, this is the KMS key ARN or ID.
     boto3_session
         The default boto3 session will be used if **boto3_session** receive ``None``.
+    pyarrow_additional_kwargs
+        Additional parameters forwarded to pyarrow.
+        e.g. pyarrow_additional_kwargs={'coerce_timestamps': 'ns', 'use_deprecated_int96_timestamps': False,
+        'allow_truncated_timestamps'=False}
     s3_additional_kwargs
         Forwarded to botocore requests.
         e.g. s3_additional_kwargs={'RequestPayer': 'requester'}
@@ -607,6 +612,7 @@ def to_iceberg(
             table=temp_table,
             boto3_session=boto3_session,
             s3_additional_kwargs=s3_additional_kwargs,
+            pyarrow_additional_kwargs=pyarrow_additional_kwargs,
             dtype=dtype,
             catalog_id=catalog_id,
             glue_table_settings=glue_table_settings,
@@ -661,6 +667,7 @@ def delete_from_iceberg_table(
     workgroup: str = "primary",
     encryption: str | None = None,
     kms_key: str | None = None,
+    dtype: dict[str, str] | None = None,
     boto3_session: boto3.Session | None = None,
     s3_additional_kwargs: dict[str, Any] | None = None,
     catalog_id: str | None = None,
@@ -696,6 +703,10 @@ def delete_from_iceberg_table(
         Valid values: [``None``, ``"SSE_S3"``, ``"SSE_KMS"``]. Notice: ``"CSE_KMS"`` is not supported.
     kms_key
         For SSE-KMS, this is the KMS key ARN or ID.
+    dtype
+        Dictionary of columns names and Athena/Glue types to be casted.
+        Useful when you have columns with undetermined or mixed data types.
+        (e.g. {'col name': 'bigint', 'col2 name': 'int'})
     boto3_session
         The default boto3 session will be used if **boto3_session** receive ``None``.
     s3_additional_kwargs
@@ -757,13 +768,14 @@ def delete_from_iceberg_table(
             boto3_session=boto3_session,
             s3_additional_kwargs=s3_additional_kwargs,
             catalog_id=catalog_id,
+            dtype=dtype,
             index=False,
         )
 
         sql_statement = f"""
             MERGE INTO "{database}"."{table}" target
             USING "{database}"."{temp_table}" source
-            ON {' AND '.join([f'target."{x}" = source."{x}"' for x in merge_cols])}
+            ON {" AND ".join([f'target."{x}" = source."{x}"' for x in merge_cols])}
             WHEN MATCHED THEN
                 DELETE
         """

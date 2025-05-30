@@ -1,6 +1,12 @@
 # PuLP : Python LP Modeler
 # Version 2.4.1
+import os
+import subprocess
 from math import inf
+from typing import List, Optional
+
+from .. import constants
+from .core import LpSolver, LpSolver_CMD, PulpSolverError
 
 # Copyright (c) 2002-2005, Jean-Sebastien Roy (js@jeannot.org)
 # Modifications Copyright (c) 2007- Stuart Anthony Mitchell (s.mitchell@auckland.ac.nz)
@@ -28,13 +34,6 @@ from math import inf
 # Modified by Sam Mathew (@samiit on Github)
 # Users would need to install HiGHS on their machine and provide the path to the executable. Please look at this thread: https://github.com/ERGO-Code/HiGHS/issues/527#issuecomment-894852288
 # More instructions on: https://www.highs.dev
-
-from typing import List
-
-from .core import LpSolver, LpSolver_CMD, PulpSolverError
-import subprocess
-import os
-from .. import constants
 
 
 class HiGHS_CMD(LpSolver_CMD):
@@ -104,7 +103,7 @@ class HiGHS_CMD(LpSolver_CMD):
         )
         lp.writeMPS(tmpMps, with_objsense=True)
 
-        file_options: List[str] = []
+        file_options: List[str] = []  # type: ignore[annotation-unchecked]
         file_options.append(f"solution_file={tmpSol}")
         file_options.append("write_solution_to_file=true")
         file_options.append(f"write_solution_style={HiGHS_CMD.SOLUTION_STYLE}")
@@ -122,7 +121,7 @@ class HiGHS_CMD(LpSolver_CMD):
             highs_log_file = tmpLog
         file_options.append(f"log_file={highs_log_file}")
 
-        command: List[str] = []
+        command: List[str] = []  # type: ignore[annotation-unchecked]
         command.append(self.path)
         command.append(tmpMps)
         command.append(f"--options_file={tmpOptions}")
@@ -272,13 +271,17 @@ class HiGHS_CMD(LpSolver_CMD):
         return values
 
 
+highspy = None
+
+
 class HiGHS(LpSolver):
     name = "HiGHS"
 
     try:
         global highspy
-        import highspy
+        import highspy  # type: ignore[import-not-found, import-untyped, unused-ignore]
     except:
+        hscb = None
 
         def available(self):
             """True if the solver is available"""
@@ -289,13 +292,7 @@ class HiGHS(LpSolver):
             raise PulpSolverError("HiGHS: Not Available")
 
     else:
-        # Note(maciej): It was surprising to me that higshpy wasn't logging out of the box,
-        #  even with the different logging options set. This callback seems to work, but there
-        #  are probably better ways of doing this ¯\_(ツ)_/¯
-        DEFAULT_CALLBACK = lambda logType, logMsg, callbackValue: print(
-            f"[{logType.name}] {logMsg}"
-        )
-        DEFAULT_CALLBACK_VALUE = ""
+        hscb = highspy.cb  # type: ignore[attr-defined, unused-ignore]
 
         def __init__(
             self,
@@ -306,21 +303,23 @@ class HiGHS(LpSolver):
             gapRel=None,
             threads=None,
             timeLimit=None,
+            callbacksToActivate: Optional[List[highspy.cb.HighsCallbackType]] = None,
             **solverParams,
         ):
             """
             :param bool mip: if False, assume LP even if integer variables
             :param bool msg: if False, no log is shown
-            :param tuple callbackTuple: Tuple of log callback function (see DEFAULT_CALLBACK above for definition)
-                and callbackValue (tag embedded in every callback)
+            :param tuple callbackTuple: Tuple of callback function and callbackValue (see tests for an example)
             :param float gapRel: relative gap tolerance for the solver to stop (in fraction)
             :param float gapAbs: absolute gap tolerance for the solver to stop
             :param int threads: sets the maximum number of threads
             :param float timeLimit: maximum time for solver (in seconds)
             :param dict solverParams: list of named options to pass directly to the HiGHS solver
+            :param callbacksToActivate: list of callback types to start
             """
             super().__init__(mip=mip, msg=msg, timeLimit=timeLimit, **solverParams)
             self.callbackTuple = callbackTuple
+            self.callbacksToActivate = callbacksToActivate
             self.gapAbs = gapAbs
             self.gapRel = gapRel
             self.threads = threads
@@ -334,12 +333,12 @@ class HiGHS(LpSolver):
         def createAndConfigureSolver(self, lp):
             lp.solverModel = highspy.Highs()
 
-            if self.msg and self.callbackTuple:
-                callbackTuple = self.callbackTuple or (
-                    HiGHS.DEFAULT_CALLBACK,
-                    HiGHS.DEFAULT_CALLBACK_VALUE,
-                )
-                lp.solverModel.setLogCallback(*callbackTuple)
+            if self.callbackTuple:
+                lp.solverModel.setCallback(*self.callbackTuple)
+
+            if self.callbacksToActivate:
+                for cb_type in self.callbacksToActivate:
+                    lp.solverModel.startCallback(cb_type)
 
             if not self.msg:
                 lp.solverModel.setOptionValue("output_flag", False)
@@ -466,6 +465,10 @@ class HiGHS(LpSolver):
                     constants.LpStatusOptimal,
                     constants.LpSolutionIntegerFeasible,
                 ),
+                HighsModelStatus.kInterrupt: (
+                    constants.LpStatusOptimal,
+                    constants.LpSolutionIntegerFeasible,
+                ),
                 HighsModelStatus.kTimeLimit: (
                     constants.LpStatusOptimal,
                     constants.LpSolutionIntegerFeasible,
@@ -513,7 +516,7 @@ class HiGHS(LpSolver):
             else:
                 return status_dict[status]
 
-        def actualSolve(self, lp):
+        def actualSolve(self, lp):  # type: ignore[misc]
             self.createAndConfigureSolver(lp)
             self.buildSolverModel(lp)
             self.callSolver(lp)

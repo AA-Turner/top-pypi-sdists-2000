@@ -1,6 +1,6 @@
 [project]
 name = "PuLP"
-version = "3.1.1"
+version = "3.2.1"
 description = "PuLP is an LP modeler written in python. PuLP can generate MPS or LP files and call GLPK, COIN CLP/CBC, CPLEX, and GUROBI to solve linear problems."
 authors = [
     {name = 'J.S. Roy'},
@@ -9,8 +9,8 @@ authors = [
 ]
 maintainers= [{name= "Franco Peschiera", email= "pchtsp@gmail.com"}]
 dependencies = []
-requires-python = ">=3.7"
-readme = "README.md"
+requires-python = ">=3.9"
+readme = "README.rst"
 license = {text = "MIT"}
 classifiers=[
     "Development Status :: 5 - Production/Stable",
@@ -26,18 +26,11 @@ keywords=["Optimization", "Linear Programming", "Operations Research"]
 
 [tool.mypy]
 exclude = [
-    "doc/",
-    "examples/",
-    "pulp/__init__.py",
-    "pulp/apis/",
-    "pulp/mps_lp.py",
-    "pulp/pulp.py",
     "pulp/solverdir/",
-    "pulp/tests/",
-    "pulp/utilities.py",
     ".venv/.*",
     "build/",
 ]
+warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
 module = [

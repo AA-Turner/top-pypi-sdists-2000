@@ -7,15 +7,18 @@ import os
 import re
 import tempfile
 import unittest
+from decimal import Decimal
+from typing import Union, Optional
+
 
 from pulp import (
+    FixedElasticSubProblem,
     LpAffineExpression,
     LpConstraint,
     LpConstraintVar,
     LpFractionConstraint,
     LpProblem,
     LpVariable,
-    FixedElasticSubProblem,
 )
 from pulp import constants as const
 from pulp import lpSum
@@ -25,7 +28,7 @@ from pulp.tests.bin_packing_problem import create_bin_packing_problem
 from pulp.utilities import makeDict
 
 try:
-    import gurobipy as gp
+    import gurobipy as gp  # type: ignore
 except ImportError:
     gp = None
 
@@ -94,15 +97,19 @@ def dumpTestProblem(prob):
 
 class BaseSolverTest:
     class PuLPTest(unittest.TestCase):
-        solveInst = None
+        solveInst: Optional[Type[LpSolver]] = None
 
         def setUp(self):
-            self.solver = self.solveInst(msg=False)
+            if self.solveInst == CUOPT:
+                # cuOpt requires a user provided time limit for MIP problems
+                self.solver = self.solveInst(msg=False, timeLimit=120)
+            else:
+                self.solver = self.solveInst(msg=False)
             if not self.solver.available():
                 self.skipTest(f"solver {self.solveInst.name} not available")
 
         def tearDown(self):
-            for ext in ["mst", "log", "lp", "mps", "sol"]:
+            for ext in ["mst", "log", "lp", "mps", "sol", "out"]:
                 filename = f"{self._testMethodName}.{ext}"
                 try:
                     os.remove(filename)
@@ -806,7 +813,7 @@ class BaseSolverTest:
                 prob, self.solver, [const.LpStatusOptimal], {x: 4, y: -1, z: 6, w: -1.0}
             )
 
-        def test_elastic_constraints_penalty_unbounded(self):
+        def test_elastic_constraints_penalty_unbounded(self) -> None:
             """
             Test the ability to use Elastic constraints (penalty unbounded)
             """
@@ -1521,7 +1528,7 @@ class BaseSolverTest:
             x = LpVariable("x")
             self.assertRaises(PulpError, lambda: x * a)
 
-        def test_constraint_copy(self):
+        def test_constraint_copy(self) -> None:
             """
             LpConstraint.copy()
             """
@@ -1544,7 +1551,7 @@ class BaseSolverTest:
             self.assertEqual(str(c), str(c2))
             self.assertEqual(repr(c), repr(c2))
 
-        def test_constraint_add(self):
+        def test_constraint_add(self) -> None:
             """
             __add__ operator on LpConstraint
             """
@@ -1573,7 +1580,7 @@ class BaseSolverTest:
             self.assertEqual(str(c1_variable), str(2 * x + y <= 5))
             self.assertEqual(repr(c1_variable), repr(2 * x + y <= 5))
 
-            expr: LpAffineExpression = x + 1
+            expr = x + 1
             self.assertIsInstance(expr, LpAffineExpression)
             self.assertEqual(expr.constant, 1)
             self.assertEqual(str(expr), "x + 1")
@@ -1591,15 +1598,15 @@ class BaseSolverTest:
             self.assertEqual(str(c1_constraint), str(2 * x + y <= 6))
             self.assertEqual(repr(c1_constraint), repr(2 * x + y <= 6))
 
-            constraint: LpConstraint = x + 1 <= 2
+            constraint = x + 1 <= 2
             self.assertIsInstance(constraint, LpConstraint)
             self.assertEqual(constraint.constant, -1)
             self.assertEqual(constraint.expr.constant, 1)
-            c1_constraint: LpConstraint = c1 + constraint
+            c1_constraint = c1 + constraint
             self.assertEqual(str(c1_constraint), str(2 * x + y <= 6))
             self.assertEqual(repr(c1_constraint), repr(2 * x + y <= 6))
 
-        def test_constraint_neg(self):
+        def test_constraint_neg(self) -> None:
             """
             __neg__ operator on LpConstraint
             """
@@ -1616,7 +1623,7 @@ class BaseSolverTest:
             self.assertEqual(str(c1_neg), str(-x + -y <= -5))
             self.assertEqual(repr(c1_neg), repr(-x + -y <= -5))
 
-        def test_constraint_sub(self):
+        def test_constraint_sub(self) -> None:
             """
             __sub__ operator on LpConstraint
             """
@@ -1653,13 +1660,13 @@ class BaseSolverTest:
             self.assertEqual(str(c1_constraint), "0*x + y <= 4")
             self.assertEqual(repr(c1_constraint), "0*x + 1*y + -4 <= 0")
 
-            constraint: LpConstraint = x + 1 <= 2
+            constraint = x + 1 <= 2
             self.assertIsInstance(constraint, LpConstraint)
-            c1_constraint: LpConstraint = c1 - constraint
+            c1_constraint = c1 - constraint
             self.assertEqual(str(c1_constraint), "0*x + y <= 4")
             self.assertEqual(repr(c1_constraint), "0*x + 1*y + -4 <= 0")
 
-        def test_constraint_mul(self):
+        def test_constraint_mul(self) -> None:
             """
             __mul__ operator on LpConstraint
             """
@@ -1698,7 +1705,7 @@ class BaseSolverTest:
             with self.assertRaises(TypeError):
                 c2 * (x + 1)
 
-        def test_constraint_div(self):
+        def test_constraint_div(self) -> None:
             """
             __div__ operator on LpConstraint
             """
@@ -1737,7 +1744,18 @@ class BaseSolverTest:
             with self.assertRaises(TypeError):
                 c2 / (x + 1)
 
-        def test_regression_794(self):
+        def test_variable_div(self):
+            """
+            __div__ operator on LpVariable
+            """
+            x = LpVariable("x")
+            x_div = x / 2
+            self.assertIsInstance(x_div, LpAffineExpression)
+            self.assertEqual(x_div[x], 0.5)
+
+            self.assertEqual(str(x_div), "0.5*x")
+
+        def test_regression_794(self) -> None:
             # See: https://github.com/coin-or/pulp/issues/794#issuecomment-2671682768
 
             initial_stock = 8  # s_0
@@ -1750,7 +1768,7 @@ class BaseSolverTest:
                 variable = LpVariable(f"x_{t}", cat="Integer", lowBound=0)
                 supply.append(variable)
 
-            stock: list[LpVariable | int] = [initial_stock]  # stock[t] = s_t
+            stock: list[Union[LpVariable, int]] = [initial_stock]  # stock[t] = s_t
             for t in range(1, max_periods + 1):
                 variable = LpVariable(f"s_{t}", cat="Integer", lowBound=0)
                 stock.append(variable)
@@ -1791,6 +1809,31 @@ class BaseSolverTest:
             c = LpConstraint(e, name="Test2")
             self.assertEqual(c.name, "Test2")
             self.assertEqual(c.expr.name, "Test1")
+
+        def test_decimal_815_addinplace(self):
+            # See: https://github.com/coin-or/pulp/issues/815
+            m1 = 3
+            m2 = Decimal("8.1")
+            extra = 5
+
+            x = LpVariable("x", lowBound=0, upBound=50, cat=LpContinuous)
+            y = LpVariable("y", lowBound=0, upBound=Decimal("32.24"), cat=LpContinuous)
+            include_extra = LpVariable("include_extra1", cat=LpBinary)
+
+            expression = LpAffineExpression()
+            expression += x * m1 + include_extra * extra - y
+            self.assertEqual(str(expression), "5*include_extra1 + 3*x - y")
+
+            with self.assertRaises(TypeError):
+                second_expression = LpAffineExpression()
+                second_expression += x * m2 - 6 - y
+
+            second_expression = LpAffineExpression(constant=Decimal("0"))
+            second_expression += x * m2 - 6 - y
+            self.assertEqual(str(second_expression), "8.1*x - y - 6.0")
+
+            second_expression_2 = x * m2 - 6 - y
+            self.assertEqual(str(second_expression_2), "8.1*x - y - 6.0")
 
 
 class PULP_CBC_CMDTest(BaseSolverTest.PuLPTest):
@@ -2017,6 +2060,100 @@ class COINMP_DLLTest(BaseSolverTest.PuLPTest):
 class GLPK_CMDTest(BaseSolverTest.PuLPTest):
     solveInst = GLPK_CMD
 
+    def test_issue814_rounding_mip(self):
+        """
+        Test there is no rounding issue for MIP problems as described in #814
+        """
+
+        # bounds and constraints are formatted as .12g
+        # see pulp.py asCplexLpVariable / asCplexLpConstraint methods
+        ub = 999999999999
+
+        assert int(format(ub, ".12g")) == ub
+        assert float(format(ub + 2, ".12g")) != float(ub + 2)
+
+        model = LpProblem("mip-814", LpMaximize)
+        Q = LpVariable("Q", cat="Integer", lowBound=0, upBound=ub)
+        model += Q
+        model += Q >= 0
+        model.solve(self.solver)
+        assert Q.value() == ub
+
+    def test_issue814_rounding_lp(self):
+        """
+        Test there is no rounding issue for LP (simplex method) problems as described in #814
+        """
+        ub = 999999999999.0
+        assert float(format(ub, ".12g")) == ub
+        assert float(format(ub + 0.1, ".12g")) != ub + 0.1
+
+        for simplex in ["primal", "dual"]:
+            model = LpProblem(f"lp-814-{simplex}", LpMaximize)
+            Q = LpVariable("Q", lowBound=0, upBound=ub)
+            model += Q
+            model += Q >= 0
+            self.solver.options.append("--" + simplex)
+            model.solve(self.solver)
+            self.solver.options = self.solver.options[:-1]
+            assert Q.value() == ub
+
+    def test_issue814_rounding_ipt(self):
+        """
+        Test there is no rounding issue for LP (interior point method) problems as described in #814
+        """
+        # this one is limited by GLPK int pt feasibility, not formatting
+        ub = 12345678999.0
+
+        model = LpProblem("ipt-814", LpMaximize)
+        Q = LpVariable("Q", lowBound=0, upBound=ub)
+        model += Q
+        model += Q >= 0
+        self.solver.options.append("--interior")
+        model.solve(self.solver)
+        self.solver.options = self.solver.options[:-1]
+        assert abs(Q.value() - ub) / ub < 1e-9
+
+    def test_decimal_815(self):
+        # See: https://github.com/coin-or/pulp/issues/815
+        # Will not run on other solvers due to how results are updated
+        m1 = 3
+        m2 = Decimal("8.1")
+        extra = 5
+
+        x = LpVariable("x", lowBound=0, upBound=50, cat=LpContinuous)
+        y = LpVariable("y", lowBound=0, upBound=Decimal("32.24"), cat=LpContinuous)
+        include_extra = LpVariable("include_extra1", cat=LpBinary)
+
+        prob = LpProblem("graph", LpMaximize)
+
+        prob += y
+
+        # y = 3x + 5 | y = 3x
+        e1 = x * m1 + include_extra * extra - y
+        c1 = e1 == 0
+        prob += c1
+
+        # y = 8.1x - 6
+        e2 = x * m2 - 6 - y
+        c2 = e2 == 0
+        prob += c2
+
+        # This generates two possible systems of equations,
+        # y = 3x + 5
+        # y = 8.1x - 6
+        # this intersects at ~(11/5, 58/5)
+
+        # OR
+        # y = 3x
+        # y = 8.1x-6
+        # this intersects at ~(6/5, 18/5)
+        pulpTestCheck(
+            prob,
+            self.solver,
+            [const.LpStatusOptimal],
+            {x: 2.15686, y: 11.4706},
+        )
+
 
 class GUROBITest(BaseSolverTest.PuLPTest):
     solveInst = GUROBI
@@ -2061,6 +2198,36 @@ class SCIP_PYTest(BaseSolverTest.PuLPTest):
 class HiGHS_PYTest(BaseSolverTest.PuLPTest):
     solveInst = HiGHS
 
+    def test_callback(self):
+        prob = create_bin_packing_problem(bins=40, seed=99)
+
+        # we pass a list as data to the tuple, so we can edit it.
+        # then we count the number of calls and stop the solving
+        # for more information on the callback, see: github.com/ERGO-Code/HiGHS @ examples/call_highs_from_python
+        def user_callback(
+            callback_type, message, data_out, data_in, user_callback_data
+        ):
+            #
+            if callback_type == HiGHS.hscb.HighsCallbackType.kCallbackMipInterrupt:
+                print(
+                    f"userInterruptCallback(type {callback_type}); "
+                    f"data {user_callback_data};"
+                    f"message: {message};"
+                    f"objective {data_out.objective_function_value:.4g};"
+                )
+                print(f"Dual bound = {data_out.mip_dual_bound:.4g}")
+                print(f"Primal bound = {data_out.mip_primal_bound:.4g}")
+                print(f"Gap = {data_out.mip_gap:.4g}")
+                if isinstance(user_callback_data, list):
+                    user_callback_data.append(1)
+                    data_in.user_interrupt = len(user_callback_data) > 5
+
+        solver = HiGHS(
+            callbackTuple=(user_callback, []),
+            callbacksToActivate=[HiGHS.hscb.HighsCallbackType.kCallbackMipInterrupt],
+        )
+        status = prob.solve(solver)
+
 
 class HiGHS_CMDTest(BaseSolverTest.PuLPTest):
     solveInst = HiGHS_CMD
@@ -2068,6 +2235,10 @@ class HiGHS_CMDTest(BaseSolverTest.PuLPTest):
 
 class COPTTest(BaseSolverTest.PuLPTest):
     solveInst = COPT
+
+
+class CUOPTTest(BaseSolverTest.PuLPTest):
+    solveInst = CUOPT
 
 
 class SASTest:

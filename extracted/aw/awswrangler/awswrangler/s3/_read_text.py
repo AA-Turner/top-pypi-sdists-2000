@@ -19,10 +19,10 @@ from awswrangler.s3._list import _path2list
 from awswrangler.s3._read import (
     _apply_partition_filter,
     _check_version_id,
+    _concat_union_categoricals,
     _get_num_output_blocks,
     _get_path_ignore_suffix,
     _get_path_root,
-    _union,
 )
 from awswrangler.s3._read_text_core import _read_text_file, _read_text_files_chunked
 from awswrangler.typing import RaySettings
@@ -70,7 +70,7 @@ def _read_text(
         itertools.repeat(s3_additional_kwargs),
         itertools.repeat(dataset),
     )
-    return _union(dfs=tables, ignore_index=ignore_index)
+    return _concat_union_categoricals(dfs=tables, ignore_index=ignore_index)
 
 
 def _read_text_format(
@@ -236,7 +236,7 @@ def read_csv(
         This function MUST return a bool, True to read the partition or False to ignore it.
         Ignored if `dataset=False`.
         E.g ``lambda x: True if x["year"] == "2020" and x["month"] == "1" else False``
-        https://aws-sdk-pandas.readthedocs.io/en/3.11.0/tutorials/023%20-%20Flexible%20Partitions%20Filter.html
+        https://aws-sdk-pandas.readthedocs.io/en/3.12.0/tutorials/023%20-%20Flexible%20Partitions%20Filter.html
     s3_additional_kwargs
         Forwarded to botocore requests.
     ray_args
@@ -397,7 +397,7 @@ def read_fwf(
         This function MUST return a bool, True to read the partition or False to ignore it.
         Ignored if `dataset=False`.
         E.g ``lambda x: True if x["year"] == "2020" and x["month"] == "1" else False``
-        https://aws-sdk-pandas.readthedocs.io/en/3.11.0/tutorials/023%20-%20Flexible%20Partitions%20Filter.html
+        https://aws-sdk-pandas.readthedocs.io/en/3.12.0/tutorials/023%20-%20Flexible%20Partitions%20Filter.html
     s3_additional_kwargs
         Forwarded to botocore requests.
     ray_args
@@ -565,7 +565,7 @@ def read_json(
         This function MUST return a bool, True to read the partition or False to ignore it.
         Ignored if `dataset=False`.
         E.g ``lambda x: True if x["year"] == "2020" and x["month"] == "1" else False``
-        https://aws-sdk-pandas.readthedocs.io/en/3.11.0/tutorials/023%20-%20Flexible%20Partitions%20Filter.html
+        https://aws-sdk-pandas.readthedocs.io/en/3.12.0/tutorials/023%20-%20Flexible%20Partitions%20Filter.html
     s3_additional_kwargs
         Forwarded to botocore requests.
     ray_args

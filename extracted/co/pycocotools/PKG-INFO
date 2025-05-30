@@ -1,13 +1,22 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: pycocotools
-Version: 2.0.8
+Version: 2.0.9
 Summary: Official APIs for the MS-COCO dataset
 Home-page: https://github.com/ppwwyyxx/cocoapi
 License: FreeBSD
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
-Requires-Dist: matplotlib>=2.1.0
 Requires-Dist: numpy
+Provides-Extra: all
+Requires-Dist: matplotlib>=2.1.0; extra == "all"
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 
 # pycocotools

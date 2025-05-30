@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sqlglot
-Version: 26.22.1
+Version: 26.23.0
 Summary: An easily customizable SQL parser and transpiler
 Author-email: Toby Mao <toby.mao@gmail.com>
 License: MIT License
@@ -54,7 +54,7 @@ Requires-Dist: types-pytz; extra == "dev"
 Requires-Dist: typing_extensions; extra == "dev"
 Requires-Dist: maturin<2.0,>=1.4; extra == "dev"
 Provides-Extra: rs
-Requires-Dist: sqlglotrs==0.4.2; extra == "rs"
+Requires-Dist: sqlglotrs==0.5.0; extra == "rs"
 Dynamic: license-file
 Dynamic: provides-extra
 
