@@ -23,6 +23,7 @@ from typing import (
     ClassVar,
     Dict,
     List,
+    Literal,
     Mapping,
     NewType,
     Optional,
@@ -39,7 +40,7 @@ import google.protobuf.duration_pb2
 import google.protobuf.json_format
 import google.protobuf.message
 import google.protobuf.symbol_database
-from typing_extensions import Literal
+import typing_extensions
 
 import temporalio.api.common.v1
 import temporalio.api.enums.v1
@@ -852,6 +853,12 @@ class DefaultFailureConverter(FailureConverter):
                 failure.application_failure_info.next_retry_delay.FromTimedelta(
                     error.next_retry_delay
                 )
+            if error.category:
+                failure.application_failure_info.category = (
+                    temporalio.api.enums.v1.ApplicationErrorCategory.ValueType(
+                        error.category
+                    )
+                )
         elif isinstance(error, temporalio.exceptions.TimeoutError):
             failure.timeout_failure_info.SetInParent()
             failure.timeout_failure_info.timeout_type = (
@@ -938,6 +945,9 @@ class DefaultFailureConverter(FailureConverter):
                 type=app_info.type or None,
                 non_retryable=app_info.non_retryable,
                 next_retry_delay=app_info.next_retry_delay.ToTimedelta(),
+                category=temporalio.exceptions.ApplicationErrorCategory(
+                    int(app_info.category)
+                ),
             )
         elif failure.HasField("timeout_failure_info"):
             timeout_info = failure.timeout_failure_info
@@ -1424,7 +1434,7 @@ def value_to_type(
     type_args: Tuple = getattr(hint, "__args__", ())
 
     # Literal
-    if origin is Literal:
+    if origin is Literal or origin is typing_extensions.Literal:
         if value not in type_args:
             raise TypeError(f"Value {value} not in literal values {type_args}")
         return value

@@ -40,7 +40,9 @@ pub mod coresdk {
         ENCODING_PAYLOAD_KEY, JSON_ENCODING_VAL,
         temporal::api::{
             common::v1::{Payload, Payloads, WorkflowExecution},
-            enums::v1::{TimeoutType, VersioningBehavior, WorkflowTaskFailedCause},
+            enums::v1::{
+                ApplicationErrorCategory, TimeoutType, VersioningBehavior, WorkflowTaskFailedCause,
+            },
             failure::v1::{
                 ActivityFailureInfo, ApplicationFailureInfo, Failure, TimeoutFailureInfo,
                 failure::FailureInfo,
@@ -67,21 +69,41 @@ pub mod coresdk {
         tonic::include_proto!("coresdk.activity_task");
 
         impl ActivityTask {
-            pub fn cancel_from_ids(task_token: Vec<u8>, reason: ActivityCancelReason) -> Self {
+            pub fn cancel_from_ids(
+                task_token: Vec<u8>,
+                reason: ActivityCancelReason,
+                details: ActivityCancellationDetails,
+            ) -> Self {
                 Self {
                     task_token,
                     variant: Some(activity_task::Variant::Cancel(Cancel {
                         reason: reason as i32,
+                        details: Some(details),
                     })),
                 }
             }
 
+            // Checks if both the primary reason or details have a timeout cancellation.
             pub fn is_timeout(&self) -> bool {
                 match &self.variant {
-                    Some(activity_task::Variant::Cancel(Cancel { reason })) => {
+                    Some(activity_task::Variant::Cancel(Cancel { reason, details })) => {
                         *reason == ActivityCancelReason::TimedOut as i32
+                            || details.as_ref().is_some_and(|d| d.is_timed_out)
                     }
                     _ => false,
+                }
+            }
+
+            pub fn primary_reason_to_cancellation_details(
+                reason: ActivityCancelReason,
+            ) -> ActivityCancellationDetails {
+                ActivityCancellationDetails {
+                    is_not_found: reason == ActivityCancelReason::NotFound,
+                    is_cancelled: reason == ActivityCancelReason::Cancelled,
+                    is_paused: reason == ActivityCancelReason::Paused,
+                    is_timed_out: reason == ActivityCancelReason::TimedOut,
+                    is_worker_shutdown: reason == ActivityCancelReason::WorkerShutdown,
+                    is_reset: reason == ActivityCancelReason::Reset,
                 }
             }
         }
@@ -626,8 +648,8 @@ pub mod coresdk {
                     workflow_activation_job::Variant::ResolveRequestCancelExternalWorkflow(_) => {
                         write!(f, "ResolveRequestCancelExternalWorkflow")
                     }
-                    workflow_activation_job::Variant::DoUpdate(_) => {
-                        write!(f, "DoUpdate")
+                    workflow_activation_job::Variant::DoUpdate(u) => {
+                        write!(f, "DoUpdate({})", u.id)
                     }
                     workflow_activation_job::Variant::ResolveNexusOperationStart(_) => {
                         write!(f, "ResolveNexusOperationStart")
@@ -1143,18 +1165,22 @@ pub mod coresdk {
 
         /// Returns true if the activation contains a complete workflow execution command
         pub fn has_complete_workflow_execution(&self) -> bool {
+            self.complete_workflow_execution_value().is_some()
+        }
+
+        /// Returns the completed execution result value, if any
+        pub fn complete_workflow_execution_value(&self) -> Option<&Payload> {
             if let Some(workflow_activation_completion::Status::Successful(s)) = &self.status {
-                return s.commands.iter().any(|wfc| {
-                    matches!(
-                        wfc,
-                        WorkflowCommand {
-                            variant: Some(workflow_command::Variant::CompleteWorkflowExecution(_)),
-                            ..
-                        },
-                    )
-                });
+                s.commands.iter().find_map(|wfc| match wfc {
+                    WorkflowCommand {
+                        variant: Some(workflow_command::Variant::CompleteWorkflowExecution(v)),
+                        ..
+                    } => v.result.as_ref(),
+                    _ => None,
+                })
+            } else {
+                None
             }
-            false
         }
 
         /// Returns true if the activation completion is a success with no commands
@@ -1345,6 +1371,12 @@ pub mod coresdk {
             } else {
                 None
             }
+        }
+
+        // Checks if a failure is an ApplicationFailure with Benign category.
+        pub fn is_benign_application_failure(&self) -> bool {
+            self.maybe_application_failure()
+                .is_some_and(|app_info| app_info.category() == ApplicationErrorCategory::Benign)
         }
     }
 
@@ -2191,6 +2223,8 @@ pub mod temporal {
                                 Attributes::NexusOperationTimedOutEventAttributes(a) => Some(a.scheduled_event_id),
                                 Attributes::NexusOperationCanceledEventAttributes(a) => Some(a.scheduled_event_id),
                                 Attributes::NexusOperationCancelRequestedEventAttributes(a) => Some(a.scheduled_event_id),
+                                Attributes::NexusOperationCancelRequestCompletedEventAttributes(a) => Some(a.scheduled_event_id),
+                                Attributes::NexusOperationCancelRequestFailedEventAttributes(a) => Some(a.scheduled_event_id),
                                 _ => None
                             }
                         })
@@ -2299,6 +2333,8 @@ pub mod temporal {
                             Attributes::NexusOperationTimedOutEventAttributes(_) => { EventType::NexusOperationTimedOut }
                             Attributes::NexusOperationCancelRequestedEventAttributes(_) => { EventType::NexusOperationCancelRequested }
                             Attributes::WorkflowExecutionOptionsUpdatedEventAttributes(_) => { EventType::WorkflowExecutionOptionsUpdated }
+                            Attributes::NexusOperationCancelRequestCompletedEventAttributes(_) => { EventType::NexusOperationCancelRequestCompleted }
+                            Attributes::NexusOperationCancelRequestFailedEventAttributes(_) => { EventType::NexusOperationCancelRequestFailed }
                         }
                     }
                 }
@@ -2334,6 +2370,11 @@ pub mod temporal {
         pub mod replication {
             pub mod v1 {
                 tonic::include_proto!("temporal.api.replication.v1");
+            }
+        }
+        pub mod rules {
+            pub mod v1 {
+                tonic::include_proto!("temporal.api.rules.v1");
             }
         }
         pub mod schedule {

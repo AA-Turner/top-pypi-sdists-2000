@@ -1591,7 +1591,7 @@ impl DeltaDataChecker {
             return Ok(());
         }
         let table = MemTable::try_new(record_batch.schema(), vec![vec![record_batch.clone()]])?;
-        let schema = table.schema();
+        table.schema();
         // Use a random table name to avoid clashes when running multiple parallel tasks, e.g. when using a partitioned table
         let table_name: String = uuid::Uuid::new_v4().to_string();
         self.ctx.register_table(&table_name, Arc::new(table))?;
@@ -1599,32 +1599,22 @@ impl DeltaDataChecker {
         let mut violations: Vec<String> = Vec::new();
 
         for check in checks {
-            let check_name = check.get_name();
-            if check_name.contains('.') {
+            if check.get_name().contains('.') {
                 return Err(DeltaTableError::Generic(
-                    "Support for nested columns is not supported.".to_string(),
+                    "delta constraints for nested columns are not supported at the moment."
+                        .to_string(),
                 ));
             }
 
             let field_to_select = if check.as_any().is::<Constraint>() {
                 "*"
             } else {
-                check_name
+                check.get_name()
             };
-
-            // Loop through schema to find the matching field. If the field has a whitespace, we
-            // need to backtick it, since the expression is an unquoted string
-            let mut expression = check.get_expression().to_string();
-            for field in schema.fields() {
-                if expression.contains(field.name()) {
-                    expression =
-                        expression.replace(field.name(), format!("`{}` ", field.name()).as_str());
-                    break;
-                }
-            }
             let sql = format!(
                 "SELECT {} FROM `{table_name}` WHERE NOT ({}) LIMIT 1",
-                field_to_select, expression
+                field_to_select,
+                check.get_expression()
             );
 
             let dfs: Vec<RecordBatch> = self.ctx.sql(&sql).await?.collect().await?;
@@ -2441,7 +2431,7 @@ mod tests {
         // Valid invariants return Ok(())
         let constraints = vec![
             Constraint::new("custom a", "a is not null"),
-            Constraint::new("custom_b", "b bop < 1000"),
+            Constraint::new("custom_b", "`b bop` < 1000"),
         ];
         assert!(DeltaDataChecker::new_with_constraints(constraints)
             .check_batch(&batch)
@@ -2451,7 +2441,7 @@ mod tests {
         // Violated invariants returns an error with list of violations
         let constraints = vec![
             Constraint::new("custom_a", "a is null"),
-            Constraint::new("custom_B", "b bop < 100"),
+            Constraint::new("custom_B", "\"b bop\" < 100"),
         ];
         let result = DeltaDataChecker::new_with_constraints(constraints)
             .check_batch(&batch)
@@ -2545,7 +2535,7 @@ mod tests {
             .with_partition_columns(["modified", "id"])
             .await
             .unwrap();
-        assert_eq!(table.version(), 0);
+        assert_eq!(table.version(), Some(0));
 
         let batch = RecordBatch::try_new(
             schema.clone(),

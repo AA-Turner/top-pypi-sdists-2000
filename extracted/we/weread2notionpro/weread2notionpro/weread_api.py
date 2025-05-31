@@ -156,6 +156,23 @@ class WeReadApi:
             if self.handle_errcode(errcode):
                 return self.get_review_list(bookId)
             raise Exception(f"get {bookId} review list failed {r.text}")
+        
+    def get_review_list2(self,bookId):
+        """获取笔记"""
+        params = dict(bookId=bookId, listType=11, mine=1, syncKey=0)
+        r = self.session.get(WEREAD_REVIEW_LIST_URL, params=params)
+        if r.ok:
+            reviews = r.json().get("reviews")
+            summary = list(filter(lambda x: x.get("review").get("type") == 4, reviews))
+            reviews = list(filter(lambda x: x.get("review").get("type") == 1, reviews))
+            reviews = list(map(lambda x: x.get("review"), reviews))
+            reviews = list(map(lambda x: {**x, "markText": x.pop("content")}, reviews))
+            return summary, reviews
+        else:
+            errcode = r.json().get("errcode", 0)
+            if self.handle_errcode(errcode):
+                return self.get_review_list2(bookId)
+            raise Exception(f"get {bookId} review list failed {r.text}")
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def get_api_data(self):

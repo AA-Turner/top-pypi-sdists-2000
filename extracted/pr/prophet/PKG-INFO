@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: prophet
-Version: 1.1.6
+Version: 1.1.7
 Summary: Automatic Forecasting Procedure
 Author-email: "Sean J. Taylor" <sjtz@pm.me>, Ben Letham <bletham@fb.com>
 Maintainer-email: Cuong Duong <cuong.duong242@gmail.com>
@@ -35,6 +35,7 @@ Requires-Dist: plotly; extra == "dev"
 Provides-Extra: parallel
 Requires-Dist: dask[dataframe]; extra == "parallel"
 Requires-Dist: distributed; extra == "parallel"
+Dynamic: license-file
 
 # Prophet: Automatic Forecasting Procedure
 

@@ -26,7 +26,6 @@ from weread2notionpro.utils  import (
     timestamp_to_date,
     get_property_value,
 )
-import json
 TAG_ICON_URL = "https://www.notion.so/icons/tag_gray.svg"
 USER_ICON_URL = "https://www.notion.so/icons/user-circle-filled_gray.svg"
 TARGET_ICON_URL = "https://www.notion.so/icons/target_red.svg"
@@ -54,7 +53,6 @@ class NotionHelper:
     block_type = "callout"
     sync_bookmark = True
     def __init__(self):
-        
         notion_dict = self.get_notion_data()
         if not notion_dict:
             sys.exit(0)

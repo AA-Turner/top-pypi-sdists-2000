@@ -216,6 +216,7 @@ class Replayer:
                 disable_eager_activity_execution=False,
                 disable_safe_eviction=self._config["disable_safe_workflow_eviction"],
                 should_enforce_versioning_behavior=False,
+                assert_local_activity_valid=lambda a: None,
             )
             # Create bridge worker
             bridge_worker, pusher = temporalio.bridge.worker.Worker.for_replay(
@@ -255,7 +256,7 @@ class Replayer:
                         or load_default_build_id(),
                     ),
                     workflow_task_poller_behavior=temporalio.bridge.worker.PollerBehaviorSimpleMaximum(
-                        1
+                        2
                     ),
                     activity_task_poller_behavior=temporalio.bridge.worker.PollerBehaviorSimpleMaximum(
                         1

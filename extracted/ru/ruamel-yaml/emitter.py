@@ -1444,8 +1444,8 @@ class Emitter:
                             space_pos = text.index('\n', end, space_pos)
                         except (ValueError, IndexError):
                             pass
-                        nprint('backslash?', space_pos, repr(text[:space_pos]), repr(text[space_pos:]), (text[space_pos] == '\n' and text[space_pos+1] == ' '))
-                        if (text[space_pos] == '\n' and text[space_pos+1] != ' '):
+                        # nprint('backslash?', space_pos, repr(text[:space_pos]), repr(text[space_pos:]), (text[space_pos] == '\n' and text[space_pos+1] == ' '))  # NOQA
+                        if (text[space_pos] == '\n' and text[space_pos + 1] != ' '):
                             pass
                         elif (
                             '"' not in text[end:space_pos]

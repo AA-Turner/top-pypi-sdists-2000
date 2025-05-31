@@ -3,7 +3,7 @@ use crate::{
     abstractions::{MeteredPermitDealer, OwnedMeteredSemPermit, UsedMeteredSemPermit, dbg_panic},
     protosext::ValidScheduleLA,
     retry_logic::RetryPolicyExt,
-    telemetry::metrics::{activity_type, workflow_type},
+    telemetry::metrics::{activity_type, should_record_failure_metric, workflow_type},
     worker::workflow::HeartbeatTimeoutMsg,
 };
 use futures_util::{
@@ -22,7 +22,7 @@ use temporal_sdk_core_protos::{
     coresdk::{
         LocalActivitySlotInfo,
         activity_result::{Cancellation, Failure as ActFail, Success},
-        activity_task::{ActivityCancelReason, ActivityTask, Cancel, Start, activity_task},
+        activity_task::{ActivityCancelReason, ActivityTask, Start, activity_task},
     },
     temporal::api::{
         common::v1::WorkflowExecution,
@@ -255,6 +255,7 @@ impl LocalActivityManager {
                 MetricsContext::no_op(),
                 None,
                 Arc::new(Default::default()),
+                None,
             ),
             hb_tx,
             MetricsContext::no_op(),
@@ -583,7 +584,9 @@ impl LocalActivityManager {
             la_metrics.la_exec_latency(runtime);
             let outcome = match &status {
                 LocalActivityExecutionResult::Failed(fail) => {
-                    la_metrics.la_execution_failed();
+                    if should_record_failure_metric(&fail.failure) {
+                        la_metrics.la_execution_failed()
+                    }
                     Outcome::FailurePath {
                         backoff: calc_backoff!(fail),
                     }
@@ -627,12 +630,13 @@ impl LocalActivityManager {
             };
             // We want to generate a cancel task if the reason for failure was a timeout.
             let task = if is_timeout {
-                Some(ActivityTask {
-                    task_token: task_token.clone().0,
-                    variant: Some(activity_task::Variant::Cancel(Cancel {
-                        reason: ActivityCancelReason::TimedOut as i32,
-                    })),
-                })
+                Some(ActivityTask::cancel_from_ids(
+                    task_token.clone().0,
+                    ActivityCancelReason::TimedOut,
+                    ActivityTask::primary_reason_to_cancellation_details(
+                        ActivityCancelReason::TimedOut,
+                    ),
+                ))
             } else {
                 None
             };
@@ -784,12 +788,13 @@ impl LocalActivityManager {
         }
 
         self.cancels_req_tx
-            .send(CancelOrTimeout::Cancel(ActivityTask {
-                task_token: lai.task_token.0.clone(),
-                variant: Some(activity_task::Variant::Cancel(Cancel {
-                    reason: ActivityCancelReason::Cancelled as i32,
-                })),
-            }))
+            .send(CancelOrTimeout::Cancel(ActivityTask::cancel_from_ids(
+                lai.task_token.0.clone(),
+                ActivityCancelReason::Cancelled,
+                ActivityTask::primary_reason_to_cancellation_details(
+                    ActivityCancelReason::Cancelled,
+                ),
+            )))
             .expect("Receive half of LA cancel channel cannot be dropped");
         None
     }
@@ -888,6 +893,7 @@ impl TimeoutBag {
     /// as request to schedule it arrives.
     ///
     /// Returns error in the event the activity is *already* timed out
+    #[allow(clippy::result_large_err)]
     fn new(
         new_la: &NewLocalAct,
         cancel_chan: UnboundedSender<CancelOrTimeout>,

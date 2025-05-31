@@ -1,13 +1,7 @@
 use crate::integ_tests::mk_nexus_endpoint;
 use anyhow::anyhow;
 use assert_matches::assert_matches;
-use std::{
-    collections::HashMap,
-    env,
-    string::ToString,
-    sync::{Arc, Mutex},
-    time::Duration,
-};
+use std::{collections::HashMap, env, string::ToString, sync::Arc, time::Duration};
 use temporal_client::{
     REQUEST_LATENCY_HISTOGRAM_NAME, WorkflowClientTrait, WorkflowOptions, WorkflowService,
 };
@@ -16,7 +10,7 @@ use temporal_sdk::{
     NexusOperationOptions, WfContext,
 };
 use temporal_sdk_core::{
-    CoreRuntime, TokioRuntimeBuilder, init_worker,
+    CoreRuntime, FixedSizeSlotSupplier, TokioRuntimeBuilder, TunerBuilder, init_worker,
     telemetry::{WORKFLOW_TASK_EXECUTION_LATENCY_HISTOGRAM_NAME, build_otlp_metric_exporter},
 };
 use temporal_sdk_core_api::{
@@ -27,7 +21,11 @@ use temporal_sdk_core_api::{
         PrometheusExporterOptionsBuilder, TelemetryOptionsBuilder,
         metrics::{CoreMeter, MetricAttributes, MetricParameters},
     },
-    worker::{PollerBehavior, WorkerConfigBuilder, WorkerVersioningStrategy},
+    worker::{
+        PollerBehavior, SlotKind, SlotMarkUsedContext, SlotReleaseContext, SlotReservationContext,
+        SlotSupplier, SlotSupplierPermit, WorkerConfigBuilder, WorkerVersioningStrategy,
+        WorkflowSlotKind,
+    },
 };
 use temporal_sdk_core_protos::{
     coresdk::{
@@ -60,7 +58,6 @@ use temporal_sdk_core_test_utils::{
     get_integ_server_options, get_integ_telem_options, prom_metrics,
 };
 use tokio::{join, sync::Barrier};
-use tracing_subscriber::fmt::MakeWriter;
 use url::Url;
 
 pub(crate) async fn get_text(endpoint: String) -> String {
@@ -157,7 +154,7 @@ async fn one_slot_worker_reports_available_slot() {
         // Need to use two for WFTs because there are a minimum of 2 pollers b/c of sticky polling
         .max_outstanding_workflow_tasks(2_usize)
         .max_outstanding_nexus_tasks(1_usize)
-        .workflow_task_poller_behavior(PollerBehavior::SimpleMaximum(1_usize))
+        .workflow_task_poller_behavior(PollerBehavior::SimpleMaximum(2_usize))
         .build()
         .unwrap();
 
@@ -1112,69 +1109,102 @@ async fn evict_on_complete_does_not_count_as_forced_eviction() {
     assert!(!body.contains("temporal_sticky_cache_total_forced_eviction"));
 }
 
-struct CapturingWriter {
-    buf: Arc<Mutex<Vec<u8>>>,
+struct MetricRecordingSlotSupplier<SK> {
+    inner: FixedSizeSlotSupplier<SK>,
 }
 
-impl MakeWriter<'_> for CapturingWriter {
-    type Writer = CapturingHandle;
+#[async_trait::async_trait]
+impl<SK> SlotSupplier for MetricRecordingSlotSupplier<SK>
+where
+    SK: SlotKind + Send + Sync,
+{
+    type SlotKind = SK;
 
-    fn make_writer(&self) -> Self::Writer {
-        CapturingHandle(self.buf.clone())
+    async fn reserve_slot(&self, ctx: &dyn SlotReservationContext) -> SlotSupplierPermit {
+        let g = ctx
+            .get_metrics_meter()
+            .unwrap()
+            .gauge(MetricParameters::from("custom_reserve"));
+        g.record(
+            1,
+            &MetricAttributes::OTel {
+                kvs: Arc::new(vec![]),
+            },
+        );
+        self.inner.reserve_slot(ctx).await
     }
-}
 
-struct CapturingHandle(Arc<Mutex<Vec<u8>>>);
-
-impl std::io::Write for CapturingHandle {
-    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
-        let mut b = self.0.lock().unwrap();
-        b.extend_from_slice(buf);
-        Ok(buf.len())
+    fn try_reserve_slot(&self, ctx: &dyn SlotReservationContext) -> Option<SlotSupplierPermit> {
+        self.inner.try_reserve_slot(ctx)
     }
-    fn flush(&mut self) -> std::io::Result<()> {
-        Ok(())
+
+    fn mark_slot_used(&self, ctx: &dyn SlotMarkUsedContext<SlotKind = Self::SlotKind>) {
+        let g = ctx
+            .get_metrics_meter()
+            .unwrap()
+            .gauge(MetricParameters::from("custom_mark_used"));
+        g.record(
+            1,
+            &MetricAttributes::OTel {
+                kvs: Arc::new(vec![]),
+            },
+        );
+        self.inner.mark_slot_used(ctx);
+    }
+
+    fn release_slot(&self, ctx: &dyn SlotReleaseContext<SlotKind = Self::SlotKind>) {
+        let g = ctx
+            .get_metrics_meter()
+            .unwrap()
+            .gauge(MetricParameters::from("custom_release"));
+        g.record(
+            1,
+            &MetricAttributes::OTel {
+                kvs: Arc::new(vec![]),
+            },
+        );
+        self.inner.release_slot(ctx);
+    }
+
+    fn available_slots(&self) -> Option<usize> {
+        self.inner.available_slots()
     }
 }
 
 #[tokio::test]
-async fn otel_errors_logged_as_errors() {
-    // Set up tracing subscriber to capture ERROR logs
-    let logs = Arc::new(Mutex::new(Vec::new()));
-    let writer = CapturingWriter { buf: logs.clone() };
-    let subscriber = tracing_subscriber::fmt().with_writer(writer).finish();
-    let _guard = tracing::subscriber::set_default(subscriber);
-
-    let opts = OtelCollectorOptionsBuilder::default()
-        .url("https://localhost:12345/v1/metrics".parse().unwrap()) // Nothing bound on that port
-        .build()
-        .unwrap();
-    let exporter = build_otlp_metric_exporter(opts).unwrap();
-
-    let telemopts = TelemetryOptionsBuilder::default()
-        .metrics(Arc::new(exporter) as Arc<dyn CoreMeter>)
-        .build()
-        .unwrap();
-
+async fn metrics_available_from_custom_slot_supplier() {
+    let (telemopts, addr, _aborter) = prom_metrics(None);
     let rt = CoreRuntime::new_assume_tokio(telemopts).unwrap();
-    let mut starter = CoreWfStarter::new_with_runtime("otel_errors_logged_as_errors", rt);
-    let _worker = starter.get_worker().await;
+    let mut starter =
+        CoreWfStarter::new_with_runtime("metrics_available_from_custom_slot_supplier", rt);
+    starter.worker_config.no_remote_activities(true);
+    starter.worker_config.clear_max_outstanding_opts();
+    let mut tb = TunerBuilder::default();
+    tb.workflow_slot_supplier(Arc::new(MetricRecordingSlotSupplier::<WorkflowSlotKind> {
+        inner: FixedSizeSlotSupplier::new(5),
+    }));
+    starter.worker_config.tuner(Arc::new(tb.build()));
+    let mut worker = starter.worker().await;
 
-    // Wait to allow exporter to attempt sending metrics and fail.
-    // Windows takes a while to fail the network attempt for some reason so 5s.
-    tokio::time::sleep(Duration::from_secs(5)).await;
-
-    let logs = logs.lock().unwrap();
-    let log_str = String::from_utf8_lossy(&logs);
-
-    assert!(
-        log_str.contains("ERROR"),
-        "Expected ERROR log not found in logs: {}",
-        log_str
+    worker.register_wf(
+        "s_wf".to_string(),
+        |_: WfContext| async move { Ok(().into()) },
     );
-    assert!(
-        log_str.contains("Metrics exporter otlp failed with the grpc server returns error"),
-        "Expected an OTel exporter error message in logs: {}",
-        log_str
-    );
+
+    worker
+        .submit_wf(
+            "s_wf".to_owned(),
+            "s_wf".to_owned(),
+            vec![],
+            WorkflowOptions::default(),
+        )
+        .await
+        .unwrap();
+    worker.run_until_done().await.unwrap();
+
+    tokio::time::sleep(Duration::from_millis(100)).await;
+    let body = get_text(format!("http://{addr}/metrics")).await;
+    assert!(body.contains("custom_reserve"));
+    assert!(body.contains("custom_mark_used"));
+    assert!(body.contains("custom_release"));
 }

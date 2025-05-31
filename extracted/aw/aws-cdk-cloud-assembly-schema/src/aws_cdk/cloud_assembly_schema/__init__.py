@@ -1234,7 +1234,7 @@ class ContainerImageAssetCacheOption:
 
         Example::
 
-            'registry'
+            "registry"
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -1250,12 +1250,13 @@ class ContainerImageAssetCacheOption:
 
         Example::
 
-            declare const branch: string;
+            # branch: str
             
-            const params = {
-              ref: `12345678.dkr.ecr.us-west-2.amazonaws.com/cache:${branch}`,
-              mode: "max",
-            };
+            
+            params = {
+                "ref": f"12345678.dkr.ecr.us-west-2.amazonaws.com/cache:{branch}",
+                "mode": "max"
+            }
         '''
         result = self._values.get("params")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -1342,10 +1343,10 @@ class ContainerImageAssetMetadataEntry:
 
         Example::
 
-            const entry = {
-              packaging: 'container-image',
-              repositoryName: 'repository-name',
-              imageTag: 'tag',
+            entry = {
+                "packaging": "container-image",
+                "repository_name": "repository-name",
+                "image_tag": "tag"
             }
         '''
         if isinstance(cache_to, dict):
@@ -3365,7 +3366,7 @@ class DockerCacheOption:
 
         Example::
 
-            'registry'
+            "registry"
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -3381,12 +3382,13 @@ class DockerCacheOption:
 
         Example::
 
-            declare const branch: string;
+            # branch: str
             
-            const params = {
-              ref: `12345678.dkr.ecr.us-west-2.amazonaws.com/cache:${branch}`,
-              mode: "max",
-            };
+            
+            params = {
+                "ref": f"12345678.dkr.ecr.us-west-2.amazonaws.com/cache:{branch}",
+                "mode": "max"
+            }
         '''
         result = self._values.get("params")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -4078,11 +4080,11 @@ class FileAssetMetadataEntry:
 
         Example::
 
-            const entry = {
-              packaging: 'file',
-              s3BucketParameter: 'bucket-parameter',
-              s3KeyParamenter: 'key-parameter',
-              artifactHashParameter: 'hash-parameter',
+            entry = {
+                "packaging": "file",
+                "s3_bucket_parameter": "bucket-parameter",
+                "s3_key_paramenter": "key-parameter",
+                "artifact_hash_parameter": "hash-parameter"
             }
         '''
         if __debug__:
@@ -6769,14 +6771,16 @@ class CcApiContextQuery(ContextLookupRoleOptions):
 
         Example::
 
-            const x: CcApiContextQuery = {
-              typeName: 'AWS::Some::Type',
-              expectedMatchCount: 'exactly-one',
-              propertiesToReturn: ['SomeProp'],
-              account: '11111111111',
-              region: 'us-east-1',
-            };
-            console.log(x);
+            from aws_cdk.cloud_assembly_schema import CcApiContextQuery
+            
+            
+            x = CcApiContextQuery(
+                type_name="AWS::Some::Type",
+                expected_match_count="exactly-one",
+                properties_to_return=["SomeProp"],
+                account="11111111111",
+                region="us-east-1"
+            )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__527f00e61a39e5b3b1a863d96d9f33b15a5b10086b87f1f121e7b1201d7796bd)

@@ -591,16 +591,21 @@ impl WorkflowMachines {
                     deployment_name: "".to_string(),
                     build_id: "".to_string(),
                 };
+                #[allow(deprecated)]
                 if let Some(bid) = $wtc.worker_version.as_ref().map(|wv| &wv.build_id) {
                     combined_ver.build_id = bid.to_string();
                 }
                 if !$wtc.worker_deployment_name.is_empty() {
                     combined_ver.deployment_name = $wtc.worker_deployment_name.clone();
                 }
+                #[allow(deprecated)]
                 if !$wtc.worker_deployment_version.is_empty() {
                     if let Ok(ver) = $wtc.worker_deployment_version.parse() {
                         combined_ver = ver;
                     }
+                }
+                if let Some(dv) = $wtc.deployment_version.as_ref() {
+                    combined_ver = dv.clone().into();
                 }
                 if !combined_ver.is_empty() {
                     $me.current_wft_deployment_info = Some(combined_ver);
@@ -734,7 +739,7 @@ impl WorkflowMachines {
 
         // Needed to delay mutation of self until after we've iterated over peeked events.
         enum DelayedAction {
-            WakeLa(MachineKey, CompleteLocalActivityData),
+            WakeLa(MachineKey, Box<CompleteLocalActivityData>),
             ProtocolMessage(IncomingProtocolMessage),
         }
         let mut delayed_actions = vec![];
@@ -770,7 +775,7 @@ impl WorkflowMachines {
                     if let Ok(mk) =
                         self.get_machine_key(CommandID::LocalActivity(la_dat.marker_dat.seq))
                     {
-                        delayed_actions.push(DelayedAction::WakeLa(mk, la_dat));
+                        delayed_actions.push(DelayedAction::WakeLa(mk, Box::new(la_dat)));
                     } else {
                         self.local_activity_data.insert_peeked_marker(la_dat);
                     }
@@ -802,10 +807,10 @@ impl WorkflowMachines {
                     let mach = self.machine_mut(mk);
                     if let Machines::LocalActivityMachine(ref mut lam) = *mach {
                         if lam.will_accept_resolve_marker() {
-                            let resps = lam.try_resolve_with_dat(la_dat.into())?;
+                            let resps = lam.try_resolve_with_dat((*la_dat).into())?;
                             self.process_machine_responses(mk, resps)?;
                         } else {
-                            self.local_activity_data.insert_peeked_marker(la_dat);
+                            self.local_activity_data.insert_peeked_marker(*la_dat);
                         }
                     }
                 }
