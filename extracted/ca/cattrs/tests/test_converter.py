@@ -16,7 +16,7 @@ from typing import (
 )
 
 import pytest
-from attrs import Factory, define, fields, has, make_class
+from attrs import Factory, define, field, fields, has, make_class
 from hypothesis import HealthCheck, assume, given, settings
 from hypothesis.strategies import booleans, just, lists, one_of, sampled_from
 
@@ -27,9 +27,10 @@ from cattrs.errors import (
     ForbiddenExtraKeysError,
     StructureHandlerNotFoundError,
 )
+from cattrs.fns import raise_error
 from cattrs.gen import make_dict_structure_fn, override
 
-from ._compat import is_py39_plus, is_py310_plus
+from ._compat import is_py310_plus
 from .typed import (
     nested_typed_classes,
     simple_typed_attrs,
@@ -40,7 +41,10 @@ from .typed import (
 unstructure_strats = one_of(just(s) for s in UnstructureStrategy)
 
 
-@given(simple_typed_classes() | simple_typed_dataclasses(), booleans())
+@given(
+    simple_typed_classes(allow_nan=False) | simple_typed_dataclasses(allow_nan=False),
+    booleans(),
+)
 def test_simple_roundtrip(cls_and_vals, detailed_validation):
     """
     Simple classes with metadata can be unstructured and restructured.
@@ -54,8 +58,8 @@ def test_simple_roundtrip(cls_and_vals, detailed_validation):
 
 
 @given(
-    simple_typed_classes(kw_only=False, newtypes=False)
-    | simple_typed_dataclasses(newtypes=False),
+    simple_typed_classes(kw_only=False, newtypes=False, allow_nan=False)
+    | simple_typed_dataclasses(newtypes=False, allow_nan=False),
     booleans(),
 )
 def test_simple_roundtrip_tuple(cls_and_vals, dv: bool):
@@ -72,7 +76,7 @@ def test_simple_roundtrip_tuple(cls_and_vals, dv: bool):
     assert inst == converter.structure(unstructured, cl)
 
 
-@given(simple_typed_attrs(defaults=True))
+@given(simple_typed_attrs(defaults=True, allow_nan=False))
 def test_simple_roundtrip_defaults(attr_and_vals):
     """
     Simple classes with metadata can be unstructured and restructured.
@@ -87,7 +91,9 @@ def test_simple_roundtrip_defaults(attr_and_vals):
     assert inst == converter.structure(converter.unstructure(inst), cl)
 
 
-@given(simple_typed_attrs(defaults=True, kw_only=False, newtypes=False))
+@given(
+    simple_typed_attrs(defaults=True, kw_only=False, newtypes=False, allow_nan=False)
+)
 def test_simple_roundtrip_defaults_tuple(attr_and_vals):
     """
     Simple classes with metadata can be unstructured and restructured.
@@ -103,7 +109,8 @@ def test_simple_roundtrip_defaults_tuple(attr_and_vals):
 
 
 @given(
-    simple_typed_classes(newtypes=False) | simple_typed_dataclasses(newtypes=False),
+    simple_typed_classes(newtypes=False, allow_nan=False)
+    | simple_typed_dataclasses(newtypes=False, allow_nan=False),
     unstructure_strats,
 )
 def test_simple_roundtrip_with_extra_keys_forbidden(cls_and_vals, strat):
@@ -200,7 +207,7 @@ def test_forbid_extra_keys_nested_override():
     assert cve.value.exceptions[0].extra_fields == {"b"}
 
 
-@given(nested_typed_classes(defaults=True, min_attrs=1), booleans())
+@given(nested_typed_classes(defaults=True, min_attrs=1, allow_nan=False), booleans())
 def test_nested_roundtrip(cls_and_vals, omit_if_default):
     """
     Nested classes with metadata can be unstructured and restructured.
@@ -214,7 +221,9 @@ def test_nested_roundtrip(cls_and_vals, omit_if_default):
 
 
 @given(
-    nested_typed_classes(defaults=True, min_attrs=1, kw_only=False, newtypes=False),
+    nested_typed_classes(
+        defaults=True, min_attrs=1, kw_only=False, newtypes=False, allow_nan=False
+    ),
     booleans(),
 )
 def test_nested_roundtrip_tuple(cls_and_vals, omit_if_default: bool):
@@ -233,8 +242,8 @@ def test_nested_roundtrip_tuple(cls_and_vals, omit_if_default: bool):
 
 @settings(suppress_health_check=[HealthCheck.filter_too_much, HealthCheck.too_slow])
 @given(
-    simple_typed_classes(defaults=False, newtypes=False),
-    simple_typed_classes(defaults=False, newtypes=False),
+    simple_typed_classes(defaults=False, newtypes=False, allow_nan=False),
+    simple_typed_classes(defaults=False, newtypes=False, allow_nan=False),
     unstructure_strats,
 )
 def test_union_field_roundtrip(cl_and_vals_a, cl_and_vals_b, strat):
@@ -278,8 +287,8 @@ def test_union_field_roundtrip(cl_and_vals_a, cl_and_vals_b, strat):
 @pytest.mark.skipif(not is_py310_plus, reason="3.10+ union syntax")
 @settings(suppress_health_check=[HealthCheck.filter_too_much, HealthCheck.too_slow])
 @given(
-    simple_typed_classes(defaults=False, newtypes=False),
-    simple_typed_classes(defaults=False, newtypes=False),
+    simple_typed_classes(defaults=False, newtypes=False, allow_nan=False),
+    simple_typed_classes(defaults=False, newtypes=False, allow_nan=False),
     unstructure_strats,
 )
 def test_310_union_field_roundtrip(cl_and_vals_a, cl_and_vals_b, strat):
@@ -320,7 +329,7 @@ def test_310_union_field_roundtrip(cl_and_vals_a, cl_and_vals_b, strat):
         assert inst == converter.structure(unstructured, C)
 
 
-@given(simple_typed_classes(defaults=False))
+@given(simple_typed_classes(defaults=False, allow_nan=False))
 def test_optional_field_roundtrip(cl_and_vals):
     """
     Classes with optional fields can be unstructured and structured.
@@ -342,7 +351,7 @@ def test_optional_field_roundtrip(cl_and_vals):
 
 
 @pytest.mark.skipif(not is_py310_plus, reason="3.10+ union syntax")
-@given(simple_typed_classes(defaults=False))
+@given(simple_typed_classes(defaults=False, allow_nan=False))
 def test_310_optional_field_roundtrip(cl_and_vals):
     """
     Classes with optional fields can be unstructured and structured.
@@ -363,7 +372,7 @@ def test_310_optional_field_roundtrip(cl_and_vals):
     assert inst == converter.structure(unstructured, C)
 
 
-@given(simple_typed_classes(defaults=True))
+@given(simple_typed_classes(defaults=True, allow_nan=False))
 def test_omit_default_roundtrip(cl_and_vals):
     """
     Omit default on the converter works.
@@ -415,9 +424,9 @@ def test_type_overrides(cl_and_vals):
     inst = cl(*vals, **kwargs)
     unstructured = converter.unstructure(inst)
 
-    for field, val in zip(fields(cl), vals):
-        if field.type is int and field.default is not None and field.default == val:
-            assert field.name not in unstructured
+    for attr, val in zip(fields(cl), vals):
+        if attr.type is int and attr.default is not None and attr.default == val:
+            assert attr.name not in unstructured
 
 
 def test_calling_back():
@@ -554,17 +563,6 @@ def test_overriding_generated_structure_hook_func():
             (deque, MutableSequence),
             (tuple, Sequence),
         ]
-        if is_py39_plus
-        else [
-            (tuple, Tuple),
-            (list, List),
-            (deque, Deque),
-            (set, Set),
-            (frozenset, FrozenSet),
-            (list, MutableSequence),
-            (deque, MutableSequence),
-            (tuple, Sequence),
-        ]
     ),
 )
 def test_seq_of_simple_classes_unstructure(cls_and_vals, seq_type_and_annotation):
@@ -602,14 +600,6 @@ def test_seq_of_simple_classes_unstructure(cls_and_vals, seq_type_and_annotation
             (frozenset, frozenset),
             (frozenset, FrozenSet),
         ]
-        if is_py39_plus
-        else [
-            (tuple, Tuple),
-            (list, List),
-            (deque, Deque),
-            (set, Set),
-            (frozenset, FrozenSet),
-        ]
     )
 )
 def test_seq_of_bare_classes_structure(seq_type_and_annotation):
@@ -637,11 +627,10 @@ def test_seq_of_bare_classes_structure(seq_type_and_annotation):
         )
         expected = seq_type(C(a=cl(*vals), b=cl(*vals)) for _ in range(5))
 
-        assert type(outputs) == seq_type
+        assert type(outputs) is seq_type
         assert outputs == expected
 
 
-@pytest.mark.skipif(not is_py39_plus, reason="3.9+ only")
 def test_annotated_attrs():
     """Annotation support works for attrs classes."""
     from typing import Annotated
@@ -713,6 +702,18 @@ def test_annotated_with_typing_extensions_attrs():
     assert structured == Outer(Inner(2), [Inner(2)], Inner(2))
 
 
+def test_default_structure_fallback(converter_cls: Type[BaseConverter]):
+    """The default structure fallback hook factory eagerly errors."""
+
+    class Test:
+        """Unsupported by default."""
+
+    c = converter_cls()
+
+    with pytest.raises(StructureHandlerNotFoundError):
+        c.get_structure_hook(Test)
+
+
 def test_unstructure_fallbacks(converter_cls: Type[BaseConverter]):
     """Unstructure fallback factories work."""
 
@@ -742,6 +743,35 @@ def test_structure_fallbacks(converter_cls: Type[BaseConverter]):
 
     c = converter_cls(structure_fallback_factory=lambda _: lambda v, _: Test())
     assert isinstance(c.structure({}, Test), Test)
+
+
+def test_legacy_structure_fallbacks(converter_cls: Type[BaseConverter]):
+    """Restoring legacy behavior works."""
+
+    class Test:
+        """Unsupported by default."""
+
+        def __init__(self, a):
+            self.a = a
+
+    c = converter_cls(
+        structure_fallback_factory=lambda _: raise_error, detailed_validation=False
+    )
+
+    # We can get the hook, but...
+    hook = c.get_structure_hook(Test)
+
+    # it won't work.
+    with pytest.raises(StructureHandlerNotFoundError):
+        hook({}, Test)
+
+    # If a field has a converter, we honor that instead.
+    @define
+    class Container:
+        a: Test = field(converter=Test)
+
+    hook = c.get_structure_hook(Container)
+    hook({"a": 1}, Container)
 
 
 def test_fallback_chaining(converter_cls: Type[BaseConverter]):

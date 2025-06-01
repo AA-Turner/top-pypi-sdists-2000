@@ -12,12 +12,11 @@ from cattrs._compat import adapted_fields, fields
 from cattrs.errors import ClassValidationError, ForbiddenExtraKeysError
 from cattrs.gen import make_dict_structure_fn, make_dict_unstructure_fn, override
 
-from ._compat import is_py39_plus
 from .typed import nested_typed_classes, simple_typed_classes, simple_typed_dataclasses
 from .untyped import nested_classes, simple_classes
 
 
-@given(nested_classes | simple_classes())
+@given(nested_classes() | simple_classes())
 def test_unmodified_generated_unstructuring(cl_and_vals):
     converter = BaseConverter()
     cl, vals, kwargs = cl_and_vals
@@ -34,7 +33,7 @@ def test_unmodified_generated_unstructuring(cl_and_vals):
     assert res_expected == res_actual
 
 
-@given(nested_classes | simple_classes())
+@given(nested_classes() | simple_classes())
 def test_nodefs_generated_unstructuring(cl_and_vals):
     """Test omitting default values on a per-attribute basis."""
     converter = BaseConverter()
@@ -62,7 +61,9 @@ def test_nodefs_generated_unstructuring(cl_and_vals):
         assert attr.name not in res
 
 
-@given(one_of(just(BaseConverter), just(Converter)), nested_classes | simple_classes())
+@given(
+    one_of(just(BaseConverter), just(Converter)), nested_classes() | simple_classes()
+)
 def test_nodefs_generated_unstructuring_cl(
     converter_cls: Type[BaseConverter], cl_and_vals
 ):
@@ -106,7 +107,7 @@ def test_nodefs_generated_unstructuring_cl(
 
 @given(
     one_of(just(BaseConverter), just(Converter)),
-    nested_classes | simple_classes() | simple_typed_dataclasses(),
+    nested_classes() | simple_classes() | simple_typed_dataclasses(),
 )
 def test_individual_overrides(converter_cls, cl_and_vals):
     """
@@ -160,9 +161,9 @@ def test_individual_overrides(converter_cls, cl_and_vals):
 
 
 @given(
-    cl_and_vals=nested_typed_classes()
-    | simple_typed_classes()
-    | simple_typed_dataclasses(),
+    cl_and_vals=nested_typed_classes(allow_nan=False)
+    | simple_typed_classes(allow_nan=False)
+    | simple_typed_dataclasses(allow_nan=False),
     dv=...,
 )
 def test_unmodified_generated_structuring(cl_and_vals, dv: bool):
@@ -185,7 +186,9 @@ def test_unmodified_generated_structuring(cl_and_vals, dv: bool):
 
 
 @given(
-    simple_typed_classes(min_attrs=1) | simple_typed_dataclasses(min_attrs=1), data()
+    simple_typed_classes(min_attrs=1, allow_nan=False)
+    | simple_typed_dataclasses(min_attrs=1, allow_nan=False),
+    data(),
 )
 def test_renaming(cl_and_vals, data):
     converter = Converter()
@@ -311,7 +314,6 @@ def test_omitting_structure(detailed_validation: bool):
     assert not hasattr(structured, "b")
 
 
-@pytest.mark.skipif(not is_py39_plus, reason="literals and annotated are 3.9+")
 def test_type_names_with_quotes():
     """Types with quote characters in their reprs should work."""
     from typing import Annotated, Literal, Union
@@ -336,6 +338,7 @@ def test_overriding_struct_hook(converter: BaseConverter) -> None:
     class A:
         a: int
         b: str
+        c: int = 0
 
     converter.register_structure_hook(
         A,
@@ -343,11 +346,12 @@ def test_overriding_struct_hook(converter: BaseConverter) -> None:
             A,
             converter,
             a=override(struct_hook=lambda v, _: ceil(v)),
+            c=override(struct_hook=lambda v, _: ceil(v)),
             _cattrs_detailed_validation=converter.detailed_validation,
         ),
     )
 
-    assert converter.structure({"a": 0.5, "b": 1}, A) == A(1, "1")
+    assert converter.structure({"a": 0.5, "b": 1, "c": 0.5}, A) == A(1, "1", 1)
 
 
 def test_overriding_unstruct_hook(converter: BaseConverter) -> None:
@@ -556,6 +560,7 @@ def test_init_false_no_structure_hook(converter: BaseConverter):
     @define
     class A:
         a: int = field(converter=int, init=False)
+        b: int = field(converter=int, init=False, default=5)
 
     converter.register_structure_hook(
         A,
@@ -634,8 +639,8 @@ def test_detailed_validation_from_converter(converter: BaseConverter):
             converter.structure({"a": "a"}, A)
 
 
-@given(prefer=...)
-def test_prefer_converters_from_converter(prefer: bool):
+@given(prefer=..., dv=...)
+def test_prefer_converters_from_converter(prefer: bool, dv: bool):
     """
     `prefer_attrs_converters` is taken from the converter by default.
     """
@@ -643,13 +648,17 @@ def test_prefer_converters_from_converter(prefer: bool):
     @define
     class A:
         a: int = field(converter=lambda x: x + 1)
+        b: int = field(converter=lambda x: x + 1, default=5)
 
     converter = BaseConverter(prefer_attrib_converters=prefer)
     converter.register_structure_hook(int, lambda x, _: x + 1)
-    converter.register_structure_hook(A, make_dict_structure_fn(A, converter))
+    converter.register_structure_hook(
+        A, make_dict_structure_fn(A, converter, _cattrs_detailed_validation=dv)
+    )
 
     if prefer:
-        assert converter.structure({"a": 1}, A).a == 2
+        assert converter.structure({"a": 1, "b": 2}, A).a == 2
+        assert converter.structure({"a": 1, "b": 2}, A).b == 3
     else:
         assert converter.structure({"a": 1}, A).a == 3
 

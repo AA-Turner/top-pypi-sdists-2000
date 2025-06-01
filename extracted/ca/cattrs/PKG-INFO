@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: cattrs
-Version: 24.1.3
+Version: 25.1.0
 Summary: Composable complex class support for attrs and dataclasses.
 Project-URL: Homepage, https://catt.rs
 Project-URL: Changelog, https://catt.rs/en/latest/history.html
@@ -14,18 +14,18 @@ Keywords: attrs,dataclasses,serialization
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: MIT License
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Programming Language :: Python :: Implementation :: PyPy
 Classifier: Typing :: Typed
-Requires-Python: >=3.8
-Requires-Dist: attrs>=23.1.0
+Requires-Python: >=3.9
+Requires-Dist: attrs>=24.3.0
 Requires-Dist: exceptiongroup>=1.1.1; python_version < '3.11'
-Requires-Dist: typing-extensions!=4.6.3,>=4.1.0; python_version < '3.11'
+Requires-Dist: typing-extensions>=4.12.2
 Provides-Extra: bson
 Requires-Dist: pymongo>=4.4.0; extra == 'bson'
 Provides-Extra: cbor2
@@ -33,15 +33,15 @@ Requires-Dist: cbor2>=5.4.6; extra == 'cbor2'
 Provides-Extra: msgpack
 Requires-Dist: msgpack>=1.0.5; extra == 'msgpack'
 Provides-Extra: msgspec
-Requires-Dist: msgspec>=0.18.5; (implementation_name == 'cpython') and extra == 'msgspec'
+Requires-Dist: msgspec>=0.19.0; (implementation_name == 'cpython') and extra == 'msgspec'
 Provides-Extra: orjson
-Requires-Dist: orjson>=3.9.2; (implementation_name == 'cpython') and extra == 'orjson'
+Requires-Dist: orjson>=3.10.7; (implementation_name == 'cpython') and extra == 'orjson'
 Provides-Extra: pyyaml
 Requires-Dist: pyyaml>=6.0; extra == 'pyyaml'
 Provides-Extra: tomlkit
 Requires-Dist: tomlkit>=0.11.8; extra == 'tomlkit'
 Provides-Extra: ujson
-Requires-Dist: ujson>=5.7.0; extra == 'ujson'
+Requires-Dist: ujson>=5.10.0; extra == 'ujson'
 Description-Content-Type: text/markdown
 
 # *cattrs*: Flexible Object Serialization and Validation
@@ -108,12 +108,12 @@ Converts unstructured data into structured data, recursively, according to your 
 The following types are supported:
 
 - `typing.Optional[T]` and its 3.10+ form, `T | None`.
-- `list[T]`, `typing.List[T]`, `typing.MutableSequence[T]`, `typing.Sequence[T]` convert to a lists.
+- `list[T]`, `typing.List[T]`, `typing.MutableSequence[T]`, `typing.Sequence[T]` convert to lists.
 - `tuple` and `typing.Tuple` (both variants, `tuple[T, ...]` and `tuple[X, Y, Z]`).
-- `set[T]`, `typing.MutableSet[T]`, and `typing.Set[T]` convert to a sets.
-- `frozenset[T]`, and `typing.FrozenSet[T]` convert to a frozensets.
-- `dict[K, V]`, `typing.Dict[K, V]`, `typing.MutableMapping[K, V]`, and `typing.Mapping[K, V]` convert to a dictionaries.
-- [`typing.TypedDict`](https://docs.python.org/3/library/typing.html#typing.TypedDict), ordinary and generic.
+- `set[T]`, `typing.MutableSet[T]`, and `typing.Set[T]` convert to sets.
+- `frozenset[T]`, and `typing.FrozenSet[T]` convert to frozensets.
+- `dict[K, V]`, `typing.Dict[K, V]`, `typing.MutableMapping[K, V]`, and `typing.Mapping[K, V]` convert to dictionaries.
+- [`typing.TypedDict`](https://docs.python.org/3/library/typing.html#typing.TypedDict), both ordinary and generic.
 - [`typing.NewType`](https://docs.python.org/3/library/typing.html#newtype)
 - [PEP 695 type aliases](https://docs.python.org/3/library/typing.html#type-aliases) on 3.12+
 - _attrs_ classes with simple attributes and the usual `__init__`[^simple].

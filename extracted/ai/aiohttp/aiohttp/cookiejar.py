@@ -11,6 +11,7 @@ import re
 import time
 import warnings
 from collections import defaultdict
+from collections.abc import Mapping
 from http.cookies import BaseCookie, Morsel, SimpleCookie
 from typing import (
     DefaultDict,
@@ -18,7 +19,6 @@ from typing import (
     Iterable,
     Iterator,
     List,
-    Mapping,
     Optional,
     Set,
     Tuple,

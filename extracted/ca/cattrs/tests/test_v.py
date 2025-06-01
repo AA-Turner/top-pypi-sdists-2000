@@ -8,13 +8,15 @@ from typing import (
     Optional,
     Sequence,
     Tuple,
+    TypedDict,
 )
 
 from attrs import Factory, define, field
 from pytest import fixture, raises
 
 from cattrs import Converter, transform_error
-from cattrs._compat import Mapping, TypedDict
+from cattrs._compat import Mapping
+from cattrs.errors import IterableValidationError
 from cattrs.gen import make_dict_structure_fn
 from cattrs.v import format_exception
 
@@ -22,7 +24,7 @@ from cattrs.v import format_exception
 @fixture
 def c() -> Converter:
     """We need only converters with detailed_validation=True."""
-    return Converter()
+    return Converter(detailed_validation=True)
 
 
 def test_attribute_errors(c: Converter) -> None:
@@ -190,6 +192,11 @@ def test_sequence_errors(c: Converter) -> None:
             "invalid value for type, expected int @ $.b[1][2]",
         ]
 
+    # IterableValidationErrors with subexceptions without notes
+    exc = IterableValidationError("Test", [TypeError("Test")], list[str])
+
+    assert transform_error(exc) == ["invalid type (Test) @ $"]
+
 
 def test_mapping_errors(c: Converter) -> None:
     try:
@@ -316,7 +323,9 @@ def test_typeddict_attribute_errors(c: Converter) -> None:
     try:
         c.structure({"c": 1}, D)
     except Exception as exc:
-        assert transform_error(exc) == ["expected a mapping @ $.c"]
+        assert transform_error(exc) == [
+            "invalid type (expected a mapping, not int) @ $.c"
+        ]
 
     try:
         c.structure({"c": {"a": "str"}}, D)

@@ -7,6 +7,7 @@ import os
 import sys
 import warnings
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 from itertools import chain
 from typing import (
     IO,
@@ -14,7 +15,6 @@ from typing import (
     Any,
     Dict,
     Final,
-    Iterable,
     List,
     Optional,
     Set,

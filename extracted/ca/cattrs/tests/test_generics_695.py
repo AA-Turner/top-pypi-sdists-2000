@@ -64,6 +64,17 @@ def test_type_aliases(converter: BaseConverter):
     assert converter.unstructure(100, my_other_int) == 80
 
 
+def test_type_aliases_simple_hooks(converter: BaseConverter):
+    """PEP 695 type aliases work with `register_un/structure_hook`."""
+    type my_other_int = int
+
+    converter.register_structure_hook(my_other_int, lambda v, _: v + 10)
+    converter.register_unstructure_hook(my_other_int, lambda v: v - 20)
+
+    assert converter.structure(1, my_other_int) == 11
+    assert converter.unstructure(100, my_other_int) == 80
+
+
 def test_type_aliases_overwrite_base_hooks(converter: BaseConverter):
     """Overwriting base hooks should affect type aliases."""
     converter.register_structure_hook(int, lambda v, _: v + 10)
@@ -89,3 +100,19 @@ def test_type_alias_with_children(converter: BaseConverter):
 
     type TestAlias = TestClass
     assert converter.structure(None, TestAlias) is TestClass
+
+
+def test_generic_type_alias(converter: BaseConverter):
+    """Generic type aliases work.
+
+    See https://docs.python.org/3/reference/compound_stmts.html#generic-type-aliases
+    for details.
+    """
+
+    type Gen1[T] = T
+
+    assert converter.structure("1", Gen1[int]) == 1
+
+    type Gen2[K, V] = dict[K, V]
+
+    assert converter.structure({"a": "1"}, Gen2[str, int]) == {"a": 1}

@@ -1,9 +1,14 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: inflate64
-Version: 1.0.1
+Version: 1.0.3
 Summary: deflate64 compression/decompression library
 Author-email: Hiroshi Miura <miurahr@linux.com>
 License: LGPL-2.1-or-later
+Project-URL: Source, https://github.com/miurahr/inflate64
+Project-URL: Homepage, https://inflate64.readthedocs.io/
+Project-URL: Documentation, https://inflate64.readthedocs.io/en/stable/
+Project-URL: Bug Tracker, https://github.com/miurahr/inflate64/issues
+Project-URL: Changelog, https://inflate64.readthedocs.io/en/latest/changelog.html
 Keywords: deflate64,compression
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)
@@ -20,15 +25,15 @@ Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: Programming Language :: Python :: Implementation :: CPython
-Classifier: Programming Language :: Python :: Implementation :: PyPy
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
-Requires-Python: >=3.9
+Requires-Python: >=3.9, <3.14
 Description-Content-Type: text/x-rst
 License-File: COPYING
 Provides-Extra: test
 Requires-Dist: pytest; extra == "test"
 Provides-Extra: docs
 Requires-Dist: sphinx>=5.0; extra == "docs"
+Requires-Dist: sphinx_rtd_theme; extra == "docs"
 Requires-Dist: docutils; extra == "docs"
 Provides-Extra: check
 Requires-Dist: mypy>=1.10.0; extra == "check"
@@ -41,12 +46,17 @@ Requires-Dist: flake8-isort; extra == "check"
 Requires-Dist: pygments; extra == "check"
 Requires-Dist: readme-renderer; extra == "check"
 Requires-Dist: twine; extra == "check"
+Dynamic: license-file
+Dynamic: requires-python
 
 inflate64
 =========
 
 .. image:: https://badge.fury.io/py/inflate64.svg
     :target: https://badge.fury.io/py/inflate64
+
+.. image:: https://github.com/miurahr/inflate64/actions/workflows/run-tox-tests.yml/badge.svg?branch=main
+    :target: https://github.com/miurahr/inflate64/actions/workflows/run-tox-tests.yml
 
 .. image:: https://ci.codeberg.org/api/badges/12505/status.svg
     :target: https://ci.codeberg.org/repos/12505

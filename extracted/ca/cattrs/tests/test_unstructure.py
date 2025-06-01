@@ -1,12 +1,10 @@
 """Tests for dumping."""
 
-from typing import Type
-
-from attr import asdict, astuple
+from attrs import asdict, astuple
 from hypothesis import given
 from hypothesis.strategies import data, just, lists, one_of, sampled_from
 
-from cattr.converters import BaseConverter, UnstructureStrategy
+from cattrs.converters import BaseConverter, UnstructureStrategy
 
 from .untyped import (
     dicts_of_primitives,
@@ -71,7 +69,7 @@ def test_enum_unstructure(enum, dump_strat, data):
     assert converter.unstructure(member) == member.value
 
 
-@given(nested_classes)
+@given(nested_classes())
 def test_attrs_asdict_unstructure(nested_class):
     """Our dumping should be identical to `attrs`."""
     converter = BaseConverter()
@@ -79,7 +77,7 @@ def test_attrs_asdict_unstructure(nested_class):
     assert converter.unstructure(instance) == asdict(instance)
 
 
-@given(nested_classes)
+@given(nested_classes())
 def test_attrs_astuple_unstructure(nested_class):
     """Our dumping should be identical to `attrs`."""
     converter = BaseConverter(unstruct_strat=UnstructureStrategy.AS_TUPLE)
@@ -126,11 +124,11 @@ def test_unstructure_hook_func(converter):
 
 
 @given(lists(simple_classes()), one_of(just(tuple), just(list)))
-def test_seq_of_simple_classes_unstructure(cls_and_vals, seq_type: Type):
+def test_seq_of_simple_classes_unstructure(cls_and_vals, seq_type: type):
     """Dumping a sequence of primitives is a simple copy operation."""
     converter = BaseConverter()
 
     inputs = seq_type(cl(*vals, **kwargs) for cl, vals, kwargs in cls_and_vals)
     outputs = converter.unstructure(inputs)
-    assert type(outputs) == seq_type
-    assert all(type(e) is dict for e in outputs)  # noqa: E721
+    assert type(outputs) is seq_type
+    assert all(type(e) is dict for e in outputs)

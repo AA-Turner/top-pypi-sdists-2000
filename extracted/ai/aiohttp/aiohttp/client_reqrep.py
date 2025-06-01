@@ -7,6 +7,7 @@ import re
 import sys
 import traceback
 import warnings
+from collections.abc import Mapping
 from hashlib import md5, sha1, sha256
 from http.cookies import CookieError, Morsel, SimpleCookie
 from types import MappingProxyType, TracebackType
@@ -18,7 +19,6 @@ from typing import (
     Iterable,
     List,
     Literal,
-    Mapping,
     NamedTuple,
     Optional,
     Tuple,

@@ -10,16 +10,11 @@ from cattrs._generics import deep_copy_with
 from cattrs.errors import StructureHandlerNotFoundError
 from cattrs.gen._generics import generate_mapping
 
-from ._compat import (
-    Dict_origin,
-    List_origin,
-    is_py39_plus,
-    is_py310_plus,
-    is_py311_plus,
-)
+from ._compat import Dict_origin, List_origin, is_py310_plus, is_py311_plus
 
 T = TypeVar("T")
 T2 = TypeVar("T2")
+T3 = TypeVar("T3", bound=int)
 
 
 def test_deep_copy():
@@ -37,9 +32,10 @@ def test_deep_copy():
 
 
 @define
-class TClass(Generic[T, T2]):
+class TClass(Generic[T, T2, T3]):
     a: T
     b: T2
+    c: T3 = 0
 
 
 @define
@@ -50,15 +46,15 @@ class GenericCols(Generic[T]):
 
 
 @pytest.mark.parametrize(
-    ("t", "t2", "result"),
+    ("t", "t2", "t3", "result"),
     (
-        (int, str, TClass(1, "a")),
-        (str, str, TClass("1", "a")),
-        (List[int], str, TClass([1, 2, 3], "a")),
+        (int, str, int, TClass(1, "a")),
+        (str, str, int, TClass("1", "a")),
+        (List[int], str, int, TClass([1, 2, 3], "a")),
     ),
 )
-def test_able_to_structure_generics(converter: BaseConverter, t, t2, result):
-    res = converter.structure(asdict(result), TClass[t, t2])
+def test_able_to_structure_generics(converter: BaseConverter, t, t2, t3, result):
+    res = converter.structure(asdict(result), TClass[t, t2, t3])
 
     assert res == result
 
@@ -77,7 +73,6 @@ def test_structure_generics_with_cols(t, result, detailed_validation):
     assert res == result
 
 
-@pytest.mark.skipif(not is_py39_plus, reason="3.9+ generics syntax")
 @pytest.mark.parametrize(
     ("t", "result"), ((int, (1, [2], {"3": 3})), (str, ("1", ["2"], {"3": "3"})))
 )
@@ -110,20 +105,20 @@ def test_structure_nested_generics_with_cols(t, result, genconverter: Converter)
 
 
 @pytest.mark.parametrize(
-    ("t", "t2", "result"),
+    ("t", "t2", "t3", "result"),
     (
-        (TClass[int, int], str, TClass(TClass(1, 2), "a")),
-        (List[TClass[int, int]], str, TClass([TClass(1, 2)], "a")),
+        (TClass[int, int, int], str, int, TClass(TClass(1, 2), "a")),
+        (List[TClass[int, int, int]], str, int, TClass([TClass(1, 2)], "a")),
     ),
 )
-def test_structure_nested_generics(converter: BaseConverter, t, t2, result):
-    res = converter.structure(asdict(result), TClass[t, t2])
+def test_structure_nested_generics(converter: BaseConverter, t, t2, t3, result):
+    res = converter.structure(asdict(result), TClass[t, t2, t3])
 
     assert res == result
 
 
 def test_able_to_structure_deeply_nested_generics_gen(converter):
-    cl = TClass[TClass[TClass[int, int], int], int]
+    cl = TClass[TClass[TClass[int, int, int], int, int], int, int]
     result = TClass(TClass(TClass(1, 2), 3), 4)
 
     res = converter.structure(asdict(result), cl)
@@ -137,7 +132,7 @@ def test_structure_unions_of_generics(converter):
         c: T
 
     data = TClass2(c="string")
-    res = converter.structure(asdict(data), Union[TClass[int, int], TClass2[str]])
+    res = converter.structure(asdict(data), Union[TClass[int, int, int], TClass2[str]])
     assert res == data
 
 
@@ -148,7 +143,7 @@ def test_structure_list_of_generic_unions(converter):
 
     data = [TClass2(c="string"), TClass(1, 2)]
     res = converter.structure(
-        [asdict(x) for x in data], List[Union[TClass[int, int], TClass2[str]]]
+        [asdict(x) for x in data], List[Union[TClass[int, int, int], TClass2[str]]]
     )
     assert res == data
 
@@ -160,7 +155,7 @@ def test_structure_deque_of_generic_unions(converter):
 
     data = deque((TClass2(c="string"), TClass(1, 2)))
     res = converter.structure(
-        [asdict(x) for x in data], Deque[Union[TClass[int, int], TClass2[str]]]
+        [asdict(x) for x in data], Deque[Union[TClass[int, int, int], TClass2[str]]]
     )
     assert res == data
 
@@ -204,6 +199,30 @@ def test_unstructure_generic_attrs(genconverter):
         inner: Inner[str]
 
     assert genconverter.structure(raw, OuterStr) == OuterStr(Inner("1"))
+
+
+def test_unstructure_generic_inheritance(genconverter):
+    """Classes inheriting from generic classes work."""
+    genconverter.register_unstructure_hook(int, lambda v: v + 1)
+    genconverter.register_unstructure_hook(str, lambda v: str(int(v) + 1))
+
+    @define
+    class Parent(Generic[T]):
+        a: T
+
+    @define
+    class Child(Parent, Generic[T]):
+        b: str
+
+    instance = Child(1, "2")
+    assert genconverter.unstructure(instance, Child[int]) == {"a": 2, "b": "3"}
+
+    @define
+    class ExplicitChild(Parent[int]):
+        b: str
+
+    instance = ExplicitChild(1, "2")
+    assert genconverter.unstructure(instance, ExplicitChild) == {"a": 2, "b": "3"}
 
 
 def test_unstructure_optional(genconverter):

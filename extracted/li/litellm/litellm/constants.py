@@ -154,7 +154,7 @@ FIREWORKS_AI_80_B = int(os.getenv("FIREWORKS_AI_80_B", 80))
 #### Logging callback constants ####
 REDACTED_BY_LITELM_STRING = "REDACTED_BY_LITELM"
 MAX_LANGFUSE_INITIALIZED_CLIENTS = int(
-    os.getenv("MAX_LANGFUSE_INITIALIZED_CLIENTS", 20)
+    os.getenv("MAX_LANGFUSE_INITIALIZED_CLIENTS", 50)
 )
 
 ############### LLM Provider Constants ###############
@@ -282,6 +282,12 @@ OPENAI_CHAT_COMPLETION_PARAMS = [
     "extra_headers",
     "thinking",
     "web_search_options",
+]
+
+OPENAI_TRANSCRIPTION_PARAMS = [
+    "language",
+    "response_format",
+    "timestamp_granularities",
 ]
 
 DEFAULT_CHAT_COMPLETION_PARAM_VALUES = {

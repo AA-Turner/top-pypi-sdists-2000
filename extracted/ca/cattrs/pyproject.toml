@@ -1,28 +1,26 @@
 [tool.black]
 skip-magic-trailing-comma = true
 
-[tool.pdm.dev-dependencies]
+[dependency-groups]
 lint = [
     "black>=24.2.0",
     "ruff>=0.0.277",
 ]
 test = [
-    "hypothesis>=6.79.4",
-    "pytest>=7.4.0",
+    "hypothesis>=6.111.2",
+    "pytest>=8.3.2",
     "pytest-benchmark>=4.0.0",
     "immutables>=0.20",
-    "typing-extensions>=4.7.1",
-    "coverage>=7.4.0",
-    "pytest-xdist>=3.4.0",
+    "coverage>=7.6.1",
+    "pytest-xdist>=3.6.1",
 ]
 docs = [
     "sphinx>=5.3.0",
     "furo>=2024.1.29",
     "sphinx-copybutton>=0.5.2",
     "myst-parser>=1.0.0",
-    "pendulum>=2.1.2",
+    "pendulum>=3.1.0",
     "sphinx-autobuild",
-    "typing-extensions>=4.8.0",
 ]
 bench = [
     "pyperf>=2.6.1",
@@ -42,11 +40,11 @@ authors = [
     {name = "Tin Tvrtkovic", email = "tinchester@gmail.com"},
 ]
 dependencies = [
-    "attrs>=23.1.0",
-    "typing-extensions>=4.1.0, !=4.6.3; python_version < '3.11'",
+    "attrs>=24.3.0",
+    "typing-extensions>=4.12.2",
     "exceptiongroup>=1.1.1; python_version < '3.11'",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 readme = "README.md"
 license = {text = "MIT"}
 keywords = ["attrs", "serialization", "dataclasses"]
@@ -54,11 +52,11 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Typing :: Typed",
@@ -74,10 +72,10 @@ Documentation = "https://catt.rs/en/stable/"
 
 [project.optional-dependencies]
 ujson = [
-    "ujson>=5.7.0",
+    "ujson>=5.10.0",
 ]
 orjson = [
-    "orjson>=3.9.2; implementation_name == \"cpython\"",
+    "orjson>=3.10.7; implementation_name == \"cpython\"",
 ]
 msgpack = [
     "msgpack>=1.0.5",
@@ -95,7 +93,7 @@ bson = [
     "pymongo>=4.4.0",
 ]
 msgspec = [
-    "msgspec>=0.18.5; implementation_name == \"cpython\"",
+    "msgspec>=0.19.0; implementation_name == \"cpython\"",
 ]
 
 [tool.pytest.ini_options]
@@ -116,6 +114,8 @@ exclude_also = [
 
 [tool.ruff]
 src = ["src", "tests"]
+
+[tool.ruff.lint]
 select = [
     "E",   # pycodestyle
     "W",   # pycodestyle
@@ -144,11 +144,12 @@ ignore = [
     "S101",   # assert
     "S307",   # hands off my eval
     "SIM300", # Yoda rocks in asserts
-    "PGH001", # No eval lol?
     "PGH003", # leave my type: ignores alone
     "B006",   # mutable argument defaults
     "DTZ001", # datetimes in tests
     "DTZ006", # datetimes in tests
+    "UP006",  # We support old typing constructs at runtime
+    "UP035",  # We support old typing constructs at runtime
 ]
 
 [tool.ruff.lint.pyupgrade]
