@@ -505,7 +505,7 @@ def test_option_list_tables(snap_compare):
 
 
 def test_option_list_build(snap_compare):
-    assert snap_compare(SNAPSHOT_APPS_DIR / "option_list.py")
+    assert snap_compare(SNAPSHOT_APPS_DIR / "option_list.py", press=["a"])
 
 
 def test_option_list_replace_prompt_from_single_line_to_single_line(snap_compare):
@@ -2554,6 +2554,7 @@ def test_pseudo_classes(snap_compare):
 
     assert snap_compare(PSApp())
 
+
 def test_child_pseudo_classes(snap_compare):
     """Test pseudo classes added in https://github.com/Textualize/textual/pull/XXXX
 
@@ -4064,7 +4065,7 @@ def test_tint(snap_compare):
         (130, 50),
     ],
 )
-def test_breakpoints(snap_compare, size):
+def test_breakpoints_horizontal(snap_compare, size):
     """Test HORIZONTAL_BREAKPOINTS
 
     You should see four terminals of different sizes with a grid of placeholders.
@@ -4093,6 +4094,57 @@ def test_breakpoints(snap_compare, size):
                 Grid { grid-size: 4; }
             }
             &.-very-wide {
+                Grid { grid-size: 6; }
+            }
+        }
+        """
+
+        def compose(self) -> ComposeResult:
+            with Grid():
+                for n in range(16):
+                    yield Placeholder(f"Placeholder {n+1}")
+
+    assert snap_compare(BreakpointApp(), terminal_size=size)
+
+
+@pytest.mark.parametrize(
+    "size",
+    [
+        (30, 20),
+        (40, 30),
+        (80, 40),
+        (130, 50),
+    ],
+)
+def test_breakpoints_vertical(snap_compare, size):
+    """Test VERTICAL_BREAKPOINTS
+
+    You should see four terminals of different sizes with a grid of placeholders.
+    The first should have a single column, then two columns, then 4, then 6.
+
+    """
+
+    class BreakpointApp(App):
+
+        VERTICAL_BREAKPOINTS = [
+            (0, "-low"),
+            (30, "-middle"),
+            (40, "-high"),
+            (50, "-very-high"),
+        ]
+
+        CSS = """
+        Screen {
+            &.-low {
+                Grid { grid-size: 1; }
+            }
+            &.-middle {
+                Grid { grid-size: 2; }
+            }
+            &.-high {
+                Grid { grid-size: 4; }
+            }
+            &.-very-high {
                 Grid { grid-size: 6; }
             }
         }
@@ -4137,3 +4189,29 @@ def test_compact(snap_compare):
                     yield TextArea("Edit me", compact=True)
 
     assert snap_compare(CompactApp())
+
+
+def test_app_default_classes(snap_compare):
+    """Test that default classes classvar is working.
+
+    You should see a blue screen with a white border, confirming that
+    the classes foo and bar have been added to the app.
+
+    """
+    from textual.app import App
+
+    class DC(App):
+        DEFAULT_CLASSES = "foo bar"
+
+        CSS = """
+        DC {
+            &.foo {
+                Screen { background: blue; }
+            }
+            &.bar {
+                Screen { border: white; }
+            }
+        }
+        """
+
+    assert snap_compare(DC())

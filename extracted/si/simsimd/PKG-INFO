@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: simsimd
-Version: 6.2.1
+Version: 6.4.7
 Summary: Portable mixed-precision BLAS-like vector math library for x86 and ARM
 Home-page: https://github.com/ashvardanian/simsimd
 Author: Ash Vardanian
@@ -31,6 +31,15 @@ Classifier: Topic :: Scientific/Engineering :: Chemistry
 Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: summary
 
 ![SimSIMD banner](https://github.com/ashvardanian/ashvardanian/blob/master/repositories/SimSIMD.jpg?raw=true)
 
@@ -224,7 +233,7 @@ You can learn more about the technical implementation details in the following b
 
   <!-- Euclidean distance with different precision level -->
   <tr>
-    <td colspan="4" align="center">eculidean distance between 1536d vectors in <code>int8</code></td>
+    <td colspan="4" align="center">euclidean distance between 1536d vectors in <code>int8</code></td>
   </tr>
   <tr>
     <td align="center"> <!-- scipy.spatial.distance.sqeuclidean -->
@@ -241,7 +250,7 @@ You can learn more about the technical implementation details in the following b
     </td>
   </tr>
   <tr>
-    <td colspan="4" align="center">eculidean distance between 1536d vectors in <code>bfloat16</code></td>
+    <td colspan="4" align="center">euclidean distance between 1536d vectors in <code>bfloat16</code></td>
   </tr>
   <tr>
     <td align="center"> <!-- scipy.spatial.distance.sqeuclidean -->
@@ -257,7 +266,7 @@ You can learn more about the technical implementation details in the following b
     </td>
   </tr>
   <tr>
-    <td colspan="4" align="center">eculidean distance between 1536d vectors in <code>float16</code></td>
+    <td colspan="4" align="center">euclidean distance between 1536d vectors in <code>float16</code></td>
   </tr>
   <tr>
     <td align="center"> <!-- scipy.spatial.distance.sqeuclidean -->
@@ -274,7 +283,7 @@ You can learn more about the technical implementation details in the following b
     </td>
   </tr>
   <tr>
-    <td colspan="4" align="center">eculidean distance between 1536d vectors in <code>float32</code></td>
+    <td colspan="4" align="center">euclidean distance between 1536d vectors in <code>float32</code></td>
   </tr>
   <tr>
     <td align="center"> <!-- scipy.spatial.distance.sqeuclidean -->
@@ -291,7 +300,7 @@ You can learn more about the technical implementation details in the following b
     </td>
   </tr>
   <tr>
-    <td colspan="4" align="center">eculidean distance between 1536d vectors in <code>float64</code></td>
+    <td colspan="4" align="center">euclidean distance between 1536d vectors in <code>float64</code></td>
   </tr>
   <tr>
     <td align="center"> <!-- scipy.spatial.distance.sqeuclidean -->
@@ -816,9 +825,9 @@ const binaryVectorB = toBinary(vectorB);
 const distance = hamming(binaryVectorA, binaryVectorB);
 ```
 
-## Using SimSIMD in Sift
+## Using SimSIMD in Swift
 
-To install, simply add the following dependency to you `Package.swift`:
+To install, simply add the following dependency to your `Package.swift`:
 
 ```swift
 dependencies: [
@@ -859,6 +868,8 @@ Simplest of all, you can include the headers, and the compiler will automaticall
 #include <simsimd/simsimd.h>
 
 int main() {
+    simsimd_flush_denormals(); // Optional, to avoid performance penalties on denormal numbers
+
     simsimd_f32_t vector_a[1536];
     simsimd_f32_t vector_b[1536];
     simsimd_kernel_punned_t distance_function = simsimd_metric_punned(
@@ -1418,3 +1429,7 @@ $ grep -oP 'SIMSIMD_PUBLIC void simsimd_\w+_\w+_\w+\(' include/simsimd/*.h | sor
 > include/simsimd/binary.h:SIMSIMD_PUBLIC void simsimd_jaccard_b8_serial(
 > include/simsimd/binary.h:SIMSIMD_PUBLIC void simsimd_jaccard_b8_sve(
 ```
+
+## License
+
+Feel free to use the project under Apache 2.0 or the Three-clause BSD license at your preference.

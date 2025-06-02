@@ -30,7 +30,7 @@ def to_json_schema(dclass: type[Any], *, normalize_keys: bool) -> dict[str, Any]
     required = []
     for field in dataclasses.fields(dclass):
         field_type = field.type
-        if isinstance(field_type, type) and dataclasses.is_dataclass(field.type):
+        if dataclasses.is_dataclass(field.type) and isinstance(field_type, type):
             props[field.name] = to_json_schema(
                 field_type, normalize_keys=normalize_keys
             )
@@ -91,10 +91,12 @@ def to_json_schema(dclass: type[Any], *, normalize_keys: bool) -> dict[str, Any]
         raise ExceptionGroup(msg, errs)
 
     docs = pull_docs(dclass)
-    for k, v in docs.items():
-        props[k]["description"] = v
-        if "DEPRECATED" in v:
-            props[k]["deprecated"] = True
+    for field in dataclasses.fields(dclass):
+        if field.name not in docs:
+            continue
+        props[field.name]["description"] = docs[field.name].split("\n", maxsplit=1)[0]
+        if field.metadata.get("deprecated"):
+            props[field.name]["deprecated"] = True
 
     if normalize_keys:
         props = {k.replace("_", "-"): v for k, v in props.items()}
@@ -111,7 +113,7 @@ def to_json_schema(dclass: type[Any], *, normalize_keys: bool) -> dict[str, Any]
 
 
 def convert_type(t: Any, *, normalize_keys: bool) -> dict[str, Any]:
-    if isinstance(t, type) and dataclasses.is_dataclass(t):
+    if dataclasses.is_dataclass(t) and isinstance(t, type):
         return to_json_schema(t, normalize_keys=normalize_keys)
     if t is str or t is Path or t is Version or t is SpecifierSet:
         return {"type": "string"}

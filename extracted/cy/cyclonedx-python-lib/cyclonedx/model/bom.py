@@ -79,14 +79,14 @@ class BomMetaData:
         manufacture: Optional[OrganizationalEntity] = None,
     ) -> None:
         self.timestamp = timestamp or _get_now_utc()
-        self.tools = tools or []  # type:ignore[assignment]
-        self.authors = authors or []  # type:ignore[assignment]
+        self.tools = tools or []
+        self.authors = authors or []
         self.component = component
         self.supplier = supplier
-        self.licenses = licenses or []  # type:ignore[assignment]
-        self.properties = properties or []  # type:ignore[assignment]
+        self.licenses = licenses or []
+        self.properties = properties or []
         self.manufacturer = manufacturer
-        self.lifecycles = lifecycles or []  # type:ignore[assignment]
+        self.lifecycles = lifecycles or []
 
         self.manufacture = manufacture
         if manufacture:
@@ -179,7 +179,7 @@ class BomMetaData:
         return self._component
 
     @component.setter
-    def component(self, component: Component) -> None:
+    def component(self, component: Optional[Component]) -> None:
         """
         The (optional) component that the BOM describes.
 
@@ -345,12 +345,12 @@ class Bom:
         self.serial_number = serial_number or uuid4()
         self.version = version
         self.metadata = metadata or BomMetaData()
-        self.components = components or []  # type:ignore[assignment]
-        self.services = services or []  # type:ignore[assignment]
-        self.external_references = external_references or []  # type:ignore[assignment]
-        self.vulnerabilities = vulnerabilities or []  # type:ignore[assignment]
-        self.dependencies = dependencies or []  # type:ignore[assignment]
-        self.properties = properties or []  # type:ignore[assignment]
+        self.components = components or []
+        self.services = services or []
+        self.external_references = external_references or []
+        self.vulnerabilities = vulnerabilities or []
+        self.dependencies = dependencies or []
+        self.properties = properties or []
         self.definitions = definitions or Definitions()
 
     @property
@@ -703,7 +703,7 @@ class Bom:
         # 2. if root component is set and there are other components: dependencies should exist for the Component
         # this BOM is describing
         if self.metadata.component and len(self.components) > 0 and not any(map(
-            lambda d: d.ref == self.metadata.component.bom_ref and len(d.dependencies) > 0,  # type: ignore[union-attr]
+            lambda d: d.ref == self.metadata.component.bom_ref and len(d.dependencies) > 0,  # type:ignore[union-attr]
             self.dependencies
         )):
             warn(
@@ -716,7 +716,7 @@ class Bom:
         # 3. If a LicenseExpression is set, then there must be no other license.
         # see https://github.com/CycloneDX/specification/pull/205
         elem: Union[BomMetaData, Component, Service]
-        for elem in chain(  # type: ignore[assignment]
+        for elem in chain(  # type:ignore[assignment]
             [self.metadata],
             self.metadata.component.get_all_nested_components(include_self=True) if self.metadata.component else [],
             chain.from_iterable(c.get_all_nested_components(include_self=True) for c in self.components),
