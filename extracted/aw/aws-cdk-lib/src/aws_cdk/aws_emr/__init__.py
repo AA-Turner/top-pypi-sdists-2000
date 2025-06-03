@@ -3704,19 +3704,27 @@ class CfnCluster(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_emr.CfnCluster.ManagedScalingPolicyProperty",
         jsii_struct_bases=[],
-        name_mapping={"compute_limits": "computeLimits"},
+        name_mapping={
+            "compute_limits": "computeLimits",
+            "scaling_strategy": "scalingStrategy",
+            "utilization_performance_index": "utilizationPerformanceIndex",
+        },
     )
     class ManagedScalingPolicyProperty:
         def __init__(
             self,
             *,
             compute_limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ComputeLimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            scaling_strategy: typing.Optional[builtins.str] = None,
+            utilization_performance_index: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Managed scaling policy for an Amazon EMR cluster.
 
             The policy specifies the limits for resources that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration.
 
             :param compute_limits: The Amazon EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster is not allowed to go above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration.
+            :param scaling_strategy: 
+            :param utilization_performance_index: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emr-cluster-managedscalingpolicy.html
             :exampleMetadata: fixture=_generated
@@ -3736,15 +3744,23 @@ class CfnCluster(
                         # the properties below are optional
                         maximum_core_capacity_units=123,
                         maximum_on_demand_capacity_units=123
-                    )
+                    ),
+                    scaling_strategy="scalingStrategy",
+                    utilization_performance_index=123
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__0286741b316b450e24ed1eff9bc726fec190a69e54cee78ab3a340bcde86cafe)
                 check_type(argname="argument compute_limits", value=compute_limits, expected_type=type_hints["compute_limits"])
+                check_type(argname="argument scaling_strategy", value=scaling_strategy, expected_type=type_hints["scaling_strategy"])
+                check_type(argname="argument utilization_performance_index", value=utilization_performance_index, expected_type=type_hints["utilization_performance_index"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if compute_limits is not None:
                 self._values["compute_limits"] = compute_limits
+            if scaling_strategy is not None:
+                self._values["scaling_strategy"] = scaling_strategy
+            if utilization_performance_index is not None:
+                self._values["utilization_performance_index"] = utilization_performance_index
 
         @builtins.property
         def compute_limits(
@@ -3758,6 +3774,22 @@ class CfnCluster(
             '''
             result = self._values.get("compute_limits")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ComputeLimitsProperty"]], result)
+
+        @builtins.property
+        def scaling_strategy(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emr-cluster-managedscalingpolicy.html#cfn-emr-cluster-managedscalingpolicy-scalingstrategy
+            '''
+            result = self._values.get("scaling_strategy")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def utilization_performance_index(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emr-cluster-managedscalingpolicy.html#cfn-emr-cluster-managedscalingpolicy-utilizationperformanceindex
+            '''
+            result = self._values.get("utilization_performance_index")
+            return typing.cast(typing.Optional[jsii.Number], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11952,6 +11984,8 @@ def _typecheckingstub__0de77f42d53bb5f752f54244451586c821de421f64b6929630c898540
 def _typecheckingstub__0286741b316b450e24ed1eff9bc726fec190a69e54cee78ab3a340bcde86cafe(
     *,
     compute_limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ComputeLimitsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    scaling_strategy: typing.Optional[builtins.str] = None,
+    utilization_performance_index: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass

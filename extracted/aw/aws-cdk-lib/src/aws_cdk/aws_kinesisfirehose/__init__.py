@@ -452,7 +452,11 @@ import aws_cdk.aws_s3 as s3
 import aws_cdk as cdk
 from aws_cdk.integ_tests_alpha import AwsApiCall, ExpectedResult, IntegTest
 
-app = cdk.App()
+app = cdk.App(
+    post_cli_context={
+        "@aws-cdk/aws-lambda:useCdkManagedLogGroup": False
+    }
+)
 
 stack = cdk.Stack(app, "aws-cdk-firehose-delivery-stream-s3-all-properties")
 

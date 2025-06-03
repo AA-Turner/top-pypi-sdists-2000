@@ -75,7 +75,16 @@ class CfnApplicationInstance(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_panorama.CfnApplicationInstance",
 ):
-    '''Creates an application instance and deploys it to a device.
+    '''.. epigraph::
+
+   End of support notice: On May 31, 2026, AWS will end support for AWS Panorama .
+
+    After May 31, 2026,
+    .. epigraph::
+
+       you will no longer be able to access the AWS Panorama console or AWS Panorama resources. For more information, see `AWS Panorama end of support <https://docs.aws.amazon.com/panorama/latest/dev/panorama-end-of-support.html>`_ .
+
+    Creates an application instance and deploys it to a device.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-panorama-applicationinstance.html
     :cloudformationResource: AWS::Panorama::ApplicationInstance
@@ -686,7 +695,16 @@ class CfnPackage(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_panorama.CfnPackage",
 ):
-    '''Creates a package and storage location in an Amazon S3 access point.
+    '''.. epigraph::
+
+   End of support notice: On May 31, 2026, AWS will end support for AWS Panorama .
+
+    After May 31, 2026,
+    .. epigraph::
+
+       you will no longer be able to access the AWS Panorama console or AWS Panorama resources. For more information, see `AWS Panorama end of support <https://docs.aws.amazon.com/panorama/latest/dev/panorama-end-of-support.html>`_ .
+
+    Creates a package and storage location in an Amazon S3 access point.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-panorama-package.html
     :cloudformationResource: AWS::Panorama::Package
@@ -1131,7 +1149,16 @@ class CfnPackageVersion(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_panorama.CfnPackageVersion",
 ):
-    '''Registers a package version.
+    '''.. epigraph::
+
+   End of support notice: On May 31, 2026, AWS will end support for AWS Panorama .
+
+    After May 31, 2026,
+    .. epigraph::
+
+       you will no longer be able to access the AWS Panorama console or AWS Panorama resources. For more information, see `AWS Panorama end of support <https://docs.aws.amazon.com/panorama/latest/dev/panorama-end-of-support.html>`_ .
+
+    Registers a package version.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-panorama-packageversion.html
     :cloudformationResource: AWS::Panorama::PackageVersion

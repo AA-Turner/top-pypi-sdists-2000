@@ -12545,7 +12545,7 @@ class CfnFlow(
         def __init__(self, *, agent_alias_arn: builtins.str) -> None:
             '''Defines an agent node in your flow.
 
-            You specify the agent to invoke at this point in the flow. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            You specify the agent to invoke at this point in the flow. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param agent_alias_arn: The Amazon Resource Name (ARN) of the alias of the agent to invoke.
 
@@ -12603,7 +12603,7 @@ class CfnFlow(
         ) -> None:
             '''Defines a condition node in your flow.
 
-            You can specify conditions that determine which node comes next in the flow. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            You can specify conditions that determine which node comes next in the flow. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param conditions: An array of conditions. Each member contains the name of a condition and an expression that defines the condition.
 
@@ -13307,12 +13307,12 @@ class CfnFlow(
         ) -> None:
             '''Contains configurations for a node in your flow.
 
-            For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param agent: Contains configurations for an agent node in your flow. Invokes an alias of an agent and returns the response.
             :param collector: Contains configurations for a collector node in your flow. Collects an iteration of inputs and consolidates them into an array of outputs.
             :param condition: Contains configurations for a condition node in your flow. Defines conditions that lead to different branches of the flow.
-            :param inline_code: Inline code config strucuture, contains code configs.
+            :param inline_code: Contains configurations for an inline code node in your flow. Inline code nodes let you write and execute code directly within your flow, enabling data transformations, custom logic, and integrations without needing an external Lambda function.
             :param input: Contains configurations for an input flow node in your flow. The first node in the flow. ``inputs`` can't be specified for this node.
             :param iterator: Contains configurations for an iterator node in your flow. Takes an input that is an array and iteratively sends each item of the array as an output to the following node. The size of the array is also returned in the output. The output flow node at the end of the flow iteration will return a response for each member of the array. To return only one response, you can include a collector node downstream from the iterator node.
             :param knowledge_base: Contains configurations for a knowledge base node in your flow. Queries a knowledge base and returns the retrieved results or generated response.
@@ -13511,7 +13511,9 @@ class CfnFlow(
         def inline_code(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlow.InlineCodeFlowNodeConfigurationProperty"]]:
-            '''Inline code config strucuture, contains code configs.
+            '''Contains configurations for an inline code node in your flow.
+
+            Inline code nodes let you write and execute code directly within your flow, enabling data transformations, custom logic, and integrations without needing an external Lambda function.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-flownodeconfiguration.html#cfn-bedrock-flow-flownodeconfiguration-inlinecode
             '''
@@ -13655,11 +13657,11 @@ class CfnFlow(
             name: builtins.str,
             type: builtins.str,
         ) -> None:
-            '''Contains configurations for an input to a node.
+            '''Contains configurations for an input in an Amazon Bedrock Flows node.
 
             :param expression: An expression that formats the input for the node. For an explanation of how to create expressions, see `Expressions in Prompt flows in Amazon Bedrock <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-expressions.html>`_ .
-            :param name: A name for the input that you can reference.
-            :param type: The data type of the input. If the input doesn't match this type at runtime, a validation error will be thrown.
+            :param name: Specifies a name for the input that you can reference.
+            :param type: Specifies the data type of the input. If the input doesn't match this type at runtime, a validation error will be thrown.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-flownodeinput.html
             :exampleMetadata: fixture=_generated
@@ -13701,7 +13703,7 @@ class CfnFlow(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''A name for the input that you can reference.
+            '''Specifies a name for the input that you can reference.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-flownodeinput.html#cfn-bedrock-flow-flownodeinput-name
             '''
@@ -13711,7 +13713,7 @@ class CfnFlow(
 
         @builtins.property
         def type(self) -> builtins.str:
-            '''The data type of the input.
+            '''Specifies the data type of the input.
 
             If the input doesn't match this type at runtime, a validation error will be thrown.
 
@@ -14169,10 +14171,12 @@ class CfnFlow(
     )
     class InlineCodeFlowNodeConfigurationProperty:
         def __init__(self, *, code: builtins.str, language: builtins.str) -> None:
-            '''Inline code config strucuture, contains code configs.
+            '''Contains configurations for an inline code node in your flow.
 
-            :param code: The inline code entered by customers. max size is 5MB.
-            :param language: Enum encodes the supported language type.
+            Inline code nodes let you write and execute code directly within your flow, enabling data transformations, custom logic, and integrations without needing an external Lambda function.
+
+            :param code: The code that's executed in your inline code node. The code can access input data from previous nodes in the flow, perform operations on that data, and produce output that can be used by other nodes in your flow. The code must be valid in the programming ``language`` that you specify.
+            :param language: The programming language used by your inline code node. The code must be valid in the programming ``language`` that you specify. Currently, only Python 3 ( ``Python_3`` ) is supported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-inlinecodeflownodeconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -14199,9 +14203,11 @@ class CfnFlow(
 
         @builtins.property
         def code(self) -> builtins.str:
-            '''The inline code entered by customers.
+            '''The code that's executed in your inline code node.
 
-            max size is 5MB.
+            The code can access input data from previous nodes in the flow, perform operations on that data, and produce output that can be used by other nodes in your flow.
+
+            The code must be valid in the programming ``language`` that you specify.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-inlinecodeflownodeconfiguration.html#cfn-bedrock-flow-inlinecodeflownodeconfiguration-code
             '''
@@ -14211,7 +14217,9 @@ class CfnFlow(
 
         @builtins.property
         def language(self) -> builtins.str:
-            '''Enum encodes the supported language type.
+            '''The programming language used by your inline code node.
+
+            The code must be valid in the programming ``language`` that you specify. Currently, only Python 3 ( ``Python_3`` ) is supported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flow-inlinecodeflownodeconfiguration.html#cfn-bedrock-flow-inlinecodeflownodeconfiguration-language
             '''
@@ -14249,7 +14257,7 @@ class CfnFlow(
         ) -> None:
             '''Contains configurations for a knowledge base node in a flow.
 
-            This node takes a query as the input and returns, as the output, the retrieved responses directly (as an array) or a response generated based on the retrieved responses. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            This node takes a query as the input and returns, as the output, the retrieved responses directly (as an array) or a response generated based on the retrieved responses. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param knowledge_base_id: The unique identifier of the knowledge base to query.
             :param guardrail_configuration: Contains configurations for a guardrail to apply during query and response generation for the knowledge base in this configuration.
@@ -14338,7 +14346,7 @@ class CfnFlow(
         def __init__(self, *, lambda_arn: builtins.str) -> None:
             '''Contains configurations for a Lambda function node in the flow.
 
-            You specify the Lambda function to invoke and the inputs into the function. The output is the response that is defined in the Lambda function. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            You specify the Lambda function to invoke and the inputs into the function. The output is the response that is defined in the Lambda function. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param lambda_arn: The Amazon Resource Name (ARN) of the Lambda function to invoke.
 
@@ -14397,7 +14405,7 @@ class CfnFlow(
         ) -> None:
             '''Contains configurations for a Lex node in the flow.
 
-            You specify a Amazon Lex bot to invoke. This node takes an utterance as the input and returns as the output the intent identified by the Amazon Lex bot. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            You specify a Amazon Lex bot to invoke. This node takes an utterance as the input and returns as the output the intent identified by the Amazon Lex bot. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param bot_alias_arn: The Amazon Resource Name (ARN) of the Amazon Lex bot alias to invoke.
             :param locale_id: The Region to invoke the Amazon Lex bot in.
@@ -14473,7 +14481,7 @@ class CfnFlow(
         ) -> None:
             '''Contains configurations for a prompt node in the flow.
 
-            You can use a prompt from Prompt management or you can define one in this node. If the prompt contains variables, the inputs into this node will fill in the variables. The output from this node is the response generated by the model. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            You can use a prompt from Prompt management or you can define one in this node. If the prompt contains variables, the inputs into this node will fill in the variables. The output from this node is the response generated by the model. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param source_configuration: Specifies whether the prompt is from Prompt management or defined inline.
             :param guardrail_configuration: Contains configurations for a guardrail to apply to the prompt in this node and the response generated from it.
@@ -15715,7 +15723,7 @@ class CfnFlowAlias(
         :param flow_arn: The Amazon Resource Name (ARN) of the alias.
         :param name: The name of the alias.
         :param routing_configuration: A list of configurations about the versions that the alias maps to. Currently, you can only specify one.
-        :param concurrency_configuration: 
+        :param concurrency_configuration: The configuration that specifies how nodes in the flow are executed concurrently.
         :param description: A description of the alias.
         :param tags: Metadata that you can assign to a resource as key-value pairs. For more information, see the following resources:. - `Tag naming limits and requirements <https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html#tag-conventions>`_ - `Tagging best practices <https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html#tag-best-practices>`_
         '''
@@ -15869,6 +15877,7 @@ class CfnFlowAlias(
     def concurrency_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty"]]:
+        '''The configuration that specifies how nodes in the flow are executed concurrently.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty"]], jsii.get(self, "concurrencyConfiguration"))
 
     @concurrency_configuration.setter
@@ -15925,9 +15934,12 @@ class CfnFlowAlias(
             type: builtins.str,
             max_concurrency: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param type: 
-            :param max_concurrency: Number of nodes executed concurrently at a time.
+            '''Determines how multiple nodes in a flow can run in parallel.
+
+            Running nodes concurrently can improve your flow's performance.
+
+            :param type: The type of concurrency to use for parallel node execution. Specify one of the following options:. - ``Automatic`` - Amazon Bedrock determines which nodes can be executed in parallel based on the flow definition and its dependencies. - ``Manual`` - You specify which nodes can be executed in parallel.
+            :param max_concurrency: The maximum number of nodes that can be executed concurrently in the flow.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowalias-flowaliasconcurrencyconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -15957,7 +15969,11 @@ class CfnFlowAlias(
 
         @builtins.property
         def type(self) -> builtins.str:
-            '''
+            '''The type of concurrency to use for parallel node execution. Specify one of the following options:.
+
+            - ``Automatic`` - Amazon Bedrock determines which nodes can be executed in parallel based on the flow definition and its dependencies.
+            - ``Manual`` - You specify which nodes can be executed in parallel.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowalias-flowaliasconcurrencyconfiguration.html#cfn-bedrock-flowalias-flowaliasconcurrencyconfiguration-type
             '''
             result = self._values.get("type")
@@ -15966,7 +15982,7 @@ class CfnFlowAlias(
 
         @builtins.property
         def max_concurrency(self) -> typing.Optional[jsii.Number]:
-            '''Number of nodes executed concurrently at a time.
+            '''The maximum number of nodes that can be executed concurrently in the flow.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowalias-flowaliasconcurrencyconfiguration.html#cfn-bedrock-flowalias-flowaliasconcurrencyconfiguration-maxconcurrency
             '''
@@ -16068,7 +16084,7 @@ class CfnFlowAliasProps:
         :param flow_arn: The Amazon Resource Name (ARN) of the alias.
         :param name: The name of the alias.
         :param routing_configuration: A list of configurations about the versions that the alias maps to. Currently, you can only specify one.
-        :param concurrency_configuration: 
+        :param concurrency_configuration: The configuration that specifies how nodes in the flow are executed concurrently.
         :param description: A description of the alias.
         :param tags: Metadata that you can assign to a resource as key-value pairs. For more information, see the following resources:. - `Tag naming limits and requirements <https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html#tag-conventions>`_ - `Tagging best practices <https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html#tag-best-practices>`_
 
@@ -16159,7 +16175,8 @@ class CfnFlowAliasProps:
     def concurrency_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty]]:
-        '''
+        '''The configuration that specifies how nodes in the flow are executed concurrently.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-flowalias.html#cfn-bedrock-flowalias-concurrencyconfiguration
         '''
         result = self._values.get("concurrency_configuration")
@@ -16755,7 +16772,7 @@ class CfnFlowVersion(
         def __init__(self, *, agent_alias_arn: builtins.str) -> None:
             '''Defines an agent node in your flow.
 
-            You specify the agent to invoke at this point in the flow. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            You specify the agent to invoke at this point in the flow. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param agent_alias_arn: The Amazon Resource Name (ARN) of the alias of the agent to invoke.
 
@@ -16813,7 +16830,7 @@ class CfnFlowVersion(
         ) -> None:
             '''Defines a condition node in your flow.
 
-            You can specify conditions that determine which node comes next in the flow. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            You can specify conditions that determine which node comes next in the flow. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param conditions: An array of conditions. Each member contains the name of a condition and an expression that defines the condition.
 
@@ -17517,12 +17534,12 @@ class CfnFlowVersion(
         ) -> None:
             '''Contains configurations for a node in your flow.
 
-            For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param agent: Contains configurations for an agent node in your flow. Invokes an alias of an agent and returns the response.
             :param collector: Contains configurations for a collector node in your flow. Collects an iteration of inputs and consolidates them into an array of outputs.
             :param condition: Contains configurations for a condition node in your flow. Defines conditions that lead to different branches of the flow.
-            :param inline_code: Inline code config strucuture, contains code configs.
+            :param inline_code: Contains configurations for an inline code node in your flow. Inline code nodes let you write and execute code directly within your flow, enabling data transformations, custom logic, and integrations without needing an external Lambda function.
             :param input: Contains configurations for an input flow node in your flow. The first node in the flow. ``inputs`` can't be specified for this node.
             :param iterator: Contains configurations for an iterator node in your flow. Takes an input that is an array and iteratively sends each item of the array as an output to the following node. The size of the array is also returned in the output. The output flow node at the end of the flow iteration will return a response for each member of the array. To return only one response, you can include a collector node downstream from the iterator node.
             :param knowledge_base: Contains configurations for a knowledge base node in your flow. Queries a knowledge base and returns the retrieved results or generated response.
@@ -17721,7 +17738,9 @@ class CfnFlowVersion(
         def inline_code(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowVersion.InlineCodeFlowNodeConfigurationProperty"]]:
-            '''Inline code config strucuture, contains code configs.
+            '''Contains configurations for an inline code node in your flow.
+
+            Inline code nodes let you write and execute code directly within your flow, enabling data transformations, custom logic, and integrations without needing an external Lambda function.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-flownodeconfiguration.html#cfn-bedrock-flowversion-flownodeconfiguration-inlinecode
             '''
@@ -17865,11 +17884,11 @@ class CfnFlowVersion(
             name: builtins.str,
             type: builtins.str,
         ) -> None:
-            '''Contains configurations for an input to a node.
+            '''Contains configurations for an input in an Amazon Bedrock Flows node.
 
             :param expression: An expression that formats the input for the node. For an explanation of how to create expressions, see `Expressions in Prompt flows in Amazon Bedrock <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-expressions.html>`_ .
-            :param name: A name for the input that you can reference.
-            :param type: The data type of the input. If the input doesn't match this type at runtime, a validation error will be thrown.
+            :param name: Specifies a name for the input that you can reference.
+            :param type: Specifies the data type of the input. If the input doesn't match this type at runtime, a validation error will be thrown.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-flownodeinput.html
             :exampleMetadata: fixture=_generated
@@ -17911,7 +17930,7 @@ class CfnFlowVersion(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''A name for the input that you can reference.
+            '''Specifies a name for the input that you can reference.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-flownodeinput.html#cfn-bedrock-flowversion-flownodeinput-name
             '''
@@ -17921,7 +17940,7 @@ class CfnFlowVersion(
 
         @builtins.property
         def type(self) -> builtins.str:
-            '''The data type of the input.
+            '''Specifies the data type of the input.
 
             If the input doesn't match this type at runtime, a validation error will be thrown.
 
@@ -18322,10 +18341,12 @@ class CfnFlowVersion(
     )
     class InlineCodeFlowNodeConfigurationProperty:
         def __init__(self, *, code: builtins.str, language: builtins.str) -> None:
-            '''Inline code config strucuture, contains code configs.
+            '''Contains configurations for an inline code node in your flow.
 
-            :param code: The inline code entered by customers. max size is 5MB.
-            :param language: Enum encodes the supported language type.
+            Inline code nodes let you write and execute code directly within your flow, enabling data transformations, custom logic, and integrations without needing an external Lambda function.
+
+            :param code: The code that's executed in your inline code node. The code can access input data from previous nodes in the flow, perform operations on that data, and produce output that can be used by other nodes in your flow. The code must be valid in the programming ``language`` that you specify.
+            :param language: The programming language used by your inline code node. The code must be valid in the programming ``language`` that you specify. Currently, only Python 3 ( ``Python_3`` ) is supported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-inlinecodeflownodeconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -18352,9 +18373,11 @@ class CfnFlowVersion(
 
         @builtins.property
         def code(self) -> builtins.str:
-            '''The inline code entered by customers.
+            '''The code that's executed in your inline code node.
 
-            max size is 5MB.
+            The code can access input data from previous nodes in the flow, perform operations on that data, and produce output that can be used by other nodes in your flow.
+
+            The code must be valid in the programming ``language`` that you specify.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-inlinecodeflownodeconfiguration.html#cfn-bedrock-flowversion-inlinecodeflownodeconfiguration-code
             '''
@@ -18364,7 +18387,9 @@ class CfnFlowVersion(
 
         @builtins.property
         def language(self) -> builtins.str:
-            '''Enum encodes the supported language type.
+            '''The programming language used by your inline code node.
+
+            The code must be valid in the programming ``language`` that you specify. Currently, only Python 3 ( ``Python_3`` ) is supported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-flowversion-inlinecodeflownodeconfiguration.html#cfn-bedrock-flowversion-inlinecodeflownodeconfiguration-language
             '''
@@ -18402,7 +18427,7 @@ class CfnFlowVersion(
         ) -> None:
             '''Contains configurations for a knowledge base node in a flow.
 
-            This node takes a query as the input and returns, as the output, the retrieved responses directly (as an array) or a response generated based on the retrieved responses. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            This node takes a query as the input and returns, as the output, the retrieved responses directly (as an array) or a response generated based on the retrieved responses. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param knowledge_base_id: The unique identifier of the knowledge base to query.
             :param guardrail_configuration: Contains configurations for a guardrail to apply during query and response generation for the knowledge base in this configuration.
@@ -18491,7 +18516,7 @@ class CfnFlowVersion(
         def __init__(self, *, lambda_arn: builtins.str) -> None:
             '''Contains configurations for a Lambda function node in the flow.
 
-            You specify the Lambda function to invoke and the inputs into the function. The output is the response that is defined in the Lambda function. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            You specify the Lambda function to invoke and the inputs into the function. The output is the response that is defined in the Lambda function. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param lambda_arn: The Amazon Resource Name (ARN) of the Lambda function to invoke.
 
@@ -18550,7 +18575,7 @@ class CfnFlowVersion(
         ) -> None:
             '''Contains configurations for a Lex node in the flow.
 
-            You specify a Amazon Lex bot to invoke. This node takes an utterance as the input and returns as the output the intent identified by the Amazon Lex bot. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            You specify a Amazon Lex bot to invoke. This node takes an utterance as the input and returns as the output the intent identified by the Amazon Lex bot. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param bot_alias_arn: The Amazon Resource Name (ARN) of the Amazon Lex bot alias to invoke.
             :param locale_id: The Region to invoke the Amazon Lex bot in.
@@ -18626,7 +18651,7 @@ class CfnFlowVersion(
         ) -> None:
             '''Contains configurations for a prompt node in the flow.
 
-            You can use a prompt from Prompt management or you can define one in this node. If the prompt contains variables, the inputs into this node will fill in the variables. The output from this node is the response generated by the model. For more information, see `Node types in Amazon Bedrock works <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
+            You can use a prompt from Prompt management or you can define one in this node. If the prompt contains variables, the inputs into this node will fill in the variables. The output from this node is the response generated by the model. For more information, see `Node types in a flow <https://docs.aws.amazon.com/bedrock/latest/userguide/flows-nodes.html>`_ in the Amazon Bedrock User Guide.
 
             :param source_configuration: Specifies whether the prompt is from Prompt management or defined inline.
             :param guardrail_configuration: Contains configurations for a guardrail to apply to the prompt in this node and the response generated from it.

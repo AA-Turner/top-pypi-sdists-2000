@@ -1024,6 +1024,10 @@ class CfnFileSystem(
                 copy_tags_to_backups=False,
                 daily_automatic_backup_start_time="dailyAutomaticBackupStartTime",
                 data_compression_type="dataCompressionType",
+                data_read_cache_configuration=fsx.CfnFileSystem.DataReadCacheConfigurationProperty(
+                    size_gi_b=123,
+                    sizing_mode="sizingMode"
+                ),
                 deployment_type="deploymentType",
                 drive_cache_type="driveCacheType",
                 efa_enabled=False,
@@ -1035,6 +1039,7 @@ class CfnFileSystem(
                     mode="mode"
                 ),
                 per_unit_storage_throughput=123,
+                throughput_capacity=123,
                 weekly_maintenance_start_time="weeklyMaintenanceStartTime"
             ),
             ontap_configuration=fsx.CfnFileSystem.OntapConfigurationProperty(
@@ -1669,6 +1674,73 @@ class CfnFileSystem(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_fsx.CfnFileSystem.DataReadCacheConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"size_gib": "sizeGiB", "sizing_mode": "sizingMode"},
+    )
+    class DataReadCacheConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            size_gib: typing.Optional[jsii.Number] = None,
+            sizing_mode: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param size_gib: 
+            :param sizing_mode: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-datareadcacheconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_fsx as fsx
+                
+                data_read_cache_configuration_property = fsx.CfnFileSystem.DataReadCacheConfigurationProperty(
+                    size_gi_b=123,
+                    sizing_mode="sizingMode"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3cb2d4a98bff48f203d8eaee325b8f6c388372cb868c4fa792f5c5693518337f)
+                check_type(argname="argument size_gib", value=size_gib, expected_type=type_hints["size_gib"])
+                check_type(argname="argument sizing_mode", value=sizing_mode, expected_type=type_hints["sizing_mode"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if size_gib is not None:
+                self._values["size_gib"] = size_gib
+            if sizing_mode is not None:
+                self._values["sizing_mode"] = sizing_mode
+
+        @builtins.property
+        def size_gib(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-datareadcacheconfiguration.html#cfn-fsx-filesystem-datareadcacheconfiguration-sizegib
+            '''
+            result = self._values.get("size_gib")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def sizing_mode(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-datareadcacheconfiguration.html#cfn-fsx-filesystem-datareadcacheconfiguration-sizingmode
+            '''
+            result = self._values.get("sizing_mode")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DataReadCacheConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_fsx.CfnFileSystem.DiskIopsConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={"iops": "iops", "mode": "mode"},
@@ -1753,6 +1825,7 @@ class CfnFileSystem(
             "copy_tags_to_backups": "copyTagsToBackups",
             "daily_automatic_backup_start_time": "dailyAutomaticBackupStartTime",
             "data_compression_type": "dataCompressionType",
+            "data_read_cache_configuration": "dataReadCacheConfiguration",
             "deployment_type": "deploymentType",
             "drive_cache_type": "driveCacheType",
             "efa_enabled": "efaEnabled",
@@ -1761,6 +1834,7 @@ class CfnFileSystem(
             "import_path": "importPath",
             "metadata_configuration": "metadataConfiguration",
             "per_unit_storage_throughput": "perUnitStorageThroughput",
+            "throughput_capacity": "throughputCapacity",
             "weekly_maintenance_start_time": "weeklyMaintenanceStartTime",
         },
     )
@@ -1773,6 +1847,7 @@ class CfnFileSystem(
             copy_tags_to_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             daily_automatic_backup_start_time: typing.Optional[builtins.str] = None,
             data_compression_type: typing.Optional[builtins.str] = None,
+            data_read_cache_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.DataReadCacheConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             deployment_type: typing.Optional[builtins.str] = None,
             drive_cache_type: typing.Optional[builtins.str] = None,
             efa_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -1781,6 +1856,7 @@ class CfnFileSystem(
             import_path: typing.Optional[builtins.str] = None,
             metadata_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.MetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             per_unit_storage_throughput: typing.Optional[jsii.Number] = None,
+            throughput_capacity: typing.Optional[jsii.Number] = None,
             weekly_maintenance_start_time: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The configuration for the Amazon FSx for Lustre file system.
@@ -1790,6 +1866,7 @@ class CfnFileSystem(
             :param copy_tags_to_backups: (Optional) Not available for use with file systems that are linked to a data repository. A boolean flag indicating whether tags for the file system should be copied to backups. The default value is false. If ``CopyTagsToBackups`` is set to true, all file system tags are copied to all automatic and user-initiated backups when the user doesn't specify any backup-specific tags. If ``CopyTagsToBackups`` is set to true and you specify one or more backup tags, only the specified tags are copied to backups. If you specify one or more tags when creating a user-initiated backup, no tags are copied from the file system, regardless of this value. (Default = ``false`` ) For more information, see `Working with backups <https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html>`_ in the *Amazon FSx for Lustre User Guide* .
             :param daily_automatic_backup_start_time: A recurring daily time, in the format ``HH:MM`` . ``HH`` is the zero-padded hour of the day (0-23), and ``MM`` is the zero-padded minute of the hour. For example, ``05:00`` specifies 5 AM daily.
             :param data_compression_type: Sets the data compression configuration for the file system. ``DataCompressionType`` can have the following values:. - ``NONE`` - (Default) Data compression is turned off when the file system is created. - ``LZ4`` - Data compression is turned on with the LZ4 algorithm. For more information, see `Lustre data compression <https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-compression.html>`_ in the *Amazon FSx for Lustre User Guide* .
+            :param data_read_cache_configuration: 
             :param deployment_type: (Optional) Choose ``SCRATCH_1`` and ``SCRATCH_2`` deployment types when you need temporary storage and shorter-term processing of data. The ``SCRATCH_2`` deployment type provides in-transit encryption of data and higher burst throughput capacity than ``SCRATCH_1`` . Choose ``PERSISTENT_1`` for longer-term storage and for throughput-focused workloads that aren’t latency-sensitive. ``PERSISTENT_1`` supports encryption of data in transit, and is available in all AWS Regions in which FSx for Lustre is available. Choose ``PERSISTENT_2`` for longer-term storage and for latency-sensitive workloads that require the highest levels of IOPS/throughput. ``PERSISTENT_2`` supports SSD storage, and offers higher ``PerUnitStorageThroughput`` (up to 1000 MB/s/TiB). You can optionally specify a metadata configuration mode for ``PERSISTENT_2`` which supports increasing metadata performance. ``PERSISTENT_2`` is available in a limited number of AWS Regions . For more information, and an up-to-date list of AWS Regions in which ``PERSISTENT_2`` is available, see `File system deployment options for FSx for Lustre <https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-fsx-lustre.html#lustre-deployment-types>`_ in the *Amazon FSx for Lustre User Guide* . .. epigraph:: If you choose ``PERSISTENT_2`` , and you set ``FileSystemTypeVersion`` to ``2.10`` , the ``CreateFileSystem`` operation fails. Encryption of data in transit is automatically turned on when you access ``SCRATCH_2`` , ``PERSISTENT_1`` , and ``PERSISTENT_2`` file systems from Amazon EC2 instances that support automatic encryption in the AWS Regions where they are available. For more information about encryption in transit for FSx for Lustre file systems, see `Encrypting data in transit <https://docs.aws.amazon.com/fsx/latest/LustreGuide/encryption-in-transit-fsxl.html>`_ in the *Amazon FSx for Lustre User Guide* . (Default = ``SCRATCH_1`` )
             :param drive_cache_type: The type of drive cache used by ``PERSISTENT_1`` file systems that are provisioned with HDD storage devices. This parameter is required when storage type is HDD. Set this property to ``READ`` to improve the performance for frequently accessed files by caching up to 20% of the total storage capacity of the file system. This parameter is required when ``StorageType`` is set to ``HDD`` and ``DeploymentType`` is ``PERSISTENT_1`` .
             :param efa_enabled: 
@@ -1798,6 +1875,7 @@ class CfnFileSystem(
             :param import_path: (Optional) The path to the Amazon S3 bucket (including the optional prefix) that you're using as the data repository for your Amazon FSx for Lustre file system. The root of your FSx for Lustre file system will be mapped to the root of the Amazon S3 bucket you select. An example is ``s3://import-bucket/optional-prefix`` . If you specify a prefix after the Amazon S3 bucket name, only object keys with that prefix are loaded into the file system. .. epigraph:: This parameter is not supported for Lustre file systems with a data repository association.
             :param metadata_configuration: 
             :param per_unit_storage_throughput: Required with ``PERSISTENT_1`` and ``PERSISTENT_2`` deployment types, provisions the amount of read and write throughput for each 1 tebibyte (TiB) of file system storage capacity, in MB/s/TiB. File system throughput capacity is calculated by multiplying ﬁle system storage capacity (TiB) by the ``PerUnitStorageThroughput`` (MB/s/TiB). For a 2.4-TiB ﬁle system, provisioning 50 MB/s/TiB of ``PerUnitStorageThroughput`` yields 120 MB/s of ﬁle system throughput. You pay for the amount of throughput that you provision. Valid values: - For ``PERSISTENT_1`` SSD storage: 50, 100, 200 MB/s/TiB. - For ``PERSISTENT_1`` HDD storage: 12, 40 MB/s/TiB. - For ``PERSISTENT_2`` SSD storage: 125, 250, 500, 1000 MB/s/TiB.
+            :param throughput_capacity: 
             :param weekly_maintenance_start_time: The preferred start time to perform weekly maintenance, formatted d:HH:MM in the UTC time zone, where d is the weekday number, from 1 through 7, beginning with Monday and ending with Sunday. For example, ``1:05:00`` specifies maintenance at 5 AM Monday.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-lustreconfiguration.html
@@ -1815,6 +1893,10 @@ class CfnFileSystem(
                     copy_tags_to_backups=False,
                     daily_automatic_backup_start_time="dailyAutomaticBackupStartTime",
                     data_compression_type="dataCompressionType",
+                    data_read_cache_configuration=fsx.CfnFileSystem.DataReadCacheConfigurationProperty(
+                        size_gi_b=123,
+                        sizing_mode="sizingMode"
+                    ),
                     deployment_type="deploymentType",
                     drive_cache_type="driveCacheType",
                     efa_enabled=False,
@@ -1826,6 +1908,7 @@ class CfnFileSystem(
                         mode="mode"
                     ),
                     per_unit_storage_throughput=123,
+                    throughput_capacity=123,
                     weekly_maintenance_start_time="weeklyMaintenanceStartTime"
                 )
             '''
@@ -1836,6 +1919,7 @@ class CfnFileSystem(
                 check_type(argname="argument copy_tags_to_backups", value=copy_tags_to_backups, expected_type=type_hints["copy_tags_to_backups"])
                 check_type(argname="argument daily_automatic_backup_start_time", value=daily_automatic_backup_start_time, expected_type=type_hints["daily_automatic_backup_start_time"])
                 check_type(argname="argument data_compression_type", value=data_compression_type, expected_type=type_hints["data_compression_type"])
+                check_type(argname="argument data_read_cache_configuration", value=data_read_cache_configuration, expected_type=type_hints["data_read_cache_configuration"])
                 check_type(argname="argument deployment_type", value=deployment_type, expected_type=type_hints["deployment_type"])
                 check_type(argname="argument drive_cache_type", value=drive_cache_type, expected_type=type_hints["drive_cache_type"])
                 check_type(argname="argument efa_enabled", value=efa_enabled, expected_type=type_hints["efa_enabled"])
@@ -1844,6 +1928,7 @@ class CfnFileSystem(
                 check_type(argname="argument import_path", value=import_path, expected_type=type_hints["import_path"])
                 check_type(argname="argument metadata_configuration", value=metadata_configuration, expected_type=type_hints["metadata_configuration"])
                 check_type(argname="argument per_unit_storage_throughput", value=per_unit_storage_throughput, expected_type=type_hints["per_unit_storage_throughput"])
+                check_type(argname="argument throughput_capacity", value=throughput_capacity, expected_type=type_hints["throughput_capacity"])
                 check_type(argname="argument weekly_maintenance_start_time", value=weekly_maintenance_start_time, expected_type=type_hints["weekly_maintenance_start_time"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if auto_import_policy is not None:
@@ -1856,6 +1941,8 @@ class CfnFileSystem(
                 self._values["daily_automatic_backup_start_time"] = daily_automatic_backup_start_time
             if data_compression_type is not None:
                 self._values["data_compression_type"] = data_compression_type
+            if data_read_cache_configuration is not None:
+                self._values["data_read_cache_configuration"] = data_read_cache_configuration
             if deployment_type is not None:
                 self._values["deployment_type"] = deployment_type
             if drive_cache_type is not None:
@@ -1872,6 +1959,8 @@ class CfnFileSystem(
                 self._values["metadata_configuration"] = metadata_configuration
             if per_unit_storage_throughput is not None:
                 self._values["per_unit_storage_throughput"] = per_unit_storage_throughput
+            if throughput_capacity is not None:
+                self._values["throughput_capacity"] = throughput_capacity
             if weekly_maintenance_start_time is not None:
                 self._values["weekly_maintenance_start_time"] = weekly_maintenance_start_time
 
@@ -1948,6 +2037,16 @@ class CfnFileSystem(
             '''
             result = self._values.get("data_compression_type")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def data_read_cache_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.DataReadCacheConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-lustreconfiguration.html#cfn-fsx-filesystem-lustreconfiguration-datareadcacheconfiguration
+            '''
+            result = self._values.get("data_read_cache_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.DataReadCacheConfigurationProperty"]], result)
 
         @builtins.property
         def deployment_type(self) -> typing.Optional[builtins.str]:
@@ -2065,6 +2164,14 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-lustreconfiguration.html#cfn-fsx-filesystem-lustreconfiguration-perunitstoragethroughput
             '''
             result = self._values.get("per_unit_storage_throughput")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def throughput_capacity(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-lustreconfiguration.html#cfn-fsx-filesystem-lustreconfiguration-throughputcapacity
+            '''
+            result = self._values.get("throughput_capacity")
             return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
@@ -3699,6 +3806,10 @@ class CfnFileSystemProps:
                     copy_tags_to_backups=False,
                     daily_automatic_backup_start_time="dailyAutomaticBackupStartTime",
                     data_compression_type="dataCompressionType",
+                    data_read_cache_configuration=fsx.CfnFileSystem.DataReadCacheConfigurationProperty(
+                        size_gi_b=123,
+                        sizing_mode="sizingMode"
+                    ),
                     deployment_type="deploymentType",
                     drive_cache_type="driveCacheType",
                     efa_enabled=False,
@@ -3710,6 +3821,7 @@ class CfnFileSystemProps:
                         mode="mode"
                     ),
                     per_unit_storage_throughput=123,
+                    throughput_capacity=123,
                     weekly_maintenance_start_time="weeklyMaintenanceStartTime"
                 ),
                 ontap_configuration=fsx.CfnFileSystem.OntapConfigurationProperty(
@@ -8781,6 +8893,14 @@ def _typecheckingstub__57b05166432d66017c1f4937608bf668fb87a580b457f8d7fc86cb698
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3cb2d4a98bff48f203d8eaee325b8f6c388372cb868c4fa792f5c5693518337f(
+    *,
+    size_gib: typing.Optional[jsii.Number] = None,
+    sizing_mode: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ae47548d0ff6b28a7e7311347d5b08153a4d8130c5f4cd5b7ebd258836f4c7e0(
     *,
     iops: typing.Optional[jsii.Number] = None,
@@ -8796,6 +8916,7 @@ def _typecheckingstub__8e1fe808b96f0eb1b8b6ed8eb3d551c8d995fe2c98c9be554bed33160
     copy_tags_to_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     daily_automatic_backup_start_time: typing.Optional[builtins.str] = None,
     data_compression_type: typing.Optional[builtins.str] = None,
+    data_read_cache_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.DataReadCacheConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     deployment_type: typing.Optional[builtins.str] = None,
     drive_cache_type: typing.Optional[builtins.str] = None,
     efa_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -8804,6 +8925,7 @@ def _typecheckingstub__8e1fe808b96f0eb1b8b6ed8eb3d551c8d995fe2c98c9be554bed33160
     import_path: typing.Optional[builtins.str] = None,
     metadata_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.MetadataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     per_unit_storage_throughput: typing.Optional[jsii.Number] = None,
+    throughput_capacity: typing.Optional[jsii.Number] = None,
     weekly_maintenance_start_time: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""

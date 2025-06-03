@@ -681,7 +681,7 @@ You can allow the traffic from the CloudFront managed prefix list named **com.am
 cf_origin_facing = ec2.PrefixList.from_lookup(self, "CloudFrontOriginFacing",
     prefix_list_name="com.amazonaws.global.cloudfront.origin-facing"
 )
-alb.connections.allow_from(ec2.Peer.prefix_list(cf_origin_facing.prefix_list_id), ec2.Port.HTTP)
+alb.connections.allow_from(cf_origin_facing, ec2.Port.HTTP)
 ```
 
 #### The VPC origin service security group

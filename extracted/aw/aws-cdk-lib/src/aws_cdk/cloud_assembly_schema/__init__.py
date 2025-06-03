@@ -115,7 +115,7 @@ class ArtifactManifest:
 
         :param type: The type of artifact.
         :param dependencies: IDs of artifacts that must be deployed before this artifact. Default: - no dependencies.
-        :param display_name: A string that represents this artifact. Should only be used in user interfaces. Default: - no display name
+        :param display_name: A string that can be shown to a user to uniquely identify this artifact inside a cloud assembly tree. Is used by the CLI to present a list of stacks to the user in a way that makes sense to them. Even though the property name "display name" doesn't imply it, this field is used to select stacks as well, so all stacks should have a unique display name. Default: - no display name
         :param environment: The environment into which this artifact is deployed. Default: - no envrionment.
         :param metadata: Associated metadata. Default: - no metadata.
         :param properties: The set of properties for this artifact (depends on type). Default: - no properties.
@@ -223,9 +223,12 @@ class ArtifactManifest:
 
     @builtins.property
     def display_name(self) -> typing.Optional[builtins.str]:
-        '''A string that represents this artifact.
+        '''A string that can be shown to a user to uniquely identify this artifact inside a cloud assembly tree.
 
-        Should only be used in user interfaces.
+        Is used by the CLI to present a list of stacks to the user in a way that
+        makes sense to them. Even though the property name "display name" doesn't
+        imply it, this field is used to select stacks as well, so all stacks should
+        have a unique display name.
 
         :default: - no display name
         '''
@@ -291,6 +294,8 @@ class ArtifactMetadataEntryType(enum.Enum):
     '''Represents the CloudFormation logical ID of a resource at a certain path.'''
     STACK_TAGS = "STACK_TAGS"
     '''Represents tags of a stack.'''
+    DO_NOT_REFACTOR = "DO_NOT_REFACTOR"
+    '''Whether the resource should be excluded during refactoring.'''
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.cloud_assembly_schema.ArtifactType")
@@ -8238,7 +8243,10 @@ class AvailabilityZonesContextQuery(ContextLookupRoleOptions):
         "lookup_role_external_id": "lookupRoleExternalId",
         "properties_to_return": "propertiesToReturn",
         "type_name": "typeName",
+        "dummy_value": "dummyValue",
         "exact_identifier": "exactIdentifier",
+        "expected_match_count": "expectedMatchCount",
+        "ignore_error_on_missing_context": "ignoreErrorOnMissingContext",
         "property_match": "propertyMatch",
     },
 )
@@ -8253,48 +8261,43 @@ class CcApiContextQuery(ContextLookupRoleOptions):
         lookup_role_external_id: typing.Optional[builtins.str] = None,
         properties_to_return: typing.Sequence[builtins.str],
         type_name: builtins.str,
+        dummy_value: typing.Any = None,
         exact_identifier: typing.Optional[builtins.str] = None,
+        expected_match_count: typing.Optional[builtins.str] = None,
+        ignore_error_on_missing_context: typing.Optional[builtins.bool] = None,
         property_match: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     ) -> None:
-        '''Query input for lookup up Cloudformation resources using CC API.
+        '''Query input for lookup up CloudFormation resources using CC API.
+
+        The example below is required to successfully compile CDK (otherwise,
+        the CDK build will generate a synthetic example for the below, but it
+        doesn't have enough type information about the literal string union
+        to generate a validly compiling example).
 
         :param account: Query account.
         :param region: Query region.
         :param assume_role_additional_options: Additional options to pass to STS when assuming the lookup role. - ``RoleArn`` should not be used. Use the dedicated ``lookupRoleArn`` property instead. - ``ExternalId`` should not be used. Use the dedicated ``lookupRoleExternalId`` instead. Default: - No additional options.
         :param lookup_role_arn: The ARN of the role that should be used to look up the missing values. Default: - None
         :param lookup_role_external_id: The ExternalId that needs to be supplied while assuming this role. Default: - No ExternalId will be supplied
-        :param properties_to_return: This is a set of properties returned from CC API that we want to return from ContextQuery.
-        :param type_name: The Cloudformation resource type. See https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/supported-resources.html
-        :param exact_identifier: exactIdentifier of the resource. Specifying exactIdentifier will return at most one result. Either exactIdentifier or propertyMatch should be specified. Default: - None
-        :param property_match: This indicates the property to search for. If both exactIdentifier and propertyMatch are specified, then exactIdentifier is used. Specifying propertyMatch will return 0 or more results. Either exactIdentifier or propertyMatch should be specified. Default: - None
-
-        :exampleMetadata: fixture=_generated
+        :param properties_to_return: This is a set of properties returned from CC API that we want to return from ContextQuery. If any properties listed here are absent from the target resource, an error will be thrown. The returned object will always include the key ``Identifier`` with the CC-API returned field ``Identifier``. Notes on property completeness CloudControl API's ``ListResources`` may return fewer properties than ``GetResource`` would, depending on the resource implementation. The returned properties here are *currently* selected from the response object that CloudControl API returns to the CDK CLI. However, if we find there is need to do so, we may decide to change this behavior in the future: we might change it to perform an additional ``GetResource`` call for resources matched by ``propertyMatch``.
+        :param type_name: The CloudFormation resource type. See https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/supported-resources.html
+        :param dummy_value: The value to return if the resource was not found and ``ignoreErrorOnMissingContext`` is true. If supplied, ``dummyValue`` should be an array of objects. ``dummyValue`` does not have to have elements, and it may have objects with different properties than the properties in ``propertiesToReturn``, but it will be easiest for downstream code if the ``dummyValue`` conforms to the expected response shape. Default: - No dummy value available
+        :param exact_identifier: Identifier of the resource to look up using ``GetResource``. Specifying exactIdentifier will return exactly one result, or throw an error unless ``ignoreErrorOnMissingContext`` is set. Default: - Either exactIdentifier or propertyMatch should be specified.
+        :param expected_match_count: Expected count of results if ``propertyMatch`` is specified. If the expected result count does not match the actual count, by default an error is produced and the result is not committed to cached context, and the user can correct the situation and try again without having to manually clear out the context key using ``cdk context --remove`` If the value of * ``ignoreErrorOnMissingContext`` is ``true``, the value of ``expectedMatchCount`` is ``at-least-one | exactly-one`` and the number of found resources is 0, ``dummyValue`` is returned and committed to context instead. Default: 'any'
+        :param ignore_error_on_missing_context: Ignore an error and return the ``dummyValue`` instead if the resource was not found. - In case of an ``exactIdentifier`` lookup, return the ``dummyValue`` if the resource with that identifier was not found. - In case of a ``propertyMatch`` lookup, return the ``dummyValue`` if ``expectedMatchCount`` is ``at-least-one | exactly-one`` and the number of resources found was 0. if ``ignoreErrorOnMissingContext`` is set, ``dummyValue`` should be set and be an array. Default: false
+        :param property_match: Returns any resources matching these properties, using ``ListResources``. By default, specifying propertyMatch will successfully return 0 or more results. To throw an error if the number of results is unexpected (and prevent the query results from being committed to context), specify ``expectedMatchCount``. Notes on property completeness CloudControl API's ``ListResources`` may return fewer properties than ``GetResource`` would, depending on the resource implementation. The resources that ``propertyMatch`` matches against will *only ever* be the properties returned by the ``ListResources`` call. Default: - Either exactIdentifier or propertyMatch should be specified.
 
         Example::
 
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import cloud_assembly_schema
+            from aws_cdk.cloud_assembly_schema import CcApiContextQuery
             
-            # assume_role_additional_options: Any
-            # property_match: Any
             
-            cc_api_context_query = CcApiContextQuery(
-                account="account",
-                properties_to_return=["propertiesToReturn"],
-                region="region",
-                type_name="typeName",
-            
-                # the properties below are optional
-                assume_role_additional_options={
-                    "assume_role_additional_options_key": assume_role_additional_options
-                },
-                exact_identifier="exactIdentifier",
-                lookup_role_arn="lookupRoleArn",
-                lookup_role_external_id="lookupRoleExternalId",
-                property_match={
-                    "property_match_key": property_match
-                }
+            x = CcApiContextQuery(
+                type_name="AWS::Some::Type",
+                expected_match_count="exactly-one",
+                properties_to_return=["SomeProp"],
+                account="11111111111",
+                region="us-east-1"
             )
         '''
         if __debug__:
@@ -8306,7 +8309,10 @@ class CcApiContextQuery(ContextLookupRoleOptions):
             check_type(argname="argument lookup_role_external_id", value=lookup_role_external_id, expected_type=type_hints["lookup_role_external_id"])
             check_type(argname="argument properties_to_return", value=properties_to_return, expected_type=type_hints["properties_to_return"])
             check_type(argname="argument type_name", value=type_name, expected_type=type_hints["type_name"])
+            check_type(argname="argument dummy_value", value=dummy_value, expected_type=type_hints["dummy_value"])
             check_type(argname="argument exact_identifier", value=exact_identifier, expected_type=type_hints["exact_identifier"])
+            check_type(argname="argument expected_match_count", value=expected_match_count, expected_type=type_hints["expected_match_count"])
+            check_type(argname="argument ignore_error_on_missing_context", value=ignore_error_on_missing_context, expected_type=type_hints["ignore_error_on_missing_context"])
             check_type(argname="argument property_match", value=property_match, expected_type=type_hints["property_match"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "account": account,
@@ -8320,8 +8326,14 @@ class CcApiContextQuery(ContextLookupRoleOptions):
             self._values["lookup_role_arn"] = lookup_role_arn
         if lookup_role_external_id is not None:
             self._values["lookup_role_external_id"] = lookup_role_external_id
+        if dummy_value is not None:
+            self._values["dummy_value"] = dummy_value
         if exact_identifier is not None:
             self._values["exact_identifier"] = exact_identifier
+        if expected_match_count is not None:
+            self._values["expected_match_count"] = expected_match_count
+        if ignore_error_on_missing_context is not None:
+            self._values["ignore_error_on_missing_context"] = ignore_error_on_missing_context
         if property_match is not None:
             self._values["property_match"] = property_match
 
@@ -8375,14 +8387,33 @@ class CcApiContextQuery(ContextLookupRoleOptions):
 
     @builtins.property
     def properties_to_return(self) -> typing.List[builtins.str]:
-        '''This is a set of properties returned from CC API that we want to return from ContextQuery.'''
+        '''This is a set of properties returned from CC API that we want to return from ContextQuery.
+
+        If any properties listed here are absent from the target resource, an error will be thrown.
+
+        The returned object will always include the key ``Identifier`` with the CC-API returned
+        field ``Identifier``.
+
+
+        Notes on property completeness
+
+        CloudControl API's ``ListResources`` may return fewer properties than
+        ``GetResource`` would, depending on the resource implementation.
+
+        The returned properties here are *currently* selected from the response
+        object that CloudControl API returns to the CDK CLI.
+
+        However, if we find there is need to do so, we may decide to change this
+        behavior in the future: we might change it to perform an additional
+        ``GetResource`` call for resources matched by ``propertyMatch``.
+        '''
         result = self._values.get("properties_to_return")
         assert result is not None, "Required property 'properties_to_return' is missing"
         return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
     def type_name(self) -> builtins.str:
-        '''The Cloudformation resource type.
+        '''The CloudFormation resource type.
 
         See https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/supported-resources.html
         '''
@@ -8391,28 +8422,89 @@ class CcApiContextQuery(ContextLookupRoleOptions):
         return typing.cast(builtins.str, result)
 
     @builtins.property
+    def dummy_value(self) -> typing.Any:
+        '''The value to return if the resource was not found and ``ignoreErrorOnMissingContext`` is true.
+
+        If supplied, ``dummyValue`` should be an array of objects.
+
+        ``dummyValue`` does not have to have elements, and it may have objects with
+        different properties than the properties in ``propertiesToReturn``, but it
+        will be easiest for downstream code if the ``dummyValue`` conforms to
+        the expected response shape.
+
+        :default: - No dummy value available
+        '''
+        result = self._values.get("dummy_value")
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
     def exact_identifier(self) -> typing.Optional[builtins.str]:
-        '''exactIdentifier of the resource.
+        '''Identifier of the resource to look up using ``GetResource``.
 
-        Specifying exactIdentifier will return at most one result.
-        Either exactIdentifier or propertyMatch should be specified.
+        Specifying exactIdentifier will return exactly one result, or throw an error
+        unless ``ignoreErrorOnMissingContext`` is set.
 
-        :default: - None
+        :default: - Either exactIdentifier or propertyMatch should be specified.
         '''
         result = self._values.get("exact_identifier")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def expected_match_count(self) -> typing.Optional[builtins.str]:
+        '''Expected count of results if ``propertyMatch`` is specified.
+
+        If the expected result count does not match the actual count,
+        by default an error is produced and the result is not committed to cached
+        context, and the user can correct the situation and try again without
+        having to manually clear out the context key using ``cdk context --remove``
+
+        If the value of * ``ignoreErrorOnMissingContext`` is ``true``, the value of
+        ``expectedMatchCount`` is ``at-least-one | exactly-one`` and the number
+        of found resources is 0, ``dummyValue`` is returned and committed to context
+        instead.
+
+        :default: 'any'
+        '''
+        result = self._values.get("expected_match_count")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def ignore_error_on_missing_context(self) -> typing.Optional[builtins.bool]:
+        '''Ignore an error and return the ``dummyValue`` instead if the resource was not found.
+
+        - In case of an ``exactIdentifier`` lookup, return the ``dummyValue`` if the resource with
+          that identifier was not found.
+        - In case of a ``propertyMatch`` lookup, return the ``dummyValue`` if ``expectedMatchCount``
+          is ``at-least-one | exactly-one`` and the number of resources found was 0.
+
+        if ``ignoreErrorOnMissingContext`` is set, ``dummyValue`` should be set and be an array.
+
+        :default: false
+        '''
+        result = self._values.get("ignore_error_on_missing_context")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
     def property_match(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
-        '''This indicates the property to search for.
+        '''Returns any resources matching these properties, using ``ListResources``.
 
-        If both exactIdentifier and propertyMatch are specified, then exactIdentifier is used.
-        Specifying propertyMatch will return 0 or more results.
-        Either exactIdentifier or propertyMatch should be specified.
+        By default, specifying propertyMatch will successfully return 0 or more
+        results. To throw an error if the number of results is unexpected (and
+        prevent the query results from being committed to context), specify
+        ``expectedMatchCount``.
 
-        :default: - None
+
+        Notes on property completeness
+
+        CloudControl API's ``ListResources`` may return fewer properties than
+        ``GetResource`` would, depending on the resource implementation.
+
+        The resources that ``propertyMatch`` matches against will *only ever* be the
+        properties returned by the ``ListResources`` call.
+
+        :default: - Either exactIdentifier or propertyMatch should be specified.
         '''
         result = self._values.get("property_match")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
@@ -9607,7 +9699,10 @@ def _typecheckingstub__cdf6a33d88e10af638d11c3322b9291978a474ed65f1a2ab37cdecc88
     lookup_role_external_id: typing.Optional[builtins.str] = None,
     properties_to_return: typing.Sequence[builtins.str],
     type_name: builtins.str,
+    dummy_value: typing.Any = None,
     exact_identifier: typing.Optional[builtins.str] = None,
+    expected_match_count: typing.Optional[builtins.str] = None,
+    ignore_error_on_missing_context: typing.Optional[builtins.bool] = None,
     property_match: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
 ) -> None:
     """Type checking stubs"""

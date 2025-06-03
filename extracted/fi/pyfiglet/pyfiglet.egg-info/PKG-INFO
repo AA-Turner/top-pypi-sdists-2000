@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: pyfiglet
-Version: 1.0.2
+Version: 1.0.3
 Summary: Pure-python FIGlet implementation
 Home-page: https://github.com/pwaller/pyfiglet
 Author: Peter Waller (Thanks to Christopher Jones and Stefano Rivera)
@@ -30,6 +30,16 @@ Classifier: Topic :: Text Processing :: Fonts
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-python
+Dynamic: summary
 
 # **pyfiglet**
 
@@ -53,7 +63,8 @@ the title above, which is the 'block' font).
 
 - **Q**: Why? WHY?!!
 
-  **A**: I was bored. Really bored.
+  **A**: I [cjones] was bored. Really bored.
+  
 - **Q**: What the hell does this do that FIGlet doesn't?
 
   **A**: Not much, except allow your font collection to live
@@ -66,14 +77,16 @@ the title above, which is the 'block' font).
 
   **A**: Yes, yes it does. Output should be identical to FIGlet. If
            not, this is a bug, which you should report to me!
+  
 - **Q**: Can I use/modify/redstribute this code?
 
   **A**: Yes, under the terms of the MIT (see LICENSE below).
+  
 - **Q**: I improved this code, what should I do with it?
 
   **A**: You can submit changes to https://github.com/pwaller/pyfiglet/pulls.
            If you make changes to the kerning/mushing/rendering portion, PLEASE
-           test it throroughly. The code is fragile and complex.
+           test it thoroughly. The code is fragile and complex.
 - **Q**: Where did my font go?
 
   **A**: It turns out that we didn't have distribution rights for some of the
@@ -85,14 +98,16 @@ the title above, which is the 'block' font).
            should give you what you need.  However, if you are looking for the
            specific removed fonts, please go to http://www.jave.de/figlet/fonts.html.
 
-- **Q** Why are some fonts missing in <my favourite> distribution?
-  **A** Some Linux distributions have very strict legal restrictions on what
+- **Q**: Why are some fonts missing in <my favourite> distribution?
+  
+  **A**: Some Linux distributions have very strict legal restrictions on what
            contributions they will take.  For these systems, we have divided the
            fonts into ones that have a clear redistribution license and those that
            don't.  These are the fonts-standard and fonts-contrib directories in
            this repository.
-- **Q** What about those other fonts?
-  **A** While there isn't a watertight case for the license, we believe that
+- **Q**: What about those other fonts?
+  
+  **A**: While there isn't a watertight case for the license, we believe that
            any legal constraint for these fonts has long expired and so they
            are public domain, so are continuing to redistribute via pypi.  If
            an owner of any of these fonts wants us to stop, please just
@@ -120,7 +135,7 @@ print(f.renderText('text to render'))
 or
 
 ```py
-from pyfiglet import Figlet
+import pyfiglet
 f = pyfiglet.figlet_format("text to render", font="slant")
 print(f)
 ```
@@ -136,7 +151,7 @@ root access to install the font - e.g. `sudo pyfiglet -L <font file>`.
 ## **Author**
 
 All of the documentation and the majority of the work done was by
-Christopher Jones (cjones@insub.org) and many other ccontributors.
+Christopher Jones (cjones@insub.org) and many other contributors.
 Packaged by Peter Waller (p@pwaller.net), various enhancements by
 Stefano Rivera (stefano@rivera.za.net),
 and lots of help from many contributors!
@@ -176,3 +191,7 @@ Peter Waller <p@pwaller.net>
 And various contributors (see git history).
 ```
 (see LICENSE for full details)
+
+# Packaging status
+
+[![Packaging status](https://repology.org/badge/vertical-allrepos/python:pyfiglet.svg)](https://repology.org/project/python:pyfiglet/versions)

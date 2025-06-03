@@ -75,9 +75,13 @@ class CfnDomain(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_voiceid.CfnDomain",
 ):
-    '''Creates a domain that contains all Amazon Connect Voice ID data, such as speakers, fraudsters, customer audio, and voiceprints.
+    '''.. epigraph::
 
-    Every domain is created with a default watchlist that fraudsters can be a part of.
+   End of support notice: On May 20, 2026, AWS will end support for Amazon Connect Voice ID.
+
+    After May 20, 2026, you will no longer be able to access Voice ID on the Amazon Connect console, access Voice ID features on the Amazon Connect admin website or Contact Control Panel, or access Voice ID resources. For more information, visit `Amazon Connect Voice ID end of support <https://docs.aws.amazon.com/connect/latest/adminguide/amazonconnect-voiceid-end-of-support.html>`_ .
+
+    Creates a domain that contains all Amazon Connect Voice ID data, such as speakers, fraudsters, customer audio, and voiceprints. Every domain is created with a default watchlist that fraudsters can be a part of.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-voiceid-domain.html
     :cloudformationResource: AWS::VoiceID::Domain
@@ -249,7 +253,13 @@ class CfnDomain(
     )
     class ServerSideEncryptionConfigurationProperty:
         def __init__(self, *, kms_key_id: builtins.str) -> None:
-            '''The configuration containing information about the customer managed key used for encrypting customer data.
+            '''.. epigraph::
+
+   End of support notice: On May 20, 2026, AWS will end support for Amazon Connect Voice ID.
+
+            After May 20, 2026, you will no longer be able to access Voice ID on the Amazon Connect console, access Voice ID features on the Amazon Connect admin website or Contact Control Panel, or access Voice ID resources. For more information, visit `Amazon Connect Voice ID end of support <https://docs.aws.amazon.com/connect/latest/adminguide/amazonconnect-voiceid-end-of-support.html>`_ .
+
+            The configuration containing information about the customer managed key used for encrypting customer data.
 
             :param kms_key_id: The identifier of the KMS key to use to encrypt data stored by Voice ID. Voice ID doesn't support asymmetric customer managed keys.
 

@@ -65,13 +65,13 @@
 #include "src/core/channelz/channelz.h"
 #include "src/core/client_channel/client_channel_filter.h"
 #include "src/core/config/core_configuration.h"
+#include "src/core/credentials/transport/fake/fake_credentials.h"
 #include "src/core/lib/channel/channel_args.h"
 #include "src/core/lib/debug/trace.h"
 #include "src/core/lib/iomgr/closure.h"
 #include "src/core/lib/iomgr/error.h"
 #include "src/core/lib/iomgr/exec_ctx.h"
 #include "src/core/lib/iomgr/pollset_set.h"
-#include "src/core/lib/security/credentials/fake/fake_credentials.h"
 #include "src/core/lib/slice/slice.h"
 #include "src/core/lib/slice/slice_internal.h"
 #include "src/core/lib/surface/call.h"
@@ -401,7 +401,8 @@ class RlsLb final : public LoadBalancingPolicy {
       size_t Size() const ABSL_EXCLUSIVE_LOCKS_REQUIRED(&RlsLb::mu_);
 
       // Pick subchannel for request based on the entry's state.
-      PickResult Pick(PickArgs args) ABSL_EXCLUSIVE_LOCKS_REQUIRED(&RlsLb::mu_);
+      PickResult Pick(PickArgs args, absl::string_view lookup_service)
+          ABSL_EXCLUSIVE_LOCKS_REQUIRED(&RlsLb::mu_);
 
       // If the cache entry is in backoff state, resets the backoff and, if
       // applicable, its backoff timer. The method does not update the LB
@@ -684,17 +685,16 @@ class RlsLb final : public LoadBalancingPolicy {
 
   void ShutdownLocked() override;
 
-  // Returns a new picker to the channel to trigger reprocessing of
-  // pending picks.  Schedules the actual picker update on the ExecCtx
-  // to be run later, so it's safe to invoke this while holding the lock.
+  // Schedules a call to UpdatePickerLocked() on the WorkSerializer.
+  // The call will be run asynchronously, so it's safe to invoke this
+  // while holding the lock.
   void UpdatePickerAsync();
-  // Hops into work serializer and calls UpdatePickerLocked().
-  static void UpdatePickerCallback(void* arg, grpc_error_handle error);
   // Updates the picker in the work serializer.
   void UpdatePickerLocked() ABSL_LOCKS_EXCLUDED(&mu_);
 
   template <typename HandleType>
   void MaybeExportPickCount(HandleType handle, absl::string_view target,
+                            absl::string_view lookup_service,
                             const PickResult& pick_result);
 
   const std::string instance_uuid_;
@@ -1002,7 +1002,7 @@ LoadBalancingPolicy::PickResult RlsLb::Picker::Pick(PickArgs args) {
       GRPC_TRACE_LOG(rls_lb, INFO)
           << "[rlslb " << lb_policy_.get() << "] picker=" << this
           << ": using cache entry " << entry;
-      return entry->Pick(args);
+      return entry->Pick(args, config_->lookup_service());
     }
     // If the entry is in backoff, then use the default target if set,
     // or else fail the pick.
@@ -1028,7 +1028,8 @@ LoadBalancingPolicy::PickResult RlsLb::Picker::PickFromDefaultTargetOrFail(
         << reason << "; using default target";
     auto pick_result = default_child_policy_->Pick(args);
     lb_policy_->MaybeExportPickCount(kMetricDefaultTargetPicks,
-                                     config_->default_target(), pick_result);
+                                     config_->default_target(),
+                                     config_->lookup_service(), pick_result);
     return pick_result;
   }
   GRPC_TRACE_LOG(rls_lb, INFO)
@@ -1139,7 +1140,8 @@ size_t RlsLb::Cache::Entry::Size() const {
   return lb_policy_->cache_.EntrySizeForKey(*lru_iterator_);
 }
 
-LoadBalancingPolicy::PickResult RlsLb::Cache::Entry::Pick(PickArgs args) {
+LoadBalancingPolicy::PickResult RlsLb::Cache::Entry::Pick(
+    PickArgs args, absl::string_view lookup_service) {
   size_t i = 0;
   ChildPolicyWrapper* child_policy_wrapper = nullptr;
   // Skip targets before the last one that are in state TRANSIENT_FAILURE.
@@ -1169,7 +1171,8 @@ LoadBalancingPolicy::PickResult RlsLb::Cache::Entry::Pick(PickArgs args) {
       << "; delegating";
   auto pick_result = child_policy_wrapper->Pick(args);
   lb_policy_->MaybeExportPickCount(kMetricTargetPicks,
-                                   child_policy_wrapper->target(), pick_result);
+                                   child_policy_wrapper->target(),
+                                   lookup_service, pick_result);
   // Add header data.
   if (!header_data_.empty()) {
     auto* complete_pick =
@@ -2057,23 +2060,10 @@ void RlsLb::ShutdownLocked() {
 }
 
 void RlsLb::UpdatePickerAsync() {
-  // Run via the ExecCtx, since the caller may be holding the lock, and
-  // we don't want to be doing that when we hop into the WorkSerializer,
-  // in case the WorkSerializer callback happens to run inline.
-  ExecCtx::Run(
-      DEBUG_LOCATION,
-      GRPC_CLOSURE_CREATE(UpdatePickerCallback,
-                          Ref(DEBUG_LOCATION, "UpdatePickerCallback").release(),
-                          grpc_schedule_on_exec_ctx),
-      absl::OkStatus());
-}
-
-void RlsLb::UpdatePickerCallback(void* arg, grpc_error_handle /*error*/) {
-  auto* rls_lb = static_cast<RlsLb*>(arg);
-  rls_lb->work_serializer()->Run([rls_lb]() {
-    RefCountedPtr<RlsLb> lb_policy(rls_lb);
-    lb_policy->UpdatePickerLocked();
-    lb_policy.reset(DEBUG_LOCATION, "UpdatePickerCallback");
+  work_serializer()->Run([self = RefAsSubclass<RlsLb>(
+                              DEBUG_LOCATION, "UpdatePickerAsync")]() mutable {
+    self->UpdatePickerLocked();
+    self.reset(DEBUG_LOCATION, "UpdatePickerAsync");
   });
 }
 
@@ -2129,6 +2119,7 @@ void RlsLb::UpdatePickerLocked() {
 
 template <typename HandleType>
 void RlsLb::MaybeExportPickCount(HandleType handle, absl::string_view target,
+                                 absl::string_view lookup_service,
                                  const PickResult& pick_result) {
   absl::string_view pick_result_string = Match(
       pick_result.result,
@@ -2140,11 +2131,10 @@ void RlsLb::MaybeExportPickCount(HandleType handle, absl::string_view target,
       [](const LoadBalancingPolicy::PickResult::Drop&) { return "drop"; });
   if (pick_result_string.empty()) return;  // Don't report queued picks.
   auto& stats_plugins = channel_control_helper()->GetStatsPluginGroup();
-  stats_plugins.AddCounter(
-      handle, 1,
-      {channel_control_helper()->GetTarget(), config_->lookup_service(), target,
-       pick_result_string},
-      {});
+  stats_plugins.AddCounter(handle, 1,
+                           {channel_control_helper()->GetTarget(),
+                            lookup_service, target, pick_result_string},
+                           {});
 }
 
 //
@@ -2373,14 +2363,18 @@ void RlsLbConfig::RouteLookupConfig::JsonPostLoad(const Json& json,
       errors->AddError("must be valid gRPC target URI");
     }
   }
-  // Clamp maxAge to the max allowed value.
-  if (max_age > kMaxMaxAge) max_age = kMaxMaxAge;
   // If staleAge is set, then maxAge must also be set.
-  if (json.object().find("staleAge") != json.object().end() &&
-      json.object().find("maxAge") == json.object().end()) {
+  const bool stale_age_set =
+      json.object().find("staleAge") != json.object().end();
+  const bool max_age_set = json.object().find("maxAge") != json.object().end();
+  if (stale_age_set && !max_age_set) {
     ValidationErrors::ScopedField field(errors, ".maxAge");
     errors->AddError("must be set if staleAge is set");
   }
+  // Clamp staleAge to the max allowed value.
+  if (stale_age > kMaxMaxAge) stale_age = kMaxMaxAge;
+  // If staleAge is not set, clamp maxAge to the max allowed value.
+  if (!stale_age_set && max_age > kMaxMaxAge) max_age = kMaxMaxAge;
   // Ignore staleAge if greater than or equal to maxAge.
   if (stale_age >= max_age) stale_age = max_age;
   // Validate cacheSizeBytes.

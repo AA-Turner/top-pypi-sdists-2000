@@ -7007,9 +7007,9 @@ class CfnEnvironmentBlueprintConfiguration(
         :param domain_identifier: The identifier of the Amazon DataZone domain in which an environment blueprint exists.
         :param enabled_regions: The enabled AWS Regions specified in a blueprint configuration.
         :param environment_blueprint_identifier: The identifier of the environment blueprint. In the current release, only the following values are supported: ``DefaultDataLake`` and ``DefaultDataWarehouse`` .
-        :param environment_role_permission_boundary: 
+        :param environment_role_permission_boundary: The environment role permission boundary.
         :param manage_access_role_arn: The ARN of the manage access role.
-        :param provisioning_configurations: 
+        :param provisioning_configurations: The provisioning configuration of a blueprint.
         :param provisioning_role_arn: The ARN of the provisioning role.
         :param regional_parameters: The regional parameters of the environment blueprint.
         '''
@@ -7145,6 +7145,7 @@ class CfnEnvironmentBlueprintConfiguration(
     @builtins.property
     @jsii.member(jsii_name="environmentRolePermissionBoundary")
     def environment_role_permission_boundary(self) -> typing.Optional[builtins.str]:
+        '''The environment role permission boundary.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "environmentRolePermissionBoundary"))
 
     @environment_role_permission_boundary.setter
@@ -7175,6 +7176,7 @@ class CfnEnvironmentBlueprintConfiguration(
     def provisioning_configurations(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironmentBlueprintConfiguration.ProvisioningConfigurationProperty"]]]]:
+        '''The provisioning configuration of a blueprint.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironmentBlueprintConfiguration.ProvisioningConfigurationProperty"]]]], jsii.get(self, "provisioningConfigurations"))
 
     @provisioning_configurations.setter
@@ -7456,9 +7458,9 @@ class CfnEnvironmentBlueprintConfigurationProps:
         :param domain_identifier: The identifier of the Amazon DataZone domain in which an environment blueprint exists.
         :param enabled_regions: The enabled AWS Regions specified in a blueprint configuration.
         :param environment_blueprint_identifier: The identifier of the environment blueprint. In the current release, only the following values are supported: ``DefaultDataLake`` and ``DefaultDataWarehouse`` .
-        :param environment_role_permission_boundary: 
+        :param environment_role_permission_boundary: The environment role permission boundary.
         :param manage_access_role_arn: The ARN of the manage access role.
-        :param provisioning_configurations: 
+        :param provisioning_configurations: The provisioning configuration of a blueprint.
         :param provisioning_role_arn: The ARN of the provisioning role.
         :param regional_parameters: The regional parameters of the environment blueprint.
 
@@ -7554,7 +7556,8 @@ class CfnEnvironmentBlueprintConfigurationProps:
 
     @builtins.property
     def environment_role_permission_boundary(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The environment role permission boundary.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-environmentblueprintconfiguration.html#cfn-datazone-environmentblueprintconfiguration-environmentrolepermissionboundary
         '''
         result = self._values.get("environment_role_permission_boundary")
@@ -7573,7 +7576,8 @@ class CfnEnvironmentBlueprintConfigurationProps:
     def provisioning_configurations(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEnvironmentBlueprintConfiguration.ProvisioningConfigurationProperty]]]]:
-        '''
+        '''The provisioning configuration of a blueprint.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-environmentblueprintconfiguration.html#cfn-datazone-environmentblueprintconfiguration-provisioningconfigurations
         '''
         result = self._values.get("provisioning_configurations")
@@ -9127,7 +9131,7 @@ class CfnProject(
         :param domain_identifier: The identifier of a Amazon DataZone domain where the project exists.
         :param name: The name of a project.
         :param description: The description of a project.
-        :param domain_unit_id: The ID of the domain unit.
+        :param domain_unit_id: The ID of the domain unit. This parameter is not required and if it is not specified, then the project is created at the root domain unit level.
         :param glossary_terms: The glossary terms that can be used in this Amazon DataZone project.
         :param project_profile_id: The project profile ID.
         :param project_profile_version: The project profile version to which the project should be updated. You can only specify the following string for this parameter: latest.
@@ -9228,7 +9232,8 @@ class CfnProject(
     @builtins.property
     @jsii.member(jsii_name="attrProjectStatus")
     def attr_project_status(self) -> builtins.str:
-        '''
+        '''The status of the project.
+
         :cloudformationAttribute: ProjectStatus
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrProjectStatus"))
@@ -9847,6 +9852,582 @@ class CfnProjectMembershipProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556)
+class CfnProjectProfile(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_datazone.CfnProjectProfile",
+):
+    '''Definition of AWS::DataZone::ProjectProfile Resource Type.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html
+    :cloudformationResource: AWS::DataZone::ProjectProfile
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_datazone as datazone
+        
+        cfn_project_profile = datazone.CfnProjectProfile(self, "MyCfnProjectProfile",
+            name="name",
+        
+            # the properties below are optional
+            allowed_designations=[datazone.CfnProjectProfile.DesignationConfigurationProperty(
+                designation_id="designationId"
+            )],
+            change_log="changeLog",
+            description="description",
+            domain_identifier="domainIdentifier",
+            domain_unit_identifier="domainUnitIdentifier",
+            project_scopes=[datazone.CfnProjectProfile.ProjectScopeProperty(
+                name="name",
+        
+                # the properties below are optional
+                policy="policy"
+            )],
+            status="status"
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        name: builtins.str,
+        allowed_designations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProjectProfile.DesignationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        change_log: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        domain_identifier: typing.Optional[builtins.str] = None,
+        domain_unit_identifier: typing.Optional[builtins.str] = None,
+        project_scopes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProjectProfile.ProjectScopeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        status: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param name: 
+        :param allowed_designations: 
+        :param change_log: 
+        :param description: 
+        :param domain_identifier: 
+        :param domain_unit_identifier: 
+        :param project_scopes: 
+        :param status: 
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__be64eda6c4825457191dba5045e07eaa3e14f5b1d6605cefc1c291b8f70eb5b2)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnProjectProfileProps(
+            name=name,
+            allowed_designations=allowed_designations,
+            change_log=change_log,
+            description=description,
+            domain_identifier=domain_identifier,
+            domain_unit_identifier=domain_unit_identifier,
+            project_scopes=project_scopes,
+            status=status,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6b4346bd08f5dc87b3a8b49fbf28cae8774624d1da19c5d260d4fbdf104d531f)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__85b771eebccea5f26f952595144e99a6c3ff8b1d0cce9803511978dff3785a2a)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedAt")
+    def attr_created_at(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: CreatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedBy")
+    def attr_created_by(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: CreatedBy
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedBy"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrDomainId")
+    def attr_domain_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: DomainId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrDomainId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrDomainUnitId")
+    def attr_domain_unit_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: DomainUnitId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrDomainUnitId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrId")
+    def attr_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Id
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrIdentifier")
+    def attr_identifier(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Identifier
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrIdentifier"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastUpdatedAt")
+    def attr_last_updated_at(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: LastUpdatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLastUpdatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e5acf0d662fb5f406ca391f15c3cadba1d68d0dc161876b2305e495701c03968)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="allowedDesignations")
+    def allowed_designations(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProjectProfile.DesignationConfigurationProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProjectProfile.DesignationConfigurationProperty"]]]], jsii.get(self, "allowedDesignations"))
+
+    @allowed_designations.setter
+    def allowed_designations(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProjectProfile.DesignationConfigurationProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__24997c31e168ff4722f9dbe78dab2e2dfc54ccb2330aa70659c831b031c49147)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "allowedDesignations", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="changeLog")
+    def change_log(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "changeLog"))
+
+    @change_log.setter
+    def change_log(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6f7e687a92a5b5f91bef6023471643a2408ea093f9930c5cb0ec8e5181d439fc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "changeLog", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="description")
+    def description(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
+
+    @description.setter
+    def description(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d3e1ff90e5fbfc5a555174f254ce075a9c3654511436a8acf04928992020df04)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="domainIdentifier")
+    def domain_identifier(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "domainIdentifier"))
+
+    @domain_identifier.setter
+    def domain_identifier(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__872e790316704042dc15857aaaff7b99878b643ac02f9de929f704cf6ca6762a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "domainIdentifier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="domainUnitIdentifier")
+    def domain_unit_identifier(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "domainUnitIdentifier"))
+
+    @domain_unit_identifier.setter
+    def domain_unit_identifier(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0b87add426c25b8a2eafdfd51a8707432f3ee35363162b07265e414b1d427ff1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "domainUnitIdentifier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="projectScopes")
+    def project_scopes(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProjectProfile.ProjectScopeProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProjectProfile.ProjectScopeProperty"]]]], jsii.get(self, "projectScopes"))
+
+    @project_scopes.setter
+    def project_scopes(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProjectProfile.ProjectScopeProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f495fae800c8dcb91a694653b2ad64d2941fc50e22122f09ae7dff638a8b93af)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "projectScopes", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="status")
+    def status(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "status"))
+
+    @status.setter
+    def status(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__22f2f0484438c03962ae71a7a8c680afa1c54e8a672160956c3951d55a32ae02)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "status", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datazone.CfnProjectProfile.DesignationConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"designation_id": "designationId"},
+    )
+    class DesignationConfigurationProperty:
+        def __init__(self, *, designation_id: builtins.str) -> None:
+            '''
+            :param designation_id: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-projectprofile-designationconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datazone as datazone
+                
+                designation_configuration_property = datazone.CfnProjectProfile.DesignationConfigurationProperty(
+                    designation_id="designationId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__175661648034f5742b855ee284c1c19c3777b76bfcfff2c198ccc3056c5d8b46)
+                check_type(argname="argument designation_id", value=designation_id, expected_type=type_hints["designation_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "designation_id": designation_id,
+            }
+
+        @builtins.property
+        def designation_id(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-projectprofile-designationconfiguration.html#cfn-datazone-projectprofile-designationconfiguration-designationid
+            '''
+            result = self._values.get("designation_id")
+            assert result is not None, "Required property 'designation_id' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DesignationConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datazone.CfnProjectProfile.ProjectScopeProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "policy": "policy"},
+    )
+    class ProjectScopeProperty:
+        def __init__(
+            self,
+            *,
+            name: builtins.str,
+            policy: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param name: 
+            :param policy: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-projectprofile-projectscope.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datazone as datazone
+                
+                project_scope_property = datazone.CfnProjectProfile.ProjectScopeProperty(
+                    name="name",
+                
+                    # the properties below are optional
+                    policy="policy"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a2029f9834b3b4721032c2da8218348c7d12f257b99892b1e132ee4be37449c6)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument policy", value=policy, expected_type=type_hints["policy"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+            }
+            if policy is not None:
+                self._values["policy"] = policy
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-projectprofile-projectscope.html#cfn-datazone-projectprofile-projectscope-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def policy(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-projectprofile-projectscope.html#cfn-datazone-projectprofile-projectscope-policy
+            '''
+            result = self._values.get("policy")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ProjectScopeProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_datazone.CfnProjectProfileProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "name": "name",
+        "allowed_designations": "allowedDesignations",
+        "change_log": "changeLog",
+        "description": "description",
+        "domain_identifier": "domainIdentifier",
+        "domain_unit_identifier": "domainUnitIdentifier",
+        "project_scopes": "projectScopes",
+        "status": "status",
+    },
+)
+class CfnProjectProfileProps:
+    def __init__(
+        self,
+        *,
+        name: builtins.str,
+        allowed_designations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProjectProfile.DesignationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        change_log: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        domain_identifier: typing.Optional[builtins.str] = None,
+        domain_unit_identifier: typing.Optional[builtins.str] = None,
+        project_scopes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProjectProfile.ProjectScopeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        status: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnProjectProfile``.
+
+        :param name: 
+        :param allowed_designations: 
+        :param change_log: 
+        :param description: 
+        :param domain_identifier: 
+        :param domain_unit_identifier: 
+        :param project_scopes: 
+        :param status: 
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_datazone as datazone
+            
+            cfn_project_profile_props = datazone.CfnProjectProfileProps(
+                name="name",
+            
+                # the properties below are optional
+                allowed_designations=[datazone.CfnProjectProfile.DesignationConfigurationProperty(
+                    designation_id="designationId"
+                )],
+                change_log="changeLog",
+                description="description",
+                domain_identifier="domainIdentifier",
+                domain_unit_identifier="domainUnitIdentifier",
+                project_scopes=[datazone.CfnProjectProfile.ProjectScopeProperty(
+                    name="name",
+            
+                    # the properties below are optional
+                    policy="policy"
+                )],
+                status="status"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__16088b85440c601f18ad4a194ccb23740aedaa1b4f93a76e720d939c57cb4d2e)
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument allowed_designations", value=allowed_designations, expected_type=type_hints["allowed_designations"])
+            check_type(argname="argument change_log", value=change_log, expected_type=type_hints["change_log"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument domain_identifier", value=domain_identifier, expected_type=type_hints["domain_identifier"])
+            check_type(argname="argument domain_unit_identifier", value=domain_unit_identifier, expected_type=type_hints["domain_unit_identifier"])
+            check_type(argname="argument project_scopes", value=project_scopes, expected_type=type_hints["project_scopes"])
+            check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+        }
+        if allowed_designations is not None:
+            self._values["allowed_designations"] = allowed_designations
+        if change_log is not None:
+            self._values["change_log"] = change_log
+        if description is not None:
+            self._values["description"] = description
+        if domain_identifier is not None:
+            self._values["domain_identifier"] = domain_identifier
+        if domain_unit_identifier is not None:
+            self._values["domain_unit_identifier"] = domain_unit_identifier
+        if project_scopes is not None:
+            self._values["project_scopes"] = project_scopes
+        if status is not None:
+            self._values["status"] = status
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html#cfn-datazone-projectprofile-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def allowed_designations(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProjectProfile.DesignationConfigurationProperty]]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html#cfn-datazone-projectprofile-alloweddesignations
+        '''
+        result = self._values.get("allowed_designations")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProjectProfile.DesignationConfigurationProperty]]]], result)
+
+    @builtins.property
+    def change_log(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html#cfn-datazone-projectprofile-changelog
+        '''
+        result = self._values.get("change_log")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html#cfn-datazone-projectprofile-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def domain_identifier(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html#cfn-datazone-projectprofile-domainidentifier
+        '''
+        result = self._values.get("domain_identifier")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def domain_unit_identifier(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html#cfn-datazone-projectprofile-domainunitidentifier
+        '''
+        result = self._values.get("domain_unit_identifier")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def project_scopes(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProjectProfile.ProjectScopeProperty]]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html#cfn-datazone-projectprofile-projectscopes
+        '''
+        result = self._values.get("project_scopes")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProjectProfile.ProjectScopeProperty]]]], result)
+
+    @builtins.property
+    def status(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html#cfn-datazone-projectprofile-status
+        '''
+        result = self._values.get("status")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnProjectProfileProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_datazone.CfnProjectProps",
     jsii_struct_bases=[],
@@ -9879,7 +10460,7 @@ class CfnProjectProps:
         :param domain_identifier: The identifier of a Amazon DataZone domain where the project exists.
         :param name: The name of a project.
         :param description: The description of a project.
-        :param domain_unit_id: The ID of the domain unit.
+        :param domain_unit_id: The ID of the domain unit. This parameter is not required and if it is not specified, then the project is created at the root domain unit level.
         :param glossary_terms: The glossary terms that can be used in this Amazon DataZone project.
         :param project_profile_id: The project profile ID.
         :param project_profile_version: The project profile version to which the project should be updated. You can only specify the following string for this parameter: latest.
@@ -9973,6 +10554,8 @@ class CfnProjectProps:
     @builtins.property
     def domain_unit_id(self) -> typing.Optional[builtins.str]:
         '''The ID of the domain unit.
+
+        This parameter is not required and if it is not specified, then the project is created at the root domain unit level.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-project.html#cfn-datazone-project-domainunitid
         '''
@@ -11140,6 +11723,8 @@ __all__ = [
     "CfnProject",
     "CfnProjectMembership",
     "CfnProjectMembershipProps",
+    "CfnProjectProfile",
+    "CfnProjectProfileProps",
     "CfnProjectProps",
     "CfnSubscriptionTarget",
     "CfnSubscriptionTargetProps",
@@ -12530,6 +13115,111 @@ def _typecheckingstub__b25f4db16efa2b368a4cf197bdf102ccdf0c613db5654c1186f9404f9
     domain_identifier: builtins.str,
     member: typing.Union[_IResolvable_da3f097b, typing.Union[CfnProjectMembership.MemberProperty, typing.Dict[builtins.str, typing.Any]]],
     project_identifier: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__be64eda6c4825457191dba5045e07eaa3e14f5b1d6605cefc1c291b8f70eb5b2(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    name: builtins.str,
+    allowed_designations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProjectProfile.DesignationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    change_log: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    domain_identifier: typing.Optional[builtins.str] = None,
+    domain_unit_identifier: typing.Optional[builtins.str] = None,
+    project_scopes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProjectProfile.ProjectScopeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    status: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6b4346bd08f5dc87b3a8b49fbf28cae8774624d1da19c5d260d4fbdf104d531f(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__85b771eebccea5f26f952595144e99a6c3ff8b1d0cce9803511978dff3785a2a(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e5acf0d662fb5f406ca391f15c3cadba1d68d0dc161876b2305e495701c03968(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__24997c31e168ff4722f9dbe78dab2e2dfc54ccb2330aa70659c831b031c49147(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProjectProfile.DesignationConfigurationProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6f7e687a92a5b5f91bef6023471643a2408ea093f9930c5cb0ec8e5181d439fc(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d3e1ff90e5fbfc5a555174f254ce075a9c3654511436a8acf04928992020df04(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__872e790316704042dc15857aaaff7b99878b643ac02f9de929f704cf6ca6762a(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0b87add426c25b8a2eafdfd51a8707432f3ee35363162b07265e414b1d427ff1(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f495fae800c8dcb91a694653b2ad64d2941fc50e22122f09ae7dff638a8b93af(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProjectProfile.ProjectScopeProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__22f2f0484438c03962ae71a7a8c680afa1c54e8a672160956c3951d55a32ae02(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__175661648034f5742b855ee284c1c19c3777b76bfcfff2c198ccc3056c5d8b46(
+    *,
+    designation_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a2029f9834b3b4721032c2da8218348c7d12f257b99892b1e132ee4be37449c6(
+    *,
+    name: builtins.str,
+    policy: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__16088b85440c601f18ad4a194ccb23740aedaa1b4f93a76e720d939c57cb4d2e(
+    *,
+    name: builtins.str,
+    allowed_designations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProjectProfile.DesignationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    change_log: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    domain_identifier: typing.Optional[builtins.str] = None,
+    domain_unit_identifier: typing.Optional[builtins.str] = None,
+    project_scopes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProjectProfile.ProjectScopeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    status: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

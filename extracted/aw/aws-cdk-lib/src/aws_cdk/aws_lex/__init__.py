@@ -9898,9 +9898,10 @@ class CfnBot(
             slot_type_id: builtins.str,
             value_elicitation_setting: typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.SubSlotValueElicitationSettingProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
-            '''
-            :param slot_type_id: 
-            :param value_elicitation_setting: 
+            '''Subslot specifications.
+
+            :param slot_type_id: The unique identifier assigned to the slot type.
+            :param value_elicitation_setting: Specifies the elicitation setting details for constituent sub slots of a composite slot.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-specifications.html
             :exampleMetadata: fixture=_generated
@@ -10186,7 +10187,8 @@ class CfnBot(
 
         @builtins.property
         def slot_type_id(self) -> builtins.str:
-            '''
+            '''The unique identifier assigned to the slot type.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-specifications.html#cfn-lex-bot-specifications-slottypeid
             '''
             result = self._values.get("slot_type_id")
@@ -10197,7 +10199,8 @@ class CfnBot(
         def value_elicitation_setting(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnBot.SubSlotValueElicitationSettingProperty"]:
-            '''
+            '''Specifies the elicitation setting details for constituent sub slots of a composite slot.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-specifications.html#cfn-lex-bot-specifications-valueelicitationsetting
             '''
             result = self._values.get("value_elicitation_setting")
@@ -10391,9 +10394,10 @@ class CfnBot(
             expression: typing.Optional[builtins.str] = None,
             slot_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.SpecificationsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
-            '''
-            :param expression: 
-            :param slot_specifications: 
+            '''Specifications for the constituent sub slots and the expression for the composite slot.
+
+            :param expression: The expression text for defining the constituent sub slots in the composite slot using logical AND and OR operators.
+            :param slot_specifications: Specifications for the constituent sub slots of a composite slot.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotsetting.html
             :exampleMetadata: fixture=_generated
@@ -10685,7 +10689,8 @@ class CfnBot(
 
         @builtins.property
         def expression(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The expression text for defining the constituent sub slots in the composite slot using logical AND and OR operators.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotsetting.html#cfn-lex-bot-subslotsetting-expression
             '''
             result = self._values.get("expression")
@@ -10695,7 +10700,8 @@ class CfnBot(
         def slot_specifications(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnBot.SpecificationsProperty"]]]]:
-            '''
+            '''Specifications for the constituent sub slots of a composite slot.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotsetting.html#cfn-lex-bot-subslotsetting-slotspecifications
             '''
             result = self._values.get("slot_specifications")
@@ -10799,10 +10805,15 @@ class CfnBot(
             sample_utterances: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.SampleUtteranceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             wait_and_continue_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.WaitAndContinueSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
+            '''Subslot elicitation settings.
+
+            ``DefaultValueSpecification`` is a list of default values for a constituent sub slot in a composite slot. Default values are used when Amazon Lex hasn't determined a value for a slot. You can specify default values from context variables, session attributes, and defined values. This is similar to ``DefaultValueSpecification`` for slots.
+
+            ``PromptSpecification`` is the prompt that Amazon Lex uses to elicit the sub slot value from the user. This is similar to ``PromptSpecification`` for slots.
+
             :param default_value_specification: 
             :param prompt_specification: 
-            :param sample_utterances: 
+            :param sample_utterances: If you know a specific pattern that users might respond to an Amazon Lex request for a sub slot value, you can provide those utterances to improve accuracy. This is optional. In most cases Amazon Lex is capable of understanding user utterances. This is similar to ``SampleUtterances`` for slots.
             :param wait_and_continue_specification: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotvalueelicitationsetting.html
@@ -11115,7 +11126,10 @@ class CfnBot(
         def sample_utterances(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBot.SampleUtteranceProperty"]]]]:
-            '''
+            '''If you know a specific pattern that users might respond to an Amazon Lex request for a sub slot value, you can provide those utterances to improve accuracy.
+
+            This is optional. In most cases Amazon Lex is capable of understanding user utterances. This is similar to ``SampleUtterances`` for slots.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-subslotvalueelicitationsetting.html#cfn-lex-bot-subslotvalueelicitationsetting-sampleutterances
             '''
             result = self._values.get("sample_utterances")

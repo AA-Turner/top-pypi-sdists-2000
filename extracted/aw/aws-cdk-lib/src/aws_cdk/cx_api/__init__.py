@@ -1043,7 +1043,7 @@ class CloudArtifact(
         :param id: -
         :param type: The type of artifact.
         :param dependencies: IDs of artifacts that must be deployed before this artifact. Default: - no dependencies.
-        :param display_name: A string that represents this artifact. Should only be used in user interfaces. Default: - no display name
+        :param display_name: A string that can be shown to a user to uniquely identify this artifact inside a cloud assembly tree. Is used by the CLI to present a list of stacks to the user in a way that makes sense to them. Even though the property name "display name" doesn't imply it, this field is used to select stacks as well, so all stacks should have a unique display name. Default: - no display name
         :param environment: The environment into which this artifact is deployed. Default: - no envrionment.
         :param metadata: Associated metadata. Default: - no metadata.
         :param properties: The set of properties for this artifact (depends on type). Default: - no properties.
@@ -1083,7 +1083,7 @@ class CloudArtifact(
         :param id: The artifact ID.
         :param type: The type of artifact.
         :param dependencies: IDs of artifacts that must be deployed before this artifact. Default: - no dependencies.
-        :param display_name: A string that represents this artifact. Should only be used in user interfaces. Default: - no display name
+        :param display_name: A string that can be shown to a user to uniquely identify this artifact inside a cloud assembly tree. Is used by the CLI to present a list of stacks to the user in a way that makes sense to them. Even though the property name "display name" doesn't imply it, this field is used to select stacks as well, so all stacks should have a unique display name. Default: - no display name
         :param environment: The environment into which this artifact is deployed. Default: - no envrionment.
         :param metadata: Associated metadata. Default: - no metadata.
         :param properties: The set of properties for this artifact (depends on type). Default: - no properties.
@@ -1422,7 +1422,7 @@ class CloudAssemblyBuilder(
         :param id: The ID of the artifact.
         :param type: The type of artifact.
         :param dependencies: IDs of artifacts that must be deployed before this artifact. Default: - no dependencies.
-        :param display_name: A string that represents this artifact. Should only be used in user interfaces. Default: - no display name
+        :param display_name: A string that can be shown to a user to uniquely identify this artifact inside a cloud assembly tree. Is used by the CLI to present a list of stacks to the user in a way that makes sense to them. Even though the property name "display name" doesn't imply it, this field is used to select stacks as well, so all stacks should have a unique display name. Default: - no display name
         :param environment: The environment into which this artifact is deployed. Default: - no envrionment.
         :param metadata: Associated metadata. Default: - no metadata.
         :param properties: The set of properties for this artifact (depends on type). Default: - no properties.
@@ -1662,7 +1662,7 @@ class CloudFormationStackArtifact(
         :param artifact_id: -
         :param type: The type of artifact.
         :param dependencies: IDs of artifacts that must be deployed before this artifact. Default: - no dependencies.
-        :param display_name: A string that represents this artifact. Should only be used in user interfaces. Default: - no display name
+        :param display_name: A string that can be shown to a user to uniquely identify this artifact inside a cloud assembly tree. Is used by the CLI to present a list of stacks to the user in a way that makes sense to them. Even though the property name "display name" doesn't imply it, this field is used to select stacks as well, so all stacks should have a unique display name. Default: - no display name
         :param environment: The environment into which this artifact is deployed. Default: - no envrionment.
         :param metadata: Associated metadata. Default: - no metadata.
         :param properties: The set of properties for this artifact (depends on type). Default: - no properties.
@@ -2758,7 +2758,7 @@ class NestedCloudAssemblyArtifact(
         :param name: -
         :param type: The type of artifact.
         :param dependencies: IDs of artifacts that must be deployed before this artifact. Default: - no dependencies.
-        :param display_name: A string that represents this artifact. Should only be used in user interfaces. Default: - no display name
+        :param display_name: A string that can be shown to a user to uniquely identify this artifact inside a cloud assembly tree. Is used by the CLI to present a list of stacks to the user in a way that makes sense to them. Even though the property name "display name" doesn't imply it, this field is used to select stacks as well, so all stacks should have a unique display name. Default: - no display name
         :param environment: The environment into which this artifact is deployed. Default: - no envrionment.
         :param metadata: Associated metadata. Default: - no metadata.
         :param properties: The set of properties for this artifact (depends on type). Default: - no properties.
@@ -3079,7 +3079,7 @@ class TreeCloudArtifact(
         :param name: -
         :param type: The type of artifact.
         :param dependencies: IDs of artifacts that must be deployed before this artifact. Default: - no dependencies.
-        :param display_name: A string that represents this artifact. Should only be used in user interfaces. Default: - no display name
+        :param display_name: A string that can be shown to a user to uniquely identify this artifact inside a cloud assembly tree. Is used by the CLI to present a list of stacks to the user in a way that makes sense to them. Even though the property name "display name" doesn't imply it, this field is used to select stacks as well, so all stacks should have a unique display name. Default: - no display name
         :param environment: The environment into which this artifact is deployed. Default: - no envrionment.
         :param metadata: Associated metadata. Default: - no metadata.
         :param properties: The set of properties for this artifact (depends on type). Default: - no properties.
@@ -3739,7 +3739,7 @@ class AssetManifestArtifact(
         :param name: -
         :param type: The type of artifact.
         :param dependencies: IDs of artifacts that must be deployed before this artifact. Default: - no dependencies.
-        :param display_name: A string that represents this artifact. Should only be used in user interfaces. Default: - no display name
+        :param display_name: A string that can be shown to a user to uniquely identify this artifact inside a cloud assembly tree. Is used by the CLI to present a list of stacks to the user in a way that makes sense to them. Even though the property name "display name" doesn't imply it, this field is used to select stacks as well, so all stacks should have a unique display name. Default: - no display name
         :param environment: The environment into which this artifact is deployed. Default: - no envrionment.
         :param metadata: Associated metadata. Default: - no metadata.
         :param properties: The set of properties for this artifact (depends on type). Default: - no properties.

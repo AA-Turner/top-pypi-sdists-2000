@@ -6278,7 +6278,11 @@ class CfnMailManagerRuleSet(
                                 analyzer="analyzer",
                                 result_field="resultField"
                             ),
-                            attribute="attribute"
+                            attribute="attribute",
+                            is_in_address_list=ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty(
+                                address_lists=["addressLists"],
+                                attribute="attribute"
+                            )
                         ),
                         operator="operator"
                     ),
@@ -6332,7 +6336,11 @@ class CfnMailManagerRuleSet(
                                 analyzer="analyzer",
                                 result_field="resultField"
                             ),
-                            attribute="attribute"
+                            attribute="attribute",
+                            is_in_address_list=ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty(
+                                address_lists=["addressLists"],
+                                attribute="attribute"
+                            )
                         ),
                         operator="operator"
                     ),
@@ -7145,7 +7153,7 @@ class CfnMailManagerRuleSet(
             :param deliver_to_mailbox: This action delivers an email to a WorkMail mailbox.
             :param deliver_to_q_business: This action delivers an email to an Amazon Q Business application for ingestion into its knowledge base.
             :param drop: This action terminates the evaluation of rules in the rule set.
-            :param publish_to_sns: 
+            :param publish_to_sns: This action publishes the email content to an Amazon SNS topic.
             :param relay: This action relays the email to another SMTP server.
             :param replace_recipient: The action replaces certain or all recipients with a different set of recipients.
             :param send: This action sends the email to the internet.
@@ -7320,7 +7328,8 @@ class CfnMailManagerRuleSet(
         def publish_to_sns(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMailManagerRuleSet.SnsActionProperty"]]:
-            '''
+            '''This action publishes the email content to an Amazon SNS topic.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-ruleaction.html#cfn-ses-mailmanagerruleset-ruleaction-publishtosns
             '''
             result = self._values.get("publish_to_sns")
@@ -7413,7 +7422,11 @@ class CfnMailManagerRuleSet(
                             analyzer="analyzer",
                             result_field="resultField"
                         ),
-                        attribute="attribute"
+                        attribute="attribute",
+                        is_in_address_list=ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty(
+                            address_lists=["addressLists"],
+                            attribute="attribute"
+                        )
                     ),
                     operator="operator"
                 )
@@ -7463,7 +7476,11 @@ class CfnMailManagerRuleSet(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ses.CfnMailManagerRuleSet.RuleBooleanToEvaluateProperty",
         jsii_struct_bases=[],
-        name_mapping={"analysis": "analysis", "attribute": "attribute"},
+        name_mapping={
+            "analysis": "analysis",
+            "attribute": "attribute",
+            "is_in_address_list": "isInAddressList",
+        },
     )
     class RuleBooleanToEvaluateProperty:
         def __init__(
@@ -7471,11 +7488,13 @@ class CfnMailManagerRuleSet(
             *,
             analysis: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerRuleSet.AnalysisProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             attribute: typing.Optional[builtins.str] = None,
+            is_in_address_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerRuleSet.RuleIsInAddressListProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The union type representing the allowed types of operands for a boolean condition.
 
             :param analysis: The Add On ARN and its returned value to evaluate in a boolean condition expression.
             :param attribute: The boolean type representing the allowed attribute types for an email.
+            :param is_in_address_list: The structure representing the address lists and address list attribute that will be used in evaluation of boolean expression.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-rulebooleantoevaluate.html
             :exampleMetadata: fixture=_generated
@@ -7491,18 +7510,25 @@ class CfnMailManagerRuleSet(
                         analyzer="analyzer",
                         result_field="resultField"
                     ),
-                    attribute="attribute"
+                    attribute="attribute",
+                    is_in_address_list=ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty(
+                        address_lists=["addressLists"],
+                        attribute="attribute"
+                    )
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__837a4286b4e8b71b3f01d430cb3025b92d9655011a10dc38d56eb207d40ebc95)
                 check_type(argname="argument analysis", value=analysis, expected_type=type_hints["analysis"])
                 check_type(argname="argument attribute", value=attribute, expected_type=type_hints["attribute"])
+                check_type(argname="argument is_in_address_list", value=is_in_address_list, expected_type=type_hints["is_in_address_list"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if analysis is not None:
                 self._values["analysis"] = analysis
             if attribute is not None:
                 self._values["attribute"] = attribute
+            if is_in_address_list is not None:
+                self._values["is_in_address_list"] = is_in_address_list
 
         @builtins.property
         def analysis(
@@ -7523,6 +7549,17 @@ class CfnMailManagerRuleSet(
             '''
             result = self._values.get("attribute")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def is_in_address_list(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMailManagerRuleSet.RuleIsInAddressListProperty"]]:
+            '''The structure representing the address lists and address list attribute that will be used in evaluation of boolean expression.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-rulebooleantoevaluate.html#cfn-ses-mailmanagerruleset-rulebooleantoevaluate-isinaddresslist
+            '''
+            result = self._values.get("is_in_address_list")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMailManagerRuleSet.RuleIsInAddressListProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7587,7 +7624,11 @@ class CfnMailManagerRuleSet(
                                 analyzer="analyzer",
                                 result_field="resultField"
                             ),
-                            attribute="attribute"
+                            attribute="attribute",
+                            is_in_address_list=ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty(
+                                address_lists=["addressLists"],
+                                attribute="attribute"
+                            )
                         ),
                         operator="operator"
                     ),
@@ -7955,6 +7996,77 @@ class CfnMailManagerRuleSet(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty",
+        jsii_struct_bases=[],
+        name_mapping={"address_lists": "addressLists", "attribute": "attribute"},
+    )
+    class RuleIsInAddressListProperty:
+        def __init__(
+            self,
+            *,
+            address_lists: typing.Sequence[builtins.str],
+            attribute: builtins.str,
+        ) -> None:
+            '''The structure type for a boolean condition that provides the address lists and address list attribute to evaluate.
+
+            :param address_lists: The address lists that will be used for evaluation.
+            :param attribute: The email attribute that needs to be evaluated against the address list.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-ruleisinaddresslist.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ses as ses
+                
+                rule_is_in_address_list_property = ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty(
+                    address_lists=["addressLists"],
+                    attribute="attribute"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c73eebae950a2c422d0d245422988b23abb78b0806a5c9c6767b4faf77f00de5)
+                check_type(argname="argument address_lists", value=address_lists, expected_type=type_hints["address_lists"])
+                check_type(argname="argument attribute", value=attribute, expected_type=type_hints["attribute"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "address_lists": address_lists,
+                "attribute": attribute,
+            }
+
+        @builtins.property
+        def address_lists(self) -> typing.List[builtins.str]:
+            '''The address lists that will be used for evaluation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-ruleisinaddresslist.html#cfn-ses-mailmanagerruleset-ruleisinaddresslist-addresslists
+            '''
+            result = self._values.get("address_lists")
+            assert result is not None, "Required property 'address_lists' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def attribute(self) -> builtins.str:
+            '''The email attribute that needs to be evaluated against the address list.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-ruleisinaddresslist.html#cfn-ses-mailmanagerruleset-ruleisinaddresslist-attribute
+            '''
+            result = self._values.get("attribute")
+            assert result is not None, "Required property 'attribute' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RuleIsInAddressListProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ses.CfnMailManagerRuleSet.RuleNumberExpressionProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -8211,7 +8323,11 @@ class CfnMailManagerRuleSet(
                                     analyzer="analyzer",
                                     result_field="resultField"
                                 ),
-                                attribute="attribute"
+                                attribute="attribute",
+                                is_in_address_list=ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty(
+                                    address_lists=["addressLists"],
+                                    attribute="attribute"
+                                )
                             ),
                             operator="operator"
                         ),
@@ -8265,7 +8381,11 @@ class CfnMailManagerRuleSet(
                                     analyzer="analyzer",
                                     result_field="resultField"
                                 ),
-                                attribute="attribute"
+                                attribute="attribute",
+                                is_in_address_list=ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty(
+                                    address_lists=["addressLists"],
+                                    attribute="attribute"
+                                )
                             ),
                             operator="operator"
                         ),
@@ -8994,12 +9114,15 @@ class CfnMailManagerRuleSet(
             encoding: typing.Optional[builtins.str] = None,
             payload_type: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param role_arn: 
-            :param topic_arn: 
-            :param action_failure_policy: 
-            :param encoding: 
-            :param payload_type: 
+            '''The action to publish the email content to an Amazon SNS topic.
+
+            When executed, this action will send the email as a notification to the specified SNS topic.
+
+            :param role_arn: The Amazon Resource Name (ARN) of the IAM Role to use while writing to Amazon SNS. This role must have access to the ``sns:Publish`` API for the given topic.
+            :param topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS Topic to which notification for the email received will be published.
+            :param action_failure_policy: A policy that states what to do in the case of failure. The action will fail if there are configuration errors. For example, specified SNS topic has been deleted or the role lacks necessary permissions to call the ``sns:Publish`` API.
+            :param encoding: The encoding to use for the email within the Amazon SNS notification. The default value is ``UTF-8`` . Use ``BASE64`` if you need to preserve all special characters, especially when the original message uses a different encoding format.
+            :param payload_type: The expected payload type within the Amazon SNS notification. ``CONTENT`` attempts to publish the full email content with 20KB of headers content. ``HEADERS`` extracts up to 100KB of header content to include in the notification, email content will not be included to the notification. The default value is ``CONTENT`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html
             :exampleMetadata: fixture=_generated
@@ -9040,7 +9163,10 @@ class CfnMailManagerRuleSet(
 
         @builtins.property
         def role_arn(self) -> builtins.str:
-            '''
+            '''The Amazon Resource Name (ARN) of the IAM Role to use while writing to Amazon SNS.
+
+            This role must have access to the ``sns:Publish`` API for the given topic.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html#cfn-ses-mailmanagerruleset-snsaction-rolearn
             '''
             result = self._values.get("role_arn")
@@ -9049,7 +9175,8 @@ class CfnMailManagerRuleSet(
 
         @builtins.property
         def topic_arn(self) -> builtins.str:
-            '''
+            '''The Amazon Resource Name (ARN) of the Amazon SNS Topic to which notification for the email received will be published.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html#cfn-ses-mailmanagerruleset-snsaction-topicarn
             '''
             result = self._values.get("topic_arn")
@@ -9058,7 +9185,10 @@ class CfnMailManagerRuleSet(
 
         @builtins.property
         def action_failure_policy(self) -> typing.Optional[builtins.str]:
-            '''
+            '''A policy that states what to do in the case of failure.
+
+            The action will fail if there are configuration errors. For example, specified SNS topic has been deleted or the role lacks necessary permissions to call the ``sns:Publish`` API.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html#cfn-ses-mailmanagerruleset-snsaction-actionfailurepolicy
             '''
             result = self._values.get("action_failure_policy")
@@ -9066,7 +9196,10 @@ class CfnMailManagerRuleSet(
 
         @builtins.property
         def encoding(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The encoding to use for the email within the Amazon SNS notification.
+
+            The default value is ``UTF-8`` . Use ``BASE64`` if you need to preserve all special characters, especially when the original message uses a different encoding format.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html#cfn-ses-mailmanagerruleset-snsaction-encoding
             '''
             result = self._values.get("encoding")
@@ -9074,7 +9207,10 @@ class CfnMailManagerRuleSet(
 
         @builtins.property
         def payload_type(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The expected payload type within the Amazon SNS notification.
+
+            ``CONTENT`` attempts to publish the full email content with 20KB of headers content. ``HEADERS`` extracts up to 100KB of header content to include in the notification, email content will not be included to the notification. The default value is ``CONTENT`` .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagerruleset-snsaction.html#cfn-ses-mailmanagerruleset-snsaction-payloadtype
             '''
             result = self._values.get("payload_type")
@@ -9195,7 +9331,11 @@ class CfnMailManagerRuleSetProps:
                                     analyzer="analyzer",
                                     result_field="resultField"
                                 ),
-                                attribute="attribute"
+                                attribute="attribute",
+                                is_in_address_list=ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty(
+                                    address_lists=["addressLists"],
+                                    attribute="attribute"
+                                )
                             ),
                             operator="operator"
                         ),
@@ -9249,7 +9389,11 @@ class CfnMailManagerRuleSetProps:
                                     analyzer="analyzer",
                                     result_field="resultField"
                                 ),
-                                attribute="attribute"
+                                attribute="attribute",
+                                is_in_address_list=ses.CfnMailManagerRuleSet.RuleIsInAddressListProperty(
+                                    address_lists=["addressLists"],
+                                    attribute="attribute"
+                                )
                             ),
                             operator="operator"
                         ),
@@ -9390,6 +9534,10 @@ class CfnMailManagerTrafficPolicy(
                             analysis=ses.CfnMailManagerTrafficPolicy.IngressAnalysisProperty(
                                 analyzer="analyzer",
                                 result_field="resultField"
+                            ),
+                            is_in_address_list=ses.CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty(
+                                address_lists=["addressLists"],
+                                attribute="attribute"
                             )
                         ),
                         operator="operator"
@@ -9704,6 +9852,10 @@ class CfnMailManagerTrafficPolicy(
                         analysis=ses.CfnMailManagerTrafficPolicy.IngressAnalysisProperty(
                             analyzer="analyzer",
                             result_field="resultField"
+                        ),
+                        is_in_address_list=ses.CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty(
+                            address_lists=["addressLists"],
+                            attribute="attribute"
                         )
                     ),
                     operator="operator"
@@ -9754,17 +9906,19 @@ class CfnMailManagerTrafficPolicy(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ses.CfnMailManagerTrafficPolicy.IngressBooleanToEvaluateProperty",
         jsii_struct_bases=[],
-        name_mapping={"analysis": "analysis"},
+        name_mapping={"analysis": "analysis", "is_in_address_list": "isInAddressList"},
     )
     class IngressBooleanToEvaluateProperty:
         def __init__(
             self,
             *,
-            analysis: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerTrafficPolicy.IngressAnalysisProperty", typing.Dict[builtins.str, typing.Any]]],
+            analysis: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerTrafficPolicy.IngressAnalysisProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            is_in_address_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The union type representing the allowed types of operands for a boolean condition.
 
             :param analysis: The structure type for a boolean condition stating the Add On ARN and its returned value.
+            :param is_in_address_list: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagertrafficpolicy-ingressbooleantoevaluate.html
             :exampleMetadata: fixture=_generated
@@ -9779,27 +9933,43 @@ class CfnMailManagerTrafficPolicy(
                     analysis=ses.CfnMailManagerTrafficPolicy.IngressAnalysisProperty(
                         analyzer="analyzer",
                         result_field="resultField"
+                    ),
+                    is_in_address_list=ses.CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty(
+                        address_lists=["addressLists"],
+                        attribute="attribute"
                     )
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__f984617bda8a2e4d661237f8f2d083ff4f9510ebc7ccbff62ef023d22ebe961f)
                 check_type(argname="argument analysis", value=analysis, expected_type=type_hints["analysis"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "analysis": analysis,
-            }
+                check_type(argname="argument is_in_address_list", value=is_in_address_list, expected_type=type_hints["is_in_address_list"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if analysis is not None:
+                self._values["analysis"] = analysis
+            if is_in_address_list is not None:
+                self._values["is_in_address_list"] = is_in_address_list
 
         @builtins.property
         def analysis(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnMailManagerTrafficPolicy.IngressAnalysisProperty"]:
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMailManagerTrafficPolicy.IngressAnalysisProperty"]]:
             '''The structure type for a boolean condition stating the Add On ARN and its returned value.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagertrafficpolicy-ingressbooleantoevaluate.html#cfn-ses-mailmanagertrafficpolicy-ingressbooleantoevaluate-analysis
             '''
             result = self._values.get("analysis")
-            assert result is not None, "Required property 'analysis' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMailManagerTrafficPolicy.IngressAnalysisProperty"], result)
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMailManagerTrafficPolicy.IngressAnalysisProperty"]], result)
+
+        @builtins.property
+        def is_in_address_list(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagertrafficpolicy-ingressbooleantoevaluate.html#cfn-ses-mailmanagertrafficpolicy-ingressbooleantoevaluate-isinaddresslist
+            '''
+            result = self._values.get("is_in_address_list")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10095,6 +10265,74 @@ class CfnMailManagerTrafficPolicy(
 
         def __repr__(self) -> str:
             return "IngressIpv6ToEvaluateProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ses.CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty",
+        jsii_struct_bases=[],
+        name_mapping={"address_lists": "addressLists", "attribute": "attribute"},
+    )
+    class IngressIsInAddressListProperty:
+        def __init__(
+            self,
+            *,
+            address_lists: typing.Sequence[builtins.str],
+            attribute: builtins.str,
+        ) -> None:
+            '''
+            :param address_lists: 
+            :param attribute: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagertrafficpolicy-ingressisinaddresslist.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ses as ses
+                
+                ingress_is_in_address_list_property = ses.CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty(
+                    address_lists=["addressLists"],
+                    attribute="attribute"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5756963845a73e3e00c9928d7ef48ca41a788f8ce93f22f31e10d1f99dbfe7fd)
+                check_type(argname="argument address_lists", value=address_lists, expected_type=type_hints["address_lists"])
+                check_type(argname="argument attribute", value=attribute, expected_type=type_hints["attribute"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "address_lists": address_lists,
+                "attribute": attribute,
+            }
+
+        @builtins.property
+        def address_lists(self) -> typing.List[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagertrafficpolicy-ingressisinaddresslist.html#cfn-ses-mailmanagertrafficpolicy-ingressisinaddresslist-addresslists
+            '''
+            result = self._values.get("address_lists")
+            assert result is not None, "Required property 'address_lists' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def attribute(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-mailmanagertrafficpolicy-ingressisinaddresslist.html#cfn-ses-mailmanagertrafficpolicy-ingressisinaddresslist-attribute
+            '''
+            result = self._values.get("attribute")
+            assert result is not None, "Required property 'attribute' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "IngressIsInAddressListProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -10463,6 +10701,10 @@ class CfnMailManagerTrafficPolicy(
                             analysis=ses.CfnMailManagerTrafficPolicy.IngressAnalysisProperty(
                                 analyzer="analyzer",
                                 result_field="resultField"
+                            ),
+                            is_in_address_list=ses.CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty(
+                                address_lists=["addressLists"],
+                                attribute="attribute"
                             )
                         ),
                         operator="operator"
@@ -10627,6 +10869,10 @@ class CfnMailManagerTrafficPolicy(
                                 analysis=ses.CfnMailManagerTrafficPolicy.IngressAnalysisProperty(
                                     analyzer="analyzer",
                                     result_field="resultField"
+                                ),
+                                is_in_address_list=ses.CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty(
+                                    address_lists=["addressLists"],
+                                    attribute="attribute"
                                 )
                             ),
                             operator="operator"
@@ -10757,6 +11003,10 @@ class CfnMailManagerTrafficPolicyProps:
                                 analysis=ses.CfnMailManagerTrafficPolicy.IngressAnalysisProperty(
                                     analyzer="analyzer",
                                     result_field="resultField"
+                                ),
+                                is_in_address_list=ses.CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty(
+                                    address_lists=["addressLists"],
+                                    attribute="attribute"
                                 )
                             ),
                             operator="operator"
@@ -19109,6 +19359,7 @@ def _typecheckingstub__837a4286b4e8b71b3f01d430cb3025b92d9655011a10dc38d56eb207d
     *,
     analysis: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerRuleSet.AnalysisProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     attribute: typing.Optional[builtins.str] = None,
+    is_in_address_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerRuleSet.RuleIsInAddressListProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19144,6 +19395,14 @@ def _typecheckingstub__a78815c83da5faa29d71e53f0ad521ece66311959d1e9d553d5f7b86b
 
 def _typecheckingstub__3a8c2b9cf0bccc9e370467c278e9d38253a9c27c0d0536268fbf47e4a05d0527(
     *,
+    attribute: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c73eebae950a2c422d0d245422988b23abb78b0806a5c9c6767b4faf77f00de5(
+    *,
+    address_lists: typing.Sequence[builtins.str],
     attribute: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -19322,7 +19581,8 @@ def _typecheckingstub__e11e4c9f67eb243bdb70a5e11d25dcc15331b3869022e75e712d05bc3
 
 def _typecheckingstub__f984617bda8a2e4d661237f8f2d083ff4f9510ebc7ccbff62ef023d22ebe961f(
     *,
-    analysis: typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerTrafficPolicy.IngressAnalysisProperty, typing.Dict[builtins.str, typing.Any]]],
+    analysis: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerTrafficPolicy.IngressAnalysisProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    is_in_address_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerTrafficPolicy.IngressIsInAddressListProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19354,6 +19614,14 @@ def _typecheckingstub__466f6fc45cc786424b25d62d8ee6b11ee8502c69bd8f436961b31e936
 
 def _typecheckingstub__f68a4c434cfdeacf5dcff0a6cf5c8e887cc1ed9849ea5b6b80bbd66457f4ee0c(
     *,
+    attribute: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5756963845a73e3e00c9928d7ef48ca41a788f8ce93f22f31e10d1f99dbfe7fd(
+    *,
+    address_lists: typing.Sequence[builtins.str],
     attribute: builtins.str,
 ) -> None:
     """Type checking stubs"""

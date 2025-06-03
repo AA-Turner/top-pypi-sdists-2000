@@ -787,7 +787,12 @@ def filter_by_level(
     ...
     DropEvent
     """
-    if logger.isEnabledFor(NAME_TO_LEVEL[method_name]):
+    if (
+        # We can't use logger.isEnabledFor() because it's always disabled when
+        # a log entry is in flight on Python 3.14 and later,
+        not logger.disabled
+        and NAME_TO_LEVEL[method_name] >= logger.getEffectiveLevel()
+    ):
         return event_dict
 
     raise DropEvent
@@ -1152,7 +1157,7 @@ class ProcessorFormatter(logging.Formatter):
             record.stack_info = None
 
         for p in self.processors:
-            ed = p(logger, meth_name, cast(EventDict, ed))
+            ed = p(logger, meth_name, ed)  # type: ignore[arg-type]
 
         if not isinstance(ed, str):
             warnings.warn(

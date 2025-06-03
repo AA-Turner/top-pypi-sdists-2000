@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: anthropic
-Version: 0.52.1
+Version: 0.52.2
 Summary: The official Python library for the anthropic API
 Project-URL: Homepage, https://github.com/anthropics/anthropic-sdk-python
 Project-URL: Repository, https://github.com/anthropics/anthropic-sdk-python
@@ -430,7 +430,7 @@ message = client.messages.create(
         }
     ],
     model="claude-3-7-sonnet-20250219",
-    metadata={"user_id": "13803d75-b4b5-4c3e-b2a2-6f21399b021b"},
+    metadata={},
 )
 print(message.metadata)
 ```

@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: jsonpickle
-Version: 4.1.0
+Version: 4.1.1
 Summary: jsonpickle encodes/decodes any Python object to/from JSON
 Author: Theelx
 Author-email: David Aguilar <davvid+jsonpickle@gmail.com>
@@ -51,6 +51,7 @@ Requires-Dist: build; extra == "packaging"
 Requires-Dist: setuptools>=61.2; extra == "packaging"
 Requires-Dist: setuptools_scm[toml]>=6.0; extra == "packaging"
 Requires-Dist: twine; extra == "packaging"
+Dynamic: license-file
 
 .. image:: https://img.shields.io/pypi/v/jsonpickle.svg
    :target: `PyPI link`_

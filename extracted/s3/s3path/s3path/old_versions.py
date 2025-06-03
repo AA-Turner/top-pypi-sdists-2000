@@ -255,20 +255,13 @@ class _S3Accessor:
         }
         transport_params = {'defer_seek': True}
         dummy_object = resource.Object('bucket', 'key')
-        if smart_open.__version__ >= '5.1.0':
-            self._smart_open_new_version_kwargs(
-                dummy_object,
-                resource,
-                config,
-                transport_params,
-                smart_open_kwargs)
-        else:
-            self._smart_open_old_version_kwargs(
-                dummy_object,
-                resource,
-                config,
-                transport_params,
-                smart_open_kwargs)
+        self._update_smart_open_kwargs(
+            dummy_object,
+            resource,
+            config,
+            transport_params,
+            smart_open_kwargs,
+        )
 
         file_object = smart_open.open(**smart_open_kwargs)
         return file_object
@@ -441,13 +434,13 @@ class _S3Accessor:
         return boto3_method(*args, **kwargs)
 
     def _boto3_method_with_extraargs(
-        self,
-        boto3_method,
-        config=None,
-        args=(),
-        kwargs=None,
-        extra_args=None,
-        allowed_extra_args=()):
+            self,
+            boto3_method,
+            config=None,
+            args=(),
+            kwargs=None,
+            extra_args=None,
+            allowed_extra_args=()):
         kwargs = kwargs or {}
         extra_args = extra_args or {}
         if config is not None:
@@ -459,7 +452,7 @@ class _S3Accessor:
         kwargs["ExtraArgs"] = extra_args
         return boto3_method(*args, **kwargs)
 
-    def _smart_open_new_version_kwargs(
+    def _update_smart_open_kwargs(
             self,
             dummy_object,
             resource,
@@ -467,7 +460,7 @@ class _S3Accessor:
             transport_params,
             smart_open_kwargs):
         """
-        New Smart-Open api
+        New Smart-Open (>=5.1.0) api
         Doc: https://github.com/RaRe-Technologies/smart_open/blob/develop/MIGRATING_FROM_OLDER_VERSIONS.rst
         """
         get_object_kwargs = self._update_kwargs_with_config(
@@ -483,53 +476,6 @@ class _S3Accessor:
         )
         smart_open_kwargs.update(
             compression='disable',
-            transport_params=transport_params,
-        )
-
-    def _smart_open_old_version_kwargs(
-            self,
-            dummy_object,
-            resource,
-            config,
-            transport_params,
-            smart_open_kwargs):
-        """
-        Old Smart-Open api
-        <5.0.0
-        """
-        def get_resource_kwargs():
-            # This is a good example of the complicity of boto3 and botocore
-            # resource arguments from the resource object :-/
-            # very annoying...
-
-            try:
-                access_key = resource.meta.client._request_signer._credentials.access_key
-                secret_key = resource.meta.client._request_signer._credentials.secret_key
-                token = resource.meta.client._request_signer._credentials.token
-            except AttributeError:
-                access_key = secret_key = token = None
-            return {
-                'endpoint_url': resource.meta.client.meta._endpoint_url,
-                'config': resource.meta.client._client_config,
-                'region_name': resource.meta.client._client_config.region_name,
-                'use_ssl': resource.meta.client._endpoint.host.startswith('https'),
-                'verify': resource.meta.client._endpoint.http_session._verify,
-                'aws_access_key_id': access_key,
-                'aws_secret_access_key': secret_key,
-                'aws_session_token': token,
-            }
-
-        initiate_multipart_upload_kwargs = self._update_kwargs_with_config(
-            dummy_object.initiate_multipart_upload, config=config)
-        object_kwargs = self._update_kwargs_with_config(dummy_object.get, config=config)
-        transport_params.update(
-            multipart_upload_kwargs=initiate_multipart_upload_kwargs,
-            object_kwargs=object_kwargs,
-            resource_kwargs=get_resource_kwargs(),
-            session=boto3.DEFAULT_SESSION,
-        )
-        smart_open_kwargs.update(
-            ignore_ext=True,
             transport_params=transport_params,
         )
 
@@ -575,20 +521,13 @@ class _VersionedS3Accessor(_S3Accessor):
         }
         transport_params = {'defer_seek': True, "version_id": path.version_id}
         dummy_object = resource.Object('bucket', 'key')
-        if smart_open.__version__ >= '5.1.0':
-            self._smart_open_new_version_kwargs(
-                dummy_object,
-                resource,
-                config,
-                transport_params,
-                smart_open_kwargs)
-        else:
-            self._smart_open_old_version_kwargs(
-                dummy_object,
-                resource,
-                config,
-                transport_params,
-                smart_open_kwargs)
+        self._update_smart_open_kwargs(
+            dummy_object,
+            resource,
+            config,
+            transport_params,
+            smart_open_kwargs,
+        )
 
         file_object = smart_open.open(**smart_open_kwargs)
         return file_object
@@ -1022,8 +961,6 @@ class S3Path(_PathNotSupportedMixin, Path, PureS3Path):
         Opens the Bucket key pointed to by the path, returns a Key file object that you can read/write with
         """
         self._absolute_path_validation()
-        if smart_open.__version__ < '4.0.0' and mode.startswith('b'):
-            mode = ''.join(reversed(mode))
         return self._accessor.open(
             self,
             mode=mode,

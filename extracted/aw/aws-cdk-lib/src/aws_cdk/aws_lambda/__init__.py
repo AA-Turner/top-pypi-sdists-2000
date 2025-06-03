@@ -227,6 +227,71 @@ lambda_.Function(self, "Lambda",
 
 To use `applicationLogLevelV2` and/or `systemLogLevelV2` you must set `loggingFormat` to `LoggingFormat.JSON`.
 
+## Customizing Log Group Creation
+
+### Log Group Creation Methods
+
+| Method | Description | Tag Propagation | Prop Injection | Aspects | Notes |
+|--------|-------------|-----------------|----------------|---------|-------|
+| **logRetention prop** | Legacy approach using Custom Resource | False | False | False | Does not support TPA |
+| **logGroup prop** | Explicitly supplied by user in CDK app | True | True | True | Full support for TPA |
+| **Lazy creation** | Lambda service creates logGroup on first invocation | False | False | False | Occurs when both logRetention and logGroup are undefined and USE_CDK_MANAGED_LAMBDA_LOGGROUP is false |
+| **USE_CDK_MANAGED_LAMBDA_LOGGROUP** | CDK Lambda function construct creates log group with default props | True | True | True | Feature flag must be enabled |
+
+*TPA: Tag propagation, Prop Injection, Aspects*
+
+#### Order of precedence
+
+```text
+                       Highest Precedence
+                             |
+             +---------------+---------------+
+             |                               |
+  +-------------------------+      +------------------------+
+  |   logRetention is set   |      |     logGroup is set    |
+  +-----------+-------------+      +----------+-------------+
+              |                               |
+              v                               v
+      Create LogGroup via            Use the provided LogGroup
+  Custom Resource (retention       instance (CDK-managed,
+  managed, logGroup disallowed)    logRetention disallowed)
+              |                               |
+              +---------------+---------------+
+                              |
+                              v
+          +-----------------------------------------------+
+          |         Feature flag enabled:                 |
+          | aws-cdk:aws-lambda:useCdkManagedLogGroup      |
+          +------------------ +---------------------------+
+                              |
+                              v
+              Create LogGroup at synth time
+          (CDK-managed, default settings for logGroup)
+                              |
+                              v
+                  +---------------------------+
+                  | Default (no config set)   |
+                  +------------+--------------+
+                              |
+                              v
+     Lambda service creates log group on first invocation runtime
+            (CDK does not manage the log group resource)
+```
+
+### Tag Propagation
+
+Refer section `Log Group Creation Methods` to find out which modes support tag propagation.
+As an example, adding the following line in your cdk app will also propagate to the logGroup.
+
+```
+const fn = new lambda.Function(this, 'MyFunctionWithFFTrue', {
+  runtime: lambda.Runtime.NODEJS_20_X,
+  handler: 'handler.main',
+  code: lambda.Code.fromAsset('lambda'),
+});
+cdk.Tags.of(fn).add('env', 'dev'); // the tag is also added to the log group
+```
+
 ## Resource-based Policies
 
 AWS Lambda supports resource-based policies for controlling access to Lambda
@@ -10779,15 +10844,12 @@ class CfnVersion(
         # The values are placeholders you should change.
         from aws_cdk import aws_lambda as lambda_
         
-        # policy: Any
-        
         cfn_version = lambda_.CfnVersion(self, "MyCfnVersion",
             function_name="functionName",
         
             # the properties below are optional
             code_sha256="codeSha256",
             description="description",
-            policy=policy,
             provisioned_concurrency_config=lambda.CfnVersion.ProvisionedConcurrencyConfigurationProperty(
                 provisioned_concurrent_executions=123
             ),
@@ -10808,7 +10870,6 @@ class CfnVersion(
         function_name: builtins.str,
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        policy: typing.Any = None,
         provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVersion.ProvisionedConcurrencyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         runtime_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVersion.RuntimePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -10818,7 +10879,6 @@ class CfnVersion(
         :param function_name: The name or ARN of the Lambda function. **Name formats** - *Function name* - ``MyFunction`` . - *Function ARN* - ``arn:aws:lambda:us-west-2:123456789012:function:MyFunction`` . - *Partial ARN* - ``123456789012:function:MyFunction`` . The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.
         :param code_sha256: Only publish a version if the hash value matches the value that's specified. Use this option to avoid publishing a version if the function code has changed since you last updated it. Updates are not supported for this property.
         :param description: A description for the version to override the description in the function configuration. Updates are not supported for this property.
-        :param policy: The resource policy of your function.
         :param provisioned_concurrency_config: Specifies a provisioned concurrency configuration for a function's version. Updates are not supported for this property.
         :param runtime_policy: Runtime Management Config of a function.
         '''
@@ -10830,7 +10890,6 @@ class CfnVersion(
             function_name=function_name,
             code_sha256=code_sha256,
             description=description,
-            policy=policy,
             provisioned_concurrency_config=provisioned_concurrency_config,
             runtime_policy=runtime_policy,
         )
@@ -10928,19 +10987,6 @@ class CfnVersion(
             type_hints = typing.get_type_hints(_typecheckingstub__f00e141771e43b8312d6a22399ba2d956886a5861db2296d1a2f16f8bba28b35)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="policy")
-    def policy(self) -> typing.Any:
-        '''The resource policy of your function.'''
-        return typing.cast(typing.Any, jsii.get(self, "policy"))
-
-    @policy.setter
-    def policy(self, value: typing.Any) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ca802d0cfdb44c8f362bdb1d342a752f1a5ebd921d11a7b2fd0806cca5d9200a)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "policy", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="provisionedConcurrencyConfig")
@@ -11128,7 +11174,6 @@ class CfnVersion(
         "function_name": "functionName",
         "code_sha256": "codeSha256",
         "description": "description",
-        "policy": "policy",
         "provisioned_concurrency_config": "provisionedConcurrencyConfig",
         "runtime_policy": "runtimePolicy",
     },
@@ -11140,7 +11185,6 @@ class CfnVersionProps:
         function_name: builtins.str,
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        policy: typing.Any = None,
         provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         runtime_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.RuntimePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -11149,7 +11193,6 @@ class CfnVersionProps:
         :param function_name: The name or ARN of the Lambda function. **Name formats** - *Function name* - ``MyFunction`` . - *Function ARN* - ``arn:aws:lambda:us-west-2:123456789012:function:MyFunction`` . - *Partial ARN* - ``123456789012:function:MyFunction`` . The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.
         :param code_sha256: Only publish a version if the hash value matches the value that's specified. Use this option to avoid publishing a version if the function code has changed since you last updated it. Updates are not supported for this property.
         :param description: A description for the version to override the description in the function configuration. Updates are not supported for this property.
-        :param policy: The resource policy of your function.
         :param provisioned_concurrency_config: Specifies a provisioned concurrency configuration for a function's version. Updates are not supported for this property.
         :param runtime_policy: Runtime Management Config of a function.
 
@@ -11162,15 +11205,12 @@ class CfnVersionProps:
             # The values are placeholders you should change.
             from aws_cdk import aws_lambda as lambda_
             
-            # policy: Any
-            
             cfn_version_props = lambda.CfnVersionProps(
                 function_name="functionName",
             
                 # the properties below are optional
                 code_sha256="codeSha256",
                 description="description",
-                policy=policy,
                 provisioned_concurrency_config=lambda.CfnVersion.ProvisionedConcurrencyConfigurationProperty(
                     provisioned_concurrent_executions=123
                 ),
@@ -11187,7 +11227,6 @@ class CfnVersionProps:
             check_type(argname="argument function_name", value=function_name, expected_type=type_hints["function_name"])
             check_type(argname="argument code_sha256", value=code_sha256, expected_type=type_hints["code_sha256"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument policy", value=policy, expected_type=type_hints["policy"])
             check_type(argname="argument provisioned_concurrency_config", value=provisioned_concurrency_config, expected_type=type_hints["provisioned_concurrency_config"])
             check_type(argname="argument runtime_policy", value=runtime_policy, expected_type=type_hints["runtime_policy"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -11197,8 +11236,6 @@ class CfnVersionProps:
             self._values["code_sha256"] = code_sha256
         if description is not None:
             self._values["description"] = description
-        if policy is not None:
-            self._values["policy"] = policy
         if provisioned_concurrency_config is not None:
             self._values["provisioned_concurrency_config"] = provisioned_concurrency_config
         if runtime_policy is not None:
@@ -11242,15 +11279,6 @@ class CfnVersionProps:
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def policy(self) -> typing.Any:
-        '''The resource policy of your function.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-version.html#cfn-lambda-version-policy
-        '''
-        result = self._values.get("policy")
-        return typing.cast(typing.Any, result)
 
     @builtins.property
     def provisioned_concurrency_config(
@@ -30700,7 +30728,6 @@ def _typecheckingstub__1d4b3bf8a38fd246db911713fe99ad93f55dc635dbdaae114631921a1
     function_name: builtins.str,
     code_sha256: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
-    policy: typing.Any = None,
     provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     runtime_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.RuntimePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -30737,12 +30764,6 @@ def _typecheckingstub__f00e141771e43b8312d6a22399ba2d956886a5861db2296d1a2f16f8b
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__ca802d0cfdb44c8f362bdb1d342a752f1a5ebd921d11a7b2fd0806cca5d9200a(
-    value: typing.Any,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__e46534e1d83b58a93edc70a851ca891701ea58cfe9a3fc7dc106915c1a475fa6(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.ProvisionedConcurrencyConfigurationProperty]],
 ) -> None:
@@ -30775,7 +30796,6 @@ def _typecheckingstub__63ba63c43bc52bb365203cebb308fd393d4c03a8aee52a0336a139696
     function_name: builtins.str,
     code_sha256: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
-    policy: typing.Any = None,
     provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     runtime_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.RuntimePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

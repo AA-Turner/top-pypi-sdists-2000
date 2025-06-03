@@ -1426,7 +1426,7 @@ class CfnCanary(
         :param schedule: A structure that contains information about how often the canary is to run, and when these runs are to stop.
         :param artifact_config: A structure that contains the configuration for canary artifacts, including the encryption-at-rest settings for artifacts that the canary uploads to Amazon S3.
         :param delete_lambda_resources_on_canary_deletion: (deprecated) Deletes associated lambda resources created by Synthetics if set to True. Default is False
-        :param dry_run_and_update: Setting to control if UpdateCanary will perform a DryRun and validate it is PASSING before performing the Update. Default is FALSE.
+        :param dry_run_and_update: Specifies whether to perform a dry run before updating the canary. If set to ``true`` , CloudFormation will execute a dry run to validate the changes before applying them to the canary. If the dry run succeeds, the canary will be updated with the changes. If the dry run fails, the CloudFormation deployment will fail with the dry run’s failure reason. If set to ``false`` or omitted, the canary will be updated directly without first performing a dry run. The default value is ``false`` . For more information, see `Performing safe canary updates <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/performing-safe-canary-upgrades.html>`_ .
         :param failure_retention_period: The number of days to retain data about failed runs of this canary. If you omit this field, the default of 31 days is used. The valid range is 1 to 455 days. This setting affects the range of information returned by `GetCanaryRuns <https://docs.aws.amazon.com/AmazonSynthetics/latest/APIReference/API_GetCanaryRuns.html>`_ , as well as the range of information displayed in the Synthetics console.
         :param provisioned_resource_cleanup: Specifies whether to also delete the Lambda functions and layers used by this canary when the canary is deleted. If it is ``AUTOMATIC`` , the Lambda functions and layers will be deleted when the canary is deleted. If the value of this parameter is ``OFF`` , then the value of the ``DeleteLambda`` parameter of the `DeleteCanary <https://docs.aws.amazon.com/AmazonSynthetics/latest/APIReference/API_DeleteCanary.html>`_ operation determines whether the Lambda functions and layers will be deleted.
         :param resources_to_replicate_tags: To have the tags that you apply to this canary also be applied to the Lambda function that the canary uses, specify this property with the value ``lambda-function`` . If you do this, CloudWatch Synthetics will keep the tags of the canary and the Lambda function synchronized. Any future changes you make to the canary's tags will also be applied to the function.
@@ -1666,7 +1666,7 @@ class CfnCanary(
     def dry_run_and_update(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Setting to control if UpdateCanary will perform a DryRun and validate it is PASSING before performing the Update.'''
+        '''Specifies whether to perform a dry run before updating the canary.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "dryRunAndUpdate"))
 
     @dry_run_and_update.setter
@@ -1993,8 +1993,8 @@ class CfnCanary(
 
             :param handler: The entry point to use for the source code when running the canary. For canaries that use the ``syn-python-selenium-1.0`` runtime or a ``syn-nodejs.puppeteer`` runtime earlier than ``syn-nodejs.puppeteer-3.4`` , the handler must be specified as ``*fileName* .handler`` . For ``syn-python-selenium-1.1`` , ``syn-nodejs.puppeteer-3.4`` , and later runtimes, the handler can be specified as ``*fileName* . *functionName*`` , or you can specify a folder where canary scripts reside as ``*folder* / *fileName* . *functionName*`` .
             :param s3_bucket: If your canary script is located in S3, specify the bucket name here. The bucket must already exist.
-            :param s3_key: The S3 key of your script. For more information, see `Working with Amazon S3 Objects <https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingObjects.html>`_ .
-            :param s3_object_version: The S3 version ID of your script.
+            :param s3_key: The Amazon S3 key of your script. For more information, see `Working with Amazon S3 Objects <https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingObjects.html>`_ .
+            :param s3_object_version: The Amazon S3 version ID of your script.
             :param script: If you input your canary script directly into the canary instead of referring to an S3 location, the value of this parameter is the script in plain text. It can be up to 5 MB.
             :param source_location_arn: The ARN of the Lambda layer where Synthetics stores the canary script code.
 
@@ -2065,7 +2065,7 @@ class CfnCanary(
 
         @builtins.property
         def s3_key(self) -> typing.Optional[builtins.str]:
-            '''The S3 key of your script.
+            '''The Amazon S3 key of your script.
 
             For more information, see `Working with Amazon S3 Objects <https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingObjects.html>`_ .
 
@@ -2076,7 +2076,7 @@ class CfnCanary(
 
         @builtins.property
         def s3_object_version(self) -> typing.Optional[builtins.str]:
-            '''The S3 version ID of your script.
+            '''The Amazon S3 version ID of your script.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-code.html#cfn-synthetics-canary-code-s3objectversion
             '''
@@ -2121,8 +2121,9 @@ class CfnCanary(
     )
     class RetryConfigProperty:
         def __init__(self, *, max_retries: jsii.Number) -> None:
-            '''
-            :param max_retries: maximum times the canary will be retried upon the scheduled run failure.
+            '''The canary's retry configuration information.
+
+            :param max_retries: The maximum number of retries. The value must be less than or equal to two.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-retryconfig.html
             :exampleMetadata: fixture=_generated
@@ -2146,7 +2147,9 @@ class CfnCanary(
 
         @builtins.property
         def max_retries(self) -> jsii.Number:
-            '''maximum times the canary will be retried upon the scheduled run failure.
+            '''The maximum number of retries.
+
+            The value must be less than or equal to two.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-retryconfig.html#cfn-synthetics-canary-retryconfig-maxretries
             '''
@@ -2391,7 +2394,7 @@ class CfnCanary(
 
             :param expression: A ``rate`` expression or a ``cron`` expression that defines how often the canary is to run. For a rate expression, The syntax is ``rate( *number unit* )`` . *unit* can be ``minute`` , ``minutes`` , or ``hour`` . For example, ``rate(1 minute)`` runs the canary once a minute, ``rate(10 minutes)`` runs it once every 10 minutes, and ``rate(1 hour)`` runs it once every hour. You can specify a frequency between ``rate(1 minute)`` and ``rate(1 hour)`` . Specifying ``rate(0 minute)`` or ``rate(0 hour)`` is a special value that causes the canary to run only once when it is started. Use ``cron( *expression* )`` to specify a cron expression. You can't schedule a canary to wait for more than a year before running. For information about the syntax for cron expressions, see `Scheduling canary runs using cron <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_cron.html>`_ .
             :param duration_in_seconds: How long, in seconds, for the canary to continue making regular runs according to the schedule in the ``Expression`` value. If you specify 0, the canary continues making runs until you stop it. If you omit this field, the default of 0 is used.
-            :param retry_config: 
+            :param retry_config: The canary's retry configuration information.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-schedule.html
             :exampleMetadata: fixture=_generated
@@ -2458,7 +2461,8 @@ class CfnCanary(
         def retry_config(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.RetryConfigProperty"]]:
-            '''
+            '''The canary's retry configuration information.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-schedule.html#cfn-synthetics-canary-schedule-retryconfig
             '''
             result = self._values.get("retry_config")
@@ -2500,7 +2504,7 @@ class CfnCanary(
 
             :param security_group_ids: The IDs of the security groups for this canary.
             :param subnet_ids: The IDs of the subnets where this canary is to run.
-            :param ipv6_allowed_for_dual_stack: Allow outbound IPv6 traffic on VPC canaries that are connected to dual-stack subnets if set to true.
+            :param ipv6_allowed_for_dual_stack: Set this to ``true`` to allow outbound IPv6 traffic on VPC canaries that are connected to dual-stack subnets. The default is ``false`` .
             :param vpc_id: The ID of the VPC where this canary is to run.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-vpcconfig.html
@@ -2560,7 +2564,9 @@ class CfnCanary(
         def ipv6_allowed_for_dual_stack(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''Allow outbound IPv6 traffic on VPC canaries that are connected to dual-stack subnets if set to true.
+            '''Set this to ``true`` to allow outbound IPv6 traffic on VPC canaries that are connected to dual-stack subnets.
+
+            The default is ``false`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-vpcconfig.html#cfn-synthetics-canary-vpcconfig-ipv6allowedfordualstack
             '''
@@ -2734,7 +2740,7 @@ class CfnCanaryProps:
         :param schedule: A structure that contains information about how often the canary is to run, and when these runs are to stop.
         :param artifact_config: A structure that contains the configuration for canary artifacts, including the encryption-at-rest settings for artifacts that the canary uploads to Amazon S3.
         :param delete_lambda_resources_on_canary_deletion: (deprecated) Deletes associated lambda resources created by Synthetics if set to True. Default is False
-        :param dry_run_and_update: Setting to control if UpdateCanary will perform a DryRun and validate it is PASSING before performing the Update. Default is FALSE.
+        :param dry_run_and_update: Specifies whether to perform a dry run before updating the canary. If set to ``true`` , CloudFormation will execute a dry run to validate the changes before applying them to the canary. If the dry run succeeds, the canary will be updated with the changes. If the dry run fails, the CloudFormation deployment will fail with the dry run’s failure reason. If set to ``false`` or omitted, the canary will be updated directly without first performing a dry run. The default value is ``false`` . For more information, see `Performing safe canary updates <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/performing-safe-canary-upgrades.html>`_ .
         :param failure_retention_period: The number of days to retain data about failed runs of this canary. If you omit this field, the default of 31 days is used. The valid range is 1 to 455 days. This setting affects the range of information returned by `GetCanaryRuns <https://docs.aws.amazon.com/AmazonSynthetics/latest/APIReference/API_GetCanaryRuns.html>`_ , as well as the range of information displayed in the Synthetics console.
         :param provisioned_resource_cleanup: Specifies whether to also delete the Lambda functions and layers used by this canary when the canary is deleted. If it is ``AUTOMATIC`` , the Lambda functions and layers will be deleted when the canary is deleted. If the value of this parameter is ``OFF`` , then the value of the ``DeleteLambda`` parameter of the `DeleteCanary <https://docs.aws.amazon.com/AmazonSynthetics/latest/APIReference/API_DeleteCanary.html>`_ operation determines whether the Lambda functions and layers will be deleted.
         :param resources_to_replicate_tags: To have the tags that you apply to this canary also be applied to the Lambda function that the canary uses, specify this property with the value ``lambda-function`` . If you do this, CloudWatch Synthetics will keep the tags of the canary and the Lambda function synchronized. Any future changes you make to the canary's tags will also be applied to the function.
@@ -2992,9 +2998,13 @@ class CfnCanaryProps:
     def dry_run_and_update(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Setting to control if UpdateCanary will perform a DryRun and validate it is PASSING before performing the Update.
+        '''Specifies whether to perform a dry run before updating the canary.
 
-        Default is FALSE.
+        If set to ``true`` , CloudFormation will execute a dry run to validate the changes before applying them to the canary. If the dry run succeeds, the canary will be updated with the changes. If the dry run fails, the CloudFormation deployment will fail with the dry run’s failure reason.
+
+        If set to ``false`` or omitted, the canary will be updated directly without first performing a dry run. The default value is ``false`` .
+
+        For more information, see `Performing safe canary updates <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/performing-safe-canary-upgrades.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-dryrunandupdate
         '''

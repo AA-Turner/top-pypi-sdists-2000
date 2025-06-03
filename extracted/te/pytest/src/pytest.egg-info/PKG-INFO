@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: pytest
-Version: 8.3.5
+Version: 8.4.0
 Summary: pytest: simple powerful testing with Python
 Author: Holger Krekel, Bruno Oliveira, Ronny Pfannschmidt, Floris Bruynooghe, Brianna Laugher, Florian Bruhin, Others (See AUTHORS)
 License: MIT
@@ -19,33 +19,35 @@ Classifier: Operating System :: Microsoft :: Windows
 Classifier: Operating System :: POSIX
 Classifier: Operating System :: Unix
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Software Development :: Libraries
 Classifier: Topic :: Software Development :: Testing
 Classifier: Topic :: Utilities
-Requires-Python: >=3.8
+Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: LICENSE
 License-File: AUTHORS
-Requires-Dist: colorama; sys_platform == "win32"
-Requires-Dist: exceptiongroup>=1.0.0rc8; python_version < "3.11"
-Requires-Dist: iniconfig
-Requires-Dist: packaging
+Requires-Dist: colorama>=0.4; sys_platform == "win32"
+Requires-Dist: exceptiongroup>=1; python_version < "3.11"
+Requires-Dist: iniconfig>=1
+Requires-Dist: packaging>=20
 Requires-Dist: pluggy<2,>=1.5
+Requires-Dist: pygments>=2.7.2
 Requires-Dist: tomli>=1; python_version < "3.11"
 Provides-Extra: dev
 Requires-Dist: argcomplete; extra == "dev"
 Requires-Dist: attrs>=19.2; extra == "dev"
 Requires-Dist: hypothesis>=3.56; extra == "dev"
 Requires-Dist: mock; extra == "dev"
-Requires-Dist: pygments>=2.7.2; extra == "dev"
 Requires-Dist: requests; extra == "dev"
 Requires-Dist: setuptools; extra == "dev"
 Requires-Dist: xmlschema; extra == "dev"
+Dynamic: license-file
 
 .. image:: https://github.com/pytest-dev/pytest/raw/main/doc/en/img/pytest_logo_curves.svg
    :target: https://docs.pytest.org/en/stable/
@@ -146,7 +148,7 @@ Features
 - Can run `unittest <https://docs.pytest.org/en/stable/how-to/unittest.html>`_ (or trial)
   test suites out of the box
 
-- Python 3.8+ or PyPy3
+- Python 3.9+ or PyPy3
 
 - Rich plugin architecture, with over 1300+ `external plugins <https://docs.pytest.org/en/latest/reference/plugin_list.html>`_ and thriving community
 

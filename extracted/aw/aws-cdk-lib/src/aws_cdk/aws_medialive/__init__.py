@@ -3435,6 +3435,7 @@ class CfnChannel(
         jsii_struct_bases=[],
         name_mapping={
             "afd_signaling": "afdSignaling",
+            "bitrate": "bitrate",
             "buf_size": "bufSize",
             "color_space_settings": "colorSpaceSettings",
             "fixed_afd": "fixedAfd",
@@ -3449,6 +3450,7 @@ class CfnChannel(
             "par_denominator": "parDenominator",
             "par_numerator": "parNumerator",
             "qvbr_quality_level": "qvbrQualityLevel",
+            "rate_control_mode": "rateControlMode",
             "scene_change_detect": "sceneChangeDetect",
             "timecode_burnin_settings": "timecodeBurninSettings",
         },
@@ -3458,6 +3460,7 @@ class CfnChannel(
             self,
             *,
             afd_signaling: typing.Optional[builtins.str] = None,
+            bitrate: typing.Optional[jsii.Number] = None,
             buf_size: typing.Optional[jsii.Number] = None,
             color_space_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.Av1ColorSpaceSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             fixed_afd: typing.Optional[builtins.str] = None,
@@ -3472,11 +3475,13 @@ class CfnChannel(
             par_denominator: typing.Optional[jsii.Number] = None,
             par_numerator: typing.Optional[jsii.Number] = None,
             qvbr_quality_level: typing.Optional[jsii.Number] = None,
+            rate_control_mode: typing.Optional[builtins.str] = None,
             scene_change_detect: typing.Optional[builtins.str] = None,
             timecode_burnin_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.TimecodeBurninSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''
             :param afd_signaling: 
+            :param bitrate: 
             :param buf_size: 
             :param color_space_settings: 
             :param fixed_afd: 
@@ -3491,6 +3496,7 @@ class CfnChannel(
             :param par_denominator: 
             :param par_numerator: 
             :param qvbr_quality_level: 
+            :param rate_control_mode: 
             :param scene_change_detect: 
             :param timecode_burnin_settings: 
 
@@ -3509,6 +3515,7 @@ class CfnChannel(
                 
                 av1_settings_property = medialive.CfnChannel.Av1SettingsProperty(
                     afd_signaling="afdSignaling",
+                    bitrate=123,
                     buf_size=123,
                     color_space_settings=medialive.CfnChannel.Av1ColorSpaceSettingsProperty(
                         color_space_passthrough_settings=color_space_passthrough_settings,
@@ -3531,6 +3538,7 @@ class CfnChannel(
                     par_denominator=123,
                     par_numerator=123,
                     qvbr_quality_level=123,
+                    rate_control_mode="rateControlMode",
                     scene_change_detect="sceneChangeDetect",
                     timecode_burnin_settings=medialive.CfnChannel.TimecodeBurninSettingsProperty(
                         font_size="fontSize",
@@ -3542,6 +3550,7 @@ class CfnChannel(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__1911156090a37730cd16cc0d13076f448f8b192dca9427883cf77e884bbd03df)
                 check_type(argname="argument afd_signaling", value=afd_signaling, expected_type=type_hints["afd_signaling"])
+                check_type(argname="argument bitrate", value=bitrate, expected_type=type_hints["bitrate"])
                 check_type(argname="argument buf_size", value=buf_size, expected_type=type_hints["buf_size"])
                 check_type(argname="argument color_space_settings", value=color_space_settings, expected_type=type_hints["color_space_settings"])
                 check_type(argname="argument fixed_afd", value=fixed_afd, expected_type=type_hints["fixed_afd"])
@@ -3556,11 +3565,14 @@ class CfnChannel(
                 check_type(argname="argument par_denominator", value=par_denominator, expected_type=type_hints["par_denominator"])
                 check_type(argname="argument par_numerator", value=par_numerator, expected_type=type_hints["par_numerator"])
                 check_type(argname="argument qvbr_quality_level", value=qvbr_quality_level, expected_type=type_hints["qvbr_quality_level"])
+                check_type(argname="argument rate_control_mode", value=rate_control_mode, expected_type=type_hints["rate_control_mode"])
                 check_type(argname="argument scene_change_detect", value=scene_change_detect, expected_type=type_hints["scene_change_detect"])
                 check_type(argname="argument timecode_burnin_settings", value=timecode_burnin_settings, expected_type=type_hints["timecode_burnin_settings"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if afd_signaling is not None:
                 self._values["afd_signaling"] = afd_signaling
+            if bitrate is not None:
+                self._values["bitrate"] = bitrate
             if buf_size is not None:
                 self._values["buf_size"] = buf_size
             if color_space_settings is not None:
@@ -3589,6 +3601,8 @@ class CfnChannel(
                 self._values["par_numerator"] = par_numerator
             if qvbr_quality_level is not None:
                 self._values["qvbr_quality_level"] = qvbr_quality_level
+            if rate_control_mode is not None:
+                self._values["rate_control_mode"] = rate_control_mode
             if scene_change_detect is not None:
                 self._values["scene_change_detect"] = scene_change_detect
             if timecode_burnin_settings is not None:
@@ -3601,6 +3615,14 @@ class CfnChannel(
             '''
             result = self._values.get("afd_signaling")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def bitrate(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-av1settings.html#cfn-medialive-channel-av1settings-bitrate
+            '''
+            result = self._values.get("bitrate")
+            return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
         def buf_size(self) -> typing.Optional[jsii.Number]:
@@ -3715,6 +3737,14 @@ class CfnChannel(
             '''
             result = self._values.get("qvbr_quality_level")
             return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def rate_control_mode(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-av1settings.html#cfn-medialive-channel-av1settings-ratecontrolmode
+            '''
+            result = self._values.get("rate_control_mode")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def scene_change_detect(self) -> typing.Optional[builtins.str]:
@@ -4700,6 +4730,8 @@ class CfnChannel(
                         ),
                         ebu_tt_dDestination_settings=medialive.CfnChannel.EbuTtDDestinationSettingsProperty(
                             copyright_holder="copyrightHolder",
+                            default_font_size=123,
+                            default_line_height=123,
                             fill_line_gap="fillLineGap",
                             font_family="fontFamily",
                             style_control="styleControl"
@@ -4954,6 +4986,8 @@ class CfnChannel(
                     ),
                     ebu_tt_dDestination_settings=medialive.CfnChannel.EbuTtDDestinationSettingsProperty(
                         copyright_holder="copyrightHolder",
+                        default_font_size=123,
+                        default_line_height=123,
                         fill_line_gap="fillLineGap",
                         font_family="fontFamily",
                         style_control="styleControl"
@@ -5805,9 +5839,80 @@ class CfnChannel(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.CmafIngestCaptionLanguageMappingProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "caption_channel": "captionChannel",
+            "language_code": "languageCode",
+        },
+    )
+    class CmafIngestCaptionLanguageMappingProperty:
+        def __init__(
+            self,
+            *,
+            caption_channel: typing.Optional[jsii.Number] = None,
+            language_code: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param caption_channel: 
+            :param language_code: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-cmafingestcaptionlanguagemapping.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                cmaf_ingest_caption_language_mapping_property = medialive.CfnChannel.CmafIngestCaptionLanguageMappingProperty(
+                    caption_channel=123,
+                    language_code="languageCode"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a833a02632a589afb5026143cbf8803b2228e0f422ab4c5a2dbf59314b9e157b)
+                check_type(argname="argument caption_channel", value=caption_channel, expected_type=type_hints["caption_channel"])
+                check_type(argname="argument language_code", value=language_code, expected_type=type_hints["language_code"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if caption_channel is not None:
+                self._values["caption_channel"] = caption_channel
+            if language_code is not None:
+                self._values["language_code"] = language_code
+
+        @builtins.property
+        def caption_channel(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-cmafingestcaptionlanguagemapping.html#cfn-medialive-channel-cmafingestcaptionlanguagemapping-captionchannel
+            '''
+            result = self._values.get("caption_channel")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def language_code(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-cmafingestcaptionlanguagemapping.html#cfn-medialive-channel-cmafingestcaptionlanguagemapping-languagecode
+            '''
+            result = self._values.get("language_code")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CmafIngestCaptionLanguageMappingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.CmafIngestGroupSettingsProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "caption_language_mappings": "captionLanguageMappings",
             "destination": "destination",
             "id3_behavior": "id3Behavior",
             "id3_name_modifier": "id3NameModifier",
@@ -5820,12 +5925,16 @@ class CfnChannel(
             "segment_length": "segmentLength",
             "segment_length_units": "segmentLengthUnits",
             "send_delay_ms": "sendDelayMs",
+            "timed_metadata_id3_frame": "timedMetadataId3Frame",
+            "timed_metadata_id3_period": "timedMetadataId3Period",
+            "timed_metadata_passthrough": "timedMetadataPassthrough",
         },
     )
     class CmafIngestGroupSettingsProperty:
         def __init__(
             self,
             *,
+            caption_language_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.CmafIngestCaptionLanguageMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.OutputLocationRefProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             id3_behavior: typing.Optional[builtins.str] = None,
             id3_name_modifier: typing.Optional[builtins.str] = None,
@@ -5838,8 +5947,12 @@ class CfnChannel(
             segment_length: typing.Optional[jsii.Number] = None,
             segment_length_units: typing.Optional[builtins.str] = None,
             send_delay_ms: typing.Optional[jsii.Number] = None,
+            timed_metadata_id3_frame: typing.Optional[builtins.str] = None,
+            timed_metadata_id3_period: typing.Optional[jsii.Number] = None,
+            timed_metadata_passthrough: typing.Optional[builtins.str] = None,
         ) -> None:
             '''
+            :param caption_language_mappings: 
             :param destination: 
             :param id3_behavior: 
             :param id3_name_modifier: 
@@ -5852,6 +5965,9 @@ class CfnChannel(
             :param segment_length: 
             :param segment_length_units: 
             :param send_delay_ms: 
+            :param timed_metadata_id3_frame: 
+            :param timed_metadata_id3_period: 
+            :param timed_metadata_passthrough: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-cmafingestgroupsettings.html
             :exampleMetadata: fixture=_generated
@@ -5863,6 +5979,10 @@ class CfnChannel(
                 from aws_cdk import aws_medialive as medialive
                 
                 cmaf_ingest_group_settings_property = medialive.CfnChannel.CmafIngestGroupSettingsProperty(
+                    caption_language_mappings=[medialive.CfnChannel.CmafIngestCaptionLanguageMappingProperty(
+                        caption_channel=123,
+                        language_code="languageCode"
+                    )],
                     destination=medialive.CfnChannel.OutputLocationRefProperty(
                         destination_ref_id="destinationRefId"
                     ),
@@ -5876,11 +5996,15 @@ class CfnChannel(
                     scte35_type="scte35Type",
                     segment_length=123,
                     segment_length_units="segmentLengthUnits",
-                    send_delay_ms=123
+                    send_delay_ms=123,
+                    timed_metadata_id3_frame="timedMetadataId3Frame",
+                    timed_metadata_id3_period=123,
+                    timed_metadata_passthrough="timedMetadataPassthrough"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__6fe9142b6885e8776c3e51af0733250a73fcd8e45bb4ec5f866206680352c7eb)
+                check_type(argname="argument caption_language_mappings", value=caption_language_mappings, expected_type=type_hints["caption_language_mappings"])
                 check_type(argname="argument destination", value=destination, expected_type=type_hints["destination"])
                 check_type(argname="argument id3_behavior", value=id3_behavior, expected_type=type_hints["id3_behavior"])
                 check_type(argname="argument id3_name_modifier", value=id3_name_modifier, expected_type=type_hints["id3_name_modifier"])
@@ -5893,7 +6017,12 @@ class CfnChannel(
                 check_type(argname="argument segment_length", value=segment_length, expected_type=type_hints["segment_length"])
                 check_type(argname="argument segment_length_units", value=segment_length_units, expected_type=type_hints["segment_length_units"])
                 check_type(argname="argument send_delay_ms", value=send_delay_ms, expected_type=type_hints["send_delay_ms"])
+                check_type(argname="argument timed_metadata_id3_frame", value=timed_metadata_id3_frame, expected_type=type_hints["timed_metadata_id3_frame"])
+                check_type(argname="argument timed_metadata_id3_period", value=timed_metadata_id3_period, expected_type=type_hints["timed_metadata_id3_period"])
+                check_type(argname="argument timed_metadata_passthrough", value=timed_metadata_passthrough, expected_type=type_hints["timed_metadata_passthrough"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if caption_language_mappings is not None:
+                self._values["caption_language_mappings"] = caption_language_mappings
             if destination is not None:
                 self._values["destination"] = destination
             if id3_behavior is not None:
@@ -5918,6 +6047,22 @@ class CfnChannel(
                 self._values["segment_length_units"] = segment_length_units
             if send_delay_ms is not None:
                 self._values["send_delay_ms"] = send_delay_ms
+            if timed_metadata_id3_frame is not None:
+                self._values["timed_metadata_id3_frame"] = timed_metadata_id3_frame
+            if timed_metadata_id3_period is not None:
+                self._values["timed_metadata_id3_period"] = timed_metadata_id3_period
+            if timed_metadata_passthrough is not None:
+                self._values["timed_metadata_passthrough"] = timed_metadata_passthrough
+
+        @builtins.property
+        def caption_language_mappings(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannel.CmafIngestCaptionLanguageMappingProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-cmafingestgroupsettings.html#cfn-medialive-channel-cmafingestgroupsettings-captionlanguagemappings
+            '''
+            result = self._values.get("caption_language_mappings")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannel.CmafIngestCaptionLanguageMappingProperty"]]]], result)
 
         @builtins.property
         def destination(
@@ -6016,6 +6161,30 @@ class CfnChannel(
             '''
             result = self._values.get("send_delay_ms")
             return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def timed_metadata_id3_frame(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-cmafingestgroupsettings.html#cfn-medialive-channel-cmafingestgroupsettings-timedmetadataid3frame
+            '''
+            result = self._values.get("timed_metadata_id3_frame")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def timed_metadata_id3_period(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-cmafingestgroupsettings.html#cfn-medialive-channel-cmafingestgroupsettings-timedmetadataid3period
+            '''
+            result = self._values.get("timed_metadata_id3_period")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def timed_metadata_passthrough(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-cmafingestgroupsettings.html#cfn-medialive-channel-cmafingestgroupsettings-timedmetadatapassthrough
+            '''
+            result = self._values.get("timed_metadata_passthrough")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7522,6 +7691,8 @@ class CfnChannel(
         jsii_struct_bases=[],
         name_mapping={
             "copyright_holder": "copyrightHolder",
+            "default_font_size": "defaultFontSize",
+            "default_line_height": "defaultLineHeight",
             "fill_line_gap": "fillLineGap",
             "font_family": "fontFamily",
             "style_control": "styleControl",
@@ -7532,6 +7703,8 @@ class CfnChannel(
             self,
             *,
             copyright_holder: typing.Optional[builtins.str] = None,
+            default_font_size: typing.Optional[jsii.Number] = None,
+            default_line_height: typing.Optional[jsii.Number] = None,
             fill_line_gap: typing.Optional[builtins.str] = None,
             font_family: typing.Optional[builtins.str] = None,
             style_control: typing.Optional[builtins.str] = None,
@@ -7541,6 +7714,8 @@ class CfnChannel(
             The parent of this entity is CaptionDestinationSettings.
 
             :param copyright_holder: Applies only if you plan to convert these source captions to EBU-TT-D or TTML in an output. Complete this field if you want to include the name of the copyright holder in the copyright metadata tag in the TTML
+            :param default_font_size: 
+            :param default_line_height: 
             :param fill_line_gap: Specifies how to handle the gap between the lines (in multi-line captions). - enabled: Fill with the captions background color (as specified in the input captions). - disabled: Leave the gap unfilled.
             :param font_family: Specifies the font family to include in the font data attached to the EBU-TT captions. Valid only if styleControl is set to include. If you leave this field empty, the font family is set to "monospaced". (If styleControl is set to exclude, the font family is always set to "monospaced".) You specify only the font family. All other style information (color, bold, position and so on) is copied from the input captions. The size is always set to 100% to allow the downstream player to choose the size. - Enter a list of font families, as a comma-separated list of font names, in order of preference. The name can be a font family (such as “Arial”), or a generic font family (such as “serif”), or “default” (to let the downstream player choose the font). - Leave blank to set the family to “monospace”.
             :param style_control: Specifies the style information (font color, font position, and so on) to include in the font data that is attached to the EBU-TT captions. - include: Take the style information (font color, font position, and so on) from the source captions and include that information in the font data attached to the EBU-TT captions. This option is valid only if the source captions are Embedded or Teletext. - exclude: In the font data attached to the EBU-TT captions, set the font family to "monospaced". Do not include any other style information.
@@ -7556,6 +7731,8 @@ class CfnChannel(
                 
                 ebu_tt_dDestination_settings_property = medialive.CfnChannel.EbuTtDDestinationSettingsProperty(
                     copyright_holder="copyrightHolder",
+                    default_font_size=123,
+                    default_line_height=123,
                     fill_line_gap="fillLineGap",
                     font_family="fontFamily",
                     style_control="styleControl"
@@ -7564,12 +7741,18 @@ class CfnChannel(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__23559d0249cfbe262bfbd93ab48605fd9c25886b289f89b7e6b86a893ae4c78b)
                 check_type(argname="argument copyright_holder", value=copyright_holder, expected_type=type_hints["copyright_holder"])
+                check_type(argname="argument default_font_size", value=default_font_size, expected_type=type_hints["default_font_size"])
+                check_type(argname="argument default_line_height", value=default_line_height, expected_type=type_hints["default_line_height"])
                 check_type(argname="argument fill_line_gap", value=fill_line_gap, expected_type=type_hints["fill_line_gap"])
                 check_type(argname="argument font_family", value=font_family, expected_type=type_hints["font_family"])
                 check_type(argname="argument style_control", value=style_control, expected_type=type_hints["style_control"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if copyright_holder is not None:
                 self._values["copyright_holder"] = copyright_holder
+            if default_font_size is not None:
+                self._values["default_font_size"] = default_font_size
+            if default_line_height is not None:
+                self._values["default_line_height"] = default_line_height
             if fill_line_gap is not None:
                 self._values["fill_line_gap"] = fill_line_gap
             if font_family is not None:
@@ -7587,6 +7770,22 @@ class CfnChannel(
             '''
             result = self._values.get("copyright_holder")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def default_font_size(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-ebuttddestinationsettings.html#cfn-medialive-channel-ebuttddestinationsettings-defaultfontsize
+            '''
+            result = self._values.get("default_font_size")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def default_line_height(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-ebuttddestinationsettings.html#cfn-medialive-channel-ebuttddestinationsettings-defaultlineheight
+            '''
+            result = self._values.get("default_line_height")
+            return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
         def fill_line_gap(self) -> typing.Optional[builtins.str]:
@@ -18154,6 +18353,7 @@ class CfnChannel(
         jsii_struct_bases=[],
         name_mapping={
             "id": "id",
+            "logical_interface_names": "logicalInterfaceNames",
             "media_package_settings": "mediaPackageSettings",
             "multiplex_settings": "multiplexSettings",
             "settings": "settings",
@@ -18165,6 +18365,7 @@ class CfnChannel(
             self,
             *,
             id: typing.Optional[builtins.str] = None,
+            logical_interface_names: typing.Optional[typing.Sequence[builtins.str]] = None,
             media_package_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.MediaPackageOutputDestinationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             multiplex_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.MultiplexProgramChannelDestinationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.OutputDestinationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -18175,6 +18376,7 @@ class CfnChannel(
             This entity is at the top level in the channel.
 
             :param id: The ID for this destination.
+            :param logical_interface_names: 
             :param media_package_settings: The destination settings for a MediaPackage output.
             :param multiplex_settings: Destination settings for a Multiplex output; one destination for both encoders.
             :param settings: The destination settings for an output.
@@ -18191,6 +18393,7 @@ class CfnChannel(
                 
                 output_destination_property = medialive.CfnChannel.OutputDestinationProperty(
                     id="id",
+                    logical_interface_names=["logicalInterfaceNames"],
                     media_package_settings=[medialive.CfnChannel.MediaPackageOutputDestinationSettingsProperty(
                         channel_group="channelGroup",
                         channel_id="channelId",
@@ -18216,6 +18419,7 @@ class CfnChannel(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__d1c3f4cbc44fec2f5cf6dcc1097499d83d328f8fd1f15b8dd6ce6bc45153265a)
                 check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+                check_type(argname="argument logical_interface_names", value=logical_interface_names, expected_type=type_hints["logical_interface_names"])
                 check_type(argname="argument media_package_settings", value=media_package_settings, expected_type=type_hints["media_package_settings"])
                 check_type(argname="argument multiplex_settings", value=multiplex_settings, expected_type=type_hints["multiplex_settings"])
                 check_type(argname="argument settings", value=settings, expected_type=type_hints["settings"])
@@ -18223,6 +18427,8 @@ class CfnChannel(
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if id is not None:
                 self._values["id"] = id
+            if logical_interface_names is not None:
+                self._values["logical_interface_names"] = logical_interface_names
             if media_package_settings is not None:
                 self._values["media_package_settings"] = media_package_settings
             if multiplex_settings is not None:
@@ -18240,6 +18446,14 @@ class CfnChannel(
             '''
             result = self._values.get("id")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def logical_interface_names(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-outputdestination.html#cfn-medialive-channel-outputdestination-logicalinterfacenames
+            '''
+            result = self._values.get("logical_interface_names")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         @builtins.property
         def media_package_settings(
@@ -18440,502 +18654,7 @@ class CfnChannel(
 
             Example::
 
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_medialive as medialive
                 
-                output_group_property = medialive.CfnChannel.OutputGroupProperty(
-                    name="name",
-                    output_group_settings=medialive.CfnChannel.OutputGroupSettingsProperty(
-                        archive_group_settings=medialive.CfnChannel.ArchiveGroupSettingsProperty(
-                            archive_cdn_settings=medialive.CfnChannel.ArchiveCdnSettingsProperty(
-                                archive_s3_settings=medialive.CfnChannel.ArchiveS3SettingsProperty(
-                                    canned_acl="cannedAcl"
-                                )
-                            ),
-                            destination=medialive.CfnChannel.OutputLocationRefProperty(
-                                destination_ref_id="destinationRefId"
-                            ),
-                            rollover_interval=123
-                        ),
-                        cmaf_ingest_group_settings=medialive.CfnChannel.CmafIngestGroupSettingsProperty(
-                            destination=medialive.CfnChannel.OutputLocationRefProperty(
-                                destination_ref_id="destinationRefId"
-                            ),
-                            id3_behavior="id3Behavior",
-                            id3_name_modifier="id3NameModifier",
-                            klv_behavior="klvBehavior",
-                            klv_name_modifier="klvNameModifier",
-                            nielsen_id3_behavior="nielsenId3Behavior",
-                            nielsen_id3_name_modifier="nielsenId3NameModifier",
-                            scte35_name_modifier="scte35NameModifier",
-                            scte35_type="scte35Type",
-                            segment_length=123,
-                            segment_length_units="segmentLengthUnits",
-                            send_delay_ms=123
-                        ),
-                        frame_capture_group_settings=medialive.CfnChannel.FrameCaptureGroupSettingsProperty(
-                            destination=medialive.CfnChannel.OutputLocationRefProperty(
-                                destination_ref_id="destinationRefId"
-                            ),
-                            frame_capture_cdn_settings=medialive.CfnChannel.FrameCaptureCdnSettingsProperty(
-                                frame_capture_s3_settings=medialive.CfnChannel.FrameCaptureS3SettingsProperty(
-                                    canned_acl="cannedAcl"
-                                )
-                            )
-                        ),
-                        hls_group_settings=medialive.CfnChannel.HlsGroupSettingsProperty(
-                            ad_markers=["adMarkers"],
-                            base_url_content="baseUrlContent",
-                            base_url_content1="baseUrlContent1",
-                            base_url_manifest="baseUrlManifest",
-                            base_url_manifest1="baseUrlManifest1",
-                            caption_language_mappings=[medialive.CfnChannel.CaptionLanguageMappingProperty(
-                                caption_channel=123,
-                                language_code="languageCode",
-                                language_description="languageDescription"
-                            )],
-                            caption_language_setting="captionLanguageSetting",
-                            client_cache="clientCache",
-                            codec_specification="codecSpecification",
-                            constant_iv="constantIv",
-                            destination=medialive.CfnChannel.OutputLocationRefProperty(
-                                destination_ref_id="destinationRefId"
-                            ),
-                            directory_structure="directoryStructure",
-                            discontinuity_tags="discontinuityTags",
-                            encryption_type="encryptionType",
-                            hls_cdn_settings=medialive.CfnChannel.HlsCdnSettingsProperty(
-                                hls_akamai_settings=medialive.CfnChannel.HlsAkamaiSettingsProperty(
-                                    connection_retry_interval=123,
-                                    filecache_duration=123,
-                                    http_transfer_mode="httpTransferMode",
-                                    num_retries=123,
-                                    restart_delay=123,
-                                    salt="salt",
-                                    token="token"
-                                ),
-                                hls_basic_put_settings=medialive.CfnChannel.HlsBasicPutSettingsProperty(
-                                    connection_retry_interval=123,
-                                    filecache_duration=123,
-                                    num_retries=123,
-                                    restart_delay=123
-                                ),
-                                hls_media_store_settings=medialive.CfnChannel.HlsMediaStoreSettingsProperty(
-                                    connection_retry_interval=123,
-                                    filecache_duration=123,
-                                    media_store_storage_class="mediaStoreStorageClass",
-                                    num_retries=123,
-                                    restart_delay=123
-                                ),
-                                hls_s3_settings=medialive.CfnChannel.HlsS3SettingsProperty(
-                                    canned_acl="cannedAcl"
-                                ),
-                                hls_webdav_settings=medialive.CfnChannel.HlsWebdavSettingsProperty(
-                                    connection_retry_interval=123,
-                                    filecache_duration=123,
-                                    http_transfer_mode="httpTransferMode",
-                                    num_retries=123,
-                                    restart_delay=123
-                                )
-                            ),
-                            hls_id3_segment_tagging="hlsId3SegmentTagging",
-                            i_frame_only_playlists="iFrameOnlyPlaylists",
-                            incomplete_segment_behavior="incompleteSegmentBehavior",
-                            index_nSegments=123,
-                            input_loss_action="inputLossAction",
-                            iv_in_manifest="ivInManifest",
-                            iv_source="ivSource",
-                            keep_segments=123,
-                            key_format="keyFormat",
-                            key_format_versions="keyFormatVersions",
-                            key_provider_settings=medialive.CfnChannel.KeyProviderSettingsProperty(
-                                static_key_settings=medialive.CfnChannel.StaticKeySettingsProperty(
-                                    key_provider_server=medialive.CfnChannel.InputLocationProperty(
-                                        password_param="passwordParam",
-                                        uri="uri",
-                                        username="username"
-                                    ),
-                                    static_key_value="staticKeyValue"
-                                )
-                            ),
-                            manifest_compression="manifestCompression",
-                            manifest_duration_format="manifestDurationFormat",
-                            min_segment_length=123,
-                            mode="mode",
-                            output_selection="outputSelection",
-                            program_date_time="programDateTime",
-                            program_date_time_clock="programDateTimeClock",
-                            program_date_time_period=123,
-                            redundant_manifest="redundantManifest",
-                            segmentation_mode="segmentationMode",
-                            segment_length=123,
-                            segments_per_subdirectory=123,
-                            stream_inf_resolution="streamInfResolution",
-                            timed_metadata_id3_frame="timedMetadataId3Frame",
-                            timed_metadata_id3_period=123,
-                            timestamp_delta_milliseconds=123,
-                            ts_file_mode="tsFileMode"
-                        ),
-                        media_package_group_settings=medialive.CfnChannel.MediaPackageGroupSettingsProperty(
-                            destination=medialive.CfnChannel.OutputLocationRefProperty(
-                                destination_ref_id="destinationRefId"
-                            )
-                        ),
-                        ms_smooth_group_settings=medialive.CfnChannel.MsSmoothGroupSettingsProperty(
-                            acquisition_point_id="acquisitionPointId",
-                            audio_only_timecode_control="audioOnlyTimecodeControl",
-                            certificate_mode="certificateMode",
-                            connection_retry_interval=123,
-                            destination=medialive.CfnChannel.OutputLocationRefProperty(
-                                destination_ref_id="destinationRefId"
-                            ),
-                            event_id="eventId",
-                            event_id_mode="eventIdMode",
-                            event_stop_behavior="eventStopBehavior",
-                            filecache_duration=123,
-                            fragment_length=123,
-                            input_loss_action="inputLossAction",
-                            num_retries=123,
-                            restart_delay=123,
-                            segmentation_mode="segmentationMode",
-                            send_delay_ms=123,
-                            sparse_track_type="sparseTrackType",
-                            stream_manifest_behavior="streamManifestBehavior",
-                            timestamp_offset="timestampOffset",
-                            timestamp_offset_mode="timestampOffsetMode"
-                        ),
-                        multiplex_group_settings=medialive.CfnChannel.MultiplexGroupSettingsProperty(),
-                        rtmp_group_settings=medialive.CfnChannel.RtmpGroupSettingsProperty(
-                            ad_markers=["adMarkers"],
-                            authentication_scheme="authenticationScheme",
-                            cache_full_behavior="cacheFullBehavior",
-                            cache_length=123,
-                            caption_data="captionData",
-                            include_filler_nal_units="includeFillerNalUnits",
-                            input_loss_action="inputLossAction",
-                            restart_delay=123
-                        ),
-                        srt_group_settings=medialive.CfnChannel.SrtGroupSettingsProperty(
-                            input_loss_action="inputLossAction"
-                        ),
-                        udp_group_settings=medialive.CfnChannel.UdpGroupSettingsProperty(
-                            input_loss_action="inputLossAction",
-                            timed_metadata_id3_frame="timedMetadataId3Frame",
-                            timed_metadata_id3_period=123
-                        )
-                    ),
-                    outputs=[medialive.CfnChannel.OutputProperty(
-                        audio_description_names=["audioDescriptionNames"],
-                        caption_description_names=["captionDescriptionNames"],
-                        output_name="outputName",
-                        output_settings=medialive.CfnChannel.OutputSettingsProperty(
-                            archive_output_settings=medialive.CfnChannel.ArchiveOutputSettingsProperty(
-                                container_settings=medialive.CfnChannel.ArchiveContainerSettingsProperty(
-                                    m2_ts_settings=medialive.CfnChannel.M2tsSettingsProperty(
-                                        absent_input_audio_behavior="absentInputAudioBehavior",
-                                        arib="arib",
-                                        arib_captions_pid="aribCaptionsPid",
-                                        arib_captions_pid_control="aribCaptionsPidControl",
-                                        audio_buffer_model="audioBufferModel",
-                                        audio_frames_per_pes=123,
-                                        audio_pids="audioPids",
-                                        audio_stream_type="audioStreamType",
-                                        bitrate=123,
-                                        buffer_model="bufferModel",
-                                        cc_descriptor="ccDescriptor",
-                                        dvb_nit_settings=medialive.CfnChannel.DvbNitSettingsProperty(
-                                            network_id=123,
-                                            network_name="networkName",
-                                            rep_interval=123
-                                        ),
-                                        dvb_sdt_settings=medialive.CfnChannel.DvbSdtSettingsProperty(
-                                            output_sdt="outputSdt",
-                                            rep_interval=123,
-                                            service_name="serviceName",
-                                            service_provider_name="serviceProviderName"
-                                        ),
-                                        dvb_sub_pids="dvbSubPids",
-                                        dvb_tdt_settings=medialive.CfnChannel.DvbTdtSettingsProperty(
-                                            rep_interval=123
-                                        ),
-                                        dvb_teletext_pid="dvbTeletextPid",
-                                        ebif="ebif",
-                                        ebp_audio_interval="ebpAudioInterval",
-                                        ebp_lookahead_ms=123,
-                                        ebp_placement="ebpPlacement",
-                                        ecm_pid="ecmPid",
-                                        es_rate_in_pes="esRateInPes",
-                                        etv_platform_pid="etvPlatformPid",
-                                        etv_signal_pid="etvSignalPid",
-                                        fragment_time=123,
-                                        klv="klv",
-                                        klv_data_pids="klvDataPids",
-                                        nielsen_id3_behavior="nielsenId3Behavior",
-                                        null_packet_bitrate=123,
-                                        pat_interval=123,
-                                        pcr_control="pcrControl",
-                                        pcr_period=123,
-                                        pcr_pid="pcrPid",
-                                        pmt_interval=123,
-                                        pmt_pid="pmtPid",
-                                        program_num=123,
-                                        rate_mode="rateMode",
-                                        scte27_pids="scte27Pids",
-                                        scte35_control="scte35Control",
-                                        scte35_pid="scte35Pid",
-                                        scte35_preroll_pullup_milliseconds=123,
-                                        segmentation_markers="segmentationMarkers",
-                                        segmentation_style="segmentationStyle",
-                                        segmentation_time=123,
-                                        timed_metadata_behavior="timedMetadataBehavior",
-                                        timed_metadata_pid="timedMetadataPid",
-                                        transport_stream_id=123,
-                                        video_pid="videoPid"
-                                    ),
-                                    raw_settings=medialive.CfnChannel.RawSettingsProperty()
-                                ),
-                                extension="extension",
-                                name_modifier="nameModifier"
-                            ),
-                            cmaf_ingest_output_settings=medialive.CfnChannel.CmafIngestOutputSettingsProperty(
-                                name_modifier="nameModifier"
-                            ),
-                            frame_capture_output_settings=medialive.CfnChannel.FrameCaptureOutputSettingsProperty(
-                                name_modifier="nameModifier"
-                            ),
-                            hls_output_settings=medialive.CfnChannel.HlsOutputSettingsProperty(
-                                h265_packaging_type="h265PackagingType",
-                                hls_settings=medialive.CfnChannel.HlsSettingsProperty(
-                                    audio_only_hls_settings=medialive.CfnChannel.AudioOnlyHlsSettingsProperty(
-                                        audio_group_id="audioGroupId",
-                                        audio_only_image=medialive.CfnChannel.InputLocationProperty(
-                                            password_param="passwordParam",
-                                            uri="uri",
-                                            username="username"
-                                        ),
-                                        audio_track_type="audioTrackType",
-                                        segment_type="segmentType"
-                                    ),
-                                    fmp4_hls_settings=medialive.CfnChannel.Fmp4HlsSettingsProperty(
-                                        audio_rendition_sets="audioRenditionSets",
-                                        nielsen_id3_behavior="nielsenId3Behavior",
-                                        timed_metadata_behavior="timedMetadataBehavior"
-                                    ),
-                                    frame_capture_hls_settings=medialive.CfnChannel.FrameCaptureHlsSettingsProperty(),
-                                    standard_hls_settings=medialive.CfnChannel.StandardHlsSettingsProperty(
-                                        audio_rendition_sets="audioRenditionSets",
-                                        m3_u8_settings=medialive.CfnChannel.M3u8SettingsProperty(
-                                            audio_frames_per_pes=123,
-                                            audio_pids="audioPids",
-                                            ecm_pid="ecmPid",
-                                            klv_behavior="klvBehavior",
-                                            klv_data_pids="klvDataPids",
-                                            nielsen_id3_behavior="nielsenId3Behavior",
-                                            pat_interval=123,
-                                            pcr_control="pcrControl",
-                                            pcr_period=123,
-                                            pcr_pid="pcrPid",
-                                            pmt_interval=123,
-                                            pmt_pid="pmtPid",
-                                            program_num=123,
-                                            scte35_behavior="scte35Behavior",
-                                            scte35_pid="scte35Pid",
-                                            timed_metadata_behavior="timedMetadataBehavior",
-                                            timed_metadata_pid="timedMetadataPid",
-                                            transport_stream_id=123,
-                                            video_pid="videoPid"
-                                        )
-                                    )
-                                ),
-                                name_modifier="nameModifier",
-                                segment_modifier="segmentModifier"
-                            ),
-                            media_package_output_settings=medialive.CfnChannel.MediaPackageOutputSettingsProperty(),
-                            ms_smooth_output_settings=medialive.CfnChannel.MsSmoothOutputSettingsProperty(
-                                h265_packaging_type="h265PackagingType",
-                                name_modifier="nameModifier"
-                            ),
-                            multiplex_output_settings=medialive.CfnChannel.MultiplexOutputSettingsProperty(
-                                container_settings=medialive.CfnChannel.MultiplexContainerSettingsProperty(
-                                    multiplex_m2_ts_settings=medialive.CfnChannel.MultiplexM2tsSettingsProperty(
-                                        absent_input_audio_behavior="absentInputAudioBehavior",
-                                        arib="arib",
-                                        audio_buffer_model="audioBufferModel",
-                                        audio_frames_per_pes=123,
-                                        audio_stream_type="audioStreamType",
-                                        cc_descriptor="ccDescriptor",
-                                        ebif="ebif",
-                                        es_rate_in_pes="esRateInPes",
-                                        klv="klv",
-                                        nielsen_id3_behavior="nielsenId3Behavior",
-                                        pcr_control="pcrControl",
-                                        pcr_period=123,
-                                        scte35_control="scte35Control",
-                                        scte35_preroll_pullup_milliseconds=123
-                                    )
-                                ),
-                                destination=medialive.CfnChannel.OutputLocationRefProperty(
-                                    destination_ref_id="destinationRefId"
-                                )
-                            ),
-                            rtmp_output_settings=medialive.CfnChannel.RtmpOutputSettingsProperty(
-                                certificate_mode="certificateMode",
-                                connection_retry_interval=123,
-                                destination=medialive.CfnChannel.OutputLocationRefProperty(
-                                    destination_ref_id="destinationRefId"
-                                ),
-                                num_retries=123
-                            ),
-                            srt_output_settings=medialive.CfnChannel.SrtOutputSettingsProperty(
-                                buffer_msec=123,
-                                container_settings=medialive.CfnChannel.UdpContainerSettingsProperty(
-                                    m2_ts_settings=medialive.CfnChannel.M2tsSettingsProperty(
-                                        absent_input_audio_behavior="absentInputAudioBehavior",
-                                        arib="arib",
-                                        arib_captions_pid="aribCaptionsPid",
-                                        arib_captions_pid_control="aribCaptionsPidControl",
-                                        audio_buffer_model="audioBufferModel",
-                                        audio_frames_per_pes=123,
-                                        audio_pids="audioPids",
-                                        audio_stream_type="audioStreamType",
-                                        bitrate=123,
-                                        buffer_model="bufferModel",
-                                        cc_descriptor="ccDescriptor",
-                                        dvb_nit_settings=medialive.CfnChannel.DvbNitSettingsProperty(
-                                            network_id=123,
-                                            network_name="networkName",
-                                            rep_interval=123
-                                        ),
-                                        dvb_sdt_settings=medialive.CfnChannel.DvbSdtSettingsProperty(
-                                            output_sdt="outputSdt",
-                                            rep_interval=123,
-                                            service_name="serviceName",
-                                            service_provider_name="serviceProviderName"
-                                        ),
-                                        dvb_sub_pids="dvbSubPids",
-                                        dvb_tdt_settings=medialive.CfnChannel.DvbTdtSettingsProperty(
-                                            rep_interval=123
-                                        ),
-                                        dvb_teletext_pid="dvbTeletextPid",
-                                        ebif="ebif",
-                                        ebp_audio_interval="ebpAudioInterval",
-                                        ebp_lookahead_ms=123,
-                                        ebp_placement="ebpPlacement",
-                                        ecm_pid="ecmPid",
-                                        es_rate_in_pes="esRateInPes",
-                                        etv_platform_pid="etvPlatformPid",
-                                        etv_signal_pid="etvSignalPid",
-                                        fragment_time=123,
-                                        klv="klv",
-                                        klv_data_pids="klvDataPids",
-                                        nielsen_id3_behavior="nielsenId3Behavior",
-                                        null_packet_bitrate=123,
-                                        pat_interval=123,
-                                        pcr_control="pcrControl",
-                                        pcr_period=123,
-                                        pcr_pid="pcrPid",
-                                        pmt_interval=123,
-                                        pmt_pid="pmtPid",
-                                        program_num=123,
-                                        rate_mode="rateMode",
-                                        scte27_pids="scte27Pids",
-                                        scte35_control="scte35Control",
-                                        scte35_pid="scte35Pid",
-                                        scte35_preroll_pullup_milliseconds=123,
-                                        segmentation_markers="segmentationMarkers",
-                                        segmentation_style="segmentationStyle",
-                                        segmentation_time=123,
-                                        timed_metadata_behavior="timedMetadataBehavior",
-                                        timed_metadata_pid="timedMetadataPid",
-                                        transport_stream_id=123,
-                                        video_pid="videoPid"
-                                    )
-                                ),
-                                destination=medialive.CfnChannel.OutputLocationRefProperty(
-                                    destination_ref_id="destinationRefId"
-                                ),
-                                encryption_type="encryptionType",
-                                latency=123
-                            ),
-                            udp_output_settings=medialive.CfnChannel.UdpOutputSettingsProperty(
-                                buffer_msec=123,
-                                container_settings=medialive.CfnChannel.UdpContainerSettingsProperty(
-                                    m2_ts_settings=medialive.CfnChannel.M2tsSettingsProperty(
-                                        absent_input_audio_behavior="absentInputAudioBehavior",
-                                        arib="arib",
-                                        arib_captions_pid="aribCaptionsPid",
-                                        arib_captions_pid_control="aribCaptionsPidControl",
-                                        audio_buffer_model="audioBufferModel",
-                                        audio_frames_per_pes=123,
-                                        audio_pids="audioPids",
-                                        audio_stream_type="audioStreamType",
-                                        bitrate=123,
-                                        buffer_model="bufferModel",
-                                        cc_descriptor="ccDescriptor",
-                                        dvb_nit_settings=medialive.CfnChannel.DvbNitSettingsProperty(
-                                            network_id=123,
-                                            network_name="networkName",
-                                            rep_interval=123
-                                        ),
-                                        dvb_sdt_settings=medialive.CfnChannel.DvbSdtSettingsProperty(
-                                            output_sdt="outputSdt",
-                                            rep_interval=123,
-                                            service_name="serviceName",
-                                            service_provider_name="serviceProviderName"
-                                        ),
-                                        dvb_sub_pids="dvbSubPids",
-                                        dvb_tdt_settings=medialive.CfnChannel.DvbTdtSettingsProperty(
-                                            rep_interval=123
-                                        ),
-                                        dvb_teletext_pid="dvbTeletextPid",
-                                        ebif="ebif",
-                                        ebp_audio_interval="ebpAudioInterval",
-                                        ebp_lookahead_ms=123,
-                                        ebp_placement="ebpPlacement",
-                                        ecm_pid="ecmPid",
-                                        es_rate_in_pes="esRateInPes",
-                                        etv_platform_pid="etvPlatformPid",
-                                        etv_signal_pid="etvSignalPid",
-                                        fragment_time=123,
-                                        klv="klv",
-                                        klv_data_pids="klvDataPids",
-                                        nielsen_id3_behavior="nielsenId3Behavior",
-                                        null_packet_bitrate=123,
-                                        pat_interval=123,
-                                        pcr_control="pcrControl",
-                                        pcr_period=123,
-                                        pcr_pid="pcrPid",
-                                        pmt_interval=123,
-                                        pmt_pid="pmtPid",
-                                        program_num=123,
-                                        rate_mode="rateMode",
-                                        scte27_pids="scte27Pids",
-                                        scte35_control="scte35Control",
-                                        scte35_pid="scte35Pid",
-                                        scte35_preroll_pullup_milliseconds=123,
-                                        segmentation_markers="segmentationMarkers",
-                                        segmentation_style="segmentationStyle",
-                                        segmentation_time=123,
-                                        timed_metadata_behavior="timedMetadataBehavior",
-                                        timed_metadata_pid="timedMetadataPid",
-                                        transport_stream_id=123,
-                                        video_pid="videoPid"
-                                    )
-                                ),
-                                destination=medialive.CfnChannel.OutputLocationRefProperty(
-                                    destination_ref_id="destinationRefId"
-                                ),
-                                fec_output_settings=medialive.CfnChannel.FecOutputSettingsProperty(
-                                    column_depth=123,
-                                    include_fec="includeFec",
-                                    row_length=123
-                                )
-                            )
-                        ),
-                        video_description_name="videoDescriptionName"
-                    )]
-                )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__5886afe17c469b30f6234f5b35aa1cb7d8baae50c424479126239a3238af2d52)
@@ -19062,6 +18781,10 @@ class CfnChannel(
                         rollover_interval=123
                     ),
                     cmaf_ingest_group_settings=medialive.CfnChannel.CmafIngestGroupSettingsProperty(
+                        caption_language_mappings=[medialive.CfnChannel.CmafIngestCaptionLanguageMappingProperty(
+                            caption_channel=123,
+                            language_code="languageCode"
+                        )],
                         destination=medialive.CfnChannel.OutputLocationRefProperty(
                             destination_ref_id="destinationRefId"
                         ),
@@ -19075,7 +18798,10 @@ class CfnChannel(
                         scte35_type="scte35Type",
                         segment_length=123,
                         segment_length_units="segmentLengthUnits",
-                        send_delay_ms=123
+                        send_delay_ms=123,
+                        timed_metadata_id3_frame="timedMetadataId3Frame",
+                        timed_metadata_id3_period=123,
+                        timed_metadata_passthrough="timedMetadataPassthrough"
                     ),
                     frame_capture_group_settings=medialive.CfnChannel.FrameCaptureGroupSettingsProperty(
                         destination=medialive.CfnChannel.OutputLocationRefProperty(
@@ -22942,6 +22668,7 @@ class CfnChannel(
                 video_codec_settings_property = medialive.CfnChannel.VideoCodecSettingsProperty(
                     av1_settings=medialive.CfnChannel.Av1SettingsProperty(
                         afd_signaling="afdSignaling",
+                        bitrate=123,
                         buf_size=123,
                         color_space_settings=medialive.CfnChannel.Av1ColorSpaceSettingsProperty(
                             color_space_passthrough_settings=color_space_passthrough_settings,
@@ -22964,6 +22691,7 @@ class CfnChannel(
                         par_denominator=123,
                         par_numerator=123,
                         qvbr_quality_level=123,
+                        rate_control_mode="rateControlMode",
                         scene_change_detect="sceneChangeDetect",
                         timecode_burnin_settings=medialive.CfnChannel.TimecodeBurninSettingsProperty(
                             font_size="fontSize",
@@ -23272,6 +23000,7 @@ class CfnChannel(
                     codec_settings=medialive.CfnChannel.VideoCodecSettingsProperty(
                         av1_settings=medialive.CfnChannel.Av1SettingsProperty(
                             afd_signaling="afdSignaling",
+                            bitrate=123,
                             buf_size=123,
                             color_space_settings=medialive.CfnChannel.Av1ColorSpaceSettingsProperty(
                                 color_space_passthrough_settings=color_space_passthrough_settings,
@@ -23294,6 +23023,7 @@ class CfnChannel(
                             par_denominator=123,
                             par_numerator=123,
                             qvbr_quality_level=123,
+                            rate_control_mode="rateControlMode",
                             scene_change_detect="sceneChangeDetect",
                             timecode_burnin_settings=medialive.CfnChannel.TimecodeBurninSettingsProperty(
                                 font_size="fontSize",
@@ -27004,6 +26734,25 @@ class CfnInput(
             ),
             name="name",
             role_arn="roleArn",
+            sdi_sources=["sdiSources"],
+            smpte2110_receiver_group_settings=medialive.CfnInput.Smpte2110ReceiverGroupSettingsProperty(
+                smpte2110_receiver_groups=[medialive.CfnInput.Smpte2110ReceiverGroupProperty(
+                    sdp_settings=medialive.CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty(
+                        ancillary_sdps=[medialive.CfnInput.InputSdpLocationProperty(
+                            media_index=123,
+                            sdp_url="sdpUrl"
+                        )],
+                        audio_sdps=[medialive.CfnInput.InputSdpLocationProperty(
+                            media_index=123,
+                            sdp_url="sdpUrl"
+                        )],
+                        video_sdp=medialive.CfnInput.InputSdpLocationProperty(
+                            media_index=123,
+                            sdp_url="sdpUrl"
+                        )
+                    )
+                )]
+            ),
             sources=[medialive.CfnInput.InputSourceRequestProperty(
                 password_param="passwordParam",
                 url="url",
@@ -27043,6 +26792,8 @@ class CfnInput(
         multicast_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.MulticastSettingsCreateRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
+        sdi_sources: typing.Optional[typing.Sequence[builtins.str]] = None,
+        smpte2110_receiver_group_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.Smpte2110ReceiverGroupSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.InputSourceRequestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         srt_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.SrtSettingsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
@@ -27060,6 +26811,8 @@ class CfnInput(
         :param multicast_settings: 
         :param name: A name for the input.
         :param role_arn: The IAM role for MediaLive to assume when creating a MediaConnect input or Amazon VPC input. This doesn't apply to other types of inputs. The role is identified by its ARN.
+        :param sdi_sources: 
+        :param smpte2110_receiver_group_settings: 
         :param sources: Settings that apply only if the input is a pull type of input.
         :param srt_settings: 
         :param tags: A collection of tags for this input. Each tag is a key-value pair.
@@ -27079,6 +26832,8 @@ class CfnInput(
             multicast_settings=multicast_settings,
             name=name,
             role_arn=role_arn,
+            sdi_sources=sdi_sources,
+            smpte2110_receiver_group_settings=smpte2110_receiver_group_settings,
             sources=sources,
             srt_settings=srt_settings,
             tags=tags,
@@ -27295,6 +27050,35 @@ class CfnInput(
             type_hints = typing.get_type_hints(_typecheckingstub__f27fc34cd2daae9bc688d197b2f17a9be9a91d5deaae844af5f1dc9c7ebc31ca)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "roleArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="sdiSources")
+    def sdi_sources(self) -> typing.Optional[typing.List[builtins.str]]:
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "sdiSources"))
+
+    @sdi_sources.setter
+    def sdi_sources(self, value: typing.Optional[typing.List[builtins.str]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1fb1e9fa5957ae8cb739e464e86543b360ea8a6ba413563d753a60a5c585cb48)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "sdiSources", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="smpte2110ReceiverGroupSettings")
+    def smpte2110_receiver_group_settings(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInput.Smpte2110ReceiverGroupSettingsProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInput.Smpte2110ReceiverGroupSettingsProperty"]], jsii.get(self, "smpte2110ReceiverGroupSettings"))
+
+    @smpte2110_receiver_group_settings.setter
+    def smpte2110_receiver_group_settings(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInput.Smpte2110ReceiverGroupSettingsProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9eb61e4c554ab79faf5508611b7e077c83491a6dad8b923d92479d86d72c6b2)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "smpte2110ReceiverGroupSettings", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="sources")
@@ -27654,6 +27438,73 @@ class CfnInput(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnInput.InputSdpLocationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"media_index": "mediaIndex", "sdp_url": "sdpUrl"},
+    )
+    class InputSdpLocationProperty:
+        def __init__(
+            self,
+            *,
+            media_index: typing.Optional[jsii.Number] = None,
+            sdp_url: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param media_index: 
+            :param sdp_url: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-inputsdplocation.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                input_sdp_location_property = medialive.CfnInput.InputSdpLocationProperty(
+                    media_index=123,
+                    sdp_url="sdpUrl"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7c288b0e0d47532d1ba5eff4fe58e0aa4efcb647e6a7f872842ff84acd1c363d)
+                check_type(argname="argument media_index", value=media_index, expected_type=type_hints["media_index"])
+                check_type(argname="argument sdp_url", value=sdp_url, expected_type=type_hints["sdp_url"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if media_index is not None:
+                self._values["media_index"] = media_index
+            if sdp_url is not None:
+                self._values["sdp_url"] = sdp_url
+
+        @builtins.property
+        def media_index(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-inputsdplocation.html#cfn-medialive-input-inputsdplocation-mediaindex
+            '''
+            result = self._values.get("media_index")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def sdp_url(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-inputsdplocation.html#cfn-medialive-input-inputsdplocation-sdpurl
+            '''
+            result = self._values.get("sdp_url")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InputSdpLocationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_medialive.CfnInput.InputSourceRequestProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -28006,6 +27857,244 @@ class CfnInput(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnInput.Smpte2110ReceiverGroupProperty",
+        jsii_struct_bases=[],
+        name_mapping={"sdp_settings": "sdpSettings"},
+    )
+    class Smpte2110ReceiverGroupProperty:
+        def __init__(
+            self,
+            *,
+            sdp_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param sdp_settings: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-smpte2110receivergroup.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                smpte2110_receiver_group_property = medialive.CfnInput.Smpte2110ReceiverGroupProperty(
+                    sdp_settings=medialive.CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty(
+                        ancillary_sdps=[medialive.CfnInput.InputSdpLocationProperty(
+                            media_index=123,
+                            sdp_url="sdpUrl"
+                        )],
+                        audio_sdps=[medialive.CfnInput.InputSdpLocationProperty(
+                            media_index=123,
+                            sdp_url="sdpUrl"
+                        )],
+                        video_sdp=medialive.CfnInput.InputSdpLocationProperty(
+                            media_index=123,
+                            sdp_url="sdpUrl"
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e439b3fe47808a945aa11d675bf7807e78bb6123c2ccf728b7f31a2f77ad12e3)
+                check_type(argname="argument sdp_settings", value=sdp_settings, expected_type=type_hints["sdp_settings"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if sdp_settings is not None:
+                self._values["sdp_settings"] = sdp_settings
+
+        @builtins.property
+        def sdp_settings(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-smpte2110receivergroup.html#cfn-medialive-input-smpte2110receivergroup-sdpsettings
+            '''
+            result = self._values.get("sdp_settings")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "Smpte2110ReceiverGroupProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "ancillary_sdps": "ancillarySdps",
+            "audio_sdps": "audioSdps",
+            "video_sdp": "videoSdp",
+        },
+    )
+    class Smpte2110ReceiverGroupSdpSettingsProperty:
+        def __init__(
+            self,
+            *,
+            ancillary_sdps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.InputSdpLocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            audio_sdps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.InputSdpLocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            video_sdp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.InputSdpLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param ancillary_sdps: 
+            :param audio_sdps: 
+            :param video_sdp: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-smpte2110receivergroupsdpsettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                smpte2110_receiver_group_sdp_settings_property = medialive.CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty(
+                    ancillary_sdps=[medialive.CfnInput.InputSdpLocationProperty(
+                        media_index=123,
+                        sdp_url="sdpUrl"
+                    )],
+                    audio_sdps=[medialive.CfnInput.InputSdpLocationProperty(
+                        media_index=123,
+                        sdp_url="sdpUrl"
+                    )],
+                    video_sdp=medialive.CfnInput.InputSdpLocationProperty(
+                        media_index=123,
+                        sdp_url="sdpUrl"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4388a095fa988861141a0787dadb3b1b80340f66e2bededcdbfa16340b26f7b6)
+                check_type(argname="argument ancillary_sdps", value=ancillary_sdps, expected_type=type_hints["ancillary_sdps"])
+                check_type(argname="argument audio_sdps", value=audio_sdps, expected_type=type_hints["audio_sdps"])
+                check_type(argname="argument video_sdp", value=video_sdp, expected_type=type_hints["video_sdp"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if ancillary_sdps is not None:
+                self._values["ancillary_sdps"] = ancillary_sdps
+            if audio_sdps is not None:
+                self._values["audio_sdps"] = audio_sdps
+            if video_sdp is not None:
+                self._values["video_sdp"] = video_sdp
+
+        @builtins.property
+        def ancillary_sdps(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInput.InputSdpLocationProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-smpte2110receivergroupsdpsettings.html#cfn-medialive-input-smpte2110receivergroupsdpsettings-ancillarysdps
+            '''
+            result = self._values.get("ancillary_sdps")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInput.InputSdpLocationProperty"]]]], result)
+
+        @builtins.property
+        def audio_sdps(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInput.InputSdpLocationProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-smpte2110receivergroupsdpsettings.html#cfn-medialive-input-smpte2110receivergroupsdpsettings-audiosdps
+            '''
+            result = self._values.get("audio_sdps")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInput.InputSdpLocationProperty"]]]], result)
+
+        @builtins.property
+        def video_sdp(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInput.InputSdpLocationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-smpte2110receivergroupsdpsettings.html#cfn-medialive-input-smpte2110receivergroupsdpsettings-videosdp
+            '''
+            result = self._values.get("video_sdp")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInput.InputSdpLocationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "Smpte2110ReceiverGroupSdpSettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnInput.Smpte2110ReceiverGroupSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"smpte2110_receiver_groups": "smpte2110ReceiverGroups"},
+    )
+    class Smpte2110ReceiverGroupSettingsProperty:
+        def __init__(
+            self,
+            *,
+            smpte2110_receiver_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.Smpte2110ReceiverGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''
+            :param smpte2110_receiver_groups: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-smpte2110receivergroupsettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                smpte2110_receiver_group_settings_property = medialive.CfnInput.Smpte2110ReceiverGroupSettingsProperty(
+                    smpte2110_receiver_groups=[medialive.CfnInput.Smpte2110ReceiverGroupProperty(
+                        sdp_settings=medialive.CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty(
+                            ancillary_sdps=[medialive.CfnInput.InputSdpLocationProperty(
+                                media_index=123,
+                                sdp_url="sdpUrl"
+                            )],
+                            audio_sdps=[medialive.CfnInput.InputSdpLocationProperty(
+                                media_index=123,
+                                sdp_url="sdpUrl"
+                            )],
+                            video_sdp=medialive.CfnInput.InputSdpLocationProperty(
+                                media_index=123,
+                                sdp_url="sdpUrl"
+                            )
+                        )
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__31f03c59761e524f0860a26124a21afd2f82c451d36ef99701df2a4b11c6705e)
+                check_type(argname="argument smpte2110_receiver_groups", value=smpte2110_receiver_groups, expected_type=type_hints["smpte2110_receiver_groups"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if smpte2110_receiver_groups is not None:
+                self._values["smpte2110_receiver_groups"] = smpte2110_receiver_groups
+
+        @builtins.property
+        def smpte2110_receiver_groups(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInput.Smpte2110ReceiverGroupProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-smpte2110receivergroupsettings.html#cfn-medialive-input-smpte2110receivergroupsettings-smpte2110receivergroups
+            '''
+            result = self._values.get("smpte2110_receiver_groups")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInput.Smpte2110ReceiverGroupProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "Smpte2110ReceiverGroupSettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_medialive.CfnInput.SrtCallerDecryptionRequestProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -28272,6 +28361,8 @@ class CfnInput(
         "multicast_settings": "multicastSettings",
         "name": "name",
         "role_arn": "roleArn",
+        "sdi_sources": "sdiSources",
+        "smpte2110_receiver_group_settings": "smpte2110ReceiverGroupSettings",
         "sources": "sources",
         "srt_settings": "srtSettings",
         "tags": "tags",
@@ -28291,6 +28382,8 @@ class CfnInputProps:
         multicast_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.MulticastSettingsCreateRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
+        sdi_sources: typing.Optional[typing.Sequence[builtins.str]] = None,
+        smpte2110_receiver_group_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.Smpte2110ReceiverGroupSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.InputSourceRequestProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         srt_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.SrtSettingsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
@@ -28307,6 +28400,8 @@ class CfnInputProps:
         :param multicast_settings: 
         :param name: A name for the input.
         :param role_arn: The IAM role for MediaLive to assume when creating a MediaConnect input or Amazon VPC input. This doesn't apply to other types of inputs. The role is identified by its ARN.
+        :param sdi_sources: 
+        :param smpte2110_receiver_group_settings: 
         :param sources: Settings that apply only if the input is a pull type of input.
         :param srt_settings: 
         :param tags: A collection of tags for this input. Each tag is a key-value pair.
@@ -28350,6 +28445,25 @@ class CfnInputProps:
                 ),
                 name="name",
                 role_arn="roleArn",
+                sdi_sources=["sdiSources"],
+                smpte2110_receiver_group_settings=medialive.CfnInput.Smpte2110ReceiverGroupSettingsProperty(
+                    smpte2110_receiver_groups=[medialive.CfnInput.Smpte2110ReceiverGroupProperty(
+                        sdp_settings=medialive.CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty(
+                            ancillary_sdps=[medialive.CfnInput.InputSdpLocationProperty(
+                                media_index=123,
+                                sdp_url="sdpUrl"
+                            )],
+                            audio_sdps=[medialive.CfnInput.InputSdpLocationProperty(
+                                media_index=123,
+                                sdp_url="sdpUrl"
+                            )],
+                            video_sdp=medialive.CfnInput.InputSdpLocationProperty(
+                                media_index=123,
+                                sdp_url="sdpUrl"
+                            )
+                        )
+                    )]
+                ),
                 sources=[medialive.CfnInput.InputSourceRequestProperty(
                     password_param="passwordParam",
                     url="url",
@@ -28385,6 +28499,8 @@ class CfnInputProps:
             check_type(argname="argument multicast_settings", value=multicast_settings, expected_type=type_hints["multicast_settings"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
+            check_type(argname="argument sdi_sources", value=sdi_sources, expected_type=type_hints["sdi_sources"])
+            check_type(argname="argument smpte2110_receiver_group_settings", value=smpte2110_receiver_group_settings, expected_type=type_hints["smpte2110_receiver_group_settings"])
             check_type(argname="argument sources", value=sources, expected_type=type_hints["sources"])
             check_type(argname="argument srt_settings", value=srt_settings, expected_type=type_hints["srt_settings"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -28407,6 +28523,10 @@ class CfnInputProps:
             self._values["name"] = name
         if role_arn is not None:
             self._values["role_arn"] = role_arn
+        if sdi_sources is not None:
+            self._values["sdi_sources"] = sdi_sources
+        if smpte2110_receiver_group_settings is not None:
+            self._values["smpte2110_receiver_group_settings"] = smpte2110_receiver_group_settings
         if sources is not None:
             self._values["sources"] = sources
         if srt_settings is not None:
@@ -28497,6 +28617,24 @@ class CfnInputProps:
         '''
         result = self._values.get("role_arn")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def sdi_sources(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medialive-input.html#cfn-medialive-input-sdisources
+        '''
+        result = self._values.get("sdi_sources")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def smpte2110_receiver_group_settings(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInput.Smpte2110ReceiverGroupSettingsProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medialive-input.html#cfn-medialive-input-smpte2110receivergroupsettings
+        '''
+        result = self._values.get("smpte2110_receiver_group_settings")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInput.Smpte2110ReceiverGroupSettingsProperty]], result)
 
     @builtins.property
     def sources(
@@ -32555,6 +32693,7 @@ def _typecheckingstub__fc0689af3b0f6f7131d0da1e3e64aeee57f565115f0a26ac370f2cf08
 def _typecheckingstub__1911156090a37730cd16cc0d13076f448f8b192dca9427883cf77e884bbd03df(
     *,
     afd_signaling: typing.Optional[builtins.str] = None,
+    bitrate: typing.Optional[jsii.Number] = None,
     buf_size: typing.Optional[jsii.Number] = None,
     color_space_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.Av1ColorSpaceSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     fixed_afd: typing.Optional[builtins.str] = None,
@@ -32569,6 +32708,7 @@ def _typecheckingstub__1911156090a37730cd16cc0d13076f448f8b192dca9427883cf77e884
     par_denominator: typing.Optional[jsii.Number] = None,
     par_numerator: typing.Optional[jsii.Number] = None,
     qvbr_quality_level: typing.Optional[jsii.Number] = None,
+    rate_control_mode: typing.Optional[builtins.str] = None,
     scene_change_detect: typing.Optional[builtins.str] = None,
     timecode_burnin_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.TimecodeBurninSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -32730,8 +32870,17 @@ def _typecheckingstub__1acb57d78941338570e4ab6b01c7608491671cdcdadde928b8f48a7eb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a833a02632a589afb5026143cbf8803b2228e0f422ab4c5a2dbf59314b9e157b(
+    *,
+    caption_channel: typing.Optional[jsii.Number] = None,
+    language_code: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6fe9142b6885e8776c3e51af0733250a73fcd8e45bb4ec5f866206680352c7eb(
     *,
+    caption_language_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.CmafIngestCaptionLanguageMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.OutputLocationRefProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     id3_behavior: typing.Optional[builtins.str] = None,
     id3_name_modifier: typing.Optional[builtins.str] = None,
@@ -32744,6 +32893,9 @@ def _typecheckingstub__6fe9142b6885e8776c3e51af0733250a73fcd8e45bb4ec5f866206680
     segment_length: typing.Optional[jsii.Number] = None,
     segment_length_units: typing.Optional[builtins.str] = None,
     send_delay_ms: typing.Optional[jsii.Number] = None,
+    timed_metadata_id3_frame: typing.Optional[builtins.str] = None,
+    timed_metadata_id3_period: typing.Optional[jsii.Number] = None,
+    timed_metadata_passthrough: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32870,6 +33022,8 @@ def _typecheckingstub__30da58edd55c00e12f81eb8c75da493d94499c43fc797241342b62224
 def _typecheckingstub__23559d0249cfbe262bfbd93ab48605fd9c25886b289f89b7e6b86a893ae4c78b(
     *,
     copyright_holder: typing.Optional[builtins.str] = None,
+    default_font_size: typing.Optional[jsii.Number] = None,
+    default_line_height: typing.Optional[jsii.Number] = None,
     fill_line_gap: typing.Optional[builtins.str] = None,
     font_family: typing.Optional[builtins.str] = None,
     style_control: typing.Optional[builtins.str] = None,
@@ -33675,6 +33829,7 @@ def _typecheckingstub__9e5624fe566342243b7ed3e5c7b82883302c5f225edc78912ef46db75
 def _typecheckingstub__d1c3f4cbc44fec2f5cf6dcc1097499d83d328f8fd1f15b8dd6ce6bc45153265a(
     *,
     id: typing.Optional[builtins.str] = None,
+    logical_interface_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     media_package_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.MediaPackageOutputDestinationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     multiplex_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.MultiplexProgramChannelDestinationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.OutputDestinationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -34523,6 +34678,8 @@ def _typecheckingstub__c37c21db5712f0e670f3144efc99d8c9ed0a67af3bc5d9018df305c7e
     multicast_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.MulticastSettingsCreateRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     role_arn: typing.Optional[builtins.str] = None,
+    sdi_sources: typing.Optional[typing.Sequence[builtins.str]] = None,
+    smpte2110_receiver_group_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.Smpte2110ReceiverGroupSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.InputSourceRequestProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     srt_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.SrtSettingsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Any = None,
@@ -34592,6 +34749,18 @@ def _typecheckingstub__f27fc34cd2daae9bc688d197b2f17a9be9a91d5deaae844af5f1dc9c7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1fb1e9fa5957ae8cb739e464e86543b360ea8a6ba413563d753a60a5c585cb48(
+    value: typing.Optional[typing.List[builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a9eb61e4c554ab79faf5508611b7e077c83491a6dad8b923d92479d86d72c6b2(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInput.Smpte2110ReceiverGroupSettingsProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1e2140b67b560eb9a66e34c68eb67fd4ee61037201bd2a5b844eaf6d2bcb509a(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInput.InputSourceRequestProperty]]]],
 ) -> None:
@@ -34654,6 +34823,14 @@ def _typecheckingstub__49a42f86677548150b6c05cd2ecf15371954f68c82ca5c8b29dc88bf5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7c288b0e0d47532d1ba5eff4fe58e0aa4efcb647e6a7f872842ff84acd1c363d(
+    *,
+    media_index: typing.Optional[jsii.Number] = None,
+    sdp_url: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a2b96e38bc252de912c2488457298c14577ee26d5734b6d9575fbe71a0f4f654(
     *,
     password_param: typing.Optional[builtins.str] = None,
@@ -34689,6 +34866,29 @@ def _typecheckingstub__2e6df72893ce7d89a6f92d69d9db55440192c737e450948d86a7e6e63
     *,
     source_ip: typing.Optional[builtins.str] = None,
     url: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e439b3fe47808a945aa11d675bf7807e78bb6123c2ccf728b7f31a2f77ad12e3(
+    *,
+    sdp_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4388a095fa988861141a0787dadb3b1b80340f66e2bededcdbfa16340b26f7b6(
+    *,
+    ancillary_sdps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.InputSdpLocationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    audio_sdps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.InputSdpLocationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    video_sdp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.InputSdpLocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__31f03c59761e524f0860a26124a21afd2f82c451d36ef99701df2a4b11c6705e(
+    *,
+    smpte2110_receiver_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.Smpte2110ReceiverGroupProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34729,6 +34929,8 @@ def _typecheckingstub__f5e4e9b50624e42353cf086c51b3b7174a3d994bf1dc422fe68231305
     multicast_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.MulticastSettingsCreateRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     role_arn: typing.Optional[builtins.str] = None,
+    sdi_sources: typing.Optional[typing.Sequence[builtins.str]] = None,
+    smpte2110_receiver_group_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.Smpte2110ReceiverGroupSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.InputSourceRequestProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     srt_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.SrtSettingsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Any = None,

@@ -13775,7 +13775,10 @@ class CfnThingPrincipalAttachment(
         
         cfn_thing_principal_attachment = iot.CfnThingPrincipalAttachment(self, "MyCfnThingPrincipalAttachment",
             principal="principal",
-            thing_name="thingName"
+            thing_name="thingName",
+        
+            # the properties below are optional
+            thing_principal_type="thingPrincipalType"
         )
     '''
 
@@ -13786,19 +13789,23 @@ class CfnThingPrincipalAttachment(
         *,
         principal: builtins.str,
         thing_name: builtins.str,
+        thing_principal_type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param principal: The principal, which can be a certificate ARN (as returned from the ``CreateCertificate`` operation) or an Amazon Cognito ID.
         :param thing_name: The name of the AWS IoT thing.
+        :param thing_principal_type: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0e0ce886b8c49b98afe43e3750b4827324240eaec344ca9ed6af433373fcce30)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnThingPrincipalAttachmentProps(
-            principal=principal, thing_name=thing_name
+            principal=principal,
+            thing_name=thing_name,
+            thing_principal_type=thing_principal_type,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -13872,18 +13879,41 @@ class CfnThingPrincipalAttachment(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "thingName", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="thingPrincipalType")
+    def thing_principal_type(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "thingPrincipalType"))
+
+    @thing_principal_type.setter
+    def thing_principal_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__60f0b73c23e6d7837ba574cbb8e459baf1d53fca094b69ea965b6eeb45ad479e)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "thingPrincipalType", value) # pyright: ignore[reportArgumentType]
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_iot.CfnThingPrincipalAttachmentProps",
     jsii_struct_bases=[],
-    name_mapping={"principal": "principal", "thing_name": "thingName"},
+    name_mapping={
+        "principal": "principal",
+        "thing_name": "thingName",
+        "thing_principal_type": "thingPrincipalType",
+    },
 )
 class CfnThingPrincipalAttachmentProps:
-    def __init__(self, *, principal: builtins.str, thing_name: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        principal: builtins.str,
+        thing_name: builtins.str,
+        thing_principal_type: typing.Optional[builtins.str] = None,
+    ) -> None:
         '''Properties for defining a ``CfnThingPrincipalAttachment``.
 
         :param principal: The principal, which can be a certificate ARN (as returned from the ``CreateCertificate`` operation) or an Amazon Cognito ID.
         :param thing_name: The name of the AWS IoT thing.
+        :param thing_principal_type: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-thingprincipalattachment.html
         :exampleMetadata: fixture=_generated
@@ -13896,17 +13926,23 @@ class CfnThingPrincipalAttachmentProps:
             
             cfn_thing_principal_attachment_props = iot.CfnThingPrincipalAttachmentProps(
                 principal="principal",
-                thing_name="thingName"
+                thing_name="thingName",
+            
+                # the properties below are optional
+                thing_principal_type="thingPrincipalType"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__84c8fe9c6ac7dd6ea654efc3fff6dfccf459a1bb6ca2a2b3be5d3116fa7d6022)
             check_type(argname="argument principal", value=principal, expected_type=type_hints["principal"])
             check_type(argname="argument thing_name", value=thing_name, expected_type=type_hints["thing_name"])
+            check_type(argname="argument thing_principal_type", value=thing_principal_type, expected_type=type_hints["thing_principal_type"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "principal": principal,
             "thing_name": thing_name,
         }
+        if thing_principal_type is not None:
+            self._values["thing_principal_type"] = thing_principal_type
 
     @builtins.property
     def principal(self) -> builtins.str:
@@ -13927,6 +13963,14 @@ class CfnThingPrincipalAttachmentProps:
         result = self._values.get("thing_name")
         assert result is not None, "Required property 'thing_name' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def thing_principal_type(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-thingprincipalattachment.html#cfn-iot-thingprincipalattachment-thingprincipaltype
+        '''
+        result = self._values.get("thing_principal_type")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -23551,6 +23595,7 @@ def _typecheckingstub__0e0ce886b8c49b98afe43e3750b4827324240eaec344ca9ed6af43337
     *,
     principal: builtins.str,
     thing_name: builtins.str,
+    thing_principal_type: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23579,10 +23624,17 @@ def _typecheckingstub__01b5ff1ad27492252f4daa6f98df93fe2358c63120a39227eea2f7555
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__60f0b73c23e6d7837ba574cbb8e459baf1d53fca094b69ea965b6eeb45ad479e(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__84c8fe9c6ac7dd6ea654efc3fff6dfccf459a1bb6ca2a2b3be5d3116fa7d6022(
     *,
     principal: builtins.str,
     thing_name: builtins.str,
+    thing_principal_type: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

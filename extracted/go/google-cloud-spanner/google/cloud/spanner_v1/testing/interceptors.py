@@ -13,8 +13,11 @@
 # limitations under the License.
 
 from collections import defaultdict
+import threading
+
 from grpc_interceptor import ClientInterceptor
 from google.api_core.exceptions import Aborted
+from google.cloud.spanner_v1.request_id_header import parse_request_id
 
 
 class MethodCountInterceptor(ClientInterceptor):
@@ -63,3 +66,53 @@ class MethodAbortInterceptor(ClientInterceptor):
         self._method_to_abort = None
         self._count = 0
         self._connection = None
+
+
+X_GOOG_REQUEST_ID = "x-goog-spanner-request-id"
+
+
+class XGoogRequestIDHeaderInterceptor(ClientInterceptor):
+    def __init__(self):
+        self._unary_req_segments = []
+        self._stream_req_segments = []
+        self.__lock = threading.Lock()
+
+    def intercept(self, method, request_or_iterator, call_details):
+        metadata = call_details.metadata
+        x_goog_request_id = None
+        for key, value in metadata:
+            if key == X_GOOG_REQUEST_ID:
+                x_goog_request_id = value
+                break
+
+        if not x_goog_request_id:
+            raise Exception(
+                f"Missing {X_GOOG_REQUEST_ID} header in {call_details.method}"
+            )
+
+        response_or_iterator = method(request_or_iterator, call_details)
+        streaming = getattr(response_or_iterator, "__iter__", None) is not None
+
+        with self.__lock:
+            if streaming:
+                self._stream_req_segments.append(
+                    (call_details.method, parse_request_id(x_goog_request_id))
+                )
+            else:
+                self._unary_req_segments.append(
+                    (call_details.method, parse_request_id(x_goog_request_id))
+                )
+
+        return response_or_iterator
+
+    @property
+    def unary_request_ids(self):
+        return self._unary_req_segments
+
+    @property
+    def stream_request_ids(self):
+        return self._stream_req_segments
+
+    def reset(self):
+        self._stream_req_segments.clear()
+        self._unary_req_segments.clear()

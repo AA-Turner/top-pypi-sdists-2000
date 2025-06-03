@@ -5,12 +5,14 @@ import re
 import shutil
 from io import BytesIO
 
+import _lzma
 import pytest
 
 import py7zr
 import py7zr.archiveinfo
 import py7zr.callbacks
 import py7zr.cli
+import py7zr.io
 import py7zr.properties
 
 from . import check_output, decode_all
@@ -27,10 +29,20 @@ def test_basic_initinfo():
 
 @pytest.mark.api
 def test_basic_exclusive_mode(tmp_path):
-    with py7zr.SevenZipFile(tmp_path.joinpath("test_x.7z"), mode="x") as archive:
-        archive.write(os.path.join(testdata_path, "test1.txt"), "test1.txt")
+    test1txt = pathlib.Path(testdata_path) / "test1.txt"
+    archivefile = tmp_path.joinpath("test_x.7z")
+
+    with py7zr.SevenZipFile(archivefile, mode="x") as archive:
+        archive.write(test1txt, "test1.txt")
+
+    with py7zr.SevenZipFile(archivefile) as archive:
+        limit = len(test1txt.read_bytes())
+        factory = py7zr.io.BytesIOFactory(limit=limit)
+        archive.extract(targets=["test1.txt"], factory=factory)
+        assert factory.products["test1.txt"].read() == test1txt.read_bytes()
+
     with pytest.raises(FileExistsError):
-        py7zr.SevenZipFile(tmp_path.joinpath("test_x.7z"), mode="x")
+        py7zr.SevenZipFile(archivefile, mode="x")
 
 
 @pytest.mark.api
@@ -140,12 +152,22 @@ def test_digests():
 
 
 @pytest.mark.basic
-def test_digests_corrupted():
+def test_digests_crc_corrupted():
     arcfile = os.path.join(testdata_path, "crc_corrupted.7z")
     with py7zr.SevenZipFile(arcfile) as archive:
         assert archive.test() is None
         archive.reset()
         assert archive.testzip() == "src/scripts/py7zr"
+    assert archive.fp.closed
+
+
+@pytest.mark.basic
+def test_digests_data_corrupted():
+    arcfile = os.path.join(testdata_path, "data_corrupted.7z")
+    with pytest.raises(_lzma.LZMAError):
+        with py7zr.SevenZipFile(arcfile) as archive:
+            archive.testzip()
+    assert archive.fp.closed
 
 
 @pytest.mark.unit
@@ -205,11 +227,45 @@ def test_py7zr_extract_specified_file(tmp_path):
 
 
 @pytest.mark.api
+def test_py7zr_extract_specified_file_with_trailing_slash(tmp_path):
+    archive = py7zr.SevenZipFile(open(os.path.join(testdata_path, "test_1.7z"), "rb"))
+    expected = [
+        {
+            "filename": "scripts/py7zr",
+            "mode": 33261,
+            "mtime": 1552522208,
+            "digest": "b0385e71d6a07eb692f5fb9798e9d33aaf87be7dfff936fd2473eab2a593d4fd",
+        }
+    ]
+    archive.extract(path=tmp_path, targets=["scripts/", "scripts/py7zr/"])
+    archive.close()
+    assert tmp_path.joinpath("scripts").is_dir()
+    assert tmp_path.joinpath("scripts/py7zr").exists()
+    assert not tmp_path.joinpath("setup.cfg").exists()
+    assert not tmp_path.joinpath("setup.py").exists()
+    check_output(expected, tmp_path)
+
+
+@pytest.mark.api
 def test_py7zr_extract_and_getnames(tmp_path):
     archive = py7zr.SevenZipFile(open(os.path.join(testdata_path, "test_1.7z"), "rb"))
     allfiles = archive.getnames()
     filter_pattern = re.compile(r"scripts.*")
     targets = [f for f in allfiles if filter_pattern.match(f)]
+    archive.extract(path=tmp_path, targets=targets)
+    archive.close()
+    assert tmp_path.joinpath("scripts").is_dir()
+    assert tmp_path.joinpath("scripts/py7zr").exists()
+    assert not tmp_path.joinpath("setup.cfg").exists()
+    assert not tmp_path.joinpath("setup.py").exists()
+
+
+@pytest.mark.api
+def test_py7zr_extract_with_trailing_slash_and_getnames(tmp_path):
+    archive = py7zr.SevenZipFile(open(os.path.join(testdata_path, "test_1.7z"), "rb"))
+    allfiles = archive.getnames()
+    filter_pattern = re.compile(r"scripts.*")
+    targets = [f"{f}/" for f in allfiles if filter_pattern.match(f)]
     archive.extract(path=tmp_path, targets=targets)
     archive.close()
     assert tmp_path.joinpath("scripts").is_dir()
@@ -237,8 +293,17 @@ def test_py7zr_read_and_reset(tmp_path):
     archive = py7zr.SevenZipFile(open(os.path.join(testdata_path, "read_reset.7z"), "rb"))
     iterations = archive.getnames()
     for target in iterations:
-        _dict = archive.read(targets=[target])
-        assert len(_dict) == 1
+        archive.extract(targets=[target], factory=py7zr.io.NullIOFactory())
+        archive.reset()
+    archive.close()
+
+
+@pytest.mark.api
+def test_py7zr_read_with_trailing_slash_and_reset(tmp_path):
+    archive = py7zr.SevenZipFile(open(os.path.join(testdata_path, "read_reset.7z"), "rb"))
+    iterations = archive.getnames()
+    for target in iterations:
+        archive.extract(targets=[f"{target}/"], factory=py7zr.io.NullIOFactory())
         archive.reset()
     archive.close()
 
@@ -302,21 +367,21 @@ def test_read_collection_argument():
         "HmmmTaSI/atXtuwiN5mGrqyFZTC/V2VEohWua1Yk1K+jXy+32hBwnK2clyr3rN5L"
         "Abv5g2wXBiABCYCFAAcLAQABIwMBAQVdABAAAAyAlgoBouB4BAAA"
     )
+    factory = py7zr.io.BytesIOFactory(64)
     with py7zr.SevenZipFile(BytesIO(data), password="boom") as arc:
-        result = arc.read(["bar.txt"])  # list -> ok
-        assert "bar.txt" in result
-        bina = result.get("bar.txt")
-        assert isinstance(bina, BytesIO)
+        arc.extract(targets=["bar.txt"], factory=factory)  # list -> ok
+        assert "bar.txt" in factory.products
+        bina = factory.get("bar.txt")
         assert bina.read() == b"refinery"
     with py7zr.SevenZipFile(BytesIO(data), password="boom") as arc:
-        result = arc.read({"bar.txt"})  # set -> ok
-        assert result.get("bar.txt").read() == b"refinery"
+        arc.extract(targets={"bar.txt"}, factory=factory)  # set -> ok
+        assert factory.get("bar.txt").read() == b"refinery"
     with pytest.raises(TypeError):
         with py7zr.SevenZipFile(BytesIO(data), password="boom") as arc:
-            arc.read(("bar.txt",))  # tuple -> bad
+            arc.extract(targets=("bar.txt",), factory=factory)  # tuple -> bad
     with pytest.raises(TypeError):
         with py7zr.SevenZipFile(BytesIO(data), password="boom") as arc:
-            arc.read("bar.txt")  # str -> bad
+            arc.extract(targets="bar.txt", factory=factory)  # str -> bad
     with pytest.raises(TypeError):
         with py7zr.SevenZipFile(BytesIO(data), password="boom") as arc:
             arc.extract(targets="bar.txt")  # str -> bad

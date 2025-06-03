@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: google-cloud-spanner
-Version: 3.54.0
+Version: 3.55.0
 Summary: Google Cloud Spanner API client library
 Home-page: https://github.com/googleapis/python-spanner
 Author: Google LLC
@@ -292,6 +292,13 @@ Connection API represents a wrap-around for Python Spanner API, written in accor
    cursor.execute("SELECT * FROM table_name")
 
    result = cursor.fetchall()
+
+
+If using [fine-grained access controls](https://cloud.google.com/spanner/docs/access-with-fgac) you can pass a ``database_role`` argument to connect as that role:
+
+.. code:: python
+
+   connection = connect("instance-id", "database-id", database_role='your-role')
 
 
 Aborted Transactions Retry Mechanism

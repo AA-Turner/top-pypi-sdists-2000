@@ -135,7 +135,7 @@ class CfnFirewall(
         :param id: Construct identifier for this resource (unique in its scope).
         :param firewall_name: The descriptive name of the firewall. You can't change the name of a firewall after you create it.
         :param firewall_policy_arn: The Amazon Resource Name (ARN) of the firewall policy. The relationship of firewall to firewall policy is many to one. Each firewall requires one firewall policy association, and you can use the same firewall policy for multiple firewalls.
-        :param subnet_mappings: The public subnets that Network Firewall is using for the firewall. Each subnet must belong to a different Availability Zone.
+        :param subnet_mappings: The primary public subnets that Network Firewall is using for the firewall. Network Firewall creates a firewall endpoint in each subnet. Create a subnet mapping for each Availability Zone where you want to use the firewall. These subnets are all defined for a single, primary VPC, and each must belong to a different Availability Zone. Each of these subnets establishes the availability of the firewall in its Availability Zone. In addition to these subnets, you can define other endpoints for the firewall in ``VpcEndpointAssociation`` resources. You can define these additional endpoints for any VPC, and for any of the Availability Zones where the firewall resource already has a subnet mapping. VPC endpoint associations give you the ability to protect multiple VPCs using a single firewall, and to define multiple firewall endpoints for a VPC in a single Availability Zone.
         :param vpc_id: The unique identifier of the VPC where the firewall is in use. You can't change the VPC of a firewall after you create the firewall.
         :param delete_protection: A flag indicating whether it is possible to delete the firewall. A setting of ``TRUE`` indicates that the firewall is protected against deletion. Use this setting to protect against accidentally deleting a firewall that is in use. When you create a firewall, the operation initializes this flag to ``TRUE`` .
         :param description: A description of the firewall.
@@ -264,7 +264,7 @@ class CfnFirewall(
     def subnet_mappings(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFirewall.SubnetMappingProperty"]]]:
-        '''The public subnets that Network Firewall is using for the firewall.'''
+        '''The primary public subnets that Network Firewall is using for the firewall.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFirewall.SubnetMappingProperty"]]], jsii.get(self, "subnetMappings"))
 
     @subnet_mappings.setter
@@ -1936,7 +1936,7 @@ class CfnFirewallProps:
 
         :param firewall_name: The descriptive name of the firewall. You can't change the name of a firewall after you create it.
         :param firewall_policy_arn: The Amazon Resource Name (ARN) of the firewall policy. The relationship of firewall to firewall policy is many to one. Each firewall requires one firewall policy association, and you can use the same firewall policy for multiple firewalls.
-        :param subnet_mappings: The public subnets that Network Firewall is using for the firewall. Each subnet must belong to a different Availability Zone.
+        :param subnet_mappings: The primary public subnets that Network Firewall is using for the firewall. Network Firewall creates a firewall endpoint in each subnet. Create a subnet mapping for each Availability Zone where you want to use the firewall. These subnets are all defined for a single, primary VPC, and each must belong to a different Availability Zone. Each of these subnets establishes the availability of the firewall in its Availability Zone. In addition to these subnets, you can define other endpoints for the firewall in ``VpcEndpointAssociation`` resources. You can define these additional endpoints for any VPC, and for any of the Availability Zones where the firewall resource already has a subnet mapping. VPC endpoint associations give you the ability to protect multiple VPCs using a single firewall, and to define multiple firewall endpoints for a VPC in a single Availability Zone.
         :param vpc_id: The unique identifier of the VPC where the firewall is in use. You can't change the VPC of a firewall after you create the firewall.
         :param delete_protection: A flag indicating whether it is possible to delete the firewall. A setting of ``TRUE`` indicates that the firewall is protected against deletion. Use this setting to protect against accidentally deleting a firewall that is in use. When you create a firewall, the operation initializes this flag to ``TRUE`` .
         :param description: A description of the firewall.
@@ -2036,9 +2036,13 @@ class CfnFirewallProps:
     def subnet_mappings(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFirewall.SubnetMappingProperty]]]:
-        '''The public subnets that Network Firewall is using for the firewall.
+        '''The primary public subnets that Network Firewall is using for the firewall.
 
-        Each subnet must belong to a different Availability Zone.
+        Network Firewall creates a firewall endpoint in each subnet. Create a subnet mapping for each Availability Zone where you want to use the firewall.
+
+        These subnets are all defined for a single, primary VPC, and each must belong to a different Availability Zone. Each of these subnets establishes the availability of the firewall in its Availability Zone.
+
+        In addition to these subnets, you can define other endpoints for the firewall in ``VpcEndpointAssociation`` resources. You can define these additional endpoints for any VPC, and for any of the Availability Zones where the firewall resource already has a subnet mapping. VPC endpoint associations give you the ability to protect multiple VPCs using a single firewall, and to define multiple firewall endpoints for a VPC in a single Availability Zone.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-networkfirewall-firewall.html#cfn-networkfirewall-firewall-subnetmappings
         '''

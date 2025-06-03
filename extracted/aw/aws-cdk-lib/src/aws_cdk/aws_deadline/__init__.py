@@ -553,7 +553,7 @@ class CfnFleet(
         :param max_worker_count: The maximum number of workers specified in the fleet.
         :param role_arn: The IAM role that workers in the fleet use when processing jobs.
         :param description: A description that helps identify what the fleet is used for. .. epigraph:: This field can store any content. Escape or encode this content before displaying it on a webpage or any other system that might interpret the content of this field. Default: - ""
-        :param host_configuration: 
+        :param host_configuration: Provides a script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet. To remove a script from a fleet, use the `UpdateFleet <https://docs.aws.amazon.com/deadline-cloud/latest/APIReference/API_UpdateFleet.html>`_ operation with the ``hostConfiguration`` ``scriptBody`` parameter set to an empty string ("").
         :param min_worker_count: The minimum number of workers in the fleet. Default: - 0
         :param tags: The tags to add to your fleet. Each tag consists of a tag key and a tag value. Tag keys and values are both required, but tag values can be empty strings.
         '''
@@ -748,6 +748,7 @@ class CfnFleet(
     def host_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.HostConfigurationProperty"]]:
+        '''Provides a script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.HostConfigurationProperty"]], jsii.get(self, "hostConfiguration"))
 
     @host_configuration.setter
@@ -1135,7 +1136,7 @@ class CfnFleet(
             :param mode: The AWS Auto Scaling mode for the customer managed fleet configuration.
             :param worker_capabilities: The worker capabilities for a customer managed fleet configuration.
             :param storage_profile_id: The storage profile ID.
-            :param tag_propagation_mode: 
+            :param tag_propagation_mode: Specifies whether tags associated with a fleet are attached to workers when the worker is launched. When the ``tagPropagationMode`` is set to ``PROPAGATE_TAGS_TO_WORKERS_AT_LAUNCH`` any tag associated with a fleet is attached to workers when they launch. If the tags for a fleet change, the tags associated with running workers *do not* change. If you don't specify ``tagPropagationMode`` , the default is ``NO_PROPAGATION`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1244,7 +1245,12 @@ class CfnFleet(
 
         @builtins.property
         def tag_propagation_mode(self) -> typing.Optional[builtins.str]:
-            '''
+            '''Specifies whether tags associated with a fleet are attached to workers when the worker is launched.
+
+            When the ``tagPropagationMode`` is set to ``PROPAGATE_TAGS_TO_WORKERS_AT_LAUNCH`` any tag associated with a fleet is attached to workers when they launch. If the tags for a fleet change, the tags associated with running workers *do not* change.
+
+            If you don't specify ``tagPropagationMode`` , the default is ``NO_PROPAGATION`` .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html#cfn-deadline-fleet-customermanagedfleetconfiguration-tagpropagationmode
             '''
             result = self._values.get("tag_propagation_mode")
@@ -2023,9 +2029,12 @@ class CfnFleet(
             script_body: builtins.str,
             script_timeout_seconds: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param script_body: 
-            :param script_timeout_seconds: Default: - 300
+            '''Provides a script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet.
+
+            To remove a script from a fleet, use the `UpdateFleet <https://docs.aws.amazon.com/deadline-cloud/latest/APIReference/API_UpdateFleet.html>`_ operation with the ``hostConfiguration`` ``scriptBody`` parameter set to an empty string ("").
+
+            :param script_body: The text of the script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet. The script runs after a worker enters the ``STARTING`` state and before the worker processes tasks. For more information about using the script, see `Run scripts as an administrator to configure workers <https://docs.aws.amazon.com/deadline-cloud/latest/developerguide/smf-admin.html>`_ in the *Deadline Cloud Developer Guide* . .. epigraph:: The script runs as an administrative user ( ``sudo root`` on Linux, as an Administrator on Windows).
+            :param script_timeout_seconds: The maximum time that the host configuration can run. If the timeout expires, the worker enters the ``NOT RESPONDING`` state and shuts down. You are charged for the time that the worker is running the host configuration script. .. epigraph:: You should configure your fleet for a maximum of one worker while testing your host configuration script to avoid starting additional workers. The default is 300 seconds (5 minutes). Default: - 300
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-hostconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2055,7 +2064,15 @@ class CfnFleet(
 
         @builtins.property
         def script_body(self) -> builtins.str:
-            '''
+            '''The text of the script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet.
+
+            The script runs after a worker enters the ``STARTING`` state and before the worker processes tasks.
+
+            For more information about using the script, see `Run scripts as an administrator to configure workers <https://docs.aws.amazon.com/deadline-cloud/latest/developerguide/smf-admin.html>`_ in the *Deadline Cloud Developer Guide* .
+            .. epigraph::
+
+               The script runs as an administrative user ( ``sudo root`` on Linux, as an Administrator on Windows).
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-hostconfiguration.html#cfn-deadline-fleet-hostconfiguration-scriptbody
             '''
             result = self._values.get("script_body")
@@ -2064,7 +2081,15 @@ class CfnFleet(
 
         @builtins.property
         def script_timeout_seconds(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum time that the host configuration can run.
+
+            If the timeout expires, the worker enters the ``NOT RESPONDING`` state and shuts down. You are charged for the time that the worker is running the host configuration script.
+            .. epigraph::
+
+               You should configure your fleet for a maximum of one worker while testing your host configuration script to avoid starting additional workers.
+
+            The default is 300 seconds (5 minutes).
+
             :default: - 300
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-hostconfiguration.html#cfn-deadline-fleet-hostconfiguration-scripttimeoutseconds
@@ -2704,7 +2729,7 @@ class CfnFleetProps:
         :param max_worker_count: The maximum number of workers specified in the fleet.
         :param role_arn: The IAM role that workers in the fleet use when processing jobs.
         :param description: A description that helps identify what the fleet is used for. .. epigraph:: This field can store any content. Escape or encode this content before displaying it on a webpage or any other system that might interpret the content of this field. Default: - ""
-        :param host_configuration: 
+        :param host_configuration: Provides a script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet. To remove a script from a fleet, use the `UpdateFleet <https://docs.aws.amazon.com/deadline-cloud/latest/APIReference/API_UpdateFleet.html>`_ operation with the ``hostConfiguration`` ``scriptBody`` parameter set to an empty string ("").
         :param min_worker_count: The minimum number of workers in the fleet. Default: - 0
         :param tags: The tags to add to your fleet. Each tag consists of a tag key and a tag value. Tag keys and values are both required, but tag values can be empty strings.
 
@@ -2948,7 +2973,10 @@ class CfnFleetProps:
     def host_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.HostConfigurationProperty]]:
-        '''
+        '''Provides a script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet.
+
+        To remove a script from a fleet, use the `UpdateFleet <https://docs.aws.amazon.com/deadline-cloud/latest/APIReference/API_UpdateFleet.html>`_ operation with the ``hostConfiguration`` ``scriptBody`` parameter set to an empty string ("").
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-fleet.html#cfn-deadline-fleet-hostconfiguration
         '''
         result = self._values.get("host_configuration")

@@ -77,6 +77,686 @@ from .. import (
 
 
 @jsii.implements(_IInspectable_c2943556)
+class CfnAccessPoint(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_s3express.CfnAccessPoint",
+):
+    '''Access points simplify managing data access at scale for shared datasets in Amazon S3 .
+
+    Access points are unique hostnames you create to enforce distinct permissions and network controls for all requests made through an access point. You can create hundreds of access points per bucket, each with a distinct name and permissions customized for each application. Each access point works in conjunction with the bucket policy that is attached to the underlying bucket. For more information, see `Managing access to shared datasets in directory buckets with access points <https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points-directory-buckets.html>`_ .
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html
+    :cloudformationResource: AWS::S3Express::AccessPoint
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_s3express as s3express
+        
+        # policy: Any
+        
+        cfn_access_point = s3express.CfnAccessPoint(self, "MyCfnAccessPoint",
+            bucket="bucket",
+        
+            # the properties below are optional
+            bucket_account_id="bucketAccountId",
+            name="name",
+            policy=policy,
+            public_access_block_configuration=s3express.CfnAccessPoint.PublicAccessBlockConfigurationProperty(
+                block_public_acls=False,
+                block_public_policy=False,
+                ignore_public_acls=False,
+                restrict_public_buckets=False
+            ),
+            scope=s3express.CfnAccessPoint.ScopeProperty(
+                permissions=["permissions"],
+                prefixes=["prefixes"]
+            ),
+            vpc_configuration=s3express.CfnAccessPoint.VpcConfigurationProperty(
+                vpc_id="vpcId"
+            )
+        )
+    '''
+
+    def __init__(
+        self,
+        scope_: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        bucket: builtins.str,
+        bucket_account_id: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        policy: typing.Any = None,
+        public_access_block_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.PublicAccessBlockConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.ScopeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''
+        :param scope_: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param bucket: The name of the bucket that you want to associate the access point with.
+        :param bucket_account_id: The AWS account ID that owns the bucket associated with this access point.
+        :param name: An access point name consists of a base name you provide, followed by the zoneID ( AWS Local Zone) followed by the prefix ``--xa-s3`` . For example, accesspointname--zoneID--xa-s3.
+        :param policy: The access point policy associated with the specified access point.
+        :param public_access_block_configuration: Public access is blocked by default to access points for directory buckets.
+        :param scope: You can use the access point scope to restrict access to specific prefixes, API operations, or a combination of both. For more information, see `Manage the scope of your access points for directory buckets. <https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points-directory-buckets-manage-scope.html>`_
+        :param vpc_configuration: If you include this field, Amazon S3 restricts access to this access point to requests from the specified virtual private cloud (VPC).
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e5fc3ca5d7f872be531c5db2f2626dbbab094b459144a7d293c09461f39dc391)
+            check_type(argname="argument scope_", value=scope_, expected_type=type_hints["scope_"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnAccessPointProps(
+            bucket=bucket,
+            bucket_account_id=bucket_account_id,
+            name=name,
+            policy=policy,
+            public_access_block_configuration=public_access_block_configuration,
+            scope=scope,
+            vpc_configuration=vpc_configuration,
+        )
+
+        jsii.create(self.__class__, self, [scope_, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__10d052bad8f115c4b5cf2aaa4e73218258b2e771a48bea5518c0d792accadaba)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2e76dd6e5c380f8cf390fdf5b0e1babe4ba751ffa40a682c93aebdb03ac5a759)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The ARN of the access point.
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrNetworkOrigin")
+    def attr_network_origin(self) -> builtins.str:
+        '''The network configuration of the access point.
+
+        :cloudformationAttribute: NetworkOrigin
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrNetworkOrigin"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="bucket")
+    def bucket(self) -> builtins.str:
+        '''The name of the bucket that you want to associate the access point with.'''
+        return typing.cast(builtins.str, jsii.get(self, "bucket"))
+
+    @bucket.setter
+    def bucket(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e1f9ad27f3884dc957ca655b1b0d301bb0cc041fcb3497da06d2fcb1e73ee5a2)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "bucket", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="bucketAccountId")
+    def bucket_account_id(self) -> typing.Optional[builtins.str]:
+        '''The AWS account ID that owns the bucket associated with this access point.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "bucketAccountId"))
+
+    @bucket_account_id.setter
+    def bucket_account_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__05bbf2a5aafbce5a9896abd9ca234cb47f6f4131c53b7226517aee28187499f5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "bucketAccountId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> typing.Optional[builtins.str]:
+        '''An access point name consists of a base name you provide, followed by the zoneID ( AWS Local Zone) followed by the prefix ``--xa-s3`` .'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a0faa6f9099f8475e8a679e37d0229c90adb5b32bd05a99c722d02ab6db01577)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="policy")
+    def policy(self) -> typing.Any:
+        '''The access point policy associated with the specified access point.'''
+        return typing.cast(typing.Any, jsii.get(self, "policy"))
+
+    @policy.setter
+    def policy(self, value: typing.Any) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b6b671117e34b3e667db8b935f30294f0e6c79bf19d6262224f7c031a23ddab9)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "policy", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="publicAccessBlockConfiguration")
+    def public_access_block_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]]:
+        '''Public access is blocked by default to access points for directory buckets.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]], jsii.get(self, "publicAccessBlockConfiguration"))
+
+    @public_access_block_configuration.setter
+    def public_access_block_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fc74f25f5a3136d66174ea811ed4ae44e659d23502d10285f8bc72b9f01fcc79)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "publicAccessBlockConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="scope")
+    def scope(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ScopeProperty"]]:
+        '''You can use the access point scope to restrict access to specific prefixes, API operations, or a combination of both.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ScopeProperty"]], jsii.get(self, "scope"))
+
+    @scope.setter
+    def scope(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ScopeProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__48d7fd3100a689dec8bdc6613bf9b51376dd53745e5ef8f3e45a997d4050fbd5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "scope", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="vpcConfiguration")
+    def vpc_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.VpcConfigurationProperty"]]:
+        '''If you include this field, Amazon S3 restricts access to this access point to requests from the specified virtual private cloud (VPC).'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.VpcConfigurationProperty"]], jsii.get(self, "vpcConfiguration"))
+
+    @vpc_configuration.setter
+    def vpc_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.VpcConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__854fbbe66a8f2a9a585ce20da917f5abf17e2ec117ac4321757853590651821a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "vpcConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3express.CfnAccessPoint.PublicAccessBlockConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "block_public_acls": "blockPublicAcls",
+            "block_public_policy": "blockPublicPolicy",
+            "ignore_public_acls": "ignorePublicAcls",
+            "restrict_public_buckets": "restrictPublicBuckets",
+        },
+    )
+    class PublicAccessBlockConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            block_public_acls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            block_public_policy: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            ignore_public_acls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            restrict_public_buckets: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''Public access is blocked by default to access points for directory buckets.
+
+            :param block_public_acls: Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket and objects in this bucket. Setting this element to ``TRUE`` causes the following behavior: - PUT Bucket ACL and PUT Object ACL calls fail if the specified ACL is public. - PUT Object calls fail if the request includes a public ACL. - PUT Bucket calls fail if the request includes a public ACL. Enabling this setting doesn't affect existing policies or ACLs.
+            :param block_public_policy: Specifies whether Amazon S3 should block public bucket policies for this bucket. Setting this element to ``TRUE`` causes Amazon S3 to reject calls to PUT Bucket policy if the specified bucket policy allows public access. Enabling this setting doesn't affect existing bucket policies.
+            :param ignore_public_acls: Specifies whether Amazon S3 should ignore public ACLs for this bucket and objects in this bucket. Setting this element to ``TRUE`` causes Amazon S3 to ignore all public ACLs on this bucket and objects in this bucket. Enabling this setting doesn't affect the persistence of any existing ACLs and doesn't prevent new public ACLs from being set.
+            :param restrict_public_buckets: Specifies whether Amazon S3 should restrict public bucket policies for this bucket. Setting this element to ``TRUE`` restricts access to this bucket to only AWS service principals and authorized users within this account if the bucket has a public policy. Enabling this setting doesn't affect previously stored bucket policies, except that public and cross-account access within any public bucket policy, including non-public delegation to specific accounts, is blocked.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-publicaccessblockconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3express as s3express
+                
+                public_access_block_configuration_property = s3express.CfnAccessPoint.PublicAccessBlockConfigurationProperty(
+                    block_public_acls=False,
+                    block_public_policy=False,
+                    ignore_public_acls=False,
+                    restrict_public_buckets=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__924486f21cdee22c013a572ef0c9c5dc92b9e7f4938fda2e969703ead9ca77c3)
+                check_type(argname="argument block_public_acls", value=block_public_acls, expected_type=type_hints["block_public_acls"])
+                check_type(argname="argument block_public_policy", value=block_public_policy, expected_type=type_hints["block_public_policy"])
+                check_type(argname="argument ignore_public_acls", value=ignore_public_acls, expected_type=type_hints["ignore_public_acls"])
+                check_type(argname="argument restrict_public_buckets", value=restrict_public_buckets, expected_type=type_hints["restrict_public_buckets"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if block_public_acls is not None:
+                self._values["block_public_acls"] = block_public_acls
+            if block_public_policy is not None:
+                self._values["block_public_policy"] = block_public_policy
+            if ignore_public_acls is not None:
+                self._values["ignore_public_acls"] = ignore_public_acls
+            if restrict_public_buckets is not None:
+                self._values["restrict_public_buckets"] = restrict_public_buckets
+
+        @builtins.property
+        def block_public_acls(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket and objects in this bucket.
+
+            Setting this element to ``TRUE`` causes the following behavior:
+
+            - PUT Bucket ACL and PUT Object ACL calls fail if the specified ACL is public.
+            - PUT Object calls fail if the request includes a public ACL.
+            - PUT Bucket calls fail if the request includes a public ACL.
+
+            Enabling this setting doesn't affect existing policies or ACLs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-publicaccessblockconfiguration.html#cfn-s3express-accesspoint-publicaccessblockconfiguration-blockpublicacls
+            '''
+            result = self._values.get("block_public_acls")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def block_public_policy(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Specifies whether Amazon S3 should block public bucket policies for this bucket.
+
+            Setting this element to ``TRUE`` causes Amazon S3 to reject calls to PUT Bucket policy if the specified bucket policy allows public access.
+
+            Enabling this setting doesn't affect existing bucket policies.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-publicaccessblockconfiguration.html#cfn-s3express-accesspoint-publicaccessblockconfiguration-blockpublicpolicy
+            '''
+            result = self._values.get("block_public_policy")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def ignore_public_acls(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Specifies whether Amazon S3 should ignore public ACLs for this bucket and objects in this bucket.
+
+            Setting this element to ``TRUE`` causes Amazon S3 to ignore all public ACLs on this bucket and objects in this bucket.
+
+            Enabling this setting doesn't affect the persistence of any existing ACLs and doesn't prevent new public ACLs from being set.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-publicaccessblockconfiguration.html#cfn-s3express-accesspoint-publicaccessblockconfiguration-ignorepublicacls
+            '''
+            result = self._values.get("ignore_public_acls")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def restrict_public_buckets(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Specifies whether Amazon S3 should restrict public bucket policies for this bucket.
+
+            Setting this element to ``TRUE`` restricts access to this bucket to only AWS service principals and authorized users within this account if the bucket has a public policy.
+
+            Enabling this setting doesn't affect previously stored bucket policies, except that public and cross-account access within any public bucket policy, including non-public delegation to specific accounts, is blocked.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-publicaccessblockconfiguration.html#cfn-s3express-accesspoint-publicaccessblockconfiguration-restrictpublicbuckets
+            '''
+            result = self._values.get("restrict_public_buckets")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "PublicAccessBlockConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3express.CfnAccessPoint.ScopeProperty",
+        jsii_struct_bases=[],
+        name_mapping={"permissions": "permissions", "prefixes": "prefixes"},
+    )
+    class ScopeProperty:
+        def __init__(
+            self,
+            *,
+            permissions: typing.Optional[typing.Sequence[builtins.str]] = None,
+            prefixes: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''You can use the access point scope to restrict access to specific prefixes, API operations, or a combination of both.
+
+            For more information, see `Manage the scope of your access points for directory buckets. <https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points-directory-buckets-manage-scope.html>`_
+
+            :param permissions: You can include one or more API operations as permissions.
+            :param prefixes: You can specify any amount of prefixes, but the total length of characters of all prefixes must be less than 256 bytes in size.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-scope.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3express as s3express
+                
+                scope_property = s3express.CfnAccessPoint.ScopeProperty(
+                    permissions=["permissions"],
+                    prefixes=["prefixes"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__72899149f7debb2e00ebe596dd77a23a5399ad56a7caca45e5e81d8f22b2f44a)
+                check_type(argname="argument permissions", value=permissions, expected_type=type_hints["permissions"])
+                check_type(argname="argument prefixes", value=prefixes, expected_type=type_hints["prefixes"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if permissions is not None:
+                self._values["permissions"] = permissions
+            if prefixes is not None:
+                self._values["prefixes"] = prefixes
+
+        @builtins.property
+        def permissions(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''You can include one or more API operations as permissions.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-scope.html#cfn-s3express-accesspoint-scope-permissions
+            '''
+            result = self._values.get("permissions")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def prefixes(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''You can specify any amount of prefixes, but the total length of characters of all prefixes must be less than 256 bytes in size.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-scope.html#cfn-s3express-accesspoint-scope-prefixes
+            '''
+            result = self._values.get("prefixes")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ScopeProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3express.CfnAccessPoint.VpcConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"vpc_id": "vpcId"},
+    )
+    class VpcConfigurationProperty:
+        def __init__(self, *, vpc_id: typing.Optional[builtins.str] = None) -> None:
+            '''The Virtual Private Cloud (VPC) configuration for a bucket access point.
+
+            :param vpc_id: If this field is specified, this access point will only allow connections from the specified VPC ID.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-vpcconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3express as s3express
+                
+                vpc_configuration_property = s3express.CfnAccessPoint.VpcConfigurationProperty(
+                    vpc_id="vpcId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__19e3009de93f19fb706fa644304d8806cbdc834cc18dec326b5586987113cce6)
+                check_type(argname="argument vpc_id", value=vpc_id, expected_type=type_hints["vpc_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if vpc_id is not None:
+                self._values["vpc_id"] = vpc_id
+
+        @builtins.property
+        def vpc_id(self) -> typing.Optional[builtins.str]:
+            '''If this field is specified, this access point will only allow connections from the specified VPC ID.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-vpcconfiguration.html#cfn-s3express-accesspoint-vpcconfiguration-vpcid
+            '''
+            result = self._values.get("vpc_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "VpcConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_s3express.CfnAccessPointProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "bucket": "bucket",
+        "bucket_account_id": "bucketAccountId",
+        "name": "name",
+        "policy": "policy",
+        "public_access_block_configuration": "publicAccessBlockConfiguration",
+        "scope": "scope",
+        "vpc_configuration": "vpcConfiguration",
+    },
+)
+class CfnAccessPointProps:
+    def __init__(
+        self,
+        *,
+        bucket: builtins.str,
+        bucket_account_id: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        policy: typing.Any = None,
+        public_access_block_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.PublicAccessBlockConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.ScopeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnAccessPoint``.
+
+        :param bucket: The name of the bucket that you want to associate the access point with.
+        :param bucket_account_id: The AWS account ID that owns the bucket associated with this access point.
+        :param name: An access point name consists of a base name you provide, followed by the zoneID ( AWS Local Zone) followed by the prefix ``--xa-s3`` . For example, accesspointname--zoneID--xa-s3.
+        :param policy: The access point policy associated with the specified access point.
+        :param public_access_block_configuration: Public access is blocked by default to access points for directory buckets.
+        :param scope: You can use the access point scope to restrict access to specific prefixes, API operations, or a combination of both. For more information, see `Manage the scope of your access points for directory buckets. <https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points-directory-buckets-manage-scope.html>`_
+        :param vpc_configuration: If you include this field, Amazon S3 restricts access to this access point to requests from the specified virtual private cloud (VPC).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_s3express as s3express
+            
+            # policy: Any
+            
+            cfn_access_point_props = s3express.CfnAccessPointProps(
+                bucket="bucket",
+            
+                # the properties below are optional
+                bucket_account_id="bucketAccountId",
+                name="name",
+                policy=policy,
+                public_access_block_configuration=s3express.CfnAccessPoint.PublicAccessBlockConfigurationProperty(
+                    block_public_acls=False,
+                    block_public_policy=False,
+                    ignore_public_acls=False,
+                    restrict_public_buckets=False
+                ),
+                scope=s3express.CfnAccessPoint.ScopeProperty(
+                    permissions=["permissions"],
+                    prefixes=["prefixes"]
+                ),
+                vpc_configuration=s3express.CfnAccessPoint.VpcConfigurationProperty(
+                    vpc_id="vpcId"
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2ec03a7d5826304628784add6c3daf7da7d66e0c0d94fd92f203f6842dda50d0)
+            check_type(argname="argument bucket", value=bucket, expected_type=type_hints["bucket"])
+            check_type(argname="argument bucket_account_id", value=bucket_account_id, expected_type=type_hints["bucket_account_id"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument policy", value=policy, expected_type=type_hints["policy"])
+            check_type(argname="argument public_access_block_configuration", value=public_access_block_configuration, expected_type=type_hints["public_access_block_configuration"])
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument vpc_configuration", value=vpc_configuration, expected_type=type_hints["vpc_configuration"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "bucket": bucket,
+        }
+        if bucket_account_id is not None:
+            self._values["bucket_account_id"] = bucket_account_id
+        if name is not None:
+            self._values["name"] = name
+        if policy is not None:
+            self._values["policy"] = policy
+        if public_access_block_configuration is not None:
+            self._values["public_access_block_configuration"] = public_access_block_configuration
+        if scope is not None:
+            self._values["scope"] = scope
+        if vpc_configuration is not None:
+            self._values["vpc_configuration"] = vpc_configuration
+
+    @builtins.property
+    def bucket(self) -> builtins.str:
+        '''The name of the bucket that you want to associate the access point with.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-bucket
+        '''
+        result = self._values.get("bucket")
+        assert result is not None, "Required property 'bucket' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def bucket_account_id(self) -> typing.Optional[builtins.str]:
+        '''The AWS account ID that owns the bucket associated with this access point.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-bucketaccountid
+        '''
+        result = self._values.get("bucket_account_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''An access point name consists of a base name you provide, followed by the zoneID ( AWS Local Zone) followed by the prefix ``--xa-s3`` .
+
+        For example, accesspointname--zoneID--xa-s3.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def policy(self) -> typing.Any:
+        '''The access point policy associated with the specified access point.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-policy
+        '''
+        result = self._values.get("policy")
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def public_access_block_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.PublicAccessBlockConfigurationProperty]]:
+        '''Public access is blocked by default to access points for directory buckets.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-publicaccessblockconfiguration
+        '''
+        result = self._values.get("public_access_block_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.PublicAccessBlockConfigurationProperty]], result)
+
+    @builtins.property
+    def scope(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.ScopeProperty]]:
+        '''You can use the access point scope to restrict access to specific prefixes, API operations, or a combination of both.
+
+        For more information, see `Manage the scope of your access points for directory buckets. <https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points-directory-buckets-manage-scope.html>`_
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-scope
+        '''
+        result = self._values.get("scope")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.ScopeProperty]], result)
+
+    @builtins.property
+    def vpc_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.VpcConfigurationProperty]]:
+        '''If you include this field, Amazon S3 restricts access to this access point to requests from the specified virtual private cloud (VPC).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-vpcconfiguration
+        '''
+        result = self._values.get("vpc_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.VpcConfigurationProperty]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnAccessPointProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556)
 class CfnBucketPolicy(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1269,6 +1949,8 @@ class CfnDirectoryBucketProps:
 
 
 __all__ = [
+    "CfnAccessPoint",
+    "CfnAccessPointProps",
     "CfnBucketPolicy",
     "CfnBucketPolicyProps",
     "CfnDirectoryBucket",
@@ -1276,6 +1958,113 @@ __all__ = [
 ]
 
 publication.publish()
+
+def _typecheckingstub__e5fc3ca5d7f872be531c5db2f2626dbbab094b459144a7d293c09461f39dc391(
+    scope_: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    bucket: builtins.str,
+    bucket_account_id: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    policy: typing.Any = None,
+    public_access_block_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.PublicAccessBlockConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.ScopeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__10d052bad8f115c4b5cf2aaa4e73218258b2e771a48bea5518c0d792accadaba(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2e76dd6e5c380f8cf390fdf5b0e1babe4ba751ffa40a682c93aebdb03ac5a759(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e1f9ad27f3884dc957ca655b1b0d301bb0cc041fcb3497da06d2fcb1e73ee5a2(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__05bbf2a5aafbce5a9896abd9ca234cb47f6f4131c53b7226517aee28187499f5(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a0faa6f9099f8475e8a679e37d0229c90adb5b32bd05a99c722d02ab6db01577(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b6b671117e34b3e667db8b935f30294f0e6c79bf19d6262224f7c031a23ddab9(
+    value: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fc74f25f5a3136d66174ea811ed4ae44e659d23502d10285f8bc72b9f01fcc79(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.PublicAccessBlockConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__48d7fd3100a689dec8bdc6613bf9b51376dd53745e5ef8f3e45a997d4050fbd5(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.ScopeProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__854fbbe66a8f2a9a585ce20da917f5abf17e2ec117ac4321757853590651821a(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.VpcConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__924486f21cdee22c013a572ef0c9c5dc92b9e7f4938fda2e969703ead9ca77c3(
+    *,
+    block_public_acls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    block_public_policy: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    ignore_public_acls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    restrict_public_buckets: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__72899149f7debb2e00ebe596dd77a23a5399ad56a7caca45e5e81d8f22b2f44a(
+    *,
+    permissions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    prefixes: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__19e3009de93f19fb706fa644304d8806cbdc834cc18dec326b5586987113cce6(
+    *,
+    vpc_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2ec03a7d5826304628784add6c3daf7da7d66e0c0d94fd92f203f6842dda50d0(
+    *,
+    bucket: builtins.str,
+    bucket_account_id: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    policy: typing.Any = None,
+    public_access_block_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.PublicAccessBlockConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.ScopeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
 
 def _typecheckingstub__c7ae0c19fbf2c7c716bc3304458f2695912d196d3e7439999f721b69fdbfc5a0(
     scope: _constructs_77d1e7e8.Construct,

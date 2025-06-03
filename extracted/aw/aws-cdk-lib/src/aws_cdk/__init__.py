@@ -1956,7 +1956,11 @@ class AppProps:
                 default_stack_synthesizer=AppStagingSynthesizer.default_resources(
                     app_id="my-app-id",
                     staging_bucket_encryption=BucketEncryption.S3_MANAGED,
-                    deployment_identities=DeploymentIdentities.cli_credentials()
+                    deployment_identities=DeploymentIdentities.specify_roles(
+                        cloud_formation_execution_role=BootstrapRole.from_role_arn("arn:aws:iam::123456789012:role/Execute"),
+                        deployment_role=BootstrapRole.from_role_arn("arn:aws:iam::123456789012:role/Deploy"),
+                        lookup_role=BootstrapRole.from_role_arn("arn:aws:iam::123456789012:role/Lookup")
+                    )
                 )
             )
         '''
@@ -9204,7 +9208,7 @@ class CfnStackSetProps:
         :param permission_model: Describes how the IAM roles required for stack set operations are created. - With ``SELF_MANAGED`` permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *AWS CloudFormation User Guide* . - With ``SERVICE_MANAGED`` permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations . For more information, see `Activate trusted access for stack sets with AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html>`_ in the *AWS CloudFormation User Guide* .
         :param stack_set_name: The name to associate with the stack set. The name must be unique in the Region where you create your stack set.
         :param administration_role_arn: The Amazon Resource Number (ARN) of the IAM role to use to create this stack set. Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. Use customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *AWS CloudFormation User Guide* . Valid only if the permissions model is ``SELF_MANAGED`` .
-        :param auto_deployment: Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU). For more information, see `Manage automatic deployments for CloudFormation StackSets that use service-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *AWS CloudFormation User Guide* . Required if the permissions model is ``SERVICE_MANAGED`` . (Not used with self-managed permissions.)
+        :param auto_deployment: Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU). For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *AWS CloudFormation User Guide* . Required if the permissions model is ``SERVICE_MANAGED`` . (Not used with self-managed permissions.)
         :param call_as: Specifies whether you are acting as an account administrator in the organization's management account or as a delegated administrator in a member account. By default, ``SELF`` is specified. Use ``SELF`` for stack sets with self-managed permissions. - To create a stack set with service-managed permissions while signed in to the management account, specify ``SELF`` . - To create a stack set with service-managed permissions while signed in to a delegated administrator account, specify ``DELEGATED_ADMIN`` . Your AWS account must be registered as a delegated admin in the management account. For more information, see `Register a delegated administrator <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-delegated-admin.html>`_ in the *AWS CloudFormation User Guide* . Stack sets with service-managed permissions are created in the management account, including stack sets that are created by delegated administrators. Valid only if the permissions model is ``SERVICE_MANAGED`` .
         :param capabilities: The capabilities that are allowed in the stack set. Some stack set templates might include resources that can affect permissions in your AWS account —for example, by creating new IAM users. For more information, see `Acknowledging IAM resources in CloudFormation templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html#using-iam-capabilities>`_ in the *AWS CloudFormation User Guide* .
         :param description: A description of the stack set.
@@ -9373,7 +9377,7 @@ class CfnStackSetProps:
     ) -> typing.Optional[typing.Union["IResolvable", "CfnStackSet.AutoDeploymentProperty"]]:
         '''Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU).
 
-        For more information, see `Manage automatic deployments for CloudFormation StackSets that use service-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *AWS CloudFormation User Guide* .
+        For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *AWS CloudFormation User Guide* .
 
         Required if the permissions model is ``SERVICE_MANAGED`` . (Not used with self-managed permissions.)
 
@@ -30656,12 +30660,10 @@ class CfnHookVersion(
     @builtins.property
     @jsii.member(jsii_name="attrVisibility")
     def attr_visibility(self) -> builtins.str:
-        '''The scope at which the Hook is visible and usable in CloudFormation operations.
+        '''The visibility level that determines who can see and use this Hook in CloudFormation operations:.
 
-        Valid values include:
-
-        - ``PRIVATE`` : The extension (Hook) is only visible and usable within the account in which it's registered. CloudFormation marks any resources you register as ``PRIVATE`` .
-        - ``PUBLIC`` : The extension (Hook) is publicly visible and usable within any AWS account.
+        - ``PRIVATE`` : The Hook is only visible and usable within the account where it was registered. CloudFormation automatically marks any Hooks you register as ``PRIVATE`` .
+        - ``PUBLIC`` : The Hook is publicly visible and usable within any AWS account.
 
         :cloudformationAttribute: Visibility
         '''
@@ -32178,12 +32180,10 @@ class CfnModuleVersion(
     @builtins.property
     @jsii.member(jsii_name="attrVisibility")
     def attr_visibility(self) -> builtins.str:
-        '''The scope at which the module is visible and usable in CloudFormation operations.
+        '''The visibility level that determines who can see and use this module in CloudFormation operations:.
 
-        Valid values include:
-
-        - ``PRIVATE`` : The extension (module) is only visible and usable within the account in which it is registered. CloudFormation marks any extensions you register as ``PRIVATE`` .
-        - ``PUBLIC`` : The extension (module) is publicly visible and usable within any AWS account.
+        - ``PRIVATE`` : The module is only visible and usable within the account where it was registered. CloudFormation automatically marks any modules you register as ``PRIVATE`` .
+        - ``PUBLIC`` : The module is publicly visible and usable within any AWS account.
 
         :cloudformationAttribute: Visibility
         '''
@@ -32853,7 +32853,7 @@ class CfnResourceVersion(
 
         CloudFormation determines the provisioning type during registration, based on the types of handlers in the schema handler package submitted.
 
-        Valid values include:
+        Possible values:
 
         - ``FULLY_MUTABLE`` : The resource type includes an update handler to process updates to the type during stack update operations.
         - ``IMMUTABLE`` : The resource type doesn't include an update handler, so the type can't be updated and must instead be replaced during stack update operations.
@@ -32889,12 +32889,10 @@ class CfnResourceVersion(
     @builtins.property
     @jsii.member(jsii_name="attrVisibility")
     def attr_visibility(self) -> builtins.str:
-        '''The scope at which the resource is visible and usable in CloudFormation operations.
+        '''The visibility level that determines who can see and use this resource in CloudFormation operations:.
 
-        Valid values include:
-
-        - ``PRIVATE`` : The extension (resource) is only visible and usable within the account in which it is registered. CloudFormation marks any extensions you register as ``PRIVATE`` .
-        - ``PUBLIC`` : The extension (resource) is publicly visible and usable within any AWS account.
+        - ``PRIVATE`` : The resource is only visible and usable within the account where it was registered. CloudFormation automatically marks any resources you register as ``PRIVATE`` .
+        - ``PUBLIC`` : The resource is publicly visible and usable within any AWS account.
 
         :cloudformationAttribute: Visibility
         '''
@@ -33037,7 +33035,7 @@ class CfnResourceVersion(
 class CfnStack(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnStack"):
     '''The ``AWS::CloudFormation::Stack`` resource nests a stack as a resource in a top-level template.
 
-    For more information, see `Embed stacks within other stacks using nested stacks <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html>`_ in the *AWS CloudFormation User Guide* .
+    For more information, see `Nested stacks <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html>`_ in the *AWS CloudFormation User Guide* .
 
     You can add output values from a nested stack within the containing template. You use the `GetAtt <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html>`_ function with the nested stack's logical name and the name of the output value in the nested stack in the format ``Outputs. *NestedStackOutputName*`` .
 
@@ -33045,7 +33043,7 @@ class CfnStack(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnS
 
     When you apply template changes to update a top-level stack, CloudFormation updates the top-level stack and initiates an update to its nested stacks. CloudFormation updates the resources of modified nested stacks, but doesn't update the resources of unmodified nested stacks.
 
-    You must acknowledge IAM capabilities for nested stacks that contain IAM resources. Also, verify that you have cancel update stack permissions, which is required if an update rolls back. For more information about IAM and CloudFormation , see `Controlling access with AWS Identity and Access Management <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html>`_ in the *AWS CloudFormation User Guide* .
+    For stacks that contain IAM resources, you must acknowledge IAM capabilities. Also, make sure that you have cancel update stack permissions, which are required if an update rolls back. For more information about IAM and CloudFormation , see `Controlling access with AWS Identity and Access Management <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html>`_ in the *AWS CloudFormation User Guide* .
     .. epigraph::
 
        A subset of ``AWS::CloudFormation::Stack`` resource type properties listed below are available to customers using CloudFormation , AWS CDK , and Cloud Control  to configure.
@@ -33211,7 +33209,7 @@ class CfnStack(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnS
     @builtins.property
     @jsii.member(jsii_name="attrParentId")
     def attr_parent_id(self) -> builtins.str:
-        '''For nested stacks--stacks created as resources for another stack--returns the stack ID of the direct parent of this stack.
+        '''For nested stacks, returns the stack ID of the direct parent of this stack.
 
         For the first level of nested stacks, the root stack is also the parent stack.
 
@@ -33222,7 +33220,7 @@ class CfnStack(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnS
     @builtins.property
     @jsii.member(jsii_name="attrRootId")
     def attr_root_id(self) -> builtins.str:
-        '''For nested stacks--stacks created as resources for another stack--returns the stack ID of the top-level stack to which the nested stack ultimately belongs.
+        '''For nested stacks, returns the stack ID of the top-level stack to which the nested stack ultimately belongs.
 
         :cloudformationAttribute: RootId
         '''
@@ -33540,7 +33538,7 @@ class CfnStackSet(
         :param permission_model: Describes how the IAM roles required for stack set operations are created. - With ``SELF_MANAGED`` permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *AWS CloudFormation User Guide* . - With ``SERVICE_MANAGED`` permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations . For more information, see `Activate trusted access for stack sets with AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html>`_ in the *AWS CloudFormation User Guide* .
         :param stack_set_name: The name to associate with the stack set. The name must be unique in the Region where you create your stack set.
         :param administration_role_arn: The Amazon Resource Number (ARN) of the IAM role to use to create this stack set. Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. Use customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *AWS CloudFormation User Guide* . Valid only if the permissions model is ``SELF_MANAGED`` .
-        :param auto_deployment: Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU). For more information, see `Manage automatic deployments for CloudFormation StackSets that use service-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *AWS CloudFormation User Guide* . Required if the permissions model is ``SERVICE_MANAGED`` . (Not used with self-managed permissions.)
+        :param auto_deployment: Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU). For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *AWS CloudFormation User Guide* . Required if the permissions model is ``SERVICE_MANAGED`` . (Not used with self-managed permissions.)
         :param call_as: Specifies whether you are acting as an account administrator in the organization's management account or as a delegated administrator in a member account. By default, ``SELF`` is specified. Use ``SELF`` for stack sets with self-managed permissions. - To create a stack set with service-managed permissions while signed in to the management account, specify ``SELF`` . - To create a stack set with service-managed permissions while signed in to a delegated administrator account, specify ``DELEGATED_ADMIN`` . Your AWS account must be registered as a delegated admin in the management account. For more information, see `Register a delegated administrator <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-delegated-admin.html>`_ in the *AWS CloudFormation User Guide* . Stack sets with service-managed permissions are created in the management account, including stack sets that are created by delegated administrators. Valid only if the permissions model is ``SERVICE_MANAGED`` .
         :param capabilities: The capabilities that are allowed in the stack set. Some stack set templates might include resources that can affect permissions in your AWS account —for example, by creating new IAM users. For more information, see `Acknowledging IAM resources in CloudFormation templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html#using-iam-capabilities>`_ in the *AWS CloudFormation User Guide* .
         :param description: A description of the stack set.

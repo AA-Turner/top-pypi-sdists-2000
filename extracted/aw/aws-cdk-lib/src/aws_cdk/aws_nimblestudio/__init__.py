@@ -74,9 +74,7 @@ class CfnLaunchProfile(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_nimblestudio.CfnLaunchProfile",
 ):
-    '''The ``AWS::NimbleStudio::LaunchProfile`` resource represents access permissions for a set of studio components, including types of workstations, render farms, and shared file systems.
-
-    Launch profiles are shared with studio users to give them access to the set of studio components.
+    '''http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html
     :cloudformationResource: AWS::NimbleStudio::LaunchProfile
@@ -149,14 +147,14 @@ class CfnLaunchProfile(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param ec2_subnet_ids: Unique identifiers for a collection of EC2 subnets.
-        :param launch_profile_protocol_versions: The version number of the protocol that is used by the launch profile. The only valid version is "2021-03-31".
-        :param name: A friendly name for the launch profile.
-        :param stream_configuration: A configuration for a streaming session.
-        :param studio_component_ids: Unique identifiers for a collection of studio components that can be used with this launch profile.
-        :param studio_id: The unique identifier for a studio resource. In Nimble Studio, all other resources are contained in a studio resource.
-        :param description: A human-readable description of the launch profile.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+        :param ec2_subnet_ids: 
+        :param launch_profile_protocol_versions: 
+        :param name: 
+        :param stream_configuration: 
+        :param studio_component_ids: 
+        :param studio_id: 
+        :param description: 
+        :param tags: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__73431936cbffacfb1263654979458319433048ccdba564211a0c846e43353e93)
@@ -208,8 +206,7 @@ class CfnLaunchProfile(
     @builtins.property
     @jsii.member(jsii_name="attrLaunchProfileId")
     def attr_launch_profile_id(self) -> builtins.str:
-        '''The unique identifier for the launch profile resource.
-
+        '''
         :cloudformationAttribute: LaunchProfileId
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrLaunchProfileId"))
@@ -228,7 +225,6 @@ class CfnLaunchProfile(
     @builtins.property
     @jsii.member(jsii_name="ec2SubnetIds")
     def ec2_subnet_ids(self) -> typing.List[builtins.str]:
-        '''Unique identifiers for a collection of EC2 subnets.'''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "ec2SubnetIds"))
 
     @ec2_subnet_ids.setter
@@ -241,7 +237,6 @@ class CfnLaunchProfile(
     @builtins.property
     @jsii.member(jsii_name="launchProfileProtocolVersions")
     def launch_profile_protocol_versions(self) -> typing.List[builtins.str]:
-        '''The version number of the protocol that is used by the launch profile.'''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "launchProfileProtocolVersions"))
 
     @launch_profile_protocol_versions.setter
@@ -257,7 +252,6 @@ class CfnLaunchProfile(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''A friendly name for the launch profile.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -272,7 +266,6 @@ class CfnLaunchProfile(
     def stream_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnLaunchProfile.StreamConfigurationProperty"]:
-        '''A configuration for a streaming session.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLaunchProfile.StreamConfigurationProperty"], jsii.get(self, "streamConfiguration"))
 
     @stream_configuration.setter
@@ -288,7 +281,6 @@ class CfnLaunchProfile(
     @builtins.property
     @jsii.member(jsii_name="studioComponentIds")
     def studio_component_ids(self) -> typing.List[builtins.str]:
-        '''Unique identifiers for a collection of studio components that can be used with this launch profile.'''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "studioComponentIds"))
 
     @studio_component_ids.setter
@@ -301,7 +293,6 @@ class CfnLaunchProfile(
     @builtins.property
     @jsii.member(jsii_name="studioId")
     def studio_id(self) -> builtins.str:
-        '''The unique identifier for a studio resource.'''
         return typing.cast(builtins.str, jsii.get(self, "studioId"))
 
     @studio_id.setter
@@ -314,7 +305,6 @@ class CfnLaunchProfile(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
-        '''A human-readable description of the launch profile.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -327,7 +317,6 @@ class CfnLaunchProfile(
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''An array of key-value pairs to apply to this resource.'''
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
@@ -371,18 +360,17 @@ class CfnLaunchProfile(
             session_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunchProfile.StreamConfigurationSessionStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             volume_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunchProfile.VolumeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''A configuration for a streaming session.
-
-            :param clipboard_mode: Allows or deactivates the use of the system clipboard to copy and paste between the streaming session and streaming client.
-            :param ec2_instance_types: The EC2 instance types that users can select from when launching a streaming session with this launch profile.
-            :param streaming_image_ids: The streaming images that users can select from when launching a streaming session with this launch profile.
-            :param automatic_termination_mode: Indicates if a streaming session created from this launch profile should be terminated automatically or retained without termination after being in a ``STOPPED`` state. - When ``ACTIVATED`` , the streaming session is scheduled for termination after being in the ``STOPPED`` state for the time specified in ``maxStoppedSessionLengthInMinutes`` . - When ``DEACTIVATED`` , the streaming session can remain in the ``STOPPED`` state indefinitely. This parameter is only allowed when ``sessionPersistenceMode`` is ``ACTIVATED`` . When allowed, the default value for this parameter is ``DEACTIVATED`` .
-            :param max_session_length_in_minutes: The length of time, in minutes, that a streaming session can be active before it is stopped or terminated. After this point, Nimble Studio automatically terminates or stops the session. The default length of time is 690 minutes, and the maximum length of time is 30 days.
-            :param max_stopped_session_length_in_minutes: Integer that determines if you can start and stop your sessions and how long a session can stay in the ``STOPPED`` state. The default value is 0. The maximum value is 5760. This field is allowed only when ``sessionPersistenceMode`` is ``ACTIVATED`` and ``automaticTerminationMode`` is ``ACTIVATED`` . If the value is set to 0, your sessions can’t be ``STOPPED`` . If you then call ``StopStreamingSession`` , the session fails. If the time that a session stays in the ``READY`` state exceeds the ``maxSessionLengthInMinutes`` value, the session will automatically be terminated (instead of ``STOPPED`` ). If the value is set to a positive number, the session can be stopped. You can call ``StopStreamingSession`` to stop sessions in the ``READY`` state. If the time that a session stays in the ``READY`` state exceeds the ``maxSessionLengthInMinutes`` value, the session will automatically be stopped (instead of terminated).
-            :param session_backup: Information about the streaming session backup.
-            :param session_persistence_mode: Determine if a streaming session created from this launch profile can configure persistent storage. This means that ``volumeConfiguration`` and ``automaticTerminationMode`` are configured.
-            :param session_storage: The upload storage for a streaming session.
-            :param volume_configuration: Custom volume configuration for the root volumes that are attached to streaming sessions. This parameter is only allowed when ``sessionPersistenceMode`` is ``ACTIVATED`` .
+            '''
+            :param clipboard_mode: 
+            :param ec2_instance_types: 
+            :param streaming_image_ids: 
+            :param automatic_termination_mode: 
+            :param max_session_length_in_minutes: 
+            :param max_stopped_session_length_in_minutes: 
+            :param session_backup: 
+            :param session_persistence_mode: 
+            :param session_storage: 
+            :param volume_configuration: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -457,8 +445,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def clipboard_mode(self) -> builtins.str:
-            '''Allows or deactivates the use of the system clipboard to copy and paste between the streaming session and streaming client.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html#cfn-nimblestudio-launchprofile-streamconfiguration-clipboardmode
             '''
             result = self._values.get("clipboard_mode")
@@ -467,8 +454,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def ec2_instance_types(self) -> typing.List[builtins.str]:
-            '''The EC2 instance types that users can select from when launching a streaming session with this launch profile.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html#cfn-nimblestudio-launchprofile-streamconfiguration-ec2instancetypes
             '''
             result = self._values.get("ec2_instance_types")
@@ -477,8 +463,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def streaming_image_ids(self) -> typing.List[builtins.str]:
-            '''The streaming images that users can select from when launching a streaming session with this launch profile.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html#cfn-nimblestudio-launchprofile-streamconfiguration-streamingimageids
             '''
             result = self._values.get("streaming_image_ids")
@@ -487,13 +472,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def automatic_termination_mode(self) -> typing.Optional[builtins.str]:
-            '''Indicates if a streaming session created from this launch profile should be terminated automatically or retained without termination after being in a ``STOPPED`` state.
-
-            - When ``ACTIVATED`` , the streaming session is scheduled for termination after being in the ``STOPPED`` state for the time specified in ``maxStoppedSessionLengthInMinutes`` .
-            - When ``DEACTIVATED`` , the streaming session can remain in the ``STOPPED`` state indefinitely.
-
-            This parameter is only allowed when ``sessionPersistenceMode`` is ``ACTIVATED`` . When allowed, the default value for this parameter is ``DEACTIVATED`` .
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html#cfn-nimblestudio-launchprofile-streamconfiguration-automaticterminationmode
             '''
             result = self._values.get("automatic_termination_mode")
@@ -501,10 +480,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def max_session_length_in_minutes(self) -> typing.Optional[jsii.Number]:
-            '''The length of time, in minutes, that a streaming session can be active before it is stopped or terminated.
-
-            After this point, Nimble Studio automatically terminates or stops the session. The default length of time is 690 minutes, and the maximum length of time is 30 days.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html#cfn-nimblestudio-launchprofile-streamconfiguration-maxsessionlengthinminutes
             '''
             result = self._values.get("max_session_length_in_minutes")
@@ -512,16 +488,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def max_stopped_session_length_in_minutes(self) -> typing.Optional[jsii.Number]:
-            '''Integer that determines if you can start and stop your sessions and how long a session can stay in the ``STOPPED`` state.
-
-            The default value is 0. The maximum value is 5760.
-
-            This field is allowed only when ``sessionPersistenceMode`` is ``ACTIVATED`` and ``automaticTerminationMode`` is ``ACTIVATED`` .
-
-            If the value is set to 0, your sessions can’t be ``STOPPED`` . If you then call ``StopStreamingSession`` , the session fails. If the time that a session stays in the ``READY`` state exceeds the ``maxSessionLengthInMinutes`` value, the session will automatically be terminated (instead of ``STOPPED`` ).
-
-            If the value is set to a positive number, the session can be stopped. You can call ``StopStreamingSession`` to stop sessions in the ``READY`` state. If the time that a session stays in the ``READY`` state exceeds the ``maxSessionLengthInMinutes`` value, the session will automatically be stopped (instead of terminated).
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html#cfn-nimblestudio-launchprofile-streamconfiguration-maxstoppedsessionlengthinminutes
             '''
             result = self._values.get("max_stopped_session_length_in_minutes")
@@ -531,8 +498,7 @@ class CfnLaunchProfile(
         def session_backup(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLaunchProfile.StreamConfigurationSessionBackupProperty"]]:
-            '''Information about the streaming session backup.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html#cfn-nimblestudio-launchprofile-streamconfiguration-sessionbackup
             '''
             result = self._values.get("session_backup")
@@ -540,10 +506,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def session_persistence_mode(self) -> typing.Optional[builtins.str]:
-            '''Determine if a streaming session created from this launch profile can configure persistent storage.
-
-            This means that ``volumeConfiguration`` and ``automaticTerminationMode`` are configured.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html#cfn-nimblestudio-launchprofile-streamconfiguration-sessionpersistencemode
             '''
             result = self._values.get("session_persistence_mode")
@@ -553,8 +516,7 @@ class CfnLaunchProfile(
         def session_storage(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLaunchProfile.StreamConfigurationSessionStorageProperty"]]:
-            '''The upload storage for a streaming session.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html#cfn-nimblestudio-launchprofile-streamconfiguration-sessionstorage
             '''
             result = self._values.get("session_storage")
@@ -564,10 +526,7 @@ class CfnLaunchProfile(
         def volume_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLaunchProfile.VolumeConfigurationProperty"]]:
-            '''Custom volume configuration for the root volumes that are attached to streaming sessions.
-
-            This parameter is only allowed when ``sessionPersistenceMode`` is ``ACTIVATED`` .
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfiguration.html#cfn-nimblestudio-launchprofile-streamconfiguration-volumeconfiguration
             '''
             result = self._values.get("volume_configuration")
@@ -596,10 +555,9 @@ class CfnLaunchProfile(
             max_backups_to_retain: typing.Optional[jsii.Number] = None,
             mode: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Configures how streaming sessions are backed up when launched from this launch profile.
-
-            :param max_backups_to_retain: The maximum number of backups that each streaming session created from this launch profile can have.
-            :param mode: Specifies how artists sessions are backed up. Configures backups for streaming sessions launched with this launch profile. The default value is ``DEACTIVATED`` , which means that backups are deactivated. To allow backups, set this value to ``AUTOMATIC`` .
+            '''
+            :param max_backups_to_retain: 
+            :param mode: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfigurationsessionbackup.html
             :exampleMetadata: fixture=_generated
@@ -627,8 +585,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def max_backups_to_retain(self) -> typing.Optional[jsii.Number]:
-            '''The maximum number of backups that each streaming session created from this launch profile can have.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfigurationsessionbackup.html#cfn-nimblestudio-launchprofile-streamconfigurationsessionbackup-maxbackupstoretain
             '''
             result = self._values.get("max_backups_to_retain")
@@ -636,10 +593,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def mode(self) -> typing.Optional[builtins.str]:
-            '''Specifies how artists sessions are backed up.
-
-            Configures backups for streaming sessions launched with this launch profile. The default value is ``DEACTIVATED`` , which means that backups are deactivated. To allow backups, set this value to ``AUTOMATIC`` .
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfigurationsessionbackup.html#cfn-nimblestudio-launchprofile-streamconfigurationsessionbackup-mode
             '''
             result = self._values.get("mode")
@@ -668,10 +622,9 @@ class CfnLaunchProfile(
             mode: typing.Sequence[builtins.str],
             root: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunchProfile.StreamingSessionStorageRootProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''The configuration for a streaming session’s upload storage.
-
-            :param mode: Allows artists to upload files to their workstations. The only valid option is ``UPLOAD`` .
-            :param root: The configuration for the upload storage root of the streaming session.
+            '''
+            :param mode: 
+            :param root: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfigurationsessionstorage.html
             :exampleMetadata: fixture=_generated
@@ -704,10 +657,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def mode(self) -> typing.List[builtins.str]:
-            '''Allows artists to upload files to their workstations.
-
-            The only valid option is ``UPLOAD`` .
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfigurationsessionstorage.html#cfn-nimblestudio-launchprofile-streamconfigurationsessionstorage-mode
             '''
             result = self._values.get("mode")
@@ -718,8 +668,7 @@ class CfnLaunchProfile(
         def root(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLaunchProfile.StreamingSessionStorageRootProperty"]]:
-            '''The configuration for the upload storage root of the streaming session.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamconfigurationsessionstorage.html#cfn-nimblestudio-launchprofile-streamconfigurationsessionstorage-root
             '''
             result = self._values.get("root")
@@ -748,10 +697,9 @@ class CfnLaunchProfile(
             linux: typing.Optional[builtins.str] = None,
             windows: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The upload storage root location (folder) on streaming workstations where files are uploaded.
-
-            :param linux: The folder path in Linux workstations where files are uploaded.
-            :param windows: The folder path in Windows workstations where files are uploaded.
+            '''
+            :param linux: 
+            :param windows: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamingsessionstorageroot.html
             :exampleMetadata: fixture=_generated
@@ -779,8 +727,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def linux(self) -> typing.Optional[builtins.str]:
-            '''The folder path in Linux workstations where files are uploaded.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamingsessionstorageroot.html#cfn-nimblestudio-launchprofile-streamingsessionstorageroot-linux
             '''
             result = self._values.get("linux")
@@ -788,8 +735,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def windows(self) -> typing.Optional[builtins.str]:
-            '''The folder path in Windows workstations where files are uploaded.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-streamingsessionstorageroot.html#cfn-nimblestudio-launchprofile-streamingsessionstorageroot-windows
             '''
             result = self._values.get("windows")
@@ -819,13 +765,10 @@ class CfnLaunchProfile(
             size: typing.Optional[jsii.Number] = None,
             throughput: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''Custom volume configuration for the root volumes that are attached to streaming sessions.
-
-            This parameter is only allowed when ``sessionPersistenceMode`` is ``ACTIVATED`` .
-
-            :param iops: The number of I/O operations per second for the root volume that is attached to streaming session.
-            :param size: The size of the root volume that is attached to the streaming session. The root volume size is measured in GiBs.
-            :param throughput: The throughput to provision for the root volume that is attached to the streaming session. The throughput is measured in MiB/s.
+            '''
+            :param iops: 
+            :param size: 
+            :param throughput: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-volumeconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -857,8 +800,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def iops(self) -> typing.Optional[jsii.Number]:
-            '''The number of I/O operations per second for the root volume that is attached to streaming session.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-volumeconfiguration.html#cfn-nimblestudio-launchprofile-volumeconfiguration-iops
             '''
             result = self._values.get("iops")
@@ -866,10 +808,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def size(self) -> typing.Optional[jsii.Number]:
-            '''The size of the root volume that is attached to the streaming session.
-
-            The root volume size is measured in GiBs.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-volumeconfiguration.html#cfn-nimblestudio-launchprofile-volumeconfiguration-size
             '''
             result = self._values.get("size")
@@ -877,10 +816,7 @@ class CfnLaunchProfile(
 
         @builtins.property
         def throughput(self) -> typing.Optional[jsii.Number]:
-            '''The throughput to provision for the root volume that is attached to the streaming session.
-
-            The throughput is measured in MiB/s.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-launchprofile-volumeconfiguration.html#cfn-nimblestudio-launchprofile-volumeconfiguration-throughput
             '''
             result = self._values.get("throughput")
@@ -927,14 +863,14 @@ class CfnLaunchProfileProps:
     ) -> None:
         '''Properties for defining a ``CfnLaunchProfile``.
 
-        :param ec2_subnet_ids: Unique identifiers for a collection of EC2 subnets.
-        :param launch_profile_protocol_versions: The version number of the protocol that is used by the launch profile. The only valid version is "2021-03-31".
-        :param name: A friendly name for the launch profile.
-        :param stream_configuration: A configuration for a streaming session.
-        :param studio_component_ids: Unique identifiers for a collection of studio components that can be used with this launch profile.
-        :param studio_id: The unique identifier for a studio resource. In Nimble Studio, all other resources are contained in a studio resource.
-        :param description: A human-readable description of the launch profile.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+        :param ec2_subnet_ids: 
+        :param launch_profile_protocol_versions: 
+        :param name: 
+        :param stream_configuration: 
+        :param studio_component_ids: 
+        :param studio_id: 
+        :param description: 
+        :param tags: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html
         :exampleMetadata: fixture=_generated
@@ -1013,8 +949,7 @@ class CfnLaunchProfileProps:
 
     @builtins.property
     def ec2_subnet_ids(self) -> typing.List[builtins.str]:
-        '''Unique identifiers for a collection of EC2 subnets.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html#cfn-nimblestudio-launchprofile-ec2subnetids
         '''
         result = self._values.get("ec2_subnet_ids")
@@ -1023,10 +958,7 @@ class CfnLaunchProfileProps:
 
     @builtins.property
     def launch_profile_protocol_versions(self) -> typing.List[builtins.str]:
-        '''The version number of the protocol that is used by the launch profile.
-
-        The only valid version is "2021-03-31".
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html#cfn-nimblestudio-launchprofile-launchprofileprotocolversions
         '''
         result = self._values.get("launch_profile_protocol_versions")
@@ -1035,8 +967,7 @@ class CfnLaunchProfileProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''A friendly name for the launch profile.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html#cfn-nimblestudio-launchprofile-name
         '''
         result = self._values.get("name")
@@ -1047,8 +978,7 @@ class CfnLaunchProfileProps:
     def stream_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, CfnLaunchProfile.StreamConfigurationProperty]:
-        '''A configuration for a streaming session.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html#cfn-nimblestudio-launchprofile-streamconfiguration
         '''
         result = self._values.get("stream_configuration")
@@ -1057,8 +987,7 @@ class CfnLaunchProfileProps:
 
     @builtins.property
     def studio_component_ids(self) -> typing.List[builtins.str]:
-        '''Unique identifiers for a collection of studio components that can be used with this launch profile.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html#cfn-nimblestudio-launchprofile-studiocomponentids
         '''
         result = self._values.get("studio_component_ids")
@@ -1067,10 +996,7 @@ class CfnLaunchProfileProps:
 
     @builtins.property
     def studio_id(self) -> builtins.str:
-        '''The unique identifier for a studio resource.
-
-        In Nimble Studio, all other resources are contained in a studio resource.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html#cfn-nimblestudio-launchprofile-studioid
         '''
         result = self._values.get("studio_id")
@@ -1079,8 +1005,7 @@ class CfnLaunchProfileProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''A human-readable description of the launch profile.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html#cfn-nimblestudio-launchprofile-description
         '''
         result = self._values.get("description")
@@ -1088,10 +1013,7 @@ class CfnLaunchProfileProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''An array of key-value pairs to apply to this resource.
-
-        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-launchprofile.html#cfn-nimblestudio-launchprofile-tags
         '''
         result = self._values.get("tags")
@@ -1115,9 +1037,7 @@ class CfnStreamingImage(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_nimblestudio.CfnStreamingImage",
 ):
-    '''The ``AWS::NimbleStudio::StreamingImage`` resource creates a streaming image in a studio.
-
-    A streaming image defines the operating system and software to be used in an  streaming session.
+    '''http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-streamingimage.html.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-streamingimage.html
     :cloudformationResource: AWS::NimbleStudio::StreamingImage
@@ -1156,11 +1076,11 @@ class CfnStreamingImage(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param ec2_image_id: The ID of an EC2 machine image with which to create the streaming image.
-        :param name: A friendly name for a streaming image resource.
-        :param studio_id: The unique identifier for a studio resource. In Nimble Studio, all other resources are contained in a studio resource.
-        :param description: A human-readable description of the streaming image.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+        :param ec2_image_id: 
+        :param name: 
+        :param studio_id: 
+        :param description: 
+        :param tags: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__71d825f7da9831b1c19a5c5c864573313899a2423aac6b5af05a411a54526743)
@@ -1233,8 +1153,7 @@ class CfnStreamingImage(
     @builtins.property
     @jsii.member(jsii_name="attrEulaIds")
     def attr_eula_ids(self) -> typing.List[builtins.str]:
-        '''The list of IDs of EULAs that must be accepted before a streaming session can be started using this streaming image.
-
+        '''
         :cloudformationAttribute: EulaIds
         '''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "attrEulaIds"))
@@ -1242,8 +1161,7 @@ class CfnStreamingImage(
     @builtins.property
     @jsii.member(jsii_name="attrOwner")
     def attr_owner(self) -> builtins.str:
-        '''The owner of the streaming image, either the studioId that contains the streaming image or 'amazon' for images that are provided by  .
-
+        '''
         :cloudformationAttribute: Owner
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrOwner"))
@@ -1251,8 +1169,7 @@ class CfnStreamingImage(
     @builtins.property
     @jsii.member(jsii_name="attrPlatform")
     def attr_platform(self) -> builtins.str:
-        '''The platform of the streaming image, either WINDOWS or LINUX.
-
+        '''
         :cloudformationAttribute: Platform
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrPlatform"))
@@ -1260,8 +1177,7 @@ class CfnStreamingImage(
     @builtins.property
     @jsii.member(jsii_name="attrStreamingImageId")
     def attr_streaming_image_id(self) -> builtins.str:
-        '''The unique identifier for the streaming image resource.
-
+        '''
         :cloudformationAttribute: StreamingImageId
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStreamingImageId"))
@@ -1280,7 +1196,6 @@ class CfnStreamingImage(
     @builtins.property
     @jsii.member(jsii_name="ec2ImageId")
     def ec2_image_id(self) -> builtins.str:
-        '''The ID of an EC2 machine image with which to create the streaming image.'''
         return typing.cast(builtins.str, jsii.get(self, "ec2ImageId"))
 
     @ec2_image_id.setter
@@ -1293,7 +1208,6 @@ class CfnStreamingImage(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''A friendly name for a streaming image resource.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -1306,7 +1220,6 @@ class CfnStreamingImage(
     @builtins.property
     @jsii.member(jsii_name="studioId")
     def studio_id(self) -> builtins.str:
-        '''The unique identifier for a studio resource.'''
         return typing.cast(builtins.str, jsii.get(self, "studioId"))
 
     @studio_id.setter
@@ -1319,7 +1232,6 @@ class CfnStreamingImage(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
-        '''A human-readable description of the streaming image.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -1332,7 +1244,6 @@ class CfnStreamingImage(
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''An array of key-value pairs to apply to this resource.'''
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
@@ -1357,10 +1268,9 @@ class CfnStreamingImage(
             key_type: builtins.str,
             key_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Specifies how a streaming image is encrypted.
-
-            :param key_type: The type of KMS key that is used to encrypt studio data.
-            :param key_arn: The ARN for a KMS key that is used to encrypt studio data.
+            '''
+            :param key_type: 
+            :param key_arn: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-streamingimage-streamingimageencryptionconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1390,8 +1300,7 @@ class CfnStreamingImage(
 
         @builtins.property
         def key_type(self) -> builtins.str:
-            '''The type of KMS key that is used to encrypt studio data.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-streamingimage-streamingimageencryptionconfiguration.html#cfn-nimblestudio-streamingimage-streamingimageencryptionconfiguration-keytype
             '''
             result = self._values.get("key_type")
@@ -1400,8 +1309,7 @@ class CfnStreamingImage(
 
         @builtins.property
         def key_arn(self) -> typing.Optional[builtins.str]:
-            '''The ARN for a KMS key that is used to encrypt studio data.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-streamingimage-streamingimageencryptionconfiguration.html#cfn-nimblestudio-streamingimage-streamingimageencryptionconfiguration-keyarn
             '''
             result = self._values.get("key_arn")
@@ -1442,11 +1350,11 @@ class CfnStreamingImageProps:
     ) -> None:
         '''Properties for defining a ``CfnStreamingImage``.
 
-        :param ec2_image_id: The ID of an EC2 machine image with which to create the streaming image.
-        :param name: A friendly name for a streaming image resource.
-        :param studio_id: The unique identifier for a studio resource. In Nimble Studio, all other resources are contained in a studio resource.
-        :param description: A human-readable description of the streaming image.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+        :param ec2_image_id: 
+        :param name: 
+        :param studio_id: 
+        :param description: 
+        :param tags: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-streamingimage.html
         :exampleMetadata: fixture=_generated
@@ -1488,8 +1396,7 @@ class CfnStreamingImageProps:
 
     @builtins.property
     def ec2_image_id(self) -> builtins.str:
-        '''The ID of an EC2 machine image with which to create the streaming image.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-streamingimage.html#cfn-nimblestudio-streamingimage-ec2imageid
         '''
         result = self._values.get("ec2_image_id")
@@ -1498,8 +1405,7 @@ class CfnStreamingImageProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''A friendly name for a streaming image resource.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-streamingimage.html#cfn-nimblestudio-streamingimage-name
         '''
         result = self._values.get("name")
@@ -1508,10 +1414,7 @@ class CfnStreamingImageProps:
 
     @builtins.property
     def studio_id(self) -> builtins.str:
-        '''The unique identifier for a studio resource.
-
-        In Nimble Studio, all other resources are contained in a studio resource.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-streamingimage.html#cfn-nimblestudio-streamingimage-studioid
         '''
         result = self._values.get("studio_id")
@@ -1520,8 +1423,7 @@ class CfnStreamingImageProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''A human-readable description of the streaming image.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-streamingimage.html#cfn-nimblestudio-streamingimage-description
         '''
         result = self._values.get("description")
@@ -1529,10 +1431,7 @@ class CfnStreamingImageProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''An array of key-value pairs to apply to this resource.
-
-        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-streamingimage.html#cfn-nimblestudio-streamingimage-tags
         '''
         result = self._values.get("tags")
@@ -1556,11 +1455,7 @@ class CfnStudio(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_nimblestudio.CfnStudio",
 ):
-    '''The ``AWS::NimbleStudio::Studio`` resource creates a new studio resource. In  , all other resources are contained in a studio.
-
-    When creating a studio, two IAM roles must be provided: the admin role and the user role. These roles are assumed by your users when they log in to the  portal. The user role must have the AmazonNimbleStudio-StudioUser managed policy attached for the portal to function properly. The Admin Role must have the AmazonNimbleStudio-StudioAdmin managed policy attached for the portal to function properly.
-
-    You can optionally specify an AWS Key Management Service key in the StudioEncryptionConfiguration. In Nimble Studio, resource names, descriptions, initialization scripts, and other data you provide are always encrypted at rest using an AWS Key Management Service key. By default, this key is owned by AWS and managed on your behalf. You may provide your own AWS Key Management Service key when calling CreateStudio to encrypt this data using a key that you own and manage. When providing an AWS Key Management Service key during studio creation,  creates AWS Key Management Service grants in your account to provide your studio user and admin roles access to these AWS Key Management Service keys. If you delete this grant, the studio will no longer be accessible to your portal users. If you delete the studio AWS Key Management Service key, your studio will no longer be accessible.
+    '''http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html
     :cloudformationResource: AWS::NimbleStudio::Studio
@@ -1606,12 +1501,12 @@ class CfnStudio(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param admin_role_arn: The IAM role that studio admins assume when logging in to the Nimble Studio portal.
-        :param display_name: A friendly name for the studio.
-        :param studio_name: The name of the studio, as included in the URL when accessing it in the Nimble Studio portal.
-        :param user_role_arn: The IAM role that studio users assume when logging in to the Nimble Studio portal.
-        :param studio_encryption_configuration: Configuration of the encryption method that is used for the studio.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+        :param admin_role_arn: 
+        :param display_name: 
+        :param studio_name: 
+        :param user_role_arn: 
+        :param studio_encryption_configuration: 
+        :param tags: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__45420baa577c3a8eb786b8d20404bcbc5573494502885eb1f55a897024f77af2)
@@ -1661,10 +1556,7 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="attrHomeRegion")
     def attr_home_region(self) -> builtins.str:
-        '''The AWS Region where the studio resource is located.
-
-        For example, ``us-west-2`` .
-
+        '''
         :cloudformationAttribute: HomeRegion
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrHomeRegion"))
@@ -1672,8 +1564,7 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="attrSsoClientId")
     def attr_sso_client_id(self) -> builtins.str:
-        '''The IAM Identity Center application client ID that is used to integrate with IAM Identity Center , which enables IAM Identity Center users to log into the  portal.
-
+        '''
         :cloudformationAttribute: SsoClientId
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrSsoClientId"))
@@ -1681,8 +1572,7 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="attrStudioId")
     def attr_studio_id(self) -> builtins.str:
-        '''The unique identifier for the studio resource.
-
+        '''
         :cloudformationAttribute: StudioId
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStudioId"))
@@ -1690,8 +1580,7 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="attrStudioUrl")
     def attr_studio_url(self) -> builtins.str:
-        '''The unique identifier for the studio resource.
-
+        '''
         :cloudformationAttribute: StudioUrl
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStudioUrl"))
@@ -1710,7 +1599,6 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="adminRoleArn")
     def admin_role_arn(self) -> builtins.str:
-        '''The IAM role that studio admins assume when logging in to the Nimble Studio portal.'''
         return typing.cast(builtins.str, jsii.get(self, "adminRoleArn"))
 
     @admin_role_arn.setter
@@ -1723,7 +1611,6 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="displayName")
     def display_name(self) -> builtins.str:
-        '''A friendly name for the studio.'''
         return typing.cast(builtins.str, jsii.get(self, "displayName"))
 
     @display_name.setter
@@ -1736,7 +1623,6 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="studioName")
     def studio_name(self) -> builtins.str:
-        '''The name of the studio, as included in the URL when accessing it in the Nimble Studio portal.'''
         return typing.cast(builtins.str, jsii.get(self, "studioName"))
 
     @studio_name.setter
@@ -1749,7 +1635,6 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="userRoleArn")
     def user_role_arn(self) -> builtins.str:
-        '''The IAM role that studio users assume when logging in to the Nimble Studio portal.'''
         return typing.cast(builtins.str, jsii.get(self, "userRoleArn"))
 
     @user_role_arn.setter
@@ -1764,7 +1649,6 @@ class CfnStudio(
     def studio_encryption_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStudio.StudioEncryptionConfigurationProperty"]]:
-        '''Configuration of the encryption method that is used for the studio.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStudio.StudioEncryptionConfigurationProperty"]], jsii.get(self, "studioEncryptionConfiguration"))
 
     @studio_encryption_configuration.setter
@@ -1780,7 +1664,6 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''An array of key-value pairs to apply to this resource.'''
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
@@ -1805,10 +1688,9 @@ class CfnStudio(
             key_type: builtins.str,
             key_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Configuration of the encryption method that is used for the studio.
-
-            :param key_type: The type of KMS key that is used to encrypt studio data.
-            :param key_arn: The ARN for a KMS key that is used to encrypt studio data.
+            '''
+            :param key_type: 
+            :param key_arn: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studio-studioencryptionconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1838,8 +1720,7 @@ class CfnStudio(
 
         @builtins.property
         def key_type(self) -> builtins.str:
-            '''The type of KMS key that is used to encrypt studio data.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studio-studioencryptionconfiguration.html#cfn-nimblestudio-studio-studioencryptionconfiguration-keytype
             '''
             result = self._values.get("key_type")
@@ -1848,8 +1729,7 @@ class CfnStudio(
 
         @builtins.property
         def key_arn(self) -> typing.Optional[builtins.str]:
-            '''The ARN for a KMS key that is used to encrypt studio data.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studio-studioencryptionconfiguration.html#cfn-nimblestudio-studio-studioencryptionconfiguration-keyarn
             '''
             result = self._values.get("key_arn")
@@ -1873,13 +1753,7 @@ class CfnStudioComponent(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_nimblestudio.CfnStudioComponent",
 ):
-    '''The ``AWS::NimbleStudio::StudioComponent`` resource represents a network resource that is used by a studio's users and workflows.
-
-    A typical studio contains studio components for the following: a render farm, an Active Directory, a licensing service, and a shared file system.
-
-    Access to a studio component is managed by specifying security groups for the resource, as well as its endpoint.
-
-    A studio component also has a set of initialization scripts, which are returned by ``GetLaunchProfileInitialization`` . These initialization scripts run on streaming sessions when they start. They provide users with flexibility in controlling how studio resources are configured on a streaming session.
+    '''http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html
     :cloudformationResource: AWS::NimbleStudio::StudioComponent
@@ -1959,16 +1833,16 @@ class CfnStudioComponent(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param name: A friendly name for the studio component resource.
-        :param studio_id: The unique identifier for a studio resource. In Nimble Studio, all other resources are contained in a studio resource.
-        :param type: The type of the studio component.
-        :param configuration: The configuration of the studio component, based on component type.
-        :param description: A human-readable description for the studio component resource.
-        :param ec2_security_group_ids: The EC2 security groups that control access to the studio component.
-        :param initialization_scripts: Initialization scripts for studio components.
-        :param script_parameters: Parameters for the studio component scripts.
-        :param subtype: The specific subtype of a studio component.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+        :param name: 
+        :param studio_id: 
+        :param type: 
+        :param configuration: 
+        :param description: 
+        :param ec2_security_group_ids: 
+        :param initialization_scripts: 
+        :param script_parameters: 
+        :param subtype: 
+        :param tags: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c22fe0082d9b44d07e4ef368d5f042dd2864628399c458b780e181e7bd4c1351)
@@ -2022,8 +1896,7 @@ class CfnStudioComponent(
     @builtins.property
     @jsii.member(jsii_name="attrStudioComponentId")
     def attr_studio_component_id(self) -> builtins.str:
-        '''The unique identifier for the studio component resource.
-
+        '''
         :cloudformationAttribute: StudioComponentId
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStudioComponentId"))
@@ -2042,7 +1915,6 @@ class CfnStudioComponent(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''A friendly name for the studio component resource.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -2055,7 +1927,6 @@ class CfnStudioComponent(
     @builtins.property
     @jsii.member(jsii_name="studioId")
     def studio_id(self) -> builtins.str:
-        '''The unique identifier for a studio resource.'''
         return typing.cast(builtins.str, jsii.get(self, "studioId"))
 
     @studio_id.setter
@@ -2068,7 +1939,6 @@ class CfnStudioComponent(
     @builtins.property
     @jsii.member(jsii_name="type")
     def type(self) -> builtins.str:
-        '''The type of the studio component.'''
         return typing.cast(builtins.str, jsii.get(self, "type"))
 
     @type.setter
@@ -2083,7 +1953,6 @@ class CfnStudioComponent(
     def configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.StudioComponentConfigurationProperty"]]:
-        '''The configuration of the studio component, based on component type.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.StudioComponentConfigurationProperty"]], jsii.get(self, "configuration"))
 
     @configuration.setter
@@ -2099,7 +1968,6 @@ class CfnStudioComponent(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
-        '''A human-readable description for the studio component resource.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -2112,7 +1980,6 @@ class CfnStudioComponent(
     @builtins.property
     @jsii.member(jsii_name="ec2SecurityGroupIds")
     def ec2_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''The EC2 security groups that control access to the studio component.'''
         return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "ec2SecurityGroupIds"))
 
     @ec2_security_group_ids.setter
@@ -2130,7 +1997,6 @@ class CfnStudioComponent(
     def initialization_scripts(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.StudioComponentInitializationScriptProperty"]]]]:
-        '''Initialization scripts for studio components.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.StudioComponentInitializationScriptProperty"]]]], jsii.get(self, "initializationScripts"))
 
     @initialization_scripts.setter
@@ -2148,7 +2014,6 @@ class CfnStudioComponent(
     def script_parameters(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.ScriptParameterKeyValueProperty"]]]]:
-        '''Parameters for the studio component scripts.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.ScriptParameterKeyValueProperty"]]]], jsii.get(self, "scriptParameters"))
 
     @script_parameters.setter
@@ -2164,7 +2029,6 @@ class CfnStudioComponent(
     @builtins.property
     @jsii.member(jsii_name="subtype")
     def subtype(self) -> typing.Optional[builtins.str]:
-        '''The specific subtype of a studio component.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "subtype"))
 
     @subtype.setter
@@ -2177,7 +2041,6 @@ class CfnStudioComponent(
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''An array of key-value pairs to apply to this resource.'''
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
@@ -2202,10 +2065,9 @@ class CfnStudioComponent(
             name: typing.Optional[builtins.str] = None,
             value: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''An LDAP attribute of an Active Directory computer account, in the form of a name:value pair.
-
-            :param name: The name for the LDAP attribute.
-            :param value: The value for the LDAP attribute.
+            '''
+            :param name: 
+            :param value: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-activedirectorycomputerattribute.html
             :exampleMetadata: fixture=_generated
@@ -2233,8 +2095,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
-            '''The name for the LDAP attribute.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-activedirectorycomputerattribute.html#cfn-nimblestudio-studiocomponent-activedirectorycomputerattribute-name
             '''
             result = self._values.get("name")
@@ -2242,8 +2103,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def value(self) -> typing.Optional[builtins.str]:
-            '''The value for the LDAP attribute.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-activedirectorycomputerattribute.html#cfn-nimblestudio-studiocomponent-activedirectorycomputerattribute-value
             '''
             result = self._values.get("value")
@@ -2277,11 +2137,10 @@ class CfnStudioComponent(
             directory_id: typing.Optional[builtins.str] = None,
             organizational_unit_distinguished_name: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The configuration for a AWS Directory Service for Microsoft Active Directory studio resource.
-
-            :param computer_attributes: A collection of custom attributes for an Active Directory computer.
-            :param directory_id: The directory ID of the AWS Directory Service for Microsoft Active Directory to access using this studio component.
-            :param organizational_unit_distinguished_name: The distinguished name (DN) and organizational unit (OU) of an Active Directory computer.
+            '''
+            :param computer_attributes: 
+            :param directory_id: 
+            :param organizational_unit_distinguished_name: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-activedirectoryconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2318,8 +2177,7 @@ class CfnStudioComponent(
         def computer_attributes(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.ActiveDirectoryComputerAttributeProperty"]]]]:
-            '''A collection of custom attributes for an Active Directory computer.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-activedirectoryconfiguration.html#cfn-nimblestudio-studiocomponent-activedirectoryconfiguration-computerattributes
             '''
             result = self._values.get("computer_attributes")
@@ -2327,8 +2185,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def directory_id(self) -> typing.Optional[builtins.str]:
-            '''The directory ID of the AWS Directory Service for Microsoft Active Directory to access using this studio component.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-activedirectoryconfiguration.html#cfn-nimblestudio-studiocomponent-activedirectoryconfiguration-directoryid
             '''
             result = self._values.get("directory_id")
@@ -2338,8 +2195,7 @@ class CfnStudioComponent(
         def organizational_unit_distinguished_name(
             self,
         ) -> typing.Optional[builtins.str]:
-            '''The distinguished name (DN) and organizational unit (OU) of an Active Directory computer.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-activedirectoryconfiguration.html#cfn-nimblestudio-studiocomponent-activedirectoryconfiguration-organizationalunitdistinguishedname
             '''
             result = self._values.get("organizational_unit_distinguished_name")
@@ -2371,10 +2227,9 @@ class CfnStudioComponent(
             active_directory_user: typing.Optional[builtins.str] = None,
             endpoint: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The configuration for a render farm that is associated with a studio resource.
-
-            :param active_directory_user: The name of an Active Directory user that is used on ComputeFarm worker instances.
-            :param endpoint: The endpoint of the ComputeFarm that is accessed by the studio component resource.
+            '''
+            :param active_directory_user: 
+            :param endpoint: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-computefarmconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2402,8 +2257,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def active_directory_user(self) -> typing.Optional[builtins.str]:
-            '''The name of an Active Directory user that is used on ComputeFarm worker instances.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-computefarmconfiguration.html#cfn-nimblestudio-studiocomponent-computefarmconfiguration-activedirectoryuser
             '''
             result = self._values.get("active_directory_user")
@@ -2411,8 +2265,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def endpoint(self) -> typing.Optional[builtins.str]:
-            '''The endpoint of the ComputeFarm that is accessed by the studio component resource.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-computefarmconfiguration.html#cfn-nimblestudio-studiocomponent-computefarmconfiguration-endpoint
             '''
             result = self._values.get("endpoint")
@@ -2436,9 +2289,8 @@ class CfnStudioComponent(
     )
     class LicenseServiceConfigurationProperty:
         def __init__(self, *, endpoint: typing.Optional[builtins.str] = None) -> None:
-            '''The configuration for a license service that is associated with a studio resource.
-
-            :param endpoint: The endpoint of the license service that is accessed by the studio component resource.
+            '''
+            :param endpoint: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-licenseserviceconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2462,8 +2314,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def endpoint(self) -> typing.Optional[builtins.str]:
-            '''The endpoint of the license service that is accessed by the studio component resource.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-licenseserviceconfiguration.html#cfn-nimblestudio-studiocomponent-licenseserviceconfiguration-endpoint
             '''
             result = self._values.get("endpoint")
@@ -2492,10 +2343,9 @@ class CfnStudioComponent(
             key: typing.Optional[builtins.str] = None,
             value: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''A parameter for a studio component script, in the form of a key-value pair.
-
-            :param key: A script parameter key.
-            :param value: A script parameter value.
+            '''
+            :param key: 
+            :param value: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-scriptparameterkeyvalue.html
             :exampleMetadata: fixture=_generated
@@ -2523,8 +2373,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def key(self) -> typing.Optional[builtins.str]:
-            '''A script parameter key.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-scriptparameterkeyvalue.html#cfn-nimblestudio-studiocomponent-scriptparameterkeyvalue-key
             '''
             result = self._values.get("key")
@@ -2532,8 +2381,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def value(self) -> typing.Optional[builtins.str]:
-            '''A script parameter value.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-scriptparameterkeyvalue.html#cfn-nimblestudio-studiocomponent-scriptparameterkeyvalue-value
             '''
             result = self._values.get("value")
@@ -2571,13 +2419,12 @@ class CfnStudioComponent(
             share_name: typing.Optional[builtins.str] = None,
             windows_mount_drive: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The configuration for a shared file storage system that is associated with a studio resource.
-
-            :param endpoint: The endpoint of the shared file system that is accessed by the studio component resource.
-            :param file_system_id: The unique identifier for a file system.
-            :param linux_mount_point: The mount location for a shared file system on a Linux virtual workstation.
-            :param share_name: The name of the file share.
-            :param windows_mount_drive: The mount location for a shared file system on a Windows virtual workstation.
+            '''
+            :param endpoint: 
+            :param file_system_id: 
+            :param linux_mount_point: 
+            :param share_name: 
+            :param windows_mount_drive: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-sharedfilesystemconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2617,8 +2464,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def endpoint(self) -> typing.Optional[builtins.str]:
-            '''The endpoint of the shared file system that is accessed by the studio component resource.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-sharedfilesystemconfiguration.html#cfn-nimblestudio-studiocomponent-sharedfilesystemconfiguration-endpoint
             '''
             result = self._values.get("endpoint")
@@ -2626,8 +2472,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def file_system_id(self) -> typing.Optional[builtins.str]:
-            '''The unique identifier for a file system.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-sharedfilesystemconfiguration.html#cfn-nimblestudio-studiocomponent-sharedfilesystemconfiguration-filesystemid
             '''
             result = self._values.get("file_system_id")
@@ -2635,8 +2480,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def linux_mount_point(self) -> typing.Optional[builtins.str]:
-            '''The mount location for a shared file system on a Linux virtual workstation.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-sharedfilesystemconfiguration.html#cfn-nimblestudio-studiocomponent-sharedfilesystemconfiguration-linuxmountpoint
             '''
             result = self._values.get("linux_mount_point")
@@ -2644,8 +2488,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def share_name(self) -> typing.Optional[builtins.str]:
-            '''The name of the file share.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-sharedfilesystemconfiguration.html#cfn-nimblestudio-studiocomponent-sharedfilesystemconfiguration-sharename
             '''
             result = self._values.get("share_name")
@@ -2653,8 +2496,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def windows_mount_drive(self) -> typing.Optional[builtins.str]:
-            '''The mount location for a shared file system on a Windows virtual workstation.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-sharedfilesystemconfiguration.html#cfn-nimblestudio-studiocomponent-sharedfilesystemconfiguration-windowsmountdrive
             '''
             result = self._values.get("windows_mount_drive")
@@ -2690,12 +2532,11 @@ class CfnStudioComponent(
             license_service_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStudioComponent.LicenseServiceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             shared_file_system_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStudioComponent.SharedFileSystemConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''The configuration of the studio component, based on component type.
-
-            :param active_directory_configuration: The configuration for a AWS Directory Service for Microsoft Active Directory studio resource.
-            :param compute_farm_configuration: The configuration for a render farm that is associated with a studio resource.
-            :param license_service_configuration: The configuration for a license service that is associated with a studio resource.
-            :param shared_file_system_configuration: The configuration for a shared file storage system that is associated with a studio resource.
+            '''
+            :param active_directory_configuration: 
+            :param compute_farm_configuration: 
+            :param license_service_configuration: 
+            :param shared_file_system_configuration: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-studiocomponentconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2751,8 +2592,7 @@ class CfnStudioComponent(
         def active_directory_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.ActiveDirectoryConfigurationProperty"]]:
-            '''The configuration for a AWS Directory Service for Microsoft Active Directory studio resource.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-studiocomponentconfiguration.html#cfn-nimblestudio-studiocomponent-studiocomponentconfiguration-activedirectoryconfiguration
             '''
             result = self._values.get("active_directory_configuration")
@@ -2762,8 +2602,7 @@ class CfnStudioComponent(
         def compute_farm_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.ComputeFarmConfigurationProperty"]]:
-            '''The configuration for a render farm that is associated with a studio resource.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-studiocomponentconfiguration.html#cfn-nimblestudio-studiocomponent-studiocomponentconfiguration-computefarmconfiguration
             '''
             result = self._values.get("compute_farm_configuration")
@@ -2773,8 +2612,7 @@ class CfnStudioComponent(
         def license_service_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.LicenseServiceConfigurationProperty"]]:
-            '''The configuration for a license service that is associated with a studio resource.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-studiocomponentconfiguration.html#cfn-nimblestudio-studiocomponent-studiocomponentconfiguration-licenseserviceconfiguration
             '''
             result = self._values.get("license_service_configuration")
@@ -2784,8 +2622,7 @@ class CfnStudioComponent(
         def shared_file_system_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStudioComponent.SharedFileSystemConfigurationProperty"]]:
-            '''The configuration for a shared file storage system that is associated with a studio resource.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-studiocomponentconfiguration.html#cfn-nimblestudio-studiocomponent-studiocomponentconfiguration-sharedfilesystemconfiguration
             '''
             result = self._values.get("shared_file_system_configuration")
@@ -2821,12 +2658,11 @@ class CfnStudioComponent(
             run_context: typing.Optional[builtins.str] = None,
             script: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Initialization scripts for studio components.
-
-            :param launch_profile_protocol_version: The version number of the protocol that is used by the launch profile. The only valid version is "2021-03-31".
-            :param platform: The platform of the initialization script, either Windows or Linux.
-            :param run_context: The method to use when running the initialization script.
-            :param script: The initialization script.
+            '''
+            :param launch_profile_protocol_version: 
+            :param platform: 
+            :param run_context: 
+            :param script: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-studiocomponentinitializationscript.html
             :exampleMetadata: fixture=_generated
@@ -2862,10 +2698,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def launch_profile_protocol_version(self) -> typing.Optional[builtins.str]:
-            '''The version number of the protocol that is used by the launch profile.
-
-            The only valid version is "2021-03-31".
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-studiocomponentinitializationscript.html#cfn-nimblestudio-studiocomponent-studiocomponentinitializationscript-launchprofileprotocolversion
             '''
             result = self._values.get("launch_profile_protocol_version")
@@ -2873,8 +2706,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def platform(self) -> typing.Optional[builtins.str]:
-            '''The platform of the initialization script, either Windows or Linux.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-studiocomponentinitializationscript.html#cfn-nimblestudio-studiocomponent-studiocomponentinitializationscript-platform
             '''
             result = self._values.get("platform")
@@ -2882,8 +2714,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def run_context(self) -> typing.Optional[builtins.str]:
-            '''The method to use when running the initialization script.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-studiocomponentinitializationscript.html#cfn-nimblestudio-studiocomponent-studiocomponentinitializationscript-runcontext
             '''
             result = self._values.get("run_context")
@@ -2891,8 +2722,7 @@ class CfnStudioComponent(
 
         @builtins.property
         def script(self) -> typing.Optional[builtins.str]:
-            '''The initialization script.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-nimblestudio-studiocomponent-studiocomponentinitializationscript.html#cfn-nimblestudio-studiocomponent-studiocomponentinitializationscript-script
             '''
             result = self._values.get("script")
@@ -2943,16 +2773,16 @@ class CfnStudioComponentProps:
     ) -> None:
         '''Properties for defining a ``CfnStudioComponent``.
 
-        :param name: A friendly name for the studio component resource.
-        :param studio_id: The unique identifier for a studio resource. In Nimble Studio, all other resources are contained in a studio resource.
-        :param type: The type of the studio component.
-        :param configuration: The configuration of the studio component, based on component type.
-        :param description: A human-readable description for the studio component resource.
-        :param ec2_security_group_ids: The EC2 security groups that control access to the studio component.
-        :param initialization_scripts: Initialization scripts for studio components.
-        :param script_parameters: Parameters for the studio component scripts.
-        :param subtype: The specific subtype of a studio component.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+        :param name: 
+        :param studio_id: 
+        :param type: 
+        :param configuration: 
+        :param description: 
+        :param ec2_security_group_ids: 
+        :param initialization_scripts: 
+        :param script_parameters: 
+        :param subtype: 
+        :param tags: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html
         :exampleMetadata: fixture=_generated
@@ -3045,8 +2875,7 @@ class CfnStudioComponentProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''A friendly name for the studio component resource.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html#cfn-nimblestudio-studiocomponent-name
         '''
         result = self._values.get("name")
@@ -3055,10 +2884,7 @@ class CfnStudioComponentProps:
 
     @builtins.property
     def studio_id(self) -> builtins.str:
-        '''The unique identifier for a studio resource.
-
-        In Nimble Studio, all other resources are contained in a studio resource.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html#cfn-nimblestudio-studiocomponent-studioid
         '''
         result = self._values.get("studio_id")
@@ -3067,8 +2893,7 @@ class CfnStudioComponentProps:
 
     @builtins.property
     def type(self) -> builtins.str:
-        '''The type of the studio component.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html#cfn-nimblestudio-studiocomponent-type
         '''
         result = self._values.get("type")
@@ -3079,8 +2904,7 @@ class CfnStudioComponentProps:
     def configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStudioComponent.StudioComponentConfigurationProperty]]:
-        '''The configuration of the studio component, based on component type.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html#cfn-nimblestudio-studiocomponent-configuration
         '''
         result = self._values.get("configuration")
@@ -3088,8 +2912,7 @@ class CfnStudioComponentProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''A human-readable description for the studio component resource.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html#cfn-nimblestudio-studiocomponent-description
         '''
         result = self._values.get("description")
@@ -3097,8 +2920,7 @@ class CfnStudioComponentProps:
 
     @builtins.property
     def ec2_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''The EC2 security groups that control access to the studio component.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html#cfn-nimblestudio-studiocomponent-ec2securitygroupids
         '''
         result = self._values.get("ec2_security_group_ids")
@@ -3108,8 +2930,7 @@ class CfnStudioComponentProps:
     def initialization_scripts(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStudioComponent.StudioComponentInitializationScriptProperty]]]]:
-        '''Initialization scripts for studio components.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html#cfn-nimblestudio-studiocomponent-initializationscripts
         '''
         result = self._values.get("initialization_scripts")
@@ -3119,8 +2940,7 @@ class CfnStudioComponentProps:
     def script_parameters(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStudioComponent.ScriptParameterKeyValueProperty]]]]:
-        '''Parameters for the studio component scripts.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html#cfn-nimblestudio-studiocomponent-scriptparameters
         '''
         result = self._values.get("script_parameters")
@@ -3128,8 +2948,7 @@ class CfnStudioComponentProps:
 
     @builtins.property
     def subtype(self) -> typing.Optional[builtins.str]:
-        '''The specific subtype of a studio component.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html#cfn-nimblestudio-studiocomponent-subtype
         '''
         result = self._values.get("subtype")
@@ -3137,10 +2956,7 @@ class CfnStudioComponentProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''An array of key-value pairs to apply to this resource.
-
-        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studiocomponent.html#cfn-nimblestudio-studiocomponent-tags
         '''
         result = self._values.get("tags")
@@ -3183,12 +2999,12 @@ class CfnStudioProps:
     ) -> None:
         '''Properties for defining a ``CfnStudio``.
 
-        :param admin_role_arn: The IAM role that studio admins assume when logging in to the Nimble Studio portal.
-        :param display_name: A friendly name for the studio.
-        :param studio_name: The name of the studio, as included in the URL when accessing it in the Nimble Studio portal.
-        :param user_role_arn: The IAM role that studio users assume when logging in to the Nimble Studio portal.
-        :param studio_encryption_configuration: Configuration of the encryption method that is used for the studio.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+        :param admin_role_arn: 
+        :param display_name: 
+        :param studio_name: 
+        :param user_role_arn: 
+        :param studio_encryption_configuration: 
+        :param tags: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html
         :exampleMetadata: fixture=_generated
@@ -3238,8 +3054,7 @@ class CfnStudioProps:
 
     @builtins.property
     def admin_role_arn(self) -> builtins.str:
-        '''The IAM role that studio admins assume when logging in to the Nimble Studio portal.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html#cfn-nimblestudio-studio-adminrolearn
         '''
         result = self._values.get("admin_role_arn")
@@ -3248,8 +3063,7 @@ class CfnStudioProps:
 
     @builtins.property
     def display_name(self) -> builtins.str:
-        '''A friendly name for the studio.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html#cfn-nimblestudio-studio-displayname
         '''
         result = self._values.get("display_name")
@@ -3258,8 +3072,7 @@ class CfnStudioProps:
 
     @builtins.property
     def studio_name(self) -> builtins.str:
-        '''The name of the studio, as included in the URL when accessing it in the Nimble Studio portal.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html#cfn-nimblestudio-studio-studioname
         '''
         result = self._values.get("studio_name")
@@ -3268,8 +3081,7 @@ class CfnStudioProps:
 
     @builtins.property
     def user_role_arn(self) -> builtins.str:
-        '''The IAM role that studio users assume when logging in to the Nimble Studio portal.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html#cfn-nimblestudio-studio-userrolearn
         '''
         result = self._values.get("user_role_arn")
@@ -3280,8 +3092,7 @@ class CfnStudioProps:
     def studio_encryption_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStudio.StudioEncryptionConfigurationProperty]]:
-        '''Configuration of the encryption method that is used for the studio.
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html#cfn-nimblestudio-studio-studioencryptionconfiguration
         '''
         result = self._values.get("studio_encryption_configuration")
@@ -3289,10 +3100,7 @@ class CfnStudioProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''An array of key-value pairs to apply to this resource.
-
-        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
-
+        '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html#cfn-nimblestudio-studio-tags
         '''
         result = self._values.get("tags")

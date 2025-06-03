@@ -1,6 +1,7 @@
 # mypy: allow-untyped-defs
 from __future__ import annotations
 
+from collections.abc import Generator
 import contextlib
 import io
 from io import UnsupportedOperation
@@ -11,7 +12,6 @@ import sys
 import textwrap
 from typing import BinaryIO
 from typing import cast
-from typing import Generator
 from typing import TextIO
 
 from _pytest import capture
@@ -445,6 +445,38 @@ class TestCaptureFixture:
             *opt,
         )
         reprec.assertoutcome(passed=1)
+
+    def test_capteesys(self, pytester: Pytester) -> None:
+        p = pytester.makepyfile(
+            """\
+            import sys
+            def test_one(capteesys):
+                print("sTdoUt")
+                print("sTdeRr", file=sys.stderr)
+                out, err = capteesys.readouterr()
+                assert out == "sTdoUt\\n"
+                assert err == "sTdeRr\\n"
+            """
+        )
+        # -rN and --capture=tee-sys means we'll read them on stdout/stderr,
+        # as opposed to both being reported on stdout
+        result = pytester.runpytest(p, "--quiet", "--quiet", "-rN", "--capture=tee-sys")
+        assert result.ret == ExitCode.OK
+        result.stdout.fnmatch_lines(["sTdoUt"])  # tee'd out
+        result.stderr.fnmatch_lines(["sTdeRr"])  # tee'd out
+
+        result = pytester.runpytest(p, "--quiet", "--quiet", "-rA", "--capture=tee-sys")
+        assert result.ret == ExitCode.OK
+        result.stdout.fnmatch_lines(
+            ["sTdoUt", "sTdoUt", "sTdeRr"]
+        )  # tee'd out, the next two reported
+        result.stderr.fnmatch_lines(["sTdeRr"])  # tee'd out
+
+        # -rA and --capture=sys means we'll read them on stdout.
+        result = pytester.runpytest(p, "--quiet", "--quiet", "-rA", "--capture=sys")
+        assert result.ret == ExitCode.OK
+        result.stdout.fnmatch_lines(["sTdoUt", "sTdeRr"])  # no tee, just reported
+        assert not result.stderr.lines
 
     def test_capsyscapfd(self, pytester: Pytester) -> None:
         p = pytester.makepyfile(

@@ -370,8 +370,10 @@ class CfnCluster(
         ) -> None:
             '''The accounting configuration includes configurable settings for Slurm accounting.
 
-            :param mode: The default value is ``STANDARD``. A value of ``STANDARD`` means that Slurm accounting is enabled. Default: - "NONE"
-            :param default_purge_time_in_days: The default value for all purge settings for ``slurmdbd.conf``. For more information, see the `slurmdbd.conf documentation at SchedMD <https://slurm.schedmd.com/slurmdbd.conf.html>`_. The default value is ``-1``. A value of ``-1`` means there is no purge time and records persist as long as the cluster exists. Default: - -1
+            It's a property of the ``ClusterSlurmConfiguration`` object.
+
+            :param mode: The default value for ``mode`` is ``STANDARD`` . A value of ``STANDARD`` means Slurm accounting is enabled. Default: - "NONE"
+            :param default_purge_time_in_days: The default value for all purge settings for ``slurmdbd.conf`` . For more information, see the `slurmdbd.conf documentation at SchedMD <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurmdbd.conf.html>`_ . The default value ``-1`` means there is no purge time and records persist as long as the cluster exists. .. epigraph:: ``0`` isn't a valid value. Default: - -1
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-accounting.html
             :exampleMetadata: fixture=_generated
@@ -401,9 +403,9 @@ class CfnCluster(
 
         @builtins.property
         def mode(self) -> builtins.str:
-            '''The default value is ``STANDARD``.
+            '''The default value for ``mode`` is ``STANDARD`` .
 
-            A value of ``STANDARD`` means that Slurm accounting is enabled.
+            A value of ``STANDARD`` means Slurm accounting is enabled.
 
             :default: - "NONE"
 
@@ -415,7 +417,12 @@ class CfnCluster(
 
         @builtins.property
         def default_purge_time_in_days(self) -> typing.Optional[jsii.Number]:
-            '''The default value for all purge settings for ``slurmdbd.conf``. For more information, see the `slurmdbd.conf documentation at SchedMD <https://slurm.schedmd.com/slurmdbd.conf.html>`_. The default value is ``-1``. A value of ``-1`` means there is no purge time and records persist as long as the cluster exists.
+            '''The default value for all purge settings for ``slurmdbd.conf`` . For more information, see the `slurmdbd.conf documentation at SchedMD <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurmdbd.conf.html>`_ .
+
+            The default value ``-1`` means there is no purge time and records persist as long as the cluster exists.
+            .. epigraph::
+
+               ``0`` isn't a valid value.
 
             :default: - -1
 

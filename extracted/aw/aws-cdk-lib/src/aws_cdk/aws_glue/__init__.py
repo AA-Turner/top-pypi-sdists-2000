@@ -14442,7 +14442,7 @@ class CfnTableOptimizer(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_glue.CfnTableOptimizer",
 ):
-    '''A resource that describes the AWS Glue resource for enabling compaction to improve read performance for open table formats.
+    '''An AWS Glue resource for enabling table optimizers to improve read performance for open table formats.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-tableoptimizer.html
     :cloudformationResource: AWS::Glue::TableOptimizer
@@ -14501,7 +14501,7 @@ class CfnTableOptimizer(
         :param database_name: The name of the database. For Hive compatibility, this is folded to lowercase when it is stored.
         :param table_name: The table name. For Hive compatibility, this must be entirely lowercase.
         :param table_optimizer_configuration: Specifies configuration details of a table optimizer.
-        :param type: The type of table optimizer. Currently, the only valid value is compaction.
+        :param type: The type of table optimizer. The valid values are:. - compaction - for managing compaction with a table optimizer. - retention - for managing the retention of snapshot with a table optimizer. - orphan_file_deletion - for managing the deletion of orphan files with a table optimizer.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b4e894dd19e24d3b1945f7e3626cca9af994eb9445db78ad5465965094995567)
@@ -14620,7 +14620,10 @@ class CfnTableOptimizer(
     @builtins.property
     @jsii.member(jsii_name="type")
     def type(self) -> builtins.str:
-        '''The type of table optimizer.'''
+        '''The type of table optimizer.
+
+        The valid values are:.
+        '''
         return typing.cast(builtins.str, jsii.get(self, "type"))
 
     @type.setter
@@ -14645,9 +14648,12 @@ class CfnTableOptimizer(
             location: typing.Optional[builtins.str] = None,
             orphan_file_retention_period_in_days: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param location: 
-            :param orphan_file_retention_period_in_days: 
+            '''IcebergConfiguration is a property type within the ``AWS::Glue::TableOptimizer`` resource in AWS CloudFormation.
+
+            This configuration is used when setting up table optimization for Iceberg tables in AWS Glue .
+
+            :param location: Specifies a directory in which to look for orphan files (defaults to the table's location). You may choose a sub-directory rather than the top-level table location.
+            :param orphan_file_retention_period_in_days: The specific number of days you want to keep the orphan files.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-icebergconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -14675,7 +14681,10 @@ class CfnTableOptimizer(
 
         @builtins.property
         def location(self) -> typing.Optional[builtins.str]:
-            '''
+            '''Specifies a directory in which to look for orphan files (defaults to the table's location).
+
+            You may choose a sub-directory rather than the top-level table location.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-icebergconfiguration.html#cfn-glue-tableoptimizer-icebergconfiguration-location
             '''
             result = self._values.get("location")
@@ -14683,7 +14692,8 @@ class CfnTableOptimizer(
 
         @builtins.property
         def orphan_file_retention_period_in_days(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The specific number of days you want to keep the orphan files.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-icebergconfiguration.html#cfn-glue-tableoptimizer-icebergconfiguration-orphanfileretentionperiodindays
             '''
             result = self._values.get("orphan_file_retention_period_in_days")
@@ -14711,8 +14721,11 @@ class CfnTableOptimizer(
             *,
             iceberg_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableOptimizer.IcebergConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param iceberg_configuration: 
+            '''Configuration for removing files that are are not tracked by the Iceberg table metadata, and are older than your configured age limit.
+
+            This configuration helps optimize storage usage and costs by automatically cleaning up files that are no longer needed by the table.
+
+            :param iceberg_configuration: The ``IcebergConfiguration`` property helps optimize your Iceberg tables in AWS Glue by allowing you to specify format-specific settings that control how data is stored, compressed, and managed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-orphanfiledeletionconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -14741,7 +14754,8 @@ class CfnTableOptimizer(
         def iceberg_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableOptimizer.IcebergConfigurationProperty"]]:
-            '''
+            '''The ``IcebergConfiguration`` property helps optimize your Iceberg tables in AWS Glue by allowing you to specify format-specific settings that control how data is stored, compressed, and managed.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-orphanfiledeletionconfiguration.html#cfn-glue-tableoptimizer-orphanfiledeletionconfiguration-icebergconfiguration
             '''
             result = self._values.get("iceberg_configuration")
@@ -14769,8 +14783,9 @@ class CfnTableOptimizer(
             *,
             iceberg_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableOptimizer.IcebergConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param iceberg_configuration: 
+            '''The configuration for a snapshot retention optimizer for Apache Iceberg tables.
+
+            :param iceberg_configuration: The configuration for an Iceberg snapshot retention optimizer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-retentionconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -14799,7 +14814,8 @@ class CfnTableOptimizer(
         def iceberg_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableOptimizer.IcebergConfigurationProperty"]]:
-            '''
+            '''The configuration for an Iceberg snapshot retention optimizer.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-retentionconfiguration.html#cfn-glue-tableoptimizer-retentionconfiguration-icebergconfiguration
             '''
             result = self._values.get("iceberg_configuration")
@@ -14841,9 +14857,9 @@ class CfnTableOptimizer(
 
             :param enabled: Whether the table optimization is enabled.
             :param role_arn: A role passed by the caller which gives the service permission to update the resources associated with the optimizer on the caller's behalf.
-            :param orphan_file_deletion_configuration: 
-            :param retention_configuration: 
-            :param vpc_configuration: 
+            :param orphan_file_deletion_configuration: ``OrphanFileDeletionConfiguration`` is a property that can be included within the TableOptimizer resource. It controls the automatic deletion of orphaned files - files that are not tracked by the table metadata, and older than the configured age limit.
+            :param retention_configuration: The configuration for a snapshot retention optimizer for Apache Iceberg tables.
+            :param vpc_configuration: An object that describes the VPC configuration for a table optimizer. This configuration is necessary to perform optimization on tables that are in a customer VPC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-tableoptimizerconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -14918,7 +14934,10 @@ class CfnTableOptimizer(
         def orphan_file_deletion_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableOptimizer.OrphanFileDeletionConfigurationProperty"]]:
-            '''
+            '''``OrphanFileDeletionConfiguration`` is a property that can be included within the TableOptimizer resource.
+
+            It controls the automatic deletion of orphaned files - files that are not tracked by the table metadata, and older than the configured age limit.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-tableoptimizerconfiguration.html#cfn-glue-tableoptimizer-tableoptimizerconfiguration-orphanfiledeletionconfiguration
             '''
             result = self._values.get("orphan_file_deletion_configuration")
@@ -14928,7 +14947,8 @@ class CfnTableOptimizer(
         def retention_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableOptimizer.RetentionConfigurationProperty"]]:
-            '''
+            '''The configuration for a snapshot retention optimizer for Apache Iceberg tables.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-tableoptimizerconfiguration.html#cfn-glue-tableoptimizer-tableoptimizerconfiguration-retentionconfiguration
             '''
             result = self._values.get("retention_configuration")
@@ -14938,7 +14958,10 @@ class CfnTableOptimizer(
         def vpc_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableOptimizer.VpcConfigurationProperty"]]:
-            '''
+            '''An object that describes the VPC configuration for a table optimizer.
+
+            This configuration is necessary to perform optimization on tables that are in a customer VPC.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-tableoptimizerconfiguration.html#cfn-glue-tableoptimizer-tableoptimizerconfiguration-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
@@ -14966,8 +14989,11 @@ class CfnTableOptimizer(
             *,
             glue_connection_name: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param glue_connection_name: 
+            '''An object that describes the VPC configuration for a table optimizer.
+
+            This configuration is necessary to perform optimization on tables that are in a customer VPC.
+
+            :param glue_connection_name: The name of the AWS Glue connection used for the VPC for the table optimizer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-vpcconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -14991,7 +15017,8 @@ class CfnTableOptimizer(
 
         @builtins.property
         def glue_connection_name(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The name of the AWS Glue connection used for the VPC for the table optimizer.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-tableoptimizer-vpcconfiguration.html#cfn-glue-tableoptimizer-vpcconfiguration-glueconnectionname
             '''
             result = self._values.get("glue_connection_name")
@@ -15036,7 +15063,7 @@ class CfnTableOptimizerProps:
         :param database_name: The name of the database. For Hive compatibility, this is folded to lowercase when it is stored.
         :param table_name: The table name. For Hive compatibility, this must be entirely lowercase.
         :param table_optimizer_configuration: Specifies configuration details of a table optimizer.
-        :param type: The type of table optimizer. Currently, the only valid value is compaction.
+        :param type: The type of table optimizer. The valid values are:. - compaction - for managing compaction with a table optimizer. - retention - for managing the retention of snapshot with a table optimizer. - orphan_file_deletion - for managing the deletion of orphan files with a table optimizer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-tableoptimizer.html
         :exampleMetadata: fixture=_generated
@@ -15138,9 +15165,11 @@ class CfnTableOptimizerProps:
 
     @builtins.property
     def type(self) -> builtins.str:
-        '''The type of table optimizer.
+        '''The type of table optimizer. The valid values are:.
 
-        Currently, the only valid value is compaction.
+        - compaction - for managing compaction with a table optimizer.
+        - retention - for managing the retention of snapshot with a table optimizer.
+        - orphan_file_deletion - for managing the deletion of orphan files with a table optimizer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-tableoptimizer.html#cfn-glue-tableoptimizer-type
         '''

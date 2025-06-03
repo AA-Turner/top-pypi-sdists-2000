@@ -720,6 +720,36 @@ The following examples defines an OpenID Connect provider. Two client IDs
 (audiences) are will be able to send authentication requests to
 [https://openid/connect](https://openid/connect).
 
+It is recommended to use the new `OidcProviderNative` which native CloudFormation resource `AWS::IAM::OIDCProvider` over the old `OpenIdConnectProvider` which uses a custom resource.
+
+```python
+native_provider = iam.OidcProviderNative(self, "MyProvider",
+    url="https://openid/connect",
+    client_ids=["myclient1", "myclient2"],
+    thumbprints=["aa00aa1122aa00aa1122aa00aa1122aa00aa1122"]
+)
+```
+
+For the new `OidcProviderNative`, you must provide at least one thumbprint when creating an IAM OIDC
+provider. For example, assume that the OIDC provider is server.example.com
+and the provider stores its keys at
+https://keys.server.example.com/openid-connect. In that case, the
+thumbprint string would be the hex-encoded SHA-1 hash value of the
+certificate used by https://keys.server.example.com.
+
+The server certificate thumbprint is the hex-encoded SHA-1 hash value of
+the X.509 certificate used by the domain where the OpenID Connect provider
+makes its keys available. It is always a 40-character string.
+
+Typically this list includes only one entry. However, IAM lets you have up
+to five thumbprints for an OIDC provider. This lets you maintain multiple
+thumbprints if the identity provider is rotating certificates.
+
+Obtain the thumbprint of the root certificate authority from the provider's
+server as described in https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
+
+The older `OpenIdConnectProvider` is still supported but it is recommended to use the new `OidcProviderNative` instead.
+
 ```python
 provider = iam.OpenIdConnectProvider(self, "MyProvider",
     url="https://openid/connect",
@@ -727,12 +757,12 @@ provider = iam.OpenIdConnectProvider(self, "MyProvider",
 )
 ```
 
-You can specify an optional list of `thumbprints`. If not specified, the
+For the older `OpenIdConnectProvider`, you can specify an optional list of `thumbprints`. If not specified, the
 thumbprint of the root certificate authority (CA) will automatically be obtained
 from the host as described
 [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html).
 
-Byy default, the custom resource enforces strict security practices by rejecting
+By default, the custom resource enforces strict security practices by rejecting
 any unauthorized connections when downloading CA thumbprints from the issuer URL.
 If you need to connect to an unauthorized OIDC identity provider and understand the
 implications, you can disable this behavior by setting the feature flag
@@ -8396,6 +8426,58 @@ class _IManagedPolicyProxy:
 typing.cast(typing.Any, IManagedPolicy).__jsii_proxy_class__ = lambda : _IManagedPolicyProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IOidcProvider")
+class IOidcProvider(_IResource_c80c4260, typing_extensions.Protocol):
+    '''Represents an IAM OpenID Connect provider.'''
+
+    @builtins.property
+    @jsii.member(jsii_name="oidcProviderArn")
+    def oidc_provider_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the IAM OpenID Connect provider.
+
+        :attribute: true
+        '''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="oidcProviderIssuer")
+    def oidc_provider_issuer(self) -> builtins.str:
+        '''The issuer for OIDC Provider.
+
+        :attribute: true
+        '''
+        ...
+
+
+class _IOidcProviderProxy(
+    jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+):
+    '''Represents an IAM OpenID Connect provider.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_iam.IOidcProvider"
+
+    @builtins.property
+    @jsii.member(jsii_name="oidcProviderArn")
+    def oidc_provider_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the IAM OpenID Connect provider.
+
+        :attribute: true
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "oidcProviderArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="oidcProviderIssuer")
+    def oidc_provider_issuer(self) -> builtins.str:
+        '''The issuer for OIDC Provider.
+
+        :attribute: true
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "oidcProviderIssuer"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IOidcProvider).__jsii_proxy_class__ = lambda : _IOidcProviderProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IOpenIdConnectProvider")
 class IOpenIdConnectProvider(_IResource_c80c4260, typing_extensions.Protocol):
     '''Represents an IAM OpenID Connect provider.'''
@@ -9452,6 +9534,265 @@ class ManagedPolicyProps:
 
     def __repr__(self) -> str:
         return "ManagedPolicyProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(IOidcProvider)
+class OidcProviderNative(
+    _Resource_45bc6135,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_iam.OidcProviderNative",
+):
+    '''IAM OIDC identity providers are entities in IAM that describe an external identity provider (IdP) service that supports the OpenID Connect (OIDC) standard, such as Google or Salesforce.
+
+    You use an IAM OIDC identity provider
+    when you want to establish trust between an OIDC-compatible IdP and your AWS
+    account. This is useful when creating a mobile app or web application that
+    requires access to AWS resources, but you don't want to create custom sign-in
+    code or manage your own user identities.
+
+    :see: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_oidc.html
+    :resource: AWS::IAM::OIDCProvider
+    :exampleMetadata: infused
+
+    Example::
+
+        native_provider = iam.OidcProviderNative(self, "MyProvider",
+            url="https://openid/connect",
+            client_ids=["myclient1", "myclient2"],
+            thumbprints=["aa00aa1122aa00aa1122aa00aa1122aa00aa1122"]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        url: builtins.str,
+        client_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        oidc_provider_name: typing.Optional[builtins.str] = None,
+        thumbprints: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> None:
+        '''Defines a Native OpenID Connect provider.
+
+        :param scope: The definition scope.
+        :param id: Construct ID.
+        :param url: The URL of the identity provider. The URL must begin with https:// and should correspond to the iss claim in the provider's OpenID Connect ID tokens. Per the OIDC standard, path components are allowed but query parameters are not. Typically the URL consists of only a hostname, like https://server.example.org or https://example.com. You cannot register the same provider multiple times in a single AWS account. If you try to submit a URL that has already been used for an OpenID Connect provider in the AWS account, you will get an error. Warning: This URL cannot contain any port numbers
+        :param client_ids: A list of client IDs (also known as audiences). When a mobile or web app registers with an OpenID Connect provider, they establish a value that identifies the application. (This is the value that's sent as the client_id parameter on OAuth requests.) You can register multiple client IDs with the same provider. For example, you might have multiple applications that use the same OIDC provider. You cannot register more than 100 client IDs with a single IAM OIDC provider. Client IDs are up to 255 characters long. Default: - no clients are allowed
+        :param oidc_provider_name: The name of the Native OIDC Provider. Default: - A name is automatically generated.
+        :param thumbprints: A list of server certificate thumbprints for the OpenID Connect (OIDC) identity provider's server certificates. Typically this list includes only 1 entry or empty. However, IAM lets you have up to 5 thumbprints for an OIDC provider. This lets you maintain multiple thumbprints if the identity provider is rotating certificates. The server certificate thumbprint is the hex-encoded SHA-1 hash value of the X.509 certificate used by the domain where the OpenID Connect provider makes its keys available. It is always a 40-character string. For example, assume that the OIDC provider is server.example.com and the provider stores its keys at https://keys.server.example.com/openid-connect. In that case, the thumbprint string would be the hex-encoded SHA-1 hash value of the certificate used by https://keys.server.example.com. This property is optional. If it is not included, IAM will retrieve and use the top intermediate certificate authority (CA) thumbprint of the OpenID Connect identity provider server certificate. Obtain the thumbprint of the root certificate authority from the provider's server as described in https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html Default: - no thumbprints are allowed. IAM will retrieve and use thumbprint of idenity provider server cerctificate
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__680e816817bfe60e999b472326e5b4b238c62d88192645c5b0bfcd07a0a2a70a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = OidcProviderNativeProps(
+            url=url,
+            client_ids=client_ids,
+            oidc_provider_name=oidc_provider_name,
+            thumbprints=thumbprints,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromOidcProviderArn")
+    @builtins.classmethod
+    def from_oidc_provider_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        oidc_provider_arn: builtins.str,
+    ) -> IOidcProvider:
+        '''Imports an Open ID connect provider from an ARN.
+
+        :param scope: The definition scope.
+        :param id: ID of the construct.
+        :param oidc_provider_arn: the ARN to import.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2bbbb35dca97e313a334486d4f1f9ad4d587da8ed7cab00044df51dcffea77cc)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument oidc_provider_arn", value=oidc_provider_arn, expected_type=type_hints["oidc_provider_arn"])
+        return typing.cast(IOidcProvider, jsii.sinvoke(cls, "fromOidcProviderArn", [scope, id, oidc_provider_arn]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @builtins.property
+    @jsii.member(jsii_name="oidcProviderArn")
+    def oidc_provider_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the Native IAM OpenID Connect provider.
+
+        :attribute: true
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "oidcProviderArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="oidcProviderIssuer")
+    def oidc_provider_issuer(self) -> builtins.str:
+        '''The issuer for the Native OIDC Provider.
+
+        :attribute: true
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "oidcProviderIssuer"))
+
+    @builtins.property
+    @jsii.member(jsii_name="oidcProviderThumbprints")
+    def oidc_provider_thumbprints(self) -> builtins.str:
+        '''The thumbprints configured for this provider.
+
+        :attribute: true
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "oidcProviderThumbprints"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_iam.OidcProviderNativeProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "url": "url",
+        "client_ids": "clientIds",
+        "oidc_provider_name": "oidcProviderName",
+        "thumbprints": "thumbprints",
+    },
+)
+class OidcProviderNativeProps:
+    def __init__(
+        self,
+        *,
+        url: builtins.str,
+        client_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        oidc_provider_name: typing.Optional[builtins.str] = None,
+        thumbprints: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> None:
+        '''Initialization properties for ``OIDCProviderNative``.
+
+        :param url: The URL of the identity provider. The URL must begin with https:// and should correspond to the iss claim in the provider's OpenID Connect ID tokens. Per the OIDC standard, path components are allowed but query parameters are not. Typically the URL consists of only a hostname, like https://server.example.org or https://example.com. You cannot register the same provider multiple times in a single AWS account. If you try to submit a URL that has already been used for an OpenID Connect provider in the AWS account, you will get an error. Warning: This URL cannot contain any port numbers
+        :param client_ids: A list of client IDs (also known as audiences). When a mobile or web app registers with an OpenID Connect provider, they establish a value that identifies the application. (This is the value that's sent as the client_id parameter on OAuth requests.) You can register multiple client IDs with the same provider. For example, you might have multiple applications that use the same OIDC provider. You cannot register more than 100 client IDs with a single IAM OIDC provider. Client IDs are up to 255 characters long. Default: - no clients are allowed
+        :param oidc_provider_name: The name of the Native OIDC Provider. Default: - A name is automatically generated.
+        :param thumbprints: A list of server certificate thumbprints for the OpenID Connect (OIDC) identity provider's server certificates. Typically this list includes only 1 entry or empty. However, IAM lets you have up to 5 thumbprints for an OIDC provider. This lets you maintain multiple thumbprints if the identity provider is rotating certificates. The server certificate thumbprint is the hex-encoded SHA-1 hash value of the X.509 certificate used by the domain where the OpenID Connect provider makes its keys available. It is always a 40-character string. For example, assume that the OIDC provider is server.example.com and the provider stores its keys at https://keys.server.example.com/openid-connect. In that case, the thumbprint string would be the hex-encoded SHA-1 hash value of the certificate used by https://keys.server.example.com. This property is optional. If it is not included, IAM will retrieve and use the top intermediate certificate authority (CA) thumbprint of the OpenID Connect identity provider server certificate. Obtain the thumbprint of the root certificate authority from the provider's server as described in https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html Default: - no thumbprints are allowed. IAM will retrieve and use thumbprint of idenity provider server cerctificate
+
+        :exampleMetadata: infused
+
+        Example::
+
+            native_provider = iam.OidcProviderNative(self, "MyProvider",
+                url="https://openid/connect",
+                client_ids=["myclient1", "myclient2"],
+                thumbprints=["aa00aa1122aa00aa1122aa00aa1122aa00aa1122"]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6981defdaab974b803e9671371e547d5d70ee03239eed02c8d458e1a2e5aa307)
+            check_type(argname="argument url", value=url, expected_type=type_hints["url"])
+            check_type(argname="argument client_ids", value=client_ids, expected_type=type_hints["client_ids"])
+            check_type(argname="argument oidc_provider_name", value=oidc_provider_name, expected_type=type_hints["oidc_provider_name"])
+            check_type(argname="argument thumbprints", value=thumbprints, expected_type=type_hints["thumbprints"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "url": url,
+        }
+        if client_ids is not None:
+            self._values["client_ids"] = client_ids
+        if oidc_provider_name is not None:
+            self._values["oidc_provider_name"] = oidc_provider_name
+        if thumbprints is not None:
+            self._values["thumbprints"] = thumbprints
+
+    @builtins.property
+    def url(self) -> builtins.str:
+        '''The URL of the identity provider.
+
+        The URL must begin with https:// and
+        should correspond to the iss claim in the provider's OpenID Connect ID
+        tokens. Per the OIDC standard, path components are allowed but query
+        parameters are not. Typically the URL consists of only a hostname, like
+        https://server.example.org or https://example.com.
+
+        You cannot register the same provider multiple times in a single AWS
+        account. If you try to submit a URL that has already been used for an
+        OpenID Connect provider in the AWS account, you will get an error.
+
+        Warning: This URL cannot contain any port numbers
+        '''
+        result = self._values.get("url")
+        assert result is not None, "Required property 'url' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def client_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''A list of client IDs (also known as audiences).
+
+        When a mobile or web app
+        registers with an OpenID Connect provider, they establish a value that
+        identifies the application. (This is the value that's sent as the client_id
+        parameter on OAuth requests.)
+
+        You can register multiple client IDs with the same provider. For example,
+        you might have multiple applications that use the same OIDC provider. You
+        cannot register more than 100 client IDs with a single IAM OIDC provider.
+
+        Client IDs are up to 255 characters long.
+
+        :default: - no clients are allowed
+        '''
+        result = self._values.get("client_ids")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def oidc_provider_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the Native OIDC Provider.
+
+        :default: - A name is automatically generated.
+        '''
+        result = self._values.get("oidc_provider_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def thumbprints(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''A list of server certificate thumbprints for the OpenID Connect (OIDC) identity provider's server certificates.
+
+        Typically this list includes only 1 entry or empty. However, IAM lets
+        you have up to 5 thumbprints for an OIDC provider. This lets you maintain
+        multiple thumbprints if the identity provider is rotating certificates.
+
+        The server certificate thumbprint is the hex-encoded SHA-1 hash value of
+        the X.509 certificate used by the domain where the OpenID Connect provider
+        makes its keys available. It is always a 40-character string.
+
+        For example, assume that the OIDC provider is server.example.com and the
+        provider stores its keys at https://keys.server.example.com/openid-connect.
+        In that case, the thumbprint string would be the hex-encoded SHA-1 hash
+        value of the certificate used by https://keys.server.example.com.
+
+        This property is optional. If it is not included, IAM will retrieve and use
+        the top intermediate certificate authority (CA) thumbprint of the OpenID
+        Connect identity provider server certificate.
+
+        Obtain the thumbprint of the root certificate authority from the provider's
+        server as described in https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
+
+        :default:
+
+        - no thumbprints are allowed. IAM will retrieve and use thumbprint
+        of idenity provider server cerctificate
+        '''
+        result = self._values.get("thumbprints")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "OidcProviderNativeProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -15591,6 +15932,7 @@ __all__ = [
     "IIdentity",
     "IInstanceProfile",
     "IManagedPolicy",
+    "IOidcProvider",
     "IOpenIdConnectProvider",
     "IPolicy",
     "IPrincipal",
@@ -15605,6 +15947,8 @@ __all__ = [
     "LazyRoleProps",
     "ManagedPolicy",
     "ManagedPolicyProps",
+    "OidcProviderNative",
+    "OidcProviderNativeProps",
     "OpenIdConnectPrincipal",
     "OpenIdConnectProvider",
     "OpenIdConnectProviderProps",
@@ -16971,6 +17315,36 @@ def _typecheckingstub__9ac402af2b963b15f12c561030bd732418fdef258857572111b9a8118
     roles: typing.Optional[typing.Sequence[IRole]] = None,
     statements: typing.Optional[typing.Sequence[PolicyStatement]] = None,
     users: typing.Optional[typing.Sequence[IUser]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__680e816817bfe60e999b472326e5b4b238c62d88192645c5b0bfcd07a0a2a70a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    url: builtins.str,
+    client_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    oidc_provider_name: typing.Optional[builtins.str] = None,
+    thumbprints: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2bbbb35dca97e313a334486d4f1f9ad4d587da8ed7cab00044df51dcffea77cc(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    oidc_provider_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6981defdaab974b803e9671371e547d5d70ee03239eed02c8d458e1a2e5aa307(
+    *,
+    url: builtins.str,
+    client_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    oidc_provider_name: typing.Optional[builtins.str] = None,
+    thumbprints: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1,4 +1,5 @@
 import httpx
+import itertools
 import logging
 from enum import Enum
 from tenacity import (
@@ -8,7 +9,7 @@ from tenacity import (
     retry_if_exception,
     before_sleep_log,
 )
-from typing import Any
+from typing import Any, Iterable, Iterator, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -297,3 +298,56 @@ async def make_api_request(
         return response
 
     return await _make_request(url, **httpx_kwargs)
+
+
+def expand_target_pages(target_pages: str) -> Iterator[int]:
+    """Yield all values in target_pages."""
+    for target in target_pages.strip().split(","):
+        if "-" in target:
+            try:
+                start, end = map(int, target.strip().split("-"))
+                if start > end:
+                    raise ValueError
+                yield from range(start, end + 1)
+            except ValueError as e:
+                raise ValueError(f"Invalid page range: {target}") from e
+        else:
+            try:
+                yield int(target)
+            except ValueError as e:
+                raise ValueError(f"Invalid page number: {target}") from e
+
+
+def partition_pages(
+    pages: Iterable[int], size: int, max_pages: Optional[int] = None
+) -> Iterator[str]:
+    """Yield partitioned target_pages segments."""
+    if size < 1:
+        raise ValueError(f"Invalid partition segment size: {size}")
+    if max_pages is not None and max_pages < 1:
+        raise ValueError("Max pages must be > 0")
+    it = iter(pages)
+    total = 0
+    while max_pages is None or total < max_pages:
+        segment = tuple(itertools.islice(it, size))
+        if segment:
+            targets = []
+            for _k, g in itertools.groupby(enumerate(segment), lambda x: x[0] - x[1]):
+                group = [item[1] for item in g]
+                if len(group) > 1:
+                    start, end = group
+                    group_size = end - start + 1
+                    if max_pages is not None and total + group_size > max_pages:
+                        end -= total + group_size - max_pages
+                        group_size = end - start + 1
+                    if group_size > 1:
+                        targets.append(f"{start}-{end}")
+                    else:
+                        targets.append(str(start))
+                    total += group_size
+                else:
+                    targets.append(str(group[0]))
+                    total += 1
+            yield ",".join(targets)
+        else:
+            return

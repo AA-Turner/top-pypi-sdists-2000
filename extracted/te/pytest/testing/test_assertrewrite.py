@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import ast
+from collections.abc import Generator
+from collections.abc import Mapping
 import dis
 import errno
 from functools import partial
@@ -17,8 +19,6 @@ import stat
 import sys
 import textwrap
 from typing import cast
-from typing import Generator
-from typing import Mapping
 from unittest import mock
 import zipfile
 
@@ -975,6 +975,23 @@ class TestAssertionRewrite:
         assert "UnicodeDecodeError" not in msg
         assert "UnicodeEncodeError" not in msg
 
+    def test_assert_fixture(self, pytester: Pytester) -> None:
+        pytester.makepyfile(
+            """\
+        import pytest
+        @pytest.fixture
+        def fixt():
+            return 42
+
+        def test_something():  # missing "fixt" argument
+            assert fixt == 42
+            """
+        )
+        result = pytester.runpytest()
+        result.stdout.fnmatch_lines(
+            ["*assert <pytest_fixture(<function fixt at *>)> == 42*"]
+        )
+
 
 class TestRewriteOnImport:
     def test_pycache_is_a_file(self, pytester: Pytester) -> None:
@@ -1018,10 +1035,6 @@ class TestRewriteOnImport:
         )
         assert pytester.runpytest().ret == ExitCode.NO_TESTS_COLLECTED
 
-    @pytest.mark.skipif(
-        sys.version_info < (3, 9),
-        reason="importlib.resources.files was introduced in 3.9",
-    )
     def test_load_resource_via_files_with_rewrite(self, pytester: Pytester) -> None:
         example = pytester.path.joinpath("demo") / "example"
         init = pytester.path.joinpath("demo") / "__init__.py"
@@ -1184,7 +1197,23 @@ def test_rewritten():
         )
         # needs to be a subprocess because pytester explicitly disables this warning
         result = pytester.runpytest_subprocess()
-        result.stdout.fnmatch_lines(["*Module already imported*: _pytest"])
+        result.stdout.fnmatch_lines(["*Module already imported*; _pytest"])
+
+    def test_rewrite_warning_ignore(self, pytester: Pytester) -> None:
+        pytester.makeconftest(
+            """
+            import pytest
+            pytest.register_assert_rewrite("_pytest")
+        """
+        )
+        # needs to be a subprocess because pytester explicitly disables this warning
+        result = pytester.runpytest_subprocess(
+            "-W",
+            "ignore:Module already imported so cannot be rewritten; _pytest:pytest.PytestAssertRewriteWarning",
+        )
+        # Previously, when the message pattern used to contain an extra `:`, an error was raised.
+        assert not result.stderr.str().strip()
+        result.stdout.no_fnmatch_line("*Module already imported*; _pytest")
 
     def test_rewrite_module_imported_from_conftest(self, pytester: Pytester) -> None:
         pytester.makeconftest(

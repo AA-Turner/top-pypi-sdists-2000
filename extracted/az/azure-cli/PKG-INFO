@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: azure-cli
-Version: 2.73.0
+Version: 2.74.0
 Summary: Microsoft Azure Command-Line Tools
 Home-page: https://github.com/Azure/azure-cli
 Author: Microsoft Corporation
@@ -21,7 +21,7 @@ License-File: LICENSE.txt
 Requires-Dist: antlr4-python3-runtime~=4.13.1
 Requires-Dist: azure-appconfiguration~=1.7.0
 Requires-Dist: azure-batch~=15.0.0b1
-Requires-Dist: azure-cli-core==2.73.0
+Requires-Dist: azure-cli-core==2.74.0
 Requires-Dist: azure-cosmos>=3.0.2,~=3.0
 Requires-Dist: azure-data-tables==12.4.0
 Requires-Dist: azure-datalake-store~=1.0.0a0
@@ -29,6 +29,7 @@ Requires-Dist: azure-keyvault-administration==4.4.0b2
 Requires-Dist: azure-keyvault-certificates==4.7.0
 Requires-Dist: azure-keyvault-keys==4.11.0b1
 Requires-Dist: azure-keyvault-secrets==4.7.0
+Requires-Dist: azure-keyvault-securitydomain==1.0.0b1
 Requires-Dist: azure-mgmt-advisor==9.0.0
 Requires-Dist: azure-mgmt-apimanagement==4.0.0
 Requires-Dist: azure-mgmt-appconfiguration==3.1.0
@@ -44,8 +45,8 @@ Requires-Dist: azure-mgmt-cognitiveservices~=13.5.0
 Requires-Dist: azure-mgmt-compute~=34.1.0
 Requires-Dist: azure-mgmt-containerinstance==10.2.0b1
 Requires-Dist: azure-mgmt-containerregistry==14.0.0
-Requires-Dist: azure-mgmt-containerservice~=35.0.0
-Requires-Dist: azure-mgmt-cosmosdb==9.7.0
+Requires-Dist: azure-mgmt-containerservice~=36.0.0
+Requires-Dist: azure-mgmt-cosmosdb==9.8.0
 Requires-Dist: azure-mgmt-databoxedge~=1.0.0
 Requires-Dist: azure-mgmt-datalake-store~=1.1.0b1
 Requires-Dist: azure-mgmt-datamigration~=10.0.0
@@ -72,7 +73,7 @@ Requires-Dist: azure-mgmt-postgresqlflexibleservers==1.1.0b2
 Requires-Dist: azure-mgmt-privatedns~=1.0.0
 Requires-Dist: azure-mgmt-rdbms==10.2.0b17
 Requires-Dist: azure-mgmt-mysqlflexibleservers==1.0.0b3
-Requires-Dist: azure-mgmt-recoveryservicesbackup~=9.1.0
+Requires-Dist: azure-mgmt-recoveryservicesbackup~=9.2.0
 Requires-Dist: azure-mgmt-recoveryservices~=3.0.0
 Requires-Dist: azure-mgmt-redhatopenshift~=1.5.0
 Requires-Dist: azure-mgmt-redis~=14.5.0
@@ -86,7 +87,7 @@ Requires-Dist: azure-mgmt-servicefabric~=2.1.0
 Requires-Dist: azure-mgmt-signalr==2.0.0b2
 Requires-Dist: azure-mgmt-sqlvirtualmachine==1.0.0b5
 Requires-Dist: azure-mgmt-sql==4.0.0b21
-Requires-Dist: azure-mgmt-storage==22.1.0
+Requires-Dist: azure-mgmt-storage==23.0.0
 Requires-Dist: azure-mgmt-synapse==2.1.0b5
 Requires-Dist: azure-mgmt-trafficmanager~=1.0.0
 Requires-Dist: azure-mgmt-web==7.3.1
@@ -109,7 +110,7 @@ Requires-Dist: pycomposefile>=0.0.32
 Requires-Dist: PyGithub~=1.38
 Requires-Dist: PyNaCl~=1.5.0
 Requires-Dist: scp~=0.13.2
-Requires-Dist: semver==2.13.0
+Requires-Dist: semver~=3.0
 Requires-Dist: setuptools
 Requires-Dist: six>=1.10.0
 Requires-Dist: sshtunnel~=0.1.4

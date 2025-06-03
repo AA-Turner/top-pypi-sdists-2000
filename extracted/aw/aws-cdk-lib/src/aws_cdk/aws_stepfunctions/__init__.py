@@ -1525,6 +1525,7 @@ Any object that implements the `IGrantable` interface (has an associated princip
 * `stateMachine.grantRead(principal)` - grants the principal read access
 * `stateMachine.grantTaskResponse(principal)` - grants the principal the ability to send task tokens to the state machine
 * `stateMachine.grantExecution(principal, actions)` - grants the principal execution-level permissions for the IAM actions specified
+* `stateMachine.grantRedriveExecution(principal)` - grants the principal permission to redrive the executions of the state machine
 * `stateMachine.grant(principal, actions)` - grants the principal state-machine-level permissions for the IAM actions specified
 
 ### Start Execution Permission
@@ -1602,6 +1603,25 @@ The following read permissions are provided to a service principal by the `grant
 ### Execution-level Permissions
 
 Grant execution-level permissions to a state machine by calling the `grantExecution()` API:
+
+### Redrive Execution Permission
+
+Grant the given identity permission to redrive the execution of the state machine:
+
+```python
+# definition: sfn.IChainable
+role = iam.Role(self, "Role",
+    assumed_by=iam.ServicePrincipal("lambda.amazonaws.com")
+)
+state_machine = sfn.StateMachine(self, "StateMachine",
+    definition_body=sfn.DefinitionBody.from_chainable(definition)
+)
+
+# Give role permission to start execution of state machine
+state_machine.grant_start_execution(role)
+# Give role permission to redrive any executions of the state machine
+state_machine.grant_redrive_execution(role)
+```
 
 ```python
 # definition: sfn.IChainable
@@ -11691,25 +11711,23 @@ class StateMachine(
 
     Example::
 
-        # Define a state machine with one Pass state
-        child = sfn.StateMachine(self, "ChildStateMachine",
-            definition=sfn.Chain.start(sfn.Pass(self, "PassState"))
-        )
+        import aws_cdk.aws_stepfunctions as stepfunctions
         
-        # Include the state machine in a Task state with callback pattern
-        task = tasks.StepFunctionsStartExecution(self, "ChildTask",
-            state_machine=child,
-            integration_pattern=sfn.IntegrationPattern.WAIT_FOR_TASK_TOKEN,
-            input=sfn.TaskInput.from_object({
-                "token": sfn.JsonPath.task_token,
-                "foo": "bar"
-            }),
-            name="MyExecutionName"
-        )
         
-        # Define a second state machine with the Task state above
-        sfn.StateMachine(self, "ParentStateMachine",
-            definition=task
+        pipeline = codepipeline.Pipeline(self, "MyPipeline")
+        input_artifact = codepipeline.Artifact()
+        start_state = stepfunctions.Pass(self, "StartState")
+        simple_state_machine = stepfunctions.StateMachine(self, "SimpleStateMachine",
+            definition=start_state
+        )
+        step_function_action = codepipeline_actions.StepFunctionInvokeAction(
+            action_name="Invoke",
+            state_machine=simple_state_machine,
+            state_machine_input=codepipeline_actions.StateMachineInput.file_path(input_artifact.at_path("assets/input.json"))
+        )
+        pipeline.add_stage(
+            stage_name="StepFunctions",
+            actions=[step_function_action]
         )
     '''
 
@@ -11868,6 +11886,20 @@ class StateMachine(
             type_hints = typing.get_type_hints(_typecheckingstub__de328dbf28de2be4ba9b61ea81bce4e6d383ec0968b0e914acb7378b694c7b96)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [identity]))
+
+    @jsii.member(jsii_name="grantRedriveExecution")
+    def grant_redrive_execution(
+        self,
+        identity: _IGrantable_71c4f5de,
+    ) -> _Grant_a7ae64f8:
+        '''Grant the given identity permission to redrive the execution of the state machine.
+
+        :param identity: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__105b46fe8f1d3a0f8f8d86eed1f7f5587ebf18870718ca73c5b57e8281defaf5)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRedriveExecution", [identity]))
 
     @jsii.member(jsii_name="grantStartExecution")
     def grant_start_execution(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
@@ -27234,6 +27266,12 @@ def _typecheckingstub__403096ab0bc513019435d412939f8df18641c1b52bfba18e821c391fa
     pass
 
 def _typecheckingstub__de328dbf28de2be4ba9b61ea81bce4e6d383ec0968b0e914acb7378b694c7b96(
+    identity: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__105b46fe8f1d3a0f8f8d86eed1f7f5587ebf18870718ca73c5b57e8281defaf5(
     identity: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""

@@ -3434,6 +3434,12 @@ class CfnProject(
         
                 # the properties below are optional
                 certificate="certificate",
+                docker_server=codebuild.CfnProject.DockerServerProperty(
+                    compute_type="computeType",
+        
+                    # the properties below are optional
+                    security_group_ids=["securityGroupIds"]
+                ),
                 environment_variables=[codebuild.CfnProject.EnvironmentVariableProperty(
                     name="name",
                     value="value",
@@ -4648,6 +4654,79 @@ class CfnProject(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_codebuild.CfnProject.DockerServerProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "compute_type": "computeType",
+            "security_group_ids": "securityGroupIds",
+        },
+    )
+    class DockerServerProperty:
+        def __init__(
+            self,
+            *,
+            compute_type: builtins.str,
+            security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''
+            :param compute_type: 
+            :param security_group_ids: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-dockerserver.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_codebuild as codebuild
+                
+                docker_server_property = codebuild.CfnProject.DockerServerProperty(
+                    compute_type="computeType",
+                
+                    # the properties below are optional
+                    security_group_ids=["securityGroupIds"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ee61866f55895d4c64262dab381d049015ede37529178930c3463abdb3999a8a)
+                check_type(argname="argument compute_type", value=compute_type, expected_type=type_hints["compute_type"])
+                check_type(argname="argument security_group_ids", value=security_group_ids, expected_type=type_hints["security_group_ids"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "compute_type": compute_type,
+            }
+            if security_group_ids is not None:
+                self._values["security_group_ids"] = security_group_ids
+
+        @builtins.property
+        def compute_type(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-dockerserver.html#cfn-codebuild-project-dockerserver-computetype
+            '''
+            result = self._values.get("compute_type")
+            assert result is not None, "Required property 'compute_type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-dockerserver.html#cfn-codebuild-project-dockerserver-securitygroupids
+            '''
+            result = self._values.get("security_group_ids")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DockerServerProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_codebuild.CfnProject.EnvironmentProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -4655,6 +4734,7 @@ class CfnProject(
             "image": "image",
             "type": "type",
             "certificate": "certificate",
+            "docker_server": "dockerServer",
             "environment_variables": "environmentVariables",
             "fleet": "fleet",
             "image_pull_credentials_type": "imagePullCredentialsType",
@@ -4670,6 +4750,7 @@ class CfnProject(
             image: builtins.str,
             type: builtins.str,
             certificate: typing.Optional[builtins.str] = None,
+            docker_server: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.DockerServerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             environment_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             fleet: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.ProjectFleetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             image_pull_credentials_type: typing.Optional[builtins.str] = None,
@@ -4682,6 +4763,7 @@ class CfnProject(
             :param image: The image tag or image digest that identifies the Docker image to use for this build project. Use the following formats: - For an image tag: ``<registry>/<repository>:<tag>`` . For example, in the Docker repository that CodeBuild uses to manage its Docker images, this would be ``aws/codebuild/standard:4.0`` . - For an image digest: ``<registry>/<repository>@<digest>`` . For example, to specify an image with the digest "sha256:cbbf2f9a99b47fc460d422812b6a5adff7dfee951d8fa2e4a98caa0382cfbdbf," use ``<registry>/<repository>@sha256:cbbf2f9a99b47fc460d422812b6a5adff7dfee951d8fa2e4a98caa0382cfbdbf`` . For more information, see `Docker images provided by CodeBuild <https://docs.aws.amazon.com//codebuild/latest/userguide/build-env-ref-available.html>`_ in the *AWS CodeBuild user guide* .
             :param type: The type of build environment to use for related builds. .. epigraph:: If you're using compute fleets during project creation, ``type`` will be ignored. For more information, see `Build environment compute types <https://docs.aws.amazon.com//codebuild/latest/userguide/build-env-ref-compute-types.html>`_ in the *AWS CodeBuild user guide* .
             :param certificate: The ARN of the Amazon S3 bucket, path prefix, and object key that contains the PEM-encoded certificate for the build project. For more information, see `certificate <https://docs.aws.amazon.com/codebuild/latest/userguide/create-project-cli.html#cli.environment.certificate>`_ in the *AWS CodeBuild User Guide* .
+            :param docker_server: 
             :param environment_variables: A set of environment variables to make available to builds for this build project.
             :param fleet: 
             :param image_pull_credentials_type: The type of credentials AWS CodeBuild uses to pull images in your build. There are two valid values:. - ``CODEBUILD`` specifies that AWS CodeBuild uses its own credentials. This requires that you modify your ECR repository policy to trust AWS CodeBuild service principal. - ``SERVICE_ROLE`` specifies that AWS CodeBuild uses your build project's service role. When you use a cross-account or private registry image, you must use SERVICE_ROLE credentials. When you use an AWS CodeBuild curated image, you must use CODEBUILD credentials.
@@ -4704,6 +4786,12 @@ class CfnProject(
                 
                     # the properties below are optional
                     certificate="certificate",
+                    docker_server=codebuild.CfnProject.DockerServerProperty(
+                        compute_type="computeType",
+                
+                        # the properties below are optional
+                        security_group_ids=["securityGroupIds"]
+                    ),
                     environment_variables=[codebuild.CfnProject.EnvironmentVariableProperty(
                         name="name",
                         value="value",
@@ -4728,6 +4816,7 @@ class CfnProject(
                 check_type(argname="argument image", value=image, expected_type=type_hints["image"])
                 check_type(argname="argument type", value=type, expected_type=type_hints["type"])
                 check_type(argname="argument certificate", value=certificate, expected_type=type_hints["certificate"])
+                check_type(argname="argument docker_server", value=docker_server, expected_type=type_hints["docker_server"])
                 check_type(argname="argument environment_variables", value=environment_variables, expected_type=type_hints["environment_variables"])
                 check_type(argname="argument fleet", value=fleet, expected_type=type_hints["fleet"])
                 check_type(argname="argument image_pull_credentials_type", value=image_pull_credentials_type, expected_type=type_hints["image_pull_credentials_type"])
@@ -4740,6 +4829,8 @@ class CfnProject(
             }
             if certificate is not None:
                 self._values["certificate"] = certificate
+            if docker_server is not None:
+                self._values["docker_server"] = docker_server
             if environment_variables is not None:
                 self._values["environment_variables"] = environment_variables
             if fleet is not None:
@@ -4837,6 +4928,16 @@ class CfnProject(
             '''
             result = self._values.get("certificate")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def docker_server(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.DockerServerProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-environment.html#cfn-codebuild-project-environment-dockerserver
+            '''
+            result = self._values.get("docker_server")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.DockerServerProperty"]], result)
 
         @builtins.property
         def environment_variables(
@@ -6847,6 +6948,12 @@ class CfnProjectProps:
             
                     # the properties below are optional
                     certificate="certificate",
+                    docker_server=codebuild.CfnProject.DockerServerProperty(
+                        compute_type="computeType",
+            
+                        # the properties below are optional
+                        security_group_ids=["securityGroupIds"]
+                    ),
                     environment_variables=[codebuild.CfnProject.EnvironmentVariableProperty(
                         name="name",
                         value="value",
@@ -19224,12 +19331,21 @@ def _typecheckingstub__3c17ec87ec820fc95c2f50ce8b9145f0fd5d2f902f5e08f4e59b9de7c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ee61866f55895d4c64262dab381d049015ede37529178930c3463abdb3999a8a(
+    *,
+    compute_type: builtins.str,
+    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__357ba2b62e83543cbaf88f71d45a8de5489e377a6db9e3c7c356c3a91c1aef44(
     *,
     compute_type: builtins.str,
     image: builtins.str,
     type: builtins.str,
     certificate: typing.Optional[builtins.str] = None,
+    docker_server: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.DockerServerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     environment_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.EnvironmentVariableProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     fleet: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.ProjectFleetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_pull_credentials_type: typing.Optional[builtins.str] = None,

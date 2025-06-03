@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: py7zr
-Version: 0.22.0
+Version: 1.0.0
 Summary: Pure python 7-zip library
 Author-email: Hiroshi Miura <miurahr@linux.com>
 License: LGPL-2.1-or-later
@@ -10,7 +10,7 @@ Project-URL: Bug Tracker, https://github.com/miurahr/py7zr/issues
 Project-URL: Source, https://github.com/miurahr/py7zr
 Project-URL: Changelog, https://py7zr.readthedocs.io/en/latest/changelog.html
 Keywords: compression,7zip,lzma,zstandard,ppmd,lzma2,bcj,archive
-Classifier: Development Status :: 4 - Beta
+Classifier: Development Status :: 5 - Production/Stable
 Classifier: License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)
 Classifier: Operating System :: MacOS :: MacOS X
 Classifier: Operating System :: Microsoft :: Windows
@@ -18,25 +18,25 @@ Classifier: Operating System :: POSIX
 Classifier: Operating System :: POSIX :: Linux
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Programming Language :: Python :: Implementation :: PyPy
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
-Requires-Python: >=3.8
+Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: LICENSE
 Requires-Dist: texttable
-Requires-Dist: pycryptodomex>=3.16.0
+Requires-Dist: pycryptodomex>=3.20.0
 Requires-Dist: brotli>=1.1.0; platform_python_implementation == "CPython"
 Requires-Dist: brotlicffi>=1.1.0.0; platform_python_implementation == "PyPy"
 Requires-Dist: psutil; sys_platform != "cygwin"
-Requires-Dist: pyzstd>=0.15.9
-Requires-Dist: pyppmd<1.2.0,>=1.1.0
+Requires-Dist: pyzstd>=0.16.1
+Requires-Dist: pyppmd<1.3.0,>=1.1.0
 Requires-Dist: pybcj<1.1.0,>=1.0.0
 Requires-Dist: multivolumefile>=0.2.3
 Requires-Dist: inflate64<1.1.0,>=1.0.0
@@ -51,14 +51,16 @@ Requires-Dist: pytest-timeout; extra == "test"
 Requires-Dist: py-cpuinfo; extra == "test"
 Requires-Dist: coverage[toml]>=5.2; extra == "test"
 Requires-Dist: coveralls>=2.1.1; extra == "test"
+Requires-Dist: requests; extra == "test"
+Requires-Dist: pytest-httpserver; extra == "test"
 Provides-Extra: docs
-Requires-Dist: sphinx>=5.0; extra == "docs"
+Requires-Dist: sphinx>=7.0.0; extra == "docs"
 Requires-Dist: sphinx-py3doc-enhanced-theme; extra == "docs"
 Requires-Dist: sphinx-a4doc; extra == "docs"
 Requires-Dist: docutils; extra == "docs"
 Provides-Extra: check
-Requires-Dist: mypy>=0.940; extra == "check"
-Requires-Dist: mypy_extensions>=0.4.1; extra == "check"
+Requires-Dist: mypy>=1.10.0; extra == "check"
+Requires-Dist: mypy_extensions>=1.0.0; extra == "check"
 Requires-Dist: lxml; extra == "check"
 Requires-Dist: types-psutil; extra == "check"
 Requires-Dist: check-manifest; extra == "check"
@@ -66,15 +68,17 @@ Requires-Dist: flake8<8; extra == "check"
 Requires-Dist: flake8-black>=0.3.6; extra == "check"
 Requires-Dist: flake8-deprecated; extra == "check"
 Requires-Dist: flake8-isort; extra == "check"
-Requires-Dist: isort>=5.0.3; extra == "check"
+Requires-Dist: isort>=5.13.2; extra == "check"
 Requires-Dist: pygments; extra == "check"
 Requires-Dist: readme-renderer; extra == "check"
 Requires-Dist: twine; extra == "check"
-Requires-Dist: black>=23.1.0; extra == "check"
+Requires-Dist: black>=24.8.0; extra == "check"
+Requires-Dist: pylint; extra == "check"
 Provides-Extra: debug
 Requires-Dist: pytest; extra == "debug"
 Requires-Dist: pytest-leaks; extra == "debug"
 Requires-Dist: pytest-profiling; extra == "debug"
+Dynamic: license-file
 
 ======================================
 |logo| py7zr -- a 7z library on python
@@ -116,9 +120,23 @@ Requires-Dist: pytest-profiling; extra == "debug"
   :target: https://snyk.io/advisor/python/py7zr
   :alt: py7zr
   
+.. image:: https://app.codacy.com/project/badge/Grade/d9d82e1c1708470a921a3a974ea0eedd
+  :target: https://app.codacy.com/gh/miurahr/py7zr/dashboard
+  :alt: Codacy
+
 
 py7zr is a library and utility to support 7zip archive compression, decompression,
 encryption and decryption written by Python programming language.
+
+Incompatible change
+===================
+
+There is incompatible change between v1.0.0-rc1 to v1.0.0-rc2.
+I abandon methods ``read`` and ``readall``.
+When you want to extract the archive to memory, you need to use
+``extract`` method with ``factory`` argument. The ``factory`` takes a factory class, as of the GoF design pattern,
+that provides object implements ``Py7zIO`` interface as a call back instance.
+``SevenZipFile`` extract and write uncompressed data into your ``Py7zIO`` object.
 
 Discussion Forum
 ================
@@ -415,7 +433,7 @@ Requirements
 `py7zr` uses a python3 standard `lzma module`_ for extraction and compression.
 The standard lzma module uses `liblzma`_ that support core compression algorithm of 7zip.
 
-Minimum required version is Python 3.8.
+Minimum required version is Python 3.9.
 
 ``py7zr`` tested on Linux, macOS, Windows and Ubuntu aarch64.
 
@@ -423,8 +441,8 @@ It hopefully works on M1 Mac too.
 
 Recommended versions are:
 
-- CPython 3.8.0 and later.
-- PyPy3.8-7.3.8 and later.
+- CPython 3.9.0 and later.
+- PyPy3.9-7.3.8 and later.
 
 Following fixes are included in these versions, and it is not fixed on python3.6.
 
@@ -492,10 +510,12 @@ py7zr consumes some memory to decompress and compress data. It requires about 30
 Use Cases
 =========
 
+- `PyTorch`_  Open-source deep learning framework.
 - `aqtinstall`_ Another (unofficial) Qt (aqt) CLI Installer on multi-platforms.
 - PreNLP_ Preprocessing Library for Natural Language Processing
 - mlox_  a tool for sorting and analyzing Morrowind plugin load order
 
+.. _`PyTorch`: https://pytorch.org/
 .. _aqtinstall: https://github.com/miurahr/aqtinstall
 .. _PreNLP: https://github.com/lyeoni/prenlp
 .. _mlox: https://github.com/mlox/mlox

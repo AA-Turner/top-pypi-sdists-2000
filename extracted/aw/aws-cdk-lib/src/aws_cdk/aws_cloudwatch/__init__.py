@@ -5458,6 +5458,7 @@ class CfnInsightRule(
             rule_state="ruleState",
         
             # the properties below are optional
+            apply_on_transformed_logs=False,
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -5473,6 +5474,7 @@ class CfnInsightRule(
         rule_body: builtins.str,
         rule_name: builtins.str,
         rule_state: builtins.str,
+        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
@@ -5481,6 +5483,7 @@ class CfnInsightRule(
         :param rule_body: The definition of the rule, as a JSON object. For details about the syntax, see `Contributor Insights Rule Syntax <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights-RuleSyntax.html>`_ in the *Amazon CloudWatch User Guide* .
         :param rule_name: The name of the rule.
         :param rule_state: The current state of the rule. Valid values are ``ENABLED`` and ``DISABLED`` .
+        :param apply_on_transformed_logs: 
         :param tags: A list of key-value pairs to associate with the Contributor Insights rule. You can associate as many as 50 tags with a rule. Tags can help you organize and categorize your resources. For more information, see `Tagging Your Amazon CloudWatch Resources <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Tagging.html>`_ . To be able to associate tags with a rule, you must have the ``cloudwatch:TagResource`` permission in addition to the ``cloudwatch:PutInsightRule`` permission.
         '''
         if __debug__:
@@ -5488,7 +5491,11 @@ class CfnInsightRule(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnInsightRuleProps(
-            rule_body=rule_body, rule_name=rule_name, rule_state=rule_state, tags=tags
+            rule_body=rule_body,
+            rule_name=rule_name,
+            rule_state=rule_state,
+            apply_on_transformed_logs=apply_on_transformed_logs,
+            tags=tags,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -5600,6 +5607,23 @@ class CfnInsightRule(
         jsii.set(self, "ruleState", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="applyOnTransformedLogs")
+    def apply_on_transformed_logs(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "applyOnTransformedLogs"))
+
+    @apply_on_transformed_logs.setter
+    def apply_on_transformed_logs(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9c9111e23da0920d9dadfa879557f9838793eca0312c1c2bec0dc6eb25325512)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "applyOnTransformedLogs", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
         '''A list of key-value pairs to associate with the Contributor Insights rule.'''
@@ -5620,6 +5644,7 @@ class CfnInsightRule(
         "rule_body": "ruleBody",
         "rule_name": "ruleName",
         "rule_state": "ruleState",
+        "apply_on_transformed_logs": "applyOnTransformedLogs",
         "tags": "tags",
     },
 )
@@ -5630,6 +5655,7 @@ class CfnInsightRuleProps:
         rule_body: builtins.str,
         rule_name: builtins.str,
         rule_state: builtins.str,
+        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnInsightRule``.
@@ -5637,6 +5663,7 @@ class CfnInsightRuleProps:
         :param rule_body: The definition of the rule, as a JSON object. For details about the syntax, see `Contributor Insights Rule Syntax <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights-RuleSyntax.html>`_ in the *Amazon CloudWatch User Guide* .
         :param rule_name: The name of the rule.
         :param rule_state: The current state of the rule. Valid values are ``ENABLED`` and ``DISABLED`` .
+        :param apply_on_transformed_logs: 
         :param tags: A list of key-value pairs to associate with the Contributor Insights rule. You can associate as many as 50 tags with a rule. Tags can help you organize and categorize your resources. For more information, see `Tagging Your Amazon CloudWatch Resources <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Tagging.html>`_ . To be able to associate tags with a rule, you must have the ``cloudwatch:TagResource`` permission in addition to the ``cloudwatch:PutInsightRule`` permission.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-insightrule.html
@@ -5654,6 +5681,7 @@ class CfnInsightRuleProps:
                 rule_state="ruleState",
             
                 # the properties below are optional
+                apply_on_transformed_logs=False,
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -5665,12 +5693,15 @@ class CfnInsightRuleProps:
             check_type(argname="argument rule_body", value=rule_body, expected_type=type_hints["rule_body"])
             check_type(argname="argument rule_name", value=rule_name, expected_type=type_hints["rule_name"])
             check_type(argname="argument rule_state", value=rule_state, expected_type=type_hints["rule_state"])
+            check_type(argname="argument apply_on_transformed_logs", value=apply_on_transformed_logs, expected_type=type_hints["apply_on_transformed_logs"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "rule_body": rule_body,
             "rule_name": rule_name,
             "rule_state": rule_state,
         }
+        if apply_on_transformed_logs is not None:
+            self._values["apply_on_transformed_logs"] = apply_on_transformed_logs
         if tags is not None:
             self._values["tags"] = tags
 
@@ -5707,6 +5738,16 @@ class CfnInsightRuleProps:
         result = self._values.get("rule_state")
         assert result is not None, "Required property 'rule_state' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def apply_on_transformed_logs(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-insightrule.html#cfn-cloudwatch-insightrule-applyontransformedlogs
+        '''
+        result = self._values.get("apply_on_transformed_logs")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -16475,6 +16516,7 @@ def _typecheckingstub__7d177572b447b5b9761effd52cd14b4510ca4c8fc8607968bdc5e0bd8
     rule_body: builtins.str,
     rule_name: builtins.str,
     rule_state: builtins.str,
+    apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -16510,6 +16552,12 @@ def _typecheckingstub__45517418d6e99e8c2af45e33f2d1375212c73bac3d2c9599691ac383e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9c9111e23da0920d9dadfa879557f9838793eca0312c1c2bec0dc6eb25325512(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7d330e494e47f68df8f1753b4e301d3df252f832725f14292abf5fa4ee104054(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -16521,6 +16569,7 @@ def _typecheckingstub__ea720192b6c423ff900f4b69425db7a31e90fed21a852500910edce45
     rule_body: builtins.str,
     rule_name: builtins.str,
     rule_state: builtins.str,
+    apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

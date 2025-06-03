@@ -64,6 +64,7 @@ from .. import (
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
+    ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
@@ -7573,6 +7574,397 @@ class CfnInstanceProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _ITaggableV2_4e6798f8)
+class CfnInstanceSnapshot(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_lightsail.CfnInstanceSnapshot",
+):
+    '''Resource Type definition for AWS::Lightsail::InstanceSnapshot.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instancesnapshot.html
+    :cloudformationResource: AWS::Lightsail::InstanceSnapshot
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_lightsail as lightsail
+        
+        cfn_instance_snapshot = lightsail.CfnInstanceSnapshot(self, "MyCfnInstanceSnapshot",
+            instance_name="instanceName",
+            instance_snapshot_name="instanceSnapshotName",
+        
+            # the properties below are optional
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        instance_name: builtins.str,
+        instance_snapshot_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param instance_name: The instance from which the snapshot was created.
+        :param instance_snapshot_name: The name of the snapshot.
+        :param tags: An array of key-value pairs to apply to this resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b541a8ae34465f7b9196a2ba229a1f5fd9a1a2d84c59e0a52b4bb8767067a951)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnInstanceSnapshotProps(
+            instance_name=instance_name,
+            instance_snapshot_name=instance_snapshot_name,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a49419df28b40d6b77fd339d87e736dc724796cbd17301bcdb9351d9f3dcbdbb)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9310355d031e13cb9c451c86cb27b746770add7da4615651c65012e37f59080c)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the snapshot.
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrFromInstanceArn")
+    def attr_from_instance_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the instance from which the snapshot was created.
+
+        :cloudformationAttribute: FromInstanceArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrFromInstanceArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrFromInstanceName")
+    def attr_from_instance_name(self) -> builtins.str:
+        '''The instance from which the snapshot was created.
+
+        :cloudformationAttribute: FromInstanceName
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrFromInstanceName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrIsFromAutoSnapshot")
+    def attr_is_from_auto_snapshot(self) -> _IResolvable_da3f097b:
+        '''A Boolean value indicating whether the snapshot was created from an automatic snapshot.
+
+        :cloudformationAttribute: IsFromAutoSnapshot
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsFromAutoSnapshot"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLocation")
+    def attr_location(self) -> _IResolvable_da3f097b:
+        '''The region name and Availability Zone where you created the snapshot.
+
+        :cloudformationAttribute: Location
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLocation"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrResourceType")
+    def attr_resource_type(self) -> builtins.str:
+        '''The type of resource (usually InstanceSnapshot).
+
+        :cloudformationAttribute: ResourceType
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrResourceType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrSizeInGb")
+    def attr_size_in_gb(self) -> jsii.Number:
+        '''The size in GB of the SSD.
+
+        :cloudformationAttribute: SizeInGb
+        '''
+        return typing.cast(jsii.Number, jsii.get(self, "attrSizeInGb"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrState")
+    def attr_state(self) -> builtins.str:
+        '''The state the snapshot is in.
+
+        :cloudformationAttribute: State
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrState"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrSupportCode")
+    def attr_support_code(self) -> builtins.str:
+        '''Support code to help identify any issues.
+
+        :cloudformationAttribute: SupportCode
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrSupportCode"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="instanceName")
+    def instance_name(self) -> builtins.str:
+        '''The instance from which the snapshot was created.'''
+        return typing.cast(builtins.str, jsii.get(self, "instanceName"))
+
+    @instance_name.setter
+    def instance_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f182c58b9768c3025ae4f374f99fa56b5842772f231e2f3a51361d5281391f84)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "instanceName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="instanceSnapshotName")
+    def instance_snapshot_name(self) -> builtins.str:
+        '''The name of the snapshot.'''
+        return typing.cast(builtins.str, jsii.get(self, "instanceSnapshotName"))
+
+    @instance_snapshot_name.setter
+    def instance_snapshot_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3db3088324a00c846eb2b2e4b45c6b74eb4a3fb6c5e40737da6265bddb536808)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "instanceSnapshotName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__898443da7c4202ed939a55cb32add087c6d691980a2787732cd68cb7696ab8cd)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lightsail.CfnInstanceSnapshot.LocationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "availability_zone": "availabilityZone",
+            "region_name": "regionName",
+        },
+    )
+    class LocationProperty:
+        def __init__(
+            self,
+            *,
+            availability_zone: typing.Optional[builtins.str] = None,
+            region_name: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The region name and Availability Zone where you created the snapshot.
+
+            :param availability_zone: The Availability Zone. Follows the format us-east-2a (case-sensitive).
+            :param region_name: The AWS Region name.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-instancesnapshot-location.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lightsail as lightsail
+                
+                location_property = lightsail.CfnInstanceSnapshot.LocationProperty(
+                    availability_zone="availabilityZone",
+                    region_name="regionName"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f46e9834c52c5af7d189618902998c954f5c27585b135d66160e3fe5f6f371c5)
+                check_type(argname="argument availability_zone", value=availability_zone, expected_type=type_hints["availability_zone"])
+                check_type(argname="argument region_name", value=region_name, expected_type=type_hints["region_name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if availability_zone is not None:
+                self._values["availability_zone"] = availability_zone
+            if region_name is not None:
+                self._values["region_name"] = region_name
+
+        @builtins.property
+        def availability_zone(self) -> typing.Optional[builtins.str]:
+            '''The Availability Zone.
+
+            Follows the format us-east-2a (case-sensitive).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-instancesnapshot-location.html#cfn-lightsail-instancesnapshot-location-availabilityzone
+            '''
+            result = self._values.get("availability_zone")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def region_name(self) -> typing.Optional[builtins.str]:
+            '''The AWS Region name.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-instancesnapshot-location.html#cfn-lightsail-instancesnapshot-location-regionname
+            '''
+            result = self._values.get("region_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LocationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_lightsail.CfnInstanceSnapshotProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "instance_name": "instanceName",
+        "instance_snapshot_name": "instanceSnapshotName",
+        "tags": "tags",
+    },
+)
+class CfnInstanceSnapshotProps:
+    def __init__(
+        self,
+        *,
+        instance_name: builtins.str,
+        instance_snapshot_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnInstanceSnapshot``.
+
+        :param instance_name: The instance from which the snapshot was created.
+        :param instance_snapshot_name: The name of the snapshot.
+        :param tags: An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instancesnapshot.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_lightsail as lightsail
+            
+            cfn_instance_snapshot_props = lightsail.CfnInstanceSnapshotProps(
+                instance_name="instanceName",
+                instance_snapshot_name="instanceSnapshotName",
+            
+                # the properties below are optional
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6f1052e16aac1d4fd5f262850ea34d03d3d58f217a43f29522c8119d4bfc0a27)
+            check_type(argname="argument instance_name", value=instance_name, expected_type=type_hints["instance_name"])
+            check_type(argname="argument instance_snapshot_name", value=instance_snapshot_name, expected_type=type_hints["instance_snapshot_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "instance_name": instance_name,
+            "instance_snapshot_name": instance_snapshot_name,
+        }
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def instance_name(self) -> builtins.str:
+        '''The instance from which the snapshot was created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instancesnapshot.html#cfn-lightsail-instancesnapshot-instancename
+        '''
+        result = self._values.get("instance_name")
+        assert result is not None, "Required property 'instance_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def instance_snapshot_name(self) -> builtins.str:
+        '''The name of the snapshot.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instancesnapshot.html#cfn-lightsail-instancesnapshot-instancesnapshotname
+        '''
+        result = self._values.get("instance_snapshot_name")
+        assert result is not None, "Required property 'instance_snapshot_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instancesnapshot.html#cfn-lightsail-instancesnapshot-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnInstanceSnapshotProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_IInspectable_c2943556, _ITaggable_36806126)
 class CfnLoadBalancer(
     _CfnResource_9df397a6,
@@ -8648,6 +9040,8 @@ __all__ = [
     "CfnDistributionProps",
     "CfnInstance",
     "CfnInstanceProps",
+    "CfnInstanceSnapshot",
+    "CfnInstanceSnapshotProps",
     "CfnLoadBalancer",
     "CfnLoadBalancerProps",
     "CfnLoadBalancerTlsCertificate",
@@ -9718,6 +10112,64 @@ def _typecheckingstub__6e0def276816b17135efe655ecd6a1a965ddb59099e6f411660bf2c2e
     state: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstance.StateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_data: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b541a8ae34465f7b9196a2ba229a1f5fd9a1a2d84c59e0a52b4bb8767067a951(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    instance_name: builtins.str,
+    instance_snapshot_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a49419df28b40d6b77fd339d87e736dc724796cbd17301bcdb9351d9f3dcbdbb(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9310355d031e13cb9c451c86cb27b746770add7da4615651c65012e37f59080c(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f182c58b9768c3025ae4f374f99fa56b5842772f231e2f3a51361d5281391f84(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3db3088324a00c846eb2b2e4b45c6b74eb4a3fb6c5e40737da6265bddb536808(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__898443da7c4202ed939a55cb32add087c6d691980a2787732cd68cb7696ab8cd(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f46e9834c52c5af7d189618902998c954f5c27585b135d66160e3fe5f6f371c5(
+    *,
+    availability_zone: typing.Optional[builtins.str] = None,
+    region_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6f1052e16aac1d4fd5f262850ea34d03d3d58f217a43f29522c8119d4bfc0a27(
+    *,
+    instance_name: builtins.str,
+    instance_snapshot_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -13,8 +13,9 @@ Subscriptions can be added to the following endpoints:
 * AWS Lambda
 * Email
 * SMS
+* Amazon Data Firehose
 
-Subscriptions to Amazon SQS and AWS Lambda can be added on topics across regions.
+Subscriptions to Amazon SQS, AWS Lambda and Amazon Data Firehose can be added on topics across regions.
 
 Create an Amazon SNS Topic to add subscriptions.
 
@@ -143,6 +144,34 @@ sms_number = CfnParameter(self, "sms-param")
 
 my_topic.add_subscription(subscriptions.SmsSubscription(sms_number.value_as_string))
 ```
+
+### Amazon Data Firehose
+
+Subscribe an Amazon Data Firehose delivery stream to your topic:
+
+```python
+import aws_cdk.aws_kinesisfirehose as firehose
+# stream: firehose.DeliveryStream
+
+
+my_topic = sns.Topic(self, "Topic")
+
+my_topic.add_subscription(subscriptions.FirehoseSubscription(stream))
+```
+
+To remove any Amazon SNS metadata from published messages, specify `rawMessageDelivery` to true.
+
+```python
+import aws_cdk.aws_kinesisfirehose as firehose
+# stream: firehose.DeliveryStream
+
+
+my_topic = sns.Topic(self, "Topic")
+
+my_topic.add_subscription(subscriptions.FirehoseSubscription(stream,
+    raw_message_delivery=True
+))
+```
 '''
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
@@ -176,6 +205,8 @@ def check_type(argname: str, value: object, expected_type: typing.Any) -> typing
 
 from .._jsii import *
 
+from ..aws_iam import IRole as _IRole_235f5d8e
+from ..aws_kinesisfirehose import IDeliveryStream as _IDeliveryStream_8f118861
 from ..aws_lambda import IFunction as _IFunction_6adb0ab8
 from ..aws_sns import (
     DeliveryPolicy as _DeliveryPolicy_76b14b4e,
@@ -246,6 +277,70 @@ class EmailSubscription(
             type_hints = typing.get_type_hints(_typecheckingstub__8196047448e43839102a9b8698847e0dced23efba9bc4c3183517832ea7a337e)
             check_type(argname="argument _topic", value=_topic, expected_type=type_hints["_topic"])
         return typing.cast(_TopicSubscriptionConfig_3a01016e, jsii.invoke(self, "bind", [_topic]))
+
+
+@jsii.implements(_ITopicSubscription_363a9426)
+class FirehoseSubscription(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_sns_subscriptions.FirehoseSubscription",
+):
+    '''Use an Amazon Data Firehose delivery stream as a subscription target.
+
+    :see: https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html
+    :exampleMetadata: infused
+
+    Example::
+
+        import aws_cdk.aws_kinesisfirehose as firehose
+        # stream: firehose.DeliveryStream
+        
+        
+        my_topic = sns.Topic(self, "Topic")
+        
+        my_topic.add_subscription(subscriptions.FirehoseSubscription(stream))
+    '''
+
+    def __init__(
+        self,
+        delivery_stream: _IDeliveryStream_8f118861,
+        *,
+        raw_message_delivery: typing.Optional[builtins.bool] = None,
+        role: typing.Optional[_IRole_235f5d8e] = None,
+        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        filter_policy: typing.Optional[typing.Mapping[builtins.str, _SubscriptionFilter_8e774360]] = None,
+        filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, _FilterOrPolicy_ad79be59]] = None,
+    ) -> None:
+        '''
+        :param delivery_stream: -
+        :param raw_message_delivery: Whether to remove any Amazon SNS metadata from published messages. Default: false
+        :param role: The role to assume to write messages to the Amazon Data Firehose delivery stream. Default: - A new Role is created
+        :param dead_letter_queue: Queue to be used as dead letter queue. If not passed no dead letter queue is enabled. Default: - No dead letter queue enabled.
+        :param filter_policy: The filter policy. Default: - all messages are delivered
+        :param filter_policy_with_message_body: The filter policy that is applied on the message body. To apply a filter policy to the message attributes, use ``filterPolicy``. A maximum of one of ``filterPolicyWithMessageBody`` and ``filterPolicy`` may be used. Default: - all messages are delivered
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__eb284a753df4f96d68b5336d14cffbd9183054fb6ebd06d8ae9d19e34dadca66)
+            check_type(argname="argument delivery_stream", value=delivery_stream, expected_type=type_hints["delivery_stream"])
+        props = FirehoseSubscriptionProps(
+            raw_message_delivery=raw_message_delivery,
+            role=role,
+            dead_letter_queue=dead_letter_queue,
+            filter_policy=filter_policy,
+            filter_policy_with_message_body=filter_policy_with_message_body,
+        )
+
+        jsii.create(self.__class__, self, [delivery_stream, props])
+
+    @jsii.member(jsii_name="bind")
+    def bind(self, topic: _ITopic_9eca4852) -> _TopicSubscriptionConfig_3a01016e:
+        '''Returns a configuration for a Lambda function to subscribe to an SNS topic.
+
+        :param topic: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4451ffe60ee55af18e7cd4f32871e3dcb229ecdc56cfab772a77a55ca36a43d2)
+            check_type(argname="argument topic", value=topic, expected_type=type_hints["topic"])
+        return typing.cast(_TopicSubscriptionConfig_3a01016e, jsii.invoke(self, "bind", [topic]))
 
 
 @jsii.implements(_ITopicSubscription_363a9426)
@@ -885,6 +980,135 @@ class EmailSubscriptionProps(SubscriptionProps):
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_sns_subscriptions.FirehoseSubscriptionProps",
+    jsii_struct_bases=[SubscriptionProps],
+    name_mapping={
+        "dead_letter_queue": "deadLetterQueue",
+        "filter_policy": "filterPolicy",
+        "filter_policy_with_message_body": "filterPolicyWithMessageBody",
+        "raw_message_delivery": "rawMessageDelivery",
+        "role": "role",
+    },
+)
+class FirehoseSubscriptionProps(SubscriptionProps):
+    def __init__(
+        self,
+        *,
+        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        filter_policy: typing.Optional[typing.Mapping[builtins.str, _SubscriptionFilter_8e774360]] = None,
+        filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, _FilterOrPolicy_ad79be59]] = None,
+        raw_message_delivery: typing.Optional[builtins.bool] = None,
+        role: typing.Optional[_IRole_235f5d8e] = None,
+    ) -> None:
+        '''Properties for an Amazon Data Firehose subscription.
+
+        :param dead_letter_queue: Queue to be used as dead letter queue. If not passed no dead letter queue is enabled. Default: - No dead letter queue enabled.
+        :param filter_policy: The filter policy. Default: - all messages are delivered
+        :param filter_policy_with_message_body: The filter policy that is applied on the message body. To apply a filter policy to the message attributes, use ``filterPolicy``. A maximum of one of ``filterPolicyWithMessageBody`` and ``filterPolicy`` may be used. Default: - all messages are delivered
+        :param raw_message_delivery: Whether to remove any Amazon SNS metadata from published messages. Default: false
+        :param role: The role to assume to write messages to the Amazon Data Firehose delivery stream. Default: - A new Role is created
+
+        :exampleMetadata: infused
+
+        Example::
+
+            import aws_cdk.aws_kinesisfirehose as firehose
+            # stream: firehose.DeliveryStream
+            
+            
+            my_topic = sns.Topic(self, "Topic")
+            
+            my_topic.add_subscription(subscriptions.FirehoseSubscription(stream,
+                raw_message_delivery=True
+            ))
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__985141d3216aa767af7319f266fa3eda68db2fc5132677f99b8aeb05d240609c)
+            check_type(argname="argument dead_letter_queue", value=dead_letter_queue, expected_type=type_hints["dead_letter_queue"])
+            check_type(argname="argument filter_policy", value=filter_policy, expected_type=type_hints["filter_policy"])
+            check_type(argname="argument filter_policy_with_message_body", value=filter_policy_with_message_body, expected_type=type_hints["filter_policy_with_message_body"])
+            check_type(argname="argument raw_message_delivery", value=raw_message_delivery, expected_type=type_hints["raw_message_delivery"])
+            check_type(argname="argument role", value=role, expected_type=type_hints["role"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if dead_letter_queue is not None:
+            self._values["dead_letter_queue"] = dead_letter_queue
+        if filter_policy is not None:
+            self._values["filter_policy"] = filter_policy
+        if filter_policy_with_message_body is not None:
+            self._values["filter_policy_with_message_body"] = filter_policy_with_message_body
+        if raw_message_delivery is not None:
+            self._values["raw_message_delivery"] = raw_message_delivery
+        if role is not None:
+            self._values["role"] = role
+
+    @builtins.property
+    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+        '''Queue to be used as dead letter queue.
+
+        If not passed no dead letter queue is enabled.
+
+        :default: - No dead letter queue enabled.
+        '''
+        result = self._values.get("dead_letter_queue")
+        return typing.cast(typing.Optional[_IQueue_7ed6f679], result)
+
+    @builtins.property
+    def filter_policy(
+        self,
+    ) -> typing.Optional[typing.Mapping[builtins.str, _SubscriptionFilter_8e774360]]:
+        '''The filter policy.
+
+        :default: - all messages are delivered
+        '''
+        result = self._values.get("filter_policy")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, _SubscriptionFilter_8e774360]], result)
+
+    @builtins.property
+    def filter_policy_with_message_body(
+        self,
+    ) -> typing.Optional[typing.Mapping[builtins.str, _FilterOrPolicy_ad79be59]]:
+        '''The filter policy that is applied on the message body.
+
+        To apply a filter policy to the message attributes, use ``filterPolicy``. A maximum of one of ``filterPolicyWithMessageBody`` and ``filterPolicy`` may be used.
+
+        :default: - all messages are delivered
+        '''
+        result = self._values.get("filter_policy_with_message_body")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, _FilterOrPolicy_ad79be59]], result)
+
+    @builtins.property
+    def raw_message_delivery(self) -> typing.Optional[builtins.bool]:
+        '''Whether to remove any Amazon SNS metadata from published messages.
+
+        :default: false
+
+        :see: https://docs.aws.amazon.com/sns/latest/dg/sns-large-payload-raw-message-delivery.html
+        '''
+        result = self._values.get("raw_message_delivery")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+        '''The role to assume to write messages to the Amazon Data Firehose delivery stream.
+
+        :default: - A new Role is created
+        '''
+        result = self._values.get("role")
+        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "FirehoseSubscriptionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_sns_subscriptions.LambdaSubscriptionProps",
     jsii_struct_bases=[SubscriptionProps],
     name_mapping={
@@ -1235,6 +1459,8 @@ class SqsSubscriptionProps(SubscriptionProps):
 __all__ = [
     "EmailSubscription",
     "EmailSubscriptionProps",
+    "FirehoseSubscription",
+    "FirehoseSubscriptionProps",
     "LambdaSubscription",
     "LambdaSubscriptionProps",
     "SmsSubscription",
@@ -1261,6 +1487,24 @@ def _typecheckingstub__1a82616a80e8cb255f10c290c6973dc00aa57e3134cc5dc533357bb5f
 
 def _typecheckingstub__8196047448e43839102a9b8698847e0dced23efba9bc4c3183517832ea7a337e(
     _topic: _ITopic_9eca4852,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eb284a753df4f96d68b5336d14cffbd9183054fb6ebd06d8ae9d19e34dadca66(
+    delivery_stream: _IDeliveryStream_8f118861,
+    *,
+    raw_message_delivery: typing.Optional[builtins.bool] = None,
+    role: typing.Optional[_IRole_235f5d8e] = None,
+    dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+    filter_policy: typing.Optional[typing.Mapping[builtins.str, _SubscriptionFilter_8e774360]] = None,
+    filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, _FilterOrPolicy_ad79be59]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4451ffe60ee55af18e7cd4f32871e3dcb229ecdc56cfab772a77a55ca36a43d2(
+    topic: _ITopic_9eca4852,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1360,6 +1604,17 @@ def _typecheckingstub__4a78d2c696d1babec6ccfebac17827b1b6ba6f90d62674866fc5b2df7
     filter_policy: typing.Optional[typing.Mapping[builtins.str, _SubscriptionFilter_8e774360]] = None,
     filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, _FilterOrPolicy_ad79be59]] = None,
     json: typing.Optional[builtins.bool] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__985141d3216aa767af7319f266fa3eda68db2fc5132677f99b8aeb05d240609c(
+    *,
+    dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+    filter_policy: typing.Optional[typing.Mapping[builtins.str, _SubscriptionFilter_8e774360]] = None,
+    filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, _FilterOrPolicy_ad79be59]] = None,
+    raw_message_delivery: typing.Optional[builtins.bool] = None,
+    role: typing.Optional[_IRole_235f5d8e] = None,
 ) -> None:
     """Type checking stubs"""
     pass

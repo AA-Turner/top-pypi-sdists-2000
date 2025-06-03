@@ -326,7 +326,7 @@ class AdjustmentTier:
     ) -> None:
         '''An adjustment.
 
-        :param adjustment: What number to adjust the capacity with. The number is interpeted as an added capacity, a new fixed capacity or an added percentage depending on the AdjustmentType value of the StepScalingPolicy. Can be positive or negative.
+        :param adjustment: What number to adjust the capacity with. The number is interpreted as an added capacity, a new fixed capacity or an added percentage depending on the AdjustmentType value of the StepScalingPolicy. Can be positive or negative.
         :param lower_bound: Lower bound where this scaling tier applies. The scaling tier applies if the difference between the metric value and its alarm threshold is higher than this value. Default: -Infinity if this is the first tier, otherwise the upperBound of the previous tier
         :param upper_bound: Upper bound where this scaling tier applies. The scaling tier applies if the difference between the metric value and its alarm threshold is lower than this value. Default: +Infinity
 
@@ -363,7 +363,7 @@ class AdjustmentTier:
     def adjustment(self) -> jsii.Number:
         '''What number to adjust the capacity with.
 
-        The number is interpeted as an added capacity, a new fixed capacity or an
+        The number is interpreted as an added capacity, a new fixed capacity or an
         added percentage depending on the AdjustmentType value of the
         StepScalingPolicy.
 
@@ -6741,9 +6741,9 @@ class StepScalingAction(
         lower_bound: typing.Optional[jsii.Number] = None,
         upper_bound: typing.Optional[jsii.Number] = None,
     ) -> None:
-        '''Add an adjusment interval to the ScalingAction.
+        '''Add an adjustment interval to the ScalingAction.
 
-        :param adjustment: What number to adjust the capacity with. The number is interpeted as an added capacity, a new fixed capacity or an added percentage depending on the AdjustmentType value of the StepScalingPolicy. Can be positive or negative.
+        :param adjustment: What number to adjust the capacity with. The number is interpreted as an added capacity, a new fixed capacity or an added percentage depending on the AdjustmentType value of the StepScalingPolicy. Can be positive or negative.
         :param lower_bound: Lower bound where this scaling tier applies. The scaling tier applies if the difference between the metric value and its alarm threshold is higher than this value. Default: -Infinity if this is the first tier, otherwise the upperBound of the previous tier
         :param upper_bound: Upper bound where this scaling tier applies. The scaling tier applies if the difference between the metric value and its alarm threshold is lower than this value. Default: +Infinity
         '''

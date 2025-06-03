@@ -428,7 +428,7 @@ class CfnScraper(
         :param scrape_configuration: The configuration in use by the scraper.
         :param source: The Amazon EKS cluster from which the scraper collects metrics.
         :param alias: An optional user-assigned scraper alias.
-        :param role_configuration: Role configuration.
+        :param role_configuration: The role configuration in an Amazon Managed Service for Prometheus scraper.
         :param tags: (Optional) The list of tag keys and values associated with the scraper.
         '''
         if __debug__:
@@ -592,7 +592,7 @@ class CfnScraper(
     def role_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.RoleConfigurationProperty"]]:
-        '''Role configuration.'''
+        '''The role configuration in an Amazon Managed Service for Prometheus scraper.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.RoleConfigurationProperty"]], jsii.get(self, "roleConfiguration"))
 
     @role_configuration.setter
@@ -837,10 +837,10 @@ class CfnScraper(
             source_role_arn: typing.Optional[builtins.str] = None,
             target_role_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Role configuration.
+            '''The role configuration in an Amazon Managed Service for Prometheus scraper.
 
-            :param source_role_arn: IAM Role in source account.
-            :param target_role_arn: IAM Role in the target account.
+            :param source_role_arn: The ARN of the source role.
+            :param target_role_arn: The ARN of the target role.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-roleconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -868,7 +868,7 @@ class CfnScraper(
 
         @builtins.property
         def source_role_arn(self) -> typing.Optional[builtins.str]:
-            '''IAM Role in source account.
+            '''The ARN of the source role.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-roleconfiguration.html#cfn-aps-scraper-roleconfiguration-sourcerolearn
             '''
@@ -877,7 +877,7 @@ class CfnScraper(
 
         @builtins.property
         def target_role_arn(self) -> typing.Optional[builtins.str]:
-            '''IAM Role in the target account.
+            '''The ARN of the target role.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-roleconfiguration.html#cfn-aps-scraper-roleconfiguration-targetrolearn
             '''
@@ -1043,7 +1043,7 @@ class CfnScraperProps:
         :param scrape_configuration: The configuration in use by the scraper.
         :param source: The Amazon EKS cluster from which the scraper collects metrics.
         :param alias: An optional user-assigned scraper alias.
-        :param role_configuration: Role configuration.
+        :param role_configuration: The role configuration in an Amazon Managed Service for Prometheus scraper.
         :param tags: (Optional) The list of tag keys and values associated with the scraper.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html
@@ -1153,7 +1153,7 @@ class CfnScraperProps:
     def role_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScraper.RoleConfigurationProperty]]:
-        '''Role configuration.
+        '''The role configuration in an Amazon Managed Service for Prometheus scraper.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-roleconfiguration
         '''
@@ -1254,8 +1254,8 @@ class CfnWorkspace(
         :param alert_manager_definition: The alert manager definition, a YAML configuration for the alert manager in your Amazon Managed Service for Prometheus workspace. For details about the alert manager definition, see `Creating an alert manager configuration files <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alertmanager-config.html>`_ in the *Amazon Managed Service for Prometheus User Guide* . The following example shows part of a CloudFormation YAML file with an embedded alert manager definition (following the ``- |-`` ). ``Workspace: Type: AWS::APS::Workspace .... Properties: .... AlertManagerDefinition: Fn::Sub: - |- alertmanager_config: | templates: - 'default_template' route: receiver: example-sns receivers: - name: example-sns sns_configs: - topic_arn: 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${TopicName}' -``
         :param alias: The alias that is assigned to this workspace to help identify it. It does not need to be unique.
         :param kms_key_arn: (optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace. For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
-        :param logging_configuration: Contains information about the logging configuration for the workspace.
-        :param query_logging_configuration: Query logging configuration.
+        :param logging_configuration: Contains information about the current rules and alerting logging configuration for the workspace. .. epigraph:: These logging configurations are only for rules and alerting logs.
+        :param query_logging_configuration: The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
         :param tags: The list of tag keys and values that are associated with the workspace.
         :param workspace_configuration: Use this structure to define label sets and the ingestion limits for time series that match label sets, and to specify the retention period of the workspace.
         '''
@@ -1393,7 +1393,7 @@ class CfnWorkspace(
     def logging_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.LoggingConfigurationProperty"]]:
-        '''Contains information about the logging configuration for the workspace.'''
+        '''Contains information about the current rules and alerting logging configuration for the workspace.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.LoggingConfigurationProperty"]], jsii.get(self, "loggingConfiguration"))
 
     @logging_configuration.setter
@@ -1411,7 +1411,7 @@ class CfnWorkspace(
     def query_logging_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.QueryLoggingConfigurationProperty"]]:
-        '''Query logging configuration.'''
+        '''The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.QueryLoggingConfigurationProperty"]], jsii.get(self, "queryLoggingConfiguration"))
 
     @query_logging_configuration.setter
@@ -1462,9 +1462,9 @@ class CfnWorkspace(
     )
     class CloudWatchLogDestinationProperty:
         def __init__(self, *, log_group_arn: builtins.str) -> None:
-            '''Represents a cloudwatch logs destination for query logging.
+            '''Configuration details for logging to CloudWatch Logs.
 
-            :param log_group_arn: The ARN of the CloudWatch Logs log group.
+            :param log_group_arn: The ARN of the CloudWatch log group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-cloudwatchlogdestination.html
             :exampleMetadata: fixture=_generated
@@ -1488,7 +1488,7 @@ class CfnWorkspace(
 
         @builtins.property
         def log_group_arn(self) -> builtins.str:
-            '''The ARN of the CloudWatch Logs log group.
+            '''The ARN of the CloudWatch log group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-cloudwatchlogdestination.html#cfn-aps-workspace-cloudwatchlogdestination-loggrouparn
             '''
@@ -1725,7 +1725,11 @@ class CfnWorkspace(
             *,
             log_group_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Contains information about the logging configuration for the workspace.
+            '''Contains information about the rules and alerting logging configuration for the workspace.
+
+            .. epigraph::
+
+               These logging configurations are only for rules and alerting logs.
 
             :param log_group_arn: The ARN of the CloudWatch log group to which the vended log data will be published. This log group must exist prior to calling this operation.
 
@@ -1783,10 +1787,10 @@ class CfnWorkspace(
             cloud_watch_logs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.CloudWatchLogDestinationProperty", typing.Dict[builtins.str, typing.Any]]],
             filters: typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.LoggingFilterProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
-            '''Destinations for query logging.
+            '''The logging destination in an Amazon Managed Service for Prometheus workspace.
 
-            :param cloud_watch_logs: Represents a cloudwatch logs destination for query logging.
-            :param filters: Filters for logging.
+            :param cloud_watch_logs: Configuration details for logging to CloudWatch Logs.
+            :param filters: Filtering criteria that determine which queries are logged.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-loggingdestination.html
             :exampleMetadata: fixture=_generated
@@ -1819,7 +1823,7 @@ class CfnWorkspace(
         def cloud_watch_logs(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnWorkspace.CloudWatchLogDestinationProperty"]:
-            '''Represents a cloudwatch logs destination for query logging.
+            '''Configuration details for logging to CloudWatch Logs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-loggingdestination.html#cfn-aps-workspace-loggingdestination-cloudwatchlogs
             '''
@@ -1831,7 +1835,7 @@ class CfnWorkspace(
         def filters(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnWorkspace.LoggingFilterProperty"]:
-            '''Filters for logging.
+            '''Filtering criteria that determine which queries are logged.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-loggingdestination.html#cfn-aps-workspace-loggingdestination-filters
             '''
@@ -1857,7 +1861,7 @@ class CfnWorkspace(
     )
     class LoggingFilterProperty:
         def __init__(self, *, qsp_threshold: jsii.Number) -> None:
-            '''Filters for logging.
+            '''Filtering criteria that determine which queries are logged.
 
             :param qsp_threshold: Query logs with QSP above this limit are vended.
 
@@ -1913,9 +1917,9 @@ class CfnWorkspace(
             *,
             destinations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.LoggingDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
-            '''Query logging configuration.
+            '''The query logging configuration in an Amazon Managed Service for Prometheus workspace.
 
-            :param destinations: The destinations configuration for query logging.
+            :param destinations: Defines a destination and its associated filtering criteria for query logging.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-queryloggingconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1948,7 +1952,7 @@ class CfnWorkspace(
         def destinations(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.LoggingDestinationProperty"]]]:
-            '''The destinations configuration for query logging.
+            '''Defines a destination and its associated filtering criteria for query logging.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-workspace-queryloggingconfiguration.html#cfn-aps-workspace-queryloggingconfiguration-destinations
             '''
@@ -2083,8 +2087,8 @@ class CfnWorkspaceProps:
         :param alert_manager_definition: The alert manager definition, a YAML configuration for the alert manager in your Amazon Managed Service for Prometheus workspace. For details about the alert manager definition, see `Creating an alert manager configuration files <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alertmanager-config.html>`_ in the *Amazon Managed Service for Prometheus User Guide* . The following example shows part of a CloudFormation YAML file with an embedded alert manager definition (following the ``- |-`` ). ``Workspace: Type: AWS::APS::Workspace .... Properties: .... AlertManagerDefinition: Fn::Sub: - |- alertmanager_config: | templates: - 'default_template' route: receiver: example-sns receivers: - name: example-sns sns_configs: - topic_arn: 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${TopicName}' -``
         :param alias: The alias that is assigned to this workspace to help identify it. It does not need to be unique.
         :param kms_key_arn: (optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace. For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
-        :param logging_configuration: Contains information about the logging configuration for the workspace.
-        :param query_logging_configuration: Query logging configuration.
+        :param logging_configuration: Contains information about the current rules and alerting logging configuration for the workspace. .. epigraph:: These logging configurations are only for rules and alerting logs.
+        :param query_logging_configuration: The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
         :param tags: The list of tag keys and values that are associated with the workspace.
         :param workspace_configuration: Use this structure to define label sets and the ingestion limits for time series that match label sets, and to specify the retention period of the workspace.
 
@@ -2198,7 +2202,11 @@ class CfnWorkspaceProps:
     def logging_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.LoggingConfigurationProperty]]:
-        '''Contains information about the logging configuration for the workspace.
+        '''Contains information about the current rules and alerting logging configuration for the workspace.
+
+        .. epigraph::
+
+           These logging configurations are only for rules and alerting logs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-loggingconfiguration
         '''
@@ -2209,7 +2217,7 @@ class CfnWorkspaceProps:
     def query_logging_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.QueryLoggingConfigurationProperty]]:
-        '''Query logging configuration.
+        '''The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-queryloggingconfiguration
         '''

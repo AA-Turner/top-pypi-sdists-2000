@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: cloudevents
-Version: 1.11.1
+Version: 1.12.0
 Summary: CloudEvents Python SDK
 Home-page: https://github.com/cloudevents/sdk-python
 Author: The Cloud Events Contributors
@@ -17,10 +17,11 @@ Classifier: Natural Language :: English
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
 Classifier: Typing :: Typed
 Description-Content-Type: text/markdown
 License-File: LICENSE

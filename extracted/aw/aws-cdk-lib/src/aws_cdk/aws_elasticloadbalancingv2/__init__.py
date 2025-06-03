@@ -3863,7 +3863,7 @@ class CfnListener(
         :param mutual_authentication: The mutual authentication configuration information.
         :param port: The port on which the load balancer is listening. You can't specify a port for a Gateway Load Balancer.
         :param protocol: The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP. You can’t specify the UDP or TCP_UDP protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
-        :param ssl_policy: [HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/describe-ssl-policies.html>`_ in the *Network Load Balancers Guide* . Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
+        :param ssl_policy: [HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/describe-ssl-policies.html>`_ in the *Network Load Balancers Guide* . [HTTPS listeners] Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__da6c6bab97eae93f0a1595d72a25ac890e7034cc701e7cf76b58f5c6a2170048)
@@ -5382,7 +5382,7 @@ class CfnListener(
         ) -> None:
             '''Information about the target group stickiness for a rule.
 
-            :param duration_seconds: The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days).
+            :param duration_seconds: The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days). You must specify this value when enabling target group stickiness.
             :param enabled: Indicates whether target group stickiness is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-targetgroupstickinessconfig.html
@@ -5413,7 +5413,7 @@ class CfnListener(
         def duration_seconds(self) -> typing.Optional[jsii.Number]:
             '''The time period, in seconds, during which requests from a client should be routed to the same target group.
 
-            The range is 1-604800 seconds (7 days).
+            The range is 1-604800 seconds (7 days). You must specify this value when enabling target group stickiness.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-targetgroupstickinessconfig.html#cfn-elasticloadbalancingv2-listener-targetgroupstickinessconfig-durationseconds
             '''
@@ -5812,7 +5812,7 @@ class CfnListenerProps:
         :param mutual_authentication: The mutual authentication configuration information.
         :param port: The port on which the load balancer is listening. You can't specify a port for a Gateway Load Balancer.
         :param protocol: The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP. You can’t specify the UDP or TCP_UDP protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
-        :param ssl_policy: [HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/describe-ssl-policies.html>`_ in the *Network Load Balancers Guide* . Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
+        :param ssl_policy: [HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/describe-ssl-policies.html>`_ in the *Network Load Balancers Guide* . [HTTPS listeners] Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html
         :exampleMetadata: fixture=_generated
@@ -6042,7 +6042,7 @@ class CfnListenerProps:
 
         For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/describe-ssl-policies.html>`_ in the *Network Load Balancers Guide* .
 
-        Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
+        [HTTPS listeners] Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-sslpolicy
         '''
@@ -8082,7 +8082,7 @@ class CfnListenerRule(
         ) -> None:
             '''Information about the target group stickiness for a rule.
 
-            :param duration_seconds: The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days).
+            :param duration_seconds: The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days). You must specify this value when enabling target group stickiness.
             :param enabled: Indicates whether target group stickiness is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-targetgroupstickinessconfig.html
@@ -8113,7 +8113,7 @@ class CfnListenerRule(
         def duration_seconds(self) -> typing.Optional[jsii.Number]:
             '''The time period, in seconds, during which requests from a client should be routed to the same target group.
 
-            The range is 1-604800 seconds (7 days).
+            The range is 1-604800 seconds (7 days). You must specify this value when enabling target group stickiness.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-targetgroupstickinessconfig.html#cfn-elasticloadbalancingv2-listenerrule-targetgroupstickinessconfig-durationseconds
             '''

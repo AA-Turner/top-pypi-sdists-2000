@@ -904,12 +904,15 @@ To replicate objects to a destination bucket, you can specify the `replicationRu
 # destination_bucket1: s3.IBucket
 # destination_bucket2: s3.IBucket
 # replication_role: iam.IRole
-# kms_key: kms.IKey
+# encryption_key: kms.IKey
+# destination_encryption_key: kms.IKey
 
 
 source_bucket = s3.Bucket(self, "SourceBucket",
     # Versioning must be enabled on both the source and destination bucket
     versioned=True,
+    # Optional. Specify the KMS key to use for encrypts objects in the source bucket.
+    encryption_key=encryption_key,
     # Optional. If not specified, a new role will be created.
     replication_role=replication_role,
     replication_rules=[s3.ReplicationRule(
@@ -932,7 +935,7 @@ source_bucket = s3.Bucket(self, "SourceBucket",
         # If set, metrics will be output to indicate whether replication by S3 RTC took longer than the configured time.
         metrics=s3.ReplicationTimeValue.FIFTEEN_MINUTES,
         # The kms key to use for the destination bucket.
-        kms_key=kms_key,
+        kms_key=destination_encryption_key,
         # The storage class to use for the destination bucket.
         storage_class=s3.StorageClass.INFREQUENT_ACCESS,
         # Whether to replicate objects with SSE-KMS encryption.
@@ -956,6 +959,15 @@ source_bucket = s3.Bucket(self, "SourceBucket",
             ]
         )
     )
+    ]
+)
+
+# Grant permissions to the replication role.
+# This method is not required if you choose to use an auto-generated replication role or manually grant permissions.
+source_bucket.grant_replication_permission(replication_role,
+    # Optional. Specify the KMS key to use for decrypting objects in the source bucket.
+    source_decryption_key=encryption_key,
+    destinations=[s3.GrantReplicationPermissionDestinationProps(bucket=destination_bucket1), s3.GrantReplicationPermissionDestinationProps(bucket=destination_bucket2, encryption_key=destination_encryption_key)
     ]
 )
 ```
@@ -15811,12 +15823,15 @@ class Filter:
             # destination_bucket1: s3.IBucket
             # destination_bucket2: s3.IBucket
             # replication_role: iam.IRole
-            # kms_key: kms.IKey
+            # encryption_key: kms.IKey
+            # destination_encryption_key: kms.IKey
             
             
             source_bucket = s3.Bucket(self, "SourceBucket",
                 # Versioning must be enabled on both the source and destination bucket
                 versioned=True,
+                # Optional. Specify the KMS key to use for encrypts objects in the source bucket.
+                encryption_key=encryption_key,
                 # Optional. If not specified, a new role will be created.
                 replication_role=replication_role,
                 replication_rules=[s3.ReplicationRule(
@@ -15839,7 +15854,7 @@ class Filter:
                     # If set, metrics will be output to indicate whether replication by S3 RTC took longer than the configured time.
                     metrics=s3.ReplicationTimeValue.FIFTEEN_MINUTES,
                     # The kms key to use for the destination bucket.
-                    kms_key=kms_key,
+                    kms_key=destination_encryption_key,
                     # The storage class to use for the destination bucket.
                     storage_class=s3.StorageClass.INFREQUENT_ACCESS,
                     # Whether to replicate objects with SSE-KMS encryption.
@@ -15863,6 +15878,15 @@ class Filter:
                         ]
                     )
                 )
+                ]
+            )
+            
+            # Grant permissions to the replication role.
+            # This method is not required if you choose to use an auto-generated replication role or manually grant permissions.
+            source_bucket.grant_replication_permission(replication_role,
+                # Optional. Specify the KMS key to use for decrypting objects in the source bucket.
+                source_decryption_key=encryption_key,
+                destinations=[s3.GrantReplicationPermissionDestinationProps(bucket=destination_bucket1), s3.GrantReplicationPermissionDestinationProps(bucket=destination_bucket2, encryption_key=destination_encryption_key)
                 ]
             )
         '''
@@ -15904,6 +15928,220 @@ class Filter:
 
     def __repr__(self) -> str:
         return "Filter(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_s3.GrantReplicationPermissionDestinationProps",
+    jsii_struct_bases=[],
+    name_mapping={"bucket": "bucket", "encryption_key": "encryptionKey"},
+)
+class GrantReplicationPermissionDestinationProps:
+    def __init__(
+        self,
+        *,
+        bucket: "IBucket",
+        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+    ) -> None:
+        '''The properties for the destination bucket for granting replication permission.
+
+        :param bucket: The destination bucket.
+        :param encryption_key: The KMS key to use for encryption if a destination bucket needs to be encrypted with a customer-managed KMS key. Default: - no KMS key is used for replication.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_kms as kms
+            from aws_cdk import aws_s3 as s3
+            
+            # bucket: s3.Bucket
+            # key: kms.Key
+            
+            grant_replication_permission_destination_props = s3.GrantReplicationPermissionDestinationProps(
+                bucket=bucket,
+            
+                # the properties below are optional
+                encryption_key=key
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c28989eb119121ac7809e78ba2038558e14755021078bf7d97f894b34bc3311a)
+            check_type(argname="argument bucket", value=bucket, expected_type=type_hints["bucket"])
+            check_type(argname="argument encryption_key", value=encryption_key, expected_type=type_hints["encryption_key"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "bucket": bucket,
+        }
+        if encryption_key is not None:
+            self._values["encryption_key"] = encryption_key
+
+    @builtins.property
+    def bucket(self) -> "IBucket":
+        '''The destination bucket.'''
+        result = self._values.get("bucket")
+        assert result is not None, "Required property 'bucket' is missing"
+        return typing.cast("IBucket", result)
+
+    @builtins.property
+    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+        '''The KMS key to use for encryption if a destination bucket needs to be encrypted with a customer-managed KMS key.
+
+        :default: - no KMS key is used for replication.
+        '''
+        result = self._values.get("encryption_key")
+        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "GrantReplicationPermissionDestinationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_s3.GrantReplicationPermissionProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "destinations": "destinations",
+        "source_decryption_key": "sourceDecryptionKey",
+    },
+)
+class GrantReplicationPermissionProps:
+    def __init__(
+        self,
+        *,
+        destinations: typing.Sequence[typing.Union[GrantReplicationPermissionDestinationProps, typing.Dict[builtins.str, typing.Any]]],
+        source_decryption_key: typing.Optional[_IKey_5f11635f] = None,
+    ) -> None:
+        '''The properties for the destination bucket for granting replication permission.
+
+        :param destinations: The destination buckets for replication. Specify the KMS key to use for encryption if a destination bucket needs to be encrypted with a customer-managed KMS key. One or more destination buckets are required if replication configuration is enabled (i.e., ``replicationRole`` is specified). Default: - empty array (valid only if the ``replicationRole`` property is NOT specified)
+        :param source_decryption_key: The KMS key used to decrypt objects in the source bucket for replication. **Required if** the source bucket is encrypted with a customer-managed KMS key. Default: - it's assumed the source bucket is not encrypted with a customer-managed KMS key.
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # destination_bucket1: s3.IBucket
+            # destination_bucket2: s3.IBucket
+            # replication_role: iam.IRole
+            # encryption_key: kms.IKey
+            # destination_encryption_key: kms.IKey
+            
+            
+            source_bucket = s3.Bucket(self, "SourceBucket",
+                # Versioning must be enabled on both the source and destination bucket
+                versioned=True,
+                # Optional. Specify the KMS key to use for encrypts objects in the source bucket.
+                encryption_key=encryption_key,
+                # Optional. If not specified, a new role will be created.
+                replication_role=replication_role,
+                replication_rules=[s3.ReplicationRule(
+                    # The destination bucket for the replication rule.
+                    destination=destination_bucket1,
+                    # The priority of the rule.
+                    # Amazon S3 will attempt to replicate objects according to all replication rules.
+                    # However, if there are two or more rules with the same destination bucket, then objects will be replicated according to the rule with the highest priority.
+                    # The higher the number, the higher the priority.
+                    # It is essential to specify priority explicitly when the replication configuration has multiple rules.
+                    priority=1
+                ), s3.ReplicationRule(
+                    destination=destination_bucket2,
+                    priority=2,
+                    # Whether to specify S3 Replication Time Control (S3 RTC).
+                    # S3 RTC replicates most objects that you upload to Amazon S3 in seconds,
+                    # and 99.99 percent of those objects within specified time.
+                    replication_time_control=s3.ReplicationTimeValue.FIFTEEN_MINUTES,
+                    # Whether to enable replication metrics about S3 RTC.
+                    # If set, metrics will be output to indicate whether replication by S3 RTC took longer than the configured time.
+                    metrics=s3.ReplicationTimeValue.FIFTEEN_MINUTES,
+                    # The kms key to use for the destination bucket.
+                    kms_key=destination_encryption_key,
+                    # The storage class to use for the destination bucket.
+                    storage_class=s3.StorageClass.INFREQUENT_ACCESS,
+                    # Whether to replicate objects with SSE-KMS encryption.
+                    sse_kms_encrypted_objects=False,
+                    # Whether to replicate modifications on replicas.
+                    replica_modifications=True,
+                    # Whether to replicate delete markers.
+                    # This property cannot be enabled if the replication rule has a tag filter.
+                    delete_marker_replication=False,
+                    # The ID of the rule.
+                    id="full-settings-rule",
+                    # The object filter for the rule.
+                    filter=s3.Filter(
+                        # The prefix filter for the rule.
+                        prefix="prefix",
+                        # The tag filter for the rule.
+                        tags=[s3.Tag(
+                            key="tagKey",
+                            value="tagValue"
+                        )
+                        ]
+                    )
+                )
+                ]
+            )
+            
+            # Grant permissions to the replication role.
+            # This method is not required if you choose to use an auto-generated replication role or manually grant permissions.
+            source_bucket.grant_replication_permission(replication_role,
+                # Optional. Specify the KMS key to use for decrypting objects in the source bucket.
+                source_decryption_key=encryption_key,
+                destinations=[s3.GrantReplicationPermissionDestinationProps(bucket=destination_bucket1), s3.GrantReplicationPermissionDestinationProps(bucket=destination_bucket2, encryption_key=destination_encryption_key)
+                ]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__892523669f29c26ab296b743291f04387d44edf1630a2288ab68d906f972d8ff)
+            check_type(argname="argument destinations", value=destinations, expected_type=type_hints["destinations"])
+            check_type(argname="argument source_decryption_key", value=source_decryption_key, expected_type=type_hints["source_decryption_key"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "destinations": destinations,
+        }
+        if source_decryption_key is not None:
+            self._values["source_decryption_key"] = source_decryption_key
+
+    @builtins.property
+    def destinations(self) -> typing.List[GrantReplicationPermissionDestinationProps]:
+        '''The destination buckets for replication.
+
+        Specify the KMS key to use for encryption if a destination bucket needs to be encrypted with a customer-managed KMS key.
+        One or more destination buckets are required if replication configuration is enabled (i.e., ``replicationRole`` is specified).
+
+        :default: - empty array (valid only if the ``replicationRole`` property is NOT specified)
+        '''
+        result = self._values.get("destinations")
+        assert result is not None, "Required property 'destinations' is missing"
+        return typing.cast(typing.List[GrantReplicationPermissionDestinationProps], result)
+
+    @builtins.property
+    def source_decryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+        '''The KMS key used to decrypt objects in the source bucket for replication.
+
+        **Required if** the source bucket is encrypted with a customer-managed KMS key.
+
+        :default: - it's assumed the source bucket is not encrypted with a customer-managed KMS key.
+        '''
+        result = self._values.get("source_decryption_key")
+        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "GrantReplicationPermissionProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -16265,6 +16503,27 @@ class IBucket(_IResource_c80c4260, typing_extensions.Protocol):
 
         :param identity: The principal.
         :param objects_key_pattern: Restrict the permission to a certain key pattern (default '*'). Parameter type is ``any`` but ``string`` should be passed in.
+        '''
+        ...
+
+    @jsii.member(jsii_name="grantReplicationPermission")
+    def grant_replication_permission(
+        self,
+        identity: _IGrantable_71c4f5de,
+        *,
+        destinations: typing.Sequence[typing.Union[GrantReplicationPermissionDestinationProps, typing.Dict[builtins.str, typing.Any]]],
+        source_decryption_key: typing.Optional[_IKey_5f11635f] = None,
+    ) -> _Grant_a7ae64f8:
+        '''Allows permissions for replication operation to bucket replication role.
+
+        If an encryption key is used, permission to use the key for
+        encrypt/decrypt will also be granted.
+
+        :param identity: The principal.
+        :param destinations: The destination buckets for replication. Specify the KMS key to use for encryption if a destination bucket needs to be encrypted with a customer-managed KMS key. One or more destination buckets are required if replication configuration is enabled (i.e., ``replicationRole`` is specified). Default: - empty array (valid only if the ``replicationRole`` property is NOT specified)
+        :param source_decryption_key: The KMS key used to decrypt objects in the source bucket for replication. **Required if** the source bucket is encrypted with a customer-managed KMS key. Default: - it's assumed the source bucket is not encrypted with a customer-managed KMS key.
+
+        :return: The ``iam.Grant`` object, which represents the grant of permissions.
         '''
         ...
 
@@ -16862,6 +17121,34 @@ class _IBucketProxy(
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument objects_key_pattern", value=objects_key_pattern, expected_type=type_hints["objects_key_pattern"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWrite", [identity, objects_key_pattern]))
+
+    @jsii.member(jsii_name="grantReplicationPermission")
+    def grant_replication_permission(
+        self,
+        identity: _IGrantable_71c4f5de,
+        *,
+        destinations: typing.Sequence[typing.Union[GrantReplicationPermissionDestinationProps, typing.Dict[builtins.str, typing.Any]]],
+        source_decryption_key: typing.Optional[_IKey_5f11635f] = None,
+    ) -> _Grant_a7ae64f8:
+        '''Allows permissions for replication operation to bucket replication role.
+
+        If an encryption key is used, permission to use the key for
+        encrypt/decrypt will also be granted.
+
+        :param identity: The principal.
+        :param destinations: The destination buckets for replication. Specify the KMS key to use for encryption if a destination bucket needs to be encrypted with a customer-managed KMS key. One or more destination buckets are required if replication configuration is enabled (i.e., ``replicationRole`` is specified). Default: - empty array (valid only if the ``replicationRole`` property is NOT specified)
+        :param source_decryption_key: The KMS key used to decrypt objects in the source bucket for replication. **Required if** the source bucket is encrypted with a customer-managed KMS key. Default: - it's assumed the source bucket is not encrypted with a customer-managed KMS key.
+
+        :return: The ``iam.Grant`` object, which represents the grant of permissions.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b2772da13be98dbf89b1d2aec491a21f6a48f84e8d96dacef9ad681c2a3c690a)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+        props = GrantReplicationPermissionProps(
+            destinations=destinations, source_decryption_key=source_decryption_key
+        )
+
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReplicationPermission", [identity, props]))
 
     @jsii.member(jsii_name="grantWrite")
     def grant_write(
@@ -19002,12 +19289,15 @@ class ReplicationTimeValue(
         # destination_bucket1: s3.IBucket
         # destination_bucket2: s3.IBucket
         # replication_role: iam.IRole
-        # kms_key: kms.IKey
+        # encryption_key: kms.IKey
+        # destination_encryption_key: kms.IKey
         
         
         source_bucket = s3.Bucket(self, "SourceBucket",
             # Versioning must be enabled on both the source and destination bucket
             versioned=True,
+            # Optional. Specify the KMS key to use for encrypts objects in the source bucket.
+            encryption_key=encryption_key,
             # Optional. If not specified, a new role will be created.
             replication_role=replication_role,
             replication_rules=[s3.ReplicationRule(
@@ -19030,7 +19320,7 @@ class ReplicationTimeValue(
                 # If set, metrics will be output to indicate whether replication by S3 RTC took longer than the configured time.
                 metrics=s3.ReplicationTimeValue.FIFTEEN_MINUTES,
                 # The kms key to use for the destination bucket.
-                kms_key=kms_key,
+                kms_key=destination_encryption_key,
                 # The storage class to use for the destination bucket.
                 storage_class=s3.StorageClass.INFREQUENT_ACCESS,
                 # Whether to replicate objects with SSE-KMS encryption.
@@ -19054,6 +19344,15 @@ class ReplicationTimeValue(
                     ]
                 )
             )
+            ]
+        )
+        
+        # Grant permissions to the replication role.
+        # This method is not required if you choose to use an auto-generated replication role or manually grant permissions.
+        source_bucket.grant_replication_permission(replication_role,
+            # Optional. Specify the KMS key to use for decrypting objects in the source bucket.
+            source_decryption_key=encryption_key,
+            destinations=[s3.GrantReplicationPermissionDestinationProps(bucket=destination_bucket1), s3.GrantReplicationPermissionDestinationProps(bucket=destination_bucket2, encryption_key=destination_encryption_key)
             ]
         )
     '''
@@ -20115,6 +20414,32 @@ class BucketBase(
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument objects_key_pattern", value=objects_key_pattern, expected_type=type_hints["objects_key_pattern"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWrite", [identity, objects_key_pattern]))
+
+    @jsii.member(jsii_name="grantReplicationPermission")
+    def grant_replication_permission(
+        self,
+        identity: _IGrantable_71c4f5de,
+        *,
+        destinations: typing.Sequence[typing.Union[GrantReplicationPermissionDestinationProps, typing.Dict[builtins.str, typing.Any]]],
+        source_decryption_key: typing.Optional[_IKey_5f11635f] = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grant replication permission to a principal. This method allows the principal to perform replication operations on this bucket.
+
+        Note that when calling this function for source or destination buckets that support KMS encryption,
+        you need to specify the KMS key for encryption and the KMS key for decryption, respectively.
+
+        :param identity: The principal to grant replication permission to.
+        :param destinations: The destination buckets for replication. Specify the KMS key to use for encryption if a destination bucket needs to be encrypted with a customer-managed KMS key. One or more destination buckets are required if replication configuration is enabled (i.e., ``replicationRole`` is specified). Default: - empty array (valid only if the ``replicationRole`` property is NOT specified)
+        :param source_decryption_key: The KMS key used to decrypt objects in the source bucket for replication. **Required if** the source bucket is encrypted with a customer-managed KMS key. Default: - it's assumed the source bucket is not encrypted with a customer-managed KMS key.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ae08375448013fd67c288fc732b4e3bd7135520a849542f49221c12f286f9554)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+        props = GrantReplicationPermissionProps(
+            destinations=destinations, source_decryption_key=source_decryption_key
+        )
+
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReplicationPermission", [identity, props]))
 
     @jsii.member(jsii_name="grantWrite")
     def grant_write(
@@ -21210,6 +21535,8 @@ __all__ = [
     "CorsRule",
     "EventType",
     "Filter",
+    "GrantReplicationPermissionDestinationProps",
+    "GrantReplicationPermissionProps",
     "HttpMethods",
     "IBucket",
     "IBucketNotificationDestination",
@@ -22865,6 +23192,22 @@ def _typecheckingstub__ff4b8a813f6812ab1464fced92fa61b97e151767705973ce994c0970f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c28989eb119121ac7809e78ba2038558e14755021078bf7d97f894b34bc3311a(
+    *,
+    bucket: IBucket,
+    encryption_key: typing.Optional[_IKey_5f11635f] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__892523669f29c26ab296b743291f04387d44edf1630a2288ab68d906f972d8ff(
+    *,
+    destinations: typing.Sequence[typing.Union[GrantReplicationPermissionDestinationProps, typing.Dict[builtins.str, typing.Any]]],
+    source_decryption_key: typing.Optional[_IKey_5f11635f] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__eee382ff86c17d46379012dcccee86976ea92e15cb6d63c3e3f4e853c058ac53(
     value: typing.Optional[BucketPolicy],
 ) -> None:
@@ -22957,6 +23300,15 @@ def _typecheckingstub__f1a358dbf8c46ed6b4261a028ec6c792fe6824e44516d82c386e63719
 def _typecheckingstub__96c877c118f5e8a1b2d7e8d8a3a593f12688f174eaf15ecd7c81983443ca9a63(
     identity: _IGrantable_71c4f5de,
     objects_key_pattern: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b2772da13be98dbf89b1d2aec491a21f6a48f84e8d96dacef9ad681c2a3c690a(
+    identity: _IGrantable_71c4f5de,
+    *,
+    destinations: typing.Sequence[typing.Union[GrantReplicationPermissionDestinationProps, typing.Dict[builtins.str, typing.Any]]],
+    source_decryption_key: typing.Optional[_IKey_5f11635f] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23339,6 +23691,15 @@ def _typecheckingstub__6f64af93cc0bb614a5c700259306bd879302f472b4844a8d3c24399f7
 def _typecheckingstub__b4fefa6383b8da3c85e674cc7aa9017f54bbafd94b3f086c041a651294edb0bb(
     identity: _IGrantable_71c4f5de,
     objects_key_pattern: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ae08375448013fd67c288fc732b4e3bd7135520a849542f49221c12f286f9554(
+    identity: _IGrantable_71c4f5de,
+    *,
+    destinations: typing.Sequence[typing.Union[GrantReplicationPermissionDestinationProps, typing.Dict[builtins.str, typing.Any]]],
+    source_decryption_key: typing.Optional[_IKey_5f11635f] = None,
 ) -> None:
     """Type checking stubs"""
     pass

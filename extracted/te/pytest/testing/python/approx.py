@@ -92,6 +92,7 @@ def assert_approx_raises_regex(pytestconfig):
 
 SOME_FLOAT = r"[+-]?((?:([0-9]*[.])?[0-9]+(e-?[0-9]+)?)|inf|nan)\s*"
 SOME_INT = r"[0-9]+\s*"
+SOME_TOLERANCE = rf"({SOME_FLOAT}|[+-]?[0-9]+(\.[0-9]+)?[eE][+-]?[0-9]+\s*)"
 
 
 class TestApprox:
@@ -116,7 +117,7 @@ class TestApprox:
                 "",
                 "  comparison failed",
                 f"  Obtained: {SOME_FLOAT}",
-                f"  Expected: {SOME_FLOAT} ± {SOME_FLOAT}",
+                f"  Expected: {SOME_FLOAT} ± {SOME_TOLERANCE}",
             ],
         )
 
@@ -132,9 +133,9 @@ class TestApprox:
                 r"  comparison failed. Mismatched elements: 2 / 3:",
                 rf"  Max absolute difference: {SOME_FLOAT}",
                 rf"  Max relative difference: {SOME_FLOAT}",
-                r"  Index \| Obtained\s+\| Expected           ",
-                rf"  a     \| {SOME_FLOAT} \| {SOME_FLOAT} ± {SOME_FLOAT}",
-                rf"  c     \| {SOME_FLOAT} \| {SOME_FLOAT} ± {SOME_FLOAT}",
+                r"  Index \| Obtained\s+\| Expected\s+",
+                rf"  a     \| {SOME_FLOAT} \| {SOME_FLOAT} ± {SOME_TOLERANCE}",
+                rf"  c     \| {SOME_FLOAT} \| {SOME_FLOAT} ± {SOME_TOLERANCE}",
             ],
         )
 
@@ -347,6 +348,11 @@ class TestApprox:
             "approx({'b': 2.0 ± 2.0e-06, 'a': 1.0 ± 1.0e-06})",
         )
 
+        assert repr(approx(42, abs=1)) == "42 ± 1"
+        assert repr(approx(5, rel=0.01)) == "5 ± 0.05"
+        assert repr(approx(24000, abs=500)) == "24000 ± 500"
+        assert repr(approx(1500, abs=555)) == "1500 ± 555"
+
     def test_repr_complex_numbers(self):
         assert repr(approx(inf + 1j)) == "(inf+1j)"
         assert repr(approx(1.0j, rel=inf)) == "1j ± inf"
@@ -360,7 +366,7 @@ class TestApprox:
         assert repr(approx(3 + 4 * 1j)) == "(3+4j) ± 5.0e-06 ∠ ±180°"
 
         # absolute tolerance is not scaled
-        assert repr(approx(3.3 + 4.4 * 1j, abs=0.02)) == "(3.3+4.4j) ± 2.0e-02 ∠ ±180°"
+        assert repr(approx(3.3 + 4.4 * 1j, abs=0.02)) == "(3.3+4.4j) ± 0.02 ∠ ±180°"
 
     @pytest.mark.parametrize(
         "value, expected_repr_string",
@@ -383,6 +389,37 @@ class TestApprox:
             assert approx(1)
 
         assert err.match(r"approx\(\) is not supported in a boolean context")
+
+    def test_mixed_sequence(self, assert_approx_raises_regex) -> None:
+        """Approx should work on sequences that also contain non-numbers (#13010)."""
+        assert_approx_raises_regex(
+            [1.1, 2, "word"],
+            [1.0, 2, "different"],
+            [
+                "",
+                r"  comparison failed. Mismatched elements: 2 / 3:",
+                rf"  Max absolute difference: {SOME_FLOAT}",
+                rf"  Max relative difference: {SOME_FLOAT}",
+                r"  Index \| Obtained\s+\| Expected\s+",
+                r"\s*0\s*\|\s*1\.1\s*\|\s*1\.0\s*±\s*1\.0e\-06\s*",
+                r"\s*2\s*\|\s*word\s*\|\s*different\s*",
+            ],
+            verbosity_level=2,
+        )
+        assert_approx_raises_regex(
+            [1.1, 2, "word"],
+            [1.0, 2, "word"],
+            [
+                "",
+                r"  comparison failed. Mismatched elements: 1 / 3:",
+                rf"  Max absolute difference: {SOME_FLOAT}",
+                rf"  Max relative difference: {SOME_FLOAT}",
+                r"  Index \| Obtained\s+\| Expected\s+",
+                r"\s*0\s*\|\s*1\.1\s*\|\s*1\.0\s*±\s*1\.0e\-06\s*",
+            ],
+            verbosity_level=2,
+        )
+        assert [1.1, 2, "word"] == pytest.approx([1.1, 2, "word"])
 
     def test_operator_overloading(self):
         assert 1 == approx(1, rel=1e-6, abs=1e-12)
@@ -609,6 +646,15 @@ class TestApprox:
         assert True != approx(False)  # noqa: E712
         assert True != approx(False, abs=2)  # noqa: E712
         assert 1 != approx(True)
+
+    def test_expecting_bool_numpy(self) -> None:
+        """Check approx comparing with numpy.bool (#13047)."""
+        np = pytest.importorskip("numpy")
+        assert np.False_ != approx(True)
+        assert np.True_ != approx(False)
+        assert np.True_ == approx(True)
+        assert np.False_ == approx(False)
+        assert np.True_ != approx(False, abs=2)
 
     def test_list(self):
         actual = [1 + 1e-7, 2 + 1e-8]
@@ -893,7 +939,7 @@ class TestApprox:
         ],
     )
     def test_nonnumeric_false_if_unequal(self, x):
-        """For nonnumeric types, x != pytest.approx(y) reduces to x != y"""
+        """For non-numeric types, x != pytest.approx(y) reduces to x != y"""
         assert "ab" != approx("abc")
         assert ["ab"] != approx(["abc"])
         # in particular, both of these should return False
