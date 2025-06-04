@@ -1,10 +1,22 @@
 # SPDX-License-Identifier: MIT
 
+import secrets
+import sys
+import threading
+
+from concurrent.futures import ThreadPoolExecutor
+from unittest import mock
+
 import pytest
 
 from argon2 import PasswordHasher, Type, extract_parameters, profiles
 from argon2._password_hasher import _ensure_bytes
-from argon2.exceptions import InvalidHash, InvalidHashError
+from argon2._utils import Parameters
+from argon2.exceptions import (
+    InvalidHash,
+    InvalidHashError,
+    UnsupportedParametersError,
+)
 
 
 class TestEnsureBytes:
@@ -109,22 +121,32 @@ class TestPasswordHasher:
         with pytest.raises(InvalidHash):
             PasswordHasher().verify("tiger", "does not matter")
 
-    def test_check_needs_rehash_no(self):
+    @pytest.mark.parametrize("use_bytes", [True, False])
+    def test_check_needs_rehash_no(self, use_bytes):
         """
         Return False if the hash has the correct parameters.
         """
         ph = PasswordHasher(1, 8, 1, 16, 16)
 
-        assert not ph.check_needs_rehash(ph.hash("foo"))
+        hash = ph.hash("foo")
+        if use_bytes:
+            hash = hash.encode()
 
-    def test_check_needs_rehash_yes(self):
+        assert not ph.check_needs_rehash(hash)
+
+    @pytest.mark.parametrize("use_bytes", [True, False])
+    def test_check_needs_rehash_yes(self, use_bytes):
         """
         Return True if any of the parameters changes.
         """
         ph = PasswordHasher(1, 8, 1, 16, 16)
         ph_old = PasswordHasher(1, 8, 1, 8, 8)
 
-        assert ph.check_needs_rehash(ph_old.hash("foo"))
+        hash = ph_old.hash("foo")
+        if use_bytes:
+            hash = hash.encode()
+
+        assert ph.check_needs_rehash(hash)
 
     def test_type_is_configurable(self):
         """
@@ -141,3 +163,74 @@ class TestPasswordHasher:
         assert Type.I is ph.type is ph._parameters.type
         assert Type.I is extract_parameters(ph.hash("foo")).type
         assert ph.check_needs_rehash(default_hash)
+
+    @mock.patch("sys.platform", "emscripten")
+    @pytest.mark.parametrize("machine", ["wasm32", "wasm64"])
+    def test_params_on_wasm(self, machine):
+        """
+        Parameter validation catches invalid parameters on WebAssembly.
+        """
+        with mock.patch("platform.machine", return_value=machine):
+            with pytest.raises(
+                UnsupportedParametersError,
+                match="In WebAssembly environments `parallelism` must be 1.",
+            ):
+                PasswordHasher(parallelism=2)
+
+            # last param is parallelism so it should fail
+            params = Parameters(Type.I, 2, 8, 8, 3, 256, 8)
+            with pytest.raises(
+                UnsupportedParametersError,
+                match="In WebAssembly environments `parallelism` must be 1.",
+            ):
+                ph = PasswordHasher.from_parameters(params)
+
+            # explicitly correct parameters
+            ph = PasswordHasher(parallelism=1)
+
+            hash = ph.hash("hello")
+
+            assert ph.verify(hash, "hello") is True
+
+            # explicit, but still default parameters
+            default_params = profiles.get_default_parameters()
+            ph = PasswordHasher.from_parameters(default_params)
+
+            hash = ph.hash("hello")
+
+            assert ph.verify(hash, "hello") is True
+
+
+def test_multithreaded_hashing():
+    """
+    Hash passwords in a thread pool and check for thread safety
+    """
+    hasher = PasswordHasher(parallelism=2)
+
+    num_passwords = 100
+
+    passwords = [secrets.token_urlsafe(15) for _ in range(num_passwords)]
+
+    def closure(b, passwords):
+        b.wait()
+        for password in passwords:
+            assert hasher.verify(hasher.hash(password), password)
+
+    max_workers = 4
+
+    chunks = [passwords[i::max_workers] for i in range(max_workers)]
+    orig_interval = sys.getswitchinterval()
+
+    with ThreadPoolExecutor(max_workers=max_workers) as tpe:
+        barrier = threading.Barrier(max_workers)
+        futures = []
+        try:
+            sys.setswitchinterval(0.00001)
+            for chunk in chunks:
+                futures.append(tpe.submit(closure, barrier, chunk))  # noqa: PERF401
+        finally:
+            sys.setswitchinterval(orig_interval)
+            if len(futures) < max_workers:
+                barrier.abort()
+        for f in futures:
+            f.result()

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: wandb
-Version: 0.19.11
+Version: 0.20.0
 Summary: A CLI and library for interacting with the Weights & Biases API.
 Project-URL: Source, https://github.com/wandb/wandb
 Project-URL: Bug Reports, https://github.com/wandb/wandb/issues
@@ -48,9 +48,9 @@ Classifier: Topic :: System :: Logging
 Classifier: Topic :: System :: Monitoring
 Requires-Python: >=3.8
 Requires-Dist: click!=8.0.0,>=7.1
-Requires-Dist: docker-pycreds>=0.4.0
 Requires-Dist: eval-type-backport; python_version < '3.10'
 Requires-Dist: gitpython!=3.1.29,>=1.0.0
+Requires-Dist: packaging
 Requires-Dist: platformdirs
 Requires-Dist: protobuf!=4.21.0,!=5.28.0,<7,>=3.12.0; python_version < '3.9' and sys_platform == 'linux'
 Requires-Dist: protobuf!=4.21.0,!=5.28.0,<7,>=3.15.0; python_version == '3.9' and sys_platform == 'linux'
@@ -62,8 +62,7 @@ Requires-Dist: pyyaml
 Requires-Dist: requests<3,>=2.0.0
 Requires-Dist: sentry-sdk>=2.0.0
 Requires-Dist: setproctitle
-Requires-Dist: setuptools
-Requires-Dist: typing-extensions<5,>=4.4
+Requires-Dist: typing-extensions<5,>=4.8
 Provides-Extra: aws
 Requires-Dist: boto3; extra == 'aws'
 Requires-Dist: botocore>=1.5.76; extra == 'aws'
@@ -106,10 +105,11 @@ Requires-Dist: optuna; extra == 'launch'
 Requires-Dist: pydantic; extra == 'launch'
 Requires-Dist: pyyaml>=6.0.0; extra == 'launch'
 Requires-Dist: tomli; extra == 'launch'
+Requires-Dist: tornado>=6.5.0; (python_version >= '3.9') and extra == 'launch'
 Requires-Dist: typing-extensions; extra == 'launch'
 Provides-Extra: media
 Requires-Dist: bokeh; extra == 'media'
-Requires-Dist: imageio; extra == 'media'
+Requires-Dist: imageio>=2.28.1; extra == 'media'
 Requires-Dist: moviepy>=1.0.0; extra == 'media'
 Requires-Dist: numpy; extra == 'media'
 Requires-Dist: pillow; extra == 'media'

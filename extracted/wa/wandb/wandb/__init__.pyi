@@ -106,7 +106,7 @@ if TYPE_CHECKING:
     import wandb
     from wandb.plot import CustomChart
 
-__version__: str = "0.19.11"
+__version__: str = "0.20.0"
 
 run: Run | None
 config: wandb_config.Config
@@ -512,7 +512,6 @@ def log(
     data: dict[str, Any],
     step: int | None = None,
     commit: bool | None = None,
-    sync: bool | None = None,
 ) -> None:
     """Upload run data.
 
@@ -617,7 +616,6 @@ def log(
             accumulate data for the step. See the notes in the description.
             If `step` is `None`, then the default is `commit=True`;
             otherwise, the default is `commit=False`.
-        sync: This argument is deprecated and does nothing.
 
     Examples:
         For more and more detailed examples, see
@@ -748,7 +746,7 @@ def log(
     ...
 
 def save(
-    glob_str: str | os.PathLike | None = None,
+    glob_str: str | os.PathLike,
     base_path: str | os.PathLike | None = None,
     policy: PolicyName = "live",
 ) -> bool | list[str]:
@@ -978,8 +976,7 @@ def use_artifact(
             You can also pass an Artifact object created by calling `wandb.Artifact`
         type: (str, optional) The type of artifact to use.
         aliases: (list, optional) Aliases to apply to this artifact
-        use_as: (string, optional) Optional string indicating what purpose the artifact was used with.
-                                   Will be shown in UI.
+        use_as: This argument is deprecated and does nothing.
 
     Returns:
         An `Artifact` object.

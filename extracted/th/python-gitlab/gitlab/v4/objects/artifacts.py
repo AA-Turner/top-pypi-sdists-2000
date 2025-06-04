@@ -3,16 +3,9 @@ GitLab API:
 https://docs.gitlab.com/ee/api/job_artifacts.html
 """
 
-from typing import (
-    Any,
-    Callable,
-    Iterator,
-    Literal,
-    Optional,
-    overload,
-    TYPE_CHECKING,
-    Union,
-)
+from __future__ import annotations
+
+from typing import Any, Callable, Iterator, Literal, overload, TYPE_CHECKING
 
 import requests
 
@@ -30,7 +23,7 @@ class ProjectArtifact(RESTObject):
     _id_attr = "ref_name"
 
 
-class ProjectArtifactManager(RESTManager):
+class ProjectArtifactManager(RESTManager[ProjectArtifact]):
     _obj_cls = ProjectArtifact
     _path = "/projects/{project_id}/jobs/artifacts"
     _from_parent_attrs = {"project_id": "id"}
@@ -84,7 +77,7 @@ class ProjectArtifactManager(RESTManager):
         ref_name: str,
         job: str,
         streamed: Literal[True] = True,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: Literal[False] = False,
@@ -102,12 +95,12 @@ class ProjectArtifactManager(RESTManager):
         ref_name: str,
         job: str,
         streamed: bool = False,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: bool = False,
         **kwargs: Any,
-    ) -> Optional[Union[bytes, Iterator[Any]]]:
+    ) -> bytes | Iterator[Any] | None:
         """Get the job artifacts archive from a specific tag or branch.
 
         Args:
@@ -177,7 +170,7 @@ class ProjectArtifactManager(RESTManager):
         artifact_path: str,
         job: str,
         streamed: Literal[True] = True,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: Literal[False] = False,
@@ -195,12 +188,12 @@ class ProjectArtifactManager(RESTManager):
         artifact_path: str,
         job: str,
         streamed: bool = False,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: bool = False,
         **kwargs: Any,
-    ) -> Optional[Union[bytes, Iterator[Any]]]:
+    ) -> bytes | Iterator[Any] | None:
         """Download a single artifact file from a specific tag or branch from
         within the job's artifacts archive.
 

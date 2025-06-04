@@ -1,35 +1,23 @@
-from typing import (
-    Any,
-    Callable,
-    cast,
-    Dict,
-    Iterator,
-    Literal,
-    Optional,
-    overload,
-    TYPE_CHECKING,
-    Union,
-)
+from __future__ import annotations
+
+from typing import Any, Callable, Iterator, Literal, overload, TYPE_CHECKING
 
 import requests
 
 from gitlab import cli
 from gitlab import exceptions as exc
 from gitlab import utils
-from gitlab.base import RESTManager, RESTObject
+from gitlab.base import RESTObject
 from gitlab.mixins import RefreshMixin, RetrieveMixin
 from gitlab.types import ArrayAttribute
 
-__all__ = [
-    "ProjectJob",
-    "ProjectJobManager",
-]
+__all__ = ["ProjectJob", "ProjectJobManager"]
 
 
 class ProjectJob(RefreshMixin, RESTObject):
     @cli.register_custom_action(cls_names="ProjectJob")
     @exc.on_http_error(exc.GitlabJobCancelError)
-    def cancel(self, **kwargs: Any) -> Dict[str, Any]:
+    def cancel(self, **kwargs: Any) -> dict[str, Any]:
         """Cancel the job.
 
         Args:
@@ -47,7 +35,7 @@ class ProjectJob(RefreshMixin, RESTObject):
 
     @cli.register_custom_action(cls_names="ProjectJob")
     @exc.on_http_error(exc.GitlabJobRetryError)
-    def retry(self, **kwargs: Any) -> Dict[str, Any]:
+    def retry(self, **kwargs: Any) -> dict[str, Any]:
         """Retry the job.
 
         Args:
@@ -152,7 +140,7 @@ class ProjectJob(RefreshMixin, RESTObject):
     def artifacts(
         self,
         streamed: Literal[True] = True,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: Literal[False] = False,
@@ -164,12 +152,12 @@ class ProjectJob(RefreshMixin, RESTObject):
     def artifacts(
         self,
         streamed: bool = False,
-        action: Optional[Callable[..., Any]] = None,
+        action: Callable[..., Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: bool = False,
         **kwargs: Any,
-    ) -> Optional[Union[bytes, Iterator[Any]]]:
+    ) -> bytes | Iterator[Any] | None:
         """Get the job artifacts.
 
         Args:
@@ -229,7 +217,7 @@ class ProjectJob(RefreshMixin, RESTObject):
         self,
         path: str,
         streamed: Literal[True] = True,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: Literal[False] = False,
@@ -242,12 +230,12 @@ class ProjectJob(RefreshMixin, RESTObject):
         self,
         path: str,
         streamed: bool = False,
-        action: Optional[Callable[..., Any]] = None,
+        action: Callable[..., Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: bool = False,
         **kwargs: Any,
-    ) -> Optional[Union[bytes, Iterator[Any]]]:
+    ) -> bytes | Iterator[Any] | None:
         """Get a single artifact file from within the job's artifacts archive.
 
         Args:
@@ -305,7 +293,7 @@ class ProjectJob(RefreshMixin, RESTObject):
     def trace(
         self,
         streamed: Literal[True] = True,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: Literal[False] = False,
@@ -317,12 +305,12 @@ class ProjectJob(RefreshMixin, RESTObject):
     def trace(
         self,
         streamed: bool = False,
-        action: Optional[Callable[..., Any]] = None,
+        action: Callable[..., Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: bool = False,
         **kwargs: Any,
-    ) -> Optional[Union[bytes, Iterator[Any]]]:
+    ) -> bytes | Iterator[Any] | None:
         """Get the job trace.
 
         Args:
@@ -354,12 +342,9 @@ class ProjectJob(RefreshMixin, RESTObject):
         )
 
 
-class ProjectJobManager(RetrieveMixin, RESTManager):
+class ProjectJobManager(RetrieveMixin[ProjectJob]):
     _path = "/projects/{project_id}/jobs"
     _obj_cls = ProjectJob
     _from_parent_attrs = {"project_id": "id"}
     _list_filters = ("scope",)
     _types = {"scope": ArrayAttribute}
-
-    def get(self, id: Union[str, int], lazy: bool = False, **kwargs: Any) -> ProjectJob:
-        return cast(ProjectJob, super().get(id=id, lazy=lazy, **kwargs))

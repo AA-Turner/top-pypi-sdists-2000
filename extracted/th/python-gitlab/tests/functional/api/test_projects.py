@@ -48,6 +48,29 @@ def test_project_members(user, project):
     member.delete()
 
 
+def test_project_avatar_upload(gl, project, fixture_dir):
+    """Test uploading an avatar to a project."""
+    with open(fixture_dir / "avatar.png", "rb") as avatar_file:
+        project.avatar = avatar_file
+        project.save()
+
+    updated_project = gl.projects.get(project.id)
+    assert updated_project.avatar_url is not None
+
+
+def test_project_avatar_remove(gl, project, fixture_dir):
+    """Test removing an avatar from a project."""
+    with open(fixture_dir / "avatar.png", "rb") as avatar_file:
+        project.avatar = avatar_file
+        project.save()
+
+    project.avatar = ""
+    project.save()
+
+    updated_project = gl.projects.get(project.id)
+    assert updated_project.avatar_url is None
+
+
 def test_project_badges(project):
     badge_image = "http://example.com"
     badge_link = "http://example/img.svg"
@@ -188,10 +211,7 @@ def test_project_label_promotion(gl, group):
 
     """
     _id = uuid.uuid4().hex
-    data = {
-        "name": f"test-project-{_id}",
-        "namespace_id": group.id,
-    }
+    data = {"name": f"test-project-{_id}", "namespace_id": group.id}
     project = gl.projects.create(data)
 
     label_name = "promoteme"
@@ -225,10 +245,7 @@ def test_project_milestone_promotion(gl, group):
 
     """
     _id = uuid.uuid4().hex
-    data = {
-        "name": f"test-project-{_id}",
-        "namespace_id": group.id,
-    }
+    data = {"name": f"test-project-{_id}", "namespace_id": group.id}
     project = gl.projects.create(data)
 
     milestone_title = "promoteme"
@@ -271,10 +288,7 @@ def test_project_protected_branches(project, gitlab_version):
     )
 
     p_b = project.protectedbranches.create(
-        {
-            "name": "*-stable",
-            "allow_force_push": False,
-        }
+        {"name": "*-stable", "allow_force_push": False}
     )
     assert p_b.name == "*-stable"
     assert not p_b.allow_force_push
@@ -394,14 +408,11 @@ def test_project_groups_list(gl, group):
     group2 = gl.groups.create(
         {"name": "group2_proj", "path": "group2_proj", "parent_id": group.id}
     )
-    data = {
-        "name": "test-project-tpsg",
-        "namespace_id": group2.id,
-    }
+    data = {"name": "test-project-tpsg", "namespace_id": group2.id}
     project = gl.projects.create(data)
 
     groups = project.groups.list()
-    group_ids = set([x.id for x in groups])
+    group_ids = {x.id for x in groups}
     assert {group.id, group2.id} == group_ids
 
 

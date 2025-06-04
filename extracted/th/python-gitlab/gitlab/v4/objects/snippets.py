@@ -1,22 +1,13 @@
-from typing import (
-    Any,
-    Callable,
-    cast,
-    Iterator,
-    List,
-    Literal,
-    Optional,
-    overload,
-    TYPE_CHECKING,
-    Union,
-)
+from __future__ import annotations
+
+from typing import Any, Callable, Iterator, Literal, overload, TYPE_CHECKING
 
 import requests
 
 from gitlab import cli
 from gitlab import exceptions as exc
 from gitlab import utils
-from gitlab.base import RESTManager, RESTObject, RESTObjectList
+from gitlab.base import RESTObject, RESTObjectList
 from gitlab.mixins import CRUDMixin, ObjectDeleteMixin, SaveMixin, UserAgentDetailMixin
 from gitlab.types import RequiredOptional
 
@@ -24,12 +15,7 @@ from .award_emojis import ProjectSnippetAwardEmojiManager  # noqa: F401
 from .discussions import ProjectSnippetDiscussionManager  # noqa: F401
 from .notes import ProjectSnippetNoteManager  # noqa: F401
 
-__all__ = [
-    "Snippet",
-    "SnippetManager",
-    "ProjectSnippet",
-    "ProjectSnippetManager",
-]
+__all__ = ["Snippet", "SnippetManager", "ProjectSnippet", "ProjectSnippetManager"]
 
 
 class Snippet(UserAgentDetailMixin, SaveMixin, ObjectDeleteMixin, RESTObject):
@@ -61,7 +47,7 @@ class Snippet(UserAgentDetailMixin, SaveMixin, ObjectDeleteMixin, RESTObject):
     def content(
         self,
         streamed: Literal[True] = True,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: Literal[False] = False,
@@ -73,12 +59,12 @@ class Snippet(UserAgentDetailMixin, SaveMixin, ObjectDeleteMixin, RESTObject):
     def content(
         self,
         streamed: bool = False,
-        action: Optional[Callable[..., Any]] = None,
+        action: Callable[..., Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: bool = False,
         **kwargs: Any,
-    ) -> Optional[Union[bytes, Iterator[Any]]]:
+    ) -> bytes | Iterator[Any] | None:
         """Return the content of a snippet.
 
         Args:
@@ -110,31 +96,37 @@ class Snippet(UserAgentDetailMixin, SaveMixin, ObjectDeleteMixin, RESTObject):
         )
 
 
-class SnippetManager(CRUDMixin, RESTManager):
+class SnippetManager(CRUDMixin[Snippet]):
     _path = "/snippets"
     _obj_cls = Snippet
     _create_attrs = RequiredOptional(
         required=("title",),
         exclusive=("files", "file_name"),
-        optional=(
-            "description",
-            "content",
-            "visibility",
-        ),
+        optional=("description", "content", "visibility"),
     )
     _update_attrs = RequiredOptional(
-        optional=(
-            "title",
-            "files",
-            "file_name",
-            "content",
-            "visibility",
-            "description",
-        ),
+        optional=("title", "files", "file_name", "content", "visibility", "description")
     )
 
+    @overload
+    def list_public(
+        self, *, iterator: Literal[False] = False, **kwargs: Any
+    ) -> list[Snippet]: ...
+
+    @overload
+    def list_public(
+        self, *, iterator: Literal[True] = True, **kwargs: Any
+    ) -> RESTObjectList[Snippet]: ...
+
+    @overload
+    def list_public(
+        self, *, iterator: bool = False, **kwargs: Any
+    ) -> RESTObjectList[Snippet] | list[Snippet]: ...
+
     @cli.register_custom_action(cls_names="SnippetManager")
-    def list_public(self, **kwargs: Any) -> Union[RESTObjectList, List[RESTObject]]:
+    def list_public(
+        self, *, iterator: bool = False, **kwargs: Any
+    ) -> RESTObjectList[Snippet] | list[Snippet]:
         """List all public snippets.
 
         Args:
@@ -151,10 +143,27 @@ class SnippetManager(CRUDMixin, RESTManager):
         Returns:
             The list of snippets, or a generator if `iterator` is True
         """
-        return self.list(path="/snippets/public", **kwargs)
+        return self.list(path="/snippets/public", iterator=iterator, **kwargs)
+
+    @overload
+    def list_all(
+        self, *, iterator: Literal[False] = False, **kwargs: Any
+    ) -> list[Snippet]: ...
+
+    @overload
+    def list_all(
+        self, *, iterator: Literal[True] = True, **kwargs: Any
+    ) -> RESTObjectList[Snippet]: ...
+
+    @overload
+    def list_all(
+        self, *, iterator: bool = False, **kwargs: Any
+    ) -> RESTObjectList[Snippet] | list[Snippet]: ...
 
     @cli.register_custom_action(cls_names="SnippetManager")
-    def list_all(self, **kwargs: Any) -> Union[RESTObjectList, List[RESTObject]]:
+    def list_all(
+        self, *, iterator: bool = False, **kwargs: Any
+    ) -> RESTObjectList[Snippet] | list[Snippet]:
         """List all snippets.
 
         Args:
@@ -171,9 +180,30 @@ class SnippetManager(CRUDMixin, RESTManager):
         Returns:
             A generator for the snippets list
         """
-        return self.list(path="/snippets/all", **kwargs)
+        return self.list(path="/snippets/all", iterator=iterator, **kwargs)
 
-    def public(self, **kwargs: Any) -> Union[RESTObjectList, List[RESTObject]]:
+    @overload
+    def public(
+        self,
+        *,
+        iterator: Literal[False] = False,
+        page: int | None = None,
+        **kwargs: Any,
+    ) -> list[Snippet]: ...
+
+    @overload
+    def public(
+        self, *, iterator: Literal[True] = True, **kwargs: Any
+    ) -> RESTObjectList[Snippet]: ...
+
+    @overload
+    def public(
+        self, *, iterator: bool = False, **kwargs: Any
+    ) -> RESTObjectList[Snippet] | list[Snippet]: ...
+
+    def public(
+        self, *, iterator: bool = False, **kwargs: Any
+    ) -> RESTObjectList[Snippet] | list[Snippet]:
         """List all public snippets.
 
         Args:
@@ -197,10 +227,7 @@ class SnippetManager(CRUDMixin, RESTManager):
             ),
             category=DeprecationWarning,
         )
-        return self.list(path="/snippets/public", **kwargs)
-
-    def get(self, id: Union[str, int], lazy: bool = False, **kwargs: Any) -> Snippet:
-        return cast(Snippet, super().get(id=id, lazy=lazy, **kwargs))
+        return self.list(path="/snippets/public", iterator=iterator, **kwargs)
 
 
 class ProjectSnippet(UserAgentDetailMixin, SaveMixin, ObjectDeleteMixin, RESTObject):
@@ -237,7 +264,7 @@ class ProjectSnippet(UserAgentDetailMixin, SaveMixin, ObjectDeleteMixin, RESTObj
     def content(
         self,
         streamed: Literal[True] = True,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: Literal[False] = False,
@@ -249,12 +276,12 @@ class ProjectSnippet(UserAgentDetailMixin, SaveMixin, ObjectDeleteMixin, RESTObj
     def content(
         self,
         streamed: bool = False,
-        action: Optional[Callable[..., Any]] = None,
+        action: Callable[..., Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: bool = False,
         **kwargs: Any,
-    ) -> Optional[Union[bytes, Iterator[Any]]]:
+    ) -> bytes | Iterator[Any] | None:
         """Return the content of a snippet.
 
         Args:
@@ -286,30 +313,15 @@ class ProjectSnippet(UserAgentDetailMixin, SaveMixin, ObjectDeleteMixin, RESTObj
         )
 
 
-class ProjectSnippetManager(CRUDMixin, RESTManager):
+class ProjectSnippetManager(CRUDMixin[ProjectSnippet]):
     _path = "/projects/{project_id}/snippets"
     _obj_cls = ProjectSnippet
     _from_parent_attrs = {"project_id": "id"}
     _create_attrs = RequiredOptional(
         required=("title", "visibility"),
         exclusive=("files", "file_name"),
-        optional=(
-            "description",
-            "content",
-        ),
+        optional=("description", "content"),
     )
     _update_attrs = RequiredOptional(
-        optional=(
-            "title",
-            "files",
-            "file_name",
-            "content",
-            "visibility",
-            "description",
-        ),
+        optional=("title", "files", "file_name", "content", "visibility", "description")
     )
-
-    def get(
-        self, id: Union[str, int], lazy: bool = False, **kwargs: Any
-    ) -> ProjectSnippet:
-        return cast(ProjectSnippet, super().get(id=id, lazy=lazy, **kwargs))

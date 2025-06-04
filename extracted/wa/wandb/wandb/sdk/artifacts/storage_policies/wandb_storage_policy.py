@@ -254,7 +254,7 @@ class WandbStoragePolicy(StoragePolicy):
                     if env.is_debug():
                         logger.debug(f"Error writing chunk to file: {e}")
                     download_has_error.set()
-                    raise e
+                    raise
             else:
                 raise ValueError(f"Unknown queue item type: {type(item)}")
 
@@ -340,7 +340,7 @@ class WandbStoragePolicy(StoragePolicy):
                 if env.is_debug():
                     logger.debug(f"Error downloading file: {e}")
                 download_has_error.set()
-                raise e
+                raise
             finally:
                 # Always signal the writer to stop
                 q.put(_CHUNK_QUEUE_SENTINEL)
@@ -387,7 +387,7 @@ class WandbStoragePolicy(StoragePolicy):
                 api.settings("base_url"), entity_name, md5_hex
             )
         elif storage_layout == StorageLayout.V2:
-            if api._check_server_feature_with_fallback(
+            if api._server_supports(
                 ServerFeature.ARTIFACT_COLLECTION_MEMBERSHIP_FILE_DOWNLOAD_HANDLER  # type: ignore
             ):
                 return "{}/artifactsV2/{}/{}/{}/{}/{}/{}/{}".format(

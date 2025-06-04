@@ -3,24 +3,16 @@ GitLab API:
 https://docs.gitlab.com/ee/api/secure_files.html
 """
 
-from typing import (
-    Any,
-    Callable,
-    cast,
-    Iterator,
-    Literal,
-    Optional,
-    overload,
-    TYPE_CHECKING,
-    Union,
-)
+from __future__ import annotations
+
+from typing import Any, Callable, Iterator, Literal, overload, TYPE_CHECKING
 
 import requests
 
 from gitlab import cli
 from gitlab import exceptions as exc
 from gitlab import utils
-from gitlab.base import RESTManager, RESTObject
+from gitlab.base import RESTObject
 from gitlab.mixins import NoUpdateMixin, ObjectDeleteMixin
 from gitlab.types import FileAttribute, RequiredOptional
 
@@ -54,7 +46,7 @@ class ProjectSecureFile(ObjectDeleteMixin, RESTObject):
     def download(
         self,
         streamed: Literal[True] = True,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: Literal[False] = False,
@@ -66,12 +58,12 @@ class ProjectSecureFile(ObjectDeleteMixin, RESTObject):
     def download(
         self,
         streamed: bool = False,
-        action: Optional[Callable[[bytes], Any]] = None,
+        action: Callable[[bytes], Any] | None = None,
         chunk_size: int = 1024,
         *,
         iterator: bool = False,
         **kwargs: Any,
-    ) -> Optional[Union[bytes, Iterator[Any]]]:
+    ) -> bytes | Iterator[Any] | None:
         """Download the secure file.
 
         Args:
@@ -102,14 +94,9 @@ class ProjectSecureFile(ObjectDeleteMixin, RESTObject):
         )
 
 
-class ProjectSecureFileManager(NoUpdateMixin, RESTManager):
+class ProjectSecureFileManager(NoUpdateMixin[ProjectSecureFile]):
     _path = "/projects/{project_id}/secure_files"
     _obj_cls = ProjectSecureFile
     _from_parent_attrs = {"project_id": "id"}
     _create_attrs = RequiredOptional(required=("name", "file"))
     _types = {"file": FileAttribute}
-
-    def get(
-        self, id: Union[str, int], lazy: bool = False, **kwargs: Any
-    ) -> ProjectSecureFile:
-        return cast(ProjectSecureFile, super().get(id=id, lazy=lazy, **kwargs))

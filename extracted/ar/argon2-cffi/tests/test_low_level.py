@@ -95,11 +95,11 @@ TEST_PARALLELISM = 4
 TEST_HASH_LEN = 32
 
 i_and_d_encoded = pytest.mark.parametrize(
-    "type,hash",
+    ("type", "hash"),
     [(Type.I, TEST_HASH_I), (Type.D, TEST_HASH_D), (Type.ID, TEST_HASH_ID)],
 )
 i_and_d_raw = pytest.mark.parametrize(
-    "type,hash",
+    ("type", "hash"),
     [(Type.I, TEST_RAW_I), (Type.D, TEST_RAW_D), (Type.ID, TEST_RAW_ID)],
 )
 
@@ -185,13 +185,15 @@ class TestHash:
                 Type.I,
             )
 
-    @both_hash_funcs
-    @given(st.binary(max_size=128))
+    @given(
+        st.sampled_from((hash_secret, hash_secret_raw)),
+        st.binary(max_size=128),
+    )
     def test_hash_fast(self, func, secret):
         """
         Hash various secrets as cheaply as possible.
         """
-        hash_secret(
+        func(
             secret,
             salt=b"12345678",
             time_cost=1,

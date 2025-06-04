@@ -1,7 +1,7 @@
 import json
 import logging
 import time
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Callable, Dict, List, Optional, Union
 from urllib.parse import parse_qs, urlparse
 
 from msal import ConfidentialClientApplication, PublicClientApplication
@@ -34,9 +34,8 @@ from .utils import (
 
 log = logging.getLogger(__name__)
 
-O365_API_VERSION = "v2.0"
-GRAPH_API_VERSION = "v1.0"
-OAUTH_REDIRECT_URL = "https://login.microsoftonline.com/common/oauth2/nativeclient"
+GRAPH_API_VERSION: str = "v1.0"
+OAUTH_REDIRECT_URL: str = "https://login.microsoftonline.com/common/oauth2/nativeclient"
 
 RETRIES_STATUS_LIST = (
     429,  # Status code for TooManyRequests
@@ -45,9 +44,9 @@ RETRIES_STATUS_LIST = (
     503,
     504,  # Server errors
 )
-RETRIES_BACKOFF_FACTOR = 0.5
+RETRIES_BACKOFF_FACTOR: float = 0.5
 
-DEFAULT_SCOPES = {
+DEFAULT_SCOPES: dict[str, list[str]] = {
     # wrap any scope in a 1 element tuple to avoid prefixing
     "basic": ["User.Read"],
     "mailbox": ["Mail.Read"],
@@ -87,9 +86,9 @@ class Protocol:
     """Base class for all protocols"""
 
     # Override these in subclass
-    _protocol_url = "not_defined"  # Main url to request.
-    _oauth_scope_prefix = ""  # Prefix for scopes
-    _oauth_scopes = {}  # Dictionary of {scopes_name: [scope1, scope2]}
+    _protocol_url: str = "not_defined"  # Main url to request.
+    _oauth_scope_prefix: str = ""  # Prefix for scopes
+    _oauth_scopes: dict[str, list[str]] = {}  # Dictionary of {scopes_name: [scope1, scope2]}
 
     def __init__(
         self,
@@ -144,7 +143,7 @@ class Protocol:
         self.max_top_value: int = 500  # Max $top parameter value
 
         #: The in use timezone.   |br| **Type:** str
-        self._timezone = None
+        self._timezone: Optional[ZoneInfo] = None
 
         if timezone:
             self.timezone = timezone  # property setter will convert this timezone to ZoneInfo if a string is provided
@@ -192,8 +191,6 @@ class Protocol:
 
         When using Microsoft Graph API, the keywords of the API use
         lowerCamelCase Casing
-
-        When using Office 365 API, the keywords of the API use PascalCase Casing
 
         Default case in this API is lowerCamelCase
 
@@ -256,7 +253,7 @@ class MSGraphProtocol(Protocol):
     _oauth_scope_prefix = "https://graph.microsoft.com/"
     _oauth_scopes = DEFAULT_SCOPES
 
-    def __init__(self, api_version="v1.0", default_resource=None, **kwargs):
+    def __init__(self, api_version: str = "v1.0", default_resource: Optional[str] = None, **kwargs):
         """Create a new Microsoft Graph protocol object
 
         _protocol_url = 'https://graph.microsoft.com/'
@@ -298,62 +295,9 @@ class MSGraphProtocol(Protocol):
         )
 
 
-class MSOffice365Protocol(Protocol):
-    """A Microsoft Office 365 Protocol Implementation
-    https://docs.microsoft.com/en-us/outlook/rest/compare-graph-outlook
-    """
-
-    _protocol_url = "https://outlook.office.com/api/"
-    _oauth_scope_prefix = "https://outlook.office.com/"
-    _oauth_scopes = DEFAULT_SCOPES
-
-    def __init__(self, api_version="v2.0", default_resource=None, **kwargs):
-        """Create a new Office 365 protocol object
-
-        _protocol_url = 'https://outlook.office.com/api/'
-
-        _oauth_scope_prefix = 'https://outlook.office.com/'
-
-        :param str api_version: api version to use
-        :param str default_resource: the default resource to use when there is
-         nothing explicitly specified during the requests
-        """
-        super().__init__(
-            protocol_url=self._protocol_url,
-            api_version=api_version,
-            default_resource=default_resource,
-            casing_function=to_pascal_case,
-            protocol_scope_prefix=self._oauth_scope_prefix,
-            **kwargs,
-        )
-
-        self.keyword_data_store["message_type"] = "Microsoft.OutlookServices.Message"
-        self.keyword_data_store["event_message_type"] = (
-            "Microsoft.OutlookServices.EventMessage"
-        )
-        self.keyword_data_store["file_attachment_type"] = (
-            "#Microsoft.OutlookServices.FileAttachment"
-        )
-        self.keyword_data_store["item_attachment_type"] = (
-            "#Microsoft.OutlookServices.ItemAttachment"
-        )
-        self.keyword_data_store["prefer_timezone_header"] = (
-            f'outlook.timezone="{get_windows_tz(self.timezone)}"'
-        )
-        #: The max value for 'top' (999).  |br| **Type:** str
-        self.max_top_value = 999  # Max $top parameter value
-
-    @Protocol.timezone.setter
-    def timezone(self, timezone: Union[str, ZoneInfo]) -> None:
-        super()._update_timezone(timezone)
-        self.keyword_data_store["prefer_timezone_header"] = (
-            f'outlook.timezone="{get_windows_tz(self._timezone)}"'
-        )
-
-
 class MSBusinessCentral365Protocol(Protocol):
     """A Microsoft Business Central Protocol Implementation
-    https://docs.microsoft.com/en-us/dynamics-nav/api-reference/v1.0/endpoints-apis-for-dynamics
+    https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/api-reference/v1.0/
     """
 
     _protocol_url = "https://api.businesscentral.dynamics.com/"
@@ -362,7 +306,8 @@ class MSBusinessCentral365Protocol(Protocol):
     _protocol_scope_prefix = "https://api.businesscentral.dynamics.com/"
 
     def __init__(
-        self, api_version="v1.0", default_resource=None, environment=None, **kwargs
+        self, api_version: str ="v1.0", default_resource: Optional[str] = None,
+            environment: Optional[str] = None, **kwargs
     ):
         """Create a new Microsoft Graph protocol object
 
@@ -421,7 +366,7 @@ class Connection:
 
     def __init__(
         self,
-        credentials: Tuple,
+        credentials: tuple,
         *,
         proxy_server: Optional[str] = None,
         proxy_port: Optional[int] = 8080,
@@ -520,7 +465,7 @@ class Connection:
             )
 
         #: The credentials for the connection.  |br| **Type:** tuple
-        self.auth: Tuple = credentials
+        self.auth: tuple = credentials
         #: The tenant id.  |br| **Type:** str
         self.tenant_id: str = tenant_id
 
@@ -580,14 +525,6 @@ class Connection:
             "https://login.microsoftonline.com/common/oauth2/nativeclient"
         )
 
-        # In the event of a response that returned 401 unauthorised this will flag between requests
-        # that this 401 can be a token expired error. MsGraph is returning 401 when the access token
-        # has expired. We can not distinguish between a real 401 or token expired 401. So in the event
-        # of a 401 http error we will first try to refresh the token, set this flag to True and then
-        # re-run the request. If the 401 goes away we will then set this flag to false. If it keeps the
-        # 401 then we will raise the error.
-        #: Indicates if the token has expired. |br| **Type:** bool
-        self._token_expired_flag: bool = False
 
     @property
     def auth_flow_type(self) -> str:
@@ -626,7 +563,7 @@ class Connection:
         if self.session is not None:
             access_token = self.token_backend.get_access_token(username=username)
             if access_token is not None:
-                self.session.headers.update({"Authorization": f"Bearer {access_token}"})
+                self.update_session_auth_header(access_token=access_token["secret"])
             else:
                 # if we can't find an access token for the current user, then remove the auth header from the session
                 if "Authorization" in self.session.headers:
@@ -699,7 +636,7 @@ class Connection:
 
     def get_authorization_url(
         self, requested_scopes: List[str], redirect_uri: Optional[str] = None, **kwargs
-    ) -> Tuple[str, dict]:
+    ) -> tuple[str, dict]:
         """Initializes the oauth authorization flow, getting the
         authorization url that the user must approve.
 
@@ -806,8 +743,7 @@ class Connection:
 
             # Update the session headers if the session exists
             if self.session is not None:
-                access_token = result["access_token"]
-                self.session.headers.update({"Authorization": f"Bearer {access_token}"})
+                self.update_session_auth_header(access_token=result["access_token"])
 
         if store_token:
             self.token_backend.save_token()
@@ -878,6 +814,53 @@ class Connection:
 
         return naive_session
 
+    def update_session_auth_header(self, access_token: Optional[str] = None) -> None:
+        """ Will update the internal request session auth header with an access token"""
+        if access_token is None:
+            # try to get the access_token from the backend
+            access_token_dict = self.token_backend.get_access_token(
+                username=self.username
+            ) or {}
+            access_token = access_token_dict.get("secret")
+            if access_token is None:
+                # at this point this is an error.
+                raise RuntimeError("Tried to update the session auth header but no access "
+                                   "token was provided nor found in the token backend.")
+        log.debug("New access token set into session auth header")
+        self.session.headers.update(
+            {"Authorization": f"Bearer {access_token}"}
+        )
+
+    def _try_refresh_token(self) -> bool:
+        """Internal method to check try to update the refresh token"""
+        # first we check if we can acquire a new refresh token
+        token_refreshed = False
+        if (
+            self.token_backend.token_is_long_lived(username=self.username)
+            or self.auth_flow_type == "credentials"
+        ):
+            # then we ask the token backend if we should refresh the token
+            log.debug("Asking the token backend if we should refresh the token")
+            should_rt = self.token_backend.should_refresh_token(con=self, username=self.username)
+            log.debug(f"Token Backend answered {should_rt}")
+            if should_rt is True:
+                # The backend has checked that we can refresh the token
+                return self.refresh_token()
+            elif should_rt is False:
+                # The token was refreshed by another instance and 'should_refresh_token' has updated it into the
+                # backend cache. So, update the session token and retry the request again
+                self.update_session_auth_header()
+                return True
+            else:
+                # the refresh was performed by the token backend, and it has updated all the data
+                return True
+        else:
+            log.error(
+                "You can not refresh an access token that has no 'refresh_token' available."
+                "Include 'offline_access' permission to get a 'refresh_token'."
+            )
+            return False
+
     def refresh_token(self) -> bool:
         """
         Refresh the OAuth authorization token.
@@ -887,71 +870,36 @@ class Connection:
 
         :return bool: Success / Failure
         """
+        log.debug("Refreshing access token")
+
         if self.session is None:
             self.session = self.get_session(load_token=True)
 
-        token_refreshed = False
+        # This will set the connection scopes from the scopes set in the stored refresh or access token
+        scopes = self.token_backend.get_token_scopes(
+            username=self.username, remove_reserved=True
+        )
 
-        if (
-            self.token_backend.token_is_long_lived(username=self.username)
-            or self.auth_flow_type == "credentials"
-        ):
-            should_rt = self.token_backend.should_refresh_token(self)
-            if should_rt is True:
-                # The backend has checked that we can refresh the token
-                log.debug("Refreshing access token")
-
-                # This will set the connection scopes from the scopes set in the stored refresh or access token
-                scopes = self.token_backend.get_token_scopes(
-                    username=self.username, remove_reserved=True
-                )
-
-                result = self.msal_client.acquire_token_silent_with_error(
-                    scopes=scopes,
-                    account=self.msal_client.get_accounts(username=self.username)[0],
-                )
-                if result is None:
-                    raise RuntimeError("There is no refresh token to refresh")
-                elif "error" in result:
-                    raise RuntimeError(
-                        f'Refresh token operation failed: {result["error"]}'
-                    )
-                elif "access_token" in result:
-                    # refresh done, update authorization header
-                    token_refreshed = True
-                    self.session.headers.update(
-                        {"Authorization": f'Bearer {result["access_token"]}'}
-                    )
-                    log.debug(
-                        f"New oauth token fetched by refresh method for username: {self.username}"
-                    )
-            elif should_rt is False:
-                # the token was refreshed by another instance and updated into this instance,
-                # so: update the session token and retry the request again
-                access_token = self.token_backend.get_access_token(
-                    username=self.username
-                )
-                if access_token:
-                    self.session.headers.update(
-                        {"Authorization": f'Bearer {access_token["secret"]}'}
-                    )
-                else:
-                    raise RuntimeError(
-                        "Can't get access token refreshed by another instance."
-                    )
-            else:
-                # the refresh was performed by the token backend.
-                pass
-        else:
-            log.error(
-                'You can not refresh an access token that has no "refresh_token" available.'
-                'Include "offline_access" permission to get a "refresh_token"'
+        # call the refresh!
+        result = self.msal_client.acquire_token_silent_with_error(
+            scopes=scopes,
+            account=self.msal_client.get_accounts(username=self.username)[0],
+        )
+        if result is None:
+            raise RuntimeError("There is no refresh token to refresh")
+        elif "error" in result:
+            raise RuntimeError(f"Refresh token operation failed: {result['error']}")
+        elif "access_token" in result:
+            log.debug(
+                f"New oauth token fetched by refresh method for username: {self.username}"
             )
-            return False
+            # refresh done, update authorization header
+            self.update_session_auth_header(access_token=result["access_token"])
 
-        if token_refreshed and self.store_token_after_refresh:
-            self.token_backend.save_token()
-        return True
+            if self.store_token_after_refresh:
+                self.token_backend.save_token()
+            return True
+        return False
 
     def _check_delay(self) -> None:
         """Checks if a delay is needed between requests and sleeps if True"""
@@ -966,13 +914,17 @@ class Connection:
         self._previous_request_at = time.time()
 
     def _internal_request(
-        self, session_obj: Session, url: str, method: str, **kwargs
+        self, session_obj: Session, url: str, method: str, ignore401: bool = False, **kwargs
     ) -> Response:
         """Internal handling of requests. Handles Exceptions.
 
         :param session_obj: a requests Session instance.
         :param str url: url to send request to
         :param str method: type of request (get/put/post/patch/delete)
+        :param bool ignore401: indicates whether to ignore 401 error when it would 
+          indicate that there the token has expired. This is set to 'True' for the
+          first call to the api, and 'False' for the call that is initiated after a 
+          tpken refresh. 
         :param kwargs: extra params to send to the request api
         :return: Response of the request
         :rtype: requests.Response
@@ -1014,6 +966,7 @@ class Connection:
         try:
             log.debug(f"Requesting ({method.upper()}) URL: {url}")
             log.debug(f"Request parameters: {kwargs}")
+            log.debug(f"Session default headers: {session_obj.headers}")
             # auto_retry will occur inside this function call if enabled
             response = session_obj.request(method, url, **kwargs)
 
@@ -1030,14 +983,13 @@ class Connection:
             raise e  # re-raise exception
         except HTTPError as e:
             # Server response with 4XX or 5XX error status codes
-            if e.response.status_code == 401 and self._token_expired_flag is False:
+            if e.response.status_code == 401 and ignore401 is True:
                 # This could be a token expired error.
                 if self.token_backend.token_is_expired(username=self.username):
                     # Access token has expired, try to refresh the token and try again on the next loop
                     # By raising custom exception TokenExpiredError we signal oauth_request to fire a
                     # refresh token operation.
                     log.debug(f"Oauth Token is expired for username: {self.username}")
-                    self._token_expired_flag = True
                     raise TokenExpiredError("Oauth Token is expired")
 
             # try to extract the error message:
@@ -1090,7 +1042,7 @@ class Connection:
             # lazy creation of a naive session
             self.naive_session = self.get_naive_session()
 
-        return self._internal_request(self.naive_session, url, method, **kwargs)
+        return self._internal_request(self.naive_session, url, method, ignore401=False, **kwargs)
 
     def oauth_request(self, url: str, method: str, **kwargs) -> Response:
         """Makes a request to url using an oauth session.
@@ -1111,17 +1063,22 @@ class Connection:
                     f"No auth token found. Authentication Flow needed for user {self.username}"
                 )
 
+        # In the event of a response that returned 401 unauthorised the ignore401 flag indicates
+        # that the 401 can be a token expired error. MsGraph is returning 401 when the access token
+        # has expired. We can not distinguish between a real 401 or token expired 401. So in the event
+        # of a 401 http error we will ignore the first time and try to refresh the token, and then
+        # re-run the request. If the 401 goes away we can move on. If it keeps the 401 then we will 
+        # raise the error.
         try:
-            return self._internal_request(self.session, url, method, **kwargs)
+            return self._internal_request(self.session, url, method, ignore401=True, **kwargs)
         except TokenExpiredError as e:
             # refresh and try again the request!
-            try:
-                if self.refresh_token():
-                    return self._internal_request(self.session, url, method, **kwargs)
-                else:
-                    raise e
-            finally:
-                self._token_expired_flag = False
+
+            # try to refresh the token and/or follow token backend answer on 'should_refresh_token'
+            if self._try_refresh_token():
+                return self._internal_request(self.session, url, method, ignore401=False, **kwargs)
+            else:
+                raise e
 
     def get(self, url: str, params: Optional[dict] = None, **kwargs) -> Response:
         """Shorthand for self.oauth_request(url, 'get')

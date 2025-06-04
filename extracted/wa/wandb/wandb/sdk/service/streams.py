@@ -18,11 +18,10 @@ from typing import Any, Callable, NoReturn
 
 import psutil
 
-import wandb
-import wandb.util
 from wandb.proto import wandb_internal_pb2 as pb
 from wandb.sdk.interface.interface_relay import InterfaceRelay
 from wandb.sdk.interface.router_relay import MessageRelayRouter
+from wandb.sdk.internal.internal import wandb_internal
 from wandb.sdk.internal.settings_static import SettingsStatic
 from wandb.sdk.lib import asyncio_compat, progress
 from wandb.sdk.lib import printer as printerlib
@@ -212,7 +211,7 @@ class StreamMux:
         # run_id = action.stream_id  # will want to fix if a streamid != runid
         settings = action._data
         thread = StreamThread(
-            target=wandb.wandb_sdk.internal.internal.wandb_internal,  # type: ignore
+            target=wandb_internal,
             kwargs=dict(
                 settings=settings,
                 record_q=stream._record_q,
@@ -420,10 +419,7 @@ class StreamMux:
         self._action_q.join()
 
     def loop(self) -> None:
-        try:
-            self._loop()
-        except Exception as e:
-            raise e
+        self._loop()
 
     def cleanup(self) -> None:
         pass

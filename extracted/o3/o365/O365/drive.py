@@ -14,6 +14,8 @@ from .utils import (
     ApiComponent,
     OneDriveWellKnowFolderNames,
     Pagination,
+    ExperimentalQuery,
+    CompositeFilter
 )
 
 log = logging.getLogger(__name__)
@@ -25,16 +27,16 @@ CHUNK_SIZE_BASE = 1024 * 320  # 320 Kb
 
 # 5 MB --> Must be a multiple of CHUNK_SIZE_BASE
 DEFAULT_UPLOAD_CHUNK_SIZE = 1024 * 1024 * 5
-ALLOWED_PDF_EXTENSIONS = {'.csv', '.doc', '.docx', '.odp', '.ods', '.odt',
-                          '.pot', '.potm', '.potx',
-                          '.pps', '.ppsx', '.ppsxm', '.ppt', '.pptm', '.pptx',
-                          '.rtf', '.xls', '.xlsx'}
+ALLOWED_PDF_EXTENSIONS = {".csv", ".doc", ".docx", ".odp", ".ods", ".odt",
+                          ".pot", ".potm", ".potx",
+                          ".pps", ".ppsx", ".ppsxm", ".ppt", ".pptm", ".pptx",
+                          ".rtf", ".xls", ".xlsx"}
 
 
 class DownloadableMixin:
 
     def download(self, to_path: Union[None, str, Path] = None, name: str = None,
-                 chunk_size: Union[str, int] = 'auto', convert_to_pdf: bool = False,
+                 chunk_size: Union[str, int] = "auto", convert_to_pdf: bool = False,
                  output: Optional[BytesIO] = None):
         """ Downloads this file to the local drive. Can download the
         file in chunks with multiple requests to the server.
@@ -64,7 +66,7 @@ class DownloadableMixin:
                     to_path = Path(to_path)
 
             if not to_path.exists():
-                raise FileNotFoundError('{} does not exist'.format(to_path))
+                raise FileNotFoundError("{} does not exist".format(to_path))
 
             if name and not Path(name).suffix and self.name:
                 name = name + Path(self.name).suffix
@@ -76,12 +78,12 @@ class DownloadableMixin:
                 to_path = to_path / name
 
         url = self.build_url(
-            self._endpoints.get('download').format(id=self.object_id))
+            self._endpoints.get("download").format(id=self.object_id))
 
         try:
             if chunk_size is None:
                 stream = False
-            elif chunk_size == 'auto':
+            elif chunk_size == "auto":
                 if self.size and self.size > SIZE_THERSHOLD:
                     stream = True
                 else:
@@ -94,12 +96,16 @@ class DownloadableMixin:
                                  "or any integer number representing bytes")
 
             params = {}
-            if convert_to_pdf and Path(name).suffix in ALLOWED_PDF_EXTENSIONS:
-                params['format'] = 'pdf'
+            if convert_to_pdf:
+                if not output:
+                    if Path(name).suffix in ALLOWED_PDF_EXTENSIONS:
+                        params["format"] = "pdf"
+                else:
+                    params["format"] = "pdf"
 
             with self.con.get(url, stream=stream, params=params) as response:
                 if not response:
-                    log.debug('Downloading driveitem Request failed: {}'.format(
+                    log.debug("Downloading driveitem Request failed: {}".format(
                         response.reason))
                     return False
 
@@ -115,12 +121,12 @@ class DownloadableMixin:
                 if output:
                     write_output(output)
                 else:
-                    with to_path.open(mode='wb') as output:
+                    with to_path.open(mode="wb") as output:
                         write_output(output)
 
         except Exception as e:
             log.error(
-                'Error downloading driveitem {}. Error: {}'.format(self.name,
+                "Error downloading driveitem {}. Error: {}".format(self.name,
                                                                    str(e)))
             return False
 
@@ -842,14 +848,15 @@ class DriveItem(ApiComponent):
         # Find out if the server has run a Sync or Async operation
         location = response.headers.get('Location', None)
 
+        parent = self.drive or self.remote_item
         if response.status_code == 202:
             # Async operation
-            return CopyOperation(parent=self.drive, monitor_url=location, target=target_drive)
+            return CopyOperation(parent=parent, monitor_url=location, target=target_drive)
         else:
             # Sync operation. Item is ready to be retrieved
             path = urlparse(location).path
             item_id = path.split('/')[-1]
-            return CopyOperation(parent=self.drive, item_id=item_id, target=target_drive)
+            return CopyOperation(parent=parent, item_id=item_id, target=target_drive)
 
     def get_versions(self):
         """ Returns a list of available versions for this item
@@ -1180,9 +1187,14 @@ class Folder(DriveItem):
 
         if query:
             if not isinstance(query, str):
-                query = query.on_attribute('folder').unequal(None)
+                if isinstance(query, CompositeFilter):
+                    q = ExperimentalQuery(protocol=self.protocol)
+                    query = query & q.unequal('folder', None)
+                else:
+                    query = query.on_attribute('folder').unequal(None)
         else:
-            query = self.q('folder').unequal(None)
+            q = ExperimentalQuery(protocol=self.protocol)
+            query = q.unequal('folder', None)
 
         return self.get_items(limit=limit, query=query, order_by=order_by, batch=batch)
 
@@ -1579,11 +1591,6 @@ class Drive(ApiComponent):
             params['$orderby'] = order_by
 
         if query:
-            # if query.has_filters:
-            #     warnings.warn(
-            #         'Filters are not allowed by the Api Provider '
-            #         'in this method')
-            #     query.clear_filters()
             if isinstance(query, str):
                 params['$filter'] = query
             else:
@@ -1645,11 +1652,16 @@ class Drive(ApiComponent):
         :return: folder items in this folder
         :rtype: generator of DriveItem or Pagination
         """
-
         if query:
-            query = query.on_attribute('folder').unequal(None)
+            if not isinstance(query, str):
+                if isinstance(query, CompositeFilter):
+                    q = ExperimentalQuery(protocol=self.protocol)
+                    query = query & q.unequal('folder', None)
+                else:
+                    query = query.on_attribute('folder').unequal(None)
         else:
-            query = self.q('folder').unequal(None)
+            q = ExperimentalQuery(protocol=self.protocol)
+            query = q.unequal('folder', None)
 
         return self.get_items(limit=limit, query=query, order_by=order_by, batch=batch)
 

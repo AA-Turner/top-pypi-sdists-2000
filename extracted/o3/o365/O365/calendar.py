@@ -126,8 +126,9 @@ class EventRecurrence(ApiComponent):
                                                      set())
         self.__first_day_of_week = recurrence_pattern.get(
             self._cc('firstDayOfWeek'), None)
-        if 'type' in recurrence_pattern.keys():
-            if 'weekly' not in recurrence_pattern['type'].lower():
+        self.__recurrence_type = recurrence_pattern.get("type", None)
+        if self.__recurrence_type:
+            if "weekly" not in recurrence_pattern["type"].lower():
                 self.__first_day_of_week = None
 
         self.__day_of_month = recurrence_pattern.get(self._cc('dayOfMonth'),
@@ -338,6 +339,15 @@ class EventRecurrence(ApiComponent):
         self.__recurrence_time_zone = value
         self._track_changes()
 
+    @property
+    def recurrence_type(self):
+        """Type of the recurrence pattern
+
+        :getter: Get the type
+        :type: str
+        """
+        return self.__recurrence_type
+        
     @property
     def start_date(self):
         """ Start date of repetition
@@ -871,6 +881,7 @@ class Event(ApiComponent, AttachableMixin, HandleRecipientsMixin):
 
         #: Unique identifier for the event.  |br| **Type:** str
         self.object_id = cloud_data.get(cc('id'), None)
+        self.__transaction_id = cloud_data.get(cc("transactionId"), None)
         self.__subject = cloud_data.get(cc('subject'),
                                         kwargs.get('subject', '') or '')
         body = (
@@ -987,6 +998,7 @@ class Event(ApiComponent, AttachableMixin, HandleRecipientsMixin):
             location = {cc('displayName'): ''}
 
         data = {
+            cc("transactionId"): self.__transaction_id,
             cc('subject'): self.__subject,
             cc('body'): {
                 cc('contentType'): self.body_type,
@@ -1073,6 +1085,23 @@ class Event(ApiComponent, AttachableMixin, HandleRecipientsMixin):
     def subject(self, value):
         self.__subject = value
         self._track_changes.add(self._cc('subject'))
+
+    @property
+    def transaction_id(self):
+        """Transaction Id of the event
+
+        :getter: Get transaction_id
+        :setter: Set transaction_id of event - can only be set for event creation
+        :type: str
+        """
+        return self.__transaction_id
+
+    @transaction_id.setter
+    def transaction_id(self, value):
+        if self.object_id and value != self.__transaction_id:
+            raise ValueError("Cannot change transaction_id after event creation")
+        self.__transaction_id = value
+        self._track_changes.add(self._cc("transactionId"))
 
     @property
     def start(self):
@@ -1751,8 +1780,9 @@ class Calendar(ApiComponent, HandleRecipientsMixin):
 
         return True
 
-    def get_events(self, limit=25, *, query=None, order_by=None, batch=None,
-                   download_attachments=False, include_recurring=True):
+    def get_events(self, limit: int = 25, *, query=None, order_by=None, batch=None,
+                   download_attachments=False, include_recurring=True,
+                   start_recurring=None, end_recurring=None):
         """ Get events from this Calendar
 
         :param int limit: max no. of events to get. Over 999 uses batch.
@@ -1764,6 +1794,8 @@ class Calendar(ApiComponent, HandleRecipientsMixin):
          batches allowing to retrieve more items than the limit.
         :param download_attachments: downloads event attachments
         :param bool include_recurring: whether to include recurring events or not
+        :param start_recurring: a string datetime or a Query object with just a start condition
+        :param end_recurring: a string datetime or a Query object with just an end condition
         :return: list of events in this calendar
         :rtype: list[Event] or Pagination
         """
@@ -1793,31 +1825,29 @@ class Calendar(ApiComponent, HandleRecipientsMixin):
         if include_recurring:
             start = None
             end = None
-            if query and not isinstance(query, str):
-                # extract start and end from query because
-                # those are required by a calendarView
-                for query_data in query._filters:
-                    if not isinstance(query_data, list):
-                        continue
-                    attribute = query_data[0]
-                    # the 2nd position contains the filter data
-                    # and the 3rd position in filter_data contains the value
-                    word = query_data[2][3]
-
-                    if attribute.lower().startswith('start/'):
-                        start = word.replace("'", '')  # remove the quotes
-                        query.remove_filter('start')
-                    if attribute.lower().startswith('end/'):
-                        end = word.replace("'", '')  # remove the quotes
-                        query.remove_filter('end')
-
+            if start_recurring is None:
+                pass
+            elif isinstance(start_recurring, str):
+                start = start_recurring
+            elif isinstance(start_recurring, dt.datetime):
+                start = start_recurring.isoformat()
+            else:
+                # it's a Query Object
+                start = start_recurring.get_filter_by_attribute('start/')
+            if end_recurring is None:
+                pass
+            elif isinstance(end_recurring, str):
+                end = end_recurring
+            elif isinstance(end_recurring, dt.datetime):
+                end = end_recurring.isoformat()
+            else:
+                # it's a Query Object
+                end = end_recurring.get_filter_by_attribute('end/')
             if start is None or end is None:
-                raise ValueError(
-                    "When 'include_recurring' is True you must provide a 'start' and 'end' datetimes inside a Query instance.")
-
-            if end < start:
-                raise ValueError('When using "include_recurring=True", the date asigned to the "end" datetime'
-                                 ' should be greater or equal than the date asigned to the "start" datetime.')
+                raise ValueError("When 'include_recurring' is True you must provide "
+                                 "a 'start_recurring' and 'end_recurring' with a datetime string.")
+            start = start.replace("'", '')  # remove the quotes
+            end = end.replace("'", '')  # remove the quotes
 
             params[self._cc('startDateTime')] = start
             params[self._cc('endDateTime')] = end
@@ -1964,7 +1994,10 @@ class Schedule(ApiComponent):
             batch = self.protocol.max_top_value
         params['$top'] =  batch if batch else limit
         if query:
-            params['$filter'] = str(query)
+            if isinstance(query, str):
+                params["$filter"] = query
+            else:
+                params.update(query.as_params())
         if order_by:
             params['$orderby'] = order_by
 
@@ -2008,11 +2041,13 @@ class Schedule(ApiComponent):
         return self.calendar_constructor(parent=self,
                                          **{self._cloud_data_key: data})
 
-    def get_calendar(self, calendar_id=None, calendar_name=None):
-        """ Returns a calendar by it's id or name
+    def get_calendar(self, calendar_id=None, calendar_name=None, query=None):
+        """Returns a calendar by it's id or name
 
         :param str calendar_id: the calendar id to be retrieved.
         :param str calendar_name: the calendar name to be retrieved.
+        :param query: applies a OData filter to the request
+        :type query: Query
         :return: calendar for the given info
         :rtype: Calendar
         """
@@ -2033,6 +2068,10 @@ class Schedule(ApiComponent):
             params = {
                 '$filter': "{} eq '{}'".format(self._cc('name'), calendar_name),
                 '$top': 1}
+        if query:
+            if not isinstance(query, str):
+                params = {} if params is None else params
+                params.update(query.as_params())
 
         response = self.con.get(url, params=params)
         if not response:
@@ -2068,9 +2107,19 @@ class Schedule(ApiComponent):
         return self.calendar_constructor(parent=self,
                                          **{self._cloud_data_key: data})
 
-    def get_events(self, limit=25, *, query=None, order_by=None, batch=None,
-                   download_attachments=False, include_recurring=True):
-        """ Get events from the default Calendar
+    def get_events(
+        self,
+        limit=25,
+        *,
+        query=None,
+        order_by=None,
+        batch=None,
+        download_attachments=False,
+        include_recurring=True,
+        start_recurring=None,
+        end_recurring=None,
+    ):
+        """Get events from the default Calendar
 
         :param int limit: max no. of events to get. Over 999 uses batch.
         :param query: applies a OData filter to the request
@@ -2081,16 +2130,24 @@ class Schedule(ApiComponent):
          batches allowing to retrieve more items than the limit.
         :param bool download_attachments: downloads event attachments
         :param bool include_recurring: whether to include recurring events or not
+        :param start_recurring: a string datetime or a Query object with just a start condition
+        :param end_recurring: a string datetime or a Query object with just an end condition
         :return: list of items in this folder
         :rtype: list[Event] or Pagination
         """
 
         default_calendar = self.calendar_constructor(parent=self)
 
-        return default_calendar.get_events(limit=limit, query=query,
-                                           order_by=order_by, batch=batch,
-                                           download_attachments=download_attachments,
-                                           include_recurring=include_recurring)
+        return default_calendar.get_events(
+            limit=limit,
+            query=query,
+            order_by=order_by,
+            batch=batch,
+            download_attachments=download_attachments,
+            include_recurring=include_recurring,
+            start_recurring=start_recurring,
+            end_recurring=end_recurring,
+        )
 
     def new_event(self, subject=None):
         """ Returns a new (unsaved) Event object in the default calendar

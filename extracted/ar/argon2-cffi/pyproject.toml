@@ -14,34 +14,30 @@ name = "argon2-cffi"
 description = "Argon2 for Python"
 authors = [{ name = "Hynek Schlawack", email = "hs@ox.cx" }]
 dynamic = ["version", "readme"]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 license = "MIT"
+license-files = ["LICENSE"]
 keywords = ["password", "hash", "hashing", "security"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX",
-    "Operating System :: Unix",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Security :: Cryptography",
-    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
 ]
-dependencies = [
-    "argon2-cffi-bindings",
-    "typing-extensions; python_version < '3.8'", # cf. _typing.py module
-]
+dependencies = ["argon2-cffi-bindings"]
 
-[project.optional-dependencies]
+[dependency-groups]
 tests = ["hypothesis", "pytest"]
 typing = ["mypy"]
 docs = [
@@ -51,7 +47,7 @@ docs = [
     "furo",
     "myst-parser",
 ]
-dev = ["argon2-cffi[tests,typing]", "tox>4"]
+dev = [{ include-group = "tests" }, { include-group = "typing" }, "tox>4"]
 
 [project.urls]
 Documentation = "https://argon2-cffi.readthedocs.io/"
@@ -93,7 +89,7 @@ pattern = "\n(###.+?\n)## "
 text = """
 ---
 
-[→ Full Changelog](https://github.com/hynek/argon2-cffi/blob/main/CHANGELOG.md)
+[Full Changelog →](https://github.com/hynek/argon2-cffi/blob/main/CHANGELOG.md)
 
 
 """
@@ -101,7 +97,6 @@ text = """
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 path = "README.md"
 start-at = "## Credits"
-
 
 
 [tool.pytest.ini_options]
@@ -149,10 +144,12 @@ whitelist-regex = ["test_.*"]
 
 [tool.pyright]
 ignore = ["conftest.py", "docs", "tests"]
+disableBytesTypePromotions = true
 
 
 [tool.mypy]
 strict = true
+pretty = true
 
 show_error_codes = true
 enable_error_code = ["ignore-without-code"]
@@ -165,12 +162,11 @@ module = "tests.*"
 ignore_errors = true
 
 
-[tool.black]
-line-length = 79
-
-
 [tool.ruff]
 src = ["src", "tests", "noxfile.py"]
+line-length = 79
+
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = [
     "A001",    # shadowing is fine
@@ -178,13 +174,14 @@ ignore = [
     "A003",    # shadowing is fine
     "ANN",     # Mypy is better at this
     "ARG001",  # unused arguments are normal when implementing interfaces
-    "COM",     # Black takes care of our commas
+    "COM",     # Formatter takes care of our commas
     "D",       # We prefer our own docstring style.
-    "E501",    # leave line-length enforcement to Black
+    "E501",    # leave line-length enforcement to formatter
     "ERA001",  # Dead code detection is overly eager.
     "FBT",     # we have one function that takes one bool; c'mon!
     "FIX",     # Yes, we want XXX as a marker.
     "INP001",  # sometimes we want Python files outside of packages
+    "ISC001",  # conflicts with ruff format
     "PLR0913", # yes, many arguments, but most have defaults
     "PLR2004", # numbers are sometimes fine
     "PLW2901", # re-assigning within loop bodies is fine
@@ -194,7 +191,7 @@ ignore = [
     "TD",      # we don't follow other people's todo style
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "src/argon2/__main__.py" = ["T201"] # need print in CLI
 "tests/*" = [
     "ARG",    # stubs don't care about arguments
@@ -207,6 +204,6 @@ ignore = [
 ]
 
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 lines-between-types = 1
 lines-after-imports = 2

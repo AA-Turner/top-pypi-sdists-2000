@@ -11,14 +11,20 @@ from collections.abc import Callable, Sequence
 from datetime import date
 from enum import Enum
 from functools import cache
-from typing import TYPE_CHECKING, Annotated, Generic, Union, cast
+from typing import (
+    TYPE_CHECKING,
+    Annotated,
+    Generic,
+    Union,
+    _BaseGenericAlias,  # pyright: ignore[reportAttributeAccessIssue]
+    cast,
+)
 
 import fastapi.params
 import fastapi.security.base
 import fastapi.utils
 import pydantic
 import pydantic._internal._decorators
-import typing_extensions
 from fastapi import Response
 from fastapi.dependencies.utils import is_async_gen_callable, is_coroutine_callable, is_gen_callable
 from fastapi.routing import APIRoute
@@ -32,12 +38,12 @@ from pydantic._internal._decorators import (
     RootValidatorDecoratorInfo,
     ValidatorDecoratorInfo,
 )
+from pydantic._internal._known_annotated_metadata import collect_known_metadata
 from pydantic._internal._typing_extra import try_eval_type as pydantic_try_eval_type
 from pydantic.fields import ComputedFieldInfo, FieldInfo
 from typing_extensions import (
     Any,
     Doc,
-    NewType,
     Self,
     TypeAlias,
     TypeAliasType,
@@ -79,11 +85,6 @@ from cadwyn.structure.versions import _CADWYN_REQUEST_PARAM_NAME, _CADWYN_RESPON
 if TYPE_CHECKING:
     from cadwyn.structure.versions import HeadVersion, Version, VersionBundle
 
-
-if sys.version_info >= (3, 10):
-    from typing import _BaseGenericAlias  # pyright: ignore[reportAttributeAccessIssue]
-else:
-    from typing_extensions import _BaseGenericAlias  # pyright: ignore[reportAttributeAccessIssue]
 
 _Call = TypeVar("_Call", bound=Callable[..., Any])
 
@@ -153,16 +154,12 @@ class PydanticFieldWrapper:
         )
 
 
-def _extract_passed_field_attributes(field_info: FieldInfo):
-    attributes = {
-        attr_name: field_info._attributes_set[attr_name]
-        for attr_name in _all_field_arg_names
-        if attr_name in field_info._attributes_set
+def _extract_passed_field_attributes(field_info: FieldInfo) -> dict[str, object]:
+    return {
+        k: v
+        for k, v in (field_info._attributes_set | collect_known_metadata(field_info.metadata)[0]).items()
+        if k in _all_field_arg_names and not (k == "frozen" and v is None)
     }
-    # PydanticV2 always adds frozen to _attributes_set but we don't want it if it wasn't explicitly set
-    if attributes.get("frozen", ...) is None:
-        attributes.pop("frozen")
-    return attributes
 
 
 @dataclasses.dataclass(**DATACLASS_SLOTS)
@@ -265,7 +262,7 @@ def _wrap_pydantic_model(model: type[_T_PYDANTIC_MODEL]) -> "_PydanticModelWrapp
     # For example, when "from __future__ import annotations" is used in the file with the schema
     if model is not BaseModel:
         model.model_rebuild(raise_errors=False)
-    model = cast(type[_T_PYDANTIC_MODEL], model)
+    model = cast("type[_T_PYDANTIC_MODEL]", model)
 
     decorators = _get_model_decorators(model)
     validators = {}
@@ -345,7 +342,7 @@ def _wrap_pydantic_model(model: type[_T_PYDANTIC_MODEL]) -> "_PydanticModelWrapp
 def _get_field_and_validator_names_from_model(cls: type) -> tuple[set[_FieldName], set[str]]:
     fields = cls.model_fields
     source = inspect.getsource(cls)
-    cls_ast = cast(ast.ClassDef, ast.parse(textwrap.dedent(source)).body[0])
+    cls_ast = cast("ast.ClassDef", ast.parse(textwrap.dedent(source)).body[0])
     validator_names = (
         _get_validator_info_or_none(node)
         for node in cls_ast.body
@@ -468,7 +465,7 @@ class _PydanticModelWrapper(Generic[_T_PYDANTIC_MODEL]):
         fields = {name: field.generate_field_copy(generator) for name, field in self.fields.items()}
         model_copy = type(self.cls)(
             self.name,
-            tuple(generator[cast(type[BaseModel], base)] for base in self.cls.__bases__),
+            tuple(generator[cast("type[BaseModel]", base)] for base in self.cls.__bases__),
             self.other_attributes
             | per_field_validators
             | root_validators
@@ -587,9 +584,11 @@ class _AnnotationTransformer:
         self._remake_endpoint_dependencies(route)
 
     def _change_version_of_a_non_container_annotation(self, annotation: Any) -> Any:
-        if isinstance(annotation, (_BaseGenericAlias, types.GenericAlias)):
+        from typing_inspection.typing_objects import is_any, is_newtype, is_typealiastype
+
+        if isinstance(annotation, (types.GenericAlias, _BaseGenericAlias)):
             return get_origin(annotation)[tuple(self.change_version_of_annotation(arg) for arg in get_args(annotation))]
-        elif isinstance(annotation, TypeAliasType):
+        elif is_typealiastype(annotation):
             if (
                 annotation.__module__ is not None and (annotation.__module__.startswith("pydantic."))
             ) or annotation.__name__ in _PYDANTIC_ALL_EXPORTED_NAMES:
@@ -616,7 +615,7 @@ class _AnnotationTransformer:
             return getitem(
                 tuple(self.change_version_of_annotation(a) for a in get_args(annotation)),
             )
-        elif annotation is typing.Any or annotation is typing_extensions.Any or isinstance(annotation, NewType):
+        elif is_any(annotation) or is_newtype(annotation):
             return annotation
         elif isinstance(annotation, type):
             return self._change_version_of_type(annotation)
@@ -776,7 +775,7 @@ class SchemaGenerator:
         wrapper = self._get_wrapper_for_model(model)
         model_copy = wrapper.generate_model_copy(self)
         self.concrete_models[model] = model_copy
-        return cast(type[_T_ANY_MODEL], model_copy)
+        return cast("type[_T_ANY_MODEL]", model_copy)
 
     @overload
     def _get_wrapper_for_model(self, model: type[BaseModel]) -> "_PydanticModelWrapper[BaseModel]": ...
@@ -865,7 +864,7 @@ def _apply_alter_schema_instructions(
         elif isinstance(alter_schema_instruction, ValidatorExistedInstruction):
             validator_name = get_name_of_function_wrapped_in_pydantic_validator(alter_schema_instruction.validator)
             raw_validator = cast(
-                pydantic._internal._decorators.PydanticDescriptorProxy, alter_schema_instruction.validator
+                "pydantic._internal._decorators.PydanticDescriptorProxy", alter_schema_instruction.validator
             )
             schema_info.validators[validator_name] = _wrap_validator(
                 raw_validator.wrapped,
@@ -1041,15 +1040,19 @@ def _delete_field_attributes(
     annotation: Any,
 ) -> None:
     for attr_name in alter_schema_instruction.attributes:
+        deleted = False
+
         if attr_name in field.passed_field_attributes:
             field.delete_attribute(name=attr_name)
-        elif get_origin(annotation) == Annotated and any(  # pragma: no branch
+            deleted = True
+        if get_origin(annotation) == Annotated and any(  # pragma: no branch
             hasattr(sub_ann, attr_name) for sub_ann in get_args(annotation)
         ):
             for sub_ann in get_args(annotation):
                 if hasattr(sub_ann, attr_name):
                     object.__setattr__(sub_ann, attr_name, None)
-        else:
+                    deleted = True
+        if not deleted:
             raise InvalidGenerationInstructionError(
                 f'You tried to delete the attribute "{attr_name}" of field "{alter_schema_instruction.name}" '
                 f'from "{model.name}" in "{version_change_name}" '
@@ -1100,7 +1103,7 @@ class _EnumWrapper(Generic[_T_ENUM]):
         for attr_name, attr in initialization_namespace.items():
             enum_dict[attr_name] = attr
         enum_dict["__doc__"] = self.cls.__doc__
-        model_copy = cast(type[_T_ENUM], type(self.name, self.cls.__bases__, enum_dict))
+        model_copy = cast("type[_T_ENUM]", type(self.name, self.cls.__bases__, enum_dict))
         model_copy.__cadwyn_original_model__ = self.cls  # pyright: ignore[reportAttributeAccessIssue]
         return model_copy
 

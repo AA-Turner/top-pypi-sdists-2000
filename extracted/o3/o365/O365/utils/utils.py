@@ -1,5 +1,6 @@
 import datetime as dt
 import logging
+import warnings
 from collections import OrderedDict
 from enum import Enum
 from typing import Dict, Union
@@ -21,7 +22,7 @@ NEXT_LINK_KEYWORD = '@odata.nextLink'
 
 log = logging.getLogger(__name__)
 
-MAX_RECIPIENTS_PER_MESSAGE = 500  # Actual limit on Office 365
+MAX_RECIPIENTS_PER_MESSAGE = 500  # Actual limit on Microsoft 365
 
 
 class CaseEnum(Enum):
@@ -496,6 +497,9 @@ class ApiComponent:
         :return: new Query
         :rtype: Query
         """
+        warnings.warn('This method will be deprecated in future releases. A new Query object is finished and will be the only option in future releases. '
+                      'Use `from O365.utils import ExperimentalQuery as Query` instead to prepare for this change. '
+                      'Current docs already explain this change. See O365/utils/query.py for more details.', DeprecationWarning)
         return Query(attribute=attribute, protocol=self.protocol)
 
     q = new_query  # alias for new query
@@ -685,6 +689,7 @@ class Query:
                     if '/' in attribute:
                         # only parent attribute can be selected
                         attribute = attribute.split('/')[0]
+                    attribute = self._get_select_mapping(attribute)
                     self._selects.add(attribute)
         else:
             if self._attribute:
@@ -859,6 +864,13 @@ class Query:
                 attribute = self.protocol.convert_case(attribute)
             return attribute
         return None
+
+    def _get_select_mapping(self, attribute):
+        if attribute.lower() in ["meetingMessageType"]:
+            return (
+                f"{self.protocol.keyword_data_store['event_message_type']}/{attribute}"
+            )
+        return attribute
 
     @fluent
     def new(self, attribute, operation=ChainOperator.AND):
@@ -1248,7 +1260,7 @@ class Query:
          inside the collection
         :param str operation: the logical operation to apply to the
          attribute inside the collection
-        :param bool negation: negate the funcion or operation inside the iterable
+        :param bool negation: negate the function or operation inside the iterable
         :rtype: Query
         """
 
@@ -1298,3 +1310,27 @@ class Query:
         else:
             raise RuntimeError("No filters present. Can't close a group")
         return self
+
+    def get_filter_by_attribute(self, attribute):
+        """
+        Returns a filter value by attribute name. It will match the attribute to the start of each filter attribute
+        and return the first found.
+        
+        :param attribute: the attribute you want to search
+        :return: The value applied to that attribute or None
+        """
+
+        attribute = attribute.lower()
+
+        # iterate over the filters to find the corresponding attribute
+        for query_data in self._filters:
+            if not isinstance(query_data, list):
+                continue
+            filter_attribute = query_data[0]
+            # the 2nd position contains the filter data
+            # and the 3rd position in filter_data contains the value
+            word = query_data[2][3]
+
+            if filter_attribute.lower().startswith(attribute):
+                return word
+        return None

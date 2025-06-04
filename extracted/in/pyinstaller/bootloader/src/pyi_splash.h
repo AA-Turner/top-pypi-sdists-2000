@@ -17,17 +17,17 @@
 #include "zlib.h"
 #include "pyi_global.h"
 #include "pyi_archive.h"
-#include "pyi_splashlib.h"
+#include "pyi_dylib_tcltk.h"
 
 /* Archive item header for splash data
  * This struct is a header describing the rest of this archive item */
 struct SPLASH_DATA_HEADER
 {
     /* Filename of the Tcl shared library, e.g., tcl86t.dll */
-    char tcl_libname[16];
+    char tcl_libname[32];
 
     /* Filename of the Tk shared library, e.g. tk86t.dll */
-    char tk_libname[16];
+    char tk_libname[32];
 
     /* Tk module library root, e.g. "tk/" */
     char tk_lib[16];
@@ -114,16 +114,9 @@ struct SPLASH_CONTEXT
     char *requirements;
     int requirements_len;
 
-    /* Flag indicating that Tcl/Tk shared libraries were successfully
-     * loaded and that required symbols have been loaded and bound. This
-     * is primarily used during finalization to properly handle tear-down
-     * of partially-initialized splash screen. */
-    bool dlls_fully_loaded;
-
-    /* Keep the handles to loaded shared libraries, in order to close them
-     * during finalization. */
-    pyi_dylib_t dll_tcl;
-    pyi_dylib_t dll_tk;
+    /* Structure that encapsulates loaded Tcl and Tk shared library and
+     * pointers to imported functions. */
+    struct DYLIB_TCLTK *dylib_tcltk;
 };
 
 typedef int (pyi_splash_event_proc)(struct SPLASH_CONTEXT *, const void *);

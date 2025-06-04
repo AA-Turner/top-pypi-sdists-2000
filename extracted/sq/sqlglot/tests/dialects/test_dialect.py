@@ -2191,6 +2191,21 @@ class TestDialect(Validator):
                 "bigquery": "MOD(a, b + 1)",
             },
         )
+        self.validate_all(
+            "ARRAY_REMOVE(the_array, target)",
+            write={
+                "": "ARRAY_REMOVE(the_array, target)",
+                "clickhouse": "arrayFilter(_u -> _u <> target, the_array)",
+                "duckdb": "LIST_FILTER(the_array, _u -> _u <> target)",
+                "bigquery": "ARRAY(SELECT _u FROM UNNEST(the_array) AS _u WHERE _u <> target)",
+                "hive": "ARRAY_REMOVE(the_array, target)",
+                "postgres": "ARRAY_REMOVE(the_array, target)",
+                "presto": "ARRAY_REMOVE(the_array, target)",
+                "starrocks": "ARRAY_REMOVE(the_array, target)",
+                "databricks": "ARRAY_REMOVE(the_array, target)",
+                "snowflake": "ARRAY_REMOVE(the_array, target)",
+            },
+        )
 
     def test_typeddiv(self):
         typed_div = exp.Div(this=exp.column("a"), expression=exp.column("b"), typed=True)
@@ -3452,4 +3467,64 @@ FROM subquery2""",
                 self.assertEqual(
                     parse_one("SELECT 0xCC", read=read_dialect).sql(other_integer_dialects),
                     "SELECT 0xCC",
+                )
+
+    def test_pipe_syntax(self):
+        self.validate_identity("FROM x", "SELECT * FROM x")
+        self.validate_identity("FROM x |> SELECT x1, x2", "SELECT x1, x2 FROM (SELECT * FROM x)")
+        self.validate_identity(
+            "FROM x |> SELECT x1 as c1, x2 as c2",
+            "SELECT x1 AS c1, x2 AS c2 FROM (SELECT * FROM x)",
+        )
+        self.validate_identity(
+            "FROM x |> SELECT x1 + 1 as x1_a, x2 - 1 as x2_a |> WHERE x1_a > 1",
+            "SELECT x1 + 1 AS x1_a, x2 - 1 AS x2_a FROM (SELECT * FROM x) WHERE x1_a > 1",
+        )
+        self.validate_identity(
+            "FROM x |> SELECT x1 + 1 as x1_a, x2 - 1 as x2_a |> WHERE x1_a > 1 |> SELECT x2_a",
+            "SELECT x2_a FROM (SELECT x1 + 1 AS x1_a, x2 - 1 AS x2_a FROM (SELECT * FROM x) WHERE x1_a > 1)",
+        )
+        self.validate_identity(
+            "FROM x |> WHERE x1 > 0 OR x2 > 0 |> WHERE x3 > 1 AND x4 > 1 |> SELECT x1, x4",
+            "SELECT x1, x4 FROM (SELECT * FROM x WHERE (x1 > 0 OR x2 > 0) AND (x3 > 1 AND x4 > 1))",
+        )
+        self.validate_identity(
+            "FROM x |> WHERE x1 > 1 |> WHERE x2 > 2 |> SELECT x1 as gt1, x2 as gt2",
+            "SELECT x1 AS gt1, x2 AS gt2 FROM (SELECT * FROM x WHERE x1 > 1 AND x2 > 2)",
+        )
+        self.validate_identity(
+            "FROM x |> WHERE x1 > 1 AND x2 > 2 |> SELECT x1 as gt1, x2 as gt2 |> SELECT gt1 * 2 + gt2 * 2 AS gt2_2",
+            "SELECT gt1 * 2 + gt2 * 2 AS gt2_2 FROM (SELECT x1 AS gt1, x2 AS gt2 FROM (SELECT * FROM x WHERE x1 > 1 AND x2 > 2))",
+        )
+        self.validate_identity("FROM x |> ORDER BY x1", "SELECT * FROM x ORDER BY x1")
+        self.validate_identity(
+            "FROM x |> ORDER BY x1 |> ORDER BY x2", "SELECT * FROM x ORDER BY x1, x2"
+        )
+        self.validate_identity(
+            "FROM x |> ORDER BY x1 |> WHERE x1 > 0 OR x1 != 1 |> ORDER BY x2 |> WHERE x2 > 0 AND x2 != 1 |> SELECT x1, x2",
+            "SELECT x1, x2 FROM (SELECT * FROM x WHERE (x1 > 0 OR x1 <> 1) AND (x2 > 0 AND x2 <> 1) ORDER BY x1, x2)",
+        )
+        self.validate_identity(
+            "FROM x |> ORDER BY x1 |> WHERE x1 > 0 |> SELECT x1",
+            "SELECT x1 FROM (SELECT * FROM x WHERE x1 > 0 ORDER BY x1)",
+        )
+        self.validate_identity(
+            "FROM x |> WHERE x1 > 0 |> SELECT x1 |> ORDER BY x1",
+            "SELECT x1 FROM (SELECT * FROM x WHERE x1 > 0) ORDER BY x1",
+        )
+        self.validate_identity(
+            "FROM x |> SELECT x1, x2, x3 |> ORDER BY x1 DESC NULLS FIRST, x2 ASC NULLS LAST, x3",
+            "SELECT x1, x2, x3 FROM (SELECT * FROM x) ORDER BY x1 DESC NULLS FIRST, x2 ASC NULLS LAST, x3",
+        )
+        for option in ("LIMIT 1", "OFFSET 2", "LIMIT 1 OFFSET 2"):
+            with self.subTest(f"Testing pipe syntax LIMIT and OFFSET option: {option}"):
+                self.validate_identity(f"FROM x |> {option}", f"SELECT * FROM x {option}")
+                self.validate_identity(f"FROM x |> {option}", f"SELECT * FROM x {option}")
+                self.validate_identity(
+                    f"FROM x |> {option} |> SELECT x1, x2 |> WHERE x1 > 0 |> WHERE x2 > 0  |> ORDER BY x1, x2 ",
+                    f"SELECT x1, x2 FROM (SELECT * FROM x {option}) WHERE x1 > 0 AND x2 > 0 ORDER BY x1, x2",
+                )
+                self.validate_identity(
+                    f"FROM x |> SELECT x1, x2 |> WHERE x1 > 0 |> WHERE x2 > 0  |> ORDER BY x1, x2 |> {option}",
+                    f"SELECT x1, x2 FROM (SELECT * FROM x) WHERE x1 > 0 AND x2 > 0 ORDER BY x1, x2 {option}",
                 )

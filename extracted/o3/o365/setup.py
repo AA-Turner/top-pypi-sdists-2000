@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages
 
 
-VERSION = '2.1.2'
+VERSION = '2.1.4'
 
 # Available classifiers: https://pypi.org/pypi?%3Aaction=list_classifiers
 CLASSIFIERS = [
@@ -47,7 +47,7 @@ setup(
     author_email='alejcas@users.noreply.github.com',
     maintainer='alejcas',
     maintainer_email='alejcas@users.noreply.github.com',
-    description='Microsoft Graph and Office 365 API made easy',
+    description='Microsoft Graph API made easy',
     long_description=read('README.md'),
     long_description_content_type="text/markdown",
     classifiers=CLASSIFIERS,

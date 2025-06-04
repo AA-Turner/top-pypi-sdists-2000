@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: frozenlist
-Version: 1.6.0
+Version: 1.6.2
 Summary: A list-like structure which implements collections.abc.MutableSequence
 Home-page: https://github.com/aio-libs/frozenlist
 Maintainer: aiohttp team <team@aiohttp.org>
@@ -160,6 +160,50 @@ Changelog
     WARNING: Don't drop the next directive!
 
 .. towncrier release notes start
+
+v1.6.2
+======
+
+*(2025-06-03)*
+
+
+No significant changes.
+
+
+----
+
+
+v1.6.1
+======
+
+*(2025-06-02)*
+
+
+Bug fixes
+---------
+
+- Correctly use ``cimport`` for including ``PyBool_FromLong`` -- by `@lysnikolaou <https://github.com/sponsors/lysnikolaou>`__.
+
+  *Related issues and pull requests on GitHub:*
+  `#653 <https://github.com/aio-libs/frozenlist/issues/653>`__.
+
+
+Packaging updates and notes for downstreams
+-------------------------------------------
+
+- Exclude ``_frozenlist.cpp`` from bdists/wheels -- by `@musicinmybrain <https://github.com/sponsors/musicinmybrain>`__.
+
+  *Related issues and pull requests on GitHub:*
+  `#649 <https://github.com/aio-libs/frozenlist/issues/649>`__.
+
+- Updated to use Cython 3.1 universally across the build path -- by `@lysnikolaou <https://github.com/sponsors/lysnikolaou>`__.
+
+  *Related issues and pull requests on GitHub:*
+  `#654 <https://github.com/aio-libs/frozenlist/issues/654>`__.
+
+
+----
+
 
 v1.6.0
 ======

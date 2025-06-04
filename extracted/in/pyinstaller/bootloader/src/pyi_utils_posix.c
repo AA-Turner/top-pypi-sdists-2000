@@ -49,22 +49,6 @@
 
 #include <dirent.h>
 
-/*
- * On AIX  RTLD_MEMBER  flag is only visible when _ALL_SOURCE flag is defined.
- *
- * There are quite a few issues with xlC compiler. GCC is much better,
- * Without flag _ALL_SOURCE gcc get stuck on the RTLD_MEMBER flax when
- * compiling the bootloader.
- * This fix was tested wigh gcc on AIX6.1.
- */
-#if defined(AIX) && !defined(_ALL_SOURCE)
-    #define _ALL_SOURCE
-    #include <dlfcn.h>
-    #undef  _ALL_SOURCE
-#else
-    #include <dlfcn.h>
-#endif
-
 #ifndef SIGCLD
     #define SIGCLD SIGCHLD /* not defined on macOS */
 #endif
@@ -370,30 +354,6 @@ pyi_recursive_rmdir(const char *dir_path)
     /* Finally, remove the directory; the return value of rmdir (0 on
      * success, -1 on error) maps directly to this function's return. */
     return rmdir(dir_path);
-}
-
-
-/**********************************************************************\
- *                  Shared library loading/unloading                  *
-\**********************************************************************/
-pyi_dylib_t
-pyi_utils_dlopen(const char *filename)
-{
-    int flags = RTLD_NOW | RTLD_GLOBAL;
-
-#ifdef AIX
-    /* Append the RTLD_MEMBER to the open mode for 'dlopen()'
-     * in order to load shared object member from library. */
-    flags |= RTLD_MEMBER;
-#endif
-
-    return dlopen(filename, flags);
-}
-
-int
-pyi_utils_dlclose(pyi_dylib_t handle)
-{
-    return dlclose(handle);
 }
 
 

@@ -103,7 +103,9 @@ class RetryingClient:
         check_retry_fn=util.no_retry_auth,
         retryable_exceptions=(RetryError, requests.RequestException),
     )
-    def execute(self, *args, **kwargs):  # noqa: D102  # User not encouraged to use this class directly
+    def execute(
+        self, *args, **kwargs
+    ):  # User not encouraged to use this class directly
         try:
             return self._client.execute(*args, **kwargs)
         except requests.exceptions.ReadTimeout:
@@ -122,10 +124,12 @@ class RetryingClient:
             self._server_info = self.execute(self.INFO_QUERY).get("serverInfo")
         return self._server_info
 
-    def version_supported(self, min_version: str) -> bool:  # noqa: D102  # User not encouraged to use this class directly
-        from wandb.util import parse_version
+    def version_supported(
+        self, min_version: str
+    ) -> bool:  # User not encouraged to use this class directly
+        from packaging.version import parse
 
-        return parse_version(min_version) <= parse_version(
+        return parse(min_version) <= parse(
             self.server_info["cliVersionInfo"]["max_cli_version"]
         )
 
@@ -272,20 +276,21 @@ class Api:
         api_key: Optional[str] = None,
     ) -> None:
         self.settings = InternalApi().settings()
+
         _overrides = overrides or {}
-        self._api_key = api_key
-        if self.api_key is None and _thread_local_api_settings.cookies is None:
-            wandb.login(host=_overrides.get("base_url"))
         self.settings.update(_overrides)
+        self.settings["base_url"] = self.settings["base_url"].rstrip("/")
+        if "organization" in _overrides:
+            self.settings["organization"] = _overrides["organization"]
         if "username" in _overrides and "entity" not in _overrides:
             wandb.termwarn(
                 'Passing "username" to Api is deprecated. please use "entity" instead.'
             )
             self.settings["entity"] = _overrides["username"]
-        self.settings["base_url"] = self.settings["base_url"].rstrip("/")
 
-        if "organization" in _overrides:
-            self.settings["organization"] = _overrides["organization"]
+        self._api_key = api_key
+        if self.api_key is None and _thread_local_api_settings.cookies is None:
+            wandb.login(host=_overrides.get("base_url"))
 
         self._viewer = None
         self._projects = {}
@@ -318,7 +323,6 @@ class Api:
             )
         )
         self._client = RetryingClient(self._base_client)
-        self._server_features_cache: Optional[dict[str, bool]] = None
 
     def create_project(self, name: str, entity: str) -> None:
         """Create a new project.
@@ -1464,9 +1468,10 @@ class Api:
         """
         try:
             self._artifact(name, type)
-            return True
         except wandb.errors.CommError:
             return False
+
+        return True
 
     @normalize_exceptions
     def artifact_collection_exists(self, name: str, type: str) -> bool:
@@ -1483,9 +1488,10 @@ class Api:
         """
         try:
             self.artifact_collection(type, name)
-            return True
         except wandb.errors.CommError:
             return False
+
+        return True
 
     def registries(
         self,
@@ -1539,9 +1545,7 @@ class Api:
         Returns:
             A registry iterator.
         """
-        if not InternalApi()._check_server_feature_with_fallback(
-            ServerFeature.ARTIFACT_REGISTRY_SEARCH
-        ):
+        if not InternalApi()._server_supports(ServerFeature.ARTIFACT_REGISTRY_SEARCH):
             raise RuntimeError(
                 "Registry search API is not enabled on this wandb server version. "
                 "Please upgrade your server version or contact support at support@wandb.com."
@@ -1577,9 +1581,7 @@ class Api:
             registry.save()
             ```
         """
-        if not InternalApi()._check_server_feature_with_fallback(
-            ServerFeature.ARTIFACT_REGISTRY_SEARCH
-        ):
+        if not InternalApi()._server_supports(ServerFeature.ARTIFACT_REGISTRY_SEARCH):
             raise RuntimeError(
                 "api.registry() is not enabled on this wandb server version. "
                 "Please upgrade your server version or contact support at support@wandb.com."
@@ -1635,7 +1637,7 @@ class Api:
             )
             ```
         """
-        if not InternalApi()._check_server_feature_with_fallback(
+        if not InternalApi()._server_supports(
             ServerFeature.INCLUDE_ARTIFACT_TYPES_IN_REGISTRY_CREATION
         ):
             raise RuntimeError(
@@ -1783,19 +1785,18 @@ class Api:
             ALWAYS_SUPPORTED_EVENTS,
         )
 
-        server_features = InternalApi()._server_features()
-        return bool(
-            (
-                (event is None)
-                or (event in ALWAYS_SUPPORTED_EVENTS)
-                or server_features.get(f"AUTOMATION_EVENT_{event.value}")
-            )
-            and (
-                (action is None)
-                or (action in ALWAYS_SUPPORTED_ACTIONS)
-                or server_features.get(f"AUTOMATION_ACTION_{action.value}")
-            )
+        api = InternalApi()
+        supports_event = (
+            (event is None)
+            or (event in ALWAYS_SUPPORTED_EVENTS)
+            or api._server_supports(f"AUTOMATION_EVENT_{event.value}")
         )
+        supports_action = (
+            (action is None)
+            or (action in ALWAYS_SUPPORTED_ACTIONS)
+            or api._server_supports(f"AUTOMATION_ACTION_{action.value}")
+        )
+        return supports_event and supports_action
 
     def _omitted_automation_fragments(self) -> Set[str]:
         """Returns the names of unsupported automation-related fragments.
@@ -1938,6 +1939,7 @@ class Api:
             iterator = filter(lambda x: x.name == name, iterator)
         yield from iterator
 
+    @normalize_exceptions
     def create_automation(
         self,
         obj: "NewAutomation",
@@ -2044,6 +2046,7 @@ class Api:
 
         return Automation.model_validate(result.trigger)
 
+    @normalize_exceptions
     def update_automation(
         self,
         obj: "Automation",
@@ -2151,7 +2154,7 @@ class Api:
 
             # Not a (known) recoverable HTTP error
             wandb.termerror(f"Got response status {status!r}: {e.response.text!r}")
-            raise e
+            raise
 
         try:
             result = UpdateAutomation.model_validate(data).result
@@ -2165,6 +2168,7 @@ class Api:
 
         return Automation.model_validate(result.trigger)
 
+    @normalize_exceptions
     def delete_automation(self, obj: Union["Automation", str]) -> Literal[True]:
         """Delete an automation.
 

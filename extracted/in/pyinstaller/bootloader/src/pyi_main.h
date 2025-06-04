@@ -23,6 +23,7 @@
 
 struct ARCHIVE;
 struct SPLASH_CONTEXT;
+struct DYLIB_PYTHON;
 
 #if defined(__APPLE__) && defined(WINDOWED)
 struct APPLE_EVENT_HANDLER_CONTEXT;
@@ -54,11 +55,20 @@ enum PYI_HIDE_CONSOLE
 /* Process levels */
 enum PYI_PROCESS_LEVEL
 {
+    /* Used to designate *parent* process level for top-level / entry-point
+     * processes. */
+    PYI_PROCESS_LEVEL_UNKNOWN = -2,
+    /* Main application process of onedir application process on POSIX
+     * systems where we modify library search path via environment variable;
+     * such process needs to restart itself for changes to take effect.
+     * Also used on said POSIX systems to designate parent / launcher
+     * process in onefile applications with splash screen enabled, which
+     * similarly needs to restart itself for changes in library search
+     * path to take effect before bundled Tcl/Tk shared libraries (and
+     * their bundled dependencies) are loaded for splash screen. */
+    PYI_PROCESS_LEVEL_PARENT_NEEDS_RESTART = -1,
     /* Parent / launcher process in onefile applications; unpacks the
-     * application, and starts the main application process. This value
-     * is also used to designate original main process of onedir
-     * applications on POSIX systems (other than macOS), before the
-     * executable restarts itself. */
+     * application, and starts the main application process. */
     PYI_PROCESS_LEVEL_PARENT = 0,
     /* Main application process, which starts the python interpreter and
      * runs user's program. In onefile builds, this is a child process
@@ -127,7 +137,18 @@ struct PYI_CONTEXT
     /* Main PKG archive */
     struct ARCHIVE *archive;
 
-    /* Splash screen context structure */
+    /* Flag indicating whether application contains resources for
+     * displaying splash screen or not. This does not reflect the
+     * actual run-time state of the splash screen (which might be
+     * suppressed, or fail to initialize). */
+    unsigned char has_splash;
+
+    /* Flag indicating whether user explicitly requested suppression
+     * of splash screen via `PYINSTALLER_SUPPRESS_SPLASH_SCREEN`
+     * environment variable. */
+    unsigned char suppress_splash;
+
+    /* Splash screen context structure. */
     struct SPLASH_CONTEXT *splash;
 
     /* Flag indicating whether the application's main PKG archive has
@@ -140,8 +161,16 @@ struct PYI_CONTEXT
     /* Process level of this process. See definitions of PYI_PROCESS_LEVEL
      * enum. Used to determine whether onefile process should unpack
      * itself or expect to already be unpacked, whether splash screen
-     * should be set up or not, etc. */
-    unsigned char process_level;
+     * should be set up or not, etc.
+     *
+     * NOTE: we need to use signed integral type here, and on some
+     * platforms (e.g., AIX), `char` behaves like `unsigned char` by
+     * default - to avoid potential issues, explicitly use `signed char`. */
+    signed char process_level;
+
+    /* Process level of this process' parent process. See definitions
+     * of PYI_PROCESS_LEVEL enum. */
+    signed char parent_process_level;
 
     /* Application's top-level directory (sys._MEIPASS), where the data
      * and shared libraries are. For applications with onefile semantics,
@@ -149,14 +178,9 @@ struct PYI_CONTEXT
      * itself. */
     char application_home_dir[PYI_PATH_MAX];
 
-    /* Handle to loaded python shared library. */
-    pyi_dylib_t python_dll;
-
-    /* Flag indicating whether symbols from Python shared library have
-     * been successfully loaded. Used to gracefully handle cleanup in
-     * situations when Python shared library is successfully loaded,
-     * but we fail to import the symbols. */
-    unsigned char python_symbols_loaded;
+    /* Structure encapsulating loaded python shared library and pointers
+     * to imported functions. */
+    struct DYLIB_PYTHON *dylib_python;
 
     /* Strict unpack mode for onefile builds. This flag is dynamically
      * controlled by `PYINSTALLER_STRICT_UNPACK_MODE` environment variable

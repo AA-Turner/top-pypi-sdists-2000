@@ -324,19 +324,11 @@ def create_redirect_response(
     # Create a "prepped" Request object to be the final redirect. The redirect
     # will be a "GET" method as Requests changes the method to "GET" when there
     # is a 301/302 redirect code.
-    req = requests.Request(
-        method="GET",
-        url=f"http://example.com/api/v4{api_path}",
-    )
+    req = requests.Request(method="GET", url=f"http://example.com/api/v4{api_path}")
     prepped = req.prepare()
 
     resp_obj = helpers.httmock_response(
-        status_code=200,
-        content="",
-        headers={},
-        reason="OK",
-        elapsed=5,
-        request=prepped,
+        status_code=200, content="", headers={}, reason="OK", elapsed=5, request=prepped
     )
     resp_obj.history = history
     return resp_obj
@@ -575,8 +567,8 @@ def test_list_request_page_and_iterator(gl):
         UserWarning, match="`iterator=True` and `page=1` were both specified"
     ):
         result = gl.http_list("/projects", iterator=True, page=1)
-    assert isinstance(result, list)
-    assert len(result) == 20
+    assert isinstance(result, GitlabList)
+    assert len(list(result)) == 20
     assert len(responses.calls) == 1
 
 
