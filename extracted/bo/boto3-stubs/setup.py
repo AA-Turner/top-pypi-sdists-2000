@@ -12,13 +12,13 @@ LONG_DESCRIPTION = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name="boto3-stubs",
-    version="1.38.29",
+    version="1.38.30",
     packages=["boto3-stubs"],
     url="https://github.com/youtype/mypy_boto3_builder",
     license="MIT License",
     author="Vlad Emelianov",
     author_email="vlad.emelianov.nz@gmail.com",
-    description="Type annotations for boto3 1.38.29 generated with mypy-boto3-builder 8.11.0",
+    description="Type annotations for boto3 1.38.30 generated with mypy-boto3-builder 8.11.0",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -55,7 +55,7 @@ setup(
     ],
     extras_require={
         "full": ["boto3-stubs-full>=1.38.0, <1.39.0"],
-        "boto3": ["boto3==1.38.29"],
+        "boto3": ["boto3==1.38.30"],
         "all": [
             "mypy-boto3-accessanalyzer>=1.38.0, <1.39.0",
             "mypy-boto3-account>=1.38.0, <1.39.0",
@@ -201,6 +201,7 @@ setup(
             "mypy-boto3-es>=1.38.0, <1.39.0",
             "mypy-boto3-events>=1.38.0, <1.39.0",
             "mypy-boto3-evidently>=1.38.0, <1.39.0",
+            "mypy-boto3-evs>=1.38.0, <1.39.0",
             "mypy-boto3-finspace>=1.38.0, <1.39.0",
             "mypy-boto3-finspace-data>=1.38.0, <1.39.0",
             "mypy-boto3-firehose>=1.38.0, <1.39.0",
@@ -616,6 +617,7 @@ setup(
         "es": ["mypy-boto3-es>=1.38.0, <1.39.0"],
         "events": ["mypy-boto3-events>=1.38.0, <1.39.0"],
         "evidently": ["mypy-boto3-evidently>=1.38.0, <1.39.0"],
+        "evs": ["mypy-boto3-evs>=1.38.0, <1.39.0"],
         "finspace": ["mypy-boto3-finspace>=1.38.0, <1.39.0"],
         "finspace-data": ["mypy-boto3-finspace-data>=1.38.0, <1.39.0"],
         "firehose": ["mypy-boto3-firehose>=1.38.0, <1.39.0"],

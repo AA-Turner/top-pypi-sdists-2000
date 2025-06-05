@@ -32,7 +32,7 @@ def insert_book_to_notion(books, index, bookId):
     markedStatus = book.get("markedStatus")
     status = "想读"
     if markedStatus == 4:
-        status = "已读"
+        status = utils.get_complete_status()
     elif book.get("readingTime", 0) >= 60:
         status = "在读"
     book["阅读状态"] = status
@@ -43,7 +43,7 @@ def insert_book_to_notion(books, index, bookId):
     book["评分"] = book.get("newRating")
     if book.get("newRatingDetail") and book.get("newRatingDetail").get("myRating"):
         book["我的评分"] = rating.get(book.get("newRatingDetail").get("myRating"))
-    elif status == "已读":
+    elif status == utils.get_complete_status():
         book["我的评分"] = "未评分"
     book["时间"] = (
         book.get("finishedDate")
@@ -176,8 +176,8 @@ def main():
             and (value.get("price") is not None)
             and (value.get("wordCount") is not None)
             and (
-                value.get("status") != "已读"
-                or (value.get("status") == "已读" and value.get("myRating"))
+                value.get("status") != utils.get_complete_status()
+                or (value.get("status") ==utils.get_complete_status() and value.get("myRating"))
             )
         ):
             not_need_sync.append(key)

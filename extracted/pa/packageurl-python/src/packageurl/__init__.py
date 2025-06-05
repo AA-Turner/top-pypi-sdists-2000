@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Copyright (c) the purl authors
 # SPDX-License-Identifier: MIT
 #
@@ -24,14 +22,12 @@
 # Visit https://github.com/package-url/packageurl-python for support and
 # download.
 
+from __future__ import annotations
+
 import string
 from collections import namedtuple
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import AnyStr
-from typing import Dict
-from typing import Optional
-from typing import Tuple
 from typing import Union
 from typing import overload
 from urllib.parse import quote as _percent_quote
@@ -43,12 +39,12 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from typing_extensions import Literal
+    from typing_extensions import Self
+
+    AnyStr = Union[str, bytes]
 
 # Python 3
-basestring = (
-    bytes,
-    str,
-)  # NOQA
+basestring = (bytes, str)
 
 """
 A purl (aka. Package URL) implementation as specified at:
@@ -61,10 +57,7 @@ def quote(s: AnyStr) -> str:
     Return a percent-encoded unicode string, except for colon :, given an `s`
     byte or unicode string.
     """
-    if isinstance(s, str):
-        s_bytes = s.encode("utf-8")
-    else:
-        s_bytes = s
+    s_bytes = s.encode("utf-8") if isinstance(s, str) else s
     quoted = _percent_quote(s_bytes)
     if not isinstance(quoted, str):
         quoted = quoted.decode("utf-8")
@@ -84,16 +77,14 @@ def unquote(s: AnyStr) -> str:
 
 
 @overload
-def get_quoter(encode: bool = True) -> "Callable[[AnyStr], str]": ...
+def get_quoter(encode: bool = True) -> Callable[[AnyStr], str]: ...
 
 
 @overload
-def get_quoter(encode: None) -> "Callable[[str], str]": ...
+def get_quoter(encode: None) -> Callable[[str], str]: ...
 
 
-def get_quoter(
-    encode: Optional[bool] = True,
-) -> "Union[Callable[[AnyStr], str], Callable[[str], str]]":
+def get_quoter(encode: bool | None = True) -> Callable[[AnyStr], str] | Callable[[str], str]:
     """
     Return quoting callable given an `encode` tri-boolean (True, False or None)
     """
@@ -105,29 +96,23 @@ def get_quoter(
         return lambda x: x
 
 
-def normalize_type(type: Optional[AnyStr], encode: Optional[bool] = True) -> Optional[str]:  # NOQA
+def normalize_type(type: AnyStr | None, encode: bool | None = True) -> str | None:
     if not type:
         return None
-    if not isinstance(type, str):
-        type_str = type.decode("utf-8")  # NOQA
-    else:
-        type_str = type
 
+    type_str = type if isinstance(type, str) else type.decode("utf-8")
     quoter = get_quoter(encode)
-    type_str = quoter(type_str)  # NOQA
+    type_str = quoter(type_str)
     return type_str.strip().lower() or None
 
 
 def normalize_namespace(
-    namespace: Optional[AnyStr], ptype: Optional[str], encode: Optional[bool] = True
-) -> Optional[str]:  # NOQA
+    namespace: AnyStr | None, ptype: str | None, encode: bool | None = True
+) -> str | None:
     if not namespace:
         return None
-    if not isinstance(namespace, str):
-        namespace_str = namespace.decode("utf-8")
-    else:
-        namespace_str = namespace
 
+    namespace_str = namespace if isinstance(namespace, str) else namespace.decode("utf-8")
     namespace_str = namespace_str.strip().strip("/")
     if ptype in ("bitbucket", "github", "pypi", "gitlab"):
         namespace_str = namespace_str.lower()
@@ -137,15 +122,12 @@ def normalize_namespace(
 
 
 def normalize_name(
-    name: Optional[AnyStr], ptype: Optional[str], encode: Optional[bool] = True
-) -> Optional[str]:  # NOQA
+    name: AnyStr | None, ptype: str | None, encode: bool | None = True
+) -> str | None:
     if not name:
         return None
-    if not isinstance(name, str):
-        name_str = name.decode("utf-8")
-    else:
-        name_str = name
 
+    name_str = name if isinstance(name, str) else name.decode("utf-8")
     quoter = get_quoter(encode)
     name_str = quoter(name_str)
     name_str = name_str.strip().strip("/")
@@ -156,16 +138,11 @@ def normalize_name(
     return name_str or None
 
 
-def normalize_version(
-    version: Optional[AnyStr], encode: Optional[bool] = True
-) -> Optional[str]:  # NOQA
+def normalize_version(version: AnyStr | None, encode: bool | None = True) -> str | None:
     if not version:
         return None
-    if not isinstance(version, str):
-        version_str = version.decode("utf-8")
-    else:
-        version_str = version
 
+    version_str = version if isinstance(version, str) else version.decode("utf-8")
     quoter = get_quoter(encode)
     version_str = quoter(version_str.strip())
     return version_str or None
@@ -173,25 +150,25 @@ def normalize_version(
 
 @overload
 def normalize_qualifiers(
-    qualifiers: Union[AnyStr, Dict[str, str], None], encode: "Literal[True]" = ...
-) -> Optional[str]: ...
+    qualifiers: AnyStr | dict[str, str] | None, encode: Literal[True] = ...
+) -> str | None: ...
 
 
 @overload
 def normalize_qualifiers(
-    qualifiers: Union[AnyStr, Dict[str, str], None], encode: "Optional[Literal[False]]"
-) -> Optional[Dict[str, str]]: ...
+    qualifiers: AnyStr | dict[str, str] | None, encode: Literal[False] | None
+) -> dict[str, str]: ...
 
 
 @overload
 def normalize_qualifiers(
-    qualifiers: Union[AnyStr, Dict[str, str], None], encode: Optional[bool] = ...
-) -> Union[str, Dict[str, str], None]: ...
+    qualifiers: AnyStr | dict[str, str] | None, encode: bool | None = ...
+) -> str | dict[str, str] | None: ...
 
 
 def normalize_qualifiers(
-    qualifiers: Union[AnyStr, Dict[str, str], None], encode: Optional[bool] = True
-) -> Union[str, Dict[str, str], None]:  # NOQA
+    qualifiers: AnyStr | dict[str, str] | None, encode: bool | None = True
+) -> str | dict[str, str] | None:
     """
     Return normalized `qualifiers` as a mapping (or as a string if `encode` is
     True). The `qualifiers` arg is either a mapping or a string.
@@ -199,25 +176,23 @@ def normalize_qualifiers(
     Raise ValueError on errors.
     """
     if not qualifiers:
-        return None if encode else dict()
+        return None if encode else {}
 
     if isinstance(qualifiers, basestring):
-        if not isinstance(qualifiers, str):
-            qualifiers_str = qualifiers.decode("utf-8")
-        else:
-            qualifiers_str = qualifiers
+        qualifiers_str = qualifiers if isinstance(qualifiers, str) else qualifiers.decode("utf-8")
+
         # decode string to list of tuples
         qualifiers_list = qualifiers_str.split("&")
-        if not all("=" in kv for kv in qualifiers_list):
+        if any("=" not in kv for kv in qualifiers_list):
             raise ValueError(
-                f"Invalid qualifier. Must be a string of key=value pairs:{repr(qualifiers_list)}"
+                f"Invalid qualifier. Must be a string of key=value pairs:{qualifiers_list!r}"
             )
         qualifiers_parts = [kv.partition("=") for kv in qualifiers_list]
-        qualifiers_pairs: "Iterable[Tuple[str, str]]" = [(k, v) for k, _, v in qualifiers_parts]
+        qualifiers_pairs: Iterable[tuple[str, str]] = [(k, v) for k, _, v in qualifiers_parts]
     elif isinstance(qualifiers, dict):
         qualifiers_pairs = qualifiers.items()
     else:
-        raise ValueError(f"Invalid qualifier. Must be a string or dict:{repr(qualifiers)}")
+        raise ValueError(f"Invalid qualifier. Must be a string or dict:{qualifiers!r}")
 
     quoter = get_quoter(encode)
     qualifiers_map = {
@@ -232,39 +207,34 @@ def normalize_qualifiers(
             raise ValueError("A qualifier key cannot be empty")
 
         if "%" in key:
-            raise ValueError(f"A qualifier key cannot be percent encoded: {repr(key)}")
+            raise ValueError(f"A qualifier key cannot be percent encoded: {key!r}")
 
         if " " in key:
-            raise ValueError(f"A qualifier key cannot contain spaces: {repr(key)}")
+            raise ValueError(f"A qualifier key cannot contain spaces: {key!r}")
 
-        if not all(c in valid_chars for c in key):
+        if any(c not in valid_chars for c in key):
             raise ValueError(
                 f"A qualifier key must be composed only of ASCII letters and numbers"
-                f"period, dash and underscore: {repr(key)}"
+                f"period, dash and underscore: {key!r}"
             )
 
         if key[0] in string.digits:
-            raise ValueError(f"A qualifier key cannot start with a number: {repr(key)}")
+            raise ValueError(f"A qualifier key cannot start with a number: {key!r}")
 
     qualifiers_map = dict(sorted(qualifiers_map.items()))
-    if encode:
-        qualifiers_list = [f"{key}={value}" for key, value in qualifiers_map.items()]
-        qualifiers_str = "&".join(qualifiers_list)
-        return qualifiers_str or None
-    else:
+
+    if not encode:
         return qualifiers_map
 
+    qualifiers_list = [f"{key}={value}" for key, value in qualifiers_map.items()]
+    return "&".join(qualifiers_list) or None
 
-def normalize_subpath(
-    subpath: Optional[AnyStr], encode: Optional[bool] = True
-) -> Optional[str]:  # NOQA
+
+def normalize_subpath(subpath: AnyStr | None, encode: bool | None = True) -> str | None:
     if not subpath:
         return None
-    if not isinstance(subpath, str):
-        subpath_str = subpath.decode("utf-8")
-    else:
-        subpath_str = subpath
 
+    subpath_str = subpath if isinstance(subpath, str) else subpath.decode("utf-8")
     quoter = get_quoter(encode)
     segments = subpath_str.split("/")
     segments = [quoter(s) for s in segments if s.strip() and s not in (".", "..")]
@@ -274,62 +244,60 @@ def normalize_subpath(
 
 @overload
 def normalize(
-    type: Optional[AnyStr],
-    namespace: Optional[AnyStr],
-    name: Optional[AnyStr],
-    version: Optional[AnyStr],
-    qualifiers: Union[AnyStr, Dict[str, str], None],
-    subpath: Optional[AnyStr],
-    encode: "Literal[True]" = ...,
-) -> Tuple[str, Optional[str], str, Optional[str], Optional[str], Optional[str]]: ...
+    type: AnyStr | None,
+    namespace: AnyStr | None,
+    name: AnyStr | None,
+    version: AnyStr | None,
+    qualifiers: AnyStr | dict[str, str] | None,
+    subpath: AnyStr | None,
+    encode: Literal[True] = ...,
+) -> tuple[str, str | None, str, str | None, str | None, str | None]: ...
 
 
 @overload
 def normalize(
-    type: Optional[AnyStr],
-    namespace: Optional[AnyStr],
-    name: Optional[AnyStr],
-    version: Optional[AnyStr],
-    qualifiers: Union[AnyStr, Dict[str, str], None],
-    subpath: Optional[AnyStr],
-    encode: "Optional[Literal[False]]",
-) -> Tuple[str, Optional[str], str, Optional[str], Optional[Dict[str, str]], Optional[str]]: ...
+    type: AnyStr | None,
+    namespace: AnyStr | None,
+    name: AnyStr | None,
+    version: AnyStr | None,
+    qualifiers: AnyStr | dict[str, str] | None,
+    subpath: AnyStr | None,
+    encode: Literal[False] | None,
+) -> tuple[str, str | None, str, str | None, dict[str, str], str | None]: ...
 
 
 @overload
 def normalize(
-    type: Optional[AnyStr],
-    namespace: Optional[AnyStr],
-    name: Optional[AnyStr],
-    version: Optional[AnyStr],
-    qualifiers: Union[AnyStr, Dict[str, str], None],
-    subpath: Optional[AnyStr],
-    encode: Optional[bool] = ...,
-) -> Tuple[
-    str, Optional[str], str, Optional[str], Union[str, Dict[str, str], None], Optional[str]
-]: ...
+    type: AnyStr | None,
+    namespace: AnyStr | None,
+    name: AnyStr | None,
+    version: AnyStr | None,
+    qualifiers: AnyStr | dict[str, str] | None,
+    subpath: AnyStr | None,
+    encode: bool | None = ...,
+) -> tuple[str, str | None, str, str | None, str | dict[str, str] | None, str | None]: ...
 
 
 def normalize(
-    type: Optional[AnyStr],
-    namespace: Optional[AnyStr],
-    name: Optional[AnyStr],
-    version: Optional[AnyStr],
-    qualifiers: Union[AnyStr, Dict[str, str], None],
-    subpath: Optional[AnyStr],
-    encode: Optional[bool] = True,
-) -> Tuple[
-    Optional[str],
-    Optional[str],
-    Optional[str],
-    Optional[str],
-    Union[str, Dict[str, str], None],
-    Optional[str],
-]:  # NOQA
+    type: AnyStr | None,
+    namespace: AnyStr | None,
+    name: AnyStr | None,
+    version: AnyStr | None,
+    qualifiers: AnyStr | dict[str, str] | None,
+    subpath: AnyStr | None,
+    encode: bool | None = True,
+) -> tuple[
+    str | None,
+    str | None,
+    str | None,
+    str | None,
+    str | dict[str, str] | None,
+    str | None,
+]:
     """
     Return normalized purl components
     """
-    type_norm = normalize_type(type, encode)  # NOQA
+    type_norm = normalize_type(type, encode)
     namespace_norm = normalize_namespace(namespace, type_norm, encode)
     name_norm = normalize_name(name, type_norm, encode)
     version_norm = normalize_version(version, encode)
@@ -346,22 +314,22 @@ class PackageURL(
     https://github.com/package-url/purl-spec
     """
 
-    name: str
-    namespace: Optional[str]
-    qualifiers: Union[str, Dict[str, str], None]
-    subpath: Optional[str]
     type: str
-    version: Optional[str]
+    namespace: str | None
+    name: str
+    version: str | None
+    qualifiers: dict[str, str]
+    subpath: str | None
 
     def __new__(
-        self,
-        type: Optional[AnyStr] = None,
-        namespace: Optional[AnyStr] = None,
-        name: Optional[AnyStr] = None,  # NOQA
-        version: Optional[AnyStr] = None,
-        qualifiers: Union[AnyStr, Dict[str, str], None] = None,
-        subpath: Optional[AnyStr] = None,
-    ) -> "PackageURL":  # this should be 'Self' https://github.com/python/mypy/pull/13133
+        cls,
+        type: AnyStr | None = None,
+        namespace: AnyStr | None = None,
+        name: AnyStr | None = None,
+        version: AnyStr | None = None,
+        qualifiers: AnyStr | dict[str, str] | None = None,
+        subpath: AnyStr | None = None,
+    ) -> Self:
         required = dict(type=type, name=name)
         for key, value in required.items():
             if value:
@@ -379,17 +347,11 @@ class PackageURL(
         for key, value in strings.items():
             if value and isinstance(value, basestring) or not value:
                 continue
-            raise ValueError(f"Invalid purl: {key} argument must be a string: {repr(value)}.")
+            raise ValueError(f"Invalid purl: {key} argument must be a string: {value!r}.")
 
-        if qualifiers and not isinstance(
-            qualifiers,
-            (
-                basestring,
-                dict,
-            ),
-        ):
+        if qualifiers and not isinstance(qualifiers, (basestring, dict)):
             raise ValueError(
-                f"Invalid purl: qualifiers argument must be a dict or a string: {repr(qualifiers)}."
+                f"Invalid purl: qualifiers argument must be a dict or a string: {qualifiers!r}."
             )
 
         (
@@ -399,12 +361,10 @@ class PackageURL(
             version_norm,
             qualifiers_norm,
             subpath_norm,
-        ) = normalize(  # NOQA
-            type, namespace, name, version, qualifiers, subpath, encode=None
-        )
+        ) = normalize(type, namespace, name, version, qualifiers, subpath, encode=None)
 
         return super().__new__(
-            PackageURL,
+            cls,
             type=type_norm,
             namespace=namespace_norm,
             name=name_norm,
@@ -419,7 +379,7 @@ class PackageURL(
     def __hash__(self) -> int:
         return hash(self.to_string())
 
-    def to_dict(self, encode: Optional[bool] = False, empty: Any = None) -> Dict[str, Any]:
+    def to_dict(self, encode: bool | None = False, empty: Any = None) -> dict[str, Any]:
         """
         Return an ordered dict of purl components as {key: value}.
         If `encode` is True, then "qualifiers" are encoded as a normalized
@@ -439,7 +399,7 @@ class PackageURL(
         """
         Return a purl string built from components.
         """
-        type, namespace, name, version, qualifiers, subpath = normalize(  # NOQA
+        type, namespace, name, version, qualifiers, subpath = normalize(
             self.type,
             self.namespace,
             self.name,
@@ -452,8 +412,7 @@ class PackageURL(
         purl = ["pkg:", type, "/"]
 
         if namespace:
-            purl.append(namespace)
-            purl.append("/")
+            purl.extend((namespace, "/"))
 
         purl.append(name)
 
@@ -472,7 +431,7 @@ class PackageURL(
         return "".join(purl)
 
     @classmethod
-    def from_string(cls, purl: str) -> "PackageURL":
+    def from_string(cls, purl: str) -> Self:
         """
         Return a PackageURL object parsed from a string.
         Raise ValueError on errors.
@@ -482,39 +441,44 @@ class PackageURL(
 
         scheme, sep, remainder = purl.partition(":")
         if not sep or scheme != "pkg":
-            raise ValueError(f'purl is missing the required "pkg" scheme component: {repr(purl)}.')
+            raise ValueError(f'purl is missing the required "pkg" scheme component: {purl!r}.')
 
         # this strip '/, // and /// as possible in :// or :///
         remainder = remainder.strip().lstrip("/")
 
-        version: Optional[str]  # this line is just for type hinting
-        subpath: Optional[str]  # this line is just for type hinting
+        version: str | None  # this line is just for type hinting
+        subpath: str | None  # this line is just for type hinting
 
-        type, sep, remainder = remainder.partition("/")  # NOQA
-        if not type or not sep:
-            raise ValueError(f"purl is missing the required type component: {repr(purl)}.")
+        type_, sep, remainder = remainder.partition("/")
+        if not type_ or not sep:
+            raise ValueError(f"purl is missing the required type component: {purl!r}.")
 
-        type = type.lower()
+        type_ = type_.lower()
 
         scheme, authority, path, qualifiers_str, subpath = _urlsplit(
             url=remainder, scheme="", allow_fragments=True
         )
 
-        if scheme or authority:
-            msg = (
-                f'Invalid purl {repr(purl)} cannot contain a "user:pass@host:port" '
-                f"URL Authority component: {repr(authority)}."
-            )
-            raise ValueError(msg)
+        # The spec (seems) to allow colons in the name and namespace.
+        # urllib.urlsplit splits on : considers them parts of scheme
+        # and authority.
+        # Other libraries do not care about this.
+        # See https://github.com/package-url/packageurl-python/issues/152#issuecomment-2637692538
+        # We do + ":" + to put the colon back that urlsplit removed.
+        if authority:
+            path = authority + ":" + path
+
+        if scheme:
+            path = scheme + ":" + path
 
         path = path.lstrip("/")
 
-        namespace: Optional[str] = ""
+        namespace: str | None = ""
         # NPM purl have a namespace in the path
         # and the namespace in an npm purl is
         # different from others because it starts with `@`
         # so we need to handle this case separately
-        if type == "npm" and path.startswith("@"):
+        if type_ == "npm" and path.startswith("@"):
             namespace, sep, path = path.partition("/")
 
         remainder, sep, version = path.rpartition("@")
@@ -528,16 +492,16 @@ class PackageURL(
         name = ""
         if not namespace and len(ns_name_parts) > 1:
             name = ns_name_parts[-1]
-            ns = ns_name_parts[0:-1]
+            ns = ns_name_parts[:-1]
             namespace = "/".join(ns)
         elif len(ns_name_parts) == 1:
             name = ns_name_parts[0]
 
         if not name:
-            raise ValueError(f"purl is missing the required name component: {repr(purl)}")
+            raise ValueError(f"purl is missing the required name component: {purl!r}")
 
-        type, namespace, name, version, qualifiers, subpath = normalize(  # NOQA
-            type,
+        type_, namespace, name, version, qualifiers, subpath = normalize(
+            type_,
             namespace,
             name,
             version,
@@ -546,4 +510,4 @@ class PackageURL(
             encode=False,
         )
 
-        return PackageURL(type, namespace, name, version, qualifiers, subpath)
+        return cls(type_, namespace, name, version, qualifiers, subpath)

@@ -1422,7 +1422,11 @@ def _GenerateVideosConfig_to_mldev(
     )
 
   if getv(from_object, ['enhance_prompt']) is not None:
-    raise ValueError('enhance_prompt parameter is not supported in Gemini API.')
+    setv(
+        parent_object,
+        ['parameters', 'enhancePrompt'],
+        getv(from_object, ['enhance_prompt']),
+    )
 
   if getv(from_object, ['generate_audio']) is not None:
     raise ValueError('generate_audio parameter is not supported in Gemini API.')
@@ -1981,7 +1985,13 @@ def _Tool_to_vertex(
     )
 
   if getv(from_object, ['url_context']) is not None:
-    raise ValueError('url_context parameter is not supported in Vertex AI.')
+    setv(
+        to_object,
+        ['urlContext'],
+        _UrlContext_to_vertex(
+            api_client, getv(from_object, ['url_context']), to_object
+        ),
+    )
 
   if getv(from_object, ['code_execution']) is not None:
     setv(to_object, ['codeExecution'], getv(from_object, ['code_execution']))
@@ -4293,6 +4303,15 @@ def _Candidate_from_vertex(
 
   if getv(from_object, ['finishReason']) is not None:
     setv(to_object, ['finish_reason'], getv(from_object, ['finishReason']))
+
+  if getv(from_object, ['urlContextMetadata']) is not None:
+    setv(
+        to_object,
+        ['url_context_metadata'],
+        _UrlContextMetadata_from_vertex(
+            api_client, getv(from_object, ['urlContextMetadata']), to_object
+        ),
+    )
 
   if getv(from_object, ['avgLogprobs']) is not None:
     setv(to_object, ['avg_logprobs'], getv(from_object, ['avgLogprobs']))

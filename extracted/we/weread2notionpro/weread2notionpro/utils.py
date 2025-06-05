@@ -365,3 +365,7 @@ def download_image(url, save_dir="cover"):
 
 def get_embed(url):
     return {"type": "embed", "embed": {"url": url}}
+
+
+def get_complete_status():
+    os.getenv("status_complete", "已读")

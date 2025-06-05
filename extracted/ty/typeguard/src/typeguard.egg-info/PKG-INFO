@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: typeguard
-Version: 4.4.2
+Version: 4.4.3
 Summary: Run-time type checker for Python
 Author-email: Alex Grönholm <alex.gronholm@nextday.fi>
 License: MIT
@@ -23,16 +23,8 @@ Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: LICENSE
 Requires-Dist: importlib_metadata>=3.6; python_version < "3.10"
-Requires-Dist: typing_extensions>=4.10.0
-Provides-Extra: test
-Requires-Dist: coverage[toml]>=7; extra == "test"
-Requires-Dist: pytest>=7; extra == "test"
-Requires-Dist: mypy>=1.2.0; platform_python_implementation != "PyPy" and extra == "test"
-Provides-Extra: doc
-Requires-Dist: packaging; extra == "doc"
-Requires-Dist: Sphinx>=7; extra == "doc"
-Requires-Dist: sphinx-autodoc-typehints>=1.2.0; extra == "doc"
-Requires-Dist: sphinx-rtd-theme>=1.3.0; extra == "doc"
+Requires-Dist: typing_extensions>=4.14.0
+Dynamic: license-file
 
 .. image:: https://github.com/agronholm/typeguard/actions/workflows/test.yml/badge.svg
   :target: https://github.com/agronholm/typeguard/actions/workflows/test.yml

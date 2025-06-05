@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: trimesh
-Version: 4.6.10
+Version: 4.6.11
 Summary: Import, export, process, analyze and view triangular meshes.
 Author-email: Michael Dawson-Haggerty <mikedh@kerfed.com>
 License: The MIT License (MIT)
@@ -70,7 +70,6 @@ Requires-Dist: psutil; extra == "recommend"
 Requires-Dist: scikit-image; extra == "recommend"
 Requires-Dist: fast-simplification; extra == "recommend"
 Requires-Dist: python-fcl; extra == "recommend"
-Requires-Dist: openctm; platform_machine == "x86_64" and extra == "recommend"
 Requires-Dist: cascadio; extra == "recommend"
 Provides-Extra: test
 Requires-Dist: pytest-cov; extra == "test"
@@ -81,6 +80,7 @@ Provides-Extra: test-more
 Requires-Dist: coveralls; extra == "test-more"
 Requires-Dist: pyright; extra == "test-more"
 Requires-Dist: ezdxf; extra == "test-more"
+Requires-Dist: xatlas; extra == "test-more"
 Requires-Dist: pytest-beartype; python_version >= "3.10" and extra == "test-more"
 Requires-Dist: matplotlib; extra == "test-more"
 Requires-Dist: pymeshlab; extra == "test-more"
@@ -89,6 +89,7 @@ Requires-Dist: ipython; extra == "test-more"
 Requires-Dist: marimo; extra == "test-more"
 Provides-Extra: deprecated
 Requires-Dist: gmsh==4.12.2; extra == "deprecated"
+Requires-Dist: openctm; extra == "deprecated"
 Provides-Extra: all
 Requires-Dist: trimesh[deprecated,easy,recommend,test,test_more]; extra == "all"
 Dynamic: license-file

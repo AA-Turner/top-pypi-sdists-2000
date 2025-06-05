@@ -8,6 +8,7 @@ from datetime import datetime
 import hashlib
 from dotenv import load_dotenv
 import os
+from weread2notionpro import utils
 from weread2notionpro.weread_api import WeReadApi
 from weread2notionpro.utils import (
     get_block,
@@ -81,7 +82,7 @@ def insert_to_notion(bookName, bookId, cover, sort, author, isbn, rating, catego
         minutes = readingTime % 3600 // 60
         if minutes > 0:
             format_time += f"{minutes}分"
-        properties["Status"] = get_select("读完" if markedStatus == 4 else "在读")
+        properties["Status"] = get_select(utils.get_complete_status() if markedStatus == 4 else "在读")
         properties["ReadingTime"] = get_rich_text(format_time)
         properties["Progress"] = get_number(readingProgress)
         if "finishedDate" in read_info:
@@ -246,12 +247,6 @@ def calculate_book_str_id(book_id):
     result += md5.hexdigest()[0:3]
     return result
 
-
-
-
-    
-
-
 def extract_page_id():
     url = os.getenv("NOTION_PAGE")
     if not url:
@@ -304,7 +299,6 @@ def main():
             print(f"正在同步 {title} ,一共{len(books)}本，当前是第{index+1}本。")
             check(bookId)
             bookinfo= weread_api.get_bookinfo(bookId)
-            print(bookinfo)
             isbn = bookinfo.get("isbn")
             rating = bookinfo.get("rating")
             id = insert_to_notion(

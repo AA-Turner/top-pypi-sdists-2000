@@ -1,9 +1,9 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: DBUtils
-Version: 3.1.0
+Version: 3.1.1
 Summary: Database connections for multi-threaded environments.
 Author-email: Christoph Zwerschke <cito@online.de>
-License: MIT License
+License-Expression: MIT
 Project-URL: Homepage, https://webwareforpython.github.io/DBUtils/
 Project-URL: Download, https://pypi.org/project/DBUtils/
 Project-URL: Documentation, https://webwareforpython.github.io/DBUtils/main.html
@@ -14,7 +14,6 @@ Platform: any
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: Web Environment
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
@@ -24,10 +23,11 @@ Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
 Classifier: Topic :: Database
 Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
-Requires-Python: >3.7
+Requires-Python: >=3.7
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Provides-Extra: pg
@@ -37,6 +37,7 @@ Requires-Dist: docutils; extra == "docs"
 Provides-Extra: tests
 Requires-Dist: pytest>=7; extra == "tests"
 Requires-Dist: ruff; extra == "tests"
+Dynamic: license-file
 
 DBUtils
 =======
@@ -47,7 +48,7 @@ to a database that can be used in all kinds of multi-threaded environments.
 The suite supports DB-API 2 compliant database interfaces
 and the classic PyGreSQL interface.
 
-The current version 3.1.0 of DBUtils supports Python versions 3.7 to 3.12.
+The current version 3.1.1 of DBUtils supports Python versions 3.7 to 3.13.
 
 **Please have a look at the [changelog](https://webwareforpython.github.io/DBUtils/changelog.html), because there were some breaking changes in version 2.0.**
 

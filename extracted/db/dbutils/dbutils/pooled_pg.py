@@ -118,6 +118,12 @@ from queue import Empty, Full, Queue
 from . import __version__
 from .steady_pg import SteadyPgConnection
 
+__all__ = [
+    'PooledPg', 'PooledPgConnection',
+    'PooledPgError', 'InvalidConnectionError', 'TooManyConnectionsError',
+    'RESET_ALWAYS_ROLLBACK', 'RESET_COMPLETELY',
+]
+
 # constants for "reset" parameter
 RESET_ALWAYS_ROLLBACK = 1
 RESET_COMPLETELY = 2
@@ -190,8 +196,7 @@ class PooledPg:
         if maxcached and maxcached < mincached:
             maxcached = mincached
         if maxconnections:
-            if maxconnections < maxcached:
-                maxconnections = maxcached
+            maxconnections = max(maxconnections, maxcached)
             # Create semaphore for number of allowed connections generally:
             from threading import Semaphore
             self._connections = Semaphore(maxconnections)

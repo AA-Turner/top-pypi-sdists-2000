@@ -12,13 +12,13 @@ LONG_DESCRIPTION = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name="types-boto3",
-    version="1.38.29",
+    version="1.38.30",
     packages=["boto3-stubs"],
     url="https://github.com/youtype/mypy_boto3_builder",
     license="MIT License",
     author="Vlad Emelianov",
     author_email="vlad.emelianov.nz@gmail.com",
-    description="Type annotations for boto3 1.38.29 generated with mypy-boto3-builder 8.11.0",
+    description="Type annotations for boto3 1.38.30 generated with mypy-boto3-builder 8.11.0",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -55,7 +55,7 @@ setup(
     ],
     extras_require={
         "full": ["types-boto3-full>=1.38.0, <1.39.0"],
-        "boto3": ["boto3==1.38.29"],
+        "boto3": ["boto3==1.38.30"],
         "all": [
             "types-boto3-accessanalyzer>=1.38.0, <1.39.0",
             "types-boto3-account>=1.38.0, <1.39.0",
@@ -201,6 +201,7 @@ setup(
             "types-boto3-es>=1.38.0, <1.39.0",
             "types-boto3-events>=1.38.0, <1.39.0",
             "types-boto3-evidently>=1.38.0, <1.39.0",
+            "types-boto3-evs>=1.38.0, <1.39.0",
             "types-boto3-finspace>=1.38.0, <1.39.0",
             "types-boto3-finspace-data>=1.38.0, <1.39.0",
             "types-boto3-firehose>=1.38.0, <1.39.0",
@@ -616,6 +617,7 @@ setup(
         "es": ["types-boto3-es>=1.38.0, <1.39.0"],
         "events": ["types-boto3-events>=1.38.0, <1.39.0"],
         "evidently": ["types-boto3-evidently>=1.38.0, <1.39.0"],
+        "evs": ["types-boto3-evs>=1.38.0, <1.39.0"],
         "finspace": ["types-boto3-finspace>=1.38.0, <1.39.0"],
         "finspace-data": ["types-boto3-finspace-data>=1.38.0, <1.39.0"],
         "firehose": ["types-boto3-firehose>=1.38.0, <1.39.0"],

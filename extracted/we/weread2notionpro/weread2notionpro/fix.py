@@ -37,7 +37,7 @@ def insert_book_to_notion(books, index, bookId,status):
     book["评分"] = book.get("newRating")
     if book.get("newRatingDetail") and book.get("newRatingDetail").get("myRating"):
         book["我的评分"] = rating.get(book.get("newRatingDetail").get("myRating"))
-    elif status == "已读":
+    elif status == utils.get_complete_status():
         book["我的评分"] = "未评分"
     book["时间"] = (
         book.get("finishedDate")
@@ -154,16 +154,20 @@ def main():
     notion_books = notion_helper.get_all_book()
     for book in books:
         if book.get("markStatus") == 4:
-            book["status"] = "已读"
+            book["status"] = utils.get_complete_status()
         elif book.get("markStatus") in [2, 3]:
             book["status"] = "在读"
     bookshelf_books_dict = {x.get("bookId"):x for x in books}
+    import json
+    with open("notion_books.json", "w", encoding="utf-8") as f:
+        json.dump(notion_books, f, ensure_ascii=False, indent=2)
     not_need_sync = []
     for key, value in bookshelf_books_dict.items():
         if ((key in notion_books)
              and (value.get("status") == notion_books.get(key).get("status"))             
-             and (value.get("cover") is not None)
-            and (value.get("price") is not None)):
+             and (notion_books.get(key).get("cover") is not None)
+            and (notion_books.get(key).get("price") is not None)
+            and (notion_books.get(key).get("wordCount") is not None)):
             not_need_sync.append(key)
     books = [item for item in books if item.get("bookId") not in not_need_sync]
     for index, book in enumerate(books):

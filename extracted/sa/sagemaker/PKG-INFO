@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: sagemaker
-Version: 2.245.0
+Version: 2.246.0
 Summary: Open source library for training and deploying models on Amazon SageMaker.
 Project-URL: Homepage, https://github.com/aws/sagemaker-python-sdk
 Author: Amazon Web Services
@@ -15,7 +15,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Requires-Python: >=3.9
-Requires-Dist: attrs<24,>=23.1.0
+Requires-Dist: attrs<26,>=24
 Requires-Dist: boto3<2.0,>=1.35.75
 Requires-Dist: cloudpickle>=2.2.1
 Requires-Dist: docker
@@ -75,7 +75,7 @@ Provides-Extra: test
 Requires-Dist: accelerate<=0.27.0,>=0.24.1; extra == 'test'
 Requires-Dist: apache-airflow-providers-amazon==7.2.1; extra == 'test'
 Requires-Dist: apache-airflow==2.10.4; extra == 'test'
-Requires-Dist: attrs<24,>=23.1.0; extra == 'test'
+Requires-Dist: attrs<26,>=24; extra == 'test'
 Requires-Dist: awslogs==0.14.0; extra == 'test'
 Requires-Dist: black==24.3.0; extra == 'test'
 Requires-Dist: build[virtualenv]==1.2.1; extra == 'test'

@@ -36,18 +36,16 @@ def make_cell(value: object) -> _Cell:
 def find_target_function(
     new_code: CodeType, target_path: Sequence[str], firstlineno: int
 ) -> CodeType | None:
-    target_name = target_path[0]
     for const in new_code.co_consts:
         if isinstance(const, CodeType):
-            if const.co_name == target_name:
-                if const.co_firstlineno == firstlineno:
-                    return const
-                elif len(target_path) > 1:
-                    target_code = find_target_function(
-                        const, target_path[1:], firstlineno
-                    )
-                    if target_code:
-                        return target_code
+            new_path = (
+                target_path[1:] if const.co_name == target_path[0] else target_path
+            )
+            if not new_path and const.co_firstlineno == firstlineno:
+                return const
+
+            if target_code := find_target_function(const, new_path, firstlineno):
+                return target_code
 
     return None
 
@@ -117,13 +115,18 @@ def instrument(f: T_CallableOrType) -> FunctionType | str:
     new_function.__module__ = f.__module__
     new_function.__name__ = f.__name__
     new_function.__qualname__ = f.__qualname__
+    new_function.__doc__ = f.__doc__
+    new_function.__defaults__ = f.__defaults__
+    new_function.__kwdefaults__ = f.__kwdefaults__
+
+    if sys.version_info >= (3, 12):
+        new_function.__type_params__ = f.__type_params__
+
     if sys.version_info >= (3, 14):
         new_function.__annotate__ = f.__annotate__
     else:
         new_function.__annotations__ = f.__annotations__
-    new_function.__doc__ = f.__doc__
-    new_function.__defaults__ = f.__defaults__
-    new_function.__kwdefaults__ = f.__kwdefaults__
+
     return new_function
 
 

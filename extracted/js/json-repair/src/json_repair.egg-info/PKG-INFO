@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: json_repair
-Version: 0.46.0
+Version: 0.46.1
 Summary: A package to repair broken json strings
 Author-email: Stefano Baccianella <4247706+mangiucugna@users.noreply.github.com>
 License: MIT License
@@ -38,7 +38,7 @@ License-File: LICENSE
 Dynamic: license-file
 
 [![PyPI](https://img.shields.io/pypi/v/json-repair)](https://pypi.org/project/json-repair/)
-![Python version](https://img.shields.io/badge/python-3.9+-important)
+![Python version](https://img.shields.io/badge/python-3.10+-important)
 [![PyPI downloads](https://img.shields.io/pypi/dm/json-repair)](https://pypi.org/project/json-repair/)
 [![Github Sponsors](https://img.shields.io/github/sponsors/mangiucugna)](https://github.com/sponsors/mangiucugna)
 [![GitHub Repo stars](https://img.shields.io/github/stars/mangiucugna/json_repair?style=flat)](https://github.com/mangiucugna/json_repair/stargazers)
@@ -289,6 +289,7 @@ You will need owner access to this repository
 - Typescript: https://github.com/josdejong/jsonrepair
 - Go: https://github.com/RealAlexandreAI/json-repair
 - Ruby: https://github.com/sashazykov/json-repair-rb
+- Rust: https://github.com/oramasearch/llm_json
 ---
 ## Star History
 
