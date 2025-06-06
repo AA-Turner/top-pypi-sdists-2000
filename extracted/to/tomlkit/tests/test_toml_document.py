@@ -15,6 +15,7 @@ from tomlkit import ws
 from tomlkit._utils import _utc
 from tomlkit.api import document
 from tomlkit.exceptions import NonExistentKey
+from tomlkit.toml_document import TOMLDocument
 
 
 def test_document_is_a_dict(example):
@@ -691,6 +692,7 @@ def test_update_nested_out_of_order_table():
         == """\
 [root1.root2.a]
 tmp = "hi"
+
 [root1.root2.a.b.c]
   value = 2
 [WALRUS]
@@ -813,6 +815,7 @@ b = 2
     assert (
         doc.as_string()
         == """bar = 42
+
 [foo]
 a = 1
 
@@ -1187,3 +1190,106 @@ name = "baz"
 
 """
     )
+
+
+def test_set_default_int():
+    with pytest.raises(TypeError):
+        TOMLDocument().setdefault(4, 5)
+
+
+def test_overwriting_out_of_order_table():
+    content = """\
+[foo.bar]
+open = false
+
+[foo]
+x = 1
+y = 2
+"""
+    doc = parse(content)
+    doc["foo"]["z"] = 3
+    assert (
+        doc.as_string()
+        == """\
+[foo.bar]
+open = false
+
+[foo]
+x = 1
+y = 2
+z = 3
+"""
+    )
+
+    doc["foo"]["bar"] = tomlkit.inline_table()
+    doc["foo"]["bar"]["open"] = True
+    assert (
+        doc.as_string()
+        == """\
+[foo]
+x = 1
+y = 2
+z = 3
+bar = {open = true}
+"""
+    )
+
+
+def test_delete_key_from_out_of_order_table():
+    content = """\
+[foo.bar.baz]
+a = 1
+[foo.bar]
+b = 2
+[other]
+c = 3
+[foo.tee]
+d = 4
+"""
+    doc = parse(content)
+    del doc["foo"]["bar"]
+    assert (
+        doc.as_string()
+        == """\
+[other]
+c = 3
+[foo.tee]
+d = 4
+"""
+    )
+
+
+def test_parse_aot_without_ending_newline():
+    content = '''\
+[[products]]
+name = "Hammer"
+
+[foo]
+
+[bar]
+
+[[products]]
+name = "Nail"'''
+    doc = parse(content)
+    assert (
+        doc.as_string()
+        == """\
+[[products]]
+name = "Hammer"
+
+[[products]]
+name = "Nail"
+[foo]
+
+[bar]
+
+"""
+    )
+    assert doc == {
+        "products": [
+            {"name": "Hammer"},
+            {"name": "Nail"},
+        ],
+        "foo": {},
+        "bar": {},
+    }

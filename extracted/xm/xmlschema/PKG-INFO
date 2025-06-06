@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: xmlschema
-Version: 4.0.1
+Version: 4.1.0
 Summary: An XML Schema validator and decoder
 Author-email: Davide Brunato <brunato@sissa.it>
 License-Expression: MIT
@@ -26,7 +26,7 @@ Classifier: Topic :: Text Processing :: Markup :: XML
 Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: LICENSE
-Requires-Dist: elementpath<6.0.0,>=4.8.0
+Requires-Dist: elementpath<6.0.0,>=5.0.1
 Provides-Extra: codegen
 Requires-Dist: jinja2; extra == "codegen"
 Provides-Extra: dev

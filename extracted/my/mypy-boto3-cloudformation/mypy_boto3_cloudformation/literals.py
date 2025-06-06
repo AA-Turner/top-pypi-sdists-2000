@@ -390,7 +390,10 @@ TypeTestsStatusType = Literal["FAILED", "IN_PROGRESS", "NOT_TESTED", "PASSED"]
 VersionBumpType = Literal["MAJOR", "MINOR"]
 VisibilityType = Literal["PRIVATE", "PUBLIC"]
 WarningTypeType = Literal[
-    "MUTUALLY_EXCLUSIVE_PROPERTIES", "MUTUALLY_EXCLUSIVE_TYPES", "UNSUPPORTED_PROPERTIES"
+    "EXCLUDED_PROPERTIES",
+    "MUTUALLY_EXCLUSIVE_PROPERTIES",
+    "MUTUALLY_EXCLUSIVE_TYPES",
+    "UNSUPPORTED_PROPERTIES",
 ]
 CloudFormationServiceName = Literal["cloudformation"]
 ServiceName = Literal[
@@ -538,6 +541,7 @@ ServiceName = Literal[
     "es",
     "events",
     "evidently",
+    "evs",
     "finspace",
     "finspace-data",
     "firehose",
@@ -690,7 +694,6 @@ ServiceName = Literal[
     "pipes",
     "polly",
     "pricing",
-    "privatenetworks",
     "proton",
     "qapps",
     "qbusiness",
@@ -751,7 +754,6 @@ ServiceName = Literal[
     "signer",
     "simspaceweaver",
     "sms",
-    "sms-voice",
     "snow-device-management",
     "snowball",
     "sns",
@@ -759,6 +761,7 @@ ServiceName = Literal[
     "sqs",
     "ssm",
     "ssm-contacts",
+    "ssm-guiconnect",
     "ssm-incidents",
     "ssm-quicksetup",
     "ssm-sap",

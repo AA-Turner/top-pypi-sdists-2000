@@ -108,8 +108,6 @@ class WeReadApi:
         params = dict(bookId=bookId)
         r = self.session.get(WEREAD_BOOKMARKLIST_URL, params=params)
         if r.ok:
-            with open("bookmark.json", "w") as f:
-                f.write(json.dumps(r.json(), indent=4, ensure_ascii=False))
             bookmarks = r.json().get("updated")
             return bookmarks
         else:
@@ -235,6 +233,8 @@ class WeReadApi:
                 if self.handle_errcode(errcode):
                     return self.get_api_data()
                 raise Exception(f"get history data failed {r.text}")
+        with open("readbook.json", "w", encoding="utf-8") as f:
+            json.dump(results, f, ensure_ascii=False, indent=4)
         return results
     def transform_id(self, book_id):
         id_length = len(book_id)

@@ -106,8 +106,8 @@ setup(
         "universal_pathlib>=0.2.0; python_version>='3.12'",
         "rich",
         "filelock",
-        "dagster-pipes==1.10.18",
-        "dagster-shared==1.10.18",
+        "dagster-pipes==1.10.19",
+        "dagster-shared==1.10.19",
         "antlr4-python3-runtime",
     ],
     extras_require={
@@ -169,10 +169,9 @@ setup(
     entry_points={
         "console_scripts": [
             "dagster = dagster.cli:main",
-            "dagster-components = dagster.components.cli:main",
             "dagster-daemon = dagster.daemon.cli:main",
         ],
-        "dagster_dg_cli.plugin": [
+        "dagster_dg_cli.registry_modules": [
             "dagster = dagster",
         ],
     },

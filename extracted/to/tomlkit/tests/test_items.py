@@ -129,6 +129,19 @@ def test_aot_unwrap():
             assert_is_ppo(vu, str)
 
 
+def test_aot_set_item():
+    d = item(["A", {"b": "B"}, ["c", "D"]])
+    d[0] = "C"
+    assert isinstance(d[0], String)
+    assert d[0] == "C"
+    d[1]["b"] = "D"
+    assert isinstance(d[1], InlineTable)
+    assert d[1]["b"] == "D"
+    d[0] = ["c", "C"]
+    assert isinstance(d[0], Array)
+    assert d[0][1] == "C"
+
+
 def test_time_unwrap():
     t = time(3, 8, 14)
     elementary_test(item(t), time)
@@ -915,6 +928,8 @@ value = false
 """
 
     content = parse(s)
+    assert content["foo"]["value"] is False
+    assert isinstance(content["foo"].item("value"), Bool)
 
     assert {"foo": {"value": False}} == content
     assert {"value": False} == content["foo"]
@@ -1006,3 +1021,67 @@ def test_not_showing_parent_header_for_super_table():
     add_table(root, "first")
     add_table(root, "second")
     assert doc.as_string() == "[root.first]\n\n[root.second]\n"
+
+
+def test_removal_of_arrayitem_with_extra_whitespace():
+    expected = 'x = [\n    "bar",\n]'
+    doc = parse('x = [\n    "foo" ,#spam\n    "bar",\n]')
+    x = doc["x"]
+    assert isinstance(x, Array)
+    x.remove("foo")
+    docstr = doc.as_string()
+    parse(docstr)
+    assert docstr == expected
+
+
+def test_badly_formatted_array_and_item_removal():
+    expected = """
+x = [
+    '0'#a
+,#b
+
+    # comment
+'1' #c
+    , #d
+# another comment
+'2'
+ # yet another comment
+,'3', # f
+ # comments here
+'4'#g
+#    comments there
+ ,'5' #h
+    #   comments everywhere
+ # so many comments
+,'6' ,
+      # you get a comment
+# you get a comment
+   '7' ,#j
+# everybody gets a comment!!!
+ "8"#c
+,"9",  \n  "10"
+]
+"""
+    assert expected == parse(expected).as_string()
+    for i in range(11):
+        doc = parse(expected)
+        x = doc["x"]
+        assert isinstance(x, Array)
+        x.remove(str(i))
+        parse(doc.as_string())
+
+
+def test_array_item_removal_newline_restore_next():
+    expected = "x = [\n  '0',\n    '2'\n]"
+
+    docstr = "x = [\n  '0',\n    '1','2'\n]"
+    doc = parse(docstr)
+    doc["x"].remove("1")
+    assert doc.as_string() == expected
+    parse(doc.as_string())
+
+    docstr = "x = [\n  '0',\n    '1',  '2'\n]"
+    doc = parse(docstr)
+    doc["x"].remove("1")
+    assert doc.as_string() == expected
+    parse(doc.as_string())

@@ -16,7 +16,6 @@ def get_version_from_sbt():
 
 VERSION = get_version_from_sbt()
 
-
 class VerifyVersionCommand(install):
     """Custom command to verify that the git tag matches our version"""
     description = 'verify that the git tag matches our version'
@@ -60,15 +59,15 @@ setup(
     ],
     keywords='delta.io',
     package_dir={'': 'python'},
-    packages=['delta'],
+    packages=['delta', 'delta.connect', 'delta.connect.proto'],
     package_data={
         'delta': ['py.typed'],
     },
     install_requires=[
-        'pyspark>=3.5.3,<3.6.0',
+        'pyspark>=4.0.0',
         'importlib_metadata>=1.0.0',
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.9',
     cmdclass={
         'verify': VerifyVersionCommand,
     }

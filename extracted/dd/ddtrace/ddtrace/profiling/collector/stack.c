@@ -1556,7 +1556,7 @@ struct __pyx_obj_7ddtrace_9profiling_9collector_5stack__ThreadTime {
  *     )
  * 
  *     def __init__(self,             # <<<<<<<<<<<<<<
- *                  recorder: Recorder,
+ *                  recorder: typing.Optional[Recorder] = None,
  *                  max_time_usage_pct: float = config.max_time_usage_pct,
 */
 struct __pyx_defaults {
@@ -3051,6 +3051,7 @@ static const char __pyx_k_typing_Optional_Tracer[] = "typing.Optional[Tracer]";
 static const char __pyx_k_CPU_profiling_collector[] = "CPU profiling collector.";
 static const char __pyx_k_ddtrace_profiling_ignore[] = "_ddtrace_profiling_ignore";
 static const char __pyx_k_pyx_unpickle__ThreadTime[] = "__pyx_unpickle__ThreadTime";
+static const char __pyx_k_typing_Optional_Recorder[] = "typing.Optional[Recorder]";
 static const char __pyx_k_StackExceptionSampleEvent[] = "StackExceptionSampleEvent";
 static const char __pyx_k_ThreadSpanLinks_link_span[] = "_ThreadSpanLinks.link_span";
 static const char __pyx_k_ddtrace_internal__threads[] = "ddtrace.internal._threads";
@@ -3071,10 +3072,10 @@ static const char __pyx_k_StackCollector__start_service[] = "StackCollector._sta
 static const char __pyx_k_collect_threads_locals_genexpr[] = "collect_threads.<locals>.genexpr";
 static const char __pyx_k_get_active_span_from_thread_id[] = "get_active_span_from_thread_id";
 static const char __pyx_k_A_T_1_Bd_U_ivS_4q_1A_D_Qa_QfG1F[] = "\200A\330\010\025\220T\230\032\2401\330\010\020\220\001\220\023\220B\220d\230#\230U\240$\240i\250v\260S\270\003\2704\270q\300\013\3101\310A\330\010\024\220D\230\005\230Q\230a\340\010\025\220Q\220f\230G\2401\240F\250&\260\004\260H\270D\300\013\3103\310d\320RV\320Va\320ab\320bc\330\010\031\230\024\230U\240!\2401\340\010\017\210r\220\024\220]\240-\250q";
-static const char __pyx_k_A_V1_a_q_a_5V6_Ry_Gq_c_3_9_1_AQ[] = "\200A\330\033\034\330%-\250V\2601\330\032 \240\006\240a\330\")\250\026\250q\330\021.\250a\330\021\031\230\021\330.5\260V\2706\300\021\330\010\r\210R\210y\230\001\230\032\240:\320-G\300q\330\010\013\320\013\036\230c\240\022\2403\320&9\270\022\2701\330\014\022\220*\230A\230Q\360\006\000\t\r\320\014\"\240!\330\010\014\320\014(\320(B\300!\340\010\014\320\014)\250\021\330\010\014\320\014\034\230A\330\010\014\320\014%\240Q\330\010\014\320\014B\300!\330\010\014\320\014/\250q\330\010\014\320\014:\270!\330\010\014\320\014$\240A\330\010\014\320\014E\300Q\330\010\014\320\0141\260\021";
 static const char __pyx_k_A_d_q_D_a_q_Q_4t1_a_A_A_A_A_A_A[] = "\200A\340\010\016\210d\220-\230q\330\010\024\220D\230\002\230$\230a\330\010\014\320\014\037\230q\330\010\025\220Q\360\006\000\t\014\2104\210t\2201\330\014\031\230\035\240a\330\020\024\220A\330\020\024\220A\330\020\024\220A\330\020\024\220A\330\020\021\330\020\024\220A\330\020\024\220A\330\027\030\360\006\000\t\035\230D\240\r\250S\260\002\260!\330\010\014\210L\230\004\320\0342\260!\2601\340\010\017\210q";
 static const char __pyx_k_ThreadSpanLinks_get_active_span[] = "_ThreadSpanLinks.get_active_span_from_thread_id";
 static const char __pyx_k_ThreadTime__get_last_thread_tim[] = "_ThreadTime._get_last_thread_time";
+static const char __pyx_k_A_1_V1_a_q_a_5V6_Ry_Gq_c_3_9_1_A[] = "\200A\330\021\033\2301\330%-\250V\2601\330\032 \240\006\240a\330\")\250\026\250q\330\021.\250a\330\021\031\230\021\330.5\260V\2706\300\021\330\010\r\210R\210y\230\001\230\032\240:\320-G\300q\330\010\013\320\013\036\230c\240\022\2403\320&9\270\022\2701\330\014\022\220*\230A\230Q\360\006\000\t\r\320\014\"\240!\330\010\014\320\014(\320(B\300!\340\010\014\320\014)\250\021\330\010\014\320\014\034\230A\330\010\014\320\014%\240Q\330\010\014\320\014B\300!\330\010\014\320\014/\250q\330\010\014\320\014:\270!\330\010\014\320\014$\240A\330\010\014\320\014E\300Q\330\010\014\320\0141\260\021";
 static const char __pyx_k_A_Kq_t_4xwa_6a_d2TTXXkkl_Qa_6_4q[] = "\200A\340\010\014\320\014\034\230K\240q\330\010\014\320\014\037\230t\240=\260\001\330\010\013\2104\210x\220w\230a\330\014\020\320\020&\320&6\260a\330\014\030\230\010\240\016\250d\3202T\320TX\320Xk\320kl\330\014\020\220\007\320\027(\250\r\260Q\260a\360\006\000\t\014\2106\220\027\230\001\330\014\031\230\021\230!\360\006\000\t\014\2104\210q\360\010\000\r\026\220^\2401\330\014\024\320\024*\250!\2506\260\026\260q\330\014\024\220F\230!";
 static const char __pyx_k_Incompatible_checksums_0x_x_vs_0[] = "Incompatible checksums (0x%x vs (0x818c784, 0xc4f49e5, 0x1798efe) = (_last_thread_time))";
 static const char __pyx_k_Max_time_usage_percent_must_be_g[] = "Max time usage percent must be greater than 0 and smaller or equal to 100";
@@ -3175,7 +3176,7 @@ typedef struct {
   __Pyx_CachedCFunction __pyx_umethod_PyDict_Type_pop;
   PyObject *__pyx_tuple[2];
   PyObject *__pyx_codeobj_tab[18];
-  PyObject *__pyx_string_tab[243];
+  PyObject *__pyx_string_tab[244];
   PyObject *__pyx_float_1e9;
   PyObject *__pyx_float_100_0;
   PyObject *__pyx_int_0;
@@ -3479,18 +3480,19 @@ static __pyx_mstatetype * const __pyx_mstate_global = &__pyx_mstate_global_stati
 #define __pyx_n_u_tracer __pyx_string_tab[228]
 #define __pyx_n_u_transparent_events __pyx_string_tab[229]
 #define __pyx_n_u_typing __pyx_string_tab[230]
-#define __pyx_kp_u_typing_Optional_Tracer __pyx_string_tab[231]
-#define __pyx_kp_u_typing_Optional_bool __pyx_string_tab[232]
-#define __pyx_n_u_update __pyx_string_tab[233]
-#define __pyx_n_u_use_setstate __pyx_string_tab[234]
-#define __pyx_n_u_used_wall_time_ns __pyx_string_tab[235]
-#define __pyx_n_u_v __pyx_string_tab[236]
-#define __pyx_n_u_v2_adaptive_sampling __pyx_string_tab[237]
-#define __pyx_n_u_v2_enabled __pyx_string_tab[238]
-#define __pyx_n_u_value __pyx_string_tab[239]
-#define __pyx_n_u_wall_time __pyx_string_tab[240]
-#define __pyx_n_u_wall_time_ns __pyx_string_tab[241]
-#define __pyx_n_u_zip __pyx_string_tab[242]
+#define __pyx_kp_u_typing_Optional_Recorder __pyx_string_tab[231]
+#define __pyx_kp_u_typing_Optional_Tracer __pyx_string_tab[232]
+#define __pyx_kp_u_typing_Optional_bool __pyx_string_tab[233]
+#define __pyx_n_u_update __pyx_string_tab[234]
+#define __pyx_n_u_use_setstate __pyx_string_tab[235]
+#define __pyx_n_u_used_wall_time_ns __pyx_string_tab[236]
+#define __pyx_n_u_v __pyx_string_tab[237]
+#define __pyx_n_u_v2_adaptive_sampling __pyx_string_tab[238]
+#define __pyx_n_u_v2_enabled __pyx_string_tab[239]
+#define __pyx_n_u_value __pyx_string_tab[240]
+#define __pyx_n_u_wall_time __pyx_string_tab[241]
+#define __pyx_n_u_wall_time_ns __pyx_string_tab[242]
+#define __pyx_n_u_zip __pyx_string_tab[243]
 /* #### Code section: module_state_clear ### */
 #if CYTHON_USE_MODULE_STATE
 static CYTHON_SMALL_CODE int __pyx_m_clear(PyObject *m) {
@@ -3528,7 +3530,7 @@ static CYTHON_SMALL_CODE int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_type_7ddtrace_9profiling_9collector_5stack___pyx_scope_struct_4_genexpr);
   for (int i=0; i<2; ++i) { Py_CLEAR(clear_module_state->__pyx_tuple[i]); }
   for (int i=0; i<18; ++i) { Py_CLEAR(clear_module_state->__pyx_codeobj_tab[i]); }
-  for (int i=0; i<243; ++i) { Py_CLEAR(clear_module_state->__pyx_string_tab[i]); }
+  for (int i=0; i<244; ++i) { Py_CLEAR(clear_module_state->__pyx_string_tab[i]); }
   Py_CLEAR(clear_module_state->__pyx_float_1e9);
   Py_CLEAR(clear_module_state->__pyx_float_100_0);
   Py_CLEAR(clear_module_state->__pyx_int_0);
@@ -3574,7 +3576,7 @@ static CYTHON_SMALL_CODE int __pyx_m_traverse(PyObject *m, visitproc visit, void
   Py_VISIT(traverse_module_state->__pyx_type_7ddtrace_9profiling_9collector_5stack___pyx_scope_struct_4_genexpr);
   for (int i=0; i<2; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_tuple[i]); }
   for (int i=0; i<18; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_codeobj_tab[i]); }
-  for (int i=0; i<243; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_string_tab[i]); }
+  for (int i=0; i<244; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_string_tab[i]); }
   __Pyx_VISIT_CONST(traverse_module_state->__pyx_float_1e9);
   __Pyx_VISIT_CONST(traverse_module_state->__pyx_float_100_0);
   __Pyx_VISIT_CONST(traverse_module_state->__pyx_int_0);
@@ -8764,7 +8766,7 @@ static PyObject *__pyx_pf_7ddtrace_9profiling_9collector_5stack__default_min_int
  *     )
  * 
  *     def __init__(self,             # <<<<<<<<<<<<<<
- *                  recorder: Recorder,
+ *                  recorder: typing.Optional[Recorder] = None,
  *                  max_time_usage_pct: float = config.max_time_usage_pct,
 */
 
@@ -8778,44 +8780,47 @@ static PyObject *__pyx_pf_7ddtrace_9profiling_9collector_5stack_4__defaults__(CY
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__defaults__", 0);
   __Pyx_XDECREF(__pyx_r);
+
+  /* "ddtrace/profiling/collector/stack.pyx":474
+ * 
+ *     def __init__(self,
+ *                  recorder: typing.Optional[Recorder] = None,             # <<<<<<<<<<<<<<
+ *                  max_time_usage_pct: float = config.max_time_usage_pct,
+ *                  nframes: int = config.max_frames,
+*/
   __pyx_t_1 = PyFloat_FromDouble(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 473, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-
-  /* "ddtrace/profiling/collector/stack.pyx":479
- *                  ignore_profiler: bool = config.ignore_profiler,
- *                  endpoint_collection_enabled: typing.Optional[bool] = None,
- *                  tracer: typing.Optional[Tracer] = None,             # <<<<<<<<<<<<<<
- *                  _stack_collector_v2_enabled: bool = config.stack.v2_enabled):
- *         super().__init__(recorder, interval= _default_min_interval_time())
-*/
-  __pyx_t_2 = PyTuple_New(6); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 473, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GIVEREF(__pyx_t_1);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
-  __Pyx_INCREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg0);
-  __Pyx_GIVEREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg0);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 1, __Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg0) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
-  __Pyx_INCREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg1);
-  __Pyx_GIVEREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg1);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 2, __Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg1) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
-  __Pyx_INCREF(Py_None);
-  __Pyx_GIVEREF(Py_None);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 3, Py_None) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
-  __Pyx_INCREF(Py_None);
-  __Pyx_GIVEREF(Py_None);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 4, Py_None) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
-  __Pyx_INCREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg2);
-  __Pyx_GIVEREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 5, __Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg2) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
-  __pyx_t_1 = 0;
 
   /* "ddtrace/profiling/collector/stack.pyx":473
  *     )
  * 
  *     def __init__(self,             # <<<<<<<<<<<<<<
- *                  recorder: Recorder,
+ *                  recorder: typing.Optional[Recorder] = None,
  *                  max_time_usage_pct: float = config.max_time_usage_pct,
 */
+  __pyx_t_2 = PyTuple_New(7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 473, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_INCREF(Py_None);
+  __Pyx_GIVEREF(Py_None);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 0, Py_None) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
+  __Pyx_GIVEREF(__pyx_t_1);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_1) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
+  __Pyx_INCREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg0);
+  __Pyx_GIVEREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg0);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 2, __Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg0) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
+  __Pyx_INCREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg1);
+  __Pyx_GIVEREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg1);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 3, __Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg1) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
+  __Pyx_INCREF(Py_None);
+  __Pyx_GIVEREF(Py_None);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 4, Py_None) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
+  __Pyx_INCREF(Py_None);
+  __Pyx_GIVEREF(Py_None);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 5, Py_None) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
+  __Pyx_INCREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg2);
+  __Pyx_GIVEREF(__Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg2);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_2, 6, __Pyx_CyFunction_Defaults(struct __pyx_defaults, __pyx_self)->arg2) != (0)) __PYX_ERR(0, 473, __pyx_L1_error);
+  __pyx_t_1 = 0;
   __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 473, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_2);
@@ -8927,6 +8932,15 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
       if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "__init__", 0) < 0) __PYX_ERR(0, 473, __pyx_L3_error)
+
+      /* "ddtrace/profiling/collector/stack.pyx":474
+ * 
+ *     def __init__(self,
+ *                  recorder: typing.Optional[Recorder] = None,             # <<<<<<<<<<<<<<
+ *                  max_time_usage_pct: float = config.max_time_usage_pct,
+ *                  nframes: int = config.max_frames,
+*/
+      if (!values[1]) values[1] = __Pyx_NewRef(((PyObject *)Py_None));
       if (!values[3]) values[3] = __Pyx_NewRef(__pyx_dynamic_args->arg0);
       if (!values[4]) values[4] = __Pyx_NewRef(__pyx_dynamic_args->arg1);
 
@@ -8948,8 +8962,8 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 */
       if (!values[6]) values[6] = __Pyx_NewRef(((PyObject *)Py_None));
       if (!values[7]) values[7] = __Pyx_NewRef(__pyx_dynamic_args->arg2);
-      for (Py_ssize_t i = __pyx_nargs; i < 2; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 8, i); __PYX_ERR(0, 473, __pyx_L3_error) }
+      for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 8, i); __PYX_ERR(0, 473, __pyx_L3_error) }
       }
     } else {
       switch (__pyx_nargs) {
@@ -8980,11 +8994,22 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
         if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 473, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
         if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 473, __pyx_L3_error)
         break;
         default: goto __pyx_L5_argtuple_error;
       }
+
+      /* "ddtrace/profiling/collector/stack.pyx":474
+ * 
+ *     def __init__(self,
+ *                  recorder: typing.Optional[Recorder] = None,             # <<<<<<<<<<<<<<
+ *                  max_time_usage_pct: float = config.max_time_usage_pct,
+ *                  nframes: int = config.max_frames,
+*/
+      if (!values[1]) values[1] = __Pyx_NewRef(((PyObject *)Py_None));
       if (!values[3]) values[3] = __Pyx_NewRef(__pyx_dynamic_args->arg0);
       if (!values[4]) values[4] = __Pyx_NewRef(__pyx_dynamic_args->arg1);
 
@@ -9022,7 +9047,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 8, __pyx_nargs); __PYX_ERR(0, 473, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 8, __pyx_nargs); __PYX_ERR(0, 473, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -9040,7 +9065,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
  *     )
  * 
  *     def __init__(self,             # <<<<<<<<<<<<<<
- *                  recorder: Recorder,
+ *                  recorder: typing.Optional[Recorder] = None,
  *                  max_time_usage_pct: float = config.max_time_usage_pct,
 */
 
@@ -9322,7 +9347,7 @@ static PyObject *__pyx_pf_7ddtrace_9profiling_9collector_5stack_14StackCollector
  *     )
  * 
  *     def __init__(self,             # <<<<<<<<<<<<<<
- *                  recorder: Recorder,
+ *                  recorder: typing.Optional[Recorder] = None,
  *                  max_time_usage_pct: float = config.max_time_usage_pct,
 */
 
@@ -14439,12 +14464,12 @@ __Pyx_RefNannySetupContext("PyInit_stack", 0);
  *     )
  * 
  *     def __init__(self,             # <<<<<<<<<<<<<<
- *                  recorder: Recorder,
+ *                  recorder: typing.Optional[Recorder] = None,
  *                  max_time_usage_pct: float = config.max_time_usage_pct,
 */
   __pyx_t_8 = __Pyx_PyDict_NewPresized(7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 473, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_recorder, __pyx_mstate_global->__pyx_n_u_Recorder) < 0) __PYX_ERR(0, 473, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_recorder, __pyx_mstate_global->__pyx_kp_u_typing_Optional_Recorder) < 0) __PYX_ERR(0, 473, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_max_time_usage_pct, __pyx_mstate_global->__pyx_n_u_float) < 0) __PYX_ERR(0, 473, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_nframes, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 473, __pyx_L1_error)
   if (PyDict_SetItem(__pyx_t_8, __pyx_mstate_global->__pyx_n_u_ignore_profiler, __pyx_mstate_global->__pyx_n_u_bool) < 0) __PYX_ERR(0, 473, __pyx_L1_error)
@@ -14457,7 +14482,7 @@ __Pyx_RefNannySetupContext("PyInit_stack", 0);
   if (!__Pyx_CyFunction_InitDefaults(__pyx_t_9, __pyx_mstate_global->__pyx_ptype_7ddtrace_9profiling_9collector_5stack___pyx_defaults)) __PYX_ERR(0, 473, __pyx_L1_error)
 
   /* "ddtrace/profiling/collector/stack.pyx":476
- *                  recorder: Recorder,
+ *                  recorder: typing.Optional[Recorder] = None,
  *                  max_time_usage_pct: float = config.max_time_usage_pct,
  *                  nframes: int = config.max_frames,             # <<<<<<<<<<<<<<
  *                  ignore_profiler: bool = config.ignore_profiler,
@@ -14510,7 +14535,7 @@ __Pyx_RefNannySetupContext("PyInit_stack", 0);
 
   /* "ddtrace/profiling/collector/stack.pyx":475
  *     def __init__(self,
- *                  recorder: Recorder,
+ *                  recorder: typing.Optional[Recorder] = None,
  *                  max_time_usage_pct: float = config.max_time_usage_pct,             # <<<<<<<<<<<<<<
  *                  nframes: int = config.max_frames,
  *                  ignore_profiler: bool = config.ignore_profiler,
@@ -14934,6 +14959,7 @@ static const __Pyx_StringTabEntry __pyx_string_tab[] = {
   {__pyx_k_tracer, sizeof(__pyx_k_tracer), 0, 1, 1}, /* PyObject cname: __pyx_n_u_tracer */
   {__pyx_k_transparent_events, sizeof(__pyx_k_transparent_events), 0, 1, 1}, /* PyObject cname: __pyx_n_u_transparent_events */
   {__pyx_k_typing, sizeof(__pyx_k_typing), 0, 1, 1}, /* PyObject cname: __pyx_n_u_typing */
+  {__pyx_k_typing_Optional_Recorder, sizeof(__pyx_k_typing_Optional_Recorder), 0, 1, 0}, /* PyObject cname: __pyx_kp_u_typing_Optional_Recorder */
   {__pyx_k_typing_Optional_Tracer, sizeof(__pyx_k_typing_Optional_Tracer), 0, 1, 0}, /* PyObject cname: __pyx_kp_u_typing_Optional_Tracer */
   {__pyx_k_typing_Optional_bool, sizeof(__pyx_k_typing_Optional_bool), 0, 1, 0}, /* PyObject cname: __pyx_kp_u_typing_Optional_bool */
   {__pyx_k_update, sizeof(__pyx_k_update), 0, 1, 1}, /* PyObject cname: __pyx_n_u_update */
@@ -15096,9 +15122,9 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
     __pyx_mstate_global->__pyx_codeobj_tab[9] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_ddtrace_profiling_collector_stac_2, __pyx_mstate->__pyx_n_u_default_min_interval_time, __pyx_k_3_2Q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[9])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {8, 0, 0, 8, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 473, 184};
+    const __Pyx_PyCode_New_function_description descr = {8, 0, 0, 8, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 473, 186};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_recorder, __pyx_mstate->__pyx_n_u_max_time_usage_pct, __pyx_mstate->__pyx_n_u_nframes, __pyx_mstate->__pyx_n_u_ignore_profiler, __pyx_mstate->__pyx_n_u_endpoint_collection_enabled, __pyx_mstate->__pyx_n_u_tracer, __pyx_mstate->__pyx_n_u_stack_collector_v2_enabled};
-    __pyx_mstate_global->__pyx_codeobj_tab[10] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_ddtrace_profiling_collector_stac_2, __pyx_mstate->__pyx_n_u_init, __pyx_k_A_V1_a_q_a_5V6_Ry_Gq_c_3_9_1_AQ, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[10])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[10] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_ddtrace_profiling_collector_stac_2, __pyx_mstate->__pyx_n_u_init, __pyx_k_A_1_V1_a_q_a_5V6_Ry_Gq_c_3_9_1_A, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[10])) goto bad;
   }
   {
     const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 12, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 500, 120};

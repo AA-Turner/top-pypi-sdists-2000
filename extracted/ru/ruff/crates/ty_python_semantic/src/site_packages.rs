@@ -8,15 +8,19 @@
 //! reasonably ask us to type-check code assuming that the code runs
 //! on Linux.)
 
-use std::fmt;
 use std::fmt::Display;
 use std::io;
 use std::num::NonZeroUsize;
 use std::ops::Deref;
+use std::{fmt, sync::Arc};
 
 use indexmap::IndexSet;
 use ruff_db::system::{System, SystemPath, SystemPathBuf};
 use ruff_python_ast::PythonVersion;
+use ruff_python_trivia::Cursor;
+use ruff_text_size::{TextLen, TextRange};
+
+use crate::{PythonVersionFileSource, PythonVersionSource, PythonVersionWithSource};
 
 type SitePackagesDiscoveryResult<T> = Result<T, SitePackagesDiscoveryError>;
 
@@ -91,15 +95,13 @@ impl PythonEnvironment {
         origin: SysPrefixPathOrigin,
         system: &dyn System,
     ) -> SitePackagesDiscoveryResult<Self> {
-        let path = SysPrefixPath::new(path, origin, system)?;
+        let path = SysPrefixPath::new(path.as_ref(), origin, system)?;
 
         // Attempt to inspect as a virtual environment first
-        // TODO(zanieb): Consider avoiding the clone here by checking for `pyvenv.cfg` ahead-of-time
-        match VirtualEnvironment::new(path.clone(), system) {
+        match VirtualEnvironment::new(path, system) {
             Ok(venv) => Ok(Self::Virtual(venv)),
             // If there's not a `pyvenv.cfg` marker, attempt to inspect as a system environment
-            //
-            Err(SitePackagesDiscoveryError::NoPyvenvCfgFile(_, _))
+            Err(SitePackagesDiscoveryError::NoPyvenvCfgFile(path, _))
                 if !origin.must_be_virtual_env() =>
             {
                 Ok(Self::System(SystemEnvironment::new(path)))
@@ -108,10 +110,23 @@ impl PythonEnvironment {
         }
     }
 
-    /// Returns the `site-packages` directories for this Python environment.
+    /// Returns the `site-packages` directories for this Python environment,
+    /// as well as the Python version that was used to create this environment
+    /// (the latter will only be available for virtual environments that specify
+    /// the metadata in their `pyvenv.cfg` files).
     ///
     /// See the documentation for [`site_packages_directory_from_sys_prefix`] for more details.
-    pub(crate) fn site_packages_directories(
+    pub(crate) fn into_settings(
+        self,
+        system: &dyn System,
+    ) -> SitePackagesDiscoveryResult<(SitePackagesPaths, Option<PythonVersionWithSource>)> {
+        Ok(match self {
+            Self::Virtual(venv) => (venv.site_packages_directories(system)?, venv.version),
+            Self::System(env) => (env.site_packages_directories(system)?, None),
+        })
+    }
+
+    fn site_packages_directories(
         &self,
         system: &dyn System,
     ) -> SitePackagesDiscoveryResult<SitePackagesPaths> {
@@ -126,13 +141,14 @@ impl PythonEnvironment {
 ///
 /// We only need to distinguish cases that change the on-disk layout.
 /// Everything else can be treated like CPython.
-#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Default)]
 pub(crate) enum PythonImplementation {
     CPython,
     PyPy,
     GraalPy,
     /// Fallback when the value is missing or unrecognised.
     /// We treat it like CPython but keep the information for diagnostics.
+    #[default]
     Unknown,
 }
 
@@ -169,7 +185,7 @@ pub(crate) struct VirtualEnvironment {
     /// so it's possible that we might not be able to find this information
     /// in an acceptable format under any of the keys we expect.
     /// This field will be `None` if so.
-    version: Option<PythonVersion>,
+    version: Option<PythonVersionWithSource>,
     implementation: PythonImplementation,
 
     /// If this virtual environment was created using uv,
@@ -186,73 +202,32 @@ impl VirtualEnvironment {
         path: SysPrefixPath,
         system: &dyn System,
     ) -> SitePackagesDiscoveryResult<Self> {
-        fn pyvenv_cfg_line_number(index: usize) -> NonZeroUsize {
-            index.checked_add(1).and_then(NonZeroUsize::new).unwrap()
-        }
-
         let pyvenv_cfg_path = path.join("pyvenv.cfg");
         tracing::debug!("Attempting to parse virtual environment metadata at '{pyvenv_cfg_path}'");
 
-        let pyvenv_cfg = system
-            .read_to_string(&pyvenv_cfg_path)
-            .map_err(|io_err| SitePackagesDiscoveryError::NoPyvenvCfgFile(path.origin, io_err))?;
+        let pyvenv_cfg = match system.read_to_string(&pyvenv_cfg_path) {
+            Ok(pyvenv_cfg) => pyvenv_cfg,
+            Err(err) => return Err(SitePackagesDiscoveryError::NoPyvenvCfgFile(path, err)),
+        };
 
-        let mut include_system_site_packages = false;
-        let mut base_executable_home_path = None;
-        let mut version_info_string = None;
-        let mut implementation = PythonImplementation::Unknown;
-        let mut created_with_uv = false;
-        let mut parent_environment = None;
+        let parsed_pyvenv_cfg =
+            PyvenvCfgParser::new(&pyvenv_cfg)
+                .parse()
+                .map_err(|pyvenv_parse_error| {
+                    SitePackagesDiscoveryError::PyvenvCfgParseError(
+                        pyvenv_cfg_path.clone(),
+                        pyvenv_parse_error,
+                    )
+                })?;
 
-        // A `pyvenv.cfg` file *looks* like a `.ini` file, but actually isn't valid `.ini` syntax!
-        // The Python standard-library's `site` module parses these files by splitting each line on
-        // '=' characters, so that's what we should do as well.
-        //
-        // See also: https://snarky.ca/how-virtual-environments-work/
-        for (index, line) in pyvenv_cfg.lines().enumerate() {
-            if let Some((key, value)) = line.split_once('=') {
-                let key = key.trim();
-                if key.is_empty() {
-                    return Err(SitePackagesDiscoveryError::PyvenvCfgParseError(
-                        pyvenv_cfg_path,
-                        PyvenvCfgParseErrorKind::MalformedKeyValuePair {
-                            line_number: pyvenv_cfg_line_number(index),
-                        },
-                    ));
-                }
-
-                let value = value.trim();
-                if value.is_empty() {
-                    return Err(SitePackagesDiscoveryError::PyvenvCfgParseError(
-                        pyvenv_cfg_path,
-                        PyvenvCfgParseErrorKind::MalformedKeyValuePair {
-                            line_number: pyvenv_cfg_line_number(index),
-                        },
-                    ));
-                }
-
-                match key {
-                    "include-system-site-packages" => {
-                        include_system_site_packages = value.eq_ignore_ascii_case("true");
-                    }
-                    "home" => base_executable_home_path = Some(value),
-                    // `virtualenv` and `uv` call this key `version_info`,
-                    // but the stdlib venv module calls it `version`
-                    "version" | "version_info" => version_info_string = Some(value),
-                    "implementation" => {
-                        implementation = match value.to_ascii_lowercase().as_str() {
-                            "cpython" => PythonImplementation::CPython,
-                            "graalvm" => PythonImplementation::GraalPy,
-                            "pypy" => PythonImplementation::PyPy,
-                            _ => PythonImplementation::Unknown,
-                        };
-                    }
-                    "uv" => created_with_uv = true,
-                    "extends-environment" => parent_environment = Some(value),
-                    _ => continue,
-                }
-            }
-        }
+        let RawPyvenvCfg {
+            include_system_site_packages,
+            base_executable_home_path,
+            version,
+            implementation,
+            created_with_uv,
+            parent_environment,
+        } = parsed_pyvenv_cfg;
 
         // The `home` key is read by the standard library's `site.py` module,
         // so if it's missing from the `pyvenv.cfg` file
@@ -264,6 +239,7 @@ impl VirtualEnvironment {
                 PyvenvCfgParseErrorKind::NoHomeKey,
             ));
         };
+
         let base_executable_home_path = PythonHomePath::new(base_executable_home_path, system)
             .map_err(|io_err| {
                 SitePackagesDiscoveryError::PyvenvCfgParseError(
@@ -298,10 +274,15 @@ impl VirtualEnvironment {
         // created the `pyvenv.cfg` file. Lenient parsing is appropriate here:
         // the file isn't really *invalid* if it doesn't have this key,
         // or if the value doesn't parse according to our expectations.
-        let version = version_info_string.and_then(|version_string| {
+        let version = version.and_then(|(version_string, range)| {
             let mut version_info_parts = version_string.split('.');
             let (major, minor) = (version_info_parts.next()?, version_info_parts.next()?);
-            PythonVersion::try_from((major, minor)).ok()
+            let version = PythonVersion::try_from((major, minor)).ok()?;
+            let source = PythonVersionSource::PyvenvCfgFile(PythonVersionFileSource::new(
+                Arc::new(pyvenv_cfg_path),
+                Some(range),
+            ));
+            Some(PythonVersionWithSource { version, source })
         });
 
         let metadata = Self {
@@ -333,8 +314,10 @@ impl VirtualEnvironment {
             parent_environment,
         } = self;
 
+        let version = version.as_ref().map(|v| v.version);
+
         let mut site_packages_directories = SitePackagesPaths::single(
-            site_packages_directory_from_sys_prefix(root_path, *version, *implementation, system)?,
+            site_packages_directory_from_sys_prefix(root_path, version, *implementation, system)?,
         );
 
         if let Some(parent_env_site_packages) = parent_environment.as_deref() {
@@ -362,7 +345,7 @@ impl VirtualEnvironment {
             if let Some(sys_prefix_path) = system_sys_prefix {
                 match site_packages_directory_from_sys_prefix(
                     &sys_prefix_path,
-                    *version,
+                    version,
                     *implementation,
                     system,
                 ) {
@@ -388,6 +371,119 @@ System site-packages will not be used for module resolution.",
         );
         Ok(site_packages_directories)
     }
+}
+
+/// A parser for `pyvenv.cfg` files: metadata files for virtual environments.
+///
+/// Note that a `pyvenv.cfg` file *looks* like a `.ini` file, but actually isn't valid `.ini` syntax!
+///
+/// See also: <https://snarky.ca/how-virtual-environments-work/>
+#[derive(Debug)]
+struct PyvenvCfgParser<'s> {
+    source: &'s str,
+    cursor: Cursor<'s>,
+    line_number: NonZeroUsize,
+    data: RawPyvenvCfg<'s>,
+}
+
+impl<'s> PyvenvCfgParser<'s> {
+    fn new(source: &'s str) -> Self {
+        Self {
+            source,
+            cursor: Cursor::new(source),
+            line_number: NonZeroUsize::new(1).unwrap(),
+            data: RawPyvenvCfg::default(),
+        }
+    }
+
+    /// Parse the `pyvenv.cfg` file and return the parsed data.
+    fn parse(mut self) -> Result<RawPyvenvCfg<'s>, PyvenvCfgParseErrorKind> {
+        while !self.cursor.is_eof() {
+            self.parse_line()?;
+            self.line_number = self.line_number.checked_add(1).unwrap();
+        }
+        Ok(self.data)
+    }
+
+    /// Parse a single line of the `pyvenv.cfg` file and advance the cursor
+    /// to the beginning of the next line.
+    fn parse_line(&mut self) -> Result<(), PyvenvCfgParseErrorKind> {
+        let PyvenvCfgParser {
+            source,
+            cursor,
+            line_number,
+            data,
+        } = self;
+
+        let line_number = *line_number;
+
+        cursor.eat_while(|c| c.is_whitespace() && c != '\n');
+
+        let key_start = cursor.offset();
+        cursor.eat_while(|c| !matches!(c, '\n' | '='));
+        let key_end = cursor.offset();
+
+        if !cursor.eat_char('=') {
+            // Skip over any lines that do not contain '=' characters, same as the CPython stdlib
+            // <https://github.com/python/cpython/blob/e64395e8eb8d3a9e35e3e534e87d427ff27ab0a5/Lib/site.py#L625-L632>
+            cursor.eat_char('\n');
+            return Ok(());
+        }
+
+        let key = source[TextRange::new(key_start, key_end)].trim();
+
+        cursor.eat_while(|c| c.is_whitespace() && c != '\n');
+        let value_start = cursor.offset();
+        cursor.eat_while(|c| c != '\n');
+        let value = source[TextRange::new(value_start, cursor.offset())].trim();
+        cursor.eat_char('\n');
+
+        if value.is_empty() {
+            return Err(PyvenvCfgParseErrorKind::MalformedKeyValuePair { line_number });
+        }
+
+        match key {
+            "include-system-site-packages" => {
+                data.include_system_site_packages = value.eq_ignore_ascii_case("true");
+            }
+            "home" => data.base_executable_home_path = Some(value),
+            // `virtualenv` and `uv` call this key `version_info`,
+            // but the stdlib venv module calls it `version`
+            "version" | "version_info" => {
+                let version_range = TextRange::at(value_start, value.text_len());
+                data.version = Some((value, version_range));
+            }
+            "implementation" => {
+                data.implementation = match value.to_ascii_lowercase().as_str() {
+                    "cpython" => PythonImplementation::CPython,
+                    "graalvm" => PythonImplementation::GraalPy,
+                    "pypy" => PythonImplementation::PyPy,
+                    _ => PythonImplementation::Unknown,
+                };
+            }
+            "uv" => data.created_with_uv = true,
+            "extends-environment" => data.parent_environment = Some(value),
+            "" => {
+                return Err(PyvenvCfgParseErrorKind::MalformedKeyValuePair { line_number });
+            }
+            _ => {}
+        }
+
+        Ok(())
+    }
+}
+
+/// A `key:value` mapping derived from parsing a `pyvenv.cfg` file.
+///
+/// This data contained within is still mostly raw and unvalidated.
+#[derive(Debug, Default)]
+struct RawPyvenvCfg<'s> {
+    include_system_site_packages: bool,
+    base_executable_home_path: Option<&'s str>,
+    version: Option<(&'s str, TextRange)>,
+    implementation: PythonImplementation,
+    created_with_uv: bool,
+    parent_environment: Option<&'s str>,
 }
 
 /// A Python environment that is _not_ a virtual environment.
@@ -433,20 +529,48 @@ impl SystemEnvironment {
     }
 }
 
+/// Enumeration of ways in which `site-packages` discovery can fail.
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum SitePackagesDiscoveryError {
+    /// `site-packages` discovery failed because the provided path couldn't be canonicalized.
     #[error("Invalid {1}: `{0}` could not be canonicalized")]
-    EnvDirCanonicalizationError(SystemPathBuf, SysPrefixPathOrigin, #[source] io::Error),
-    #[error("Invalid {1}: `{0}` does not point to a directory on disk")]
-    EnvDirNotDirectory(SystemPathBuf, SysPrefixPathOrigin),
-    #[error("{0} points to a broken venv with no pyvenv.cfg file")]
-    NoPyvenvCfgFile(SysPrefixPathOrigin, #[source] io::Error),
+    CanonicalizationError(SystemPathBuf, SysPrefixPathOrigin, #[source] io::Error),
+
+    /// `site-packages` discovery failed because the provided path doesn't appear to point to
+    /// a Python executable or a `sys.prefix` directory.
+    #[error(
+        "Invalid {1}: `{0}` does not point to a {thing}",
+
+        thing = if .1.must_point_directly_to_sys_prefix() {
+            "directory on disk"
+        } else {
+            "Python executable or a directory on disk"
+        }
+    )]
+    PathNotExecutableOrDirectory(SystemPathBuf, SysPrefixPathOrigin),
+
+    /// `site-packages` discovery failed because the [`SysPrefixPathOrigin`] indicated that
+    /// the provided path should point to the `sys.prefix` of a virtual environment,
+    /// but there was no file at `<sys.prefix>/pyvenv.cfg`.
+    #[error("{} points to a broken venv with no pyvenv.cfg file", .0.origin)]
+    NoPyvenvCfgFile(SysPrefixPath, #[source] io::Error),
+
+    /// `site-packages` discovery failed because the `pyvenv.cfg` file could not be parsed.
     #[error("Failed to parse the pyvenv.cfg file at {0} because {1}")]
     PyvenvCfgParseError(SystemPathBuf, PyvenvCfgParseErrorKind),
+
+    /// `site-packages` discovery failed because we're on a Unix system,
+    /// we weren't able to figure out from the `pyvenv.cfg` file exactly where `site-packages`
+    /// would be relative to the `sys.prefix` path, and we tried to fallback to iterating
+    /// through the `<sys.prefix>/lib` directory looking for a `site-packages` directory,
+    /// but we came across some I/O error while trying to do so.
     #[error(
-        "Failed to search the `lib` directory of the Python installation at {1} for `site-packages`"
+        "Failed to iterate over the contents of the `lib` directory of the Python installation at {1}"
     )]
     CouldNotReadLibDirectory(#[source] io::Error, SysPrefixPath),
+
+    /// We looked everywhere we could think of for the `site-packages` directory,
+    /// but none could be found despite our best endeavours.
     #[error("Could not find the `site-packages` directory for the Python installation at {0}")]
     NoSitePackagesDirFound(SysPrefixPath),
 }
@@ -612,14 +736,6 @@ pub(crate) struct SysPrefixPath {
 
 impl SysPrefixPath {
     fn new(
-        unvalidated_path: impl AsRef<SystemPath>,
-        origin: SysPrefixPathOrigin,
-        system: &dyn System,
-    ) -> SitePackagesDiscoveryResult<Self> {
-        Self::new_impl(unvalidated_path.as_ref(), origin, system)
-    }
-
-    fn new_impl(
         unvalidated_path: &SystemPath,
         origin: SysPrefixPathOrigin,
         system: &dyn System,
@@ -630,24 +746,79 @@ impl SysPrefixPath {
         let canonicalized = system
             .canonicalize_path(unvalidated_path)
             .map_err(|io_err| {
-                SitePackagesDiscoveryError::EnvDirCanonicalizationError(
-                    unvalidated_path.to_path_buf(),
-                    origin,
-                    io_err,
-                )
+                let unvalidated_path = unvalidated_path.to_path_buf();
+                if io_err.kind() == io::ErrorKind::NotFound {
+                    SitePackagesDiscoveryError::PathNotExecutableOrDirectory(
+                        unvalidated_path,
+                        origin,
+                    )
+                } else {
+                    SitePackagesDiscoveryError::CanonicalizationError(
+                        unvalidated_path,
+                        origin,
+                        io_err,
+                    )
+                }
             })?;
-        system
-            .is_directory(&canonicalized)
-            .then_some(Self {
-                inner: canonicalized,
-                origin,
-            })
-            .ok_or_else(|| {
-                SitePackagesDiscoveryError::EnvDirNotDirectory(
+
+        if origin.must_point_directly_to_sys_prefix() {
+            return system
+                .is_directory(&canonicalized)
+                .then_some(Self {
+                    inner: canonicalized,
+                    origin,
+                })
+                .ok_or_else(|| {
+                    SitePackagesDiscoveryError::PathNotExecutableOrDirectory(
+                        unvalidated_path.to_path_buf(),
+                        origin,
+                    )
+                });
+        }
+
+        let sys_prefix = if system.is_file(&canonicalized)
+            && canonicalized
+                .file_name()
+                .is_some_and(|name| name.starts_with("python"))
+        {
+            // It looks like they passed us a path to a Python executable, e.g. `.venv/bin/python3`.
+            // Try to figure out the `sys.prefix` value from the Python executable.
+            let sys_prefix = if cfg!(windows) {
+                // On Windows, the relative path to the Python executable from `sys.prefix`
+                // is different depending on whether it's a virtual environment or a system installation.
+                // System installations have their executable at `<sys.prefix>/python.exe`,
+                // whereas virtual environments have their executable at `<sys.prefix>/Scripts/python.exe`.
+                canonicalized.parent().and_then(|parent| {
+                    if parent.file_name() == Some("Scripts") {
+                        parent.parent()
+                    } else {
+                        Some(parent)
+                    }
+                })
+            } else {
+                // On Unix, `sys.prefix` is always the grandparent directory of the Python executable,
+                // regardless of whether it's a virtual environment or a system installation.
+                canonicalized.ancestors().nth(2)
+            };
+            sys_prefix.map(SystemPath::to_path_buf).ok_or_else(|| {
+                SitePackagesDiscoveryError::PathNotExecutableOrDirectory(
                     unvalidated_path.to_path_buf(),
                     origin,
                 )
-            })
+            })?
+        } else if system.is_directory(&canonicalized) {
+            canonicalized
+        } else {
+            return Err(SitePackagesDiscoveryError::PathNotExecutableOrDirectory(
+                unvalidated_path.to_path_buf(),
+                origin,
+            ));
+        };
+
+        Ok(Self {
+            inner: sys_prefix,
+            origin,
+        })
     }
 
     fn from_executable_home_path(path: &PythonHomePath) -> Option<Self> {
@@ -704,10 +875,24 @@ pub enum SysPrefixPathOrigin {
 impl SysPrefixPathOrigin {
     /// Whether the given `sys.prefix` path must be a virtual environment (rather than a system
     /// Python environment).
-    pub(crate) fn must_be_virtual_env(self) -> bool {
+    pub(crate) const fn must_be_virtual_env(self) -> bool {
         match self {
             Self::LocalVenv | Self::VirtualEnvVar => true,
             Self::PythonCliFlag | Self::DerivedFromPyvenvCfg | Self::CondaPrefixVar => false,
+        }
+    }
+
+    /// Whether paths with this origin always point directly to the `sys.prefix` directory.
+    ///
+    /// Some variants can point either directly to `sys.prefix` or to a Python executable inside
+    /// the `sys.prefix` directory, e.g. the `--python` CLI flag.
+    pub(crate) const fn must_point_directly_to_sys_prefix(self) -> bool {
+        match self {
+            Self::PythonCliFlag => false,
+            Self::VirtualEnvVar
+            | Self::CondaPrefixVar
+            | Self::DerivedFromPyvenvCfg
+            | Self::LocalVenv => true,
         }
     }
 }
@@ -969,7 +1154,7 @@ mod tests {
 
             if self_venv.pyvenv_cfg_version_field.is_some() {
                 assert_eq!(
-                    venv.version,
+                    venv.version.as_ref().map(|v| v.version),
                     Some(PythonVersion {
                         major: 3,
                         minor: self.minor_version
@@ -1001,22 +1186,7 @@ mod tests {
                 ))
             };
 
-            let expected_system_site_packages = if cfg!(target_os = "windows") {
-                SystemPathBuf::from(&*format!(
-                    r"\Python3.{}\Lib\site-packages",
-                    self.minor_version
-                ))
-            } else if self.free_threaded {
-                SystemPathBuf::from(&*format!(
-                    "/Python3.{minor_version}/lib/python3.{minor_version}t/site-packages",
-                    minor_version = self.minor_version
-                ))
-            } else {
-                SystemPathBuf::from(&*format!(
-                    "/Python3.{minor_version}/lib/python3.{minor_version}/site-packages",
-                    minor_version = self.minor_version
-                ))
-            };
+            let expected_system_site_packages = self.expected_system_site_packages();
 
             if self_venv.system_site_packages {
                 assert_eq!(
@@ -1051,33 +1221,33 @@ mod tests {
             );
 
             let site_packages_directories = env.site_packages_directories(&self.system).unwrap();
+            let expected_site_packages = self.expected_system_site_packages();
+            assert_eq!(
+                site_packages_directories,
+                std::slice::from_ref(&expected_site_packages)
+            );
+        }
 
-            let expected_site_packages = if cfg!(target_os = "windows") {
-                SystemPathBuf::from(&*format!(
-                    r"\Python3.{}\Lib\site-packages",
-                    self.minor_version
-                ))
+        fn expected_system_site_packages(&self) -> SystemPathBuf {
+            let minor_version = self.minor_version;
+            if cfg!(target_os = "windows") {
+                SystemPathBuf::from(&*format!(r"\Python3.{minor_version}\Lib\site-packages"))
             } else if self.free_threaded {
                 SystemPathBuf::from(&*format!(
-                    "/Python3.{minor_version}/lib/python3.{minor_version}t/site-packages",
-                    minor_version = self.minor_version
+                    "/Python3.{minor_version}/lib/python3.{minor_version}t/site-packages"
                 ))
             } else {
                 SystemPathBuf::from(&*format!(
-                    "/Python3.{minor_version}/lib/python3.{minor_version}/site-packages",
-                    minor_version = self.minor_version
+                    "/Python3.{minor_version}/lib/python3.{minor_version}/site-packages"
                 ))
-            };
-
-            assert_eq!(
-                site_packages_directories,
-                [expected_site_packages].as_slice()
-            );
+            }
         }
     }
 
     #[test]
     fn can_find_site_packages_directory_no_virtual_env() {
+        // Shouldn't be converted to an mdtest because mdtest automatically creates a
+        // pyvenv.cfg file for you if it sees you creating a `site-packages` directory.
         let test = PythonEnvironmentTestCase {
             system: TestSystem::default(),
             minor_version: 12,
@@ -1090,6 +1260,8 @@ mod tests {
 
     #[test]
     fn can_find_site_packages_directory_no_virtual_env_freethreaded() {
+        // Shouldn't be converted to an mdtest because mdtest automatically creates a
+        // pyvenv.cfg file for you if it sees you creating a `site-packages` directory.
         let test = PythonEnvironmentTestCase {
             system: TestSystem::default(),
             minor_version: 13,
@@ -1133,22 +1305,9 @@ mod tests {
     }
 
     #[test]
-    fn can_find_site_packages_directory_no_version_field_in_pyvenv_cfg() {
-        let test = PythonEnvironmentTestCase {
-            system: TestSystem::default(),
-            minor_version: 12,
-            free_threaded: false,
-            origin: SysPrefixPathOrigin::VirtualEnvVar,
-            virtual_env: Some(VirtualEnvironmentTestCase {
-                pyvenv_cfg_version_field: None,
-                ..VirtualEnvironmentTestCase::default()
-            }),
-        };
-        test.run();
-    }
-
-    #[test]
     fn can_find_site_packages_directory_venv_style_version_field_in_pyvenv_cfg() {
+        // Shouldn't be converted to an mdtest because we want to assert
+        // that we parsed the `version` field correctly in `test.run()`.
         let test = PythonEnvironmentTestCase {
             system: TestSystem::default(),
             minor_version: 12,
@@ -1164,6 +1323,8 @@ mod tests {
 
     #[test]
     fn can_find_site_packages_directory_uv_style_version_field_in_pyvenv_cfg() {
+        // Shouldn't be converted to an mdtest because we want to assert
+        // that we parsed the `version` field correctly in `test.run()`.
         let test = PythonEnvironmentTestCase {
             system: TestSystem::default(),
             minor_version: 12,
@@ -1179,6 +1340,8 @@ mod tests {
 
     #[test]
     fn can_find_site_packages_directory_virtualenv_style_version_field_in_pyvenv_cfg() {
+        // Shouldn't be converted to an mdtest because we want to assert
+        // that we parsed the `version` field correctly in `test.run()`.
         let test = PythonEnvironmentTestCase {
             system: TestSystem::default(),
             minor_version: 12,
@@ -1209,6 +1372,9 @@ mod tests {
 
     #[test]
     fn finds_system_site_packages() {
+        // Can't be converted to an mdtest because the system installation's `sys.prefix`
+        // path is at a different location relative to the `pyvenv.cfg` file's `home` value
+        // on Windows.
         let test = PythonEnvironmentTestCase {
             system: TestSystem::default(),
             minor_version: 13,
@@ -1289,7 +1455,7 @@ mod tests {
         let system = TestSystem::default();
         assert!(matches!(
             PythonEnvironment::new("/env", SysPrefixPathOrigin::PythonCliFlag, &system),
-            Err(SitePackagesDiscoveryError::EnvDirCanonicalizationError(..))
+            Err(SitePackagesDiscoveryError::PathNotExecutableOrDirectory(..))
         ));
     }
 
@@ -1302,7 +1468,7 @@ mod tests {
             .unwrap();
         assert!(matches!(
             PythonEnvironment::new("/env", SysPrefixPathOrigin::PythonCliFlag, &system),
-            Err(SitePackagesDiscoveryError::EnvDirNotDirectory(..))
+            Err(SitePackagesDiscoveryError::PathNotExecutableOrDirectory(..))
         ));
     }
 
@@ -1364,25 +1530,6 @@ mod tests {
             ),
             "Got {site_packages:?}",
         );
-    }
-
-    /// See <https://github.com/astral-sh/ty/issues/430>
-    #[test]
-    fn parsing_pyvenv_cfg_with_equals_in_value() {
-        let test = PythonEnvironmentTestCase {
-            system: TestSystem::default(),
-            minor_version: 13,
-            free_threaded: true,
-            origin: SysPrefixPathOrigin::VirtualEnvVar,
-            virtual_env: Some(VirtualEnvironmentTestCase {
-                pyvenv_cfg_version_field: Some("version_info = 3.13"),
-                command_field: Some(
-                    r#"command = /.pyenv/versions/3.13.3/bin/python3.13 -m venv --without-pip --prompt="python-default/3.13.3" /somewhere-else/python/virtualenvs/python-default/3.13.3"#,
-                ),
-                ..VirtualEnvironmentTestCase::default()
-            }),
-        };
-        test.run();
     }
 
     #[test]
@@ -1461,5 +1608,30 @@ mod tests {
             ))
             if path == pyvenv_cfg_path
         ));
+    }
+
+    #[test]
+    fn pyvenv_cfg_with_carriage_return_line_endings_parses() {
+        let pyvenv_cfg = "home = /somewhere/python\r\nversion_info = 3.13\r\nimplementation = PyPy";
+        let parsed = PyvenvCfgParser::new(pyvenv_cfg).parse().unwrap();
+        assert_eq!(parsed.base_executable_home_path, Some("/somewhere/python"));
+        let version = parsed.version.unwrap();
+        assert_eq!(version.0, "3.13");
+        assert_eq!(&pyvenv_cfg[version.1], version.0);
+        assert_eq!(parsed.implementation, PythonImplementation::PyPy);
+    }
+
+    #[test]
+    fn pyvenv_cfg_with_strange_whitespace_parses() {
+        let pyvenv_cfg = "  home= /a path with whitespace/python\t   \t  \nversion_info =    3.13 \n\n\n\nimplementation    =PyPy";
+        let parsed = PyvenvCfgParser::new(pyvenv_cfg).parse().unwrap();
+        assert_eq!(
+            parsed.base_executable_home_path,
+            Some("/a path with whitespace/python")
+        );
+        let version = parsed.version.unwrap();
+        assert_eq!(version.0, "3.13");
+        assert_eq!(&pyvenv_cfg[version.1], version.0);
+        assert_eq!(parsed.implementation, PythonImplementation::PyPy);
     }
 }

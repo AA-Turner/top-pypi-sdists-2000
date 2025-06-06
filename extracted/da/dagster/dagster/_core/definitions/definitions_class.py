@@ -1,7 +1,10 @@
+import warnings
 from collections import defaultdict
 from collections.abc import Iterable, Mapping, Sequence
-from typing import TYPE_CHECKING, Any, Callable, NamedTuple, Optional, Union
+from typing import TYPE_CHECKING, Annotated, Any, Callable, NamedTuple, Optional, Union
 
+from dagster_shared.record import ImportFrom
+from dagster_shared.utils.cached_method import get_cached_method_cache
 from typing_extensions import Self
 
 import dagster._check as check
@@ -44,9 +47,8 @@ from dagster._utils.cached_method import cached_method
 from dagster._utils.warnings import disable_dagster_warnings
 
 if TYPE_CHECKING:
-    from dagster._core.definitions.run_config import RunConfig
-    from dagster._core.execution.execute_in_process_result import ExecuteInProcessResult
     from dagster._core.storage.asset_value_loader import AssetValueLoader
+    from dagster.components.core.tree import ComponentTree
 
 
 @public
@@ -239,6 +241,7 @@ def _create_repository_using_definitions_args(
     loggers: Optional[Mapping[str, LoggerDefinition]] = None,
     asset_checks: Optional[Iterable[AssetsDefinition]] = None,
     metadata: Optional[RawMetadataMapping] = None,
+    component_tree: Optional["ComponentTree"] = None,
 ) -> RepositoryDefinition:
     # First, dedupe all definition types.
     sensors = dedupe_object_refs(sensors)
@@ -266,8 +269,9 @@ def _create_repository_using_definitions_args(
         name=name,
         default_executor_def=executor_def,
         default_logger_defs=loggers,
-        _top_level_resources=resource_defs,
         metadata=metadata,
+        _top_level_resources=resource_defs,
+        _component_tree=component_tree,
     )
     def created_repo():
         return [
@@ -363,6 +367,11 @@ class Definitions(IHaveNew):
             Arbitrary metadata for the Definitions. Not displayed in the UI but accessible on
             the Definitions instance at runtime.
 
+        component_tree (Optional[ComponentTree]):
+            Information about the Components that were used to construct part of this
+            Definitions object.
+
+
     Example usage:
 
     .. code-block:: python
@@ -405,6 +414,7 @@ class Definitions(IHaveNew):
     # After we fix the bug, we should remove AssetsDefinition from the set of accepted types.
     asset_checks: Optional[Iterable[AssetsDefinition]] = None
     metadata: Mapping[str, MetadataValue]
+    component_tree: Optional[Annotated["ComponentTree", ImportFrom("dagster.components.core.tree")]]
 
     def __new__(
         cls,
@@ -421,8 +431,9 @@ class Definitions(IHaveNew):
         loggers: Optional[Mapping[str, LoggerDefinition]] = None,
         asset_checks: Optional[Iterable[AssetsDefinition]] = None,
         metadata: Optional[RawMetadataMapping] = None,
+        component_tree: Optional["ComponentTree"] = None,
     ):
-        return super().__new__(
+        instance = super().__new__(
             cls,
             assets=assets,
             schedules=schedules,
@@ -433,7 +444,15 @@ class Definitions(IHaveNew):
             loggers=loggers,
             asset_checks=asset_checks,
             metadata=normalize_metadata(check.opt_mapping_param(metadata, "metadata")),
+            component_tree=component_tree,
         )
+
+        check.invariant(
+            not instance.has_resolved_repository_def(),
+            "Definitions object should not have been resolved",
+        )
+
+        return instance
 
     @public
     def get_job_def(self, name: str) -> JobDefinition:
@@ -441,6 +460,23 @@ class Definitions(IHaveNew):
         (return value of :py:func:`define_asset_job`) it will be resolved to a :py:class:`JobDefinition` when returned
         from this function, with all resource dependencies fully resolved.
         """
+        found_direct = False
+        for job in self.jobs or []:
+            if job.name == name:
+                if isinstance(job, JobDefinition):
+                    found_direct = True
+
+        if not found_direct:
+            warnings.warn(
+                f"JobDefinition with name {name} directly passed to Definitions not found, "
+                "will attempt to resolve to a JobDefinition. "
+                "This will be an error in a future release and will require a call to "
+                "resolve_job_def in dagster 1.11. "
+            )
+
+        return self.resolve_job_def(name)
+
+    def resolve_job_def(self, name: str) -> JobDefinition:
         check.str_param(name, "name")
         return self.get_repository_def().get_job(name)
 
@@ -450,6 +486,20 @@ class Definitions(IHaveNew):
         If your passed-in sensor had resource dependencies, or the job targeted by the sensor had
         resource dependencies, those resource dependencies will be fully resolved on the returned object.
         """
+        warnings.warn(
+            "Starting in dagster 1.11, get_sensor_def will return a SensorDefinition without resolving resource dependencies on it or its target."
+        )
+
+        return self.resolve_sensor_def(name)
+
+    # TODO: after dagster 1.11, this will become the implementation of get_sensor_def -- schrockn 2025-06-02
+    def get_unresolved_sensor_def(self, name: str) -> SensorDefinition:
+        for sensor in self.sensors or []:
+            if sensor.name == name:
+                return sensor
+        raise ValueError(f"SensorDefinition with name {name} not found")
+
+    def resolve_sensor_def(self, name: str) -> SensorDefinition:
         check.str_param(name, "name")
         return self.get_repository_def().get_sensor_def(name)
 
@@ -459,6 +509,24 @@ class Definitions(IHaveNew):
         If your passed-in schedule had resource dependencies, or the job targeted by the schedule had
         resource dependencies, those resource dependencies will be fully resolved on the returned object.
         """
+        warnings.warn(
+            "Starting in dagster 1.11, get_schedule_def will return a ScheduleDefinition without resolving resource dependencies on it or its target."
+        )
+        return self.resolve_schedule_def(name)
+
+    # TODO: after dagster 1.11, this will become the implementation of get_schedule_def -- schrockn 2025-06-02
+    def get_unresolved_schedule_def(self, name: str) -> ScheduleDefinition:
+        for schedule in self.schedules or []:
+            if schedule.name == name:
+                if isinstance(schedule, ScheduleDefinition):
+                    return schedule
+                raise ValueError(
+                    f"ScheduleDefinition with name {name} is an UnresolvedPartitionedAssetScheduleDefinition, which is not supported in get_unresolved_schedule_def"
+                )
+
+        raise ValueError(f"ScheduleDefinition with name {name} not found")
+
+    def resolve_schedule_def(self, name: str) -> ScheduleDefinition:
         check.str_param(name, "name")
         return self.get_repository_def().get_schedule_def(name)
 
@@ -520,7 +588,7 @@ class Definitions(IHaveNew):
             instance=instance,
         )
 
-    def get_all_job_defs(self) -> Sequence[JobDefinition]:
+    def resolve_all_job_defs(self) -> Sequence[JobDefinition]:
         """Get all the Job definitions in the code location.
         This includes both jobs passed into the Definitions object and any implicit jobs created.
         All jobs returned from this function will have all resource dependencies resolved.
@@ -531,6 +599,12 @@ class Definitions(IHaveNew):
         return self.get_repository_def().has_implicit_global_asset_job_def()
 
     def get_implicit_global_asset_job_def(self) -> JobDefinition:
+        warnings.warn(
+            "This will be renamed to resolve_implicit_global_asset_job_def in dagster 1.11"
+        )
+        return self.get_repository_def().get_implicit_global_asset_job_def()
+
+    def resolve_implicit_global_asset_job_def(self) -> JobDefinition:
         """A useful conveninence method when there is a single defined global asset job.
         This occurs when all assets in the code location use a single partitioning scheme.
         If there are multiple partitioning schemes you must use get_implicit_job_def_for_assets
@@ -538,14 +612,29 @@ class Definitions(IHaveNew):
         """
         return self.get_repository_def().get_implicit_global_asset_job_def()
 
-    def get_implicit_job_def_for_assets(
+    def resolve_implicit_job_def_def_for_assets(
         self, asset_keys: Iterable[AssetKey]
     ) -> Optional[JobDefinition]:
         return self.get_repository_def().get_implicit_job_def_for_assets(asset_keys)
 
     def get_assets_def(self, key: CoercibleToAssetKey) -> AssetsDefinition:
+        key = AssetKey.from_coercible(key)
+        # Sadly both self.assets and self.asset_checks can contain either AssetsDefinition or AssetChecksDefinition
+        # objects. We need to check both collections and exclude the AssetChecksDefinition objects.
+        for asset in [*(self.assets or []), *(self.asset_checks or [])]:
+            if isinstance(asset, AssetsDefinition) and not isinstance(asset, AssetChecksDefinition):
+                if key in asset.keys:
+                    return asset
+
+        warnings.warn(
+            f"Could not find assets_def with key {key} directly passed to Definitions. This will be an error starting in 1.11 and will require a call to resolve_assets_def in dagster 1.11."
+        )
+
+        return self.resolve_assets_def(key)
+
+    def resolve_assets_def(self, key: CoercibleToAssetKey) -> AssetsDefinition:
         asset_key = AssetKey.from_coercible(key)
-        for assets_def in self.get_asset_graph().assets_defs:
+        for assets_def in self.resolve_asset_graph().assets_defs:
             if asset_key in assets_def.keys:
                 return assets_def
 
@@ -567,9 +656,10 @@ class Definitions(IHaveNew):
             loggers=self.loggers,
             asset_checks=self.asset_checks,
             metadata=self.metadata,
+            component_tree=self.component_tree,
         )
 
-    def get_asset_graph(self) -> AssetGraph:
+    def resolve_asset_graph(self) -> AssetGraph:
         """Get the AssetGraph for this set of definitions."""
         return self.get_repository_def().asset_graph
 
@@ -617,6 +707,7 @@ class Definitions(IHaveNew):
         jobs = []
         asset_checks = []
         metadata = {}
+        component_tree = None
 
         resources = {}
         resource_key_indexes: dict[str, int] = {}
@@ -660,6 +751,18 @@ class Definitions(IHaveNew):
                 executor = def_set.executor
                 executor_index = i
 
+            if def_set.component_tree:
+                if component_tree is not None:
+                    raise DagsterInvariantViolationError(
+                        "Can not merge Definitions that both contain component_tree."
+                    )
+
+                component_tree = def_set.component_tree
+
+            check.invariant(
+                not def_set.has_resolved_repository_def(),
+                "Definitions object should have been resolved",
+            )
         return Definitions(
             assets=assets,
             schedules=schedules,
@@ -670,13 +773,23 @@ class Definitions(IHaveNew):
             loggers=loggers,
             asset_checks=asset_checks,
             metadata=metadata,
+            component_tree=component_tree,
         )
 
     @public
-    @preview
+    @deprecated(
+        breaking_version="1.11",
+        additional_warn_text="Use resolve_all_asset_specs instead",
+        subject="get_all_asset_specs",
+    )
     def get_all_asset_specs(self) -> Sequence[AssetSpec]:
-        """Returns an AssetSpec object for every asset contained inside the Definitions object."""
-        asset_graph = self.get_asset_graph()
+        """Returns an AssetSpec object for AssetsDefinitions and AssetSpec passed directly to the Definitions object."""
+        return self.resolve_all_asset_specs()
+
+    @public
+    def resolve_all_asset_specs(self) -> Sequence[AssetSpec]:
+        """Returns an AssetSpec object for every asset contained inside the resolved Definitions object."""
+        asset_graph = self.resolve_asset_graph()
         return [asset_node.to_asset_spec() for asset_node in asset_graph.asset_nodes]
 
     @preview
@@ -734,8 +847,10 @@ class Definitions(IHaveNew):
                 my_spec = dg.AssetSpec("asset1")
 
                 @dg.asset
-                def asset2(_): ...
+                def asset1(_): ...
 
+                @dg.asset
+                def asset2(_): ...
 
                 defs = Definitions(
                     assets=[asset1, asset2]
@@ -746,41 +861,76 @@ class Definitions(IHaveNew):
                     func=lambda s: s.merge_attributes(metadata={"new_key": "new_value"}),
                 )
 
+        """
+        check.invariant(
+            selection is None,
+            "The selection parameter is no longer supported for map_asset_specs, Please use map_resolved_asset_specs instead",
+        )
+
+        return self.map_resolved_asset_specs(func=func, selection=None)
+
+    @public
+    @preview
+    def map_resolved_asset_specs(
+        self,
+        *,
+        func: Callable[[AssetSpec], AssetSpec],
+        selection: Optional[CoercibleToAssetSelection] = None,
+    ) -> "Definitions":
+        """Map a function over the included AssetSpecs or AssetsDefinitions in this Definitions object, replacing specs in the sequence.
+
+        See map_asset_specs for more details.
+
+        Supports selection and therefore requires resolving the Definitions object to a RepositoryDefinition when there is a selection.
+
+        Examples:
+            .. code-block:: python
+
+                import dagster as dg
+
+                my_spec = dg.AssetSpec("asset1")
+
+                @dg.asset
+                def asset1(_): ...
+
+                @dg.asset
+                def asset2(_): ...
+
                 # Applies only to asset1
-                mapped_defs = defs.map_asset_specs(
+                mapped_defs = defs.map_resolved_asset_specs(
                     func=lambda s: s.replace_attributes(metadata={"new_key": "new_value"}),
                     selection="asset1",
                 )
-
         """
-        return self.map_asset_specs_inner(
+        non_spec_asset_types = {
+            type(d) for d in self.assets or [] if not isinstance(d, (AssetsDefinition, AssetSpec))
+        }
+
+        if non_spec_asset_types:
+            raise DagsterInvariantViolationError(
+                "Can only map over AssetSpec or AssetsDefinition objects. "
+                "Received objects of types: "
+                f"{non_spec_asset_types}."
+            )
+
+        return self.permissive_map_resolved_asset_specs(
             func=func,
             selection=selection,
-            ignore_non_spec_asset_types=False,
         )
 
-    def map_asset_specs_inner(
+    def permissive_map_resolved_asset_specs(
         self,
         func: Callable[[AssetSpec], AssetSpec],
         selection: Optional[CoercibleToAssetSelection],
-        ignore_non_spec_asset_types: bool,
     ) -> "Definitions":
+        """This is a permissive version of map_resolved_asset_specs that allows for non-spec asset types, i.e. SourceAssets and CacheableAssetsDefinitions."""
         target_keys = None
         if selection:
             if isinstance(selection, str):
                 selection = AssetSelection.from_string(selection, include_sources=True)
             else:
                 selection = AssetSelection.from_coercible(selection)
-            target_keys = selection.resolve(self.get_asset_graph())
-        non_spec_asset_types = {
-            type(d) for d in self.assets or [] if not isinstance(d, (AssetsDefinition, AssetSpec))
-        }
-        if non_spec_asset_types and not ignore_non_spec_asset_types:
-            raise DagsterInvariantViolationError(
-                "Can only map over AssetSpec or AssetsDefinition objects. "
-                "Received objects of types: "
-                f"{non_spec_asset_types}."
-            )
+            target_keys = selection.resolve(self.resolve_asset_graph())
         mappable = iter(
             d for d in self.assets or [] if isinstance(d, (AssetsDefinition, AssetSpec))
         )
@@ -795,105 +945,8 @@ class Definitions(IHaveNew):
         ]
         return replace(self, assets=assets)
 
-    def execute_job_in_process(
-        self,
-        job_name: str,
-        run_config: Optional[Union[Mapping[str, Any], "RunConfig"]] = None,
-        instance: Optional["DagsterInstance"] = None,
-        partition_key: Optional[str] = None,
-        raise_on_error: bool = True,
-        op_selection: Optional[Sequence[str]] = None,
-        asset_selection: Optional[Sequence[AssetKey]] = None,
-        run_id: Optional[str] = None,
-        input_values: Optional[Mapping[str, object]] = None,
-        tags: Optional[Mapping[str, str]] = None,
-        resources: Optional[Mapping[str, object]] = None,
-    ) -> "ExecuteInProcessResult":
-        from dagster._core.definitions.job_base import RepoBackedJob
-        from dagster._core.execution.execute_in_process import (
-            core_execute_in_process,
-            merge_run_tags,
-            type_check_and_normalize_args,
-        )
-
-        run_config, op_selection, asset_selection, resource_defs, partition_key, input_values = (
-            type_check_and_normalize_args(
-                run_config=run_config,
-                partition_key=partition_key,
-                op_selection=op_selection,
-                asset_selection=asset_selection,
-                input_values=input_values,
-                resources=resources,
-            )
-        )
-        job = check.not_none(get_job_from_defs(job_name, self))
-        if isinstance(job, UnresolvedAssetJobDefinition):
-            raise DagsterInvariantViolationError(
-                "Cannot execute an unresolved asset job. Please resolve the job by calling "
-                "`resolve_to_job` on the job definition."
-            )
-
-        job_def = job.as_ephemeral_job(
-            resource_defs=resource_defs,
-            input_values=check.opt_mapping_param(
-                input_values, "input_values", key_type=str, value_type=object
-            ),
-            op_selection=op_selection,
-            asset_selection=asset_selection,
-        )
-        new_job_list = [job for job in (self.jobs or []) if job.name != job_name] + [job_def]
-        schedules = [
-            schedule.with_updated_job(job_def)
-            if isinstance(schedule, ScheduleDefinition)
-            and schedule.target.has_job_def
-            and schedule.job.name == job_name
-            else schedule
-            for schedule in (self.schedules or [])
-        ]
-        sensors = []
-        for sensor in self.sensors or []:
-            if has_job_defs_attached(sensor) and any(job.name == job_name for job in sensor.jobs):
-                sensors.append(
-                    sensor.with_updated_jobs(
-                        [job for job in sensor.jobs if job.name != job_name] + [job_def]
-                    )
-                )
-            else:
-                sensors.append(sensor)
-        new_defs_obj = replace(self, jobs=new_job_list, schedules=schedules, sensors=sensors)
-        resolved_repo = new_defs_obj.get_repository_def()
-        wrapped_job = RepoBackedJob(job_name=job_name, repository_def=resolved_repo)
-        return core_execute_in_process(
-            job=wrapped_job,
-            run_config=run_config,
-            instance=instance,
-            output_capturing_enabled=True,
-            raise_on_error=raise_on_error,
-            run_tags=merge_run_tags(
-                job_def=job_def,
-                partition_key=partition_key,
-                tags=tags,
-                asset_selection=asset_selection,
-                instance=instance,
-                run_config=run_config,
-            ),
-            run_id=run_id,
-            asset_selection=frozenset(asset_selection),
-        )
-
     def with_resources(self, resources: Optional[Mapping[str, Any]]) -> "Definitions":
         return Definitions.merge(self, Definitions(resources=resources)) if resources else self
 
-
-def get_job_from_defs(
-    name: str, defs: Definitions
-) -> Optional[Union[JobDefinition, UnresolvedAssetJobDefinition]]:
-    """Get the job from the definitions by its name."""
-    return next(
-        iter(job for job in (defs.jobs or []) if job.name == name),
-        None,
-    )
-
-
-def has_job_defs_attached(sensor_def: SensorDefinition) -> bool:
-    return any(target.has_job_def for target in sensor_def.targets)
+    def has_resolved_repository_def(self) -> bool:
+        return len(get_cached_method_cache(self, self.get_repository_def.__name__)) > 0

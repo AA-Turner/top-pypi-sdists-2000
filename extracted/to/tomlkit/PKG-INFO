@@ -1,8 +1,7 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.3
 Name: tomlkit
-Version: 0.13.2
+Version: 0.13.3
 Summary: Style preserving TOML library
-Home-page: https://github.com/sdispater/tomlkit
 License: MIT
 Author: Sébastien Eustace
 Author-email: sebastien@eustace.io
@@ -14,6 +13,8 @@ Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Project-URL: Homepage, https://github.com/sdispater/tomlkit
 Project-URL: Repository, https://github.com/sdispater/tomlkit
 Description-Content-Type: text/markdown
 
@@ -62,9 +63,14 @@ pip install tomlkit
 
 ## Running tests
 
-Please clone the repo with submodules with the following command
-`git clone --recurse-submodules https://github.com/sdispater/tomlkit.git`.
-We need the submodule - `toml-test` for running the tests.
+Please clone the repo with submodules with the following command:
+```bash
+git clone --recurse-submodules https://github.com/python-poetry/tomlkit.git
+```
+The `toml-test` submodule is required for running the tests.
 
-You can run the tests with `poetry run pytest -q tests`
+You can then run the tests with
+```bash
+poetry run pytest -q tests
+```
 

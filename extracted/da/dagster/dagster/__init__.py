@@ -512,6 +512,7 @@ from dagster._core.execution.context.input import (
     build_input_context as build_input_context,
 )
 from dagster._core.execution.context.invocation import (
+    build_asset_check_context as build_asset_check_context,
     build_asset_context as build_asset_context,
     build_op_context as build_op_context,
 )
@@ -667,7 +668,6 @@ from dagster.components.resolved.core_models import (
     ResolvedAssetSpec as ResolvedAssetSpec,
 )
 from dagster.components.resolved.model import (
-    Injectable as Injectable,
     Injected as Injected,
     Model as Model,
     Resolver as Resolver,

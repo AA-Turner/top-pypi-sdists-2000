@@ -66,7 +66,6 @@ class NotionHelper:
         self.book_database_id = self.database_id_dict.get(
             self.database_name_dict.get("BOOK_DATABASE_NAME")
         )
-        print(self.client.databases.retrieve(database_id=self.book_database_id))
         self.review_database_id = self.database_id_dict.get(
             self.database_name_dict.get("REVIEW_DATABASE_NAME")
         )

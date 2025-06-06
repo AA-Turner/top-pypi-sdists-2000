@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2013 Lowell Alleman
+# Copyright 2013, 2025 Lowell Alleman, Preston Landers, and contributors
 #
 #   Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #   use this file except in compliance with the License. You may obtain a copy
@@ -65,7 +65,7 @@ import warnings
 from contextlib import contextmanager, suppress
 from io import TextIOWrapper
 from logging.handlers import BaseRotatingHandler, TimedRotatingFileHandler
-from typing import TYPE_CHECKING, Dict, Generator, List, Optional, Tuple
+from typing import TYPE_CHECKING, Dict, Generator, List, Optional, Tuple, Union
 
 from portalocker import LOCK_EX, lock, unlock
 
@@ -104,6 +104,8 @@ __all__ = [
 HAS_CHOWN: bool = hasattr(os, "chown")
 HAS_CHMOD: bool = hasattr(os, "chmod")
 
+LogFilenameType = Union[str, os.PathLike]
+
 
 class ConcurrentRotatingFileHandler(BaseRotatingHandler):
     """Handler for logging to a set of files, which switches from one file to the
@@ -114,7 +116,7 @@ class ConcurrentRotatingFileHandler(BaseRotatingHandler):
 
     def __init__(  # noqa: PLR0913
         self,
-        filename: str,
+        filename: LogFilenameType,
         mode: str = "a",
         maxBytes: int = 0,
         backupCount: int = 0,
@@ -258,8 +260,12 @@ class ConcurrentRotatingFileHandler(BaseRotatingHandler):
         self.terminator = terminator or "\n"
 
         if self.owner and HAS_CHOWN and pwd and grp:
-            self._set_uid = pwd.getpwnam(self.owner[0]).pw_uid
-            self._set_gid = grp.getgrnam(self.owner[1]).gr_gid
+            self._set_uid = pwd.getpwnam(  # pyright: ignore[reportAttributeAccessIssue]
+                self.owner[0]
+            ).pw_uid
+            self._set_gid = grp.getgrnam(  # pyright: ignore[reportAttributeAccessIssue]
+                self.owner[1]
+            ).gr_gid
 
         self.lockFilename = self.getLockFilename(lock_file_directory)
         self.is_locked = False
@@ -559,7 +565,7 @@ class ConcurrentRotatingFileHandler(BaseRotatingHandler):
 
     def close(self) -> None:
         """Close log stream and stream_lock."""
-        self._console_log("In close()", stack=True)
+        # self._console_log("In close()", stack=True)
         try:
             # Always fully close files when the handler is closed
             if self.stream and not self.stream.closed:
@@ -722,7 +728,9 @@ class ConcurrentRotatingFileHandler(BaseRotatingHandler):
                     with suppress(OSError):
                         self.stream.close()
                 # noinspection PyTypeChecker
-                self.stream = None
+                self.stream = (  # pyright: ignore[reportIncompatibleVariableOverride]
+                    None
+                )
                 # Fall through to the fallback logic
 
         # Fallback logic: Try getsize first, then temporary open/seek/close
@@ -788,7 +796,9 @@ class ConcurrentRotatingFileHandler(BaseRotatingHandler):
 
     def _do_chown_and_chmod(self, filename: str) -> None:
         if HAS_CHOWN and self._set_uid is not None and self._set_gid is not None:
-            os.chown(filename, self._set_uid, self._set_gid)
+            os.chown(  # pyright: ignore[reportAttributeAccessIssue]
+                filename, self._set_uid, self._set_gid
+            )
 
         if HAS_CHMOD and self.chmod is not None:
             os.chmod(filename, self.chmod)
@@ -796,6 +806,9 @@ class ConcurrentRotatingFileHandler(BaseRotatingHandler):
 
 # noinspection PyProtectedMember
 class ConcurrentTimedRotatingFileHandler(TimedRotatingFileHandler):
+    # Define a reasonable minimum timestamp, e.g., Jan 1, 2000 00:00:00 UTC
+    MIN_VALID_TIMESTAMP = 946684800
+
     """A time-based rotating log handler that supports concurrent access across
     multiple processes or hosts (using logs on a shared network drive).
 
@@ -811,7 +824,7 @@ class ConcurrentTimedRotatingFileHandler(TimedRotatingFileHandler):
 
     def __init__(  # type: ignore[no-untyped-def] # noqa: PLR0913
         self,
-        filename: str,
+        filename: LogFilenameType,
         when: str = "h",
         interval: int = 1,
         backupCount: int = 0,
@@ -873,12 +886,70 @@ class ConcurrentTimedRotatingFileHandler(TimedRotatingFileHandler):
     def __internal_close(self) -> None:
         # Don't need or want to hold the main logfile handle open unless we're actively writing to it.
         if self.stream:
-            self.stream.close()
-            # noinspection PyTypeChecker
+            if not self.stream.closed:
+                try:
+                    self.stream.flush()
+                except Exception as e_flush:  # Catch potential flush errors
+                    # Check if clh and its _debug attribute exist, common during initialization/teardown
+                    if (
+                        hasattr(self, "clh")
+                        and hasattr(self.clh, "_debug")
+                        and self.clh._debug
+                    ):
+                        self._console_log(
+                            f"Exception during self.stream flush in __internal_close: {e_flush}",
+                            stack=False,
+                        )
+                try:
+                    self.stream.close()
+                except Exception as e_close:
+                    if (
+                        hasattr(self, "clh")
+                        and hasattr(self.clh, "_debug")
+                        and self.clh._debug
+                    ):
+                        self._console_log(
+                            f"Exception during self.stream close in __internal_close: {e_close}",
+                            stack=False,
+                        )
             self.stream = None  # type: ignore[assignment]
 
     def _console_log(self, msg: str, stack: bool = False) -> None:
         self.clh._console_log(msg, stack=stack)
+
+    def _get_current_time(self) -> int:
+        """Gets the current time as an integer timestamp, with validation and a recovery attempt."""
+        current_time = int(time.time())
+        if current_time < self.MIN_VALID_TIMESTAMP:
+            self._console_log(
+                f"CRITICAL: time.time() returned an unexpected low value: {current_time}. "
+                "Attempting recovery with datetime.datetime.now().",
+                stack=True,
+            )
+            # Recovery attempt
+            try:
+                if self.utc:
+                    current_time = int(
+                        datetime.datetime.now(datetime.timezone.utc).timestamp()
+                    )
+                else:
+                    current_time = int(
+                        datetime.datetime.now().timestamp()  # noqa: DTZ005
+                    )
+            except Exception as e_recovery:
+                self._console_log(
+                    f"Recovery attempt with datetime.now() failed: {e_recovery}",
+                )
+                # If recovery also fails, the check below will catch it.
+
+            if current_time < self.MIN_VALID_TIMESTAMP:  # Re-check after recovery
+                self._console_log(
+                    f"CRITICAL: System time still invalid ({current_time}) after recovery attempt. Raising error.",
+                )
+                raise RuntimeError(
+                    f"System time ({current_time}) is invalid and recovery failed."
+                )
+        return current_time
 
     def emit(self, record: logging.LogRecord) -> None:
         """
@@ -919,36 +990,70 @@ class ConcurrentTimedRotatingFileHandler(TimedRotatingFileHandler):
     def read_rollover_time(self) -> None:
         # Lock must be held before calling this method
         lock_file = self.clh.stream_lock
-        if not lock_file or not self.clh.is_locked:
-            # Lock is not being held?
+        if not lock_file:
             self._console_log(
-                "No rollover time (lock) file to read from. Lock is not held?"
+                "No lock file object (self.clh.stream_lock is None). Cannot read rollover time. Re-computing.",
+            )
+            current_time = self._get_current_time()
+            self.rolloverAt = self.computeRollover(current_time)
+            self._console_log(
+                f"No lock_file object, computed new rolloverAt: {self.rolloverAt}"
             )
             return
+
+        if not self.clh.is_locked:
+            self._console_log(
+                "Lock not held while trying to read rollover time. This is unsafe. Re-computing.",
+            )
+            # This situation implies a deeper issue if called without a lock.
+            current_time = self._get_current_time()
+            self.rolloverAt = self.computeRollover(current_time)
+            self._console_log(
+                f"Lock not held, computed new rolloverAt: {self.rolloverAt}"
+            )
+            return
+
+        raw_time_str = ""  # Initialize for logging in case of early OSError
         try:
             lock_file.seek(0)
-            raw_time = lock_file.read()
-        except OSError:
-            self.rolloverAt = 0
-            self._console_log(f"Couldn't read rollover time from file {lock_file!r}")
-            return
-        try:
-            self.rolloverAt = int(raw_time.strip())
-            # self._console_log(
-            #     f"Read rollover time: {self.rolloverAt} - raw: {raw_time!r}"
-            # )
-        except ValueError:
-            self.rolloverAt = 0
-            self._console_log(f"Couldn't read rollover time from file: {raw_time!r}")
+            raw_time_str = lock_file.read().strip()
+            if not raw_time_str:  # Empty file content
+                raise ValueError("Lock file content is empty.")
+
+            parsed_time = int(raw_time_str)
+            # Validate the parsed time against an absolute minimum
+            if parsed_time >= self.MIN_VALID_TIMESTAMP:
+                self.rolloverAt = parsed_time
+                # Can be verbose
+                # self._console_log(f"Read rollover time: {self.rolloverAt} from lock file.")
+            else:
+                # Parsed time is too old or invalid (e.g., 0 or negative)
+                self._console_log(
+                    f"Invalid or too old rollover time ({parsed_time}) found in lock file. Re-computing.",
+                )
+                current_time = self._get_current_time()  # Use validated time
+                self.rolloverAt = self.computeRollover(current_time)
+        except (OSError, ValueError) as e:
+            self._console_log(
+                f"Couldn't read or parse rollover time from lock file (content: '{raw_time_str}'): {e}. "
+                "Computing a new rollover time.",
+            )
+            current_time = self._get_current_time()  # Use validated time
+            self.rolloverAt = self.computeRollover(current_time)
 
     def write_rollover_time(self) -> None:
         """Write the next rollover time (current value of self.rolloverAt) to the lock file."""
+        # Callers (doRollover, initialize_rollover_time) are responsible for ensuring
+        # self.rolloverAt is valid before this method is called.
+
         lock_file = self.clh.stream_lock
         if not lock_file or not self.clh.is_locked:
             self._console_log(
-                "No rollover time (lock) file to write to. Lock is not held?"
+                "No rollover time (lock) file to write to or lock not held. Cannot persist rolloverTime.",
+                stack=True,
             )
             return
+
         lock_file.seek(0)
         lock_file.write(str(self.rolloverAt))
         lock_file.truncate()
@@ -962,33 +1067,51 @@ class ConcurrentTimedRotatingFileHandler(TimedRotatingFileHandler):
         try:
             self.clh._do_lock()
             self.read_rollover_time()
-            self._console_log(f"Initializing; reading rollover time: {self.rolloverAt}")
-            if self.rolloverAt != 0:
-                return
-            current_time = int(time.time())
-            new_rollover_at = self.computeRollover(current_time)
-            while new_rollover_at <= current_time:
-                new_rollover_at += self.interval
-            self.rolloverAt = new_rollover_at
-            self.write_rollover_time()
+            self._console_log(
+                f"Initializing; current self.rolloverAt after read_rollover_time: {self.rolloverAt}"
+            )
 
-            self._console_log(f"Set initial rollover time: {self.rolloverAt}")
+            current_time_for_init = self._get_current_time()
+
+            # Always validate and ensure we have a future rolloverAt
+            if self.rolloverAt <= current_time_for_init:
+                self._console_log(
+                    f"Rollover time {self.rolloverAt} is in the past or current. Re-calculating to future."
+                )
+                new_rollover_at = self.computeRollover(current_time_for_init)
+                while new_rollover_at <= current_time_for_init:
+                    new_rollover_at += self.interval
+                self.rolloverAt = new_rollover_at
+
+            # Always write if valid (handles both new computation and empty file cases)
+            if self.rolloverAt >= self.MIN_VALID_TIMESTAMP:
+                self.write_rollover_time()
+                self._console_log(
+                    f"Initialized and wrote rollover time: {self.rolloverAt}"
+                )
+            else:
+                self._console_log(
+                    f"CRITICAL: rolloverAt ({self.rolloverAt}) is invalid. Not writing.",
+                    stack=True,
+                )
         finally:
             self.clh._do_unlock()
 
     def shouldRollover(self, record: logging.LogRecord) -> bool:
-        """Determine if the rollover should occur."""
-        # Read the latest rollover time from the file
-        self.read_rollover_time()
+        """
+        Determine if the rollover should occur. This implementation uses the
+        validated _get_current_time() for the time-based check.
+        """
+        self.read_rollover_time()  # Syncs self.rolloverAt from shared state
 
-        do_rollover = False
-        if super(ConcurrentTimedRotatingFileHandler, self).shouldRollover(record):
-            self._console_log("Rolling over because of time")
-            do_rollover = True
-        elif self.clh.shouldRollover(record):
-            self.clh._console_log("Rolling over because of size")
-            do_rollover = True
-        return bool(do_rollover)
+        # 1. Check for time-based rollover using our safe time function
+        t = self._get_current_time()
+        time_rollover_needed = t >= self.rolloverAt
+
+        # 2. Check for size-based rollover
+        size_rollover_needed = self.clh.shouldRollover(record)
+
+        return time_rollover_needed or size_rollover_needed
 
     def doRollover(self) -> None:  # noqa: C901, PLR0912, PLR0915
         """
@@ -1008,23 +1131,45 @@ class ConcurrentTimedRotatingFileHandler(TimedRotatingFileHandler):
         # Some of this code is duplicated in parent class, could be refactored out
         if self.clh.stream:
             # fsync paranoia for gzip + POSIX
-            if self.clh.use_gzip and self.clh.is_posix:
-                self.clh.stream.flush()
+            if not self.clh.stream.closed:
                 try:
-                    os.fsync(self.clh.stream.fileno())
-                except OSError as e:
+                    self.clh.stream.flush()
+                    if self.clh.use_gzip and self.clh.is_posix:
+                        os.fsync(self.clh.stream.fileno())
+                except OSError as e_fsync:  # More specific for fsync
                     if self.clh._debug:
                         self.clh._console_log(
-                            f"fsync before close failed in CTRFH.doRollover: {e}",
-                            stack=False,
+                            f"Error during clh.stream flush/fsync in doRollover: {e_fsync}",
                         )
-            self.clh.stream.close()
+                except Exception as e_flush:  # Catch other potential flush errors
+                    if self.clh._debug:
+                        self.clh._console_log(
+                            f"Exception during clh.stream flush in doRollover: {e_flush}",
+                        )
+                try:
+                    self.clh.stream.close()
+                except Exception as e_close:  # Catch potential close errors
+                    if self.clh._debug:
+                        self.clh._console_log(
+                            f"Exception during clh.stream close in doRollover: {e_close}",
+                        )
             self.clh.stream = None
 
         self.__internal_close()
 
         # get the time that this sequence started at and make it a TimeTuple
-        currentTime = int(time.time())
+        currentTime = self._get_current_time()  # Use validated current time
+
+        # Early validation of self.rolloverAt (which should have been sanitized by read_rollover_time)
+        if self.rolloverAt < self.MIN_VALID_TIMESTAMP:
+            self._console_log(
+                f"CRITICAL: At start of doRollover, self.rolloverAt ({self.rolloverAt}) is still invalid "
+                f"despite prior sanitization attempts. currentTime={currentTime}. Skipping this rollover.",
+                stack=True,
+            )
+            # Streams should already be closed by calls above.
+            return  # Skip this rollover attempt
+
         dstNow = time.localtime(currentTime)[-1]
         t = self.rolloverAt - self.interval
         if self.utc:
@@ -1035,23 +1180,32 @@ class ConcurrentTimedRotatingFileHandler(TimedRotatingFileHandler):
             if dstNow != dstThen:
                 addend = 3600 if dstNow else -3600
                 timeTuple = time.localtime(t + addend)
+
+        if t < 0:  # Warn if the calculated period start is before epoch UTC
+            # Get the year from the potentially adjusted timeTuple for more accurate logging
+            year_for_log = time.strftime("%Y", timeTuple)
+            self._console_log(
+                f"Warning: Calculated timestamp 't' for filename is negative ({t}), "
+                f"derived from self.rolloverAt={self.rolloverAt} and self.interval={self.interval}. "
+                f"Resulting year for filename: {year_for_log}",
+                stack=False,
+            )
+
         dfn = self.rotation_filename(
             self.baseFilename + "." + time.strftime(self.suffix, timeTuple)
         )
 
         gzip_ext = ".gz" if self.clh.use_gzip else ""
 
-        counter = 1
         if os.path.exists(dfn + gzip_ext):
-            while os.path.exists(f"{dfn}.{counter}{gzip_ext}"):
-                ending = f".{counter - 1}{gzip_ext}"
-                if dfn.endswith(ending):
-                    dfn = dfn[: -len(ending)]
+            base_dfn_for_counter = dfn
+            counter = 1
+            while True:
+                numbered_dfn_candidate = f"{base_dfn_for_counter}.{counter}"
+                if not os.path.exists(numbered_dfn_candidate + gzip_ext):
+                    dfn = numbered_dfn_candidate
+                    break
                 counter += 1
-            dfn = f"{dfn}.{counter}"
-
-        # if os.path.exists(dfn):
-        #     os.remove(dfn)
 
         self.rotate(self.baseFilename, dfn)
 
@@ -1078,116 +1232,93 @@ class ConcurrentTimedRotatingFileHandler(TimedRotatingFileHandler):
                     # DST bows out before next rollover, so we need to add an hour
                     addend = 3600
                 newRolloverAt += addend
-        self.num_rollovers += 1
-        self.rolloverAt = newRolloverAt
-        self.write_rollover_time()
-        self._console_log(f"Rotation completed (on time) {dfn}")
 
-    def getFilesToDelete(self) -> List[str]:  # noqa: C901, PLR0912
+        # Validate newRolloverAt before persisting
+        if newRolloverAt < self.MIN_VALID_TIMESTAMP:
+            self._console_log(
+                f"CRITICAL: Calculated newRolloverAt for next period ({newRolloverAt}) is invalid "
+                f"(based on currentTime={currentTime}). NOT updating lock file. "
+                f"Rotated file is {dfn}.",
+                stack=True,
+            )
+            # self.num_rollovers not incremented as full cycle isn't clean
+        else:
+            self.num_rollovers += 1
+            self.rolloverAt = newRolloverAt
+            self.write_rollover_time()  # Write the validated new rollover time
+            self._console_log(
+                f"Rotation completed. Next rollover at: {self.rolloverAt} ({dfn})"
+            )
+
+    def getFilesToDelete(self) -> List[str]:  # noqa: C901
         """
         Determine the files to delete when rolling over.
+        This version correctly parses filenames with date/time stamps and optional
+        counters, and safely ignores files with malformed dates instead of
+        falling back to modification time.
 
-        This implementation handles the naming convention used by ConcurrentTimedRotatingFileHandler
-        when both time and size rotation are active, where files can have names like:
-        basename.YYYY-MM-DD_HH-MM-SS.1, basename.YYYY-MM-DD_HH-MM-SS.2, etc.
-
-        We need to parse both the timestamp and any counter suffix to properly sort these files
-        and delete the oldest ones when backupCount is exceeded.
+        NOTE: Only files matching the current rotation format will be considered
+        for deletion. If you change the rotation interval (e.g., from daily to
+        hourly), old files with different formats will be preserved and must be
+        manually cleaned up.
         """
         dirName, baseName = os.path.split(self.baseFilename)
         fileNames = os.listdir(dirName)
-
-        # Build a list of files to analyze
-        candidates = []
-
-        # Build a pattern that matches our log file with optional .gz extension
+        file_data_for_sorting = []
         gzip_ext = ".gz" if self.clh.use_gzip else ""
+
         for fileName in fileNames:
-            # Skip the current log file - it's not a backup
-            if fileName == baseName:
+            # Huh... interesting. PyCharm detected a 20 line duplicate here
+            # with code in portalocker/__init__.py. That may suggest this is a common pattern.
+            if fileName == baseName or not fileName.startswith(baseName + "."):
                 continue
 
-            # Skip if not a rotated version of our log file
-            if not fileName.startswith(baseName + "."):
-                continue
-
-            # Skip lock files or other unrelated files
-            if not self.extMatch.search(fileName) and not (
-                gzip_ext and fileName.endswith(gzip_ext)
-            ):
-                continue
-
-            candidates.append(os.path.join(dirName, fileName))
-
-        if len(candidates) <= self.backupCount:
-            return []  # Nothing to delete yet
-
-        # Sort files by modification time primarily, and then by counter suffix if available
-        file_data = []
-        for candidate in candidates:
-            # Get basic file info
-            filename = os.path.basename(candidate)
-
-            # Extract the timestamp part
+            candidate_path = os.path.join(dirName, fileName)
             time_part = ""
             counter_part = 0
+            parse_name = fileName
+            if gzip_ext and parse_name.endswith(gzip_ext):
+                parse_name = parse_name[: -len(gzip_ext)]
 
-            # Split the filename into parts
-            parts = filename[len(baseName) + 1 :].split(".")
+            parts = parse_name[len(baseName) + 1 :].split(".")
 
-            # Look for the timestamp part and the optional counter suffix
             for i, part in enumerate(parts):
                 if self.extMatch.match(part):
                     time_part = part
-                    # Check if the next part is a counter suffix
-                    # Note: 'gz' will not pass the isdigit() check, so we don't need to explicitly exclude it
                     if i + 1 < len(parts) and parts[i + 1].isdigit():
                         counter_part = int(parts[i + 1])
                     break
 
-            # If we couldn't find a time part, try to fallback using file modification time
             if not time_part:
-                mtime = os.path.getmtime(candidate)
-                file_data.append((mtime, 0, candidate))
-            else:
-                # Use the parsed time component as primary sort key, counter as secondary
-                try:
-                    # Try to convert time part to a timestamp for proper chronological sorting
-                    time_tuple = time.strptime(time_part, self.suffix)
-                    timestamp = time.mktime(time_tuple)
-                    file_data.append((timestamp, counter_part, candidate))
-                except (ValueError, TypeError):
-                    # Fallback if time part can't be parsed
-                    mtime = os.path.getmtime(candidate)
-                    file_data.append((mtime, counter_part, candidate))
+                continue
 
-        # Sort by primary key (timestamp) then secondary key (counter)
-        # Oldest files first for proper deletion
-        file_data.sort()
+            try:
+                time_tuple = time.strptime(time_part, self.suffix)
+                timestamp = time.mktime(time_tuple)
+                file_data_for_sorting.append((timestamp, counter_part, candidate_path))
+            except (ValueError, TypeError):
+                # If a file has a part that looks like a date but doesn't parse, it's invalid.
+                # Log it and SKIP it rather than guessing its age from mtime.
+                if self.clh._debug:
+                    self._console_log(
+                        f"Could not parse date from {fileName}. Skipping from cleanup."
+                    )
+                continue
 
-        # Return the list of old files beyond the backupCount
-        result = [x[2] for x in file_data]
+        if len(file_data_for_sorting) <= self.backupCount:
+            return []
+
+        file_data_for_sorting.sort()
+        num_to_delete = len(file_data_for_sorting) - self.backupCount
+        files_to_delete = [item[2] for item in file_data_for_sorting][:num_to_delete]
 
         if self.clh._debug:
             self._console_log(
-                f"Found {len(candidates)} log files, keeping {self.backupCount}"
+                f"Found {len(file_data_for_sorting)} valid log files, keeping {self.backupCount}, "
+                f"deleting {num_to_delete} files: {files_to_delete}"
             )
-            if len(result) > 10:  # noqa: PLR2004
-                self._console_log(
-                    f"First 5 files to keep: {result[len(result) - self.backupCount:][:5]}"
-                )
-                self._console_log(f"First 5 files to delete: {result[:5]}")
-            else:
-                self._console_log(
-                    f"Files to keep: {result[len(result) - self.backupCount:]}"
-                )
-                self._console_log(
-                    f"Files to delete: {result[:len(result) - self.backupCount]}"
-                )
 
-        if len(result) > self.backupCount:
-            return result[: len(result) - self.backupCount]
-        return []
+        return files_to_delete
 
     def close(self) -> None:
         """Close all resources."""

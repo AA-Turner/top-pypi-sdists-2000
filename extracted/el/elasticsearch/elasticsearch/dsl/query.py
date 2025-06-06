@@ -1084,7 +1084,7 @@ class Knn(Query):
     :arg similarity: The minimum similarity for a vector to be considered
         a match
     :arg rescore_vector: Apply oversampling and rescoring to quantized
-        vectors *
+        vectors
     :arg boost: Floating point number used to decrease or increase the
         relevance scores of the query. Boost values are relative to the
         default value of 1.0. A boost value between 0 and 1.0 decreases
@@ -1382,7 +1382,49 @@ class MoreLikeThis(Query):
         min_term_freq: Union[int, "DefaultType"] = DEFAULT,
         min_word_length: Union[int, "DefaultType"] = DEFAULT,
         routing: Union[str, "DefaultType"] = DEFAULT,
-        stop_words: Union[str, Sequence[str], "DefaultType"] = DEFAULT,
+        stop_words: Union[
+            Literal[
+                "_arabic_",
+                "_armenian_",
+                "_basque_",
+                "_bengali_",
+                "_brazilian_",
+                "_bulgarian_",
+                "_catalan_",
+                "_cjk_",
+                "_czech_",
+                "_danish_",
+                "_dutch_",
+                "_english_",
+                "_estonian_",
+                "_finnish_",
+                "_french_",
+                "_galician_",
+                "_german_",
+                "_greek_",
+                "_hindi_",
+                "_hungarian_",
+                "_indonesian_",
+                "_irish_",
+                "_italian_",
+                "_latvian_",
+                "_lithuanian_",
+                "_norwegian_",
+                "_persian_",
+                "_portuguese_",
+                "_romanian_",
+                "_russian_",
+                "_serbian_",
+                "_sorani_",
+                "_spanish_",
+                "_swedish_",
+                "_thai_",
+                "_turkish_",
+                "_none_",
+            ],
+            Sequence[str],
+            "DefaultType",
+        ] = DEFAULT,
         unlike: Union[
             Union[str, "types.LikeDocument"],
             Sequence[Union[str, "types.LikeDocument"]],
