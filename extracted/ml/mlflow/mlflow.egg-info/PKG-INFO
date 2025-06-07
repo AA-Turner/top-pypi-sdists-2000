@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mlflow
-Version: 2.22.0
+Version: 2.22.1
 Summary: MLflow is an open source platform for the complete machine learning lifecycle
 Maintainer-email: Databricks <mlflow-oss-maintainers@googlegroups.com>
 License: Copyright 2018 Databricks, Inc.  All rights reserved.
@@ -224,7 +224,7 @@ Classifier: Programming Language :: Python :: 3.9
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
-Requires-Dist: mlflow-skinny==2.22.0
+Requires-Dist: mlflow-skinny==2.22.1
 Requires-Dist: Flask<4
 Requires-Dist: Jinja2<4,>=2.11; platform_system != "Windows"
 Requires-Dist: Jinja2<4,>=3.0; platform_system == "Windows"
@@ -235,7 +235,7 @@ Requires-Dist: gunicorn<24; platform_system != "Windows"
 Requires-Dist: markdown<4,>=3.3
 Requires-Dist: matplotlib<4
 Requires-Dist: numpy<3
-Requires-Dist: pandas<3
+Requires-Dist: pandas!=2.3.0,<3
 Requires-Dist: pyarrow<20,>=4.0.0
 Requires-Dist: scikit-learn<2
 Requires-Dist: scipy<2

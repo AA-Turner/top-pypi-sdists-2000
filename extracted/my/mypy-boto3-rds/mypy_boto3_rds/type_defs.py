@@ -4122,6 +4122,7 @@ class DBClusterTypeDef(TypedDict):
     CrossAccountClone: NotRequired[bool]
     DomainMemberships: NotRequired[List[DomainMembershipTypeDef]]
     TagList: NotRequired[List[TagTypeDef]]
+    GlobalClusterIdentifier: NotRequired[str]
     GlobalWriteForwardingStatus: NotRequired[WriteForwardingStatusType]
     GlobalWriteForwardingRequested: NotRequired[bool]
     PendingModifiedValues: NotRequired[ClusterPendingModifiedValuesTypeDef]

@@ -233,8 +233,6 @@ class WeReadApi:
                 if self.handle_errcode(errcode):
                     return self.get_api_data()
                 raise Exception(f"get history data failed {r.text}")
-        with open("readbook.json", "w", encoding="utf-8") as f:
-            json.dump(results, f, ensure_ascii=False, indent=4)
         return results
     def transform_id(self, book_id):
         id_length = len(book_id)

@@ -1,4 +1,5 @@
 import json
+import re
 import time
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union, cast
 
@@ -14,7 +15,6 @@ from litellm.constants import (
     RESPONSE_FORMAT_TOOL_NAME,
 )
 from litellm.litellm_core_utils.core_helpers import map_finish_reason
-from litellm.litellm_core_utils.prompt_templates.factory import anthropic_messages_pt
 from litellm.llms.base_llm.base_utils import type_to_response_format_param
 from litellm.llms.base_llm.chat.transformation import BaseConfig, BaseLLMException
 from litellm.types.llms.anthropic import (
@@ -581,6 +581,10 @@ class AnthropicConfig(AnthropicModelInfo, BaseConfig):
         """
         Anthropic doesn't support tool calling without `tools=` param specified.
         """
+        from litellm.litellm_core_utils.prompt_templates.factory import (
+            anthropic_messages_pt,
+        )
+
         if (
             "tools" not in optional_params
             and messages is not None
@@ -641,6 +645,7 @@ class AnthropicConfig(AnthropicModelInfo, BaseConfig):
             _litellm_metadata
             and isinstance(_litellm_metadata, dict)
             and "user_id" in _litellm_metadata
+            and not _valid_user_id(_litellm_metadata.get("user_id", None))
         ):
             optional_params["metadata"] = {"user_id": _litellm_metadata["user_id"]}
 
@@ -948,3 +953,19 @@ class AnthropicConfig(AnthropicModelInfo, BaseConfig):
             message=error_message,
             headers=cast(httpx.Headers, headers),
         )
+
+
+def _valid_user_id(user_id: str) -> bool:
+    """
+    Validate that user_id is not an email or phone number.
+    Returns: bool: True if valid (not email or phone), False otherwise
+    """
+    email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    phone_pattern = r"^\+?[\d\s\(\)-]{7,}$"
+
+    if re.match(email_pattern, user_id):
+        return False
+    if re.match(phone_pattern, user_id):
+        return False
+
+    return True

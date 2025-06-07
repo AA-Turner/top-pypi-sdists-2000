@@ -368,4 +368,4 @@ def get_embed(url):
 
 
 def get_complete_status():
-    os.getenv("status_complete", "已读")
+    return os.getenv("status_complete", "已读")

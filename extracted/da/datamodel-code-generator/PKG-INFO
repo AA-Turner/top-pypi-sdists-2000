@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: datamodel-code-generator
-Version: 0.30.1
+Version: 0.30.2
 Summary: Datamodel Code Generator
 Project-URL: Homepage, https://github.com/koxudaxi/datamodel-code-generator
 Project-URL: Source, https://github.com/koxudaxi/datamodel-code-generator
@@ -505,6 +505,8 @@ Model customization:
                         Enable faux immutability
   --enable-version-header
                         Enable package version on file headers
+  --frozen-dataclasses  Generate frozen dataclasses (dataclass(frozen=True)). Only applies
+                        to dataclass output.
   --keep-model-order    Keep generated models'' order
   --keyword-only        Defined models as keyword only (for example
                         dataclass(kw_only=True)).
