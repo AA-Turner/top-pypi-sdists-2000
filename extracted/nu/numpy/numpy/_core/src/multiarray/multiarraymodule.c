@@ -83,6 +83,8 @@ NPY_NO_EXPORT int NPY_NUMUSERTYPES = 0;
 
 #include "umathmodule.h"
 
+#include "unique.h"
+
 /*
  *****************************************************************************
  **                    INCLUDE GENERATED CODE                               **
@@ -556,10 +558,8 @@ PyArray_ConcatenateFlattenedArrays(int narrays, PyArrayObject **arrays,
         }
     }
 
-    int out_passed = 0;
     if (ret != NULL) {
         assert(dtype == NULL);
-        out_passed = 1;
         if (PyArray_NDIM(ret) != 1) {
             PyErr_SetString(PyExc_ValueError,
                             "Output array must be 1D");
@@ -607,35 +607,18 @@ PyArray_ConcatenateFlattenedArrays(int narrays, PyArrayObject **arrays,
         return NULL;
     }
 
-    int give_deprecation_warning = 1;  /* To give warning for just one input array. */
     for (iarrays = 0; iarrays < narrays; ++iarrays) {
         /* Adjust the window dimensions for this array */
         sliding_view->dimensions[0] = PyArray_SIZE(arrays[iarrays]);
 
         if (!PyArray_CanCastArrayTo(
                 arrays[iarrays], PyArray_DESCR(ret), casting)) {
-            /* This should be an error, but was previously allowed here. */
-            if (casting_not_passed && out_passed) {
-                /* NumPy 1.20, 2020-09-03 */
-                if (give_deprecation_warning && DEPRECATE(
-                        "concatenate() with `axis=None` will use same-kind "
-                        "casting by default in the future. Please use "
-                        "`casting='unsafe'` to retain the old behaviour. "
-                        "In the future this will be a TypeError.") < 0) {
-                    Py_DECREF(sliding_view);
-                    Py_DECREF(ret);
-                    return NULL;
-                }
-                give_deprecation_warning = 0;
-            }
-            else {
-                npy_set_invalid_cast_error(
-                        PyArray_DESCR(arrays[iarrays]), PyArray_DESCR(ret),
-                        casting, PyArray_NDIM(arrays[iarrays]) == 0);
-                Py_DECREF(sliding_view);
-                Py_DECREF(ret);
-                return NULL;
-            }
+            npy_set_invalid_cast_error(
+                    PyArray_DESCR(arrays[iarrays]), PyArray_DESCR(ret),
+                    casting, PyArray_NDIM(arrays[iarrays]) == 0);
+            Py_DECREF(sliding_view);
+            Py_DECREF(ret);
+            return NULL;
         }
 
         /* Copy the data for this array */
@@ -1102,6 +1085,8 @@ PyArray_MatrixProduct2(PyObject *op1, PyObject *op2, PyArrayObject* out)
         Py_DECREF(it1);
         goto fail;
     }
+
+    npy_clear_floatstatus_barrier((char *) result);
     NPY_BEGIN_THREADS_DESCR(PyArray_DESCR(ap2));
     while (it1->index < it1->size) {
         while (it2->index < it2->size) {
@@ -1117,6 +1102,11 @@ PyArray_MatrixProduct2(PyObject *op1, PyObject *op2, PyArrayObject* out)
     Py_DECREF(it2);
     if (PyErr_Occurred()) {
         /* only for OBJECT arrays */
+        goto fail;
+    }
+
+    int fpes = npy_get_floatstatus_barrier((char *) result);
+    if (fpes && PyUFunc_GiveFloatingpointErrors("dot", fpes) < 0) {
         goto fail;
     }
     Py_DECREF(ap1);
@@ -2134,16 +2124,15 @@ array_scalar(PyObject *NPY_UNUSED(ignored), PyObject *args, PyObject *kwds)
     }
     if (PyDataType_FLAGCHK(typecode, NPY_LIST_PICKLE)) {
         if (typecode->type_num == NPY_OBJECT) {
-            /* Deprecated 2020-11-24, NumPy 1.20 */
-            if (DEPRECATE(
-                    "Unpickling a scalar with object dtype is deprecated. "
-                    "Object scalars should never be created. If this was a "
-                    "properly created pickle, please open a NumPy issue. In "
-                    "a best effort this returns the original object.") < 0) {
-                return NULL;
-            }
-            Py_INCREF(obj);
-            return obj;
+            PyErr_SetString(PyExc_TypeError,
+                    "Cannot unpickle a scalar with object dtype.");
+            return NULL;
+        }
+        if (typecode->type_num == NPY_VSTRING) {
+            // TODO: if we ever add a StringDType scalar, this might need to change
+            PyErr_SetString(PyExc_TypeError,
+                            "Cannot unpickle a StringDType scalar");
+            return NULL;
         }
         /* We store the full array to unpack it here: */
         if (!PyArray_CheckExact(obj)) {
@@ -2291,14 +2280,18 @@ array_count_nonzero(PyObject *NPY_UNUSED(self), PyObject *const *args, Py_ssize_
         return NULL;
     }
 
-    count =  PyArray_CountNonzero(array);
-
+    count = PyArray_CountNonzero(array);
     Py_DECREF(array);
 
     if (count == -1) {
         return NULL;
     }
-    return PyLong_FromSsize_t(count);
+
+    PyArray_Descr *descr = PyArray_DescrFromType(NPY_INTP);
+    if (descr == NULL) {
+        return NULL;
+    }
+    return PyArray_Scalar(&count, descr, NULL);
 }
 
 static PyObject *
@@ -2329,13 +2322,9 @@ array_fromstring(PyObject *NPY_UNUSED(ignored), PyObject *args, PyObject *keywds
 
     /* binary mode, condition copied from PyArray_FromString */
     if (sep == NULL || strlen(sep) == 0) {
-        /* Numpy 1.14, 2017-10-19 */
-        if (DEPRECATE(
-                "The binary mode of fromstring is deprecated, as it behaves "
-                "surprisingly on unicode inputs. Use frombuffer instead") < 0) {
-            Py_XDECREF(descr);
-            return NULL;
-        }
+        PyErr_SetString(PyExc_ValueError,
+            "The binary mode of fromstring is removed, use frombuffer instead");
+        return NULL;
     }
     return PyArray_FromString(data, (npy_intp)s, descr, (npy_intp)nin, sep);
 }
@@ -3604,24 +3593,28 @@ static PyObject *
 array_result_type(PyObject *NPY_UNUSED(dummy), PyObject *const *args, Py_ssize_t len)
 {
     npy_intp i, narr = 0, ndtypes = 0;
-    PyArrayObject **arr = NULL;
-    PyArray_Descr **dtypes = NULL;
     PyObject *ret = NULL;
 
     if (len == 0) {
         PyErr_SetString(PyExc_ValueError,
                         "at least one array or dtype is required");
-        goto finish;
+        return NULL;
     }
 
-    arr = PyArray_malloc(2 * len * sizeof(void *));
+    NPY_ALLOC_WORKSPACE(arr, PyArrayObject *, 2 * 3, 2 * len);
     if (arr == NULL) {
-        return PyErr_NoMemory();
+        return NULL;
     }
-    dtypes = (PyArray_Descr**)&arr[len];
+    PyArray_Descr **dtypes = (PyArray_Descr**)&arr[len];
+
+    PyObject *previous_obj = NULL;
 
     for (i = 0; i < len; ++i) {
         PyObject *obj = args[i];
+        if (obj == previous_obj) {
+            continue;
+        }
+
         if (PyArray_Check(obj)) {
             Py_INCREF(obj);
             arr[narr] = (PyArrayObject *)obj;
@@ -3657,7 +3650,7 @@ finish:
     for (i = 0; i < ndtypes; ++i) {
         Py_DECREF(dtypes[i]);
     }
-    PyArray_free(arr);
+    npy_free_workspace(arr);
     return ret;
 }
 
@@ -4592,6 +4585,8 @@ static struct PyMethodDef array_module_methods[] = {
         "Give a warning on reload and big warning in sub-interpreters."},
     {"from_dlpack", (PyCFunction)from_dlpack,
         METH_FASTCALL | METH_KEYWORDS, NULL},
+    {"_unique_hash",  (PyCFunction)array__unique_hash,
+        METH_O, "Collect unique values via a hash map."},
     {NULL, NULL, 0, NULL}                /* sentinel */
 };
 

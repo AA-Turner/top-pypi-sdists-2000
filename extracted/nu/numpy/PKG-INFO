@@ -1,10 +1,10 @@
 Metadata-Version: 2.1
 Name: numpy
-Version: 2.2.6
+Version: 2.3.0
 Summary: Fundamental package for array computing in Python
 Author: Travis E. Oliphant et al.
 Maintainer-Email: NumPy Developers <numpy-discussion@python.org>
-License: Copyright (c) 2005-2024, NumPy Developers.
+License: Copyright (c) 2005-2025, NumPy Developers.
          All rights reserved.
          
          Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,6 @@ Classifier: License :: OSI Approved :: BSD License
 Classifier: Programming Language :: C
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
@@ -61,7 +60,7 @@ Project-URL: source, https://github.com/numpy/numpy
 Project-URL: download, https://pypi.org/project/numpy/#files
 Project-URL: tracker, https://github.com/numpy/numpy/issues
 Project-URL: release notes, https://numpy.org/doc/stable/release
-Requires-Python: >=3.10
+Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 
 <h1 align="center">
@@ -80,15 +79,16 @@ https://stackoverflow.com/questions/tagged/numpy)
 [![Nature Paper](https://img.shields.io/badge/DOI-10.1038%2Fs41586--020--2649--2-blue)](
 https://doi.org/10.1038/s41586-020-2649-2)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/numpy/numpy/badge)](https://securityscorecards.dev/viewer/?uri=github.com/numpy/numpy)
+[![Typing](https://img.shields.io/pypi/types/numpy)](https://pypi.org/project/numpy/)
 
 
 NumPy is the fundamental package for scientific computing with Python.
 
-- **Website:** https://www.numpy.org
+- **Website:** https://numpy.org
 - **Documentation:** https://numpy.org/doc
 - **Mailing list:** https://mail.python.org/mailman/listinfo/numpy-discussion
 - **Source code:** https://github.com/numpy/numpy
-- **Contributing:** https://www.numpy.org/devdocs/dev/index.html
+- **Contributing:** https://numpy.org/devdocs/dev/index.html
 - **Bug reports:** https://github.com/numpy/numpy/issues
 - **Report a security vulnerability:** https://tidelift.com/docs/security
 

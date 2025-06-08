@@ -1,8 +1,7 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.3
 Name: openapi-spec-validator
-Version: 0.7.1
+Version: 0.7.2
 Summary: OpenAPI 2.0 (aka Swagger) and OpenAPI 3 spec validator
-Home-page: https://github.com/python-openapi/openapi-spec-validator
 License: Apache-2.0
 Keywords: openapi,swagger,schema
 Author: Artur Maciag
@@ -18,8 +17,10 @@ Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
 Classifier: Topic :: Software Development :: Libraries
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
 Provides-Extra: docs
 Requires-Dist: importlib-resources (>=5.8,<7.0) ; python_version < "3.9"
 Requires-Dist: jsonschema (>=4.18.0,<5.0.0)

@@ -35,7 +35,7 @@
 #define UNUSED(x)  (void)(x)
 
 #include "Python.h"
-
+#include "zstd.h"
 
 /*-=====  Do you need legacy old-format functions?  =====-*/
 #ifndef PYZSTD_LEGACY
@@ -71,6 +71,10 @@
 #define ZSTDMT_NBWORKERS_MAX ((sizeof(void*)==4) /*32-bit*/ ? 64 : 256)
 #endif
 
+#ifndef MOD_VERSION
+#define MOD_VERSION "0.0.0"
+#endif
+
 /* --== Negative fast compression levels only since 1.3.4 ==-- */
 #if ZSTD_VERSION_NUMBER >= 10304
 
@@ -97,6 +101,10 @@ static PyObject *py_zstd_library_version_int(PyObject* self, PyObject *args);
 static PyObject *py_zstd_library_external(PyObject* self, PyObject *args);
 static PyObject *py_zstd_with_threads(PyObject* self, PyObject *args);
 static PyObject *py_zstd_with_asm(PyObject* self, PyObject *args);
+static PyObject *py_zstd_is_debug_enabled(PyObject* self, PyObject *args);
+static PyObject *py_zstd_is_debug_notice_enabled(PyObject* self, PyObject *args);
+static PyObject *py_zstd_is_debug_info_enabled(PyObject* self, PyObject *args);
+static PyObject *py_zstd_is_debug_error_enabled(PyObject* self, PyObject *args);
 
 #if PY_MAJOR_VERSION < 3
 PyMODINIT_FUNC initzstd(void);
@@ -131,6 +139,7 @@ Raises a zstd.Error exception if any error occurs."
 
 #define ZSTD_MIN_COMPRESSION_LEVEL_DOCSTRING  "ZSTD_min_compression_level(): int -- Returns ZSTD library determined minimum number of compression level in integer."
 #define ZSTD_MAX_COMPRESSION_LEVEL_DOCSTRING  "ZSTD_max_compression_level(): int -- Returns ZSTD library determined maximum number of compression level in integer."
+#define ZSTD_DEFAULT_COMPRESSION_LEVEL_DOCSTRING  "ZSTD_default_compression_level(): int -- Returns ZSTD library determined default number of compression level in integer, must be 3."
 
 #if PYZSTD_LEGACY > 0
 #define COMPRESS_OLD_DOCSTRING      "compress_old(string[, level]): "PY_BYTESTR_TYPE" -- Compress string, old version, returning the compressed data.\n\nUses custom format. Not compatible with streaming or origin compression tools.\n\nRaises a zstd.Error exception if any error occurs.\n\n@deprecated"

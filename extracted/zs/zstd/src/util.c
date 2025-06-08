@@ -16,9 +16,11 @@ extern "C" {
 /*-****************************************
 *  Dependencies
 ******************************************/
+#include "debug.h"
 #include "util.h"       /* note : ensure that platform.h is included first ! */
 #include <errno.h>
 #include <string.h>
+#include <stdio.h>
 
 #if defined(_MSC_VER) || defined(__MINGW32__) || defined (__MSVCRT__)
 #include <direct.h>     /* needed for _mkdir in windows */
@@ -34,7 +36,7 @@ extern "C" {
 
 typedef BOOL(WINAPI* LPFN_GLPI)(PSYSTEM_LOGICAL_PROCESSOR_INFORMATION, PDWORD);
 
-int UTIL_countPhysicalCores(void)
+int UTIL_countAvailableCores(void)
 {
     static int numPhysicalCores = 0;
     if (numPhysicalCores != 0) return numPhysicalCores;
@@ -112,7 +114,7 @@ failed:
 
 /* Use apple-provided syscall
  * see: man 3 sysctl */
-int UTIL_countPhysicalCores(void)
+int UTIL_countAvailableCores(void)
 {
     static int32_t numPhysicalCores = 0; /* apple specifies int32_t */
     if (numPhysicalCores != 0) return numPhysicalCores;
@@ -138,34 +140,41 @@ int UTIL_countPhysicalCores(void)
 /* parse /proc/cpuinfo
  * siblings / cpu cores should give hyperthreading ratio
  * otherwise fall back on sysconf */
-int UTIL_countPhysicalCores(void)
+int UTIL_countAvailableCores(void)
 {
     static int numPhysicalCores = 0;
 
-    if (numPhysicalCores != 0) return numPhysicalCores;
+    if (numPhysicalCores != 0) {
+	printdn("Stored static numPhysicalCores: %d\n", numPhysicalCores);
+	return numPhysicalCores;
+    }
 
     numPhysicalCores = (int)sysconf(_SC_NPROCESSORS_ONLN);
     if (numPhysicalCores == -1) {
         /* value not queryable, fall back on 1 */
+	printdn("Sysconf read fail. numPhysicalCores: %d\n", numPhysicalCores);
         return numPhysicalCores = 1;
     }
+	printdn("Sysconf readed. numPhysicalCores: %d\n", numPhysicalCores);
 
     /* try to determine if there's hyperthreading */
-    {   FILE* const cpuinfo = fopen("/proc/cpuinfo", "r");
+    {   FILE* cpuinfo = fopen("/proc/cpuinfo", "r");
 #define BUF_SIZE 80
         char buff[BUF_SIZE];
 
         int siblings = 0;
         int cpu_cores = 0;
+        int procs = 0;
         int ratio = 1;
 
         if (cpuinfo == NULL) {
-            /* fall back on the sysconf value */
-            return numPhysicalCores;
+            /* fall back on the sysconf value, fallback to 1 */
+            printdn("Cpuinfo not open. numPhysicalCores: %d\n", numPhysicalCores);
+            return numPhysicalCores = 1;
         }
 
         /* assume the cpu cores/siblings values will be constant across all
-         * present processors */
+         * present processors, in vm/containers lxc/openvz it shows all physical cores/threads */
         while (!feof(cpuinfo)) {
             if (fgets(buff, BUF_SIZE, cpuinfo) != NULL) {
                 if (strncmp(buff, "siblings", 8) == 0) {
@@ -176,7 +185,9 @@ int UTIL_countPhysicalCores(void)
                     }
 
                     siblings = atoi(sep + 1);
+                    printdn("Cpuinfo: got siblings: %d\n", siblings);
                 }
+                // here are stored count of physical cores
                 if (strncmp(buff, "cpu cores", 9) == 0) {
                     const char* const sep = strchr(buff, ':');
                     if (sep == NULL || *sep == '\0') {
@@ -185,6 +196,17 @@ int UTIL_countPhysicalCores(void)
                     }
 
                     cpu_cores = atoi(sep + 1);
+                    printdn("Cpuinfo: got cpu-cores: %d\n", cpu_cores);
+                }
+                // just do stupid line counting
+                if (strncmp(buff, "processor", 9) == 0) {
+                    const char* const sep = strchr(buff, ':');
+                    if (sep == NULL || *sep == '\0') {
+                        /* formatting was broken? */
+                        goto failed;
+                    }
+
+                    procs++;
                 }
             } else if (ferror(cpuinfo)) {
                 /* fall back on the sysconf value */
@@ -194,8 +216,13 @@ int UTIL_countPhysicalCores(void)
         if (siblings && cpu_cores) {
             ratio = siblings / cpu_cores;
         }
+        fclose(cpuinfo); cpuinfo = NULL;
+        if (procs){
+            printdn("Cpuinfo found processor lines: %d\n", procs);
+            return numPhysicalCores = procs;
+        }
 failed:
-        fclose(cpuinfo);
+        if (cpuinfo){ fclose(cpuinfo); cpuinfo = NULL;}
         return numPhysicalCores = numPhysicalCores / ratio;
     }
 }
@@ -207,7 +234,7 @@ failed:
 
 /* Use physical core sysctl when available
  * see: man 4 smp, man 3 sysctl */
-int UTIL_countPhysicalCores(void)
+int UTIL_countAvailableCores(void)
 {
     static int numPhysicalCores = 0; /* freebsd sysctl is native int sized */
     if (numPhysicalCores != 0) return numPhysicalCores;
@@ -236,7 +263,7 @@ int UTIL_countPhysicalCores(void)
 
 /* Use POSIX sysconf
  * see: man 3 sysconf */
-int UTIL_countPhysicalCores(void)
+int UTIL_countAvailableCores(void)
 {
     static int numPhysicalCores = 0;
 
@@ -252,7 +279,7 @@ int UTIL_countPhysicalCores(void)
 
 #else
 
-int UTIL_countPhysicalCores(void)
+int UTIL_countAvailableCores(void)
 {
     /* assume 1 */
     return 1;

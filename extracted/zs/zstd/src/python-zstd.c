@@ -37,12 +37,14 @@
 #define str(x) #x
 #define xstr(x) str(x)
 
+#include <stdio.h>
+#include <string.h>
 #include <Python.h>
 #include "pythoncapi_compat.h"    // Py_SET_SIZE() for Python 3.8 and older
 
 #include "bytesobject.h"
-#include "zstd.h"
 #include "util.h"
+#include "debug.h"
 #include "python-zstd.h"
 
 /**
@@ -54,13 +56,17 @@
 static PyObject *py_zstd_compress_mt(PyObject* self, PyObject *args)
 {
     UNUSED(self);
-    
+
     PyObject *result;
+//    PyObject *resultT;
     const char *source;
     Py_ssize_t source_size;
+//    Py_ssize_t chunk_size;
     char *dest;
+//    char *destT;
     Py_ssize_t dest_size;
     size_t cSize;
+//    size_t sum=0;
     int32_t level = ZSTD_CLEVEL_DEFAULT;
     int32_t threads = 0;
     int32_t strict = 0;
@@ -74,11 +80,14 @@ static PyObject *py_zstd_compress_mt(PyObject* self, PyObject *args)
         return NULL;
 #endif
 
-    if (0 == level) level=ZSTD_CLEVEL_DEFAULT;
+    printdn("got Compression level:%d\n",level);
+    if (0 == level) level=ZSTD_defaultCLevel();
     /* Fast levels (zstd >= 1.3.4) - [-1..-100] */
     /* Usual levels                - [ 1..22] */
     /* If level less than -100 or 1 - raise Error, level 0 handled before. */
+    printdn("Compression min level:%d\n",ZSTD_MIN_CLEVEL);
     if (level < ZSTD_MIN_CLEVEL) {
+        printd2e("Bad compression level - less than %d: %d\n", ZSTD_MIN_CLEVEL, level);
 	if (strict) {
         PyErr_Format(ZstdError, "Bad compression level - less than %d: %d", ZSTD_MIN_CLEVEL, level);
         return NULL;
@@ -87,29 +96,37 @@ static PyObject *py_zstd_compress_mt(PyObject* self, PyObject *args)
 	}
     }
     /* If level more than 22 - raise Error. */
-    if (level > ZSTD_MAX_CLEVEL) {
+    printdn("Compression max level:%d\n",ZSTD_maxCLevel());
+    if (level > ZSTD_maxCLevel()) {
+        printd2e("Bad compression level - more than %d: %d\n", ZSTD_maxCLevel(), level);
 	if (strict) {
         PyErr_Format(ZstdError, "Bad compression level - more than %d: %d", ZSTD_MAX_CLEVEL, level);
         return NULL;
 	} else {
-	    level = ZSTD_MAX_CLEVEL;
+	    level = ZSTD_maxCLevel();
 	}
     }
+    printdn("Compression level will be:%d\n",level);
 
+    printdn("got Compression threads:%d\n",threads);
     if (threads < 0) {
+        printd2e("Bad threads count - less than %d: %d\n", 0, threads);
 	if (strict) {
         PyErr_Format(ZstdError, "Bad threads count - less than %d: %d", 0, threads);
         return NULL;
-	} else threads = 0; 
+	} else threads = 1;
     }
-    if (0 == threads) threads = UTIL_countPhysicalCores();
+    if (0 == threads) threads = UTIL_countAvailableCores();
+    printdn("got CPU cores:%d\n",threads);
     /* If threads more than 200 - raise Error. */
     if (threads > ZSTDMT_NBWORKERS_MAX) {
+        printd2e("Bad threads count - more than %d: %d\n", ZSTDMT_NBWORKERS_MAX, threads);
         threads = ZSTDMT_NBWORKERS_MAX;
         // do not fail here, due auto thread counter
         //PyErr_Format(ZstdError, "Bad threads count - more than %d: %d", ZSTDMT_NBWORKERS_MAX, threads);
         //return NULL;
     }
+    printdn("Compression will use:%d threads\n",threads);
 
     dest_size = (Py_ssize_t)ZSTD_compressBound(source_size);
     result = PyBytes_FromStringAndSize(NULL, dest_size);
@@ -124,14 +141,15 @@ static PyObject *py_zstd_compress_mt(PyObject* self, PyObject *args)
 
         ZSTD_CCtx_setParameter(cctx, ZSTD_c_compressionLevel, level);
         ZSTD_CCtx_setParameter(cctx, ZSTD_c_nbWorkers, threads);
-
         Py_BEGIN_ALLOW_THREADS
         cSize = ZSTD_compress2(cctx, dest, (size_t)dest_size, source, (size_t)source_size);
         Py_END_ALLOW_THREADS
 
         ZSTD_freeCCtx(cctx);
 
+        printdn("Compression result: %d\n", cSize);
         if (ZSTD_isError(cSize)) {
+            printdes("debug INFO: Compression error: %s", ZSTD_getErrorName(cSize));
             PyErr_Format(ZstdError, "Compression error: %s", ZSTD_getErrorName(cSize));
             Py_CLEAR(result);
             return NULL;
@@ -140,6 +158,7 @@ static PyObject *py_zstd_compress_mt(PyObject* self, PyObject *args)
     }
     return result;
 }
+
 
 /**
  * New more interoperable function
@@ -303,9 +322,9 @@ static PyObject *py_zstd_module_version(PyObject* self, PyObject *args)
     UNUSED(args);
 
 #if PY_MAJOR_VERSION >= 3
-    return PyUnicode_FromFormat("%s", xstr(VERSION));
+    return PyUnicode_FromFormat("%s", xstr(MOD_VERSION));
 #else
-    return PyString_FromFormat("%s", xstr(VERSION));
+    return PyString_FromFormat("%s", xstr(MOD_VERSION));
 #endif
 }
 
@@ -371,7 +390,7 @@ static PyObject *py_zstd_with_threads(PyObject* self, PyObject *args)
 
 
 /**
- * Returns 0 or 1 if ZSTD library build with threads
+ * Returns 0 or 1 if ZSTD library build with assembler inlines
  */
 static PyObject *py_zstd_with_asm(PyObject* self, PyObject *args)
 {
@@ -381,7 +400,49 @@ static PyObject *py_zstd_with_asm(PyObject* self, PyObject *args)
     return Py_BuildValue("i", ! ZSTD_DISABLE_ASM);
 }
 
+/**
+ * Returns 0 or 1 if module built with debug output enabled
+ */
+static PyObject *py_zstd_is_debug_enabled(PyObject* self, PyObject *args)
+{
+    UNUSED(self);
+    UNUSED(args);
 
+    return Py_BuildValue("i", ZSTD_DEBUG);
+}
+
+/**
+ * Returns 0 or 1 if module built with debug notice level output enabled
+ */
+static PyObject *py_zstd_is_debug_notice_enabled(PyObject* self, PyObject *args)
+{
+    UNUSED(self);
+    UNUSED(args);
+
+    return Py_BuildValue("i", ZSTD_DEBUG_NOTICE);
+}
+
+/**
+ * Returns 0 or 1 if module built with debug info level output enabled
+ */
+static PyObject *py_zstd_is_debug_info_enabled(PyObject* self, PyObject *args)
+{
+    UNUSED(self);
+    UNUSED(args);
+
+    return Py_BuildValue("i", ZSTD_DEBUG_INFO);
+}
+
+/**
+ * Returns 0 or 1 if module built with debug error level output enabled
+ */
+static PyObject *py_zstd_is_debug_error_enabled(PyObject* self, PyObject *args)
+{
+    UNUSED(self);
+    UNUSED(args);
+
+    return Py_BuildValue("i", ZSTD_DEBUG_ERROR);
+}
 
 /**
  * Returns ZSTD determined threads count, int
@@ -390,9 +451,7 @@ static PyObject *py_zstd_threads_count(PyObject* self, PyObject *args)
 {
     UNUSED(self);
     UNUSED(args);
-
-    int32_t threads = UTIL_countPhysicalCores();
-
+    int32_t threads = UTIL_countAvailableCores();
     return Py_BuildValue("i", threads);
 }
 
@@ -415,7 +474,19 @@ static PyObject *py_zstd_min_compression_level(PyObject* self, PyObject *args)
     UNUSED(self);
     UNUSED(args);
 
+//    return Py_BuildValue("i", ZSTD_minCLevel());
     return Py_BuildValue("i", ZSTD_MIN_CLEVEL);
+}
+
+/**
+ * Returns ZSTD determined default standard compression level, int
+ */
+static PyObject *py_zstd_default_compression_level(PyObject* self, PyObject *args)
+{
+    UNUSED(self);
+    UNUSED(args);
+
+    return Py_BuildValue("i", ZSTD_defaultCLevel());
 }
 
 /**
@@ -426,7 +497,7 @@ static PyObject *py_zstd_max_compression_level(PyObject* self, PyObject *args)
     UNUSED(self);
     UNUSED(args);
 
-    return Py_BuildValue("i", ZSTD_MAX_CLEVEL);
+    return Py_BuildValue("i", ZSTD_maxCLevel());
 }
 
 
@@ -437,6 +508,7 @@ static PyMethodDef ZstdMethods[] = {
     {"check",  py_zstd_check, METH_VARARGS, CHECK_DOCSTRING},
     {"verify",  py_zstd_check, METH_VARARGS, CHECK_DOCSTRING},
     {"compress",  py_zstd_compress_mt, METH_VARARGS, COMPRESS_DOCSTRING},
+    {"compress_real_mt",  py_zstd_compress_mt, METH_VARARGS, COMPRESS_DOCSTRING},
     {"uncompress",  py_zstd_uncompress, METH_VARARGS, UNCOMPRESS_DOCSTRING},
     {"encode",  py_zstd_compress_mt, METH_VARARGS, COMPRESS_DOCSTRING},
     {"decode",  py_zstd_uncompress, METH_VARARGS, UNCOMPRESS_DOCSTRING},
@@ -450,11 +522,18 @@ static PyMethodDef ZstdMethods[] = {
     {"ZSTD_max_threads_count",  py_zstd_max_threads_count, METH_NOARGS, ZSTD_MAX_THREADS_COUNT_DOCSTRING},
     {"ZSTD_min_compression_level",  py_zstd_min_compression_level, METH_NOARGS, ZSTD_MIN_COMPRESSION_LEVEL_DOCSTRING},
     {"ZSTD_max_compression_level",  py_zstd_max_compression_level, METH_NOARGS, ZSTD_MAX_COMPRESSION_LEVEL_DOCSTRING},
+    {"ZSTD_default_compression_level",  py_zstd_default_compression_level, METH_NOARGS, ZSTD_DEFAULT_COMPRESSION_LEVEL_DOCSTRING},
 
     {"ZSTD_external",  py_zstd_library_external, METH_NOARGS, ZSTD_EXTERNAL_DOCSTRING},
     {"ZSTD_legacy_support",  py_zstd_library_legacy_format_support, METH_NOARGS, ZSTD_LEGACY_DOCSTRING},
     {"ZSTD_with_threads",  py_zstd_with_threads, METH_NOARGS, ZSTD_WITH_THREADS_DOCSTRING},
     {"ZSTD_with_asm",  py_zstd_with_asm, METH_NOARGS, ZSTD_WITH_ASM_DOCSTRING},
+
+    {"ZSTD_is_debug_enabled",  py_zstd_is_debug_enabled, METH_NOARGS, NULL},
+    {"ZSTD_is_debug_notice_enabled",  py_zstd_is_debug_notice_enabled, METH_NOARGS, NULL},
+    {"ZSTD_is_debug_info_enabled",  py_zstd_is_debug_info_enabled, METH_NOARGS, NULL},
+    {"ZSTD_is_debug_error_enabled",  py_zstd_is_debug_error_enabled, METH_NOARGS, NULL},
+
     {NULL, NULL, 0, NULL}
 };
 
@@ -488,12 +567,20 @@ static int init_py_zstd(PyObject *module) {
 
 static int myextension_traverse(PyObject *m, visitproc visit, void *arg) {
     Py_VISIT(GETSTATE(m)->error);
+    printdi("ZSTD module->traverse\n",0);
     return 0;
 }
 
-static int myextension_clear(PyObject *m) {
-    Py_CLEAR(GETSTATE(m)->error);
+static int myextension_clear(PyObject *self) {
+    Py_CLEAR(GETSTATE(self)->error);
+    printdi("ZSTD module->clear\n",0);
     return 0;
+}
+
+static void myextension_free(void *self) {
+    Py_CLEAR(GETSTATE((PyObject *)self)->error);
+    printdi("ZSTD module->free\n",0);
+    return;
 }
 
 //Slots not supported in Python 3.4
@@ -521,7 +608,8 @@ static struct PyModuleDef moduledef = {
         #endif
         myextension_traverse,
         myextension_clear,
-        NULL
+//        NULL
+        myextension_free,
 };
 
 
@@ -543,10 +631,12 @@ void initzstd(void)
     if (init_py_zstd(module) != 0) {
         return NULL;
     }
+    printdi("ZSTD module initialized\n",0);
     return module;
     #endif
 #else
     PyObject *module = Py_InitModule("zstd", ZstdMethods);
     init_py_zstd(module);
+    printdi("ZSTD module initialized\n",0);
 #endif
 }

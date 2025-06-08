@@ -30,10 +30,6 @@ struct zmm_vector<float16> {
 
     using swizzle_ops = avx512_16bit_swizzle_ops;
 
-    static reg_t get_network(int index)
-    {
-        return _mm512_loadu_si512(&network[index - 1][0]);
-    }
     static type_t type_max()
     {
         return X86_SIMD_SORT_INFINITYH;
@@ -179,12 +175,12 @@ struct zmm_vector<float16> {
     }
     static reg_t reverse(reg_t zmm)
     {
-        const auto rev_index = get_network(4);
+        const auto rev_index = _mm512_set_epi16(NETWORK_REVERSE_32LANES);
         return permutexvar(rev_index, zmm);
     }
     static reg_t sort_vec(reg_t x)
     {
-        return sort_zmm_16bit<zmm_vector<float16>>(x);
+        return sort_reg_32lanes<zmm_vector<float16>>(x);
     }
     static reg_t cast_from(__m512i v)
     {
@@ -225,10 +221,6 @@ struct zmm_vector<int16_t> {
 
     using swizzle_ops = avx512_16bit_swizzle_ops;
 
-    static reg_t get_network(int index)
-    {
-        return _mm512_loadu_si512(&network[index - 1][0]);
-    }
     static type_t type_max()
     {
         return X86_SIMD_SORT_MAX_INT16;
@@ -328,12 +320,12 @@ struct zmm_vector<int16_t> {
     }
     static reg_t reverse(reg_t zmm)
     {
-        const auto rev_index = get_network(4);
+        const auto rev_index = _mm512_set_epi16(NETWORK_REVERSE_32LANES);
         return permutexvar(rev_index, zmm);
     }
     static reg_t sort_vec(reg_t x)
     {
-        return sort_zmm_16bit<zmm_vector<type_t>>(x);
+        return sort_reg_32lanes<zmm_vector<type_t>>(x);
     }
     static reg_t cast_from(__m512i v)
     {
@@ -373,10 +365,6 @@ struct zmm_vector<uint16_t> {
 
     using swizzle_ops = avx512_16bit_swizzle_ops;
 
-    static reg_t get_network(int index)
-    {
-        return _mm512_loadu_si512(&network[index - 1][0]);
-    }
     static type_t type_max()
     {
         return X86_SIMD_SORT_MAX_UINT16;
@@ -474,12 +462,12 @@ struct zmm_vector<uint16_t> {
     }
     static reg_t reverse(reg_t zmm)
     {
-        const auto rev_index = get_network(4);
+        const auto rev_index = _mm512_set_epi16(NETWORK_REVERSE_32LANES);
         return permutexvar(rev_index, zmm);
     }
     static reg_t sort_vec(reg_t x)
     {
-        return sort_zmm_16bit<zmm_vector<type_t>>(x);
+        return sort_reg_32lanes<zmm_vector<type_t>>(x);
     }
     static reg_t cast_from(__m512i v)
     {
@@ -568,6 +556,7 @@ avx512_qsort_fp16(uint16_t *arr,
 {
     using vtype = zmm_vector<float16>;
 
+    // TODO multithreading support here
     if (arrsize > 1) {
         arrsize_t nan_count = 0;
         if (UNLIKELY(hasnan)) {
@@ -576,14 +565,19 @@ avx512_qsort_fp16(uint16_t *arr,
         }
         if (descending) {
             qsort_<vtype, Comparator<vtype, true>, uint16_t>(
-                    arr, 0, arrsize - 1, 2 * (arrsize_t)log2(arrsize));
+                    arr, 0, arrsize - 1, 2 * (arrsize_t)log2(arrsize), 0);
         }
         else {
             qsort_<vtype, Comparator<vtype, false>, uint16_t>(
-                    arr, 0, arrsize - 1, 2 * (arrsize_t)log2(arrsize));
+                    arr, 0, arrsize - 1, 2 * (arrsize_t)log2(arrsize), 0);
         }
         replace_inf_with_nan(arr, arrsize, nan_count, descending);
     }
+
+#ifdef __MMX__
+    // Workaround for compiler bug generating MMX instructions without emms
+    _mm_empty();
+#endif
 }
 
 [[maybe_unused]] X86_SIMD_SORT_INLINE void
@@ -617,6 +611,11 @@ avx512_qselect_fp16(uint16_t *arr,
                     2 * (arrsize_t)log2(indx_last_elem));
         }
     }
+
+#ifdef __MMX__
+    // Workaround for compiler bug generating MMX instructions without emms
+    _mm_empty();
+#endif
 }
 
 [[maybe_unused]] X86_SIMD_SORT_INLINE void

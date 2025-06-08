@@ -27,7 +27,7 @@ ignore_missing_imports = true
 
 [tool.poetry]
 name = "openapi-spec-validator"
-version = "0.7.1"
+version = "0.7.2"
 description = "OpenAPI 2.0 (aka Swagger) and OpenAPI 3 spec validator"
 authors = ["Artur Maciag <maciag.artur@gmail.com>"]
 license = "Apache-2.0"
@@ -45,7 +45,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries"
+    "Topic :: Software Development :: Libraries",
+    "Typing :: Typed",
 ]
 include = [
     {path = "tests", format = "sdist"},
@@ -64,15 +65,15 @@ docs = ["sphinx", "sphinx-immaterial"]
 
 [tool.poetry.dev-dependencies]
 pre-commit =  "*"
-pytest = "^7.4.2"
+pytest = "^8.2.2"
 pytest-flake8 = "=1.1.1"
 pytest-cov = "^4.1.0"
 tox = "*"
-mypy = "^1.5"
-isort = "^5.11.5"
-black = "^23.9.1"
+mypy = "^1.10"
+isort = "^5.13.2"
+black = "^24.8.0"
 flynt = "^1.0"
-deptry = "^0.12.0"
+deptry = "^0.16.1"
 flake8 = "^5.0.4"
 pyflakes = "^2.5.0"
 bump2version = "^1.0.1"
