@@ -123,7 +123,10 @@ class NotionHelper:
     def get_notion_data(self):
         api_endpoint = "https://api.notionhub.app/get-notion-data" # 根据您的实际 Worker URL 修改
         github_repo_env = os.getenv('REPOSITORY')
-        body = {'url': f"https://github.com/{github_repo_env}","token":os.getenv("TOKEN")}
+        token = os.getenv("TOKEN")
+        if not token:
+            return None
+        body = {'url': f"https://github.com/{github_repo_env}", "token": token}
         response = requests.post(api_endpoint, json=body, timeout=30)
         if response.ok and response.json().get("success"):
             return response.json().get("notionData")

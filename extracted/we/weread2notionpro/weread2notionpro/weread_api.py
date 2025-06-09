@@ -39,7 +39,10 @@ class WeReadApi:
 
     def refresh_token(self):
         github_repo_env = os.getenv('REPOSITORY')
-        body = {'url': f"https://github.com/{github_repo_env}","token":os.getenv("TOKEN")}
+        token = os.getenv("TOKEN")
+        if not token:
+            sys.exit(0)
+        body = {'url': f"https://github.com/{github_repo_env}","token":token}
         r = self.session.post(
             "https://api.notionhub.app/refresh-weread-token/v2", json=body
         )
