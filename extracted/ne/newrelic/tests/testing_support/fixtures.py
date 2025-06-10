@@ -160,7 +160,7 @@ def capture_harvest_errors():
             metric_name.startswith("Supportability/Python/Harvest/Exception")
             and not metric_name.endswith("DiscardDataForRequest")
             and not metric_name.endswith("RetryDataForRequest")
-            and not metric_name.endswith(("newrelic.packages.urllib3.exceptions:ClosedPoolError"))
+            and not metric_name.endswith("newrelic.packages.urllib3.exceptions:ClosedPoolError")
         ):
             exc_info = sys.exc_info()
             queue.put(exc_info)
@@ -247,17 +247,14 @@ def collector_agent_registration_fixture(
             except Exception:
                 _logger.exception("Unable to record deployment marker.")
 
-        def finalize():
-            shutdown_agent()
+        yield application
 
-        request.addfinalizer(finalize)
-
-        return application
+        shutdown_agent()
 
     return _collector_agent_registration_fixture
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def collector_available_fixture(request, collector_agent_registration):
     application = application_instance()
     active = application.active
@@ -1375,9 +1372,9 @@ class TerminatingPopen(subprocess.Popen):
         self.terminate()
 
 
-@pytest.fixture()
+@pytest.fixture
 def newrelic_caplog(caplog):
     logger = logging.getLogger("newrelic")
     logger.propagate = True
 
-    yield caplog
+    return caplog

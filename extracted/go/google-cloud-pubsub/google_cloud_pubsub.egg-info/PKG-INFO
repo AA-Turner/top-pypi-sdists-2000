@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: google-cloud-pubsub
-Version: 2.29.1
+Version: 2.30.0
 Summary: Google Cloud Pub/Sub API client library
 Home-page: https://github.com/googleapis/python-pubsub
 Author: Google LLC
@@ -38,6 +38,18 @@ Requires-Dist: opentelemetry-sdk<=1.22.0; python_version <= "3.7"
 Requires-Dist: opentelemetry-sdk>=1.27.0; python_version >= "3.8"
 Provides-Extra: libcst
 Requires-Dist: libcst>=0.3.10; extra == "libcst"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: platform
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 Python Client for Google Cloud Pub / Sub
 ========================================

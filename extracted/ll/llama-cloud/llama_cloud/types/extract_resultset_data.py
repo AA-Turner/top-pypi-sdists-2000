@@ -2,10 +2,8 @@
 
 import typing
 
-from .extract_resultset_data_item_value import ExtractResultsetDataItemValue
-from .extract_resultset_data_zero_value import ExtractResultsetDataZeroValue
+from .json_type import JsonType
 
 ExtractResultsetData = typing.Union[
-    typing.Dict[str, typing.Optional[ExtractResultsetDataZeroValue]],
-    typing.List[typing.Dict[str, typing.Optional[ExtractResultsetDataItemValue]]],
+    typing.Dict[str, typing.Optional[JsonType]], typing.List[typing.Dict[str, typing.Optional[JsonType]]]
 ]

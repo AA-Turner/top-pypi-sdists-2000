@@ -5,8 +5,8 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from .configurable_data_source_names import ConfigurableDataSourceNames
+from .json_type import JsonType
 from .pipeline_data_source_component import PipelineDataSourceComponent
-from .pipeline_data_source_custom_metadata_value import PipelineDataSourceCustomMetadataValue
 from .pipeline_data_source_status import PipelineDataSourceStatus
 
 try:
@@ -28,7 +28,7 @@ class PipelineDataSource(pydantic.BaseModel):
     updated_at: typing.Optional[dt.datetime]
     name: str = pydantic.Field(description="The name of the data source.")
     source_type: ConfigurableDataSourceNames
-    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[PipelineDataSourceCustomMetadataValue]]]
+    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
     component: PipelineDataSourceComponent = pydantic.Field(description="Component that implements the data source")
     version_metadata: typing.Optional[typing.Dict[str, typing.Any]]
     project_id: str

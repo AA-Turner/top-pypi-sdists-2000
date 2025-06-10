@@ -486,7 +486,7 @@
 #endif
 
 #ifndef CYTHON_NCP_UNUSED
-# if CYTHON_COMPILING_IN_CPYTHON
+# if CYTHON_COMPILING_IN_CPYTHON && !CYTHON_COMPILING_IN_CPYTHON_FREETHREADING
 #  define CYTHON_NCP_UNUSED
 # else
 #  define CYTHON_NCP_UNUSED CYTHON_UNUSED
@@ -1076,11 +1076,19 @@ static CYTHON_INLINE PyObject * __Pyx_PyDict_GetItemStrWithError(PyObject *dict,
   #define __Pyx_SET_SIZE(obj, size) Py_SIZE(obj) = (size)
 #endif
 
-#if CYTHON_COMPILING_IN_LIMITED_API || CYTHON_AVOID_BORROWED_REFS || CYTHON_AVOID_THREAD_UNSAFE_BORROWED_REFS || !CYTHON_ASSUME_SAFE_MACROS
+#if CYTHON_AVOID_BORROWED_REFS || CYTHON_AVOID_THREAD_UNSAFE_BORROWED_REFS
+  #if __PYX_LIMITED_VERSION_HEX >= 0x030d0000
+    #define __Pyx_PyList_GetItemRef(o, i) PyList_GetItemRef(o, i)
+  #elif CYTHON_COMPILING_IN_LIMITED_API || !CYTHON_ASSUME_SAFE_MACROS
+    #define __Pyx_PyList_GetItemRef(o, i) (likely((i) >= 0) ? PySequence_GetItem(o, i) : (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL))
+  #else
+    #define __Pyx_PyList_GetItemRef(o, i) PySequence_ITEM(o, i)
+  #endif
+#elif CYTHON_COMPILING_IN_LIMITED_API || !CYTHON_ASSUME_SAFE_MACROS
   #if __PYX_LIMITED_VERSION_HEX >= 0x030d0000
     #define __Pyx_PyList_GetItemRef(o, i) PyList_GetItemRef(o, i)
   #else
-    #define __Pyx_PyList_GetItemRef(o, i) PySequence_GetItem(o, i)
+    #define __Pyx_PyList_GetItemRef(o, i) __Pyx_XNewRef(PyList_GetItem(o, i))
   #endif
 #else
   #define __Pyx_PyList_GetItemRef(o, i) __Pyx_NewRef(PyList_GET_ITEM(o, i))
@@ -2308,7 +2316,10 @@ static void __Pyx_FastGilFuncInit(void) {
 // In C++ a variable must actually be initialized to make returning
 // it defined behaviour, and there doesn't seem to be a viable compiler trick to
 // avoid that.
+#if __cplusplus > 201103L
 #include <type_traits>
+#endif
+
 template <typename T>
 static void __Pyx_pretend_to_initialize(T* ptr) {
     // In C++11 we have enough introspection to work out which types it's actually

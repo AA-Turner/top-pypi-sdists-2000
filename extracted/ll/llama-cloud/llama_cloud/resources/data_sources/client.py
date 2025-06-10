@@ -13,8 +13,8 @@ from ...types.configurable_data_source_names import ConfigurableDataSourceNames
 from ...types.data_source import DataSource
 from ...types.data_source_create import DataSourceCreate
 from ...types.http_validation_error import HttpValidationError
+from ...types.json_type import JsonType
 from .types.data_source_update_component import DataSourceUpdateComponent
-from .types.data_source_update_custom_metadata_value import DataSourceUpdateCustomMetadataValue
 
 try:
     import pydantic
@@ -203,7 +203,7 @@ class DataSourcesClient:
         *,
         name: typing.Optional[str] = OMIT,
         source_type: ConfigurableDataSourceNames,
-        custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[DataSourceUpdateCustomMetadataValue]]] = OMIT,
+        custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
         component: typing.Optional[DataSourceUpdateComponent] = OMIT,
     ) -> DataSource:
         """
@@ -216,7 +216,7 @@ class DataSourcesClient:
 
             - source_type: ConfigurableDataSourceNames.
 
-            - custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[DataSourceUpdateCustomMetadataValue]]].
+            - custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
 
             - component: typing.Optional[DataSourceUpdateComponent]. Component that implements the data source
         ---
@@ -463,7 +463,7 @@ class AsyncDataSourcesClient:
         *,
         name: typing.Optional[str] = OMIT,
         source_type: ConfigurableDataSourceNames,
-        custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[DataSourceUpdateCustomMetadataValue]]] = OMIT,
+        custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
         component: typing.Optional[DataSourceUpdateComponent] = OMIT,
     ) -> DataSource:
         """
@@ -476,7 +476,7 @@ class AsyncDataSourcesClient:
 
             - source_type: ConfigurableDataSourceNames.
 
-            - custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[DataSourceUpdateCustomMetadataValue]]].
+            - custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
 
             - component: typing.Optional[DataSourceUpdateComponent]. Component that implements the data source
         ---

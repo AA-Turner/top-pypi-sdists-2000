@@ -22,6 +22,7 @@ class TestPostgres(Validator):
         expected_sql = "ARRAY[\n  x" + (",\n  x" * 27) + "\n]"
         self.validate_identity(sql, expected_sql, pretty=True)
 
+        self.validate_identity("SELECT ST_DISTANCE(gg1, gg2, FALSE) AS sphere_dist")
         self.validate_identity("SHA384(x)")
         self.validate_identity("1.x", "1. AS x")
         self.validate_identity("|/ x", "SQRT(x)")
@@ -905,6 +906,18 @@ FROM json_data, field_ids""",
             write={
                 "postgres": "SELECT DATE_BIN('30 days', timestamp_col, (SELECT MIN(TIMESTAMP) FROM table)) FROM table",
                 "duckdb": 'SELECT TIME_BUCKET(\'30 days\', timestamp_col, (SELECT MIN(TIMESTAMP) FROM "table")) FROM "table"',
+            },
+        )
+
+        # Postgres introduced ANY_VALUE in version 16
+        self.validate_all(
+            "SELECT ANY_VALUE(1) AS col",
+            write={
+                "postgres": "SELECT ANY_VALUE(1) AS col",
+                "postgres, version=16": "SELECT ANY_VALUE(1) AS col",
+                "postgres, version=17.5": "SELECT ANY_VALUE(1) AS col",
+                "postgres, version=15": "SELECT MAX(1) AS col",
+                "postgres, version=13.9": "SELECT MAX(1) AS col",
             },
         )
 

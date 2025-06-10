@@ -1,9 +1,10 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: numexpr
-Version: 2.10.2
+Version: 2.11.0
 Summary: Fast numerical expression evaluator for NumPy
 Author-email: "David M. Cooke, Francesc Alted, and others" <blosc@blosc.org>
 Maintainer-email: Blosc Development Team <blosc@blosc.org>
+License-Expression: MIT
 Project-URL: homepage, https://github.com/pydata/numexpr
 Project-URL: documentation, https://numexpr.readthedocs.io
 Project-URL: repository, https://github.com/pydata/numexpr
@@ -11,21 +12,21 @@ Classifier: Development Status :: 6 - Mature
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: Information Technology
 Classifier: Intended Audience :: Science/Research
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Operating System :: Microsoft :: Windows
 Classifier: Operating System :: Unix
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
-Requires-Python: >=3.9
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.10
 Description-Content-Type: text/x-rst
 License-File: LICENSE.txt
 License-File: AUTHORS.txt
 Requires-Dist: numpy>=1.23.0
+Dynamic: license-file
 
 ======================================================
 NumExpr: Fast numerical expression evaluator for NumPy
@@ -186,6 +187,24 @@ Usage
   >>> s = np.array([b'abba', b'abbb', b'abbcdef'])
   >>> ne.evaluate("b'abba' == s")   # string arrays are supported too
   array([ True, False, False], dtype=bool)
+
+
+Free-threading support
+----------------------
+Starting on CPython 3.13 onwards there is a new distribution that disables the
+Global Interpreter Lock (GIL) altogether, thus increasing the performance yields
+under multi-threaded conditions on a single interpreter, as opposed to having to use
+multiprocessing.
+
+Whilst numexpr has been demonstrated to work under free-threaded
+CPython, considerations need to be taken when using numexpr native parallel
+implementation vs using Python threads directly in order to prevent oversubscription,
+we recommend either using the main CPython interpreter thread to spawn multiple C threads
+using the parallel numexpr API, or spawning multiple CPython threads that do not use
+the parallel API.
+
+For more information about free-threaded CPython, we recommend visiting the following
+`community Wiki <https://py-free-threading.github.io/>`
 
 
 Documentation

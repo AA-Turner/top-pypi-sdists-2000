@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: ruamel.yaml
-Version: 0.18.13
+Version: 0.18.14
 Summary: ruamel.yaml is a YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order
 Author: Anthon van der Neut
 Author-email: a.van.der.neut@ruamel.eu
@@ -25,7 +25,7 @@ Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Text Processing :: Markup
 Classifier: Typing :: Typed
-Requires-Python: >=3.7
+Requires-Python: >=3.8
 Description-Content-Type: text/markdown; charset=UTF-8; variant=CommonMark
 Provides-Extra: jinja2
 Provides-Extra: docs

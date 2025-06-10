@@ -160,7 +160,10 @@ def infer_sequence_item_type(env, seq_node, index_node=None, seq_type=None):
             else:
                 return item.infer_type(env)
         # if we're lucky, all items have the same type
-        item_types = {item.infer_type(env) for item in seq_node.args}
+        item_types = {
+            infer_sequence_item_type(env, item) if item.is_starred else item.infer_type(env)
+            for item in seq_node.args
+        }
         if len(item_types) == 1:
             return item_types.pop()
     return None
@@ -4567,11 +4570,12 @@ class IndexNode(_IndexingBaseNode):
                 not (isinstance(self.index.constant_result, int)
                      and self.index.constant_result >= 0))
             boundscheck = bool(code.globalstate.directives['boundscheck'])
-            return ", %s, %d, %s, %d, %d, %d" % (
+            has_gil = not self.in_nogil_context
+            return ", %s, %d, %s, %d, %d, %d, %d" % (
                 self.original_index_type.empty_declaration_code(),
                 self.original_index_type.signed and 1 or 0,
                 self.original_index_type.to_py_function,
-                is_list, wraparound, boundscheck)
+                is_list, wraparound, boundscheck, has_gil)
         else:
             return ""
 
@@ -12182,7 +12186,7 @@ class BinopNode(ExprNode):
             elif type1.is_pyunicode_ptr:
                 type1 = Builtin.unicode_type
             if type1.is_builtin_type or type2.is_builtin_type:
-                if type1 is type2 and self.operator in '**%+|&^':
+                if type1 is type2 and type1 is not type_type and self.operator in '**%+|&^':
                     # FIXME: at least these operators should be safe - others?
                     return type1
                 result_type = self.infer_builtin_types_operation(type1, type2)

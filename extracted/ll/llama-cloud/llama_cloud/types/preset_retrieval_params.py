@@ -4,10 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
+from .json_type import JsonType
 from .metadata_filters import MetadataFilters
-from .preset_retrieval_params_search_filters_inference_schema_value import (
-    PresetRetrievalParamsSearchFiltersInferenceSchemaValue,
-)
 from .retrieval_mode import RetrievalMode
 
 try:
@@ -31,12 +29,16 @@ class PresetRetrievalParams(pydantic.BaseModel):
     rerank_top_n: typing.Optional[int]
     alpha: typing.Optional[float]
     search_filters: typing.Optional[MetadataFilters]
-    search_filters_inference_schema: typing.Optional[
-        typing.Dict[str, typing.Optional[PresetRetrievalParamsSearchFiltersInferenceSchemaValue]]
-    ]
+    search_filters_inference_schema: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
     files_top_k: typing.Optional[int]
     retrieval_mode: typing.Optional[RetrievalMode] = pydantic.Field(description="The retrieval mode for the query.")
     retrieve_image_nodes: typing.Optional[bool] = pydantic.Field(description="Whether to retrieve image nodes.")
+    retrieve_page_screenshot_nodes: typing.Optional[bool] = pydantic.Field(
+        description="Whether to retrieve page screenshot nodes."
+    )
+    retrieve_page_figure_nodes: typing.Optional[bool] = pydantic.Field(
+        description="Whether to retrieve page figure nodes."
+    )
     class_name: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:

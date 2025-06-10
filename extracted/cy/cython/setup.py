@@ -48,7 +48,9 @@ pxd_include_dirs = [
     directory for directory, dirs, files
     in os.walk(os.path.join('Cython', 'Includes'))
     if '__init__.pyx' in files or '__init__.pxd' in files
-    or directory == os.path.join('Cython', 'Includes')]
+    or directory == os.path.join('Cython', 'Includes')
+    or directory == os.path.join('Cython', 'Includes', 'numpy')
+]
 
 pxd_include_patterns = [
     p+'/*.pxd' for p in pxd_include_dirs ] + [
@@ -239,8 +241,6 @@ def collect_changelog(version):
         'Bugs fixed': [],
         'Other changes': [],
     }
-    # Collect initial content in a throw-away dict.
-    current_sections = defaultdict(list)
 
     changelog = []
     with open("CHANGES.rst", encoding='utf8') as f:
@@ -256,6 +256,7 @@ def collect_changelog(version):
         changelog.append(next(lines))  # underline of version
         assert changelog[-1].startswith('=====')
 
+        current_sections = sections
         current_section = []
         for line in lines:
             if line.startswith('-----'):

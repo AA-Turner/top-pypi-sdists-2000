@@ -4,8 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .extract_agent_data_schema_value import ExtractAgentDataSchemaValue
 from .extract_config import ExtractConfig
+from .json_type import JsonType
 
 try:
     import pydantic
@@ -24,9 +24,7 @@ class ExtractAgent(pydantic.BaseModel):
     id: str = pydantic.Field(description="The id of the extraction agent.")
     name: str = pydantic.Field(description="The name of the extraction agent.")
     project_id: str = pydantic.Field(description="The ID of the project that the extraction agent belongs to.")
-    data_schema: typing.Dict[str, typing.Optional[ExtractAgentDataSchemaValue]] = pydantic.Field(
-        description="The schema of the data."
-    )
+    data_schema: typing.Dict[str, typing.Optional[JsonType]] = pydantic.Field(description="The schema of the data.")
     config: ExtractConfig = pydantic.Field(description="The configuration parameters for the extraction agent.")
     created_at: typing.Optional[dt.datetime]
     updated_at: typing.Optional[dt.datetime]

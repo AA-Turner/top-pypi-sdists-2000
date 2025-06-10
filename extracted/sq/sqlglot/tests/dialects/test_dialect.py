@@ -462,6 +462,16 @@ class TestDialect(Validator):
             "CAST('127.0.0.1/32' AS INET)",
             read={"postgres": "INET '127.0.0.1/32'"},
         )
+        self.assertIsNotNone(
+            self.validate_identity("CREATE TABLE foo (bar INT AS (foo))").find(
+                exp.ComputedColumnConstraint
+            )
+        )
+        self.assertIsNotNone(
+            self.validate_identity(
+                "CREATE TABLE foo (t1 INT, t2 INT, bar INT AS (t1 * t2 * 2))"
+            ).find(exp.ComputedColumnConstraint)
+        )
 
     def test_ddl(self):
         self.validate_all(
@@ -1303,6 +1313,32 @@ class TestDialect(Validator):
                 "presto": "REDUCE(x, 0, (acc, x) -> acc + x, acc -> acc)",
             },
         )
+
+        self.validate_all(
+            "ARRAY_INTERSECT(x, y)",
+            read={
+                "hive": "ARRAY_INTERSECT(x, y)",
+                "spark2": "ARRAY_INTERSECT(x, y)",
+                "spark": "ARRAY_INTERSECT(x, y)",
+                "databricks": "ARRAY_INTERSECT(x, y)",
+                "presto": "ARRAY_INTERSECT(x, y)",
+                "trino": "ARRAY_INTERSECT(x, y)",
+                "snowflake": "ARRAY_INTERSECTION(x, y)",
+                "starrocks": "ARRAY_INTERSECT(x, y)",
+            },
+            write={
+                "hive": "ARRAY_INTERSECT(x, y)",
+                "spark2": "ARRAY_INTERSECT(x, y)",
+                "spark": "ARRAY_INTERSECT(x, y)",
+                "databricks": "ARRAY_INTERSECT(x, y)",
+                "presto": "ARRAY_INTERSECT(x, y)",
+                "trino": "ARRAY_INTERSECT(x, y)",
+                "snowflake": "ARRAY_INTERSECTION(x, y)",
+                "starrocks": "ARRAY_INTERSECT(x, y)",
+            },
+        )
+
+        self.validate_identity("SELECT ARRAY_INTERSECT(x, y, z)")
 
     def test_order_by(self):
         self.validate_identity(
@@ -3528,3 +3564,81 @@ FROM subquery2""",
                     f"FROM x |> SELECT x1, x2 |> WHERE x1 > 0 |> WHERE x2 > 0  |> ORDER BY x1, x2 |> {option}",
                     f"SELECT x1, x2 FROM (SELECT * FROM x) WHERE x1 > 0 AND x2 > 0 ORDER BY x1, x2 {option}",
                 )
+        self.validate_identity(
+            "FROM x |> AGGREGATE SUM(x1), MAX(x2), MIN(x3)",
+            "SELECT SUM(x1), MAX(x2), MIN(x3) FROM (SELECT * FROM x)",
+        )
+        self.validate_identity(
+            "FROM x |> AGGREGATE SUM(x1) AS s_x1 |> SELECT s_x1",
+            "SELECT s_x1 FROM (SELECT SUM(x1) AS s_x1 FROM (SELECT * FROM x))",
+        )
+        self.validate_identity(
+            "FROM x |> AGGREGATE SUM(x1), MAX(x2), MIN(x3) GROUP BY x4, x5",
+            "SELECT SUM(x1), MAX(x2), MIN(x3), x4, x5 FROM (SELECT * FROM x) GROUP BY x4, x5",
+        )
+        self.validate_identity(
+            "FROM x |> AGGREGATE SUM(x1), MAX(x2), MIN(x3) GROUP BY x4 AS a_x4, x5 AS a_x5",
+            "SELECT SUM(x1), MAX(x2), MIN(x3), x4 AS a_x4, x5 AS a_x5 FROM (SELECT * FROM x) GROUP BY a_x4, a_x5",
+        )
+        self.validate_identity(
+            "FROM x |> AGGREGATE SUM(x1) as s_x1 GROUP BY x1 |> SELECT s_x1, x1 as ss_x1",
+            "SELECT s_x1, x1 AS ss_x1 FROM (SELECT SUM(x1) AS s_x1, x1 FROM (SELECT * FROM x) GROUP BY x1)",
+        )
+        self.validate_identity(
+            "FROM x |> AGGREGATE SUM(x1) GROUP", "SELECT SUM(x1) AS GROUP FROM (SELECT * FROM x)"
+        )
+        for order_option in ("ASC", "DESC", "ASC NULLS LAST", "DESC NULLS FIRST"):
+            with self.subTest(f"Testing pipe syntax AGGREGATE for order option: {order_option}"):
+                self.validate_all(
+                    f"SELECT SUM(x1) AS x_s FROM (SELECT * FROM x) ORDER BY x_s {order_option}",
+                    read={
+                        "bigquery": f"FROM x |> AGGREGATE SUM(x1) AS x_s {order_option}",
+                    },
+                )
+                self.validate_all(
+                    f"SELECT SUM(x1) AS x_s, x1 AS g_x1 FROM (SELECT * FROM x) GROUP BY g_x1 ORDER BY x_s {order_option}",
+                    read={
+                        "bigquery": f"FROM x |> AGGREGATE SUM(x1) AS x_s {order_option} GROUP BY x1 AS g_x1",
+                    },
+                )
+            with self.subTest(
+                f"Testing pipe syntax AGGREGATE with GROUP AND ORDER BY for order option: {order_option}"
+            ):
+                self.validate_all(
+                    f"SELECT g_x1, x_s FROM (SELECT SUM(x1) AS x_s, x1 AS g_x1 FROM (SELECT * FROM x) GROUP BY g_x1 ORDER BY g_x1 {order_option})",
+                    read={
+                        "bigquery": f"FROM x |> AGGREGATE SUM(x1) AS x_s GROUP AND ORDER BY x1 AS g_x1 {order_option} |> SELECT g_x1, x_s",
+                    },
+                )
+
+            for op_operator in (
+                "UNION ALL",
+                "UNION DISTINCT",
+                "INTERSECT DISTINCT",
+                "EXCEPT DISTINCT",
+            ):
+                with self.subTest(f"Testing pipe syntax SET OPERATORS: {op_operator}"):
+                    self.validate_all(
+                        f"FROM x|> {op_operator} (SELECT y1 FROM y), (SELECT z1 FROM z)",
+                        write={
+                            "bigquery": f"SELECT * FROM x {op_operator} (SELECT y1 FROM y) {op_operator} (SELECT z1 FROM z)",
+                        },
+                    )
+
+            for op_prefix in ("LEFT OUTER", "FULL OUTER"):
+                for op_operator in (
+                    "UNION ALL",
+                    "UNION DISTINCT",
+                    "INTERSECT DISTINCT",
+                    "EXCEPT DISTINCT",
+                ):
+                    for suffix_operator in ("BY NAME", "CORRESPONDING"):
+                        with self.subTest(
+                            f"Testing pipe syntax SET OPERATORS: {op_prefix} {op_operator} {suffix_operator}"
+                        ):
+                            self.validate_all(
+                                f"FROM x|> SELECT x1, x2 FROM x |> {op_prefix} {op_operator} {suffix_operator} (SELECT y1, y2 FROM y), (SELECT z1, z2 FROM z)",
+                                write={
+                                    "bigquery": f"SELECT x1, x2 FROM (SELECT * FROM x) {op_prefix} {op_operator} BY NAME (SELECT y1, y2 FROM y) {op_prefix} {op_operator} BY NAME (SELECT z1, z2 FROM z)",
+                                },
+                            )

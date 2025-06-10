@@ -936,6 +936,7 @@ class Parser(metaclass=_Parser):
         "ORDER BY": lambda self, query: query.order_by(self._parse_order(), copy=False),
         "LIMIT": lambda self, query: self._parse_pipe_syntax_limit(query),
         "OFFSET": lambda self, query: query.offset(self._parse_offset(), copy=False),
+        "AGGREGATE": lambda self, query: self._parse_pipe_syntax_aggregate(query),
     }
 
     PROPERTY_PARSERS: t.Dict[str, t.Callable] = {
@@ -1142,6 +1143,78 @@ class Parser(metaclass=_Parser):
         if offset:
             query.offset(offset, copy=False)
         return query
+
+    def _parse_pipe_syntax_aggregate_fields(self) -> t.Optional[exp.Expression]:
+        this = self._parse_assignment()
+        if self._match_text_seq("GROUP", "AND", advance=False):
+            return this
+
+        this = self._parse_alias(this)
+
+        if self._match_set((TokenType.ASC, TokenType.DESC), advance=False):
+            return self._parse_ordered(lambda: this)
+
+        return this
+
+    def _parse_pipe_syntax_aggregate_group_order_by(
+        self, query: exp.Query, group_by_exists: bool = True
+    ) -> exp.Query:
+        expr = self._parse_csv(self._parse_pipe_syntax_aggregate_fields)
+        aggregates_or_groups, orders = [], []
+        for element in expr:
+            if isinstance(element, exp.Ordered):
+                this = element.this
+                if isinstance(this, exp.Alias):
+                    element.set("this", this.args["alias"])
+                orders.append(element)
+            else:
+                this = element
+            aggregates_or_groups.append(this)
+
+        if group_by_exists and isinstance(query, exp.Select):
+            query = query.select(*aggregates_or_groups, copy=False).group_by(
+                *[element.args.get("alias", element) for element in aggregates_or_groups],
+                copy=False,
+            )
+        else:
+            query = exp.select(*aggregates_or_groups, copy=False).from_(
+                query.subquery(copy=False), copy=False
+            )
+
+        if orders:
+            return query.order_by(*orders, copy=False)
+
+        return query
+
+    def _parse_pipe_syntax_aggregate(self, query: exp.Query) -> exp.Query:
+        self._match_text_seq("AGGREGATE")
+        query = self._parse_pipe_syntax_aggregate_group_order_by(query, group_by_exists=False)
+
+        if self._match(TokenType.GROUP_BY) or (
+            self._match_text_seq("GROUP", "AND") and self._match(TokenType.ORDER_BY)
+        ):
+            return self._parse_pipe_syntax_aggregate_group_order_by(query)
+
+        return query
+
+    def _parse_pipe_syntax_set_operator(
+        self, query: t.Optional[exp.Query]
+    ) -> t.Optional[exp.Query]:
+        first_setop = self.parse_set_operation(this=query)
+
+        if not first_setop or not query:
+            return None
+
+        first_setop.this.pop()
+        distinct = first_setop.args.pop("distinct")
+
+        setops = [first_setop.expression.pop(), *self._parse_expressions()]
+
+        if isinstance(first_setop, exp.Union):
+            return query.union(*setops, distinct=distinct, **first_setop.args)
+        if isinstance(first_setop, exp.Except):
+            return query.except_(*setops, distinct=distinct, **first_setop.args)
+        return query.intersect(*setops, distinct=distinct, **first_setop.args)
 
     def _parse_partitioned_by_bucket_or_truncate(self) -> exp.Expression:
         klass = (
@@ -5900,7 +5973,7 @@ class Parser(metaclass=_Parser):
             constraints.append(
                 self.expression(
                     exp.ColumnConstraint,
-                    kind=exp.TransformColumnConstraint(this=self._parse_disjunction()),
+                    kind=exp.ComputedColumnConstraint(this=self._parse_disjunction()),
                 )
             )
 
@@ -7163,11 +7236,18 @@ class Parser(metaclass=_Parser):
 
         return this
 
-    def _parse_pipe_syntax_query(self, query: exp.Select) -> exp.Query:
+    def _parse_pipe_syntax_query(self, query: exp.Query) -> t.Optional[exp.Query]:
         while self._match(TokenType.PIPE_GT):
+            start = self._curr
             parser = self.PIPE_SYNTAX_TRANSFORM_PARSERS.get(self._curr.text.upper())
             if not parser:
-                self.raise_error(f"Unsupported pipe syntax operator: '{self._curr.text.upper()}'.")
+                set_op_query = self._parse_pipe_syntax_set_operator(query)
+                if not set_op_query:
+                    self._retreat(start)
+                    self.raise_error(f"Unsupported pipe syntax operator: '{start.text.upper()}'.")
+                    break
+
+                query = set_op_query
             else:
                 query = parser(self, query)
 

@@ -11,37 +11,52 @@
 
 
 import os
-import sys
 import platform
+import subprocess
+import sys
+import unittest
 import warnings
 from contextlib import contextmanager
-import subprocess
+from unittest.mock import MagicMock
 
-import numpy as np
-from numpy import (
-    array, arange, empty, zeros, int32, int64, uint16, cdouble, float64, rec,
-    copy, ones_like, where, all as alltrue, linspace,
-    sum, prod, sqrt, fmod, floor, ceil,
-    sin, cos, tan, arcsin, arccos, arctan, arctan2,
-    sinh, cosh, tanh, arcsinh, arccosh, arctanh,
-    log, log1p, log10, exp, expm1, conj)
 import numpy
-from numpy.testing import (assert_equal, assert_array_equal,
-                           assert_array_almost_equal, assert_allclose)
-from numpy import shape, allclose, array_equal, ravel, isnan, isinf
+import numpy as np
+from numpy import all as alltrue
+from numpy import (allclose, arange, arccos, arccosh, arcsin, arcsinh, arctan,
+                   arctan2, arctanh, array, array_equal, cdouble, ceil, conj,
+                   copy, cos, cosh, empty, exp, expm1, float64, floor, fmod,
+                   int32, int64, isinf, isnan, linspace, log, log1p, log10,
+                   ones_like, prod, ravel, rec, shape, sin, sinh, sqrt, sum,
+                   tan, tanh, uint16, where, zeros)
+from numpy.testing import (assert_allclose, assert_array_almost_equal,
+                           assert_array_equal, assert_equal)
 
 import numexpr
-from numexpr import E, NumExpr, evaluate, re_evaluate, validate, disassemble, use_vml
+from numexpr import (E, NumExpr, disassemble, evaluate, re_evaluate, use_vml,
+                     validate)
 from numexpr.expressions import ConstantNode
 from numexpr.utils import detect_number_of_cores
 
-import unittest
+try:
+    import pytest
+    pytest_available = True
+except ImportError:
+    pytest_available = False
 
 TestCase = unittest.TestCase
 
 double = np.double
 long = int
 MAX_THREADS = 16
+
+
+if not pytest_available:
+    def identity(f):
+        return f
+
+    pytest = MagicMock()
+    pytest.mark = MagicMock()
+    pytest.mark.thread_unsafe = identity
 
 
 class test_numexpr(TestCase):
@@ -309,15 +324,18 @@ class test_numexpr(TestCase):
         res = evaluate('where(a, b, c)')
         assert_array_equal(res, c)
 
+    # Comment out this test completely, as modern Python optimizes handling refcounts.
+    # See #511 for more info.
     @unittest.skipIf(hasattr(sys, "pypy_version_info"),
                      "PyPy does not have sys.getrefcount()")
-    def test_refcount(self):
+    def _test_refcount(self):
         # Regression test for issue #310
         a = array([1])
         assert sys.getrefcount(a) == 2
         evaluate('1')
         assert sys.getrefcount(a) == 2
 
+    @pytest.mark.thread_unsafe
     def test_locals_clears_globals(self):
         # Check for issue #313, whereby clearing f_locals also clear f_globals
         # if in the top-frame. This cannot be done inside `unittest` as it is always
@@ -341,6 +359,7 @@ class test_numexpr(TestCase):
 
 
 
+@pytest.mark.thread_unsafe
 class test_numexpr2(test_numexpr):
     """Testing with 2 threads"""
     nthreads = 2
@@ -512,6 +531,7 @@ class test_evaluate(TestCase):
         else:
             self.fail()
 
+    @pytest.mark.thread_unsafe
     def test_sanitize(self):
         with _environment('NUMEXPR_SANITIZE', '1'):
             # Forbid dunder
@@ -583,11 +603,14 @@ class test_evaluate(TestCase):
             evaluate('1.5j')
             evaluate('3.j')
 
+            #pass imaginary with scientific notation
+            evaluate('1.2e3+4.5e6j')
+
             # pass forbidden characters within quotes
             x = np.array(['a', 'b'], dtype=bytes)
             evaluate("x == 'b:'")
 
-
+    @pytest.mark.thread_unsafe
     def test_no_sanitize(self):
         try: # Errors on compile() after eval()
             evaluate('import os;', sanitize=False)
@@ -674,6 +697,7 @@ class test_evaluate(TestCase):
     if 'sparc' not in platform.machine():
         # Execution order set here so as to not use too many threads
         # during the rest of the execution.  See #33 for details.
+        @pytest.mark.thread_unsafe
         def test_changing_nthreads_00_inc(self):
             a = linspace(-1, 1, 1000000)
             b = ((.25 * a + .75) * a - 1.5) * a - 2
@@ -682,6 +706,7 @@ class test_evaluate(TestCase):
                 c = evaluate("((.25*a + .75)*a - 1.5)*a - 2")
                 assert_array_almost_equal(b, c)
 
+        @pytest.mark.thread_unsafe
         def test_changing_nthreads_01_dec(self):
             a = linspace(-1, 1, 1000000)
             b = ((.25 * a + .75) * a - 1.5) * a - 2
@@ -783,108 +808,89 @@ def equal(a, b, exact):
 class Skip(Exception): pass
 
 
-def test_expressions():
-    test_no = [0]
-
-    def make_test_method(a, a2, b, c, d, e, x, expr,
-                         test_scalar, dtype, optimization, exact, section):
-        this_locals = locals()
-
-        def method():
-            try:
-                # We don't want to listen at RuntimeWarnings like
-                # "overflows" or "divide by zero" in plain eval().
-                warnings.simplefilter("ignore")
-                npval = eval(expr, globals(), this_locals)
-                warnings.simplefilter("always")
-                npval = eval(expr, globals(), this_locals)
-            except Exception as ex:
-                # just store the exception in a variable
-                # compatibility with numpy v1.12
-                # see also https://github.com/pydata/numexpr/issues/239
-                np_exception = ex
-                npval = None
-            else:
-                np_exception = None
-
-            try:
-                neval = evaluate(expr, local_dict=this_locals,
-                                 optimization=optimization)
-            except AssertionError:
-                raise
-            except NotImplementedError:
-                print('%r not implemented for %s (scalar=%d, opt=%s)'
-                      % (expr, dtype.__name__, test_scalar, optimization))
-            except Exception as ne_exception:
-                same_exc_type = issubclass(type(ne_exception),
-                                           type(np_exception))
-                if np_exception is None or not same_exc_type:
-                    print('numexpr error for expression %r' % (expr,))
-                    raise
-            except:
-                print('numexpr error for expression %r' % (expr,))
-                raise
-            else:
-                msg = ('expected numexpr error not raised for expression '
-                       '%r' % (expr,))
-                assert np_exception is None, msg
-
-                assert equal(npval, neval, exact), """%r
-(test_scalar=%r, dtype=%r, optimization=%r, exact=%r,
- npval=%r (%r - %r)\n neval=%r (%r - %r))""" % (expr, test_scalar, dtype.__name__,
-                                                optimization, exact,
-                                                npval, type(npval), shape(npval),
-                                                neval, type(neval), shape(neval))
-
-        method.description = ('test_expressions(%s, test_scalar=%r, '
-                              'dtype=%r, optimization=%r, exact=%r)') % (expr, test_scalar, dtype.__name__, optimization, exact)
-        test_no[0] += 1
-        method.__name__ = 'test_scalar%d_%s_%s_%s_%04d' % (test_scalar,
-                                                           dtype.__name__,
-                                                           optimization.encode('ascii'),
-                                                           section.encode('ascii'),
-                                                           test_no[0])
-        return method
-
+@pytest.mark.parametrize(
+    "expr,test_scalar,dtype,optimization,exact,section_name",
+    [
+        (expr, test_scalar, dtype, optimization, exact, section_name)
+        for test_scalar in (0, 1, 2)
+        for dtype in (int, int, np.float32, double, complex)
+        for optimization, exact in [
+            ("none", False),
+            ("moderate", False),
+            ("aggressive", False),
+        ]
+        for section_name, section_tests in tests
+        for expr in section_tests
+        if not (
+            dtype == complex
+            and (
+                "<" in expr
+                or ">" in expr
+                or "%" in expr
+                or "arctan2" in expr
+                or "fmod" in expr
+                or "floor" in expr
+                or "ceil" in expr
+            )
+        )
+        if not (dtype in (int, int) and test_scalar and expr == "(a+1) ** -1")
+    ],
+)
+def test_expressions(
+    expr, test_scalar, dtype, optimization, exact, section_name
+):
+    array_size = 100
+    a = arange(2 * array_size, dtype=dtype)[::2]
+    a2 = zeros([array_size, array_size], dtype=dtype)
+    b = arange(array_size, dtype=dtype) / array_size
+    c = arange(array_size, dtype=dtype)
+    d = arange(array_size, dtype=dtype)
+    e = arange(array_size, dtype=dtype)
     x = None
-    for test_scalar in (0, 1, 2):
-        for dtype in (int, int, np.float32, double, complex):
-            array_size = 100
-            a = arange(2 * array_size, dtype=dtype)[::2]
-            a2 = zeros([array_size, array_size], dtype=dtype)
-            b = arange(array_size, dtype=dtype) / array_size
-            c = arange(array_size, dtype=dtype)
-            d = arange(array_size, dtype=dtype)
-            e = arange(array_size, dtype=dtype)
-            if dtype == complex:
-                a = a.real
-                for x in [a2, b, c, d, e]:
-                    x += 1j
-                    x *= 1 + 1j
-            if test_scalar == 1:
-                a = a[array_size // 2]
-            if test_scalar == 2:
-                b = b[array_size // 2]
-            for optimization, exact in [
-                ('none', False), ('moderate', False), ('aggressive', False)]:
-                for section_name, section_tests in tests:
-                    for expr in section_tests:
-                        if (dtype == complex and
-                            ('<' in expr or '>' in expr or '%' in expr
-                             or "arctan2" in expr or "fmod" in expr
-                             or "floor" in expr or "ceil" in expr)):
-                            # skip complex comparisons or functions not
-                            # defined in complex domain.
-                            continue
-                        if (dtype in (int, int) and test_scalar and
-                                    expr == '(a+1) ** -1'):
-                            continue
 
-                        m = make_test_method(a, a2, b, c, d, e, x,
-                                             expr, test_scalar, dtype,
-                                             optimization, exact,
-                                             section_name)
-                        yield m
+    if dtype == complex:
+        a = a.real
+        for var in [a2, b, c, d, e]:
+            var += 1j
+            var *= 1 + 1j
+
+    if test_scalar == 1:
+        a = a[array_size // 2]
+    if test_scalar == 2:
+        b = b[array_size // 2]
+
+    # We don't want to listen at RuntimeWarnings like
+    # "overflows" or "divide by zero" in plain eval().
+    warnings.simplefilter("ignore")
+    try:
+        npval = eval(expr, globals(), locals())
+    except Exception as ex:
+        np_exception = ex
+        npval = None
+    else:
+        np_exception = None
+    warnings.simplefilter("always")
+
+    try:
+        neval = evaluate(expr, local_dict=locals(), optimization=optimization)
+    except AssertionError:
+        raise
+    except NotImplementedError:
+        pytest.skip(
+            f"{expr!r} not implemented for {dtype.__name__} (scalar={test_scalar}, opt={optimization})"
+        )
+    except Exception as ne_exception:
+        same_exc_type = issubclass(type(ne_exception), type(np_exception))
+        if np_exception is None or not same_exc_type:
+            pytest.fail(f"numexpr error for expression {expr!r}")
+    else:
+        if np_exception is not None:
+            pytest.fail(f"expected numexpr error not raised for expression {expr!r}")
+
+        assert equal(npval, neval, exact), f"""{expr!r}
+            (test_scalar={test_scalar!r}, dtype={dtype.__name__!r}, optimization={optimization!r}, exact={exact!r},
+            npval={npval!r} ({type(npval)!r} - {shape(npval)!r})
+            neval={neval!r} ({type(neval)!r} - {shape(neval)!r}))"""
 
 
 class test_int64(TestCase):
@@ -1120,6 +1126,7 @@ def _environment(key, value):
             del os.environ[key]
 
 # Test cases for the threading configuration
+@pytest.mark.thread_unsafe
 class test_threading_config(TestCase):
     def test_max_threads_unset(self):
         # Has to be done in a subprocess as `importlib.reload` doesn't let us
@@ -1303,6 +1310,7 @@ def _worker(qout=None):
 
 # Case test for subprocesses (via multiprocessing module)
 class test_subprocess(TestCase):
+    @pytest.mark.thread_unsafe
     def test_multiprocess(self):
         try:
             import multiprocessing as mp
@@ -1325,8 +1333,9 @@ class test_subprocess(TestCase):
 def print_versions():
     """Print the versions of software that numexpr relies on."""
     # from pkg_resources import parse_version
-    from numexpr.cpuinfo import cpu
     import platform
+
+    from numexpr.cpuinfo import cpu
 
     print('-=' * 38)
     print('Numexpr version:   %s' % numexpr.__version__)
@@ -1368,31 +1377,50 @@ test.__test__ = False
 
 
 def suite():
-    import unittest
     import platform as pl
+    import unittest
 
     theSuite = unittest.TestSuite()
     niter = 1
 
-    class TestExpressions(TestCase):
-        pass
+    # Add the pytest parametrized tests only if pytest is available
+    if pytest_available:
+        # Create a class that will run the test_expressions function with different parameters
+        class TestExpressions(unittest.TestCase):
+            pass
 
-    def add_method(func):
-        def method(self):
-            return func()
+        # Get the parameters from the pytest.mark.parametrize decorator
+        # This is safer than accessing internal pytest modules
+        marker = getattr(test_expressions, "pytestmark", None)
+        if marker and hasattr(marker[0], "args") and len(marker[0].args) >= 2:
+            param_list = marker[0].args[1]
 
-        setattr(TestExpressions, func.__name__,
-                method.__get__(None, TestExpressions))
+            # Create test methods dynamically
+            for i, params in enumerate(param_list):
+                expr, test_scalar, dtype, optimization, exact, section_name = params
 
-    for func in test_expressions():
-        add_method(func)
+                def create_test_method(params=params):
+                    def test_method(self):
+                        expr, test_scalar, dtype, optimization, exact, section_name = (
+                            params
+                        )
+                        test_expressions(
+                            expr, test_scalar, dtype, optimization, exact, section_name
+                        )
+
+                    return test_method
+
+                method_name = f"test_expr_{i}"
+                setattr(TestExpressions, method_name, create_test_method())
 
     for n in range(niter):
         theSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(test_numexpr))
         if 'sparc' not in platform.machine():
             theSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(test_numexpr2))
         theSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(test_evaluate))
-        theSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestExpressions))
+        # Add the dynamically created TestExpressions to the suite
+        if pytest_available:
+            theSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestExpressions))
         theSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(test_int32_int64))
         theSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(test_uint32_int64))
         theSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(test_strings))
@@ -1410,6 +1438,7 @@ def suite():
         # This only happens with Windows, so I suspect of a subtle bad
         # interaction with threads and subprocess :-/
         theSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(test_threading))
+
 
     return theSuite
 

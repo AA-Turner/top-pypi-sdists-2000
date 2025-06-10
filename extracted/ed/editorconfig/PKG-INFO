@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: EditorConfig
-Version: 0.17.0
+Version: 0.17.1
 Summary: EditorConfig File Locator and Interpreter for Python
 Author: EditorConfig Team
 License: PSF-2.0
@@ -10,17 +10,20 @@ Project-URL: Bug Tracker, https://github.com/editorconfig/editorconfig-core-py/i
 Classifier: License :: OSI Approved :: Python Software Foundation License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 2.7
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: LICENSE.BSD
 License-File: LICENSE.PSF
 License-File: COPYING
+Provides-Extra: dev
+Requires-Dist: mypy>=1.15; extra == "dev"
+Dynamic: license-file
 
 ========================
 EditorConfig Python Core
@@ -50,7 +53,7 @@ between different text editors and between different projects.  The
 EditorConfig project maintains a file format and plugins for various text
 editors which allow this file format to be read and used by those editors.  For
 information on the file format and supported text editors, see the
-`EditorConfig website <http://editorconfig.org>`_.
+`EditorConfig website <https://editorconfig.org>`_.
 
 Installation
 ============

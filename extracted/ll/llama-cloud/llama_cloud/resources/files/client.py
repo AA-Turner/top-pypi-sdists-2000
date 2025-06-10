@@ -11,13 +11,12 @@ from ...core.jsonable_encoder import jsonable_encoder
 from ...core.remove_none_from_dict import remove_none_from_dict
 from ...errors.unprocessable_entity_error import UnprocessableEntityError
 from ...types.file import File
+from ...types.file_id_presigned_url import FileIdPresignedUrl
 from ...types.http_validation_error import HttpValidationError
+from ...types.json_type import JsonType
 from ...types.page_figure_metadata import PageFigureMetadata
 from ...types.page_screenshot_metadata import PageScreenshotMetadata
 from ...types.presigned_url import PresignedUrl
-from .types.file_create_from_url_resource_info_value import FileCreateFromUrlResourceInfoValue
-from .types.file_create_permission_info_value import FileCreatePermissionInfoValue
-from .types.file_create_resource_info_value import FileCreateResourceInfoValue
 
 try:
     import pydantic
@@ -199,10 +198,10 @@ class FilesClient:
         external_file_id: typing.Optional[str] = OMIT,
         file_size: typing.Optional[int] = OMIT,
         last_modified_at: typing.Optional[dt.datetime] = OMIT,
-        resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateResourceInfoValue]]] = OMIT,
-        permission_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreatePermissionInfoValue]]] = OMIT,
+        resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
+        permission_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
         data_source_id: typing.Optional[str] = OMIT,
-    ) -> PresignedUrl:
+    ) -> FileIdPresignedUrl:
         """
         Create a presigned url for uploading a file.
 
@@ -221,9 +220,9 @@ class FilesClient:
 
             - last_modified_at: typing.Optional[dt.datetime].
 
-            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateResourceInfoValue]]].
+            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
 
-            - permission_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreatePermissionInfoValue]]].
+            - permission_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
 
             - data_source_id: typing.Optional[str].
         ---
@@ -260,7 +259,7 @@ class FilesClient:
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PresignedUrl, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(FileIdPresignedUrl, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -315,7 +314,7 @@ class FilesClient:
         request_headers: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         verify_ssl: typing.Optional[bool] = OMIT,
         follow_redirects: typing.Optional[bool] = OMIT,
-        resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateFromUrlResourceInfoValue]]] = OMIT,
+        resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
     ) -> File:
         """
         Upload a file to the project from a URL.
@@ -344,7 +343,7 @@ class FilesClient:
 
             - follow_redirects: typing.Optional[bool]. Whether to follow redirects when downloading the file
 
-            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateFromUrlResourceInfoValue]]].
+            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
         ---
         from llama_cloud.client import LlamaCloud
 
@@ -826,10 +825,10 @@ class AsyncFilesClient:
         external_file_id: typing.Optional[str] = OMIT,
         file_size: typing.Optional[int] = OMIT,
         last_modified_at: typing.Optional[dt.datetime] = OMIT,
-        resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateResourceInfoValue]]] = OMIT,
-        permission_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreatePermissionInfoValue]]] = OMIT,
+        resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
+        permission_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
         data_source_id: typing.Optional[str] = OMIT,
-    ) -> PresignedUrl:
+    ) -> FileIdPresignedUrl:
         """
         Create a presigned url for uploading a file.
 
@@ -848,9 +847,9 @@ class AsyncFilesClient:
 
             - last_modified_at: typing.Optional[dt.datetime].
 
-            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateResourceInfoValue]]].
+            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
 
-            - permission_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreatePermissionInfoValue]]].
+            - permission_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
 
             - data_source_id: typing.Optional[str].
         ---
@@ -887,7 +886,7 @@ class AsyncFilesClient:
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PresignedUrl, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(FileIdPresignedUrl, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -942,7 +941,7 @@ class AsyncFilesClient:
         request_headers: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         verify_ssl: typing.Optional[bool] = OMIT,
         follow_redirects: typing.Optional[bool] = OMIT,
-        resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateFromUrlResourceInfoValue]]] = OMIT,
+        resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
     ) -> File:
         """
         Upload a file to the project from a URL.
@@ -971,7 +970,7 @@ class AsyncFilesClient:
 
             - follow_redirects: typing.Optional[bool]. Whether to follow redirects when downloading the file
 
-            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateFromUrlResourceInfoValue]]].
+            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
         ---
         from llama_cloud.client import AsyncLlamaCloud
 

@@ -2745,6 +2745,7 @@ class ClassicAddress(ServiceResource):
     customer_owned_ip: str
     customer_owned_ipv4_pool: str
     carrier_ip: str
+    subnet_id: str
     service_managed: ServiceManagedType
     instance_id: str
     meta: EC2ResourceMeta  # type: ignore[override]
@@ -3093,8 +3094,8 @@ class Instance(ServiceResource):
         self, **kwargs: Unpack[AttachVolumeRequestInstanceAttachVolumeTypeDef]
     ) -> VolumeAttachmentResponseTypeDef:
         """
-        Attaches an EBS volume to a running or stopped instance and exposes it to the
-        instance with the specified device name.
+        Attaches an Amazon EBS volume to a <code>running</code> or <code>stopped</code>
+        instance, and exposes it to the instance with the specified device name.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/instance/attach_volume.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/service_resource/#instanceattach_volume-method)
@@ -3648,6 +3649,7 @@ class NetworkInterface(ServiceResource):
     ipv6_native: bool
     ipv6_address: str
     operator: OperatorResponseTypeDef
+    associated_subnets: List[str]
     meta: EC2ResourceMeta  # type: ignore[override]
 
     def get_available_subresources(self) -> Sequence[str]:
@@ -4328,6 +4330,7 @@ class Subnet(ServiceResource):
     ipv6_native: bool
     private_dns_name_options_on_launch: PrivateDnsNameOptionsOnLaunchTypeDef
     block_public_access_states: BlockPublicAccessStatesTypeDef
+    type: str
     subnet_id: str
     state: SubnetStateType
     vpc_id: str
@@ -4485,8 +4488,8 @@ class Volume(ServiceResource):
         self, **kwargs: Unpack[AttachVolumeRequestVolumeAttachToInstanceTypeDef]
     ) -> VolumeAttachmentResponseTypeDef:
         """
-        Attaches an EBS volume to a running or stopped instance and exposes it to the
-        instance with the specified device name.
+        Attaches an Amazon EBS volume to a <code>running</code> or <code>stopped</code>
+        instance, and exposes it to the instance with the specified device name.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/volume/attach_to_instance.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/service_resource/#volumeattach_to_instance-method)
@@ -4913,6 +4916,7 @@ class VpcAddress(ServiceResource):
     customer_owned_ip: str
     customer_owned_ipv4_pool: str
     carrier_ip: str
+    subnet_id: str
     service_managed: ServiceManagedType
     instance_id: str
     public_ip: str

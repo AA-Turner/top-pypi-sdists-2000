@@ -75,14 +75,14 @@ _base_pool_rollup_metrics = [
 # Tests
 
 
-@pytest.fixture()
+@pytest.fixture
 def client(loop):
     import redis.asyncio
 
     return loop.run_until_complete(redis.asyncio.Redis(host=DB_SETTINGS["host"], port=DB_SETTINGS["port"], db=0))
 
 
-@pytest.fixture()
+@pytest.fixture
 def client_pool(loop):
     import redis.asyncio
 
@@ -129,14 +129,22 @@ def test_async_pipeline(client, loop):
 @background_task()
 def test_async_pubsub(client, loop):
     messages_received = []
+    message_received = asyncio.Event()
 
     async def reader(pubsub):
         while True:
             message = await pubsub.get_message(ignore_subscribe_messages=True)
             if message:
+                message_received.set()
                 messages_received.append(message["data"].decode())
                 if message["data"].decode() == "NOPE":
                     break
+
+    async def _publish(client, channel, message):
+        """Publish a message and wait for the reader to receive it."""
+        await client.publish(channel, message)
+        await asyncio.wait_for(message_received.wait(), timeout=10)
+        message_received.clear()
 
     async def _test_pubsub():
         async with client.pubsub() as pubsub:
@@ -144,9 +152,9 @@ def test_async_pubsub(client, loop):
 
             future = asyncio.create_task(reader(pubsub))
 
-            await client.publish("channel:1", "Hello")
-            await client.publish("channel:2", "World")
-            await client.publish("channel:1", "NOPE")
+            await _publish(client, "channel:1", "Hello")
+            await _publish(client, "channel:2", "World")
+            await _publish(client, "channel:1", "NOPE")
 
             await future
 

@@ -1,6 +1,7 @@
 use crate::auditwheel::{AuditWheelMode, PlatformTag};
 use crate::bridge::{Abi3Version, PyO3Crate};
 use crate::compile::{CompileTarget, LIB_CRATE_TYPES};
+use crate::compression::CompressionOptions;
 use crate::cross_compile::{find_sysconfigdata, parse_sysconfigdata};
 use crate::project_layout::ProjectResolver;
 use crate::pyproject_toml::ToolMaturin;
@@ -217,10 +218,9 @@ pub struct BuildOptions {
     #[command(flatten)]
     pub cargo: CargoOptions,
 
-    /// Zip compresson level to use
-    #[arg(long, value_parser = clap::value_parser!(u16).range(0..=264), hide = true, default_value="6"
-    )]
-    pub compression_level: u16,
+    /// Wheel compression options
+    #[command(flatten)]
+    pub compression: CompressionOptions,
 }
 
 impl Deref for BuildOptions {
@@ -587,6 +587,7 @@ impl BuildContextBuilder {
             editable,
             sdist_only,
         } = self;
+        build_options.compression.validate();
         let ProjectResolver {
             project_layout,
             cargo_toml_path,
@@ -807,7 +808,7 @@ impl BuildContextBuilder {
             universal2,
             editable,
             cargo_options,
-            compression_level: build_options.compression_level,
+            compression: build_options.compression,
         })
     }
 }
@@ -1268,9 +1269,9 @@ fn find_interpreter(
     if !interpreter.is_empty() {
         let mut missing = Vec::new();
         for interp in interpreter {
-            match PythonInterpreter::check_executable(interp.clone(), target, bridge) {
-                Ok(Some(interp)) => found_interpreters.push(interp),
-                _ => missing.push(interp.clone()),
+            match PythonInterpreter::check_executable(interp.clone(), target, bridge)? {
+                Some(interp) => found_interpreters.push(interp),
+                None => missing.push(interp.clone()),
             }
         }
         if !missing.is_empty() {
@@ -1401,8 +1402,8 @@ fn find_interpreter_in_sysconfig(
                 format!("Failed to find a {python_impl} {ver_major}.{ver_minor} interpreter in known sysconfig")
             })?;
         debug!(
-            "Found {} {}.{} in bundled sysconfig",
-            sysconfig.interpreter_kind, sysconfig.major, sysconfig.minor,
+            "Found {} {}.{}{} in bundled sysconfig",
+            sysconfig.interpreter_kind, sysconfig.major, sysconfig.minor, sysconfig.abiflags
         );
         interpreters.push(PythonInterpreter::from_config(sysconfig.clone()));
     }
@@ -1620,12 +1621,12 @@ mod test {
 
         let bridge = BridgeModel::PyO3(PyO3 {
             crate_name: PyO3Crate::PyO3,
-            version: semver::Version::new(0, 24, 1),
+            version: semver::Version::new(0, 25, 0),
             abi3: Some(Abi3Version::Version(3, 7)),
             metadata: Some(PyO3Metadata {
                 cpython: PyO3VersionMetadata {
                     min_minor: 7,
-                    max_minor: 13,
+                    max_minor: 14,
                 },
                 pypy: PyO3VersionMetadata {
                     min_minor: 9,

@@ -6,7 +6,7 @@ import typing
 from ..core.datetime_utils import serialize_datetime
 from .configurable_data_source_names import ConfigurableDataSourceNames
 from .data_source_component import DataSourceComponent
-from .data_source_custom_metadata_value import DataSourceCustomMetadataValue
+from .json_type import JsonType
 
 try:
     import pydantic
@@ -27,7 +27,7 @@ class DataSource(pydantic.BaseModel):
     updated_at: typing.Optional[dt.datetime]
     name: str = pydantic.Field(description="The name of the data source.")
     source_type: ConfigurableDataSourceNames
-    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[DataSourceCustomMetadataValue]]]
+    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
     component: DataSourceComponent = pydantic.Field(description="Component that implements the data source")
     version_metadata: typing.Optional[typing.Dict[str, typing.Any]]
     project_id: str

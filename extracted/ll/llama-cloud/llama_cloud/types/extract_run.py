@@ -6,10 +6,9 @@ import typing
 from ..core.datetime_utils import serialize_datetime
 from .extract_config import ExtractConfig
 from .extract_run_data import ExtractRunData
-from .extract_run_data_schema_value import ExtractRunDataSchemaValue
-from .extract_run_extraction_metadata_value import ExtractRunExtractionMetadataValue
 from .extract_state import ExtractState
 from .file import File
+from .json_type import JsonType
 
 try:
     import pydantic
@@ -29,7 +28,7 @@ class ExtractRun(pydantic.BaseModel):
     created_at: typing.Optional[dt.datetime]
     updated_at: typing.Optional[dt.datetime]
     extraction_agent_id: str = pydantic.Field(description="The id of the extraction agent")
-    data_schema: typing.Dict[str, typing.Optional[ExtractRunDataSchemaValue]] = pydantic.Field(
+    data_schema: typing.Dict[str, typing.Optional[JsonType]] = pydantic.Field(
         description="The schema used for extraction"
     )
     config: ExtractConfig = pydantic.Field(description="The config used for extraction")
@@ -38,7 +37,7 @@ class ExtractRun(pydantic.BaseModel):
     error: typing.Optional[str]
     job_id: typing.Optional[str]
     data: typing.Optional[ExtractRunData] = pydantic.Field(description="The data extracted from the file")
-    extraction_metadata: typing.Optional[typing.Dict[str, typing.Optional[ExtractRunExtractionMetadataValue]]]
+    extraction_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
     from_ui: bool = pydantic.Field(description="Whether this extraction run was triggered from the UI")
 
     def json(self, **kwargs: typing.Any) -> str:

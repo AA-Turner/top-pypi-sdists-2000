@@ -2,8 +2,6 @@
 
 import typing
 
-from .extract_job_create_batch_data_schema_override_zero_value import ExtractJobCreateBatchDataSchemaOverrideZeroValue
+from ....types.json_type import JsonType
 
-ExtractJobCreateBatchDataSchemaOverride = typing.Union[
-    typing.Dict[str, typing.Optional[ExtractJobCreateBatchDataSchemaOverrideZeroValue]], str
-]
+ExtractJobCreateBatchDataSchemaOverride = typing.Union[typing.Dict[str, typing.Optional[JsonType]], str]
