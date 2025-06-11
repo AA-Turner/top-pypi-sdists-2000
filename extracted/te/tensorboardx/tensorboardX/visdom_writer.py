@@ -1,8 +1,9 @@
 import gc
-import numpy as np
-import math
 import json
+import math
 import time
+
+import numpy as np
 
 from .summary import compute_curve
 from .utils import figure_to_image
@@ -60,10 +61,9 @@ class VisdomWriter:
         exists = self.scalar_dict[main_tag].get(tag) is not None
         self.scalar_dict[main_tag][tag] = self.scalar_dict[main_tag][tag] + \
             [scalar_value] if exists else [scalar_value]
-        plot_name = '{}-{}'.format(main_tag, tag)
+        plot_name = f'{main_tag}-{tag}'
         # If there is no global_step provided, follow sequential order
-        x_val = len(self.scalar_dict[main_tag][tag]
-                    ) if not global_step else global_step
+        x_val = global_step if global_step else len(self.scalar_dict[main_tag][tag])
         if exists:
             # Update our existing Visdom window
             self.vis.line(
@@ -109,7 +109,7 @@ class VisdomWriter:
                 'run_14h-arctanx'
             with the corresponding values.
         """
-        for key in tag_scalar_dict.keys():
+        for key in tag_scalar_dict:
             self.add_scalar(key, tag_scalar_dict[key], global_step, main_tag)
 
     @_check_connection
@@ -282,7 +282,7 @@ class VisdomWriter:
             Y=precision,
             name=tag,
             opts={
-                'title': 'PR Curve for {}'.format(tag),
+                'title': f'PR Curve for {tag}',
                 'xlabel': 'recall',
                 'ylabel': 'precision',
             },
@@ -315,7 +315,7 @@ class VisdomWriter:
             Y=precision,
             name=tag,
             opts={
-                'title': 'PR Curve for {}'.format(tag),
+                'title': f'PR Curve for {tag}',
                 'xlabel': 'recall',
                 'ylabel': 'precision',
             },

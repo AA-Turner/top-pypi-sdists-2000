@@ -17,7 +17,6 @@ from ...types.eval_execution_params import EvalExecutionParams
 from ...types.file_count_by_status_response import FileCountByStatusResponse
 from ...types.http_validation_error import HttpValidationError
 from ...types.input_message import InputMessage
-from ...types.json_type import JsonType
 from ...types.llama_parse_parameters import LlamaParseParameters
 from ...types.managed_ingestion_status_response import ManagedIngestionStatusResponse
 from ...types.metadata_filters import MetadataFilters
@@ -37,8 +36,12 @@ from ...types.preset_retrieval_params import PresetRetrievalParams
 from ...types.retrieval_mode import RetrievalMode
 from ...types.retrieve_results import RetrieveResults
 from ...types.text_node import TextNode
+from .types.pipeline_file_update_custom_metadata_value import PipelineFileUpdateCustomMetadataValue
 from .types.pipeline_update_embedding_config import PipelineUpdateEmbeddingConfig
 from .types.pipeline_update_transform_config import PipelineUpdateTransformConfig
+from .types.retrieval_params_search_filters_inference_schema_value import (
+    RetrievalParamsSearchFiltersInferenceSchemaValue,
+)
 
 try:
     import pydantic
@@ -662,7 +665,9 @@ class PipelinesClient:
         file_id: str,
         pipeline_id: str,
         *,
-        custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
+        custom_metadata: typing.Optional[
+            typing.Dict[str, typing.Optional[PipelineFileUpdateCustomMetadataValue]]
+        ] = OMIT,
     ) -> PipelineFile:
         """
         Update a file for a pipeline.
@@ -672,7 +677,7 @@ class PipelinesClient:
 
             - pipeline_id: str.
 
-            - custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
+            - custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileUpdateCustomMetadataValue]]].
         ---
         from llama_cloud.client import LlamaCloud
 
@@ -1039,7 +1044,9 @@ class PipelinesClient:
         rerank_top_n: typing.Optional[int] = OMIT,
         alpha: typing.Optional[float] = OMIT,
         search_filters: typing.Optional[MetadataFilters] = OMIT,
-        search_filters_inference_schema: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
+        search_filters_inference_schema: typing.Optional[
+            typing.Dict[str, typing.Optional[RetrievalParamsSearchFiltersInferenceSchemaValue]]
+        ] = OMIT,
         files_top_k: typing.Optional[int] = OMIT,
         retrieval_mode: typing.Optional[RetrievalMode] = OMIT,
         retrieve_image_nodes: typing.Optional[bool] = OMIT,
@@ -1072,7 +1079,7 @@ class PipelinesClient:
 
             - search_filters: typing.Optional[MetadataFilters].
 
-            - search_filters_inference_schema: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
+            - search_filters_inference_schema: typing.Optional[typing.Dict[str, typing.Optional[RetrievalParamsSearchFiltersInferenceSchemaValue]]].
 
             - files_top_k: typing.Optional[int].
 
@@ -2297,7 +2304,9 @@ class AsyncPipelinesClient:
         file_id: str,
         pipeline_id: str,
         *,
-        custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
+        custom_metadata: typing.Optional[
+            typing.Dict[str, typing.Optional[PipelineFileUpdateCustomMetadataValue]]
+        ] = OMIT,
     ) -> PipelineFile:
         """
         Update a file for a pipeline.
@@ -2307,7 +2316,7 @@ class AsyncPipelinesClient:
 
             - pipeline_id: str.
 
-            - custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
+            - custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileUpdateCustomMetadataValue]]].
         ---
         from llama_cloud.client import AsyncLlamaCloud
 
@@ -2676,7 +2685,9 @@ class AsyncPipelinesClient:
         rerank_top_n: typing.Optional[int] = OMIT,
         alpha: typing.Optional[float] = OMIT,
         search_filters: typing.Optional[MetadataFilters] = OMIT,
-        search_filters_inference_schema: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
+        search_filters_inference_schema: typing.Optional[
+            typing.Dict[str, typing.Optional[RetrievalParamsSearchFiltersInferenceSchemaValue]]
+        ] = OMIT,
         files_top_k: typing.Optional[int] = OMIT,
         retrieval_mode: typing.Optional[RetrievalMode] = OMIT,
         retrieve_image_nodes: typing.Optional[bool] = OMIT,
@@ -2709,7 +2720,7 @@ class AsyncPipelinesClient:
 
             - search_filters: typing.Optional[MetadataFilters].
 
-            - search_filters_inference_schema: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
+            - search_filters_inference_schema: typing.Optional[typing.Dict[str, typing.Optional[RetrievalParamsSearchFiltersInferenceSchemaValue]]].
 
             - files_top_k: typing.Optional[int].
 

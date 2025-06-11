@@ -4,7 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .json_type import JsonType
+from .extract_schema_validate_response_data_schema_value import ExtractSchemaValidateResponseDataSchemaValue
 
 try:
     import pydantic
@@ -16,7 +16,7 @@ except ImportError:
 
 
 class ExtractSchemaValidateResponse(pydantic.BaseModel):
-    data_schema: typing.Dict[str, typing.Optional[JsonType]]
+    data_schema: typing.Dict[str, typing.Optional[ExtractSchemaValidateResponseDataSchemaValue]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

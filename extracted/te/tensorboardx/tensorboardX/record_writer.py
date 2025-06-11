@@ -3,12 +3,13 @@ To write tf_record into file. Here we use it for tensorboard's event writting.
 The code was borrowed from https://github.com/TeamHG-Memex/tensorboard_logger
 """
 
-import os
 import copy
 import io
+import os
 import os.path
 import re
 import struct
+
 try:
     import boto3
     S3_ENABLED = True
@@ -21,7 +22,6 @@ except ImportError:
     GCS_ENABLED = False
 
 from .crc32c import crc32c
-
 
 _VALID_OP_NAME_START = re.compile('^[A-Za-z0-9.]')
 _VALID_OP_NAME_PART = re.compile('[A-Za-z0-9_.\\-/]+')
@@ -61,7 +61,7 @@ def open_file(path):
         return open(path, 'wb')
 
 
-class S3RecordWriter(object):
+class S3RecordWriter:
     """Writes tensorboard protocol buffer files to S3."""
 
     def __init__(self, path):
@@ -99,7 +99,7 @@ class S3RecordWriter(object):
         self.closed = True
 
 
-class S3RecordWriterFactory(object):
+class S3RecordWriterFactory:
     """Factory for event protocol buffer files to S3."""
 
     def open(self, path):
@@ -114,7 +114,7 @@ class S3RecordWriterFactory(object):
 register_writer_factory("s3", S3RecordWriterFactory())
 
 
-class GCSRecordWriter(object):
+class GCSRecordWriter:
     """Writes tensorboard protocol buffer files to Google Cloud Storage."""
 
     def __init__(self, path):
@@ -158,7 +158,7 @@ class GCSRecordWriter(object):
         self.flush()
 
 
-class GCSRecordWriterFactory(object):
+class GCSRecordWriterFactory:
     """Factory for event protocol buffer files to Google Cloud Storage."""
 
     def open(self, path):
@@ -173,7 +173,7 @@ class GCSRecordWriterFactory(object):
 register_writer_factory("gs", GCSRecordWriterFactory())
 
 
-class RecordWriter(object):
+class RecordWriter:
     def __init__(self, path):
         self._name_to_tf_name = {}
         self._tf_names = set()

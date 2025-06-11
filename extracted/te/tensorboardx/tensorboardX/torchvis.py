@@ -1,15 +1,10 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 import gc
 import time
-
 from functools import wraps
-from .writer import SummaryWriter
-from .visdom_writer import VisdomWriter
 
+from .visdom_writer import VisdomWriter
+from .writer import SummaryWriter
 
 # Supports both TensorBoard and Visdom (no embedding or graph visualization with Visdom)
 vis_formats = {'tensorboard': SummaryWriter, 'visdom': VisdomWriter}
@@ -30,9 +25,9 @@ class TorchVis:
 
     def register(self, *args, **init_kwargs):
         # Sets tensorboard as the default visualization format if not specified
-        formats = ['tensorboard'] if not args else args
+        formats = args if args else ['tensorboard']
         for format in formats:
-            if self.subscribers.get(format) is None and format in vis_formats.keys():
+            if self.subscribers.get(format) is None and format in vis_formats:
                 self.subscribers[format] = vis_formats[format](**init_kwargs.get(format, {}))
 
     def unregister(self, *args):

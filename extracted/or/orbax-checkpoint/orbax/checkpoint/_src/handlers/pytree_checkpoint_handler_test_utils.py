@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -157,6 +157,7 @@ class PyTreeCheckpointHandlerTestBase:
         self,  # pylint: disable=unused-argument
         use_ocdbt: bool,
         use_zarr3: bool = False,
+        enable_pinned_host_transfer: bool | None = None,
         pytree_metadata_options: tree_metadata.PyTreeMetadataOptions = (
             tree_metadata.PYTREE_METADATA_OPTIONS
         ),
@@ -177,6 +178,7 @@ class PyTreeCheckpointHandlerTestBase:
           use_zarr3=use_zarr3,
           type_handler_registry=type_handler_registry,
           pytree_metadata_options=pytree_metadata_options,
+          enable_pinned_host_transfer=enable_pinned_host_transfer,
       )
       try:
         yield handler
@@ -1991,7 +1993,8 @@ class PyTreeCheckpointHandlerTestBase:
           sleep_time,
       )
 
-    def test_enable_pinned_host_transfer(self):
+    @parameterized.product(enable_pinned_host_transfer=(True, False))
+    def test_enable_pinned_host_transfer(self, enable_pinned_host_transfer):
       if utils.is_pathways_backend():
         self.skipTest(
             'Disabled on Pathways because local variables cannot updated by'
@@ -2021,14 +2024,18 @@ class PyTreeCheckpointHandlerTestBase:
           replica_slices,
           'transfer_arrays_to_host',
           new=_transfer_arrays_to_host,
-      ):
-        self.handler.save(
-            self.directory,
-            args=PyTreeSaveArgs(self.pytree, enable_pinned_host_transfer=False),
-        )
+      ), self.ocdbt_checkpoint_handler(
+          use_ocdbt=False,
+          enable_pinned_host_transfer=enable_pinned_host_transfer,
+      ) as handler:
+        handler.save(self.directory, args=PyTreeSaveArgs(self.pytree))
 
-      self.assertEqual(true_count, 0)
-      self.assertGreater(false_count, 0)
+      if enable_pinned_host_transfer:
+        self.assertGreater(true_count, 0)
+        self.assertEqual(false_count, 0)
+      else:
+        self.assertEqual(true_count, 0)
+        self.assertGreater(false_count, 0)
 
     def test_custom_metadata(self):
       custom_metadata = {'foo': 1}
@@ -2569,5 +2576,73 @@ class PyTreeCheckpointHandlerTestBase:
                 args=PyTreeRestoreArgs(
                     item=reference_item,
                     restore_args=restore_args,
+                ),
+            )
+
+    @parameterized.product(use_ocdbt=(True, False))
+    def test_partial_restore_with_omission(self, use_ocdbt: bool):
+      """Basic save and restore test."""
+      directory = self.directory / 'partial_restore'
+      directory.mkdir(parents=True, exist_ok=True)
+
+      with self.ocdbt_checkpoint_handler(
+          use_ocdbt=use_ocdbt,
+          array_metadata_store=array_metadata_store_lib.Store(),
+      ) as save_handler:
+        save_handler.save(directory, self.pytree)
+
+      restore_args = jax.tree.map(
+          lambda arr: ArrayRestoreArgs(sharding=arr.sharding), self.pytree
+      )
+
+      with self.subTest('success'):
+        with self.ocdbt_checkpoint_handler(
+            use_ocdbt=use_ocdbt,
+            array_metadata_store=array_metadata_store_lib.Store(),
+        ) as restore_handler:
+          reference_item = {
+              'a': 0,
+              'c': {
+                  'a': 0,
+              },
+          }
+          expected = {
+              'a': self.pytree['a'],
+              'c': {
+                  'a': self.pytree['c']['a'],
+              },
+          }
+          restored = restore_handler.restore(
+              directory,
+              args=PyTreeRestoreArgs(
+                  item=reference_item,
+                  restore_args=restore_args,
+                  partial_restore=True,
+              ),
+          )
+          test_utils.assert_tree_equal(self, expected, restored)
+
+      with self.subTest('extra_leaf'):
+        with self.ocdbt_checkpoint_handler(
+            use_ocdbt=use_ocdbt,
+            array_metadata_store=array_metadata_store_lib.Store(),
+        ) as restore_handler:
+          reference_item = {
+              'a': 0,
+              'c': {
+                  'a': 0,
+              },
+              'z': 0,
+          }
+          with self.assertRaisesRegex(
+              ValueError,
+              r"Missing 1 keys in structure path \(\), including: \['z'\]",
+          ):
+            restore_handler.restore(
+                directory,
+                args=PyTreeRestoreArgs(
+                    item=reference_item,
+                    restore_args=restore_args,
+                    partial_restore=True,
                 ),
             )

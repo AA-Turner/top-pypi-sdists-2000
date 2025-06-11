@@ -1,10 +1,13 @@
-import logging
-import json
 import functools
+import json
+import logging
 from io import BytesIO
-from google.protobuf.json_format import MessageToJson
+
 import numpy as np
+from google.protobuf.json_format import MessageToJson
+
 from .summary import _clean_tag
+
 try:
     import comet_ml
     comet_installed = True
@@ -32,7 +35,7 @@ class CometLogger:
             if self._logging is None and comet_installed:
                 self._logging = False
                 try:
-                    if 'api_key' not in self._comet_config.keys():
+                    if 'api_key' not in self._comet_config:
                         comet_ml.init()
                     if comet_ml.get_global_experiment() is not None:
                         logger.warning("You have already created a comet \

@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ from orbax.checkpoint._src.path import atomicity
 from orbax.checkpoint._src.serialization import serialization
 from orbax.checkpoint._src.tree import utils as tree_utils
 import orbax.checkpoint.experimental.v1 as ocp
+from orbax.checkpoint.experimental.v1._src.handlers import registration
 from orbax.checkpoint.experimental.v1._src.path import types as path_types
 from orbax.checkpoint.experimental.v1._src.synchronization import multihost
 from orbax.checkpoint.experimental.v1._src.testing import array_utils as array_test_utils
@@ -440,9 +441,9 @@ class SaveLoadTestBase:
         with self.assertRaisesRegex(ValueError, 'User-provided restore item'):
           ocp.load_pytree(self.directory, abstract_pytree)
 
-    def test_force_overwrites(self):
+    def test_overwrites(self):
       ocp.save_pytree(self.directory, self.pytree)
-      ocp.save_pytree(self.directory, self.numpy_pytree, force=True)
+      ocp.save_pytree(self.directory, self.numpy_pytree, overwrite=True)
       test_utils.assert_tree_equal(
           self, self.numpy_pytree, ocp.load_pytree(self.directory)
       )
@@ -802,10 +803,52 @@ class SaveLoadTestBase:
       checkpointables = {'point': point}
       ocp.save_checkpointables(self.directory, checkpointables)
       self.assertTrue((self.directory / 'point' / 'foo.txt').exists())
-      loaded = ocp.load_checkpointables(
-          self.directory, {'point': handler_utils.Point(0, 0)}
-      )
-      self.assertEqual(1, loaded['point'].x)
-      self.assertEqual(2, loaded['point'].y)
-      # TODO(yaning) Add failure case where abstract_checkpointable is not
-      # provided.
+      with self.subTest('success'):
+        loaded = ocp.load_checkpointables(
+            self.directory, {'point': handler_utils.Point(0, 0)}
+        )
+        self.assertEqual(1, loaded['point'].x)
+        self.assertEqual(2, loaded['point'].y)
+      with self.subTest('No abstract_checkpointable'):
+        with self.assertRaisesRegex(
+            ValueError,
+            'To restore a `StatefulCheckpointable`, you must pass an instance'
+            ' of the object.',
+        ):
+          ocp.load_checkpointables(self.directory)
+
+    def test_checkpointable_missing_load(self):
+
+      @dataclasses.dataclass
+      class PointMissingLoad:
+        """Implements Point that violates StatefulCheckpointable protocol with missing load method."""
+
+        x: int
+        y: int
+
+        async def save(
+            self, directory: path_types.PathAwaitingCreation
+        ) -> Awaitable[None]:
+          return handler_utils.DataclassHandler().background_save(
+              directory,
+              self,
+              primary_host=handler_utils.context_lib.get_context().multiprocessing_options.primary_host,
+          )
+
+      point = PointMissingLoad(1, 2)
+      checkpointables = {'point': point}
+      with self.assertRaisesRegex(
+          registration.NoEntryError,
+          'Could not identify a valid handler for the checkpointable: "point"',
+      ):
+        ocp.save_checkpointables(self.directory, checkpointables)
+
+    def test_load_does_not_exist(self):
+      with self.assertRaises(FileNotFoundError):
+        ocp.load_checkpointables(self.directory / 'foobar')
+
+    def test_load_tmp_checkpoint(self):
+      tmp_checkpoint_dir = self.directory / 'foo.orbax-checkpoint-tmp-1234'
+      tmp_checkpoint_dir.mkdir(parents=True, exist_ok=False)
+      with self.assertRaisesRegex(ValueError, 'Found incomplete checkpoint'):
+        ocp.load_checkpointables(tmp_checkpoint_dir)

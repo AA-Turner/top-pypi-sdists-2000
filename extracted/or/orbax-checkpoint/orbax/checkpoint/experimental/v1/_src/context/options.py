@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ from typing import Any, Callable, Protocol, Type
 
 import numpy as np
 from orbax.checkpoint import options as v0_options_lib
+from orbax.checkpoint._src.metadata import array_metadata_store as array_metadata_store_lib
 from orbax.checkpoint._src.metadata import tree as tree_metadata
 from orbax.checkpoint._src.path import atomicity_types
 from orbax.checkpoint.experimental.v1._src.handlers import registration
@@ -33,11 +34,12 @@ from orbax.checkpoint.experimental.v1._src.tree import types as tree_types
 class AsyncOptions:
   """Options used to configure async behavior.
 
-  timeout_secs: The timeout in seconds for the async save operation.
-  post_finalization_callback: A function that is called after the async save
-    operation is complete.
-  create_directories_asynchronously: If true, create directories asynchronously
-    in the background.
+  timeout_secs:
+    The timeout in seconds for the async save operation.
+  post_finalization_callback:
+    A function that is called after the async save operation is complete.
+  create_directories_asynchronously:
+    If true, create directories asynchronously in the background.
   """
 
   timeout_secs: int = 600  # 10 minutes.
@@ -56,19 +58,20 @@ class AsyncOptions:
 class MultiprocessingOptions:
   """Options used to configure multiprocessing behavior.
 
-  primary_host: the host id of the primary host.  Default to 0.  If it's set
-    to None, then all hosts will be considered as primary.  It's useful in
-    the case that all hosts are only working with local storage.
-  active_processes: A set of process indices (corresponding to
-    `multihost.process_index()`) over which `CheckpointManager` is expected to
-    be called. This makes it possible to have a `CheckpointManager` instance
-    that runs over a subset of processes, rather than all processes as it is
-    normally expected to do. If specified, `primary_host` must belong to
-    `active_processes`.
-  barrier_sync_key_prefix: A string to be prepended to the barrier sync key
-    used to synchronize processes. This is useful to avoid collisions with
-    other barrier syncs if another CheckpointManager is being used
-    concurrently.
+  primary_host:
+    The host id of the primary host.  Default to 0.  If it's set to None, then
+    all hosts will be considered as primary.  It's useful in the case that all
+    hosts are only working with local storage.
+  active_processes:
+    A set of process indices (corresponding to `multihost.process_index()`) over
+    which `CheckpointManager` is expected to be called. This makes it possible
+    to have a `CheckpointManager` instance that runs over a subset of processes,
+    rather than all processes as it is normally expected to do. If specified,
+    `primary_host` must belong to `active_processes`.
+  barrier_sync_key_prefix:
+    A string to be prepended to the barrier sync key used to synchronize
+    processes. This is useful to avoid collisions with other barrier syncs if
+    another CheckpointManager is being used concurrently.
   """
 
   primary_host: int | None = 0
@@ -89,12 +92,15 @@ class FileOptions:
   """Options used to configure checkpoint directories and files.
 
   Attributes:
-    path_permission_mode: Path permission mode for step directories, user
-      metadata files. e.g. 0o750. Please check
+    path_permission_mode:
+      Path permission mode for step directories, user metadata files. e.g.
+      0o750. Please check
       https://github.com/google/etils/blob/main/etils/epath/backend.py if your
-        path is supported. default=None.
-    temporary_path_class: A class that is used to create and finallize temporary
-      paths, and to ensure atomicity.
+      path is supported. default=None.
+    temporary_path_class:
+      A class that is used to create and finallize temporary paths, and to
+      ensure atomicity.
+
   """
 
   path_permission_mode: int | None = None
@@ -123,9 +129,10 @@ class PyTreeOptions:
   class Saving:
     """Options for saving PyTrees.
 
-    create_array_storage_options_fn: A function that is called in order to
-      create `ArrayOptions.Saving.StorageOptions` for each leaf in a PyTree,
-      when it is being saved. It is called similar to:
+    create_array_storage_options_fn:
+      A function that is called in order to create
+      `ArrayOptions.Saving.StorageOptions` for each leaf in a PyTree, when it is
+      being saved. It is called similar to:
       `jax.tree.map_with_path(create_array_storage_options_fn, pytree_to_save)`.
       If provided, it overrides any default settings in
       `ArrayOptions.Saving.StorageOptions`.
@@ -182,16 +189,22 @@ class ArrayOptions:
       use_ocdbt: Enables OCDBT format.
       use_zarr3: If True, use Zarr3 format.
       ocdbt_target_data_file_size: Specifies the target size (in bytes) of each
-        OCDBT data file.  It only applies when OCDBT is enabled and Zarr3 must
-        be turned on.  If left unspecified, default size is 2GB.  A value of 0
+        OCDBT data file. It only applies when OCDBT is enabled and Zarr3 must be
+        turned on. If left unspecified, default size is 2GB.  A value of 0
         indicates no maximum file size limit.  For best results, ensure
         chunk_byte_size is smaller than this value.  For more details, refer to
         https://google.github.io/tensorstore/kvstore/ocdbt/index.html#json-kvstore/ocdbt.target_data_file_size
-      enable_pinned_host_transfer: If False, disables transfer to pinned host
-        when copying from device to host, regardless of the presence of pinned
-        host memory.
+      enable_pinned_host_transfer: Whether to use pinned_host memory for the
+        transfer from device to host memory. Passing None will enable
+        pinned_host memory depending on the platform used (currently only
+        enables it for the GPU backend).
       enable_post_merge_validation: If True, enables validation of the
         parameters after the finalize step.
+      use_replica_parallel: Whether to parallelize saving across replicas.
+      enable_write_sharding_file: whether to write sharding file, defaults to
+        True.
+      array_metadata_store: Store to manage per host ArrayMetadata. To disable
+        ArrayMetadata persistence, set it to None.
     """
 
     @dataclasses.dataclass(frozen=True, kw_only=True)
@@ -204,17 +217,15 @@ class ArrayOptions:
         jnp.bfloat16 is not compatible with np.ndarray).
       chunk_byte_size:
         This is an experimental feature that automatically chooses the largest
-        chunk
-        shape possible, while keeping the chunk byte size less than or equal
-        to the
-        specified chunk_byte_size. Both the write_chunk_shape and
-        read_chunk_shape
-        are automatically set to the chosen shape. This uses a greedy
-        algorithm that
-        prioritizes splitting the largest dimensions first.
-      shard_axes: An optional list of axes that should be prioritized when
-        sharding array for storage. If empty, storage sharding implementation
-        will prioritize axes which are already sharded.
+        chunk shape possible, while keeping the chunk byte size less than or
+        equal to the specified chunk_byte_size. Both the write_chunk_shape and
+        read_chunk_shape are automatically set to the chosen shape. This uses a
+        greedy algorithm that prioritizes splitting the largest dimensions
+        first.
+      shard_axes:
+        An optional list of axes that should be prioritized when sharding array
+        for storage. If empty, storage sharding implementation will prioritize
+        axes which are already sharded.
       """
 
       dtype: np.typing.DTypeLike | None = None
@@ -228,22 +239,29 @@ class ArrayOptions:
     use_ocdbt: bool = True
     use_zarr3: bool = True
     ocdbt_target_data_file_size: int | None = None
-    enable_pinned_host_transfer: bool = False
+    enable_pinned_host_transfer: bool | None = None
     enable_post_merge_validation: bool = True
+    use_replica_parallel: bool = True
+    enable_write_sharding_file: bool = True
+    array_metadata_store: array_metadata_store_lib.Store | None = (
+        array_metadata_store_lib.Store()
+    )
 
   @dataclasses.dataclass(frozen=True, kw_only=True)
   class Loading:
     """Options for loading arrays.
 
-    concurrent_bytes: Max concurrent bytes that are allowed for reading. Can
-      help to reduce the possibility of OOM's when large checkpoints are
-      restored.
-    enable_padding_and_truncation: If True, restoration allows silent
-      truncating/padding of arrays if the stored array shape does not match the
-      target shape. Otherwise, raises an error.
+    concurrent_bytes:
+      Max concurrent bytes that are allowed for reading. Can help to reduce the
+      possibility of OOM's when large checkpoints are restored.
+    enable_padding_and_truncation:
+      If True, restoration allows silent truncating/padding of arrays if the
+      stored array shape does not match the target shape. Otherwise, raises an
+      error.
     """
     concurrent_bytes: int | None = None
     enable_padding_and_truncation: bool = False
+    raise_array_data_missing_error: bool = True
 
   saving: Saving = dataclasses.field(default_factory=Saving)
   loading: Loading = dataclasses.field(default_factory=Loading)
@@ -253,8 +271,9 @@ class ArrayOptions:
 class CheckpointablesOptions:
   """Options used to configure `checkpointables` save/load behavior.
 
-  Primarily intended for registering custom `CheckpointableHandler` classes. You
-  can specify a registry directly, or use `create_with_handlers`. For example::
+  Primarily intended for registering custom :py:class:`.CheckpointableHandler`
+  classes. You can specify a registry directly, or use `create_with_handlers`.
+  For example::
 
     checkpointables_options = (
       ocp.options.CheckpointablesOptions.create_with_handlers(
@@ -272,13 +291,13 @@ class CheckpointablesOptions:
   by `BarHandler` and has the name `bar` can handled by this `BarHandler`.
 
   Recall that a global registry also exists, containing core handlers like
-  `PyTreeHandler` and `JsonHandler`. Use `ocp.handlers.register_handler` to
-  register a handler globally.
+  :py:class:`.PyTreeHandler` and :py:class:`.JsonHandler`. Use
+  `ocp.handlers.register_handler` to register a handler globally.
 
   Note that registration order matters. For example, if saving a dict containing
-  only strings, both `JsonHandler` and `PyTreeHandler` are capable of handling
-  this object, but `JsonHandler` will be selected first because it is registered
-  first.
+  only strings, both :py:class:`.JsonHandler` and :py:class:`.PyTreeHandler` are
+  capable of handling this object, but :py:class:`.JsonHandler` will be selected
+  first because it is registered first.
 
   Attributes:
     registry: A `CheckpointableHandlerRegistry` that is used to resolve

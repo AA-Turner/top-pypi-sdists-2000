@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import math
+import re
 import unittest
 
 import numpy as np
@@ -471,6 +472,10 @@ class TestClarabel(BaseTest):
 
     def test_clarabel_lp_0(self) -> None:
         StandardTestLPs.test_lp_0(solver=cp.CLARABEL)
+
+    def test_clarabel_nonstandard_name(self) -> None:
+        # Test that solver name with non-standard capitalization works.
+        StandardTestLPs.test_lp_0(solver="Clarabel")
 
     def test_clarabel_lp_1(self) -> None:
         StandardTestLPs.test_lp_1(solver='CLARABEL')
@@ -2130,6 +2135,31 @@ class TestHIGHS:
     )
     def test_highs_solving(self, problem) -> None:
         problem(solver=cp.HIGHS)
+
+    def test_highs_nonstandard_name(self) -> None:
+        """Test HiGHS solver with non-capitalized solver name."""
+        # https://github.com/cvxpy/cvxpy/issues/2751
+        StandardTestLPs.test_lp_0(solver="HiGHS")
+
+    @pytest.mark.parametrize(
+        ["problem", "confirmation_string"],
+        [
+            (StandardTestLPs.test_lp_2, "Solving LP .* with basis"),
+            (StandardTestLPs.test_mi_lp_2, "MIP start solution is feasible"),
+        ],
+    )
+    def test_highs_warm_start(self, problem, confirmation_string, capfd) -> None:
+        """Test that HiGHS actually gets warm started for each problem type.
+
+        Args:
+            problem: LP or MIP.
+            confirmation_string: Regex that confirms that HiGHS was warm started.
+            capfd: Captures stdout to search for confirmation_string.
+        """
+        p = problem(cp.HIGHS, verbose=True)
+        p.prob.solve(cp.HIGHS, warm_start=True, verbose=True)
+        captured = capfd.readouterr()
+        assert re.search(confirmation_string, captured.out) is not None
 
     @pytest.mark.parametrize(
         "problem",

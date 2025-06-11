@@ -1,32 +1,46 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: tensorboardX
-Version: 2.6.2.2
+Version: 2.6.4
 Summary: TensorBoardX lets you watch Tensors Flow without Tensorflow
-Home-page: https://github.com/lanpa/tensorboardX
-Author: Tzu-Wei Huang
-Author-email: huang.dexter@gmail.com
-License: MIT license
-Platform: UNKNOWN
+Author-email: Tzu-Wei Huang <huang.dexter@gmail.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/lanpa/tensorboardX
+Project-URL: Repository, https://github.com/lanpa/tensorboardX.git
 Classifier: Development Status :: 4 - Beta
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Natural Language :: English
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
 License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: packaging
+Requires-Dist: protobuf>=3.20
+Dynamic: license-file
 
 History
 =======
-2.6.2.1 (2023-08-20)
+2.6.3 (2025-04-24)
+---------------------
+* Support PaddlePaddle tensors
+* Added a use_metadata context manager
+* MoviePy version 2 support
+
+2.6.2.2 (2023-08-20)
 ---------------------
 * Added protobuf's lower bound version (>=3.20)
 
+2.6.2.1 (2023-08-20)
+---------------------
+* [Yanked because operation miss] Added protobuf's lower bound version (>=3.20)
+
 2.6.2 (2023-07-30)
 -------------------
-* Removed version limit for protobuf
+* [Yanked because wrong dependency] Removed version limit for protobuf
 
 2.6.1 (2023-06-18)
 -------------------
@@ -193,5 +207,3 @@ History
 
 https://github.com/TeamHG-Memex/tensorboard_logger
 https://github.com/dmlc/tensorboard
-
-

@@ -1,25 +1,21 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import logging
-import numpy as np
 import os
 import re as _re
 
-# pylint: disable=unused-import
+import numpy as np
 
-from .proto.summary_pb2 import Summary
-from .proto.summary_pb2 import HistogramProto
-from .proto.summary_pb2 import SummaryMetadata
-from .proto.tensor_pb2 import TensorProto
-from .proto.tensor_shape_pb2 import TensorShapeProto
+from .proto import layout_pb2
+from .proto.plugin_mesh_pb2 import MeshPluginData
 from .proto.plugin_pr_curve_pb2 import PrCurvePluginData
 from .proto.plugin_text_pb2 import TextPluginData
-from .proto.plugin_mesh_pb2 import MeshPluginData
-from .proto import layout_pb2
-from .x2num import make_np
+
+# pylint: disable=unused-import
+from .proto.summary_pb2 import HistogramProto, Summary, SummaryMetadata
+from .proto.tensor_pb2 import TensorProto
+from .proto.tensor_shape_pb2 import TensorShapeProto
 from .utils import _prepare_video, convert_to_HWC, convert_to_NTCHW
+from .x2num import make_np
+
 logger = logging.getLogger(__name__)
 
 _INVALID_TAG_CHARACTERS = _re.compile(r'[^-/\w\.]')
@@ -38,7 +34,7 @@ def _clean_tag(name):
         new_name = new_name.lstrip('/')  # Remove leading slashes
         if new_name != name:
             logger.info(
-                'Summary name %s is illegal; using %s instead.' % (name, new_name))
+                f'Summary name {name} is illegal; using {new_name} instead.')
             name = new_name
     return name
 
@@ -68,8 +64,19 @@ def _draw_single_box(image, xmin, ymin, xmax, ymax, display_str, color='black', 
 
 
 def hparams(hparam_dict=None, metric_dict=None):
-    from tensorboardX.proto.plugin_hparams_pb2 import HParamsPluginData, SessionEndInfo, SessionStartInfo
-    from tensorboardX.proto.api_pb2 import Experiment, HParamInfo, MetricInfo, MetricName, Status, DataType
+    from tensorboardX.proto.api_pb2 import (
+        DataType,
+        Experiment,
+        HParamInfo,
+        MetricInfo,
+        MetricName,
+        Status,
+    )
+    from tensorboardX.proto.plugin_hparams_pb2 import (
+        HParamsPluginData,
+        SessionEndInfo,
+        SessionStartInfo,
+    )
 
     PLUGIN_NAME = 'hparams'
     PLUGIN_DATA_VERSION = 0
@@ -100,7 +107,7 @@ def hparams(hparam_dict=None, metric_dict=None):
             hps.append(HParamInfo(name=k, type=DataType.Value("DATA_TYPE_BOOL")))
             continue
 
-        if isinstance(v, int) or isinstance(v, float):
+        if isinstance(v, (int, float)):
             v = make_np(v)[0]
             ssi.hparams[k].number_value = v
             hps.append(HParamInfo(name=k, type=DataType.Value("DATA_TYPE_FLOAT64")))
@@ -118,7 +125,7 @@ def hparams(hparam_dict=None, metric_dict=None):
                                                                  content=content.SerializeToString()))
     ssi = Summary(value=[Summary.Value(tag=SESSION_START_INFO_TAG, metadata=smd)])
 
-    mts = [MetricInfo(name=MetricName(tag=k)) for k in metric_dict.keys()]
+    mts = [MetricInfo(name=MetricName(tag=k)) for k in metric_dict]
 
     exp = Experiment(hparam_infos=hps, metric_infos=mts)
     content = HParamsPluginData(experiment=exp, version=PLUGIN_DATA_VERSION)
@@ -322,8 +329,8 @@ def draw_boxes(disp_image, boxes, labels=None):
 def make_image(tensor, rescale=1, rois=None, labels=None):
     """Convert an numpy representation image to Image protobuf"""
     import PIL
-    from PIL import Image
     from packaging.version import parse
+    from PIL import Image
     height, width, channel = tensor.shape
     scaled_height = int(height * rescale)
     scaled_width = int(width * rescale)
@@ -360,45 +367,69 @@ def video(tag, tensor, fps=4, dataformats="NTCHW"):
 
 
 def make_video(tensor, fps):
-    try:
-        import moviepy  # noqa: F401
-    except ImportError:
-        print('add_video needs package moviepy')
-        return
-    try:
-        from moviepy import editor as mpy
-    except ImportError:
-        print("moviepy is installed, but can't import moviepy.editor.",
-              "Some packages could be missing [imageio, requests]")
-        return
-
-    import moviepy.version
     import tempfile
+    from importlib.metadata import PackageNotFoundError
+    from importlib.metadata import version as get_version
 
+    from packaging.version import Version
+    try:
+        moviepy_version = Version(get_version("moviepy"))
+    except PackageNotFoundError:
+        logger.error("moviepy is not installed.")
+        return
+
+    try:
+        # moviepy v2+
+        from moviepy import ImageSequenceClip
+    except ImportError:
+        try:
+            # Fallback for all moviepy versions
+            from moviepy.video.io.ImageSequenceClip import ImageSequenceClip
+        except ImportError as e:
+            logger.error(
+                "Can't create video. moviepy is installed, but can't import moviepy.video.io.ImageSequenceClip due to %r",
+                e,
+            )
+            return
+
+    # Warn about potential moviepy and imageio version incompatibility
+    imageio_version = Version(get_version("imageio"))
+    if moviepy_version >= Version("2") and imageio_version < Version("2.29"):
+        logger.error(
+            "You are using moviepy >= 2.0.0 and imageio < 2.29.0. "
+            "This combination is known to cause issues when writing videos. "
+            "Please upgrade imageio to 2.29 or later, or use moviepy < 2.0.0."
+        )
     t, h, w, c = tensor.shape
 
+    # Convert to RGB if moviepy v2/imageio>2.27 is used; 1-channel input is not supported.
+    if c == 1 and (
+        moviepy_version >= Version("2")
+        or imageio_version > Version("2.27")
+    ):
+        tensor = np.repeat(tensor, 3, axis=-1)
     # encode sequence of images into gif string
-    clip = mpy.ImageSequenceClip(list(tensor), fps=fps)
+    clip = ImageSequenceClip(list(tensor), fps=fps)
+    with tempfile.NamedTemporaryFile(suffix='.gif', delete=False) as fp:
+        filename = fp.name
 
-    filename = tempfile.NamedTemporaryFile(suffix='.gif', delete=False).name
+        if moviepy_version < Version("1.0.0"):
+            logger.warning('Upgrade to moviepy >= 1.0.0 to supress the progress bar.')
+            clip.write_gif(filename, verbose=False)
+        elif moviepy_version < Version("2.0.0dev1"):
+            # moviepy >= 1.0.0 use logger=None to suppress output.
+            clip.write_gif(filename, verbose=False, logger=None)
+        else:
+            # Moviepy >= 2.0.0.dev1 removed the verbose argument
+            clip.write_gif(filename, logger=None)
 
-    if moviepy.version.__version__.startswith("0."):
-        logger.warning('Upgrade to moviepy >= 1.0.0 to supress the progress bar.')
-        clip.write_gif(filename, verbose=False)
-    elif moviepy.version.__version__.startswith("1."):
-        # moviepy >= 1.0.0 use logger=None to suppress output.
-        clip.write_gif(filename, verbose=False, logger=None)
-    else:
-        # Moviepy >= 2.0.0.dev1 removed the verbose argument
-        clip.write_gif(filename, logger=None)
+        with open(filename, 'rb') as f:
+            tensor_string = f.read()
 
-    with open(filename, 'rb') as f:
-        tensor_string = f.read()
-
-    try:
-        os.remove(filename)
-    except OSError:
-        logger.warning('The temporary file used by moviepy cannot be deleted.')
+        try:
+            os.remove(filename)
+        except OSError:
+            logger.warning('The temporary file used by moviepy cannot be deleted.')
 
     return Summary.Image(height=h, width=w, colorspace=c, encoded_image_string=tensor_string)
 
@@ -410,6 +441,7 @@ def audio(tag, tensor, sample_rate=44100):
         The values should between [-1, 1]. We also accepts 1-D tensor.
     """
     import io
+
     import soundfile
     tensor = make_np(tensor)
     if abs(tensor).max() > 1:
@@ -435,9 +467,7 @@ def audio(tag, tensor, sample_rate=44100):
 
 
 def custom_scalars(layout):
-    categoriesnames = layout.keys()
     categories = []
-    layouts = []
     for k, v in layout.items():
         charts = []
         for chart_name, chart_meatadata in v.items():
@@ -561,7 +591,7 @@ def _get_tensor_summary(tag, tensor, content_type, json_config):
                              TensorShapeProto.Dim(size=tensor.shape[2]),
                          ]))
     tensor_summary = Summary.Value(
-        tag='{}_{}'.format(tag, content_type),
+        tag=f'{tag}_{content_type}',
         tensor=tensor,
         metadata=smd,
     )

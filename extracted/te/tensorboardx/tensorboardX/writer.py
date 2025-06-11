@@ -1,31 +1,41 @@
 """Provides an API for writing protocol buffers to event files to be
 consumed by TensorBoard for visualization."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
-import json
-import os
-import numpy
-import time
-import logging
 import atexit
-from typing import Union, Optional, Dict, List
+import contextlib
+import json
+import logging
+import os
+import time
+from typing import Optional, Union
+
+import numpy
 
 from .comet_utils import CometLogger
-from .embedding import make_mat, make_sprite, make_tsv, append_pbtxt
+from .embedding import append_pbtxt, make_mat, make_sprite, make_tsv
 from .event_file_writer import EventFileWriter
 from .onnx_graph import load_onnx_graph
 from .openvino_graph import load_openvino_graph
-from .proto import event_pb2
-from .proto import summary_pb2
-from .proto.event_pb2 import SessionLog, Event
-from .utils import figure_to_image
+from .proto import event_pb2, summary_pb2
+from .proto.event_pb2 import Event, SessionLog
 from .summary import (
-    scalar, histogram, histogram_raw, image, audio, text,
-    pr_curve, pr_curve_raw, video, custom_scalars, image_boxes, mesh, hparams
+    audio,
+    custom_scalars,
+    histogram,
+    histogram_raw,
+    hparams,
+    image,
+    image_boxes,
+    mesh,
+    pr_curve,
+    pr_curve_raw,
+    scalar,
+    text,
+    video,
 )
+from .utils import figure_to_image
+
 logger = logging.getLogger(__name__)
 
 numpy_compatible = numpy.ndarray
@@ -36,7 +46,7 @@ except ImportError:
     pass
 
 
-class DummyFileWriter(object):
+class DummyFileWriter:
     """A fake file writer that writes nothing to the disk.
     """
 
@@ -68,8 +78,12 @@ class DummyFileWriter(object):
     def reopen(self):
         return
 
+    @contextlib.contextmanager
+    def use_metadata(self, *, global_step=None, walltime=None):
+        yield self
 
-class FileWriter(object):
+
+class FileWriter:
     """Writes protocol buffers to event files to be consumed by TensorBoard.
 
     The `FileWriter` class provides a mechanism to create an event file in a
@@ -108,6 +122,7 @@ class FileWriter(object):
             self.event_writer.close()
 
         atexit.register(cleanup)
+        self._default_metadata = {}
 
     def get_logdir(self):
         """Returns the directory where event file will be written."""
@@ -122,7 +137,14 @@ class FileWriter(object):
           walltime: float. Optional walltime to override the default (current)
             walltime (from time.time())
         """
-        event.wall_time = time.time() if walltime is None else walltime
+        walltime = (
+            self._default_metadata.get("walltime", time.time())
+            if walltime is None
+            else walltime
+        )
+        if walltime is not None:
+            event.wall_time = walltime
+        step = self._default_metadata.get("global_step") if step is None else step
         if step is not None:
             # Make sure step is converted from numpy or other formats
             # since protobuf might not convert depending on version
@@ -205,8 +227,30 @@ class FileWriter(object):
         """
         self.event_writer.reopen()
 
+    @contextlib.contextmanager
+    def use_metadata(self, *, global_step=None, walltime=None):
+        """Context manager to temporarily set default metadata for all enclosed :meth:`add_event`
+        calls.
 
-class SummaryWriter(object):
+        Args:
+            global_step: Global step value to record
+            walltime: Walltime to record (defaults to time.time())
+
+        Examples::
+
+            with writer.use_metadata(global_step=10):
+                writer.add_event(event)
+        """
+        assert not self._default_metadata, "Default metadata is already set."
+        assert (
+            global_step is not None or walltime is not None
+        ), "At least one of `global_step` or `walltime` must be provided."
+        self._default_metadata = {"global_step": global_step, "walltime": walltime}
+        yield self
+        self._default_metadata = {}
+
+
+class SummaryWriter:
     """Writes entries directly to event files in the logdir to be
     consumed by TensorBoard.
 
@@ -310,6 +354,7 @@ class SummaryWriter(object):
         self.default_bins = neg_buckets[::-1] + [0] + buckets
 
         self.scalar_dict = {}
+        self._default_metadata = {}
 
     def __append_to_scalar_dict(self, tag, scalar_value, global_step,
                                 timestamp):
@@ -317,25 +362,10 @@ class SummaryWriter(object):
         {writer_id : [[timestamp, step, value], ...], ...}.
         """
         from .x2num import make_np
-        if tag not in self.scalar_dict.keys():
+        if tag not in self.scalar_dict:
             self.scalar_dict[tag] = []
         self.scalar_dict[tag].append(
             [timestamp, global_step, float(make_np(scalar_value).squeeze())])
-
-    def _check_caffe2_blob(self, item):
-        """
-        Caffe2 users have the option of passing a string representing the name of
-        a blob in the workspace instead of passing the actual Tensor/array containing
-        the numeric values. Thus, we need to check if we received a string as input
-        instead of an actual Tensor/array, and if so, we need to fetch the Blob
-        from the workspace corresponding to that name. Fetching can be done with the
-        following:
-
-        from caffe2.python import workspace (if not already imported)
-        workspace.FetchBlob(blob_name)
-        workspace.FetchBlobs([blob_name1, blob_name2, ...])
-        """
-        return isinstance(item, str)
 
     def _get_file_writer(self):
         """Returns the default FileWriter instance. Recreates it if closed."""
@@ -366,8 +396,8 @@ class SummaryWriter(object):
 
     def add_hparams(
             self,
-            hparam_dict: Dict[str, Union[bool, str, float, int]],
-            metric_dict: Dict[str, float],
+            hparam_dict: dict[str, Union[bool, str, float, int]],
+            metric_dict: dict[str, float],
             name: Optional[str] = None,
             global_step: Optional[int] = None):
         """Add a set of hyperparameters to be compared in tensorboard.
@@ -424,8 +454,7 @@ class SummaryWriter(object):
 
         Args:
             tag: Data identifier
-            scalar_value: Value to save, if string is passed, it will be treated
-                as caffe blob name.
+            scalar_value: Value to be logged in tensorboard
             global_step: Global step value to record
             walltime: Optional override default walltime (time.time()) of event
             display_name: The title of the plot. If empty string is passed,
@@ -447,11 +476,6 @@ class SummaryWriter(object):
            :scale: 50 %
 
         """
-        if self._check_caffe2_blob(scalar_value):
-            if 'workspace' in globals():
-                scalar_value = workspace.FetchBlob(scalar_value)
-            else:
-                raise TypeError("Input value: \"{}\" is not a scalar".format(scalar_value))
         self._get_file_writer().add_summary(
             scalar(tag, scalar_value, display_name, summary_description), global_step, walltime)
         self._get_comet_logger().log_metric(tag, display_name, scalar_value, global_step)
@@ -459,7 +483,7 @@ class SummaryWriter(object):
     def add_scalars(
             self,
             main_tag: str,
-            tag_scalar_dict: Dict[str, float],
+            tag_scalar_dict: dict[str, float],
             global_step: Optional[int] = None,
             walltime: Optional[float] = None):
         """Adds many scalar data to summary.
@@ -494,14 +518,12 @@ class SummaryWriter(object):
         walltime = time.time() if walltime is None else walltime
         fw_logdir = self._get_file_writer().get_logdir()
         for tag, scalar_value in tag_scalar_dict.items():
-            fw_tag = fw_logdir + "/" + main_tag + "/" + tag
-            if fw_tag in self.all_writers.keys():
+            fw_tag = os.path.join(str(fw_logdir), main_tag, tag)
+            if fw_tag in self.all_writers:
                 fw = self.all_writers[fw_tag]
             else:
                 fw = FileWriter(logdir=fw_tag)
                 self.all_writers[fw_tag] = fw
-            if self._check_caffe2_blob(scalar_value):
-                scalar_value = workspace.FetchBlob(scalar_value)
             fw.add_summary(scalar(main_tag, scalar_value),
                            global_step, walltime)
             self.__append_to_scalar_dict(
@@ -554,8 +576,6 @@ class SummaryWriter(object):
            :scale: 50 %
 
         """
-        if self._check_caffe2_blob(values):
-            values = workspace.FetchBlob(values)
         if isinstance(bins, str) and bins == 'tensorflow':
             bins = self.default_bins
         self._get_file_writer().add_summary(
@@ -680,8 +700,6 @@ class SummaryWriter(object):
            :scale: 50 %
 
         """
-        if self._check_caffe2_blob(img_tensor):
-            img_tensor = workspace.FetchBlob(img_tensor)
         summary = image(tag, img_tensor, dataformats=dataformats)
         encoded_image_string = summary.value[0].image.encoded_image_string
         self._get_file_writer().add_summary(
@@ -731,8 +749,6 @@ class SummaryWriter(object):
            :scale: 30 %
 
         """
-        if self._check_caffe2_blob(img_tensor):
-            img_tensor = workspace.FetchBlob(img_tensor)
         if isinstance(img_tensor, list):  # a list of tensors in CHW or HWC
             if dataformats.upper() != 'CHW' and dataformats.upper() != 'HWC':
                 print('A list of image is passed, but the dataformat is neither CHW nor HWC.')
@@ -741,7 +757,7 @@ class SummaryWriter(object):
             import torch
             try:
                 img_tensor = torch.stack(img_tensor, 0)
-            except TypeError as e:
+            except TypeError:
                 import numpy as np
                 img_tensor = np.stack(img_tensor, 0)
 
@@ -761,7 +777,7 @@ class SummaryWriter(object):
             global_step: Optional[int] = None,
             walltime: Optional[float] = None,
             dataformats: Optional[str] = 'CHW',
-            labels: Optional[List[str]] = None,
+            labels: Optional[list[str]] = None,
             **kwargs):
         """Add image and draw bounding boxes on the image.
 
@@ -780,10 +796,6 @@ class SummaryWriter(object):
             box_tensor: (torch.Tensor, numpy.array, or string/blobname): NX4,  where N is the number of
             boxes and each 4 elements in a row represents (xmin, ymin, xmax, ymax).
         """
-        if self._check_caffe2_blob(img_tensor):
-            img_tensor = workspace.FetchBlob(img_tensor)
-        if self._check_caffe2_blob(box_tensor):
-            box_tensor = workspace.FetchBlob(box_tensor)
         if labels is not None:
             if isinstance(labels, str):
                 labels = [labels]
@@ -853,7 +865,7 @@ class SummaryWriter(object):
             self,
             tag: str,
             snd_tensor: numpy_compatible,
-            global_step: Optional[int],
+            global_step: Optional[int] = None,
             sample_rate: Optional[int] = 44100,
             walltime: Optional[float] = None):
         """Add audio data to summary.
@@ -869,8 +881,6 @@ class SummaryWriter(object):
             Where `L` is the number of audio frames and `C` is the channel. Set
             channel equals to 2 for stereo.
         """
-        if self._check_caffe2_blob(snd_tensor):
-            snd_tensor = workspace.FetchBlob(snd_tensor)
         self._get_file_writer().add_summary(
             audio(tag, snd_tensor, sample_rate=sample_rate), global_step, walltime)
         self._get_comet_logger().log_audio(snd_tensor, sample_rate, tag, step=global_step)
@@ -943,9 +953,9 @@ class SummaryWriter(object):
     def _encode(rawstr):
         # I'd use urllib but, I'm unsure about the differences from python3 to python2, etc.
         retval = rawstr
-        retval = retval.replace("%", "%%%02x" % (ord("%")))
-        retval = retval.replace("/", "%%%02x" % (ord("/")))
-        retval = retval.replace("\\", "%%%02x" % (ord("\\")))
+        retval = retval.replace("%", "%{:02x}".format(ord("%")))
+        retval = retval.replace("/", "%{:02x}".format(ord("/")))
+        retval = retval.replace("\\", "%{:02x}".format(ord("\\")))
         return retval
 
     def add_embedding(
@@ -1007,7 +1017,7 @@ class SummaryWriter(object):
             # clear pbtxt?
         # Maybe we should encode the tag so slashes don't trip us up?
         # I don't think this will mess us up, but better safe than sorry.
-        subdir = "%s/%s" % (str(global_step).zfill(5), self._encode(tag))
+        subdir = f"{str(global_step).zfill(5)}/{self._encode(tag)}"
         save_path = os.path.join(self._get_file_writer().get_logdir(), subdir)
         try:
             os.makedirs(save_path)
@@ -1027,11 +1037,7 @@ class SummaryWriter(object):
         # new funcion to append to the config file a new embedding
         append_pbtxt(metadata, label_img,
                      self._get_file_writer().get_logdir(), subdir, global_step, tag)
-        if tag is not None:
-            template_filename = "%s.json" % tag
-
-        else:
-            template_filename = None
+        template_filename = f'{tag}.json' if tag is not None else None
 
         self._get_comet_logger().log_embedding(mat, metadata, label_img, template_filename=template_filename)
 
@@ -1129,7 +1135,7 @@ class SummaryWriter(object):
 
     def add_custom_scalars_multilinechart(
             self,
-            tags: List[str],
+            tags: list[str],
             category: str = 'default',
             title: str = 'untitled'):
         """Shorthand for creating multilinechart. Similar to ``add_custom_scalars()``, but the only necessary argument
@@ -1147,7 +1153,7 @@ class SummaryWriter(object):
 
     def add_custom_scalars_marginchart(
             self,
-            tags: List[str],
+            tags: list[str],
             category: str = 'default',
             title: str = 'untitled'):
         """Shorthand for creating marginchart. Similar to ``add_custom_scalars()``, but the only necessary argument
@@ -1166,7 +1172,7 @@ class SummaryWriter(object):
 
     def add_custom_scalars(
             self,
-            layout: Dict[str, Dict[str, List]]):
+            layout: dict[str, dict[str, list]]):
         """Create special chart by collecting charts tags in 'scalars'. Note that this function can only be called once
         for each SummaryWriter() object. Because it only provides metadata to tensorboard, the function can be called
         before or after the training loop. See ``examples/demo_custom_scalars.py`` for more.
@@ -1257,3 +1263,19 @@ class SummaryWriter(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
+
+    @contextlib.contextmanager
+    def use_metadata(self, *, global_step=None, walltime=None):
+        """Context manager to temporarily set default metadata for all enclosed :meth:`add_*` calls.
+
+        Args:
+            global_step: Global step value to record
+            walltime: Walltime to record (defaults to time.time())
+
+        Examples::
+
+            with writer.use_metadata(global_step=10):
+                writer.add_scalar("loss", 3.0)
+        """
+        with self._get_file_writer().use_metadata(global_step=global_step, walltime=walltime):
+            yield self

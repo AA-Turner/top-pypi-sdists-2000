@@ -72,6 +72,8 @@ from .data_source import DataSource
 from .data_source_component import DataSourceComponent
 from .data_source_create import DataSourceCreate
 from .data_source_create_component import DataSourceCreateComponent
+from .data_source_create_custom_metadata_value import DataSourceCreateCustomMetadataValue
+from .data_source_custom_metadata_value import DataSourceCustomMetadataValue
 from .data_source_update_dispatcher_config import DataSourceUpdateDispatcherConfig
 from .delete_params import DeleteParams
 from .document_block import DocumentBlock
@@ -104,17 +106,27 @@ from .embedding_model_config_update_embedding_config import (
 )
 from .eval_execution_params import EvalExecutionParams
 from .extract_agent import ExtractAgent
+from .extract_agent_data_schema_value import ExtractAgentDataSchemaValue
 from .extract_config import ExtractConfig
 from .extract_job import ExtractJob
 from .extract_job_create import ExtractJobCreate
 from .extract_job_create_data_schema_override import ExtractJobCreateDataSchemaOverride
+from .extract_job_create_data_schema_override_zero_value import ExtractJobCreateDataSchemaOverrideZeroValue
 from .extract_mode import ExtractMode
 from .extract_models import ExtractModels
 from .extract_resultset import ExtractResultset
 from .extract_resultset_data import ExtractResultsetData
+from .extract_resultset_data_item_value import ExtractResultsetDataItemValue
+from .extract_resultset_data_zero_value import ExtractResultsetDataZeroValue
+from .extract_resultset_extraction_metadata_value import ExtractResultsetExtractionMetadataValue
 from .extract_run import ExtractRun
 from .extract_run_data import ExtractRunData
+from .extract_run_data_item_value import ExtractRunDataItemValue
+from .extract_run_data_schema_value import ExtractRunDataSchemaValue
+from .extract_run_data_zero_value import ExtractRunDataZeroValue
+from .extract_run_extraction_metadata_value import ExtractRunExtractionMetadataValue
 from .extract_schema_validate_response import ExtractSchemaValidateResponse
+from .extract_schema_validate_response_data_schema_value import ExtractSchemaValidateResponseDataSchemaValue
 from .extract_state import ExtractState
 from .extract_target import ExtractTarget
 from .fail_page_mode import FailPageMode
@@ -122,6 +134,8 @@ from .file import File
 from .file_count_by_status_response import FileCountByStatusResponse
 from .file_id_presigned_url import FileIdPresignedUrl
 from .file_parse_public import FileParsePublic
+from .file_permission_info_value import FilePermissionInfoValue
+from .file_resource_info_value import FileResourceInfoValue
 from .filter_condition import FilterCondition
 from .filter_operator import FilterOperator
 from .free_credits_usage import FreeCreditsUsage
@@ -150,7 +164,6 @@ from .job_record_parameters import (
     JobRecordParameters_PipelineManagedIngestion,
 )
 from .job_record_with_usage_metrics import JobRecordWithUsageMetrics
-from .json_type import JsonType
 from .l_lama_parse_transform_config import LLamaParseTransformConfig
 from .legacy_parse_job_config import LegacyParseJobConfig
 from .llama_extract_settings import LlamaExtractSettings
@@ -225,6 +238,7 @@ from .pipeline_create_transform_config import PipelineCreateTransformConfig
 from .pipeline_data_source import PipelineDataSource
 from .pipeline_data_source_component import PipelineDataSourceComponent
 from .pipeline_data_source_create import PipelineDataSourceCreate
+from .pipeline_data_source_custom_metadata_value import PipelineDataSourceCustomMetadataValue
 from .pipeline_data_source_status import PipelineDataSourceStatus
 from .pipeline_deployment import PipelineDeployment
 from .pipeline_embedding_config import (
@@ -238,7 +252,12 @@ from .pipeline_embedding_config import (
     PipelineEmbeddingConfig_VertexaiEmbedding,
 )
 from .pipeline_file import PipelineFile
+from .pipeline_file_config_hash_value import PipelineFileConfigHashValue
 from .pipeline_file_create import PipelineFileCreate
+from .pipeline_file_create_custom_metadata_value import PipelineFileCreateCustomMetadataValue
+from .pipeline_file_custom_metadata_value import PipelineFileCustomMetadataValue
+from .pipeline_file_permission_info_value import PipelineFilePermissionInfoValue
+from .pipeline_file_resource_info_value import PipelineFileResourceInfoValue
 from .pipeline_file_status import PipelineFileStatus
 from .pipeline_file_update_dispatcher_config import PipelineFileUpdateDispatcherConfig
 from .pipeline_file_updater_config import PipelineFileUpdaterConfig
@@ -256,6 +275,9 @@ from .playground_session import PlaygroundSession
 from .pooling import Pooling
 from .preset_composite_retrieval_params import PresetCompositeRetrievalParams
 from .preset_retrieval_params import PresetRetrievalParams
+from .preset_retrieval_params_search_filters_inference_schema_value import (
+    PresetRetrievalParamsSearchFiltersInferenceSchemaValue,
+)
 from .presigned_url import PresignedUrl
 from .progress_event import ProgressEvent
 from .progress_event_status import ProgressEventStatus
@@ -390,6 +412,8 @@ __all__ = [
     "DataSourceComponent",
     "DataSourceCreate",
     "DataSourceCreateComponent",
+    "DataSourceCreateCustomMetadataValue",
+    "DataSourceCustomMetadataValue",
     "DataSourceUpdateDispatcherConfig",
     "DeleteParams",
     "DocumentBlock",
@@ -418,17 +442,27 @@ __all__ = [
     "EmbeddingModelConfigUpdateEmbeddingConfig_VertexaiEmbedding",
     "EvalExecutionParams",
     "ExtractAgent",
+    "ExtractAgentDataSchemaValue",
     "ExtractConfig",
     "ExtractJob",
     "ExtractJobCreate",
     "ExtractJobCreateDataSchemaOverride",
+    "ExtractJobCreateDataSchemaOverrideZeroValue",
     "ExtractMode",
     "ExtractModels",
     "ExtractResultset",
     "ExtractResultsetData",
+    "ExtractResultsetDataItemValue",
+    "ExtractResultsetDataZeroValue",
+    "ExtractResultsetExtractionMetadataValue",
     "ExtractRun",
     "ExtractRunData",
+    "ExtractRunDataItemValue",
+    "ExtractRunDataSchemaValue",
+    "ExtractRunDataZeroValue",
+    "ExtractRunExtractionMetadataValue",
     "ExtractSchemaValidateResponse",
+    "ExtractSchemaValidateResponseDataSchemaValue",
     "ExtractState",
     "ExtractTarget",
     "FailPageMode",
@@ -436,6 +470,8 @@ __all__ = [
     "FileCountByStatusResponse",
     "FileIdPresignedUrl",
     "FileParsePublic",
+    "FilePermissionInfoValue",
+    "FileResourceInfoValue",
     "FilterCondition",
     "FilterOperator",
     "FreeCreditsUsage",
@@ -462,7 +498,6 @@ __all__ = [
     "JobRecordParameters_PipelineFileUpdater",
     "JobRecordParameters_PipelineManagedIngestion",
     "JobRecordWithUsageMetrics",
-    "JsonType",
     "LLamaParseTransformConfig",
     "LegacyParseJobConfig",
     "LlamaExtractSettings",
@@ -533,6 +568,7 @@ __all__ = [
     "PipelineDataSource",
     "PipelineDataSourceComponent",
     "PipelineDataSourceCreate",
+    "PipelineDataSourceCustomMetadataValue",
     "PipelineDataSourceStatus",
     "PipelineDeployment",
     "PipelineEmbeddingConfig",
@@ -544,7 +580,12 @@ __all__ = [
     "PipelineEmbeddingConfig_OpenaiEmbedding",
     "PipelineEmbeddingConfig_VertexaiEmbedding",
     "PipelineFile",
+    "PipelineFileConfigHashValue",
     "PipelineFileCreate",
+    "PipelineFileCreateCustomMetadataValue",
+    "PipelineFileCustomMetadataValue",
+    "PipelineFilePermissionInfoValue",
+    "PipelineFileResourceInfoValue",
     "PipelineFileStatus",
     "PipelineFileUpdateDispatcherConfig",
     "PipelineFileUpdaterConfig",
@@ -560,6 +601,7 @@ __all__ = [
     "Pooling",
     "PresetCompositeRetrievalParams",
     "PresetRetrievalParams",
+    "PresetRetrievalParamsSearchFiltersInferenceSchemaValue",
     "PresignedUrl",
     "ProgressEvent",
     "ProgressEventStatus",

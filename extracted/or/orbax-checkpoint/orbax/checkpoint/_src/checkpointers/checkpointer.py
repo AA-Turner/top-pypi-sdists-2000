@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -77,14 +77,15 @@ class Checkpointer(
   """A synchronous implementation of AbstractCheckpointer.
 
   This class saves synchronously to a given directory using an underlying
-  `CheckpointHandler`. Atomicity of the operation is guaranteed.
+  :py:class:`.CheckpointHandler`. Atomicity of the operation is guaranteed.
 
   IMPORTANT: Async checkpointing can often be faster for saving. Strongly
-  consider using `AsyncCheckpointer` instead.
+  consider using :py:class:`.AsyncCheckpointer` instead.
 
   IMPORTANT: Remember that to save and restore a checkpoint, one should always
-  use an `AbstractCheckpointer` coupled with a `CheckpointHandler`. The specific
-  `CheckpointHandler` to use depends on the object being saved or restored.
+  use an :py:class:`.AbstractCheckpointer` coupled with a `CheckpointHandler`.
+  The specific `CheckpointHandler` to use depends on the object being saved or
+  restored.
 
   Basic example::
 
@@ -229,10 +230,13 @@ class Checkpointer(
     )
     directory = epath.Path(directory)
 
-    jax.monitoring.record_event(
-        '/jax/orbax/write/storage_type',
-        storage_type=path_utils.get_storage_type(directory),
-    )
+    if utils.is_primary_host(self._primary_host):
+      jax.monitoring.record_event(
+          '/jax/orbax/write/storage_type',
+          storage_type=path_utils.get_storage_type(directory),
+      )
+    # TODO(dicentra): Revise other metrics to also only report from the primary
+    # host where appropriate.
     jax.monitoring.record_event('/jax/orbax/write/start')
     logging.info(
         '[process=%s] Started saving checkpoint to %s.',

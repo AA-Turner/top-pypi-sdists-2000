@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,8 +21,13 @@ import json
 from typing import Any, Awaitable, Type
 
 import aiofiles
+from etils import epath
+from orbax.checkpoint import checkpoint_args as v0_args
+from orbax.checkpoint import handlers as v0_handlers
+from orbax.checkpoint.experimental.v1._src.context import context as context_lib
 from orbax.checkpoint.experimental.v1._src.handlers import types as handler_types
 from orbax.checkpoint.experimental.v1._src.path import types as path_types
+from orbax.checkpoint.experimental.v1._src.synchronization import multihost
 
 
 # pylint: disable=missing-class-docstring
@@ -34,11 +39,14 @@ class DataclassHandler:
       self,
       directory: path_types.PathAwaitingCreation,
       checkpointable: Any,
+      *,
+      primary_host: int | None,
   ):
-    directory = await directory.await_creation()
-    async with aiofiles.open(directory / 'foo.txt', 'w') as f:
-      contents = json.dumps(dataclasses.asdict(checkpointable))
-      await f.write(contents)
+    if multihost.is_primary_host(primary_host):
+      directory = await directory.await_creation()
+      async with aiofiles.open(directory / 'foo.txt', 'w') as f:
+        contents = json.dumps(dataclasses.asdict(checkpointable))
+        await f.write(contents)
 
   async def background_load(
       self,
@@ -50,9 +58,38 @@ class DataclassHandler:
       return checkpointable_type(*contents.values())
 
 
+class DataclassCheckpointHandler(v0_handlers.CheckpointHandler):
+  """Implements v0 CheckpointHandler for dataclasses."""
+
+  def save(self, directory: epath.Path, args: DataclassSaveArgs):
+    if multihost.is_primary_host(0):
+      contents = json.dumps(dataclasses.asdict(args.data))
+      (directory / 'foo.txt').write_text(contents)
+
+  def restore(self, directory: epath.Path, *args, **kwargs) -> Any:
+    raise NotImplementedError()
+
+
+@v0_args.register_with_handler(DataclassCheckpointHandler, for_save=True)
+@dataclasses.dataclass(kw_only=False)
+class DataclassSaveArgs(v0_args.CheckpointArgs):
+  """Implements v0 CheckpointArgs for dataclasses."""
+
+  data: Any
+
+
+@v0_args.register_with_handler(DataclassCheckpointHandler, for_restore=True)
+@dataclasses.dataclass(kw_only=False)
+class DataclassRestoreArgs(v0_args.CheckpointArgs):
+  """Implements v0 CheckpointArgs for dataclasses."""
+
+  pass
+
+
 @dataclasses.dataclass
 class Point:
   """Implements StatefulCheckpointable."""
+
   x: int
   y: int
 
@@ -62,7 +99,11 @@ class Point:
   async def save(
       self, directory: path_types.PathAwaitingCreation
   ) -> Awaitable[None]:
-    return DataclassHandler().background_save(directory, self)
+    return DataclassHandler().background_save(
+        directory,
+        self,
+        primary_host=context_lib.get_context().multiprocessing_options.primary_host,
+    )
 
   async def _background_load(self, directory: path_types.Path):
     async with aiofiles.open(directory / 'foo.txt', 'r') as f:
@@ -95,7 +136,11 @@ class FooHandler(handler_types.CheckpointableHandler[Foo, AbstractFoo]):
       checkpointable: Foo,
   ) -> Awaitable[None]:
     return DataclassHandler().background_save(
-        directory, Foo(**dataclasses.asdict(checkpointable))
+        directory,
+        Foo(
+            **dataclasses.asdict(checkpointable),
+        ),
+        primary_host=context_lib.get_context().multiprocessing_options.primary_host,
     )
 
   async def load(
@@ -138,7 +183,11 @@ class BarHandler(handler_types.CheckpointableHandler[Bar, AbstractBar]):
       checkpointable: Bar,
   ) -> Awaitable[None]:
     return DataclassHandler().background_save(
-        directory, Bar(**dataclasses.asdict(checkpointable))
+        directory,
+        Bar(
+            **dataclasses.asdict(checkpointable),
+        ),
+        primary_host=context_lib.get_context().multiprocessing_options.primary_host,
     )
 
   async def load(
@@ -185,7 +234,11 @@ class BazHandler(handler_types.CheckpointableHandler[Baz, AbstractBaz]):
       checkpointable: Baz,
   ) -> Awaitable[None]:
     return DataclassHandler().background_save(
-        directory, Baz(**dataclasses.asdict(checkpointable))
+        directory,
+        Baz(
+            **dataclasses.asdict(checkpointable),
+        ),
+        primary_host=context_lib.get_context().multiprocessing_options.primary_host,
     )
 
   async def load(
@@ -223,9 +276,12 @@ class DictHandler(handler_types.CheckpointableHandler[BasicDict, None]):
       directory: path_types.PathAwaitingCreation,
       checkpointable: BasicDict,
   ) -> Awaitable[None]:
-    directory = await directory.await_creation()
-    async with aiofiles.open(directory / 'data.txt', 'w') as f:
-      await f.write(str(dict(checkpointable)))
+    if multihost.is_primary_host(
+        context_lib.get_context().multiprocessing_options.primary_host
+    ):
+      directory = await directory.await_creation()
+      async with aiofiles.open(directory / 'data.txt', 'w') as f:
+        await f.write(str(dict(checkpointable)))
     return self._background_save()
 
   async def load(

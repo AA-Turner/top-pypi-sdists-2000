@@ -5,10 +5,10 @@ from typing import Any, Optional, Union
 
 from pydantic import BaseModel
 
-from mlflow.entities import SpanType
 from mlflow.entities.span import LiveSpan
 from mlflow.exceptions import MlflowException
 from mlflow.tracing import set_span_chat_messages, set_span_chat_tools
+from mlflow.tracing.constant import SpanAttributeKey, TokenUsageKey
 from mlflow.types.chat import (
     ChatMessage,
     ChatTool,
@@ -32,9 +32,8 @@ _RESPONSE_API_BUILT_IN_TOOLS = {
 
 
 def set_span_chat_attributes(span: LiveSpan, inputs: dict[str, Any], output: Any):
-    if span.span_type not in (SpanType.CHAT_MODEL, SpanType.LLM):
-        return
-
+    # NB: This function is also used for setting chat attributes for ResponsesAgent tracing spans
+    # (TODO: Add doc link). Therefore, the core logic should still run without openai package.
     messages = _parse_inputs_output(inputs, output)
     try:
         set_span_chat_messages(span, messages)
@@ -50,38 +49,72 @@ def set_span_chat_attributes(span: LiveSpan, inputs: dict[str, Any], output: Any
         except MlflowException:
             _logger.debug("Failed to set chat tools on span", exc_info=True)
 
+    # Extract and set usage information if available
+    if usage := _parse_usage(output):
+        span.set_attribute(SpanAttributeKey.CHAT_USAGE, usage)
+
 
 def _parse_inputs_output(inputs: dict[str, Any], output: Any) -> list[ChatMessage]:
-    from openai.types.chat import ChatCompletion
-
-    try:
-        from openai.types.responses import Response
-
-        if isinstance(output, Response):
-            messages = []
-            if _input := inputs.get("input"):
-                if isinstance(_input, str):
-                    messages.append(ChatMessage(role="user", content=_input))
-                elif isinstance(_input, list):
-                    for item in _input:
-                        messages.extend(_parse_response_item(item, messages))
-
-            for output in output.output:
-                output_dict = output.model_dump(exclude_unset=True)
-                messages.extend(_parse_response_item(output_dict, messages))
-
-            return messages
-    except ImportError:
-        pass
+    if _is_responses_output(output):
+        return _parse_responses_inputs_outputs(inputs, output)
 
     messages = []
     if "messages" in inputs:
         messages.extend(inputs["messages"])
 
-    if isinstance(output, ChatCompletion):
-        messages.extend([output.choices[0].message.to_dict(exclude_unset=True)])
-    elif isinstance(output, str):
-        messages.extend([{"role": "assistant", "content": output}])
+    try:
+        from openai.types.chat import ChatCompletion
+
+        if isinstance(output, ChatCompletion):
+            messages.append(output.choices[0].message.to_dict(exclude_unset=True))
+            return messages
+    except ImportError:
+        pass
+
+    if isinstance(output, str):
+        messages.append({"role": "assistant", "content": output})
+
+    return messages
+
+
+def _is_responses_output(output: Any) -> bool:
+    """
+    Check whether the output is OpenAI Responses API output, or
+    a response from the MLflow ResponsesAgent instance.
+    """
+    try:
+        from openai.types.responses import Response
+
+        if isinstance(output, Response):
+            return True
+    except ImportError:
+        pass
+
+    try:
+        from mlflow.types.responses import ResponsesAgentResponse
+
+        if ResponsesAgentResponse.validate_compat(output):
+            return True
+    except Exception:
+        pass
+
+    return False
+
+
+def _parse_responses_inputs_outputs(
+    inputs: dict[str, Any], output: Union[BaseModel, dict[str, Any]]
+) -> list[ChatMessage]:
+    messages = []
+    if _input := inputs.get("input"):
+        if isinstance(_input, str):
+            messages.append(ChatMessage(role="user", content=_input))
+        elif isinstance(_input, list):
+            for item in _input:
+                messages.extend(_parse_response_item(item, messages))
+
+    output = output if isinstance(output, dict) else output.model_dump()
+    for output_item in output["output"]:
+        messages.extend(_parse_response_item(output_item, messages))
 
     return messages
 
@@ -290,3 +323,45 @@ def _parse_tools(inputs: dict[str, Any]) -> list[ChatTool]:
             raise MlflowException(f"Unknown tool type: {tool_type}")
 
     return parsed_tools
+
+
+def _parse_usage(output: Any) -> Optional[dict]:
+    """
+    Parse token usage information from OpenAI response objects.
+
+    Args:
+        output: The response object from OpenAI API calls
+
+    Returns:
+        A dictionary containing token usage information.
+    """
+    if output is None:
+        return None
+
+    # Handle OpenAI ChatCompletion API response
+    try:
+        from openai.types.chat import ChatCompletion
+
+        if isinstance(output, ChatCompletion) and (usage := output.usage):
+            return {
+                TokenUsageKey.INPUT_TOKENS: usage.prompt_tokens,
+                TokenUsageKey.OUTPUT_TOKENS: usage.completion_tokens,
+                TokenUsageKey.TOTAL_TOKENS: usage.total_tokens,
+            }
+    except ImportError:
+        pass
+
+    # Handle OpenAI Responses API response
+    try:
+        from openai.types.responses import Response
+
+        if isinstance(output, Response) and (usage := output.usage):
+            return {
+                TokenUsageKey.INPUT_TOKENS: usage.input_tokens,
+                TokenUsageKey.OUTPUT_TOKENS: usage.output_tokens,
+                TokenUsageKey.TOTAL_TOKENS: usage.total_tokens,
+            }
+    except ImportError:
+        pass
+
+    return None

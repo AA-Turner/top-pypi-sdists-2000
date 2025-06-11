@@ -511,13 +511,6 @@ class SnowflakeDialect(default.DefaultDialect):
             )
             schema_name = self.denormalize_name(schema)
 
-            iceberg_table_names = self.get_table_names_with_prefix(
-                connection,
-                schema=schema_name,
-                prefix=CustomTablePrefix.ICEBERG.name,
-                info_cache=kw.get("info_cache", None),
-            )
-
             result = connection.execute(
                 text(
                     """
@@ -578,10 +571,7 @@ class SnowflakeDialect(default.DefaultDialect):
                     col_type_kw["scale"] = numeric_scale
                 elif issubclass(col_type, (sqltypes.String, sqltypes.BINARY)):
                     col_type_kw["length"] = character_maximum_length
-                elif (
-                    issubclass(col_type, StructuredType)
-                    and table_name in iceberg_table_names
-                ):
+                elif issubclass(col_type, StructuredType):
                     if (schema_name, table_name) not in full_columns_descriptions:
                         full_columns_descriptions[(schema_name, table_name)] = (
                             self.table_columns_as_dict(
@@ -654,21 +644,13 @@ class SnowflakeDialect(default.DefaultDialect):
                 f" TABLE {table_schema}.{table_name} TYPE = COLUMNS"
             )
         )
-        for (
-            column_name,
-            coltype,
-            _kind,
-            is_nullable,
-            column_default,
-            primary_key,
-            _unique_key,
-            _check,
-            _expression,
-            comment,
-            _policy_name,
-            _privacy_domain,
-            _name_mapping,
-        ) in result:
+        for desc_data in result:
+            column_name = desc_data[0]
+            coltype = desc_data[1]
+            is_nullable = desc_data[3]
+            column_default = desc_data[4]
+            primary_key = desc_data[5]
+            comment = desc_data[9]
 
             column_name = self.normalize_name(column_name)
             if column_name.startswith("sys_clustering_column"):

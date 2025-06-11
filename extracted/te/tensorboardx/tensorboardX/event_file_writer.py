@@ -14,22 +14,19 @@
 # ==============================================================================
 """Writes events to disk in a logdir."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
+import multiprocessing
 import os
+import queue
 import socket
 import threading
 import time
-import multiprocessing
-import queue
 
 from .proto import event_pb2
 from .record_writer import RecordWriter, directory_check
 
 
-class EventsWriter(object):
+class EventsWriter:
     '''Writes `Event` protocol buffers to an event file.'''
 
     def __init__(self, file_prefix, filename_suffix=''):
@@ -54,7 +51,7 @@ class EventsWriter(object):
         # Check if event is of type event_pb2.Event proto.
         if not isinstance(event, event_pb2.Event):
             raise TypeError("Expected an event_pb2.Event proto, "
-                            " but got %s" % type(event))
+                            f" but got {type(event)}")
         return self._write_serialized_event(event.SerializeToString())
 
     def _write_serialized_event(self, event_str):
@@ -77,7 +74,7 @@ class EventsWriter(object):
         return return_value
 
 
-class EventFileWriter(object):
+class EventFileWriter:
     """Writes `Event` protocol buffers to an event file.
 
     The `EventFileWriter` class creates an event file in the specified directory,

@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,6 +25,18 @@ from orbax.checkpoint._src.checkpoint_managers.save_decision_policy import (
     ContinuousCheckpointingPolicy,
     AnySavePolicy,
 )
+
+from orbax.checkpoint._src.checkpoint_managers import preservation_policy
+from orbax.checkpoint._src.checkpoint_managers.preservation_policy import (
+    PreservationPolicy,
+    LatestN,
+    EveryNSeconds,
+    EveryNSteps,
+    CustomSteps,
+    AnyPreservationPolicy,
+    BestN,
+)
+
 
 from orbax.checkpoint.checkpoint_manager import CheckpointManagerOptions
 from orbax.checkpoint.checkpoint_manager import CheckpointManager

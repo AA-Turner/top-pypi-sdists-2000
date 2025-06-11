@@ -1,10 +1,9 @@
 # DO NOT alter/distruct/free input object !
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import logging
+
 import numpy as np
+
 logger = logging.getLogger(__name__)
 
 
@@ -20,8 +19,6 @@ def make_np(x):
         return check_nan(np.array(x))
     if isinstance(x, np.ndarray):
         return check_nan(x)
-    if isinstance(x, str):  # Caffe2 will pass name of blob(s) to fetch
-        return check_nan(prepare_caffe2(x))
     if np.isscalar(x):
         return check_nan(np.array([x]))
     if 'torch' in str(type(x)):
@@ -32,8 +29,10 @@ def make_np(x):
         return check_nan(prepare_mxnet(x))
     if 'jax' in str(type(x)):
         return check_nan(np.array(x))
+    if 'paddle' in str(type(x)):
+        return check_nan(np.array(x))
     raise NotImplementedError(
-        'Got {}, but expected numpy array or torch tensor.'.format(type(x)))
+        f'Got {type(x)}, but expected numpy array or torch tensor.')
 
 
 def prepare_pytorch(x):
@@ -47,12 +46,6 @@ def prepare_pytorch(x):
 def prepare_theano(x):
     import theano
     pass
-
-
-def prepare_caffe2(x):
-    from caffe2.python import workspace
-    x = workspace.FetchBlob(x)
-    return x
 
 
 def prepare_mxnet(x):

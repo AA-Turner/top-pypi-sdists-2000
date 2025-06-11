@@ -5,7 +5,7 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from .extract_resultset_data import ExtractResultsetData
-from .json_type import JsonType
+from .extract_resultset_extraction_metadata_value import ExtractResultsetExtractionMetadataValue
 
 try:
     import pydantic
@@ -24,7 +24,7 @@ class ExtractResultset(pydantic.BaseModel):
     run_id: str = pydantic.Field(description="The id of the extraction run")
     extraction_agent_id: str = pydantic.Field(description="The id of the extraction agent")
     data: typing.Optional[ExtractResultsetData] = pydantic.Field(description="The data extracted from the file")
-    extraction_metadata: typing.Dict[str, typing.Optional[JsonType]] = pydantic.Field(
+    extraction_metadata: typing.Dict[str, typing.Optional[ExtractResultsetExtractionMetadataValue]] = pydantic.Field(
         description="The metadata extracted from the file"
     )
 

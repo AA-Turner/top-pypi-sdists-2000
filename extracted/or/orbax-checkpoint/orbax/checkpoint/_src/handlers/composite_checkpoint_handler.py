@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,6 +48,8 @@ from __future__ import annotations
 import asyncio
 import concurrent.futures
 import dataclasses
+import threading
+import time
 from typing import Any, Dict, List, Mapping, MutableSet, Optional, Tuple, Type
 
 from absl import logging
@@ -65,6 +67,7 @@ from orbax.checkpoint._src.handlers import handler_registration
 from orbax.checkpoint._src.handlers import handler_type_registry
 from orbax.checkpoint._src.metadata import checkpoint
 from orbax.checkpoint._src.metadata import step_metadata_serialization
+from orbax.checkpoint._src.multihost import multihost
 from orbax.checkpoint._src.path import atomicity
 from orbax.checkpoint._src.path import atomicity_defaults
 from orbax.checkpoint._src.path import atomicity_types
@@ -251,24 +254,24 @@ def _add_to_handler_registry_from_global_registry(
 class CompositeCheckpointHandler(AsyncCheckpointHandler):
   """CheckpointHandler for saving multiple items.
 
-  As with all :py:class:`CheckpointHandler` implementations, use only in
-  conjunction with an instance of `AbstractCheckpointer`.
+  As with all :py:class:`.CheckpointHandler` implementations, use only in
+  conjunction with an instance of :py:class:`.AbstractCheckpointer`.
 
-  The :py:class:`CompositeCheckpointHandler` allows dealing with multiple items
+  The :py:class:`.CompositeCheckpointHandler` allows dealing with multiple items
   of different types or logical distinctness, such as training state (PyTree),
   dataset iterator, JSON metadata, or anything else. To specify the handler
   and args for each checkpointable item, use the `handler_registry` option at
-  initialization (see :py:class:`CheckpointHandlerRegistry`).
+  initialization (see :py:class:`.CheckpointHandlerRegistry`).
 
-  If a handler registry is provided, the :py:class:`CompositeCheckpointHandler`
-  will use this registry to determine the :py:class:`CheckpointHandler` for each
-  checkpointable item. If no registry is provided, an empty registry will be
-  constructed by default internally. Additional items not registered in the
+  If a handler registry is provided, the :py:class:`.CompositeCheckpointHandler`
+  will use this registry to determine the :py:class:`.CheckpointHandler` for
+  each checkpointable item. If no registry is provided, an empty registry will
+  be constructed by default internally. Additional items not registered in the
   handler registry can be specified when calling `save` or `restore`. The
-  handler will be determined from the provided :py:class:`CheckpointArgs` during
-  the first call to `save` or `restore`. Subsequent calls to `save` or `restore`
-  will use the same handler and will require the same :py:class:`CheckpointArgs`
-  to be provided.
+  handler will be determined from the provided :py:class:`.CheckpointArgs`
+  during the first call to `save` or `restore`. Subsequent calls to `save` or
+  `restore` will use the same handler and will require the same
+  :py:class:`.CheckpointArgs` to be provided.
 
   `item_names` and `items_and_handlers` are deprecated arguments for specifying
   the items and handlers. Please use `handler_registry` instead.
@@ -667,6 +670,7 @@ class CompositeCheckpointHandler(AsyncCheckpointHandler):
       self, directory: epath.Path, args: CompositeArgs
   ) -> Optional[List[Future]]:
     """Saves multiple items to individual subdirectories."""
+    start_time = time.time()
     self._current_temporary_paths = self._get_item_temporary_paths(
         directory, args
     )
@@ -687,7 +691,10 @@ class CompositeCheckpointHandler(AsyncCheckpointHandler):
           )
       ).result()
     save_ops = []
+    time_taken_per_item = {}
+    time_taken_all_items = 0.0
     for item_name, item_directory in self._current_temporary_paths.items():
+      item_start_time = time.time()
       arg = args[item_name]
       _maybe_raise_reserved_item_error(item_name)
       handler = self._get_or_set_handler(item_name, arg)
@@ -699,9 +706,24 @@ class CompositeCheckpointHandler(AsyncCheckpointHandler):
         future.CommitFutureAwaitingContractedSignals(
             async_handler_save_fn(item_directory.get(), args=arg)
         ).result()
+      item_end_time = time.time() - item_start_time
+      time_taken_per_item[item_name] = f'{item_end_time:.8f}'
+      time_taken_all_items += item_end_time
 
     commit_futures.extend(
         jax.tree.flatten(await asyncio.gather(*save_ops))[0] or []
+    )
+    end_time = time.time()
+    logging.info(
+        '[process=%s][thread=%s] Initiated'
+        ' CompositeCheckpointHandler.async_save. Time taken: %fs'
+        ' (all_items=%fs, per_item=%s, temp_paths=%f)',
+        multihost.process_index(),
+        threading.current_thread().name,
+        end_time - start_time,
+        time_taken_all_items,
+        time_taken_per_item,
+        end_time - start_time - time_taken_all_items,
     )
     return commit_futures
 

@@ -1,8 +1,7 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.3
 Name: auth0-python
-Version: 4.9.0
+Version: 4.10.0
 Summary: 
-Home-page: https://auth0.com
 License: MIT
 Author: Auth0
 Author-email: support@auth0.com
@@ -13,11 +12,14 @@ Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
 Requires-Dist: aiohttp (>=3.10.11)
 Requires-Dist: cryptography (>=43.0.1)
 Requires-Dist: pyjwt (>=2.8.0)
 Requires-Dist: requests (>=2.32.3)
 Requires-Dist: urllib3 (>=2.2.3)
+Project-URL: Homepage, https://auth0.com
 Project-URL: Repository, https://github.com/auth0/auth0-python
 Description-Content-Type: text/markdown
 
@@ -145,6 +147,7 @@ For more code samples on how to integrate the auth0-python SDK in your Python ap
 - Roles() ( `Auth0().roles` )
 - RulesConfigs() ( `Auth0().rules_configs` )
 - Rules() ( `Auth0().rules` )
+- SelfServiceProfiles() ( `Auth0().self_service_profiles` )
 - Stats() ( `Auth0().stats` )
 - Tenants() ( `Auth0().tenants` )
 - Tickets() ( `Auth0().tickets` )

@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import dataclasses
 import functools
 import json
 import sys
+import threading
 import time
 from typing import Any, List, Optional, Sequence, Tuple, Union
 import uuid
@@ -49,6 +50,7 @@ from orbax.checkpoint._src.serialization import serialization
 from orbax.checkpoint._src.serialization import tensorstore_utils as ts_utils
 from orbax.checkpoint._src.serialization import type_handlers
 from orbax.checkpoint._src.serialization import types
+from orbax.checkpoint._src.tree import structure_utils as tree_structure_utils
 from orbax.checkpoint._src.tree import types as tree_types
 from orbax.checkpoint._src.tree import utils as tree_utils
 import tensorstore as ts
@@ -122,6 +124,24 @@ def _log_io_metrics(
   jax.monitoring.record_event_duration_secs(bytes_per_sec_metric, bytes_per_sec)
   if bytes_metric is not None:
     jax.monitoring.record_event(bytes_metric, bytes=size)
+
+
+async def _logging_serialize(
+    handler: TypeHandler,
+    serialize: asyncio.Coroutine[Any, Any, Sequence[future.Future]],
+) -> Sequence[future.Future]:
+  """Logs the time taken to serialize."""
+  start = time.time()
+  commit_futures = await serialize
+  handler_name = f'{type(handler).__module__}.{type(handler).__qualname__}'
+  logging.info(
+      '[process=%s][thread=%s] Initiated %s.serialize. Time taken: %fs',
+      multihost.process_index(),
+      threading.current_thread().name,
+      f'"{handler_name}"',
+      time.time() - start,
+  )
+  return commit_futures
 
 
 @dataclasses.dataclass
@@ -288,6 +308,7 @@ class BasePyTreeCheckpointHandler(
       array_metadata_validator: array_metadata_store_lib.Validator = (
           array_metadata_store_lib.Validator()
       ),
+      enable_pinned_host_transfer: Optional[bool] = None,
   ):
     """Creates BasePyTreeCheckpointHandler.
 
@@ -307,6 +328,10 @@ class BasePyTreeCheckpointHandler(
         parameters after the finalize step.
       pytree_metadata_options: `PyTreeMetadataOptions` to manage metadata.
       array_metadata_validator: Validator for ArrayMetadata.
+      enable_pinned_host_transfer: Whether to use pinned_host memory for the
+        transfer from device to host memory. Passing None will enable
+        pinned_host memory depending on the platform used (currently only
+        enables it for the GPU backend).
     """
     self._save_concurrent_bytes = save_concurrent_bytes
     self._restore_concurrent_bytes = restore_concurrent_bytes
@@ -327,17 +352,23 @@ class BasePyTreeCheckpointHandler(
       self._array_metadata_store.set_primary_host(self._primary_host)
     self._array_metadata_validator = array_metadata_validator
 
+    if enable_pinned_host_transfer is None:
+      enable_pinned_host_transfer = jax.default_backend() == 'gpu'
+    self._enable_pinned_host_transfer = enable_pinned_host_transfer
 
     jax.monitoring.record_event(
         '/jax/orbax/pytree_checkpoint_handler/init/ocdbt'
     )
-    logging.info(
+    logging.vlog(
+        1,
         'Created BasePyTreeCheckpointHandler: use_ocdbt=%s, use_zarr3=%s,'
-        ' pytree_metadata_options=%s, array_metadata_store=%s',
+        ' pytree_metadata_options=%s, array_metadata_store=%s,'
+        ' enable_pinned_host_transfer=%s',
         self._use_ocdbt,
         self._use_zarr3,
         self._pytree_metadata_options,
         self._array_metadata_store,
+        self._enable_pinned_host_transfer,
     )
 
   def get_param_names(self, item: PyTree) -> PyTree:
@@ -352,7 +383,6 @@ class BasePyTreeCheckpointHandler(
       use_ocdbt: bool = True,
       use_zarr3: Optional[bool] = None,
       ocdbt_target_data_file_size: Optional[int] = None,
-      enable_pinned_host_transfer: bool = False,
       byte_limiter: Optional[serialization.ByteLimiter] = None,
       raise_array_data_missing_error: bool = True,
   ) -> PyTree:
@@ -368,7 +398,6 @@ class BasePyTreeCheckpointHandler(
       use_zarr3: Whether to use zarr3.
       ocdbt_target_data_file_size: Specifies the target size (in bytes) of each
         OCDBT data file.
-      enable_pinned_host_transfer: See ParamInfo docs.
       byte_limiter: ByteLimiter object.
       raise_array_data_missing_error: See documentation in ParamInfo.
 
@@ -394,7 +423,7 @@ class BasePyTreeCheckpointHandler(
           skip_deserialize=skip_deserialize,
           is_ocdbt_checkpoint=use_ocdbt,
           use_zarr3=use_zarr3,
-          enable_pinned_host_transfer=enable_pinned_host_transfer,
+          enable_pinned_host_transfer=self._enable_pinned_host_transfer,
           ocdbt_target_data_file_size=ocdbt_target_data_file_size,
           byte_limiter=byte_limiter,
           ts_context=ts_context,
@@ -464,7 +493,6 @@ class BasePyTreeCheckpointHandler(
         directory,
         use_ocdbt=self._use_ocdbt,
         ocdbt_target_data_file_size=ocdbt_target_data_file_size,
-        enable_pinned_host_transfer=args.enable_pinned_host_transfer,
         byte_limiter=byte_limiter,
     )
     assert all(
@@ -478,10 +506,16 @@ class BasePyTreeCheckpointHandler(
         save_args,
         self._type_handler_registry,
     )
+    batch_requests_ready_time = time.time()
     tree_memory_size = 0
     for request in batch_requests:
       serialize_ops += [
-          request.handler.serialize(request.values, request.infos, request.args)
+          _logging_serialize(
+              request.handler,
+              request.handler.serialize(
+                  request.values, request.infos, request.args
+              ),
+          )
       ]
       write_size, _ = _get_batch_memory_size(request.handler, request.values)
       tree_memory_size += write_size
@@ -490,6 +524,7 @@ class BasePyTreeCheckpointHandler(
     # Flatten to List[future.Future].
     commit_futures, _ = jax.tree.flatten(commit_futures)
 
+    total_serialization_initiated_time = time.time()
     if logging.vlog_is_on(1):
       logging.vlog(1, 'param_info: %s', param_infos)
       logging.vlog(1, 'save_args: %s', save_args)
@@ -517,7 +552,7 @@ class BasePyTreeCheckpointHandler(
         start_time,
         '/jax/checkpoint/write/blocking_bytes_per_sec',
     )
-    return [
+    chained_futures = [
         future.ChainedFuture(
             save_futures,
             functools.partial(
@@ -529,6 +564,19 @@ class BasePyTreeCheckpointHandler(
             ),
         )
     ]
+    async_save_end_time = time.time()
+    logging.info(
+        '[process=%s][thread=%s] Initiated Pytree async_save. Time taken:'
+        ' %fs (batch_requests_ready=%fs, total_serialization_initiated=%fs,'
+        ' others=%fs)',
+        multihost.process_index(),
+        threading.current_thread().name,
+        async_save_end_time - start_time,
+        batch_requests_ready_time - start_time,
+        total_serialization_initiated_time - batch_requests_ready_time,
+        async_save_end_time - total_serialization_initiated_time,
+    )
+    return chained_futures
 
   def save(self, directory: epath.Path, *args, **kwargs):
     """Saves the provided item.
@@ -722,12 +770,19 @@ class BasePyTreeCheckpointHandler(
     # Prep for restore.
     if item is None:
       item = value_metadata_tree
+    elif args.partial_restore:
+      value_metadata_tree = tree_structure_utils.tree_trim(
+          item, value_metadata_tree, strict=True
+      )
+      restore_args = tree_structure_utils.tree_trim(
+          item, restore_args, strict=True
+      )
     else:
       # is_empty_or_leaf is necessary here to treat empty nodes (e.g. empty
       # dicts, lists, custom nodes) as leaves, as they do not contain any
       # actual data to be restored, but are needed to maintain the structure.
       serialized_item = tree_utils.serialize_tree(item, keep_empty_nodes=True)
-      diff = tree_utils.tree_difference(
+      diff = tree_structure_utils.tree_difference(
           serialized_item,
           value_metadata_tree,
           is_leaf=tree_utils.is_empty_or_leaf,
@@ -881,10 +936,13 @@ class BasePyTreeCheckpointHandler(
       custom_metadata: tree_types.JsonType | None = None,
       use_zarr3: bool,
   ) -> None:
+    start_time = time.time()
     if not utils.is_primary_host(self._primary_host):
       return
     for commit_future in commit_futures:
       await asyncio.to_thread(commit_future.result)
+
+    commit_time = time.time()
     # `write_shape` is extracted from ArrayMetadata store saved during
     # materialization of commit_futures. Then it is written to the pytree
     # metadata.
@@ -906,6 +964,16 @@ class BasePyTreeCheckpointHandler(
         use_zarr3=use_zarr3,
     )
     await asyncio.to_thread(write_metadata_file_future.result)
+    end_time = time.time()
+    logging.info(
+        '[process=%s][thread=%s] Commit + Array metadata written. Time taken:'
+        ' %fs (commit=%fs, array_metadata_write=%fs)',
+        multihost.process_index(),
+        threading.current_thread().name,
+        end_time - start_time,
+        commit_time - start_time,
+        end_time - commit_time,
+    )
 
   def _read_metadata_file(
       self, directory: epath.Path
@@ -977,6 +1045,7 @@ class BasePyTreeCheckpointHandler(
     )
 
   async def _finalize_async(self, directory: epath.Path) -> None:
+    start_time = time.time()
     finalize_coros = []
     if self._array_metadata_store is not None:
       if self._primary_host is None:
@@ -1013,6 +1082,18 @@ class BasePyTreeCheckpointHandler(
     finalize_coros.append(merge_ocdbt_per_process_files())
 
     await asyncio.gather(*finalize_coros)
+    end_time = time.time()
+    logging.info(
+        '[process=%s][thread=%s] Pytree save finalize (merge_ocdbt +'
+        ' ArrayMetadata validation) completed. Time taken: %fs. use_zarr3=%s,'
+        ' enable_post_merge_validation=%s, directory=%s',
+        multihost.process_index(),
+        threading.current_thread().name,
+        end_time - start_time,
+        self._use_zarr3,
+        self._enable_post_merge_validation,
+        directory,
+    )
 
   def finalize(self, directory: epath.Path) -> None:
     """Finalization step.
@@ -1043,9 +1124,6 @@ class BasePyTreeSaveArgs(CheckpointArgs):
       indicates no maximum file size limit.  For best results, ensure
       chunk_byte_size is smaller than this value.  For more details, refer to
       https://google.github.io/tensorstore/kvstore/ocdbt/index.html#json-kvstore/ocdbt.target_data_file_size
-    enable_pinned_host_transfer: If False, disables transfer to pinned host when
-      copying from device to host, regardless of the presence of pinned host
-      memory.
     custom_metadata: User-provided custom metadata. An arbitrary
       JSON-serializable dictionary the user can use to store additional
       information. The field is treated as opaque by Orbax.
@@ -1054,7 +1132,6 @@ class BasePyTreeSaveArgs(CheckpointArgs):
   item: PyTree
   save_args: Optional[PyTree] = None
   ocdbt_target_data_file_size: Optional[int] = None
-  enable_pinned_host_transfer: bool = False
   custom_metadata: tree_types.JsonType | None = None
 
 
@@ -1076,7 +1153,10 @@ class BasePyTreeRestoreArgs(CheckpointArgs):
       leaf as a certain type, a specific subclass of `RestoreArgs` may be
       required. `RestoreArgs` also provides the option to customize the
       restore type of an individual leaf.
+      partial_restore: If True, only restore the parameters that are specified
+      in PyTreeRestoreArgs.
   """
 
   item: Optional[PyTree] = None
   restore_args: Optional[PyTree] = None
+  partial_restore: bool = False

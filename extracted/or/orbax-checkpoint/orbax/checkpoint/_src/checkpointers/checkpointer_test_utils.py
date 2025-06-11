@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,6 +50,8 @@ from orbax.checkpoint._src.path import step
 from orbax.checkpoint._src.serialization import serialization
 from orbax.checkpoint._src.serialization import type_handlers
 from orbax.checkpoint._src.testing import test_tree_utils
+
+from .pyglib import gfile
 
 
 PyTreeCheckpointHandler = pytree_checkpoint_handler.PyTreeCheckpointHandler
@@ -104,6 +106,12 @@ class CheckpointerTestBase:
       if isinstance(checkpointer, AsyncCheckpointer):
         checkpointer.wait_until_finished()
 
+    def is_world_readable(self, path):
+      if not gfile.Exists(path):
+        return False
+      mode = gfile.Stat(path, stat_proto=True).mode
+      return (mode & 0o770) != mode
+
     def test_save_restore(self):
       """Basic save and restore test."""
       with self.checkpointer(PyTreeCheckpointHandler()) as checkpointer:
@@ -156,6 +164,7 @@ class CheckpointerTestBase:
         )
         expected = self.pytree
         test_utils.assert_tree_equal(self, expected, restored)
+        self.assertFalse(self.is_world_readable(self.directory))
 
     def test_overwrite_existing(self):
       """Test overwrite existing path."""
@@ -169,6 +178,7 @@ class CheckpointerTestBase:
         )
         expected = self.doubled_pytree
         test_utils.assert_tree_equal(self, expected, restored)
+        self.assertFalse(self.is_world_readable(self.directory))
 
     def test_flax_train_state(self):
       """Test using flax model."""
@@ -644,5 +654,64 @@ class CheckpointerTestBase:
                 args=pytree_checkpoint_handler.PyTreeRestoreArgs(
                     item=reference_item,
                     restore_args=self.pytree_restore_args,
+                ),
+            )
+
+    def test_partial_restore_with_omission(self):
+      """Basic save and restore test."""
+      with self.checkpointer(PyTreeCheckpointHandler()) as save_checkpointer:
+        directory = self.directory / 'partial_restore'
+        save_checkpointer.save(
+            directory,
+            args.PyTreeSave(self.pytree),
+        )
+
+      with self.subTest('success'):
+        with self.checkpointer(
+            PyTreeCheckpointHandler()
+        ) as restore_checkpointer:
+          reference_item = {
+              'a': 0,
+              'c': {
+                  'a': 0,
+              },
+          }
+          expected = {
+              'a': self.pytree['a'],
+              'c': {
+                  'a': self.pytree['c']['a'],
+              },
+          }
+          restored = restore_checkpointer.restore(
+              directory,
+              args=pytree_checkpoint_handler.PyTreeRestoreArgs(
+                  item=reference_item,
+                  restore_args=self.pytree_restore_args,
+                  partial_restore=True,
+              ),
+          )
+          test_utils.assert_tree_equal(self, expected, restored)
+
+      with self.subTest('extra_leaf'):
+        with self.checkpointer(
+            PyTreeCheckpointHandler()
+        ) as restore_checkpointer:
+          reference_item = {
+              'a': 0,
+              'c': {
+                  'a': 0,
+              },
+              'z': 0,
+          }
+          with self.assertRaisesRegex(
+              ValueError,
+              r"Missing 1 keys in structure path \(\), including: \['z'\]",
+          ):
+            restore_checkpointer.restore(
+                directory,
+                args=pytree_checkpoint_handler.PyTreeRestoreArgs(
+                    item=reference_item,
+                    restore_args=self.pytree_restore_args,
+                    partial_restore=True,
                 ),
             )

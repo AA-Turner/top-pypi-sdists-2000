@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
 
 """PyTreeCheckpointHandler class.
 
-Implementation of `CheckpointHandler` interface dealing with JAX PyTrees. Much
-of the underlying reading/writing logic for individual leaf types can be
-customized, and is delegated to the `TypeHandler` class.
+Implementation of :py:class:`.CheckpointHandler` interface dealing with JAX
+PyTrees. Much of the underlying reading/writing logic for individual leaf types
+can be customized, and is delegated to the :py:class:`.TypeHandler` class.
 """
 
 from __future__ import annotations
@@ -191,6 +191,7 @@ def _get_restore_parameters(
     byte_limiter: Optional[LimitInFlightBytes] = None,
     transforms_default_to_original: bool = True,
     use_zarr3: bool = False,
+    partial_restore: bool = False,
 ) -> Tuple[PyTree, PyTree]:
   """Construct parameters needed for restoration.
 
@@ -229,6 +230,7 @@ def _get_restore_parameters(
     byte_limiter: A LimitInFlightBytes object.
     transforms_default_to_original: See transform_utils.apply_transformations.
     use_zarr3: If True, use Zarr ver3 otherwise Zarr ver2
+    partial_restore: If True, only restore the parameters present in structure.
 
   Returns:
     Tuple of param_infos, and restore_args.
@@ -242,6 +244,7 @@ def _get_restore_parameters(
   flat_restore_args = tree_utils.to_flat_dict(
       restore_args, keep_empty_nodes=True
   )
+  flat_item = tree_utils.to_flat_dict(item, keep_empty_nodes=True)
   flat_param_infos = {}
   flat_input_restore_args = {}
   is_ocdbt_checkpoint = type_handlers.is_ocdbt_checkpoint(directory)
@@ -275,7 +278,18 @@ def _get_restore_parameters(
         raise_array_data_missing_error=False,
     )
 
-  if transforms is None:
+  if partial_restore:
+    for key, meta in flat_structure.items():
+      if key not in flat_item:
+        flat_param_infos[key] = ParamInfo(skip_deserialize=True)
+        flat_input_restore_args[key] = RestoreArgs()
+      else:
+        flat_param_infos[key] = _get_param_info(flat_param_names[key], meta)
+        flat_input_restore_args[key] = flat_restore_args[key]
+    restore_args = tree_utils.from_flat_dict(
+        flat_input_restore_args, target=structure
+    )
+  elif transforms is None:
     for key, meta in flat_structure.items():
       flat_param_infos[key] = _get_param_info(flat_param_names[key], meta)
     restore_args = tree_metadata.serialize_tree(
@@ -287,7 +301,6 @@ def _get_restore_parameters(
           'If providing `transforms`, must provide `item` matching structure'
           ' of expected result.'
       )
-    flat_item = tree_utils.to_flat_dict(item, keep_empty_nodes=True)
     flat_transforms = tree_utils.to_flat_dict(transforms)
 
     for input_key, meta in flat_structure.items():
@@ -432,7 +445,6 @@ def _get_impl_save_args(
       item=args.item,
       save_args=args.save_args,
       ocdbt_target_data_file_size=args.ocdbt_target_data_file_size,
-      enable_pinned_host_transfer=args.enable_pinned_host_transfer,
       custom_metadata=args.custom_metadata,
   )
 
@@ -449,13 +461,14 @@ class PyTreeCheckpointHandler(async_checkpoint_handler.AsyncCheckpointHandler):
 
   See JAX documentation for more information on what consistutes a "PyTree".
   This handler is capable of saving and restoring any leaf object for which a
-  `TypeHandler` (see documentation) is registered. By default, `TypeHandler`s
-  for standard types like `np.ndarray`, `jax.Array`, Python scalars, and others
-  are registered.
+  :py:class:`.TypeHandler` (see documentation) is registered. By default,
+  `TypeHandler`s for standard types like `np.ndarray`, `jax.Array`, Python
+  scalars, and others are registered.
 
-  As with all `CheckpointHandler` subclasses, `PyTreeCheckpointHandler` should
-  only be used in conjunction with a `Checkpointer` (or subclass). By itself,
-  the `CheckpointHandler` is non-atomic.
+  As with all :py:class:`.CheckpointHandler` subclasses,
+  `PyTreeCheckpointHandler` should only be used in conjunction with a
+  :py:class:`.Checkpointer` (or subclass). By itself, the `CheckpointHandler` is
+  non-atomic.
 
   Example::
 
@@ -481,6 +494,7 @@ class PyTreeCheckpointHandler(async_checkpoint_handler.AsyncCheckpointHandler):
       array_metadata_validator: array_metadata_store_lib.Validator = (
           array_metadata_store_lib.Validator()
       ),
+      enable_pinned_host_transfer: Optional[bool] = None,
   ):
     """Creates PyTreeCheckpointHandler.
 
@@ -503,6 +517,10 @@ class PyTreeCheckpointHandler(async_checkpoint_handler.AsyncCheckpointHandler):
       handler_impl: Allows overriding the internal implementation.
       pytree_metadata_options: `PyTreeMetadataOptions` to manage metadata.
       array_metadata_validator: Validator for ArrayMetadata.
+      enable_pinned_host_transfer: Whether to use pinned_host memory for the
+        transfer from device to host memory. Passing None will enable
+        pinned_host memory depending on the platform used (currently only
+        enables it for the GPU backend).
     """
     self._aggregate_handler = MsgpackHandler(
         primary_host=multiprocessing_options.primary_host,
@@ -526,6 +544,7 @@ class PyTreeCheckpointHandler(async_checkpoint_handler.AsyncCheckpointHandler):
         type_handler_registry=type_handler_registry,
         pytree_metadata_options=pytree_metadata_options,
         array_metadata_validator=array_metadata_validator,
+        enable_pinned_host_transfer=enable_pinned_host_transfer,
     )
     self._pytree_metadata_options = pytree_metadata_options
 
@@ -792,6 +811,7 @@ class PyTreeCheckpointHandler(async_checkpoint_handler.AsyncCheckpointHandler):
       args = BasePyTreeRestoreArgs(
           item,
           restore_args=restore_args,
+          partial_restore=args.partial_restore,
       )
       return self._handler_impl.restore(directory, args=args)
 
@@ -1057,9 +1077,6 @@ class PyTreeSaveArgs(CheckpointArgs):
       indicates no maximum file size limit.  For best results, ensure
       chunk_byte_size is smaller than this value.  For more details, refer to
       https://google.github.io/tensorstore/kvstore/ocdbt/index.html#json-kvstore/ocdbt.target_data_file_size
-    enable_pinned_host_transfer: If False, disables transfer to
-      pinned host when copying from device to host, regardless of the presence
-      of pinned host memory.
     custom_metadata: User-provided custom metadata. An arbitrary
       JSON-serializable dictionary the user can use to store additional
       information. The field is treated as opaque by Orbax.
@@ -1068,7 +1085,6 @@ class PyTreeSaveArgs(CheckpointArgs):
   item: PyTree
   save_args: Optional[PyTree] = None
   ocdbt_target_data_file_size: Optional[int] = None
-  enable_pinned_host_transfer: bool = False
   custom_metadata: tree_types.JsonType | None = None
 
   def __post_init__(self):
@@ -1109,6 +1125,8 @@ class PyTreeRestoreArgs(CheckpointArgs):
       of ParamInfos based on the checkpoint. Returns a transformed PyTree
       matching the desired return tree structure, and a matching ParamInfo
       tree.
+    partial_restore: If True, only restore the parameters that are specified
+      in PyTreeRestoreArgs.
   """
 
   item: Optional[PyTree] = None
@@ -1116,6 +1134,7 @@ class PyTreeRestoreArgs(CheckpointArgs):
   transforms: Optional[PyTree] = None
   transforms_default_to_original: bool = True
   legacy_transform_fn: Optional[LegacyTransformFn] = None
+  partial_restore: bool = False
 
   def __post_init__(self):
     if isinstance(self.item, tree_metadata.TreeMetadata):

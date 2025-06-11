@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ from etils import epath
 
 
 
-def get_storage_type(path: epath.Path) -> str:
+def get_storage_type(path: epath.Path | str) -> str:
     return 'other'
 
 

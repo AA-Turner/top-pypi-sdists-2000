@@ -11,12 +11,6 @@ Spark MLlib (native) format
     input data as a Spark DataFrame prior to scoring. Also supports deployment in Spark
     as a Spark UDF. Models with this flavor can be loaded as Python functions
     for performing inference. This flavor is always produced.
-:py:mod:`mlflow.mleap`
-    Enables high-performance deployment outside of Spark by leveraging MLeap's
-    custom dataframe and pipeline representations. Models with this flavor *cannot* be loaded
-    back as Python objects. Rather, they must be deserialized in Java using the
-    ``mlflow/java`` package. This flavor is produced only if you specify
-    MLeap-compatible arguments.
 """
 
 import logging
@@ -31,7 +25,7 @@ import yaml
 from packaging.version import Version
 
 import mlflow
-from mlflow import environment_variables, mleap, pyfunc
+from mlflow import environment_variables, pyfunc
 from mlflow.environment_variables import MLFLOW_DFS_TMP
 from mlflow.exceptions import MlflowException
 from mlflow.models import Model, ModelInputExample, ModelSignature
@@ -148,7 +142,6 @@ def log_model(
     conda_env=None,
     code_paths=None,
     dfs_tmpdir=None,
-    sample_input=None,
     registered_model_name=None,
     signature: ModelSignature = None,
     input_example: ModelInputExample = None,
@@ -186,9 +179,6 @@ def log_model(
                         cluster. If this operation completes successfully, all temporary files
                         created on the DFS are removed. Defaults to ``/tmp/mlflow``.
                         For models defined in `pyspark.ml.connect` module, this param is ignored.
-        sample_input: A sample input used to add the MLeap flavor to the model.
-            This must be a PySpark DataFrame that the model can evaluate. If
-            ``sample_input`` is ``None``, the MLeap flavor is not added.
         registered_model_name: If given, create a model version under
             ``registered_model_name``, also creating a registered model if one
             with the given name does not exist.
@@ -287,13 +277,14 @@ def log_model(
     from pyspark.ml import PipelineModel
 
     if _is_spark_connect_model(spark_model):
-        return Model.log(
+        # TODO: Use `Model.log` once `mlflowdbfs` supports logged model artifacts.
+        # `mlflowdbfs` doesn't support logged model artifacts yet, so we use `Model._log_v2`.
+        return Model._log_v2(
             artifact_path=artifact_path,
             flavor=mlflow.spark,
             spark_model=spark_model,
             conda_env=conda_env,
             code_paths=code_paths,
-            sample_input=sample_input,
             registered_model_name=registered_model_name,
             signature=signature,
             input_example=input_example,
@@ -338,14 +329,15 @@ def log_model(
     ):
         dfs_tmpdir = dfs_tmpdir or MLFLOW_DFS_TMP.get()
         _check_databricks_uc_volume_tmpdir_availability(dfs_tmpdir)
-        return Model.log(
+        # TODO: Use `Model.log` once `mlflowdbfs` supports logged model artifacts.
+        # `mlflowdbfs` doesn't support logged model artifacts yet, so we use `Model._log_v2`.
+        return Model._log_v2(
             artifact_path=artifact_path,
             flavor=mlflow.spark,
             spark_model=spark_model,
             conda_env=conda_env,
             code_paths=code_paths,
             dfs_tmpdir=dfs_tmpdir,
-            sample_input=sample_input,
             registered_model_name=registered_model_name,
             signature=signature,
             input_example=input_example,
@@ -362,7 +354,6 @@ def log_model(
             tmp_model_metadata_dir,
             spark_model,
             mlflow_model,
-            sample_input,
             conda_env,
             code_paths,
             signature=signature,
@@ -571,7 +562,6 @@ def _save_model_metadata(
     dst_dir,
     spark_model,
     mlflow_model,
-    sample_input,
     conda_env,
     code_paths,
     signature=None,
@@ -590,13 +580,6 @@ def _save_model_metadata(
     import pyspark
 
     is_spark_connect_model = _is_spark_connect_model(spark_model)
-    if sample_input is not None and not is_spark_connect_model:
-        mleap.add_to_model(
-            mlflow_model=mlflow_model,
-            path=dst_dir,
-            spark_model=spark_model,
-            sample_input=sample_input,
-        )
     if signature is not None:
         mlflow_model.signature = signature
     if input_example is not None:
@@ -726,7 +709,6 @@ def save_model(
     conda_env=None,
     code_paths=None,
     dfs_tmpdir=None,
-    sample_input=None,
     signature: ModelSignature = None,
     input_example: ModelInputExample = None,
     pip_requirements=None,
@@ -737,8 +719,6 @@ def save_model(
     Save a Spark MLlib Model to a local path.
 
     By default, this function saves models using the Spark MLlib persistence mechanism.
-    Additionally, if a sample input is specified using the ``sample_input`` parameter, the model
-    is also serialized in MLeap format and the MLeap flavor is added.
 
     Args:
         spark_model: Spark model to be saved - MLflow can only save descendants of
@@ -754,9 +734,6 @@ def save_model(
             as Spark ML models read from and write to DFS if running on a cluster. All
             temporary files created on the DFS are removed if this operation
             completes successfully. Defaults to ``/tmp/mlflow``.
-        sample_input: A sample input that is used to add the MLeap flavor to the model.
-            This must be a PySpark DataFrame that the model can evaluate. If
-            ``sample_input`` is ``None``, the MLeap flavor is not added.
         signature: See the document of argument ``signature`` in :py:func:`mlflow.spark.log_model`.
         input_example: {{ input_example }}
         pip_requirements: {{ pip_requirements }}
@@ -854,7 +831,6 @@ def save_model(
         dst_dir=path,
         spark_model=spark_model,
         mlflow_model=mlflow_model,
-        sample_input=sample_input,
         conda_env=conda_env,
         code_paths=code_paths,
         signature=signature,

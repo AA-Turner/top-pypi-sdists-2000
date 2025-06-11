@@ -1,13 +1,13 @@
 Metadata-Version: 2.1
 Name: langchain-community
-Version: 0.3.24
+Version: 0.3.25
 Summary: Community contributed LangChain integrations.
 License: MIT
 Project-URL: Source Code, https://github.com/langchain-ai/langchain-community/tree/main/libs/community
 Project-URL: Release Notes, https://github.com/langchain-ai/langchain/releases?q=tag%3A%22langchain-community%3D%3D0%22&expanded=true
 Project-URL: repository, https://github.com/langchain-ai/langchain-community
 Requires-Python: >=3.9
-Requires-Dist: langchain-core<1.0.0,>=0.3.59
+Requires-Dist: langchain-core<1.0.0,>=0.3.65
 Requires-Dist: langchain<1.0.0,>=0.3.25
 Requires-Dist: SQLAlchemy<3,>=1.4
 Requires-Dist: requests<3,>=2
@@ -52,3 +52,11 @@ All changes will be accompanied by a patch version increase.
 As an open-source project in a rapidly developing field, we are extremely open to contributions, whether it be in the form of a new feature, improved infrastructure, or better documentation.
 
 For detailed information on how to contribute, see the [Contributing Guide](https://python.langchain.com/docs/contributing/).
+
+> [!NOTE]
+> Contributing a new integration? LangChain has published a
+[guide](https://python.langchain.com/docs/contributing/how_to/integrations/) on
+implementing new `langchain-*` [integration packages](https://python.langchain.com/docs/concepts/architecture/#integration-packages)
+and is recommending this in most cases to help decouple versioning and support
+varied testing infrastructures. See [docs](https://python.langchain.com/docs/contributing/how_to/integrations/)
+for details.

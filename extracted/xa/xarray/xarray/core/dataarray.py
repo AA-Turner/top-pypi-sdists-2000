@@ -33,6 +33,7 @@ from xarray.core.coordinates import (
     DataArrayCoordinates,
     assert_coordinate_consistent,
     create_coords_with_default_indexes,
+    validate_dataarray_coords,
 )
 from xarray.core.dataset import Dataset
 from xarray.core.extension_array import PandasExtensionArray
@@ -124,25 +125,6 @@ if TYPE_CHECKING:
     T_XarrayOther = TypeVar("T_XarrayOther", bound="DataArray" | Dataset)
 
 
-def _check_coords_dims(shape, coords, dim):
-    sizes = dict(zip(dim, shape, strict=True))
-    for k, v in coords.items():
-        if any(d not in dim for d in v.dims):
-            raise ValueError(
-                f"coordinate {k} has dimensions {v.dims}, but these "
-                "are not a subset of the DataArray "
-                f"dimensions {dim}"
-            )
-
-        for d, s in v.sizes.items():
-            if s != sizes[d]:
-                raise ValueError(
-                    f"conflicting sizes for dimension {d!r}: "
-                    f"length {sizes[d]} on the data but length {s} on "
-                    f"coordinate {k!r}"
-                )
-
-
 def _infer_coords_and_dims(
     shape: tuple[int, ...],
     coords: (
@@ -206,7 +188,7 @@ def _infer_coords_and_dims(
                 var.dims = (dim,)
                 new_coords[dim] = var.to_index_variable()
 
-    _check_coords_dims(shape, new_coords, dims_tuple)
+    validate_dataarray_coords(shape, new_coords, dims_tuple)
 
     return new_coords, dims_tuple
 
@@ -4232,6 +4214,7 @@ class DataArray(
         append_dim: Hashable | None = None,
         region: Mapping[str, slice | Literal["auto"]] | Literal["auto"] | None = None,
         safe_chunks: bool = True,
+        align_chunks: bool = False,
         storage_options: dict[str, str] | None = None,
         zarr_version: int | None = None,
         zarr_format: int | None = None,
@@ -4255,6 +4238,7 @@ class DataArray(
         append_dim: Hashable | None = None,
         region: Mapping[str, slice | Literal["auto"]] | Literal["auto"] | None = None,
         safe_chunks: bool = True,
+        align_chunks: bool = False,
         storage_options: dict[str, str] | None = None,
         zarr_version: int | None = None,
         zarr_format: int | None = None,
@@ -4276,6 +4260,7 @@ class DataArray(
         append_dim: Hashable | None = None,
         region: Mapping[str, slice | Literal["auto"]] | Literal["auto"] | None = None,
         safe_chunks: bool = True,
+        align_chunks: bool = False,
         storage_options: dict[str, str] | None = None,
         zarr_version: int | None = None,
         zarr_format: int | None = None,
@@ -4377,6 +4362,16 @@ class DataArray(
             two or more chunked arrays in the same location in parallel if they are
             not writing in independent regions, for those cases it is better to use
             a synchronizer.
+        align_chunks: bool, default False
+            If True, rechunks the Dask array to align with Zarr chunks before writing.
+            This ensures each Dask chunk maps to one or more contiguous Zarr chunks,
+            which avoids race conditions.
+            Internally, the process sets safe_chunks=False and tries to preserve
+            the original Dask chunking as much as possible.
+            Note: While this alignment avoids write conflicts stemming from chunk
+            boundary misalignment, it does not protect against race conditions
+            if multiple uncoordinated processes write to the same
+            Zarr array concurrently.
         storage_options : dict, optional
             Any additional parameters for the storage backend (ignored for local
             paths).
@@ -4468,6 +4463,7 @@ class DataArray(
             append_dim=append_dim,
             region=region,
             safe_chunks=safe_chunks,
+            align_chunks=align_chunks,
             storage_options=storage_options,
             zarr_version=zarr_version,
             zarr_format=zarr_format,
@@ -5464,7 +5460,7 @@ class DataArray(
         ----------
         coord : Hashable, or sequence of Hashable
             Coordinate(s) used for the integration.
-        datetime_unit : {'Y', 'M', 'W', 'D', 'h', 'm', 's', 'ms', 'us', 'ns', \
+        datetime_unit : {'W', 'D', 'h', 'm', 's', 'ms', 'us', 'ns', \
                         'ps', 'fs', 'as', None}, optional
             Specify the unit if a datetime coordinate is used.
 
@@ -5521,7 +5517,7 @@ class DataArray(
         ----------
         coord : Hashable, or sequence of Hashable
             Coordinate(s) used for the integration.
-        datetime_unit : {'Y', 'M', 'W', 'D', 'h', 'm', 's', 'ms', 'us', 'ns', \
+        datetime_unit : {'W', 'D', 'h', 'm', 's', 'ms', 'us', 'ns', \
                         'ps', 'fs', 'as', None}, optional
             Specify the unit if a datetime coordinate is used.
 
@@ -6410,7 +6406,7 @@ class DataArray(
         """
         Curve fitting optimization for arbitrary functions.
 
-        Wraps `scipy.optimize.curve_fit` with `apply_ufunc`.
+        Wraps :py:func:`scipy.optimize.curve_fit` with :py:func:`~xarray.apply_ufunc`.
 
         Parameters
         ----------
@@ -6550,6 +6546,9 @@ class DataArray(
         --------
         DataArray.polyfit
         scipy.optimize.curve_fit
+        xarray.DataArray.xlm.modelfit
+            External method from `xarray-lmfit <https://xarray-lmfit.readthedocs.io/>`_
+            with more curve fitting functionality.
         """
         # For DataArray, use the original implementation by converting to a dataset first
         return self._to_temp_dataset().curvefit(
@@ -6875,7 +6874,7 @@ class DataArray(
 
         >>> da.groupby("letters")
         <DataArrayGroupBy, grouped over 1 grouper(s), 2 groups in total:
-            'letters': 2/2 groups present with labels 'a', 'b'>
+            'letters': UniqueGrouper('letters'), 2/2 groups with labels 'a', 'b'>
 
         Execute a reduction
 
@@ -6891,8 +6890,8 @@ class DataArray(
 
         >>> da.groupby(["letters", "x"])
         <DataArrayGroupBy, grouped over 2 grouper(s), 8 groups in total:
-            'letters': 2/2 groups present with labels 'a', 'b'
-            'x': 4/4 groups present with labels 10, 20, 30, 40>
+            'letters': UniqueGrouper('letters'), 2/2 groups with labels 'a', 'b'
+            'x': UniqueGrouper('x'), 4/4 groups with labels 10, 20, 30, 40>
 
         Use Grouper objects to express more complicated GroupBy operations
 

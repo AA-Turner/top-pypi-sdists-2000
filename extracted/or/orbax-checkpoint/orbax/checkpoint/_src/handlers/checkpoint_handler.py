@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ class CheckpointHandler(abc.ABC):
   Item may be a PyTree, Dataset, or any other supported object.
 
   NOTE: Users should avoid using CheckpointHandler independently. Use
-  Checkpointer or CheckpointManager.
+  :py:class:`.Checkpointer` or :py:class:`.CheckpointManager` instead.
   """
 
   @abc.abstractmethod

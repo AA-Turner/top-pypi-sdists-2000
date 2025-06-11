@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -80,6 +80,13 @@ def to_shape_dtype_struct(
   Returns:
     jax.ShapeDtypeStruct or scalar value.
   """
+  if isinstance(arr, jax.Array) and jax.dtypes.issubdtype(
+      arr.dtype, jax.dtypes.prng_key
+  ):
+    # For random keys, extract the dtype and shape as a regular Jax array.
+    # Stored metadata will help restoring the original random key.
+    arr = jax.random.key_data(arr)
+
   if _is_scalar(arr):
     if scalar_dtype is not None:
       return scalar_dtype(arr)

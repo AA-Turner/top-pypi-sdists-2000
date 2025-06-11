@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,6 +27,10 @@ from orbax.checkpoint.experimental.v1._src.handlers.pytree_handler import (
 from orbax.checkpoint.experimental.v1._src.handlers.proto_handler import (
     ProtoHandler,
 )
+from orbax.checkpoint.experimental.v1._src.handlers.json_handler import (
+    JsonHandler,
+)
+
 
 from orbax.checkpoint.experimental.v1._src.handlers.registration import (
     CheckpointableHandlerRegistry,

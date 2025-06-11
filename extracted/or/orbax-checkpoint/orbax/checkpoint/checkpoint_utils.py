@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -492,6 +492,18 @@ def construct_restore_args(
         return value.sharding
     else:
       return None
+
+  def _return_key_data(value):
+    # replace jax.random.key with underneath jax.Array
+    if isinstance(value, jax.Array) and jax.dtypes.issubdtype(
+        value.dtype, jax.dtypes.prng_key
+    ):
+      # For random keys, extract the dtype and shape as a regular Jax array.
+      # Stored metadata will help restoring the original random key.
+      return jax.random.key_data(value)
+    return value
+
+  target = jax.tree.map(_return_key_data, target)
 
   if sharding_tree is None:
     sharding_tree = jax.tree.map(_get_sharding_or_layout, target)

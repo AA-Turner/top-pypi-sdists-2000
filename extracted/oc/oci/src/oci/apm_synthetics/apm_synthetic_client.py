@@ -157,14 +157,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/aggregate_network_data.py.html>`__ to see an example of how to use aggregate_network_data API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/aggregate_network_data.py.html>`__ to see an example of how to use aggregate_network_data API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['monitorId', 'apmDomainId']
         resource_path = "/monitors/{monitorId}/actions/aggregateNetworkData"
         method = "POST"
         operation_name = "aggregate_network_data"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/AggregatedNetworkDataResult/AggregateNetworkData"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -278,14 +278,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/create_dedicated_vantage_point.py.html>`__ to see an example of how to use create_dedicated_vantage_point API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/create_dedicated_vantage_point.py.html>`__ to see an example of how to use create_dedicated_vantage_point API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['apmDomainId']
         resource_path = "/dedicatedVantagePoints"
         method = "POST"
         operation_name = "create_dedicated_vantage_point"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/DedicatedVantagePoint/CreateDedicatedVantagePoint"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -387,14 +387,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/create_monitor.py.html>`__ to see an example of how to use create_monitor API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/create_monitor.py.html>`__ to see an example of how to use create_monitor API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['apmDomainId']
         resource_path = "/monitors"
         method = "POST"
         operation_name = "create_monitor"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Monitor/CreateMonitor"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -496,14 +496,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/create_on_premise_vantage_point.py.html>`__ to see an example of how to use create_on_premise_vantage_point API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/create_on_premise_vantage_point.py.html>`__ to see an example of how to use create_on_premise_vantage_point API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['apmDomainId']
         resource_path = "/onPremiseVantagePoints"
         method = "POST"
         operation_name = "create_on_premise_vantage_point"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/OnPremiseVantagePoint/CreateOnPremiseVantagePoint"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -605,14 +605,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/create_script.py.html>`__ to see an example of how to use create_script API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/create_script.py.html>`__ to see an example of how to use create_script API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['apmDomainId']
         resource_path = "/scripts"
         method = "POST"
         operation_name = "create_script"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Script/CreateScript"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -717,14 +717,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/create_worker.py.html>`__ to see an example of how to use create_worker API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/create_worker.py.html>`__ to see an example of how to use create_worker API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['onPremiseVantagePointId', 'apmDomainId']
         resource_path = "/onPremiseVantagePoints/{onPremiseVantagePointId}/workers"
         method = "POST"
         operation_name = "create_worker"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Worker/CreateWorker"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -838,14 +838,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/delete_dedicated_vantage_point.py.html>`__ to see an example of how to use delete_dedicated_vantage_point API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/delete_dedicated_vantage_point.py.html>`__ to see an example of how to use delete_dedicated_vantage_point API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dedicatedVantagePointId', 'apmDomainId']
         resource_path = "/dedicatedVantagePoints/{dedicatedVantagePointId}"
         method = "DELETE"
         operation_name = "delete_dedicated_vantage_point"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/DedicatedVantagePoint/DeleteDedicatedVantagePoint"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -954,14 +954,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/delete_monitor.py.html>`__ to see an example of how to use delete_monitor API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/delete_monitor.py.html>`__ to see an example of how to use delete_monitor API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['monitorId', 'apmDomainId']
         resource_path = "/monitors/{monitorId}"
         method = "DELETE"
         operation_name = "delete_monitor"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Monitor/DeleteMonitor"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1070,14 +1070,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/delete_on_premise_vantage_point.py.html>`__ to see an example of how to use delete_on_premise_vantage_point API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/delete_on_premise_vantage_point.py.html>`__ to see an example of how to use delete_on_premise_vantage_point API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['onPremiseVantagePointId', 'apmDomainId']
         resource_path = "/onPremiseVantagePoints/{onPremiseVantagePointId}"
         method = "DELETE"
         operation_name = "delete_on_premise_vantage_point"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/OnPremiseVantagePoint/DeleteOnPremiseVantagePoint"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1186,14 +1186,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/delete_script.py.html>`__ to see an example of how to use delete_script API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/delete_script.py.html>`__ to see an example of how to use delete_script API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['scriptId', 'apmDomainId']
         resource_path = "/scripts/{scriptId}"
         method = "DELETE"
         operation_name = "delete_script"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Script/DeleteScript"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1305,14 +1305,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/delete_worker.py.html>`__ to see an example of how to use delete_worker API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/delete_worker.py.html>`__ to see an example of how to use delete_worker API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['onPremiseVantagePointId', 'workerId', 'apmDomainId']
         resource_path = "/onPremiseVantagePoints/{onPremiseVantagePointId}/workers/{workerId}"
         method = "DELETE"
         operation_name = "delete_worker"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Worker/DeleteWorker"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1415,14 +1415,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/get_dedicated_vantage_point.py.html>`__ to see an example of how to use get_dedicated_vantage_point API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/get_dedicated_vantage_point.py.html>`__ to see an example of how to use get_dedicated_vantage_point API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dedicatedVantagePointId', 'apmDomainId']
         resource_path = "/dedicatedVantagePoints/{dedicatedVantagePointId}"
         method = "GET"
         operation_name = "get_dedicated_vantage_point"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/DedicatedVantagePoint/GetDedicatedVantagePoint"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1524,14 +1524,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/get_monitor.py.html>`__ to see an example of how to use get_monitor API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/get_monitor.py.html>`__ to see an example of how to use get_monitor API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['monitorId', 'apmDomainId']
         resource_path = "/monitors/{monitorId}"
         method = "GET"
         operation_name = "get_monitor"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Monitor/GetMonitor"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1645,14 +1645,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/get_monitor_result.py.html>`__ to see an example of how to use get_monitor_result API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/get_monitor_result.py.html>`__ to see an example of how to use get_monitor_result API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['monitorId', 'executionTime', 'apmDomainId', 'vantagePoint', 'resultType', 'resultContentType']
         resource_path = "/monitors/{monitorId}/results/{executionTime}"
         method = "GET"
         operation_name = "get_monitor_result"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/MonitorResult/GetMonitorResult"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1758,14 +1758,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/get_on_premise_vantage_point.py.html>`__ to see an example of how to use get_on_premise_vantage_point API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/get_on_premise_vantage_point.py.html>`__ to see an example of how to use get_on_premise_vantage_point API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['onPremiseVantagePointId', 'apmDomainId']
         resource_path = "/onPremiseVantagePoints/{onPremiseVantagePointId}"
         method = "GET"
         operation_name = "get_on_premise_vantage_point"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/OnPremiseVantagePoint/GetOnPremiseVantagePoint"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1867,14 +1867,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/get_script.py.html>`__ to see an example of how to use get_script API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/get_script.py.html>`__ to see an example of how to use get_script API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['scriptId', 'apmDomainId']
         resource_path = "/scripts/{scriptId}"
         method = "GET"
         operation_name = "get_script"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Script/GetScript"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1979,14 +1979,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/get_worker.py.html>`__ to see an example of how to use get_worker API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/get_worker.py.html>`__ to see an example of how to use get_worker API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['onPremiseVantagePointId', 'workerId', 'apmDomainId']
         resource_path = "/onPremiseVantagePoints/{onPremiseVantagePointId}/workers/{workerId}"
         method = "GET"
         operation_name = "get_worker"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Worker/GetWorker"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2122,14 +2122,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/list_dedicated_vantage_points.py.html>`__ to see an example of how to use list_dedicated_vantage_points API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/list_dedicated_vantage_points.py.html>`__ to see an example of how to use list_dedicated_vantage_points API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['apmDomainId']
         resource_path = "/dedicatedVantagePoints"
         method = "GET"
         operation_name = "list_dedicated_vantage_points"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/DedicatedVantagePointCollection/ListDedicatedVantagePoints"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2300,14 +2300,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/list_monitors.py.html>`__ to see an example of how to use list_monitors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/list_monitors.py.html>`__ to see an example of how to use list_monitors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['apmDomainId']
         resource_path = "/monitors"
         method = "GET"
         operation_name = "list_monitors"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/MonitorCollection/ListMonitors"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2468,14 +2468,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/list_on_premise_vantage_points.py.html>`__ to see an example of how to use list_on_premise_vantage_points API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/list_on_premise_vantage_points.py.html>`__ to see an example of how to use list_on_premise_vantage_points API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['apmDomainId']
         resource_path = "/onPremiseVantagePoints"
         method = "GET"
         operation_name = "list_on_premise_vantage_points"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/OnPremiseVantagePointCollection/ListOnPremiseVantagePoints"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2617,14 +2617,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/list_public_vantage_points.py.html>`__ to see an example of how to use list_public_vantage_points API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/list_public_vantage_points.py.html>`__ to see an example of how to use list_public_vantage_points API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['apmDomainId']
         resource_path = "/publicVantagePoints"
         method = "GET"
         operation_name = "list_public_vantage_points"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/PublicVantagePointCollection/ListPublicVantagePoints"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2768,14 +2768,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/list_scripts.py.html>`__ to see an example of how to use list_scripts API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/list_scripts.py.html>`__ to see an example of how to use list_scripts API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['apmDomainId']
         resource_path = "/scripts"
         method = "GET"
         operation_name = "list_scripts"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/ScriptCollection/ListScripts"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2930,14 +2930,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/list_workers.py.html>`__ to see an example of how to use list_workers API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/list_workers.py.html>`__ to see an example of how to use list_workers API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['onPremiseVantagePointId', 'apmDomainId']
         resource_path = "/onPremiseVantagePoints/{onPremiseVantagePointId}/workers"
         method = "GET"
         operation_name = "list_workers"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/WorkerCollection/ListWorkers"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3086,14 +3086,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/update_dedicated_vantage_point.py.html>`__ to see an example of how to use update_dedicated_vantage_point API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/update_dedicated_vantage_point.py.html>`__ to see an example of how to use update_dedicated_vantage_point API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dedicatedVantagePointId', 'apmDomainId']
         resource_path = "/dedicatedVantagePoints/{dedicatedVantagePointId}"
         method = "PUT"
         operation_name = "update_dedicated_vantage_point"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/DedicatedVantagePoint/UpdateDedicatedVantagePoint"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3209,14 +3209,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/update_monitor.py.html>`__ to see an example of how to use update_monitor API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/update_monitor.py.html>`__ to see an example of how to use update_monitor API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['monitorId', 'apmDomainId']
         resource_path = "/monitors/{monitorId}"
         method = "PUT"
         operation_name = "update_monitor"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Monitor/UpdateMonitor"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3332,14 +3332,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/update_on_premise_vantage_point.py.html>`__ to see an example of how to use update_on_premise_vantage_point API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/update_on_premise_vantage_point.py.html>`__ to see an example of how to use update_on_premise_vantage_point API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['onPremiseVantagePointId', 'apmDomainId']
         resource_path = "/onPremiseVantagePoints/{onPremiseVantagePointId}"
         method = "PUT"
         operation_name = "update_on_premise_vantage_point"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/OnPremiseVantagePoint/UpdateOnPremiseVantagePoint"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3455,14 +3455,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/update_script.py.html>`__ to see an example of how to use update_script API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/update_script.py.html>`__ to see an example of how to use update_script API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['scriptId', 'apmDomainId']
         resource_path = "/scripts/{scriptId}"
         method = "PUT"
         operation_name = "update_script"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Script/UpdateScript"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3581,14 +3581,14 @@ class ApmSyntheticClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.0/apmsynthetics/update_worker.py.html>`__ to see an example of how to use update_worker API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.154.1/apmsynthetics/update_worker.py.html>`__ to see an example of how to use update_worker API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['onPremiseVantagePointId', 'workerId', 'apmDomainId']
         resource_path = "/onPremiseVantagePoints/{onPremiseVantagePointId}/workers/{workerId}"
         method = "PUT"
         operation_name = "update_worker"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/apm-synthetic-monitoring/20200630/Worker/UpdateWorker"
 
         # Don't accept unknown kwargs
         expected_kwargs = [

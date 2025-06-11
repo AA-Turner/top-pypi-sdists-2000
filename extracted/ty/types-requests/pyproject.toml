@@ -4,7 +4,7 @@ requires = ["setuptools>=77.0.3"]
 
 [project]
 name = "types-requests"
-version = "2.32.0.20250602"
+version = "2.32.4.20250611"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 description = "Typing stubs for requests"
@@ -20,7 +20,7 @@ It can be used by type-checking tools like
 [Pyre](https://pyre-check.org/),
 PyCharm, etc. to check code that uses `requests`. This version of
 `types-requests` aims to provide accurate annotations for
-`requests==2.32.*`.
+`requests~=2.32.4`.
 
 Note: `types-requests` has required `urllib3>=2` since v2.31.0.7. If you need to install `types-requests` into an environment that must also have `urllib3<2` installed into it, you will have to use `types-requests<2.31.0.7`.
 
@@ -36,7 +36,7 @@ mypy 1.16.0,
 pyright 1.1.400,
 and pytype 2024.10.11.
 It was generated from typeshed commit
-[`eb495ff1353a538a5021341b3c905c35a2284899`](https://github.com/python/typeshed/commit/eb495ff1353a538a5021341b3c905c35a2284899).
+[`0db0486fe6a0eb6b4ebf1256fe0afe0b95e2dc36`](https://github.com/python/typeshed/commit/0db0486fe6a0eb6b4ebf1256fe0afe0b95e2dc36).
 """, content-type = "text/markdown" }
 classifiers = [
   "Programming Language :: Python :: 3",

@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -84,11 +84,14 @@ def _background_wait_for_commit_futures(
   # Wait for commit operations to complete.
   for commit_future in commit_futures:
     commit_future.result()
+  commit_duration_secs = time.time() - thread_start_time
   logging.info(
-      '[process=%s][thread=%s] %d Handler Commit operations completed.',
+      '[process=%s][thread=%s] %d Handler Commit operations completed. Time'
+      ' taken: %fs.',
       current_process,
       current_thread_id,
       len(commit_futures),
+      commit_duration_secs,
   )
   # Log the number of async writes that are in flight. Abuses a duration
   # metric as a counter since jax.monitoring only has events and durations.
@@ -96,14 +99,11 @@ def _background_wait_for_commit_futures(
       '/jax/checkpoint/write/async/commit_future_count',
       len(commit_futures),
   )
-
   # Log the per process storage commit latency excluding the barrier time.
-  commit_duration_secs = time.time() - thread_start_time
   jax.monitoring.record_event_duration_secs(
       '/jax/checkpoint/write/async/commit_duration_sec',
       commit_duration_secs,
   )
-  logging.vlog(1, 'Async Commit duration: %s seconds', commit_duration_secs)
 
   if process_count > 1:
     # All processes will wait at the barrier. When all processes are at the
@@ -139,11 +139,11 @@ def _background_wait_for_commit_futures(
       '/jax/checkpoint/write/async/thread_duration_sec',
       thread_duration_secs,
   )
-  logging.vlog(1, 'Async thread duration: %s seconds', thread_duration_secs)
   logging.info(
-      '[process=%s][thread=%s] Background save thread done.',
+      '[process=%s][thread=%s] Background save thread done. Time taken: %fs.',
       current_process,
       current_thread_id,
+      thread_duration_secs,
   )
 
 
@@ -290,9 +290,10 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
   until a save operation running in the background is complete.
 
   Like its parent, AsyncCheckpointer also makes use of an underlying
-  CheckpointHandler to deal with type-specific logic.
+  :py:class:`.CheckpointHandler` to deal with type-specific logic.
 
-  Please see `Checkpointer` documentation for more generic usage instructions.
+  Please see :py:class:`.Checkpointer` documentation for more generic usage
+  instructions.
   """
 
   _handler: async_checkpoint_handler.AsyncCheckpointHandler
@@ -410,8 +411,8 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
           checkpoint_start_time,
       )
       logging.info(
-          'Finished asynchronous save (blocking + background) in %.2f seconds'
-          ' to %s',
+          'Finished async_save (blocking + background). Time taken: %fs.'
+          ' directory=%s',
           time.time() - checkpoint_start_time,
           tmpdir.get_final(),
       )
@@ -431,10 +432,13 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
   ):
     directory = tmpdir.get_final()
 
-    jax.monitoring.record_event(
-        '/jax/orbax/write/storage_type',
-        storage_type=path_utils.get_storage_type(directory),
-    )
+    if utils.is_primary_host(self._primary_host):
+      jax.monitoring.record_event(
+          '/jax/orbax/write/storage_type',
+          storage_type=path_utils.get_storage_type(directory),
+      )
+    # TODO(dicentra): Revise other metrics to also only report from the primary
+    # host where appropriate.
     jax.monitoring.record_event('/jax/orbax/write/async/start')
     logging.info(
         '[process=%s] Started async saving checkpoint to %s.',
@@ -546,8 +550,8 @@ class AsyncCheckpointer(checkpointer.Checkpointer):
         blocking_duration_secs,
     )
     logging.info(
-        'Finished blocking save in %.2f seconds. Continuing to save'
-        ' asynchronously to %s.',
+        'Finished blocking save. Time taken: %fs. Continuing background save'
+        ' to %s.',
         blocking_duration_secs,
         directory,
     )

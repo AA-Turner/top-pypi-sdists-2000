@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,11 +34,11 @@ PyTree = Any
 class StandardCheckpointer(async_checkpointer.AsyncCheckpointer):
   """Shorthand class.
 
-  Note that this `Checkpointer` saves asynchronously.
+  Note that this :py:class:`.Checkpointer` saves asynchronously.
 
   Initialization::
 
-    # Instead of: 
+    # Instead of:
     with AsyncCheckpointer(StandardCheckpointHandler()) as ckptr:
       ...
     # We can use:

@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -162,7 +162,6 @@ class Checkpointer(epy.ContextManager):
         options=options,
         metadata=custom_metadata,
     )
-    self._manager._checkpointer = None  # pylint: disable=protected-access
 
   @property
   def directory(self) -> path_types.Path:
@@ -171,7 +170,7 @@ class Checkpointer(epy.ContextManager):
 
   @property
   def latest(self) -> CheckpointMetadata[None] | None:
-    """Returns the latest `CheckpointMetadata`, or None if no checkpoints exist.
+    """Returns the latest :py:class:`.CheckpointMetadata`, or None if no checkpoints exist.
 
     See `checkpoints` documentation below.
 
@@ -184,7 +183,7 @@ class Checkpointer(epy.ContextManager):
 
   @property
   def checkpoints(self) -> Sequence[CheckpointMetadata[None]]:
-    """Returns a list of `CheckpointMetadata`, sorted ascending by step.
+    """Returns a list of :py:class:`.CheckpointMetadata`, sorted ascending by step.
 
     The method returns a list of `CheckpointMetadata` objects, which contain
     selected properties describing the checkpoint. Contrast this with the
@@ -212,27 +211,21 @@ class Checkpointer(epy.ContextManager):
         for info in infos
     ]
 
-  def _select_checkpoint(
-      self, step: int | CheckpointMetadata
-  ) -> CheckpointMetadata[None]:
-    """Returns the checkpoint metadata at the given step."""
-    step = _resolve_integer_step(step)
-    for checkpoint in self.checkpoints:
-      if checkpoint.step == step:
-        return checkpoint
-    raise errors.StepNotFoundError(f'No checkpoint found at step {step}.')
-
-  def _resolve_existing_step(
+  def _resolve_existing_checkpoint(
       self, step: int | CheckpointMetadata | None
-  ) -> int:
+  ) -> CheckpointMetadata[None]:
     if step is None:
       latest = self.latest
       if latest is None:
         raise errors.StepNotFoundError(
             'Specified `step=None`, but no checkpoints were found.'
         )
-      return latest.step
-    return self._select_checkpoint(step).step
+      return latest
+    step = _resolve_integer_step(step)
+    for checkpoint in self.checkpoints:
+      if checkpoint.step == step:
+        return checkpoint
+    raise errors.StepNotFoundError(f'No checkpoint found at step {step}.')
 
   def should_save(self, step: int) -> bool:
     """Returns whether a checkpoint should be saved at the given step."""
@@ -245,6 +238,7 @@ class Checkpointer(epy.ContextManager):
       pytree: tree_types.PyTreeOf[tree_types.LeafType],
       *,
       force: bool = False,
+      overwrite: bool = False,
       metrics: tree_types.JsonType | None = None,
       custom_metadata: tree_types.JsonType | None = None,
   ) -> bool:
@@ -263,8 +257,11 @@ class Checkpointer(epy.ContextManager):
     Args:
       step: The step number to save.
       pytree: The PyTree to save.
-      force: If True, deletes any existing checkpoint at the given step before
-        saving.
+      force: If True, ignores all `SaveDecisionPolicy` checks, and always
+        decides to save a checkpoint.
+      overwrite: If True, deletes any existing checkpoint at the given step
+        before saving. Otherwise, raises an error if the checkpoint already
+        exists.
       metrics: A PyTree of metrics to be saved with the checkpoint.
       custom_metadata: A JSON dictionary representing user-specified custom
         metadata. This should be information that is relevant to the checkpoint
@@ -277,6 +274,7 @@ class Checkpointer(epy.ContextManager):
         step,
         pytree,
         force=force,
+        overwrite=overwrite,
         metrics=metrics,
         custom_metadata=custom_metadata,
     ).result()
@@ -287,6 +285,7 @@ class Checkpointer(epy.ContextManager):
       checkpointables: dict[str, Any],
       *,
       force: bool = False,
+      overwrite: bool = False,
       metrics: tree_types.JsonType | None = None,
       custom_metadata: tree_types.JsonType | None = None,
   ) -> bool:
@@ -295,6 +294,7 @@ class Checkpointer(epy.ContextManager):
         step,
         checkpointables,
         force=force,
+        overwrite=overwrite,
         metrics=metrics,
         custom_metadata=custom_metadata,
     ).result()
@@ -305,6 +305,7 @@ class Checkpointer(epy.ContextManager):
       pytree: tree_types.PyTreeOf[tree_types.LeafType],
       *,
       force: bool = False,
+      overwrite: bool = False,
       metrics: tree_types.JsonType | None = None,
       custom_metadata: tree_types.JsonType | None = None,
   ) -> async_types.AsyncResponse[bool]:
@@ -316,8 +317,11 @@ class Checkpointer(epy.ContextManager):
     Args:
       step: The step number to save.
       pytree: The PyTree to save.
-      force: If True, deletes any existing checkpoint at the given step before
-        saving.
+      force: If True, ignores all `SaveDecisionPolicy` checks, and always
+        decides to save a checkpoint.
+      overwrite: If True, deletes any existing checkpoint at the given step
+        before saving. Otherwise, raises an error if the checkpoint already
+        exists.
       metrics: A PyTree of metrics to be saved with the checkpoint.
       custom_metadata: A JSON dictionary representing user-specified custom
         metadata. This should be information that is relevant to the checkpoint
@@ -331,6 +335,7 @@ class Checkpointer(epy.ContextManager):
         step,
         {PYTREE_CHECKPOINTABLE_KEY: pytree},
         force=force,
+        overwrite=overwrite,
         metrics=metrics,
         custom_metadata=custom_metadata,
     )
@@ -341,13 +346,15 @@ class Checkpointer(epy.ContextManager):
       checkpointables: dict[str, Any],
       *,
       force: bool = False,
+      overwrite: bool = False,
       metrics: tree_types.JsonType | None = None,
       custom_metadata: tree_types.JsonType | None = None,
   ) -> async_types.AsyncResponse[bool]:
     """Saves a set of checkpointables asynchronously at the given step."""
-    if force:
+    if overwrite:
       logging.info(
-          'Specified `force`: deleting existing checkpoint %d if it exists.',
+          'Specified `overwrite`: deleting existing checkpoint %d if it'
+          ' exists.',
           step,
       )
       try:
@@ -362,7 +369,11 @@ class Checkpointer(epy.ContextManager):
     )
     self._manager._checkpointer = checkpointer  # pylint: disable=protected-access
     saved = self._manager.save(
-        step, args=args, metrics=metrics, custom_metadata=custom_metadata
+        step,
+        args=args,
+        metrics=metrics,
+        force=force,
+        custom_metadata=custom_metadata,
     )
     return _AsyncSaveResponse(self._manager, saved)
 
@@ -394,7 +405,7 @@ class Checkpointer(epy.ContextManager):
       abstract_checkpointables: dict[str, Any] | None = None,
   ) -> dict[str, Any]:
     """Loads a set of checkpointables at the given step."""
-    step = self._resolve_existing_step(step)
+    step = self._resolve_existing_checkpoint(step).step
     checkpointer, args = loading.get_v0_checkpointer_and_args(
         self.directory / self._step_name_format.build_name(step),
         abstract_checkpointables,
@@ -426,12 +437,12 @@ class Checkpointer(epy.ContextManager):
     raise NotImplementedError()
 
   def pytree_metadata(
-      self, step: int
+      self, step: int | CheckpointMetadata | None = None
   ) -> training_metadata_types.CheckpointMetadata[
       metadata_types.PyTreeMetadata
   ]:
     """Returns checkpoint metadata for the given step."""
-    checkpoint = self._select_checkpoint(step)
+    checkpoint = self._resolve_existing_checkpoint(step)
     del step
     checkpoint_metadata = metadata_loading.pytree_metadata(
         self._manager.directory
@@ -450,10 +461,10 @@ class Checkpointer(epy.ContextManager):
     )
 
   def checkpointables_metadata(
-      self, step: int | CheckpointMetadata
+      self, step: int | CheckpointMetadata | None = None
   ) -> training_metadata_types.CheckpointMetadata[dict[str, Any]]:
     """Returns checkpoint metadata for the given step."""
-    checkpoint = self._select_checkpoint(step)
+    checkpoint = self._resolve_existing_checkpoint(step)
     del step
     checkpoint_metadata = metadata_loading.checkpointables_metadata(
         self._manager.directory

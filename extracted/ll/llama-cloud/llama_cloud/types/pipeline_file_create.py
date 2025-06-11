@@ -4,7 +4,7 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .json_type import JsonType
+from .pipeline_file_create_custom_metadata_value import PipelineFileCreateCustomMetadataValue
 
 try:
     import pydantic
@@ -21,7 +21,7 @@ class PipelineFileCreate(pydantic.BaseModel):
     """
 
     file_id: str = pydantic.Field(description="The ID of the file")
-    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
+    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileCreateCustomMetadataValue]]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,11 +18,12 @@ import dataclasses
 import datetime
 from typing import Any, Callable, Dict, Protocol, Sequence, Set
 import numpy as np
-from orbax.checkpoint._src.metadata import checkpoint_info
+from orbax.checkpoint._src.checkpoint_managers import policy_checkpoint_info
 
 
 NestedDict = Dict[str, Any]
 PyTree = Any
+PolicyCheckpointInfo = policy_checkpoint_info.PolicyCheckpointInfo
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -36,7 +37,7 @@ class PreservationPolicy(Protocol):
 
   def should_preserve(
       self,
-      checkpoints: Sequence[checkpoint_info.CheckpointInfo],
+      checkpoints: Sequence[PolicyCheckpointInfo],
       *,
       context: PreservationContext,
   ) -> Sequence[bool]:
@@ -52,7 +53,7 @@ class LatestN(PreservationPolicy):
 
   def should_preserve(
       self,
-      checkpoints: Sequence[checkpoint_info.CheckpointInfo],
+      checkpoints: Sequence[PolicyCheckpointInfo],
       *,
       context: PreservationContext,
   ) -> Sequence[bool]:
@@ -69,7 +70,7 @@ class EveryNSeconds(PreservationPolicy):
 
   def should_preserve(
       self,
-      checkpoints: Sequence[checkpoint_info.CheckpointInfo],
+      checkpoints: Sequence[PolicyCheckpointInfo],
       *,
       context: PreservationContext,
   ) -> Sequence[bool]:
@@ -96,7 +97,7 @@ class EveryNSteps(PreservationPolicy):
 
   def should_preserve(
       self,
-      checkpoints: Sequence[checkpoint_info.CheckpointInfo],
+      checkpoints: Sequence[PolicyCheckpointInfo],
       *,
       context: PreservationContext,
   ) -> Sequence[bool]:
@@ -118,7 +119,7 @@ class CustomSteps(PreservationPolicy):
 
   def should_preserve(
       self,
-      checkpoints: Sequence[checkpoint_info.CheckpointInfo],
+      checkpoints: Sequence[PolicyCheckpointInfo],
       *,
       context: PreservationContext,
   ) -> Sequence[bool]:
@@ -133,7 +134,7 @@ class AnyPreservationPolicy(PreservationPolicy):
 
   def should_preserve(
       self,
-      checkpoints: Sequence[checkpoint_info.CheckpointInfo],
+      checkpoints: Sequence[PolicyCheckpointInfo],
       *,
       context: PreservationContext,
   ) -> Sequence[bool]:
@@ -146,15 +147,15 @@ class AnyPreservationPolicy(PreservationPolicy):
 
 @dataclasses.dataclass(kw_only=True)
 class BestN(PreservationPolicy):
-  """A policy that preserves the best checkpoints based on a best_fn."""
+  """A policy that preserves the best checkpoints based on a get_metric_fn."""
 
-  best_fn: Callable[[PyTree], float]
+  get_metric_fn: Callable[[PyTree], float]
   reverse: bool
   n: int | None = None
 
   def should_preserve(
       self,
-      checkpoints: Sequence[checkpoint_info.CheckpointInfo],
+      checkpoints: Sequence[PolicyCheckpointInfo],
       *,
       context: PreservationContext,
   ) -> Sequence[bool]:
@@ -174,7 +175,7 @@ class BestN(PreservationPolicy):
     ]
     indexed_checkpoints_with_metrics = sorted(
         indexed_checkpoints_with_metrics,
-        key=lambda item: self.best_fn(item[1].metrics),
+        key=lambda item: self.get_metric_fn(item[1].metrics),
         reverse=self.reverse,
     )
     preserve_indices = [

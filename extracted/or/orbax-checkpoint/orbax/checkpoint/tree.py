@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,4 +30,8 @@ from orbax.checkpoint._src.tree.utils import (
     to_flat_dict,
     from_flat_dict,
     to_shape_dtype_struct,
+)
+from orbax.checkpoint._src.tree.structure_utils import (
+    tree_difference,
+    tree_trim,
 )

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: apache-airflow
-Version: 3.0.1
+Version: 3.0.2
 Summary: Programmatically author, schedule and monitor data pipelines
 Project-URL: Bug Tracker, https://github.com/apache/airflow/issues
 Project-URL: Documentation, https://airflow.apache.org/docs/
@@ -30,7 +30,7 @@ Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Topic :: System :: Monitoring
 Requires-Python: <3.13,~=3.9
-Requires-Dist: apache-airflow-core==3.0.1
+Requires-Dist: apache-airflow-core==3.0.2
 Requires-Dist: apache-airflow-task-sdk<1.1.0,>=1.0.0
 Provides-Extra: aiobotocore
 Requires-Dist: apache-airflow-providers-amazon[aiobotocore]>=9.6.0; extra == 'aiobotocore'
@@ -92,7 +92,7 @@ Requires-Dist: apache-airflow-providers-edge3>=1.0.0; extra == 'all'
 Requires-Dist: apache-airflow-providers-elasticsearch>=5.5.2; extra == 'all'
 Requires-Dist: apache-airflow-providers-exasol>=4.6.1; extra == 'all'
 Requires-Dist: apache-airflow-providers-fab; extra == 'all'
-Requires-Dist: apache-airflow-providers-fab>=2.0.2; extra == 'all'
+Requires-Dist: apache-airflow-providers-fab>=2.2.0; extra == 'all'
 Requires-Dist: apache-airflow-providers-facebook>=3.7.0; extra == 'all'
 Requires-Dist: apache-airflow-providers-ftp>=3.12.0; extra == 'all'
 Requires-Dist: apache-airflow-providers-git>=0.0.2; extra == 'all'
@@ -152,7 +152,7 @@ Requires-Dist: atlasclient>=0.1.2; extra == 'all'
 Requires-Dist: authlib>=1.0.0; extra == 'all'
 Requires-Dist: cloudpickle>=2.2.1; extra == 'all'
 Requires-Dist: python-ldap>=3.4.4; extra == 'all'
-Requires-Dist: uv>=0.7.2; extra == 'all'
+Requires-Dist: uv>=0.7.8; extra == 'all'
 Provides-Extra: all-core
 Requires-Dist: apache-airflow-core[all]; extra == 'all-core'
 Provides-Extra: amazon
@@ -238,7 +238,7 @@ Requires-Dist: apache-airflow-providers-elasticsearch>=5.5.2; extra == 'elastics
 Provides-Extra: exasol
 Requires-Dist: apache-airflow-providers-exasol>=4.6.1; extra == 'exasol'
 Provides-Extra: fab
-Requires-Dist: apache-airflow-providers-fab>=2.0.2; extra == 'fab'
+Requires-Dist: apache-airflow-providers-fab>=2.2.0; extra == 'fab'
 Provides-Extra: facebook
 Requires-Dist: apache-airflow-providers-facebook>=3.7.0; extra == 'facebook'
 Provides-Extra: ftp
@@ -366,7 +366,7 @@ Requires-Dist: apache-airflow-providers-teradata>=2.6.1; extra == 'teradata'
 Provides-Extra: trino
 Requires-Dist: apache-airflow-providers-trino>=5.8.1; extra == 'trino'
 Provides-Extra: uv
-Requires-Dist: uv>=0.7.2; extra == 'uv'
+Requires-Dist: uv>=0.7.8; extra == 'uv'
 Provides-Extra: vertica
 Requires-Dist: apache-airflow-providers-vertica>=3.9.1; extra == 'vertica'
 Provides-Extra: weaviate
@@ -404,7 +404,9 @@ PROJECT BY THE `generate-pypi-readme` PRE-COMMIT. YOUR CHANGES HERE WILL BE AUTO
 # Apache Airflow
 
 [![PyPI version](https://badge.fury.io/py/apache-airflow.svg)](https://badge.fury.io/py/apache-airflow)
-[![GitHub Build](https://github.com/apache/airflow/actions/workflows/ci.yml/badge.svg)](https://github.com/apache/airflow/actions)
+[![GitHub Build main](https://github.com/apache/airflow/actions/workflows/ci-amd.yml/badge.svg)](https://github.com/apache/airflow/actions)
+[![GitHub Build 3.0](https://github.com/apache/airflow/actions/workflows/ci-amd.yml/badge.svg?branch=v3-0-test)](https://github.com/apache/airflow/actions)
+[![GitHub Build 2.11](https://github.com/apache/airflow/actions/workflows/ci.yml/badge.svg?branch=v2-11-test)](https://github.com/apache/airflow/actions)
 [![Coverage Status](https://codecov.io/gh/apache/airflow/graph/badge.svg?token=WdLKlKHOAU)](https://codecov.io/gh/apache/airflow)
 [![License](https://img.shields.io/:license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/apache-airflow.svg)](https://pypi.org/project/apache-airflow/)
@@ -474,6 +476,7 @@ the [Airflow Wiki](https://cwiki.apache.org/confluence/display/AIRFLOW/Airflow+I
 
 Documentation for dependent projects like provider distributions, Docker image, Helm Chart, you'll find it in [the documentation index](https://airflow.apache.org/docs/).
 
+
 ## Installing from PyPI
 
 We publish Apache Airflow as `apache-airflow` package in PyPI. Installing it however might be sometimes tricky
@@ -488,7 +491,6 @@ files in the orphan `constraints-main` and `constraints-2-0` branches. We keep t
 constraints files separately per major/minor Python version.
 You can use them as constraint files when installing Airflow from PyPI. Note that you have to specify
 correct Airflow tag/version/branch and Python versions in the URL.
-
 
 1. Installing just Airflow:
 
@@ -544,7 +546,7 @@ Want to help build Apache Airflow? Check out our [contributors' guide](https://g
 
 If you can't wait to contribute, and want to get started asap, check out the [contribution quickstart](https://github.com/apache/airflow/blob/main/contributing-docs/03_contributors_quick_start.rst) here!
 
-Official Docker (container) images for Apache Airflow are described in [images](dev/breeze/doc/ci/02_images.md).
+Official Docker (container) images for Apache Airflow are described in [images](https://github.com/apache/airflow/blob/main/dev/breeze/doc/ci/02_images.md).
 
 
 ## Voting Policy

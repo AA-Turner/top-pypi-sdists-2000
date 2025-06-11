@@ -4,7 +4,10 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .json_type import JsonType
+from .pipeline_file_config_hash_value import PipelineFileConfigHashValue
+from .pipeline_file_custom_metadata_value import PipelineFileCustomMetadataValue
+from .pipeline_file_permission_info_value import PipelineFilePermissionInfoValue
+from .pipeline_file_resource_info_value import PipelineFileResourceInfoValue
 from .pipeline_file_status import PipelineFileStatus
 
 try:
@@ -30,13 +33,13 @@ class PipelineFile(pydantic.BaseModel):
     file_type: typing.Optional[str]
     project_id: str = pydantic.Field(description="The ID of the project that the file belongs to")
     last_modified_at: typing.Optional[dt.datetime]
-    resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
-    permission_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
+    resource_info: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileResourceInfoValue]]]
+    permission_info: typing.Optional[typing.Dict[str, typing.Optional[PipelineFilePermissionInfoValue]]]
     data_source_id: typing.Optional[str]
     file_id: typing.Optional[str]
     pipeline_id: str = pydantic.Field(description="The ID of the pipeline that the file is associated with")
-    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
-    config_hash: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
+    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileCustomMetadataValue]]]
+    config_hash: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileConfigHashValue]]]
     indexed_page_count: typing.Optional[int]
     status: typing.Optional[PipelineFileStatus]
     status_updated_at: typing.Optional[dt.datetime]

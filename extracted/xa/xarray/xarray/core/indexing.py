@@ -444,7 +444,7 @@ class OuterIndexer(ExplicitIndexer):
                         f"invalid indexer array for {type(self).__name__}; must be scalar "
                         f"or have 1 dimension: {k!r}"
                     )
-                k = k.astype(np.int64)  # type: ignore[union-attr]
+                k = duck_array_ops.astype(k, np.int64, copy=False)
             else:
                 raise TypeError(
                     f"unexpected indexer type for {type(self).__name__}: {k!r}"
@@ -488,7 +488,7 @@ class VectorizedIndexer(ExplicitIndexer):
                         "invalid indexer key: ndarray arguments "
                         f"have different numbers of dimensions: {ndims}"
                     )
-                k = k.astype(np.int64)  # type: ignore[union-attr]
+                k = duck_array_ops.astype(k, np.int64, copy=False)
             else:
                 raise TypeError(
                     f"unexpected indexer type for {type(self).__name__}: {k!r}"
@@ -769,7 +769,14 @@ class LazilyVectorizedIndexedArray(ExplicitlyIndexedNDArrayMixin):
 
 def _wrap_numpy_scalars(array):
     """Wrap NumPy scalars in 0d arrays."""
-    if np.isscalar(array):
+    if np.ndim(array) == 0 and (
+        isinstance(array, np.generic)
+        or not (is_duck_array(array) or isinstance(array, NDArrayMixin))
+    ):
+        return np.array(array)
+    elif hasattr(array, "dtype"):
+        return array
+    elif np.ndim(array) == 0:
         return np.array(array)
     else:
         return array

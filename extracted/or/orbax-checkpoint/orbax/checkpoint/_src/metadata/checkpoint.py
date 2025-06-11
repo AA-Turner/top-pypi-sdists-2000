@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,9 +42,7 @@ SerializedMetadata = TypeVar('SerializedMetadata', bound=dict[str, Any])
 def _sanitize_metadata_path(path: epath.PathLike) -> epath.Path:
   """Sanitizes the path and returns it as an `epath.Path`."""
   path = epath.Path(path)
-  if not path.exists():
-    raise FileNotFoundError(f'Path does not exist: {path}')
-  if not path.is_dir():
+  if path.exists() and not path.is_dir():
     raise NotADirectoryError(f'Path is not a directory: {path}')
   return path
 
@@ -174,8 +172,8 @@ class _MetadataStoreImpl(MetadataStore):
       metadata: SerializedMetadata,
   ) -> None:
     metadata_file = epath.Path(file_path)
-    if not metadata_file.parent.name or not metadata_file.parent.exists():
-      raise ValueError(f'Metadata path does not exist: {metadata_file.parent}')
+    if not metadata_file.parent.name:
+      raise ValueError('Metadata parent name not set')
     json_data = json.dumps(metadata)
     bytes_written = metadata_file.write_text(json_data)
     if bytes_written == 0:

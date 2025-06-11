@@ -24,7 +24,7 @@ from mlflow.protos.databricks_pb2 import (
     INVALID_PARAMETER_VALUE,
     RESOURCE_DOES_NOT_EXIST,
 )
-from mlflow.tracing.artifact_utils import TRACE_DATA_FILE_NAME
+from mlflow.tracing.utils.artifact_utils import TRACE_DATA_FILE_NAME
 from mlflow.utils.annotations import developer_stable
 from mlflow.utils.async_logging.async_artifacts_logging_queue import (
     AsyncArtifactsLoggingQueue,
@@ -166,7 +166,7 @@ class ArtifactRepository:
         """
 
     @abstractmethod
-    def list_artifacts(self, path: Optional[str] = None) -> list:
+    def list_artifacts(self, path: Optional[str] = None) -> list[FileInfo]:
         """
         Return all the artifacts for this run_id directly under path. If path is a file, returns
         an empty list. Will error if path is neither a file nor directory.

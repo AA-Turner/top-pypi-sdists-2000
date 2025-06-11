@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ from orbax.checkpoint._src.multihost import multihost
 class AsyncOptions:
   """Options used to configure async behavior.
 
-  See `AsyncCheckpointer` for details.
+  See :py:class:`.AsyncCheckpointer` for details.
   """
 
   timeout_secs: int = 600  # 10 minutes. Same as default in `AsyncCheckpointer`.

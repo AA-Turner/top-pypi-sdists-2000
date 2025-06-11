@@ -13,10 +13,12 @@ from ...errors.unprocessable_entity_error import UnprocessableEntityError
 from ...types.file import File
 from ...types.file_id_presigned_url import FileIdPresignedUrl
 from ...types.http_validation_error import HttpValidationError
-from ...types.json_type import JsonType
 from ...types.page_figure_metadata import PageFigureMetadata
 from ...types.page_screenshot_metadata import PageScreenshotMetadata
 from ...types.presigned_url import PresignedUrl
+from .types.file_create_from_url_resource_info_value import FileCreateFromUrlResourceInfoValue
+from .types.file_create_permission_info_value import FileCreatePermissionInfoValue
+from .types.file_create_resource_info_value import FileCreateResourceInfoValue
 
 try:
     import pydantic
@@ -198,8 +200,8 @@ class FilesClient:
         external_file_id: typing.Optional[str] = OMIT,
         file_size: typing.Optional[int] = OMIT,
         last_modified_at: typing.Optional[dt.datetime] = OMIT,
-        resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
-        permission_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
+        resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateResourceInfoValue]]] = OMIT,
+        permission_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreatePermissionInfoValue]]] = OMIT,
         data_source_id: typing.Optional[str] = OMIT,
     ) -> FileIdPresignedUrl:
         """
@@ -220,9 +222,9 @@ class FilesClient:
 
             - last_modified_at: typing.Optional[dt.datetime].
 
-            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
+            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateResourceInfoValue]]].
 
-            - permission_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
+            - permission_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreatePermissionInfoValue]]].
 
             - data_source_id: typing.Optional[str].
         ---
@@ -314,7 +316,7 @@ class FilesClient:
         request_headers: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         verify_ssl: typing.Optional[bool] = OMIT,
         follow_redirects: typing.Optional[bool] = OMIT,
-        resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
+        resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateFromUrlResourceInfoValue]]] = OMIT,
     ) -> File:
         """
         Upload a file to the project from a URL.
@@ -343,7 +345,7 @@ class FilesClient:
 
             - follow_redirects: typing.Optional[bool]. Whether to follow redirects when downloading the file
 
-            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
+            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateFromUrlResourceInfoValue]]].
         ---
         from llama_cloud.client import LlamaCloud
 
@@ -825,8 +827,8 @@ class AsyncFilesClient:
         external_file_id: typing.Optional[str] = OMIT,
         file_size: typing.Optional[int] = OMIT,
         last_modified_at: typing.Optional[dt.datetime] = OMIT,
-        resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
-        permission_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
+        resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateResourceInfoValue]]] = OMIT,
+        permission_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreatePermissionInfoValue]]] = OMIT,
         data_source_id: typing.Optional[str] = OMIT,
     ) -> FileIdPresignedUrl:
         """
@@ -847,9 +849,9 @@ class AsyncFilesClient:
 
             - last_modified_at: typing.Optional[dt.datetime].
 
-            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
+            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateResourceInfoValue]]].
 
-            - permission_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
+            - permission_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreatePermissionInfoValue]]].
 
             - data_source_id: typing.Optional[str].
         ---
@@ -941,7 +943,7 @@ class AsyncFilesClient:
         request_headers: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         verify_ssl: typing.Optional[bool] = OMIT,
         follow_redirects: typing.Optional[bool] = OMIT,
-        resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]] = OMIT,
+        resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateFromUrlResourceInfoValue]]] = OMIT,
     ) -> File:
         """
         Upload a file to the project from a URL.
@@ -970,7 +972,7 @@ class AsyncFilesClient:
 
             - follow_redirects: typing.Optional[bool]. Whether to follow redirects when downloading the file
 
-            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]].
+            - resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateFromUrlResourceInfoValue]]].
         ---
         from llama_cloud.client import AsyncLlamaCloud
 

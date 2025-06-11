@@ -2,6 +2,8 @@
 
 import typing
 
-from ....types.json_type import JsonType
+from .extract_agent_update_data_schema_zero_value import ExtractAgentUpdateDataSchemaZeroValue
 
-ExtractAgentUpdateDataSchema = typing.Union[typing.Dict[str, typing.Optional[JsonType]], str]
+ExtractAgentUpdateDataSchema = typing.Union[
+    typing.Dict[str, typing.Optional[ExtractAgentUpdateDataSchemaZeroValue]], str
+]

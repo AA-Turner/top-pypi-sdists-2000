@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 import dataclasses
 import datetime
+import pprint
 from typing import TypeVar
 from orbax.checkpoint.experimental.v1._src.metadata import types as metadata_types
 from orbax.checkpoint.experimental.v1._src.path import types as path_types
@@ -97,10 +98,11 @@ class RootMetadata:
   directory: path_types.Path
   custom_metadata: tree_types.JsonType | None = None
 
+  def _properties_strings(self) -> dict[str, str]:
+    return {
+        'directory': str(self.directory),
+        'custom_metadata': str(self.custom_metadata),
+    }
+
   def __repr__(self):
-    return (
-        'RootMetadata('
-        f' directory={self.directory}, '
-        f' custom_metadata={self.custom_metadata}, '
-        ')'
-    )
+    return f'RootMetadata({pprint.pformat(self._properties_strings())})'

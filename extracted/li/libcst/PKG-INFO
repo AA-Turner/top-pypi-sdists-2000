@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: libcst
-Version: 1.8.0
+Version: 1.8.1
 Summary: A concrete syntax tree with AST-like properties for Python 3.0 through 3.13 programs.
 License: All contributions towards LibCST are MIT licensed.
         
@@ -120,7 +120,7 @@ Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: LICENSE
 Requires-Dist: pyyaml>=5.2; python_version < "3.13"
-Requires-Dist: pyyaml-ft; python_version >= "3.13"
+Requires-Dist: pyyaml-ft>=8.0.0; python_version >= "3.13"
 Dynamic: license-file
 
 .. image:: docs/source/_static/logo/horizontal.svg

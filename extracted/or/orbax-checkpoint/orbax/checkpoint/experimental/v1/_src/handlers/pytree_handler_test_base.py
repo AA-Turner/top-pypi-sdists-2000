@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -57,6 +57,7 @@ from orbax.checkpoint.experimental.v1._src.context import context as context_lib
 from orbax.checkpoint.experimental.v1._src.context import options as options_lib
 from orbax.checkpoint.experimental.v1._src.handlers import pytree_handler
 from orbax.checkpoint.experimental.v1._src.path import types as path_types
+from orbax.checkpoint.experimental.v1._src.serialization import compatibility
 from orbax.checkpoint.experimental.v1._src.serialization import registration as serialization_registration
 from orbax.checkpoint.experimental.v1._src.synchronization import multihost
 from orbax.checkpoint.experimental.v1._src.testing import array_utils as array_test_utils
@@ -197,20 +198,18 @@ def handler_with_options(
     use_zarr3: bool = False,
     enable_padding_and_truncation: bool = True,
     ocdbt_target_data_file_size: int | None = None,
-    enable_pinned_host_transfer: bool = False,
+    enable_pinned_host_transfer: bool | None = None,
     pytree_metadata_options: tree_metadata.PyTreeMetadataOptions = (
         tree_metadata.PYTREE_METADATA_OPTIONS
     ),
     array_metadata_store: array_metadata_store_lib.Store | None = (
         ARRAY_METADATA_STORE
     ),
+    enable_write_sharding_file: bool = True,
 ):
   """Registers handlers with OCDBT support and resets when done."""
   type_handler_registry = copy.deepcopy(
       type_handlers.GLOBAL_TYPE_HANDLER_REGISTRY
-  )
-  type_handler_registry.get(jax.Array)._array_metadata_store = (
-      array_metadata_store
   )
 
   context = context_lib.Context(
@@ -221,6 +220,9 @@ def handler_with_options(
               use_zarr3=use_zarr3,
               ocdbt_target_data_file_size=ocdbt_target_data_file_size,
               enable_pinned_host_transfer=enable_pinned_host_transfer,
+              array_metadata_store=array_metadata_store,
+              enable_write_sharding_file=enable_write_sharding_file,
+              use_replica_parallel=not utils.is_pathways_backend(),
           ),
           loading=options_lib.ArrayOptions.Loading(
               concurrent_bytes=restore_concurrent_bytes,
@@ -234,6 +236,12 @@ def handler_with_options(
           )
       ),
   )
+
+  # Get a V0 type handler registry that registered with V1 array leaf handlers.
+  type_handler_registry = compatibility.get_compatible_type_handler_registry(
+      context=context, type_handler_registry=type_handler_registry
+  )
+
   handler = PyTreeHandler(
       context=context,
       type_handler_registry=type_handler_registry,
@@ -466,24 +474,19 @@ class PyTreeHandlerTestBase:
         use_ocdbt: bool,
         array_metadata_store: array_metadata_store_lib.Store | None,
     ):
-      array_handler = type_handlers.ArrayHandler(
-          enable_write_sharding_file=False,
+      pytree, abstract_pytree = create_mixed_format_pytree()
+      with handler_with_options(
+          use_ocdbt=use_ocdbt,
           array_metadata_store=array_metadata_store,
-      )
-      ty = jax.Array
-      fn = lambda ty: issubclass(ty, jax.Array)
-      with test_utils.register_type_handler(ty, array_handler, fn):
-        pytree, abstract_pytree = create_mixed_format_pytree()
-        with handler_with_options(
-            use_ocdbt=use_ocdbt, array_metadata_store=array_metadata_store
-        ) as checkpoint_handler:
-          checkpoint_handler.save(self.directory, pytree)
-          self.validate_save(
-              self.directory,
-              abstract_pytree,
-              pytree,
-              checkpoint_handler,
-          )
+          enable_write_sharding_file=False,
+      ) as checkpoint_handler:
+        checkpoint_handler.save(self.directory, pytree)
+        self.validate_save(
+            self.directory,
+            abstract_pytree,
+            pytree,
+            checkpoint_handler,
+        )
       self.assertFalse((self.directory / _SHARDING).exists())
 
     def test_sharding_variable_devices(self):
@@ -674,7 +677,10 @@ class PyTreeHandlerTestBase:
 
       def set_dtype(v, dtype):
         if hasattr(v, 'dtype'):
-          setattr(v, 'dtype', dtype)
+          if isinstance(v, jax.ShapeDtypeStruct):
+            v = v.update(dtype=dtype)
+          else:
+            setattr(v, 'dtype', dtype)
         return v
 
       with self.subTest('check_origin_dtype'):
@@ -1008,80 +1014,6 @@ class PyTreeHandlerTestBase:
       with self.assertRaises(FileNotFoundError):
         self.handler.metadata(self.directory)
 
-    @parameterized.product(
-        use_ocdbt=(False,),
-        array_metadata_store=(None, ARRAY_METADATA_STORE),
-    )
-    def test_override_tensorstore_metadata_name_sharded_arrays(
-        self,
-        use_ocdbt: bool,
-        array_metadata_store: array_metadata_store_lib.Store | None,
-    ):
-      metadata_key = 'custom_zarray'
-      ty = jax.Array
-      array_handler = type_handlers.ArrayHandler(
-          metadata_key=metadata_key, array_metadata_store=array_metadata_store
-      )
-      fn = lambda ty: issubclass(ty, jax.Array)
-      pytree = self.pytree
-
-      with test_utils.register_type_handler(ty, array_handler, fn):
-        with handler_with_options(
-            use_ocdbt=use_ocdbt, array_metadata_store=array_metadata_store
-        ) as checkpoint_handler:
-          checkpoint_handler.save(self.directory, pytree)
-          param_names = pytree_checkpoint_handler.get_param_names(pytree)
-          paths = jax.tree.map(lambda n: self.directory / n, param_names)
-
-          def check_path(p):
-            self.assertTrue(
-                (p / metadata_key).exists(),
-                msg=f'{p / metadata_key} should exist.',
-            )
-            self.assertFalse(
-                (p / '.zarray').exists(),
-                msg=f'{p / ".zarray"} should not exist.',
-            )
-
-          jax.tree.map(check_path, paths)
-
-    @parameterized.product(
-        use_ocdbt=(False,),
-        array_metadata_store=(None, ARRAY_METADATA_STORE),
-    )
-    def test_override_tensorstore_metadata_name(
-        self,
-        use_ocdbt: bool,
-        array_metadata_store: array_metadata_store_lib.Store | None,
-    ):
-      metadata_key = 'custom_zarray'
-      ty = np.ndarray
-      np_array_handler = type_handlers.NumpyHandler(metadata_key=metadata_key)
-      fn = lambda ty: issubclass(ty, np.ndarray)
-      pytree = self.numpy_pytree
-      del pytree['x']
-      del pytree['y']
-
-      with test_utils.register_type_handler(ty, np_array_handler, fn):
-        with handler_with_options(
-            use_ocdbt=use_ocdbt, array_metadata_store=array_metadata_store
-        ) as checkpoint_handler:
-          checkpoint_handler.save(self.directory, pytree)
-          param_names = pytree_checkpoint_handler.get_param_names(pytree)
-          paths = jax.tree.map(lambda n: self.directory / n, param_names)
-
-          def check_path(p):
-            self.assertTrue(
-                (p / metadata_key).exists(),
-                msg=f'{p / metadata_key} should exist.',
-            )
-            self.assertFalse(
-                (p / '.zarray').exists(),
-                msg=f'{p / ".zarray"} should not exist.',
-            )
-
-          jax.tree.map(check_path, paths)
-
     @parameterized.parameters((True,), (False,))
     def test_reshape_padding(self, enable_padding_and_truncation: bool):
       mesh = jax.sharding.Mesh(np.asarray(jax.devices()), ('x',))
@@ -1344,11 +1276,15 @@ class PyTreeHandlerTestBase:
           'a': np.arange(array_len, dtype=np.int32),
           'b': np.arange(array_len * 2, dtype=np.float32),
           'c': {
-              'a': np.arange(array_len, dtype=np.int32).reshape(
-                  2, array_len // 2
+              'a': (
+                  np.arange(array_len, dtype=np.int32).reshape(
+                      2, array_len // 2
+                  )
               ),
-              'e': np.arange(array_len * 2, dtype=np.float32).reshape(
-                  2, array_len
+              'e': (
+                  np.arange(array_len * 2, dtype=np.float32).reshape(
+                      2, array_len
+                  )
               ),
           },
       }
@@ -1564,7 +1500,8 @@ class PyTreeHandlerTestBase:
           sleep_time,
       )
 
-    def test_enable_pinned_host_transfer(self):
+    @parameterized.product(enable_pinned_host_transfer=(True, False))
+    def test_enable_pinned_host_transfer(self, enable_pinned_host_transfer):
       if multihost.is_pathways_backend():
         self.skipTest(
             'Disabled on Pathways because local variables cannot updated by'
@@ -1594,11 +1531,17 @@ class PyTreeHandlerTestBase:
           replica_slices,
           'transfer_arrays_to_host',
           new=_transfer_arrays_to_host,
-      ), handler_with_options(enable_pinned_host_transfer=False) as handler:
+      ), handler_with_options(
+          enable_pinned_host_transfer=enable_pinned_host_transfer,
+      ) as handler:
         handler.save(self.directory, self.pytree)
 
-      self.assertEqual(true_count, 0)
-      self.assertGreater(false_count, 0)
+      if enable_pinned_host_transfer:
+        self.assertGreater(true_count, 0)
+        self.assertEqual(false_count, 0)
+      else:
+        self.assertEqual(true_count, 0)
+        self.assertGreater(false_count, 0)
 
     @parameterized.product(
         use_ocdbt=(True, False),

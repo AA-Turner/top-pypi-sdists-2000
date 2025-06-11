@@ -2,6 +2,8 @@
 
 import typing
 
-from ....types.json_type import JsonType
+from .extract_schema_validate_request_data_schema_zero_value import ExtractSchemaValidateRequestDataSchemaZeroValue
 
-ExtractSchemaValidateRequestDataSchema = typing.Union[typing.Dict[str, typing.Optional[JsonType]], str]
+ExtractSchemaValidateRequestDataSchema = typing.Union[
+    typing.Dict[str, typing.Optional[ExtractSchemaValidateRequestDataSchemaZeroValue]], str
+]

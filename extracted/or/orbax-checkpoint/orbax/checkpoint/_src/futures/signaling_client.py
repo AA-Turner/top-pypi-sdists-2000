@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
 """A signaling client interface and implementations."""
 
 import functools
-import logging
 import threading
 import time
 from typing import Sequence
+from absl import logging
 import jax
 from orbax.checkpoint._src.multihost import multihost
 from typing_extensions import Protocol
@@ -107,12 +107,9 @@ class JaxDistributedSignalingClient(SignalingClient):
         given key.
 
     Raises:
-      KeyError: If the key already exists and allow_overwrite is False.
+      JaxRuntimeError: If key value set fails.
     """
-    try:
-      self._client.key_value_set(key, value, allow_overwrite=allow_overwrite)
-    except jax.errors.JaxRuntimeError as e:
-      raise KeyError(f"Key '{key}' already exists.") from e
+    self._client.key_value_set(key, value, allow_overwrite=allow_overwrite)
 
   def blocking_key_value_get(self, key: str, timeout_secs: int) -> str:
     """Gets the value for a given key in the client.
@@ -127,12 +124,9 @@ class JaxDistributedSignalingClient(SignalingClient):
       The value associated with the key.
 
     Raises:
-      TimeoutError: If the timeout is reached.
+      JaxRuntimeError: If the key value get fails.
     """
-    try:
-      return str(self._client.blocking_key_value_get(key, timeout_secs * 1000))
-    except jax.errors.JaxRuntimeError as e:
-      raise TimeoutError(f"Timeout waiting for key '{key}'") from e
+    return str(self._client.blocking_key_value_get(key, timeout_secs * 1000))
 
   def key_value_try_get(self, key: str) -> str | None:
     """Tries to get the value for a given key in the client without blocking.
@@ -146,6 +140,14 @@ class JaxDistributedSignalingClient(SignalingClient):
     try:
       return str(self._client.key_value_try_get(key))
     except jax.errors.JaxRuntimeError:
+      # Note that JaxRuntimeError may represent issues other than key not found,
+      # but we are catching all such issues and returning None.
+      logging.vlog(
+          1,
+          "JaxRuntimeError raised while trying to get key '%s'.",
+          key,
+          exc_info=True,
+      )
       return None
 
   def key_value_delete(self, key: str):

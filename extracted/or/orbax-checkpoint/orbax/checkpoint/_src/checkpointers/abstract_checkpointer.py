@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,11 +24,11 @@ from orbax.checkpoint import version
 class AbstractCheckpointer(abc.ABC):
   """An interface allowing atomic save and restore for a single object.
 
-  Typically, an implementation of this class should rely on a CheckpointHandler
-  object, which type-specific logic can be delegated to. In this way, the
-  Checkpointer can be used for many different types, while itself only handling
-  common logic related to atomicity, synchronization, or asynchronous thread
-  management.
+  Typically, an implementation of this class should rely on a
+  :py:class:`.CheckpointHandler` object, which type-specific logic can be
+  delegated to. In this way, the Checkpointer can be used for many different
+  types, while itself only handling common logic related to atomicity,
+  synchronization, or asynchronous thread management.
   """
 
   def __new__(cls, *args, **kwargs):  # pylint: disable=unused-argument

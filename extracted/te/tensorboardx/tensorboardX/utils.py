@@ -13,8 +13,8 @@ def figure_to_image(figures, close=True):
     """
     import numpy as np
     try:
-        import matplotlib.pyplot as plt
         import matplotlib.backends.backend_agg as plt_backend_agg
+        import matplotlib.pyplot as plt
     except ModuleNotFoundError:
         print('please install matplotlib')
 
@@ -93,10 +93,10 @@ def make_grid(I, ncols=8):
 
 def convert_to_NTCHW(tensor, input_format):
     assert len(input_format) == 5, "Only 5D tensor is supported."
-    assert len(set(input_format)) == len(input_format), "You can not use the same dimension shorthand twice. \
-        input_format: {}".format(input_format)
-    assert len(tensor.shape) == len(input_format), "size of input tensor and input format are different. \
-        tensor shape: {}, input_format: {}".format(tensor.shape, input_format)
+    assert len(set(input_format)) == len(input_format), f"You can not use the same dimension shorthand twice. \
+        input_format: {input_format}"
+    assert len(tensor.shape) == len(input_format), f"size of input tensor and input format are different. \
+        tensor shape: {tensor.shape}, input_format: {input_format}"
     input_format = input_format.upper()
     index = [input_format.find(c) for c in 'NTCHW']
     tensor_NTCHW = tensor.transpose(index)
@@ -105,10 +105,10 @@ def convert_to_NTCHW(tensor, input_format):
 
 def convert_to_HWC(tensor, input_format):  # tensor: numpy array
     import numpy as np
-    assert len(set(input_format)) == len(input_format), "You can not use the same dimension shorthand twice. \
-        input_format: {}".format(input_format)
-    assert len(tensor.shape) == len(input_format), "size of input tensor and input format are different. \
-        tensor shape: {}, input_format: {}".format(tensor.shape, input_format)
+    assert len(set(input_format)) == len(input_format), f"You can not use the same dimension shorthand twice. \
+        input_format: {input_format}"
+    assert len(tensor.shape) == len(input_format), f"size of input tensor and input format are different. \
+        tensor shape: {tensor.shape}, input_format: {input_format}"
     input_format = input_format.upper()
 
     if len(input_format) == 4:

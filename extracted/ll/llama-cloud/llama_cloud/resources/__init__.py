@@ -18,7 +18,7 @@ from . import (
     retrievers,
 )
 from .data_sinks import DataSinkUpdateComponent
-from .data_sources import DataSourceUpdateComponent
+from .data_sources import DataSourceUpdateComponent, DataSourceUpdateCustomMetadataValue
 from .embedding_model_configs import (
     EmbeddingModelConfigCreateEmbeddingConfig,
     EmbeddingModelConfigCreateEmbeddingConfig_AzureEmbedding,
@@ -29,13 +29,19 @@ from .embedding_model_configs import (
     EmbeddingModelConfigCreateEmbeddingConfig_OpenaiEmbedding,
     EmbeddingModelConfigCreateEmbeddingConfig_VertexaiEmbedding,
 )
+from .files import FileCreateFromUrlResourceInfoValue, FileCreatePermissionInfoValue, FileCreateResourceInfoValue
 from .llama_extract import (
     ExtractAgentCreateDataSchema,
+    ExtractAgentCreateDataSchemaZeroValue,
     ExtractAgentUpdateDataSchema,
+    ExtractAgentUpdateDataSchemaZeroValue,
     ExtractJobCreateBatchDataSchemaOverride,
+    ExtractJobCreateBatchDataSchemaOverrideZeroValue,
     ExtractSchemaValidateRequestDataSchema,
+    ExtractSchemaValidateRequestDataSchemaZeroValue,
 )
 from .pipelines import (
+    PipelineFileUpdateCustomMetadataValue,
     PipelineUpdateEmbeddingConfig,
     PipelineUpdateEmbeddingConfig_AzureEmbedding,
     PipelineUpdateEmbeddingConfig_BedrockEmbedding,
@@ -45,12 +51,14 @@ from .pipelines import (
     PipelineUpdateEmbeddingConfig_OpenaiEmbedding,
     PipelineUpdateEmbeddingConfig_VertexaiEmbedding,
     PipelineUpdateTransformConfig,
+    RetrievalParamsSearchFiltersInferenceSchemaValue,
 )
 from .reports import UpdateReportPlanApiV1ReportsReportIdPlanPatchRequestAction
 
 __all__ = [
     "DataSinkUpdateComponent",
     "DataSourceUpdateComponent",
+    "DataSourceUpdateCustomMetadataValue",
     "EmbeddingModelConfigCreateEmbeddingConfig",
     "EmbeddingModelConfigCreateEmbeddingConfig_AzureEmbedding",
     "EmbeddingModelConfigCreateEmbeddingConfig_BedrockEmbedding",
@@ -60,9 +68,17 @@ __all__ = [
     "EmbeddingModelConfigCreateEmbeddingConfig_OpenaiEmbedding",
     "EmbeddingModelConfigCreateEmbeddingConfig_VertexaiEmbedding",
     "ExtractAgentCreateDataSchema",
+    "ExtractAgentCreateDataSchemaZeroValue",
     "ExtractAgentUpdateDataSchema",
+    "ExtractAgentUpdateDataSchemaZeroValue",
     "ExtractJobCreateBatchDataSchemaOverride",
+    "ExtractJobCreateBatchDataSchemaOverrideZeroValue",
     "ExtractSchemaValidateRequestDataSchema",
+    "ExtractSchemaValidateRequestDataSchemaZeroValue",
+    "FileCreateFromUrlResourceInfoValue",
+    "FileCreatePermissionInfoValue",
+    "FileCreateResourceInfoValue",
+    "PipelineFileUpdateCustomMetadataValue",
     "PipelineUpdateEmbeddingConfig",
     "PipelineUpdateEmbeddingConfig_AzureEmbedding",
     "PipelineUpdateEmbeddingConfig_BedrockEmbedding",
@@ -72,6 +88,7 @@ __all__ = [
     "PipelineUpdateEmbeddingConfig_OpenaiEmbedding",
     "PipelineUpdateEmbeddingConfig_VertexaiEmbedding",
     "PipelineUpdateTransformConfig",
+    "RetrievalParamsSearchFiltersInferenceSchemaValue",
     "UpdateReportPlanApiV1ReportsReportIdPlanPatchRequestAction",
     "beta",
     "chat_apps",

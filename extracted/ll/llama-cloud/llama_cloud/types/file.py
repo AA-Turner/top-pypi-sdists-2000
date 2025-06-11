@@ -4,7 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .json_type import JsonType
+from .file_permission_info_value import FilePermissionInfoValue
+from .file_resource_info_value import FileResourceInfoValue
 
 try:
     import pydantic
@@ -29,8 +30,8 @@ class File(pydantic.BaseModel):
     file_type: typing.Optional[str]
     project_id: str = pydantic.Field(description="The ID of the project that the file belongs to")
     last_modified_at: typing.Optional[dt.datetime]
-    resource_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
-    permission_info: typing.Optional[typing.Dict[str, typing.Optional[JsonType]]]
+    resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileResourceInfoValue]]]
+    permission_info: typing.Optional[typing.Dict[str, typing.Optional[FilePermissionInfoValue]]]
     data_source_id: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:

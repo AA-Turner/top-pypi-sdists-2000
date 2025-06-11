@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -154,6 +154,26 @@ class InternalCheckpointMetadata:
         init_timestamp_nsecs=step_metadata.init_timestamp_nsecs,
         commit_timestamp_nsecs=step_metadata.commit_timestamp_nsecs,
         custom_metadata=step_metadata.custom_metadata,
+    )
+
+  # TODO(b/407609701): Add `to_checkpoint_metadata` (like `to_step_metadata`)
+  # for conversion to V1 metadata after dependencies are separated.
+
+  @classmethod
+  def create(
+      cls,
+      *,
+      handler_typestrs: dict[str, str],
+      init_timestamp_nsecs: int,
+      commit_timestamp_nsecs: int,
+      custom_metadata: dict[str, Any] | None = None,
+  ) -> InternalCheckpointMetadata:
+    """Return internal representation, dropping fields handled separately."""
+    return cls(
+        item_handlers=handler_typestrs,
+        init_timestamp_nsecs=init_timestamp_nsecs,
+        commit_timestamp_nsecs=commit_timestamp_nsecs,
+        custom_metadata=custom_metadata,
     )
 
 

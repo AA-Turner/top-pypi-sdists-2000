@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,22 +17,25 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any, Awaitable, List
+from typing import Any, Awaitable
 
 from absl import logging
 from etils import epath
-from orbax.checkpoint._src import composite
 from orbax.checkpoint._src.metadata import checkpoint as checkpoint_metadata
 from orbax.checkpoint._src.metadata import step_metadata_serialization
 from orbax.checkpoint.experimental.v1._src.context import context as context_lib
 from orbax.checkpoint.experimental.v1._src.handlers import registration
 import orbax.checkpoint.experimental.v1._src.handlers.global_registration  # pylint: disable=unused-import
+from orbax.checkpoint.experimental.v1._src.path import format_utils
 from orbax.checkpoint.experimental.v1._src.path import types as path_types
 
 
 StepMetadata = checkpoint_metadata.StepMetadata
 CompositeItemMetadata = checkpoint_metadata.CompositeItemMetadata
-Composite = composite.Composite
+
+
+def _existing_checkpointable_names(directory: epath.Path) -> set[str]:
+  return {p.name for p in directory.iterdir() if p.is_dir()}
 
 
 class CompositeHandler:
@@ -104,9 +107,6 @@ class CompositeHandler:
 
     return _run_background()
 
-  def _existing_items(self, directory: epath.Path) -> List[str]:
-    return [p.name for p in directory.iterdir() if p.is_dir()]
-
   async def load(
       self,
       directory: path_types.Path,
@@ -123,22 +123,39 @@ class CompositeHandler:
 
     Returns:
       An awaitable that represents a background load operation.
+
+    Raises:
+      KeyError: If any of the specified checkpointable names are not found in
+      the checkpoint.
     """
     abstract_checkpointables = abstract_checkpointables or {}
     loadable_checkpointable_names_to_handlers = self._get_loadable_handlers(
         directory, abstract_checkpointables
     )
+    existing_checkpointable_names = _existing_checkpointable_names(directory)
+    if not abstract_checkpointables:
+      abstract_checkpointables = {
+          name: None
+          for name in loadable_checkpointable_names_to_handlers.keys()
+          if name not in format_utils.RESERVED_CHECKPOINTABLE_KEYS
+          and name in existing_checkpointable_names
+      }
+    if any(
+        name not in existing_checkpointable_names
+        for name in abstract_checkpointables.keys()
+    ):
+      raise KeyError(
+          'Requested checkpointables for loading were not found in the'
+          ' checkpoint. Available checkpointables:'
+          f' {existing_checkpointable_names}'
+      )
 
     load_ops = []
     for (
         checkpointable_name,
-        handler,
-    ) in loadable_checkpointable_names_to_handlers.items():
-      abstract_checkpointable = (
-          abstract_checkpointables[checkpointable_name]
-          if checkpointable_name in abstract_checkpointables
-          else None
-      )
+        abstract_checkpointable,
+    ) in abstract_checkpointables.items():
+      handler = loadable_checkpointable_names_to_handlers[checkpointable_name]
       load_ops.append(
           handler.load(
               directory / checkpointable_name,
@@ -157,7 +174,7 @@ class CompositeHandler:
       return {
           checkpointable_name: loaded
           for checkpointable_name, loaded in zip(
-              loadable_checkpointable_names_to_handlers.keys(),
+              abstract_checkpointables.keys(),
               loaded_checkpointables,
           )
       }
@@ -194,8 +211,7 @@ class CompositeHandler:
     return loadable_checkpointable_names_to_handlers
 
   def _get_saved_handler_typestrs(
-      self,
-      directory: path_types.Path,
+      self, directory: path_types.Path
   ) -> dict[str, str]:
     """Reads from the checkpoint metadata to get saved handler typestrs."""
     step_metadata_file_path = checkpoint_metadata.step_metadata_file_path(
@@ -206,19 +222,27 @@ class CompositeHandler:
       saved_metadata = step_metadata_serialization.deserialize(
           serialized_metadata or {}
       )
-      assert isinstance(saved_metadata.item_handlers, dict)
-      return saved_metadata.item_handlers
+      if isinstance(saved_metadata.item_handlers, dict):
+        return saved_metadata.item_handlers  # found step level metadata.
+      raise ValueError(
+          'Expected a valid path containing checkpointable subdirectories, but'
+          ' given path contains subdirectories:'
+          f' {format_utils.subdirs(directory)}... Given path is {directory}.'
+          ' _CHECKPOINT_METADATA file under given path has'
+          f' `item_handlers`={saved_metadata.item_handlers}, whose keys should'
+          ' match the checkpointable subdirectory names. If you intended to'
+          ' load a pytree checkpoint from the given path, then please consider'
+          ' using `loading.load_pytree(..., checkpointable_name=None)` instead.'
+      )
 
     logging.warning(
-        'Given dir contains checkpointables subdirs but no step metadata'
-        ' file=%s. Such dirs can exist if the checkpoints are saved directly'
-        ' using V0 Checkpointer instead of using CheckpointManager or'
-        ' CompositeCheckpointHandler. Will fetch saved handlers from each of'
-        ' the checkpointable subdirectories.',
+        'Given dir does not contain checkpoint metadata file: %s. Trying to get'
+        ' saved handlers from checkpoint metadata in each of the checkpointable'
+        ' subdirectory.',
         directory,
     )
 
-    saved_handler_typestrs = {}
+    saved_handler_typestrs: dict[str, str] = {}
     for checkpointable_path in directory.iterdir():
       serialized_metadata = self._metadata_store.read(
           checkpoint_metadata.step_metadata_file_path(checkpointable_path)
@@ -228,7 +252,17 @@ class CompositeHandler:
       saved_metadata = step_metadata_serialization.deserialize(
           serialized_metadata
       )
-      assert not isinstance(saved_metadata.item_handlers, dict)
+      if isinstance(saved_metadata.item_handlers, dict):
+        raise ValueError(
+            'Expected a valid path containing checkpointable subdirectories,'
+            ' but given path contains subdirectories:'
+            f' {format_utils.subdirs(directory)}... Given path is {directory}.'
+            ' _CHECKPOINT_METADATA file under a subdir of given path has'
+            f' `item_handlers`={saved_metadata.item_handlers}, whose keys'
+            ' should match the checkpointable subdirectory names. Did you mean'
+            ' to provide the following subdirectory path instead:'
+            f' {checkpointable_path}?'
+        )
       item_handlers = saved_metadata.item_handlers
       if item_handlers is not None:
         checkpointable_name = checkpointable_path.name

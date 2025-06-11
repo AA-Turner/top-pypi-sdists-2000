@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ from orbax.checkpoint.experimental.v1._src.loading.loading import (
     load_checkpointables_async,
     load_pytree,
     load_pytree_async,
+    PLACEHOLDER,
 )
 from orbax.checkpoint.experimental.v1._src.metadata.loading import (
     checkpointables_metadata,

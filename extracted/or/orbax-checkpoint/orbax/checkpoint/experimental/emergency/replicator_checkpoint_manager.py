@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import jax
 from orbax.checkpoint import abstract_checkpoint_manager
 from orbax.checkpoint import args as args_lib
 from orbax.checkpoint import checkpoint_manager
-from orbax.checkpoint._src import composite
 from orbax.checkpoint._src.handlers import handler_registration
 from orbax.checkpoint._src.handlers import pytree_checkpoint_handler
 from orbax.checkpoint._src.multihost import multihost
@@ -51,7 +50,7 @@ ProcessMetadataCheckpointHandler = (
 )
 
 
-_UNNAMED_ITEM_NAME = 'state'
+_STATE_ITEM_NAME = 'state'
 _PROCESS_METADATA_NAME = 'process_metadata'
 
 
@@ -131,6 +130,8 @@ class ReplicatorCheckpointManager(
     multiprocessing_options = checkpoint_manager.MultiprocessingOptions(
         primary_host=None
     )
+    async_options = checkpoint_manager.AsyncOptions()
+    async_options.create_directories_asynchronously = False
     self._options = options
     self._step_name_format = (
         options.step_name_format or step_lib.standard_name_format()
@@ -152,6 +153,7 @@ class ReplicatorCheckpointManager(
         cleanup_tmp_directories=False,  # Handled separately below.
         enable_background_delete=False,
         enable_async_checkpointing=True,
+        async_options=async_options,
     )
 
     self._handler_registry = DefaultCheckpointHandlerRegistry()
@@ -219,14 +221,22 @@ class ReplicatorCheckpointManager(
 
   def _validate_and_standardize_args(
       self,
-      args: args_lib.CheckpointArgs | None,
+      args: args_lib.Composite,
   ) -> args_lib.Composite:
-    if not isinstance(args, args_lib.CheckpointArgs):
+    if not isinstance(args, args_lib.Composite):
       raise ValueError(
-          f'Expected args to be a `CheckpointArgs`, but got {type(args)}.'
+          f'Expected args must be a Composite object, but got {type(args)}.'
       )
-    if not isinstance(args, composite.Composite):
-      args = args_lib.Composite(**{_UNNAMED_ITEM_NAME: args})
+    if _STATE_ITEM_NAME not in args.keys():
+      raise ValueError(
+          f'{_STATE_ITEM_NAME} is a required key and should be'
+          ' specified by the user.'
+      )
+    if _PROCESS_METADATA_NAME in args.keys():
+      raise ValueError(
+          f'{_PROCESS_METADATA_NAME} is a reserved key and should not be'
+          ' specified by the user.'
+      )
     for a in args.values():
       assert isinstance(a, args_lib.CheckpointArgs)
       if not self._handler_registry.has(None, a):
@@ -240,7 +250,7 @@ class ReplicatorCheckpointManager(
   def save(
       self,
       step: int,
-      args: args_lib.CheckpointArgs,
+      args: args_lib.Composite,
       *,
       force: bool = False,
   ) -> bool:
@@ -326,14 +336,14 @@ class ReplicatorCheckpointManager(
     result = args_lib.Composite(**result)
     if default_item_mode:
       assert len(result) == 1
-      return result[_UNNAMED_ITEM_NAME]
+      return result[_STATE_ITEM_NAME]
     else:
       return result
 
   def restore(
       self,
       step: int | None,
-      args: args_lib.CheckpointArgs | None = None,
+      args: args_lib.Composite,
   ) -> Any:
     if step is None:
       step = self.latest_step()

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mlflow
-Version: 2.22.1
+Version: 3.1.0
 Summary: MLflow is an open source platform for the complete machine learning lifecycle
 Maintainer-email: Databricks <mlflow-oss-maintainers@googlegroups.com>
 License: Copyright 2018 Databricks, Inc.  All rights reserved.
@@ -224,19 +224,16 @@ Classifier: Programming Language :: Python :: 3.9
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
-Requires-Dist: mlflow-skinny==2.22.1
+Requires-Dist: mlflow-skinny==3.1.0
 Requires-Dist: Flask<4
-Requires-Dist: Jinja2<4,>=2.11; platform_system != "Windows"
-Requires-Dist: Jinja2<4,>=3.0; platform_system == "Windows"
 Requires-Dist: alembic!=1.10.0,<2
 Requires-Dist: docker<8,>=4.0.0
 Requires-Dist: graphene<4
 Requires-Dist: gunicorn<24; platform_system != "Windows"
-Requires-Dist: markdown<4,>=3.3
 Requires-Dist: matplotlib<4
 Requires-Dist: numpy<3
-Requires-Dist: pandas!=2.3.0,<3
-Requires-Dist: pyarrow<20,>=4.0.0
+Requires-Dist: pandas<3
+Requires-Dist: pyarrow<21,>=4.0.0
 Requires-Dist: scikit-learn<2
 Requires-Dist: scipy<2
 Requires-Dist: sqlalchemy<3,>=1.4.0
@@ -257,6 +254,7 @@ Requires-Dist: azure-storage-file-datalake>12; extra == "databricks"
 Requires-Dist: google-cloud-storage>=1.30.0; extra == "databricks"
 Requires-Dist: boto3>1; extra == "databricks"
 Requires-Dist: botocore; extra == "databricks"
+Requires-Dist: databricks-agents<2.0,>=1.0.0rc3; extra == "databricks"
 Provides-Extra: mlserver
 Requires-Dist: mlserver!=1.3.1,>=1.2.0; extra == "mlserver"
 Requires-Dist: mlserver-mlflow!=1.3.1,>=1.2.0; extra == "mlserver"
@@ -285,7 +283,7 @@ Requires-Dist: mlflow-xethub; extra == "xethub"
 Provides-Extra: jfrog
 Requires-Dist: mlflow-jfrog-plugin; extra == "jfrog"
 Provides-Extra: langchain
-Requires-Dist: langchain<=0.3.23,>=0.1.0; extra == "langchain"
+Requires-Dist: langchain<=0.3.25,>=0.1.0; extra == "langchain"
 Provides-Extra: auth
 Requires-Dist: Flask-WTF<2; extra == "auth"
 Dynamic: license-file
@@ -297,6 +295,7 @@ Dynamic: license-file
 [![Total Downloads](https://img.shields.io/pypi/dw/mlflow?style=for-the-badge&logo=pypi&logoColor=white)](https://pepy.tech/project/mlflow)
 [![Slack](https://img.shields.io/badge/slack-@mlflow--users-CF0E5B.svg?logo=slack&logoColor=white&labelColor=3F0E40&style=for-the-badge)](https://mlflow.org/community/#slack)
 [![Twitter](https://img.shields.io/twitter/follow/MLflow?style=for-the-badge&labelColor=00ACEE&logo=twitter&logoColor=white)](https://twitter.com/MLflow)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/mlflow/mlflow)
 
 MLflow is an open-source platform, purpose-built to assist machine learning practitioners and teams in handling the complexities of the machine learning process. MLflow focuses on the full lifecycle for machine learning projects, ensuring that each phase is manageable, traceable, and reproducible
 
@@ -323,12 +322,12 @@ pip install mlflow
 
 Alternatively, you can install MLflow from on different package hosting platforms:
 
-|               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PyPI          | [![PyPI - mlflow](https://img.shields.io/pypi/v/mlflow.svg?style=for-the-badge&logo=pypi&logoColor=white&label=mlflow)](https://pypi.org/project/mlflow/) [![PyPI - mlflow-skinny](https://img.shields.io/pypi/v/mlflow-skinny.svg?style=for-the-badge&logo=pypi&logoColor=white&label=mlflow-skinny)](https://pypi.org/project/mlflow-skinny/)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| conda-forge   | [![Conda - mlflow](https://img.shields.io/conda/vn/conda-forge/mlflow.svg?style=for-the-badge&logo=anaconda&label=mlflow)](https://anaconda.org/conda-forge/mlflow) [![Conda - mlflow-skinny](https://img.shields.io/conda/vn/conda-forge/mlflow.svg?style=for-the-badge&logo=anaconda&label=mlflow-skinny)](https://anaconda.org/conda-forge/mlflow-skinny)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| CRAN          | [![CRAN - mlflow](https://img.shields.io/cran/v/mlflow.svg?style=for-the-badge&logo=r&label=mlflow)](https://cran.r-project.org/package=mlflow)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| Maven Central | [![Maven Central - mlflow-client](https://img.shields.io/maven-central/v/org.mlflow/mlflow-client.svg?style=for-the-badge&logo=apache-maven&label=mlflow-client)](https://mvnrepository.com/artifact/org.mlflow/mlflow-client) [![Maven Central - mlflow-parent](https://img.shields.io/maven-central/v/org.mlflow/mlflow-parent.svg?style=for-the-badge&logo=apache-maven&label=mlflow-parent)](https://mvnrepository.com/artifact/org.mlflow/mlflow-parent) [![Maven Central - mlflow-scoring](https://img.shields.io/maven-central/v/org.mlflow/mlflow-scoring.svg?style=for-the-badge&logo=apache-maven&label=mlflow-scoring)](https://mvnrepository.com/artifact/org.mlflow/mlflow-scoring) [![Maven Central - mlflow-spark](https://img.shields.io/maven-central/v/org.mlflow/mlflow-spark.svg?style=for-the-badge&logo=apache-maven&label=mlflow-spark)](https://mvnrepository.com/artifact/org.mlflow/mlflow-spark) |
+|               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PyPI          | [![PyPI - mlflow](https://img.shields.io/pypi/v/mlflow.svg?style=for-the-badge&logo=pypi&logoColor=white&label=mlflow)](https://pypi.org/project/mlflow/) [![PyPI - mlflow-skinny](https://img.shields.io/pypi/v/mlflow-skinny.svg?style=for-the-badge&logo=pypi&logoColor=white&label=mlflow-skinny)](https://pypi.org/project/mlflow-skinny/)                                                                                                                                                                                                                                                                                                                                          |
+| conda-forge   | [![Conda - mlflow](https://img.shields.io/conda/vn/conda-forge/mlflow.svg?style=for-the-badge&logo=anaconda&label=mlflow)](https://anaconda.org/conda-forge/mlflow) [![Conda - mlflow-skinny](https://img.shields.io/conda/vn/conda-forge/mlflow.svg?style=for-the-badge&logo=anaconda&label=mlflow-skinny)](https://anaconda.org/conda-forge/mlflow-skinny)                                                                                                                                                                                                                                                                                                                             |
+| CRAN          | [![CRAN - mlflow](https://img.shields.io/cran/v/mlflow.svg?style=for-the-badge&logo=r&label=mlflow)](https://cran.r-project.org/package=mlflow)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Maven Central | [![Maven Central - mlflow-client](https://img.shields.io/maven-central/v/org.mlflow/mlflow-client.svg?style=for-the-badge&logo=apache-maven&label=mlflow-client)](https://mvnrepository.com/artifact/org.mlflow/mlflow-client) [![Maven Central - mlflow-parent](https://img.shields.io/maven-central/v/org.mlflow/mlflow-parent.svg?style=for-the-badge&logo=apache-maven&label=mlflow-parent)](https://mvnrepository.com/artifact/org.mlflow/mlflow-parent) [![Maven Central - mlflow-spark](https://img.shields.io/maven-central/v/org.mlflow/mlflow-spark.svg?style=for-the-badge&logo=apache-maven&label=mlflow-spark)](https://mvnrepository.com/artifact/org.mlflow/mlflow-spark) |
 
 ## Documentation 📘
 

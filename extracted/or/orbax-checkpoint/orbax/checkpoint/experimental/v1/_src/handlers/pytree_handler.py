@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Implementation of `CheckpointableHandler` for PyTrees."""
+"""Implementation of :py:class:`.CheckpointableHandler` for PyTrees."""
 
 from __future__ import annotations
 
@@ -91,6 +91,7 @@ def create_v0_handler(
       enable_post_merge_validation=context.array_options.saving.enable_post_merge_validation,
       pytree_metadata_options=context.pytree_options.saving.pytree_metadata_options,
       array_metadata_validator=array_metadata_validator,
+      enable_pinned_host_transfer=context.array_options.saving.enable_pinned_host_transfer,
   )
 
 
@@ -106,7 +107,6 @@ def create_v0_save_args(
           context.pytree_options.saving.create_array_storage_options_fn,
       ),
       ocdbt_target_data_file_size=context.array_options.saving.ocdbt_target_data_file_size,
-      enable_pinned_host_transfer=context.array_options.saving.enable_pinned_host_transfer,
   )
 
 
@@ -139,7 +139,7 @@ async def _async_futures(commit_futures: Sequence[future.Future]):
 
 
 class PyTreeHandler(CheckpointableHandler[PyTree, PyTree]):
-  """An implementation of `CheckpointableHandler` for PyTrees."""
+  """An implementation of :py:class:`.CheckpointableHandler` for PyTrees."""
 
   def __init__(
       self,

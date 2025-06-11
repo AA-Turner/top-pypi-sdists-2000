@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
 
 """Defines exported :py:class:`CheckpointArgs` classes.
 
-:py:class:`CheckpointHandler` subclasses define logic used to save and restore
-an object to and from a checkpoint. Each :py:class:`CheckpointHandler`
-has corresponding :py:class:`SaveArgs` and :py:class:`RestoreArgs`
+:py:class:`.CheckpointHandler` subclasses define logic used to save and restore
+an object to and from a checkpoint. Each :py:class:`.CheckpointHandler`
+has corresponding :py:class:`.SaveArgs` and :py:class:`.RestoreArgs`
 classes that define the arguments used to call the handler.
 
 The `ocp.args` module provides a complete definition of these classes. Refer to

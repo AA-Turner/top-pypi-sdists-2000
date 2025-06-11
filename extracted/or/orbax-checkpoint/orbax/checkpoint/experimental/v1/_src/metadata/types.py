@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,27 +16,34 @@
 
 from __future__ import annotations
 
-from typing import Generic, TypeAlias, TypeVar
+import pprint
+from typing import Any, Generic, TypeAlias, TypeVar
 
 from orbax.checkpoint.experimental.v1._src.tree import types as tree_types
 
 
 CheckpointableMetadataT = TypeVar('CheckpointableMetadataT')
+SerializedMetadata = TypeVar('SerializedMetadata', bound=dict[str, Any])
 
-# Metadata describing a PyTree checkpoint.
-# A serialized PyTree structure with the same structure as the
-# checkpointed PyTree. By "serialized", we mean that the PyTree has been
-# converted to a standardized representation, with all container nodes
-# represented as standard types (e.g., tuple, list, dict, etc.). The leaves
-# of the tree are individual parameter metadatas.
+
 PyTreeMetadata: TypeAlias = tree_types.PyTreeOf[tree_types.AbstractLeafType]
+PyTreeMetadata.__doc__ = """
+Metadata describing a PyTree checkpoint.
+
+A serialized PyTree structure with the same structure as the checkpointed
+PyTree. By "serialized", we mean that the PyTree has been converted to a
+standardized representation, with all container nodes represented as standard
+types (e.g., tuple, list, dict, etc.). The leaves of the tree are individual
+parameter metadatas.
+"""
 
 
 class CheckpointMetadata(Generic[CheckpointableMetadataT]):
   """Represents complete metadata describing a checkpoint.
 
   Note that this class has a generic type `CheckpointableMetadataT`. This
-  will typically be either `PyTreeMetadata` (see above), or `dict[str, Any]`.
+  will typically be either :py:data:`.PyTreeMetadata` (see above), or
+  `dict[str, Any]`.
 
   `CheckpointMetadata` can be accessed via one of two metadata methods. Please
   see `ocp.pytree_metadata` and `ocp.checkpointables_metadata` for more
@@ -117,8 +124,4 @@ class CheckpointMetadata(Generic[CheckpointableMetadataT]):
     }
 
   def __repr__(self):
-    s = 'CheckpointMetadata('
-    for k, v in self._properties_strings().items():
-      s += f' {k} = {v}, '
-    s += ')'
-    return s
+    return f'CheckpointMetadata({pprint.pformat(self._properties_strings())})'

@@ -1,4 +1,4 @@
-# Copyright 2024 The Orbax Authors.
+# Copyright 2025 The Orbax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -301,7 +301,7 @@ CheckpointableHandlerType = TypeVar(
 def register_handler(
     cls: CheckpointableHandlerType,
 ) -> CheckpointableHandlerType:
-  """Registers a `CheckpointableHandler` globally.
+  """Registers a :py:class:`.CheckpointableHandler` globally.
 
   The order in which handlers are registered matters. If multiple handlers
   could potentially be used to save or load, the one added most recently will be
