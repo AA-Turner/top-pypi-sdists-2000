@@ -8,7 +8,7 @@ from decimal import Decimal
 
 import pytest
 
-from pydantic_core import SchemaError, SchemaValidator, ValidationError, core_schema, validate_core_schema
+from pydantic_core import SchemaError, SchemaValidator, ValidationError, core_schema
 from pydantic_core import core_schema as cs
 
 from ..conftest import Err, PyAndJson
@@ -198,7 +198,7 @@ def test_custom_timezone_repr():
     assert output.tzinfo.dst(output) is None
     assert output.tzinfo.tzname(output) == '-12:15'
     assert str(output.tzinfo) == '-12:15'
-    assert repr(output.tzinfo) == 'TzInfo(-12:15)'
+    assert repr(output.tzinfo) == 'TzInfo(-44100)'
 
 
 def test_custom_timezone_utc_repr():
@@ -208,7 +208,7 @@ def test_custom_timezone_utc_repr():
     assert output.tzinfo.dst(output) is None
     assert output.tzinfo.tzname(output) == 'UTC'
     assert str(output.tzinfo) == 'UTC'
-    assert repr(output.tzinfo) == 'TzInfo(UTC)'
+    assert repr(output.tzinfo) == 'TzInfo(0)'
 
 
 def test_tz_comparison():
@@ -230,16 +230,16 @@ def test_tz_comparison():
 def test_tz_info_deepcopy():
     output = SchemaValidator(cs.datetime_schema()).validate_python('2023-02-15T16:23:44.037Z')
     c = copy.deepcopy(output)
-    assert repr(output.tzinfo) == 'TzInfo(UTC)'
-    assert repr(c.tzinfo) == 'TzInfo(UTC)'
+    assert repr(output.tzinfo) == 'TzInfo(0)'
+    assert repr(c.tzinfo) == 'TzInfo(0)'
     assert c == output
 
 
 def test_tz_info_copy():
     output = SchemaValidator(cs.datetime_schema()).validate_python('2023-02-15T16:23:44.037Z')
     c = copy.copy(output)
-    assert repr(output.tzinfo) == 'TzInfo(UTC)'
-    assert repr(c.tzinfo) == 'TzInfo(UTC)'
+    assert repr(output.tzinfo) == 'TzInfo(0)'
+    assert repr(c.tzinfo) == 'TzInfo(0)'
     assert c == output
 
 
@@ -316,11 +316,6 @@ def test_union():
     v = SchemaValidator(cs.union_schema(choices=[cs.datetime_schema(), cs.str_schema()]))
     assert v.validate_python('2022-01-02T00:00') == '2022-01-02T00:00'
     assert v.validate_python(datetime(2022, 1, 2)) == datetime(2022, 1, 2)
-
-
-def test_invalid_constraint():
-    with pytest.raises(SchemaError, match=r'datetime\.gt\n  Input should be a valid datetime'):
-        validate_core_schema({'type': 'datetime', 'gt': 'foobar'})
 
 
 @pytest.mark.parametrize(
@@ -421,19 +416,6 @@ def test_mock_utc_offset_8_hours(mocker):
     assert not v.isinstance_python(future)
 
 
-def test_offset_too_large():
-    with pytest.raises(SchemaError, match=r'Input should be greater than -86400 \[type=greater_than,'):
-        validate_core_schema(core_schema.datetime_schema(now_op='past', now_utc_offset=-24 * 3600))
-
-
-def test_raises_schema_error_for_unknown_constraint_kind():
-    with pytest.raises(
-        SchemaError,
-        match=(r'Input should be \'aware\' or \'naive\' \[type=literal_error, input_value=\'foo\', input_type=str\]'),
-    ):
-        validate_core_schema({'type': 'datetime', 'tz_constraint': 'foo'})
-
-
 def test_aware():
     v = SchemaValidator(core_schema.datetime_schema(tz_constraint='aware'))
     value = datetime.now(tz=timezone.utc)
@@ -509,11 +491,6 @@ def test_neg_7200():
 def test_tz_constraint_too_high():
     with pytest.raises(SchemaError, match='OverflowError: Python int too large to convert to C long'):
         SchemaValidator(core_schema.datetime_schema(tz_constraint=2**64))
-
-
-def test_tz_constraint_wrong():
-    with pytest.raises(SchemaError, match="Input should be 'aware' or 'naive"):
-        validate_core_schema(core_schema.datetime_schema(tz_constraint='wrong'))
 
 
 def test_tz_hash() -> None:

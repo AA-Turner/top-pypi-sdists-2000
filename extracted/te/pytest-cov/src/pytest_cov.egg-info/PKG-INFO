@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pytest-cov
-Version: 6.1.1
+Version: 6.2.0
 Summary: Pytest plugin for measuring coverage.
 Home-page: https://github.com/pytest-dev/pytest-cov
 Author: Marc Schlaich
@@ -94,9 +94,9 @@ Overview
     :alt: Supported implementations
     :target: https://pypi.org/project/pytest-cov
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/pytest-dev/pytest-cov/v6.1.1.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/pytest-dev/pytest-cov/v6.2.0.svg
     :alt: Commits since latest release
-    :target: https://github.com/pytest-dev/pytest-cov/compare/v6.1.1...master
+    :target: https://github.com/pytest-dev/pytest-cov/compare/v6.2.0...master
 
 .. end-badges
 
@@ -219,6 +219,31 @@ No doubt others have contributed to these tools as well.
 
 Changelog
 =========
+
+6.2.0 (2025-06-11)
+------------------
+
+* The plugin now adds 3 rules in the filter warnings configuration to prevent common coverage warnings being raised as obscure errors::
+
+    default:unclosed database in <sqlite3.Connection object at:ResourceWarning
+    once::PytestCovWarning
+    once::CoverageWarning
+
+  This fixes most of the bad interactions that are occurring on pytest 8.4 with ``filterwarnings=error``.
+
+  The plugin will check if there already matching rules for the 3 categories
+  (``ResourceWarning``, ``PytestCovWarning``, ``CoverageWarning``) and message (``unclosed database in <sqlite3.Connection object at``) before adding the filters.
+
+  This means you can have this in your pytest configuration for complete oblivion (not recommended, if that is not clear)::
+
+    filterwarnings = [
+        "error",
+        "ignore:unclosed database in <sqlite3.Connection object at:ResourceWarning",
+        "ignore::PytestCovWarning",
+        "ignore::CoverageWarning",
+    ]
+
+
 
 6.1.1 (2025-04-05)
 ------------------

@@ -7523,6 +7523,37 @@ class SupplyChainStats:
 
 
 @dataclass
+class SummaryStats:
+    """Original type: summary_stats = { ... }"""
+
+    mean: float
+    std_dev: float
+
+    @classmethod
+    def from_json(cls, x: Any) -> 'SummaryStats':
+        if isinstance(x, dict):
+            return cls(
+                mean=_atd_read_float(x['mean']) if 'mean' in x else _atd_missing_json_field('SummaryStats', 'mean'),
+                std_dev=_atd_read_float(x['std_dev']) if 'std_dev' in x else _atd_missing_json_field('SummaryStats', 'std_dev'),
+            )
+        else:
+            _atd_bad_json('SummaryStats', x)
+
+    def to_json(self) -> Any:
+        res: Dict[str, Any] = {}
+        res['mean'] = _atd_write_float(self.mean)
+        res['std_dev'] = _atd_write_float(self.std_dev)
+        return res
+
+    @classmethod
+    def from_json_string(cls, x: str) -> 'SummaryStats':
+        return cls.from_json(json.loads(x))
+
+    def to_json_string(self, **kw: Any) -> str:
+        return json.dumps(self.to_json(), **kw)
+
+
+@dataclass
 class SkippedRule:
     """Original type: skipped_rule = { ... }"""
 
@@ -7744,6 +7775,7 @@ class EngineConfiguration:
     path_to_transitivity: bool = field(default_factory=lambda: False)
     scan_all_deps_in_diff_scan: bool = field(default_factory=lambda: False)
     symbol_analysis: bool = field(default_factory=lambda: False)
+    transitive_reachability_enabled: bool = field(default_factory=lambda: False)
     ignored_files: List[str] = field(default_factory=lambda: [])
     product_ignored_files: Optional[ProductIgnoredFiles] = None
     generic_slow_rollout: bool = field(default_factory=lambda: False)
@@ -7760,6 +7792,7 @@ class EngineConfiguration:
                 path_to_transitivity=_atd_read_bool(x['path_to_transitivity']) if 'path_to_transitivity' in x else False,
                 scan_all_deps_in_diff_scan=_atd_read_bool(x['scan_all_deps_in_diff_scan']) if 'scan_all_deps_in_diff_scan' in x else False,
                 symbol_analysis=_atd_read_bool(x['symbol_analysis']) if 'symbol_analysis' in x else False,
+                transitive_reachability_enabled=_atd_read_bool(x['transitive_reachability_enabled']) if 'transitive_reachability_enabled' in x else False,
                 ignored_files=_atd_read_list(_atd_read_string)(x['ignored_files']) if 'ignored_files' in x else [],
                 product_ignored_files=ProductIgnoredFiles.from_json(x['product_ignored_files']) if 'product_ignored_files' in x else None,
                 generic_slow_rollout=_atd_read_bool(x['generic_slow_rollout']) if 'generic_slow_rollout' in x else False,
@@ -7777,6 +7810,7 @@ class EngineConfiguration:
         res['path_to_transitivity'] = _atd_write_bool(self.path_to_transitivity)
         res['scan_all_deps_in_diff_scan'] = _atd_write_bool(self.scan_all_deps_in_diff_scan)
         res['symbol_analysis'] = _atd_write_bool(self.symbol_analysis)
+        res['transitive_reachability_enabled'] = _atd_write_bool(self.transitive_reachability_enabled)
         res['ignored_files'] = _atd_write_list(_atd_write_string)(self.ignored_files)
         if self.product_ignored_files is not None:
             res['product_ignored_files'] = (lambda x: x.to_json())(self.product_ignored_files)
@@ -8086,6 +8120,7 @@ class CiConfig:
     path_to_transitivity: bool = field(default_factory=lambda: False)
     scan_all_deps_in_diff_scan: bool = field(default_factory=lambda: False)
     symbol_analysis: bool = field(default_factory=lambda: False)
+    transitive_reachability_enabled: bool = field(default_factory=lambda: False)
 
     @classmethod
     def from_json(cls, x: Any) -> 'CiConfig':
@@ -8100,6 +8135,7 @@ class CiConfig:
                 path_to_transitivity=_atd_read_bool(x['path_to_transitivity']) if 'path_to_transitivity' in x else False,
                 scan_all_deps_in_diff_scan=_atd_read_bool(x['scan_all_deps_in_diff_scan']) if 'scan_all_deps_in_diff_scan' in x else False,
                 symbol_analysis=_atd_read_bool(x['symbol_analysis']) if 'symbol_analysis' in x else False,
+                transitive_reachability_enabled=_atd_read_bool(x['transitive_reachability_enabled']) if 'transitive_reachability_enabled' in x else False,
             )
         else:
             _atd_bad_json('CiConfig', x)
@@ -8115,6 +8151,7 @@ class CiConfig:
         res['path_to_transitivity'] = _atd_write_bool(self.path_to_transitivity)
         res['scan_all_deps_in_diff_scan'] = _atd_write_bool(self.scan_all_deps_in_diff_scan)
         res['symbol_analysis'] = _atd_write_bool(self.symbol_analysis)
+        res['transitive_reachability_enabled'] = _atd_write_bool(self.transitive_reachability_enabled)
         return res
 
     @classmethod
@@ -8267,6 +8304,7 @@ class ScanConfig:
     path_to_transitivity: bool = field(default_factory=lambda: False)
     scan_all_deps_in_diff_scan: bool = field(default_factory=lambda: False)
     symbol_analysis: bool = field(default_factory=lambda: False)
+    transitive_reachability_enabled: bool = field(default_factory=lambda: False)
     triage_ignored_syntactic_ids: List[str] = field(default_factory=lambda: [])
     triage_ignored_match_based_ids: List[str] = field(default_factory=lambda: [])
     ignored_files: List[str] = field(default_factory=lambda: [])
@@ -8288,6 +8326,7 @@ class ScanConfig:
                 path_to_transitivity=_atd_read_bool(x['path_to_transitivity']) if 'path_to_transitivity' in x else False,
                 scan_all_deps_in_diff_scan=_atd_read_bool(x['scan_all_deps_in_diff_scan']) if 'scan_all_deps_in_diff_scan' in x else False,
                 symbol_analysis=_atd_read_bool(x['symbol_analysis']) if 'symbol_analysis' in x else False,
+                transitive_reachability_enabled=_atd_read_bool(x['transitive_reachability_enabled']) if 'transitive_reachability_enabled' in x else False,
                 triage_ignored_syntactic_ids=_atd_read_list(_atd_read_string)(x['triage_ignored_syntactic_ids']) if 'triage_ignored_syntactic_ids' in x else [],
                 triage_ignored_match_based_ids=_atd_read_list(_atd_read_string)(x['triage_ignored_match_based_ids']) if 'triage_ignored_match_based_ids' in x else [],
                 ignored_files=_atd_read_list(_atd_read_string)(x['ignored_files']) if 'ignored_files' in x else [],
@@ -8310,6 +8349,7 @@ class ScanConfig:
         res['path_to_transitivity'] = _atd_write_bool(self.path_to_transitivity)
         res['scan_all_deps_in_diff_scan'] = _atd_write_bool(self.scan_all_deps_in_diff_scan)
         res['symbol_analysis'] = _atd_write_bool(self.symbol_analysis)
+        res['transitive_reachability_enabled'] = _atd_write_bool(self.transitive_reachability_enabled)
         res['triage_ignored_syntactic_ids'] = _atd_write_list(_atd_write_string)(self.triage_ignored_syntactic_ids)
         res['triage_ignored_match_based_ids'] = _atd_write_list(_atd_write_string)(self.triage_ignored_match_based_ids)
         res['ignored_files'] = _atd_write_list(_atd_write_string)(self.ignored_files)
@@ -8590,6 +8630,71 @@ class ResolutionResult:
 
 
 @dataclass
+class FileTime:
+    """Original type: file_time = { ... }"""
+
+    fpath: Fpath
+    ftime: float
+
+    @classmethod
+    def from_json(cls, x: Any) -> 'FileTime':
+        if isinstance(x, dict):
+            return cls(
+                fpath=Fpath.from_json(x['fpath']) if 'fpath' in x else _atd_missing_json_field('FileTime', 'fpath'),
+                ftime=_atd_read_float(x['ftime']) if 'ftime' in x else _atd_missing_json_field('FileTime', 'ftime'),
+            )
+        else:
+            _atd_bad_json('FileTime', x)
+
+    def to_json(self) -> Any:
+        res: Dict[str, Any] = {}
+        res['fpath'] = (lambda x: x.to_json())(self.fpath)
+        res['ftime'] = _atd_write_float(self.ftime)
+        return res
+
+    @classmethod
+    def from_json_string(cls, x: str) -> 'FileTime':
+        return cls.from_json(json.loads(x))
+
+    def to_json_string(self, **kw: Any) -> str:
+        return json.dumps(self.to_json(), **kw)
+
+
+@dataclass
+class ParsingTime:
+    """Original type: parsing_time = { ... }"""
+
+    total_time: float
+    per_file_time: SummaryStats
+    very_slow_files: List[FileTime]
+
+    @classmethod
+    def from_json(cls, x: Any) -> 'ParsingTime':
+        if isinstance(x, dict):
+            return cls(
+                total_time=_atd_read_float(x['total_time']) if 'total_time' in x else _atd_missing_json_field('ParsingTime', 'total_time'),
+                per_file_time=SummaryStats.from_json(x['per_file_time']) if 'per_file_time' in x else _atd_missing_json_field('ParsingTime', 'per_file_time'),
+                very_slow_files=_atd_read_list(FileTime.from_json)(x['very_slow_files']) if 'very_slow_files' in x else _atd_missing_json_field('ParsingTime', 'very_slow_files'),
+            )
+        else:
+            _atd_bad_json('ParsingTime', x)
+
+    def to_json(self) -> Any:
+        res: Dict[str, Any] = {}
+        res['total_time'] = _atd_write_float(self.total_time)
+        res['per_file_time'] = (lambda x: x.to_json())(self.per_file_time)
+        res['very_slow_files'] = _atd_write_list((lambda x: x.to_json()))(self.very_slow_files)
+        return res
+
+    @classmethod
+    def from_json_string(cls, x: str) -> 'ParsingTime':
+        return cls.from_json(json.loads(x))
+
+    def to_json_string(self, **kw: Any) -> str:
+        return json.dumps(self.to_json(), **kw)
+
+
+@dataclass
 class Profile:
     """Original type: profile = { ... }"""
 
@@ -8598,6 +8703,7 @@ class Profile:
     profiling_times: Dict[str, float]
     targets: List[TargetTimes]
     total_bytes: int
+    parsing_time: Optional[ParsingTime] = None
     max_memory_bytes: Optional[int] = None
 
     @classmethod
@@ -8609,6 +8715,7 @@ class Profile:
                 profiling_times=_atd_read_assoc_object_into_dict(_atd_read_float)(x['profiling_times']) if 'profiling_times' in x else _atd_missing_json_field('Profile', 'profiling_times'),
                 targets=_atd_read_list(TargetTimes.from_json)(x['targets']) if 'targets' in x else _atd_missing_json_field('Profile', 'targets'),
                 total_bytes=_atd_read_int(x['total_bytes']) if 'total_bytes' in x else _atd_missing_json_field('Profile', 'total_bytes'),
+                parsing_time=ParsingTime.from_json(x['parsing_time']) if 'parsing_time' in x else None,
                 max_memory_bytes=_atd_read_int(x['max_memory_bytes']) if 'max_memory_bytes' in x else None,
             )
         else:
@@ -8621,6 +8728,8 @@ class Profile:
         res['profiling_times'] = _atd_write_assoc_dict_to_object(_atd_write_float)(self.profiling_times)
         res['targets'] = _atd_write_list((lambda x: x.to_json()))(self.targets)
         res['total_bytes'] = _atd_write_int(self.total_bytes)
+        if self.parsing_time is not None:
+            res['parsing_time'] = (lambda x: x.to_json())(self.parsing_time)
         if self.max_memory_bytes is not None:
             res['max_memory_bytes'] = _atd_write_int(self.max_memory_bytes)
         return res
@@ -9969,6 +10078,45 @@ class DumpRulePartitionsParams:
 
 
 @dataclass
+class CliOutputSubprojectInfo:
+    """Original type: cli_output_subproject_info = { ... }"""
+
+    dependency_sources: List[Fpath]
+    resolved: bool
+    unresolved_reason: Optional[UnresolvedReason] = None
+    resolved_stats: Optional[DependencyResolutionStats] = None
+
+    @classmethod
+    def from_json(cls, x: Any) -> 'CliOutputSubprojectInfo':
+        if isinstance(x, dict):
+            return cls(
+                dependency_sources=_atd_read_list(Fpath.from_json)(x['dependency_sources']) if 'dependency_sources' in x else _atd_missing_json_field('CliOutputSubprojectInfo', 'dependency_sources'),
+                resolved=_atd_read_bool(x['resolved']) if 'resolved' in x else _atd_missing_json_field('CliOutputSubprojectInfo', 'resolved'),
+                unresolved_reason=UnresolvedReason.from_json(x['unresolved_reason']) if 'unresolved_reason' in x else None,
+                resolved_stats=DependencyResolutionStats.from_json(x['resolved_stats']) if 'resolved_stats' in x else None,
+            )
+        else:
+            _atd_bad_json('CliOutputSubprojectInfo', x)
+
+    def to_json(self) -> Any:
+        res: Dict[str, Any] = {}
+        res['dependency_sources'] = _atd_write_list((lambda x: x.to_json()))(self.dependency_sources)
+        res['resolved'] = _atd_write_bool(self.resolved)
+        if self.unresolved_reason is not None:
+            res['unresolved_reason'] = (lambda x: x.to_json())(self.unresolved_reason)
+        if self.resolved_stats is not None:
+            res['resolved_stats'] = (lambda x: x.to_json())(self.resolved_stats)
+        return res
+
+    @classmethod
+    def from_json_string(cls, x: str) -> 'CliOutputSubprojectInfo':
+        return cls.from_json(json.loads(x))
+
+    def to_json_string(self, **kw: Any) -> str:
+        return json.dumps(self.to_json(), **kw)
+
+
+@dataclass
 class CliOutput:
     """Original type: cli_output = { ... }"""
 
@@ -9982,6 +10130,7 @@ class CliOutput:
     engine_requested: Optional[EngineKind] = None
     interfile_languages_used: Optional[List[str]] = None
     skipped_rules: List[SkippedRule] = field(default_factory=lambda: [])
+    subprojects: Optional[List[CliOutputSubprojectInfo]] = None
 
     @classmethod
     def from_json(cls, x: Any) -> 'CliOutput':
@@ -9997,6 +10146,7 @@ class CliOutput:
                 engine_requested=EngineKind.from_json(x['engine_requested']) if 'engine_requested' in x else None,
                 interfile_languages_used=_atd_read_list(_atd_read_string)(x['interfile_languages_used']) if 'interfile_languages_used' in x else None,
                 skipped_rules=_atd_read_list(SkippedRule.from_json)(x['skipped_rules']) if 'skipped_rules' in x else [],
+                subprojects=_atd_read_list(CliOutputSubprojectInfo.from_json)(x['subprojects']) if 'subprojects' in x else None,
             )
         else:
             _atd_bad_json('CliOutput', x)
@@ -10019,6 +10169,8 @@ class CliOutput:
         if self.interfile_languages_used is not None:
             res['interfile_languages_used'] = _atd_write_list(_atd_write_string)(self.interfile_languages_used)
         res['skipped_rules'] = _atd_write_list((lambda x: x.to_json()))(self.skipped_rules)
+        if self.subprojects is not None:
+            res['subprojects'] = _atd_write_list((lambda x: x.to_json()))(self.subprojects)
         return res
 
     @classmethod
@@ -10320,6 +10472,7 @@ class Features:
     path_to_transitivity: bool = field(default_factory=lambda: False)
     scan_all_deps_in_diff_scan: bool = field(default_factory=lambda: False)
     symbol_analysis: bool = field(default_factory=lambda: False)
+    transitive_reachability_enabled: bool = field(default_factory=lambda: False)
 
     @classmethod
     def from_json(cls, x: Any) -> 'Features':
@@ -10331,6 +10484,7 @@ class Features:
                 path_to_transitivity=_atd_read_bool(x['path_to_transitivity']) if 'path_to_transitivity' in x else False,
                 scan_all_deps_in_diff_scan=_atd_read_bool(x['scan_all_deps_in_diff_scan']) if 'scan_all_deps_in_diff_scan' in x else False,
                 symbol_analysis=_atd_read_bool(x['symbol_analysis']) if 'symbol_analysis' in x else False,
+                transitive_reachability_enabled=_atd_read_bool(x['transitive_reachability_enabled']) if 'transitive_reachability_enabled' in x else False,
             )
         else:
             _atd_bad_json('Features', x)
@@ -10343,6 +10497,7 @@ class Features:
         res['path_to_transitivity'] = _atd_write_bool(self.path_to_transitivity)
         res['scan_all_deps_in_diff_scan'] = _atd_write_bool(self.scan_all_deps_in_diff_scan)
         res['symbol_analysis'] = _atd_write_bool(self.symbol_analysis)
+        res['transitive_reachability_enabled'] = _atd_write_bool(self.transitive_reachability_enabled)
         return res
 
     @classmethod
@@ -10547,6 +10702,7 @@ class CoreOutput:
     engine_requested: Optional[EngineKind] = None
     interfile_languages_used: Optional[List[str]] = None
     skipped_rules: List[SkippedRule] = field(default_factory=lambda: [])
+    subprojects: Optional[List[CliOutputSubprojectInfo]] = None
     symbol_analysis: Optional[SymbolAnalysis] = None
 
     @classmethod
@@ -10563,6 +10719,7 @@ class CoreOutput:
                 engine_requested=EngineKind.from_json(x['engine_requested']) if 'engine_requested' in x else None,
                 interfile_languages_used=_atd_read_list(_atd_read_string)(x['interfile_languages_used']) if 'interfile_languages_used' in x else None,
                 skipped_rules=_atd_read_list(SkippedRule.from_json)(x['skipped_rules']) if 'skipped_rules' in x else [],
+                subprojects=_atd_read_list(CliOutputSubprojectInfo.from_json)(x['subprojects']) if 'subprojects' in x else None,
                 symbol_analysis=SymbolAnalysis.from_json(x['symbol_analysis']) if 'symbol_analysis' in x else None,
             )
         else:
@@ -10585,6 +10742,8 @@ class CoreOutput:
         if self.interfile_languages_used is not None:
             res['interfile_languages_used'] = _atd_write_list(_atd_write_string)(self.interfile_languages_used)
         res['skipped_rules'] = _atd_write_list((lambda x: x.to_json()))(self.skipped_rules)
+        if self.subprojects is not None:
+            res['subprojects'] = _atd_write_list((lambda x: x.to_json()))(self.subprojects)
         if self.symbol_analysis is not None:
             res['symbol_analysis'] = (lambda x: x.to_json())(self.symbol_analysis)
         return res
@@ -10608,6 +10767,7 @@ class CliOutputExtra:
     engine_requested: Optional[EngineKind] = None
     interfile_languages_used: Optional[List[str]] = None
     skipped_rules: List[SkippedRule] = field(default_factory=lambda: [])
+    subprojects: Optional[List[CliOutputSubprojectInfo]] = None
 
     @classmethod
     def from_json(cls, x: Any) -> 'CliOutputExtra':
@@ -10620,6 +10780,7 @@ class CliOutputExtra:
                 engine_requested=EngineKind.from_json(x['engine_requested']) if 'engine_requested' in x else None,
                 interfile_languages_used=_atd_read_list(_atd_read_string)(x['interfile_languages_used']) if 'interfile_languages_used' in x else None,
                 skipped_rules=_atd_read_list(SkippedRule.from_json)(x['skipped_rules']) if 'skipped_rules' in x else [],
+                subprojects=_atd_read_list(CliOutputSubprojectInfo.from_json)(x['subprojects']) if 'subprojects' in x else None,
             )
         else:
             _atd_bad_json('CliOutputExtra', x)
@@ -10638,6 +10799,8 @@ class CliOutputExtra:
         if self.interfile_languages_used is not None:
             res['interfile_languages_used'] = _atd_write_list(_atd_write_string)(self.interfile_languages_used)
         res['skipped_rules'] = _atd_write_list((lambda x: x.to_json()))(self.skipped_rules)
+        if self.subprojects is not None:
+            res['subprojects'] = _atd_write_list((lambda x: x.to_json()))(self.subprojects)
         return res
 
     @classmethod

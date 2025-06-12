@@ -4,13 +4,11 @@ use enum_dispatch::enum_dispatch;
 use jiter::{PartialMode, StringCacheMode};
 
 use pyo3::exceptions::PyTypeError;
-use pyo3::ffi::c_str;
-use pyo3::sync::GILOnceCell;
 use pyo3::types::{PyAny, PyDict, PyString, PyTuple, PyType};
 use pyo3::{intern, PyTraverseError, PyVisit};
 use pyo3::{prelude::*, IntoPyObjectExt};
 
-use crate::build_tools::{py_schema_err, py_schema_error_type, SchemaError};
+use crate::build_tools::{py_schema_err, py_schema_error_type};
 use crate::definitions::{Definitions, DefinitionsBuilder};
 use crate::errors::{LocItem, ValError, ValResult, ValidationError};
 use crate::input::{Input, InputType, StringMapping};
@@ -127,7 +125,7 @@ impl SchemaValidator {
     pub fn py_new(py: Python, schema: &Bound<'_, PyAny>, config: Option<&Bound<'_, PyDict>>) -> PyResult<Self> {
         let mut definitions_builder = DefinitionsBuilder::new();
 
-        let validator = build_validator(schema, config, &mut definitions_builder)?;
+        let validator = build_validator_base(schema, config, &mut definitions_builder)?;
         let definitions = definitions_builder.finish()?;
         let py_schema = schema.clone().unbind();
         let py_config = match config {
@@ -157,11 +155,6 @@ impl SchemaValidator {
             validation_error_cause,
             cache_str,
         })
-    }
-
-    pub fn __reduce__<'py>(slf: &Bound<'py, Self>) -> PyResult<(Bound<'py, PyType>, Bound<'py, PyTuple>)> {
-        let init_args = (&slf.get().py_schema, &slf.get().py_config).into_pyobject(slf.py())?;
-        Ok((slf.get_type(), init_args))
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -357,6 +350,11 @@ impl SchemaValidator {
         }
     }
 
+    pub fn __reduce__<'py>(slf: &Bound<'py, Self>) -> PyResult<(Bound<'py, PyType>, Bound<'py, PyTuple>)> {
+        let init_args = (&slf.get().py_schema, &slf.get().py_config).into_pyobject(slf.py())?;
+        Ok((slf.get_type(), init_args))
+    }
+
     pub fn __repr__(&self, py: Python) -> String {
         format!(
             "SchemaValidator(title={:?}, validator={:#?}, definitions={:#?}, cache_strings={})",
@@ -457,68 +455,6 @@ impl SchemaValidator {
     }
 }
 
-static SCHEMA_DEFINITION: GILOnceCell<SchemaValidator> = GILOnceCell::new();
-
-#[derive(Debug, Clone)]
-pub struct SelfValidator<'py> {
-    validator: &'py SchemaValidator,
-}
-
-impl<'py> SelfValidator<'py> {
-    pub fn new(py: Python<'py>) -> PyResult<Self> {
-        let validator = SCHEMA_DEFINITION.get_or_init(py, || match Self::build(py) {
-            Ok(schema) => schema,
-            Err(e) => panic!("Error building schema validator:\n  {e}"),
-        });
-        Ok(Self { validator })
-    }
-
-    pub fn validate_schema(&self, schema: &Bound<'py, PyAny>, strict: Option<bool>) -> PyResult<Bound<'py, PyAny>> {
-        let py = schema.py();
-        let mut recursion_guard = RecursionState::default();
-        let mut state = ValidationState::new(
-            Extra::new(strict, None, None, None, InputType::Python, true.into(), None, None),
-            &mut recursion_guard,
-            false.into(),
-        );
-        match self.validator.validator.validate(py, schema, &mut state) {
-            Ok(schema_obj) => Ok(schema_obj.into_bound(py)),
-            Err(e) => Err(SchemaError::from_val_error(py, e)),
-        }
-    }
-
-    fn build(py: Python) -> PyResult<SchemaValidator> {
-        let code = c_str!(include_str!("../self_schema.py"));
-        let locals = PyDict::new(py);
-        py.run(code, None, Some(&locals))?;
-        let self_schema = locals.get_as_req(intern!(py, "self_schema"))?;
-
-        let mut definitions_builder = DefinitionsBuilder::new();
-
-        let validator = match build_validator(&self_schema, None, &mut definitions_builder) {
-            Ok(v) => v,
-            Err(err) => return py_schema_err!("Error building self-schema:\n  {}", err),
-        };
-        let definitions = definitions_builder.finish()?;
-        Ok(SchemaValidator {
-            validator,
-            definitions,
-            py_schema: py.None(),
-            py_config: None,
-            title: "Self Schema".into_py_any(py)?,
-            hide_input_in_errors: false,
-            validation_error_cause: false,
-            cache_str: true.into(),
-        })
-    }
-}
-
-#[pyfunction(signature = (schema, *, strict = None))]
-pub fn validate_core_schema<'py>(schema: &Bound<'py, PyAny>, strict: Option<bool>) -> PyResult<Bound<'py, PyAny>> {
-    let self_validator = SelfValidator::new(schema.py())?;
-    self_validator.validate_schema(schema, strict)
-}
-
 pub trait BuildValidator: Sized {
     const EXPECTED_TYPE: &'static str;
 
@@ -555,19 +491,40 @@ macro_rules! validator_match {
     };
 }
 
+// Used when creating the base validator instance, to avoid reusing the instance
+// when unpickling:
+pub fn build_validator_base(
+    schema: &Bound<'_, PyAny>,
+    config: Option<&Bound<'_, PyDict>>,
+    definitions: &mut DefinitionsBuilder<CombinedValidator>,
+) -> PyResult<CombinedValidator> {
+    build_validator_inner(schema, config, definitions, false)
+}
+
 pub fn build_validator(
     schema: &Bound<'_, PyAny>,
     config: Option<&Bound<'_, PyDict>>,
     definitions: &mut DefinitionsBuilder<CombinedValidator>,
+) -> PyResult<CombinedValidator> {
+    build_validator_inner(schema, config, definitions, true)
+}
+
+fn build_validator_inner(
+    schema: &Bound<'_, PyAny>,
+    config: Option<&Bound<'_, PyDict>>,
+    definitions: &mut DefinitionsBuilder<CombinedValidator>,
+    use_prebuilt: bool,
 ) -> PyResult<CombinedValidator> {
     let dict = schema.downcast::<PyDict>()?;
     let py = schema.py();
     let type_: Bound<'_, PyString> = dict.get_as_req(intern!(py, "type"))?;
     let type_ = type_.to_str()?;
 
-    // if we have a SchemaValidator on the type already, use it
-    if let Ok(Some(prebuilt_validator)) = prebuilt::PrebuiltValidator::try_get_from_schema(type_, dict) {
-        return Ok(prebuilt_validator);
+    if use_prebuilt {
+        // if we have a SchemaValidator on the type already, use it
+        if let Ok(Some(prebuilt_validator)) = prebuilt::PrebuiltValidator::try_get_from_schema(type_, dict) {
+            return Ok(prebuilt_validator);
+        }
     }
 
     validator_match!(

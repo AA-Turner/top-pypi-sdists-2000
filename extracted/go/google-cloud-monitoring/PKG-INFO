@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: google-cloud-monitoring
-Version: 2.27.1
+Version: 2.27.2
 Summary: Google Cloud Monitoring API client library
 Home-page: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-monitoring
 Author: Google LLC
@@ -30,6 +30,18 @@ Requires-Dist: proto-plus<2.0.0,>=1.25.0; python_version >= "3.13"
 Requires-Dist: protobuf!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<7.0.0,>=3.20.2
 Provides-Extra: pandas
 Requires-Dist: pandas>=0.23.2; extra == "pandas"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: platform
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 Python Client for Stackdriver Monitoring
 ========================================
@@ -195,7 +207,7 @@ Code-Based Examples
 
     import logging
     
-    from google.cloud.translate_v3 import translate
+    from google.cloud import library_v1
     
     base_logger = logging.getLogger("google")
     base_logger.addHandler(logging.StreamHandler())
@@ -207,7 +219,7 @@ Code-Based Examples
 
     import logging
     
-    from google.cloud.translate_v3 import translate
+    from google.cloud import library_v1
     
     base_logger = logging.getLogger("google.cloud.library_v1")
     base_logger.addHandler(logging.StreamHandler())

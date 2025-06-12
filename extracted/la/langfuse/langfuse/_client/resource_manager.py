@@ -18,7 +18,7 @@ import atexit
 import os
 import threading
 from queue import Full, Queue
-from typing import Dict, Optional, cast
+from typing import Any, Dict, Optional, cast
 
 import httpx
 from opentelemetry import trace as otel_trace_api
@@ -43,6 +43,7 @@ from langfuse._utils.prompt_cache import PromptCache
 from langfuse._utils.request import LangfuseClient
 from langfuse.api.client import AsyncFernLangfuse, FernLangfuse
 from langfuse.logger import langfuse_logger
+from langfuse.types import MaskFunction
 
 from ..version import __version__ as langfuse_version
 
@@ -90,6 +91,7 @@ class LangfuseResourceManager:
         httpx_client: Optional[httpx.Client] = None,
         media_upload_thread_count: Optional[int] = None,
         sample_rate: Optional[float] = None,
+        mask: Optional[MaskFunction] = None,
     ) -> "LangfuseResourceManager":
         if public_key in cls._instances:
             return cls._instances[public_key]
@@ -110,6 +112,7 @@ class LangfuseResourceManager:
                     httpx_client=httpx_client,
                     media_upload_thread_count=media_upload_thread_count,
                     sample_rate=sample_rate,
+                    mask=mask,
                 )
 
                 cls._instances[public_key] = instance
@@ -130,8 +133,12 @@ class LangfuseResourceManager:
         media_upload_thread_count: Optional[int] = None,
         httpx_client: Optional[httpx.Client] = None,
         sample_rate: Optional[float] = None,
+        mask: Optional[MaskFunction] = None,
     ):
         self.public_key = public_key
+        self.secret_key = secret_key
+        self.host = host
+        self.mask = mask
 
         # OTEL Tracer
         tracer_provider = _init_tracer_provider(
@@ -148,7 +155,7 @@ class LangfuseResourceManager:
         )
         tracer_provider.add_span_processor(langfuse_processor)
 
-        tracer_provider = otel_trace_api.get_tracer_provider()
+        tracer_provider = cast(TracerProvider, otel_trace_api.get_tracer_provider())
         self._otel_tracer = tracer_provider.get_tracer(
             LANGFUSE_TRACER_NAME,
             langfuse_version,
@@ -195,7 +202,7 @@ class LangfuseResourceManager:
             LANGFUSE_MEDIA_UPLOAD_ENABLED, "True"
         ).lower() not in ("false", "0")
 
-        self._media_upload_queue = Queue(100_000)
+        self._media_upload_queue: Queue[Any] = Queue(100_000)
         self._media_manager = MediaManager(
             api_client=self.api,
             media_upload_queue=self._media_upload_queue,
@@ -220,7 +227,7 @@ class LangfuseResourceManager:
         self.prompt_cache = PromptCache()
 
         # Score ingestion
-        self._score_ingestion_queue = Queue(100_000)
+        self._score_ingestion_queue: Queue[Any] = Queue(100_000)
         self._ingestion_consumers = []
 
         ingestion_consumer = ScoreIngestionConsumer(
@@ -249,13 +256,17 @@ class LangfuseResourceManager:
 
     @classmethod
     def reset(cls):
-        cls._instances.clear()
+        with cls._lock:
+            for key in cls._instances:
+                cls._instances[key].shutdown()
 
-    def add_score_task(self, event: dict):
+            cls._instances.clear()
+
+    def add_score_task(self, event: dict, *, force_sample: bool = False):
         try:
             # Sample scores with the same sampler that is used for tracing
             tracer_provider = cast(TracerProvider, otel_trace_api.get_tracer_provider())
-            should_sample = (
+            should_sample = force_sample or (
                 (
                     tracer_provider.sampler.should_sample(
                         parent_context=None,

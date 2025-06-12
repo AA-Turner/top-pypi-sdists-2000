@@ -278,7 +278,9 @@ def ci(
     state = get_state()
 
     state.traces.configure(trace, trace_endpoint)
-    with tracing.TRACER.start_as_current_span("semgrep.commands.ci"):
+    with tracing.TRACER.start_as_current_span(
+        "semgrep.commands.ci", kind=tracing.TOP_LEVEL_SPAN_KIND
+    ):
         state.terminal.configure(
             verbose=verbose,
             debug=debug,
@@ -673,7 +675,9 @@ def ci(
             "capture_core_stderr": capture_core_stderr,
             "allow_local_builds": allow_local_builds,
             "x_eio": x_eio,
-            "x_tr": x_tr,
+            "x_tr": scan_handler.transitive_reachability_enabled
+            if scan_handler
+            else x_tr,
             "x_pro_naming": x_pro_naming,
             "dump_rule_partitions_params": dump_rule_partitions_params,
             "ptt_enabled": scan_handler.ptt_enabled if scan_handler else False,
@@ -875,6 +879,7 @@ def ci(
                     severities=shown_severities,
                     is_ci_invocation=True,
                     print_summary=False,
+                    all_subprojects=all_subprojects,
                 )
 
             logger.info("CI scan completed successfully.")
@@ -956,6 +961,7 @@ def ci(
                     severities=shown_severities,
                     is_ci_invocation=True,
                     print_summary=False,
+                    all_subprojects=all_subprojects,
                 )
 
             logger.info("CI scan completed successfully.")

@@ -1129,7 +1129,6 @@ class CoverageCoreTest(CoverageTest):
         has_ctracer = False
 
     def test_core_default(self) -> None:
-        self.del_environ("COVERAGE_TEST_CORES")
         self.del_environ("COVERAGE_CORE")
         self.make_file("numbers.py", "print(123, 456)")
         out = self.run_command("coverage run --debug=sys numbers.py")
@@ -1137,14 +1136,16 @@ class CoverageCoreTest(CoverageTest):
         core = re_line(r" core:", out).strip()
         # if env.PYBEHAVIOR.pep669:
         #     assert core == "core: SysMonitor"
+        warns = re_lines(r"\(no-ctracer\)", out)
         if self.has_ctracer:
             assert core == "core: CTracer"
+            assert not warns
         else:
             assert core == "core: PyTracer"
+            assert bool(warns) == env.CPYTHON
 
     @pytest.mark.skipif(not has_ctracer, reason="No CTracer to request")
     def test_core_request_ctrace(self) -> None:
-        self.del_environ("COVERAGE_TEST_CORES")
         self.set_environ("COVERAGE_CORE", "ctrace")
         self.make_file("numbers.py", "print(123, 456)")
         out = self.run_command("coverage run --debug=sys numbers.py")
@@ -1153,7 +1154,6 @@ class CoverageCoreTest(CoverageTest):
         assert core == "core: CTracer"
 
     def test_core_request_pytrace(self) -> None:
-        self.del_environ("COVERAGE_TEST_CORES")
         self.set_environ("COVERAGE_CORE", "pytrace")
         self.make_file("numbers.py", "print(123, 456)")
         out = self.run_command("coverage run --debug=sys numbers.py")
@@ -1162,22 +1162,20 @@ class CoverageCoreTest(CoverageTest):
         assert core == "core: PyTracer"
 
     def test_core_request_sysmon(self) -> None:
-        self.del_environ("COVERAGE_TEST_CORES")
         self.set_environ("COVERAGE_CORE", "sysmon")
         self.make_file("numbers.py", "print(123, 456)")
         out = self.run_command("coverage run --debug=sys numbers.py")
         assert out.endswith("123 456\n")
         core = re_line(r" core:", out).strip()
-        warns = re_lines(r"CoverageWarning: sys.monitoring isn't available", out)
+        warns = re_lines(r"\(no-sysmon\)", out)
         if env.PYBEHAVIOR.pep669:
             assert core == "core: SysMonitor"
             assert not warns
         else:
-            assert core in ("core: CTracer", "core: PyTracer")
+            assert core in ["core: CTracer", "core: PyTracer"]
             assert warns
 
     def test_core_request_nosuchcore(self) -> None:
-        self.del_environ("COVERAGE_TEST_CORES")
         self.set_environ("COVERAGE_CORE", "nosuchcore")
         self.make_file("numbers.py", "print(123, 456)")
         out = self.run_command("coverage run numbers.py")

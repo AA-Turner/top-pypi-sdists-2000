@@ -580,6 +580,28 @@ def _ToolParameterKVMatchInput_to_vertex(
     return to_object
 
 
+def _AutoraterConfig_to_vertex(
+    api_client: BaseApiClient,
+    from_object: Union[dict[str, Any], object],
+    parent_object: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+    to_object: dict[str, Any] = {}
+    if getv(from_object, ["autorater_model"]) is not None:
+        setv(
+            to_object,
+            ["autoraterModel"],
+            getv(from_object, ["autorater_model"]),
+        )
+
+    if getv(from_object, ["flip_enabled"]) is not None:
+        setv(to_object, ["flipEnabled"], getv(from_object, ["flip_enabled"]))
+
+    if getv(from_object, ["sampling_count"]) is not None:
+        setv(to_object, ["samplingCount"], getv(from_object, ["sampling_count"]))
+
+    return to_object
+
+
 def _EvaluateInstancesRequestParameters_to_vertex(
     api_client: BaseApiClient,
     from_object: Union[dict[str, Any], object],
@@ -679,6 +701,15 @@ def _EvaluateInstancesRequestParameters_to_vertex(
             ),
         )
 
+    if getv(from_object, ["autorater_config"]) is not None:
+        setv(
+            to_object,
+            ["autoraterConfig"],
+            _AutoraterConfig_to_vertex(
+                api_client, getv(from_object, ["autorater_config"]), to_object
+            ),
+        )
+
     if getv(from_object, ["config"]) is not None:
         setv(to_object, ["config"], getv(from_object, ["config"]))
 
@@ -692,15 +723,19 @@ def _EvaluationDataset_to_vertex(
 ) -> dict[str, Any]:
     to_object: dict[str, Any] = {}
 
+    if getv(from_object, ["gcs_source"]) is not None:
+        setv(
+            to_object,
+            ["dataset", "gcs_source"],
+            getv(from_object, ["gcs_source"]),
+        )
+
     if getv(from_object, ["bigquery_source"]) is not None:
         setv(
             to_object,
-            ["bigquerySource"],
+            ["dataset", "bigquery_source"],
             getv(from_object, ["bigquery_source"]),
         )
-
-    if getv(from_object, ["gcs_source"]) is not None:
-        setv(to_object, ["gcsSource"], getv(from_object, ["gcs_source"]))
 
     return to_object
 
@@ -711,39 +746,45 @@ def _Metric_to_vertex(
     parent_object: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
     to_object: dict[str, Any] = {}
-    if getv(from_object, ["aggregation_metrics"]) is not None:
+
+    if getv(from_object, ["prompt_template"]) is not None:
         setv(
             to_object,
-            ["aggregationMetrics"],
-            getv(from_object, ["aggregation_metrics"]),
+            ["pointwise_metric_spec", "prompt_template"],
+            getv(from_object, ["prompt_template"]),
         )
 
-    if getv(from_object, ["bleu_spec"]) is not None:
-        setv(to_object, ["bleuSpec"], getv(from_object, ["bleu_spec"]))
+    if getv(from_object, ["judge_model"]) is not None:
+        setv(
+            parent_object,
+            ["autorater_config", "autorater_model"],
+            getv(from_object, ["judge_model"]),
+        )
 
-    if getv(from_object, ["exact_match_spec"]) is not None:
+    if getv(from_object, ["judge_model_sampling_count"]) is not None:
+        setv(
+            parent_object,
+            ["autorater_config", "sampling_count"],
+            getv(from_object, ["judge_model_sampling_count"]),
+        )
+
+    if getv(from_object, ["judge_model_system_instruction"]) is not None:
         setv(
             to_object,
-            ["exactMatchSpec"],
-            getv(from_object, ["exact_match_spec"]),
+            ["pointwise_metric_spec", "system_instruction"],
+            getv(from_object, ["judge_model_system_instruction"]),
         )
 
-    if getv(from_object, ["pairwise_metric_spec"]) is not None:
+    if getv(from_object, ["return_raw_output"]) is not None:
         setv(
             to_object,
-            ["pairwiseMetricSpec"],
-            getv(from_object, ["pairwise_metric_spec"]),
+            [
+                "pointwise_metric_spec",
+                "custom_output_format_config",
+                "return_raw_output",
+            ],
+            getv(from_object, ["return_raw_output"]),
         )
-
-    if getv(from_object, ["pointwise_metric_spec"]) is not None:
-        setv(
-            to_object,
-            ["pointwiseMetricSpec"],
-            getv(from_object, ["pointwise_metric_spec"]),
-        )
-
-    if getv(from_object, ["rouge_spec"]) is not None:
-        setv(to_object, ["rougeSpec"], getv(from_object, ["rouge_spec"]))
 
     return to_object
 
@@ -760,28 +801,6 @@ def _OutputConfig_to_vertex(
             ["gcsDestination"],
             getv(from_object, ["gcs_destination"]),
         )
-
-    return to_object
-
-
-def _AutoraterConfig_to_vertex(
-    api_client: BaseApiClient,
-    from_object: Union[dict[str, Any], object],
-    parent_object: Optional[dict[str, Any]] = None,
-) -> dict[str, Any]:
-    to_object: dict[str, Any] = {}
-    if getv(from_object, ["autorater_model"]) is not None:
-        setv(
-            to_object,
-            ["autoraterModel"],
-            getv(from_object, ["autorater_model"]),
-        )
-
-    if getv(from_object, ["flip_enabled"]) is not None:
-        setv(to_object, ["flipEnabled"], getv(from_object, ["flip_enabled"]))
-
-    if getv(from_object, ["sampling_count"]) is not None:
-        setv(to_object, ["samplingCount"], getv(from_object, ["sampling_count"]))
 
     return to_object
 
@@ -969,15 +988,19 @@ def _EvaluationDataset_from_vertex(
 ) -> dict[str, Any]:
     to_object: dict[str, Any] = {}
 
-    if getv(from_object, ["bigquerySource"]) is not None:
+    if getv(from_object, ["dataset", "gcs_source"]) is not None:
+        setv(
+            to_object,
+            ["gcs_source"],
+            getv(from_object, ["dataset", "gcs_source"]),
+        )
+
+    if getv(from_object, ["dataset", "bigquery_source"]) is not None:
         setv(
             to_object,
             ["bigquery_source"],
-            getv(from_object, ["bigquerySource"]),
+            getv(from_object, ["dataset", "bigquery_source"]),
         )
-
-    if getv(from_object, ["gcsSource"]) is not None:
-        setv(to_object, ["gcs_source"], getv(from_object, ["gcsSource"]))
 
     return to_object
 
@@ -1029,6 +1052,7 @@ class Evals(_api_module.BaseModule):
         tool_parameter_kv_match_input: Optional[
             types.ToolParameterKVMatchInputOrDict
         ] = None,
+        autorater_config: Optional[types.AutoraterConfigOrDict] = None,
         config: Optional[types.EvaluateInstancesConfigOrDict] = None,
     ) -> types.EvaluateInstancesResponse:
         """Evaluates instances based on a given metric."""
@@ -1043,6 +1067,7 @@ class Evals(_api_module.BaseModule):
             tool_name_match_input=tool_name_match_input,
             tool_parameter_key_match_input=tool_parameter_key_match_input,
             tool_parameter_kv_match_input=tool_parameter_kv_match_input,
+            autorater_config=autorater_config,
             config=config,
         )
 
@@ -1181,12 +1206,13 @@ class Evals(_api_module.BaseModule):
         *,
         model: Union[str, Callable[[Any], Any]],
         src: Union[str, pd.DataFrame],
-        config: Optional[types.EvalRunInferenceConfig] = None,
-    ) -> pd.DataFrame:
+        config: Optional[types.EvalRunInferenceConfigOrDict] = None,
+    ) -> types.EvaluationDataset:
         """Runs inference on a dataset for evaluation."""
         if not config:
             config = types.EvalRunInferenceConfig()
-        # TODO: b/421006375 - return a types.EvaluationDataset instead of a DataFrame.
+        if isinstance(config, dict):
+            config = types.EvalRunInferenceConfig.model_validate(config)
         return _evals_common._execute_inference(
             api_client=self._api_client,
             model=model,
@@ -1194,6 +1220,39 @@ class Evals(_api_module.BaseModule):
             dest=config.dest,
             config=config.generate_content_config,
             prompt_template=config.prompt_template,
+        )
+
+    def evaluate(
+        self,
+        *,
+        dataset: Union[
+            types.EvaluationDatasetOrDict, list[types.EvaluationDatasetOrDict]
+        ],
+        metrics: list[types.MetricOrDict],
+        config: Optional[types.EvaluateMethodConfigOrDict] = None,
+    ) -> types.EvaluationResult:
+        """Evaluates a dataset using the provided metrics."""
+        if not config:
+            config = types.EvaluateMethodConfig()
+        if isinstance(config, dict):
+            config = types.EvaluateMethodConfig.model_validate(config)
+        if isinstance(dataset, list):
+            dataset = [
+                types.EvaluationDataset.model_validate(ds_item)
+                if isinstance(ds_item, dict)
+                else ds_item
+                for ds_item in dataset
+            ]
+        else:
+            if isinstance(dataset, dict):
+                dataset = types.EvaluationDataset.model_validate(dataset)
+
+        return _evals_common._execute_evaluation(
+            api_client=self._api_client,
+            dataset=dataset,
+            metrics=metrics,
+            dataset_schema=config.dataset_schema,
+            dest=config.dest,
         )
 
 
@@ -1214,6 +1273,7 @@ class AsyncEvals(_api_module.BaseModule):
         tool_parameter_kv_match_input: Optional[
             types.ToolParameterKVMatchInputOrDict
         ] = None,
+        autorater_config: Optional[types.AutoraterConfigOrDict] = None,
         config: Optional[types.EvaluateInstancesConfigOrDict] = None,
     ) -> types.EvaluateInstancesResponse:
         """Evaluates instances based on a given metric."""
@@ -1228,6 +1288,7 @@ class AsyncEvals(_api_module.BaseModule):
             tool_name_match_input=tool_name_match_input,
             tool_parameter_key_match_input=tool_parameter_key_match_input,
             tool_parameter_kv_match_input=tool_parameter_kv_match_input,
+            autorater_config=autorater_config,
             config=config,
         )
 

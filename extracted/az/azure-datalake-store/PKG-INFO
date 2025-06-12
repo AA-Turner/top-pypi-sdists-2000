@@ -1,28 +1,38 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: azure-datalake-store
-Version: 0.0.53
+Version: 1.0.1
 Summary: Azure Data Lake Store Filesystem Client Library for Python
 Home-page: https://github.com/Azure/azure-data-lake-store-python
 Author: Microsoft Corporation
 Author-email: Akshat.Harit@microsoft.com
 License: MIT License
 Keywords: azure
-Classifier: Development Status :: 4 - Beta
+Classifier: Development Status :: 3 - Alpha
 Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 2
-Classifier: Programming Language :: Python :: 2.7
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.3
-Classifier: Programming Language :: Python :: 3.4
-Classifier: Programming Language :: Python :: 3.5
-Classifier: Programming Language :: Python :: 3.6
-Classifier: Programming Language :: Python :: 3.7
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
 Classifier: License :: OSI Approved :: MIT License
+Description-Content-Type: text/x-rst
 License-File: License.txt
+Requires-Dist: cffi
+Requires-Dist: requests>=2.20.0
+Provides-Extra: auth
+Requires-Dist: azure-identity; extra == "auth"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: summary
 
 Microsoft Azure Data Lake Store Filesystem Library for Python
 =============================================================
@@ -264,6 +274,14 @@ For more information see the `Code of Conduct FAQ <https://opensource.microsoft.
 
 Release History
 ===============
+1.0.1 (2025-05-16)
++++++++++++++++++++
+* Remove concat operation from multi-part upload. Upload of large fies will now be done in single chunk.
+
+1.0.0-alpha0 (2024-07-12)
++++++++++++++++++++++++++
+* Use generic azure token credential for auth instead of custom lib.auth
+* Remove older Python support
 
 0.0.53 (2023-04-11)
 +++++++++++++++++++

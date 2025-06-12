@@ -4,6 +4,13 @@ This module provides the functions uuid6(), uuid7(), and uuid8() for
 generating version 6, 7, and 8 UUIDs as specified in RFC 9562.
 """
 
+# Get version
+try:
+    from ._version import version as __version__  # type: ignore
+except ImportError:
+    __version__ = "0.0.0.dev0"
+
+
 import secrets
 import time
 import uuid
@@ -24,7 +31,7 @@ class UUID(uuid.UUID):
         int: Optional[int] = None,
         version: Optional[int] = None,
         *,
-        is_safe: uuid.SafeUUID = uuid.SafeUUID.unknown
+        is_safe: uuid.SafeUUID = uuid.SafeUUID.unknown,
     ) -> None:
         r"""Create a UUID."""
 

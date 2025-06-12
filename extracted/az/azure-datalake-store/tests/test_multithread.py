@@ -21,7 +21,7 @@ from tests.settings import AZURE_ACL_TEST_APPID
 test_dir = working_dir()
 
 
-@pytest.yield_fixture()
+@pytest.fixture()
 def tempdir():
     tmpdir = tempfile.mkdtemp()
     try:
@@ -168,7 +168,7 @@ def test_download_path(azure):
         down = ADLDownloader(
             azure,
             lpath="/lpath/test/testfolder",
-            rpath='/' + test_dir.name,
+            rpath='/'/test_dir,
             run=False)
         for lfile, rfile in down._file_pairs:
             if 'data' in lfile:
@@ -264,7 +264,7 @@ def test_save_down(tempdir, azure):
         assert down.hash not in alldownloads
 
 
-@pytest.yield_fixture()
+@pytest.fixture()
 def local_files(tempdir):
     filenames = [os.path.join(tempdir, f) for f in ['bigfile', 'littlefile', 'emptyfile']]
     with open(filenames[0], 'wb') as f:
@@ -300,7 +300,7 @@ def test_upload_one(local_files, azure):
         # multiple chunks, one thread
         size = 10000
         up = ADLUploader(azure, test_dir / 'bigfile', bigfile, nthreads=1,
-                         chunksize=size//5, client=client, run=False,
+                         client=client, run=False,
                          overwrite=True)
         up.run()
 

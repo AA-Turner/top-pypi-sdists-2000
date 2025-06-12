@@ -728,7 +728,9 @@ def scan(
             )
         )
     state.traces.configure(trace, trace_endpoint)
-    with tracing.TRACER.start_as_current_span("semgrep.commands.scan"):
+    with tracing.TRACER.start_as_current_span(
+        "semgrep.commands.scan", kind=tracing.TOP_LEVEL_SPAN_KIND
+    ):
         engine_type = EngineType.decide_engine_type(
             logged_in=auth.is_logged_in_weak(),
             engine_flag=requested_engine,
@@ -994,6 +996,7 @@ def scan(
                     engine_type=engine_type,
                     executed_rule_count=executed_rule_count,
                     missed_rule_count=missed_rule_count,
+                    all_subprojects=_all_subprojects,
                 )
 
                 return_data = ScanResult(

@@ -21,7 +21,7 @@ project = 'pytest-cov'
 year = '2010-2024'
 author = 'pytest-cov contributors'
 copyright = f'{year}, {author}'
-version = release = '6.1.1'
+version = release = '6.2.0'
 
 pygments_style = 'trac'
 templates_path = ['.']
@@ -31,7 +31,9 @@ extlinks = {
 }
 html_theme = 'furo'
 html_theme_options = {
-    'githuburl': 'https://github.com/pytest-dev/pytest-cov/',
+    'source_repository': 'https://github.com/pytest-dev/pytest-cov/',
+    'source_branch': 'master',
+    'source_directory': 'docs/',
 }
 
 html_use_smartypants = True

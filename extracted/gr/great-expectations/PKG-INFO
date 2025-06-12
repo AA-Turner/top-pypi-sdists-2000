@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: great_expectations
-Version: 1.5.0
+Version: 1.5.1
 Summary: Always know what to expect from your data.
 Home-page: https://greatexpectations.io
 Author: The Great Expectations Team
@@ -23,28 +23,28 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Requires-Python: >=3.9,<3.13
+Provides-Extra: spark-connect
 Provides-Extra: mysql
-Provides-Extra: excel
-Provides-Extra: teradata
-Provides-Extra: clickhouse
+Provides-Extra: mssql
+Provides-Extra: athena
 Provides-Extra: spark
-Provides-Extra: bigquery
 Provides-Extra: vertica
-Provides-Extra: dremio
 Provides-Extra: hive
+Provides-Extra: arrow
+Provides-Extra: pagerduty
+Provides-Extra: redshift
+Provides-Extra: dremio
+Provides-Extra: azure
+Provides-Extra: bigquery
 Provides-Extra: cloud
-Provides-Extra: snowflake
+Provides-Extra: gx-redshift
 Provides-Extra: trino
 Provides-Extra: databricks
-Provides-Extra: gx-redshift
-Provides-Extra: redshift
-Provides-Extra: arrow
-Provides-Extra: mssql
-Provides-Extra: azure
 Provides-Extra: postgresql
-Provides-Extra: athena
-Provides-Extra: pagerduty
-Provides-Extra: spark-connect
+Provides-Extra: excel
+Provides-Extra: teradata
+Provides-Extra: snowflake
+Provides-Extra: clickhouse
 Provides-Extra: test
 Provides-Extra: aws_secrets
 Provides-Extra: azure_secrets

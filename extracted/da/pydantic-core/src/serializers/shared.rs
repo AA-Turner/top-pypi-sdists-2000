@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 use std::fmt::Debug;
+use std::io::{self, Write};
 
 use pyo3::exceptions::PyTypeError;
 use pyo3::prelude::*;
@@ -9,7 +10,7 @@ use pyo3::{intern, PyTraverseError, PyVisit};
 
 use enum_dispatch::enum_dispatch;
 use serde::Serialize;
-use serde_json::ser::PrettyFormatter;
+use serde_json::ser::{Formatter, PrettyFormatter};
 
 use crate::build_tools::py_schema_err;
 use crate::build_tools::py_schema_error_type;
@@ -20,7 +21,7 @@ use crate::tools::{py_err, SchemaDict};
 
 use super::errors::se_err_py_err;
 use super::extra::Extra;
-use super::infer::infer_json_key;
+use super::infer::{infer_json_key, infer_serialize, infer_to_python};
 use super::ob_type::{IsType, ObType};
 
 pub(crate) trait BuildSerializer: Sized {
@@ -149,10 +150,21 @@ combined_serializer! {
 }
 
 impl CombinedSerializer {
+    // Used when creating the base serializer instance, to avoid reusing the instance
+    // when unpickling:
+    pub fn build_base(
+        schema: &Bound<'_, PyDict>,
+        config: Option<&Bound<'_, PyDict>>,
+        definitions: &mut DefinitionsBuilder<CombinedSerializer>,
+    ) -> PyResult<CombinedSerializer> {
+        Self::_build(schema, config, definitions, false)
+    }
+
     fn _build(
         schema: &Bound<'_, PyDict>,
         config: Option<&Bound<'_, PyDict>>,
         definitions: &mut DefinitionsBuilder<CombinedSerializer>,
+        use_prebuilt: bool,
     ) -> PyResult<CombinedSerializer> {
         let py = schema.py();
         let type_key = intern!(py, "type");
@@ -199,12 +211,84 @@ impl CombinedSerializer {
         let type_: Bound<'_, PyString> = schema.get_as_req(type_key)?;
         let type_ = type_.to_str()?;
 
-        // if we have a SchemaValidator on the type already, use it
-        if let Ok(Some(prebuilt_serializer)) = super::prebuilt::PrebuiltSerializer::try_get_from_schema(type_, schema) {
-            return Ok(prebuilt_serializer);
+        if use_prebuilt {
+            // if we have a SchemaValidator on the type already, use it
+            if let Ok(Some(prebuilt_serializer)) =
+                super::prebuilt::PrebuiltSerializer::try_get_from_schema(type_, schema)
+            {
+                return Ok(prebuilt_serializer);
+            }
         }
 
         Self::find_serializer(type_, schema, config, definitions)
+    }
+
+    /// Main recursive way to call serializers, supports possible recursive type inference by
+    /// switching to type inference mode eagerly.
+    pub fn to_python(
+        &self,
+        value: &Bound<'_, PyAny>,
+        include: Option<&Bound<'_, PyAny>>,
+        exclude: Option<&Bound<'_, PyAny>>,
+        extra: &Extra,
+    ) -> PyResult<PyObject> {
+        if extra.serialize_as_any {
+            infer_to_python(value, include, exclude, extra)
+        } else {
+            self.to_python_no_infer(value, include, exclude, extra)
+        }
+    }
+
+    /// Variant of the above which does not fall back to inference mode immediately
+    #[inline]
+    pub fn to_python_no_infer(
+        &self,
+        value: &Bound<'_, PyAny>,
+        include: Option<&Bound<'_, PyAny>>,
+        exclude: Option<&Bound<'_, PyAny>>,
+        extra: &Extra,
+    ) -> PyResult<PyObject> {
+        TypeSerializer::to_python(self, value, include, exclude, extra)
+    }
+
+    pub fn json_key<'a>(&self, key: &'a Bound<'_, PyAny>, extra: &Extra) -> PyResult<Cow<'a, str>> {
+        if extra.serialize_as_any {
+            infer_json_key(key, extra)
+        } else {
+            self.json_key_no_infer(key, extra)
+        }
+    }
+
+    #[inline]
+    pub fn json_key_no_infer<'a>(&self, key: &'a Bound<'_, PyAny>, extra: &Extra) -> PyResult<Cow<'a, str>> {
+        TypeSerializer::json_key(self, key, extra)
+    }
+
+    pub fn serde_serialize<S: serde::ser::Serializer>(
+        &self,
+        value: &Bound<'_, PyAny>,
+        serializer: S,
+        include: Option<&Bound<'_, PyAny>>,
+        exclude: Option<&Bound<'_, PyAny>>,
+        extra: &Extra,
+    ) -> Result<S::Ok, S::Error> {
+        if extra.serialize_as_any {
+            infer_serialize(value, serializer, include, exclude, extra)
+        } else {
+            self.serde_serialize_no_infer(value, serializer, include, exclude, extra)
+        }
+    }
+
+    #[inline]
+    pub fn serde_serialize_no_infer<S: serde::ser::Serializer>(
+        &self,
+        value: &Bound<'_, PyAny>,
+        serializer: S,
+        include: Option<&Bound<'_, PyAny>>,
+        exclude: Option<&Bound<'_, PyAny>>,
+        extra: &Extra,
+    ) -> Result<S::Ok, S::Error> {
+        TypeSerializer::serde_serialize(self, value, serializer, include, exclude, extra)
     }
 }
 
@@ -217,7 +301,7 @@ impl BuildSerializer for CombinedSerializer {
         config: Option<&Bound<'_, PyDict>>,
         definitions: &mut DefinitionsBuilder<CombinedSerializer>,
     ) -> PyResult<CombinedSerializer> {
-        Self::_build(schema, config, definitions)
+        Self::_build(schema, config, definitions, true)
     }
 }
 
@@ -349,6 +433,87 @@ impl Serialize for PydanticSerializer<'_> {
     }
 }
 
+struct EscapeNonAsciiFormatter;
+
+impl Formatter for EscapeNonAsciiFormatter {
+    fn write_string_fragment<W: ?Sized + Write>(&mut self, writer: &mut W, fragment: &str) -> io::Result<()> {
+        let mut input = fragment;
+
+        while let Some((idx, non_ascii_char)) = input.chars().enumerate().find(|(_, c)| !c.is_ascii()) {
+            if idx > 0 {
+                // write all ascii characters before the non-ascii one
+                let ascii_run = &input[..idx];
+                writer.write_all(ascii_run.as_bytes()).unwrap();
+            }
+
+            let codepoint = non_ascii_char as u32;
+            if codepoint < 0xFFFF {
+                // write basic codepoint as single escape
+                write!(writer, "\\u{codepoint:04x}").unwrap();
+            } else {
+                // encode extended plane character as utf16 pair
+                for escape in non_ascii_char.encode_utf16(&mut [0; 2]) {
+                    write!(writer, "\\u{escape:04x}").unwrap();
+                }
+            }
+
+            input = &input[(idx + non_ascii_char.len_utf8())..];
+        }
+
+        // write any ascii trailer
+        writer.write_all(input.as_bytes())?;
+        Ok(())
+    }
+}
+
+struct EscapeNonAsciiPrettyFormatter<'a> {
+    pretty: PrettyFormatter<'a>,
+    escape_non_ascii: EscapeNonAsciiFormatter,
+}
+
+impl<'a> EscapeNonAsciiPrettyFormatter<'a> {
+    pub fn with_indent(indent: &'a [u8]) -> Self {
+        Self {
+            pretty: PrettyFormatter::with_indent(indent),
+            escape_non_ascii: EscapeNonAsciiFormatter,
+        }
+    }
+}
+
+macro_rules! defer {
+    ($formatter:ident, $fun:ident) => {
+        fn $fun<W>(&mut self, writer: &mut W) -> io::Result<()>
+        where
+            W: ?Sized + io::Write,
+        {
+            self.$formatter.$fun(writer)
+        }
+    };
+    ($formatter:ident, $fun:ident, $val:ty) => {
+        fn $fun<W>(&mut self, writer: &mut W, val: $val) -> io::Result<()>
+        where
+            W: ?Sized + io::Write,
+        {
+            self.$formatter.$fun(writer, val)
+        }
+    };
+}
+
+#[allow(clippy::needless_lifetimes)]
+impl Formatter for EscapeNonAsciiPrettyFormatter<'_> {
+    defer!(escape_non_ascii, write_string_fragment, &str);
+    defer!(pretty, begin_array);
+    defer!(pretty, end_array);
+    defer!(pretty, begin_array_value, bool);
+    defer!(pretty, end_array_value);
+    defer!(pretty, begin_object);
+    defer!(pretty, end_object);
+    defer!(pretty, begin_object_key, bool);
+    defer!(pretty, end_object_key);
+    defer!(pretty, begin_object_value);
+    defer!(pretty, end_object_value);
+}
+
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn to_json_bytes(
     value: &Bound<'_, PyAny>,
@@ -357,25 +522,40 @@ pub(crate) fn to_json_bytes(
     exclude: Option<&Bound<'_, PyAny>>,
     extra: &Extra,
     indent: Option<usize>,
+    ensure_ascii: bool,
     expected_json_size: usize,
 ) -> PyResult<Vec<u8>> {
     let serializer = PydanticSerializer::new(value, serializer, include, exclude, extra);
 
     let writer: Vec<u8> = Vec::with_capacity(expected_json_size);
-    let bytes = match indent {
-        Some(indent) => {
+
+    let bytes = match (indent, ensure_ascii) {
+        (Some(indent), true) => {
+            let indent = vec![b' '; indent];
+            let formatter = EscapeNonAsciiPrettyFormatter::with_indent(&indent);
+            let mut ser = PythonSerializer::with_formatter(writer, formatter);
+            serializer.serialize(&mut ser).map_err(se_err_py_err)?;
+            ser.into_inner()
+        }
+        (Some(indent), false) => {
             let indent = vec![b' '; indent];
             let formatter = PrettyFormatter::with_indent(&indent);
             let mut ser = PythonSerializer::with_formatter(writer, formatter);
             serializer.serialize(&mut ser).map_err(se_err_py_err)?;
             ser.into_inner()
         }
-        None => {
+        (None, true) => {
+            let mut ser = PythonSerializer::with_formatter(writer, EscapeNonAsciiFormatter);
+            serializer.serialize(&mut ser).map_err(se_err_py_err)?;
+            ser.into_inner()
+        }
+        (None, false) => {
             let mut ser = PythonSerializer::new(writer);
             serializer.serialize(&mut ser).map_err(se_err_py_err)?;
             ser.into_inner()
         }
     };
+
     Ok(bytes)
 }
 

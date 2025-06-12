@@ -1,3 +1,5 @@
+import platform
+import sys
 from dataclasses import dataclass
 from datetime import date, time
 from enum import Enum, IntEnum
@@ -8,7 +10,7 @@ from uuid import UUID
 import pytest
 from dirty_equals import IsFloat, IsInt
 
-from pydantic_core import CoreConfig, SchemaError, SchemaValidator, ValidationError, core_schema, validate_core_schema
+from pydantic_core import CoreConfig, SchemaError, SchemaValidator, ValidationError, core_schema
 
 from ..conftest import plain_repr
 
@@ -231,22 +233,9 @@ def test_union_list_bool_int():
     ]
 
 
-def test_no_choices(pydantic_version):
-    with pytest.raises(SchemaError) as exc_info:
-        validate_core_schema({'type': 'union'})
-
-    assert str(exc_info.value) == (
-        'Invalid Schema:\n'
-        'union.choices\n'
-        "  Field required [type=missing, input_value={'type': 'union'}, input_type=dict]\n"
-        f'    For further information visit https://errors.pydantic.dev/{pydantic_version}/v/missing'
-    )
-    assert exc_info.value.error_count() == 1
-    assert exc_info.value.errors() == [
-        {'input': {'type': 'union'}, 'loc': ('union', 'choices'), 'msg': 'Field required', 'type': 'missing'}
-    ]
-
-
+@pytest.mark.xfail(
+    platform.python_implementation() == 'PyPy' and sys.version_info[:2] == (3, 11), reason='pypy 3.11 type formatting'
+)
 def test_empty_choices():
     msg = r'Error building "union" validator:\s+SchemaError: One or more union choices required'
     with pytest.raises(SchemaError, match=msg):
@@ -1358,3 +1347,83 @@ def test_smart_union_extra_behavior(extra_behavior) -> None:
 
     assert isinstance(validator.validate_python({'x': {'foo': 'foo'}}).x, Foo)
     assert isinstance(validator.validate_python({'x': {'bar': 'bar'}}).x, Bar)
+
+
+def test_smart_union_wrap_validator_should_not_change_nested_model_field_counts() -> None:
+    """Adding a wrap validator on a union member should not affect smart union behavior"""
+
+    class SubModel:
+        x: str = 'x'
+
+    class ModelA:
+        type: str = 'A'
+        sub: SubModel
+
+    class ModelB:
+        type: str = 'B'
+        sub: SubModel
+
+    submodel_schema = core_schema.model_schema(
+        SubModel,
+        core_schema.model_fields_schema(fields={'x': core_schema.model_field(core_schema.str_schema())}),
+    )
+
+    wrapped_submodel_schema = core_schema.no_info_wrap_validator_function(
+        lambda v, handler: handler(v), submodel_schema
+    )
+
+    model_a_schema = core_schema.model_schema(
+        ModelA,
+        core_schema.model_fields_schema(
+            fields={
+                'type': core_schema.model_field(
+                    core_schema.with_default_schema(core_schema.literal_schema(['A']), default='A'),
+                ),
+                'sub': core_schema.model_field(wrapped_submodel_schema),
+            },
+        ),
+    )
+
+    model_b_schema = core_schema.model_schema(
+        ModelB,
+        core_schema.model_fields_schema(
+            fields={
+                'type': core_schema.model_field(
+                    core_schema.with_default_schema(core_schema.literal_schema(['B']), default='B'),
+                ),
+                'sub': core_schema.model_field(submodel_schema),
+            },
+        ),
+    )
+
+    for choices in permute_choices([model_a_schema, model_b_schema]):
+        schema = core_schema.union_schema(choices)
+        validator = SchemaValidator(schema)
+
+        assert isinstance(validator.validate_python({'type': 'A', 'sub': {'x': 'x'}}), ModelA)
+        assert isinstance(validator.validate_python({'type': 'B', 'sub': {'x': 'x'}}), ModelB)
+
+        # defaults to leftmost choice if there's a tie
+        assert isinstance(validator.validate_python({'sub': {'x': 'x'}}), choices[0]['cls'])
+
+    # test validate_assignment
+    class RootModel:
+        ab: Union[ModelA, ModelB]
+
+    root_model = core_schema.model_schema(
+        RootModel,
+        core_schema.model_fields_schema(
+            fields={'ab': core_schema.model_field(core_schema.union_schema([model_a_schema, model_b_schema]))}
+        ),
+    )
+
+    validator = SchemaValidator(root_model)
+    m = validator.validate_python({'ab': {'type': 'B', 'sub': {'x': 'x'}}})
+    assert isinstance(m, RootModel)
+    assert isinstance(m.ab, ModelB)
+    assert m.ab.sub.x == 'x'
+
+    m = validator.validate_assignment(m, 'ab', {'sub': {'x': 'y'}})
+    assert isinstance(m, RootModel)
+    assert isinstance(m.ab, ModelA)
+    assert m.ab.sub.x == 'y'

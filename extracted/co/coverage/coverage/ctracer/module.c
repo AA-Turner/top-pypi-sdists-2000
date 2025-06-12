@@ -9,65 +9,71 @@
 
 #define MODULE_DOC PyDoc_STR("Fast coverage tracer.")
 
-static PyModuleDef
-moduledef = {
-    PyModuleDef_HEAD_INIT,
-    "coverage.tracer",
-    MODULE_DOC,
-    -1,
-    NULL,       /* methods */
-    NULL,
-    NULL,       /* traverse */
-    NULL,       /* clear */
-    NULL
-};
+static BOOL module_inited = FALSE;
 
-
-PyObject *
-PyInit_tracer(void)
+static int
+tracer_exec(PyObject *mod)
 {
-    PyObject * mod = PyModule_Create(&moduledef);
-    if (mod == NULL) {
-        return NULL;
+    if (module_inited) {
+        return 0;
     }
 
-#ifdef Py_GIL_DISABLED
-    PyUnstable_Module_SetGIL(mod, Py_MOD_GIL_NOT_USED);
-#endif
-
     if (CTracer_intern_strings() < 0) {
-        return NULL;
+        return -1;
     }
 
     /* Initialize CTracer */
     CTracerType.tp_new = PyType_GenericNew;
     if (PyType_Ready(&CTracerType) < 0) {
-        Py_DECREF(mod);
-        return NULL;
+        return -1;
     }
 
     Py_INCREF(&CTracerType);
     if (PyModule_AddObject(mod, "CTracer", (PyObject *)&CTracerType) < 0) {
-        Py_DECREF(mod);
         Py_DECREF(&CTracerType);
-        return NULL;
+        return -1;
     }
 
     /* Initialize CFileDisposition */
     CFileDispositionType.tp_new = PyType_GenericNew;
     if (PyType_Ready(&CFileDispositionType) < 0) {
-        Py_DECREF(mod);
         Py_DECREF(&CTracerType);
-        return NULL;
+        return -1;
     }
 
     Py_INCREF(&CFileDispositionType);
     if (PyModule_AddObject(mod, "CFileDisposition", (PyObject *)&CFileDispositionType) < 0) {
-        Py_DECREF(mod);
         Py_DECREF(&CTracerType);
         Py_DECREF(&CFileDispositionType);
-        return NULL;
+        return -1;
     }
 
-    return mod;
+    module_inited = TRUE;
+    return 0;
+}
+
+static PyModuleDef_Slot tracer_slots[] = {
+    {Py_mod_exec, tracer_exec},
+#if PY_VERSION_HEX >= 0x030c00f0  // Python 3.12+
+    {Py_mod_multiple_interpreters, Py_MOD_MULTIPLE_INTERPRETERS_NOT_SUPPORTED},
+#endif
+#if PY_VERSION_HEX >= 0x030d00f0  // Python 3.13+
+    // signal that this module supports running without an active GIL
+    {Py_mod_gil, Py_MOD_GIL_NOT_USED},
+#endif
+    {0, NULL}
+};
+
+static PyModuleDef moduledef = {
+    .m_base = PyModuleDef_HEAD_INIT,
+    .m_name = "coverage.tracer",
+    .m_doc = MODULE_DOC,
+    .m_size = 0,
+    .m_slots = tracer_slots,
+};
+
+PyMODINIT_FUNC
+PyInit_tracer(void)
+{
+    return PyModuleDef_Init(&moduledef);
 }

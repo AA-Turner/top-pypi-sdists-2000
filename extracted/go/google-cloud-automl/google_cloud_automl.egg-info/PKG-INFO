@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: google-cloud-automl
-Version: 2.16.3
+Version: 2.16.4
 Summary: Google Cloud Automl API client library
 Home-page: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-automl
 Author: Google LLC
@@ -34,6 +34,18 @@ Provides-Extra: pandas
 Requires-Dist: pandas>=1.0.5; extra == "pandas"
 Provides-Extra: storage
 Requires-Dist: google-cloud-storage<4.0.0,>=1.18.0; extra == "storage"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: platform
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 Python Client for Cloud AutoML
 ==============================
@@ -199,7 +211,7 @@ Code-Based Examples
 
     import logging
     
-    from google.cloud.translate_v3 import translate
+    from google.cloud import library_v1
     
     base_logger = logging.getLogger("google")
     base_logger.addHandler(logging.StreamHandler())
@@ -211,7 +223,7 @@ Code-Based Examples
 
     import logging
     
-    from google.cloud.translate_v3 import translate
+    from google.cloud import library_v1
     
     base_logger = logging.getLogger("google.cloud.library_v1")
     base_logger.addHandler(logging.StreamHandler())
