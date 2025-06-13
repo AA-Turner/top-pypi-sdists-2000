@@ -7,14 +7,15 @@ from botocore.exceptions import ParamValidationError, ReadTimeoutError
 
 from aiobotocore.config import AioConfig
 from aiobotocore.httpsession import AIOHTTPSession
+from aiobotocore.httpxsession import HttpxSession
 from aiobotocore.session import AioSession, get_session
 from tests.mock_server import AIOServer
 
 
-async def test_connector_args():
+async def test_connector_args(current_http_backend: str):
     with pytest.raises(ParamValidationError):
         # wrong type
-        connector_args = dict(use_dns_cache=1)
+        connector_args: dict[str, object] = dict(use_dns_cache=1)
         AioConfig(connector_args)
 
     with pytest.raises(ParamValidationError):
@@ -52,6 +53,23 @@ async def test_connector_args():
         connector_args = dict(foo="1")
         AioConfig(connector_args)
 
+    with pytest.raises(
+        ParamValidationError,
+        match='Httpx does not support dns caching. https://github.com/encode/httpx/discussions/2211',
+    ):
+        AioConfig({'use_dns_cache': True}, http_session_cls=HttpxSession)
+
+    with pytest.raises(
+        ParamValidationError,
+        match='Httpx backend does not currently support force_close.',
+    ):
+        AioConfig({'force_close': True}, http_session_cls=HttpxSession)
+
+    with pytest.raises(
+        ParamValidationError, match='Httpx backend does not support resolver.'
+    ):
+        AioConfig({'resolver': True}, http_session_cls=HttpxSession)
+
     # Test valid configs:
     AioConfig({"ttl_dns_cache": None})
     AioConfig({"ttl_dns_cache": 1})
@@ -72,13 +90,16 @@ async def test_connector_timeout():
     config = AioConfig(
         max_pool_connections=1, connect_timeout=1, retries={'max_attempts': 0}
     )
-    async with AIOServer() as server, session.create_client(
-        's3',
-        config=config,
-        endpoint_url=server.endpoint_url,
-        aws_secret_access_key='xxx',
-        aws_access_key_id='xxx',
-    ) as s3_client:
+    async with (
+        AIOServer() as server,
+        session.create_client(
+            's3',
+            config=config,
+            endpoint_url=server.endpoint_url,
+            aws_secret_access_key='xxx',
+            aws_access_key_id='xxx',
+        ) as s3_client,
+    ):
 
         async def get_and_wait():
             await s3_client.get_object(Bucket='foo', Key='bar')
@@ -106,13 +127,16 @@ async def test_connector_timeout2():
         read_timeout=1,
         retries={'max_attempts': 0},
     )
-    async with AIOServer() as server, session.create_client(
-        's3',
-        config=config,
-        endpoint_url=server.endpoint_url,
-        aws_secret_access_key='xxx',
-        aws_access_key_id='xxx',
-    ) as s3_client:
+    async with (
+        AIOServer() as server,
+        session.create_client(
+            's3',
+            config=config,
+            endpoint_url=server.endpoint_url,
+            aws_secret_access_key='xxx',
+            aws_access_key_id='xxx',
+        ) as s3_client,
+    ):
         with pytest.raises(ReadTimeoutError):
             resp = await s3_client.get_object(Bucket='foo', Key='bar')
             await resp["Body"].read()
@@ -142,12 +166,15 @@ async def test_config_http_session_cls():
 
     config = AioConfig(http_session_cls=MyHttpSession)
     session = AioSession()
-    async with AIOServer() as server, session.create_client(
-        's3',
-        config=config,
-        endpoint_url=server.endpoint_url,
-        aws_secret_access_key='xxx',
-        aws_access_key_id='xxx',
-    ) as s3_client:
+    async with (
+        AIOServer() as server,
+        session.create_client(
+            's3',
+            config=config,
+            endpoint_url=server.endpoint_url,
+            aws_secret_access_key='xxx',
+            aws_access_key_id='xxx',
+        ) as s3_client,
+    ):
         with pytest.raises(SuccessExc):
             await s3_client.get_object(Bucket='foo', Key='bar')

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pytest-cov
-Version: 6.2.0
+Version: 6.2.1
 Summary: Pytest plugin for measuring coverage.
 Home-page: https://github.com/pytest-dev/pytest-cov
 Author: Marc Schlaich
@@ -13,7 +13,6 @@ Keywords: cover,coverage,pytest,py.test,distributed,parallel
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Framework :: Pytest
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: Microsoft :: Windows
 Classifier: Operating System :: POSIX
 Classifier: Operating System :: Unix
@@ -31,8 +30,9 @@ Classifier: Topic :: Utilities
 Requires-Python: >=3.9
 License-File: LICENSE
 License-File: AUTHORS.rst
-Requires-Dist: pytest>=4.6
+Requires-Dist: pytest>=6.2.5
 Requires-Dist: coverage[toml]>=7.5
+Requires-Dist: pluggy>=1.2
 Provides-Extra: testing
 Requires-Dist: fields; extra == "testing"
 Requires-Dist: hunter; extra == "testing"
@@ -94,9 +94,9 @@ Overview
     :alt: Supported implementations
     :target: https://pypi.org/project/pytest-cov
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/pytest-dev/pytest-cov/v6.2.0.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/pytest-dev/pytest-cov/v6.2.1.svg
     :alt: Commits since latest release
-    :target: https://github.com/pytest-dev/pytest-cov/compare/v6.2.0...master
+    :target: https://github.com/pytest-dev/pytest-cov/compare/v6.2.1...master
 
 .. end-badges
 
@@ -219,6 +219,17 @@ No doubt others have contributed to these tools as well.
 
 Changelog
 =========
+
+
+6.2.1 (2025-06-12)
+------------------
+
+* Added a version requirement for pytest's pluggy dependency (1.2.0, released 2023-06-21) that has the required new-style hookwrapper API.
+* Removed deprecated license classifier (packaging).
+* Disabled coverage warnings in two more situations where they have no value:
+
+  * "module-not-measured" in workers
+  * "already-imported" in subprocesses
 
 6.2.0 (2025-06-11)
 ------------------

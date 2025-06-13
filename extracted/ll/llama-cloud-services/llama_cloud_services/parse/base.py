@@ -2,6 +2,7 @@ import asyncio
 import mimetypes
 import os
 import time
+import warnings
 from contextlib import asynccontextmanager
 from copy import deepcopy
 from enum import Enum
@@ -13,12 +14,18 @@ from urllib.parse import urlparse
 import httpx
 from fsspec import AbstractFileSystem
 from llama_index.core.async_utils import asyncio_run, run_jobs
-from llama_index.core.bridge.pydantic import Field, PrivateAttr, field_validator
+from llama_index.core.bridge.pydantic import (
+    Field,
+    PrivateAttr,
+    field_validator,
+    model_validator,
+)
 from llama_index.core.constants import DEFAULT_BASE_URL
 from llama_index.core.readers.base import BasePydanticReader
 from llama_index.core.readers.file.base import get_default_fs
 from llama_index.core.schema import Document
 
+from llama_cloud_services.utils import check_extra_params
 from llama_cloud_services.parse.types import JobResult
 from llama_cloud_services.parse.utils import (
     SUPPORTED_FILE_TYPES,
@@ -497,6 +504,21 @@ class LlamaParse(BasePydanticReader):
         default=None,
         description="If set, documents will automatically be partitioned into segments containing the specified number of pages at most. Parsing will be split into separate jobs for each partition segment. Can be used in combination with targetPages and maxPages.",
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def warn_extra_params(cls, data: Dict[str, Any]) -> Dict[str, Any]:
+        extra_params, suggestions = check_extra_params(cls, data)
+        if extra_params:
+            suggestions = [f"\n - {suggestion}" for suggestion in suggestions]
+            suggestions_str = "".join(suggestions)
+            warnings.warn(
+                "The following parameters are unused: "
+                + ", ".join(extra_params)
+                + f".\n{suggestions_str}",
+            )
+
+        return data
 
     @field_validator("api_key", mode="before", check_fields=True)
     @classmethod

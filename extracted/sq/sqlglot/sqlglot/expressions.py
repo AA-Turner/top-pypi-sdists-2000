@@ -51,8 +51,8 @@ class _Expression(type):
     def __new__(cls, clsname, bases, attrs):
         klass = super().__new__(cls, clsname, bases, attrs)
 
-        # When an Expression class is created, its key is automatically set to be
-        # the lowercase version of the class' name.
+        # When an Expression class is created, its key is automatically set
+        # to be the lowercase version of the class' name.
         klass.key = clsname.lower()
 
         # This is so that docstrings are not inherited in pdoc
@@ -1724,15 +1724,15 @@ class Column(Condition):
             if self.args.get(part)
         ]
 
-    def to_dot(self) -> Dot | Identifier:
+    def to_dot(self, include_dots: bool = True) -> Dot | Identifier:
         """Converts the column into a dot expression."""
         parts = self.parts
         parent = self.parent
 
-        while parent:
-            if isinstance(parent, Dot):
+        if include_dots:
+            while isinstance(parent, Dot):
                 parts.append(parent.expression)
-            parent = parent.parent
+                parent = parent.parent
 
         return Dot.build(deepcopy(parts)) if len(parts) > 1 else parts[0]
 
@@ -4753,6 +4753,8 @@ class DataType(Expression):
                 if udt:
                     return DataType(this=DataType.Type.USERDEFINED, kind=dtype, **kwargs)
                 raise
+        elif isinstance(dtype, (Identifier, Dot)) and udt:
+            return DataType(this=DataType.Type.USERDEFINED, kind=dtype, **kwargs)
         elif isinstance(dtype, DataType.Type):
             data_type_exp = DataType(this=dtype)
         elif isinstance(dtype, DataType):
@@ -4792,9 +4794,6 @@ class DataType(Expression):
             if matches:
                 return True
         return False
-
-
-DATA_TYPE = t.Union[str, DataType, DataType.Type]
 
 
 # https://www.postgresql.org/docs/15/datatype-pseudo.html
@@ -4926,6 +4925,10 @@ class AddConstraint(Expression):
     arg_types = {"expressions": True}
 
 
+class AddPartition(Expression):
+    arg_types = {"this": True, "exists": False}
+
+
 class AttachOption(Expression):
     arg_types = {"this": True, "expression": False}
 
@@ -5024,6 +5027,9 @@ class Dot(Binary):
 
         parts.reverse()
         return parts
+
+
+DATA_TYPE = t.Union[str, Identifier, Dot, DataType, DataType.Type]
 
 
 class DPipe(Binary):

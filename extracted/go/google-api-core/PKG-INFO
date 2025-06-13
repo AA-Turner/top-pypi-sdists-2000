@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: google-api-core
-Version: 2.25.0
+Version: 2.25.1
 Summary: Google API client core library
 Author-email: Google LLC <googleapis-packages@google.com>
 License: Apache 2.0
@@ -40,6 +40,7 @@ Provides-Extra: grpcgcp
 Requires-Dist: grpcio-gcp<1.0.0,>=0.2.2; extra == "grpcgcp"
 Provides-Extra: grpcio-gcp
 Requires-Dist: grpcio-gcp<1.0.0,>=0.2.2; extra == "grpcio-gcp"
+Dynamic: license-file
 
 Core Library for Google Client Libraries
 ========================================

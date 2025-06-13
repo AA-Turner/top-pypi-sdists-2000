@@ -177,8 +177,9 @@ class Test(unittest.TestCase):
         c = self.pdf.to_csv(precision=3)
         assert c.split("\r\n")[9] == (
             "char,1,45.83,58.826,656.82,674.82,117.18,117.18,135.18,12.996,"
-            '18.0,12.996,,,,,,,TimesNewRomanPSMT,,,"(1, 0, 0, 1, 45.83, 660.69)"'
-            ',,,DeviceRGB,"(0, 0, 0)",,,,18.0,,,,,,,Y,,1,'
+            "18.0,12.996,,,,,,,TimesNewRomanPSMT,,,"
+            '"(1.0, 0.0, 0.0, 1.0, 45.83, 660.69)"'
+            ',,,DeviceRGB,"(0.0, 0.0, 0.0)",,,18.0,,,,"(0,)",,Y,,1,'
         )
 
         io = StringIO()
@@ -190,6 +191,10 @@ class Test(unittest.TestCase):
     def test_csv_all_types(self):
         c = self.pdf.to_csv(object_types=None)
         assert c.split("\r\n")[1].split(",")[0] == "line"
+
+    def test_cli_help(self):
+        res = run([sys.executable, "-m", "pdfplumber.cli"])
+        assert b"usage:" in res
 
     def test_cli_structure(self):
         res = run([sys.executable, "-m", "pdfplumber.cli", self.path, "--structure"])
@@ -244,8 +249,9 @@ class Test(unittest.TestCase):
 
         assert res.decode("utf-8").split("\r\n")[9] == (
             "char,1,45.83,58.826,656.82,674.82,117.18,117.18,135.18,12.996,"
-            '18.0,12.996,,,,,,,TimesNewRomanPSMT,,,"(1, 0, 0, 1, 45.83, 660.69)"'
-            ',,,DeviceRGB,"(0, 0, 0)",,,,18.0,,,,,,,Y,,1,'
+            "18.0,12.996,,,,,,,TimesNewRomanPSMT,,,"
+            '"(1.0, 0.0, 0.0, 1.0, 45.83, 660.69)"'
+            ',,,DeviceRGB,"(0.0, 0.0, 0.0)",,,18.0,,,,"(0,)",,Y,,1,'
         )
 
     def test_cli_csv_exclude(self):
@@ -263,15 +269,13 @@ class Test(unittest.TestCase):
                 "matrix",
                 "mcid",
                 "ncs",
-                "non_stroking_pattern",
-                "stroking_pattern",
             ]
         )
 
         assert res.decode("utf-8").split("\r\n")[9] == (
             "char,1,45.83,58.826,656.82,674.82,117.18,117.18,135.18,12.996,"
             "18.0,12.996,,,,,,,TimesNewRomanPSMT,"
-            ',,,"(0, 0, 0)",,,18.0,,,,,,Y,,1,'
+            ',,,"(0.0, 0.0, 0.0)",,,18.0,,,,"(0,)",,Y,,1,'
         )
 
     def test_cli_csv_include(self):

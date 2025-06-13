@@ -77,7 +77,7 @@ class GeneratePTH(Command):
 
 setup(
     name='pytest-cov',
-    version='6.2.0',
+    version='6.2.1',
     license='MIT',
     description='Pytest plugin for measuring coverage.',
     long_description='{}\n{}'.format(read('README.rst'), re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))),
@@ -94,7 +94,6 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Framework :: Pytest',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
         'Operating System :: Unix',
@@ -125,8 +124,9 @@ setup(
     ],
     python_requires='>=3.9',
     install_requires=[
-        'pytest>=4.6',
+        'pytest>=6.2.5',
         'coverage[toml]>=7.5',
+        'pluggy>=1.2',
     ],
     extras_require={
         'testing': [

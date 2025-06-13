@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pdfplumber
-Version: 0.11.6
+Version: 0.11.7
 Summary: Plumb a PDF for detailed information about each char, rectangle, and line.
 Home-page: https://github.com/jsvine/pdfplumber
 Author: Jeremy Singer-Vine
@@ -15,7 +15,7 @@ Classifier: Programming Language :: Python :: 3.12
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
-Requires-Dist: pdfminer.six==20250327
+Requires-Dist: pdfminer.six==20250506
 Requires-Dist: Pillow>=9.1
 Requires-Dist: pypdfium2>=4.18.0
 Dynamic: author

@@ -29,8 +29,11 @@ class StreamingBody(wrapt.ObjectProxy):
 
     _DEFAULT_CHUNK_SIZE = 1024
 
-    def __init__(self, raw_stream: aiohttp.StreamReader, content_length: str):
+    def __init__(
+        self, raw_stream: aiohttp.ClientResponse, content_length: str
+    ):
         super().__init__(raw_stream)
+        self.__wrapped__: aiohttp.ClientResponse
         self._self_content_length = content_length
         self._self_amount_read = 0
 
@@ -70,6 +73,28 @@ class StreamingBody(wrapt.ObjectProxy):
             # we need to verify the content length.
             self._verify_content_length()
         return chunk
+
+    async def readinto(self, b: bytearray):
+        """Read bytes into a pre-allocated, writable bytes-like object b, and return the number of bytes read."""
+        try:
+            # AioHTTP ClientResponse does not support .readinto()
+            chunk = await self.__wrapped__.content.read(len(b))
+            amount_read = len(chunk)
+            b[:amount_read] = chunk
+
+        except asyncio.TimeoutError as e:
+            raise AioReadTimeoutError(
+                endpoint_url=self.__wrapped__.url, error=e
+            )
+        except aiohttp.client_exceptions.ClientConnectionError as e:
+            raise ResponseStreamingError(error=e)
+
+        self._self_amount_read += amount_read
+        if amount_read == 0 and len(b) > 0:
+            # If the server sends empty contents then we know we need to verify
+            # the content length.
+            self._verify_content_length()
+        return amount_read
 
     async def readlines(self):
         # assuming this is not an iterator
@@ -129,6 +154,29 @@ class StreamingBody(wrapt.ObjectProxy):
 
     def tell(self):
         return self._self_amount_read
+
+
+# wraps httpx.Response
+class HttpxStreamingBody(wrapt.ObjectProxy):
+    async def read(self, amt=None):
+        if amt is not None:
+            # We could do a fancy thing here and start doing calls to
+            # aiter_bytes()/aiter_raw() and keep state
+            raise ValueError(
+                "httpx.Response.aread does not support reading a specific number of bytes"
+            )
+        return await self.__wrapped__.aread()
+
+    async def __aenter__(self):
+        # use AsyncClient.stream somehow?
+        # See "manual mode" at https://www.python-httpx.org/async/#streaming-responses
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        # When support for anyio/trio is added this needs a shielded cancelscope to
+        # avoid swallowing exceptions.
+        # See https://github.com/python-trio/trio/issues/455
+        await self.__wrapped__.aclose()
 
 
 async def get_response(operation_model, http_response):

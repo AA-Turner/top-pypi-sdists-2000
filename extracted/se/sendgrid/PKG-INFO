@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: sendgrid
-Version: 6.12.3
+Version: 6.12.4
 Summary: Twilio SendGrid library for Python
 Home-page: https://github.com/sendgrid/sendgrid-python/
 Author: Elmer Thomas, Yamil Asusta

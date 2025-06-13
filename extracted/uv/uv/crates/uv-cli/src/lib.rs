@@ -1491,7 +1491,7 @@ pub struct PipSyncArgs {
     /// Hash-checking mode introduces a number of additional constraints:
     ///
     /// - Git dependencies are not supported.
-    /// - Editable installs are not supported.
+    /// - Editable installations are not supported.
     /// - Local dependencies are not supported, unless they point to a specific wheel (`.whl`) or
     ///   source archive (`.zip`, `.tar.gz`), as opposed to a directory.
     #[arg(
@@ -1801,7 +1801,7 @@ pub struct PipInstallArgs {
     /// Hash-checking mode introduces a number of additional constraints:
     ///
     /// - Git dependencies are not supported.
-    /// - Editable installs are not supported.
+    /// - Editable installations are not supported.
     /// - Local dependencies are not supported, unless they point to a specific wheel (`.whl`) or
     ///   source archive (`.zip`, `.tar.gz`), as opposed to a directory.
     #[arg(
@@ -2471,7 +2471,7 @@ pub struct BuildArgs {
     /// Hash-checking mode introduces a number of additional constraints:
     ///
     /// - Git dependencies are not supported.
-    /// - Editable installs are not supported.
+    /// - Editable installations are not supported.
     /// - Local dependencies are not supported, unless they point to a specific wheel (`.whl`) or
     ///   source archive (`.zip`, `.tar.gz`), as opposed to a directory.
     #[arg(
@@ -3516,7 +3516,12 @@ pub struct AddArgs {
     /// Add the requirements to the development dependency group.
     ///
     /// This option is an alias for `--group dev`.
-    #[arg(long, conflicts_with("optional"), conflicts_with("group"))]
+    #[arg(
+        long,
+        conflicts_with("optional"),
+        conflicts_with("group"),
+        conflicts_with("script")
+    )]
     pub dev: bool,
 
     /// Add the requirements to the package's optional dependencies for the specified extra.
@@ -3530,7 +3535,12 @@ pub struct AddArgs {
     /// Add the requirements to the specified dependency group.
     ///
     /// These requirements will not be included in the published metadata for the project.
-    #[arg(long, conflicts_with("dev"), conflicts_with("optional"))]
+    #[arg(
+        long,
+        conflicts_with("dev"),
+        conflicts_with("optional"),
+        conflicts_with("script")
+    )]
     pub group: Option<GroupName>,
 
     /// Add the requirements as editable.
@@ -3677,11 +3687,21 @@ pub struct RemoveArgs {
     pub dev: bool,
 
     /// Remove the packages from the project's optional dependencies for the specified extra.
-    #[arg(long, conflicts_with("dev"), conflicts_with("group"))]
+    #[arg(
+        long,
+        conflicts_with("dev"),
+        conflicts_with("group"),
+        conflicts_with("script")
+    )]
     pub optional: Option<ExtraName>,
 
     /// Remove the packages from the specified dependency group.
-    #[arg(long, conflicts_with("dev"), conflicts_with("optional"))]
+    #[arg(
+        long,
+        conflicts_with("dev"),
+        conflicts_with("optional"),
+        conflicts_with("script")
+    )]
     pub group: Option<GroupName>,
 
     /// Avoid syncing the virtual environment after re-locking the project.
@@ -4728,7 +4748,8 @@ pub enum PythonCommand {
     ///
     /// A `python` executable is not made globally available, managed Python versions are only used
     /// in uv commands or in active virtual environments. There is experimental support for adding
-    /// Python executables to the `PATH` — use the `--preview` flag to enable this behavior.
+    /// Python executables to a directory on the path — use the `--preview` flag to enable this
+    /// behavior and `uv python dir --bin` to retrieve the target directory.
     ///
     /// Multiple Python versions may be requested.
     ///
@@ -4763,7 +4784,8 @@ pub enum PythonCommand {
     /// The Python installation directory may be overridden with `$UV_PYTHON_INSTALL_DIR`.
     ///
     /// To view the directory where uv installs Python executables instead, use the `--bin` flag.
-    /// Note that Python executables are only installed when preview mode is enabled.
+    /// The Python executable directory may be overridden with `$UV_PYTHON_BIN_DIR`. Note that
+    /// Python executables are only installed when preview mode is enabled.
     Dir(PythonDirArgs),
 
     /// Uninstall Python versions.
