@@ -16,6 +16,7 @@ from copy import deepcopy
 from typing import Any, Dict, List, Optional
 
 from compressed_tensors.quantization.quant_args import (
+    DynamicType,
     QuantizationArgs,
     QuantizationStrategy,
     QuantizationType,
@@ -48,7 +49,7 @@ class QuantizationScheme(BaseModel):
     output_activations: Optional[QuantizationArgs] = None
 
     @model_validator(mode="after")
-    def validate_model_after(model: "QuantizationArgs") -> Dict[str, Any]:
+    def validate_model_after(model: "QuantizationScheme") -> "QuantizationScheme":
         inputs = model.input_activations
         outputs = model.output_activations
 
@@ -99,6 +100,37 @@ def is_preset_scheme(name: str) -> bool:
 
 
 UNQUANTIZED = dict()
+
+NVFP4A16 = dict(
+    weights=QuantizationArgs(
+        num_bits=4,
+        type=QuantizationType.FLOAT,
+        strategy=QuantizationStrategy.TENSOR_GROUP,
+        symmetric=True,
+        dynamic=False,
+        group_size=16,
+    )
+)
+
+
+NVFP4 = dict(
+    weights=QuantizationArgs(
+        num_bits=4,
+        type=QuantizationType.FLOAT,
+        strategy=QuantizationStrategy.TENSOR_GROUP,
+        symmetric=True,
+        dynamic=False,
+        group_size=16,
+    ),
+    input_activations=QuantizationArgs(
+        num_bits=4,
+        type=QuantizationType.FLOAT,
+        strategy=QuantizationStrategy.TENSOR_GROUP,
+        symmetric=True,
+        dynamic=DynamicType.LOCAL,
+        group_size=16,
+    ),
+)
 
 # 8 bit integer weights and 8 bit activations quantization
 INT8_W8A8 = dict(
@@ -225,4 +257,6 @@ PRESET_SCHEMES = {
     # Float weight and activation schemes
     "FP8": FP8,
     "FP8_DYNAMIC": FP8_DYNAMIC,
+    "NVFP4A16": NVFP4A16,
+    "NVFP4": NVFP4,
 }

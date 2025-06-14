@@ -1,5 +1,3 @@
-import base64
-import json
 import logging
 import re
 import shutil
@@ -11,11 +9,16 @@ from urllib.parse import urlsplit, urlunsplit
 import typer
 from rich.console import Console
 
-from safety.tool.constants import PUBLIC_REPOSITORY_URL, ORGANIZATION_REPOSITORY_URL
+from safety.tool.constants import (
+    PUBLIC_REPOSITORY_URL,
+    ORGANIZATION_REPOSITORY_URL,
+    PROJECT_REPOSITORY_URL,
+)
 from safety.tool.resolver import get_unwrapped_command
 
 from safety.console import main_console
-
+from safety.tool.auth import index_credentials
+from ...encoding import detect_encoding
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +39,7 @@ class Pip:
         cls,
         file: Path,
         org_slug: Optional[str],
+        project_id: Optional[str],
         console: Console = main_console,
     ) -> Optional[Path]:
         """
@@ -44,16 +48,21 @@ class Pip:
         Args:
             file (Path): Path to requirements.txt file.
             org_slug (str): Organization slug.
+            project_id (str): Project identifier.
             console (Console): Console instance.
         """
 
-        with open(file, "r+") as f:
+        with open(file, "r+", encoding=detect_encoding(file)) as f:
             content = f.read()
 
             repository_url = (
-                ORGANIZATION_REPOSITORY_URL.format(org_slug)
-                if org_slug
-                else PUBLIC_REPOSITORY_URL
+                PROJECT_REPOSITORY_URL.format(org_slug, project_id)
+                if project_id and org_slug
+                else (
+                    ORGANIZATION_REPOSITORY_URL.format(org_slug)
+                    if org_slug
+                    else PUBLIC_REPOSITORY_URL
+                )
             )
             index_config = f"-i {repository_url}\n"
             if content.find(index_config) == -1:
@@ -128,26 +137,6 @@ class Pip:
             console.print("Failed to reset PIP global settings.")
 
     @classmethod
-    def index_credentials(cls, ctx: typer.Context):
-        api_key = None
-        token = None
-
-        if auth := getattr(ctx.obj, "auth", None):
-            client = auth.client
-            token = client.token.get("access_token") if client.token else None
-            api_key = client.api_key
-
-        auth_envelop = json.dumps(
-            {
-                "version": "1.0",
-                "access_token": token,
-                "api_key": api_key,
-                "project_id": ctx.obj.project.id if ctx.obj.project else None,
-            }
-        )
-        return base64.urlsafe_b64encode(auth_envelop.encode("utf-8")).decode("utf-8")
-
-    @classmethod
     def default_index_url(cls) -> str:
         return "https://pypi.org/simple/"
 
@@ -158,7 +147,7 @@ class Pip:
 
         url = urlsplit(index_url)
 
-        encoded_auth = cls.index_credentials(ctx)
+        encoded_auth = index_credentials(ctx)
         netloc = f"user:{encoded_auth}@{url.netloc}"
 
         if type(url.netloc) is bytes:

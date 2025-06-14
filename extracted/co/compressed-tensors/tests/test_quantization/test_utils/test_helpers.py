@@ -14,8 +14,13 @@
 
 import pytest
 import torch
-from compressed_tensors.quantization import QuantizationArgs, QuantizationStrategy
-from compressed_tensors.quantization.utils import calculate_qparams
+from compressed_tensors.quantization import (
+    FP4_E2M1_DATA,
+    FP8_E4M3_DATA,
+    QuantizationArgs,
+    QuantizationStrategy,
+)
+from compressed_tensors.quantization.utils import calculate_qparams, generate_gparam
 
 
 @pytest.mark.parametrize(
@@ -56,3 +61,15 @@ def test_calculate_qparams(keepdims, strategy, exp_shape):
         scale, zp = calculate_qparams(min_val, max_val, args)
         assert scale.shape == exp_shape
         assert zp.shape == exp_shape
+
+
+def test_fused_global_scales():
+    layer = torch.nn.Linear(7, 8)
+    max_tensor_value = torch.abs(layer.weight.data).max()
+    # use defaults
+    min_val, max_val = torch.aminmax(layer.weight)
+    global_scale = generate_gparam(min_val.data, max_val.data)
+    # max value should be = (448 * 6) / global_scale
+    assert max_tensor_value.item() == pytest.approx(
+        FP4_E2M1_DATA.max * FP8_E4M3_DATA.max / global_scale, abs=0.001
+    )

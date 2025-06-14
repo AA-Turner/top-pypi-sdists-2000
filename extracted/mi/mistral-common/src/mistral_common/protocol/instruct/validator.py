@@ -34,25 +34,73 @@ from mistral_common.protocol.instruct.tool_calls import (
 
 
 class ValidationMode(Enum):
+    r"""Enum for the validation mode.
+
+    Attributes:
+        serving: The serving mode.
+        finetuning: The finetuning mode.
+        test: The test mode.
+
+    Examples:
+        >>> mode = ValidationMode.serving
+    """
+
     serving = "serving"
     finetuning = "finetuning"
     test = "test"
 
 
 class MistralRequestValidator(Generic[UserMessageType, AssistantMessageType, ToolMessageType, SystemMessageType]):
+    r"""Validator for Mistral requests.
+
+    This class validates the structure and content of Mistral requests.
+
+    Examples:
+        >>> from mistral_common.protocol.instruct.messages import UserMessage, AssistantMessage
+        >>> validator = MistralRequestValidator()
+        >>> messages = [UserMessage(content="Hello how are you ?")]
+        >>> validator.validate_messages(messages)
+    """
+
+    _allow_tool_call_and_content: bool = False
+
     def __init__(self, mode: ValidationMode = ValidationMode.test):
+        r"""Initializes the `MistralRequestValidator`.
+
+        Args:
+            mode: The validation mode. Defaults to ValidationMode.test.
+        """
         self._mode = mode
 
     def validate_messages(self, messages: List[UATS]) -> None:
-        """
-        Validates the list of messages
+        r"""Validates the list of messages.
+
+        Args:
+            messages: The list of messages to validate.
+
+        Examples:
+            >>> from mistral_common.protocol.instruct.messages import UserMessage, AssistantMessage
+            >>> validator = MistralRequestValidator()
+            >>> messages = [AssistantMessage(content="Hi"), UserMessage(content="Hello")]
+            >>> validator.validate_messages(messages)
         """
         self._validate_message_list_structure(messages)
         self._validate_message_list_content(messages)
 
     def validate_request(self, request: ChatCompletionRequest) -> ChatCompletionRequest[UATS]:
-        """
-        Validates the request
+        r"""Validates the request
+
+        Args:
+            request: The request to validate.
+
+        Returns:
+            The validated request.
+
+        Examples:
+            >>> from mistral_common.protocol.instruct.messages import UserMessage
+            >>> validator = MistralRequestValidator()
+            >>> request = ChatCompletionRequest(messages=[UserMessage(content="Hello")])
+            >>> validated_request = validator.validate_request(request)
         """
 
         if self._mode == ValidationMode.serving:
@@ -143,7 +191,7 @@ class MistralRequestValidator(Generic[UserMessageType, AssistantMessageType, Too
 
         # Validate that the message has either text or tool_calls
         # but not both and not neither.
-        if bool(message.content) == bool(message.tool_calls):
+        if (not self._allow_tool_call_and_content) and (bool(message.content) == bool(message.tool_calls)):
             raise InvalidAssistantMessageException(
                 "Assistant message must have either content or tool_calls, but not both."
             )
@@ -278,6 +326,14 @@ class MistralRequestValidator(Generic[UserMessageType, AssistantMessageType, Too
 
 
 class MistralRequestValidatorV3(MistralRequestValidator):
+    r"""Validator for v3 Mistral requests.
+
+    This validator adds additional validation for tool call IDs.
+
+    Examples:
+        >>> validator = MistralRequestValidatorV3()
+    """
+
     def _validate_tool_message(self, message: ToolMessageType) -> None:
         """
         Checks:
@@ -326,3 +382,15 @@ class MistralRequestValidatorV3(MistralRequestValidator):
             if message.tool_calls is not None:
                 for tool_call in message.tool_calls:
                     self._validate_tool_call(tool_call, is_last_message=True)
+
+
+class MistralRequestValidatorV5(MistralRequestValidatorV3):
+    r"""Validator for v5 Mistral requests.
+
+    This validator allows for both tool calls and content in the assistant message.
+
+    Examples:
+        >>> validator = MistralRequestValidatorV5()
+    """
+
+    _allow_tool_call_and_content: bool = True

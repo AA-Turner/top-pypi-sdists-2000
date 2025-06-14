@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "confluent-kafka"
-version = "2.10.0"
+version = "2.10.1"
 description = "Confluent's Python client for Apache Kafka"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -73,3 +73,6 @@ optional-dependencies.all = { file = [
     "requirements/requirements-avro.txt",
     "requirements/requirements-json.txt",
     "requirements/requirements-protobuf.txt"] }
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

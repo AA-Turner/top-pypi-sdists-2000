@@ -146,7 +146,8 @@ class Prepare:
             )
             for k, v in f.params.items():
                 kv_pair = common_types.KeyValuePair(
-                    key=str(k) if k != "mmap_enabled" else "mmap.enabled", value=ujson.dumps(v)
+                    key=str(k) if k != "mmap_enabled" else "mmap.enabled",
+                    value=ujson.dumps(v) if not isinstance(v, str) else str(v),
                 )
                 field_schema.type_params.append(kv_pair)
 
@@ -224,7 +225,8 @@ class Prepare:
             raise ParamError(message="params should be dictionary type")
         kvs = [
             common_types.KeyValuePair(
-                key=str(k) if k != "mmap_enabled" else "mmap.enabled", value=str(v)
+                key=str(k) if k != "mmap_enabled" else "mmap.enabled",
+                value=str(v),
             )
             for k, v in type_params.items()
         ]
@@ -264,7 +266,6 @@ class Prepare:
             (field_schema, primary_field, auto_id_field) = cls.get_field_schema(
                 field, primary_field, auto_id_field
             )
-
             schema.fields.append(field_schema)
         return schema
 
@@ -1191,23 +1192,39 @@ class Prepare:
     @classmethod
     def load_collection(
         cls,
-        db_name: str,
         collection_name: str,
-        replica_number: int,
-        refresh: bool,
-        resource_groups: List[str],
-        load_fields: List[str],
-        skip_load_dynamic_field: bool,
+        replica_number: Optional[int] = None,
+        **kwargs,
     ):
-        return milvus_types.LoadCollectionRequest(
-            db_name=db_name,
+        check_pass_param(collection_name=collection_name)
+        req = milvus_types.LoadCollectionRequest(
             collection_name=collection_name,
-            replica_number=replica_number,
-            refresh=refresh,
-            resource_groups=resource_groups,
-            load_fields=load_fields,
-            skip_load_dynamic_field=skip_load_dynamic_field,
         )
+
+        if replica_number:
+            check_pass_param(replica_number=replica_number)
+            req.replica_number = replica_number
+
+        # Keep underscore key for backward compatibility
+        if "refresh" in kwargs or "_refresh" in kwargs:
+            refresh = kwargs.get("refresh", kwargs.get("_refresh", False))
+            req.refresh = refresh
+
+        if "resource_groups" in kwargs or "_resource_groups" in kwargs:
+            resource_groups = kwargs.get("resource_groups", kwargs.get("_resource_groups"))
+            req.resource_groups.extend(resource_groups)
+
+        if "load_fields" in kwargs or "_load_fields" in kwargs:
+            load_fields = kwargs.get("load_fields", kwargs.get("_load_fields"))
+            req.load_fields.extend(load_fields)
+
+        if "skip_load_dynamic_field" in kwargs or "_skip_load_dynamic_field" in kwargs:
+            skip_load_dynamic_field = kwargs.get(
+                "skip_load_dynamic_field", kwargs.get("_skip_load_dynamic_field", False)
+            )
+            req.skip_load_dynamic_field = skip_load_dynamic_field
+
+        return req
 
     @classmethod
     def release_collection(cls, db_name: str, collection_name: str):
@@ -1218,25 +1235,43 @@ class Prepare:
     @classmethod
     def load_partitions(
         cls,
-        db_name: str,
         collection_name: str,
         partition_names: List[str],
-        replica_number: int,
-        refresh: bool,
-        resource_groups: List[str],
-        load_fields: List[str],
-        skip_load_dynamic_field: bool,
+        replica_number: Optional[int] = None,
+        **kwargs,
     ):
-        return milvus_types.LoadPartitionsRequest(
-            db_name=db_name,
+        check_pass_param(collection_name=collection_name)
+        req = milvus_types.LoadPartitionsRequest(
             collection_name=collection_name,
-            partition_names=partition_names,
-            replica_number=replica_number,
-            refresh=refresh,
-            resource_groups=resource_groups,
-            load_fields=load_fields,
-            skip_load_dynamic_field=skip_load_dynamic_field,
         )
+
+        if partition_names:
+            check_pass_param(partition_name_array=partition_names)
+            req.partition_names.extend(partition_names)
+
+        if replica_number:
+            check_pass_param(replica_number=replica_number)
+            req.replica_number = replica_number
+
+        # Keep underscore key for backward compatibility
+        if "refresh" in kwargs or "_refresh" in kwargs:
+            refresh = kwargs.get("refresh", kwargs.get("_refresh", False))
+            req.refresh = refresh
+
+        if "resource_groups" in kwargs or "_resource_groups" in kwargs:
+            resource_groups = kwargs.get("resource_groups", kwargs.get("_resource_groups"))
+            req.resource_groups.extend(resource_groups)
+
+        if "load_fields" in kwargs or "_load_fields" in kwargs:
+            load_fields = kwargs.get("load_fields", kwargs.get("_load_fields"))
+            req.load_fields.extend(load_fields)
+
+        if "skip_load_dynamic_field" in kwargs or "_skip_load_dynamic_field" in kwargs:
+            skip_load_dynamic_field = kwargs.get(
+                "skip_load_dynamic_field", kwargs.get("_skip_load_dynamic_field", False)
+            )
+            req.skip_load_dynamic_field = skip_load_dynamic_field
+        return req
 
     @classmethod
     def release_partitions(cls, db_name: str, collection_name: str, partition_names: List[str]):
@@ -1732,9 +1767,12 @@ class Prepare:
     def run_analyzer(
         cls,
         texts: Union[str, List[str]],
-        analyzer_params: Union[str, Dict],
+        analyzer_params: Optional[Union[str, Dict]] = None,
         with_hash: bool = False,
         with_detail: bool = False,
+        collection_name: Optional[str] = None,
+        field_name: Optional[str] = None,
+        analyzer_names: Optional[Union[str, List[str]]] = None,
     ):
         req = milvus_types.RunAnalyzerRequest(with_hash=with_hash, with_detail=with_detail)
         if isinstance(texts, str):
@@ -1742,9 +1780,21 @@ class Prepare:
         else:
             req.placeholder.extend([text.encode("utf-8") for text in texts])
 
-        if isinstance(analyzer_params, dict):
-            req.analyzer_params = ujson.dumps(analyzer_params)
-        else:
-            req.analyzer_params = analyzer_params
+        if analyzer_params is not None:
+            if isinstance(analyzer_params, dict):
+                req.analyzer_params = ujson.dumps(analyzer_params)
+            else:
+                req.analyzer_params = analyzer_params
 
+        if collection_name is not None:
+            req.collection_name = collection_name
+
+        if field_name is not None:
+            req.field_name = field_name
+
+        if analyzer_names is not None:
+            if isinstance(analyzer_names, str):
+                req.analyzer_names.extend([analyzer_names])
+            else:
+                req.analyzer_names.extend(analyzer_names)
         return req

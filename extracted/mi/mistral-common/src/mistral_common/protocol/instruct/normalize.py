@@ -25,17 +25,21 @@ from mistral_common.tokens.tokenizers.base import InstructRequestType, Tokenizer
 class InstructRequestNormalizer(
     Generic[UserMessageType, AssistantMessageType, ToolMessageType, SystemMessageType, InstructRequestType]
 ):
-    """
-    Takes a ChatCompletionRequest and normalizes it into an InstructRequest.
+    r"""Takes a [ChatCompletionRequest][mistral_common.protocol.instruct.request.ChatCompletionRequest] and normalizes
+    it into an [InstructRequest][mistral_common.tokens.instruct.request.InstructRequest].
 
     The normalization process does several things such as:
     - Aggregate consecutive messages of the same role
     - Aggregate system prompts
     - Normalize json content
     - Normalize tool calls
+
+    Examples:
+        >>> normalizer = InstructRequestNormalizer.normalizer()
     """
 
-    system_prompt_in_begin: bool = False
+    _system_prompt_in_begin: bool = False
+    _allow_tool_call_and_content: bool = False
 
     def __init__(
         self,
@@ -45,6 +49,15 @@ class InstructRequestNormalizer(
         system_message_class: Type[SystemMessageType],
         instruct_request_class: Type[InstructRequestType],
     ):
+        r"""Initializes the normalizer with the appropriate message classes.
+
+        Args:
+           user_message_class: The class for user messages.
+           assistant_message_class: The class for assistant messages.
+           tool_message_class: The class for tool messages.
+           system_message_class: The class for system messages.
+           instruct_request_class: The class for instruct requests.
+        """
         self._user_message_class = user_message_class
         self._assistant_message_class = assistant_message_class
         self._tool_message_class = tool_message_class
@@ -54,6 +67,11 @@ class InstructRequestNormalizer(
 
     @staticmethod
     def normalizer() -> "InstructRequestNormalizer":
+        r"""Returns a normalizer for the default instruct request.
+
+        Examples:
+            >>> normalizer = InstructRequestNormalizer.normalizer()
+        """
         return InstructRequestNormalizer(
             UserMessage,
             AssistantMessage,
@@ -119,19 +137,25 @@ class InstructRequestNormalizer(
         weight: Optional[float] = None
         for message in messages:
             assert isinstance(message, self._assistant_message_class), "Expected assistant message"
-            if message.tool_calls is not None and len(message.tool_calls) > 0:
+
+            if not self._allow_tool_call_and_content and (message.tool_calls and message.content):
+                raise ValueError(f"Tool calls and content cannot be used together in the same message. {message}")
+
+            if message.tool_calls:
                 for tool_call in message.tool_calls:
                     normalized_tool_call = self._normalize_tool_call(tool_call)
                     tool_calls.append(normalized_tool_call)
-            elif message.content:
+
+            if message.content:
                 aggregated_content.append(self._aggregate_content_chunks(message.content))
+
             prefix |= message.prefix
             if isinstance(message, FinetuningAssistantMessage):
                 # Only FinetuningAssistantMessage can be weighted
                 if weight is not None:
-                    assert (
-                        weight == message.weight
-                    ), "Expected weights of aggregated FinetuningAssistantMessage to be equal"
+                    assert weight == message.weight, (
+                        "Expected weights of aggregated FinetuningAssistantMessage to be equal"
+                    )
                 weight = message.weight
 
         aggregated_message = self._assistant_message_class(
@@ -208,13 +232,32 @@ class InstructRequestNormalizer(
         # If the first message is not a user message, or we didnt aggregate
         # anything (all system messages) for example, add an empty user message
         if len(aggregated_messages) == 0 or (
-            not self.system_prompt_in_begin and aggregated_messages[0].role != Roles.user
+            not self._system_prompt_in_begin and aggregated_messages[0].role != Roles.user
         ):
             aggregated_messages.insert(0, self._user_message_class(content=""))
 
         return aggregated_messages
 
     def from_chat_completion_request(self, request: ChatCompletionRequest[UATS]) -> InstructRequestType:
+        r"""Converts a chat completion request to an instruct request.
+
+        Args:
+            request: The chat completion request to convert.
+
+        Returns:
+            The converted instruct request.
+
+        Examples:
+            >>> from mistral_common.protocol.instruct.messages import UserMessage, AssistantMessage
+            >>> request = ChatCompletionRequest(
+            ...     messages=[
+            ...         UserMessage(content="Hello"),
+            ...         AssistantMessage(content="Hi"),
+            ...     ],
+            ... )
+            >>> normalizer = InstructRequestNormalizer.normalizer()
+            >>> instruct_request = normalizer.from_chat_completion_request(request)
+        """
         system_prompt = self._aggregate_system_prompts(request)
         messages = self._aggregate_messages(request)
 
@@ -224,10 +267,22 @@ class InstructRequestNormalizer(
 
 
 class InstructRequestNormalizerV7(InstructRequestNormalizer):
-    system_prompt_in_begin: bool = True
+    r"""Normalizer for the v7 tokenizer.
+
+    Examples:
+        >>> normalizer = InstructRequestNormalizerV7.normalizer()
+    """
+
+    _system_prompt_in_begin: bool = True
+    _allow_tool_call_and_content: bool = True
 
     @staticmethod
     def normalizer() -> "InstructRequestNormalizerV7":
+        r"""Returns a normalizer for the default instruct request
+
+        Examples:
+            >>> normalizer = InstructRequestNormalizerV7.normalizer()
+        """
         return InstructRequestNormalizerV7(
             UserMessage,
             AssistantMessage,
@@ -253,13 +308,43 @@ class InstructRequestNormalizerV7(InstructRequestNormalizer):
         raise NotImplementedError("We should not aggregate system prompts")
 
     def from_chat_completion_request(self, request: ChatCompletionRequest[UATS]) -> InstructRequestType:  # type: ignore[type-var]
+        r"""Converts a chat completion request to an instruct request.
+
+        Args:
+            request: The chat completion request to convert.
+
+        Returns:
+            The converted instruct request.
+
+        Examples:
+            >>> from mistral_common.protocol.instruct.messages import UserMessage, AssistantMessage
+            >>> request = ChatCompletionRequest(
+            ...     messages=[
+            ...         UserMessage(content="Hello"),
+            ...         AssistantMessage(content="Hi"),
+            ...     ],
+            ... )
+            >>> normalizer = InstructRequestNormalizerV7.normalizer()
+            >>> instruct_request = normalizer.from_chat_completion_request(request)
+        """
         messages = self._aggregate_messages(request)
         return self._instruct_request_class(messages=messages, system_prompt=None, available_tools=request.tools)  # type: ignore[no-any-return]
 
 
 def normalizer_for_tokenizer_version(version: TokenizerVersion) -> InstructRequestNormalizer:
+    """Gets the appropriate normalizer for the given tokenizer version.
+
+    Args:
+        version: The tokenizer version to get the normalizer for.
+
+    Returns:
+        The appropriate normalizer for the given tokenizer version.
+
+    Examples:
+        >>> normalizer = normalizer_for_tokenizer_version(TokenizerVersion.v1)
+    """
     if version in {TokenizerVersion.v1, TokenizerVersion.v2, TokenizerVersion.v3}:
         return InstructRequestNormalizer.normalizer()
-    elif version == TokenizerVersion.v7:
+    elif version in {TokenizerVersion.v7, TokenizerVersion.v11}:
         return InstructRequestNormalizerV7.normalizer()
     raise ValueError(f"Unknown tokenizer version {version}")

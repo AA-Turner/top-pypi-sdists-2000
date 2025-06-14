@@ -13,13 +13,18 @@
 # limitations under the License.
 
 
+import math
+
 import pytest
+import torch
 from compressed_tensors.quantization import (
+    FP8_E4M3_DATA,
     ActivationOrdering,
     QuantizationArgs,
     QuantizationScheme,
     QuantizationStatus,
     QuantizationStrategy,
+    QuantizationType,
 )
 from compressed_tensors.quantization.lifecycle.initialize import (
     initialize_module_for_quantization,
@@ -151,6 +156,24 @@ def test_initialize_module_for_quantization_offloaded(
             None,
         ),
         (
+            QuantizationArgs(
+                strategy="tensor_group", group_size=16, type="float", num_bits=4
+            ),
+            None,
+        ),
+        (
+            QuantizationArgs(
+                strategy="tensor_group", group_size=16, type="float", num_bits=4
+            ),
+            QuantizationArgs(
+                strategy="tensor_group",
+                group_size=16,
+                type="float",
+                num_bits=4,
+                dynamic="local",
+            ),
+        ),
+        (
             QuantizationArgs(strategy="block"),
             QuantizationArgs(strategy="block"),
         ),
@@ -175,6 +198,20 @@ def test_initialize_quantization_parameters(weights, input_activations):
             continue
         q_param_name = Q_PARAM_NAMES[q_type]
 
+        if args.strategy == QuantizationStrategy.TENSOR_GROUP:
+            if q_type == "weights":
+                assert hasattr(layer, "weight_global_scale")
+                assert layer.weight_global_scale.dtype == torch.float32
+                assert layer.weight_global_scale.numel() == 1
+                assert layer.weight_scale.dtype == FP8_E4M3_DATA.dtype
+            elif q_type == "input_activations":
+                assert hasattr(layer, "input_global_scale")
+                assert layer.input_global_scale.dtype == torch.float32
+                assert layer.input_global_scale.numel() == 1
+        else:
+            assert not hasattr(layer, "weight_global_scale")
+            assert not hasattr(layer, "input_global_scale")
+
         # scale and zero point
         if args.strategy == QuantizationStrategy.TENSOR:
             expected_shape = (1,)
@@ -182,8 +219,11 @@ def test_initialize_quantization_parameters(weights, input_activations):
         elif args.strategy == QuantizationStrategy.CHANNEL:  # only weight
             expected_shape = (layer.weight.shape[0], 1)
 
-        elif args.strategy == QuantizationStrategy.GROUP:  # only weight
-            num_groups = layer.weight.shape[1] // args.group_size
+        elif args.strategy in (
+            QuantizationStrategy.TENSOR_GROUP,
+            QuantizationStrategy.GROUP,
+        ):
+            num_groups = math.ceil(layer.weight.shape[1] / args.group_size)
             expected_shape = (layer.weight.shape[0], max(num_groups, 1))
 
         elif args.strategy == QuantizationStrategy.BLOCK:
@@ -192,8 +232,9 @@ def test_initialize_quantization_parameters(weights, input_activations):
         elif args.strategy == QuantizationStrategy.TOKEN:
             expected_shape = (1, 1)
 
-        assert getattr(layer, f"{q_param_name}_scale").shape == expected_shape
-        assert getattr(layer, f"{q_param_name}_zero_point").shape == expected_shape
+        if not args.dynamic:
+            assert getattr(layer, f"{q_param_name}_scale").shape == expected_shape
+            assert getattr(layer, f"{q_param_name}_zero_point").shape == expected_shape
 
         # g_idx
         if args.actorder == ActivationOrdering.GROUP:

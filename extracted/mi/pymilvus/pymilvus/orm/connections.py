@@ -292,6 +292,10 @@ class Connections(metaclass=SingleInstanceMetaClass):
         if alias in self._connected_alias:
             await self._connected_alias.pop(alias).close()
 
+    async def async_remove_connection(self, alias: str):
+        await self.async_disconnect(alias)
+        self._alias.pop(alias, None)
+
     def remove_connection(self, alias: str):
         """Removes connection from the registry.
 
@@ -410,10 +414,10 @@ class Connections(metaclass=SingleInstanceMetaClass):
             if not _async:
                 gh._wait_for_channel_ready(timeout=timeout)
 
-            if kwargs.get("keep_alive", False):
-                gh.register_state_change_callback(
-                    ReconnectHandler(self, alias, kwargs_copy).reconnect_on_idle
-                )
+                if kwargs.pop("keep_alive", False):
+                    gh.register_state_change_callback(
+                        ReconnectHandler(self, alias, kwargs_copy).reconnect_on_idle
+                    )
             kwargs.pop("password")
             kwargs.pop("token", None)
             kwargs.pop("db_name", "")

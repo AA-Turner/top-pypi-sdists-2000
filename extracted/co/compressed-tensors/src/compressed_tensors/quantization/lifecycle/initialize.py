@@ -14,24 +14,26 @@
 
 
 import logging
+import math
 from enum import Enum
-from typing import Optional
+from typing import List, Optional
 
 import torch
 from compressed_tensors.quantization.lifecycle.forward import (
     wrap_module_forward_quantized,
 )
 from compressed_tensors.quantization.quant_args import (
+    FP8_E4M3_DATA,
     ActivationOrdering,
     QuantizationArgs,
     QuantizationStrategy,
 )
 from compressed_tensors.quantization.quant_config import QuantizationStatus
 from compressed_tensors.quantization.quant_scheme import QuantizationScheme
-from compressed_tensors.quantization.utils import is_kv_cache_quant_scheme
+from compressed_tensors.quantization.utils import is_fp4, is_kv_cache_quant_scheme
 from compressed_tensors.utils import (
     disable_hf_hook,
-    has_offloaded_params,
+    get_execution_device,
     register_offload_parameter,
 )
 from torch.nn import Module, Parameter
@@ -145,16 +147,24 @@ def _initialize_scale_zero_point(
     force_zero_point: bool = True,
     scale_dtype: Optional[torch.dtype] = None,
 ):
-    if quantization_args.dynamic:
+    if quantization_args.dynamic is True:
         return
 
-    # begin on the same device as other parameters or cpu if offloaded.
-    # in the offloaded case, there's no point moving tensors to the execution device
-    # if they're going to be immediately offloaded by `register_offload_parameter`
-    params_device = next(module.parameters()).device
-    device = "cpu" if has_offloaded_params(module) else params_device
+    # initialize on execution device to avoid performing quantized ops on cpu
+    device = get_execution_device(module)
 
-    # infer expected scale/zero point shape
+    # 1. Create global_scales for tensor_group - generates
+    # a per tensor scale
+    if quantization_args.strategy == QuantizationStrategy.TENSOR_GROUP:
+        init_global_scale = Parameter(
+            torch.empty(1, dtype=torch.float32, device=device),
+            requires_grad=False,
+        )
+        register_offload_parameter(
+            module, f"{base_name}_global_scale", init_global_scale
+        )
+
+    # 2. Infer expected scale/zero point shape
     if quantization_args.strategy == QuantizationStrategy.TOKEN:
         expected_shape = (1, 1)
     else:
@@ -164,26 +174,35 @@ def _initialize_scale_zero_point(
         if quantization_args.strategy == QuantizationStrategy.CHANNEL:
             # (output_channels, 1)
             expected_shape = (weight_shape[0], 1)
-        elif quantization_args.strategy == QuantizationStrategy.GROUP:
-            num_groups = weight_shape[1] // quantization_args.group_size
+        elif quantization_args.strategy in (
+            QuantizationStrategy.TENSOR_GROUP,
+            QuantizationStrategy.GROUP,
+        ):
+            num_groups = math.ceil(weight_shape[1] / quantization_args.group_size)
             expected_shape = (weight_shape[0], max(num_groups, 1))
 
+    # 3. Identify quantization scale and zp dtype
     scale_dtype = scale_dtype if scale_dtype is not None else module.weight.dtype
-    # TODO: consider erroring out in the future as if the dtype if not one fo these,
-    # there is likely bug
 
-    if scale_dtype not in [torch.float16, torch.bfloat16, torch.float32]:
-        scale_dtype = torch.float16
+    if is_fp4(quantization_args=quantization_args):
+        scale_dtype = zp_dtype = FP8_E4M3_DATA.dtype
+    else:
+        # TODO: consider erroring out in the future as if the dtype if not one of these,
+        # there is likely bug
+        if scale_dtype not in [torch.float16, torch.bfloat16, torch.float32]:
+            scale_dtype = torch.float16
+        zp_dtype = quantization_args.pytorch_dtype()
 
-    # initializes empty scale, zero point, and g_idx parameters for the module
-    init_scale = Parameter(
-        torch.empty(expected_shape, dtype=scale_dtype, device=device),
-        requires_grad=False,
-    )
-    register_offload_parameter(module, f"{base_name}_scale", init_scale)
+    # 4. Initializes empty scale, zero point, and g_idx parameters for the module
+    # do not init scales for quantzation_args.dynamic == DynamicType.local
+    if not quantization_args.dynamic:
+        init_scale = Parameter(
+            torch.empty(expected_shape, dtype=scale_dtype, device=device),
+            requires_grad=False,
+        )
+        register_offload_parameter(module, f"{base_name}_scale", init_scale)
 
     if force_zero_point or not quantization_args.symmetric:
-        zp_dtype = quantization_args.pytorch_dtype()
         init_zero_point = Parameter(
             torch.zeros(expected_shape, device=device, dtype=zp_dtype),
             requires_grad=False,
