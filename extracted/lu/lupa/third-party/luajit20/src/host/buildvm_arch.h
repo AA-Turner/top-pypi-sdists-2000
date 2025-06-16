@@ -8,7 +8,7 @@
 #line 1 "vm_x86.dasc"
 //|// Low-level VM code for x86 CPUs.
 //|// Bytecode interpreter, fast functions and helper functions.
-//|// Copyright (C) 2005-2023 Mike Pall. See Copyright Notice in luajit.h
+//|// Copyright (C) 2005-2025 Mike Pall. See Copyright Notice in luajit.h
 //|
 //|.if P64
 //|.arch x64

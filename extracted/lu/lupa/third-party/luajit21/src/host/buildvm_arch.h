@@ -8,7 +8,7 @@
 #line 1 "vm_x64.dasc"
 //|// Low-level VM code for x64 CPUs in LJ_GC64 mode.
 //|// Bytecode interpreter, fast functions and helper functions.
-//|// Copyright (C) 2005-2023 Mike Pall. See Copyright Notice in luajit.h
+//|// Copyright (C) 2005-2025 Mike Pall. See Copyright Notice in luajit.h
 //|
 //|.arch x64
 #if DASM_VERSION != 10500
