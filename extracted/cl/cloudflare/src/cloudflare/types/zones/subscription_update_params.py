@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 from ..shared_params.rate_plan import RatePlan
 
@@ -10,6 +10,9 @@ __all__ = ["SubscriptionUpdateParams"]
 
 
 class SubscriptionUpdateParams(TypedDict, total=False):
+    zone_id: Required[str]
+    """Subscription identifier tag."""
+
     frequency: Literal["weekly", "monthly", "quarterly", "yearly"]
     """How often the subscription is renewed automatically."""
 

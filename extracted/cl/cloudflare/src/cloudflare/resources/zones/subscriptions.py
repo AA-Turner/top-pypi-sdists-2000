@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
+from typing import Type, cast
 from typing_extensions import Literal
 
 import httpx
@@ -20,10 +20,8 @@ from ..._response import (
 from ..._wrappers import ResultWrapper
 from ...types.zones import subscription_create_params, subscription_update_params
 from ..._base_client import make_request_options
+from ...types.shared.subscription import Subscription
 from ...types.shared_params.rate_plan import RatePlan
-from ...types.zones.subscription_get_response import SubscriptionGetResponse
-from ...types.zones.subscription_create_response import SubscriptionCreateResponse
-from ...types.zones.subscription_update_response import SubscriptionUpdateResponse
 
 __all__ = ["SubscriptionsResource", "AsyncSubscriptionsResource"]
 
@@ -50,8 +48,8 @@ class SubscriptionsResource(SyncAPIResource):
 
     def create(
         self,
-        identifier: str,
         *,
+        zone_id: str,
         frequency: Literal["weekly", "monthly", "quarterly", "yearly"] | NotGiven = NOT_GIVEN,
         rate_plan: RatePlan | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -60,12 +58,12 @@ class SubscriptionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SubscriptionCreateResponse:
+    ) -> Subscription:
         """
         Create a zone subscription, either plan or add-ons.
 
         Args:
-          identifier: Subscription identifier tag.
+          zone_id: Subscription identifier tag.
 
           frequency: How often the subscription is renewed automatically.
 
@@ -79,36 +77,31 @@ class SubscriptionsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not identifier:
-            raise ValueError(f"Expected a non-empty value for `identifier` but received {identifier!r}")
-        return cast(
-            SubscriptionCreateResponse,
-            self._post(
-                f"/zones/{identifier}/subscription",
-                body=maybe_transform(
-                    {
-                        "frequency": frequency,
-                        "rate_plan": rate_plan,
-                    },
-                    subscription_create_params.SubscriptionCreateParams,
-                ),
-                options=make_request_options(
-                    extra_headers=extra_headers,
-                    extra_query=extra_query,
-                    extra_body=extra_body,
-                    timeout=timeout,
-                    post_parser=ResultWrapper[SubscriptionCreateResponse]._unwrapper,
-                ),
-                cast_to=cast(
-                    Any, ResultWrapper[SubscriptionCreateResponse]
-                ),  # Union types cannot be passed in as arguments in the type system
+        if not zone_id:
+            raise ValueError(f"Expected a non-empty value for `zone_id` but received {zone_id!r}")
+        return self._post(
+            f"/zones/{zone_id}/subscription",
+            body=maybe_transform(
+                {
+                    "frequency": frequency,
+                    "rate_plan": rate_plan,
+                },
+                subscription_create_params.SubscriptionCreateParams,
             ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                post_parser=ResultWrapper[Subscription]._unwrapper,
+            ),
+            cast_to=cast(Type[Subscription], ResultWrapper[Subscription]),
         )
 
     def update(
         self,
-        identifier: str,
         *,
+        zone_id: str,
         frequency: Literal["weekly", "monthly", "quarterly", "yearly"] | NotGiven = NOT_GIVEN,
         rate_plan: RatePlan | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -117,12 +110,12 @@ class SubscriptionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SubscriptionUpdateResponse:
+    ) -> Subscription:
         """
         Updates zone subscriptions, either plan or add-ons.
 
         Args:
-          identifier: Subscription identifier tag.
+          zone_id: Subscription identifier tag.
 
           frequency: How often the subscription is renewed automatically.
 
@@ -136,48 +129,43 @@ class SubscriptionsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not identifier:
-            raise ValueError(f"Expected a non-empty value for `identifier` but received {identifier!r}")
-        return cast(
-            SubscriptionUpdateResponse,
-            self._put(
-                f"/zones/{identifier}/subscription",
-                body=maybe_transform(
-                    {
-                        "frequency": frequency,
-                        "rate_plan": rate_plan,
-                    },
-                    subscription_update_params.SubscriptionUpdateParams,
-                ),
-                options=make_request_options(
-                    extra_headers=extra_headers,
-                    extra_query=extra_query,
-                    extra_body=extra_body,
-                    timeout=timeout,
-                    post_parser=ResultWrapper[SubscriptionUpdateResponse]._unwrapper,
-                ),
-                cast_to=cast(
-                    Any, ResultWrapper[SubscriptionUpdateResponse]
-                ),  # Union types cannot be passed in as arguments in the type system
+        if not zone_id:
+            raise ValueError(f"Expected a non-empty value for `zone_id` but received {zone_id!r}")
+        return self._put(
+            f"/zones/{zone_id}/subscription",
+            body=maybe_transform(
+                {
+                    "frequency": frequency,
+                    "rate_plan": rate_plan,
+                },
+                subscription_update_params.SubscriptionUpdateParams,
             ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                post_parser=ResultWrapper[Subscription]._unwrapper,
+            ),
+            cast_to=cast(Type[Subscription], ResultWrapper[Subscription]),
         )
 
     def get(
         self,
-        identifier: str,
         *,
+        zone_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SubscriptionGetResponse:
+    ) -> Subscription:
         """
         Lists zone subscription details.
 
         Args:
-          identifier: Subscription identifier tag.
+          zone_id: Subscription identifier tag.
 
           extra_headers: Send extra headers
 
@@ -187,23 +175,18 @@ class SubscriptionsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not identifier:
-            raise ValueError(f"Expected a non-empty value for `identifier` but received {identifier!r}")
-        return cast(
-            SubscriptionGetResponse,
-            self._get(
-                f"/zones/{identifier}/subscription",
-                options=make_request_options(
-                    extra_headers=extra_headers,
-                    extra_query=extra_query,
-                    extra_body=extra_body,
-                    timeout=timeout,
-                    post_parser=ResultWrapper[SubscriptionGetResponse]._unwrapper,
-                ),
-                cast_to=cast(
-                    Any, ResultWrapper[SubscriptionGetResponse]
-                ),  # Union types cannot be passed in as arguments in the type system
+        if not zone_id:
+            raise ValueError(f"Expected a non-empty value for `zone_id` but received {zone_id!r}")
+        return self._get(
+            f"/zones/{zone_id}/subscription",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                post_parser=ResultWrapper[Subscription]._unwrapper,
             ),
+            cast_to=cast(Type[Subscription], ResultWrapper[Subscription]),
         )
 
 
@@ -229,8 +212,8 @@ class AsyncSubscriptionsResource(AsyncAPIResource):
 
     async def create(
         self,
-        identifier: str,
         *,
+        zone_id: str,
         frequency: Literal["weekly", "monthly", "quarterly", "yearly"] | NotGiven = NOT_GIVEN,
         rate_plan: RatePlan | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -239,12 +222,12 @@ class AsyncSubscriptionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SubscriptionCreateResponse:
+    ) -> Subscription:
         """
         Create a zone subscription, either plan or add-ons.
 
         Args:
-          identifier: Subscription identifier tag.
+          zone_id: Subscription identifier tag.
 
           frequency: How often the subscription is renewed automatically.
 
@@ -258,36 +241,31 @@ class AsyncSubscriptionsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not identifier:
-            raise ValueError(f"Expected a non-empty value for `identifier` but received {identifier!r}")
-        return cast(
-            SubscriptionCreateResponse,
-            await self._post(
-                f"/zones/{identifier}/subscription",
-                body=await async_maybe_transform(
-                    {
-                        "frequency": frequency,
-                        "rate_plan": rate_plan,
-                    },
-                    subscription_create_params.SubscriptionCreateParams,
-                ),
-                options=make_request_options(
-                    extra_headers=extra_headers,
-                    extra_query=extra_query,
-                    extra_body=extra_body,
-                    timeout=timeout,
-                    post_parser=ResultWrapper[SubscriptionCreateResponse]._unwrapper,
-                ),
-                cast_to=cast(
-                    Any, ResultWrapper[SubscriptionCreateResponse]
-                ),  # Union types cannot be passed in as arguments in the type system
+        if not zone_id:
+            raise ValueError(f"Expected a non-empty value for `zone_id` but received {zone_id!r}")
+        return await self._post(
+            f"/zones/{zone_id}/subscription",
+            body=await async_maybe_transform(
+                {
+                    "frequency": frequency,
+                    "rate_plan": rate_plan,
+                },
+                subscription_create_params.SubscriptionCreateParams,
             ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                post_parser=ResultWrapper[Subscription]._unwrapper,
+            ),
+            cast_to=cast(Type[Subscription], ResultWrapper[Subscription]),
         )
 
     async def update(
         self,
-        identifier: str,
         *,
+        zone_id: str,
         frequency: Literal["weekly", "monthly", "quarterly", "yearly"] | NotGiven = NOT_GIVEN,
         rate_plan: RatePlan | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -296,12 +274,12 @@ class AsyncSubscriptionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SubscriptionUpdateResponse:
+    ) -> Subscription:
         """
         Updates zone subscriptions, either plan or add-ons.
 
         Args:
-          identifier: Subscription identifier tag.
+          zone_id: Subscription identifier tag.
 
           frequency: How often the subscription is renewed automatically.
 
@@ -315,48 +293,43 @@ class AsyncSubscriptionsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not identifier:
-            raise ValueError(f"Expected a non-empty value for `identifier` but received {identifier!r}")
-        return cast(
-            SubscriptionUpdateResponse,
-            await self._put(
-                f"/zones/{identifier}/subscription",
-                body=await async_maybe_transform(
-                    {
-                        "frequency": frequency,
-                        "rate_plan": rate_plan,
-                    },
-                    subscription_update_params.SubscriptionUpdateParams,
-                ),
-                options=make_request_options(
-                    extra_headers=extra_headers,
-                    extra_query=extra_query,
-                    extra_body=extra_body,
-                    timeout=timeout,
-                    post_parser=ResultWrapper[SubscriptionUpdateResponse]._unwrapper,
-                ),
-                cast_to=cast(
-                    Any, ResultWrapper[SubscriptionUpdateResponse]
-                ),  # Union types cannot be passed in as arguments in the type system
+        if not zone_id:
+            raise ValueError(f"Expected a non-empty value for `zone_id` but received {zone_id!r}")
+        return await self._put(
+            f"/zones/{zone_id}/subscription",
+            body=await async_maybe_transform(
+                {
+                    "frequency": frequency,
+                    "rate_plan": rate_plan,
+                },
+                subscription_update_params.SubscriptionUpdateParams,
             ),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                post_parser=ResultWrapper[Subscription]._unwrapper,
+            ),
+            cast_to=cast(Type[Subscription], ResultWrapper[Subscription]),
         )
 
     async def get(
         self,
-        identifier: str,
         *,
+        zone_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SubscriptionGetResponse:
+    ) -> Subscription:
         """
         Lists zone subscription details.
 
         Args:
-          identifier: Subscription identifier tag.
+          zone_id: Subscription identifier tag.
 
           extra_headers: Send extra headers
 
@@ -366,23 +339,18 @@ class AsyncSubscriptionsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not identifier:
-            raise ValueError(f"Expected a non-empty value for `identifier` but received {identifier!r}")
-        return cast(
-            SubscriptionGetResponse,
-            await self._get(
-                f"/zones/{identifier}/subscription",
-                options=make_request_options(
-                    extra_headers=extra_headers,
-                    extra_query=extra_query,
-                    extra_body=extra_body,
-                    timeout=timeout,
-                    post_parser=ResultWrapper[SubscriptionGetResponse]._unwrapper,
-                ),
-                cast_to=cast(
-                    Any, ResultWrapper[SubscriptionGetResponse]
-                ),  # Union types cannot be passed in as arguments in the type system
+        if not zone_id:
+            raise ValueError(f"Expected a non-empty value for `zone_id` but received {zone_id!r}")
+        return await self._get(
+            f"/zones/{zone_id}/subscription",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                post_parser=ResultWrapper[Subscription]._unwrapper,
             ),
+            cast_to=cast(Type[Subscription], ResultWrapper[Subscription]),
         )
 
 

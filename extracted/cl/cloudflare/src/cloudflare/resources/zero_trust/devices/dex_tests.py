@@ -7,10 +7,7 @@ from typing import Type, Iterable, Optional, cast
 import httpx
 
 from ...._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ...._utils import (
-    maybe_transform,
-    async_maybe_transform,
-)
+from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -23,9 +20,11 @@ from ...._wrappers import ResultWrapper
 from ....pagination import SyncSinglePage, AsyncSinglePage
 from ...._base_client import AsyncPaginator, make_request_options
 from ....types.zero_trust.devices import dex_test_create_params, dex_test_update_params
-from ....types.zero_trust.devices.schema_http import SchemaHTTP
-from ....types.zero_trust.devices.schema_data_param import SchemaDataParam
+from ....types.zero_trust.devices.dex_test_get_response import DEXTestGetResponse
+from ....types.zero_trust.devices.dex_test_list_response import DEXTestListResponse
+from ....types.zero_trust.devices.dex_test_create_response import DEXTestCreateResponse
 from ....types.zero_trust.devices.dex_test_delete_response import DEXTestDeleteResponse
+from ....types.zero_trust.devices.dex_test_update_response import DEXTestUpdateResponse
 
 __all__ = ["DEXTestsResource", "AsyncDEXTestsResource"]
 
@@ -54,7 +53,7 @@ class DEXTestsResource(SyncAPIResource):
         self,
         *,
         account_id: str,
-        data: SchemaDataParam,
+        data: dex_test_create_params.Data,
         enabled: bool,
         interval: str,
         name: str,
@@ -67,7 +66,7 @@ class DEXTestsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Optional[SchemaHTTP]:
+    ) -> Optional[DEXTestCreateResponse]:
         """
         Create a DEX test.
 
@@ -83,7 +82,7 @@ class DEXTestsResource(SyncAPIResource):
 
           description: Additional details about the test.
 
-          target_policies: Device settings profiles targeted by this test
+          target_policies: DEX rules targeted by this test
 
           extra_headers: Send extra headers
 
@@ -96,7 +95,7 @@ class DEXTestsResource(SyncAPIResource):
         if not account_id:
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
         return self._post(
-            f"/accounts/{account_id}/devices/dex_tests",
+            f"/accounts/{account_id}/dex/devices/dex_tests",
             body=maybe_transform(
                 {
                     "data": data,
@@ -114,9 +113,9 @@ class DEXTestsResource(SyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                post_parser=ResultWrapper[Optional[SchemaHTTP]]._unwrapper,
+                post_parser=ResultWrapper[Optional[DEXTestCreateResponse]]._unwrapper,
             ),
-            cast_to=cast(Type[Optional[SchemaHTTP]], ResultWrapper[SchemaHTTP]),
+            cast_to=cast(Type[Optional[DEXTestCreateResponse]], ResultWrapper[DEXTestCreateResponse]),
         )
 
     def update(
@@ -124,7 +123,7 @@ class DEXTestsResource(SyncAPIResource):
         dex_test_id: str,
         *,
         account_id: str,
-        data: SchemaDataParam,
+        data: dex_test_update_params.Data,
         enabled: bool,
         interval: str,
         name: str,
@@ -137,12 +136,12 @@ class DEXTestsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Optional[SchemaHTTP]:
+    ) -> Optional[DEXTestUpdateResponse]:
         """
         Update a DEX test.
 
         Args:
-          dex_test_id: API UUID.
+          dex_test_id: API Resource UUID tag.
 
           data: The configuration object which contains the details for the WARP client to
               conduct the test.
@@ -155,7 +154,7 @@ class DEXTestsResource(SyncAPIResource):
 
           description: Additional details about the test.
 
-          target_policies: Device settings profiles targeted by this test
+          target_policies: DEX rules targeted by this test
 
           extra_headers: Send extra headers
 
@@ -170,7 +169,7 @@ class DEXTestsResource(SyncAPIResource):
         if not dex_test_id:
             raise ValueError(f"Expected a non-empty value for `dex_test_id` but received {dex_test_id!r}")
         return self._put(
-            f"/accounts/{account_id}/devices/dex_tests/{dex_test_id}",
+            f"/accounts/{account_id}/dex/devices/dex_tests/{dex_test_id}",
             body=maybe_transform(
                 {
                     "data": data,
@@ -188,9 +187,9 @@ class DEXTestsResource(SyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                post_parser=ResultWrapper[Optional[SchemaHTTP]]._unwrapper,
+                post_parser=ResultWrapper[Optional[DEXTestUpdateResponse]]._unwrapper,
             ),
-            cast_to=cast(Type[Optional[SchemaHTTP]], ResultWrapper[SchemaHTTP]),
+            cast_to=cast(Type[Optional[DEXTestUpdateResponse]], ResultWrapper[DEXTestUpdateResponse]),
         )
 
     def list(
@@ -203,7 +202,7 @@ class DEXTestsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> SyncSinglePage[SchemaHTTP]:
+    ) -> SyncSinglePage[DEXTestListResponse]:
         """
         Fetch all DEX tests.
 
@@ -219,12 +218,12 @@ class DEXTestsResource(SyncAPIResource):
         if not account_id:
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
         return self._get_api_list(
-            f"/accounts/{account_id}/devices/dex_tests",
-            page=SyncSinglePage[SchemaHTTP],
+            f"/accounts/{account_id}/dex/devices/dex_tests",
+            page=SyncSinglePage[DEXTestListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            model=SchemaHTTP,
+            model=DEXTestListResponse,
         )
 
     def delete(
@@ -238,14 +237,14 @@ class DEXTestsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DEXTestDeleteResponse:
+    ) -> Optional[DEXTestDeleteResponse]:
         """Delete a Device DEX test.
 
         Returns the remaining device dex tests for the
         account.
 
         Args:
-          dex_test_id: API UUID.
+          dex_test_id: API Resource UUID tag.
 
           extra_headers: Send extra headers
 
@@ -260,15 +259,15 @@ class DEXTestsResource(SyncAPIResource):
         if not dex_test_id:
             raise ValueError(f"Expected a non-empty value for `dex_test_id` but received {dex_test_id!r}")
         return self._delete(
-            f"/accounts/{account_id}/devices/dex_tests/{dex_test_id}",
+            f"/accounts/{account_id}/dex/devices/dex_tests/{dex_test_id}",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                post_parser=ResultWrapper[DEXTestDeleteResponse]._unwrapper,
+                post_parser=ResultWrapper[Optional[DEXTestDeleteResponse]]._unwrapper,
             ),
-            cast_to=cast(Type[DEXTestDeleteResponse], ResultWrapper[DEXTestDeleteResponse]),
+            cast_to=cast(Type[Optional[DEXTestDeleteResponse]], ResultWrapper[DEXTestDeleteResponse]),
         )
 
     def get(
@@ -282,7 +281,7 @@ class DEXTestsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Optional[SchemaHTTP]:
+    ) -> Optional[DEXTestGetResponse]:
         """
         Fetch a single DEX test.
 
@@ -302,15 +301,15 @@ class DEXTestsResource(SyncAPIResource):
         if not dex_test_id:
             raise ValueError(f"Expected a non-empty value for `dex_test_id` but received {dex_test_id!r}")
         return self._get(
-            f"/accounts/{account_id}/devices/dex_tests/{dex_test_id}",
+            f"/accounts/{account_id}/dex/devices/dex_tests/{dex_test_id}",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                post_parser=ResultWrapper[Optional[SchemaHTTP]]._unwrapper,
+                post_parser=ResultWrapper[Optional[DEXTestGetResponse]]._unwrapper,
             ),
-            cast_to=cast(Type[Optional[SchemaHTTP]], ResultWrapper[SchemaHTTP]),
+            cast_to=cast(Type[Optional[DEXTestGetResponse]], ResultWrapper[DEXTestGetResponse]),
         )
 
 
@@ -338,7 +337,7 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         self,
         *,
         account_id: str,
-        data: SchemaDataParam,
+        data: dex_test_create_params.Data,
         enabled: bool,
         interval: str,
         name: str,
@@ -351,7 +350,7 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Optional[SchemaHTTP]:
+    ) -> Optional[DEXTestCreateResponse]:
         """
         Create a DEX test.
 
@@ -367,7 +366,7 @@ class AsyncDEXTestsResource(AsyncAPIResource):
 
           description: Additional details about the test.
 
-          target_policies: Device settings profiles targeted by this test
+          target_policies: DEX rules targeted by this test
 
           extra_headers: Send extra headers
 
@@ -380,7 +379,7 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         if not account_id:
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
         return await self._post(
-            f"/accounts/{account_id}/devices/dex_tests",
+            f"/accounts/{account_id}/dex/devices/dex_tests",
             body=await async_maybe_transform(
                 {
                     "data": data,
@@ -398,9 +397,9 @@ class AsyncDEXTestsResource(AsyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                post_parser=ResultWrapper[Optional[SchemaHTTP]]._unwrapper,
+                post_parser=ResultWrapper[Optional[DEXTestCreateResponse]]._unwrapper,
             ),
-            cast_to=cast(Type[Optional[SchemaHTTP]], ResultWrapper[SchemaHTTP]),
+            cast_to=cast(Type[Optional[DEXTestCreateResponse]], ResultWrapper[DEXTestCreateResponse]),
         )
 
     async def update(
@@ -408,7 +407,7 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         dex_test_id: str,
         *,
         account_id: str,
-        data: SchemaDataParam,
+        data: dex_test_update_params.Data,
         enabled: bool,
         interval: str,
         name: str,
@@ -421,12 +420,12 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Optional[SchemaHTTP]:
+    ) -> Optional[DEXTestUpdateResponse]:
         """
         Update a DEX test.
 
         Args:
-          dex_test_id: API UUID.
+          dex_test_id: API Resource UUID tag.
 
           data: The configuration object which contains the details for the WARP client to
               conduct the test.
@@ -439,7 +438,7 @@ class AsyncDEXTestsResource(AsyncAPIResource):
 
           description: Additional details about the test.
 
-          target_policies: Device settings profiles targeted by this test
+          target_policies: DEX rules targeted by this test
 
           extra_headers: Send extra headers
 
@@ -454,7 +453,7 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         if not dex_test_id:
             raise ValueError(f"Expected a non-empty value for `dex_test_id` but received {dex_test_id!r}")
         return await self._put(
-            f"/accounts/{account_id}/devices/dex_tests/{dex_test_id}",
+            f"/accounts/{account_id}/dex/devices/dex_tests/{dex_test_id}",
             body=await async_maybe_transform(
                 {
                     "data": data,
@@ -472,9 +471,9 @@ class AsyncDEXTestsResource(AsyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                post_parser=ResultWrapper[Optional[SchemaHTTP]]._unwrapper,
+                post_parser=ResultWrapper[Optional[DEXTestUpdateResponse]]._unwrapper,
             ),
-            cast_to=cast(Type[Optional[SchemaHTTP]], ResultWrapper[SchemaHTTP]),
+            cast_to=cast(Type[Optional[DEXTestUpdateResponse]], ResultWrapper[DEXTestUpdateResponse]),
         )
 
     def list(
@@ -487,7 +486,7 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AsyncPaginator[SchemaHTTP, AsyncSinglePage[SchemaHTTP]]:
+    ) -> AsyncPaginator[DEXTestListResponse, AsyncSinglePage[DEXTestListResponse]]:
         """
         Fetch all DEX tests.
 
@@ -503,12 +502,12 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         if not account_id:
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
         return self._get_api_list(
-            f"/accounts/{account_id}/devices/dex_tests",
-            page=AsyncSinglePage[SchemaHTTP],
+            f"/accounts/{account_id}/dex/devices/dex_tests",
+            page=AsyncSinglePage[DEXTestListResponse],
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            model=SchemaHTTP,
+            model=DEXTestListResponse,
         )
 
     async def delete(
@@ -522,14 +521,14 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> DEXTestDeleteResponse:
+    ) -> Optional[DEXTestDeleteResponse]:
         """Delete a Device DEX test.
 
         Returns the remaining device dex tests for the
         account.
 
         Args:
-          dex_test_id: API UUID.
+          dex_test_id: API Resource UUID tag.
 
           extra_headers: Send extra headers
 
@@ -544,15 +543,15 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         if not dex_test_id:
             raise ValueError(f"Expected a non-empty value for `dex_test_id` but received {dex_test_id!r}")
         return await self._delete(
-            f"/accounts/{account_id}/devices/dex_tests/{dex_test_id}",
+            f"/accounts/{account_id}/dex/devices/dex_tests/{dex_test_id}",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                post_parser=ResultWrapper[DEXTestDeleteResponse]._unwrapper,
+                post_parser=ResultWrapper[Optional[DEXTestDeleteResponse]]._unwrapper,
             ),
-            cast_to=cast(Type[DEXTestDeleteResponse], ResultWrapper[DEXTestDeleteResponse]),
+            cast_to=cast(Type[Optional[DEXTestDeleteResponse]], ResultWrapper[DEXTestDeleteResponse]),
         )
 
     async def get(
@@ -566,7 +565,7 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Optional[SchemaHTTP]:
+    ) -> Optional[DEXTestGetResponse]:
         """
         Fetch a single DEX test.
 
@@ -586,15 +585,15 @@ class AsyncDEXTestsResource(AsyncAPIResource):
         if not dex_test_id:
             raise ValueError(f"Expected a non-empty value for `dex_test_id` but received {dex_test_id!r}")
         return await self._get(
-            f"/accounts/{account_id}/devices/dex_tests/{dex_test_id}",
+            f"/accounts/{account_id}/dex/devices/dex_tests/{dex_test_id}",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                post_parser=ResultWrapper[Optional[SchemaHTTP]]._unwrapper,
+                post_parser=ResultWrapper[Optional[DEXTestGetResponse]]._unwrapper,
             ),
-            cast_to=cast(Type[Optional[SchemaHTTP]], ResultWrapper[SchemaHTTP]),
+            cast_to=cast(Type[Optional[DEXTestGetResponse]], ResultWrapper[DEXTestGetResponse]),
         )
 
 
