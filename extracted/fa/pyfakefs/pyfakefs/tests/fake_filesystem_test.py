@@ -25,6 +25,11 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+try:
+    import pytest
+except ImportError:
+    pytest = None
+
 from pyfakefs import fake_filesystem, fake_os, fake_open
 from pyfakefs.fake_filesystem import (
     set_uid,
@@ -1030,6 +1035,23 @@ class FakePathModuleTest(TestCase):
         self.assertEqual(
             f"{root_dir}foo!bar", self.os.path.realpath("bar", strict=True)
         )
+
+    @unittest.skipIf(
+        not hasattr(os.path, "ALLOW_MISSING"),
+        "ALLOW_MISSING has been added in different patch versions",
+    )
+    def test_realpath_allow_missing(self):
+        f = self.filesystem.create_file("!foo!bar")
+        root_dir = self.filesystem.root_dir_name
+        self.filesystem.cwd = f"{root_dir}foo"
+        self.assertEqual(
+            f"{root_dir}foo!baz",
+            self.os.path.realpath("baz", strict=os.path.ALLOW_MISSING),  # type: ignore[attr-defined]
+        )
+        if not is_root():
+            self.os.chmod(f.path, 0)
+            with self.raises_os_error(errno.EACCES):
+                self.os.path.realpath(f.path, strict=os.path.ALLOW_MISSING)  # type: ignore[attr-defined]
 
     def test_samefile(self):
         file_path1 = "!foo!bar!baz"
@@ -2606,6 +2628,18 @@ class RealFileSystemAccessTest(RealFsTestCase):
         fake_file = self.filesystem.resolve(real_file_path)
         self.check_fake_file_stat(fake_file, real_file_path)
         self.check_writable_file(fake_file, real_file_path)
+
+    @unittest.skipIf(pytest is None, "pytest is not installed")
+    @unittest.skipIf(sys.version_info < (3, 8), "importlib.metadata not available")
+    @unittest.skipIf("pathlib2" in sys.modules, "pathlib2 may break this test")
+    def test_add_package_metadata(self):
+        parent_path = pathlib.Path(pytest.__file__).parent.parent
+        pytest_dist_path = parent_path / f"pytest-{pytest.__version__}.dist-info"
+        assert pytest_dist_path.exists()  # real fs
+        assert not self.filesystem.exists(pytest_dist_path)
+        self.filesystem.add_package_metadata("pytest")
+        assert self.filesystem.exists(pytest_dist_path)
+        assert self.filesystem.exists(pytest_dist_path / "METADATA")
 
 
 class FileSideEffectTests(TestCase):
