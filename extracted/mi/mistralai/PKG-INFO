@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: mistralai
-Version: 1.7.0
+Version: 1.9.1
 Summary: Python Client SDK for the Mistral AI API.
 Author: Mistral
 Requires-Python: >=3.9
@@ -10,10 +10,14 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Provides-Extra: agents
 Provides-Extra: gcp
+Requires-Dist: authlib (>=1.5.2,<2.0) ; extra == "agents"
 Requires-Dist: eval-type-backport (>=0.2.0)
 Requires-Dist: google-auth (>=2.27.0) ; extra == "gcp"
+Requires-Dist: griffe (>=1.7.3,<2.0) ; extra == "agents"
 Requires-Dist: httpx (>=0.28.1)
+Requires-Dist: mcp (>=1.0,<2.0) ; (python_version >= "3.10") and (extra == "agents")
 Requires-Dist: pydantic (>=2.10.3)
 Requires-Dist: python-dateutil (>=2.8.2)
 Requires-Dist: requests (>=2.32.3) ; extra == "gcp"
@@ -131,6 +135,18 @@ Once that is saved to a file, you can run it with `uv run script.py` where
 `script.py` can be replaced with the actual file name.
 <!-- End SDK Installation [installation] -->
 
+### Agents extra dependencies
+
+When using the agents related feature it is required to add the `agents` extra dependencies. This can be added when 
+installing the package:
+
+```bash
+pip install "mistralai[agents]"
+```
+
+> Note: Because of some of our dependencies, these features are only available for python version higher or equal to 
+> 3.10.
+
 <!-- Start SDK Example Usage [usage] -->
 ## SDK Example Usage
 
@@ -153,7 +169,7 @@ with Mistral(
             "content": "Who is the best French painter? Answer in one short sentence.",
             "role": "user",
         },
-    ])
+    ], stream=False)
 
     # Handle response
     print(res)
@@ -179,7 +195,7 @@ async def main():
                 "content": "Who is the best French painter? Answer in one short sentence.",
                 "role": "user",
             },
-        ])
+        ], stream=False)
 
         # Handle response
         print(res)
@@ -255,7 +271,7 @@ with Mistral(
             "content": "Who is the best French painter? Answer in one short sentence.",
             "role": "user",
         },
-    ], agent_id="<id>")
+    ], agent_id="<id>", stream=False)
 
     # Handle response
     print(res)
@@ -281,7 +297,7 @@ async def main():
                 "content": "Who is the best French painter? Answer in one short sentence.",
                 "role": "user",
             },
-        ], agent_id="<id>")
+        ], agent_id="<id>", stream=False)
 
         # Handle response
         print(res)
@@ -455,6 +471,30 @@ The documentation for the GCP SDK is available [here](https://github.com/mistral
 * [get](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistraljobs/README.md#get) - Get Batch Job
 * [cancel](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistraljobs/README.md#cancel) - Cancel Batch Job
 
+### [beta](https://github.com/mistralai/client-python/blob/master/docs/sdks/beta/README.md)
+
+
+#### [beta.agents](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md)
+
+* [create](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md#create) - Create a agent that can be used within a conversation.
+* [list](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md#list) - List agent entities.
+* [get](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md#get) - Retrieve an agent entity.
+* [update](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md#update) - Update an agent entity.
+* [update_version](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md#update_version) - Update an agent version.
+
+#### [beta.conversations](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md)
+
+* [start](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#start) - Create a conversation and append entries to it.
+* [list](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#list) - List all created conversations.
+* [get](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#get) - Retrieve a conversation information.
+* [append](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#append) - Append new entries to an existing conversation.
+* [get_history](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#get_history) - Retrieve all entries in a conversation.
+* [get_messages](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#get_messages) - Retrieve all messages in a conversation.
+* [restart](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#restart) - Restart a conversation starting from a given entry.
+* [start_stream](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#start_stream) - Create a conversation and append entries to it.
+* [append_stream](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#append_stream) - Append new entries to an existing conversation.
+* [restart_stream](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#restart_stream) - Restart a conversation starting from a given entry.
+
 ### [chat](https://github.com/mistralai/client-python/blob/master/docs/sdks/chat/README.md)
 
 * [complete](https://github.com/mistralai/client-python/blob/master/docs/sdks/chat/README.md#complete) - Chat Completion
@@ -534,12 +574,14 @@ with Mistral(
     api_key=os.getenv("MISTRAL_API_KEY", ""),
 ) as mistral:
 
-    res = mistral.chat.stream(model="mistral-small-latest", messages=[
+    res = mistral.beta.conversations.start_stream(inputs=[
         {
-            "content": "Who is the best French painter? Answer in one short sentence.",
-            "role": "user",
+            "object": "entry",
+            "type": "function.result",
+            "tool_call_id": "<id>",
+            "result": "<value>",
         },
-    ])
+    ], stream=True)
 
     with res as event_stream:
         for event in event_stream:

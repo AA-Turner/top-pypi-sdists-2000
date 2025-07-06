@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 from .documenturlchunk import DocumentURLChunk, DocumentURLChunkTypedDict
+from .filechunk import FileChunk, FileChunkTypedDict
 from .imageurlchunk import ImageURLChunk, ImageURLChunkTypedDict
+from .responseformat import ResponseFormat, ResponseFormatTypedDict
 from mistralai.types import BaseModel, Nullable, OptionalNullable, UNSET, UNSET_SENTINEL
 from pydantic import model_serializer
 from typing import List, Optional, Union
@@ -10,12 +12,13 @@ from typing_extensions import NotRequired, TypeAliasType, TypedDict
 
 
 DocumentTypedDict = TypeAliasType(
-    "DocumentTypedDict", Union[ImageURLChunkTypedDict, DocumentURLChunkTypedDict]
+    "DocumentTypedDict",
+    Union[FileChunkTypedDict, ImageURLChunkTypedDict, DocumentURLChunkTypedDict],
 )
 r"""Document to run OCR on"""
 
 
-Document = TypeAliasType("Document", Union[ImageURLChunk, DocumentURLChunk])
+Document = TypeAliasType("Document", Union[FileChunk, ImageURLChunk, DocumentURLChunk])
 r"""Document to run OCR on"""
 
 
@@ -32,6 +35,10 @@ class OCRRequestTypedDict(TypedDict):
     r"""Max images to extract"""
     image_min_size: NotRequired[Nullable[int]]
     r"""Minimum height and width of image to extract"""
+    bbox_annotation_format: NotRequired[Nullable[ResponseFormatTypedDict]]
+    r"""Structured output class for extracting useful information from each extracted bounding box / image from document. Only json_schema is valid for this field"""
+    document_annotation_format: NotRequired[Nullable[ResponseFormatTypedDict]]
+    r"""Structured output class for extracting useful information from the entire document. Only json_schema is valid for this field"""
 
 
 class OCRRequest(BaseModel):
@@ -54,6 +61,12 @@ class OCRRequest(BaseModel):
     image_min_size: OptionalNullable[int] = UNSET
     r"""Minimum height and width of image to extract"""
 
+    bbox_annotation_format: OptionalNullable[ResponseFormat] = UNSET
+    r"""Structured output class for extracting useful information from each extracted bounding box / image from document. Only json_schema is valid for this field"""
+
+    document_annotation_format: OptionalNullable[ResponseFormat] = UNSET
+    r"""Structured output class for extracting useful information from the entire document. Only json_schema is valid for this field"""
+
     @model_serializer(mode="wrap")
     def serialize_model(self, handler):
         optional_fields = [
@@ -62,6 +75,8 @@ class OCRRequest(BaseModel):
             "include_image_base64",
             "image_limit",
             "image_min_size",
+            "bbox_annotation_format",
+            "document_annotation_format",
         ]
         nullable_fields = [
             "model",
@@ -69,6 +84,8 @@ class OCRRequest(BaseModel):
             "include_image_base64",
             "image_limit",
             "image_min_size",
+            "bbox_annotation_format",
+            "document_annotation_format",
         ]
         null_default_fields = []
 
@@ -76,7 +93,7 @@ class OCRRequest(BaseModel):
 
         m = {}
 
-        for n, f in self.model_fields.items():
+        for n, f in type(self).model_fields.items():
             k = f.alias or n
             val = serialized.get(k)
             serialized.pop(k, None)

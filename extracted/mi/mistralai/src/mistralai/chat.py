@@ -123,6 +123,7 @@ class Chat(BaseSDK):
             Union[models.Prediction, models.PredictionTypedDict]
         ] = None,
         parallel_tool_calls: Optional[bool] = None,
+        prompt_mode: OptionalNullable[models.MistralPromptMode] = UNSET,
         safe_prompt: Optional[bool] = None,
         retries: OptionalNullable[utils.RetryConfig] = UNSET,
         server_url: Optional[str] = None,
@@ -147,6 +148,7 @@ class Chat(BaseSDK):
         :param n: Number of completions to return for each request, input tokens are only billed once.
         :param prediction:
         :param parallel_tool_calls:
+        :param prompt_mode: Allows toggling between the reasoning mode and no system prompt. When set to `reasoning` the system prompt for reasoning models will be used.
         :param safe_prompt: Whether to inject a safety prompt before all conversations.
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method
@@ -186,6 +188,7 @@ class Chat(BaseSDK):
                 prediction, Optional[models.Prediction]
             ),
             parallel_tool_calls=parallel_tool_calls,
+            prompt_mode=prompt_mode,
             safe_prompt=safe_prompt,
         )
 
@@ -218,6 +221,7 @@ class Chat(BaseSDK):
 
         http_res = self.do_request(
             hook_ctx=HookContext(
+                config=self.sdk_configuration,
                 base_url=base_url or "",
                 operation_id="chat_completion_v1_chat_completions_post",
                 oauth2_scopes=[],
@@ -288,6 +292,7 @@ class Chat(BaseSDK):
             Union[models.Prediction, models.PredictionTypedDict]
         ] = None,
         parallel_tool_calls: Optional[bool] = None,
+        prompt_mode: OptionalNullable[models.MistralPromptMode] = UNSET,
         safe_prompt: Optional[bool] = None,
         retries: OptionalNullable[utils.RetryConfig] = UNSET,
         server_url: Optional[str] = None,
@@ -312,6 +317,7 @@ class Chat(BaseSDK):
         :param n: Number of completions to return for each request, input tokens are only billed once.
         :param prediction:
         :param parallel_tool_calls:
+        :param prompt_mode: Allows toggling between the reasoning mode and no system prompt. When set to `reasoning` the system prompt for reasoning models will be used.
         :param safe_prompt: Whether to inject a safety prompt before all conversations.
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method
@@ -351,6 +357,7 @@ class Chat(BaseSDK):
                 prediction, Optional[models.Prediction]
             ),
             parallel_tool_calls=parallel_tool_calls,
+            prompt_mode=prompt_mode,
             safe_prompt=safe_prompt,
         )
 
@@ -383,6 +390,7 @@ class Chat(BaseSDK):
 
         http_res = await self.do_request_async(
             hook_ctx=HookContext(
+                config=self.sdk_configuration,
                 base_url=base_url or "",
                 operation_id="chat_completion_v1_chat_completions_post",
                 oauth2_scopes=[],
@@ -461,6 +469,7 @@ class Chat(BaseSDK):
             Union[models.Prediction, models.PredictionTypedDict]
         ] = None,
         parallel_tool_calls: Optional[bool] = None,
+        prompt_mode: OptionalNullable[models.MistralPromptMode] = UNSET,
         safe_prompt: Optional[bool] = None,
         retries: OptionalNullable[utils.RetryConfig] = UNSET,
         server_url: Optional[str] = None,
@@ -487,6 +496,7 @@ class Chat(BaseSDK):
         :param n: Number of completions to return for each request, input tokens are only billed once.
         :param prediction:
         :param parallel_tool_calls:
+        :param prompt_mode: Allows toggling between the reasoning mode and no system prompt. When set to `reasoning` the system prompt for reasoning models will be used.
         :param safe_prompt: Whether to inject a safety prompt before all conversations.
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method
@@ -528,6 +538,7 @@ class Chat(BaseSDK):
                 prediction, Optional[models.Prediction]
             ),
             parallel_tool_calls=parallel_tool_calls,
+            prompt_mode=prompt_mode,
             safe_prompt=safe_prompt,
         )
 
@@ -560,6 +571,7 @@ class Chat(BaseSDK):
 
         http_res = self.do_request(
             hook_ctx=HookContext(
+                config=self.sdk_configuration,
                 base_url=base_url or "",
                 operation_id="stream_chat",
                 oauth2_scopes=[],
@@ -644,6 +656,7 @@ class Chat(BaseSDK):
             Union[models.Prediction, models.PredictionTypedDict]
         ] = None,
         parallel_tool_calls: Optional[bool] = None,
+        prompt_mode: OptionalNullable[models.MistralPromptMode] = UNSET,
         safe_prompt: Optional[bool] = None,
         retries: OptionalNullable[utils.RetryConfig] = UNSET,
         server_url: Optional[str] = None,
@@ -670,6 +683,7 @@ class Chat(BaseSDK):
         :param n: Number of completions to return for each request, input tokens are only billed once.
         :param prediction:
         :param parallel_tool_calls:
+        :param prompt_mode: Allows toggling between the reasoning mode and no system prompt. When set to `reasoning` the system prompt for reasoning models will be used.
         :param safe_prompt: Whether to inject a safety prompt before all conversations.
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method
@@ -711,6 +725,7 @@ class Chat(BaseSDK):
                 prediction, Optional[models.Prediction]
             ),
             parallel_tool_calls=parallel_tool_calls,
+            prompt_mode=prompt_mode,
             safe_prompt=safe_prompt,
         )
 
@@ -743,6 +758,7 @@ class Chat(BaseSDK):
 
         http_res = await self.do_request_async(
             hook_ctx=HookContext(
+                config=self.sdk_configuration,
                 base_url=base_url or "",
                 operation_id="stream_chat",
                 oauth2_scopes=[],

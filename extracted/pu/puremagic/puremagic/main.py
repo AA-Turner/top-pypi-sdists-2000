@@ -4,7 +4,7 @@ puremagic is a pure python module that will identify a file based off it's
 magic numbers. It is designed to be minimalistic and inherently cross platform
 compatible, with no imports when used as a module.
 
-© 2013-2024 Chris Griffith - License: MIT (see LICENSE)
+© 2013-2025 Chris Griffith - License: MIT (see LICENSE)
 
 Acknowledgements
 Gary C. Kessler
@@ -21,7 +21,7 @@ from collections import namedtuple
 from itertools import chain
 
 __author__ = "Chris Griffith"
-__version__ = "1.28"
+__version__ = "1.30"
 __all__ = [
     "magic_file",
     "magic_string",
@@ -208,6 +208,8 @@ def _magic(header: bytes, footer: bytes, mime: bool, ext=None) -> str:
 
 def _file_details(filename: os.PathLike | str) -> tuple[bytes, bytes]:
     """Grab the start and end of the file"""
+    if not os.path.isfile(filename):
+        raise PureError("Not a regular file")
     with open(filename, "rb") as fin:
         head = fin.read(max_head)
         try:
@@ -228,7 +230,7 @@ def _stream_details(stream):
     head = stream.read(max_head)
     try:
         stream.seek(-max_foot, os.SEEK_END)
-    except OSError:
+    except (OSError, ValueError):  # fsspec throws ValueError
         # File is smaller than the max_foot size, jump to beginning
         stream.seek(0)
     foot = stream.read()
