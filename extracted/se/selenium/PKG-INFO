@@ -18,13 +18,13 @@ Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Requires-Python: >=3.9
-Requires-Dist: urllib3[socks]~=2.4.0
+Requires-Dist: urllib3[socks]~=2.5.0
 Requires-Dist: trio~=0.30.0
 Requires-Dist: trio-websocket~=0.12.2
-Requires-Dist: certifi>=2025.4.26
+Requires-Dist: certifi>=2025.6.15
 Requires-Dist: typing_extensions~=4.14.0
 Requires-Dist: websocket-client~=1.8.0
-Version: 4.34.0
+Version: 4.34.2
 
 ======================
 Selenium Client Driver
