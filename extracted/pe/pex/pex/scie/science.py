@@ -12,16 +12,15 @@ from subprocess import CalledProcessError
 
 from pex import toml
 from pex.atomic_directory import atomic_directory
-from pex.cache.dirs import CacheDir, UnzipDir
+from pex.cache.dirs import CacheDir
 from pex.common import pluralize, safe_mkdtemp, safe_open
 from pex.compatibility import shlex_quote
 from pex.dist_metadata import NamedEntryPoint, parse_entry_point
 from pex.enum import Enum
-from pex.exceptions import production_assert
+from pex.exceptions import reportable_unexpected_error_msg
 from pex.executables import chmod_plus_x
 from pex.fetcher import URLFetcher
 from pex.hashing import Sha256
-from pex.layout import Layout
 from pex.os import is_exe
 from pex.pep_440 import Version
 from pex.pex import PEX
@@ -40,12 +39,12 @@ from pex.sysconfig import SysPlatform
 from pex.third_party.packaging.specifiers import SpecifierSet
 from pex.third_party.packaging.version import InvalidVersion
 from pex.tracer import TRACER
-from pex.typing import TYPE_CHECKING, cast
+from pex.typing import TYPE_CHECKING
 from pex.util import CacheHelper
 from pex.variables import ENV, Variables
 
 if TYPE_CHECKING:
-    from typing import Any, Dict, Iterator, List, Optional, Union, cast
+    from typing import Any, Dict, Iterator, List, Optional, Union
 
     import attr  # vendor:skip
 else:
@@ -67,7 +66,7 @@ class Manifest(object):
 
 
 SCIENCE_RELEASES_URL = "https://github.com/a-scie/lift/releases"
-MIN_SCIENCE_VERSION = Version("0.12.2")
+MIN_SCIENCE_VERSION = Version("0.12.8")
 SCIENCE_REQUIREMENT = SpecifierSet("~={min_version}".format(min_version=MIN_SCIENCE_VERSION))
 
 
@@ -81,7 +80,7 @@ def _science_binary_url(suffix=""):
     )
 
 
-PTEX_VERSION = "1.5.1"
+PTEX_VERSION = "1.6.1"
 SCIE_JUMP_VERSION = "1.7.0"
 
 
@@ -114,13 +113,21 @@ def create_manifests(
     # type: (...) -> Iterator[Manifest]
 
     pex_info = pex.pex_info(include_env_overrides=False)
-    pex_root = "{scie.bindings}/pex_root"
+    if pex_info.pex_hash is None:
+        raise ValueError(
+            reportable_unexpected_error_msg(
+                "PEX at {pex} is unexpectedly missing a `pex_hash` in its PEX-INFO.", pex=pex.path()
+            )
+        )
+    pex_hash = pex_info.pex_hash
 
     def create_commands(platform):
         # type: (SysPlatform.Value) -> Iterator[Dict[str, Any]]
         entrypoints = configuration.options.busybox_entrypoints
         if entrypoints:
-            pex_entry_point = parse_entry_point(pex_info.entry_point)
+            pex_entry_point = (
+                parse_entry_point(pex_info.entry_point) if pex_info.entry_point else None
+            )
 
             def default_env(named_entry_point):
                 # type: (...) -> Dict[str, str]
@@ -225,9 +232,13 @@ def create_manifests(
         pex_name = Filenames.PEX.name
         pex_key = None
 
-    lift = {
+    scie_jump_config = {"version": SCIE_JUMP_VERSION}
+    if configuration.options.assets_base_url:
+        scie_jump_config["base_url"] = "/".join((configuration.options.assets_base_url, "jump"))
+
+    lift_template = {
         "name": name,
-        "scie_jump": {"version": SCIE_JUMP_VERSION},
+        "scie_jump": scie_jump_config,
         "files": [
             {"name": Filenames.CONFIGURE_BINDING.name},
             dict(name=pex_name, is_executable=True, **({"key": pex_key} if pex_key else {})),
@@ -235,18 +246,19 @@ def create_manifests(
     }  # type: Dict[str, Any]
 
     if configuration.options.style is ScieStyle.LAZY:
-        lift["ptex"] = {
+        ptex_config = lift_template["ptex"] = {
             "id": Filenames.PTEX.name,
             "version": PTEX_VERSION,
             "argv1": "{scie.env.PEX_BOOTSTRAP_URLS={scie.lift}}",
         }
+        if configuration.options.assets_base_url:
+            ptex_config["base_url"] = "/".join((configuration.options.assets_base_url, "ptex"))
 
     configure_binding = {
         "env": {
             "remove_exact": ["PATH"],
             "remove_re": ["PEX_.*", "PYTHON.*"],
             "replace": {
-                "PEX_ROOT": pex_root,
                 "PEX_INTERPRETER": "1",
                 # We can get a warning about too-long script shebangs, but this is not
                 # relevant since we above run the PEX via python and not via shebang.
@@ -259,6 +271,15 @@ def create_manifests(
 
     configure_binding_args = [Filenames.PEX.placeholder, Filenames.CONFIGURE_BINDING.placeholder]
     for interpreter in configuration.interpreters:
+        lift = lift_template.copy()
+
+        if configuration.options.base:
+            lift["base"] = configuration.options.base
+        elif pex_info.pex_root:
+            lift["base"] = CacheDir.SCIES.path(
+                "base", os=interpreter.platform.os, pex_root=pex_info.pex_root
+            )
+
         manifest_path = os.path.join(
             safe_mkdtemp(),
             interpreter.platform.qualified_file_name("{name}-lift.toml".format(name=name)),
@@ -272,6 +293,10 @@ def create_manifests(
         }
         if interpreter.release:
             interpreter_config["release"] = interpreter.release
+        if configuration.options.assets_base_url:
+            interpreter_config["base_url"] = "/".join(
+                (configuration.options.assets_base_url, "providers", str(interpreter.provider))
+            )
         if Provider.PythonBuildStandalone is interpreter.provider:
             interpreter_config.update(
                 flavor=(
@@ -281,20 +306,12 @@ def create_manifests(
                 )
             )
 
-        # N.B.: For the venv case, we let the configure-binding calculate the installed PEX dir
-        # (venv dir) at runtime since it depends on the interpreter executing the venv PEX.
+        extra_configure_binding_args = []  # type: List[str]
         if pex_info.venv:
-            extra_configure_binding_args = ["--venv-bin-dir", interpreter.platform.venv_bin_dir]
-        else:
-            extra_configure_binding_args = ["--installed-pex-dir"]
-            if pex.layout is Layout.LOOSE:
-                extra_configure_binding_args.append(Filenames.PEX.placeholder)
-            else:
-                production_assert(pex_info.pex_hash is not None)
-                pex_hash = cast(str, pex_info.pex_hash)
-                extra_configure_binding_args.append(
-                    UnzipDir.create(pex_hash, pex_root=pex_root).path
-                )
+            extra_configure_binding_args.extend(
+                ("--venv-bin-dir", interpreter.platform.venv_bin_dir)
+            )
+        extra_configure_binding_args.append(pex_hash)
 
         if use_platform_suffix is True or (
             use_platform_suffix is None and interpreter.platform is not SysPlatform.CURRENT
@@ -379,7 +396,7 @@ def _path_science():
     return None
 
 
-def _ensure_science(
+def ensure_science(
     url_fetcher=None,  # type: Optional[URLFetcher]
     science_binary=None,  # type: Optional[Union[File, Url]]
     env=ENV,  # type: Variables
@@ -462,7 +479,7 @@ def build(
 ):
     # type: (...) -> Iterator[ScieInfo]
 
-    science = _ensure_science(
+    science = ensure_science(
         url_fetcher=url_fetcher,
         science_binary=configuration.options.science_binary,
         env=env,
@@ -511,8 +528,15 @@ def build(
         for hash_algorithm in configuration.options.hash_algorithms:
             args.extend(["--hash", hash_algorithm])
         args.append(manifest.path)
+
+        environ = os.environ.copy()
+        if url_fetcher:
+            environ.update(url_fetcher.network_env())
+
         with open(os.devnull, "wb") as devnull:
-            process = subprocess.Popen(args=args, stdout=devnull, stderr=subprocess.PIPE)
+            process = subprocess.Popen(
+                args=args, env=environ, stdout=devnull, stderr=subprocess.PIPE
+            )
             _, stderr = process.communicate()
             if process.returncode != 0:
                 saved_manifest = os.path.relpath(

@@ -5,7 +5,7 @@ authors = [
 ]
 description = 'You should switch to the snowflake-uuid package'
 readme = 'README.md'
-requires-python = '>=3.8,<3.12'
+requires-python = '>=3.9,<3.13'
 license = {text = 'Apache-2.0'}
 keywords = [
     'Snowflake',
@@ -40,7 +40,7 @@ dynamic = ['version']
 path = 'src/snowflake/_legacy/__init__.py'
 
 [tool.hatch.build]
-directory = '../../dist'
+directory = '../../dist/snowflake._legacy'
 dev-mode-dirs = ['src']
 sources = ['data', 'src']
 
@@ -64,7 +64,7 @@ include = [
 template = 'test'
 
 [[tool.hatch.envs.test_all.matrix]]
-python = ['3.8', '3.9', '3.10', '3.11']
+python = ['3.9', '3.10', '3.11', '3.12']
 
 [tool.hatch.envs.test]
 dependencies = [
@@ -81,8 +81,6 @@ check = [
     # The following is only useful in a git repository; thus errors are ignored.
     '- diff-cover coverage-{matrix:python:{env:PYTHON_VERSION:unset}}.xml',
 ]
-check_notebook = []
-check_storedproc = []
 
 [tool.hatch.envs.precommit]
 dependencies = [

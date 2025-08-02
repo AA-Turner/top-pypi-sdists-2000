@@ -3,7 +3,6 @@
 
 from __future__ import absolute_import, print_function
 
-import atexit
 import contextlib
 import errno
 import itertools
@@ -22,6 +21,7 @@ from datetime import datetime
 from uuid import uuid4
 from zipfile import ZipFile, ZipInfo
 
+from pex import atexit
 from pex.enum import Enum
 from pex.executables import chmod_plus_x
 from pex.fs import safe_link, safe_rename, safe_symlink
@@ -464,27 +464,6 @@ def safe_sleep(seconds):
             remaining_time = seconds - (current_time - start_time)
             time.sleep(remaining_time)
             current_time = time.time()
-
-
-def can_write_dir(path):
-    # type: (str) -> bool
-    """Determines if the directory at path can be written to by the current process.
-
-    If the directory doesn't exist, determines if it can be created and thus written to.
-
-    N.B.: This is a best-effort check only that uses permission heuristics and does not actually test
-    that the directory can be written to with and writes.
-
-    :param path: The directory path to test.
-    :return:`True` if the given path is a directory that can be written to by the current process.
-    """
-    while not os.access(path, os.F_OK):
-        parent_path = os.path.dirname(path)
-        if not parent_path or (parent_path == path):
-            # We've recursed up to the root without success, which shouldn't happen,
-            return False
-        path = parent_path
-    return os.path.isdir(path) and os.access(path, os.R_OK | os.W_OK | os.X_OK)
 
 
 def touch(

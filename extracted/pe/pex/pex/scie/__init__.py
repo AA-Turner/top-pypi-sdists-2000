@@ -265,6 +265,29 @@ def register_options(parser):
             )
         ),
     )
+    parser.add_argument(
+        "--scie-assets-base-url",
+        dest="assets_base_url",
+        default=None,
+        type=str,
+        help=(
+            "The URL of a mirror created using `science download ...` to populate a directory tree "
+            "with `ptex`, `scie-jump` and science interpreter providers."
+        ),
+    )
+    parser.add_argument(
+        "--scie-base",
+        dest="scie_base",
+        default=None,
+        type=str,
+        help=(
+            "A custom SCIE_BASE to use at runtime to unpack the Pex scie to. The scie-jump default "
+            "scie base is normally used (`~/.cache/nce` on Linux, `~/Library/Caches/nce` on Mac "
+            "and `~\\AppData\\Local\\nce` on Windows) or else a subdirectory of "
+            "`--runtime-pex-root` if that is set. If `--scie-base` is set, it overrides all of "
+            "these defaults."
+        ),
+    )
 
 
 def render_options(options):
@@ -303,6 +326,12 @@ def render_options(options):
     if options.science_binary:
         args.append("--scie-science-binary")
         args.append(options.science_binary)
+    if options.assets_base_url:
+        args.append("--scie-assets-base-url")
+        args.append(options.assets_base_url)
+    if options.base:
+        args.append("--scie-base")
+        args.append(options.base)
     return " ".join(args)
 
 
@@ -377,6 +406,10 @@ def extract_options(options):
         else:
             science_binary = Url(options.scie_science_binary)
 
+    assets_base_url = None  # type: Optional[Url]
+    if options.assets_base_url:
+        assets_base_url = Url(options.assets_base_url)
+
     return ScieOptions(
         style=options.scie_style,
         naming_style=options.naming_style,
@@ -390,6 +423,8 @@ def extract_options(options):
         pbs_stripped=options.scie_pbs_stripped,
         hash_algorithms=tuple(options.scie_hash_algorithms),
         science_binary=science_binary,
+        assets_base_url=assets_base_url,
+        base=options.scie_base,
     )
 
 

@@ -7,9 +7,9 @@ import json
 import os
 import zipfile
 
-from pex import layout, pex_warnings, variables
+from pex import layout, pex_root, pex_warnings, variables
 from pex.cache import root as cache_root
-from pex.common import can_write_dir, open_zip, safe_mkdtemp
+from pex.common import open_zip
 from pex.compatibility import PY2
 from pex.compatibility import string as compatibility_string
 from pex.inherit_path import InheritPath
@@ -153,11 +153,14 @@ class PexInfo(object):
         self._excluded = OrderedSet(self._pex_info.get("excluded", ()))  # type: OrderedSet[str]
         self._overridden = OrderedSet(self._pex_info.get("overridden", ()))  # type: OrderedSet[str]
 
-    def _get_safe(self, key):
+    def _get_python2_import_system_safe_str(self, key):
+        # type: (str) -> Optional[str]
         if key not in self._pex_info:
             return None
         value = self._pex_info[key]
-        return value.encode("utf-8") if PY2 else value
+        if PY2 and isinstance(value, unicode):
+            return str(value.encode("utf-8"))
+        return cast(str, value)
 
     @property
     def build_properties(self):
@@ -283,10 +286,10 @@ class PexInfo(object):
         if self.pex_hash is None:
             raise ValueError("The venv_dir was requested but no pex_hash was set.")
         return variables.venv_dir(
-            pex_file=pex_file,
             pex_root=pex_root,
             pex_hash=self.pex_hash,
             has_interpreter_constraints=self.has_interpreter_constraints,
+            pex_file=pex_file,
             interpreter=interpreter,
             pex_path=self.pex_path,
             expand_pex_root=expand_pex_root,
@@ -453,18 +456,22 @@ class PexInfo(object):
 
     @property
     def entry_point(self):
-        return self._get_safe("entry_point")
+        # type: () -> Optional[str]
+        return self._get_python2_import_system_safe_str("entry_point")
 
     @entry_point.setter
     def entry_point(self, value):
+        # type: (str) -> None
         self._pex_info["entry_point"] = value
 
     @property
     def script(self):
-        return self._get_safe("script")
+        # type: () -> Optional[str]
+        return self._get_python2_import_system_safe_str("script")
 
     @script.setter
     def script(self, value):
+        # type: (str) -> None
         self._pex_info["script"] = value
 
     def add_requirement(self, requirement):
@@ -509,16 +516,10 @@ class PexInfo(object):
     @property
     def pex_root(self):
         # type: () -> str
-        pex_root = os.path.realpath(os.path.expanduser(self.raw_pex_root))
-        if not can_write_dir(pex_root):
-            tmp_root = os.path.realpath(safe_mkdtemp())
-            pex_warnings.warn(
-                "PEX_ROOT is configured as {pex_root} but that path is un-writeable, "
-                "falling back to a temporary PEX_ROOT of {tmp_root} which will hurt "
-                "performance.".format(pex_root=pex_root, tmp_root=tmp_root)
-            )
-            pex_root = self._pex_info["pex_root"] = tmp_root
-        return pex_root
+        writeable_pex_root, is_fallback = pex_root.ensure_writeable(self.raw_pex_root)
+        if is_fallback:
+            self._pex_info["pex_root"] = writeable_pex_root
+        return writeable_pex_root
 
     @pex_root.setter
     def pex_root(self, value):

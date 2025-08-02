@@ -45,6 +45,7 @@ from .type_defs import (
     CopyObjectOutputTypeDef,
     CopyObjectRequestTypeDef,
     CopySourceTypeDef,
+    CreateBucketMetadataConfigurationRequestTypeDef,
     CreateBucketMetadataTableConfigurationRequestTypeDef,
     CreateBucketOutputTypeDef,
     CreateBucketRequestTypeDef,
@@ -58,6 +59,7 @@ from .type_defs import (
     DeleteBucketIntelligentTieringConfigurationRequestTypeDef,
     DeleteBucketInventoryConfigurationRequestTypeDef,
     DeleteBucketLifecycleRequestTypeDef,
+    DeleteBucketMetadataConfigurationRequestTypeDef,
     DeleteBucketMetadataTableConfigurationRequestTypeDef,
     DeleteBucketMetricsConfigurationRequestTypeDef,
     DeleteBucketOwnershipControlsRequestTypeDef,
@@ -97,6 +99,8 @@ from .type_defs import (
     GetBucketLocationRequestTypeDef,
     GetBucketLoggingOutputTypeDef,
     GetBucketLoggingRequestTypeDef,
+    GetBucketMetadataConfigurationOutputTypeDef,
+    GetBucketMetadataConfigurationRequestTypeDef,
     GetBucketMetadataTableConfigurationOutputTypeDef,
     GetBucketMetadataTableConfigurationRequestTypeDef,
     GetBucketMetricsConfigurationOutputTypeDef,
@@ -199,10 +203,13 @@ from .type_defs import (
     PutObjectTaggingOutputTypeDef,
     PutObjectTaggingRequestTypeDef,
     PutPublicAccessBlockRequestTypeDef,
+    RenameObjectRequestTypeDef,
     RestoreObjectOutputTypeDef,
     RestoreObjectRequestTypeDef,
     SelectObjectContentOutputTypeDef,
     SelectObjectContentRequestTypeDef,
+    UpdateBucketMetadataInventoryTableConfigurationRequestTypeDef,
+    UpdateBucketMetadataJournalTableConfigurationRequestTypeDef,
     UploadPartCopyOutputTypeDef,
     UploadPartCopyRequestTypeDef,
     UploadPartOutputTypeDef,
@@ -241,6 +248,7 @@ class Exceptions(BaseClientExceptions):
     BucketAlreadyOwnedByYou: Type[BotocoreClientError]
     ClientError: Type[BotocoreClientError]
     EncryptionTypeMismatch: Type[BotocoreClientError]
+    IdempotencyParameterMismatch: Type[BotocoreClientError]
     InvalidObjectState: Type[BotocoreClientError]
     InvalidRequest: Type[BotocoreClientError]
     InvalidWriteOffset: Type[BotocoreClientError]
@@ -311,7 +319,8 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[CopyObjectRequestTypeDef]
     ) -> CopyObjectOutputTypeDef:
         """
-        Creates a copy of an object that is already stored in Amazon S3.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will discontinue
+        support for creating new Email Grantee Access Control Lists (ACL).
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/copy_object.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#copy_object)
@@ -321,17 +330,30 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[CreateBucketRequestTypeDef]
     ) -> CreateBucketOutputTypeDef:
         """
-        This action creates an Amazon S3 bucket.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will discontinue
+        support for creating new Email Grantee Access Control Lists (ACL).
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/create_bucket.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#create_bucket)
+        """
+
+    async def create_bucket_metadata_configuration(
+        self, **kwargs: Unpack[CreateBucketMetadataConfigurationRequestTypeDef]
+    ) -> EmptyResponseMetadataTypeDef:
+        """
+        Creates an S3 Metadata V2 metadata configuration for a general purpose bucket.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/create_bucket_metadata_configuration.html)
+        [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#create_bucket_metadata_configuration)
         """
 
     async def create_bucket_metadata_table_configuration(
         self, **kwargs: Unpack[CreateBucketMetadataTableConfigurationRequestTypeDef]
     ) -> EmptyResponseMetadataTypeDef:
         """
-        Creates a metadata table configuration for a general purpose bucket.
+        We recommend that you create your S3 Metadata configurations by using the V2 <a
+        href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucketMetadataConfiguration.html">CreateBucketMetadataConfiguration</a>
+        API operation.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/create_bucket_metadata_table_configuration.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#create_bucket_metadata_table_configuration)
@@ -341,7 +363,8 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[CreateMultipartUploadRequestTypeDef]
     ) -> CreateMultipartUploadOutputTypeDef:
         """
-        This action initiates a multipart upload and returns an upload ID.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will discontinue
+        support for creating new Email Grantee Access Control Lists (ACL).
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/create_multipart_upload.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#create_multipart_upload)
@@ -430,11 +453,23 @@ class S3Client(AioBaseClient):
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#delete_bucket_lifecycle)
         """
 
+    async def delete_bucket_metadata_configuration(
+        self, **kwargs: Unpack[DeleteBucketMetadataConfigurationRequestTypeDef]
+    ) -> EmptyResponseMetadataTypeDef:
+        """
+        Deletes an S3 Metadata configuration from a general purpose bucket.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/delete_bucket_metadata_configuration.html)
+        [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#delete_bucket_metadata_configuration)
+        """
+
     async def delete_bucket_metadata_table_configuration(
         self, **kwargs: Unpack[DeleteBucketMetadataTableConfigurationRequestTypeDef]
     ) -> EmptyResponseMetadataTypeDef:
         """
-        Deletes a metadata table configuration from a general purpose bucket.
+        We recommend that you delete your S3 Metadata configurations by using the V2 <a
+        href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketMetadataTableConfiguration.html">DeleteBucketMetadataTableConfiguration</a>
+        API operation.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/delete_bucket_metadata_table_configuration.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#delete_bucket_metadata_table_configuration)
@@ -555,7 +590,8 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[GetBucketAclRequestTypeDef]
     ) -> GetBucketAclOutputTypeDef:
         """
-        This operation is not supported for directory buckets.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will stop returning
+        <code>DisplayName</code>.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/get_bucket_acl.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#get_bucket_acl)
@@ -646,17 +682,31 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[GetBucketLoggingRequestTypeDef]
     ) -> GetBucketLoggingOutputTypeDef:
         """
-        This operation is not supported for directory buckets.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will stop returning
+        <code>DisplayName</code>.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/get_bucket_logging.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#get_bucket_logging)
+        """
+
+    async def get_bucket_metadata_configuration(
+        self, **kwargs: Unpack[GetBucketMetadataConfigurationRequestTypeDef]
+    ) -> GetBucketMetadataConfigurationOutputTypeDef:
+        """
+        Retrieves the S3 Metadata configuration for a general purpose bucket.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/get_bucket_metadata_configuration.html)
+        [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#get_bucket_metadata_configuration)
         """
 
     async def get_bucket_metadata_table_configuration(
         self, **kwargs: Unpack[GetBucketMetadataTableConfigurationRequestTypeDef]
     ) -> GetBucketMetadataTableConfigurationOutputTypeDef:
         """
-        Retrieves the metadata table configuration for a general purpose bucket.
+        We recommend that you retrieve your S3 Metadata configurations by using the V2
+        <a
+        href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketMetadataTableConfiguration.html">GetBucketMetadataTableConfiguration</a>
+        API operation.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/get_bucket_metadata_table_configuration.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#get_bucket_metadata_table_configuration)
@@ -794,7 +844,8 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[GetObjectAttributesRequestTypeDef]
     ) -> GetObjectAttributesOutputTypeDef:
         """
-        Retrieves all the metadata from an object without returning the object itself.
+        Retrieves all of the metadata from an object without returning the object
+        itself.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/get_object_attributes.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#get_object_attributes)
@@ -926,7 +977,8 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[ListBucketsRequestTypeDef]
     ) -> ListBucketsOutputTypeDef:
         """
-        This operation is not supported for directory buckets.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will stop returning
+        <code>DisplayName</code>.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_buckets.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#list_buckets)
@@ -947,7 +999,8 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[ListMultipartUploadsRequestTypeDef]
     ) -> ListMultipartUploadsOutputTypeDef:
         """
-        This operation lists in-progress multipart uploads in a bucket.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will stop returning
+        <code>DisplayName</code>.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_multipart_uploads.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#list_multipart_uploads)
@@ -957,7 +1010,8 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[ListObjectVersionsRequestTypeDef]
     ) -> ListObjectVersionsOutputTypeDef:
         """
-        This operation is not supported for directory buckets.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will stop returning
+        <code>DisplayName</code>.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_object_versions.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#list_object_versions)
@@ -967,7 +1021,8 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[ListObjectsRequestTypeDef]
     ) -> ListObjectsOutputTypeDef:
         """
-        This operation is not supported for directory buckets.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will stop returning
+        <code>DisplayName</code>.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_objects.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#list_objects)
@@ -985,7 +1040,8 @@ class S3Client(AioBaseClient):
 
     async def list_parts(self, **kwargs: Unpack[ListPartsRequestTypeDef]) -> ListPartsOutputTypeDef:
         """
-        Lists the parts that have been uploaded for a specific multipart upload.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will stop returning
+        <code>DisplayName</code>.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_parts.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#list_parts)
@@ -1005,7 +1061,8 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[PutBucketAclRequestTypeDef]
     ) -> EmptyResponseMetadataTypeDef:
         """
-        This operation is not supported for directory buckets.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will discontinue
+        support for creating new Email Grantee Access Control Lists (ACL).
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/put_bucket_acl.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#put_bucket_acl)
@@ -1087,7 +1144,8 @@ class S3Client(AioBaseClient):
         self, **kwargs: Unpack[PutBucketLoggingRequestTypeDef]
     ) -> EmptyResponseMetadataTypeDef:
         """
-        This operation is not supported for directory buckets.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will discontinue
+        support for creating new Email Grantee Access Control Lists (ACL).
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/put_bucket_logging.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#put_bucket_logging)
@@ -1195,7 +1253,8 @@ class S3Client(AioBaseClient):
 
     async def put_object(self, **kwargs: Unpack[PutObjectRequestTypeDef]) -> PutObjectOutputTypeDef:
         """
-        Adds an object to a bucket.
+        End of support notice: Beginning October 1, 2025, Amazon S3 will discontinue
+        support for creating new Email Grantee Access Control Lists (ACL).
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/put_object.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#put_object)
@@ -1261,6 +1320,15 @@ class S3Client(AioBaseClient):
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#put_public_access_block)
         """
 
+    async def rename_object(self, **kwargs: Unpack[RenameObjectRequestTypeDef]) -> Dict[str, Any]:
+        """
+        Renames an existing object in a directory bucket that uses the S3 Express One
+        Zone storage class.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/rename_object.html)
+        [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#rename_object)
+        """
+
     async def restore_object(
         self, **kwargs: Unpack[RestoreObjectRequestTypeDef]
     ) -> RestoreObjectOutputTypeDef:
@@ -1279,6 +1347,28 @@ class S3Client(AioBaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/select_object_content.html)
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#select_object_content)
+        """
+
+    async def update_bucket_metadata_inventory_table_configuration(
+        self, **kwargs: Unpack[UpdateBucketMetadataInventoryTableConfigurationRequestTypeDef]
+    ) -> EmptyResponseMetadataTypeDef:
+        """
+        Enables or disables a live inventory table for an S3 Metadata configuration on
+        a general purpose bucket.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/update_bucket_metadata_inventory_table_configuration.html)
+        [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#update_bucket_metadata_inventory_table_configuration)
+        """
+
+    async def update_bucket_metadata_journal_table_configuration(
+        self, **kwargs: Unpack[UpdateBucketMetadataJournalTableConfigurationRequestTypeDef]
+    ) -> EmptyResponseMetadataTypeDef:
+        """
+        Enables or disables journal table record expiration for an S3 Metadata
+        configuration on a general purpose bucket.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/update_bucket_metadata_journal_table_configuration.html)
+        [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#update_bucket_metadata_journal_table_configuration)
         """
 
     async def upload_part(
