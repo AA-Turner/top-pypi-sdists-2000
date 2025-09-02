@@ -3,7 +3,6 @@
  *  @brief      SIMD-accelerated Similarity Measures and Distance Functions.
  *  @author     Ash Vardanian
  *  @date       March 14, 2023
- *  @copyright  Copyright (c) 2023
  *
  *  References:
  *  x86 intrinsics: https://www.intel.com/content/www/us/en/docs/intrinsics-guide
@@ -89,8 +88,8 @@
 #define SIMSIMD_H
 
 #define SIMSIMD_VERSION_MAJOR 6
-#define SIMSIMD_VERSION_MINOR 4
-#define SIMSIMD_VERSION_PATCH 9
+#define SIMSIMD_VERSION_MINOR 5
+#define SIMSIMD_VERSION_PATCH 1
 
 /**
  *  @brief  Removes compile-time dispatching, and replaces it with runtime dispatching.
