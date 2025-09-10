@@ -1,71 +1,30 @@
-from typing import Callable, Any, TypeVar
-from inspect import signature
-from pydantic import ValidationInfo
+"""Backwards compatibility module for instructor.validators.
 
-ASYNC_VALIDATOR_KEY = "__async_validator__"
-ASYNC_MODEL_VALIDATOR_KEY = "__async_model_validator__"
-T = TypeVar("T", bound=Callable[..., Any])
+This module provides lazy imports to maintain backwards compatibility.
+"""
 
-
-class AsyncValidationContext:
-    context: dict[str, Any]
-
-    def __init__(self, context: dict[str, Any]):
-        self.context = context
+import warnings
 
 
-class AsyncValidationError(ValueError):
-    errors: list[ValueError]
-
-
-def async_field_validator(field: str, *fields: str) -> Callable[[T], T]:
-    field_names = field, *fields
-
-    def decorator(func: T) -> T:
-        params = signature(func).parameters
-        requires_validation_context = False
-        if len(params) == 3:
-            if "info" not in params:
-                raise ValueError(
-                    "Async validator can only have a value parameter and an optional info parameter"
-                )
-            if params["info"].annotation != ValidationInfo:
-                raise ValueError(
-                    "Async validator info parameter must be of type ValidationInfo"
-                )
-            requires_validation_context = True
-
-        setattr(
-            func, ASYNC_VALIDATOR_KEY, (field_names, func, requires_validation_context)
-        )
-        return func
-
-    return decorator
-
-
-def async_model_validator() -> Callable[[T], T]:
-    def decorator(func: T) -> T:
-        params = signature(func).parameters
-        requires_validation_context = False
-        if len(params) > 2:
-            raise ValueError("Invalid Parameter Count!")
-
-        if len(params) == 2:
-            if "info" not in params:
-                raise ValueError(
-                    "Async validator can only have a value parameter and an optional info parameter"
-                )
-            if params["info"].annotation != ValidationInfo:
-                raise ValueError(
-                    "Async validator info parameter must be of type ValidationInfo"
-                )
-            requires_validation_context = True
-
-        setattr(
-            func,
-            ASYNC_MODEL_VALIDATOR_KEY,
-            (func, requires_validation_context),
-        )
-        return func
-
-    return decorator
+def __getattr__(name: str):
+    """Lazy import to provide backward compatibility for validators imports."""
+    warnings.warn(
+        f"Importing from 'instructor.validators' is deprecated and will be removed in v2.0.0. "
+        f"Please update your imports to use the new location:\n"
+        "  from instructor.validation import llm_validator, openai_moderation",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    
+    from . import validation
+    from .processing import validators as processing_validators
+    
+    # Try validation module first
+    if hasattr(validation, name):
+        return getattr(validation, name)
+        
+    # Then try processing.validators
+    if hasattr(processing_validators, name):
+        return getattr(processing_validators, name)
+    
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
