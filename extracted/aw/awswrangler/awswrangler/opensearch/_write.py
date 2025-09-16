@@ -117,7 +117,7 @@ def _file_line_generator(path: str, is_json: bool = False) -> Generator[Any, Non
 
 @_utils.check_optional_dependency(jsonpath_ng, "jsonpath_ng")
 def _get_documents_w_json_path(documents: list[Mapping[str, Any]], json_path: str) -> list[Any]:
-    from jsonpath_ng.exceptions import JsonPathParserError
+    from jsonpath_ng.exceptions import JsonPathParserError  # noqa: PLC0415
 
     try:
         jsonpath_expression = jsonpath_ng.parse(json_path)
@@ -232,7 +232,7 @@ def create_index(
         body = None  # type: ignore[assignment]
 
     # ignore 400 cause by IndexAlreadyExistsException when creating an index
-    response: dict[str, Any] = client.indices.create(index, body=body, ignore=400)
+    response: dict[str, Any] = client.indices.create(index=index, body=body, ignore=400)
     if "error" in response:
         _logger.warning(response)
         if str(response["error"]).startswith("MapperParsingException"):
@@ -268,7 +268,7 @@ def delete_index(client: "opensearchpy.OpenSearch", index: str) -> dict[str, Any
 
     """
     # ignore 400/404 IndexNotFoundError exception
-    response: dict[str, Any] = client.indices.delete(index, ignore=[400, 404])
+    response: dict[str, Any] = client.indices.delete(index=index, ignore=[400, 404])
     if "error" in response:
         _logger.warning(response)
     return response
@@ -280,7 +280,7 @@ def index_json(
     path: str,
     index: str,
     doc_type: str | None = None,
-    boto3_session: boto3.Session | None = boto3.Session(),
+    boto3_session: boto3.Session | None = None,
     json_path: str | None = None,
     use_threads: bool | int = False,
     **kwargs: Any,
@@ -334,12 +334,9 @@ def index_json(
     """
     _logger.debug("indexing %s from %s", index, path)
 
-    if boto3_session is None:
-        raise ValueError("boto3_session cannot be None")
-
     if path.startswith("s3://"):
         bucket, key = parse_path(path)
-        s3 = boto3_session.client("s3")
+        s3 = _utils.client(service_name="s3", session=boto3_session)
         obj = s3.get_object(Bucket=bucket, Key=key)
         body = obj["Body"].read()
         lines = body.splitlines()

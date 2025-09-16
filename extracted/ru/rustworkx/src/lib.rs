@@ -123,7 +123,7 @@ pub struct RxPyErr {
 pub type RxPyResult<T> = Result<T, RxPyErr>;
 
 fn map_dag_would_cycle<E: std::error::Error>(value: E) -> PyErr {
-    DAGWouldCycle::new_err(format!("{}", value))
+    DAGWouldCycle::new_err(format!("{value}"))
 }
 
 impl From<ContractError> for RxPyErr {
@@ -152,7 +152,7 @@ impl From<TopologicalSortError<PyErr>> for RxPyErr {
         RxPyErr {
             pyerr: match value {
                 TopologicalSortError::CycleOrBadInitialState => {
-                    PyValueError::new_err(format!("{}", value))
+                    PyValueError::new_err(format!("{value}"))
                 }
                 TopologicalSortError::KeyError(e) => e,
             },
@@ -371,49 +371,90 @@ fn find_node_by_weight<Ty: EdgeType>(
     Ok(index)
 }
 
-fn generic_class_getitem(
-    cls: &Bound<'_, pyo3::types::PyType>,
-    key: &Bound<'_, PyAny>,
-) -> PyResult<PyObject> {
-    Python::with_gil(|py| -> PyResult<PyObject> {
-        let types_mod = py.import("types")?;
-        let types_generic_alias = types_mod.getattr("GenericAlias")?;
-        let args = (cls, key);
-        let generic_alias = types_generic_alias.call1(args)?;
-        Ok(generic_alias.into())
-    })
-}
+create_exception!(
+    rustworkx,
+    InvalidNode,
+    PyException,
+    "The provided node is invalid."
+);
+create_exception!(
+    rustworkx,
+    DAGWouldCycle,
+    PyException,
+    "Performing this operation would result in trying to add a cycle to a DAG."
+);
+create_exception!(
+    rustworkx,
+    NoEdgeBetweenNodes,
+    PyException,
+    "There is no edge present between the provided nodes."
+);
+create_exception!(
+    rustworkx,
+    DAGHasCycle,
+    PyException,
+    "The specified Directed Graph has a cycle and can't be treated as a DAG."
+);
+create_exception!(
+    rustworkx,
+    NoSuitableNeighbors,
+    PyException,
+    "No neighbors found matching the provided predicate."
+);
+create_exception!(
+    rustworkx,
+    NullGraph,
+    PyException,
+    "Invalid operation on a null graph"
+);
+create_exception!(
+    rustworkx,
+    NoPathFound,
+    PyException,
+    "No path was found between the specified nodes."
+);
+create_exception!(
+    rustworkx,
+    InvalidMapping,
+    PyException,
+    "No mapping was found for the request swapping"
+);
 
-// The provided node is invalid.
-create_exception!(rustworkx, InvalidNode, PyException);
-// Performing this operation would result in trying to add a cycle to a DAG.
-create_exception!(rustworkx, DAGWouldCycle, PyException);
-// There is no edge present between the provided nodes.
-create_exception!(rustworkx, NoEdgeBetweenNodes, PyException);
-// The specified Directed Graph has a cycle and can't be treated as a DAG.
-create_exception!(rustworkx, DAGHasCycle, PyException);
-// No neighbors found matching the provided predicate.
-create_exception!(rustworkx, NoSuitableNeighbors, PyException);
-// Invalid operation on a null graph
-create_exception!(rustworkx, NullGraph, PyException);
-// No path was found between the specified nodes.
-create_exception!(rustworkx, NoPathFound, PyException);
-// No mapping was found for the request swapping
-create_exception!(rustworkx, InvalidMapping, PyException);
 // Prune part of the search tree while traversing a graph.
 import_exception!(rustworkx.visit, PruneSearch);
 // Stop graph traversal.
 import_exception!(rustworkx.visit, StopSearch);
-// JSON Error
-create_exception!(rustworkx, JSONSerializationError, PyException);
-// JSON Error
-create_exception!(rustworkx, JSONDeserializationError, PyException);
-// Negative Cycle found on shortest-path algorithm
-create_exception!(rustworkx, NegativeCycle, PyException);
-// Failed to Converge on a solution
-create_exception!(rustworkx, FailedToConverge, PyException);
-// Graph is not bipartite
-create_exception!(rustworkx, GraphNotBipartite, PyException);
+
+create_exception!(
+    rustworkx,
+    JSONSerializationError,
+    PyException,
+    "JSON Serialization Error"
+);
+create_exception!(
+    rustworkx,
+    JSONDeserializationError,
+    PyException,
+    "JSON Deserialization Error"
+);
+create_exception!(
+    rustworkx,
+    NegativeCycle,
+    PyException,
+    "Negative Cycle found on shortest-path algorithm"
+);
+create_exception!(
+    rustworkx,
+    FailedToConverge,
+    PyException,
+    "Failed to Converge on a solution"
+);
+create_exception!(
+    rustworkx,
+    GraphNotBipartite,
+    PyException,
+    "Graph is not bipartite"
+);
 
 #[pymodule]
 fn rustworkx(py: Python<'_>, m: &Bound<PyModule>) -> PyResult<()> {
@@ -530,6 +571,10 @@ fn rustworkx(py: Python<'_>, m: &Bound<PyModule>) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(digraph_betweenness_centrality))?;
     m.add_wrapped(wrap_pyfunction!(graph_closeness_centrality))?;
     m.add_wrapped(wrap_pyfunction!(digraph_closeness_centrality))?;
+    m.add_wrapped(wrap_pyfunction!(graph_newman_weighted_closeness_centrality))?;
+    m.add_wrapped(wrap_pyfunction!(
+        digraph_newman_weighted_closeness_centrality
+    ))?;
     m.add_wrapped(wrap_pyfunction!(graph_edge_betweenness_centrality))?;
     m.add_wrapped(wrap_pyfunction!(digraph_edge_betweenness_centrality))?;
     m.add_wrapped(wrap_pyfunction!(graph_eigenvector_centrality))?;
@@ -567,12 +612,18 @@ fn rustworkx(py: Python<'_>, m: &Bound<PyModule>) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(undirected_random_bipartite_graph))?;
     m.add_wrapped(wrap_pyfunction!(cycle_basis))?;
     m.add_wrapped(wrap_pyfunction!(simple_cycles))?;
+    m.add_wrapped(wrap_pyfunction!(number_strongly_connected_components))?;
     m.add_wrapped(wrap_pyfunction!(strongly_connected_components))?;
+    m.add_wrapped(wrap_pyfunction!(is_strongly_connected))?;
+    m.add_wrapped(wrap_pyfunction!(digraph_condensation))?;
+    m.add_wrapped(wrap_pyfunction!(graph_condensation))?;
     m.add_wrapped(wrap_pyfunction!(digraph_dfs_edges))?;
     m.add_wrapped(wrap_pyfunction!(graph_dfs_edges))?;
     m.add_wrapped(wrap_pyfunction!(digraph_find_cycle))?;
     m.add_wrapped(wrap_pyfunction!(digraph_k_shortest_path_lengths))?;
     m.add_wrapped(wrap_pyfunction!(graph_k_shortest_path_lengths))?;
+    m.add_wrapped(wrap_pyfunction!(digraph_single_source_all_shortest_paths))?;
+    m.add_wrapped(wrap_pyfunction!(graph_single_source_all_shortest_paths))?;
     m.add_wrapped(wrap_pyfunction!(is_matching))?;
     m.add_wrapped(wrap_pyfunction!(is_maximal_matching))?;
     m.add_wrapped(wrap_pyfunction!(max_weight_matching))?;
@@ -585,6 +636,7 @@ fn rustworkx(py: Python<'_>, m: &Bound<PyModule>) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(digraph_core_number))?;
     m.add_wrapped(wrap_pyfunction!(graph_complement))?;
     m.add_wrapped(wrap_pyfunction!(digraph_complement))?;
+    m.add_wrapped(wrap_pyfunction!(local_complement))?;
     m.add_wrapped(wrap_pyfunction!(graph_random_layout))?;
     m.add_wrapped(wrap_pyfunction!(digraph_random_layout))?;
     m.add_wrapped(wrap_pyfunction!(graph_bipartite_layout))?;
@@ -619,6 +671,8 @@ fn rustworkx(py: Python<'_>, m: &Bound<PyModule>) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(connected_subgraphs))?;
     m.add_wrapped(wrap_pyfunction!(is_planar))?;
     m.add_wrapped(wrap_pyfunction!(read_graphml))?;
+    m.add_wrapped(wrap_pyfunction!(graph_write_graphml))?;
+    m.add_wrapped(wrap_pyfunction!(digraph_write_graphml))?;
     m.add_wrapped(wrap_pyfunction!(digraph_node_link_json))?;
     m.add_wrapped(wrap_pyfunction!(graph_node_link_json))?;
     m.add_wrapped(wrap_pyfunction!(from_node_link_json_file))?;
@@ -652,6 +706,25 @@ fn rustworkx(py: Python<'_>, m: &Bound<PyModule>) -> PyResult<()> {
     m.add_class::<iterators::ProductNodeMap>()?;
     m.add_class::<iterators::BiconnectedComponents>()?;
     m.add_class::<ColoringStrategy>()?;
+    m.add_class::<Domain>()?;
+    m.add_class::<Type>()?;
+    m.add_class::<KeySpec>()?;
     m.add_wrapped(wrap_pymodule!(generators::generators))?;
+    #[cfg(target_os = "emscripten")]
+    setup_rayon_for_pyodide();
     Ok(())
+}
+
+#[cfg(target_os = "emscripten")]
+static PYODIDE_INIT: std::sync::Once = std::sync::Once::new();
+
+#[cfg(target_os = "emscripten")]
+pub fn setup_rayon_for_pyodide() {
+    PYODIDE_INIT.call_once(|| {
+        rayon::ThreadPoolBuilder::new()
+            .num_threads(1)
+            .use_current_thread()
+            .build_global()
+            .expect("failing setting up threads for pyodide");
+    });
 }

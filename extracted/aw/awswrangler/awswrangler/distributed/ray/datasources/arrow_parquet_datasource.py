@@ -5,6 +5,7 @@ This module is pulled from Ray's [ParquetDatasource]
 and customized to ensure compatibility with AWS SDK for pandas behavior. Changes from the original implementation,
 are documented in the comments and marked with (AWS SDK for pandas) prefix.
 """
+# ruff: noqa: PLC0415
 
 from __future__ import annotations
 
@@ -344,7 +345,6 @@ class ArrowParquetDatasource(Datasource):
 
             meta = self._meta_provider(
                 paths,  # type: ignore[arg-type]
-                self._inferred_schema,
                 num_fragments=len(fragments),
                 prefetched_metadata=metadata,
             )
@@ -566,7 +566,7 @@ def _estimate_default_read_batch_size_rows(sample_infos: list[_SampleInfo]) -> i
         if sample_info.actual_bytes_per_row is None:
             return PARQUET_READER_ROW_BATCH_SIZE
         else:
-            max_parquet_reader_row_batch_size_bytes = DataContext.get_current().target_max_block_size // 10
+            max_parquet_reader_row_batch_size_bytes = DataContext.get_current().target_max_block_size // 10  # type: ignore[operator]
             return max(
                 1,
                 min(

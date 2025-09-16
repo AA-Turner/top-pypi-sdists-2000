@@ -168,7 +168,7 @@ def connect(
     attrs: _db_utils.ConnectionAttributes = _db_utils.get_connection_attributes(
         connection=connection, secret_id=secret_id, catalog_id=catalog_id, dbname=dbname, boto3_session=boto3_session
     )
-    if attrs.kind != "mysql":
+    if attrs.kind not in ("mysql", "aurora-mysql"):
         raise exceptions.InvalidDatabaseType(f"Invalid connection type ({attrs.kind}. It must be a MySQL connection.)")
     return pymysql.connect(
         user=attrs.user,
@@ -176,7 +176,7 @@ def connect(
         password=attrs.password,
         port=attrs.port,
         host=attrs.host,
-        ssl=attrs.ssl_context,  # type: ignore[arg-type]
+        ssl=attrs.ssl_context,
         read_timeout=read_timeout,
         write_timeout=write_timeout,
         connect_timeout=connect_timeout,

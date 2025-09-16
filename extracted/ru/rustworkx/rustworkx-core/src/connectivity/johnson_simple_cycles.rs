@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-use ahash::RandomState;
+use foldhash::fast::RandomState;
 use hashbrown::{HashMap, HashSet};
 use indexmap::IndexSet;
 use std::hash::Hash;
@@ -93,7 +93,7 @@ fn unblock(
 #[allow(clippy::too_many_arguments)]
 fn process_stack(
     start_node: NodeIndex,
-    stack: &mut Vec<(NodeIndex, IndexSet<NodeIndex, ahash::RandomState>)>,
+    stack: &mut Vec<(NodeIndex, IndexSet<NodeIndex, foldhash::fast::RandomState>)>,
     path: &mut Vec<NodeIndex>,
     closed: &mut HashSet<NodeIndex>,
     blocked: &mut HashSet<NodeIndex>,
@@ -117,7 +117,7 @@ fn process_stack(
                     next_node,
                     subgraph
                         .neighbors(next_node)
-                        .collect::<IndexSet<NodeIndex, ahash::RandomState>>(),
+                        .collect::<IndexSet<NodeIndex, foldhash::fast::RandomState>>(),
                 ));
                 closed.remove(&next_node);
                 blocked.insert(next_node);
@@ -197,7 +197,7 @@ impl SimpleCycleIter {
             return Some(vec![cycle_node]);
         }
         // Restore previous state if it exists
-        let mut stack: Vec<(NodeIndex, IndexSet<NodeIndex, ahash::RandomState>)> =
+        let mut stack: Vec<(NodeIndex, IndexSet<NodeIndex, foldhash::fast::RandomState>)> =
             std::mem::take(&mut self.stack);
         let mut path: Vec<NodeIndex> = std::mem::take(&mut self.path);
         let mut closed: HashSet<NodeIndex> = std::mem::take(&mut self.closed);
@@ -258,7 +258,7 @@ impl SimpleCycleIter {
                 self.start_node,
                 subgraph
                     .neighbors(self.start_node)
-                    .collect::<IndexSet<NodeIndex, ahash::RandomState>>(),
+                    .collect::<IndexSet<NodeIndex, foldhash::fast::RandomState>>(),
             )];
             if let Some(res) = process_stack(
                 self.start_node,
@@ -318,7 +318,7 @@ impl SimpleCycleIter {
 /// # Returns
 ///
 /// This function returns a `SimpleCycleIter` iterator which returns a `Vec` of `NodeIndex`.
-/// Note the `NodeIndex` type is not neccesarily the same as the input graph, as it's built
+/// Note the `NodeIndex` type is not necessarily the same as the input graph, as it's built
 /// using an internal `StableGraph` used by the algorithm. If your input `graph` uses a
 /// different node index type that differs from the default `NodeIndex<u32>`/`NodeIndex<DefaultIx>`
 /// you will want to convert these objects to your native `NodeIndex` type.
@@ -489,7 +489,7 @@ mod test_longest_path {
             );
             let mut cycles_iter = johnson_simple_cycles(&graph, None);
             let mut res = 0;
-            while let Some(_) = cycles_iter.next(&graph) {
+            while cycles_iter.next(&graph).is_some() {
                 res += 1;
             }
             assert_eq!(res, 3 * k);
@@ -523,7 +523,7 @@ mod test_longest_path {
             );
             let mut cycles_iter = johnson_simple_cycles(&graph, None);
             let mut res = 0;
-            while let Some(_) = cycles_iter.next(&graph) {
+            while cycles_iter.next(&graph).is_some() {
                 res += 1;
             }
             assert_eq!(res, 3 * k);

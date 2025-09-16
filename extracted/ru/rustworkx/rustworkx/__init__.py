@@ -61,7 +61,7 @@ class PyDAG(PyDiGraph):
         graph = rx.PyDAG()
         data_payload = "An arbitrary Python object"
         node_index = graph.add_node(data_payload)
-        print("Node Index: %s" % node_index)
+        print(f"Node Index: {node_index}")
         print(graph[node_index])
 
     The PyDAG class implements the Python mapping protocol for nodes so in
@@ -75,7 +75,7 @@ class PyDAG(PyDiGraph):
         data_payload = "An arbitrary Python object"
         node_index = graph.add_node(data_payload)
         graph[node_index] = "New Payload"
-        print("Node Index: %s" % node_index)
+        print(f"Node Index: {node_index}")
         print(graph[node_index])
 
     The PyDAG class has an option for real time cycle checking which can
@@ -123,9 +123,9 @@ class PyDAG(PyDiGraph):
 
     :param bool check_cycle: When this is set to ``True`` the created
         ``PyDAG`` has runtime cycle detection enabled.
-    :param bool multgraph: When this is set to ``False`` the created
+    :param bool multigraph: When this is set to ``False`` the created
         ``PyDAG`` object will not be a multigraph. When ``False`` if a method
-        call is made that would add parallel edges the the weight/weight from
+        call is made that would add parallel edges the weight/weight from
         that method call will be used to update the existing edge in place.
     """
 
@@ -173,7 +173,7 @@ def distance_matrix(graph, parallel_threshold=300, as_undirected=False, null_val
     :returns: The distance matrix
     :rtype: numpy.ndarray
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -215,7 +215,7 @@ def unweighted_average_shortest_path_length(graph, parallel_threshold=300, disco
 
     :rtype: float
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -251,7 +251,7 @@ def adjacency_matrix(graph, weight_fn=None, default_weight=1.0, null_value=0.0):
      :return: The adjacency matrix for the input dag as a numpy array
      :rtype: numpy.ndarray
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -263,7 +263,7 @@ def all_simple_paths(graph, from_, to, min_depth=None, cutoff=None):
     :param graph: The graph to find the path in. Can either be a
         class:`~rustworkx.PyGraph` or :class:`~rustworkx.PyDiGraph`
     :param int from_: The node index to find the paths from
-    :param int to: The node index to find the paths to
+    :param int | Iterable[int] to: The node index(es) to find the paths to
     :param int min_depth: The minimum depth of the path to include in the
         output list of paths. By default all paths are included regardless of
         depth, setting to 0 will behave like the default.
@@ -274,7 +274,7 @@ def all_simple_paths(graph, from_, to, min_depth=None, cutoff=None):
     :returns: A list of lists where each inner list is a path of node indices
     :rtype: list
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -330,7 +330,7 @@ def floyd_warshall(
 
     :rtype: AllPairsPathLengthMapping
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -379,7 +379,7 @@ def floyd_warshall_numpy(
         ``np.inf``.
     :rtype: numpy.ndarray
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -406,7 +406,7 @@ def astar_shortest_path(graph, node, goal_fn, edge_cost_fn, estimate_cost_fn):
         of node indices.
     :rtype: NodeIndices
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -440,7 +440,7 @@ def dijkstra_shortest_paths(
         the dict values are lists of node indices making the path.
     :rtype: dict
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -463,7 +463,7 @@ def has_path(
     :return: True if a path exists, False if not
     :rtype: bool
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -496,7 +496,7 @@ def all_pairs_dijkstra_shortest_paths(graph, edge_cost_fn):
 
     :rtype: AllPairsPathMapping
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -521,7 +521,7 @@ def all_pairs_all_simple_paths(graph, min_depth=None, cutoff=None):
         indices to a list of paths between the source and target nodes.
     :rtype: AllPairsMultiplePathMapping
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -554,7 +554,7 @@ def all_pairs_dijkstra_path_lengths(graph, edge_cost_fn):
 
     :rtype: AllPairsPathLengthMapping
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -579,7 +579,7 @@ def dijkstra_shortest_path_lengths(graph, node, edge_cost_fn, goal=None):
         cost/sum of the weights of path
     :rtype: dict
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -596,7 +596,7 @@ def k_shortest_path_lengths(graph, start, k, edge_cost, goal=None):
     :param int start: The node index to find the shortest paths from
     :param int k: The kth shortest path to find the lengths of
     :param edge_cost: A python callable that will receive an edge payload and
-        return a float for the cost of that eedge
+        return a float for the cost of that edge
     :param int goal: An optional goal node index, if specified the output
         dictionary
 
@@ -604,7 +604,7 @@ def k_shortest_path_lengths(graph, start, k, edge_cost, goal=None):
         the value is the length of the path.
     :rtype: dict
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -648,7 +648,7 @@ def dfs_edges(graph, source=None):
         depth-first order
     :rtype: EdgeList
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -704,7 +704,7 @@ def is_isomorphic(
     .. [VF2] VF2++  An Improved Subgraph Isomorphism Algorithm
         by Alpár Jüttner and Péter Madarasi
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(first))
+    raise TypeError(f"Invalid Input Type {type(first)} for graph")
 
 
 def is_isomorphic_node_match(first, second, matcher, id_order=True):
@@ -732,7 +732,7 @@ def is_isomorphic_node_match(first, second, matcher, id_order=True):
         It should be the same type as the first graph.
     :param callable matcher: A python callable object that takes 2 positional
         one for each node data object. If the return of this
-        function evaluates to True then the nodes passed to it are vieded
+        function evaluates to True then the nodes passed to it are viewed
         as matching.
     :param bool id_order: If set to ``False`` this function will use a
         heuristic matching order based on [VF2]_ paper. Otherwise it will
@@ -799,7 +799,7 @@ def is_subgraph_isomorphic(
         , ``False`` if there is not.
     :rtype: bool
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(first))
+    raise TypeError(f"Invalid Input Type {type(first)} for graph")
 
 
 @_rustworkx_dispatch
@@ -823,9 +823,8 @@ def transitivity(graph):
 
     :returns: Transitivity of the graph.
     :rtype: float
-        raise TypeError("Invalid Input Type %s for graph" % type(graph))
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -845,9 +844,8 @@ def core_number(graph):
 
     :returns: A dictionary keyed by node index to the core number
     :rtype: dict
-        raise TypeError("Invalid Input Type %s for graph" % type(graph))
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -864,7 +862,7 @@ def complement(graph):
         Parallel edges and self-loops are never created,
         even if the ``multigraph`` is set to ``True``
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -879,7 +877,7 @@ def random_layout(graph, center=None, seed=None):
     :returns: The random layout of the graph.
     :rtype: Pos2DMapping
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -944,7 +942,7 @@ def spring_layout(
     :returns: A dictionary of positions keyed by node id.
     :rtype: dict
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 def networkx_converter(graph, keep_attributes: bool = False):
@@ -1015,7 +1013,7 @@ def bipartite_layout(
     :returns: The bipartite layout of the graph.
     :rtype: Pos2DMapping
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1031,7 +1029,7 @@ def circular_layout(graph, scale=1, center=None):
     :returns: The circular layout of the graph.
     :rtype: Pos2DMapping
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1052,7 +1050,7 @@ def shell_layout(graph, nlist=None, rotate=None, scale=1, center=None):
     :returns: The shell layout of the graph.
     :rtype: Pos2DMapping
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1073,7 +1071,7 @@ def spiral_layout(graph, scale=1, center=None, resolution=0.35, equidistant=Fals
     :returns: The spiral layout of the graph.
     :rtype: Pos2DMapping
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1088,7 +1086,7 @@ def num_shortest_paths_unweighted(graph, source):
         a node in the graph that node will not be preset in the output mapping.
     :rtype: NodesCountMapping
     """
-    raise TypeError("Invalid input type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1096,14 +1094,14 @@ def betweenness_centrality(graph, normalized=True, endpoints=False, parallel_thr
     r"""Returns the betweenness centrality of each node in the graph.
 
     Betweenness centrality of a node :math:`v` is the sum of the
-    fraction of all-pairs shortest paths that pass through :math`v`
+    fraction of all-pairs shortest paths that pass through :math:`v`
 
     .. math::
 
        c_B(v) =\sum_{s,t \in V} \frac{\sigma(s, t|v)}{\sigma(s, t)}
 
     where :math:`V` is the set of nodes, :math:`\sigma(s, t)` is the number of
-    shortest :math`(s, t)` paths, and :math:`\sigma(s, t|v)` is the number of
+    shortest :math:`(s, t)` paths, and :math:`\sigma(s, t|v)` is the number of
     those paths  passing through some  node :math:`v` other than :math:`s, t`.
     If :math:`s = t`, :math:`\sigma(s, t) = 1`, and if :math:`v \in {s, t}`,
     :math:`\sigma(s, t|v) = 0`
@@ -1120,7 +1118,7 @@ def betweenness_centrality(graph, normalized=True, endpoints=False, parallel_thr
 
     See Also
     --------
-    edge_betweenness_centrality
+    :func:`~rustworkx.edge_betweenness_centrality`
 
     :param PyDiGraph graph: The input graph
     :param bool normalized: Whether to normalize the betweenness scores by
@@ -1135,16 +1133,16 @@ def betweenness_centrality(graph, normalized=True, endpoints=False, parallel_thr
     :returns: A dictionary mapping each node index to its betweenness centrality.
     :rtype: dict
     """
-    raise TypeError("Invalid input type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
-def closeness_centrality(graph, wf_improved=True):
+def closeness_centrality(graph, wf_improved=True, parallel_threshold=50):
     r"""Compute the closeness centrality of each node in a graph object.
 
     The closeness centrality of a node :math:`u` is defined as the
     reciprocal of the average shortest path distance to :math:`u` over all
-    :math:`n-1` reachable nodes in the graph. In it's general form this can
+    :math:`n-1` reachable nodes in the graph. In its general form this can
     be expressed as:
 
     .. math::
@@ -1169,10 +1167,19 @@ def closeness_centrality(graph, wf_improved=True):
     where :math:`N` is the number of nodes in the graph. This alternative
     formula can be used with the ``wf_improved`` argument.
 
+    This function is multithreaded and will run in parallel if the number
+    of nodes in the graph is above the value of ``parallel_threshold`` (it
+    defaults to 50). If the function will be running in parallel the env var
+    ``RAYON_NUM_THREADS`` can be used to adjust how many threads will be used.
+
     :param graph: The input graph. Can either be a
-        :class:`~retworkx.PyGraph` or :class:`~retworkx.PyDiGraph`.
+        :class:`~rustworkx.PyGraph` or :class:`~rustworkx.PyDiGraph`.
     :param bool wf_improved: This is optional; the default is True. If True,
         scale by the fraction of nodes reachable.
+    :param int parallel_threshold: The number of nodes to calculate the
+        the closeness centrality in parallel at if the number of nodes in
+        the graph is less than this value it will run in a single thread. The
+        default value is 50.
 
     :returns: A dictionary mapping each node index to its closeness centrality.
     :rtype: dict
@@ -1181,7 +1188,70 @@ def closeness_centrality(graph, wf_improved=True):
       Methods and Applications (Structural Analysis in the Social Sciences).
       Cambridge: Cambridge University Press. doi:10.1017/CBO9780511815478
     """
-    raise TypeError("Invalid input type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
+
+
+@_rustworkx_dispatch
+def newman_weighted_closeness_centrality(
+    graph, weight_fn=None, wf_improved=True, default_weight=1.0, parallel_threshold=50
+):
+    r"""Compute the weighted closeness centrality of each node in the graph.
+
+    The weighted closeness centrality is an extension of the standard closeness
+    centrality measure where edge weights represent connection strength rather
+    than distance. To properly compute shortest paths, weights are inverted
+    so that stronger connections correspond to shorter effective distances.
+    The algorithm follows the method described by Newman (2001) in analyzing
+    weighted graphs.[Newman]
+
+    The edges originally represent connection strength between nodes.
+    The idea is that if two nodes have a strong connection, the computed
+    distance between them should be small (shorter), and vice versa.
+    Note that this assume that the graph is modelling a measure of
+    connection strength (e.g. trust, collaboration, or similarity).
+    If the graph is not modelling a measure of connection strength,
+    the function `weight_fn` should invert the weights before calling this
+    function, if not it is considered as a logical error.
+
+    In the case of a graphs with more than one connected component there is
+    an alternative improved formula that calculates the closeness centrality
+    as "a ratio of the fraction of actors in the group who are reachable, to
+    the average distance".[WF]
+    You can enable this by setting `wf_improved` to `true`.
+
+    This function is multithreaded and will run in parallel if the number
+    of nodes in the graph is above the value of ``parallel_threshold`` (it
+    defaults to 50). If the function will be running in parallel the env var
+    ``RAYON_NUM_THREADS`` can be used to adjust how many threads will be used.
+
+    :param PyGraph graph: The input graph. Can either be a
+        :class:`~rustworkx.PyGraph` or :class:`~rustworkx.PyDiGraph`.
+    :param weight_fn: An optional input callable that will be passed the edge's
+       payload object and is expected to return a `float` weight for that edge.
+       If this is not specified ``default_weight`` will be used as the weight
+       for every edge in ``graph``
+    :param bool wf_improved: This is optional; the default is True. If True,
+      scale by the fraction of nodes reachable.
+    :param float default_weight: If ``weight_fn`` is not set the default weight
+        value to use for the weight of all edges
+    :param int parallel_threshold: The number of nodes to calculate the
+        the closeness centrality in parallel at if the number of nodes in
+        the graph is less than this value it will run in a single thread. The
+        default value is 50.
+
+    :returns: A dictionary mapping each node index to its closeness centrality.
+    :rtype: CentralityMapping
+
+    .. [Newman]: Newman, M. E. J. (2001). Scientific collaboration networks.
+        II. Shortest paths, weighted networks, and centrality.
+        Physical Review E, 64(1), 016132.
+
+    .. [WF]: Wasserman, S., & Faust, K. (1994). Social Network Analysis:
+        Methods and Applications (Structural Analysis in the Social Sciences).
+        Cambridge: Cambridge University Press.
+        <https://doi.org/10.1017/CBO9780511815478>
+    """
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1195,7 +1265,7 @@ def degree_centrality(graph):
         degree centrality score for each node.
     :rtype: CentralityMapping
     """
-    raise TypeError("Invalid input type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1203,7 +1273,7 @@ def edge_betweenness_centrality(graph, normalized=True, parallel_threshold=50):
     r"""Compute the edge betweenness centrality of all edges in a graph.
 
     Edge betweenness centrality of an edge :math:`e` is the sum of the
-    fraction of all-pairs shortest paths that pass through :math`e`
+    fraction of all-pairs shortest paths that pass through :math:`e`
 
     .. math::
 
@@ -1225,7 +1295,7 @@ def edge_betweenness_centrality(graph, normalized=True, parallel_threshold=50):
 
     See Also
     --------
-    betweenness_centrality
+    :func:`~rustworkx.betweenness_centrality`
 
     :param PyGraph graph: The input graph
     :param bool normalized: Whether to normalize the betweenness scores by the
@@ -1239,7 +1309,7 @@ def edge_betweenness_centrality(graph, normalized=True, parallel_threshold=50):
         betweenness score for each node.
     :rtype: EdgeCentralityMapping
     """
-    raise TypeError("Invalid input type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1280,7 +1350,7 @@ def eigenvector_centrality(graph, weight_fn=None, default_weight=1.0, max_iter=1
          centrality score for that node.
     :rtype: CentralityMapping
     """
-    raise TypeError("Invalid input type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1327,7 +1397,7 @@ def katz_centrality(
          centrality score for that node.
     :rtype: CentralityMapping
     """
-    raise TypeError("Invalid input type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1385,7 +1455,7 @@ def vf2_mapping(
         indices in ``second`` representing the mapping found.
     :rtype: Iterable[NodeMap]
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(first))
+    raise TypeError(f"Invalid Input Type {type(first)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1426,7 +1496,7 @@ def union(
         passed by reference from ``first`` and ``second`` to this new object.
     :rtype: :class:`~rustworkx.PyGraph` or :class:`~rustworkx.PyDiGraph`
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(first))
+    raise TypeError(f"Invalid Input Type {type(first)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1456,7 +1526,7 @@ def tensor_product(
     :rtype: Tuple[:class:`~rustworkx.PyGraph` or :class:`~rustworkx.PyDiGraph`,
         :class:`~rustworkx.ProductNodeMap`]
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(first))
+    raise TypeError(f"Invalid Input Type {type(first)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1486,40 +1556,47 @@ def cartesian_product(
     :rtype: Tuple[:class:`~rustworkx.PyGraph` or :class:`~rustworkx.PyDiGraph`,
         :class:`~rustworkx.ProductNodeMap`]
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(first))
+    raise TypeError(f"Invalid Input Type {type(first)} for graph")
 
 
 @_rustworkx_dispatch
 def bfs_search(graph, source, visitor):
-    """Breadth-first traversal of a directed/undirected graph.
+    """Breadth-first traversal of a directed/undirected graph with several source vertices.
 
-    The pseudo-code for the BFS algorithm is listed below, with the annotated
-    event points, for which the given visitor object will be called with the
-    appropriate method.
+    Pseudo-code for the breadth-first search algorithm with a single source vertex is
+    listed below with annotated event points at which a method of the given
+    :class:`~rustworkx.visit.BFSVisitor` is called.
 
     ::
 
-        BFS(G, s)
-          for each vertex u in V
-              color[u] := WHITE
+      # G - graph, s - single source node
+      BFS(G, s)
+        let color be a mapping             # color[u] - vertex u color WHITE/GRAY/BLACK
+        for each u in G                    # u - vertex in G
+          color[u] := WHITE                # color all vertices as undiscovered
+        end for
+        let Q be a queue
+        ENQUEUE(Q, s)
+        color[s] := GRAY                   # event: discover_vertex(s)
+        while (Q is not empty)
+          u := DEQUEUE(Q)
+          for each v, w in OutEdges(G, u)  # v - target vertex, w - edge weight
+            if (WHITE = color[v])          # event: tree_edge((u, v, w))
+              color[v] := GRAY             # event: discover_vertex(v)
+              ENQUEUE(Q, v)
+            else                           # event: non_tree_edge((u, v, w))
+              if (GRAY = color[v])         # event: gray_target_edge((u, v, w))
+                ...
+              elif (BLACK = color[v])      # event: black_target_edge((u, v, w))
+                ...
           end for
-          color[s] := GRAY
-          EQUEUE(Q, s)                             discover vertex s
-          while (Q != Ø)
-              u := DEQUEUE(Q)
-              for each vertex v in Adj[u]          (u,v) is a tree edge
-                  if (color[v] = WHITE)
-                      color[v] = GRAY
-                  else                             (u,v) is a non - tree edge
-                      if (color[v] = GRAY)         (u,v) has a gray target
-                          ...
-                      else if (color[v] = BLACK)   (u,v) has a black target
-                          ...
-              end for
-              color[u] := BLACK                    finish vertex u
-          end while
+          color[u] := BLACK                # event: finish_vertex(u)
+        end while
 
-    If an exception is raised inside the callback function, the graph traversal
+    For several source nodes, the BFS algorithm is applied on source nodes by the given order.
+
+    If an exception is raised inside the callback method of the
+    :class:`~rustworkx.visit.BFSVisitor` instance, the graph traversal
     will be stopped immediately. You can exploit this to exit early by raising a
     :class:`~rustworkx.visit.StopSearch` exception, in which case the search function
     will return but without raising back the exception. You can also prune part of
@@ -1531,7 +1608,6 @@ def bfs_search(graph, source, visitor):
 
         import rustworkx as rx
         from rustworkx.visit import BFSVisitor
-
 
         class TreeEdgesRecorder(BFSVisitor):
 
@@ -1547,52 +1623,113 @@ def bfs_search(graph, source, visitor):
         rx.bfs_search(graph, [0], vis)
         print('Tree edges:', vis.edges)
 
+    Here is another example, using the :class:`~rustworkx.visit.PruneSearch`
+    exception, to find the shortest path between two vertices with some
+    restrictions on the edges
+    (for a more efficient ways to find the shortest path, see :ref:`shortest-paths`):
+
+    .. jupyter-execute::
+
+        import rustworkx as rx
+        from rustworkx.visit import BFSVisitor, PruneSearch
+
+
+        graph = rx.PyGraph()
+        home, market, school = graph.add_nodes_from(['home', 'market', 'school'])
+        graph.add_edges_from_no_data(
+            [(school, home), (school, market), (market, home)]
+        )
+
+        class DistanceHomeFinder(BFSVisitor):
+
+            def __init__(self):
+                self.distance = {}
+
+            def discover_vertex(self, vertex):
+                self.distance.setdefault(vertex, 0)
+
+            def tree_edge(self, edge):
+                source, target, _ = edge
+                # the road directly from home to school is closed
+                if {source, target} == {home, school}:
+                    raise PruneSearch
+                self.distance[target] = self.distance[source] + 1
+
+        vis = DistanceHomeFinder()
+        rx.bfs_search(graph, [school], vis)
+        print('Distance from school to home:', vis.distance[home])
+
     .. note::
 
         Graph can **not** be mutated while traversing.
+        Trying to do so raises an exception.
+
+
+    .. note::
+
+        An exception is raised if the :class:`~rustworkx.visit.PruneSearch` is
+        raised in the :class:`~rustworkx.visit.BFSVisitor.finish_vertex` event.
+
 
     :param graph: The graph to be used. This can be a :class:`~rustworkx.PyGraph`
         or a :class:`~rustworkx.PyDiGraph`
-    :param List[int] source: An optional list of node indices to use as the starting
-        nodes for the breadth-first search. If this is not specified then a source
+    :param source: An optional list of node indices to use as the starting
+        nodes for the breadth-first search. If ``None`` or not specified then a source
         will be chosen arbitrarily and repeated until all components of the
         graph are searched.
+        This can be a ``Sequence[int]`` or ``None``.
     :param visitor: A visitor object that is invoked at the event points inside the
         algorithm. This should be a subclass of :class:`~rustworkx.visit.BFSVisitor`.
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
 def dfs_search(graph, source, visitor):
-    """Depth-first traversal of a directed/undirected graph.
+    """Depth-first traversal of a directed/undirected graph with several source vertices.
 
-    The pseudo-code for the DFS algorithm is listed below, with the annotated
-    event points, for which the given visitor object will be called with the
-    appropriate method.
+    Pseudo-code for the depth-first search algorithm with a single source vertex is
+    listed below with annotated event points at which a method of the given
+    :class:`~rustworkx.visit.DFSVisitor` is called.
 
     ::
 
-        DFS(G)
-          for each vertex u in V
-              color[u] := WHITE                 initialize vertex u
-          end for
-          time := 0
-          call DFS-VISIT(G, source)             start vertex s
-
-        DFS-VISIT(G, u)
-          color[u] := GRAY                      discover vertex u
-          for each v in Adj[u]                  examine edge (u,v)
-              if (color[v] = WHITE)             (u,v) is a tree edge
-                  all DFS-VISIT(G, v)
-              else if (color[v] = GRAY)         (u,v) is a back edge
+      # G - graph, s - single source node
+      DFS(G, s)
+        let color be a mapping                        # color[u] - vertex u color WHITE/GRAY/BLACK
+        for each u in G                               # u - vertex in G
+          color[u] := WHITE                           # color all as undiscovered
+        end for
+        time := 0
+        let S be a stack
+        PUSH(S, (s, iterator of OutEdges(G, s)))      # S - stack of vertices and edge iterators
+        color[s] := GRAY                              # event: discover_vertex(s, time)
+        while (S is not empty)
+          let (u, iterator) := LAST(S)
+          flag := False                               # whether edge to undiscovered vertex found
+          for each v, w in iterator                   # v - target vertex, w - edge weight
+            if (WHITE = color[v])                     # event: tree_edge((u, v, w))
+              time := time + 1
+              color[v] := GRAY                        # event: discover_vertex(v, time)
+              flag := True
+              break
+            elif (GRAY = color[v])                    # event: back_edge((u, v, w))
               ...
-             else if (color[v] = BLACK)         (u,v) is a cross or forward edge
-             ...
+            elif (BLACK = color[v])                   # event: forward_or_cross_edge((u, v, w))
+              ...
           end for
-          color[u] := BLACK                     finish vertex u
+          if (flag is True)
+            PUSH(S, (v, iterator of OutEdges(G, v)))
+          elif (flag is False)
+            time := time + 1
+            color[u] := BLACK                         # event: finish_vertex(u, time)
+            POP(S)
+        end while
 
-    If an exception is raised inside the callback function, the graph traversal
+    For several source nodes, the DFS algorithm is applied on source nodes by the given order.
+
+    If an exception is raised inside the callback method of the
+    :class:`~rustworkx.visit.DFSVisitor` instance, the graph traversal
     will be stopped immediately. You can exploit this to exit early by raising a
     :class:`~rustworkx.visit.StopSearch` exception. You can also prune part of the
     search tree by raising :class:`~rustworkx.visit.PruneSearch`.
@@ -1621,65 +1758,133 @@ def dfs_search(graph, source, visitor):
     .. note::
 
         Graph can *not* be mutated while traversing.
+        Trying to do so raises an exception.
 
-    :param PyGraph graph: The graph to be used.
-    :param List[int] source: An optional list of node indices to use as the starting
-        nodes for the depth-first search. If this is not specified then a source
+
+    .. note::
+
+        An exception is raised if the :class:`~rustworkx.visit.PruneSearch` is
+        raised in the :class:`~rustworkx.visit.DFSVisitor.finish_vertex` event.
+
+    :param graph: The graph to be used. This can be a :class:`~rustworkx.PyGraph`
+        or a :class:`~rustworkx.PyDiGraph`
+    :param source: An optional list of node indices to use as the starting
+        nodes for the depth-first search. If ``None`` or not specified then a source
         will be chosen arbitrarily and repeated until all components of the
         graph are searched.
+        This can be a ``Sequence[int]`` or ``None``.
     :param visitor: A visitor object that is invoked at the event points inside the
         algorithm. This should be a subclass of :class:`~rustworkx.visit.DFSVisitor`.
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
 def dijkstra_search(graph, source, weight_fn, visitor):
-    """Dijkstra traversal of a graph.
+    """Dijkstra traversal of a graph with several source vertices.
 
-    The pseudo-code for the Dijkstra algorithm is listed below, with the annotated
-    event points, for which the given visitor object will be called with the
-    appropriate method.
+    Pseudo-code for the Dijkstra algorithm with a single source vertex is
+    listed below with annotated event points at which a method of the given
+    :class:`~rustworkx.visit.DijkstraVisitor` is called.
 
     ::
 
-        DIJKSTRA(G, source, weight)
-          for each vertex u in V
-              d[u] := infinity
-              p[u] := u
-          end for
-          d[source] := 0
-          INSERT(Q, source)
-          while (Q != Ø)
-              u := EXTRACT-MIN(Q)                         discover vertex u
-              for each vertex v in Adj[u]                 examine edge (u,v)
-                  if (weight[(u,v)] + d[u] < d[v])        edge (u,v) relaxed
-                      d[v] := weight[(u,v)] + d[u]
-                      p[v] := u
-                      DECREASE-KEY(Q, v)
-                  else                                    edge (u,v) not relaxed
-                      ...
-                  if (d[v] was originally infinity)
-                      INSERT(Q, v)
-              end for                                     finish vertex u
-          end while
+      # G - graph, s - single source node, weight - edge cost function
+      DIJKSTRA(G, s, weight)
+        let score be empty mapping
+        let visited be empty set
+        let Q be a priority queue
+        score[s] := 0.0
+        PUSH(Q, (score[s], s))                # only score determines the priority
+        while Q is not empty
+          cost, u := POP-MIN(Q)
+          if u in visited
+            continue
+          PUT(visited, u)                     # event: discover_vertex(u, cost)
+          for each _, v, w in OutEdges(G, u)  # v - target vertex, w - edge weight
+            ...                               # event: examine_edge((u, v, w))
+            if v in visited
+              continue
+            next_cost = cost + weight(w)
+            if {(v is key in score)
+                and (score[v] <= next_cost)}  # event: edge_not_relaxed((u, v, w))
+              ...
+            else:                             # v not scored or scored higher
+              score[v] = next_cost            # event: edge_relaxed((u, v, w))
+              PUSH(Q, (next_cost, v))
+          end for                             # event: finish_vertex(u)
+        end while
 
-    If an exception is raised inside the callback function, the graph traversal
+    For several source nodes, the Dijkstra algorithm is applied on source nodes by the given order.
+
+    If an exception is raised inside the callback method of the
+    :class:`~rustworkx.visit.DijkstraVisitor` instance, the graph traversal
     will be stopped immediately. You can exploit this to exit early by raising a
     :class:`~rustworkx.visit.StopSearch` exception, in which case the search function
     will return but without raising back the exception. You can also prune part of the
     search tree by raising :class:`~rustworkx.visit.PruneSearch`.
 
+    In the following example we find the shortest path from vertex 0 to 5, and exit the visit as
+    soon as we reach the goal vertex:
+
+    .. jupyter-execute::
+
+        import rustworkx as rx
+        from rustworkx.visit import DijkstraVisitor, StopSearch
+
+        graph = rx.PyDiGraph()
+        graph.extend_from_edge_list([
+            (0, 1), (0, 2), (0, 3), (0, 4),
+            (1, 3),
+            (2, 3), (2, 4),
+            (4, 5),
+        ])
+
+        class PathFinder(DijkstraVisitor):
+
+            def __init__(self, start, goal):
+                self.start = start
+                self.goal = goal
+                self.predecessors = {}
+
+            def get_path(self):
+                n = self.goal
+                rev_path = [n]
+                while n != self.start:
+                    n = self.predecessors[n]
+                    rev_path.append(n)
+                return list(reversed(rev_path))
+
+            def discover_vertex(self, vertex, cost):
+                if vertex == self.goal:
+                    raise StopSearch
+
+            def edge_relaxed(self, edge):
+                self.predecessors[edge[1]] = edge[0]
+
+        start = 0
+        vis = PathFinder(start=start, goal=5)
+        rx.dijkstra_search(graph, [start], weight_fn=None, visitor=vis)
+        print('Path:', vis.get_path())
+
     .. note::
 
         Graph can **not** be mutated while traversing.
+        Trying to do so raises an exception.
+
+
+    .. note::
+
+        An exception is raised if the :class:`~rustworkx.visit.PruneSearch` is
+        raised in the :class:`~rustworkx.visit.DijkstraVisitor.finish_vertex` event.
 
     :param graph: The graph to be used. This can be a :class:`~rustworkx.PyGraph`
         or a :class:`~rustworkx.PyDiGraph`.
-    :param List[int] source: An optional list of node indices to use as the starting nodes
-        for the dijkstra search. If this is not specified then a source
+    :param source: An optional list of node indices to use as the starting nodes
+        for the dijkstra search. If ``None`` or not specified then a source
         will be chosen arbitrarily and repeated until all components of the
         graph are searched.
+        This can be a ``Sequence[int]`` or ``None``.
     :param weight_fn: An optional weight function for an edge. It will accept
         a single argument, the edge's weight object and will return a float which
         will be used to represent the weight/cost of the edge. If not specified,
@@ -1687,7 +1892,7 @@ def dijkstra_search(graph, source, weight_fn, visitor):
     :param visitor: A visitor object that is invoked at the event points inside the
         algorithm. This should be a subclass of :class:`~rustworkx.visit.DijkstraVisitor`.
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1724,7 +1929,7 @@ def bellman_ford_shortest_paths(
     :raises: :class:`~rustworkx.NegativeCycle`: when there is a negative cycle and the shortest
         path is not defined
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1751,7 +1956,7 @@ def bellman_ford_shortest_path_lengths(graph, node, edge_cost_fn, goal=None):
     :raises: :class:`~rustworkx.NegativeCycle`: when there is a negative cycle and the shortest
         path is not defined
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1787,7 +1992,7 @@ def all_pairs_bellman_ford_path_lengths(graph, edge_cost_fn):
     :raises: :class:`~rustworkx.NegativeCycle`: when there is a negative cycle and the shortest
         path is not defined
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1823,7 +2028,7 @@ def all_pairs_bellman_ford_shortest_paths(graph, edge_cost_fn):
     :raises: :class:`~rustworkx.NegativeCycle`: when there is a negative cycle and the shortest
         path is not defined
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1831,7 +2036,7 @@ def node_link_json(graph, path=None, graph_attrs=None, node_attrs=None, edge_att
     """Generate a JSON object representing a graph in a node-link format
 
     :param graph: The graph to generate the JSON for. Can either be a
-        :class:`~retworkx.PyGraph` or :class:`~retworkx.PyDiGraph`.
+        :class:`~rustworkx.PyGraph` or :class:`~rustworkx.PyDiGraph`.
     :param str path: An optional path to write the JSON output to. If specified
         the function will not return anything and instead will write the JSON
         to the file specified.
@@ -1853,7 +2058,7 @@ def node_link_json(graph, path=None, graph_attrs=None, node_attrs=None, edge_att
     :returns: Either the JSON string for the payload or ``None`` if ``path`` is specified
     :rtype: str
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -1985,7 +2190,7 @@ def floyd_warshall_successor_and_distance(
 
     :rtype: (numpy.ndarray, numpy.ndarray)
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
 
 
 @_rustworkx_dispatch
@@ -2017,6 +2222,92 @@ def all_shortest_paths(
     :rtype: list
     :raises ValueError: when an edge weight with NaN or negative value
         is provided.
-
     """
-    raise TypeError("Invalid Input Type %s for graph" % type(graph))
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
+
+
+@_rustworkx_dispatch
+def condensation(graph, /, sccs=None):
+    """Return the condensation of a directed or undirected graph
+    The condensation of a directed graph is a directed acyclic graph (DAG) in which
+    each node represents a strongly connected component (SCC) of the original graph.
+    The edges of the DAG represent the connections between these components.
+    The condensation of an undirected graph is a directed graph in which each node
+    represents a connected component of the original graph. The edges of the DAG
+    represent the connections between these components.
+
+    The condensation is computed using Tarjan's algorithm.
+
+    :param graph: The input graph to condense. This can be a
+        :class:`~rustworkx.PyGraph` or :class:`~rustworkx.PyDiGraph`.
+    :param sccs: An optional list of strongly connected components (SCCs) to use.
+        If not specified, the function will compute the SCCs internally.
+        If the input graph is undirected, this parameter is ignored.
+    :returns: A PyGraph or PyDiGraph object representing the condensation of the input graph.
+    :rtype: PyGraph or PyDiGraph
+    """
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
+
+
+@_rustworkx_dispatch
+def single_source_all_shortest_paths(
+    graph, source, weight_fn=None, default_weight=1.0, as_undirected=False
+):
+    """
+    Find all shortest paths from a single source node to all other nodes.
+
+    This function will generate all possible shortest paths from a source node to all other nodes
+    using Dijkstra's algorithm. If ``as_undirected`` is True for directed graphs, it will be treated as undirected.
+
+    :param graph: The input graph :class:`~rustworkx.PyGraph` or :class:`~rustworkx.PyDiGraph`.
+    :param int source: The node index to find paths from.
+    :param weight_fn: An optional weight function for an edge. It will accept
+        a single argument, the edge's weight object and will return a float which
+        will be used to represent the weight/cost of the edge.
+    :param float default_weight: If ``weight_fn`` isn't specified this optional
+        float value will be used for the weight/cost of each edge.
+    :param bool as_undirected: If True, treat the directed graph as undirected (only for PyDiGraph).
+
+    :return: A dictionary where keys are node indices and values are lists of all shortest paths
+        from the source to that node. Each path is a list of node indices starting with the source.
+    :rtype: dict
+    :raises ValueError: when an edge weight with NaN or negative value is provided.
+    :raises IndexError: if the source node index is out of range.
+
+    .. warning::
+        This function can return an exponential number of paths in certain graphs, especially with zero-weight edges.
+        For most use cases, consider using `dijkstra_shortest_paths` for a single shortest path, which runs much faster.
+    """
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")
+
+
+@_rustworkx_dispatch
+def write_graphml(graph, path, /, keys=None, compression=None):
+    """Write a graph to a file in GraphML format.
+
+    GraphML is a comprehensive and easy-to-use file format for graphs. It consists
+    of a language core to describe the structural properties of a graph and a flexible
+    extension mechanism to add application-specific data.
+
+    For more information see:
+    http://graphml.graphdrawing.org/
+
+    .. note::
+
+        This implementation does not support mixed graphs (directed and undirected edges together),
+        hyperedges, nested graphs, or ports.
+
+    .. note::
+
+        GraphML attributes with `graph` domain are written from the graph's attrs field.
+
+    :param graph: The graph to write to the file. This can be a
+        :class:`~rustworkx.PyGraph` or :class:`~rustworkx.PyDiGraph`.
+    :param path: The path of the output file to write.
+    :param keys: Optional list of key definitions for GraphML attributes.
+        If not specified, keys will be inferred from the graph data.
+    :param compression: Optional compression format for the output file.
+        If not specified, no compression is applied.
+    :raises RuntimeError: when an error is encountered while writing the GraphML file.
+    """
+    raise TypeError(f"Invalid Input Type {type(graph)} for graph")

@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 import math
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Any, Callable, Iterator, Literal, cast
+from typing import TYPE_CHECKING, Any, Callable, Iterator, Literal
 
 import boto3
 import pandas as pd
@@ -435,18 +435,18 @@ def to_parquet(
     concurrent_partitioning
         If True will increase the parallelism level during the partitions writing. It will decrease the
         writing time and increase the memory usage.
-        https://aws-sdk-pandas.readthedocs.io/en/3.12.1/tutorials/022%20-%20Writing%20Partitions%20Concurrently.html
+        https://aws-sdk-pandas.readthedocs.io/en/3.13.0/tutorials/022%20-%20Writing%20Partitions%20Concurrently.html
     mode
         ``append`` (Default), ``overwrite``, ``overwrite_partitions``. Only takes effect if dataset=True.
         For details check the related tutorial:
-        https://aws-sdk-pandas.readthedocs.io/en/3.12.1/tutorials/004%20-%20Parquet%20Datasets.html
+        https://aws-sdk-pandas.readthedocs.io/en/3.13.0/tutorials/004%20-%20Parquet%20Datasets.html
     catalog_versioning
         If True and `mode="overwrite"`, creates an archived version of the table catalog before updating it.
     schema_evolution
         If True allows schema evolution (new or missing columns), otherwise a exception will be raised. True by default.
         (Only considered if dataset=True and mode in ("append", "overwrite_partitions"))
         Related tutorial:
-        https://aws-sdk-pandas.readthedocs.io/en/3.12.1/tutorials/014%20-%20Schema%20Evolution.html
+        https://aws-sdk-pandas.readthedocs.io/en/3.13.0/tutorials/014%20-%20Schema%20Evolution.html
     database
         Glue/Athena catalog: Database name.
     table
@@ -678,10 +678,7 @@ def to_parquet(
     }
 
     """
-    glue_table_settings = cast(
-        GlueTableSettings,
-        glue_table_settings if glue_table_settings else {},
-    )
+    glue_table_settings = glue_table_settings if glue_table_settings else {}
 
     table_type = glue_table_settings.get("table_type")
     description = glue_table_settings.get("description")
