@@ -59,7 +59,7 @@ installer = 'uv'
 
 [tool.hatch.envs.default.scripts]
 all = [
-    'hatch test --all',
+    'hatch test --all --cover',
     'hatch run qa:qa',
     'hatch run docs:docs',
 ]
@@ -73,16 +73,14 @@ extra-dependencies = [
 ]
 
 [tool.hatch.envs.hatch-test.scripts]
-run = [
-    'coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}',
-    'coverage combine',
-    'coverage report',
-    'coverage xml',
-    '- diff-cover coverage.xml',
+run = 'pytest{env:HATCH_TEST_ARGS:} {args}'
+run-cov = 'coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}'
+cov-combine = 'coverage combine'
+cov-report = [
+  'coverage report',
+  'coverage xml',
+  '- diff-cover coverage.xml',
 ]
-run-cov = 'hatch test'
-cov-combine = ''
-cov-report = ''
 
 [[tool.hatch.envs.hatch-test.matrix]]
 python = ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
@@ -111,13 +109,18 @@ preview = [
 
 [tool.hatch.envs.docs]
 dependencies = [
-    'sphinx',
     'furo',
+    'sphinx',
+    'sphinx-autobuild',
+    'sphinx-copybutton',
 ]
 
 [tool.hatch.envs.docs.scripts]
 docs = [
     'sphinx-build docs build/html',
+]
+serve = [
+    'sphinx-autobuild docs build/html --port 9000 --open-browser',
 ]
 
 [tool.coverage.run]

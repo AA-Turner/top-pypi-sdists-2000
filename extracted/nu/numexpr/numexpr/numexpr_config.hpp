@@ -40,7 +40,12 @@
 #include "mkl_vml.h"
 #include "mkl_service.h"
 #endif
-
+#include <cmath>
+//no single precision version of signbit in C++ standard
+inline bool signbitf(float x) { return signbit((double)x); }
+// To handle overloading of fmax/fmin in cmath
+inline double fmaxd(double x, double y)    { return fmax(x, y); }
+inline double fmind(double x, double y)    { return fmin(x, y); }
 #ifdef _WIN32
   #ifndef __MINGW32__
     #include "missing_posix_functions.hpp"
@@ -48,15 +53,15 @@
   #include "msvc_function_stubs.hpp"
 #else
 /* GCC/Clang version: use std:: (can't use it for windows)
-msvc_function_stubs contains windows alternatives
+   msvc_function_stubs contains windows alternatives */
 /* Due to casting problems (normally return ints not bools, easiest to define
-non-overloaded wrappers for these functions) */
-inline bool isfinitef_(float x) { return !!::isfinite(x); }
-inline bool isnanf_(float x)    { return !!::isnan(x); }
-inline bool isfinited(double x) { return !!::isfinite(x); }
-inline bool isnand(double x)    { return !!::isnan(x); }
-inline bool isinff_(float x) { return !!::isinf(x); }
-inline bool isinfd(double x)    { return !!::isinf(x); }
+   non-overloaded wrappers for these functions) */
+inline bool isfinitef_(float x) { return !!std::isfinite(x); }
+inline bool isnanf_(float x)    { return !!std::isnan(x); }
+inline bool isfinited(double x) { return !!std::isfinite(x); }
+inline bool isnand(double x)    { return !!std::isnan(x); }
+inline bool isinff_(float x) { return !!std::isinf(x); }
+inline bool isinfd(double x)    { return !!std::isinf(x); }
 #endif
 
 #endif // NUMEXPR_CONFIG_HPP

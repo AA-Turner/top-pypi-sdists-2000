@@ -66,6 +66,10 @@ from ollama._types import (
   ShowResponse,
   StatusResponse,
   Tool,
+  WebFetchRequest,
+  WebFetchResponse,
+  WebSearchRequest,
+  WebSearchResponse,
 )
 
 T = TypeVar('T')
@@ -90,20 +94,25 @@ class BaseClient:
     `kwargs` are passed to the httpx client.
     """
 
+    headers = {
+      k.lower(): v
+      for k, v in {
+        **(headers or {}),
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'User-Agent': f'ollama-python/{__version__} ({platform.machine()} {platform.system().lower()}) Python/{platform.python_version()}',
+      }.items()
+      if v is not None
+    }
+    api_key = os.getenv('OLLAMA_API_KEY', None)
+    if not headers.get('authorization') and api_key:
+      headers['authorization'] = f'Bearer {api_key}'
+
     self._client = client(
       base_url=_parse_host(host or os.getenv('OLLAMA_HOST')),
       follow_redirects=follow_redirects,
       timeout=timeout,
-      # Lowercase all headers to ensure override
-      headers={
-        k.lower(): v
-        for k, v in {
-          **(headers or {}),
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'User-Agent': f'ollama-python/{__version__} ({platform.machine()} {platform.system().lower()}) Python/{platform.python_version()}',
-        }.items()
-      },
+      headers=headers,
       **kwargs,
     )
 
@@ -624,6 +633,54 @@ class Client(BaseClient):
       '/api/ps',
     )
 
+  def web_search(self, query: str, max_results: int = 3) -> WebSearchResponse:
+    """
+    Performs a web search
+
+    Args:
+      query: The query to search for
+      max_results: The maximum number of results to return (default: 3)
+
+    Returns:
+      WebSearchResponse with the search results
+    Raises:
+      ValueError: If OLLAMA_API_KEY environment variable is not set
+    """
+    if not self._client.headers.get('authorization', '').startswith('Bearer '):
+      raise ValueError('Authorization header with Bearer token is required for web search')
+
+    return self._request(
+      WebSearchResponse,
+      'POST',
+      'https://ollama.com/api/web_search',
+      json=WebSearchRequest(
+        query=query,
+        max_results=max_results,
+      ).model_dump(exclude_none=True),
+    )
+
+  def web_fetch(self, url: str) -> WebFetchResponse:
+    """
+    Fetches the content of a web page for the provided URL.
+
+    Args:
+      url: The URL to fetch
+
+    Returns:
+      WebFetchResponse with the fetched result
+    """
+    if not self._client.headers.get('authorization', '').startswith('Bearer '):
+      raise ValueError('Authorization header with Bearer token is required for web fetch')
+
+    return self._request(
+      WebFetchResponse,
+      'POST',
+      'https://ollama.com/api/web_fetch',
+      json=WebFetchRequest(
+        url=url,
+      ).model_dump(exclude_none=True),
+    )
+
 
 class AsyncClient(BaseClient):
   def __init__(self, host: Optional[str] = None, **kwargs) -> None:
@@ -692,6 +749,46 @@ class AsyncClient(BaseClient):
       return inner()
 
     return cls(**(await self._request_raw(*args, **kwargs)).json())
+
+  async def web_search(self, query: str, max_results: int = 3) -> WebSearchResponse:
+    """
+    Performs a web search
+
+    Args:
+      query: The query to search for
+      max_results: The maximum number of results to return (default: 3)
+
+    Returns:
+      WebSearchResponse with the search results
+    """
+    return await self._request(
+      WebSearchResponse,
+      'POST',
+      'https://ollama.com/api/web_search',
+      json=WebSearchRequest(
+        query=query,
+        max_results=max_results,
+      ).model_dump(exclude_none=True),
+    )
+
+  async def web_fetch(self, url: str) -> WebFetchResponse:
+    """
+    Fetches the content of a web page for the provided URL.
+
+    Args:
+      url: The URL to fetch
+
+    Returns:
+      WebFetchResponse with the fetched result
+    """
+    return await self._request(
+      WebFetchResponse,
+      'POST',
+      'https://ollama.com/api/web_fetch',
+      json=WebFetchRequest(
+        url=url,
+      ).model_dump(exclude_none=True),
+    )
 
   @overload
   async def generate(

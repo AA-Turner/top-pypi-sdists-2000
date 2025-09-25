@@ -5,6 +5,7 @@ import sys
 import time
 import typing
 from enum import IntEnum
+from pathlib import Path, PureWindowsPath
 from typing import Annotated, Any, Dict, Generic, List, Literal, Optional, Tuple, TypeVar, Union  # noqa: UP035
 
 import pytest
@@ -18,15 +19,26 @@ from pydantic import (
     DirectoryPath,
     Discriminator,
     Field,
+    RootModel,
     Tag,
     ValidationError,
+    field_validator,
+    model_validator,
 )
 from pydantic import (
     dataclasses as pydantic_dataclasses,
 )
 from pydantic._internal._repr import Representation
 
-from pydantic_settings import BaseSettings, CliApp, PydanticBaseSettingsSource, SettingsConfigDict, SettingsError
+from pydantic_settings import (
+    BaseSettings,
+    CliApp,
+    ForceDecode,
+    NoDecode,
+    PydanticBaseSettingsSource,
+    SettingsConfigDict,
+    SettingsError,
+)
 from pydantic_settings.sources import (
     CLI_SUPPRESS,
     CliExplicitFlag,
@@ -270,6 +282,7 @@ def test_cli_alias_arg(capsys, monkeypatch, avoid_json):
         alias_choice_w_only_path: str = Field(validation_alias=AliasChoices(AliasPath('path1', 1)))
         alias_choice_no_path: str = Field(validation_alias=AliasChoices('b', 'c'))
         alias_path: str = Field(validation_alias=AliasPath('path2', 'deep', 1))
+        alias_extra_deep: str = Field(validation_alias=AliasPath('path3', 'deep', 'extra', 'deep', 1))
         alias_str: str = Field(validation_alias='str')
 
     cfg = CliApp.run(
@@ -287,6 +300,8 @@ def test_cli_alias_arg(capsys, monkeypatch, avoid_json):
             'a1,b1,c1',
             '--path2',
             '{"deep": ["a2","b2","c2"]}',
+            '--path3',
+            '{"deep": {"extra": {"deep": ["a3","b3","c3"]}}}',
         ],
     )
     assert cfg.model_dump() == {
@@ -294,8 +309,26 @@ def test_cli_alias_arg(capsys, monkeypatch, avoid_json):
         'alias_choice_w_only_path': 'b1',
         'alias_choice_no_path': 'b',
         'alias_path': 'b2',
+        'alias_extra_deep': 'b3',
         'alias_str': 'str',
     }
+
+    serialized_cli_args = CliApp.serialize(cfg)
+    assert serialized_cli_args == [
+        '-a',
+        'a',
+        '--path1',
+        '["", "b1"]',
+        '-b',
+        'b',
+        '--path2',
+        '{"deep": ["", "b2"]}',
+        '--path3',
+        '{"deep": {"extra": {"deep": ["", "b3"]}}}',
+        '--str',
+        'str',
+    ]
+    assert CliApp.run(Cfg, cli_args=serialized_cli_args).model_dump() == cfg.model_dump()
 
 
 @pytest.mark.parametrize('avoid_json', [True, False])
@@ -305,6 +338,7 @@ def test_cli_alias_nested_arg(capsys, monkeypatch, avoid_json):
         alias_choice_w_only_path: str = Field(validation_alias=AliasChoices(AliasPath('path1', 1)))
         alias_choice_no_path: str = Field(validation_alias=AliasChoices('b', 'c'))
         alias_path: str = Field(validation_alias=AliasPath('path2', 'deep', 1))
+        alias_extra_deep: str = Field(validation_alias=AliasPath('path3', 'deep', 'extra', 'deep', 1))
         alias_str: str = Field(validation_alias='str')
 
     class Cfg(BaseSettings, cli_avoid_json=avoid_json):
@@ -319,8 +353,14 @@ def test_cli_alias_nested_arg(capsys, monkeypatch, avoid_json):
             'b',
             '--nest.str',
             'str',
-            '--nest',
-            '{"path0": ["a0","b0","c0"], "path1": ["a1","b1","c1"], "path2": {"deep": ["a2","b2","c2"]}}',
+            '--nest.path0',
+            '["a0","b0","c0"]',
+            '--nest.path1',
+            '["a1","b1","c1"]',
+            '--nest.path2',
+            '{"deep": ["a2","b2","c2"]}',
+            '--nest.path3',
+            '{"deep": {"extra": {"deep": ["a3","b3","c3"]}}}',
         ],
     )
     assert cfg.model_dump() == {
@@ -329,9 +369,27 @@ def test_cli_alias_nested_arg(capsys, monkeypatch, avoid_json):
             'alias_choice_w_only_path': 'b1',
             'alias_choice_no_path': 'b',
             'alias_path': 'b2',
+            'alias_extra_deep': 'b3',
             'alias_str': 'str',
         }
     }
+
+    serialized_cli_args = CliApp.serialize(cfg)
+    assert serialized_cli_args == [
+        '--nest.a',
+        'a',
+        '--nest.path1',
+        '["", "b1"]',
+        '--nest.b',
+        'b',
+        '--nest.path2',
+        '{"deep": ["", "b2"]}',
+        '--nest.path3',
+        '{"deep": {"extra": {"deep": ["", "b3"]}}}',
+        '--nest.str',
+        'str',
+    ]
+    assert CliApp.run(Cfg, cli_args=serialized_cli_args).model_dump() == cfg.model_dump()
 
 
 def test_cli_alias_exceptions(capsys, monkeypatch):
@@ -1511,8 +1569,36 @@ def test_cli_bool_flags(monkeypatch, enforce_required):
         'implicit_opt': False,
     }
 
-    assert CliApp.run(ExplicitSettings, cli_args=['--explicit_req=True', '--implicit_req']).model_dump() == expected
-    assert CliApp.run(ImplicitSettings, cli_args=['--explicit_req=True', '--implicit_req']).model_dump() == expected
+    explicit_settings = CliApp.run(ExplicitSettings, cli_args=['--explicit_req=True', '--implicit_req'])
+    assert explicit_settings.model_dump() == expected
+    serialized_args = CliApp.serialize(explicit_settings)
+    assert serialized_args == ['--explicit_req', 'True', '--implicit_req']
+    assert CliApp.run(ExplicitSettings, cli_args=serialized_args).model_dump() == expected
+
+    implicit_settings = CliApp.run(ImplicitSettings, cli_args=['--explicit_req=True', '--implicit_req'])
+    assert implicit_settings.model_dump() == expected
+    serialized_args = CliApp.serialize(implicit_settings)
+    assert serialized_args == ['--explicit_req', 'True', '--implicit_req']
+    assert CliApp.run(ImplicitSettings, cli_args=serialized_args).model_dump() == expected
+
+    expected = {
+        'explicit_req': False,
+        'explicit_opt': False,
+        'implicit_req': False,
+        'implicit_opt': False,
+    }
+
+    explicit_settings = CliApp.run(ExplicitSettings, cli_args=['--explicit_req=False', '--no-implicit_req'])
+    assert explicit_settings.model_dump() == expected
+    serialized_args = CliApp.serialize(explicit_settings)
+    assert serialized_args == ['--explicit_req', 'False', '--no-implicit_req']
+    assert CliApp.run(ExplicitSettings, cli_args=serialized_args).model_dump() == expected
+
+    implicit_settings = CliApp.run(ImplicitSettings, cli_args=['--explicit_req=False', '--no-implicit_req'])
+    assert implicit_settings.model_dump() == expected
+    serialized_args = CliApp.serialize(implicit_settings)
+    assert serialized_args == ['--explicit_req', 'False', '--no-implicit_req']
+    assert CliApp.run(ImplicitSettings, cli_args=serialized_args).model_dump() == expected
 
 
 def test_cli_avoid_json(capsys, monkeypatch):
@@ -1693,19 +1779,30 @@ sub_model options:
 
 
 def test_cli_enforce_required(env):
+    class MyRootModel(RootModel[str]):
+        root: str
+
     class Settings(BaseSettings, cli_exit_on_error=False):
         my_required_field: str
+        my_root_model_required_field: MyRootModel
 
     env.set('MY_REQUIRED_FIELD', 'hello from environment')
+    env.set('MY_ROOT_MODEL_REQUIRED_FIELD', 'hi from environment')
 
     assert Settings(_cli_parse_args=[], _cli_enforce_required=False).model_dump() == {
-        'my_required_field': 'hello from environment'
+        'my_required_field': 'hello from environment',
+        'my_root_model_required_field': 'hi from environment',
     }
 
     with pytest.raises(
         SettingsError, match='error parsing CLI: the following arguments are required: --my_required_field'
     ):
         Settings(_cli_parse_args=[], _cli_enforce_required=True).model_dump()
+
+    with pytest.raises(
+        SettingsError, match='error parsing CLI: the following arguments are required: --my_root_model_required_field'
+    ):
+        Settings(_cli_parse_args=['--my_required_field', 'hello from cli'], _cli_enforce_required=True).model_dump()
 
 
 def test_cli_exit_on_error(capsys, monkeypatch):
@@ -2347,6 +2444,25 @@ def test_cli_invalid_abbrev():
         )
 
 
+def test_cli_subcommand_invalid_abbrev():
+    class Child(BaseModel):
+        bacon: str = ''
+        badger: str = ''
+
+    class MySettings(BaseSettings):
+        child: CliSubCommand[Child]
+
+    with pytest.raises(
+        SettingsError,
+        match='error parsing CLI: unrecognized arguments: --bac cli abbrev are invalid for internal parser',
+    ):
+        CliApp.run(
+            MySettings,
+            cli_args=['child', '--bac', 'cli abbrev are invalid for internal parser'],
+            cli_exit_on_error=False,
+        )
+
+
 def test_cli_submodels_strip_annotated():
     class PolyA(BaseModel):
         a: int = 1
@@ -2376,13 +2492,15 @@ def test_cli_kebab_case(capsys, monkeypatch):
 
     class SubModel(BaseModel):
         sub_subcmd: CliSubCommand[DeepSubModel]
+        sub_other_subcmd: CliSubCommand[DeepSubModel]
         sub_arg: str
 
     class Root(BaseModel):
         root_subcmd: CliSubCommand[SubModel]
+        other_subcmd: CliSubCommand[SubModel]
         root_arg: str
 
-    assert CliApp.run(
+    root = CliApp.run(
         Root,
         cli_args=[
             '--root-arg=hi',
@@ -2392,13 +2510,29 @@ def test_cli_kebab_case(capsys, monkeypatch):
             'hey',
             '--deep-arg=bye',
         ],
-    ).model_dump() == {
+    )
+    assert root.model_dump() == {
         'root_arg': 'hi',
+        'other_subcmd': None,
         'root_subcmd': {
             'sub_arg': 'hello',
             'sub_subcmd': {'deep_pos_arg': 'hey', 'deep_arg': 'bye'},
+            'sub_other_subcmd': None,
         },
     }
+
+    serialized_cli_args = CliApp.serialize(root)
+    assert serialized_cli_args == [
+        '--root-arg',
+        'hi',
+        'root-subcmd',
+        '--sub-arg',
+        'hello',
+        'sub-subcmd',
+        '--deep-arg',
+        'bye',
+        'hey',
+    ]
 
     with monkeypatch.context() as m:
         m.setattr(sys, 'argv', ['example.py', '--help'])
@@ -2406,15 +2540,16 @@ def test_cli_kebab_case(capsys, monkeypatch):
             CliApp.run(Root)
         assert (
             capsys.readouterr().out
-            == f"""usage: example.py [-h] --root-arg str {{root-subcmd}} ...
+            == f"""usage: example.py [-h] --root-arg str {{root-subcmd,other-subcmd}} ...
 
 {ARGPARSE_OPTIONS_TEXT}:
-  -h, --help      show this help message and exit
-  --root-arg str  (required)
+  -h, --help            show this help message and exit
+  --root-arg str        (required)
 
 subcommands:
-  {{root-subcmd}}
+  {{root-subcmd,other-subcmd}}
     root-subcmd
+    other-subcmd
 """
         )
 
@@ -2423,15 +2558,17 @@ subcommands:
             CliApp.run(Root)
         assert (
             capsys.readouterr().out
-            == f"""usage: example.py root-subcmd [-h] --sub-arg str {{sub-subcmd}} ...
+            == f"""usage: example.py root-subcmd [-h] --sub-arg str
+                              {{sub-subcmd,sub-other-subcmd}} ...
 
 {ARGPARSE_OPTIONS_TEXT}:
-  -h, --help     show this help message and exit
-  --sub-arg str  (required)
+  -h, --help            show this help message and exit
+  --sub-arg str         (required)
 
 subcommands:
-  {{sub-subcmd}}
+  {{sub-subcmd,sub-other-subcmd}}
     sub-subcmd
+    sub-other-subcmd
 """
         )
 
@@ -2574,3 +2711,171 @@ def test_cli_shortcuts_alias_collision_applies_to_first_target_field():
         'nested': {'option': 'bar'},
         'option2': 'foo2',
     }
+
+
+def test_cli_serialize_positional_args():
+    class Nested(BaseModel):
+        deep: CliPositionalArg[int]
+
+    class Cfg(BaseSettings):
+        top: CliPositionalArg[int]
+
+        variadic: CliPositionalArg[list[int]]
+
+        nested_0: Nested
+
+        nested_1: Nested
+
+    cfg = CliApp.run(Cfg, cli_args=['0', '1', '2', '3', '4', '5'])
+    assert cfg.model_dump() == {
+        'top': 0,
+        'variadic': [
+            1,
+            2,
+            3,
+        ],
+        'nested_0': {
+            'deep': 4,
+        },
+        'nested_1': {
+            'deep': 5,
+        },
+    }
+
+    serialized_cli_args = CliApp.serialize(cfg)
+    assert serialized_cli_args == ['0', '1', '2', '3', '4', '5']
+    assert CliApp.run(Cfg, cli_args=serialized_cli_args).model_dump() == cfg.model_dump()
+
+
+def test_cli_app_with_separate_parser(monkeypatch):
+    class Cfg(BaseSettings):
+        model_config = SettingsConfigDict(cli_parse_args=True)
+        pet: Literal['dog', 'cat', 'bird']
+
+    parser = argparse.ArgumentParser()
+
+    # The actual parsing of command line argument should not happen here.
+    cli_settings = CliSettingsSource(Cfg, root_parser=parser)
+
+    parser.add_argument('-e', '--extra', dest='extra', default=0, action='count')
+
+    with monkeypatch.context() as m:
+        m.setattr(sys, 'argv', ['example.py', '--pet', 'dog', '-eeee'])
+
+        parsed_args = parser.parse_args()
+
+    assert parsed_args.extra == 4
+    # With parsed arguments passed to CliApp.run, the parser should not need to be called again.
+    assert CliApp.run(Cfg, cli_args=parsed_args, cli_settings_source=cli_settings).model_dump() == {'pet': 'dog'}
+
+
+def test_cli_serialize_non_default_values():
+    class Cfg(BaseSettings):
+        default_val: int = 123
+        non_default_val: int
+
+    cfg = Cfg(non_default_val=456)
+    assert cfg.model_dump() == {'default_val': 123, 'non_default_val': 456}
+
+    serialized_cli_args = CliApp.serialize(cfg)
+    assert serialized_cli_args == ['--non_default_val', '456']
+
+    assert CliApp.run(Cfg, cli_args=serialized_cli_args).model_dump() == cfg.model_dump()
+
+
+def test_cli_serialize_ordering():
+    class NestedCfg(BaseSettings):
+        positional: CliPositionalArg[str]
+        optional: int
+
+    class Cfg(BaseSettings):
+        command: CliSubCommand[NestedCfg]
+        positional: CliPositionalArg[str]
+        optional: int
+
+    cfg = Cfg(optional=0, positional='pos_1', command=NestedCfg(optional=2, positional='pos_3'))
+    assert cfg.model_dump() == {'command': {'optional': 2, 'positional': 'pos_3'}, 'optional': 0, 'positional': 'pos_1'}
+
+    serialized_cli_args = CliApp.serialize(cfg)
+    assert serialized_cli_args == [
+        '--optional',
+        '0',
+        'pos_1',
+        'command',
+        '--optional',
+        '2',
+        'pos_3',
+    ]
+
+    assert CliApp.run(Cfg, cli_args=serialized_cli_args).model_dump() == cfg.model_dump()
+
+
+def test_cli_decoding():
+    PATH_A_STR = str(PureWindowsPath(Path.cwd()))
+    PATH_B_STR = str(PureWindowsPath(Path.cwd() / 'subdir'))
+
+    class PathsDecode(BaseSettings):
+        path_a: Path = Field(validation_alias=AliasPath('paths', 0))
+        path_b: Path = Field(validation_alias=AliasPath('paths', 1))
+        num_a: int = Field(validation_alias=AliasPath('nums', 0))
+        num_b: int = Field(validation_alias=AliasPath('nums', 1))
+
+    assert CliApp.run(
+        PathsDecode, cli_args=['--paths', PATH_A_STR, '--paths', PATH_B_STR, '--nums', '1', '--nums', '2']
+    ).model_dump() == {
+        'path_a': Path(PATH_A_STR),
+        'path_b': Path(PATH_B_STR),
+        'num_a': 1,
+        'num_b': 2,
+    }
+
+    class PathsListNoDecode(BaseSettings):
+        paths: Annotated[list[Path], NoDecode]
+        nums: Annotated[list[int], NoDecode]
+
+        @field_validator('paths', mode='before')
+        @classmethod
+        def decode_path_a(cls, paths: str) -> list[Path]:
+            return [Path(p) for p in paths.split(',')]
+
+        @field_validator('nums', mode='before')
+        @classmethod
+        def decode_nums(cls, nums: str) -> list[int]:
+            return [int(n) for n in nums.split(',')]
+
+    assert CliApp.run(
+        PathsListNoDecode, cli_args=['--paths', f'{PATH_A_STR},{PATH_B_STR}', '--nums', '1,2']
+    ).model_dump() == {'paths': [Path(PATH_A_STR), Path(PATH_B_STR)], 'nums': [1, 2]}
+
+    class PathsAliasNoDecode(BaseSettings):
+        path_a: Annotated[Path, NoDecode] = Field(validation_alias=AliasPath('paths', 0))
+        path_b: Annotated[Path, NoDecode] = Field(validation_alias=AliasPath('paths', 1))
+        num_a: Annotated[int, NoDecode] = Field(validation_alias=AliasPath('nums', 0))
+        num_b: Annotated[int, NoDecode] = Field(validation_alias=AliasPath('nums', 1))
+
+        @model_validator(mode='before')
+        @classmethod
+        def intercept_kwargs(cls, data: Any) -> Any:
+            data['paths'] = [Path(p) for p in data['paths'].split(',')]
+            data['nums'] = [int(n) for n in data['nums'].split(',')]
+            return data
+
+    assert CliApp.run(
+        PathsAliasNoDecode, cli_args=['--paths', f'{PATH_A_STR},{PATH_B_STR}', '--nums', '1,2']
+    ).model_dump() == {
+        'path_a': Path(PATH_A_STR),
+        'path_b': Path(PATH_B_STR),
+        'num_a': 1,
+        'num_b': 2,
+    }
+
+    with pytest.raises(
+        SettingsError,
+        match='Parsing error encountered for paths: Mixing Decode and NoDecode across different AliasPath fields is not allowed',
+    ):
+
+        class PathsMixedDecode(BaseSettings):
+            path_a: Annotated[Path, ForceDecode] = Field(validation_alias=AliasPath('paths', 0))
+            path_b: Annotated[Path, NoDecode] = Field(validation_alias=AliasPath('paths', 1))
+
+        CliApp.run(PathsMixedDecode, cli_args=['--paths', PATH_A_STR, '--paths', PATH_B_STR])

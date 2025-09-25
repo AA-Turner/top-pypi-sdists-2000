@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: safety
-Version: 3.6.1
+Version: 3.6.2
 Summary: Scan dependencies for known vulnerabilities and licenses.
 Project-URL: homepage, https://safetycli.com
 Project-URL: source, https://github.com/pyupio/safety
@@ -41,10 +41,10 @@ Requires-Dist: marshmallow>=3.15.0
 Requires-Dist: nltk>=3.9
 Requires-Dist: packaging>=21.0
 Requires-Dist: psutil<8.0,>=6.1.0
-Requires-Dist: pydantic<2.10.0,>=2.6.0
+Requires-Dist: pydantic>=2.6.0
 Requires-Dist: requests
 Requires-Dist: ruamel-yaml>=0.17.21
-Requires-Dist: safety-schemas==0.0.14
+Requires-Dist: safety-schemas==0.0.16
 Requires-Dist: setuptools>=65.5.1
 Requires-Dist: tenacity
 Requires-Dist: tomli; python_version < '3.11'

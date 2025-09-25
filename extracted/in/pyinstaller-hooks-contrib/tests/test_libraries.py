@@ -2044,8 +2044,12 @@ def test_numba_jit(pyi_builder):
 # Basic import test with new type system enabled (numba >= 0.61).
 # Ideally, we would repeat the above `test_numba_jit`, but at the time of writing (numba 0.61.0rc2) it does not seem to
 # work even when unfrozen.
+# In numba 0.62.0, the new type system was removed, so trying to enable it results in an error.
 @importorskip('numba')
-@pytest.mark.skipif(not is_module_satisfies('numba >= 0.61.0rc1'), reason="Requires numba >= 0.61.0.")
+@pytest.mark.skipif(
+    not is_module_satisfies('numba >= 0.61.0rc1, < 0.62.0rc1'),
+    reason="Requires numba >= 0.61.0, < 0.62.0."
+)
 def test_numba_new_type_system(pyi_builder):
     pyi_builder.test_source("""
         import os
@@ -2854,6 +2858,8 @@ def test_pandera(pyi_builder):
 
 @importorskip('tkinterweb')
 def test_tkinterweb(pyi_builder):
+    # NOTE: run_from_path=True prevents `pyi_builder` from completely clearing the `PATH` environment variable. At the
+    # time of writing, `tkinterweb_tkhtml` v1.1.2 raises error if `PATH` is missing from `os.environ`.
     pyi_builder.test_source("""
         import tkinter
         import tkinterweb
@@ -2863,29 +2869,31 @@ def test_tkinterweb(pyi_builder):
 
         # Load a test string that uses all files that should have been bundled
         frame.load_html(
-                            "<img src='this path doesn't exist' alt='Hello, World!'/> \
-                            <p>Hello Again!</p> \
-                            <select><option>Hi...</option></select>"
-                            )
-    """)
+            "<img src='this path doesn't exist' alt='Hello, World!'/>"
+            "<p>Hello Again!</p>"
+            "<select><option>Hi...</option></select>"
+        )
+    """, run_from_path=True)
 
 
 @importorskip('tkinterweb_tkhtml')
 def test_tkinterweb_tkhtml(pyi_builder):
+    # See comment in `test_tkinterweb` as to why `run_from_path=True` is required.
     pyi_builder.test_source("""
         import tkinter
         import tkinterweb_tkhtml
 
         root = tkinter.Tk()
 
-        folder = tkinterweb_tkhtml.get_tkhtml_folder()
-        tkinterweb_tkhtml.load_tkhtml(root, folder)
+        tkhtml_file, tkhtml_version, experimental = tkinterweb_tkhtml.get_tkhtml_file(None, False)
+        print(f"Loading tkhtml version {tkhtml_version!r}: {tkhtml_file!r}")
+        tkinterweb_tkhtml.load_tkhtml_file(root, tkhtml_file)
 
         frame = tkinter.Widget(root, "html")
 
         # Load a test string
         frame.tk.call(frame._w, "parse", "<p>Hello, World!</p>")
-    """)
+    """, run_from_path=True)
 
 
 @importorskip('narwhals')
@@ -2910,4 +2918,18 @@ def test_uuid6(pyi_builder):
         my_uuid = uuid6.uuid6()
         print(my_uuid)
         assert my_uuid < uuid6.uuid6()
+    """)
+
+
+@importorskip("globus_sdk")
+def test_globus_sdk(pyi_builder):
+    pyi_builder.test_source("""
+        from globus_sdk import (
+            ClientCredentialsAuthorizer,
+            ConfidentialAppAuthClient,
+            IterableTransferResponse,
+            TransferAPIError,
+            TransferClient,
+            TransferData,
+        )
     """)

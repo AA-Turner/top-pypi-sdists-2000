@@ -425,6 +425,24 @@ class CitationBlock(BaseModel):
         return v
 
 
+class ThinkingBlock(BaseModel):
+    """A representation of the content streamed from reasoning/thinking processes by LLMs"""
+
+    block_type: Literal["thinking"] = "thinking"
+    content: Optional[str] = Field(
+        description="Content of the reasoning/thinking process, if available",
+        default=None,
+    )
+    num_tokens: Optional[int] = Field(
+        description="Number of token used for reasoning/thinking, if available",
+        default=None,
+    )
+    additional_information: Dict[str, Any] = Field(
+        description="Additional information related to the thinking/reasoning process, if available",
+        default_factory=dict,
+    )
+
+
 ContentBlock = Annotated[
     Union[
         TextBlock,
@@ -435,6 +453,7 @@ ContentBlock = Annotated[
         CachePoint,
         CitableBlock,
         CitationBlock,
+        ThinkingBlock,
     ],
     Field(discriminator="block_type"),
 ]
@@ -539,6 +558,10 @@ class ChatMessage(BaseModel):
             }
         if isinstance(value, list):
             return [self._recursive_serialization(item) for item in value]
+
+        if isinstance(value, bytes):
+            return base64.b64encode(value).decode("utf-8")
+
         return value
 
     @field_serializer("additional_kwargs", check_fields=False)

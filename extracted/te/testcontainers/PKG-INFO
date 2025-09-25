@@ -1,13 +1,15 @@
-Metadata-Version: 2.3
+Metadata-Version: 2.4
 Name: testcontainers
-Version: 4.13.0
+Version: 4.13.1
 Summary: Python library for throwaway instances of anything that can run in a Docker container
+License: Apache-2.0
+License-File: LICENSE.txt
 Keywords: testing,logging,docker,test automation
 Author: Sergey Pirogov
 Author-email: automationremarks@gmail.com
 Maintainer: Balint Bartha
 Maintainer-email: totallyzen@users.noreply.github.com
-Requires-Python: >=3.9,<4.0
+Requires-Python: >=3.9.2,<4.0
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: Information Technology
 Classifier: License :: OSI Approved :: Apache Software License
@@ -16,11 +18,12 @@ Classifier: Operating System :: Microsoft :: Windows
 Classifier: Operating System :: POSIX
 Classifier: Operating System :: Unix
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: 3.9
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Provides-Extra: arangodb
 Provides-Extra: aws

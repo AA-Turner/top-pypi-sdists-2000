@@ -541,6 +541,31 @@ class ProcessResponse(SubscriptableBaseModel):
   models: Sequence[Model]
 
 
+class WebSearchRequest(SubscriptableBaseModel):
+  query: str
+  max_results: Optional[int] = None
+
+
+class WebSearchResult(SubscriptableBaseModel):
+  content: Optional[str] = None
+  title: Optional[str] = None
+  url: Optional[str] = None
+
+
+class WebFetchRequest(SubscriptableBaseModel):
+  url: str
+
+
+class WebSearchResponse(SubscriptableBaseModel):
+  results: Sequence[WebSearchResult]
+
+
+class WebFetchResponse(SubscriptableBaseModel):
+  title: Optional[str] = None
+  content: Optional[str] = None
+  links: Optional[Sequence[str]] = None
+
+
 class RequestError(Exception):
   """
   Common class for request errors.
