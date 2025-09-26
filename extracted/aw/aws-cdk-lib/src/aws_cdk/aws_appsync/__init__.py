@@ -5923,7 +5923,7 @@ class CfnDomainNameProps:
     ) -> None:
         '''Properties for defining a ``CfnDomainName``.
 
-        :param certificate_arn: The Amazon Resource Name (ARN) of the certificate. This will be an AWS Certificate Manager certificate.
+        :param certificate_arn: The Amazon Resource Name (ARN) of the certificate. This will be an Certificate Manager certificate.
         :param domain_name: The domain name.
         :param description: The decription for your domain name.
         :param tags: A set of tags (key-value pairs) for this domain name.
@@ -5968,7 +5968,7 @@ class CfnDomainNameProps:
     def certificate_arn(self) -> builtins.str:
         '''The Amazon Resource Name (ARN) of the certificate.
 
-        This will be an AWS Certificate Manager certificate.
+        This will be an Certificate Manager certificate.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-domainname.html#cfn-appsync-domainname-certificatearn
         '''
@@ -20701,7 +20701,7 @@ class CfnDomainName(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param certificate_arn: The Amazon Resource Name (ARN) of the certificate. This will be an AWS Certificate Manager certificate.
+        :param certificate_arn: The Amazon Resource Name (ARN) of the certificate. This will be an Certificate Manager certificate.
         :param domain_name: The domain name.
         :param description: The decription for your domain name.
         :param tags: A set of tags (key-value pairs) for this domain name.

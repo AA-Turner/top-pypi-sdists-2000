@@ -1757,27 +1757,27 @@ class CfnLaunchTemplateConstraintProps:
     jsii_type="aws-cdk-lib.aws_servicecatalog.CfnPortfolioPrincipalAssociationProps",
     jsii_struct_bases=[],
     name_mapping={
-        "portfolio_id": "portfolioId",
-        "principal_arn": "principalArn",
         "principal_type": "principalType",
         "accept_language": "acceptLanguage",
+        "portfolio_id": "portfolioId",
+        "principal_arn": "principalArn",
     },
 )
 class CfnPortfolioPrincipalAssociationProps:
     def __init__(
         self,
         *,
-        portfolio_id: builtins.str,
-        principal_arn: builtins.str,
         principal_type: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
+        portfolio_id: typing.Optional[builtins.str] = None,
+        principal_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnPortfolioPrincipalAssociation``.
 
-        :param portfolio_id: The portfolio identifier.
-        :param principal_arn: The ARN of the principal ( IAM user, role, or group).
         :param principal_type: The principal type. The supported values are ``IAM`` and ``IAM_PATTERN`` .
         :param accept_language: The language code. - ``jp`` - Japanese - ``zh`` - Chinese
+        :param portfolio_id: The portfolio identifier.
+        :param principal_arn: The ARN of the principal ( IAM user, role, or group).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html
         :exampleMetadata: fixture=_generated
@@ -1789,47 +1789,29 @@ class CfnPortfolioPrincipalAssociationProps:
             from aws_cdk import aws_servicecatalog as servicecatalog
             
             cfn_portfolio_principal_association_props = servicecatalog.CfnPortfolioPrincipalAssociationProps(
-                portfolio_id="portfolioId",
-                principal_arn="principalArn",
                 principal_type="principalType",
             
                 # the properties below are optional
-                accept_language="acceptLanguage"
+                accept_language="acceptLanguage",
+                portfolio_id="portfolioId",
+                principal_arn="principalArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__86aa94ae9b8977b851184740615709136e8ab87d84e565bd4ed1c37202e743af)
-            check_type(argname="argument portfolio_id", value=portfolio_id, expected_type=type_hints["portfolio_id"])
-            check_type(argname="argument principal_arn", value=principal_arn, expected_type=type_hints["principal_arn"])
             check_type(argname="argument principal_type", value=principal_type, expected_type=type_hints["principal_type"])
             check_type(argname="argument accept_language", value=accept_language, expected_type=type_hints["accept_language"])
+            check_type(argname="argument portfolio_id", value=portfolio_id, expected_type=type_hints["portfolio_id"])
+            check_type(argname="argument principal_arn", value=principal_arn, expected_type=type_hints["principal_arn"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "portfolio_id": portfolio_id,
-            "principal_arn": principal_arn,
             "principal_type": principal_type,
         }
         if accept_language is not None:
             self._values["accept_language"] = accept_language
-
-    @builtins.property
-    def portfolio_id(self) -> builtins.str:
-        '''The portfolio identifier.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-portfolioid
-        '''
-        result = self._values.get("portfolio_id")
-        assert result is not None, "Required property 'portfolio_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def principal_arn(self) -> builtins.str:
-        '''The ARN of the principal ( IAM user, role, or group).
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-principalarn
-        '''
-        result = self._values.get("principal_arn")
-        assert result is not None, "Required property 'principal_arn' is missing"
-        return typing.cast(builtins.str, result)
+        if portfolio_id is not None:
+            self._values["portfolio_id"] = portfolio_id
+        if principal_arn is not None:
+            self._values["principal_arn"] = principal_arn
 
     @builtins.property
     def principal_type(self) -> builtins.str:
@@ -1855,6 +1837,24 @@ class CfnPortfolioPrincipalAssociationProps:
         result = self._values.get("accept_language")
         return typing.cast(typing.Optional[builtins.str], result)
 
+    @builtins.property
+    def portfolio_id(self) -> typing.Optional[builtins.str]:
+        '''The portfolio identifier.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-portfolioid
+        '''
+        result = self._values.get("portfolio_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def principal_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of the principal ( IAM user, role, or group).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-principalarn
+        '''
+        result = self._values.get("principal_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
 
@@ -1871,9 +1871,9 @@ class CfnPortfolioPrincipalAssociationProps:
     jsii_type="aws-cdk-lib.aws_servicecatalog.CfnPortfolioProductAssociationProps",
     jsii_struct_bases=[],
     name_mapping={
+        "accept_language": "acceptLanguage",
         "portfolio_id": "portfolioId",
         "product_id": "productId",
-        "accept_language": "acceptLanguage",
         "source_portfolio_id": "sourcePortfolioId",
     },
 )
@@ -1881,16 +1881,16 @@ class CfnPortfolioProductAssociationProps:
     def __init__(
         self,
         *,
-        portfolio_id: builtins.str,
-        product_id: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
+        portfolio_id: typing.Optional[builtins.str] = None,
+        product_id: typing.Optional[builtins.str] = None,
         source_portfolio_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnPortfolioProductAssociation``.
 
+        :param accept_language: The language code. - ``jp`` - Japanese - ``zh`` - Chinese
         :param portfolio_id: The portfolio identifier.
         :param product_id: The product identifier.
-        :param accept_language: The language code. - ``jp`` - Japanese - ``zh`` - Chinese
         :param source_portfolio_id: The identifier of the source portfolio.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioproductassociation.html
@@ -1903,48 +1903,27 @@ class CfnPortfolioProductAssociationProps:
             from aws_cdk import aws_servicecatalog as servicecatalog
             
             cfn_portfolio_product_association_props = servicecatalog.CfnPortfolioProductAssociationProps(
+                accept_language="acceptLanguage",
                 portfolio_id="portfolioId",
                 product_id="productId",
-            
-                # the properties below are optional
-                accept_language="acceptLanguage",
                 source_portfolio_id="sourcePortfolioId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__97355e439ae20c66a13583fbc70b7a8de7f038ae88e7d60775df912c8ba748c0)
+            check_type(argname="argument accept_language", value=accept_language, expected_type=type_hints["accept_language"])
             check_type(argname="argument portfolio_id", value=portfolio_id, expected_type=type_hints["portfolio_id"])
             check_type(argname="argument product_id", value=product_id, expected_type=type_hints["product_id"])
-            check_type(argname="argument accept_language", value=accept_language, expected_type=type_hints["accept_language"])
             check_type(argname="argument source_portfolio_id", value=source_portfolio_id, expected_type=type_hints["source_portfolio_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "portfolio_id": portfolio_id,
-            "product_id": product_id,
-        }
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
         if accept_language is not None:
             self._values["accept_language"] = accept_language
+        if portfolio_id is not None:
+            self._values["portfolio_id"] = portfolio_id
+        if product_id is not None:
+            self._values["product_id"] = product_id
         if source_portfolio_id is not None:
             self._values["source_portfolio_id"] = source_portfolio_id
-
-    @builtins.property
-    def portfolio_id(self) -> builtins.str:
-        '''The portfolio identifier.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioproductassociation.html#cfn-servicecatalog-portfolioproductassociation-portfolioid
-        '''
-        result = self._values.get("portfolio_id")
-        assert result is not None, "Required property 'portfolio_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def product_id(self) -> builtins.str:
-        '''The product identifier.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioproductassociation.html#cfn-servicecatalog-portfolioproductassociation-productid
-        '''
-        result = self._values.get("product_id")
-        assert result is not None, "Required property 'product_id' is missing"
-        return typing.cast(builtins.str, result)
 
     @builtins.property
     def accept_language(self) -> typing.Optional[builtins.str]:
@@ -1956,6 +1935,24 @@ class CfnPortfolioProductAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioproductassociation.html#cfn-servicecatalog-portfolioproductassociation-acceptlanguage
         '''
         result = self._values.get("accept_language")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def portfolio_id(self) -> typing.Optional[builtins.str]:
+        '''The portfolio identifier.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioproductassociation.html#cfn-servicecatalog-portfolioproductassociation-portfolioid
+        '''
+        result = self._values.get("portfolio_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def product_id(self) -> typing.Optional[builtins.str]:
+        '''The product identifier.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioproductassociation.html#cfn-servicecatalog-portfolioproductassociation-productid
+        '''
+        result = self._values.get("product_id")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -5627,13 +5624,14 @@ class PortfolioPrincipalAssociationReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_servicecatalog.PortfolioProductAssociationReference",
     jsii_struct_bases=[],
-    name_mapping={"portfolio_product_association_id": "portfolioProductAssociationId"},
+    name_mapping={"portfolio_id": "portfolioId", "product_id": "productId"},
 )
 class PortfolioProductAssociationReference:
-    def __init__(self, *, portfolio_product_association_id: builtins.str) -> None:
+    def __init__(self, *, portfolio_id: builtins.str, product_id: builtins.str) -> None:
         '''A reference to a PortfolioProductAssociation resource.
 
-        :param portfolio_product_association_id: The Id of the PortfolioProductAssociation resource.
+        :param portfolio_id: The PortfolioId of the PortfolioProductAssociation resource.
+        :param product_id: The ProductId of the PortfolioProductAssociation resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -5644,21 +5642,31 @@ class PortfolioProductAssociationReference:
             from aws_cdk import aws_servicecatalog as servicecatalog
             
             portfolio_product_association_reference = servicecatalog.PortfolioProductAssociationReference(
-                portfolio_product_association_id="portfolioProductAssociationId"
+                portfolio_id="portfolioId",
+                product_id="productId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__16f8ca87db7922e5db79b96a382f11f60f939784f7535a92f4d0967a66b4a0fc)
-            check_type(argname="argument portfolio_product_association_id", value=portfolio_product_association_id, expected_type=type_hints["portfolio_product_association_id"])
+            check_type(argname="argument portfolio_id", value=portfolio_id, expected_type=type_hints["portfolio_id"])
+            check_type(argname="argument product_id", value=product_id, expected_type=type_hints["product_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "portfolio_product_association_id": portfolio_product_association_id,
+            "portfolio_id": portfolio_id,
+            "product_id": product_id,
         }
 
     @builtins.property
-    def portfolio_product_association_id(self) -> builtins.str:
-        '''The Id of the PortfolioProductAssociation resource.'''
-        result = self._values.get("portfolio_product_association_id")
-        assert result is not None, "Required property 'portfolio_product_association_id' is missing"
+    def portfolio_id(self) -> builtins.str:
+        '''The PortfolioId of the PortfolioProductAssociation resource.'''
+        result = self._values.get("portfolio_id")
+        assert result is not None, "Required property 'portfolio_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def product_id(self) -> builtins.str:
+        '''The ProductId of the PortfolioProductAssociation resource.'''
+        result = self._values.get("product_id")
+        assert result is not None, "Required property 'product_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -9448,7 +9456,8 @@ class CfnLaunchTemplateConstraint(
     @builtins.property
     @jsii.member(jsii_name="attrId")
     def attr_id(self) -> builtins.str:
-        '''
+        '''Unique identifier for the constraint.
+
         :cloudformationAttribute: Id
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrId"))
@@ -9746,12 +9755,12 @@ class CfnPortfolioPrincipalAssociation(
         from aws_cdk import aws_servicecatalog as servicecatalog
         
         cfn_portfolio_principal_association = servicecatalog.CfnPortfolioPrincipalAssociation(self, "MyCfnPortfolioPrincipalAssociation",
-            portfolio_id="portfolioId",
-            principal_arn="principalArn",
             principal_type="principalType",
         
             # the properties below are optional
-            accept_language="acceptLanguage"
+            accept_language="acceptLanguage",
+            portfolio_id="portfolioId",
+            principal_arn="principalArn"
         )
     '''
 
@@ -9760,28 +9769,28 @@ class CfnPortfolioPrincipalAssociation(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        portfolio_id: builtins.str,
-        principal_arn: builtins.str,
         principal_type: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
+        portfolio_id: typing.Optional[builtins.str] = None,
+        principal_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param portfolio_id: The portfolio identifier.
-        :param principal_arn: The ARN of the principal ( IAM user, role, or group).
         :param principal_type: The principal type. The supported values are ``IAM`` and ``IAM_PATTERN`` .
         :param accept_language: The language code. - ``jp`` - Japanese - ``zh`` - Chinese
+        :param portfolio_id: The portfolio identifier.
+        :param principal_arn: The ARN of the principal ( IAM user, role, or group).
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b8a7d450a71f88f29341f360bc05a021b910027171e4e63c9be6c67c4d53b2a)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnPortfolioPrincipalAssociationProps(
-            portfolio_id=portfolio_id,
-            principal_arn=principal_arn,
             principal_type=principal_type,
             accept_language=accept_language,
+            portfolio_id=portfolio_id,
+            principal_arn=principal_arn,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -9838,32 +9847,6 @@ class CfnPortfolioPrincipalAssociation(
         return typing.cast(PortfolioPrincipalAssociationReference, jsii.get(self, "portfolioPrincipalAssociationRef"))
 
     @builtins.property
-    @jsii.member(jsii_name="portfolioId")
-    def portfolio_id(self) -> builtins.str:
-        '''The portfolio identifier.'''
-        return typing.cast(builtins.str, jsii.get(self, "portfolioId"))
-
-    @portfolio_id.setter
-    def portfolio_id(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__726706747073f477b14d5b31fa14aba7087b2fc4265414101c6069e458c605ef)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "portfolioId", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="principalArn")
-    def principal_arn(self) -> builtins.str:
-        '''The ARN of the principal ( IAM user, role, or group).'''
-        return typing.cast(builtins.str, jsii.get(self, "principalArn"))
-
-    @principal_arn.setter
-    def principal_arn(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__71c52a4171fa242df45a083617e532d09ea08d89eea6a461f83e7608b28c48bb)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "principalArn", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="principalType")
     def principal_type(self) -> builtins.str:
         '''The principal type.'''
@@ -9889,6 +9872,32 @@ class CfnPortfolioPrincipalAssociation(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "acceptLanguage", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="portfolioId")
+    def portfolio_id(self) -> typing.Optional[builtins.str]:
+        '''The portfolio identifier.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "portfolioId"))
+
+    @portfolio_id.setter
+    def portfolio_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__726706747073f477b14d5b31fa14aba7087b2fc4265414101c6069e458c605ef)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "portfolioId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="principalArn")
+    def principal_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of the principal ( IAM user, role, or group).'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "principalArn"))
+
+    @principal_arn.setter
+    def principal_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__71c52a4171fa242df45a083617e532d09ea08d89eea6a461f83e7608b28c48bb)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "principalArn", value) # pyright: ignore[reportArgumentType]
+
 
 @jsii.implements(_IInspectable_c2943556, IPortfolioProductAssociationRef)
 class CfnPortfolioProductAssociation(
@@ -9911,11 +9920,9 @@ class CfnPortfolioProductAssociation(
         from aws_cdk import aws_servicecatalog as servicecatalog
         
         cfn_portfolio_product_association = servicecatalog.CfnPortfolioProductAssociation(self, "MyCfnPortfolioProductAssociation",
+            accept_language="acceptLanguage",
             portfolio_id="portfolioId",
             product_id="productId",
-        
-            # the properties below are optional
-            accept_language="acceptLanguage",
             source_portfolio_id="sourcePortfolioId"
         )
     '''
@@ -9925,17 +9932,17 @@ class CfnPortfolioProductAssociation(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        portfolio_id: builtins.str,
-        product_id: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
+        portfolio_id: typing.Optional[builtins.str] = None,
+        product_id: typing.Optional[builtins.str] = None,
         source_portfolio_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
+        :param accept_language: The language code. - ``jp`` - Japanese - ``zh`` - Chinese
         :param portfolio_id: The portfolio identifier.
         :param product_id: The product identifier.
-        :param accept_language: The language code. - ``jp`` - Japanese - ``zh`` - Chinese
         :param source_portfolio_id: The identifier of the source portfolio.
         '''
         if __debug__:
@@ -9943,9 +9950,9 @@ class CfnPortfolioProductAssociation(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnPortfolioProductAssociationProps(
+            accept_language=accept_language,
             portfolio_id=portfolio_id,
             product_id=product_id,
-            accept_language=accept_language,
             source_portfolio_id=source_portfolio_id,
         )
 
@@ -10001,32 +10008,6 @@ class CfnPortfolioProductAssociation(
         return typing.cast(PortfolioProductAssociationReference, jsii.get(self, "portfolioProductAssociationRef"))
 
     @builtins.property
-    @jsii.member(jsii_name="portfolioId")
-    def portfolio_id(self) -> builtins.str:
-        '''The portfolio identifier.'''
-        return typing.cast(builtins.str, jsii.get(self, "portfolioId"))
-
-    @portfolio_id.setter
-    def portfolio_id(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__19f425d3e28d58e160bed9adb81d5653e2000512b6a76bfcf27a70e272988f14)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "portfolioId", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="productId")
-    def product_id(self) -> builtins.str:
-        '''The product identifier.'''
-        return typing.cast(builtins.str, jsii.get(self, "productId"))
-
-    @product_id.setter
-    def product_id(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__3098433a8204e6c52183ab4756af784eb3f510cb7bdb7fe68b7c21ef9e4d78cf)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "productId", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="acceptLanguage")
     def accept_language(self) -> typing.Optional[builtins.str]:
         '''The language code.'''
@@ -10038,6 +10019,32 @@ class CfnPortfolioProductAssociation(
             type_hints = typing.get_type_hints(_typecheckingstub__c7d396eed36a68172694b616bafad7ef385373f22a1d8c3dc49608d69ec9e526)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "acceptLanguage", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="portfolioId")
+    def portfolio_id(self) -> typing.Optional[builtins.str]:
+        '''The portfolio identifier.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "portfolioId"))
+
+    @portfolio_id.setter
+    def portfolio_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__19f425d3e28d58e160bed9adb81d5653e2000512b6a76bfcf27a70e272988f14)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "portfolioId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="productId")
+    def product_id(self) -> typing.Optional[builtins.str]:
+        '''The product identifier.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "productId"))
+
+    @product_id.setter
+    def product_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3098433a8204e6c52183ab4756af784eb3f510cb7bdb7fe68b7c21ef9e4d78cf)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "productId", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="sourcePortfolioId")
@@ -11696,19 +11703,19 @@ def _typecheckingstub__782bde46fdc76fe863545140febd1fe95f163b327614047bf13a8ac26
 
 def _typecheckingstub__86aa94ae9b8977b851184740615709136e8ab87d84e565bd4ed1c37202e743af(
     *,
-    portfolio_id: builtins.str,
-    principal_arn: builtins.str,
     principal_type: builtins.str,
     accept_language: typing.Optional[builtins.str] = None,
+    portfolio_id: typing.Optional[builtins.str] = None,
+    principal_arn: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__97355e439ae20c66a13583fbc70b7a8de7f038ae88e7d60775df912c8ba748c0(
     *,
-    portfolio_id: builtins.str,
-    product_id: builtins.str,
     accept_language: typing.Optional[builtins.str] = None,
+    portfolio_id: typing.Optional[builtins.str] = None,
+    product_id: typing.Optional[builtins.str] = None,
     source_portfolio_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -12179,7 +12186,8 @@ def _typecheckingstub__c7ef68af4b2af04fe6a77831d825e0f8e0c22a01698dad7f094da6200
 
 def _typecheckingstub__16f8ca87db7922e5db79b96a382f11f60f939784f7535a92f4d0967a66b4a0fc(
     *,
-    portfolio_product_association_id: builtins.str,
+    portfolio_id: builtins.str,
+    product_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12937,10 +12945,10 @@ def _typecheckingstub__2b8a7d450a71f88f29341f360bc05a021b910027171e4e63c9be6c67c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    portfolio_id: builtins.str,
-    principal_arn: builtins.str,
     principal_type: builtins.str,
     accept_language: typing.Optional[builtins.str] = None,
+    portfolio_id: typing.Optional[builtins.str] = None,
+    principal_arn: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12957,18 +12965,6 @@ def _typecheckingstub__257e8fbedbaa67aa61288a1f94be02039da4ac33558591be208505deb
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__726706747073f477b14d5b31fa14aba7087b2fc4265414101c6069e458c605ef(
-    value: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__71c52a4171fa242df45a083617e532d09ea08d89eea6a461f83e7608b28c48bb(
-    value: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__66dbe3deef345271ae1cfb35b0e313622b15892928d8581127c03e117db33585(
     value: builtins.str,
 ) -> None:
@@ -12981,13 +12977,25 @@ def _typecheckingstub__1390265bc6b4e797f81f5a56c99acfec9dceeb8b223c28fc92f325ebf
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__726706747073f477b14d5b31fa14aba7087b2fc4265414101c6069e458c605ef(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__71c52a4171fa242df45a083617e532d09ea08d89eea6a461f83e7608b28c48bb(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__25cb0daf817ffe74f2f0c38badd3f1db5ae0cb2012f78855ecb4495b5ba58298(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    portfolio_id: builtins.str,
-    product_id: builtins.str,
     accept_language: typing.Optional[builtins.str] = None,
+    portfolio_id: typing.Optional[builtins.str] = None,
+    product_id: typing.Optional[builtins.str] = None,
     source_portfolio_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -13005,19 +13013,19 @@ def _typecheckingstub__32a7d6ef335f62572e1892401cb2c591da9aaabfd6b667b07c91465fd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c7d396eed36a68172694b616bafad7ef385373f22a1d8c3dc49608d69ec9e526(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__19f425d3e28d58e160bed9adb81d5653e2000512b6a76bfcf27a70e272988f14(
-    value: builtins.str,
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__3098433a8204e6c52183ab4756af784eb3f510cb7bdb7fe68b7c21ef9e4d78cf(
-    value: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__c7d396eed36a68172694b616bafad7ef385373f22a1d8c3dc49608d69ec9e526(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""

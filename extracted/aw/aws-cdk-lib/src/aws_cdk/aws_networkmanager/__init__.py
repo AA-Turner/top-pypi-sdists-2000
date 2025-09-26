@@ -3987,6 +3987,15 @@ class CfnConnectAttachment(
         return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrLastModificationErrors")
+    def attr_last_modification_errors(self) -> typing.List[builtins.str]:
+        '''Errors from the last modification of the attachment.
+
+        :cloudformationAttribute: LastModificationErrors
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "attrLastModificationErrors"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrOwnerAccountId")
     def attr_owner_account_id(self) -> builtins.str:
         '''The ID of the Connect attachment owner.
@@ -4598,6 +4607,15 @@ class CfnConnectPeer(
         :cloudformationAttribute: EdgeLocation
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrEdgeLocation"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastModificationErrors")
+    def attr_last_modification_errors(self) -> typing.List[builtins.str]:
+        '''Describes the error associated with the attachment request.
+
+        :cloudformationAttribute: LastModificationErrors
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "attrLastModificationErrors"))
 
     @builtins.property
     @jsii.member(jsii_name="attrState")
@@ -6392,6 +6410,15 @@ class CfnDirectConnectGatewayAttachment(
         return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrLastModificationErrors")
+    def attr_last_modification_errors(self) -> typing.List[builtins.str]:
+        '''Errors from the last modification of the attachment.
+
+        :cloudformationAttribute: LastModificationErrors
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "attrLastModificationErrors"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrNetworkFunctionGroupName")
     def attr_network_function_group_name(self) -> builtins.str:
         '''The name of the network function group.
@@ -7855,6 +7882,15 @@ class CfnSiteToSiteVpnAttachment(
         return typing.cast(builtins.str, jsii.get(self, "attrEdgeLocation"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrLastModificationErrors")
+    def attr_last_modification_errors(self) -> typing.List[builtins.str]:
+        '''Errors from the last modification of the attachment.
+
+        :cloudformationAttribute: LastModificationErrors
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "attrLastModificationErrors"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrOwnerAccountId")
     def attr_owner_account_id(self) -> builtins.str:
         '''The ID of the site-to-site VPN attachment owner.
@@ -8309,6 +8345,15 @@ class CfnTransitGatewayPeering(
         return typing.cast(builtins.str, jsii.get(self, "attrEdgeLocation"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrLastModificationErrors")
+    def attr_last_modification_errors(self) -> typing.List[builtins.str]:
+        '''Errors from the last modification of the transit gateway peering.
+
+        :cloudformationAttribute: LastModificationErrors
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "attrLastModificationErrors"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrOwnerAccountId")
     def attr_owner_account_id(self) -> builtins.str:
         '''The ID of the account owner.
@@ -8720,6 +8765,15 @@ class CfnTransitGatewayRouteTableAttachment(
         :cloudformationAttribute: EdgeLocation
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrEdgeLocation"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastModificationErrors")
+    def attr_last_modification_errors(self) -> typing.List[builtins.str]:
+        '''Errors from the last modification of the attachment.
+
+        :cloudformationAttribute: LastModificationErrors
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "attrLastModificationErrors"))
 
     @builtins.property
     @jsii.member(jsii_name="attrOwnerAccountId")
@@ -9240,6 +9294,15 @@ class CfnVpcAttachment(
         :cloudformationAttribute: EdgeLocation
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrEdgeLocation"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastModificationErrors")
+    def attr_last_modification_errors(self) -> typing.List[builtins.str]:
+        '''Errors from the last modification of the attachment.
+
+        :cloudformationAttribute: LastModificationErrors
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "attrLastModificationErrors"))
 
     @builtins.property
     @jsii.member(jsii_name="attrNetworkFunctionGroupName")

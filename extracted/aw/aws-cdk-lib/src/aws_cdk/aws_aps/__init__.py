@@ -268,6 +268,7 @@ class CfnRuleGroupsNamespaceProps:
         "source": "source",
         "alias": "alias",
         "role_configuration": "roleConfiguration",
+        "scraper_logging_configuration": "scraperLoggingConfiguration",
         "tags": "tags",
     },
 )
@@ -280,6 +281,7 @@ class CfnScraperProps:
         source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
         alias: typing.Optional[builtins.str] = None,
         role_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.RoleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scraper_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.ScraperLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnScraper``.
@@ -289,6 +291,7 @@ class CfnScraperProps:
         :param source: The Amazon EKS cluster from which the scraper collects metrics.
         :param alias: An optional user-assigned scraper alias.
         :param role_configuration: The role configuration in an Amazon Managed Service for Prometheus scraper.
+        :param scraper_logging_configuration: The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
         :param tags: (Optional) The list of tag keys and values associated with the scraper.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html
@@ -325,6 +328,23 @@ class CfnScraperProps:
                     source_role_arn="sourceRoleArn",
                     target_role_arn="targetRoleArn"
                 ),
+                scraper_logging_configuration=aps.CfnScraper.ScraperLoggingConfigurationProperty(
+                    logging_destination=aps.CfnScraper.ScraperLoggingDestinationProperty(
+                        cloud_watch_logs=aps.CfnScraper.CloudWatchLogDestinationProperty(
+                            log_group_arn="logGroupArn"
+                        )
+                    ),
+                    scraper_components=[aps.CfnScraper.ScraperComponentProperty(
+                        type="type",
+            
+                        # the properties below are optional
+                        config=aps.CfnScraper.ComponentConfigProperty(
+                            options={
+                                "options_key": "options"
+                            }
+                        )
+                    )]
+                ),
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -338,6 +358,7 @@ class CfnScraperProps:
             check_type(argname="argument source", value=source, expected_type=type_hints["source"])
             check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
             check_type(argname="argument role_configuration", value=role_configuration, expected_type=type_hints["role_configuration"])
+            check_type(argname="argument scraper_logging_configuration", value=scraper_logging_configuration, expected_type=type_hints["scraper_logging_configuration"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "destination": destination,
@@ -348,6 +369,8 @@ class CfnScraperProps:
             self._values["alias"] = alias
         if role_configuration is not None:
             self._values["role_configuration"] = role_configuration
+        if scraper_logging_configuration is not None:
+            self._values["scraper_logging_configuration"] = scraper_logging_configuration
         if tags is not None:
             self._values["tags"] = tags
 
@@ -406,6 +429,17 @@ class CfnScraperProps:
         '''
         result = self._values.get("role_configuration")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.RoleConfigurationProperty"]], result)
+
+    @builtins.property
+    def scraper_logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperLoggingConfigurationProperty"]]:
+        '''The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-scraperloggingconfiguration
+        '''
+        result = self._values.get("scraper_logging_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperLoggingConfigurationProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -1328,6 +1362,23 @@ class CfnScraper(
                 source_role_arn="sourceRoleArn",
                 target_role_arn="targetRoleArn"
             ),
+            scraper_logging_configuration=aps.CfnScraper.ScraperLoggingConfigurationProperty(
+                logging_destination=aps.CfnScraper.ScraperLoggingDestinationProperty(
+                    cloud_watch_logs=aps.CfnScraper.CloudWatchLogDestinationProperty(
+                        log_group_arn="logGroupArn"
+                    )
+                ),
+                scraper_components=[aps.CfnScraper.ScraperComponentProperty(
+                    type="type",
+        
+                    # the properties below are optional
+                    config=aps.CfnScraper.ComponentConfigProperty(
+                        options={
+                            "options_key": "options"
+                        }
+                    )
+                )]
+            ),
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -1345,6 +1396,7 @@ class CfnScraper(
         source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
         alias: typing.Optional[builtins.str] = None,
         role_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.RoleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scraper_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.ScraperLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
@@ -1355,6 +1407,7 @@ class CfnScraper(
         :param source: The Amazon EKS cluster from which the scraper collects metrics.
         :param alias: An optional user-assigned scraper alias.
         :param role_configuration: The role configuration in an Amazon Managed Service for Prometheus scraper.
+        :param scraper_logging_configuration: The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
         :param tags: (Optional) The list of tag keys and values associated with the scraper.
         '''
         if __debug__:
@@ -1367,6 +1420,7 @@ class CfnScraper(
             source=source,
             alias=alias,
             role_configuration=role_configuration,
+            scraper_logging_configuration=scraper_logging_configuration,
             tags=tags,
         )
 
@@ -1538,6 +1592,24 @@ class CfnScraper(
         jsii.set(self, "roleConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="scraperLoggingConfiguration")
+    def scraper_logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperLoggingConfigurationProperty"]]:
+        '''The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperLoggingConfigurationProperty"]], jsii.get(self, "scraperLoggingConfiguration"))
+
+    @scraper_logging_configuration.setter
+    def scraper_logging_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperLoggingConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__98c937c38a5c278540b0a6d9654c4dc0d8dbc46a2f3145fd9275f2a8fd9ce000)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "scraperLoggingConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
         '''(Optional) The list of tag keys and values associated with the scraper.'''
@@ -1599,6 +1671,120 @@ class CfnScraper(
 
         def __repr__(self) -> str:
             return "AmpConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnScraper.CloudWatchLogDestinationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"log_group_arn": "logGroupArn"},
+    )
+    class CloudWatchLogDestinationProperty:
+        def __init__(
+            self,
+            *,
+            log_group_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Represents a cloudwatch logs destination for scraper logging.
+
+            :param log_group_arn: ARN of the CloudWatch log group.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-cloudwatchlogdestination.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                cloud_watch_log_destination_property = aps.CfnScraper.CloudWatchLogDestinationProperty(
+                    log_group_arn="logGroupArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d4d1b8a234d9b0461189ac94d16b7043b8e40fc1a62680a811ba8396bc54a5d6)
+                check_type(argname="argument log_group_arn", value=log_group_arn, expected_type=type_hints["log_group_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if log_group_arn is not None:
+                self._values["log_group_arn"] = log_group_arn
+
+        @builtins.property
+        def log_group_arn(self) -> typing.Optional[builtins.str]:
+            '''ARN of the CloudWatch log group.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-cloudwatchlogdestination.html#cfn-aps-scraper-cloudwatchlogdestination-loggrouparn
+            '''
+            result = self._values.get("log_group_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CloudWatchLogDestinationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnScraper.ComponentConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"options": "options"},
+    )
+    class ComponentConfigProperty:
+        def __init__(
+            self,
+            *,
+            options: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''Configuration settings for a scraper component.
+
+            :param options: Configuration options for the scraper component.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-componentconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                component_config_property = aps.CfnScraper.ComponentConfigProperty(
+                    options={
+                        "options_key": "options"
+                    }
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c81abd8a9526f73204a9bfa774d69e9b3ec81f7592dafabd756679cc66dcb1e1)
+                check_type(argname="argument options", value=options, expected_type=type_hints["options"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if options is not None:
+                self._values["options"] = options
+
+        @builtins.property
+        def options(
+            self,
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+            '''Configuration options for the scraper component.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-componentconfig.html#cfn-aps-scraper-componentconfig-options
+            '''
+            result = self._values.get("options")
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ComponentConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -1878,6 +2064,234 @@ class CfnScraper(
 
         def __repr__(self) -> str:
             return "ScrapeConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnScraper.ScraperComponentProperty",
+        jsii_struct_bases=[],
+        name_mapping={"type": "type", "config": "config"},
+    )
+    class ScraperComponentProperty:
+        def __init__(
+            self,
+            *,
+            type: builtins.str,
+            config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.ComponentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''A component of a Amazon Managed Service for Prometheus scraper that can be configured for logging.
+
+            :param type: The type of the scraper component.
+            :param config: The configuration settings for the scraper component.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-scrapercomponent.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                scraper_component_property = aps.CfnScraper.ScraperComponentProperty(
+                    type="type",
+                
+                    # the properties below are optional
+                    config=aps.CfnScraper.ComponentConfigProperty(
+                        options={
+                            "options_key": "options"
+                        }
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__be259f573540cfe3fb130cbc10c656811dffac0fb6663b27b9f4982549990b6a)
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+                check_type(argname="argument config", value=config, expected_type=type_hints["config"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "type": type,
+            }
+            if config is not None:
+                self._values["config"] = config
+
+        @builtins.property
+        def type(self) -> builtins.str:
+            '''The type of the scraper component.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-scrapercomponent.html#cfn-aps-scraper-scrapercomponent-type
+            '''
+            result = self._values.get("type")
+            assert result is not None, "Required property 'type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def config(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.ComponentConfigProperty"]]:
+            '''The configuration settings for the scraper component.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-scrapercomponent.html#cfn-aps-scraper-scrapercomponent-config
+            '''
+            result = self._values.get("config")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.ComponentConfigProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ScraperComponentProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnScraper.ScraperLoggingConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "logging_destination": "loggingDestination",
+            "scraper_components": "scraperComponents",
+        },
+    )
+    class ScraperLoggingConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            logging_destination: typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.ScraperLoggingDestinationProperty", typing.Dict[builtins.str, typing.Any]]],
+            scraper_components: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.ScraperComponentProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        ) -> None:
+            '''Configuration for scraper logging.
+
+            :param logging_destination: Destination for scraper logging.
+            :param scraper_components: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-scraperloggingconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                scraper_logging_configuration_property = aps.CfnScraper.ScraperLoggingConfigurationProperty(
+                    logging_destination=aps.CfnScraper.ScraperLoggingDestinationProperty(
+                        cloud_watch_logs=aps.CfnScraper.CloudWatchLogDestinationProperty(
+                            log_group_arn="logGroupArn"
+                        )
+                    ),
+                    scraper_components=[aps.CfnScraper.ScraperComponentProperty(
+                        type="type",
+                
+                        # the properties below are optional
+                        config=aps.CfnScraper.ComponentConfigProperty(
+                            options={
+                                "options_key": "options"
+                            }
+                        )
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ea5221003b2ff43404935c67045669a8a84790d807c849eadd6df28ea9b60feb)
+                check_type(argname="argument logging_destination", value=logging_destination, expected_type=type_hints["logging_destination"])
+                check_type(argname="argument scraper_components", value=scraper_components, expected_type=type_hints["scraper_components"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "logging_destination": logging_destination,
+                "scraper_components": scraper_components,
+            }
+
+        @builtins.property
+        def logging_destination(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperLoggingDestinationProperty"]:
+            '''Destination for scraper logging.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-scraperloggingconfiguration.html#cfn-aps-scraper-scraperloggingconfiguration-loggingdestination
+            '''
+            result = self._values.get("logging_destination")
+            assert result is not None, "Required property 'logging_destination' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperLoggingDestinationProperty"], result)
+
+        @builtins.property
+        def scraper_components(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperComponentProperty"]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-scraperloggingconfiguration.html#cfn-aps-scraper-scraperloggingconfiguration-scrapercomponents
+            '''
+            result = self._values.get("scraper_components")
+            assert result is not None, "Required property 'scraper_components' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperComponentProperty"]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ScraperLoggingConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnScraper.ScraperLoggingDestinationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"cloud_watch_logs": "cloudWatchLogs"},
+    )
+    class ScraperLoggingDestinationProperty:
+        def __init__(
+            self,
+            *,
+            cloud_watch_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.CloudWatchLogDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''The destination where scraper logs are sent.
+
+            :param cloud_watch_logs: The CloudWatch Logs configuration for the scraper logging destination.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-scraperloggingdestination.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                scraper_logging_destination_property = aps.CfnScraper.ScraperLoggingDestinationProperty(
+                    cloud_watch_logs=aps.CfnScraper.CloudWatchLogDestinationProperty(
+                        log_group_arn="logGroupArn"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__63a27055fededd95d1bc1fba74349c5f0f37894ed254d1e1ce3d670ded2f515f)
+                check_type(argname="argument cloud_watch_logs", value=cloud_watch_logs, expected_type=type_hints["cloud_watch_logs"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if cloud_watch_logs is not None:
+                self._values["cloud_watch_logs"] = cloud_watch_logs
+
+        @builtins.property
+        def cloud_watch_logs(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.CloudWatchLogDestinationProperty"]]:
+            '''The CloudWatch Logs configuration for the scraper logging destination.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-scraperloggingdestination.html#cfn-aps-scraper-scraperloggingdestination-cloudwatchlogs
+            '''
+            result = self._values.get("cloud_watch_logs")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.CloudWatchLogDestinationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ScraperLoggingDestinationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2876,6 +3290,7 @@ def _typecheckingstub__f302dfc2aa92636b313e32f5d91a0ccfd79ebde0259b977f6291d4c83
     source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.SourceProperty, typing.Dict[builtins.str, typing.Any]]],
     alias: typing.Optional[builtins.str] = None,
     role_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.RoleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    scraper_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScraperLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3013,6 +3428,7 @@ def _typecheckingstub__4d4cb1653b22b80f73c5fa4972418519c1d58f8ac033d22184f1b74ee
     source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.SourceProperty, typing.Dict[builtins.str, typing.Any]]],
     alias: typing.Optional[builtins.str] = None,
     role_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.RoleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    scraper_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScraperLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3060,6 +3476,12 @@ def _typecheckingstub__a8492f7c00f66de3309f136730786a3ad81d27f787146130fdb2b6191
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__98c937c38a5c278540b0a6d9654c4dc0d8dbc46a2f3145fd9275f2a8fd9ce000(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScraper.ScraperLoggingConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__265ada3fe1d3014c11a5af4d87c8e4b691d29a917e8643b804a82b7c3223573f(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -3069,6 +3491,20 @@ def _typecheckingstub__265ada3fe1d3014c11a5af4d87c8e4b691d29a917e8643b804a82b7c3
 def _typecheckingstub__02c8f0a43ed30375a3d1b283c2450f310915b0f0fcff6103d168cb18a16bfc4f(
     *,
     workspace_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d4d1b8a234d9b0461189ac94d16b7043b8e40fc1a62680a811ba8396bc54a5d6(
+    *,
+    log_group_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c81abd8a9526f73204a9bfa774d69e9b3ec81f7592dafabd756679cc66dcb1e1(
+    *,
+    options: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3100,6 +3536,29 @@ def _typecheckingstub__86bf03aa28256ae3502c8e0745b810c6f1fe11b530f463788b7c7ffd3
 def _typecheckingstub__61507a1463486662c27c8fec99a5cb181f22e5f346b7bb6d10823ad9b7102b72(
     *,
     configuration_blob: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__be259f573540cfe3fb130cbc10c656811dffac0fb6663b27b9f4982549990b6a(
+    *,
+    type: builtins.str,
+    config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ComponentConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ea5221003b2ff43404935c67045669a8a84790d807c849eadd6df28ea9b60feb(
+    *,
+    logging_destination: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScraperLoggingDestinationProperty, typing.Dict[builtins.str, typing.Any]]],
+    scraper_components: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScraperComponentProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__63a27055fededd95d1bc1fba74349c5f0f37894ed254d1e1ce3d670ded2f515f(
+    *,
+    cloud_watch_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.CloudWatchLogDestinationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

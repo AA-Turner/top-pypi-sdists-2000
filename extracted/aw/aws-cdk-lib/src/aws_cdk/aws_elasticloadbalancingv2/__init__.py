@@ -4370,6 +4370,7 @@ class CfnListenerRuleProps:
     jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnLoadBalancerProps",
     jsii_struct_bases=[],
     name_mapping={
+        "enable_capacity_reservation_provision_stabilize": "enableCapacityReservationProvisionStabilize",
         "enable_prefix_for_ipv6_source_nat": "enablePrefixForIpv6SourceNat",
         "enforce_security_group_inbound_rules_on_private_link_traffic": "enforceSecurityGroupInboundRulesOnPrivateLinkTraffic",
         "ip_address_type": "ipAddressType",
@@ -4389,6 +4390,7 @@ class CfnLoadBalancerProps:
     def __init__(
         self,
         *,
+        enable_capacity_reservation_provision_stabilize: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         enable_prefix_for_ipv6_source_nat: typing.Optional[builtins.str] = None,
         enforce_security_group_inbound_rules_on_private_link_traffic: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
@@ -4405,6 +4407,7 @@ class CfnLoadBalancerProps:
     ) -> None:
         '''Properties for defining a ``CfnLoadBalancer``.
 
+        :param enable_capacity_reservation_provision_stabilize: Default: - false
         :param enable_prefix_for_ipv6_source_nat: [Network Load Balancers with UDP listeners] Indicates whether to use an IPv6 prefix from each subnet for source NAT. The IP address type must be ``dualstack`` . The default value is ``off`` .
         :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink . The default is ``on`` . You can't configure this property on a Network Load Balancer unless you associated a security group with the load balancer when you created it.
         :param ip_address_type: The IP address type. Internal load balancers must use ``ipv4`` . [Application Load Balancers] The possible values are ``ipv4`` (IPv4 addresses), ``dualstack`` (IPv4 and IPv6 addresses), and ``dualstack-without-public-ipv4`` (public IPv6 addresses and private IPv4 and IPv6 addresses). Application Load Balancer authentication supports IPv4 addresses only when connecting to an Identity Provider (IdP) or Amazon Cognito endpoint. Without a public IPv4 address the load balancer can't complete the authentication process, resulting in HTTP 500 errors. [Network Load Balancers and Gateway Load Balancers] The possible values are ``ipv4`` (IPv4 addresses) and ``dualstack`` (IPv4 and IPv6 addresses).
@@ -4429,6 +4432,7 @@ class CfnLoadBalancerProps:
             from aws_cdk import aws_elasticloadbalancingv2 as elbv2
             
             cfn_load_balancer_props = elbv2.CfnLoadBalancerProps(
+                enable_capacity_reservation_provision_stabilize=False,
                 enable_prefix_for_ipv6_source_nat="enablePrefixForIpv6SourceNat",
                 enforce_security_group_inbound_rules_on_private_link_traffic="enforceSecurityGroupInboundRulesOnPrivateLinkTraffic",
                 ip_address_type="ipAddressType",
@@ -4462,6 +4466,7 @@ class CfnLoadBalancerProps:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6b1eb30cea756dc45f625ec82ab8cba6ea31d24595a925a4aabceb7e6605bcde)
+            check_type(argname="argument enable_capacity_reservation_provision_stabilize", value=enable_capacity_reservation_provision_stabilize, expected_type=type_hints["enable_capacity_reservation_provision_stabilize"])
             check_type(argname="argument enable_prefix_for_ipv6_source_nat", value=enable_prefix_for_ipv6_source_nat, expected_type=type_hints["enable_prefix_for_ipv6_source_nat"])
             check_type(argname="argument enforce_security_group_inbound_rules_on_private_link_traffic", value=enforce_security_group_inbound_rules_on_private_link_traffic, expected_type=type_hints["enforce_security_group_inbound_rules_on_private_link_traffic"])
             check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
@@ -4476,6 +4481,8 @@ class CfnLoadBalancerProps:
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument type", value=type, expected_type=type_hints["type"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if enable_capacity_reservation_provision_stabilize is not None:
+            self._values["enable_capacity_reservation_provision_stabilize"] = enable_capacity_reservation_provision_stabilize
         if enable_prefix_for_ipv6_source_nat is not None:
             self._values["enable_prefix_for_ipv6_source_nat"] = enable_prefix_for_ipv6_source_nat
         if enforce_security_group_inbound_rules_on_private_link_traffic is not None:
@@ -4502,6 +4509,18 @@ class CfnLoadBalancerProps:
             self._values["tags"] = tags
         if type is not None:
             self._values["type"] = type
+
+    @builtins.property
+    def enable_capacity_reservation_provision_stabilize(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''
+        :default: - false
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-enablecapacityreservationprovisionstabilize
+        '''
+        result = self._values.get("enable_capacity_reservation_provision_stabilize")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
     def enable_prefix_for_ipv6_source_nat(self) -> typing.Optional[builtins.str]:
@@ -21911,6 +21930,7 @@ class CfnLoadBalancer(
         from aws_cdk import aws_elasticloadbalancingv2 as elbv2
         
         cfn_load_balancer = elbv2.CfnLoadBalancer(self, "MyCfnLoadBalancer",
+            enable_capacity_reservation_provision_stabilize=False,
             enable_prefix_for_ipv6_source_nat="enablePrefixForIpv6SourceNat",
             enforce_security_group_inbound_rules_on_private_link_traffic="enforceSecurityGroupInboundRulesOnPrivateLinkTraffic",
             ip_address_type="ipAddressType",
@@ -21948,6 +21968,7 @@ class CfnLoadBalancer(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
+        enable_capacity_reservation_provision_stabilize: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         enable_prefix_for_ipv6_source_nat: typing.Optional[builtins.str] = None,
         enforce_security_group_inbound_rules_on_private_link_traffic: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
@@ -21965,6 +21986,7 @@ class CfnLoadBalancer(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
+        :param enable_capacity_reservation_provision_stabilize: Default: - false
         :param enable_prefix_for_ipv6_source_nat: [Network Load Balancers with UDP listeners] Indicates whether to use an IPv6 prefix from each subnet for source NAT. The IP address type must be ``dualstack`` . The default value is ``off`` .
         :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink . The default is ``on`` . You can't configure this property on a Network Load Balancer unless you associated a security group with the load balancer when you created it.
         :param ip_address_type: The IP address type. Internal load balancers must use ``ipv4`` . [Application Load Balancers] The possible values are ``ipv4`` (IPv4 addresses), ``dualstack`` (IPv4 and IPv6 addresses), and ``dualstack-without-public-ipv4`` (public IPv6 addresses and private IPv4 and IPv6 addresses). Application Load Balancer authentication supports IPv4 addresses only when connecting to an Identity Provider (IdP) or Amazon Cognito endpoint. Without a public IPv4 address the load balancer can't complete the authentication process, resulting in HTTP 500 errors. [Network Load Balancers and Gateway Load Balancers] The possible values are ``ipv4`` (IPv4 addresses) and ``dualstack`` (IPv4 and IPv6 addresses).
@@ -21984,6 +22006,7 @@ class CfnLoadBalancer(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnLoadBalancerProps(
+            enable_capacity_reservation_provision_stabilize=enable_capacity_reservation_provision_stabilize,
             enable_prefix_for_ipv6_source_nat=enable_prefix_for_ipv6_source_nat,
             enforce_security_group_inbound_rules_on_private_link_traffic=enforce_security_group_inbound_rules_on_private_link_traffic,
             ip_address_type=ip_address_type,
@@ -22109,6 +22132,23 @@ class CfnLoadBalancer(
     def tags(self) -> _TagManager_0a598cb3:
         '''Tag Manager which manages the tags for this resource.'''
         return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+
+    @builtins.property
+    @jsii.member(jsii_name="enableCapacityReservationProvisionStabilize")
+    def enable_capacity_reservation_provision_stabilize(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableCapacityReservationProvisionStabilize"))
+
+    @enable_capacity_reservation_provision_stabilize.setter
+    def enable_capacity_reservation_provision_stabilize(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__db326b5431980db555d148f9ae3420eff076c5f4436bcac08ce2f9c7154eefce)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "enableCapacityReservationProvisionStabilize", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="enablePrefixForIpv6SourceNat")
@@ -28396,6 +28436,7 @@ def _typecheckingstub__ca75076613edf0bf6ade8ee145bc71de34aa66567d90d5721bd40f862
 
 def _typecheckingstub__6b1eb30cea756dc45f625ec82ab8cba6ea31d24595a925a4aabceb7e6605bcde(
     *,
+    enable_capacity_reservation_provision_stabilize: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     enable_prefix_for_ipv6_source_nat: typing.Optional[builtins.str] = None,
     enforce_security_group_inbound_rules_on_private_link_traffic: typing.Optional[builtins.str] = None,
     ip_address_type: typing.Optional[builtins.str] = None,
@@ -29797,6 +29838,7 @@ def _typecheckingstub__907e1e3e88136a6a7bdcdac293563447ed893c77b9f7b1e7154fb1749
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
+    enable_capacity_reservation_provision_stabilize: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     enable_prefix_for_ipv6_source_nat: typing.Optional[builtins.str] = None,
     enforce_security_group_inbound_rules_on_private_link_traffic: typing.Optional[builtins.str] = None,
     ip_address_type: typing.Optional[builtins.str] = None,
@@ -29822,6 +29864,12 @@ def _typecheckingstub__3f4fc1db72c9bbcfbaddb7ea6d8213545b1ac543356f1721fbbcb2794
 
 def _typecheckingstub__1a178a2aa61d40ebc079a81b6caeba1ff6649a54d784e4ce75ed79b7efbcac42(
     props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__db326b5431980db555d148f9ae3420eff076c5f4436bcac08ce2f9c7154eefce(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
     pass

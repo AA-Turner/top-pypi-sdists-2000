@@ -23876,7 +23876,7 @@ class CfnVirtualGateway(
     )
     class VirtualGatewayListenerTlsAcmCertificateProperty:
         def __init__(self, *, certificate_arn: builtins.str) -> None:
-            '''An object that represents an AWS Certificate Manager certificate.
+            '''An object that represents an Certificate Manager certificate.
 
             :param certificate_arn: The Amazon Resource Name (ARN) for the certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see `Transport Layer Security (TLS) <https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites>`_ .
 
@@ -23938,7 +23938,7 @@ class CfnVirtualGateway(
         ) -> None:
             '''An object that represents a listener's Transport Layer Security (TLS) certificate.
 
-            :param acm: A reference to an object that represents an AWS Certificate Manager certificate.
+            :param acm: A reference to an object that represents an Certificate Manager certificate.
             :param file: A reference to an object that represents a local file certificate.
             :param sds: A reference to an object that represents a virtual gateway's listener's Secret Discovery Service certificate.
 
@@ -23981,7 +23981,7 @@ class CfnVirtualGateway(
         def acm(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsAcmCertificateProperty"]]:
-            '''A reference to an object that represents an AWS Certificate Manager certificate.
+            '''A reference to an object that represents an Certificate Manager certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistenertlscertificate.html#cfn-appmesh-virtualgateway-virtualgatewaylistenertlscertificate-acm
             '''
@@ -24813,7 +24813,7 @@ class CfnVirtualGateway(
             *,
             certificate_authority_arns: typing.Sequence[builtins.str],
         ) -> None:
-            '''An object that represents a Transport Layer Security (TLS) validation context trust for an AWS Certificate Manager certificate.
+            '''An object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.
 
             :param certificate_authority_arns: One or more ACM Amazon Resource Name (ARN)s.
 
@@ -25073,7 +25073,7 @@ class CfnVirtualGateway(
         ) -> None:
             '''An object that represents a Transport Layer Security (TLS) validation context trust.
 
-            :param acm: A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an AWS Certificate Manager certificate.
+            :param acm: A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.
             :param file: An object that represents a Transport Layer Security (TLS) validation context trust for a local file.
             :param sds: A reference to an object that represents a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
 
@@ -25115,7 +25115,7 @@ class CfnVirtualGateway(
         def acm(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextAcmTrustProperty"]]:
-            '''A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an AWS Certificate Manager certificate.
+            '''A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaytlsvalidationcontexttrust.html#cfn-appmesh-virtualgateway-virtualgatewaytlsvalidationcontexttrust-acm
             '''
@@ -27480,7 +27480,7 @@ class CfnVirtualNode(
     )
     class ListenerTlsAcmCertificateProperty:
         def __init__(self, *, certificate_arn: builtins.str) -> None:
-            '''An object that represents an AWS Certificate Manager certificate.
+            '''An object that represents an Certificate Manager certificate.
 
             :param certificate_arn: The Amazon Resource Name (ARN) for the certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see `Transport Layer Security (TLS) <https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites>`_ .
 
@@ -27542,7 +27542,7 @@ class CfnVirtualNode(
         ) -> None:
             '''An object that represents a listener's Transport Layer Security (TLS) certificate.
 
-            :param acm: A reference to an object that represents an AWS Certificate Manager certificate.
+            :param acm: A reference to an object that represents an Certificate Manager certificate.
             :param file: A reference to an object that represents a local file certificate.
             :param sds: A reference to an object that represents a listener's Secret Discovery Service certificate.
 
@@ -27585,7 +27585,7 @@ class CfnVirtualNode(
         def acm(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsAcmCertificateProperty"]]:
-            '''A reference to an object that represents an AWS Certificate Manager certificate.
+            '''A reference to an object that represents an Certificate Manager certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertlscertificate.html#cfn-appmesh-virtualnode-listenertlscertificate-acm
             '''
@@ -28660,7 +28660,7 @@ class CfnVirtualNode(
             *,
             certificate_authority_arns: typing.Sequence[builtins.str],
         ) -> None:
-            '''An object that represents a Transport Layer Security (TLS) validation context trust for an AWS Certificate Manager certificate.
+            '''An object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.
 
             :param certificate_authority_arns: One or more ACM Amazon Resource Name (ARN)s.
 
@@ -28922,7 +28922,7 @@ class CfnVirtualNode(
         ) -> None:
             '''An object that represents a Transport Layer Security (TLS) validation context trust.
 
-            :param acm: A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an AWS Certificate Manager certificate.
+            :param acm: A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.
             :param file: An object that represents a Transport Layer Security (TLS) validation context trust for a local file.
             :param sds: A reference to an object that represents a Transport Layer Security (TLS) Secret Discovery Service validation context trust.
 
@@ -28964,7 +28964,7 @@ class CfnVirtualNode(
         def acm(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextAcmTrustProperty"]]:
-            '''A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an AWS Certificate Manager certificate.
+            '''A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-tlsvalidationcontexttrust.html#cfn-appmesh-virtualnode-tlsvalidationcontexttrust-acm
             '''

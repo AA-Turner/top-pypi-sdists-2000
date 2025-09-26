@@ -5593,7 +5593,7 @@ class CfnDomain(
                The ``AWS::Elasticsearch::Domain`` resource is being replaced by the `AWS::OpenSearchService::Domain <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchservice-domain.html>`_ resource. While the legacy Elasticsearch resource and options are still supported, we recommend modifying your existing Cloudformation templates to use the new OpenSearch Service resource, which supports both OpenSearch and Elasticsearch. For more information about the service rename, see `New resource types <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/rename.html#rename-resource>`_ in the *Amazon OpenSearch Service Developer Guide* .
 
             :param custom_endpoint: The fully qualified URL for your custom endpoint. Required if you enabled a custom endpoint for the domain.
-            :param custom_endpoint_certificate_arn: The AWS Certificate Manager ARN for your domain's SSL/TLS certificate. Required if you enabled a custom endpoint for the domain.
+            :param custom_endpoint_certificate_arn: The Certificate Manager ARN for your domain's SSL/TLS certificate. Required if you enabled a custom endpoint for the domain.
             :param custom_endpoint_enabled: True to enable a custom endpoint for the domain. If enabled, you must also provide values for ``CustomEndpoint`` and ``CustomEndpointCertificateArn`` .
             :param enforce_https: True to require that all traffic to the domain arrive over HTTPS.
             :param tls_security_policy: The minimum TLS version required for traffic to the domain. Valid values are TLS 1.3 (recommended) or 1.2:. - ``Policy-Min-TLS-1-0-2019-07`` - ``Policy-Min-TLS-1-2-2019-07``
@@ -5647,7 +5647,7 @@ class CfnDomain(
 
         @builtins.property
         def custom_endpoint_certificate_arn(self) -> typing.Optional[builtins.str]:
-            '''The AWS Certificate Manager ARN for your domain's SSL/TLS certificate.
+            '''The Certificate Manager ARN for your domain's SSL/TLS certificate.
 
             Required if you enabled a custom endpoint for the domain.
 

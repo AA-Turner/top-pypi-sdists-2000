@@ -423,6 +423,7 @@ class CfnCloudAutonomousVmClusterProps:
         "customer_contacts_to_send_to_oci": "customerContactsToSendToOci",
         "database_server_type": "databaseServerType",
         "display_name": "displayName",
+        "maintenance_window": "maintenanceWindow",
         "shape": "shape",
         "storage_count": "storageCount",
         "storage_server_type": "storageServerType",
@@ -439,6 +440,7 @@ class CfnCloudExadataInfrastructureProps:
         customer_contacts_to_send_to_oci: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudExadataInfrastructure.CustomerContactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         database_server_type: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
+        maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudExadataInfrastructure.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         shape: typing.Optional[builtins.str] = None,
         storage_count: typing.Optional[jsii.Number] = None,
         storage_server_type: typing.Optional[builtins.str] = None,
@@ -452,6 +454,7 @@ class CfnCloudExadataInfrastructureProps:
         :param customer_contacts_to_send_to_oci: The email addresses of contacts to receive notification from Oracle about maintenance updates for the Exadata infrastructure.
         :param database_server_type: The database server model type of the Exadata infrastructure. For the list of valid model names, use the ``ListDbSystemShapes`` operation.
         :param display_name: The user-friendly name for the Exadata infrastructure. Required when creating an Exadata infrastructure.
+        :param maintenance_window: The scheduling details for the maintenance window. Patching and system updates take place during the maintenance window.
         :param shape: The model name of the Exadata infrastructure. Required when creating an Exadata infrastructure.
         :param storage_count: The number of storage servers that are activated for the Exadata infrastructure. Required when creating an Exadata infrastructure.
         :param storage_server_type: The storage server model type of the Exadata infrastructure. For the list of valid model names, use the ``ListDbSystemShapes`` operation.
@@ -475,6 +478,17 @@ class CfnCloudExadataInfrastructureProps:
                 )],
                 database_server_type="databaseServerType",
                 display_name="displayName",
+                maintenance_window=odb.CfnCloudExadataInfrastructure.MaintenanceWindowProperty(
+                    custom_action_timeout_in_mins=123,
+                    days_of_week=["daysOfWeek"],
+                    hours_of_day=[123],
+                    is_custom_action_timeout_enabled=False,
+                    lead_time_in_weeks=123,
+                    months=["months"],
+                    patching_mode="patchingMode",
+                    preference="preference",
+                    weeks_of_month=[123]
+                ),
                 shape="shape",
                 storage_count=123,
                 storage_server_type="storageServerType",
@@ -492,6 +506,7 @@ class CfnCloudExadataInfrastructureProps:
             check_type(argname="argument customer_contacts_to_send_to_oci", value=customer_contacts_to_send_to_oci, expected_type=type_hints["customer_contacts_to_send_to_oci"])
             check_type(argname="argument database_server_type", value=database_server_type, expected_type=type_hints["database_server_type"])
             check_type(argname="argument display_name", value=display_name, expected_type=type_hints["display_name"])
+            check_type(argname="argument maintenance_window", value=maintenance_window, expected_type=type_hints["maintenance_window"])
             check_type(argname="argument shape", value=shape, expected_type=type_hints["shape"])
             check_type(argname="argument storage_count", value=storage_count, expected_type=type_hints["storage_count"])
             check_type(argname="argument storage_server_type", value=storage_server_type, expected_type=type_hints["storage_server_type"])
@@ -509,6 +524,8 @@ class CfnCloudExadataInfrastructureProps:
             self._values["database_server_type"] = database_server_type
         if display_name is not None:
             self._values["display_name"] = display_name
+        if maintenance_window is not None:
+            self._values["maintenance_window"] = maintenance_window
         if shape is not None:
             self._values["shape"] = shape
         if storage_count is not None:
@@ -585,6 +602,19 @@ class CfnCloudExadataInfrastructureProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def maintenance_window(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]]:
+        '''The scheduling details for the maintenance window.
+
+        Patching and system updates take place during the maintenance window.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudexadatainfrastructure.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow
+        '''
+        result = self._values.get("maintenance_window")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]], result)
+
+    @builtins.property
     def shape(self) -> typing.Optional[builtins.str]:
         '''The model name of the Exadata infrastructure.
 
@@ -647,6 +677,7 @@ class CfnCloudExadataInfrastructureProps:
         "cpu_core_count": "cpuCoreCount",
         "data_collection_options": "dataCollectionOptions",
         "data_storage_size_in_t_bs": "dataStorageSizeInTBs",
+        "db_nodes": "dbNodes",
         "db_node_storage_size_in_g_bs": "dbNodeStorageSizeInGBs",
         "db_servers": "dbServers",
         "display_name": "displayName",
@@ -673,6 +704,7 @@ class CfnCloudVmClusterProps:
         cpu_core_count: typing.Optional[jsii.Number] = None,
         data_collection_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudVmCluster.DataCollectionOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         data_storage_size_in_t_bs: typing.Optional[jsii.Number] = None,
+        db_nodes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudVmCluster.DbNodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         db_node_storage_size_in_g_bs: typing.Optional[jsii.Number] = None,
         db_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         display_name: typing.Optional[builtins.str] = None,
@@ -696,6 +728,7 @@ class CfnCloudVmClusterProps:
         :param cpu_core_count: The number of CPU cores enabled on the VM cluster. Required when creating a VM cluster.
         :param data_collection_options: The set of diagnostic collection options enabled for the VM cluster.
         :param data_storage_size_in_t_bs: The size of the data disk group, in terabytes (TB), that's allocated for the VM cluster.
+        :param db_nodes: The DB nodes that are implicitly created and managed as part of this VM Cluster.
         :param db_node_storage_size_in_g_bs: The amount of local node storage, in gigabytes (GB), that's allocated for the VM cluster.
         :param db_servers: The list of database servers for the VM cluster.
         :param display_name: The user-friendly name for the VM cluster. Required when creating a VM cluster.
@@ -731,6 +764,29 @@ class CfnCloudVmClusterProps:
                     is_incident_logs_enabled=False
                 ),
                 data_storage_size_in_tBs=123,
+                db_nodes=[odb.CfnCloudVmCluster.DbNodeProperty(
+                    db_server_id="dbServerId",
+            
+                    # the properties below are optional
+                    backup_ip_id="backupIpId",
+                    backup_vnic2_id="backupVnic2Id",
+                    cpu_core_count=123,
+                    db_node_arn="dbNodeArn",
+                    db_node_id="dbNodeId",
+                    db_node_storage_size_in_gBs=123,
+                    db_system_id="dbSystemId",
+                    host_ip_id="hostIpId",
+                    hostname="hostname",
+                    memory_size_in_gBs=123,
+                    ocid="ocid",
+                    status="status",
+                    tags=[CfnTag(
+                        key="key",
+                        value="value"
+                    )],
+                    vnic2_id="vnic2Id",
+                    vnic_id="vnicId"
+                )],
                 db_node_storage_size_in_gBs=123,
                 db_servers=["dbServers"],
                 display_name="displayName",
@@ -758,6 +814,7 @@ class CfnCloudVmClusterProps:
             check_type(argname="argument cpu_core_count", value=cpu_core_count, expected_type=type_hints["cpu_core_count"])
             check_type(argname="argument data_collection_options", value=data_collection_options, expected_type=type_hints["data_collection_options"])
             check_type(argname="argument data_storage_size_in_t_bs", value=data_storage_size_in_t_bs, expected_type=type_hints["data_storage_size_in_t_bs"])
+            check_type(argname="argument db_nodes", value=db_nodes, expected_type=type_hints["db_nodes"])
             check_type(argname="argument db_node_storage_size_in_g_bs", value=db_node_storage_size_in_g_bs, expected_type=type_hints["db_node_storage_size_in_g_bs"])
             check_type(argname="argument db_servers", value=db_servers, expected_type=type_hints["db_servers"])
             check_type(argname="argument display_name", value=display_name, expected_type=type_hints["display_name"])
@@ -784,6 +841,8 @@ class CfnCloudVmClusterProps:
             self._values["data_collection_options"] = data_collection_options
         if data_storage_size_in_t_bs is not None:
             self._values["data_storage_size_in_t_bs"] = data_storage_size_in_t_bs
+        if db_nodes is not None:
+            self._values["db_nodes"] = db_nodes
         if db_node_storage_size_in_g_bs is not None:
             self._values["db_node_storage_size_in_g_bs"] = db_node_storage_size_in_g_bs
         if db_servers is not None:
@@ -865,6 +924,17 @@ class CfnCloudVmClusterProps:
         '''
         result = self._values.get("data_storage_size_in_t_bs")
         return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def db_nodes(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DbNodeProperty"]]]]:
+        '''The DB nodes that are implicitly created and managed as part of this VM Cluster.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudvmcluster.html#cfn-odb-cloudvmcluster-dbnodes
+        '''
+        result = self._values.get("db_nodes")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DbNodeProperty"]]]], result)
 
     @builtins.property
     def db_node_storage_size_in_g_bs(self) -> typing.Optional[jsii.Number]:
@@ -1039,10 +1109,14 @@ class CfnCloudVmClusterProps:
         "availability_zone_id": "availabilityZoneId",
         "backup_subnet_cidr": "backupSubnetCidr",
         "client_subnet_cidr": "clientSubnetCidr",
+        "custom_domain_name": "customDomainName",
         "default_dns_prefix": "defaultDnsPrefix",
         "delete_associated_resources": "deleteAssociatedResources",
         "display_name": "displayName",
+        "s3_access": "s3Access",
+        "s3_policy_document": "s3PolicyDocument",
         "tags": "tags",
+        "zero_etl_access": "zeroEtlAccess",
     },
 )
 class CfnOdbNetworkProps:
@@ -1053,10 +1127,14 @@ class CfnOdbNetworkProps:
         availability_zone_id: typing.Optional[builtins.str] = None,
         backup_subnet_cidr: typing.Optional[builtins.str] = None,
         client_subnet_cidr: typing.Optional[builtins.str] = None,
+        custom_domain_name: typing.Optional[builtins.str] = None,
         default_dns_prefix: typing.Optional[builtins.str] = None,
         delete_associated_resources: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         display_name: typing.Optional[builtins.str] = None,
+        s3_access: typing.Optional[builtins.str] = None,
+        s3_policy_document: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        zero_etl_access: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnOdbNetwork``.
 
@@ -1064,10 +1142,14 @@ class CfnOdbNetworkProps:
         :param availability_zone_id: The AZ ID of the AZ where the ODB network is located. Required when creating an ODB network. Specify either AvailabilityZone or AvailabilityZoneId to define the location of the network.
         :param backup_subnet_cidr: The CIDR range of the backup subnet in the ODB network.
         :param client_subnet_cidr: The CIDR range of the client subnet in the ODB network. Required when creating an ODB network.
+        :param custom_domain_name: The domain name for the resources in the ODB network.
         :param default_dns_prefix: The DNS prefix to the default DNS domain name. The default DNS domain name is oraclevcn.com.
         :param delete_associated_resources: Specifies whether to delete associated OCI networking resources along with the ODB network. Required when creating an ODB network.
         :param display_name: The user-friendly name of the ODB network. Required when creating an ODB network.
+        :param s3_access: The configuration for Amazon S3 access from the ODB network.
+        :param s3_policy_document: Specifies the endpoint policy for Amazon S3 access from the ODB network.
         :param tags: Tags to assign to the Odb Network.
+        :param zero_etl_access: The configuration for Zero-ETL access from the ODB network.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbnetwork.html
         :exampleMetadata: fixture=_generated
@@ -1083,13 +1165,17 @@ class CfnOdbNetworkProps:
                 availability_zone_id="availabilityZoneId",
                 backup_subnet_cidr="backupSubnetCidr",
                 client_subnet_cidr="clientSubnetCidr",
+                custom_domain_name="customDomainName",
                 default_dns_prefix="defaultDnsPrefix",
                 delete_associated_resources=False,
                 display_name="displayName",
+                s3_access="s3Access",
+                s3_policy_document="s3PolicyDocument",
                 tags=[CfnTag(
                     key="key",
                     value="value"
-                )]
+                )],
+                zero_etl_access="zeroEtlAccess"
             )
         '''
         if __debug__:
@@ -1098,10 +1184,14 @@ class CfnOdbNetworkProps:
             check_type(argname="argument availability_zone_id", value=availability_zone_id, expected_type=type_hints["availability_zone_id"])
             check_type(argname="argument backup_subnet_cidr", value=backup_subnet_cidr, expected_type=type_hints["backup_subnet_cidr"])
             check_type(argname="argument client_subnet_cidr", value=client_subnet_cidr, expected_type=type_hints["client_subnet_cidr"])
+            check_type(argname="argument custom_domain_name", value=custom_domain_name, expected_type=type_hints["custom_domain_name"])
             check_type(argname="argument default_dns_prefix", value=default_dns_prefix, expected_type=type_hints["default_dns_prefix"])
             check_type(argname="argument delete_associated_resources", value=delete_associated_resources, expected_type=type_hints["delete_associated_resources"])
             check_type(argname="argument display_name", value=display_name, expected_type=type_hints["display_name"])
+            check_type(argname="argument s3_access", value=s3_access, expected_type=type_hints["s3_access"])
+            check_type(argname="argument s3_policy_document", value=s3_policy_document, expected_type=type_hints["s3_policy_document"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument zero_etl_access", value=zero_etl_access, expected_type=type_hints["zero_etl_access"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if availability_zone is not None:
             self._values["availability_zone"] = availability_zone
@@ -1111,14 +1201,22 @@ class CfnOdbNetworkProps:
             self._values["backup_subnet_cidr"] = backup_subnet_cidr
         if client_subnet_cidr is not None:
             self._values["client_subnet_cidr"] = client_subnet_cidr
+        if custom_domain_name is not None:
+            self._values["custom_domain_name"] = custom_domain_name
         if default_dns_prefix is not None:
             self._values["default_dns_prefix"] = default_dns_prefix
         if delete_associated_resources is not None:
             self._values["delete_associated_resources"] = delete_associated_resources
         if display_name is not None:
             self._values["display_name"] = display_name
+        if s3_access is not None:
+            self._values["s3_access"] = s3_access
+        if s3_policy_document is not None:
+            self._values["s3_policy_document"] = s3_policy_document
         if tags is not None:
             self._values["tags"] = tags
+        if zero_etl_access is not None:
+            self._values["zero_etl_access"] = zero_etl_access
 
     @builtins.property
     def availability_zone(self) -> typing.Optional[builtins.str]:
@@ -1163,6 +1261,15 @@ class CfnOdbNetworkProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def custom_domain_name(self) -> typing.Optional[builtins.str]:
+        '''The domain name for the resources in the ODB network.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbnetwork.html#cfn-odb-odbnetwork-customdomainname
+        '''
+        result = self._values.get("custom_domain_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def default_dns_prefix(self) -> typing.Optional[builtins.str]:
         '''The DNS prefix to the default DNS domain name.
 
@@ -1198,10 +1305,146 @@ class CfnOdbNetworkProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def s3_access(self) -> typing.Optional[builtins.str]:
+        '''The configuration for Amazon S3 access from the ODB network.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbnetwork.html#cfn-odb-odbnetwork-s3access
+        '''
+        result = self._values.get("s3_access")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def s3_policy_document(self) -> typing.Optional[builtins.str]:
+        '''Specifies the endpoint policy for Amazon S3 access from the ODB network.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbnetwork.html#cfn-odb-odbnetwork-s3policydocument
+        '''
+        result = self._values.get("s3_policy_document")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
         '''Tags to assign to the Odb Network.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbnetwork.html#cfn-odb-odbnetwork-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def zero_etl_access(self) -> typing.Optional[builtins.str]:
+        '''The configuration for Zero-ETL access from the ODB network.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbnetwork.html#cfn-odb-odbnetwork-zeroetlaccess
+        '''
+        result = self._values.get("zero_etl_access")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnOdbNetworkProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_odb.CfnOdbPeeringConnectionProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "display_name": "displayName",
+        "odb_network_id": "odbNetworkId",
+        "peer_network_id": "peerNetworkId",
+        "tags": "tags",
+    },
+)
+class CfnOdbPeeringConnectionProps:
+    def __init__(
+        self,
+        *,
+        display_name: typing.Optional[builtins.str] = None,
+        odb_network_id: typing.Optional[builtins.str] = None,
+        peer_network_id: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnOdbPeeringConnection``.
+
+        :param display_name: The display name of the ODB peering connection.
+        :param odb_network_id: The unique identifier of the ODB network.
+        :param peer_network_id: The unique identifier of the peer network.
+        :param tags: Tags to assign to the Odb peering connection.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbpeeringconnection.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_odb as odb
+            
+            cfn_odb_peering_connection_props = odb.CfnOdbPeeringConnectionProps(
+                display_name="displayName",
+                odb_network_id="odbNetworkId",
+                peer_network_id="peerNetworkId",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cb14f6a041f61647a57988c9818fe08cae77494cecfe8f526e6f77c42849303b)
+            check_type(argname="argument display_name", value=display_name, expected_type=type_hints["display_name"])
+            check_type(argname="argument odb_network_id", value=odb_network_id, expected_type=type_hints["odb_network_id"])
+            check_type(argname="argument peer_network_id", value=peer_network_id, expected_type=type_hints["peer_network_id"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if display_name is not None:
+            self._values["display_name"] = display_name
+        if odb_network_id is not None:
+            self._values["odb_network_id"] = odb_network_id
+        if peer_network_id is not None:
+            self._values["peer_network_id"] = peer_network_id
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def display_name(self) -> typing.Optional[builtins.str]:
+        '''The display name of the ODB peering connection.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbpeeringconnection.html#cfn-odb-odbpeeringconnection-displayname
+        '''
+        result = self._values.get("display_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def odb_network_id(self) -> typing.Optional[builtins.str]:
+        '''The unique identifier of the ODB network.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbpeeringconnection.html#cfn-odb-odbpeeringconnection-odbnetworkid
+        '''
+        result = self._values.get("odb_network_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def peer_network_id(self) -> typing.Optional[builtins.str]:
+        '''The unique identifier of the peer network.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbpeeringconnection.html#cfn-odb-odbpeeringconnection-peernetworkid
+        '''
+        result = self._values.get("peer_network_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Tags to assign to the Odb peering connection.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbpeeringconnection.html#cfn-odb-odbpeeringconnection-tags
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
@@ -1213,7 +1456,7 @@ class CfnOdbNetworkProps:
         return not (rhs == self)
 
     def __repr__(self) -> str:
-        return "CfnOdbNetworkProps(%s)" % ", ".join(
+        return "CfnOdbPeeringConnectionProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -1531,6 +1774,49 @@ class _IOdbNetworkRefProxy(
 typing.cast(typing.Any, IOdbNetworkRef).__jsii_proxy_class__ = lambda : _IOdbNetworkRefProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.aws_odb.IOdbPeeringConnectionRef")
+class IOdbPeeringConnectionRef(
+    _constructs_77d1e7e8.IConstruct,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a OdbPeeringConnection.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="odbPeeringConnectionRef")
+    def odb_peering_connection_ref(self) -> "OdbPeeringConnectionReference":
+        '''(experimental) A reference to a OdbPeeringConnection resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IOdbPeeringConnectionRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a OdbPeeringConnection.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_odb.IOdbPeeringConnectionRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="odbPeeringConnectionRef")
+    def odb_peering_connection_ref(self) -> "OdbPeeringConnectionReference":
+        '''(experimental) A reference to a OdbPeeringConnection resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("OdbPeeringConnectionReference", jsii.get(self, "odbPeeringConnectionRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IOdbPeeringConnectionRef).__jsii_proxy_class__ = lambda : _IOdbPeeringConnectionRefProxy
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_odb.OdbNetworkReference",
     jsii_struct_bases=[],
@@ -1576,6 +1862,55 @@ class OdbNetworkReference:
 
     def __repr__(self) -> str:
         return "OdbNetworkReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_odb.OdbPeeringConnectionReference",
+    jsii_struct_bases=[],
+    name_mapping={"odb_peering_connection_arn": "odbPeeringConnectionArn"},
+)
+class OdbPeeringConnectionReference:
+    def __init__(self, *, odb_peering_connection_arn: builtins.str) -> None:
+        '''A reference to a OdbPeeringConnection resource.
+
+        :param odb_peering_connection_arn: The OdbPeeringConnectionArn of the OdbPeeringConnection resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_odb as odb
+            
+            odb_peering_connection_reference = odb.OdbPeeringConnectionReference(
+                odb_peering_connection_arn="odbPeeringConnectionArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7e3a4b6ffc1638d5ec32639aad578b9bbc91b0bd40570c735ef585018043545a)
+            check_type(argname="argument odb_peering_connection_arn", value=odb_peering_connection_arn, expected_type=type_hints["odb_peering_connection_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "odb_peering_connection_arn": odb_peering_connection_arn,
+        }
+
+    @builtins.property
+    def odb_peering_connection_arn(self) -> builtins.str:
+        '''The OdbPeeringConnectionArn of the OdbPeeringConnection resource.'''
+        result = self._values.get("odb_peering_connection_arn")
+        assert result is not None, "Required property 'odb_peering_connection_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "OdbPeeringConnectionReference(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -2398,6 +2733,17 @@ class CfnCloudExadataInfrastructure(
             )],
             database_server_type="databaseServerType",
             display_name="displayName",
+            maintenance_window=odb.CfnCloudExadataInfrastructure.MaintenanceWindowProperty(
+                custom_action_timeout_in_mins=123,
+                days_of_week=["daysOfWeek"],
+                hours_of_day=[123],
+                is_custom_action_timeout_enabled=False,
+                lead_time_in_weeks=123,
+                months=["months"],
+                patching_mode="patchingMode",
+                preference="preference",
+                weeks_of_month=[123]
+            ),
             shape="shape",
             storage_count=123,
             storage_server_type="storageServerType",
@@ -2419,6 +2765,7 @@ class CfnCloudExadataInfrastructure(
         customer_contacts_to_send_to_oci: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudExadataInfrastructure.CustomerContactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         database_server_type: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
+        maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudExadataInfrastructure.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         shape: typing.Optional[builtins.str] = None,
         storage_count: typing.Optional[jsii.Number] = None,
         storage_server_type: typing.Optional[builtins.str] = None,
@@ -2433,6 +2780,7 @@ class CfnCloudExadataInfrastructure(
         :param customer_contacts_to_send_to_oci: The email addresses of contacts to receive notification from Oracle about maintenance updates for the Exadata infrastructure.
         :param database_server_type: The database server model type of the Exadata infrastructure. For the list of valid model names, use the ``ListDbSystemShapes`` operation.
         :param display_name: The user-friendly name for the Exadata infrastructure. Required when creating an Exadata infrastructure.
+        :param maintenance_window: The scheduling details for the maintenance window. Patching and system updates take place during the maintenance window.
         :param shape: The model name of the Exadata infrastructure. Required when creating an Exadata infrastructure.
         :param storage_count: The number of storage servers that are activated for the Exadata infrastructure. Required when creating an Exadata infrastructure.
         :param storage_server_type: The storage server model type of the Exadata infrastructure. For the list of valid model names, use the ``ListDbSystemShapes`` operation.
@@ -2449,6 +2797,7 @@ class CfnCloudExadataInfrastructure(
             customer_contacts_to_send_to_oci=customer_contacts_to_send_to_oci,
             database_server_type=database_server_type,
             display_name=display_name,
+            maintenance_window=maintenance_window,
             shape=shape,
             storage_count=storage_count,
             storage_server_type=storage_server_type,
@@ -2779,6 +3128,24 @@ class CfnCloudExadataInfrastructure(
         jsii.set(self, "displayName", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="maintenanceWindow")
+    def maintenance_window(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]]:
+        '''The scheduling details for the maintenance window.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]], jsii.get(self, "maintenanceWindow"))
+
+    @maintenance_window.setter
+    def maintenance_window(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1e3bb28409835469386431431fb04ff62da0b9c236f5e4e6de86eaab458aa03d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "maintenanceWindow", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="shape")
     def shape(self) -> typing.Optional[builtins.str]:
         '''The model name of the Exadata infrastructure.'''
@@ -2881,6 +3248,199 @@ class CfnCloudExadataInfrastructure(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_odb.CfnCloudExadataInfrastructure.MaintenanceWindowProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "custom_action_timeout_in_mins": "customActionTimeoutInMins",
+            "days_of_week": "daysOfWeek",
+            "hours_of_day": "hoursOfDay",
+            "is_custom_action_timeout_enabled": "isCustomActionTimeoutEnabled",
+            "lead_time_in_weeks": "leadTimeInWeeks",
+            "months": "months",
+            "patching_mode": "patchingMode",
+            "preference": "preference",
+            "weeks_of_month": "weeksOfMonth",
+        },
+    )
+    class MaintenanceWindowProperty:
+        def __init__(
+            self,
+            *,
+            custom_action_timeout_in_mins: typing.Optional[jsii.Number] = None,
+            days_of_week: typing.Optional[typing.Sequence[builtins.str]] = None,
+            hours_of_day: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+            is_custom_action_timeout_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            lead_time_in_weeks: typing.Optional[jsii.Number] = None,
+            months: typing.Optional[typing.Sequence[builtins.str]] = None,
+            patching_mode: typing.Optional[builtins.str] = None,
+            preference: typing.Optional[builtins.str] = None,
+            weeks_of_month: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''The scheduling details for the maintenance window.
+
+            Patching and system updates take place during the maintenance window.
+
+            :param custom_action_timeout_in_mins: The custom action timeout in minutes for the maintenance window.
+            :param days_of_week: The days of the week when maintenance can be performed.
+            :param hours_of_day: The hours of the day when maintenance can be performed.
+            :param is_custom_action_timeout_enabled: Indicates whether custom action timeout is enabled for the maintenance window.
+            :param lead_time_in_weeks: The lead time in weeks before the maintenance window.
+            :param months: The months when maintenance can be performed.
+            :param patching_mode: The patching mode for the maintenance window.
+            :param preference: The preference for the maintenance window scheduling.
+            :param weeks_of_month: The weeks of the month when maintenance can be performed.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_odb as odb
+                
+                maintenance_window_property = odb.CfnCloudExadataInfrastructure.MaintenanceWindowProperty(
+                    custom_action_timeout_in_mins=123,
+                    days_of_week=["daysOfWeek"],
+                    hours_of_day=[123],
+                    is_custom_action_timeout_enabled=False,
+                    lead_time_in_weeks=123,
+                    months=["months"],
+                    patching_mode="patchingMode",
+                    preference="preference",
+                    weeks_of_month=[123]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__99303e5da5047eb80fd9260c2a8d18c444f4f01d29749076a86c0c0412db2caa)
+                check_type(argname="argument custom_action_timeout_in_mins", value=custom_action_timeout_in_mins, expected_type=type_hints["custom_action_timeout_in_mins"])
+                check_type(argname="argument days_of_week", value=days_of_week, expected_type=type_hints["days_of_week"])
+                check_type(argname="argument hours_of_day", value=hours_of_day, expected_type=type_hints["hours_of_day"])
+                check_type(argname="argument is_custom_action_timeout_enabled", value=is_custom_action_timeout_enabled, expected_type=type_hints["is_custom_action_timeout_enabled"])
+                check_type(argname="argument lead_time_in_weeks", value=lead_time_in_weeks, expected_type=type_hints["lead_time_in_weeks"])
+                check_type(argname="argument months", value=months, expected_type=type_hints["months"])
+                check_type(argname="argument patching_mode", value=patching_mode, expected_type=type_hints["patching_mode"])
+                check_type(argname="argument preference", value=preference, expected_type=type_hints["preference"])
+                check_type(argname="argument weeks_of_month", value=weeks_of_month, expected_type=type_hints["weeks_of_month"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if custom_action_timeout_in_mins is not None:
+                self._values["custom_action_timeout_in_mins"] = custom_action_timeout_in_mins
+            if days_of_week is not None:
+                self._values["days_of_week"] = days_of_week
+            if hours_of_day is not None:
+                self._values["hours_of_day"] = hours_of_day
+            if is_custom_action_timeout_enabled is not None:
+                self._values["is_custom_action_timeout_enabled"] = is_custom_action_timeout_enabled
+            if lead_time_in_weeks is not None:
+                self._values["lead_time_in_weeks"] = lead_time_in_weeks
+            if months is not None:
+                self._values["months"] = months
+            if patching_mode is not None:
+                self._values["patching_mode"] = patching_mode
+            if preference is not None:
+                self._values["preference"] = preference
+            if weeks_of_month is not None:
+                self._values["weeks_of_month"] = weeks_of_month
+
+        @builtins.property
+        def custom_action_timeout_in_mins(self) -> typing.Optional[jsii.Number]:
+            '''The custom action timeout in minutes for the maintenance window.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-customactiontimeoutinmins
+            '''
+            result = self._values.get("custom_action_timeout_in_mins")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def days_of_week(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The days of the week when maintenance can be performed.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-daysofweek
+            '''
+            result = self._values.get("days_of_week")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def hours_of_day(
+            self,
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+            '''The hours of the day when maintenance can be performed.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-hoursofday
+            '''
+            result = self._values.get("hours_of_day")
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def is_custom_action_timeout_enabled(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Indicates whether custom action timeout is enabled for the maintenance window.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-iscustomactiontimeoutenabled
+            '''
+            result = self._values.get("is_custom_action_timeout_enabled")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def lead_time_in_weeks(self) -> typing.Optional[jsii.Number]:
+            '''The lead time in weeks before the maintenance window.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-leadtimeinweeks
+            '''
+            result = self._values.get("lead_time_in_weeks")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def months(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The months when maintenance can be performed.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-months
+            '''
+            result = self._values.get("months")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def patching_mode(self) -> typing.Optional[builtins.str]:
+            '''The patching mode for the maintenance window.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-patchingmode
+            '''
+            result = self._values.get("patching_mode")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def preference(self) -> typing.Optional[builtins.str]:
+            '''The preference for the maintenance window scheduling.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-preference
+            '''
+            result = self._values.get("preference")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def weeks_of_month(
+            self,
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+            '''The weeks of the month when maintenance can be performed.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-weeksofmonth
+            '''
+            result = self._values.get("weeks_of_month")
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MaintenanceWindowProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.implements(_IInspectable_c2943556, ICloudVmClusterRef, _ITaggableV2_4e6798f8)
 class CfnCloudVmCluster(
@@ -2912,6 +3472,29 @@ class CfnCloudVmCluster(
                 is_incident_logs_enabled=False
             ),
             data_storage_size_in_tBs=123,
+            db_nodes=[odb.CfnCloudVmCluster.DbNodeProperty(
+                db_server_id="dbServerId",
+        
+                # the properties below are optional
+                backup_ip_id="backupIpId",
+                backup_vnic2_id="backupVnic2Id",
+                cpu_core_count=123,
+                db_node_arn="dbNodeArn",
+                db_node_id="dbNodeId",
+                db_node_storage_size_in_gBs=123,
+                db_system_id="dbSystemId",
+                host_ip_id="hostIpId",
+                hostname="hostname",
+                memory_size_in_gBs=123,
+                ocid="ocid",
+                status="status",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                vnic2_id="vnic2Id",
+                vnic_id="vnicId"
+            )],
             db_node_storage_size_in_gBs=123,
             db_servers=["dbServers"],
             display_name="displayName",
@@ -2943,6 +3526,7 @@ class CfnCloudVmCluster(
         cpu_core_count: typing.Optional[jsii.Number] = None,
         data_collection_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudVmCluster.DataCollectionOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         data_storage_size_in_t_bs: typing.Optional[jsii.Number] = None,
+        db_nodes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudVmCluster.DbNodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         db_node_storage_size_in_g_bs: typing.Optional[jsii.Number] = None,
         db_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         display_name: typing.Optional[builtins.str] = None,
@@ -2967,6 +3551,7 @@ class CfnCloudVmCluster(
         :param cpu_core_count: The number of CPU cores enabled on the VM cluster. Required when creating a VM cluster.
         :param data_collection_options: The set of diagnostic collection options enabled for the VM cluster.
         :param data_storage_size_in_t_bs: The size of the data disk group, in terabytes (TB), that's allocated for the VM cluster.
+        :param db_nodes: The DB nodes that are implicitly created and managed as part of this VM Cluster.
         :param db_node_storage_size_in_g_bs: The amount of local node storage, in gigabytes (GB), that's allocated for the VM cluster.
         :param db_servers: The list of database servers for the VM cluster.
         :param display_name: The user-friendly name for the VM cluster. Required when creating a VM cluster.
@@ -2993,6 +3578,7 @@ class CfnCloudVmCluster(
             cpu_core_count=cpu_core_count,
             data_collection_options=data_collection_options,
             data_storage_size_in_t_bs=data_storage_size_in_t_bs,
+            db_nodes=db_nodes,
             db_node_storage_size_in_g_bs=db_node_storage_size_in_g_bs,
             db_servers=db_servers,
             display_name=display_name,
@@ -3272,6 +3858,24 @@ class CfnCloudVmCluster(
             type_hints = typing.get_type_hints(_typecheckingstub__10a4a98dd975dea2ac63836158b2dc7afd11f93fa6eef648312be262c3ea26ec)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "dataStorageSizeInTBs", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="dbNodes")
+    def db_nodes(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DbNodeProperty"]]]]:
+        '''The DB nodes that are implicitly created and managed as part of this VM Cluster.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DbNodeProperty"]]]], jsii.get(self, "dbNodes"))
+
+    @db_nodes.setter
+    def db_nodes(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DbNodeProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1d87bde62c7a3c3cf4ed0bfffab6f8bc36cc20a58ede136430e57b23880577ef)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "dbNodes", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="dbNodeStorageSizeInGBs")
@@ -3576,6 +4180,308 @@ class CfnCloudVmCluster(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_odb.CfnCloudVmCluster.DbNodeProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "db_server_id": "dbServerId",
+            "backup_ip_id": "backupIpId",
+            "backup_vnic2_id": "backupVnic2Id",
+            "cpu_core_count": "cpuCoreCount",
+            "db_node_arn": "dbNodeArn",
+            "db_node_id": "dbNodeId",
+            "db_node_storage_size_in_g_bs": "dbNodeStorageSizeInGBs",
+            "db_system_id": "dbSystemId",
+            "host_ip_id": "hostIpId",
+            "hostname": "hostname",
+            "memory_size_in_g_bs": "memorySizeInGBs",
+            "ocid": "ocid",
+            "status": "status",
+            "tags": "tags",
+            "vnic2_id": "vnic2Id",
+            "vnic_id": "vnicId",
+        },
+    )
+    class DbNodeProperty:
+        def __init__(
+            self,
+            *,
+            db_server_id: builtins.str,
+            backup_ip_id: typing.Optional[builtins.str] = None,
+            backup_vnic2_id: typing.Optional[builtins.str] = None,
+            cpu_core_count: typing.Optional[jsii.Number] = None,
+            db_node_arn: typing.Optional[builtins.str] = None,
+            db_node_id: typing.Optional[builtins.str] = None,
+            db_node_storage_size_in_g_bs: typing.Optional[jsii.Number] = None,
+            db_system_id: typing.Optional[builtins.str] = None,
+            host_ip_id: typing.Optional[builtins.str] = None,
+            hostname: typing.Optional[builtins.str] = None,
+            memory_size_in_g_bs: typing.Optional[jsii.Number] = None,
+            ocid: typing.Optional[builtins.str] = None,
+            status: typing.Optional[builtins.str] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            vnic2_id: typing.Optional[builtins.str] = None,
+            vnic_id: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Information about a DB node.
+
+            :param db_server_id: The unique identifier of the Db server that is associated with the DB node.
+            :param backup_ip_id: The Oracle Cloud ID (OCID) of the backup IP address that's associated with the DB node.
+            :param backup_vnic2_id: The OCID of the second backup VNIC.
+            :param cpu_core_count: Number of CPU cores enabled on the DB node.
+            :param db_node_arn: The Amazon Resource Name (ARN) of the DB node.
+            :param db_node_id: The unique identifier of the DB node.
+            :param db_node_storage_size_in_g_bs: The amount of local node storage, in gigabytes (GBs), that's allocated on the DB node.
+            :param db_system_id: The OCID of the DB system.
+            :param host_ip_id: The OCID of the host IP address that's associated with the DB node.
+            :param hostname: The host name for the DB node.
+            :param memory_size_in_g_bs: The allocated memory in GBs on the DB node.
+            :param ocid: The OCID of the DB node.
+            :param status: The current status of the DB node.
+            :param tags: 
+            :param vnic2_id: The OCID of the second VNIC.
+            :param vnic_id: The OCID of the VNIC.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_odb as odb
+                
+                db_node_property = odb.CfnCloudVmCluster.DbNodeProperty(
+                    db_server_id="dbServerId",
+                
+                    # the properties below are optional
+                    backup_ip_id="backupIpId",
+                    backup_vnic2_id="backupVnic2Id",
+                    cpu_core_count=123,
+                    db_node_arn="dbNodeArn",
+                    db_node_id="dbNodeId",
+                    db_node_storage_size_in_gBs=123,
+                    db_system_id="dbSystemId",
+                    host_ip_id="hostIpId",
+                    hostname="hostname",
+                    memory_size_in_gBs=123,
+                    ocid="ocid",
+                    status="status",
+                    tags=[CfnTag(
+                        key="key",
+                        value="value"
+                    )],
+                    vnic2_id="vnic2Id",
+                    vnic_id="vnicId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c95a10051fe96e033b74a53129c8792115ffa8596c6e20c63b8b2bae5c33dd21)
+                check_type(argname="argument db_server_id", value=db_server_id, expected_type=type_hints["db_server_id"])
+                check_type(argname="argument backup_ip_id", value=backup_ip_id, expected_type=type_hints["backup_ip_id"])
+                check_type(argname="argument backup_vnic2_id", value=backup_vnic2_id, expected_type=type_hints["backup_vnic2_id"])
+                check_type(argname="argument cpu_core_count", value=cpu_core_count, expected_type=type_hints["cpu_core_count"])
+                check_type(argname="argument db_node_arn", value=db_node_arn, expected_type=type_hints["db_node_arn"])
+                check_type(argname="argument db_node_id", value=db_node_id, expected_type=type_hints["db_node_id"])
+                check_type(argname="argument db_node_storage_size_in_g_bs", value=db_node_storage_size_in_g_bs, expected_type=type_hints["db_node_storage_size_in_g_bs"])
+                check_type(argname="argument db_system_id", value=db_system_id, expected_type=type_hints["db_system_id"])
+                check_type(argname="argument host_ip_id", value=host_ip_id, expected_type=type_hints["host_ip_id"])
+                check_type(argname="argument hostname", value=hostname, expected_type=type_hints["hostname"])
+                check_type(argname="argument memory_size_in_g_bs", value=memory_size_in_g_bs, expected_type=type_hints["memory_size_in_g_bs"])
+                check_type(argname="argument ocid", value=ocid, expected_type=type_hints["ocid"])
+                check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+                check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+                check_type(argname="argument vnic2_id", value=vnic2_id, expected_type=type_hints["vnic2_id"])
+                check_type(argname="argument vnic_id", value=vnic_id, expected_type=type_hints["vnic_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "db_server_id": db_server_id,
+            }
+            if backup_ip_id is not None:
+                self._values["backup_ip_id"] = backup_ip_id
+            if backup_vnic2_id is not None:
+                self._values["backup_vnic2_id"] = backup_vnic2_id
+            if cpu_core_count is not None:
+                self._values["cpu_core_count"] = cpu_core_count
+            if db_node_arn is not None:
+                self._values["db_node_arn"] = db_node_arn
+            if db_node_id is not None:
+                self._values["db_node_id"] = db_node_id
+            if db_node_storage_size_in_g_bs is not None:
+                self._values["db_node_storage_size_in_g_bs"] = db_node_storage_size_in_g_bs
+            if db_system_id is not None:
+                self._values["db_system_id"] = db_system_id
+            if host_ip_id is not None:
+                self._values["host_ip_id"] = host_ip_id
+            if hostname is not None:
+                self._values["hostname"] = hostname
+            if memory_size_in_g_bs is not None:
+                self._values["memory_size_in_g_bs"] = memory_size_in_g_bs
+            if ocid is not None:
+                self._values["ocid"] = ocid
+            if status is not None:
+                self._values["status"] = status
+            if tags is not None:
+                self._values["tags"] = tags
+            if vnic2_id is not None:
+                self._values["vnic2_id"] = vnic2_id
+            if vnic_id is not None:
+                self._values["vnic_id"] = vnic_id
+
+        @builtins.property
+        def db_server_id(self) -> builtins.str:
+            '''The unique identifier of the Db server that is associated with the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-dbserverid
+            '''
+            result = self._values.get("db_server_id")
+            assert result is not None, "Required property 'db_server_id' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def backup_ip_id(self) -> typing.Optional[builtins.str]:
+            '''The Oracle Cloud ID (OCID) of the backup IP address that's associated with the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-backupipid
+            '''
+            result = self._values.get("backup_ip_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def backup_vnic2_id(self) -> typing.Optional[builtins.str]:
+            '''The OCID of the second backup VNIC.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-backupvnic2id
+            '''
+            result = self._values.get("backup_vnic2_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def cpu_core_count(self) -> typing.Optional[jsii.Number]:
+            '''Number of CPU cores enabled on the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-cpucorecount
+            '''
+            result = self._values.get("cpu_core_count")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def db_node_arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-dbnodearn
+            '''
+            result = self._values.get("db_node_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def db_node_id(self) -> typing.Optional[builtins.str]:
+            '''The unique identifier of the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-dbnodeid
+            '''
+            result = self._values.get("db_node_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def db_node_storage_size_in_g_bs(self) -> typing.Optional[jsii.Number]:
+            '''The amount of local node storage, in gigabytes (GBs), that's allocated on the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-dbnodestoragesizeingbs
+            '''
+            result = self._values.get("db_node_storage_size_in_g_bs")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def db_system_id(self) -> typing.Optional[builtins.str]:
+            '''The OCID of the DB system.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-dbsystemid
+            '''
+            result = self._values.get("db_system_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def host_ip_id(self) -> typing.Optional[builtins.str]:
+            '''The OCID of the host IP address that's associated with the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-hostipid
+            '''
+            result = self._values.get("host_ip_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def hostname(self) -> typing.Optional[builtins.str]:
+            '''The host name for the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-hostname
+            '''
+            result = self._values.get("hostname")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def memory_size_in_g_bs(self) -> typing.Optional[jsii.Number]:
+            '''The allocated memory in GBs on the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-memorysizeingbs
+            '''
+            result = self._values.get("memory_size_in_g_bs")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def ocid(self) -> typing.Optional[builtins.str]:
+            '''The OCID of the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-ocid
+            '''
+            result = self._values.get("ocid")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def status(self) -> typing.Optional[builtins.str]:
+            '''The current status of the DB node.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-status
+            '''
+            result = self._values.get("status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-tags
+            '''
+            result = self._values.get("tags")
+            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+        @builtins.property
+        def vnic2_id(self) -> typing.Optional[builtins.str]:
+            '''The OCID of the second VNIC.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-vnic2id
+            '''
+            result = self._values.get("vnic2_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def vnic_id(self) -> typing.Optional[builtins.str]:
+            '''The OCID of the VNIC.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-vnicid
+            '''
+            result = self._values.get("vnic_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DbNodeProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.implements(_IInspectable_c2943556, IOdbNetworkRef, _ITaggableV2_4e6798f8)
 class CfnOdbNetwork(
@@ -3602,13 +4508,17 @@ class CfnOdbNetwork(
             availability_zone_id="availabilityZoneId",
             backup_subnet_cidr="backupSubnetCidr",
             client_subnet_cidr="clientSubnetCidr",
+            custom_domain_name="customDomainName",
             default_dns_prefix="defaultDnsPrefix",
             delete_associated_resources=False,
             display_name="displayName",
+            s3_access="s3Access",
+            s3_policy_document="s3PolicyDocument",
             tags=[CfnTag(
                 key="key",
                 value="value"
-            )]
+            )],
+            zero_etl_access="zeroEtlAccess"
         )
     '''
 
@@ -3621,10 +4531,14 @@ class CfnOdbNetwork(
         availability_zone_id: typing.Optional[builtins.str] = None,
         backup_subnet_cidr: typing.Optional[builtins.str] = None,
         client_subnet_cidr: typing.Optional[builtins.str] = None,
+        custom_domain_name: typing.Optional[builtins.str] = None,
         default_dns_prefix: typing.Optional[builtins.str] = None,
         delete_associated_resources: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         display_name: typing.Optional[builtins.str] = None,
+        s3_access: typing.Optional[builtins.str] = None,
+        s3_policy_document: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        zero_etl_access: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
@@ -3633,10 +4547,14 @@ class CfnOdbNetwork(
         :param availability_zone_id: The AZ ID of the AZ where the ODB network is located. Required when creating an ODB network. Specify either AvailabilityZone or AvailabilityZoneId to define the location of the network.
         :param backup_subnet_cidr: The CIDR range of the backup subnet in the ODB network.
         :param client_subnet_cidr: The CIDR range of the client subnet in the ODB network. Required when creating an ODB network.
+        :param custom_domain_name: The domain name for the resources in the ODB network.
         :param default_dns_prefix: The DNS prefix to the default DNS domain name. The default DNS domain name is oraclevcn.com.
         :param delete_associated_resources: Specifies whether to delete associated OCI networking resources along with the ODB network. Required when creating an ODB network.
         :param display_name: The user-friendly name of the ODB network. Required when creating an ODB network.
+        :param s3_access: The configuration for Amazon S3 access from the ODB network.
+        :param s3_policy_document: Specifies the endpoint policy for Amazon S3 access from the ODB network.
         :param tags: Tags to assign to the Odb Network.
+        :param zero_etl_access: The configuration for Zero-ETL access from the ODB network.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9fb7fc690c89d5ce8f5abecb60ad841f57c0a476f500c817c386b57c3cd0f5d6)
@@ -3647,10 +4565,14 @@ class CfnOdbNetwork(
             availability_zone_id=availability_zone_id,
             backup_subnet_cidr=backup_subnet_cidr,
             client_subnet_cidr=client_subnet_cidr,
+            custom_domain_name=custom_domain_name,
             default_dns_prefix=default_dns_prefix,
             delete_associated_resources=delete_associated_resources,
             display_name=display_name,
+            s3_access=s3_access,
+            s3_policy_document=s3_policy_document,
             tags=tags,
+            zero_etl_access=zero_etl_access,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -3684,6 +4606,15 @@ class CfnOdbNetwork(
     def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
         '''The CloudFormation resource type name for this resource class.'''
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrManagedServices")
+    def attr_managed_services(self) -> _IResolvable_da3f097b:
+        '''The managed services configuration for the ODB network.
+
+        :cloudformationAttribute: ManagedServices
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrManagedServices"))
 
     @builtins.property
     @jsii.member(jsii_name="attrOciNetworkAnchorId")
@@ -3800,6 +4731,19 @@ class CfnOdbNetwork(
         jsii.set(self, "clientSubnetCidr", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="customDomainName")
+    def custom_domain_name(self) -> typing.Optional[builtins.str]:
+        '''The domain name for the resources in the ODB network.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "customDomainName"))
+
+    @custom_domain_name.setter
+    def custom_domain_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d8107768076a5ec91104db244c22d754231524ae1e1cdad765edecf3270b5e9d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "customDomainName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="defaultDnsPrefix")
     def default_dns_prefix(self) -> typing.Optional[builtins.str]:
         '''The DNS prefix to the default DNS domain name.'''
@@ -3844,6 +4788,32 @@ class CfnOdbNetwork(
         jsii.set(self, "displayName", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="s3Access")
+    def s3_access(self) -> typing.Optional[builtins.str]:
+        '''The configuration for Amazon S3 access from the ODB network.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "s3Access"))
+
+    @s3_access.setter
+    def s3_access(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7f428808d342fa75b5322aafc69efcb16a9aadaf8c1f1602313528cb3d71f054)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "s3Access", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="s3PolicyDocument")
+    def s3_policy_document(self) -> typing.Optional[builtins.str]:
+        '''Specifies the endpoint policy for Amazon S3 access from the ODB network.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "s3PolicyDocument"))
+
+    @s3_policy_document.setter
+    def s3_policy_document(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6e9a1278f83bd7d6781ffbd7b2e4e7ec97b8190160130c264991534d7c4eb6a7)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "s3PolicyDocument", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
         '''Tags to assign to the Odb Network.'''
@@ -3853,6 +4823,722 @@ class CfnOdbNetwork(
     def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2a78f63e76d627d52015eb8e2a0dc2ab1a80a0926480a2a40fc93da33d803ce3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="zeroEtlAccess")
+    def zero_etl_access(self) -> typing.Optional[builtins.str]:
+        '''The configuration for Zero-ETL access from the ODB network.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "zeroEtlAccess"))
+
+    @zero_etl_access.setter
+    def zero_etl_access(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8b37fc0f36ed5a2463c0ef988c6f8aff7344389a8c80070dd7013b5e428fa33f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "zeroEtlAccess", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_odb.CfnOdbNetwork.ManagedS3BackupAccessProperty",
+        jsii_struct_bases=[],
+        name_mapping={"ipv4_addresses": "ipv4Addresses", "status": "status"},
+    )
+    class ManagedS3BackupAccessProperty:
+        def __init__(
+            self,
+            *,
+            ipv4_addresses: typing.Optional[typing.Sequence[builtins.str]] = None,
+            status: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration for managed Amazon S3 backup access from the ODB network.
+
+            :param ipv4_addresses: The IPv4 addresses for the managed Amazon S3 backup access.
+            :param status: The status of the managed Amazon S3 backup access. Valid Values: ``enabled | disabled``
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-manageds3backupaccess.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_odb as odb
+                
+                managed_s3_backup_access_property = odb.CfnOdbNetwork.ManagedS3BackupAccessProperty(
+                    ipv4_addresses=["ipv4Addresses"],
+                    status="status"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__1b0181205001e0daa042d78d18fe8d5325e5c0b3292546c75de8da725399ad6c)
+                check_type(argname="argument ipv4_addresses", value=ipv4_addresses, expected_type=type_hints["ipv4_addresses"])
+                check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if ipv4_addresses is not None:
+                self._values["ipv4_addresses"] = ipv4_addresses
+            if status is not None:
+                self._values["status"] = status
+
+        @builtins.property
+        def ipv4_addresses(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The IPv4 addresses for the managed Amazon S3 backup access.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-manageds3backupaccess.html#cfn-odb-odbnetwork-manageds3backupaccess-ipv4addresses
+            '''
+            result = self._values.get("ipv4_addresses")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def status(self) -> typing.Optional[builtins.str]:
+            '''The status of the managed Amazon S3 backup access.
+
+            Valid Values: ``enabled | disabled``
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-manageds3backupaccess.html#cfn-odb-odbnetwork-manageds3backupaccess-status
+            '''
+            result = self._values.get("status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ManagedS3BackupAccessProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_odb.CfnOdbNetwork.ManagedServicesProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "managed_s3_backup_access": "managedS3BackupAccess",
+            "managed_services_ipv4_cidrs": "managedServicesIpv4Cidrs",
+            "resource_gateway_arn": "resourceGatewayArn",
+            "s3_access": "s3Access",
+            "service_network_arn": "serviceNetworkArn",
+            "service_network_endpoint": "serviceNetworkEndpoint",
+            "zero_etl_access": "zeroEtlAccess",
+        },
+    )
+    class ManagedServicesProperty:
+        def __init__(
+            self,
+            *,
+            managed_s3_backup_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOdbNetwork.ManagedS3BackupAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            managed_services_ipv4_cidrs: typing.Optional[typing.Sequence[builtins.str]] = None,
+            resource_gateway_arn: typing.Optional[builtins.str] = None,
+            s3_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOdbNetwork.S3AccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            service_network_arn: typing.Optional[builtins.str] = None,
+            service_network_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOdbNetwork.ServiceNetworkEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            zero_etl_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOdbNetwork.ZeroEtlAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''The managed services configuration for the ODB network.
+
+            :param managed_s3_backup_access: The managed Amazon S3 backup access configuration.
+            :param managed_services_ipv4_cidrs: The IPv4 CIDR blocks for the managed services.
+            :param resource_gateway_arn: The Amazon Resource Name (ARN) of the resource gateway.
+            :param s3_access: The Amazon S3 access configuration.
+            :param service_network_arn: The Amazon Resource Name (ARN) of the service network.
+            :param service_network_endpoint: The service network endpoint configuration.
+            :param zero_etl_access: The Zero-ETL access configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_odb as odb
+                
+                managed_services_property = odb.CfnOdbNetwork.ManagedServicesProperty(
+                    managed_s3_backup_access=odb.CfnOdbNetwork.ManagedS3BackupAccessProperty(
+                        ipv4_addresses=["ipv4Addresses"],
+                        status="status"
+                    ),
+                    managed_services_ipv4_cidrs=["managedServicesIpv4Cidrs"],
+                    resource_gateway_arn="resourceGatewayArn",
+                    s3_access=odb.CfnOdbNetwork.S3AccessProperty(
+                        domain_name="domainName",
+                        ipv4_addresses=["ipv4Addresses"],
+                        s3_policy_document="s3PolicyDocument",
+                        status="status"
+                    ),
+                    service_network_arn="serviceNetworkArn",
+                    service_network_endpoint=odb.CfnOdbNetwork.ServiceNetworkEndpointProperty(
+                        vpc_endpoint_id="vpcEndpointId",
+                        vpc_endpoint_type="vpcEndpointType"
+                    ),
+                    zero_etl_access=odb.CfnOdbNetwork.ZeroEtlAccessProperty(
+                        cidr="cidr",
+                        status="status"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f05f5ee314e82552aae02e8a14cfd272bb6288ddfa3db3a136edf0b694fc8f04)
+                check_type(argname="argument managed_s3_backup_access", value=managed_s3_backup_access, expected_type=type_hints["managed_s3_backup_access"])
+                check_type(argname="argument managed_services_ipv4_cidrs", value=managed_services_ipv4_cidrs, expected_type=type_hints["managed_services_ipv4_cidrs"])
+                check_type(argname="argument resource_gateway_arn", value=resource_gateway_arn, expected_type=type_hints["resource_gateway_arn"])
+                check_type(argname="argument s3_access", value=s3_access, expected_type=type_hints["s3_access"])
+                check_type(argname="argument service_network_arn", value=service_network_arn, expected_type=type_hints["service_network_arn"])
+                check_type(argname="argument service_network_endpoint", value=service_network_endpoint, expected_type=type_hints["service_network_endpoint"])
+                check_type(argname="argument zero_etl_access", value=zero_etl_access, expected_type=type_hints["zero_etl_access"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if managed_s3_backup_access is not None:
+                self._values["managed_s3_backup_access"] = managed_s3_backup_access
+            if managed_services_ipv4_cidrs is not None:
+                self._values["managed_services_ipv4_cidrs"] = managed_services_ipv4_cidrs
+            if resource_gateway_arn is not None:
+                self._values["resource_gateway_arn"] = resource_gateway_arn
+            if s3_access is not None:
+                self._values["s3_access"] = s3_access
+            if service_network_arn is not None:
+                self._values["service_network_arn"] = service_network_arn
+            if service_network_endpoint is not None:
+                self._values["service_network_endpoint"] = service_network_endpoint
+            if zero_etl_access is not None:
+                self._values["zero_etl_access"] = zero_etl_access
+
+        @builtins.property
+        def managed_s3_backup_access(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ManagedS3BackupAccessProperty"]]:
+            '''The managed Amazon S3 backup access configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-manageds3backupaccess
+            '''
+            result = self._values.get("managed_s3_backup_access")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ManagedS3BackupAccessProperty"]], result)
+
+        @builtins.property
+        def managed_services_ipv4_cidrs(
+            self,
+        ) -> typing.Optional[typing.List[builtins.str]]:
+            '''The IPv4 CIDR blocks for the managed services.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-managedservicesipv4cidrs
+            '''
+            result = self._values.get("managed_services_ipv4_cidrs")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def resource_gateway_arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the resource gateway.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-resourcegatewayarn
+            '''
+            result = self._values.get("resource_gateway_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def s3_access(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.S3AccessProperty"]]:
+            '''The Amazon S3 access configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-s3access
+            '''
+            result = self._values.get("s3_access")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.S3AccessProperty"]], result)
+
+        @builtins.property
+        def service_network_arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the service network.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-servicenetworkarn
+            '''
+            result = self._values.get("service_network_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def service_network_endpoint(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ServiceNetworkEndpointProperty"]]:
+            '''The service network endpoint configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-servicenetworkendpoint
+            '''
+            result = self._values.get("service_network_endpoint")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ServiceNetworkEndpointProperty"]], result)
+
+        @builtins.property
+        def zero_etl_access(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ZeroEtlAccessProperty"]]:
+            '''The Zero-ETL access configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-zeroetlaccess
+            '''
+            result = self._values.get("zero_etl_access")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ZeroEtlAccessProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ManagedServicesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_odb.CfnOdbNetwork.S3AccessProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "domain_name": "domainName",
+            "ipv4_addresses": "ipv4Addresses",
+            "s3_policy_document": "s3PolicyDocument",
+            "status": "status",
+        },
+    )
+    class S3AccessProperty:
+        def __init__(
+            self,
+            *,
+            domain_name: typing.Optional[builtins.str] = None,
+            ipv4_addresses: typing.Optional[typing.Sequence[builtins.str]] = None,
+            s3_policy_document: typing.Optional[builtins.str] = None,
+            status: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration for Amazon S3 access from the ODB network.
+
+            :param domain_name: The domain name for the Amazon S3 access.
+            :param ipv4_addresses: The IPv4 addresses for the Amazon S3 access.
+            :param s3_policy_document: The endpoint policy for the Amazon S3 access.
+            :param status: The status of the Amazon S3 access. Valid Values: ``enabled | disabled``
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-s3access.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_odb as odb
+                
+                s3_access_property = odb.CfnOdbNetwork.S3AccessProperty(
+                    domain_name="domainName",
+                    ipv4_addresses=["ipv4Addresses"],
+                    s3_policy_document="s3PolicyDocument",
+                    status="status"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f9ceb49d35946863bf3c3373dfa2beadc7131a98014ab8760b8a753494ebd78d)
+                check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
+                check_type(argname="argument ipv4_addresses", value=ipv4_addresses, expected_type=type_hints["ipv4_addresses"])
+                check_type(argname="argument s3_policy_document", value=s3_policy_document, expected_type=type_hints["s3_policy_document"])
+                check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if domain_name is not None:
+                self._values["domain_name"] = domain_name
+            if ipv4_addresses is not None:
+                self._values["ipv4_addresses"] = ipv4_addresses
+            if s3_policy_document is not None:
+                self._values["s3_policy_document"] = s3_policy_document
+            if status is not None:
+                self._values["status"] = status
+
+        @builtins.property
+        def domain_name(self) -> typing.Optional[builtins.str]:
+            '''The domain name for the Amazon S3 access.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-s3access.html#cfn-odb-odbnetwork-s3access-domainname
+            '''
+            result = self._values.get("domain_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def ipv4_addresses(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The IPv4 addresses for the Amazon S3 access.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-s3access.html#cfn-odb-odbnetwork-s3access-ipv4addresses
+            '''
+            result = self._values.get("ipv4_addresses")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def s3_policy_document(self) -> typing.Optional[builtins.str]:
+            '''The endpoint policy for the Amazon S3 access.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-s3access.html#cfn-odb-odbnetwork-s3access-s3policydocument
+            '''
+            result = self._values.get("s3_policy_document")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def status(self) -> typing.Optional[builtins.str]:
+            '''The status of the Amazon S3 access.
+
+            Valid Values: ``enabled | disabled``
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-s3access.html#cfn-odb-odbnetwork-s3access-status
+            '''
+            result = self._values.get("status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "S3AccessProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_odb.CfnOdbNetwork.ServiceNetworkEndpointProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "vpc_endpoint_id": "vpcEndpointId",
+            "vpc_endpoint_type": "vpcEndpointType",
+        },
+    )
+    class ServiceNetworkEndpointProperty:
+        def __init__(
+            self,
+            *,
+            vpc_endpoint_id: typing.Optional[builtins.str] = None,
+            vpc_endpoint_type: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration for a service network endpoint.
+
+            :param vpc_endpoint_id: The identifier of the VPC endpoint.
+            :param vpc_endpoint_type: The type of the VPC endpoint. Valid Values: ``Interface | Gateway``
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-servicenetworkendpoint.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_odb as odb
+                
+                service_network_endpoint_property = odb.CfnOdbNetwork.ServiceNetworkEndpointProperty(
+                    vpc_endpoint_id="vpcEndpointId",
+                    vpc_endpoint_type="vpcEndpointType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__aa23d13536607858ecb17ec218e9d01d10a09d3dc235be793fb3ac7485d17be1)
+                check_type(argname="argument vpc_endpoint_id", value=vpc_endpoint_id, expected_type=type_hints["vpc_endpoint_id"])
+                check_type(argname="argument vpc_endpoint_type", value=vpc_endpoint_type, expected_type=type_hints["vpc_endpoint_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if vpc_endpoint_id is not None:
+                self._values["vpc_endpoint_id"] = vpc_endpoint_id
+            if vpc_endpoint_type is not None:
+                self._values["vpc_endpoint_type"] = vpc_endpoint_type
+
+        @builtins.property
+        def vpc_endpoint_id(self) -> typing.Optional[builtins.str]:
+            '''The identifier of the VPC endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-servicenetworkendpoint.html#cfn-odb-odbnetwork-servicenetworkendpoint-vpcendpointid
+            '''
+            result = self._values.get("vpc_endpoint_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def vpc_endpoint_type(self) -> typing.Optional[builtins.str]:
+            '''The type of the VPC endpoint.
+
+            Valid Values: ``Interface | Gateway``
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-servicenetworkendpoint.html#cfn-odb-odbnetwork-servicenetworkendpoint-vpcendpointtype
+            '''
+            result = self._values.get("vpc_endpoint_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ServiceNetworkEndpointProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_odb.CfnOdbNetwork.ZeroEtlAccessProperty",
+        jsii_struct_bases=[],
+        name_mapping={"cidr": "cidr", "status": "status"},
+    )
+    class ZeroEtlAccessProperty:
+        def __init__(
+            self,
+            *,
+            cidr: typing.Optional[builtins.str] = None,
+            status: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration for Zero-ETL access from the ODB network.
+
+            :param cidr: The CIDR block for the Zero-ETL access.
+            :param status: The status of the Zero-ETL access. Valid Values: ``enabled | disabled``
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-zeroetlaccess.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_odb as odb
+                
+                zero_etl_access_property = odb.CfnOdbNetwork.ZeroEtlAccessProperty(
+                    cidr="cidr",
+                    status="status"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8d8647c7f912887ddd8cf379fbed057ec6a564b3495caa039b6697c1b5aa3e9e)
+                check_type(argname="argument cidr", value=cidr, expected_type=type_hints["cidr"])
+                check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if cidr is not None:
+                self._values["cidr"] = cidr
+            if status is not None:
+                self._values["status"] = status
+
+        @builtins.property
+        def cidr(self) -> typing.Optional[builtins.str]:
+            '''The CIDR block for the Zero-ETL access.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-zeroetlaccess.html#cfn-odb-odbnetwork-zeroetlaccess-cidr
+            '''
+            result = self._values.get("cidr")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def status(self) -> typing.Optional[builtins.str]:
+            '''The status of the Zero-ETL access.
+
+            Valid Values: ``enabled | disabled``
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-zeroetlaccess.html#cfn-odb-odbnetwork-zeroetlaccess-status
+            '''
+            result = self._values.get("status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ZeroEtlAccessProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.implements(_IInspectable_c2943556, IOdbPeeringConnectionRef, _ITaggableV2_4e6798f8)
+class CfnOdbPeeringConnection(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_odb.CfnOdbPeeringConnection",
+):
+    '''Creates a peering connection between an ODB network and either another ODB network or a customer-owned VPC.
+
+    A peering connection enables private connectivity between the networks for application-tier communication.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbpeeringconnection.html
+    :cloudformationResource: AWS::ODB::OdbPeeringConnection
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_odb as odb
+        
+        cfn_odb_peering_connection = odb.CfnOdbPeeringConnection(self, "MyCfnOdbPeeringConnection",
+            display_name="displayName",
+            odb_network_id="odbNetworkId",
+            peer_network_id="peerNetworkId",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        display_name: typing.Optional[builtins.str] = None,
+        odb_network_id: typing.Optional[builtins.str] = None,
+        peer_network_id: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param display_name: The display name of the ODB peering connection.
+        :param odb_network_id: The unique identifier of the ODB network.
+        :param peer_network_id: The unique identifier of the peer network.
+        :param tags: Tags to assign to the Odb peering connection.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cf0303fdbabd342a7442eedc20c217c961164af3d96d803130ec699ce6cf84d0)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnOdbPeeringConnectionProps(
+            display_name=display_name,
+            odb_network_id=odb_network_id,
+            peer_network_id=peer_network_id,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3c607296b85b8e34cc1971180744ea86ab063bf6e70311b45f2a5e22464c0506)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fdee86eadecbb57db0a54818b6bf117c40239d065452a626ca98bb6f57e734f3)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrOdbNetworkArn")
+    def attr_odb_network_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the ODB network that initiated the peering connection.
+
+        :cloudformationAttribute: OdbNetworkArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrOdbNetworkArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrOdbPeeringConnectionArn")
+    def attr_odb_peering_connection_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the ODB peering connection.
+
+        :cloudformationAttribute: OdbPeeringConnectionArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrOdbPeeringConnectionArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrOdbPeeringConnectionId")
+    def attr_odb_peering_connection_id(self) -> builtins.str:
+        '''The unique identifier of the ODB peering connection.
+
+        A sample ID is ``odbpcx-abcdefgh12345678`` .
+
+        :cloudformationAttribute: OdbPeeringConnectionId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrOdbPeeringConnectionId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrPeerNetworkArn")
+    def attr_peer_network_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the peer network.
+
+        :cloudformationAttribute: PeerNetworkArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrPeerNetworkArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="odbPeeringConnectionRef")
+    def odb_peering_connection_ref(self) -> OdbPeeringConnectionReference:
+        '''A reference to a OdbPeeringConnection resource.'''
+        return typing.cast(OdbPeeringConnectionReference, jsii.get(self, "odbPeeringConnectionRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="displayName")
+    def display_name(self) -> typing.Optional[builtins.str]:
+        '''The display name of the ODB peering connection.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "displayName"))
+
+    @display_name.setter
+    def display_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e5c2d7c7680dd80443dde7963eb8b7ebf34b6b63b1c6c155d7867956062438a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "displayName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="odbNetworkId")
+    def odb_network_id(self) -> typing.Optional[builtins.str]:
+        '''The unique identifier of the ODB network.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "odbNetworkId"))
+
+    @odb_network_id.setter
+    def odb_network_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9fefb4bfab3abcea0bd112930eb81eda4161508620e9868a51c31460a3bc6124)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "odbNetworkId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="peerNetworkId")
+    def peer_network_id(self) -> typing.Optional[builtins.str]:
+        '''The unique identifier of the peer network.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "peerNetworkId"))
+
+    @peer_network_id.setter
+    def peer_network_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9ab942a64178d4b44a12a7c4d77ac39a95872d25a99449973520d474cd6d4cbc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "peerNetworkId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Tags to assign to the Odb peering connection.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e52d668f36d0789e49c0196d151e22c497a4f1c0a77cff71369f51481f5725dc)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
@@ -3866,6 +5552,8 @@ __all__ = [
     "CfnCloudVmClusterProps",
     "CfnOdbNetwork",
     "CfnOdbNetworkProps",
+    "CfnOdbPeeringConnection",
+    "CfnOdbPeeringConnectionProps",
     "CloudAutonomousVmClusterReference",
     "CloudExadataInfrastructureReference",
     "CloudVmClusterReference",
@@ -3873,7 +5561,9 @@ __all__ = [
     "ICloudExadataInfrastructureRef",
     "ICloudVmClusterRef",
     "IOdbNetworkRef",
+    "IOdbPeeringConnectionRef",
     "OdbNetworkReference",
+    "OdbPeeringConnectionReference",
 ]
 
 publication.publish()
@@ -3908,6 +5598,7 @@ def _typecheckingstub__b021189fda911f5f9c01459f93a1cc1991300050c373d976ffb11c43e
     customer_contacts_to_send_to_oci: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudExadataInfrastructure.CustomerContactProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     database_server_type: typing.Optional[builtins.str] = None,
     display_name: typing.Optional[builtins.str] = None,
+    maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudExadataInfrastructure.MaintenanceWindowProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     shape: typing.Optional[builtins.str] = None,
     storage_count: typing.Optional[jsii.Number] = None,
     storage_server_type: typing.Optional[builtins.str] = None,
@@ -3923,6 +5614,7 @@ def _typecheckingstub__b7c1c550550cdc807e34dbb5ced4b50daf930df9156b6a6f0dfaa8e97
     cpu_core_count: typing.Optional[jsii.Number] = None,
     data_collection_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudVmCluster.DataCollectionOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     data_storage_size_in_t_bs: typing.Optional[jsii.Number] = None,
+    db_nodes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudVmCluster.DbNodeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     db_node_storage_size_in_g_bs: typing.Optional[jsii.Number] = None,
     db_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
     display_name: typing.Optional[builtins.str] = None,
@@ -3948,9 +5640,23 @@ def _typecheckingstub__41648888050cc85bcebe5a38dc9918a297404cec697643f0d6d43e8c7
     availability_zone_id: typing.Optional[builtins.str] = None,
     backup_subnet_cidr: typing.Optional[builtins.str] = None,
     client_subnet_cidr: typing.Optional[builtins.str] = None,
+    custom_domain_name: typing.Optional[builtins.str] = None,
     default_dns_prefix: typing.Optional[builtins.str] = None,
     delete_associated_resources: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     display_name: typing.Optional[builtins.str] = None,
+    s3_access: typing.Optional[builtins.str] = None,
+    s3_policy_document: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    zero_etl_access: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cb14f6a041f61647a57988c9818fe08cae77494cecfe8f526e6f77c42849303b(
+    *,
+    display_name: typing.Optional[builtins.str] = None,
+    odb_network_id: typing.Optional[builtins.str] = None,
+    peer_network_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3980,6 +5686,13 @@ def _typecheckingstub__2bc919a1bccca98db2c7d732fc322b3e0c085d92103fd456faa8d6264
 def _typecheckingstub__b71b7117720de959ffe8ba50b9add7b418e7681ed203043975d7154ad0306c23(
     *,
     odb_network_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7e3a4b6ffc1638d5ec32639aad578b9bbc91b0bd40570c735ef585018043545a(
+    *,
+    odb_peering_connection_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4138,6 +5851,7 @@ def _typecheckingstub__fd782f736e7ad827f171e15d160c54071c1fbef5443d136721533cbfd
     customer_contacts_to_send_to_oci: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudExadataInfrastructure.CustomerContactProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     database_server_type: typing.Optional[builtins.str] = None,
     display_name: typing.Optional[builtins.str] = None,
+    maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudExadataInfrastructure.MaintenanceWindowProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     shape: typing.Optional[builtins.str] = None,
     storage_count: typing.Optional[jsii.Number] = None,
     storage_server_type: typing.Optional[builtins.str] = None,
@@ -4194,6 +5908,12 @@ def _typecheckingstub__d12c1cc442676c06c38458b560f32148a7562dbf983c5df26ac19ffea
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1e3bb28409835469386431431fb04ff62da0b9c236f5e4e6de86eaab458aa03d(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudExadataInfrastructure.MaintenanceWindowProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__044d56c3db02ff4cda6e4851e60243f1c99ed89d6880d3e3d3d95a41f20c78c6(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -4225,6 +5945,21 @@ def _typecheckingstub__643c0e64847e961d0058c2280408d7c853e987c242dc2bdfb33b5b65d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__99303e5da5047eb80fd9260c2a8d18c444f4f01d29749076a86c0c0412db2caa(
+    *,
+    custom_action_timeout_in_mins: typing.Optional[jsii.Number] = None,
+    days_of_week: typing.Optional[typing.Sequence[builtins.str]] = None,
+    hours_of_day: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+    is_custom_action_timeout_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    lead_time_in_weeks: typing.Optional[jsii.Number] = None,
+    months: typing.Optional[typing.Sequence[builtins.str]] = None,
+    patching_mode: typing.Optional[builtins.str] = None,
+    preference: typing.Optional[builtins.str] = None,
+    weeks_of_month: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__54a24296108cf4d367a887b0b65dc2c9163c185183c8fde1522a8cb329db03c9(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4234,6 +5969,7 @@ def _typecheckingstub__54a24296108cf4d367a887b0b65dc2c9163c185183c8fde1522a8cb32
     cpu_core_count: typing.Optional[jsii.Number] = None,
     data_collection_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudVmCluster.DataCollectionOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     data_storage_size_in_t_bs: typing.Optional[jsii.Number] = None,
+    db_nodes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudVmCluster.DbNodeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     db_node_storage_size_in_g_bs: typing.Optional[jsii.Number] = None,
     db_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
     display_name: typing.Optional[builtins.str] = None,
@@ -4291,6 +6027,12 @@ def _typecheckingstub__53fa60e8088e8fcfabc4956f1ab3fbbe0607d6039731af37fdbf97088
 
 def _typecheckingstub__10a4a98dd975dea2ac63836158b2dc7afd11f93fa6eef648312be262c3ea26ec(
     value: typing.Optional[jsii.Number],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1d87bde62c7a3c3cf4ed0bfffab6f8bc36cc20a58ede136430e57b23880577ef(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCloudVmCluster.DbNodeProperty]]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4394,6 +6136,28 @@ def _typecheckingstub__0be5e048213b0ee63e4c9703a3c1b37da85fb4dc37d9458571be7e678
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c95a10051fe96e033b74a53129c8792115ffa8596c6e20c63b8b2bae5c33dd21(
+    *,
+    db_server_id: builtins.str,
+    backup_ip_id: typing.Optional[builtins.str] = None,
+    backup_vnic2_id: typing.Optional[builtins.str] = None,
+    cpu_core_count: typing.Optional[jsii.Number] = None,
+    db_node_arn: typing.Optional[builtins.str] = None,
+    db_node_id: typing.Optional[builtins.str] = None,
+    db_node_storage_size_in_g_bs: typing.Optional[jsii.Number] = None,
+    db_system_id: typing.Optional[builtins.str] = None,
+    host_ip_id: typing.Optional[builtins.str] = None,
+    hostname: typing.Optional[builtins.str] = None,
+    memory_size_in_g_bs: typing.Optional[jsii.Number] = None,
+    ocid: typing.Optional[builtins.str] = None,
+    status: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    vnic2_id: typing.Optional[builtins.str] = None,
+    vnic_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9fb7fc690c89d5ce8f5abecb60ad841f57c0a476f500c817c386b57c3cd0f5d6(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4402,10 +6166,14 @@ def _typecheckingstub__9fb7fc690c89d5ce8f5abecb60ad841f57c0a476f500c817c386b57c3
     availability_zone_id: typing.Optional[builtins.str] = None,
     backup_subnet_cidr: typing.Optional[builtins.str] = None,
     client_subnet_cidr: typing.Optional[builtins.str] = None,
+    custom_domain_name: typing.Optional[builtins.str] = None,
     default_dns_prefix: typing.Optional[builtins.str] = None,
     delete_associated_resources: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     display_name: typing.Optional[builtins.str] = None,
+    s3_access: typing.Optional[builtins.str] = None,
+    s3_policy_document: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    zero_etl_access: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4446,6 +6214,12 @@ def _typecheckingstub__964e75c8af7e656feecdf2af9cc1f3709e5857d22d004e58037f1a4d9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d8107768076a5ec91104db244c22d754231524ae1e1cdad765edecf3270b5e9d(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ccee4738061946ef5f75dacb78a62f5c60382f3bd85cd506ee1454b932d8374a(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -4464,7 +6238,120 @@ def _typecheckingstub__6f9a4c06370e66400707daa4ab73fb37a67d67c8422f10b57fa0ee6b1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7f428808d342fa75b5322aafc69efcb16a9aadaf8c1f1602313528cb3d71f054(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6e9a1278f83bd7d6781ffbd7b2e4e7ec97b8190160130c264991534d7c4eb6a7(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2a78f63e76d627d52015eb8e2a0dc2ab1a80a0926480a2a40fc93da33d803ce3(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8b37fc0f36ed5a2463c0ef988c6f8aff7344389a8c80070dd7013b5e428fa33f(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1b0181205001e0daa042d78d18fe8d5325e5c0b3292546c75de8da725399ad6c(
+    *,
+    ipv4_addresses: typing.Optional[typing.Sequence[builtins.str]] = None,
+    status: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f05f5ee314e82552aae02e8a14cfd272bb6288ddfa3db3a136edf0b694fc8f04(
+    *,
+    managed_s3_backup_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOdbNetwork.ManagedS3BackupAccessProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    managed_services_ipv4_cidrs: typing.Optional[typing.Sequence[builtins.str]] = None,
+    resource_gateway_arn: typing.Optional[builtins.str] = None,
+    s3_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOdbNetwork.S3AccessProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    service_network_arn: typing.Optional[builtins.str] = None,
+    service_network_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOdbNetwork.ServiceNetworkEndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    zero_etl_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOdbNetwork.ZeroEtlAccessProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f9ceb49d35946863bf3c3373dfa2beadc7131a98014ab8760b8a753494ebd78d(
+    *,
+    domain_name: typing.Optional[builtins.str] = None,
+    ipv4_addresses: typing.Optional[typing.Sequence[builtins.str]] = None,
+    s3_policy_document: typing.Optional[builtins.str] = None,
+    status: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aa23d13536607858ecb17ec218e9d01d10a09d3dc235be793fb3ac7485d17be1(
+    *,
+    vpc_endpoint_id: typing.Optional[builtins.str] = None,
+    vpc_endpoint_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8d8647c7f912887ddd8cf379fbed057ec6a564b3495caa039b6697c1b5aa3e9e(
+    *,
+    cidr: typing.Optional[builtins.str] = None,
+    status: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cf0303fdbabd342a7442eedc20c217c961164af3d96d803130ec699ce6cf84d0(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    display_name: typing.Optional[builtins.str] = None,
+    odb_network_id: typing.Optional[builtins.str] = None,
+    peer_network_id: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3c607296b85b8e34cc1971180744ea86ab063bf6e70311b45f2a5e22464c0506(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fdee86eadecbb57db0a54818b6bf117c40239d065452a626ca98bb6f57e734f3(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8e5c2d7c7680dd80443dde7963eb8b7ebf34b6b63b1c6c155d7867956062438a(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9fefb4bfab3abcea0bd112930eb81eda4161508620e9868a51c31460a3bc6124(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9ab942a64178d4b44a12a7c4d77ac39a95872d25a99449973520d474cd6d4cbc(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e52d668f36d0789e49c0196d151e22c497a4f1c0a77cff71369f51481f5725dc(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
     """Type checking stubs"""

@@ -589,9 +589,11 @@ class CfnContainerFleetProps:
             
                     # the properties below are optional
                     location_capacity=gamelift.CfnContainerFleet.LocationCapacityProperty(
-                        desired_ec2_instances=123,
                         max_size=123,
-                        min_size=123
+                        min_size=123,
+            
+                        # the properties below are optional
+                        desired_ec2_instances=123
                     ),
                     stopped_actions=["stoppedActions"]
                 )],
@@ -1261,7 +1263,7 @@ class CfnFleetProps:
         :param anywhere_configuration: Amazon GameLift Servers Anywhere configuration options.
         :param apply_capacity: Current resource capacity settings for managed EC2 fleets and managed container fleets. For multi-location fleets, location values might refer to a fleet's remote location or its home Region. *Returned by:* `DescribeFleetCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_DescribeFleetCapacity.html>`_ , `DescribeFleetLocationCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_DescribeFleetLocationCapacity.html>`_ , `UpdateFleetCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_UpdateFleetCapacity.html>`_
         :param build_id: A unique identifier for a build to be deployed on the new fleet. If you are deploying the fleet with a custom game build, you must specify this property. The build must have been successfully uploaded to Amazon GameLift and be in a ``READY`` status. This fleet setting cannot be changed once the fleet is created.
-        :param certificate_configuration: Prompts Amazon GameLift Servers to generate a TLS/SSL certificate for the fleet. Amazon GameLift Servers uses the certificates to encrypt traffic between game clients and the game servers running on Amazon GameLift Servers. By default, the ``CertificateConfiguration`` is ``DISABLED`` . You can't change this property after you create the fleet. AWS Certificate Manager (ACM) certificates expire after 13 months. Certificate expiration can cause fleets to fail, preventing players from connecting to instances in the fleet. We recommend you replace fleets before 13 months, consider using fleet aliases for a smooth transition. .. epigraph:: ACM isn't available in all AWS regions. A fleet creation request with certificate generation enabled in an unsupported Region, fails with a 4xx error. For more information about the supported Regions, see `Supported Regions <https://docs.aws.amazon.com/acm/latest/userguide/acm-regions.html>`_ in the *AWS Certificate Manager User Guide* .
+        :param certificate_configuration: Prompts Amazon GameLift Servers to generate a TLS/SSL certificate for the fleet. Amazon GameLift Servers uses the certificates to encrypt traffic between game clients and the game servers running on Amazon GameLift Servers. By default, the ``CertificateConfiguration`` is ``DISABLED`` . You can't change this property after you create the fleet. Certificate Manager (ACM) certificates expire after 13 months. Certificate expiration can cause fleets to fail, preventing players from connecting to instances in the fleet. We recommend you replace fleets before 13 months, consider using fleet aliases for a smooth transition. .. epigraph:: ACM isn't available in all AWS regions. A fleet creation request with certificate generation enabled in an unsupported Region, fails with a 4xx error. For more information about the supported Regions, see `Supported Regions <https://docs.aws.amazon.com/acm/latest/userguide/acm-regions.html>`_ in the *Certificate Manager User Guide* .
         :param compute_type: The type of compute resource used to host your game servers. - ``EC2`` – The game server build is deployed to Amazon EC2 instances for cloud hosting. This is the default setting. - ``ANYWHERE`` – Game servers and supporting software are deployed to compute resources that you provide and manage. With this compute type, you can also set the ``AnywhereConfiguration`` parameter.
         :param description: A description for the fleet.
         :param desired_ec2_instances: (deprecated) [DEPRECATED] The number of EC2 instances that you want this fleet to host. When creating a new fleet, GameLift automatically sets this value to "1" and initiates a single instance. Once the fleet is active, update this value to trigger GameLift to add or remove instances from the fleet.
@@ -1325,9 +1327,11 @@ class CfnFleetProps:
             
                     # the properties below are optional
                     location_capacity=gamelift.CfnFleet.LocationCapacityProperty(
-                        desired_ec2_instances=123,
                         max_size=123,
-                        min_size=123
+                        min_size=123,
+            
+                        # the properties below are optional
+                        desired_ec2_instances=123
                     )
                 )],
                 log_paths=["logPaths"],
@@ -1522,10 +1526,10 @@ class CfnFleetProps:
 
         Amazon GameLift Servers uses the certificates to encrypt traffic between game clients and the game servers running on Amazon GameLift Servers. By default, the ``CertificateConfiguration`` is ``DISABLED`` . You can't change this property after you create the fleet.
 
-        AWS Certificate Manager (ACM) certificates expire after 13 months. Certificate expiration can cause fleets to fail, preventing players from connecting to instances in the fleet. We recommend you replace fleets before 13 months, consider using fleet aliases for a smooth transition.
+        Certificate Manager (ACM) certificates expire after 13 months. Certificate expiration can cause fleets to fail, preventing players from connecting to instances in the fleet. We recommend you replace fleets before 13 months, consider using fleet aliases for a smooth transition.
         .. epigraph::
 
-           ACM isn't available in all AWS regions. A fleet creation request with certificate generation enabled in an unsupported Region, fails with a 4xx error. For more information about the supported Regions, see `Supported Regions <https://docs.aws.amazon.com/acm/latest/userguide/acm-regions.html>`_ in the *AWS Certificate Manager User Guide* .
+           ACM isn't available in all AWS regions. A fleet creation request with certificate generation enabled in an unsupported Region, fails with a 4xx error. For more information about the supported Regions, see `Supported Regions <https://docs.aws.amazon.com/acm/latest/userguide/acm-regions.html>`_ in the *Certificate Manager User Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-certificateconfiguration
         '''
@@ -4691,9 +4695,11 @@ class CfnContainerFleet(
         
                 # the properties below are optional
                 location_capacity=gamelift.CfnContainerFleet.LocationCapacityProperty(
-                    desired_ec2_instances=123,
                     max_size=123,
-                    min_size=123
+                    min_size=123,
+        
+                    # the properties below are optional
+                    desired_ec2_instances=123
                 ),
                 stopped_actions=["stoppedActions"]
             )],
@@ -5623,26 +5629,26 @@ class CfnContainerFleet(
         jsii_type="aws-cdk-lib.aws_gamelift.CfnContainerFleet.LocationCapacityProperty",
         jsii_struct_bases=[],
         name_mapping={
-            "desired_ec2_instances": "desiredEc2Instances",
             "max_size": "maxSize",
             "min_size": "minSize",
+            "desired_ec2_instances": "desiredEc2Instances",
         },
     )
     class LocationCapacityProperty:
         def __init__(
             self,
             *,
-            desired_ec2_instances: jsii.Number,
             max_size: jsii.Number,
             min_size: jsii.Number,
+            desired_ec2_instances: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Current resource capacity settings in a specified fleet or location.
 
             The location value might refer to a fleet's remote location or its home Region.
 
-            :param desired_ec2_instances: The number of EC2 instances you want to maintain in the specified fleet location. This value must fall between the minimum and maximum size limits. If any auto-scaling policy is defined for the container fleet, the desired instance will only be applied once during fleet creation and will be ignored in updates to avoid conflicts with auto-scaling. During updates with any auto-scaling policy defined, if current desired instance is lower than the new MinSize, it will be increased to the new MinSize; if current desired instance is larger than the new MaxSize, it will be decreased to the new MaxSize.
             :param max_size: The maximum value that is allowed for the fleet's instance count for a location.
             :param min_size: The minimum value allowed for the fleet's instance count for a location.
+            :param desired_ec2_instances: Defaults to MinSize if not defined. The number of EC2 instances you want to maintain in the specified fleet location. This value must fall between the minimum and maximum size limits. If any auto-scaling policy is defined for the container fleet, the desired instance will only be applied once during fleet creation and will be ignored in updates to avoid conflicts with auto-scaling. During updates with any auto-scaling policy defined, if current desired instance is lower than the new MinSize, it will be increased to the new MinSize; if current desired instance is larger than the new MaxSize, it will be decreased to the new MaxSize.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containerfleet-locationcapacity.html
             :exampleMetadata: fixture=_generated
@@ -5654,33 +5660,24 @@ class CfnContainerFleet(
                 from aws_cdk import aws_gamelift as gamelift
                 
                 location_capacity_property = gamelift.CfnContainerFleet.LocationCapacityProperty(
-                    desired_ec2_instances=123,
                     max_size=123,
-                    min_size=123
+                    min_size=123,
+                
+                    # the properties below are optional
+                    desired_ec2_instances=123
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__cfdc01eeb9f739a54f304b9e5cb1f66114e55233f5383f018ef7dd086a28ed10)
-                check_type(argname="argument desired_ec2_instances", value=desired_ec2_instances, expected_type=type_hints["desired_ec2_instances"])
                 check_type(argname="argument max_size", value=max_size, expected_type=type_hints["max_size"])
                 check_type(argname="argument min_size", value=min_size, expected_type=type_hints["min_size"])
+                check_type(argname="argument desired_ec2_instances", value=desired_ec2_instances, expected_type=type_hints["desired_ec2_instances"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
-                "desired_ec2_instances": desired_ec2_instances,
                 "max_size": max_size,
                 "min_size": min_size,
             }
-
-        @builtins.property
-        def desired_ec2_instances(self) -> jsii.Number:
-            '''The number of EC2 instances you want to maintain in the specified fleet location.
-
-            This value must fall between the minimum and maximum size limits. If any auto-scaling policy is defined for the container fleet, the desired instance will only be applied once during fleet creation and will be ignored in updates to avoid conflicts with auto-scaling. During updates with any auto-scaling policy defined, if current desired instance is lower than the new MinSize, it will be increased to the new MinSize; if current desired instance is larger than the new MaxSize, it will be decreased to the new MaxSize.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containerfleet-locationcapacity.html#cfn-gamelift-containerfleet-locationcapacity-desiredec2instances
-            '''
-            result = self._values.get("desired_ec2_instances")
-            assert result is not None, "Required property 'desired_ec2_instances' is missing"
-            return typing.cast(jsii.Number, result)
+            if desired_ec2_instances is not None:
+                self._values["desired_ec2_instances"] = desired_ec2_instances
 
         @builtins.property
         def max_size(self) -> jsii.Number:
@@ -5701,6 +5698,17 @@ class CfnContainerFleet(
             result = self._values.get("min_size")
             assert result is not None, "Required property 'min_size' is missing"
             return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def desired_ec2_instances(self) -> typing.Optional[jsii.Number]:
+            '''Defaults to MinSize if not defined.
+
+            The number of EC2 instances you want to maintain in the specified fleet location. This value must fall between the minimum and maximum size limits. If any auto-scaling policy is defined for the container fleet, the desired instance will only be applied once during fleet creation and will be ignored in updates to avoid conflicts with auto-scaling. During updates with any auto-scaling policy defined, if current desired instance is lower than the new MinSize, it will be increased to the new MinSize; if current desired instance is larger than the new MaxSize, it will be decreased to the new MaxSize.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containerfleet-locationcapacity.html#cfn-gamelift-containerfleet-locationcapacity-desiredec2instances
+            '''
+            result = self._values.get("desired_ec2_instances")
+            return typing.cast(typing.Optional[jsii.Number], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5750,9 +5758,11 @@ class CfnContainerFleet(
                 
                     # the properties below are optional
                     location_capacity=gamelift.CfnContainerFleet.LocationCapacityProperty(
-                        desired_ec2_instances=123,
                         max_size=123,
-                        min_size=123
+                        min_size=123,
+                
+                        # the properties below are optional
+                        desired_ec2_instances=123
                     ),
                     stopped_actions=["stoppedActions"]
                 )
@@ -7687,9 +7697,11 @@ class CfnFleet(
         
                 # the properties below are optional
                 location_capacity=gamelift.CfnFleet.LocationCapacityProperty(
-                    desired_ec2_instances=123,
                     max_size=123,
-                    min_size=123
+                    min_size=123,
+        
+                    # the properties below are optional
+                    desired_ec2_instances=123
                 )
             )],
             log_paths=["logPaths"],
@@ -7783,7 +7795,7 @@ class CfnFleet(
         :param anywhere_configuration: Amazon GameLift Servers Anywhere configuration options.
         :param apply_capacity: Current resource capacity settings for managed EC2 fleets and managed container fleets. For multi-location fleets, location values might refer to a fleet's remote location or its home Region. *Returned by:* `DescribeFleetCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_DescribeFleetCapacity.html>`_ , `DescribeFleetLocationCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_DescribeFleetLocationCapacity.html>`_ , `UpdateFleetCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_UpdateFleetCapacity.html>`_
         :param build_id: A unique identifier for a build to be deployed on the new fleet. If you are deploying the fleet with a custom game build, you must specify this property. The build must have been successfully uploaded to Amazon GameLift and be in a ``READY`` status. This fleet setting cannot be changed once the fleet is created.
-        :param certificate_configuration: Prompts Amazon GameLift Servers to generate a TLS/SSL certificate for the fleet. Amazon GameLift Servers uses the certificates to encrypt traffic between game clients and the game servers running on Amazon GameLift Servers. By default, the ``CertificateConfiguration`` is ``DISABLED`` . You can't change this property after you create the fleet. AWS Certificate Manager (ACM) certificates expire after 13 months. Certificate expiration can cause fleets to fail, preventing players from connecting to instances in the fleet. We recommend you replace fleets before 13 months, consider using fleet aliases for a smooth transition. .. epigraph:: ACM isn't available in all AWS regions. A fleet creation request with certificate generation enabled in an unsupported Region, fails with a 4xx error. For more information about the supported Regions, see `Supported Regions <https://docs.aws.amazon.com/acm/latest/userguide/acm-regions.html>`_ in the *AWS Certificate Manager User Guide* .
+        :param certificate_configuration: Prompts Amazon GameLift Servers to generate a TLS/SSL certificate for the fleet. Amazon GameLift Servers uses the certificates to encrypt traffic between game clients and the game servers running on Amazon GameLift Servers. By default, the ``CertificateConfiguration`` is ``DISABLED`` . You can't change this property after you create the fleet. Certificate Manager (ACM) certificates expire after 13 months. Certificate expiration can cause fleets to fail, preventing players from connecting to instances in the fleet. We recommend you replace fleets before 13 months, consider using fleet aliases for a smooth transition. .. epigraph:: ACM isn't available in all AWS regions. A fleet creation request with certificate generation enabled in an unsupported Region, fails with a 4xx error. For more information about the supported Regions, see `Supported Regions <https://docs.aws.amazon.com/acm/latest/userguide/acm-regions.html>`_ in the *Certificate Manager User Guide* .
         :param compute_type: The type of compute resource used to host your game servers. - ``EC2`` – The game server build is deployed to Amazon EC2 instances for cloud hosting. This is the default setting. - ``ANYWHERE`` – Game servers and supporting software are deployed to compute resources that you provide and manage. With this compute type, you can also set the ``AnywhereConfiguration`` parameter.
         :param description: A description for the fleet.
         :param desired_ec2_instances: (deprecated) [DEPRECATED] The number of EC2 instances that you want this fleet to host. When creating a new fleet, GameLift automatically sets this value to "1" and initiates a single instance. Once the fleet is active, update this value to trigger GameLift to add or remove instances from the fleet.
@@ -8582,18 +8594,18 @@ class CfnFleet(
         jsii_type="aws-cdk-lib.aws_gamelift.CfnFleet.LocationCapacityProperty",
         jsii_struct_bases=[],
         name_mapping={
-            "desired_ec2_instances": "desiredEc2Instances",
             "max_size": "maxSize",
             "min_size": "minSize",
+            "desired_ec2_instances": "desiredEc2Instances",
         },
     )
     class LocationCapacityProperty:
         def __init__(
             self,
             *,
-            desired_ec2_instances: jsii.Number,
             max_size: jsii.Number,
             min_size: jsii.Number,
+            desired_ec2_instances: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Current resource capacity settings for managed EC2 fleets and managed container fleets.
 
@@ -8601,9 +8613,9 @@ class CfnFleet(
 
             *Returned by:* `DescribeFleetCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_DescribeFleetCapacity.html>`_ , `DescribeFleetLocationCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_DescribeFleetLocationCapacity.html>`_ , `UpdateFleetCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_UpdateFleetCapacity.html>`_
 
-            :param desired_ec2_instances: The number of Amazon EC2 instances you want to maintain in the specified fleet location. This value must fall between the minimum and maximum size limits. Changes in desired instance value can take up to 1 minute to be reflected when viewing the fleet's capacity settings.
             :param max_size: The maximum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 1.
             :param min_size: The minimum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 0.
+            :param desired_ec2_instances: The number of Amazon EC2 instances you want to maintain in the specified fleet location. This value must fall between the minimum and maximum size limits. Changes in desired instance value can take up to 1 minute to be reflected when viewing the fleet's capacity settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-fleet-locationcapacity.html
             :exampleMetadata: fixture=_generated
@@ -8615,33 +8627,24 @@ class CfnFleet(
                 from aws_cdk import aws_gamelift as gamelift
                 
                 location_capacity_property = gamelift.CfnFleet.LocationCapacityProperty(
-                    desired_ec2_instances=123,
                     max_size=123,
-                    min_size=123
+                    min_size=123,
+                
+                    # the properties below are optional
+                    desired_ec2_instances=123
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__76847ac983ab72ef92adc1b0579d769ca62af002ef71c76165cbd879da8645fc)
-                check_type(argname="argument desired_ec2_instances", value=desired_ec2_instances, expected_type=type_hints["desired_ec2_instances"])
                 check_type(argname="argument max_size", value=max_size, expected_type=type_hints["max_size"])
                 check_type(argname="argument min_size", value=min_size, expected_type=type_hints["min_size"])
+                check_type(argname="argument desired_ec2_instances", value=desired_ec2_instances, expected_type=type_hints["desired_ec2_instances"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
-                "desired_ec2_instances": desired_ec2_instances,
                 "max_size": max_size,
                 "min_size": min_size,
             }
-
-        @builtins.property
-        def desired_ec2_instances(self) -> jsii.Number:
-            '''The number of Amazon EC2 instances you want to maintain in the specified fleet location.
-
-            This value must fall between the minimum and maximum size limits. Changes in desired instance value can take up to 1 minute to be reflected when viewing the fleet's capacity settings.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-fleet-locationcapacity.html#cfn-gamelift-fleet-locationcapacity-desiredec2instances
-            '''
-            result = self._values.get("desired_ec2_instances")
-            assert result is not None, "Required property 'desired_ec2_instances' is missing"
-            return typing.cast(jsii.Number, result)
+            if desired_ec2_instances is not None:
+                self._values["desired_ec2_instances"] = desired_ec2_instances
 
         @builtins.property
         def max_size(self) -> jsii.Number:
@@ -8666,6 +8669,17 @@ class CfnFleet(
             result = self._values.get("min_size")
             assert result is not None, "Required property 'min_size' is missing"
             return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def desired_ec2_instances(self) -> typing.Optional[jsii.Number]:
+            '''The number of Amazon EC2 instances you want to maintain in the specified fleet location.
+
+            This value must fall between the minimum and maximum size limits. Changes in desired instance value can take up to 1 minute to be reflected when viewing the fleet's capacity settings.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-fleet-locationcapacity.html#cfn-gamelift-fleet-locationcapacity-desiredec2instances
+            '''
+            result = self._values.get("desired_ec2_instances")
+            return typing.cast(typing.Optional[jsii.Number], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8709,9 +8723,11 @@ class CfnFleet(
                 
                     # the properties below are optional
                     location_capacity=gamelift.CfnFleet.LocationCapacityProperty(
-                        desired_ec2_instances=123,
                         max_size=123,
-                        min_size=123
+                        min_size=123,
+                
+                        # the properties below are optional
+                        desired_ec2_instances=123
                     )
                 )
             '''
@@ -12468,9 +12484,9 @@ def _typecheckingstub__3c74cebf3a79bd067a90f843de7a76b099cbe8aff962b812b7dcae7ad
 
 def _typecheckingstub__cfdc01eeb9f739a54f304b9e5cb1f66114e55233f5383f018ef7dd086a28ed10(
     *,
-    desired_ec2_instances: jsii.Number,
     max_size: jsii.Number,
     min_size: jsii.Number,
+    desired_ec2_instances: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12930,9 +12946,9 @@ def _typecheckingstub__70f885be25c9084dbab3b02a36601be0e37c43ab741ea7dd646494423
 
 def _typecheckingstub__76847ac983ab72ef92adc1b0579d769ca62af002ef71c76165cbd879da8645fc(
     *,
-    desired_ec2_instances: jsii.Number,
     max_size: jsii.Number,
     min_size: jsii.Number,
+    desired_ec2_instances: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass

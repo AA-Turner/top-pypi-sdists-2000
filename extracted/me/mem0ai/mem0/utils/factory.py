@@ -165,6 +165,7 @@ class VectorStoreFactory:
         "pinecone": "mem0.vector_stores.pinecone.PineconeDB",
         "mongodb": "mem0.vector_stores.mongodb.MongoDB",
         "redis": "mem0.vector_stores.redis.RedisDB",
+        "valkey": "mem0.vector_stores.valkey.ValkeyDB",
         "databricks": "mem0.vector_stores.databricks.Databricks",
         "elasticsearch": "mem0.vector_stores.elasticsearch.ElasticsearchDB",
         "vertex_ai_vector_search": "mem0.vector_stores.vertex_ai_vector_search.GoogleMatchingEngine",
@@ -175,6 +176,7 @@ class VectorStoreFactory:
         "langchain": "mem0.vector_stores.langchain.Langchain",
         "s3_vectors": "mem0.vector_stores.s3_vectors.S3Vectors",
         "baidu": "mem0.vector_stores.baidu.BaiduDB",
+        "neptune": "mem0.vector_stores.neptune_analytics.NeptuneAnalyticsVector",
     }
 
     @classmethod
@@ -202,7 +204,8 @@ class GraphStoreFactory:
 
     provider_to_class = {
         "memgraph": "mem0.memory.memgraph_memory.MemoryGraph",
-        "neptune": "mem0.graphs.neptune.main.MemoryGraph",
+        "neptune": "mem0.graphs.neptune.neptunegraph.MemoryGraph",
+        "neptunedb": "mem0.graphs.neptune.neptunedb.MemoryGraph",
         "kuzu": "mem0.memory.kuzu_memory.MemoryGraph",
         "default": "mem0.memory.graph_memory.MemoryGraph",
     }

@@ -6856,6 +6856,7 @@ class QuerySchemaVersionMetadataResponseTypeDef(TypedDict):
 class AuthenticationConfigurationTypeDef(TypedDict):
     AuthenticationType: NotRequired[AuthenticationTypeType]
     SecretArn: NotRequired[str]
+    KmsKeyArn: NotRequired[str]
     OAuth2Properties: NotRequired[OAuth2PropertiesTypeDef]
 
 class AuthenticationConfigurationInputTypeDef(TypedDict):

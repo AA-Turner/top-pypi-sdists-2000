@@ -4902,7 +4902,7 @@ class CfnOriginEndpoint(
             :param role_arn: The ARN for the IAM role that's granted by the key provider to provide access to the key provider API. This role must have a trust policy that allows AWS Elemental MediaPackage to assume the role, and it must have a sufficient permissions policy to allow access to the specific key retrieval URL. Valid format: arn:aws:iam::{accountID}:role/{name}
             :param system_ids: List of unique identifiers for the DRM systems to use, as defined in the CPIX specification.
             :param url: URL for the key provider’s key retrieval API endpoint. Must start with https://.
-            :param certificate_arn: The Amazon Resource Name (ARN) for the certificate that you imported to AWS Certificate Manager to add content key encryption to this endpoint. For this feature to work, your DRM key provider must support content key encryption.
+            :param certificate_arn: The Amazon Resource Name (ARN) for the certificate that you imported to Certificate Manager to add content key encryption to this endpoint. For this feature to work, your DRM key provider must support content key encryption.
             :param encryption_contract_configuration: Use ``encryptionContractConfiguration`` to configure one or more content encryption keys for your endpoints that use SPEKE Version 2.0. The encryption contract defines which content keys are used to encrypt the audio and video tracks in your stream. To configure the encryption contract, specify which audio and video encryption presets to use.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-spekekeyprovider.html
@@ -4993,7 +4993,7 @@ class CfnOriginEndpoint(
 
         @builtins.property
         def certificate_arn(self) -> typing.Optional[builtins.str]:
-            '''The Amazon Resource Name (ARN) for the certificate that you imported to AWS Certificate Manager to add content key encryption to this endpoint.
+            '''The Amazon Resource Name (ARN) for the certificate that you imported to Certificate Manager to add content key encryption to this endpoint.
 
             For this feature to work, your DRM key provider must support content key encryption.
 

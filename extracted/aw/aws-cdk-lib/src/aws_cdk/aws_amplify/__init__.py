@@ -3447,8 +3447,8 @@ class CfnDomain(
 
             If you are updating your domain to use a different certificate, ``Certificate`` points to the new certificate that is being created instead of the current active certificate. Otherwise, ``Certificate`` points to the current active certificate.
 
-            :param certificate_arn: The Amazon resource name (ARN) for a custom certificate that you have already added to AWS Certificate Manager in your AWS account . This field is required only when the certificate type is ``CUSTOM`` .
-            :param certificate_type: The type of SSL/TLS certificate that you want to use. Specify ``AMPLIFY_MANAGED`` to use the default certificate that Amplify provisions for you. Specify ``CUSTOM`` to use your own certificate that you have already added to AWS Certificate Manager in your AWS account . Make sure you request (or import) the certificate in the US East (N. Virginia) Region (us-east-1). For more information about using ACM, see `Importing certificates into AWS Certificate Manager <https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html>`_ in the *ACM User guide* .
+            :param certificate_arn: The Amazon resource name (ARN) for a custom certificate that you have already added to Certificate Manager in your AWS account . This field is required only when the certificate type is ``CUSTOM`` .
+            :param certificate_type: The type of SSL/TLS certificate that you want to use. Specify ``AMPLIFY_MANAGED`` to use the default certificate that Amplify provisions for you. Specify ``CUSTOM`` to use your own certificate that you have already added to Certificate Manager in your AWS account . Make sure you request (or import) the certificate in the US East (N. Virginia) Region (us-east-1). For more information about using ACM, see `Importing certificates into Certificate Manager <https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html>`_ in the *ACM User guide* .
             :param certificate_verification_dns_record: The DNS record for certificate verification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amplify-domain-certificate.html
@@ -3481,7 +3481,7 @@ class CfnDomain(
 
         @builtins.property
         def certificate_arn(self) -> typing.Optional[builtins.str]:
-            '''The Amazon resource name (ARN) for a custom certificate that you have already added to AWS Certificate Manager in your AWS account .
+            '''The Amazon resource name (ARN) for a custom certificate that you have already added to Certificate Manager in your AWS account .
 
             This field is required only when the certificate type is ``CUSTOM`` .
 
@@ -3496,7 +3496,7 @@ class CfnDomain(
 
             Specify ``AMPLIFY_MANAGED`` to use the default certificate that Amplify provisions for you.
 
-            Specify ``CUSTOM`` to use your own certificate that you have already added to AWS Certificate Manager in your AWS account . Make sure you request (or import) the certificate in the US East (N. Virginia) Region (us-east-1). For more information about using ACM, see `Importing certificates into AWS Certificate Manager <https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html>`_ in the *ACM User guide* .
+            Specify ``CUSTOM`` to use your own certificate that you have already added to Certificate Manager in your AWS account . Make sure you request (or import) the certificate in the US East (N. Virginia) Region (us-east-1). For more information about using ACM, see `Importing certificates into Certificate Manager <https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html>`_ in the *ACM User guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amplify-domain-certificate.html#cfn-amplify-domain-certificate-certificatetype
             '''
@@ -3542,8 +3542,8 @@ class CfnDomain(
 
             If a certificate type isn't specified, Amplify uses the default ``AMPLIFY_MANAGED`` certificate.
 
-            :param certificate_type: The certificate type. Specify ``AMPLIFY_MANAGED`` to use the default certificate that Amplify provisions for you. Specify ``CUSTOM`` to use your own certificate that you have already added to AWS Certificate Manager in your AWS account . Make sure you request (or import) the certificate in the US East (N. Virginia) Region (us-east-1). For more information about using ACM, see `Importing certificates into AWS Certificate Manager <https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html>`_ in the *ACM User guide* .
-            :param custom_certificate_arn: The Amazon resource name (ARN) for the custom certificate that you have already added to AWS Certificate Manager in your AWS account . This field is required only when the certificate type is ``CUSTOM`` .
+            :param certificate_type: The certificate type. Specify ``AMPLIFY_MANAGED`` to use the default certificate that Amplify provisions for you. Specify ``CUSTOM`` to use your own certificate that you have already added to Certificate Manager in your AWS account . Make sure you request (or import) the certificate in the US East (N. Virginia) Region (us-east-1). For more information about using ACM, see `Importing certificates into Certificate Manager <https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html>`_ in the *ACM User guide* .
+            :param custom_certificate_arn: The Amazon resource name (ARN) for the custom certificate that you have already added to Certificate Manager in your AWS account . This field is required only when the certificate type is ``CUSTOM`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amplify-domain-certificatesettings.html
             :exampleMetadata: fixture=_generated
@@ -3575,7 +3575,7 @@ class CfnDomain(
 
             Specify ``AMPLIFY_MANAGED`` to use the default certificate that Amplify provisions for you.
 
-            Specify ``CUSTOM`` to use your own certificate that you have already added to AWS Certificate Manager in your AWS account . Make sure you request (or import) the certificate in the US East (N. Virginia) Region (us-east-1). For more information about using ACM, see `Importing certificates into AWS Certificate Manager <https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html>`_ in the *ACM User guide* .
+            Specify ``CUSTOM`` to use your own certificate that you have already added to Certificate Manager in your AWS account . Make sure you request (or import) the certificate in the US East (N. Virginia) Region (us-east-1). For more information about using ACM, see `Importing certificates into Certificate Manager <https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html>`_ in the *ACM User guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amplify-domain-certificatesettings.html#cfn-amplify-domain-certificatesettings-certificatetype
             '''
@@ -3584,7 +3584,7 @@ class CfnDomain(
 
         @builtins.property
         def custom_certificate_arn(self) -> typing.Optional[builtins.str]:
-            '''The Amazon resource name (ARN) for the custom certificate that you have already added to AWS Certificate Manager in your AWS account .
+            '''The Amazon resource name (ARN) for the custom certificate that you have already added to Certificate Manager in your AWS account .
 
             This field is required only when the certificate type is ``CUSTOM`` .
 

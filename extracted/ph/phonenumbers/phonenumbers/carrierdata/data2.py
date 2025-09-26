@@ -19,6 +19,8 @@ from ..util import u
 # limitations under the License.
 
 data = {
+ '573102':{'en': 'Claro'},
+ '573103':{'en': 'Claro'},
  '573104':{'en': 'Claro'},
  '573105':{'en': 'Claro'},
  '573106':{'en': 'Claro'},

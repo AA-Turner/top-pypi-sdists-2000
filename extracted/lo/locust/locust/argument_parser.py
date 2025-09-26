@@ -7,6 +7,7 @@ from locust.rpc import Message, zmqrpc
 import argparse
 import ast
 import atexit
+import difflib
 import json
 import os
 import platform
@@ -59,6 +60,15 @@ class LocustArgumentParser(configargparse.ArgumentParser):
     """Drop-in replacement for `configargparse.ArgumentParser` that adds support for
     optionally exclude arguments from the UI.
     """
+
+    def error(self, message):
+        if "unrecognized arguments:" in message:
+            bad_arg = message.split("unrecognized arguments:")[1].strip().split()[0]
+            options = [opt for action in self._actions for opt in action.option_strings]
+            suggestion = difflib.get_close_matches(bad_arg, options, n=1)
+            if suggestion:
+                message += f"\nDid you mean '{suggestion[0]}'?"
+        self.exit(2, f"{self.prog}: error: {message}\n")
 
     def add_argument(self, *args, **kwargs) -> configargparse.Action:
         """

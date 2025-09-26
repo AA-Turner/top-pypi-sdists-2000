@@ -2880,6 +2880,7 @@ class CfnFlowVersionProps:
         "blocked_input_messaging": "blockedInputMessaging",
         "blocked_outputs_messaging": "blockedOutputsMessaging",
         "name": "name",
+        "automated_reasoning_policy_config": "automatedReasoningPolicyConfig",
         "content_policy_config": "contentPolicyConfig",
         "contextual_grounding_policy_config": "contextualGroundingPolicyConfig",
         "cross_region_config": "crossRegionConfig",
@@ -2898,6 +2899,7 @@ class CfnGuardrailProps:
         blocked_input_messaging: builtins.str,
         blocked_outputs_messaging: builtins.str,
         name: builtins.str,
+        automated_reasoning_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGuardrail.AutomatedReasoningPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         content_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGuardrail.ContentPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         contextual_grounding_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGuardrail.ContextualGroundingPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         cross_region_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGuardrail.GuardrailCrossRegionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2913,6 +2915,7 @@ class CfnGuardrailProps:
         :param blocked_input_messaging: The message to return when the guardrail blocks a prompt.
         :param blocked_outputs_messaging: The message to return when the guardrail blocks a model response.
         :param name: The name of the guardrail.
+        :param automated_reasoning_policy_config: Configuration settings for integrating Automated Reasoning policies with Amazon Bedrock Guardrails.
         :param content_policy_config: The content filter policies to configure for the guardrail.
         :param contextual_grounding_policy_config: Contextual grounding policy config for a guardrail.
         :param cross_region_config: The system-defined guardrail profile that you're using with your guardrail. Guardrail profiles define the destination AWS Regions where guardrail inference requests can be automatically routed. Using guardrail profiles helps maintain guardrail performance and reliability when demand increases. For more information, see the `Amazon Bedrock User Guide <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-cross-region.html>`_ .
@@ -2950,6 +2953,7 @@ class CfnGuardrailProps:
             check_type(argname="argument blocked_input_messaging", value=blocked_input_messaging, expected_type=type_hints["blocked_input_messaging"])
             check_type(argname="argument blocked_outputs_messaging", value=blocked_outputs_messaging, expected_type=type_hints["blocked_outputs_messaging"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument automated_reasoning_policy_config", value=automated_reasoning_policy_config, expected_type=type_hints["automated_reasoning_policy_config"])
             check_type(argname="argument content_policy_config", value=content_policy_config, expected_type=type_hints["content_policy_config"])
             check_type(argname="argument contextual_grounding_policy_config", value=contextual_grounding_policy_config, expected_type=type_hints["contextual_grounding_policy_config"])
             check_type(argname="argument cross_region_config", value=cross_region_config, expected_type=type_hints["cross_region_config"])
@@ -2964,6 +2968,8 @@ class CfnGuardrailProps:
             "blocked_outputs_messaging": blocked_outputs_messaging,
             "name": name,
         }
+        if automated_reasoning_policy_config is not None:
+            self._values["automated_reasoning_policy_config"] = automated_reasoning_policy_config
         if content_policy_config is not None:
             self._values["content_policy_config"] = content_policy_config
         if contextual_grounding_policy_config is not None:
@@ -3012,6 +3018,17 @@ class CfnGuardrailProps:
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def automated_reasoning_policy_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGuardrail.AutomatedReasoningPolicyConfigProperty"]]:
+        '''Configuration settings for integrating Automated Reasoning policies with Amazon Bedrock Guardrails.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-guardrail.html#cfn-bedrock-guardrail-automatedreasoningpolicyconfig
+        '''
+        result = self._values.get("automated_reasoning_policy_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGuardrail.AutomatedReasoningPolicyConfigProperty"]], result)
 
     @builtins.property
     def content_policy_config(
@@ -28414,6 +28431,7 @@ class CfnGuardrail(
         blocked_input_messaging: builtins.str,
         blocked_outputs_messaging: builtins.str,
         name: builtins.str,
+        automated_reasoning_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGuardrail.AutomatedReasoningPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         content_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGuardrail.ContentPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         contextual_grounding_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGuardrail.ContextualGroundingPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         cross_region_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGuardrail.GuardrailCrossRegionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -28430,6 +28448,7 @@ class CfnGuardrail(
         :param blocked_input_messaging: The message to return when the guardrail blocks a prompt.
         :param blocked_outputs_messaging: The message to return when the guardrail blocks a model response.
         :param name: The name of the guardrail.
+        :param automated_reasoning_policy_config: Configuration settings for integrating Automated Reasoning policies with Amazon Bedrock Guardrails.
         :param content_policy_config: The content filter policies to configure for the guardrail.
         :param contextual_grounding_policy_config: Contextual grounding policy config for a guardrail.
         :param cross_region_config: The system-defined guardrail profile that you're using with your guardrail. Guardrail profiles define the destination AWS Regions where guardrail inference requests can be automatically routed. Using guardrail profiles helps maintain guardrail performance and reliability when demand increases. For more information, see the `Amazon Bedrock User Guide <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-cross-region.html>`_ .
@@ -28448,6 +28467,7 @@ class CfnGuardrail(
             blocked_input_messaging=blocked_input_messaging,
             blocked_outputs_messaging=blocked_outputs_messaging,
             name=name,
+            automated_reasoning_policy_config=automated_reasoning_policy_config,
             content_policy_config=content_policy_config,
             contextual_grounding_policy_config=contextual_grounding_policy_config,
             cross_region_config=cross_region_config,
@@ -28626,6 +28646,24 @@ class CfnGuardrail(
         jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="automatedReasoningPolicyConfig")
+    def automated_reasoning_policy_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGuardrail.AutomatedReasoningPolicyConfigProperty"]]:
+        '''Configuration settings for integrating Automated Reasoning policies with Amazon Bedrock Guardrails.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGuardrail.AutomatedReasoningPolicyConfigProperty"]], jsii.get(self, "automatedReasoningPolicyConfig"))
+
+    @automated_reasoning_policy_config.setter
+    def automated_reasoning_policy_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGuardrail.AutomatedReasoningPolicyConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0f7e988f8aa9a49e9c7d18479b2e890b8fe801c669022cbb74dafe4a3a01f399)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "automatedReasoningPolicyConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="contentPolicyConfig")
     def content_policy_config(
         self,
@@ -28771,6 +28809,84 @@ class CfnGuardrail(
             type_hints = typing.get_type_hints(_typecheckingstub__8db61eded81d93fbd03b059a0415cd544498a84333ec2ae6cb76fed58dc07062)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "wordPolicyConfig", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnGuardrail.AutomatedReasoningPolicyConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "policies": "policies",
+            "confidence_threshold": "confidenceThreshold",
+        },
+    )
+    class AutomatedReasoningPolicyConfigProperty:
+        def __init__(
+            self,
+            *,
+            policies: typing.Sequence[builtins.str],
+            confidence_threshold: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Configuration settings for integrating Automated Reasoning policies with Amazon Bedrock Guardrails.
+
+            :param policies: The list of Automated Reasoning policy ARNs that should be applied as part of this guardrail configuration.
+            :param confidence_threshold: The minimum confidence level required for Automated Reasoning policy violations to trigger guardrail actions. Values range from 0.0 to 1.0.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-guardrail-automatedreasoningpolicyconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                automated_reasoning_policy_config_property = bedrock.CfnGuardrail.AutomatedReasoningPolicyConfigProperty(
+                    policies=["policies"],
+                
+                    # the properties below are optional
+                    confidence_threshold=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__81b300ba729d19904cc1eb50e4cff612a346a658e152b6b4c77f39f797f9571a)
+                check_type(argname="argument policies", value=policies, expected_type=type_hints["policies"])
+                check_type(argname="argument confidence_threshold", value=confidence_threshold, expected_type=type_hints["confidence_threshold"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "policies": policies,
+            }
+            if confidence_threshold is not None:
+                self._values["confidence_threshold"] = confidence_threshold
+
+        @builtins.property
+        def policies(self) -> typing.List[builtins.str]:
+            '''The list of Automated Reasoning policy ARNs that should be applied as part of this guardrail configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-guardrail-automatedreasoningpolicyconfig.html#cfn-bedrock-guardrail-automatedreasoningpolicyconfig-policies
+            '''
+            result = self._values.get("policies")
+            assert result is not None, "Required property 'policies' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def confidence_threshold(self) -> typing.Optional[jsii.Number]:
+            '''The minimum confidence level required for Automated Reasoning policy violations to trigger guardrail actions.
+
+            Values range from 0.0 to 1.0.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-guardrail-automatedreasoningpolicyconfig.html#cfn-bedrock-guardrail-automatedreasoningpolicyconfig-confidencethreshold
+            '''
+            result = self._values.get("confidence_threshold")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AutomatedReasoningPolicyConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrock.CfnGuardrail.ContentFilterConfigProperty",
@@ -39989,6 +40105,7 @@ def _typecheckingstub__e16800cc7473874d0d58b13a772dade51a596e19ff440f95ad243d236
     blocked_input_messaging: builtins.str,
     blocked_outputs_messaging: builtins.str,
     name: builtins.str,
+    automated_reasoning_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGuardrail.AutomatedReasoningPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     content_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGuardrail.ContentPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     contextual_grounding_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGuardrail.ContextualGroundingPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cross_region_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGuardrail.GuardrailCrossRegionConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -42478,6 +42595,7 @@ def _typecheckingstub__2043b4e3280827dde584095cdad9778bf2076242696d52ba5a39dc96c
     blocked_input_messaging: builtins.str,
     blocked_outputs_messaging: builtins.str,
     name: builtins.str,
+    automated_reasoning_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGuardrail.AutomatedReasoningPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     content_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGuardrail.ContentPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     contextual_grounding_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGuardrail.ContextualGroundingPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cross_region_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGuardrail.GuardrailCrossRegionConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -42517,6 +42635,12 @@ def _typecheckingstub__59377d273ba1076fa0e7fa7b325e1080a042838c62e3d653e7e2d9fbf
 
 def _typecheckingstub__4214430bb449bbe8c35bffe05d8f030f2f1e4d9bf03e87e52eaf3920fcd73539(
     value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0f7e988f8aa9a49e9c7d18479b2e890b8fe801c669022cbb74dafe4a3a01f399(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGuardrail.AutomatedReasoningPolicyConfigProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -42571,6 +42695,14 @@ def _typecheckingstub__853c4d50370da0c19067d3356726317d2cb9cfdd5405344e1ded902c2
 
 def _typecheckingstub__8db61eded81d93fbd03b059a0415cd544498a84333ec2ae6cb76fed58dc07062(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGuardrail.WordPolicyConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__81b300ba729d19904cc1eb50e4cff612a346a658e152b6b4c77f39f797f9571a(
+    *,
+    policies: typing.Sequence[builtins.str],
+    confidence_threshold: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass

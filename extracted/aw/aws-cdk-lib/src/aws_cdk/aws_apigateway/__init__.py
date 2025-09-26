@@ -5449,12 +5449,12 @@ class CfnDomainNameProps:
     ) -> None:
         '''Properties for defining a ``CfnDomainName``.
 
-        :param certificate_arn: The reference to an AWS -managed certificate that will be used by edge-optimized endpoint or private endpoint for this domain name. AWS Certificate Manager is the only supported source.
+        :param certificate_arn: The reference to an AWS -managed certificate that will be used by edge-optimized endpoint or private endpoint for this domain name. Certificate Manager is the only supported source.
         :param domain_name: The custom domain name as an API host name, for example, ``my-api.example.com`` .
         :param endpoint_configuration: The endpoint configuration of this DomainName showing the endpoint types and IP address types of the domain name.
         :param mutual_tls_authentication: The mutual TLS authentication configuration for a custom domain name. If specified, API Gateway performs two-way authentication between the client and the server. Clients must present a trusted certificate to access your API.
         :param ownership_verification_certificate_arn: The ARN of the public certificate issued by ACM to validate ownership of your custom domain. Only required when configuring mutual TLS and using an ACM imported or private CA certificate ARN as the RegionalCertificateArn.
-        :param regional_certificate_arn: The reference to an AWS -managed certificate that will be used for validating the regional domain name. AWS Certificate Manager is the only supported source.
+        :param regional_certificate_arn: The reference to an AWS -managed certificate that will be used for validating the regional domain name. Certificate Manager is the only supported source.
         :param routing_mode: The routing mode for this domain name. The routing mode determines how API Gateway sends traffic from your custom domain name to your public APIs. Default: - "BASE_PATH_MAPPING_ONLY"
         :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName. The valid values are ``TLS_1_0`` and ``TLS_1_2`` .
         :param tags: The collection of tags. Each tag element is associated with a given resource.
@@ -5524,7 +5524,7 @@ class CfnDomainNameProps:
     def certificate_arn(self) -> typing.Optional[builtins.str]:
         '''The reference to an AWS -managed certificate that will be used by edge-optimized endpoint or private endpoint for this domain name.
 
-        AWS Certificate Manager is the only supported source.
+        Certificate Manager is the only supported source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-certificatearn
         '''
@@ -5579,7 +5579,7 @@ class CfnDomainNameProps:
     def regional_certificate_arn(self) -> typing.Optional[builtins.str]:
         '''The reference to an AWS -managed certificate that will be used for validating the regional domain name.
 
-        AWS Certificate Manager is the only supported source.
+        Certificate Manager is the only supported source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-regionalcertificatearn
         '''
@@ -6045,6 +6045,7 @@ class CfnMethodProps:
                     request_templates={
                         "request_templates_key": "requestTemplates"
                     },
+                    response_transfer_mode="responseTransferMode",
                     timeout_in_millis=123,
                     uri="uri"
                 ),
@@ -24766,12 +24767,12 @@ class CfnDomainName(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param certificate_arn: The reference to an AWS -managed certificate that will be used by edge-optimized endpoint or private endpoint for this domain name. AWS Certificate Manager is the only supported source.
+        :param certificate_arn: The reference to an AWS -managed certificate that will be used by edge-optimized endpoint or private endpoint for this domain name. Certificate Manager is the only supported source.
         :param domain_name: The custom domain name as an API host name, for example, ``my-api.example.com`` .
         :param endpoint_configuration: The endpoint configuration of this DomainName showing the endpoint types and IP address types of the domain name.
         :param mutual_tls_authentication: The mutual TLS authentication configuration for a custom domain name. If specified, API Gateway performs two-way authentication between the client and the server. Clients must present a trusted certificate to access your API.
         :param ownership_verification_certificate_arn: The ARN of the public certificate issued by ACM to validate ownership of your custom domain. Only required when configuring mutual TLS and using an ACM imported or private CA certificate ARN as the RegionalCertificateArn.
-        :param regional_certificate_arn: The reference to an AWS -managed certificate that will be used for validating the regional domain name. AWS Certificate Manager is the only supported source.
+        :param regional_certificate_arn: The reference to an AWS -managed certificate that will be used for validating the regional domain name. Certificate Manager is the only supported source.
         :param routing_mode: The routing mode for this domain name. The routing mode determines how API Gateway sends traffic from your custom domain name to your public APIs. Default: - "BASE_PATH_MAPPING_ONLY"
         :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName. The valid values are ``TLS_1_0`` and ``TLS_1_2`` .
         :param tags: The collection of tags. Each tag element is associated with a given resource.
@@ -25930,6 +25931,7 @@ class CfnMethod(
                 request_templates={
                     "request_templates_key": "requestTemplates"
                 },
+                response_transfer_mode="responseTransferMode",
                 timeout_in_millis=123,
                 uri="uri"
             ),
@@ -26267,6 +26269,7 @@ class CfnMethod(
             "passthrough_behavior": "passthroughBehavior",
             "request_parameters": "requestParameters",
             "request_templates": "requestTemplates",
+            "response_transfer_mode": "responseTransferMode",
             "timeout_in_millis": "timeoutInMillis",
             "uri": "uri",
         },
@@ -26287,6 +26290,7 @@ class CfnMethod(
             passthrough_behavior: typing.Optional[builtins.str] = None,
             request_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
             request_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            response_transfer_mode: typing.Optional[builtins.str] = None,
             timeout_in_millis: typing.Optional[jsii.Number] = None,
             uri: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -26304,6 +26308,7 @@ class CfnMethod(
             :param passthrough_behavior: Specifies how the method request body of an unmapped content type will be passed through the integration request to the back end without transformation. A content type is unmapped if no mapping template is defined in the integration or the content type does not match any of the mapped content types, as specified in ``requestTemplates`` . The valid value is one of the following: ``WHEN_NO_MATCH`` : passes the method request body through the integration request to the back end without transformation when the method request content type does not match any content type associated with the mapping templates defined in the integration request. ``WHEN_NO_TEMPLATES`` : passes the method request body through the integration request to the back end without transformation when no mapping template is defined in the integration request. If a template is defined when this option is selected, the method request of an unmapped content-type will be rejected with an HTTP 415 Unsupported Media Type response. ``NEVER`` : rejects the method request with an HTTP 415 Unsupported Media Type response when either the method request content type does not match any content type associated with the mapping templates defined in the integration request or no mapping template is defined in the integration request.
             :param request_parameters: A key-value map specifying request parameters that are passed from the method request to the back end. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the back end. The method request parameter value must match the pattern of ``method.request.{location}.{name}`` , where ``location`` is ``querystring`` , ``path`` , or ``header`` and ``name`` must be a valid and unique method request parameter name.
             :param request_templates: Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.
+            :param response_transfer_mode: Default: - "BUFFERED"
             :param timeout_in_millis: Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds. You can increase the default value to longer than 29 seconds for Regional or private APIs only.
             :param uri: Specifies Uniform Resource Identifier (URI) of the integration endpoint. For ``HTTP`` or ``HTTP_PROXY`` integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the RFC-3986 specification for standard integrations. If ``connectionType`` is ``VPC_LINK`` specify the Network Load Balancer DNS name. For ``AWS`` or ``AWS_PROXY`` integrations, the URI is of the form ``arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service_api}`` . Here, {Region} is the API Gateway region (e.g., us-east-1); {service} is the name of the integrated AWS service (e.g., s3); and {subdomain} is a designated subdomain supported by certain AWS service for fast host-name lookup. action can be used for an AWS service action-based API, using an Action={name}&{p1}={v1}&p2={v2}... query string. The ensuing {service_api} refers to a supported action {name} plus any required input parameters. Alternatively, path can be used for an AWS service path-based API. The ensuing service_api refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of GetObject, the uri can be either ``arn:aws:apigateway:us-west-2:s3:action/GetObject&Bucket={bucket}&Key={key}`` or ``arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}``
 
@@ -26347,6 +26352,7 @@ class CfnMethod(
                     request_templates={
                         "request_templates_key": "requestTemplates"
                     },
+                    response_transfer_mode="responseTransferMode",
                     timeout_in_millis=123,
                     uri="uri"
                 )
@@ -26365,6 +26371,7 @@ class CfnMethod(
                 check_type(argname="argument passthrough_behavior", value=passthrough_behavior, expected_type=type_hints["passthrough_behavior"])
                 check_type(argname="argument request_parameters", value=request_parameters, expected_type=type_hints["request_parameters"])
                 check_type(argname="argument request_templates", value=request_templates, expected_type=type_hints["request_templates"])
+                check_type(argname="argument response_transfer_mode", value=response_transfer_mode, expected_type=type_hints["response_transfer_mode"])
                 check_type(argname="argument timeout_in_millis", value=timeout_in_millis, expected_type=type_hints["timeout_in_millis"])
                 check_type(argname="argument uri", value=uri, expected_type=type_hints["uri"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -26392,6 +26399,8 @@ class CfnMethod(
                 self._values["request_parameters"] = request_parameters
             if request_templates is not None:
                 self._values["request_templates"] = request_templates
+            if response_transfer_mode is not None:
+                self._values["response_transfer_mode"] = response_transfer_mode
             if timeout_in_millis is not None:
                 self._values["timeout_in_millis"] = timeout_in_millis
             if uri is not None:
@@ -26533,6 +26542,16 @@ class CfnMethod(
             '''
             result = self._values.get("request_templates")
             return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def response_transfer_mode(self) -> typing.Optional[builtins.str]:
+            '''
+            :default: - "BUFFERED"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-integration.html#cfn-apigateway-method-integration-responsetransfermode
+            '''
+            result = self._values.get("response_transfer_mode")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def timeout_in_millis(self) -> typing.Optional[jsii.Number]:
@@ -38780,6 +38799,7 @@ def _typecheckingstub__7fc2a1b31e9e3f92210ced50c17b0bf1cfcdb472f8b61fcc31a3c633b
     passthrough_behavior: typing.Optional[builtins.str] = None,
     request_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     request_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+    response_transfer_mode: typing.Optional[builtins.str] = None,
     timeout_in_millis: typing.Optional[jsii.Number] = None,
     uri: typing.Optional[builtins.str] = None,
 ) -> None:

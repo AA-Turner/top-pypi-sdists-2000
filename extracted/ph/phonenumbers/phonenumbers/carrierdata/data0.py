@@ -1314,6 +1314,7 @@ data = {
  '254121':{'en': 'Infura'},
  '254124':{'en': 'Finserve'},
  '25413':{'en': 'NRG Media Limited'},
+ '25414':{'en': 'Safaricom'},
  '25470':{'en': 'Safaricom'},
  '25471':{'en': 'Safaricom'},
  '25472':{'en': 'Safaricom'},
@@ -1368,6 +1369,7 @@ data = {
  '25678':{'en': 'MTN'},
  '256790':{'en': 'MTN'},
  '256791':{'en': 'MTN'},
+ '256792':{'en': 'MTN'},
  '256798':{'en': 'Africell'},
  '256799':{'en': 'Africell'},
  '25729':{'en': 'Leo'},
@@ -10017,6 +10019,4 @@ data = {
  '553199785':{'en': 'Telemig Celular'},
  '553199786':{'en': 'Telemig Celular'},
  '553199787':{'en': 'Telemig Celular'},
- '553199788':{'en': 'Telemig Celular'},
- '553199789':{'en': 'Telemig Celular'},
 }

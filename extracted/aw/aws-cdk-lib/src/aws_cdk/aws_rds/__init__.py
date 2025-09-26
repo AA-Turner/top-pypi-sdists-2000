@@ -5272,6 +5272,7 @@ class CfnDBClusterParameterGroupProps:
         "iops": "iops",
         "kms_key_id": "kmsKeyId",
         "manage_master_user_password": "manageMasterUserPassword",
+        "master_user_authentication_type": "masterUserAuthenticationType",
         "master_username": "masterUsername",
         "master_user_password": "masterUserPassword",
         "master_user_secret": "masterUserSecret",
@@ -5338,6 +5339,7 @@ class CfnDBClusterProps:
         iops: typing.Optional[jsii.Number] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
         manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        master_user_authentication_type: typing.Optional[builtins.str] = None,
         master_username: typing.Optional[builtins.str] = None,
         master_user_password: typing.Optional[builtins.str] = None,
         master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBCluster.MasterUserSecretProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -5401,6 +5403,7 @@ class CfnDBClusterProps:
         :param iops: The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for each DB instance in the Multi-AZ DB cluster. For information about valid IOPS values, see `Provisioned IOPS storage <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS>`_ in the *Amazon RDS User Guide* . This setting is required to create a Multi-AZ DB cluster. Valid for Cluster Type: Multi-AZ DB clusters only Constraints: - Must be a multiple between .5 and 50 of the storage amount for the DB cluster.
         :param kms_key_id: The Amazon Resource Name (ARN) of the AWS KMS key that is used to encrypt the database instances in the DB cluster, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` . If you enable the ``StorageEncrypted`` property but don't specify this property, the default KMS key is used. If you specify this property, you must set the ``StorageEncrypted`` property to ``true`` . If you specify the ``SnapshotIdentifier`` property, the ``StorageEncrypted`` property value is inherited from the snapshot, and if the DB cluster is encrypted, the specified ``KmsKeyId`` property is used. If you create a read replica of an encrypted DB cluster in another AWS Region, make sure to set ``KmsKeyId`` to a KMS key identifier that is valid in the destination AWS Region. This KMS key is used to encrypt the read replica in that AWS Region. Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param manage_master_user_password: Specifies whether to manage the master user password with AWS Secrets Manager. For more information, see `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html>`_ in the *Amazon RDS User Guide* and `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-secrets-manager.html>`_ in the *Amazon Aurora User Guide.* Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters Constraints: - Can't manage the master user password with AWS Secrets Manager if ``MasterUserPassword`` is specified.
+        :param master_user_authentication_type: Specifies the authentication type for the master user. With IAM master user authentication, you can configure the master DB user with IAM database authentication when you create a DB cluster. You can specify one of the following values: - ``password`` - Use standard database authentication with a password. - ``iam-db-auth`` - Use IAM database authentication for the master user. Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.
         :param master_username: The name of the master user for the DB cluster. .. epigraph:: If you specify the ``SourceDBClusterIdentifier`` , ``SnapshotIdentifier`` , or ``GlobalClusterIdentifier`` property, don't specify this property. The value is inherited from the source DB cluster, the snapshot, or the primary DB cluster for the global database cluster, respectively. Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param master_user_password: The master password for the DB instance. .. epigraph:: If you specify the ``SourceDBClusterIdentifier`` , ``SnapshotIdentifier`` , or ``GlobalClusterIdentifier`` property, don't specify this property. The value is inherited from the source DB cluster, the snapshot, or the primary DB cluster for the global database cluster, respectively. Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param master_user_secret: The secret managed by RDS in AWS Secrets Manager for the master user password. .. epigraph:: When you restore a DB cluster from a snapshot, Amazon RDS generates a new secret instead of reusing the secret specified in the ``SecretArn`` property. This ensures that the restored DB cluster is securely managed with a dedicated secret. To maintain consistent integration with your application, you might need to update resource configurations to reference the newly created secret. For more information, see `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html>`_ in the *Amazon RDS User Guide* and `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-secrets-manager.html>`_ in the *Amazon Aurora User Guide.*
@@ -5477,6 +5480,7 @@ class CfnDBClusterProps:
                 iops=123,
                 kms_key_id="kmsKeyId",
                 manage_master_user_password=False,
+                master_user_authentication_type="masterUserAuthenticationType",
                 master_username="masterUsername",
                 master_user_password="masterUserPassword",
                 master_user_secret=rds.CfnDBCluster.MasterUserSecretProperty(
@@ -5558,6 +5562,7 @@ class CfnDBClusterProps:
             check_type(argname="argument iops", value=iops, expected_type=type_hints["iops"])
             check_type(argname="argument kms_key_id", value=kms_key_id, expected_type=type_hints["kms_key_id"])
             check_type(argname="argument manage_master_user_password", value=manage_master_user_password, expected_type=type_hints["manage_master_user_password"])
+            check_type(argname="argument master_user_authentication_type", value=master_user_authentication_type, expected_type=type_hints["master_user_authentication_type"])
             check_type(argname="argument master_username", value=master_username, expected_type=type_hints["master_username"])
             check_type(argname="argument master_user_password", value=master_user_password, expected_type=type_hints["master_user_password"])
             check_type(argname="argument master_user_secret", value=master_user_secret, expected_type=type_hints["master_user_secret"])
@@ -5652,6 +5657,8 @@ class CfnDBClusterProps:
             self._values["kms_key_id"] = kms_key_id
         if manage_master_user_password is not None:
             self._values["manage_master_user_password"] = manage_master_user_password
+        if master_user_authentication_type is not None:
+            self._values["master_user_authentication_type"] = master_user_authentication_type
         if master_username is not None:
             self._values["master_username"] = master_username
         if master_user_password is not None:
@@ -6278,6 +6285,26 @@ class CfnDBClusterProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
+    def master_user_authentication_type(self) -> typing.Optional[builtins.str]:
+        '''Specifies the authentication type for the master user.
+
+        With IAM master user authentication, you can configure the master DB user with IAM database authentication when you create a DB cluster.
+
+        You can specify one of the following values:
+
+        - ``password`` - Use standard database authentication with a password.
+        - ``iam-db-auth`` - Use IAM database authentication for the master user.
+
+        Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
+
+        This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbcluster.html#cfn-rds-dbcluster-masteruserauthenticationtype
+        '''
+        result = self._values.get("master_user_authentication_type")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def master_username(self) -> typing.Optional[builtins.str]:
         '''The name of the master user for the DB cluster.
 
@@ -6825,6 +6852,7 @@ class CfnDBClusterProps:
         "kms_key_id": "kmsKeyId",
         "license_model": "licenseModel",
         "manage_master_user_password": "manageMasterUserPassword",
+        "master_user_authentication_type": "masterUserAuthenticationType",
         "master_username": "masterUsername",
         "master_user_password": "masterUserPassword",
         "master_user_secret": "masterUserSecret",
@@ -6912,6 +6940,7 @@ class CfnDBInstanceProps:
         kms_key_id: typing.Optional[builtins.str] = None,
         license_model: typing.Optional[builtins.str] = None,
         manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        master_user_authentication_type: typing.Optional[builtins.str] = None,
         master_username: typing.Optional[builtins.str] = None,
         master_user_password: typing.Optional[builtins.str] = None,
         master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBInstance.MasterUserSecretProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6996,6 +7025,7 @@ class CfnDBInstanceProps:
         :param kms_key_id: The ARN of the AWS KMS key that's used to encrypt the DB instance, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` . If you enable the StorageEncrypted property but don't specify this property, AWS CloudFormation uses the default KMS key. If you specify this property, you must set the StorageEncrypted property to true. If you specify the ``SourceDBInstanceIdentifier`` or ``SourceDbiResourceId`` property, don't specify this property. The value is inherited from the source DB instance, and if the DB instance is encrypted, the specified ``KmsKeyId`` property is used. However, if the source DB instance is in a different AWS Region, you must specify a KMS key ID. If you specify the ``SourceDBInstanceAutomatedBackupsArn`` property, don't specify this property. The value is inherited from the source DB instance automated backup, and if the automated backup is encrypted, the specified ``KmsKeyId`` property is used. If you create an encrypted read replica in a different AWS Region, then you must specify a KMS key for the destination AWS Region. KMS encryption keys are specific to the region that they're created in, and you can't use encryption keys from one region in another region. If you specify the ``DBSnapshotIdentifier`` property, don't specify this property. The ``StorageEncrypted`` property value is inherited from the snapshot. If the DB instance is encrypted, the specified ``KmsKeyId`` property is also inherited from the snapshot. If you specify ``DBSecurityGroups`` , AWS CloudFormation ignores this property. To specify both a security group and this property, you must use a VPC security group. For more information about Amazon RDS and VPC, see `Using Amazon RDS with Amazon VPC <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.html>`_ in the *Amazon RDS User Guide* . *Amazon Aurora* Not applicable. The KMS key identifier is managed by the DB cluster.
         :param license_model: License model information for this DB instance. Valid Values: - Aurora MySQL - ``general-public-license`` - Aurora PostgreSQL - ``postgresql-license`` - RDS for Db2 - ``bring-your-own-license`` . For more information about RDS for Db2 licensing, see ` <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/db2-licensing.html>`_ in the *Amazon RDS User Guide.* - RDS for MariaDB - ``general-public-license`` - RDS for Microsoft SQL Server - ``license-included`` - RDS for MySQL - ``general-public-license`` - RDS for Oracle - ``bring-your-own-license`` or ``license-included`` - RDS for PostgreSQL - ``postgresql-license`` .. epigraph:: If you've specified ``DBSecurityGroups`` and then you update the license model, AWS CloudFormation replaces the underlying DB instance. This will incur some interruptions to database availability.
         :param manage_master_user_password: Specifies whether to manage the master user password with AWS Secrets Manager. For more information, see `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html>`_ in the *Amazon RDS User Guide.* Constraints: - Can't manage the master user password with AWS Secrets Manager if ``MasterUserPassword`` is specified.
+        :param master_user_authentication_type: Specifies the authentication type for the master user. With IAM master user authentication, you can configure the master DB user with IAM database authentication when you create a DB instance. You can specify one of the following values: - ``password`` - Use standard database authentication with a password. - ``iam-db-auth`` - Use IAM database authentication for the master user. This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.
         :param master_username: The master user name for the DB instance. .. epigraph:: If you specify the ``SourceDBInstanceIdentifier`` or ``DBSnapshotIdentifier`` property, don't specify this property. The value is inherited from the source DB instance or snapshot. When migrating a self-managed Db2 database, we recommend that you use the same master username as your self-managed Db2 instance name. *Amazon Aurora* Not applicable. The name for the master user is managed by the DB cluster. *RDS for Db2* Constraints: - Must be 1 to 16 letters or numbers. - First character must be a letter. - Can't be a reserved word for the chosen database engine. *RDS for MariaDB* Constraints: - Must be 1 to 16 letters or numbers. - Can't be a reserved word for the chosen database engine. *RDS for Microsoft SQL Server* Constraints: - Must be 1 to 128 letters or numbers. - First character must be a letter. - Can't be a reserved word for the chosen database engine. *RDS for MySQL* Constraints: - Must be 1 to 16 letters or numbers. - First character must be a letter. - Can't be a reserved word for the chosen database engine. *RDS for Oracle* Constraints: - Must be 1 to 30 letters or numbers. - First character must be a letter. - Can't be a reserved word for the chosen database engine. *RDS for PostgreSQL* Constraints: - Must be 1 to 63 letters or numbers. - First character must be a letter. - Can't be a reserved word for the chosen database engine.
         :param master_user_password: The password for the master user. The password can include any printable ASCII character except "/", """, or "@". *Amazon Aurora* Not applicable. The password for the master user is managed by the DB cluster. *RDS for Db2* Must contain from 8 to 255 characters. *RDS for MariaDB* Constraints: Must contain from 8 to 41 characters. *RDS for Microsoft SQL Server* Constraints: Must contain from 8 to 128 characters. *RDS for MySQL* Constraints: Must contain from 8 to 41 characters. *RDS for Oracle* Constraints: Must contain from 8 to 30 characters. *RDS for PostgreSQL* Constraints: Must contain from 8 to 128 characters.
         :param master_user_secret: The secret managed by RDS in AWS Secrets Manager for the master user password. For more information, see `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html>`_ in the *Amazon RDS User Guide.*
@@ -7091,6 +7121,7 @@ class CfnDBInstanceProps:
                 kms_key_id="kmsKeyId",
                 license_model="licenseModel",
                 manage_master_user_password=False,
+                master_user_authentication_type="masterUserAuthenticationType",
                 master_username="masterUsername",
                 master_user_password="masterUserPassword",
                 master_user_secret=rds.CfnDBInstance.MasterUserSecretProperty(
@@ -7185,6 +7216,7 @@ class CfnDBInstanceProps:
             check_type(argname="argument kms_key_id", value=kms_key_id, expected_type=type_hints["kms_key_id"])
             check_type(argname="argument license_model", value=license_model, expected_type=type_hints["license_model"])
             check_type(argname="argument manage_master_user_password", value=manage_master_user_password, expected_type=type_hints["manage_master_user_password"])
+            check_type(argname="argument master_user_authentication_type", value=master_user_authentication_type, expected_type=type_hints["master_user_authentication_type"])
             check_type(argname="argument master_username", value=master_username, expected_type=type_hints["master_username"])
             check_type(argname="argument master_user_password", value=master_user_password, expected_type=type_hints["master_user_password"])
             check_type(argname="argument master_user_secret", value=master_user_secret, expected_type=type_hints["master_user_secret"])
@@ -7313,6 +7345,8 @@ class CfnDBInstanceProps:
             self._values["license_model"] = license_model
         if manage_master_user_password is not None:
             self._values["manage_master_user_password"] = manage_master_user_password
+        if master_user_authentication_type is not None:
+            self._values["master_user_authentication_type"] = master_user_authentication_type
         if master_username is not None:
             self._values["master_username"] = master_username
         if master_user_password is not None:
@@ -8341,6 +8375,24 @@ class CfnDBInstanceProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
+    def master_user_authentication_type(self) -> typing.Optional[builtins.str]:
+        '''Specifies the authentication type for the master user.
+
+        With IAM master user authentication, you can configure the master DB user with IAM database authentication when you create a DB instance.
+
+        You can specify one of the following values:
+
+        - ``password`` - Use standard database authentication with a password.
+        - ``iam-db-auth`` - Use IAM database authentication for the master user.
+
+        This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-masteruserauthenticationtype
+        '''
+        result = self._values.get("master_user_authentication_type")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def master_username(self) -> typing.Optional[builtins.str]:
         '''The master user name for the DB instance.
 
@@ -9168,6 +9220,7 @@ class CfnDBParameterGroupProps:
         "db_proxy_endpoint_name": "dbProxyEndpointName",
         "db_proxy_name": "dbProxyName",
         "vpc_subnet_ids": "vpcSubnetIds",
+        "endpoint_network_type": "endpointNetworkType",
         "tags": "tags",
         "target_role": "targetRole",
         "vpc_security_group_ids": "vpcSecurityGroupIds",
@@ -9180,6 +9233,7 @@ class CfnDBProxyEndpointProps:
         db_proxy_endpoint_name: builtins.str,
         db_proxy_name: builtins.str,
         vpc_subnet_ids: typing.Sequence[builtins.str],
+        endpoint_network_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnDBProxyEndpoint.TagFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_role: typing.Optional[builtins.str] = None,
         vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -9189,6 +9243,7 @@ class CfnDBProxyEndpointProps:
         :param db_proxy_endpoint_name: The name of the DB proxy endpoint to create.
         :param db_proxy_name: The name of the DB proxy associated with the DB proxy endpoint that you create.
         :param vpc_subnet_ids: The VPC subnet IDs for the DB proxy endpoint that you create. You can specify a different set of subnet IDs than for the original DB proxy.
+        :param endpoint_network_type: The network type of the DB proxy endpoint. The network type determines the IP version that the proxy endpoint supports.
         :param tags: An optional set of key-value pairs to associate arbitrary data of your choosing with the proxy.
         :param target_role: A value that indicates whether the DB proxy endpoint can be used for read/write or read-only operations.
         :param vpc_security_group_ids: The VPC security group IDs for the DB proxy endpoint that you create. You can specify a different set of security group IDs than for the original DB proxy. The default is the default security group for the VPC.
@@ -9208,6 +9263,7 @@ class CfnDBProxyEndpointProps:
                 vpc_subnet_ids=["vpcSubnetIds"],
             
                 # the properties below are optional
+                endpoint_network_type="endpointNetworkType",
                 tags=[rds.CfnDBProxyEndpoint.TagFormatProperty(
                     key="key",
                     value="value"
@@ -9221,6 +9277,7 @@ class CfnDBProxyEndpointProps:
             check_type(argname="argument db_proxy_endpoint_name", value=db_proxy_endpoint_name, expected_type=type_hints["db_proxy_endpoint_name"])
             check_type(argname="argument db_proxy_name", value=db_proxy_name, expected_type=type_hints["db_proxy_name"])
             check_type(argname="argument vpc_subnet_ids", value=vpc_subnet_ids, expected_type=type_hints["vpc_subnet_ids"])
+            check_type(argname="argument endpoint_network_type", value=endpoint_network_type, expected_type=type_hints["endpoint_network_type"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument target_role", value=target_role, expected_type=type_hints["target_role"])
             check_type(argname="argument vpc_security_group_ids", value=vpc_security_group_ids, expected_type=type_hints["vpc_security_group_ids"])
@@ -9229,6 +9286,8 @@ class CfnDBProxyEndpointProps:
             "db_proxy_name": db_proxy_name,
             "vpc_subnet_ids": vpc_subnet_ids,
         }
+        if endpoint_network_type is not None:
+            self._values["endpoint_network_type"] = endpoint_network_type
         if tags is not None:
             self._values["tags"] = tags
         if target_role is not None:
@@ -9267,6 +9326,17 @@ class CfnDBProxyEndpointProps:
         result = self._values.get("vpc_subnet_ids")
         assert result is not None, "Required property 'vpc_subnet_ids' is missing"
         return typing.cast(typing.List[builtins.str], result)
+
+    @builtins.property
+    def endpoint_network_type(self) -> typing.Optional[builtins.str]:
+        '''The network type of the DB proxy endpoint.
+
+        The network type determines the IP version that the proxy endpoint supports.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxyendpoint.html#cfn-rds-dbproxyendpoint-endpointnetworktype
+        '''
+        result = self._values.get("endpoint_network_type")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def tags(
@@ -9315,15 +9385,18 @@ class CfnDBProxyEndpointProps:
     jsii_type="aws-cdk-lib.aws_rds.CfnDBProxyProps",
     jsii_struct_bases=[],
     name_mapping={
-        "auth": "auth",
         "db_proxy_name": "dbProxyName",
         "engine_family": "engineFamily",
         "role_arn": "roleArn",
         "vpc_subnet_ids": "vpcSubnetIds",
+        "auth": "auth",
         "debug_logging": "debugLogging",
+        "default_auth_scheme": "defaultAuthScheme",
+        "endpoint_network_type": "endpointNetworkType",
         "idle_client_timeout": "idleClientTimeout",
         "require_tls": "requireTls",
         "tags": "tags",
+        "target_connection_network_type": "targetConnectionNetworkType",
         "vpc_security_group_ids": "vpcSecurityGroupIds",
     },
 )
@@ -9331,28 +9404,34 @@ class CfnDBProxyProps:
     def __init__(
         self,
         *,
-        auth: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBProxy.AuthFormatProperty", typing.Dict[builtins.str, typing.Any]]]]],
         db_proxy_name: builtins.str,
         engine_family: builtins.str,
         role_arn: builtins.str,
         vpc_subnet_ids: typing.Sequence[builtins.str],
+        auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBProxy.AuthFormatProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         debug_logging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        default_auth_scheme: typing.Optional[builtins.str] = None,
+        endpoint_network_type: typing.Optional[builtins.str] = None,
         idle_client_timeout: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnDBProxy.TagFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_connection_network_type: typing.Optional[builtins.str] = None,
         vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBProxy``.
 
-        :param auth: The authorization mechanism that the proxy uses.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region . An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
         :param engine_family: The kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify ``MYSQL`` . For Aurora PostgreSQL and RDS for PostgreSQL databases, specify ``POSTGRESQL`` . For RDS for Microsoft SQL Server, specify ``SQLSERVER`` .
         :param role_arn: The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
         :param vpc_subnet_ids: One or more VPC subnet IDs to associate with the new proxy.
+        :param auth: The authorization mechanism that the proxy uses.
         :param debug_logging: Specifies whether the proxy logs detailed connection and query information. When you enable ``DebugLogging`` , the proxy captures connection details and connection pool behavior from your queries. Debug logging increases CloudWatch costs and can impact proxy performance. Enable this option only when you need to troubleshoot connection or performance issues.
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database.
+        :param endpoint_network_type: The network type of the DB proxy endpoint. The network type determines the IP version that the proxy endpoint supports.
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
         :param require_tls: Specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy.
         :param tags: An optional set of key-value pairs to associate arbitrary data of your choosing with the proxy.
+        :param target_connection_network_type: The network type that the proxy uses to connect to the target database. The network type determines the IP version that the proxy uses for connections to the database.
         :param vpc_security_group_ids: One or more VPC security group IDs to associate with the new proxy. If you plan to update the resource, don't specify VPC security groups in a shared VPC.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxy.html
@@ -9365,6 +9444,12 @@ class CfnDBProxyProps:
             from aws_cdk import aws_rds as rds
             
             cfn_dBProxy_props = rds.CfnDBProxyProps(
+                db_proxy_name="dbProxyName",
+                engine_family="engineFamily",
+                role_arn="roleArn",
+                vpc_subnet_ids=["vpcSubnetIds"],
+            
+                # the properties below are optional
                 auth=[rds.CfnDBProxy.AuthFormatProperty(
                     auth_scheme="authScheme",
                     client_password_auth_type="clientPasswordAuthType",
@@ -9372,63 +9457,58 @@ class CfnDBProxyProps:
                     iam_auth="iamAuth",
                     secret_arn="secretArn"
                 )],
-                db_proxy_name="dbProxyName",
-                engine_family="engineFamily",
-                role_arn="roleArn",
-                vpc_subnet_ids=["vpcSubnetIds"],
-            
-                # the properties below are optional
                 debug_logging=False,
+                default_auth_scheme="defaultAuthScheme",
+                endpoint_network_type="endpointNetworkType",
                 idle_client_timeout=123,
                 require_tls=False,
                 tags=[rds.CfnDBProxy.TagFormatProperty(
                     key="key",
                     value="value"
                 )],
+                target_connection_network_type="targetConnectionNetworkType",
                 vpc_security_group_ids=["vpcSecurityGroupIds"]
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__331ec6568969c058d2fc6c0482e8c31b8cc3af661d01d569ed27059f5a683e34)
-            check_type(argname="argument auth", value=auth, expected_type=type_hints["auth"])
             check_type(argname="argument db_proxy_name", value=db_proxy_name, expected_type=type_hints["db_proxy_name"])
             check_type(argname="argument engine_family", value=engine_family, expected_type=type_hints["engine_family"])
             check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
             check_type(argname="argument vpc_subnet_ids", value=vpc_subnet_ids, expected_type=type_hints["vpc_subnet_ids"])
+            check_type(argname="argument auth", value=auth, expected_type=type_hints["auth"])
             check_type(argname="argument debug_logging", value=debug_logging, expected_type=type_hints["debug_logging"])
+            check_type(argname="argument default_auth_scheme", value=default_auth_scheme, expected_type=type_hints["default_auth_scheme"])
+            check_type(argname="argument endpoint_network_type", value=endpoint_network_type, expected_type=type_hints["endpoint_network_type"])
             check_type(argname="argument idle_client_timeout", value=idle_client_timeout, expected_type=type_hints["idle_client_timeout"])
             check_type(argname="argument require_tls", value=require_tls, expected_type=type_hints["require_tls"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument target_connection_network_type", value=target_connection_network_type, expected_type=type_hints["target_connection_network_type"])
             check_type(argname="argument vpc_security_group_ids", value=vpc_security_group_ids, expected_type=type_hints["vpc_security_group_ids"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "auth": auth,
             "db_proxy_name": db_proxy_name,
             "engine_family": engine_family,
             "role_arn": role_arn,
             "vpc_subnet_ids": vpc_subnet_ids,
         }
+        if auth is not None:
+            self._values["auth"] = auth
         if debug_logging is not None:
             self._values["debug_logging"] = debug_logging
+        if default_auth_scheme is not None:
+            self._values["default_auth_scheme"] = default_auth_scheme
+        if endpoint_network_type is not None:
+            self._values["endpoint_network_type"] = endpoint_network_type
         if idle_client_timeout is not None:
             self._values["idle_client_timeout"] = idle_client_timeout
         if require_tls is not None:
             self._values["require_tls"] = require_tls
         if tags is not None:
             self._values["tags"] = tags
+        if target_connection_network_type is not None:
+            self._values["target_connection_network_type"] = target_connection_network_type
         if vpc_security_group_ids is not None:
             self._values["vpc_security_group_ids"] = vpc_security_group_ids
-
-    @builtins.property
-    def auth(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBProxy.AuthFormatProperty"]]]:
-        '''The authorization mechanism that the proxy uses.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxy.html#cfn-rds-dbproxy-auth
-        '''
-        result = self._values.get("auth")
-        assert result is not None, "Required property 'auth' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBProxy.AuthFormatProperty"]]], result)
 
     @builtins.property
     def db_proxy_name(self) -> builtins.str:
@@ -9475,6 +9555,17 @@ class CfnDBProxyProps:
         return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
+    def auth(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBProxy.AuthFormatProperty"]]]]:
+        '''The authorization mechanism that the proxy uses.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxy.html#cfn-rds-dbproxy-auth
+        '''
+        result = self._values.get("auth")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBProxy.AuthFormatProperty"]]]], result)
+
+    @builtins.property
     def debug_logging(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
@@ -9486,6 +9577,26 @@ class CfnDBProxyProps:
         '''
         result = self._values.get("debug_logging")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def default_auth_scheme(self) -> typing.Optional[builtins.str]:
+        '''The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxy.html#cfn-rds-dbproxy-defaultauthscheme
+        '''
+        result = self._values.get("default_auth_scheme")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def endpoint_network_type(self) -> typing.Optional[builtins.str]:
+        '''The network type of the DB proxy endpoint.
+
+        The network type determines the IP version that the proxy endpoint supports.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxy.html#cfn-rds-dbproxy-endpointnetworktype
+        '''
+        result = self._values.get("endpoint_network_type")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def idle_client_timeout(self) -> typing.Optional[jsii.Number]:
@@ -9519,6 +9630,17 @@ class CfnDBProxyProps:
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List["CfnDBProxy.TagFormatProperty"]], result)
+
+    @builtins.property
+    def target_connection_network_type(self) -> typing.Optional[builtins.str]:
+        '''The network type that the proxy uses to connect to the target database.
+
+        The network type determines the IP version that the proxy uses for connections to the database.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxy.html#cfn-rds-dbproxy-targetconnectionnetworktype
+        '''
+        result = self._values.get("target_connection_network_type")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -36683,6 +36805,7 @@ class CfnDBCluster(
             iops=123,
             kms_key_id="kmsKeyId",
             manage_master_user_password=False,
+            master_user_authentication_type="masterUserAuthenticationType",
             master_username="masterUsername",
             master_user_password="masterUserPassword",
             master_user_secret=rds.CfnDBCluster.MasterUserSecretProperty(
@@ -36768,6 +36891,7 @@ class CfnDBCluster(
         iops: typing.Optional[jsii.Number] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
         manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        master_user_authentication_type: typing.Optional[builtins.str] = None,
         master_username: typing.Optional[builtins.str] = None,
         master_user_password: typing.Optional[builtins.str] = None,
         master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBCluster.MasterUserSecretProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -36832,6 +36956,7 @@ class CfnDBCluster(
         :param iops: The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for each DB instance in the Multi-AZ DB cluster. For information about valid IOPS values, see `Provisioned IOPS storage <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS>`_ in the *Amazon RDS User Guide* . This setting is required to create a Multi-AZ DB cluster. Valid for Cluster Type: Multi-AZ DB clusters only Constraints: - Must be a multiple between .5 and 50 of the storage amount for the DB cluster.
         :param kms_key_id: The Amazon Resource Name (ARN) of the AWS KMS key that is used to encrypt the database instances in the DB cluster, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` . If you enable the ``StorageEncrypted`` property but don't specify this property, the default KMS key is used. If you specify this property, you must set the ``StorageEncrypted`` property to ``true`` . If you specify the ``SnapshotIdentifier`` property, the ``StorageEncrypted`` property value is inherited from the snapshot, and if the DB cluster is encrypted, the specified ``KmsKeyId`` property is used. If you create a read replica of an encrypted DB cluster in another AWS Region, make sure to set ``KmsKeyId`` to a KMS key identifier that is valid in the destination AWS Region. This KMS key is used to encrypt the read replica in that AWS Region. Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param manage_master_user_password: Specifies whether to manage the master user password with AWS Secrets Manager. For more information, see `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html>`_ in the *Amazon RDS User Guide* and `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-secrets-manager.html>`_ in the *Amazon Aurora User Guide.* Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters Constraints: - Can't manage the master user password with AWS Secrets Manager if ``MasterUserPassword`` is specified.
+        :param master_user_authentication_type: Specifies the authentication type for the master user. With IAM master user authentication, you can configure the master DB user with IAM database authentication when you create a DB cluster. You can specify one of the following values: - ``password`` - Use standard database authentication with a password. - ``iam-db-auth`` - Use IAM database authentication for the master user. Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.
         :param master_username: The name of the master user for the DB cluster. .. epigraph:: If you specify the ``SourceDBClusterIdentifier`` , ``SnapshotIdentifier`` , or ``GlobalClusterIdentifier`` property, don't specify this property. The value is inherited from the source DB cluster, the snapshot, or the primary DB cluster for the global database cluster, respectively. Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param master_user_password: The master password for the DB instance. .. epigraph:: If you specify the ``SourceDBClusterIdentifier`` , ``SnapshotIdentifier`` , or ``GlobalClusterIdentifier`` property, don't specify this property. The value is inherited from the source DB cluster, the snapshot, or the primary DB cluster for the global database cluster, respectively. Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param master_user_secret: The secret managed by RDS in AWS Secrets Manager for the master user password. .. epigraph:: When you restore a DB cluster from a snapshot, Amazon RDS generates a new secret instead of reusing the secret specified in the ``SecretArn`` property. This ensures that the restored DB cluster is securely managed with a dedicated secret. To maintain consistent integration with your application, you might need to update resource configurations to reference the newly created secret. For more information, see `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html>`_ in the *Amazon RDS User Guide* and `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-secrets-manager.html>`_ in the *Amazon Aurora User Guide.*
@@ -36898,6 +37023,7 @@ class CfnDBCluster(
             iops=iops,
             kms_key_id=kms_key_id,
             manage_master_user_password=manage_master_user_password,
+            master_user_authentication_type=master_user_authentication_type,
             master_username=master_username,
             master_user_password=master_user_password,
             master_user_secret=master_user_secret,
@@ -37574,6 +37700,22 @@ class CfnDBCluster(
             type_hints = typing.get_type_hints(_typecheckingstub__7ca876954b5556832b0c941ce0f6ef94a61eb0cd960bb6e8a0106369ccc13a12)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "manageMasterUserPassword", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="masterUserAuthenticationType")
+    def master_user_authentication_type(self) -> typing.Optional[builtins.str]:
+        '''Specifies the authentication type for the master user.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "masterUserAuthenticationType"))
+
+    @master_user_authentication_type.setter
+    def master_user_authentication_type(
+        self,
+        value: typing.Optional[builtins.str],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__910a49e316ebe92edf4e4f3c3db84de89812fb192f5741dd59271a8ec7200008)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "masterUserAuthenticationType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="masterUsername")
@@ -38871,6 +39013,7 @@ class CfnDBInstance(
         kms_key_id: typing.Optional[builtins.str] = None,
         license_model: typing.Optional[builtins.str] = None,
         manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        master_user_authentication_type: typing.Optional[builtins.str] = None,
         master_username: typing.Optional[builtins.str] = None,
         master_user_password: typing.Optional[builtins.str] = None,
         master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBInstance.MasterUserSecretProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -38956,6 +39099,7 @@ class CfnDBInstance(
         :param kms_key_id: The ARN of the AWS KMS key that's used to encrypt the DB instance, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` . If you enable the StorageEncrypted property but don't specify this property, AWS CloudFormation uses the default KMS key. If you specify this property, you must set the StorageEncrypted property to true. If you specify the ``SourceDBInstanceIdentifier`` or ``SourceDbiResourceId`` property, don't specify this property. The value is inherited from the source DB instance, and if the DB instance is encrypted, the specified ``KmsKeyId`` property is used. However, if the source DB instance is in a different AWS Region, you must specify a KMS key ID. If you specify the ``SourceDBInstanceAutomatedBackupsArn`` property, don't specify this property. The value is inherited from the source DB instance automated backup, and if the automated backup is encrypted, the specified ``KmsKeyId`` property is used. If you create an encrypted read replica in a different AWS Region, then you must specify a KMS key for the destination AWS Region. KMS encryption keys are specific to the region that they're created in, and you can't use encryption keys from one region in another region. If you specify the ``DBSnapshotIdentifier`` property, don't specify this property. The ``StorageEncrypted`` property value is inherited from the snapshot. If the DB instance is encrypted, the specified ``KmsKeyId`` property is also inherited from the snapshot. If you specify ``DBSecurityGroups`` , AWS CloudFormation ignores this property. To specify both a security group and this property, you must use a VPC security group. For more information about Amazon RDS and VPC, see `Using Amazon RDS with Amazon VPC <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.html>`_ in the *Amazon RDS User Guide* . *Amazon Aurora* Not applicable. The KMS key identifier is managed by the DB cluster.
         :param license_model: License model information for this DB instance. Valid Values: - Aurora MySQL - ``general-public-license`` - Aurora PostgreSQL - ``postgresql-license`` - RDS for Db2 - ``bring-your-own-license`` . For more information about RDS for Db2 licensing, see ` <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/db2-licensing.html>`_ in the *Amazon RDS User Guide.* - RDS for MariaDB - ``general-public-license`` - RDS for Microsoft SQL Server - ``license-included`` - RDS for MySQL - ``general-public-license`` - RDS for Oracle - ``bring-your-own-license`` or ``license-included`` - RDS for PostgreSQL - ``postgresql-license`` .. epigraph:: If you've specified ``DBSecurityGroups`` and then you update the license model, AWS CloudFormation replaces the underlying DB instance. This will incur some interruptions to database availability.
         :param manage_master_user_password: Specifies whether to manage the master user password with AWS Secrets Manager. For more information, see `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html>`_ in the *Amazon RDS User Guide.* Constraints: - Can't manage the master user password with AWS Secrets Manager if ``MasterUserPassword`` is specified.
+        :param master_user_authentication_type: Specifies the authentication type for the master user. With IAM master user authentication, you can configure the master DB user with IAM database authentication when you create a DB instance. You can specify one of the following values: - ``password`` - Use standard database authentication with a password. - ``iam-db-auth`` - Use IAM database authentication for the master user. This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.
         :param master_username: The master user name for the DB instance. .. epigraph:: If you specify the ``SourceDBInstanceIdentifier`` or ``DBSnapshotIdentifier`` property, don't specify this property. The value is inherited from the source DB instance or snapshot. When migrating a self-managed Db2 database, we recommend that you use the same master username as your self-managed Db2 instance name. *Amazon Aurora* Not applicable. The name for the master user is managed by the DB cluster. *RDS for Db2* Constraints: - Must be 1 to 16 letters or numbers. - First character must be a letter. - Can't be a reserved word for the chosen database engine. *RDS for MariaDB* Constraints: - Must be 1 to 16 letters or numbers. - Can't be a reserved word for the chosen database engine. *RDS for Microsoft SQL Server* Constraints: - Must be 1 to 128 letters or numbers. - First character must be a letter. - Can't be a reserved word for the chosen database engine. *RDS for MySQL* Constraints: - Must be 1 to 16 letters or numbers. - First character must be a letter. - Can't be a reserved word for the chosen database engine. *RDS for Oracle* Constraints: - Must be 1 to 30 letters or numbers. - First character must be a letter. - Can't be a reserved word for the chosen database engine. *RDS for PostgreSQL* Constraints: - Must be 1 to 63 letters or numbers. - First character must be a letter. - Can't be a reserved word for the chosen database engine.
         :param master_user_password: The password for the master user. The password can include any printable ASCII character except "/", """, or "@". *Amazon Aurora* Not applicable. The password for the master user is managed by the DB cluster. *RDS for Db2* Must contain from 8 to 255 characters. *RDS for MariaDB* Constraints: Must contain from 8 to 41 characters. *RDS for Microsoft SQL Server* Constraints: Must contain from 8 to 128 characters. *RDS for MySQL* Constraints: Must contain from 8 to 41 characters. *RDS for Oracle* Constraints: Must contain from 8 to 30 characters. *RDS for PostgreSQL* Constraints: Must contain from 8 to 128 characters.
         :param master_user_secret: The secret managed by RDS in AWS Secrets Manager for the master user password. For more information, see `Password management with AWS Secrets Manager <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html>`_ in the *Amazon RDS User Guide.*
@@ -39043,6 +39187,7 @@ class CfnDBInstance(
             kms_key_id=kms_key_id,
             license_model=license_model,
             manage_master_user_password=manage_master_user_password,
+            master_user_authentication_type=master_user_authentication_type,
             master_username=master_username,
             master_user_password=master_user_password,
             master_user_secret=master_user_secret,
@@ -40076,6 +40221,22 @@ class CfnDBInstance(
             type_hints = typing.get_type_hints(_typecheckingstub__8ecef20f6921c76abf800f6b708fec7f9adf740c5601480addc60f0e306f478d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "manageMasterUserPassword", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="masterUserAuthenticationType")
+    def master_user_authentication_type(self) -> typing.Optional[builtins.str]:
+        '''Specifies the authentication type for the master user.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "masterUserAuthenticationType"))
+
+    @master_user_authentication_type.setter
+    def master_user_authentication_type(
+        self,
+        value: typing.Optional[builtins.str],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__619116fe6142881faa76cfea60c3ef852326ec74e01502e52b5f4e5f78feb598)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "masterUserAuthenticationType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="masterUsername")
@@ -41331,6 +41492,12 @@ class CfnDBProxy(
         from aws_cdk import aws_rds as rds
         
         cfn_dBProxy = rds.CfnDBProxy(self, "MyCfnDBProxy",
+            db_proxy_name="dbProxyName",
+            engine_family="engineFamily",
+            role_arn="roleArn",
+            vpc_subnet_ids=["vpcSubnetIds"],
+        
+            # the properties below are optional
             auth=[rds.CfnDBProxy.AuthFormatProperty(
                 auth_scheme="authScheme",
                 client_password_auth_type="clientPasswordAuthType",
@@ -41338,19 +41505,16 @@ class CfnDBProxy(
                 iam_auth="iamAuth",
                 secret_arn="secretArn"
             )],
-            db_proxy_name="dbProxyName",
-            engine_family="engineFamily",
-            role_arn="roleArn",
-            vpc_subnet_ids=["vpcSubnetIds"],
-        
-            # the properties below are optional
             debug_logging=False,
+            default_auth_scheme="defaultAuthScheme",
+            endpoint_network_type="endpointNetworkType",
             idle_client_timeout=123,
             require_tls=False,
             tags=[rds.CfnDBProxy.TagFormatProperty(
                 key="key",
                 value="value"
             )],
+            target_connection_network_type="targetConnectionNetworkType",
             vpc_security_group_ids=["vpcSecurityGroupIds"]
         )
     '''
@@ -41360,29 +41524,35 @@ class CfnDBProxy(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        auth: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBProxy.AuthFormatProperty", typing.Dict[builtins.str, typing.Any]]]]],
         db_proxy_name: builtins.str,
         engine_family: builtins.str,
         role_arn: builtins.str,
         vpc_subnet_ids: typing.Sequence[builtins.str],
+        auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBProxy.AuthFormatProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         debug_logging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        default_auth_scheme: typing.Optional[builtins.str] = None,
+        endpoint_network_type: typing.Optional[builtins.str] = None,
         idle_client_timeout: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnDBProxy.TagFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_connection_network_type: typing.Optional[builtins.str] = None,
         vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param auth: The authorization mechanism that the proxy uses.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region . An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.
         :param engine_family: The kinds of databases that the proxy can connect to. This value determines which database network protocol the proxy recognizes when it interprets network traffic to and from the database. For Aurora MySQL, RDS for MariaDB, and RDS for MySQL databases, specify ``MYSQL`` . For Aurora PostgreSQL and RDS for PostgreSQL databases, specify ``POSTGRESQL`` . For RDS for Microsoft SQL Server, specify ``SQLSERVER`` .
         :param role_arn: The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
         :param vpc_subnet_ids: One or more VPC subnet IDs to associate with the new proxy.
+        :param auth: The authorization mechanism that the proxy uses.
         :param debug_logging: Specifies whether the proxy logs detailed connection and query information. When you enable ``DebugLogging`` , the proxy captures connection details and connection pool behavior from your queries. Debug logging increases CloudWatch costs and can impact proxy performance. Enable this option only when you need to troubleshoot connection or performance issues.
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database.
+        :param endpoint_network_type: The network type of the DB proxy endpoint. The network type determines the IP version that the proxy endpoint supports.
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database.
         :param require_tls: Specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy.
         :param tags: An optional set of key-value pairs to associate arbitrary data of your choosing with the proxy.
+        :param target_connection_network_type: The network type that the proxy uses to connect to the target database. The network type determines the IP version that the proxy uses for connections to the database.
         :param vpc_security_group_ids: One or more VPC security group IDs to associate with the new proxy. If you plan to update the resource, don't specify VPC security groups in a shared VPC.
         '''
         if __debug__:
@@ -41390,15 +41560,18 @@ class CfnDBProxy(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnDBProxyProps(
-            auth=auth,
             db_proxy_name=db_proxy_name,
             engine_family=engine_family,
             role_arn=role_arn,
             vpc_subnet_ids=vpc_subnet_ids,
+            auth=auth,
             debug_logging=debug_logging,
+            default_auth_scheme=default_auth_scheme,
+            endpoint_network_type=endpoint_network_type,
             idle_client_timeout=idle_client_timeout,
             require_tls=require_tls,
             tags=tags,
+            target_connection_network_type=target_connection_network_type,
             vpc_security_group_ids=vpc_security_group_ids,
         )
 
@@ -41481,24 +41654,6 @@ class CfnDBProxy(
         return typing.cast(DBProxyReference, jsii.get(self, "dbProxyRef"))
 
     @builtins.property
-    @jsii.member(jsii_name="auth")
-    def auth(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBProxy.AuthFormatProperty"]]]:
-        '''The authorization mechanism that the proxy uses.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBProxy.AuthFormatProperty"]]], jsii.get(self, "auth"))
-
-    @auth.setter
-    def auth(
-        self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBProxy.AuthFormatProperty"]]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__869ef0e6807a044fbcf1b07244e827164f63faefbf4f14d0b5f86f685fd1c949)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "auth", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="dbProxyName")
     def db_proxy_name(self) -> builtins.str:
         '''The identifier for the proxy.'''
@@ -41551,6 +41706,24 @@ class CfnDBProxy(
         jsii.set(self, "vpcSubnetIds", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="auth")
+    def auth(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBProxy.AuthFormatProperty"]]]]:
+        '''The authorization mechanism that the proxy uses.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBProxy.AuthFormatProperty"]]]], jsii.get(self, "auth"))
+
+    @auth.setter
+    def auth(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBProxy.AuthFormatProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__869ef0e6807a044fbcf1b07244e827164f63faefbf4f14d0b5f86f685fd1c949)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "auth", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="debugLogging")
     def debug_logging(
         self,
@@ -41567,6 +41740,32 @@ class CfnDBProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__74bf8fd129aa7db6aa8cbe4c31cc1e5c4cc49092cdf5e1df037dc0169913f027)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "debugLogging", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="defaultAuthScheme")
+    def default_auth_scheme(self) -> typing.Optional[builtins.str]:
+        '''The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "defaultAuthScheme"))
+
+    @default_auth_scheme.setter
+    def default_auth_scheme(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__18dc20cb6c7198c733585aea9169142348f96482c7091e5ff56866cefa172b68)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "defaultAuthScheme", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="endpointNetworkType")
+    def endpoint_network_type(self) -> typing.Optional[builtins.str]:
+        '''The network type of the DB proxy endpoint.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "endpointNetworkType"))
+
+    @endpoint_network_type.setter
+    def endpoint_network_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4b7b706fa2b81a42f739d93aa1586cfc3f9c177800bd27f17441dd2628140627)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "endpointNetworkType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="idleClientTimeout")
@@ -41614,6 +41813,22 @@ class CfnDBProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__40e4176c733c58b29a8f2c935c044c4a11574a0150e5b0cfa2bfd50ca6c8e729)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="targetConnectionNetworkType")
+    def target_connection_network_type(self) -> typing.Optional[builtins.str]:
+        '''The network type that the proxy uses to connect to the target database.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "targetConnectionNetworkType"))
+
+    @target_connection_network_type.setter
+    def target_connection_network_type(
+        self,
+        value: typing.Optional[builtins.str],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5b826621bdca40a58dfea5c6aa2d64059dae2f19860bb147be23851703e84180)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "targetConnectionNetworkType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="vpcSecurityGroupIds")
@@ -41861,6 +42076,7 @@ class CfnDBProxyEndpoint(
             vpc_subnet_ids=["vpcSubnetIds"],
         
             # the properties below are optional
+            endpoint_network_type="endpointNetworkType",
             tags=[rds.CfnDBProxyEndpoint.TagFormatProperty(
                 key="key",
                 value="value"
@@ -41878,6 +42094,7 @@ class CfnDBProxyEndpoint(
         db_proxy_endpoint_name: builtins.str,
         db_proxy_name: builtins.str,
         vpc_subnet_ids: typing.Sequence[builtins.str],
+        endpoint_network_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnDBProxyEndpoint.TagFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_role: typing.Optional[builtins.str] = None,
         vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -41888,6 +42105,7 @@ class CfnDBProxyEndpoint(
         :param db_proxy_endpoint_name: The name of the DB proxy endpoint to create.
         :param db_proxy_name: The name of the DB proxy associated with the DB proxy endpoint that you create.
         :param vpc_subnet_ids: The VPC subnet IDs for the DB proxy endpoint that you create. You can specify a different set of subnet IDs than for the original DB proxy.
+        :param endpoint_network_type: The network type of the DB proxy endpoint. The network type determines the IP version that the proxy endpoint supports.
         :param tags: An optional set of key-value pairs to associate arbitrary data of your choosing with the proxy.
         :param target_role: A value that indicates whether the DB proxy endpoint can be used for read/write or read-only operations.
         :param vpc_security_group_ids: The VPC security group IDs for the DB proxy endpoint that you create. You can specify a different set of security group IDs than for the original DB proxy. The default is the default security group for the VPC.
@@ -41900,6 +42118,7 @@ class CfnDBProxyEndpoint(
             db_proxy_endpoint_name=db_proxy_endpoint_name,
             db_proxy_name=db_proxy_name,
             vpc_subnet_ids=vpc_subnet_ids,
+            endpoint_network_type=endpoint_network_type,
             tags=tags,
             target_role=target_role,
             vpc_security_group_ids=vpc_security_group_ids,
@@ -42032,6 +42251,19 @@ class CfnDBProxyEndpoint(
             type_hints = typing.get_type_hints(_typecheckingstub__46c2bdfcac6804daeebeae78f3431ef98a8d5656ee2fedd5f51ebf7343ca46d8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "vpcSubnetIds", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="endpointNetworkType")
+    def endpoint_network_type(self) -> typing.Optional[builtins.str]:
+        '''The network type of the DB proxy endpoint.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "endpointNetworkType"))
+
+    @endpoint_network_type.setter
+    def endpoint_network_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7c98a9244985299acd378ba6ec6338a555d6cbfb215e627bdcfcfc077fea704e)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "endpointNetworkType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -51910,6 +52142,7 @@ def _typecheckingstub__aaf089104646bb0ea95e48cd2107d642585c3eb3785a21112fc029b15
     iops: typing.Optional[jsii.Number] = None,
     kms_key_id: typing.Optional[builtins.str] = None,
     manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    master_user_authentication_type: typing.Optional[builtins.str] = None,
     master_username: typing.Optional[builtins.str] = None,
     master_user_password: typing.Optional[builtins.str] = None,
     master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBCluster.MasterUserSecretProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -51989,6 +52222,7 @@ def _typecheckingstub__3bddb1be0bd1f1699e3a084c5859d94d8879ff15011f2f2eaac29ec16
     kms_key_id: typing.Optional[builtins.str] = None,
     license_model: typing.Optional[builtins.str] = None,
     manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    master_user_authentication_type: typing.Optional[builtins.str] = None,
     master_username: typing.Optional[builtins.str] = None,
     master_user_password: typing.Optional[builtins.str] = None,
     master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBInstance.MasterUserSecretProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -52044,6 +52278,7 @@ def _typecheckingstub__3a9b3c0e1e94a5b7b563dceb2d99b8e9a70c4025e99ff97121a4d04a0
     db_proxy_endpoint_name: builtins.str,
     db_proxy_name: builtins.str,
     vpc_subnet_ids: typing.Sequence[builtins.str],
+    endpoint_network_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnDBProxyEndpoint.TagFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_role: typing.Optional[builtins.str] = None,
     vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -52053,15 +52288,18 @@ def _typecheckingstub__3a9b3c0e1e94a5b7b563dceb2d99b8e9a70c4025e99ff97121a4d04a0
 
 def _typecheckingstub__331ec6568969c058d2fc6c0482e8c31b8cc3af661d01d569ed27059f5a683e34(
     *,
-    auth: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBProxy.AuthFormatProperty, typing.Dict[builtins.str, typing.Any]]]]],
     db_proxy_name: builtins.str,
     engine_family: builtins.str,
     role_arn: builtins.str,
     vpc_subnet_ids: typing.Sequence[builtins.str],
+    auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBProxy.AuthFormatProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     debug_logging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    default_auth_scheme: typing.Optional[builtins.str] = None,
+    endpoint_network_type: typing.Optional[builtins.str] = None,
     idle_client_timeout: typing.Optional[jsii.Number] = None,
     require_tls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnDBProxy.TagFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    target_connection_network_type: typing.Optional[builtins.str] = None,
     vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -53830,6 +54068,7 @@ def _typecheckingstub__1eb14b9dcc306eabcc2963c7b6ef9b87bf8d616bb5691dbc6656242be
     iops: typing.Optional[jsii.Number] = None,
     kms_key_id: typing.Optional[builtins.str] = None,
     manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    master_user_authentication_type: typing.Optional[builtins.str] = None,
     master_username: typing.Optional[builtins.str] = None,
     master_user_password: typing.Optional[builtins.str] = None,
     master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBCluster.MasterUserSecretProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -54067,6 +54306,12 @@ def _typecheckingstub__b8d0fdd0070aafd30ad6bcb3a42b259df4088aada78fe5a4669ad688f
 
 def _typecheckingstub__7ca876954b5556832b0c941ce0f6ef94a61eb0cd960bb6e8a0106369ccc13a12(
     value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__910a49e316ebe92edf4e4f3c3db84de89812fb192f5741dd59271a8ec7200008(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -54390,6 +54635,7 @@ def _typecheckingstub__255b0779ca741853674876540bf77279f6293bea05de2cd18724d2b92
     kms_key_id: typing.Optional[builtins.str] = None,
     license_model: typing.Optional[builtins.str] = None,
     manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    master_user_authentication_type: typing.Optional[builtins.str] = None,
     master_username: typing.Optional[builtins.str] = None,
     master_user_password: typing.Optional[builtins.str] = None,
     master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBInstance.MasterUserSecretProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -54717,6 +54963,12 @@ def _typecheckingstub__8ecef20f6921c76abf800f6b708fec7f9adf740c5601480addc60f0e3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__619116fe6142881faa76cfea60c3ef852326ec74e01502e52b5f4e5f78feb598(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e4f4f227c9a762f25ad0222448fd600edf7e310cc003e4a2fed9244a343499d9(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -55037,15 +55289,18 @@ def _typecheckingstub__4d94f4b32c99ad047b3a29dd2b83cad728335675f9397ef40b6355d8a
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auth: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBProxy.AuthFormatProperty, typing.Dict[builtins.str, typing.Any]]]]],
     db_proxy_name: builtins.str,
     engine_family: builtins.str,
     role_arn: builtins.str,
     vpc_subnet_ids: typing.Sequence[builtins.str],
+    auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBProxy.AuthFormatProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     debug_logging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    default_auth_scheme: typing.Optional[builtins.str] = None,
+    endpoint_network_type: typing.Optional[builtins.str] = None,
     idle_client_timeout: typing.Optional[jsii.Number] = None,
     require_tls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnDBProxy.TagFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    target_connection_network_type: typing.Optional[builtins.str] = None,
     vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -55059,12 +55314,6 @@ def _typecheckingstub__351cc29b05d72e928a5b2d1751feed3437ab7086670c86649b38919b4
 
 def _typecheckingstub__069f114e3593f89959ab0180ffc2c341744b96a557ca447e885c4c7a4931659e(
     props: typing.Mapping[builtins.str, typing.Any],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__869ef0e6807a044fbcf1b07244e827164f63faefbf4f14d0b5f86f685fd1c949(
-    value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDBProxy.AuthFormatProperty]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -55093,8 +55342,26 @@ def _typecheckingstub__41d92774518120032be7c505a800af682ea1962c565406683dc31aa33
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__869ef0e6807a044fbcf1b07244e827164f63faefbf4f14d0b5f86f685fd1c949(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDBProxy.AuthFormatProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__74bf8fd129aa7db6aa8cbe4c31cc1e5c4cc49092cdf5e1df037dc0169913f027(
     value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__18dc20cb6c7198c733585aea9169142348f96482c7091e5ff56866cefa172b68(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4b7b706fa2b81a42f739d93aa1586cfc3f9c177800bd27f17441dd2628140627(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -55113,6 +55380,12 @@ def _typecheckingstub__cafb97ac157af82b7b8950ec8723a47d1feed5e51aae3131c9f0eae5c
 
 def _typecheckingstub__40e4176c733c58b29a8f2c935c044c4a11574a0150e5b0cfa2bfd50ca6c8e729(
     value: typing.Optional[typing.List[CfnDBProxy.TagFormatProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5b826621bdca40a58dfea5c6aa2d64059dae2f19860bb147be23851703e84180(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -55149,6 +55422,7 @@ def _typecheckingstub__54411dbda583caaf4997925cbfd0ea949cf7e685dcde3cdc9e9e301dc
     db_proxy_endpoint_name: builtins.str,
     db_proxy_name: builtins.str,
     vpc_subnet_ids: typing.Sequence[builtins.str],
+    endpoint_network_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnDBProxyEndpoint.TagFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_role: typing.Optional[builtins.str] = None,
     vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -55182,6 +55456,12 @@ def _typecheckingstub__3095e42d7cd1f0e74a79a5ee9fc57b041d819bd79c12932b424bf150a
 
 def _typecheckingstub__46c2bdfcac6804daeebeae78f3431ef98a8d5656ee2fedd5f51ebf7343ca46d8(
     value: typing.List[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7c98a9244985299acd378ba6ec6338a555d6cbfb215e627bdcfcfc077fea704e(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass

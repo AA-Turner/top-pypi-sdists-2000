@@ -1,11 +1,11 @@
 Metadata-Version: 2.4
 Name: mem0ai
-Version: 0.1.117
+Version: 0.1.118
 Summary: Long-term memory for AI Agents
 Author-email: Mem0 <founders@mem0.ai>
 License-File: LICENSE
 Requires-Python: <4.0,>=3.9
-Requires-Dist: openai<1.100.0,>=1.90.0
+Requires-Dist: openai<1.110.0,>=1.90.0
 Requires-Dist: posthog>=3.5.0
 Requires-Dist: protobuf<6.0.0,>=5.29.0
 Requires-Dist: pydantic>=2.7.3
@@ -35,7 +35,7 @@ Requires-Dist: google-generativeai>=0.3.0; extra == 'llms'
 Requires-Dist: groq>=0.3.0; extra == 'llms'
 Requires-Dist: litellm>=1.74.0; extra == 'llms'
 Requires-Dist: ollama>=0.1.0; extra == 'llms'
-Requires-Dist: openai<1.100.0,>=1.90.0; extra == 'llms'
+Requires-Dist: openai<1.110.0,>=1.90.0; extra == 'llms'
 Requires-Dist: together>=0.2.10; extra == 'llms'
 Requires-Dist: vertexai>=0.1.0; extra == 'llms'
 Provides-Extra: test
@@ -49,6 +49,7 @@ Requires-Dist: chromadb>=0.4.24; extra == 'vector-stores'
 Requires-Dist: databricks-sdk>=0.63.0; extra == 'vector-stores'
 Requires-Dist: elasticsearch<9.0.0,>=8.0.0; extra == 'vector-stores'
 Requires-Dist: faiss-cpu>=1.7.4; extra == 'vector-stores'
+Requires-Dist: langchain-aws>=0.2.23; extra == 'vector-stores'
 Requires-Dist: pinecone-text>=0.10.0; extra == 'vector-stores'
 Requires-Dist: pinecone<=7.3.0; extra == 'vector-stores'
 Requires-Dist: psycopg-pool<4.0.0,>=3.2.6; extra == 'vector-stores'
@@ -59,6 +60,7 @@ Requires-Dist: pymongo>=4.13.2; extra == 'vector-stores'
 Requires-Dist: redis<6.0.0,>=5.0.0; extra == 'vector-stores'
 Requires-Dist: redisvl<1.0.0,>=0.1.0; extra == 'vector-stores'
 Requires-Dist: upstash-vector>=0.1.0; extra == 'vector-stores'
+Requires-Dist: valkey>=6.0.0; extra == 'vector-stores'
 Requires-Dist: vecs>=0.4.0; extra == 'vector-stores'
 Requires-Dist: weaviate-client<4.15.0,>=4.4.0; extra == 'vector-stores'
 Description-Content-Type: text/markdown

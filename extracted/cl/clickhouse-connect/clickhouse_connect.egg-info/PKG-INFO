@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: clickhouse-connect
-Version: 0.9.1
+Version: 0.9.2
 Summary: ClickHouse Database Core Driver for Python, Pandas, and Superset
 Home-page: https://github.com/ClickHouse/clickhouse-connect
 Author: ClickHouse Inc.
@@ -15,7 +15,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
-Requires-Python: ~=3.8
+Requires-Python: >=3.9,<3.14
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: certifi

@@ -296,7 +296,7 @@ class CfnComputeNodeGroupProps:
         :param cluster_id: The ID of the cluster of the compute node group.
         :param custom_launch_template: An Amazon EC2 launch template AWS PCS uses to launch compute nodes.
         :param iam_instance_profile_arn: The Amazon Resource Name (ARN) of the IAM instance profile used to pass an IAM role when launching EC2 instances. The role contained in your instance profile must have the ``pcs:RegisterComputeNodeGroupInstance`` permission and the role name must start with ``AWSPCS`` or must have the path ``/aws-pcs/`` . For more information, see `IAM instance profiles for AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/security-instance-profiles.html>`_ in the *AWS PCS User Guide* .
-        :param instance_configs: A list of EC2 instance configurations that AWS AWS PCS can provision in the compute node group.
+        :param instance_configs: A list of EC2 instance configurations that AWS PCS can provision in the compute node group.
         :param scaling_configuration: Specifies the boundaries of the compute node group auto scaling.
         :param subnet_ids: The list of subnet IDs where instances are provisioned by the compute node group. The subnets must be in the same VPC as the cluster.
         :param ami_id: The ID of the Amazon Machine Image (AMI) that AWS PCS uses to launch instances. If not provided, AWS PCS uses the AMI ID specified in the custom launch template.
@@ -424,7 +424,7 @@ class CfnComputeNodeGroupProps:
     def instance_configs(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.InstanceConfigProperty"]]]:
-        '''A list of EC2 instance configurations that AWS AWS PCS can provision in the compute node group.
+        '''A list of EC2 instance configurations that AWS PCS can provision in the compute node group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-computenodegroup.html#cfn-pcs-computenodegroup-instanceconfigs
         '''
@@ -1307,7 +1307,7 @@ class CfnCluster(
         ) -> None:
             '''The shared Slurm key for authentication, also known as the *cluster secret* .
 
-            :param secret_arn: The Amazon Resource Name (ARN) of the the shared Slurm key.
+            :param secret_arn: The Amazon Resource Name (ARN) of the shared Slurm key.
             :param secret_version: The version of the shared Slurm key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-authkey.html
@@ -1335,7 +1335,7 @@ class CfnCluster(
 
         @builtins.property
         def secret_arn(self) -> builtins.str:
-            '''The Amazon Resource Name (ARN) of the the shared Slurm key.
+            '''The Amazon Resource Name (ARN) of the shared Slurm key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-authkey.html#cfn-pcs-cluster-authkey-secretarn
             '''
@@ -2042,7 +2042,7 @@ class CfnComputeNodeGroup(
         :param cluster_id: The ID of the cluster of the compute node group.
         :param custom_launch_template: An Amazon EC2 launch template AWS PCS uses to launch compute nodes.
         :param iam_instance_profile_arn: The Amazon Resource Name (ARN) of the IAM instance profile used to pass an IAM role when launching EC2 instances. The role contained in your instance profile must have the ``pcs:RegisterComputeNodeGroupInstance`` permission and the role name must start with ``AWSPCS`` or must have the path ``/aws-pcs/`` . For more information, see `IAM instance profiles for AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/security-instance-profiles.html>`_ in the *AWS PCS User Guide* .
-        :param instance_configs: A list of EC2 instance configurations that AWS AWS PCS can provision in the compute node group.
+        :param instance_configs: A list of EC2 instance configurations that AWS PCS can provision in the compute node group.
         :param scaling_configuration: Specifies the boundaries of the compute node group auto scaling.
         :param subnet_ids: The list of subnet IDs where instances are provisioned by the compute node group. The subnets must be in the same VPC as the cluster.
         :param ami_id: The ID of the Amazon Machine Image (AMI) that AWS PCS uses to launch instances. If not provided, AWS PCS uses the AMI ID specified in the custom launch template.
@@ -2209,7 +2209,7 @@ class CfnComputeNodeGroup(
     def instance_configs(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.InstanceConfigProperty"]]]:
-        '''A list of EC2 instance configurations that AWS AWS PCS can provision in the compute node group.'''
+        '''A list of EC2 instance configurations that AWS PCS can provision in the compute node group.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.InstanceConfigProperty"]]], jsii.get(self, "instanceConfigs"))
 
     @instance_configs.setter
@@ -2779,7 +2779,7 @@ class CfnComputeNodeGroup(
         ) -> None:
             '''Additional configuration when you specify ``SPOT`` as the ``purchaseOption`` for the ``CreateComputeNodeGroup`` API action.
 
-            :param allocation_strategy: The Amazon EC2 allocation strategy AWS AWS PCS uses to provision EC2 instances. AWS AWS PCS supports *lowest price* , *capacity optimized* , and *price capacity optimized* . For more information, see `Use allocation strategies to determine how EC2 Fleet or Spot Fleet fulfills Spot and On-Demand capacity <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-allocation-strategy.html>`_ in the *Amazon Elastic Compute Cloud User Guide* . If you don't provide this option, it defaults to *price capacity optimized* .
+            :param allocation_strategy: The Amazon EC2 allocation strategy AWS PCS uses to provision EC2 instances. AWS PCS supports *lowest price* , *capacity optimized* , and *price capacity optimized* . For more information, see `Use allocation strategies to determine how EC2 Fleet or Spot Fleet fulfills Spot and On-Demand capacity <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-allocation-strategy.html>`_ in the *Amazon Elastic Compute Cloud User Guide* . If you don't provide this option, it defaults to *price capacity optimized* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-computenodegroup-spotoptions.html
             :exampleMetadata: fixture=_generated
@@ -2803,9 +2803,9 @@ class CfnComputeNodeGroup(
 
         @builtins.property
         def allocation_strategy(self) -> typing.Optional[builtins.str]:
-            '''The Amazon EC2 allocation strategy AWS AWS PCS uses to provision EC2 instances.
+            '''The Amazon EC2 allocation strategy AWS PCS uses to provision EC2 instances.
 
-            AWS AWS PCS supports *lowest price* , *capacity optimized* , and *price capacity optimized* . For more information, see `Use allocation strategies to determine how EC2 Fleet or Spot Fleet fulfills Spot and On-Demand capacity <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-allocation-strategy.html>`_ in the *Amazon Elastic Compute Cloud User Guide* . If you don't provide this option, it defaults to *price capacity optimized* .
+            AWS PCS supports *lowest price* , *capacity optimized* , and *price capacity optimized* . For more information, see `Use allocation strategies to determine how EC2 Fleet or Spot Fleet fulfills Spot and On-Demand capacity <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-allocation-strategy.html>`_ in the *Amazon Elastic Compute Cloud User Guide* . If you don't provide this option, it defaults to *price capacity optimized* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-computenodegroup-spotoptions.html#cfn-pcs-computenodegroup-spotoptions-allocationstrategy
             '''

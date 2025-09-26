@@ -7361,7 +7361,7 @@ class CfnServiceProps:
     ) -> None:
         '''Properties for defining a ``CfnService``.
 
-        :param availability_zone_rebalancing: Indicates whether to use Availability Zone rebalancing for the service. For more information, see `Balancing an Amazon ECS service across Availability Zones <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-rebalancing.html>`_ in the **Amazon Elastic Container Service Developer Guide** . Default: - "ENABLED"
+        :param availability_zone_rebalancing: Indicates whether to use Availability Zone rebalancing for the service. For more information, see `Balancing an Amazon ECS service across Availability Zones <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-rebalancing.html>`_ in the **Amazon Elastic Container Service Developer Guide** . The default behavior of ``AvailabilityZoneRebalancing`` differs between create and update requests: - For create service requests, when no value is specified for ``AvailabilityZoneRebalancing`` , Amazon ECS defaults the value to ``ENABLED`` . - For update service requests, when no value is specified for ``AvailabilityZoneRebalancing`` , Amazon ECS defaults to the existing service’s ``AvailabilityZoneRebalancing`` value. If the service never had an ``AvailabilityZoneRebalancing`` value set, Amazon ECS treats this as ``DISABLED`` . Default: - "ENABLED"
         :param capacity_provider_strategy: The capacity provider strategy to use for the service. If a ``capacityProviderStrategy`` is specified, the ``launchType`` parameter must be omitted. If no ``capacityProviderStrategy`` or ``launchType`` is specified, the ``defaultCapacityProviderStrategy`` for the cluster is used. A capacity provider strategy can contain a maximum of 20 capacity providers. .. epigraph:: To remove this property from your service resource, specify an empty ``CapacityProviderStrategyItem`` array.
         :param cluster: The short name or full Amazon Resource Name (ARN) of the cluster that you run your service on. If you do not specify a cluster, the default cluster is assumed.
         :param deployment_configuration: Optional deployment parameters that control how many tasks run during the deployment and the ordering of stopping and starting tasks.
@@ -7370,7 +7370,7 @@ class CfnServiceProps:
         :param enable_ecs_managed_tags: Specifies whether to turn on Amazon ECS managed tags for the tasks within the service. For more information, see `Tagging your Amazon ECS resources <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-using-tags.html>`_ in the *Amazon Elastic Container Service Developer Guide* . When you use Amazon ECS managed tags, you must set the ``propagateTags`` request parameter.
         :param enable_execute_command: Determines whether the execute command functionality is turned on for the service. If ``true`` , the execute command functionality is turned on for all containers in tasks as part of the service.
         :param force_new_deployment: Determines whether to force a new deployment of the service. By default, deployments aren't forced. You can use this option to start a new deployment with no service definition changes. For example, you can update a service's tasks to use a newer Docker image with the same image/tag combination ( ``my_image:latest`` ) or to roll Fargate tasks onto a newer platform version.
-        :param health_check_grace_period_seconds: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started. If you don't specify a health check grace period value, the default value of ``0`` is used. If you don't use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused. If your service's tasks take a while to start and respond to health checks, you can specify a health check grace period of up to 2,147,483,647 seconds (about 69 years). During that time, the Amazon ECS service scheduler ignores health check status. This grace period can prevent the service scheduler from marking tasks as unhealthy and stopping them before they have time to come up.
+        :param health_check_grace_period_seconds: The period of time, in seconds, that the Amazon Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started. If you do not specify a health check grace period value, the default value of 0 is used. If you do not use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused. If your service has more running tasks than desired, unhealthy tasks in the grace period might be stopped to reach the desired count.
         :param launch_type: The launch type on which to run your service. For more information, see `Amazon ECS Launch Types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
         :param load_balancers: A list of load balancer objects to associate with the service. If you specify the ``Role`` property, ``LoadBalancers`` must be specified as well. For information about the number of load balancers that you can specify per service, see `Service Load Balancing <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html>`_ in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: To remove this property from your service resource, specify an empty ``LoadBalancer`` array.
         :param network_configuration: The network configuration for the service. This parameter is required for task definitions that use the ``awsvpc`` network mode to receive their own elastic network interface, and it is not supported for other network modes. For more information, see `Task Networking <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
@@ -7397,6 +7397,8 @@ class CfnServiceProps:
             # The values are placeholders you should change.
             from aws_cdk import aws_ecs as ecs
             
+            # hook_details: Any
+            
             cfn_service_props = ecs.CfnServiceProps(
                 availability_zone_rebalancing="availabilityZoneRebalancing",
                 capacity_provider_strategy=[ecs.CfnService.CapacityProviderStrategyItemProperty(
@@ -7419,7 +7421,10 @@ class CfnServiceProps:
                     lifecycle_hooks=[ecs.CfnService.DeploymentLifecycleHookProperty(
                         hook_target_arn="hookTargetArn",
                         lifecycle_stages=["lifecycleStages"],
-                        role_arn="roleArn"
+                        role_arn="roleArn",
+            
+                        # the properties below are optional
+                        hook_details=hook_details
                     )],
                     maximum_percent=123,
                     minimum_healthy_percent=123,
@@ -7664,6 +7669,11 @@ class CfnServiceProps:
 
         For more information, see `Balancing an Amazon ECS service across Availability Zones <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-rebalancing.html>`_ in the **Amazon Elastic Container Service Developer Guide** .
 
+        The default behavior of ``AvailabilityZoneRebalancing`` differs between create and update requests:
+
+        - For create service requests, when no value is specified for ``AvailabilityZoneRebalancing`` , Amazon ECS defaults the value to ``ENABLED`` .
+        - For update service requests, when no value is specified for ``AvailabilityZoneRebalancing`` , Amazon ECS defaults to the existing service’s ``AvailabilityZoneRebalancing`` value. If the service never had an ``AvailabilityZoneRebalancing`` value set, Amazon ECS treats this as ``DISABLED`` .
+
         :default: - "ENABLED"
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-availabilityzonerebalancing
@@ -7778,11 +7788,11 @@ class CfnServiceProps:
 
     @builtins.property
     def health_check_grace_period_seconds(self) -> typing.Optional[jsii.Number]:
-        '''The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started.
+        '''The period of time, in seconds, that the Amazon Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started.
 
-        If you don't specify a health check grace period value, the default value of ``0`` is used. If you don't use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused.
+        If you do not specify a health check grace period value, the default value of 0 is used. If you do not use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused.
 
-        If your service's tasks take a while to start and respond to health checks, you can specify a health check grace period of up to 2,147,483,647 seconds (about 69 years). During that time, the Amazon ECS service scheduler ignores health check status. This grace period can prevent the service scheduler from marking tasks as unhealthy and stopping them before they have time to come up.
+        If your service has more running tasks than desired, unhealthy tasks in the grace period might be stopped to reach the desired count.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-healthcheckgraceperiodseconds
         '''
@@ -32493,6 +32503,8 @@ class CfnService(
         # The values are placeholders you should change.
         from aws_cdk import aws_ecs as ecs
         
+        # hook_details: Any
+        
         cfn_service = ecs.CfnService(self, "MyCfnService",
             availability_zone_rebalancing="availabilityZoneRebalancing",
             capacity_provider_strategy=[ecs.CfnService.CapacityProviderStrategyItemProperty(
@@ -32515,7 +32527,10 @@ class CfnService(
                 lifecycle_hooks=[ecs.CfnService.DeploymentLifecycleHookProperty(
                     hook_target_arn="hookTargetArn",
                     lifecycle_stages=["lifecycleStages"],
-                    role_arn="roleArn"
+                    role_arn="roleArn",
+        
+                    # the properties below are optional
+                    hook_details=hook_details
                 )],
                 maximum_percent=123,
                 minimum_healthy_percent=123,
@@ -32708,7 +32723,7 @@ class CfnService(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param availability_zone_rebalancing: Indicates whether to use Availability Zone rebalancing for the service. For more information, see `Balancing an Amazon ECS service across Availability Zones <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-rebalancing.html>`_ in the **Amazon Elastic Container Service Developer Guide** . Default: - "ENABLED"
+        :param availability_zone_rebalancing: Indicates whether to use Availability Zone rebalancing for the service. For more information, see `Balancing an Amazon ECS service across Availability Zones <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-rebalancing.html>`_ in the **Amazon Elastic Container Service Developer Guide** . The default behavior of ``AvailabilityZoneRebalancing`` differs between create and update requests: - For create service requests, when no value is specified for ``AvailabilityZoneRebalancing`` , Amazon ECS defaults the value to ``ENABLED`` . - For update service requests, when no value is specified for ``AvailabilityZoneRebalancing`` , Amazon ECS defaults to the existing service’s ``AvailabilityZoneRebalancing`` value. If the service never had an ``AvailabilityZoneRebalancing`` value set, Amazon ECS treats this as ``DISABLED`` . Default: - "ENABLED"
         :param capacity_provider_strategy: The capacity provider strategy to use for the service. If a ``capacityProviderStrategy`` is specified, the ``launchType`` parameter must be omitted. If no ``capacityProviderStrategy`` or ``launchType`` is specified, the ``defaultCapacityProviderStrategy`` for the cluster is used. A capacity provider strategy can contain a maximum of 20 capacity providers. .. epigraph:: To remove this property from your service resource, specify an empty ``CapacityProviderStrategyItem`` array.
         :param cluster: The short name or full Amazon Resource Name (ARN) of the cluster that you run your service on. If you do not specify a cluster, the default cluster is assumed.
         :param deployment_configuration: Optional deployment parameters that control how many tasks run during the deployment and the ordering of stopping and starting tasks.
@@ -32717,7 +32732,7 @@ class CfnService(
         :param enable_ecs_managed_tags: Specifies whether to turn on Amazon ECS managed tags for the tasks within the service. For more information, see `Tagging your Amazon ECS resources <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-using-tags.html>`_ in the *Amazon Elastic Container Service Developer Guide* . When you use Amazon ECS managed tags, you must set the ``propagateTags`` request parameter.
         :param enable_execute_command: Determines whether the execute command functionality is turned on for the service. If ``true`` , the execute command functionality is turned on for all containers in tasks as part of the service.
         :param force_new_deployment: Determines whether to force a new deployment of the service. By default, deployments aren't forced. You can use this option to start a new deployment with no service definition changes. For example, you can update a service's tasks to use a newer Docker image with the same image/tag combination ( ``my_image:latest`` ) or to roll Fargate tasks onto a newer platform version.
-        :param health_check_grace_period_seconds: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started. If you don't specify a health check grace period value, the default value of ``0`` is used. If you don't use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused. If your service's tasks take a while to start and respond to health checks, you can specify a health check grace period of up to 2,147,483,647 seconds (about 69 years). During that time, the Amazon ECS service scheduler ignores health check status. This grace period can prevent the service scheduler from marking tasks as unhealthy and stopping them before they have time to come up.
+        :param health_check_grace_period_seconds: The period of time, in seconds, that the Amazon Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started. If you do not specify a health check grace period value, the default value of 0 is used. If you do not use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused. If your service has more running tasks than desired, unhealthy tasks in the grace period might be stopped to reach the desired count.
         :param launch_type: The launch type on which to run your service. For more information, see `Amazon ECS Launch Types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
         :param load_balancers: A list of load balancer objects to associate with the service. If you specify the ``Role`` property, ``LoadBalancers`` must be specified as well. For information about the number of load balancers that you can specify per service, see `Service Load Balancing <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html>`_ in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: To remove this property from your service resource, specify an empty ``LoadBalancer`` array.
         :param network_configuration: The network configuration for the service. This parameter is required for task definitions that use the ``awsvpc`` network mode to receive their own elastic network interface, and it is not supported for other network modes. For more information, see `Task Networking <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
@@ -32990,7 +33005,7 @@ class CfnService(
     @builtins.property
     @jsii.member(jsii_name="healthCheckGracePeriodSeconds")
     def health_check_grace_period_seconds(self) -> typing.Optional[jsii.Number]:
-        '''The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started.'''
+        '''The period of time, in seconds, that the Amazon Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started.'''
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "healthCheckGracePeriodSeconds"))
 
     @health_check_grace_period_seconds.setter
@@ -33825,6 +33840,8 @@ class CfnService(
                 # The values are placeholders you should change.
                 from aws_cdk import aws_ecs as ecs
                 
+                # hook_details: Any
+                
                 deployment_configuration_property = ecs.CfnService.DeploymentConfigurationProperty(
                     alarms=ecs.CfnService.DeploymentAlarmsProperty(
                         alarm_names=["alarmNames"],
@@ -33839,7 +33856,10 @@ class CfnService(
                     lifecycle_hooks=[ecs.CfnService.DeploymentLifecycleHookProperty(
                         hook_target_arn="hookTargetArn",
                         lifecycle_stages=["lifecycleStages"],
-                        role_arn="roleArn"
+                        role_arn="roleArn",
+                
+                        # the properties below are optional
+                        hook_details=hook_details
                     )],
                     maximum_percent=123,
                     minimum_healthy_percent=123,
@@ -34105,6 +34125,7 @@ class CfnService(
             "hook_target_arn": "hookTargetArn",
             "lifecycle_stages": "lifecycleStages",
             "role_arn": "roleArn",
+            "hook_details": "hookDetails",
         },
     )
     class DeploymentLifecycleHookProperty:
@@ -34114,6 +34135,7 @@ class CfnService(
             hook_target_arn: builtins.str,
             lifecycle_stages: typing.Sequence[builtins.str],
             role_arn: builtins.str,
+            hook_details: typing.Any = None,
         ) -> None:
             '''A deployment lifecycle hook runs custom logic at specific stages of the deployment process.
 
@@ -34124,6 +34146,7 @@ class CfnService(
             :param hook_target_arn: The Amazon Resource Name (ARN) of the hook target. Currently, only Lambda function ARNs are supported. You must provide this parameter when configuring a deployment lifecycle hook.
             :param lifecycle_stages: The lifecycle stages at which to run the hook. Choose from these valid values:. - RECONCILE_SERVICE The reconciliation stage that only happens when you start a new service deployment with more than 1 service revision in an ACTIVE state. You can use a lifecycle hook for this stage. - PRE_SCALE_UP The green service revision has not started. The blue service revision is handling 100% of the production traffic. There is no test traffic. You can use a lifecycle hook for this stage. - POST_SCALE_UP The green service revision has started. The blue service revision is handling 100% of the production traffic. There is no test traffic. You can use a lifecycle hook for this stage. - TEST_TRAFFIC_SHIFT The blue and green service revisions are running. The blue service revision handles 100% of the production traffic. The green service revision is migrating from 0% to 100% of test traffic. You can use a lifecycle hook for this stage. - POST_TEST_TRAFFIC_SHIFT The test traffic shift is complete. The green service revision handles 100% of the test traffic. You can use a lifecycle hook for this stage. - PRODUCTION_TRAFFIC_SHIFT Production traffic is shifting to the green service revision. The green service revision is migrating from 0% to 100% of production traffic. You can use a lifecycle hook for this stage. - POST_PRODUCTION_TRAFFIC_SHIFT The production traffic shift is complete. You can use a lifecycle hook for this stage. You must provide this parameter when configuring a deployment lifecycle hook.
             :param role_arn: The Amazon Resource Name (ARN) of the IAM role that grants Amazon ECS permission to call Lambda functions on your behalf. For more information, see `Permissions required for Lambda functions in Amazon ECS blue/green deployments <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/blue-green-permissions.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
+            :param hook_details: Use this field to specify custom parameters that Amazon ECS passes to your hook target invocations (such as a Lambda function). This field must be a JSON object as a string.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-deploymentlifecyclehook.html
             :exampleMetadata: fixture=_generated
@@ -34134,10 +34157,15 @@ class CfnService(
                 # The values are placeholders you should change.
                 from aws_cdk import aws_ecs as ecs
                 
+                # hook_details: Any
+                
                 deployment_lifecycle_hook_property = ecs.CfnService.DeploymentLifecycleHookProperty(
                     hook_target_arn="hookTargetArn",
                     lifecycle_stages=["lifecycleStages"],
-                    role_arn="roleArn"
+                    role_arn="roleArn",
+                
+                    # the properties below are optional
+                    hook_details=hook_details
                 )
             '''
             if __debug__:
@@ -34145,11 +34173,14 @@ class CfnService(
                 check_type(argname="argument hook_target_arn", value=hook_target_arn, expected_type=type_hints["hook_target_arn"])
                 check_type(argname="argument lifecycle_stages", value=lifecycle_stages, expected_type=type_hints["lifecycle_stages"])
                 check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
+                check_type(argname="argument hook_details", value=hook_details, expected_type=type_hints["hook_details"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "hook_target_arn": hook_target_arn,
                 "lifecycle_stages": lifecycle_stages,
                 "role_arn": role_arn,
             }
+            if hook_details is not None:
+                self._values["hook_details"] = hook_details
 
         @builtins.property
         def hook_target_arn(self) -> builtins.str:
@@ -34228,6 +34259,17 @@ class CfnService(
             result = self._values.get("role_arn")
             assert result is not None, "Required property 'role_arn' is missing"
             return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def hook_details(self) -> typing.Any:
+            '''Use this field to specify custom parameters that Amazon ECS passes to your hook target invocations (such as a Lambda function).
+
+            This field must be a JSON object as a string.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-deploymentlifecyclehook.html#cfn-ecs-service-deploymentlifecyclehook-hookdetails
+            '''
+            result = self._values.get("hook_details")
+            return typing.cast(typing.Any, result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -49622,6 +49664,7 @@ def _typecheckingstub__81d51cf744a434ad2ba13fc9f3dea23611c28b28f4a9414d8324cf577
     hook_target_arn: builtins.str,
     lifecycle_stages: typing.Sequence[builtins.str],
     role_arn: builtins.str,
+    hook_details: typing.Any = None,
 ) -> None:
     """Type checking stubs"""
     pass

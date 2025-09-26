@@ -432,10 +432,10 @@ class CfnIndexProps:
                             dimension=123,
                             index=False,
                             method=opensearchserverless.CfnIndex.MethodProperty(
-                                engine="engine",
                                 name="name",
             
                                 # the properties below are optional
+                                engine="engine",
                                 parameters=opensearchserverless.CfnIndex.ParametersProperty(
                                     ef_construction=123,
                                     m=123
@@ -641,6 +641,7 @@ class CfnLifecyclePolicyProps:
     jsii_struct_bases=[],
     name_mapping={
         "description": "description",
+        "iam_federation_options": "iamFederationOptions",
         "iam_identity_center_options": "iamIdentityCenterOptions",
         "name": "name",
         "saml_options": "samlOptions",
@@ -652,6 +653,7 @@ class CfnSecurityConfigProps:
         self,
         *,
         description: typing.Optional[builtins.str] = None,
+        iam_federation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityConfig.IamFederationConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         iam_identity_center_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         saml_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityConfig.SamlConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -660,6 +662,7 @@ class CfnSecurityConfigProps:
         '''Properties for defining a ``CfnSecurityConfig``.
 
         :param description: The description of the security configuration.
+        :param iam_federation_options: Describes IAM federation options in the form of a key-value map. Contains configuration details about how OpenSearch Serverless integrates with external identity providers through federation.
         :param iam_identity_center_options: Describes IAM Identity Center options in the form of a key-value map.
         :param name: The name of the security configuration.
         :param saml_options: SAML options for the security configuration in the form of a key-value map.
@@ -676,6 +679,10 @@ class CfnSecurityConfigProps:
             
             cfn_security_config_props = opensearchserverless.CfnSecurityConfigProps(
                 description="description",
+                iam_federation_options=opensearchserverless.CfnSecurityConfig.IamFederationConfigOptionsProperty(
+                    group_attribute="groupAttribute",
+                    user_attribute="userAttribute"
+                ),
                 iam_identity_center_options=opensearchserverless.CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty(
                     instance_arn="instanceArn",
             
@@ -702,6 +709,7 @@ class CfnSecurityConfigProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__83172f8fcf5e40df2e2a8ddc136c744969aad86c37d45de37b6d75f0dc154be4)
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument iam_federation_options", value=iam_federation_options, expected_type=type_hints["iam_federation_options"])
             check_type(argname="argument iam_identity_center_options", value=iam_identity_center_options, expected_type=type_hints["iam_identity_center_options"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument saml_options", value=saml_options, expected_type=type_hints["saml_options"])
@@ -709,6 +717,8 @@ class CfnSecurityConfigProps:
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if description is not None:
             self._values["description"] = description
+        if iam_federation_options is not None:
+            self._values["iam_federation_options"] = iam_federation_options
         if iam_identity_center_options is not None:
             self._values["iam_identity_center_options"] = iam_identity_center_options
         if name is not None:
@@ -726,6 +736,19 @@ class CfnSecurityConfigProps:
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def iam_federation_options(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamFederationConfigOptionsProperty"]]:
+        '''Describes IAM federation options in the form of a key-value map.
+
+        Contains configuration details about how OpenSearch Serverless integrates with external identity providers through federation.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-securityconfig.html#cfn-opensearchserverless-securityconfig-iamfederationoptions
+        '''
+        result = self._values.get("iam_federation_options")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamFederationConfigOptionsProperty"]], result)
 
     @builtins.property
     def iam_identity_center_options(
@@ -2056,10 +2079,10 @@ class CfnIndex(
                         dimension=123,
                         index=False,
                         method=opensearchserverless.CfnIndex.MethodProperty(
-                            engine="engine",
                             name="name",
         
                             # the properties below are optional
+                            engine="engine",
                             parameters=opensearchserverless.CfnIndex.ParametersProperty(
                                 ef_construction=123,
                                 m=123
@@ -2415,10 +2438,10 @@ class CfnIndex(
                             dimension=123,
                             index=False,
                             method=opensearchserverless.CfnIndex.MethodProperty(
-                                engine="engine",
                                 name="name",
                 
                                 # the properties below are optional
+                                engine="engine",
                                 parameters=opensearchserverless.CfnIndex.ParametersProperty(
                                     ef_construction=123,
                                     m=123
@@ -2466,8 +2489,8 @@ class CfnIndex(
         jsii_type="aws-cdk-lib.aws_opensearchserverless.CfnIndex.MethodProperty",
         jsii_struct_bases=[],
         name_mapping={
-            "engine": "engine",
             "name": "name",
+            "engine": "engine",
             "parameters": "parameters",
             "space_type": "spaceType",
         },
@@ -2476,15 +2499,15 @@ class CfnIndex(
         def __init__(
             self,
             *,
-            engine: builtins.str,
             name: builtins.str,
+            engine: typing.Optional[builtins.str] = None,
             parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.ParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             space_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Configuration for k-NN search method.
 
-            :param engine: The k-NN search engine to use.
             :param name: The algorithm name for k-NN search.
+            :param engine: The k-NN search engine to use.
             :param parameters: Additional parameters for the k-NN algorithm.
             :param space_type: The distance function used for k-NN search.
 
@@ -2498,10 +2521,10 @@ class CfnIndex(
                 from aws_cdk import aws_opensearchserverless as opensearchserverless
                 
                 method_property = opensearchserverless.CfnIndex.MethodProperty(
-                    engine="engine",
                     name="name",
                 
                     # the properties below are optional
+                    engine="engine",
                     parameters=opensearchserverless.CfnIndex.ParametersProperty(
                         ef_construction=123,
                         m=123
@@ -2511,28 +2534,19 @@ class CfnIndex(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__1f32a7c2cc9cc53a405856608b840b3cd657cad90afeb4b25d6577b3e1573b35)
-                check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
                 check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
                 check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
                 check_type(argname="argument space_type", value=space_type, expected_type=type_hints["space_type"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
-                "engine": engine,
                 "name": name,
             }
+            if engine is not None:
+                self._values["engine"] = engine
             if parameters is not None:
                 self._values["parameters"] = parameters
             if space_type is not None:
                 self._values["space_type"] = space_type
-
-        @builtins.property
-        def engine(self) -> builtins.str:
-            '''The k-NN search engine to use.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-index-method.html#cfn-opensearchserverless-index-method-engine
-            '''
-            result = self._values.get("engine")
-            assert result is not None, "Required property 'engine' is missing"
-            return typing.cast(builtins.str, result)
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -2543,6 +2557,15 @@ class CfnIndex(
             result = self._values.get("name")
             assert result is not None, "Required property 'name' is missing"
             return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def engine(self) -> typing.Optional[builtins.str]:
+            '''The k-NN search engine to use.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-index-method.html#cfn-opensearchserverless-index-method-engine
+            '''
+            result = self._values.get("engine")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def parameters(
@@ -2695,10 +2718,10 @@ class CfnIndex(
                     dimension=123,
                     index=False,
                     method=opensearchserverless.CfnIndex.MethodProperty(
-                        engine="engine",
                         name="name",
                 
                         # the properties below are optional
+                        engine="engine",
                         parameters=opensearchserverless.CfnIndex.ParametersProperty(
                             ef_construction=123,
                             m=123
@@ -2982,6 +3005,10 @@ class CfnSecurityConfig(
         
         cfn_security_config = opensearchserverless.CfnSecurityConfig(self, "MyCfnSecurityConfig",
             description="description",
+            iam_federation_options=opensearchserverless.CfnSecurityConfig.IamFederationConfigOptionsProperty(
+                group_attribute="groupAttribute",
+                user_attribute="userAttribute"
+            ),
             iam_identity_center_options=opensearchserverless.CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty(
                 instance_arn="instanceArn",
         
@@ -3012,6 +3039,7 @@ class CfnSecurityConfig(
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
+        iam_federation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityConfig.IamFederationConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         iam_identity_center_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         saml_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityConfig.SamlConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3021,6 +3049,7 @@ class CfnSecurityConfig(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param description: The description of the security configuration.
+        :param iam_federation_options: Describes IAM federation options in the form of a key-value map. Contains configuration details about how OpenSearch Serverless integrates with external identity providers through federation.
         :param iam_identity_center_options: Describes IAM Identity Center options in the form of a key-value map.
         :param name: The name of the security configuration.
         :param saml_options: SAML options for the security configuration in the form of a key-value map.
@@ -3032,6 +3061,7 @@ class CfnSecurityConfig(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnSecurityConfigProps(
             description=description,
+            iam_federation_options=iam_federation_options,
             iam_identity_center_options=iam_identity_center_options,
             name=name,
             saml_options=saml_options,
@@ -3133,6 +3163,24 @@ class CfnSecurityConfig(
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="iamFederationOptions")
+    def iam_federation_options(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamFederationConfigOptionsProperty"]]:
+        '''Describes IAM federation options in the form of a key-value map.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamFederationConfigOptionsProperty"]], jsii.get(self, "iamFederationOptions"))
+
+    @iam_federation_options.setter
+    def iam_federation_options(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamFederationConfigOptionsProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ccfa7fa0cc51cc5944f3e224a02320990df0f8ebafce43a7009528585ae23975)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "iamFederationOptions", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="iamIdentityCenterOptions")
     def iam_identity_center_options(
         self,
@@ -3193,6 +3241,85 @@ class CfnSecurityConfig(
             type_hints = typing.get_type_hints(_typecheckingstub__80701c5b69899d2a5416bba637f7adf26445dcef6c813c58399037cc3941a3cf)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "type", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_opensearchserverless.CfnSecurityConfig.IamFederationConfigOptionsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "group_attribute": "groupAttribute",
+            "user_attribute": "userAttribute",
+        },
+    )
+    class IamFederationConfigOptionsProperty:
+        def __init__(
+            self,
+            *,
+            group_attribute: typing.Optional[builtins.str] = None,
+            user_attribute: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Describes IAM federation options for an OpenSearch Serverless security configuration in the form of a key-value map.
+
+            These options define how OpenSearch Serverless integrates with external identity providers using federation.
+
+            :param group_attribute: The group attribute for this IAM federation integration. This attribute is used to map identity provider groups to OpenSearch Serverless permissions.
+            :param user_attribute: The user attribute for this IAM federation integration. This attribute is used to identify users in the federated authentication process.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-securityconfig-iamfederationconfigoptions.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_opensearchserverless as opensearchserverless
+                
+                iam_federation_config_options_property = opensearchserverless.CfnSecurityConfig.IamFederationConfigOptionsProperty(
+                    group_attribute="groupAttribute",
+                    user_attribute="userAttribute"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ce8f26dda3a935772ecc5546e8017fcfdc1c87fe45685294d9860d147cf53040)
+                check_type(argname="argument group_attribute", value=group_attribute, expected_type=type_hints["group_attribute"])
+                check_type(argname="argument user_attribute", value=user_attribute, expected_type=type_hints["user_attribute"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if group_attribute is not None:
+                self._values["group_attribute"] = group_attribute
+            if user_attribute is not None:
+                self._values["user_attribute"] = user_attribute
+
+        @builtins.property
+        def group_attribute(self) -> typing.Optional[builtins.str]:
+            '''The group attribute for this IAM federation integration.
+
+            This attribute is used to map identity provider groups to OpenSearch Serverless permissions.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-securityconfig-iamfederationconfigoptions.html#cfn-opensearchserverless-securityconfig-iamfederationconfigoptions-groupattribute
+            '''
+            result = self._values.get("group_attribute")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def user_attribute(self) -> typing.Optional[builtins.str]:
+            '''The user attribute for this IAM federation integration.
+
+            This attribute is used to identify users in the federated authentication process.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-securityconfig-iamfederationconfigoptions.html#cfn-opensearchserverless-securityconfig-iamfederationconfigoptions-userattribute
+            '''
+            result = self._values.get("user_attribute")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "IamFederationConfigOptionsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_opensearchserverless.CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty",
@@ -3873,6 +4000,7 @@ def _typecheckingstub__e73912f69bcf372f36058fe91d3360e53142205e8eb7f06190c7963ad
 def _typecheckingstub__83172f8fcf5e40df2e2a8ddc136c744969aad86c37d45de37b6d75f0dc154be4(
     *,
     description: typing.Optional[builtins.str] = None,
+    iam_federation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityConfig.IamFederationConfigOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     iam_identity_center_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     saml_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityConfig.SamlConfigOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4123,8 +4251,8 @@ def _typecheckingstub__a5bb392b8c065f198a0fe7fd6e0fa2156f493990b76e0fee04edb9297
 
 def _typecheckingstub__1f32a7c2cc9cc53a405856608b840b3cd657cad90afeb4b25d6577b3e1573b35(
     *,
-    engine: builtins.str,
     name: builtins.str,
+    engine: typing.Optional[builtins.str] = None,
     parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.ParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     space_type: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -4204,6 +4332,7 @@ def _typecheckingstub__ed9d460597a09f666d8e08c01fd366ec5026a44848df01fe64ec8aa93
     id: builtins.str,
     *,
     description: typing.Optional[builtins.str] = None,
+    iam_federation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityConfig.IamFederationConfigOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     iam_identity_center_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     saml_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityConfig.SamlConfigOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4230,6 +4359,12 @@ def _typecheckingstub__a7b44e920b0f0e4d138dcb200c4536168d3965f24eed3226a4574e927
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ccfa7fa0cc51cc5944f3e224a02320990df0f8ebafce43a7009528585ae23975(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecurityConfig.IamFederationConfigOptionsProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1158fc0f587cad32843a157af521fc2d669a0bc1f7c84c5e1dcd753237a9ca9a(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty]],
 ) -> None:
@@ -4250,6 +4385,14 @@ def _typecheckingstub__470a9a05248daf375f793933f5c035aad9eb0363381a3a0f6edb816e1
 
 def _typecheckingstub__80701c5b69899d2a5416bba637f7adf26445dcef6c813c58399037cc3941a3cf(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ce8f26dda3a935772ecc5546e8017fcfdc1c87fe45685294d9860d147cf53040(
+    *,
+    group_attribute: typing.Optional[builtins.str] = None,
+    user_attribute: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

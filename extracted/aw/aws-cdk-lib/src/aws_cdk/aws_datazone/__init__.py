@@ -1685,6 +1685,149 @@ class CfnEnvironmentProps:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_datazone.CfnFormTypeProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "domain_identifier": "domainIdentifier",
+        "model": "model",
+        "name": "name",
+        "owning_project_identifier": "owningProjectIdentifier",
+        "description": "description",
+        "status": "status",
+    },
+)
+class CfnFormTypeProps:
+    def __init__(
+        self,
+        *,
+        domain_identifier: builtins.str,
+        model: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFormType.ModelProperty", typing.Dict[builtins.str, typing.Any]]],
+        name: builtins.str,
+        owning_project_identifier: builtins.str,
+        description: typing.Optional[builtins.str] = None,
+        status: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnFormType``.
+
+        :param domain_identifier: The ID of the Amazon DataZone domain in which this metadata form type is created.
+        :param model: Indicates the smithy model of the API.
+        :param name: The name of this Amazon DataZone metadata form type.
+        :param owning_project_identifier: The ID of the Amazon DataZone project that owns this metadata form type.
+        :param description: The description of this Amazon DataZone metadata form type.
+        :param status: The status of this Amazon DataZone metadata form type.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_datazone as datazone
+            
+            cfn_form_type_props = datazone.CfnFormTypeProps(
+                domain_identifier="domainIdentifier",
+                model=datazone.CfnFormType.ModelProperty(
+                    smithy="smithy"
+                ),
+                name="name",
+                owning_project_identifier="owningProjectIdentifier",
+            
+                # the properties below are optional
+                description="description",
+                status="status"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1d5d64f9db9d5db2b48658391fb0d79863073acb36e66a1bbe210ae89102e089)
+            check_type(argname="argument domain_identifier", value=domain_identifier, expected_type=type_hints["domain_identifier"])
+            check_type(argname="argument model", value=model, expected_type=type_hints["model"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument owning_project_identifier", value=owning_project_identifier, expected_type=type_hints["owning_project_identifier"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "domain_identifier": domain_identifier,
+            "model": model,
+            "name": name,
+            "owning_project_identifier": owning_project_identifier,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if status is not None:
+            self._values["status"] = status
+
+    @builtins.property
+    def domain_identifier(self) -> builtins.str:
+        '''The ID of the Amazon DataZone domain in which this metadata form type is created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-domainidentifier
+        '''
+        result = self._values.get("domain_identifier")
+        assert result is not None, "Required property 'domain_identifier' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def model(self) -> typing.Union[_IResolvable_da3f097b, "CfnFormType.ModelProperty"]:
+        '''Indicates the smithy model of the API.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-model
+        '''
+        result = self._values.get("model")
+        assert result is not None, "Required property 'model' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFormType.ModelProperty"], result)
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of this Amazon DataZone metadata form type.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def owning_project_identifier(self) -> builtins.str:
+        '''The ID of the Amazon DataZone project that owns this metadata form type.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-owningprojectidentifier
+        '''
+        result = self._values.get("owning_project_identifier")
+        assert result is not None, "Required property 'owning_project_identifier' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The description of this Amazon DataZone metadata form type.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def status(self) -> typing.Optional[builtins.str]:
+        '''The status of this Amazon DataZone metadata form type.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-status
+        '''
+        result = self._values.get("status")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnFormTypeProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_datazone.CfnGroupProfileProps",
     jsii_struct_bases=[],
     name_mapping={
@@ -3411,6 +3554,74 @@ class EnvironmentReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_datazone.FormTypeReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "domain_identifier": "domainIdentifier",
+        "form_type_identifier": "formTypeIdentifier",
+    },
+)
+class FormTypeReference:
+    def __init__(
+        self,
+        *,
+        domain_identifier: builtins.str,
+        form_type_identifier: builtins.str,
+    ) -> None:
+        '''A reference to a FormType resource.
+
+        :param domain_identifier: The DomainIdentifier of the FormType resource.
+        :param form_type_identifier: The FormTypeIdentifier of the FormType resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_datazone as datazone
+            
+            form_type_reference = datazone.FormTypeReference(
+                domain_identifier="domainIdentifier",
+                form_type_identifier="formTypeIdentifier"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7e9137523d26d74e056985919cf6df2d81e05562c4039a5d385b18594d48b472)
+            check_type(argname="argument domain_identifier", value=domain_identifier, expected_type=type_hints["domain_identifier"])
+            check_type(argname="argument form_type_identifier", value=form_type_identifier, expected_type=type_hints["form_type_identifier"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "domain_identifier": domain_identifier,
+            "form_type_identifier": form_type_identifier,
+        }
+
+    @builtins.property
+    def domain_identifier(self) -> builtins.str:
+        '''The DomainIdentifier of the FormType resource.'''
+        result = self._values.get("domain_identifier")
+        assert result is not None, "Required property 'domain_identifier' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def form_type_identifier(self) -> builtins.str:
+        '''The FormTypeIdentifier of the FormType resource.'''
+        result = self._values.get("form_type_identifier")
+        assert result is not None, "Required property 'form_type_identifier' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "FormTypeReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_datazone.GroupProfileReference",
     jsii_struct_bases=[],
     name_mapping={"domain_id": "domainId", "group_profile_id": "groupProfileId"},
@@ -3808,6 +4019,46 @@ class _IEnvironmentRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentRef).__jsii_proxy_class__ = lambda : _IEnvironmentRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.aws_datazone.IFormTypeRef")
+class IFormTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+    '''(experimental) Indicates that this resource can be referenced as a FormType.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="formTypeRef")
+    def form_type_ref(self) -> FormTypeReference:
+        '''(experimental) A reference to a FormType resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IFormTypeRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a FormType.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_datazone.IFormTypeRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="formTypeRef")
+    def form_type_ref(self) -> FormTypeReference:
+        '''(experimental) A reference to a FormType resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(FormTypeReference, jsii.get(self, "formTypeRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IFormTypeRef).__jsii_proxy_class__ = lambda : _IFormTypeRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datazone.IGroupProfileRef")
@@ -11445,6 +11696,302 @@ class CfnEnvironmentProfile(
             )
 
 
+@jsii.implements(_IInspectable_c2943556, IFormTypeRef)
+class CfnFormType(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_datazone.CfnFormType",
+):
+    '''Create and manage form types in Amazon Datazone.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html
+    :cloudformationResource: AWS::DataZone::FormType
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_datazone as datazone
+        
+        cfn_form_type = datazone.CfnFormType(self, "MyCfnFormType",
+            domain_identifier="domainIdentifier",
+            model=datazone.CfnFormType.ModelProperty(
+                smithy="smithy"
+            ),
+            name="name",
+            owning_project_identifier="owningProjectIdentifier",
+        
+            # the properties below are optional
+            description="description",
+            status="status"
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        domain_identifier: builtins.str,
+        model: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFormType.ModelProperty", typing.Dict[builtins.str, typing.Any]]],
+        name: builtins.str,
+        owning_project_identifier: builtins.str,
+        description: typing.Optional[builtins.str] = None,
+        status: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param domain_identifier: The ID of the Amazon DataZone domain in which this metadata form type is created.
+        :param model: Indicates the smithy model of the API.
+        :param name: The name of this Amazon DataZone metadata form type.
+        :param owning_project_identifier: The ID of the Amazon DataZone project that owns this metadata form type.
+        :param description: The description of this Amazon DataZone metadata form type.
+        :param status: The status of this Amazon DataZone metadata form type.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f81071a1a99e5415d6626de96c93bf3bae9973b224056b0dd081b7dea58b9c42)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnFormTypeProps(
+            domain_identifier=domain_identifier,
+            model=model,
+            name=name,
+            owning_project_identifier=owning_project_identifier,
+            description=description,
+            status=status,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b464c1e8d9caba7ca12d282335a590316faa2a9e44c06ef3fcfcf2bf658e2f59)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bad9fae448f7834a64bdc6ac75126955a5d220edd03996d839f25e40662c1840)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedAt")
+    def attr_created_at(self) -> builtins.str:
+        '''The timestamp of when this Amazon DataZone metadata form type was created.
+
+        :cloudformationAttribute: CreatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedBy")
+    def attr_created_by(self) -> builtins.str:
+        '''The user who created this Amazon DataZone metadata form type.
+
+        :cloudformationAttribute: CreatedBy
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedBy"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrDomainId")
+    def attr_domain_id(self) -> builtins.str:
+        '''The ID of the Amazon DataZone domain in which this metadata form type is created.
+
+        :cloudformationAttribute: DomainId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrDomainId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrFormTypeIdentifier")
+    def attr_form_type_identifier(self) -> builtins.str:
+        '''The ID of this Amazon DataZone metadata form type.
+
+        :cloudformationAttribute: FormTypeIdentifier
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrFormTypeIdentifier"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrOwningProjectId")
+    def attr_owning_project_id(self) -> builtins.str:
+        '''The ID of the project that owns this Amazon DataZone metadata form type.
+
+        :cloudformationAttribute: OwningProjectId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrOwningProjectId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrRevision")
+    def attr_revision(self) -> builtins.str:
+        '''The revision of this Amazon DataZone metadata form type.
+
+        :cloudformationAttribute: Revision
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrRevision"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="formTypeRef")
+    def form_type_ref(self) -> FormTypeReference:
+        '''A reference to a FormType resource.'''
+        return typing.cast(FormTypeReference, jsii.get(self, "formTypeRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="domainIdentifier")
+    def domain_identifier(self) -> builtins.str:
+        '''The ID of the Amazon DataZone domain in which this metadata form type is created.'''
+        return typing.cast(builtins.str, jsii.get(self, "domainIdentifier"))
+
+    @domain_identifier.setter
+    def domain_identifier(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2b46e3b1065bc071b7c178d8c453b0749af37045869bbbf51fcbc9495351a9c8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "domainIdentifier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="model")
+    def model(self) -> typing.Union[_IResolvable_da3f097b, "CfnFormType.ModelProperty"]:
+        '''Indicates the smithy model of the API.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFormType.ModelProperty"], jsii.get(self, "model"))
+
+    @model.setter
+    def model(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnFormType.ModelProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b3f1c11a2e22affbdfa75c3598ef0670bfa54222c19e080d1f27477fceab0b08)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "model", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        '''The name of this Amazon DataZone metadata form type.'''
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4db67c3acb5b6a0032679e096fc2e3c4890bed280f7a8375900977292223c9c9)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="owningProjectIdentifier")
+    def owning_project_identifier(self) -> builtins.str:
+        '''The ID of the Amazon DataZone project that owns this metadata form type.'''
+        return typing.cast(builtins.str, jsii.get(self, "owningProjectIdentifier"))
+
+    @owning_project_identifier.setter
+    def owning_project_identifier(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ef621e28b6e4f4b3ff8d056fd5590e62a42d672e8eb7f3178e4433052f99b78f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "owningProjectIdentifier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="description")
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The description of this Amazon DataZone metadata form type.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
+
+    @description.setter
+    def description(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9e202387db1832295d6567c2f10923cb43415fa7c54595651d97565f41d96ac5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="status")
+    def status(self) -> typing.Optional[builtins.str]:
+        '''The status of this Amazon DataZone metadata form type.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "status"))
+
+    @status.setter
+    def status(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__020adc02f22142ea5477f1a153c01137dede2ab4e6371a06591cf06f6c428d61)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "status", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datazone.CfnFormType.ModelProperty",
+        jsii_struct_bases=[],
+        name_mapping={"smithy": "smithy"},
+    )
+    class ModelProperty:
+        def __init__(self, *, smithy: typing.Optional[builtins.str] = None) -> None:
+            '''Indicates the smithy model of the API.
+
+            :param smithy: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-formtype-model.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datazone as datazone
+                
+                model_property = datazone.CfnFormType.ModelProperty(
+                    smithy="smithy"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__eaaec1a7e6bb1ed0f7ee04f5ba73618200b18c1dc4719937dd04e1c76c1d7854)
+                check_type(argname="argument smithy", value=smithy, expected_type=type_hints["smithy"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if smithy is not None:
+                self._values["smithy"] = smithy
+
+        @builtins.property
+        def smithy(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-formtype-model.html#cfn-datazone-formtype-model-smithy
+            '''
+            result = self._values.get("smithy")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ModelProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
 @jsii.implements(_IInspectable_c2943556, IGroupProfileRef)
 class CfnGroupProfile(
     _CfnResource_9df397a6,
@@ -11701,6 +12248,22 @@ class CfnOwner(
     def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
         '''The CloudFormation resource type name for this resource class.'''
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrOwnerIdentifier")
+    def attr_owner_identifier(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: OwnerIdentifier
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrOwnerIdentifier"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrOwnerType")
+    def attr_owner_type(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: OwnerType
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrOwnerType"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -13165,7 +13728,7 @@ class CfnPolicyGrant(
             :param create_environment_from_blueprint: The details of the policy of creating an environment.
             :param create_environment_profile: Specifies that this is a create environment profile policy.
             :param create_form_type: Specifies that this is a create form type policy.
-            :param create_glossary: 
+            :param create_glossary: Specifies that this is a create glossary policy.
             :param create_project: Specifies that this is a create project policy.
             :param create_project_from_project_profile: Specifies whether to create a project from project profile.
             :param delegate_create_environment_profile: Specifies that this is the delegation of the create environment profile policy.
@@ -13342,7 +13905,8 @@ class CfnPolicyGrant(
         def create_glossary(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicyGrant.CreateGlossaryPolicyGrantDetailProperty"]]:
-            '''
+            '''Specifies that this is a create glossary policy.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-policygrant-policygrantdetail.html#cfn-datazone-policygrant-policygrantdetail-createglossary
             '''
             result = self._values.get("create_glossary")
@@ -14331,6 +14895,22 @@ class CfnProjectMembership(
     def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
         '''The CloudFormation resource type name for this resource class.'''
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrMemberIdentifier")
+    def attr_member_identifier(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: MemberIdentifier
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrMemberIdentifier"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrMemberIdentifierType")
+    def attr_member_identifier_type(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: MemberIdentifierType
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrMemberIdentifierType"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -16072,6 +16652,8 @@ __all__ = [
     "CfnEnvironmentProfile",
     "CfnEnvironmentProfileProps",
     "CfnEnvironmentProps",
+    "CfnFormType",
+    "CfnFormTypeProps",
     "CfnGroupProfile",
     "CfnGroupProfileProps",
     "CfnOwner",
@@ -16096,6 +16678,7 @@ __all__ = [
     "EnvironmentBlueprintConfigurationReference",
     "EnvironmentProfileReference",
     "EnvironmentReference",
+    "FormTypeReference",
     "GroupProfileReference",
     "IConnectionRef",
     "IDataSourceRef",
@@ -16105,6 +16688,7 @@ __all__ = [
     "IEnvironmentBlueprintConfigurationRef",
     "IEnvironmentProfileRef",
     "IEnvironmentRef",
+    "IFormTypeRef",
     "IGroupProfileRef",
     "IOwnerRef",
     "IPolicyGrantRef",
@@ -16231,6 +16815,18 @@ def _typecheckingstub__52cb17aae6cf0b0cbeef010a71f7f53573517f0a8e973b5881ae34c16
     environment_role_arn: typing.Optional[builtins.str] = None,
     glossary_terms: typing.Optional[typing.Sequence[builtins.str]] = None,
     user_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.EnvironmentParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1d5d64f9db9d5db2b48658391fb0d79863073acb36e66a1bbe210ae89102e089(
+    *,
+    domain_identifier: builtins.str,
+    model: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFormType.ModelProperty, typing.Dict[builtins.str, typing.Any]]],
+    name: builtins.str,
+    owning_project_identifier: builtins.str,
+    description: typing.Optional[builtins.str] = None,
+    status: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16388,6 +16984,14 @@ def _typecheckingstub__370a2d27cc92ceba84e36d72845193f2510637d09de1d67c6b2b2984d
     *,
     domain_id: builtins.str,
     environment_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7e9137523d26d74e056985919cf6df2d81e05562c4039a5d385b18594d48b472(
+    *,
+    domain_identifier: builtins.str,
+    form_type_identifier: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17446,6 +18050,75 @@ def _typecheckingstub__7d9a0947f6555aed5fe498e71fb0065f6dff69f004c35341f60523d1d
     *,
     name: typing.Optional[builtins.str] = None,
     value: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f81071a1a99e5415d6626de96c93bf3bae9973b224056b0dd081b7dea58b9c42(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    domain_identifier: builtins.str,
+    model: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFormType.ModelProperty, typing.Dict[builtins.str, typing.Any]]],
+    name: builtins.str,
+    owning_project_identifier: builtins.str,
+    description: typing.Optional[builtins.str] = None,
+    status: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b464c1e8d9caba7ca12d282335a590316faa2a9e44c06ef3fcfcf2bf658e2f59(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bad9fae448f7834a64bdc6ac75126955a5d220edd03996d839f25e40662c1840(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2b46e3b1065bc071b7c178d8c453b0749af37045869bbbf51fcbc9495351a9c8(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b3f1c11a2e22affbdfa75c3598ef0670bfa54222c19e080d1f27477fceab0b08(
+    value: typing.Union[_IResolvable_da3f097b, CfnFormType.ModelProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4db67c3acb5b6a0032679e096fc2e3c4890bed280f7a8375900977292223c9c9(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ef621e28b6e4f4b3ff8d056fd5590e62a42d672e8eb7f3178e4433052f99b78f(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9e202387db1832295d6567c2f10923cb43415fa7c54595651d97565f41d96ac5(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__020adc02f22142ea5477f1a153c01137dede2ab4e6371a06591cf06f6c428d61(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eaaec1a7e6bb1ed0f7ee04f5ba73618200b18c1dc4719937dd04e1c76c1d7854(
+    *,
+    smithy: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

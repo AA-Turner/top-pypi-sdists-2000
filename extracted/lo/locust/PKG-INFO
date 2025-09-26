@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: locust
-Version: 2.40.5
+Version: 2.41.1
 Summary: Developer-friendly load testing framework
 Project-URL: homepage, https://locust.io/
 Project-URL: repository, https://github.com/locustio/locust
@@ -30,7 +30,7 @@ Requires-Dist: flask-login>=0.6.3
 Requires-Dist: flask>=2.0.0
 Requires-Dist: gevent<25.8.1,>=24.10.1
 Requires-Dist: geventhttpclient>=2.3.1
-Requires-Dist: locust-cloud>=1.27.0
+Requires-Dist: locust-cloud>=1.27.1
 Requires-Dist: msgpack>=1.0.0
 Requires-Dist: psutil>=5.9.1
 Requires-Dist: pytest<9.0.0,>=8.3.3
@@ -45,6 +45,8 @@ Requires-Dist: typing-extensions>=4.6.0; python_version < '3.12'
 Requires-Dist: werkzeug>=2.0.0
 Provides-Extra: milvus
 Requires-Dist: pymilvus>=2.5.0; extra == 'milvus'
+Provides-Extra: mqtt
+Requires-Dist: paho-mqtt>=2.1.0; extra == 'mqtt'
 Description-Content-Type: text/markdown
 
 # Locust

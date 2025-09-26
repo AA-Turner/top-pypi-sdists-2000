@@ -6899,7 +6899,7 @@ class CfnDomain(
             :param anonymous_auth_disable_date: Date and time when the migration period will be disabled. Only necessary when `enabling fine-grained access control on an existing domain <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html#fgac-enabling-existing>`_ .
             :param anonymous_auth_enabled: True to enable a 30-day migration period during which administrators can create role mappings. Only necessary when `enabling fine-grained access control on an existing domain <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html#fgac-enabling-existing>`_ .
             :param enabled: True to enable fine-grained access control. You must also enable encryption of data at rest and node-to-node encryption. See `Fine-grained access control in Amazon OpenSearch Service <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html>`_ .
-            :param iam_federation_options: 
+            :param iam_federation_options: Input configuration for IAM identity federation within advanced security options.
             :param internal_user_database_enabled: True to enable the internal user database.
             :param jwt_options: Container for information about the JWT configuration of the Amazon OpenSearch Service.
             :param master_user_options: Specifies information about the master user.
@@ -7018,7 +7018,8 @@ class CfnDomain(
         def iam_federation_options(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.IAMFederationOptionsProperty"]]:
-            '''
+            '''Input configuration for IAM identity federation within advanced security options.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-advancedsecurityoptionsinput.html#cfn-opensearchservice-domain-advancedsecurityoptionsinput-iamfederationoptions
             '''
             result = self._values.get("iam_federation_options")
@@ -7567,7 +7568,7 @@ class CfnDomain(
             '''Specifies additional options for the domain endpoint, such as whether to require HTTPS for all traffic or whether to use a custom endpoint rather than the default endpoint.
 
             :param custom_endpoint: The fully qualified URL for your custom endpoint. Required if you enabled a custom endpoint for the domain.
-            :param custom_endpoint_certificate_arn: The AWS Certificate Manager ARN for your domain's SSL/TLS certificate. Required if you enabled a custom endpoint for the domain.
+            :param custom_endpoint_certificate_arn: The Certificate Manager ARN for your domain's SSL/TLS certificate. Required if you enabled a custom endpoint for the domain.
             :param custom_endpoint_enabled: True to enable a custom endpoint for the domain. If enabled, you must also provide values for ``CustomEndpoint`` and ``CustomEndpointCertificateArn`` .
             :param enforce_https: True to require that all traffic to the domain arrive over HTTPS. Required if you enable fine-grained access control in `AdvancedSecurityOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-advancedsecurityoptionsinput.html>`_ .
             :param tls_security_policy: The minimum TLS version required for traffic to the domain. The policy can be one of the following values:. - *Policy-Min-TLS-1-0-2019-07:* TLS security policy that supports TLS version 1.0 to TLS version 1.2 - *Policy-Min-TLS-1-2-2019-07:* TLS security policy that supports only TLS version 1.2 - *Policy-Min-TLS-1-2-PFS-2023-10:* TLS security policy that supports TLS version 1.2 to TLS version 1.3 with perfect forward secrecy cipher suites
@@ -7621,7 +7622,7 @@ class CfnDomain(
 
         @builtins.property
         def custom_endpoint_certificate_arn(self) -> typing.Optional[builtins.str]:
-            '''The AWS Certificate Manager ARN for your domain's SSL/TLS certificate.
+            '''The Certificate Manager ARN for your domain's SSL/TLS certificate.
 
             Required if you enabled a custom endpoint for the domain.
 

@@ -210,7 +210,11 @@ class CfnEnvironmentProps:
                     ),
                     v_tep=evs.CfnEnvironment.InitialVlanInfoProperty(
                         cidr="cidr"
-                    )
+                    ),
+            
+                    # the properties below are optional
+                    hcx_network_acl_id="hcxNetworkAclId",
+                    is_hcx_public=False
                 ),
                 kms_key_id="kmsKeyId",
                 service_access_security_groups=evs.CfnEnvironment.ServiceAccessSecurityGroupsProperty(
@@ -644,7 +648,11 @@ class CfnEnvironment(
                 ),
                 v_tep=evs.CfnEnvironment.InitialVlanInfoProperty(
                     cidr="cidr"
-                )
+                ),
+        
+                # the properties below are optional
+                hcx_network_acl_id="hcxNetworkAclId",
+                is_hcx_public=False
             ),
             kms_key_id="kmsKeyId",
             service_access_security_groups=evs.CfnEnvironment.ServiceAccessSecurityGroupsProperty(
@@ -1432,6 +1440,8 @@ class CfnEnvironment(
             "v_motion": "vMotion",
             "v_san": "vSan",
             "v_tep": "vTep",
+            "hcx_network_acl_id": "hcxNetworkAclId",
+            "is_hcx_public": "isHcxPublic",
         },
     )
     class InitialVlansProperty:
@@ -1448,6 +1458,8 @@ class CfnEnvironment(
             v_motion: typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.InitialVlanInfoProperty", typing.Dict[builtins.str, typing.Any]]],
             v_san: typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.InitialVlanInfoProperty", typing.Dict[builtins.str, typing.Any]]],
             v_tep: typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.InitialVlanInfoProperty", typing.Dict[builtins.str, typing.Any]]],
+            hcx_network_acl_id: typing.Optional[builtins.str] = None,
+            is_hcx_public: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ) -> None:
             '''The initial VLAN subnets for the environment.
 
@@ -1456,13 +1468,15 @@ class CfnEnvironment(
             :param edge_v_tep: The edge VTEP VLAN subnet. This VLAN subnet manages traffic flowing between the internal network and external networks, including internet access and other site connections.
             :param expansion_vlan1: An additional VLAN subnet that can be used to extend VCF capabilities once configured. For example, you can configure an expansion VLAN subnet to use NSX Federation for centralized management and synchronization of multiple NSX deployments across different locations.
             :param expansion_vlan2: An additional VLAN subnet that can be used to extend VCF capabilities once configured. For example, you can configure an expansion VLAN subnet to use NSX Federation for centralized management and synchronization of multiple NSX deployments across different locations.
-            :param hcx: The HCX VLAN subnet. This VLAN subnet allows the HCX Interconnnect (IX) and HCX Network Extension (NE) to reach their peers and enable HCX Service Mesh creation.
+            :param hcx: The HCX VLAN subnet. This VLAN subnet allows the HCX Interconnnect (IX) and HCX Network Extension (NE) to reach their peers and enable HCX Service Mesh creation. If you plan to use a public HCX VLAN subnet, the following requirements must be met: - Must have a /28 netmask and be allocated from the IPAM public pool. Required for HCX internet access configuration. - The HCX public VLAN CIDR block must be added to the VPC as a secondary CIDR block. - Must have at least two Elastic IP addresses to be allocated from the public IPAM pool for HCX components.
             :param nsx_up_link: The NSX uplink VLAN subnet. This VLAN subnet allows connectivity to the NSX overlay network.
             :param vmk_management: The host VMkernel management VLAN subnet. This VLAN subnet carries traffic for managing ESXi hosts and communicating with VMware vCenter Server.
             :param vm_management: The VM management VLAN subnet. This VLAN subnet carries traffic for vSphere virtual machines.
             :param v_motion: The vMotion VLAN subnet. This VLAN subnet carries traffic for vSphere vMotion.
             :param v_san: The vSAN VLAN subnet. This VLAN subnet carries the communication between ESXi hosts to implement a vSAN shared storage pool.
             :param v_tep: The VTEP VLAN subnet. This VLAN subnet handles internal network traffic between virtual machines within a VCF instance.
+            :param hcx_network_acl_id: A unique ID for a network access control list that the HCX VLAN uses. Required when ``isHcxPublic`` is set to ``true`` .
+            :param is_hcx_public: Determines if the HCX VLAN that Amazon EVS provisions is public or private.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evs-environment-initialvlans.html
             :exampleMetadata: fixture=_generated
@@ -1503,7 +1517,11 @@ class CfnEnvironment(
                     ),
                     v_tep=evs.CfnEnvironment.InitialVlanInfoProperty(
                         cidr="cidr"
-                    )
+                    ),
+                
+                    # the properties below are optional
+                    hcx_network_acl_id="hcxNetworkAclId",
+                    is_hcx_public=False
                 )
             '''
             if __debug__:
@@ -1518,6 +1536,8 @@ class CfnEnvironment(
                 check_type(argname="argument v_motion", value=v_motion, expected_type=type_hints["v_motion"])
                 check_type(argname="argument v_san", value=v_san, expected_type=type_hints["v_san"])
                 check_type(argname="argument v_tep", value=v_tep, expected_type=type_hints["v_tep"])
+                check_type(argname="argument hcx_network_acl_id", value=hcx_network_acl_id, expected_type=type_hints["hcx_network_acl_id"])
+                check_type(argname="argument is_hcx_public", value=is_hcx_public, expected_type=type_hints["is_hcx_public"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "edge_v_tep": edge_v_tep,
                 "expansion_vlan1": expansion_vlan1,
@@ -1530,6 +1550,10 @@ class CfnEnvironment(
                 "v_san": v_san,
                 "v_tep": v_tep,
             }
+            if hcx_network_acl_id is not None:
+                self._values["hcx_network_acl_id"] = hcx_network_acl_id
+            if is_hcx_public is not None:
+                self._values["is_hcx_public"] = is_hcx_public
 
         @builtins.property
         def edge_v_tep(
@@ -1580,6 +1604,12 @@ class CfnEnvironment(
             '''The HCX VLAN subnet.
 
             This VLAN subnet allows the HCX Interconnnect (IX) and HCX Network Extension (NE) to reach their peers and enable HCX Service Mesh creation.
+
+            If you plan to use a public HCX VLAN subnet, the following requirements must be met:
+
+            - Must have a /28 netmask and be allocated from the IPAM public pool. Required for HCX internet access configuration.
+            - The HCX public VLAN CIDR block must be added to the VPC as a secondary CIDR block.
+            - Must have at least two Elastic IP addresses to be allocated from the public IPAM pool for HCX components.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evs-environment-initialvlans.html#cfn-evs-environment-initialvlans-hcx
             '''
@@ -1670,6 +1700,28 @@ class CfnEnvironment(
             result = self._values.get("v_tep")
             assert result is not None, "Required property 'v_tep' is missing"
             return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnEnvironment.InitialVlanInfoProperty"], result)
+
+        @builtins.property
+        def hcx_network_acl_id(self) -> typing.Optional[builtins.str]:
+            '''A unique ID for a network access control list that the HCX VLAN uses.
+
+            Required when ``isHcxPublic`` is set to ``true`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evs-environment-initialvlans.html#cfn-evs-environment-initialvlans-hcxnetworkaclid
+            '''
+            result = self._values.get("hcx_network_acl_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def is_hcx_public(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Determines if the HCX VLAN that Amazon EVS provisions is public or private.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evs-environment-initialvlans.html#cfn-evs-environment-initialvlans-ishcxpublic
+            '''
+            result = self._values.get("is_hcx_public")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2261,6 +2313,8 @@ def _typecheckingstub__a70b9547ba64740f8b44168dbcdcd80e75a75a1dc2ed733c834ad336f
     v_motion: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.InitialVlanInfoProperty, typing.Dict[builtins.str, typing.Any]]],
     v_san: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.InitialVlanInfoProperty, typing.Dict[builtins.str, typing.Any]]],
     v_tep: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.InitialVlanInfoProperty, typing.Dict[builtins.str, typing.Any]]],
+    hcx_network_acl_id: typing.Optional[builtins.str] = None,
+    is_hcx_public: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

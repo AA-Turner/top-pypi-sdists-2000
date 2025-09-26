@@ -2037,8 +2037,8 @@ class CfnPredefinedAttributeProps:
 
         :param instance_arn: The Amazon Resource Name (ARN) of the instance.
         :param name: The name of the predefined attribute.
-        :param attribute_configuration: Custom metadata associated to a Predefined attribute that controls how the attribute behaves when used by upstream services.
-        :param purposes: The assigned purposes of the predefined attribute.
+        :param attribute_configuration: Custom metadata that is associated to predefined attributes to control behavior in upstream services, such as controlling how a predefined attribute should be displayed in the Amazon Connect admin website.
+        :param purposes: Values that enable you to categorize your predefined attributes. You can use them in custom UI elements across the Amazon Connect admin website.
         :param values: The values of a predefined attribute.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-predefinedattribute.html
@@ -2107,7 +2107,7 @@ class CfnPredefinedAttributeProps:
     def attribute_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPredefinedAttribute.AttributeConfigurationProperty"]]:
-        '''Custom metadata associated to a Predefined attribute that controls how the attribute behaves when used by upstream services.
+        '''Custom metadata that is associated to predefined attributes to control behavior in upstream services, such as controlling how a predefined attribute should be displayed in the Amazon Connect admin website.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-predefinedattribute.html#cfn-connect-predefinedattribute-attributeconfiguration
         '''
@@ -2116,7 +2116,9 @@ class CfnPredefinedAttributeProps:
 
     @builtins.property
     def purposes(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''The assigned purposes of the predefined attribute.
+        '''Values that enable you to categorize your predefined attributes.
+
+        You can use them in custom UI elements across the Amazon Connect admin website.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-predefinedattribute.html#cfn-connect-predefinedattribute-purposes
         '''
@@ -2655,6 +2657,7 @@ class CfnQuickConnectProps:
         "media_concurrencies": "mediaConcurrencies",
         "name": "name",
         "agent_availability_timer": "agentAvailabilityTimer",
+        "manual_assignment_queue_configs": "manualAssignmentQueueConfigs",
         "queue_configs": "queueConfigs",
         "tags": "tags",
     },
@@ -2669,6 +2672,7 @@ class CfnRoutingProfileProps:
         media_concurrencies: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingProfile.MediaConcurrencyProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
         agent_availability_timer: typing.Optional[builtins.str] = None,
+        manual_assignment_queue_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         queue_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingProfile.RoutingProfileQueueConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -2680,6 +2684,7 @@ class CfnRoutingProfileProps:
         :param media_concurrencies: The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.
         :param name: The name of the routing profile.
         :param agent_availability_timer: Whether agents with this routing profile will have their routing order calculated based on *time since their last inbound contact* or *longest idle time* .
+        :param manual_assignment_queue_configs: The manual assignment queues to associate with this routing profile.
         :param queue_configs: The inbound queues associated with the routing profile. If no queue is added, the agent can make only outbound calls.
         :param tags: The tags used to organize, track, or control access for this resource. For example, { "Tags": {"key1":"value1", "key2":"value2"} }.
 
@@ -2709,6 +2714,12 @@ class CfnRoutingProfileProps:
             
                 # the properties below are optional
                 agent_availability_timer="agentAvailabilityTimer",
+                manual_assignment_queue_configs=[connect.CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty(
+                    queue_reference=connect.CfnRoutingProfile.RoutingProfileQueueReferenceProperty(
+                        channel="channel",
+                        queue_arn="queueArn"
+                    )
+                )],
                 queue_configs=[connect.CfnRoutingProfile.RoutingProfileQueueConfigProperty(
                     delay=123,
                     priority=123,
@@ -2731,6 +2742,7 @@ class CfnRoutingProfileProps:
             check_type(argname="argument media_concurrencies", value=media_concurrencies, expected_type=type_hints["media_concurrencies"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument agent_availability_timer", value=agent_availability_timer, expected_type=type_hints["agent_availability_timer"])
+            check_type(argname="argument manual_assignment_queue_configs", value=manual_assignment_queue_configs, expected_type=type_hints["manual_assignment_queue_configs"])
             check_type(argname="argument queue_configs", value=queue_configs, expected_type=type_hints["queue_configs"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -2742,6 +2754,8 @@ class CfnRoutingProfileProps:
         }
         if agent_availability_timer is not None:
             self._values["agent_availability_timer"] = agent_availability_timer
+        if manual_assignment_queue_configs is not None:
+            self._values["manual_assignment_queue_configs"] = manual_assignment_queue_configs
         if queue_configs is not None:
             self._values["queue_configs"] = queue_configs
         if tags is not None:
@@ -2807,6 +2821,17 @@ class CfnRoutingProfileProps:
         '''
         result = self._values.get("agent_availability_timer")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def manual_assignment_queue_configs(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty"]]]]:
+        '''The manual assignment queues to associate with this routing profile.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-routingprofile.html#cfn-connect-routingprofile-manualassignmentqueueconfigs
+        '''
+        result = self._values.get("manual_assignment_queue_configs")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty"]]]], result)
 
     @builtins.property
     def queue_configs(
@@ -10623,7 +10648,7 @@ class CfnHoursOfOperation(
             '''Information about the hours of operations override.
 
             :param effective_from: The date from which the hours of operation override would be effective.
-            :param effective_till: The date till which the hours of operation override would be effective.
+            :param effective_till: The date until the hours of operation override is effective.
             :param override_config: Configuration information for the hours of operation override: day, start time, and end time.
             :param override_name: The name of the hours of operation override.
             :param hours_of_operation_override_id: The identifier for the hours of operation override.
@@ -10690,7 +10715,7 @@ class CfnHoursOfOperation(
 
         @builtins.property
         def effective_till(self) -> builtins.str:
-            '''The date till which the hours of operation override would be effective.
+            '''The date until the hours of operation override is effective.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-hoursofoperationoverride.html#cfn-connect-hoursofoperation-hoursofoperationoverride-effectivetill
             '''
@@ -12447,8 +12472,8 @@ class CfnPredefinedAttribute(
         :param id: Construct identifier for this resource (unique in its scope).
         :param instance_arn: The Amazon Resource Name (ARN) of the instance.
         :param name: The name of the predefined attribute.
-        :param attribute_configuration: Custom metadata associated to a Predefined attribute that controls how the attribute behaves when used by upstream services.
-        :param purposes: The assigned purposes of the predefined attribute.
+        :param attribute_configuration: Custom metadata that is associated to predefined attributes to control behavior in upstream services, such as controlling how a predefined attribute should be displayed in the Amazon Connect admin website.
+        :param purposes: Values that enable you to categorize your predefined attributes. You can use them in custom UI elements across the Amazon Connect admin website.
         :param values: The values of a predefined attribute.
         '''
         if __debug__:
@@ -12555,7 +12580,7 @@ class CfnPredefinedAttribute(
     def attribute_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPredefinedAttribute.AttributeConfigurationProperty"]]:
-        '''Custom metadata associated to a Predefined attribute that controls how the attribute behaves when used by upstream services.'''
+        '''Custom metadata that is associated to predefined attributes to control behavior in upstream services, such as controlling how a predefined attribute should be displayed in the Amazon Connect admin website.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPredefinedAttribute.AttributeConfigurationProperty"]], jsii.get(self, "attributeConfiguration"))
 
     @attribute_configuration.setter
@@ -12571,7 +12596,7 @@ class CfnPredefinedAttribute(
     @builtins.property
     @jsii.member(jsii_name="purposes")
     def purposes(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''The assigned purposes of the predefined attribute.'''
+        '''Values that enable you to categorize your predefined attributes.'''
         return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "purposes"))
 
     @purposes.setter
@@ -13951,6 +13976,12 @@ class CfnRoutingProfile(
         
             # the properties below are optional
             agent_availability_timer="agentAvailabilityTimer",
+            manual_assignment_queue_configs=[connect.CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty(
+                queue_reference=connect.CfnRoutingProfile.RoutingProfileQueueReferenceProperty(
+                    channel="channel",
+                    queue_arn="queueArn"
+                )
+            )],
             queue_configs=[connect.CfnRoutingProfile.RoutingProfileQueueConfigProperty(
                 delay=123,
                 priority=123,
@@ -13977,6 +14008,7 @@ class CfnRoutingProfile(
         media_concurrencies: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingProfile.MediaConcurrencyProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
         agent_availability_timer: typing.Optional[builtins.str] = None,
+        manual_assignment_queue_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         queue_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingProfile.RoutingProfileQueueConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -13989,6 +14021,7 @@ class CfnRoutingProfile(
         :param media_concurrencies: The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.
         :param name: The name of the routing profile.
         :param agent_availability_timer: Whether agents with this routing profile will have their routing order calculated based on *time since their last inbound contact* or *longest idle time* .
+        :param manual_assignment_queue_configs: The manual assignment queues to associate with this routing profile.
         :param queue_configs: The inbound queues associated with the routing profile. If no queue is added, the agent can make only outbound calls.
         :param tags: The tags used to organize, track, or control access for this resource. For example, { "Tags": {"key1":"value1", "key2":"value2"} }.
         '''
@@ -14003,6 +14036,7 @@ class CfnRoutingProfile(
             media_concurrencies=media_concurrencies,
             name=name,
             agent_availability_timer=agent_availability_timer,
+            manual_assignment_queue_configs=manual_assignment_queue_configs,
             queue_configs=queue_configs,
             tags=tags,
         )
@@ -14147,6 +14181,24 @@ class CfnRoutingProfile(
             type_hints = typing.get_type_hints(_typecheckingstub__d19931b4ff72cc897b92c5bddb17158eb5a7dd2de0061c85498c43c4b38eabbf)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "agentAvailabilityTimer", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="manualAssignmentQueueConfigs")
+    def manual_assignment_queue_configs(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty"]]]]:
+        '''The manual assignment queues to associate with this routing profile.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty"]]]], jsii.get(self, "manualAssignmentQueueConfigs"))
+
+    @manual_assignment_queue_configs.setter
+    def manual_assignment_queue_configs(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__09c417924d45d3886a694f2e5caaf47e0684df9643866e06b6a7aab6a2a50849)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "manualAssignmentQueueConfigs", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="queueConfigs")
@@ -14332,6 +14384,67 @@ class CfnRoutingProfile(
 
         def __repr__(self) -> str:
             return "MediaConcurrencyProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"queue_reference": "queueReference"},
+    )
+    class RoutingProfileManualAssignmentQueueConfigProperty:
+        def __init__(
+            self,
+            *,
+            queue_reference: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingProfile.RoutingProfileQueueReferenceProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Contains information about the manual assignment queue and channel.
+
+            :param queue_reference: Contains the channel and queue identifier for a routing profile.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-routingprofile-routingprofilemanualassignmentqueueconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                routing_profile_manual_assignment_queue_config_property = connect.CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty(
+                    queue_reference=connect.CfnRoutingProfile.RoutingProfileQueueReferenceProperty(
+                        channel="channel",
+                        queue_arn="queueArn"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__26afadec6b0e131a6a22ba0a9b6b159af4190ae7fd0c58a9a59d144fb9253157)
+                check_type(argname="argument queue_reference", value=queue_reference, expected_type=type_hints["queue_reference"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "queue_reference": queue_reference,
+            }
+
+        @builtins.property
+        def queue_reference(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileQueueReferenceProperty"]:
+            '''Contains the channel and queue identifier for a routing profile.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-routingprofile-routingprofilemanualassignmentqueueconfig.html#cfn-connect-routingprofile-routingprofilemanualassignmentqueueconfig-queuereference
+            '''
+            result = self._values.get("queue_reference")
+            assert result is not None, "Required property 'queue_reference' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileQueueReferenceProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RoutingProfileManualAssignmentQueueConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -19889,6 +20002,7 @@ def _typecheckingstub__c352ac5c14b7a76c3094c7e1595be9aaa093440801508c4780610a6d2
     media_concurrencies: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.MediaConcurrencyProperty, typing.Dict[builtins.str, typing.Any]]]]],
     name: builtins.str,
     agent_availability_timer: typing.Optional[builtins.str] = None,
+    manual_assignment_queue_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     queue_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.RoutingProfileQueueConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -21477,6 +21591,7 @@ def _typecheckingstub__ca1360ef7fc87b491018629ca5fc6a3c13fcbdd97e4a14461038caf03
     media_concurrencies: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.MediaConcurrencyProperty, typing.Dict[builtins.str, typing.Any]]]]],
     name: builtins.str,
     agent_availability_timer: typing.Optional[builtins.str] = None,
+    manual_assignment_queue_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     queue_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.RoutingProfileQueueConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -21531,6 +21646,12 @@ def _typecheckingstub__d19931b4ff72cc897b92c5bddb17158eb5a7dd2de0061c85498c43c4b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__09c417924d45d3886a694f2e5caaf47e0684df9643866e06b6a7aab6a2a50849(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__59e5612a464f7993fc5802b7496378e9f43c22ddbfdd66a4769b7dd34e2ad014(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRoutingProfile.RoutingProfileQueueConfigProperty]]]],
 ) -> None:
@@ -21555,6 +21676,13 @@ def _typecheckingstub__c169890f0c9845b73f64645c0d362ee0a7e26614d464148fd2a80b600
     channel: builtins.str,
     concurrency: jsii.Number,
     cross_channel_behavior: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.CrossChannelBehaviorProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__26afadec6b0e131a6a22ba0a9b6b159af4190ae7fd0c58a9a59d144fb9253157(
+    *,
+    queue_reference: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.RoutingProfileQueueReferenceProperty, typing.Dict[builtins.str, typing.Any]]],
 ) -> None:
     """Type checking stubs"""
     pass

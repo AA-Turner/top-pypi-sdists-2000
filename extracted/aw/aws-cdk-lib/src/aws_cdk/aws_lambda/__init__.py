@@ -5317,6 +5317,7 @@ class CfnParametersCodeProps:
         "principal": "principal",
         "event_source_token": "eventSourceToken",
         "function_url_auth_type": "functionUrlAuthType",
+        "invoked_via_function_url": "invokedViaFunctionUrl",
         "principal_org_id": "principalOrgId",
         "source_account": "sourceAccount",
         "source_arn": "sourceArn",
@@ -5331,6 +5332,7 @@ class CfnPermissionProps:
         principal: builtins.str,
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[builtins.str] = None,
+        invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         principal_org_id: typing.Optional[builtins.str] = None,
         source_account: typing.Optional[builtins.str] = None,
         source_arn: typing.Optional[builtins.str] = None,
@@ -5342,6 +5344,7 @@ class CfnPermissionProps:
         :param principal: The AWS service , AWS account , IAM user, or IAM role that invokes the function. If you specify a service, use ``SourceArn`` or ``SourceAccount`` to limit who can invoke the function through that service.
         :param event_source_token: For Alexa Smart Home functions, a token that the invoker must supply.
         :param function_url_auth_type: The type of authentication that your function URL uses. Set to ``AWS_IAM`` if you want to restrict access to authenticated users only. Set to ``NONE`` if you want to bypass IAM authentication to create a public endpoint. For more information, see `Security and auth model for Lambda function URLs <https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html>`_ .
+        :param invoked_via_function_url: 
         :param principal_org_id: The identifier for your organization in AWS Organizations . Use this to grant permissions to all the AWS accounts under this organization.
         :param source_account: For AWS service , the ID of the AWS account that owns the resource. Use this together with ``SourceArn`` to ensure that the specified account owns the resource. It is possible for an Amazon S3 bucket to be deleted by its owner and recreated by another account.
         :param source_arn: For AWS services , the ARN of the AWS resource that invokes the function. For example, an Amazon S3 bucket or Amazon SNS topic. Note that Lambda configures the comparison using the ``StringLike`` operator.
@@ -5363,6 +5366,7 @@ class CfnPermissionProps:
                 # the properties below are optional
                 event_source_token="eventSourceToken",
                 function_url_auth_type="functionUrlAuthType",
+                invoked_via_function_url=False,
                 principal_org_id="principalOrgId",
                 source_account="sourceAccount",
                 source_arn="sourceArn"
@@ -5375,6 +5379,7 @@ class CfnPermissionProps:
             check_type(argname="argument principal", value=principal, expected_type=type_hints["principal"])
             check_type(argname="argument event_source_token", value=event_source_token, expected_type=type_hints["event_source_token"])
             check_type(argname="argument function_url_auth_type", value=function_url_auth_type, expected_type=type_hints["function_url_auth_type"])
+            check_type(argname="argument invoked_via_function_url", value=invoked_via_function_url, expected_type=type_hints["invoked_via_function_url"])
             check_type(argname="argument principal_org_id", value=principal_org_id, expected_type=type_hints["principal_org_id"])
             check_type(argname="argument source_account", value=source_account, expected_type=type_hints["source_account"])
             check_type(argname="argument source_arn", value=source_arn, expected_type=type_hints["source_arn"])
@@ -5387,6 +5392,8 @@ class CfnPermissionProps:
             self._values["event_source_token"] = event_source_token
         if function_url_auth_type is not None:
             self._values["function_url_auth_type"] = function_url_auth_type
+        if invoked_via_function_url is not None:
+            self._values["invoked_via_function_url"] = invoked_via_function_url
         if principal_org_id is not None:
             self._values["principal_org_id"] = principal_org_id
         if source_account is not None:
@@ -5454,6 +5461,16 @@ class CfnPermissionProps:
         '''
         result = self._values.get("function_url_auth_type")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def invoked_via_function_url(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html#cfn-lambda-permission-invokedviafunctionurl
+        '''
+        result = self._values.get("invoked_via_function_url")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
     def principal_org_id(self) -> typing.Optional[builtins.str]:
@@ -24663,6 +24680,7 @@ class CfnPermission(
             # the properties below are optional
             event_source_token="eventSourceToken",
             function_url_auth_type="functionUrlAuthType",
+            invoked_via_function_url=False,
             principal_org_id="principalOrgId",
             source_account="sourceAccount",
             source_arn="sourceArn"
@@ -24679,6 +24697,7 @@ class CfnPermission(
         principal: builtins.str,
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[builtins.str] = None,
+        invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         principal_org_id: typing.Optional[builtins.str] = None,
         source_account: typing.Optional[builtins.str] = None,
         source_arn: typing.Optional[builtins.str] = None,
@@ -24691,6 +24710,7 @@ class CfnPermission(
         :param principal: The AWS service , AWS account , IAM user, or IAM role that invokes the function. If you specify a service, use ``SourceArn`` or ``SourceAccount`` to limit who can invoke the function through that service.
         :param event_source_token: For Alexa Smart Home functions, a token that the invoker must supply.
         :param function_url_auth_type: The type of authentication that your function URL uses. Set to ``AWS_IAM`` if you want to restrict access to authenticated users only. Set to ``NONE`` if you want to bypass IAM authentication to create a public endpoint. For more information, see `Security and auth model for Lambda function URLs <https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html>`_ .
+        :param invoked_via_function_url: 
         :param principal_org_id: The identifier for your organization in AWS Organizations . Use this to grant permissions to all the AWS accounts under this organization.
         :param source_account: For AWS service , the ID of the AWS account that owns the resource. Use this together with ``SourceArn`` to ensure that the specified account owns the resource. It is possible for an Amazon S3 bucket to be deleted by its owner and recreated by another account.
         :param source_arn: For AWS services , the ARN of the AWS resource that invokes the function. For example, an Amazon S3 bucket or Amazon SNS topic. Note that Lambda configures the comparison using the ``StringLike`` operator.
@@ -24705,6 +24725,7 @@ class CfnPermission(
             principal=principal,
             event_source_token=event_source_token,
             function_url_auth_type=function_url_auth_type,
+            invoked_via_function_url=invoked_via_function_url,
             principal_org_id=principal_org_id,
             source_account=source_account,
             source_arn=source_arn,
@@ -24825,6 +24846,23 @@ class CfnPermission(
             type_hints = typing.get_type_hints(_typecheckingstub__c85fd263b0dc67595e83c426e4f8a064ea18d154ec013099a2ff44bb12a40473)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "functionUrlAuthType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="invokedViaFunctionUrl")
+    def invoked_via_function_url(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "invokedViaFunctionUrl"))
+
+    @invoked_via_function_url.setter
+    def invoked_via_function_url(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__27448921eb884e35f652e485f1520f21a151aabd99f5cd26586c6fbaaf7385ab)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "invokedViaFunctionUrl", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="principalOrgId")
@@ -32120,6 +32158,7 @@ def _typecheckingstub__b0c90e5a512dc08c54978bc1f6bf13992ad2d1d5c793f2b05fc82eef3
     principal: builtins.str,
     event_source_token: typing.Optional[builtins.str] = None,
     function_url_auth_type: typing.Optional[builtins.str] = None,
+    invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     principal_org_id: typing.Optional[builtins.str] = None,
     source_account: typing.Optional[builtins.str] = None,
     source_arn: typing.Optional[builtins.str] = None,
@@ -34376,6 +34415,7 @@ def _typecheckingstub__c457a277b84dbba5bd94a2c0135335b8d7dbb3d409b1fa988b4f5a219
     principal: builtins.str,
     event_source_token: typing.Optional[builtins.str] = None,
     function_url_auth_type: typing.Optional[builtins.str] = None,
+    invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     principal_org_id: typing.Optional[builtins.str] = None,
     source_account: typing.Optional[builtins.str] = None,
     source_arn: typing.Optional[builtins.str] = None,
@@ -34421,6 +34461,12 @@ def _typecheckingstub__7584a173c7ddfb61695a8eaeb94df07bc5ed6da7dacb871ce3f736ac5
 
 def _typecheckingstub__c85fd263b0dc67595e83c426e4f8a064ea18d154ec013099a2ff44bb12a40473(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__27448921eb884e35f652e485f1520f21a151aabd99f5cd26586c6fbaaf7385ab(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
     pass

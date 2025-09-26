@@ -901,6 +901,8 @@ class CfnVariantStoreProps:
     jsii_struct_bases=[],
     name_mapping={
         "accelerators": "accelerators",
+        "container_registry_map": "containerRegistryMap",
+        "container_registry_map_uri": "containerRegistryMapUri",
         "definition_repository": "definitionRepository",
         "definition_uri": "definitionUri",
         "description": "description",
@@ -923,6 +925,8 @@ class CfnWorkflowProps:
         self,
         *,
         accelerators: typing.Optional[builtins.str] = None,
+        container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.ContainerRegistryMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        container_registry_map_uri: typing.Optional[builtins.str] = None,
         definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.DefinitionRepositoryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         definition_uri: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
@@ -942,6 +946,8 @@ class CfnWorkflowProps:
         '''Properties for defining a ``CfnWorkflow``.
 
         :param accelerators: 
+        :param container_registry_map: Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries. For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+        :param container_registry_map_uri: 
         :param definition_repository: Contains information about a source code repository that hosts the workflow definition files.
         :param definition_uri: The URI of a definition for the workflow.
         :param description: The parameter's description.
@@ -969,6 +975,19 @@ class CfnWorkflowProps:
             
             cfn_workflow_props = omics.CfnWorkflowProps(
                 accelerators="accelerators",
+                container_registry_map=omics.CfnWorkflow.ContainerRegistryMapProperty(
+                    image_mappings=[omics.CfnWorkflow.ImageMappingProperty(
+                        destination_image="destinationImage",
+                        source_image="sourceImage"
+                    )],
+                    registry_mappings=[omics.CfnWorkflow.RegistryMappingProperty(
+                        ecr_account_id="ecrAccountId",
+                        ecr_repository_prefix="ecrRepositoryPrefix",
+                        upstream_registry_url="upstreamRegistryUrl",
+                        upstream_repository_prefix="upstreamRepositoryPrefix"
+                    )]
+                ),
+                container_registry_map_uri="containerRegistryMapUri",
                 definition_repository=omics.CfnWorkflow.DefinitionRepositoryProperty(
                     connection_arn="connectionArn",
                     exclude_file_patterns=["excludeFilePatterns"],
@@ -1004,6 +1023,8 @@ class CfnWorkflowProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__09bedca50200dd06a4bbe4bb6135e76dacff76287249f3d28b8f285f8205f173)
             check_type(argname="argument accelerators", value=accelerators, expected_type=type_hints["accelerators"])
+            check_type(argname="argument container_registry_map", value=container_registry_map, expected_type=type_hints["container_registry_map"])
+            check_type(argname="argument container_registry_map_uri", value=container_registry_map_uri, expected_type=type_hints["container_registry_map_uri"])
             check_type(argname="argument definition_repository", value=definition_repository, expected_type=type_hints["definition_repository"])
             check_type(argname="argument definition_uri", value=definition_uri, expected_type=type_hints["definition_uri"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
@@ -1022,6 +1043,10 @@ class CfnWorkflowProps:
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if accelerators is not None:
             self._values["accelerators"] = accelerators
+        if container_registry_map is not None:
+            self._values["container_registry_map"] = container_registry_map
+        if container_registry_map_uri is not None:
+            self._values["container_registry_map_uri"] = container_registry_map_uri
         if definition_repository is not None:
             self._values["definition_repository"] = definition_repository
         if definition_uri is not None:
@@ -1059,6 +1084,27 @@ class CfnWorkflowProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-accelerators
         '''
         result = self._values.get("accelerators")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def container_registry_map(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.ContainerRegistryMapProperty"]]:
+        '''Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries.
+
+        For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-containerregistrymap
+        '''
+        result = self._values.get("container_registry_map")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.ContainerRegistryMapProperty"]], result)
+
+    @builtins.property
+    def container_registry_map_uri(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-containerregistrymapuri
+        '''
+        result = self._values.get("container_registry_map_uri")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -1226,11 +1272,18 @@ class CfnWorkflowProps:
         "version_name": "versionName",
         "workflow_id": "workflowId",
         "accelerators": "accelerators",
+        "container_registry_map": "containerRegistryMap",
+        "container_registry_map_uri": "containerRegistryMapUri",
+        "definition_repository": "definitionRepository",
         "definition_uri": "definitionUri",
         "description": "description",
         "engine": "engine",
         "main": "main",
         "parameter_template": "parameterTemplate",
+        "parameter_template_path": "parameterTemplatePath",
+        "readme_markdown": "readmeMarkdown",
+        "readme_path": "readmePath",
+        "readme_uri": "readmeUri",
         "storage_capacity": "storageCapacity",
         "storage_type": "storageType",
         "tags": "tags",
@@ -1244,11 +1297,18 @@ class CfnWorkflowVersionProps:
         version_name: builtins.str,
         workflow_id: builtins.str,
         accelerators: typing.Optional[builtins.str] = None,
+        container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.ContainerRegistryMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        container_registry_map_uri: typing.Optional[builtins.str] = None,
+        definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.DefinitionRepositoryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         definition_uri: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         engine: typing.Optional[builtins.str] = None,
         main: typing.Optional[builtins.str] = None,
         parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.WorkflowParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        parameter_template_path: typing.Optional[builtins.str] = None,
+        readme_markdown: typing.Optional[builtins.str] = None,
+        readme_path: typing.Optional[builtins.str] = None,
+        readme_uri: typing.Optional[builtins.str] = None,
         storage_capacity: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -1259,11 +1319,18 @@ class CfnWorkflowVersionProps:
         :param version_name: The name of the workflow version.
         :param workflow_id: The workflow's ID.
         :param accelerators: 
+        :param container_registry_map: Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries. For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+        :param container_registry_map_uri: 
+        :param definition_repository: Contains information about a source code repository that hosts the workflow definition files.
         :param definition_uri: 
         :param description: The description of the workflow version.
         :param engine: 
         :param main: 
         :param parameter_template: 
+        :param parameter_template_path: Path to the primary workflow parameter template JSON file inside the repository.
+        :param readme_markdown: The markdown content for the workflow's README file. This provides documentation and usage information for users of the workflow.
+        :param readme_path: The path to the workflow README markdown file within the repository. This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
+        :param readme_uri: The S3 URI of the README file for the workflow. This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
         :param storage_capacity: 
         :param storage_type: 
         :param tags: A map of resource tags.
@@ -1284,6 +1351,28 @@ class CfnWorkflowVersionProps:
             
                 # the properties below are optional
                 accelerators="accelerators",
+                container_registry_map=omics.CfnWorkflowVersion.ContainerRegistryMapProperty(
+                    image_mappings=[omics.CfnWorkflowVersion.ImageMappingProperty(
+                        destination_image="destinationImage",
+                        source_image="sourceImage"
+                    )],
+                    registry_mappings=[omics.CfnWorkflowVersion.RegistryMappingProperty(
+                        ecr_account_id="ecrAccountId",
+                        ecr_repository_prefix="ecrRepositoryPrefix",
+                        upstream_registry_url="upstreamRegistryUrl",
+                        upstream_repository_prefix="upstreamRepositoryPrefix"
+                    )]
+                ),
+                container_registry_map_uri="containerRegistryMapUri",
+                definition_repository=omics.CfnWorkflowVersion.DefinitionRepositoryProperty(
+                    connection_arn="connectionArn",
+                    exclude_file_patterns=["excludeFilePatterns"],
+                    full_repository_id="fullRepositoryId",
+                    source_reference=omics.CfnWorkflowVersion.SourceReferenceProperty(
+                        type="type",
+                        value="value"
+                    )
+                ),
                 definition_uri="definitionUri",
                 description="description",
                 engine="engine",
@@ -1294,6 +1383,10 @@ class CfnWorkflowVersionProps:
                         optional=False
                     )
                 },
+                parameter_template_path="parameterTemplatePath",
+                readme_markdown="readmeMarkdown",
+                readme_path="readmePath",
+                readme_uri="readmeUri",
                 storage_capacity=123,
                 storage_type="storageType",
                 tags={
@@ -1307,11 +1400,18 @@ class CfnWorkflowVersionProps:
             check_type(argname="argument version_name", value=version_name, expected_type=type_hints["version_name"])
             check_type(argname="argument workflow_id", value=workflow_id, expected_type=type_hints["workflow_id"])
             check_type(argname="argument accelerators", value=accelerators, expected_type=type_hints["accelerators"])
+            check_type(argname="argument container_registry_map", value=container_registry_map, expected_type=type_hints["container_registry_map"])
+            check_type(argname="argument container_registry_map_uri", value=container_registry_map_uri, expected_type=type_hints["container_registry_map_uri"])
+            check_type(argname="argument definition_repository", value=definition_repository, expected_type=type_hints["definition_repository"])
             check_type(argname="argument definition_uri", value=definition_uri, expected_type=type_hints["definition_uri"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
             check_type(argname="argument main", value=main, expected_type=type_hints["main"])
             check_type(argname="argument parameter_template", value=parameter_template, expected_type=type_hints["parameter_template"])
+            check_type(argname="argument parameter_template_path", value=parameter_template_path, expected_type=type_hints["parameter_template_path"])
+            check_type(argname="argument readme_markdown", value=readme_markdown, expected_type=type_hints["readme_markdown"])
+            check_type(argname="argument readme_path", value=readme_path, expected_type=type_hints["readme_path"])
+            check_type(argname="argument readme_uri", value=readme_uri, expected_type=type_hints["readme_uri"])
             check_type(argname="argument storage_capacity", value=storage_capacity, expected_type=type_hints["storage_capacity"])
             check_type(argname="argument storage_type", value=storage_type, expected_type=type_hints["storage_type"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -1322,6 +1422,12 @@ class CfnWorkflowVersionProps:
         }
         if accelerators is not None:
             self._values["accelerators"] = accelerators
+        if container_registry_map is not None:
+            self._values["container_registry_map"] = container_registry_map
+        if container_registry_map_uri is not None:
+            self._values["container_registry_map_uri"] = container_registry_map_uri
+        if definition_repository is not None:
+            self._values["definition_repository"] = definition_repository
         if definition_uri is not None:
             self._values["definition_uri"] = definition_uri
         if description is not None:
@@ -1332,6 +1438,14 @@ class CfnWorkflowVersionProps:
             self._values["main"] = main
         if parameter_template is not None:
             self._values["parameter_template"] = parameter_template
+        if parameter_template_path is not None:
+            self._values["parameter_template_path"] = parameter_template_path
+        if readme_markdown is not None:
+            self._values["readme_markdown"] = readme_markdown
+        if readme_path is not None:
+            self._values["readme_path"] = readme_path
+        if readme_uri is not None:
+            self._values["readme_uri"] = readme_uri
         if storage_capacity is not None:
             self._values["storage_capacity"] = storage_capacity
         if storage_type is not None:
@@ -1368,6 +1482,38 @@ class CfnWorkflowVersionProps:
         '''
         result = self._values.get("accelerators")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def container_registry_map(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.ContainerRegistryMapProperty"]]:
+        '''Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries.
+
+        For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-containerregistrymap
+        '''
+        result = self._values.get("container_registry_map")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.ContainerRegistryMapProperty"]], result)
+
+    @builtins.property
+    def container_registry_map_uri(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-containerregistrymapuri
+        '''
+        result = self._values.get("container_registry_map_uri")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def definition_repository(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.DefinitionRepositoryProperty"]]:
+        '''Contains information about a source code repository that hosts the workflow definition files.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-definitionrepository
+        '''
+        result = self._values.get("definition_repository")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.DefinitionRepositoryProperty"]], result)
 
     @builtins.property
     def definition_uri(self) -> typing.Optional[builtins.str]:
@@ -1411,6 +1557,48 @@ class CfnWorkflowVersionProps:
         '''
         result = self._values.get("parameter_template")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.WorkflowParameterProperty"]]]], result)
+
+    @builtins.property
+    def parameter_template_path(self) -> typing.Optional[builtins.str]:
+        '''Path to the primary workflow parameter template JSON file inside the repository.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-parametertemplatepath
+        '''
+        result = self._values.get("parameter_template_path")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def readme_markdown(self) -> typing.Optional[builtins.str]:
+        '''The markdown content for the workflow's README file.
+
+        This provides documentation and usage information for users of the workflow.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-readmemarkdown
+        '''
+        result = self._values.get("readme_markdown")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def readme_path(self) -> typing.Optional[builtins.str]:
+        '''The path to the workflow README markdown file within the repository.
+
+        This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-readmepath
+        '''
+        result = self._values.get("readme_path")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def readme_uri(self) -> typing.Optional[builtins.str]:
+        '''The S3 URI of the README file for the workflow.
+
+        This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-readmeuri
+        '''
+        result = self._values.get("readme_uri")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def storage_capacity(self) -> typing.Optional[jsii.Number]:
@@ -3996,10 +4184,11 @@ class CfnWorkflow(
 ):
     '''Creates a private workflow. Before you create a private workflow, you must create and configure these required resources:.
 
-    - *Workflow definition files* : Define your workflow in one or more workflow definition files, written in WDL, Nextflow, or CWL. The workflow definition specifies the inputs and outputs for runs that use the workflow. It also includes specifications for the runs and run tasks for your workflow, including compute and memory requirements. The workflow definition file must be in .zip format.
-    - (Optional) *Parameter template* : You can create a parameter template file that defines the run parameters, or AWS HealthOmics can generate the parameter template for you.
-    - *ECR container images* : Create container images for the workflow in a private ECR repository, or synchronize images from a supported upstream registry with your Amazon ECR private repository.
-    - (Optional) *Sentieon licenses* : Request a Sentieon license if using the Sentieon software in a private workflow.
+    - *Workflow definition file:* A workflow definition file written in WDL, Nextflow, or CWL. The workflow definition specifies the inputs and outputs for runs that use the workflow. It also includes specifications for the runs and run tasks for your workflow, including compute and memory requirements. The workflow definition file must be in ``.zip`` format. For more information, see `Workflow definition files <https://docs.aws.amazon.com/omics/latest/dev/workflow-definition-files.html>`_ in AWS HealthOmics.
+    - You can use Amazon Q CLI to build and validate your workflow definition files in WDL, Nextflow, and CWL. For more information, see `Example prompts for Amazon Q CLI <https://docs.aws.amazon.com/omics/latest/dev/getting-started.html#omics-q-prompts>`_ and the `AWS HealthOmics Agentic generative AI tutorial <https://docs.aws.amazon.com/https://github.com/aws-samples/aws-healthomics-tutorials/tree/main/generative-ai>`_ on GitHub.
+    - *(Optional) Parameter template file:* A parameter template file written in JSON. Create the file to define the run parameters, or AWS HealthOmics generates the parameter template for you. For more information, see `Parameter template files for HealthOmics workflows <https://docs.aws.amazon.com/omics/latest/dev/parameter-templates.html>`_ .
+    - *ECR container images:* Create container images for the workflow in a private ECR repository, or synchronize images from a supported upstream registry with your Amazon ECR private repository.
+    - *(Optional) Sentieon licenses:* Request a Sentieon license to use the Sentieon software in private workflows.
 
     For more information, see `Creating or updating a private workflow in AWS HealthOmics <https://docs.aws.amazon.com/omics/latest/dev/creating-private-workflows.html>`_ in the *AWS HealthOmics User Guide* .
 
@@ -4015,6 +4204,19 @@ class CfnWorkflow(
         
         cfn_workflow = omics.CfnWorkflow(self, "MyCfnWorkflow",
             accelerators="accelerators",
+            container_registry_map=omics.CfnWorkflow.ContainerRegistryMapProperty(
+                image_mappings=[omics.CfnWorkflow.ImageMappingProperty(
+                    destination_image="destinationImage",
+                    source_image="sourceImage"
+                )],
+                registry_mappings=[omics.CfnWorkflow.RegistryMappingProperty(
+                    ecr_account_id="ecrAccountId",
+                    ecr_repository_prefix="ecrRepositoryPrefix",
+                    upstream_registry_url="upstreamRegistryUrl",
+                    upstream_repository_prefix="upstreamRepositoryPrefix"
+                )]
+            ),
+            container_registry_map_uri="containerRegistryMapUri",
             definition_repository=omics.CfnWorkflow.DefinitionRepositoryProperty(
                 connection_arn="connectionArn",
                 exclude_file_patterns=["excludeFilePatterns"],
@@ -4054,6 +4256,8 @@ class CfnWorkflow(
         id: builtins.str,
         *,
         accelerators: typing.Optional[builtins.str] = None,
+        container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.ContainerRegistryMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        container_registry_map_uri: typing.Optional[builtins.str] = None,
         definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.DefinitionRepositoryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         definition_uri: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
@@ -4074,6 +4278,8 @@ class CfnWorkflow(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param accelerators: 
+        :param container_registry_map: Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries. For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+        :param container_registry_map_uri: 
         :param definition_repository: Contains information about a source code repository that hosts the workflow definition files.
         :param definition_uri: The URI of a definition for the workflow.
         :param description: The parameter's description.
@@ -4096,6 +4302,8 @@ class CfnWorkflow(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnWorkflowProps(
             accelerators=accelerators,
+            container_registry_map=container_registry_map,
+            container_registry_map_uri=container_registry_map_uri,
             definition_repository=definition_repository,
             definition_uri=definition_uri,
             description=description,
@@ -4226,6 +4434,36 @@ class CfnWorkflow(
             type_hints = typing.get_type_hints(_typecheckingstub__286f71b00d1993ebc792c6e260606dac95cf17ec599b45b4cb2111b4ca57a0fe)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "accelerators", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="containerRegistryMap")
+    def container_registry_map(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.ContainerRegistryMapProperty"]]:
+        '''Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.ContainerRegistryMapProperty"]], jsii.get(self, "containerRegistryMap"))
+
+    @container_registry_map.setter
+    def container_registry_map(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.ContainerRegistryMapProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d61321fc4a694dded60b8fceeeafd83e9ae3f79a0329bdba98cd03787f3daa3c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "containerRegistryMap", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="containerRegistryMapUri")
+    def container_registry_map_uri(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "containerRegistryMapUri"))
+
+    @container_registry_map_uri.setter
+    def container_registry_map_uri(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1466a9fdbdff03b1c7b3fd5e72f7386ca160db487d501609519ca1c35a987aca)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "containerRegistryMapUri", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="definitionRepository")
@@ -4435,6 +4673,93 @@ class CfnWorkflow(
         jsii.set(self, "workflowBucketOwnerId", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_omics.CfnWorkflow.ContainerRegistryMapProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "image_mappings": "imageMappings",
+            "registry_mappings": "registryMappings",
+        },
+    )
+    class ContainerRegistryMapProperty:
+        def __init__(
+            self,
+            *,
+            image_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.ImageMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            registry_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.RegistryMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries.
+
+            For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+
+            :param image_mappings: Image mappings specify path mappings between the ECR private repository and their corresponding external repositories.
+            :param registry_mappings: Mapping that provides the ECR repository path where upstream container images are pulled and synchronized.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-containerregistrymap.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_omics as omics
+                
+                container_registry_map_property = omics.CfnWorkflow.ContainerRegistryMapProperty(
+                    image_mappings=[omics.CfnWorkflow.ImageMappingProperty(
+                        destination_image="destinationImage",
+                        source_image="sourceImage"
+                    )],
+                    registry_mappings=[omics.CfnWorkflow.RegistryMappingProperty(
+                        ecr_account_id="ecrAccountId",
+                        ecr_repository_prefix="ecrRepositoryPrefix",
+                        upstream_registry_url="upstreamRegistryUrl",
+                        upstream_repository_prefix="upstreamRepositoryPrefix"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__b93208b886c42793f6b22971c79ed50b456a125a28fedf2949548b0a03f82c3e)
+                check_type(argname="argument image_mappings", value=image_mappings, expected_type=type_hints["image_mappings"])
+                check_type(argname="argument registry_mappings", value=registry_mappings, expected_type=type_hints["registry_mappings"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if image_mappings is not None:
+                self._values["image_mappings"] = image_mappings
+            if registry_mappings is not None:
+                self._values["registry_mappings"] = registry_mappings
+
+        @builtins.property
+        def image_mappings(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.ImageMappingProperty"]]]]:
+            '''Image mappings specify path mappings between the ECR private repository and their corresponding external repositories.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-containerregistrymap.html#cfn-omics-workflow-containerregistrymap-imagemappings
+            '''
+            result = self._values.get("image_mappings")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.ImageMappingProperty"]]]], result)
+
+        @builtins.property
+        def registry_mappings(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.RegistryMappingProperty"]]]]:
+            '''Mapping that provides the ECR repository path where upstream container images are pulled and synchronized.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-containerregistrymap.html#cfn-omics-workflow-containerregistrymap-registrymappings
+            '''
+            result = self._values.get("registry_mappings")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.RegistryMappingProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ContainerRegistryMapProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_omics.CfnWorkflow.DefinitionRepositoryProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -4543,6 +4868,186 @@ class CfnWorkflow(
 
         def __repr__(self) -> str:
             return "DefinitionRepositoryProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_omics.CfnWorkflow.ImageMappingProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "destination_image": "destinationImage",
+            "source_image": "sourceImage",
+        },
+    )
+    class ImageMappingProperty:
+        def __init__(
+            self,
+            *,
+            destination_image: typing.Optional[builtins.str] = None,
+            source_image: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Specifies image mappings that workflow tasks can use.
+
+            For example, you can replace all the task references of a public image to use an equivalent image in your private ECR repository. You can use image mappings with upstream registries that don't support pull through cache. You need to manually synchronize the upstream registry with your private repository.
+
+            :param destination_image: Specifies the URI of the corresponding image in the private ECR registry.
+            :param source_image: Specifies the URI of the source image in the upstream registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-imagemapping.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_omics as omics
+                
+                image_mapping_property = omics.CfnWorkflow.ImageMappingProperty(
+                    destination_image="destinationImage",
+                    source_image="sourceImage"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__98f85817eb366199f668581daf61aabd43de777e1bd4110572941bbd0bb03687)
+                check_type(argname="argument destination_image", value=destination_image, expected_type=type_hints["destination_image"])
+                check_type(argname="argument source_image", value=source_image, expected_type=type_hints["source_image"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if destination_image is not None:
+                self._values["destination_image"] = destination_image
+            if source_image is not None:
+                self._values["source_image"] = source_image
+
+        @builtins.property
+        def destination_image(self) -> typing.Optional[builtins.str]:
+            '''Specifies the URI of the corresponding image in the private ECR registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-imagemapping.html#cfn-omics-workflow-imagemapping-destinationimage
+            '''
+            result = self._values.get("destination_image")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def source_image(self) -> typing.Optional[builtins.str]:
+            '''Specifies the URI of the source image in the upstream registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-imagemapping.html#cfn-omics-workflow-imagemapping-sourceimage
+            '''
+            result = self._values.get("source_image")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ImageMappingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_omics.CfnWorkflow.RegistryMappingProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "ecr_account_id": "ecrAccountId",
+            "ecr_repository_prefix": "ecrRepositoryPrefix",
+            "upstream_registry_url": "upstreamRegistryUrl",
+            "upstream_repository_prefix": "upstreamRepositoryPrefix",
+        },
+    )
+    class RegistryMappingProperty:
+        def __init__(
+            self,
+            *,
+            ecr_account_id: typing.Optional[builtins.str] = None,
+            ecr_repository_prefix: typing.Optional[builtins.str] = None,
+            upstream_registry_url: typing.Optional[builtins.str] = None,
+            upstream_repository_prefix: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''If you are using the ECR pull through cache feature, the registry mapping maps between the ECR repository and the upstream registry where container images are pulled and synchronized.
+
+            :param ecr_account_id: Account ID of the account that owns the upstream container image.
+            :param ecr_repository_prefix: The repository prefix to use in the ECR private repository.
+            :param upstream_registry_url: The URI of the upstream registry.
+            :param upstream_repository_prefix: The repository prefix of the corresponding repository in the upstream registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-registrymapping.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_omics as omics
+                
+                registry_mapping_property = omics.CfnWorkflow.RegistryMappingProperty(
+                    ecr_account_id="ecrAccountId",
+                    ecr_repository_prefix="ecrRepositoryPrefix",
+                    upstream_registry_url="upstreamRegistryUrl",
+                    upstream_repository_prefix="upstreamRepositoryPrefix"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__bf8725b8e4b50a33568267e8b0666f0c8b9e8a47c56098879cb0cdba27310fbf)
+                check_type(argname="argument ecr_account_id", value=ecr_account_id, expected_type=type_hints["ecr_account_id"])
+                check_type(argname="argument ecr_repository_prefix", value=ecr_repository_prefix, expected_type=type_hints["ecr_repository_prefix"])
+                check_type(argname="argument upstream_registry_url", value=upstream_registry_url, expected_type=type_hints["upstream_registry_url"])
+                check_type(argname="argument upstream_repository_prefix", value=upstream_repository_prefix, expected_type=type_hints["upstream_repository_prefix"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if ecr_account_id is not None:
+                self._values["ecr_account_id"] = ecr_account_id
+            if ecr_repository_prefix is not None:
+                self._values["ecr_repository_prefix"] = ecr_repository_prefix
+            if upstream_registry_url is not None:
+                self._values["upstream_registry_url"] = upstream_registry_url
+            if upstream_repository_prefix is not None:
+                self._values["upstream_repository_prefix"] = upstream_repository_prefix
+
+        @builtins.property
+        def ecr_account_id(self) -> typing.Optional[builtins.str]:
+            '''Account ID of the account that owns the upstream container image.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-registrymapping.html#cfn-omics-workflow-registrymapping-ecraccountid
+            '''
+            result = self._values.get("ecr_account_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def ecr_repository_prefix(self) -> typing.Optional[builtins.str]:
+            '''The repository prefix to use in the ECR private repository.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-registrymapping.html#cfn-omics-workflow-registrymapping-ecrrepositoryprefix
+            '''
+            result = self._values.get("ecr_repository_prefix")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def upstream_registry_url(self) -> typing.Optional[builtins.str]:
+            '''The URI of the upstream registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-registrymapping.html#cfn-omics-workflow-registrymapping-upstreamregistryurl
+            '''
+            result = self._values.get("upstream_registry_url")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def upstream_repository_prefix(self) -> typing.Optional[builtins.str]:
+            '''The repository prefix of the corresponding repository in the upstream registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflow-registrymapping.html#cfn-omics-workflow-registrymapping-upstreamrepositoryprefix
+            '''
+            result = self._values.get("upstream_repository_prefix")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RegistryMappingProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -4722,6 +5227,28 @@ class CfnWorkflowVersion(
         
             # the properties below are optional
             accelerators="accelerators",
+            container_registry_map=omics.CfnWorkflowVersion.ContainerRegistryMapProperty(
+                image_mappings=[omics.CfnWorkflowVersion.ImageMappingProperty(
+                    destination_image="destinationImage",
+                    source_image="sourceImage"
+                )],
+                registry_mappings=[omics.CfnWorkflowVersion.RegistryMappingProperty(
+                    ecr_account_id="ecrAccountId",
+                    ecr_repository_prefix="ecrRepositoryPrefix",
+                    upstream_registry_url="upstreamRegistryUrl",
+                    upstream_repository_prefix="upstreamRepositoryPrefix"
+                )]
+            ),
+            container_registry_map_uri="containerRegistryMapUri",
+            definition_repository=omics.CfnWorkflowVersion.DefinitionRepositoryProperty(
+                connection_arn="connectionArn",
+                exclude_file_patterns=["excludeFilePatterns"],
+                full_repository_id="fullRepositoryId",
+                source_reference=omics.CfnWorkflowVersion.SourceReferenceProperty(
+                    type="type",
+                    value="value"
+                )
+            ),
             definition_uri="definitionUri",
             description="description",
             engine="engine",
@@ -4732,6 +5259,10 @@ class CfnWorkflowVersion(
                     optional=False
                 )
             },
+            parameter_template_path="parameterTemplatePath",
+            readme_markdown="readmeMarkdown",
+            readme_path="readmePath",
+            readme_uri="readmeUri",
             storage_capacity=123,
             storage_type="storageType",
             tags={
@@ -4749,11 +5280,18 @@ class CfnWorkflowVersion(
         version_name: builtins.str,
         workflow_id: builtins.str,
         accelerators: typing.Optional[builtins.str] = None,
+        container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.ContainerRegistryMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        container_registry_map_uri: typing.Optional[builtins.str] = None,
+        definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.DefinitionRepositoryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         definition_uri: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         engine: typing.Optional[builtins.str] = None,
         main: typing.Optional[builtins.str] = None,
         parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.WorkflowParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        parameter_template_path: typing.Optional[builtins.str] = None,
+        readme_markdown: typing.Optional[builtins.str] = None,
+        readme_path: typing.Optional[builtins.str] = None,
+        readme_uri: typing.Optional[builtins.str] = None,
         storage_capacity: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -4765,11 +5303,18 @@ class CfnWorkflowVersion(
         :param version_name: The name of the workflow version.
         :param workflow_id: The workflow's ID.
         :param accelerators: 
+        :param container_registry_map: Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries. For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+        :param container_registry_map_uri: 
+        :param definition_repository: Contains information about a source code repository that hosts the workflow definition files.
         :param definition_uri: 
         :param description: The description of the workflow version.
         :param engine: 
         :param main: 
         :param parameter_template: 
+        :param parameter_template_path: Path to the primary workflow parameter template JSON file inside the repository.
+        :param readme_markdown: The markdown content for the workflow's README file. This provides documentation and usage information for users of the workflow.
+        :param readme_path: The path to the workflow README markdown file within the repository. This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
+        :param readme_uri: The S3 URI of the README file for the workflow. This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
         :param storage_capacity: 
         :param storage_type: 
         :param tags: A map of resource tags.
@@ -4783,11 +5328,18 @@ class CfnWorkflowVersion(
             version_name=version_name,
             workflow_id=workflow_id,
             accelerators=accelerators,
+            container_registry_map=container_registry_map,
+            container_registry_map_uri=container_registry_map_uri,
+            definition_repository=definition_repository,
             definition_uri=definition_uri,
             description=description,
             engine=engine,
             main=main,
             parameter_template=parameter_template,
+            parameter_template_path=parameter_template_path,
+            readme_markdown=readme_markdown,
+            readme_path=readme_path,
+            readme_uri=readme_uri,
             storage_capacity=storage_capacity,
             storage_type=storage_type,
             tags=tags,
@@ -4926,6 +5478,54 @@ class CfnWorkflowVersion(
         jsii.set(self, "accelerators", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="containerRegistryMap")
+    def container_registry_map(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.ContainerRegistryMapProperty"]]:
+        '''Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.ContainerRegistryMapProperty"]], jsii.get(self, "containerRegistryMap"))
+
+    @container_registry_map.setter
+    def container_registry_map(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.ContainerRegistryMapProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__46a9bb90d987260f113e2b2c7bfe0d00e76229ce25afbfccf1a386b82f85e224)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "containerRegistryMap", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="containerRegistryMapUri")
+    def container_registry_map_uri(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "containerRegistryMapUri"))
+
+    @container_registry_map_uri.setter
+    def container_registry_map_uri(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__65acb20ad98b8b631169a3db99c88bd3662a7e2bd947577b5265d087e4b8362d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "containerRegistryMapUri", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="definitionRepository")
+    def definition_repository(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.DefinitionRepositoryProperty"]]:
+        '''Contains information about a source code repository that hosts the workflow definition files.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.DefinitionRepositoryProperty"]], jsii.get(self, "definitionRepository"))
+
+    @definition_repository.setter
+    def definition_repository(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.DefinitionRepositoryProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__76f88fb7dbfba72f92fec4a64878a9e7fdd595353c2e76e5f675a9f318a5b5e6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "definitionRepository", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="definitionUri")
     def definition_uri(self) -> typing.Optional[builtins.str]:
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "definitionUri"))
@@ -4992,6 +5592,58 @@ class CfnWorkflowVersion(
         jsii.set(self, "parameterTemplate", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="parameterTemplatePath")
+    def parameter_template_path(self) -> typing.Optional[builtins.str]:
+        '''Path to the primary workflow parameter template JSON file inside the repository.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "parameterTemplatePath"))
+
+    @parameter_template_path.setter
+    def parameter_template_path(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1012e58717a3baf054312a40aba36847bbd98b702310ea8aff265f26caeab471)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "parameterTemplatePath", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="readmeMarkdown")
+    def readme_markdown(self) -> typing.Optional[builtins.str]:
+        '''The markdown content for the workflow's README file.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "readmeMarkdown"))
+
+    @readme_markdown.setter
+    def readme_markdown(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3cea66896cfd0dfa12a8b3d0b44794207352c9c78eb70c50e46466b4eea34898)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "readmeMarkdown", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="readmePath")
+    def readme_path(self) -> typing.Optional[builtins.str]:
+        '''The path to the workflow README markdown file within the repository.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "readmePath"))
+
+    @readme_path.setter
+    def readme_path(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__40cad564b15c28b2c112ad54de257f81d4d31fdfe311871657ae5bd714eb9ee6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "readmePath", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="readmeUri")
+    def readme_uri(self) -> typing.Optional[builtins.str]:
+        '''The S3 URI of the README file for the workflow.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "readmeUri"))
+
+    @readme_uri.setter
+    def readme_uri(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__abe09bb1e32d84773aaf309a744224900a63bf483fa24970e875c0b0a2f1b1cb)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "readmeUri", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="storageCapacity")
     def storage_capacity(self) -> typing.Optional[jsii.Number]:
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "storageCapacity"))
@@ -5042,6 +5694,455 @@ class CfnWorkflowVersion(
             type_hints = typing.get_type_hints(_typecheckingstub__bc6b06c168132bf54bf849b9d49774230af45a049e67f52bc48dd0220c18775d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "workflowBucketOwnerId", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersion.ContainerRegistryMapProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "image_mappings": "imageMappings",
+            "registry_mappings": "registryMappings",
+        },
+    )
+    class ContainerRegistryMapProperty:
+        def __init__(
+            self,
+            *,
+            image_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.ImageMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            registry_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.RegistryMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries.
+
+            For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+
+            :param image_mappings: Image mappings specify path mappings between the ECR private repository and their corresponding external repositories.
+            :param registry_mappings: Mapping that provides the ECR repository path where upstream container images are pulled and synchronized.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-containerregistrymap.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_omics as omics
+                
+                container_registry_map_property = omics.CfnWorkflowVersion.ContainerRegistryMapProperty(
+                    image_mappings=[omics.CfnWorkflowVersion.ImageMappingProperty(
+                        destination_image="destinationImage",
+                        source_image="sourceImage"
+                    )],
+                    registry_mappings=[omics.CfnWorkflowVersion.RegistryMappingProperty(
+                        ecr_account_id="ecrAccountId",
+                        ecr_repository_prefix="ecrRepositoryPrefix",
+                        upstream_registry_url="upstreamRegistryUrl",
+                        upstream_repository_prefix="upstreamRepositoryPrefix"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__32eb3bf30b3d01f44e56bdf643f62609b8cbc84d473cb19e3564543b645033d4)
+                check_type(argname="argument image_mappings", value=image_mappings, expected_type=type_hints["image_mappings"])
+                check_type(argname="argument registry_mappings", value=registry_mappings, expected_type=type_hints["registry_mappings"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if image_mappings is not None:
+                self._values["image_mappings"] = image_mappings
+            if registry_mappings is not None:
+                self._values["registry_mappings"] = registry_mappings
+
+        @builtins.property
+        def image_mappings(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.ImageMappingProperty"]]]]:
+            '''Image mappings specify path mappings between the ECR private repository and their corresponding external repositories.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-containerregistrymap.html#cfn-omics-workflowversion-containerregistrymap-imagemappings
+            '''
+            result = self._values.get("image_mappings")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.ImageMappingProperty"]]]], result)
+
+        @builtins.property
+        def registry_mappings(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.RegistryMappingProperty"]]]]:
+            '''Mapping that provides the ECR repository path where upstream container images are pulled and synchronized.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-containerregistrymap.html#cfn-omics-workflowversion-containerregistrymap-registrymappings
+            '''
+            result = self._values.get("registry_mappings")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.RegistryMappingProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ContainerRegistryMapProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersion.DefinitionRepositoryProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "connection_arn": "connectionArn",
+            "exclude_file_patterns": "excludeFilePatterns",
+            "full_repository_id": "fullRepositoryId",
+            "source_reference": "sourceReference",
+        },
+    )
+    class DefinitionRepositoryProperty:
+        def __init__(
+            self,
+            *,
+            connection_arn: typing.Optional[builtins.str] = None,
+            exclude_file_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
+            full_repository_id: typing.Optional[builtins.str] = None,
+            source_reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.SourceReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''Contains information about a source code repository that hosts the workflow definition files.
+
+            :param connection_arn: The Amazon Resource Name (ARN) of the connection to the source code repository.
+            :param exclude_file_patterns: A list of file patterns to exclude when retrieving the workflow definition from the repository.
+            :param full_repository_id: The full repository identifier, including the repository owner and name. For example, 'repository-owner/repository-name'.
+            :param source_reference: The source reference for the repository, such as a branch name, tag, or commit ID.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-definitionrepository.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_omics as omics
+                
+                definition_repository_property = omics.CfnWorkflowVersion.DefinitionRepositoryProperty(
+                    connection_arn="connectionArn",
+                    exclude_file_patterns=["excludeFilePatterns"],
+                    full_repository_id="fullRepositoryId",
+                    source_reference=omics.CfnWorkflowVersion.SourceReferenceProperty(
+                        type="type",
+                        value="value"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e0748aa0fb5a9a9d624696b0fc54ab2faf0941992918eb234ba6c3bb4a47aef5)
+                check_type(argname="argument connection_arn", value=connection_arn, expected_type=type_hints["connection_arn"])
+                check_type(argname="argument exclude_file_patterns", value=exclude_file_patterns, expected_type=type_hints["exclude_file_patterns"])
+                check_type(argname="argument full_repository_id", value=full_repository_id, expected_type=type_hints["full_repository_id"])
+                check_type(argname="argument source_reference", value=source_reference, expected_type=type_hints["source_reference"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if connection_arn is not None:
+                self._values["connection_arn"] = connection_arn
+            if exclude_file_patterns is not None:
+                self._values["exclude_file_patterns"] = exclude_file_patterns
+            if full_repository_id is not None:
+                self._values["full_repository_id"] = full_repository_id
+            if source_reference is not None:
+                self._values["source_reference"] = source_reference
+
+        @builtins.property
+        def connection_arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the connection to the source code repository.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-definitionrepository.html#cfn-omics-workflowversion-definitionrepository-connectionarn
+            '''
+            result = self._values.get("connection_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def exclude_file_patterns(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''A list of file patterns to exclude when retrieving the workflow definition from the repository.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-definitionrepository.html#cfn-omics-workflowversion-definitionrepository-excludefilepatterns
+            '''
+            result = self._values.get("exclude_file_patterns")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def full_repository_id(self) -> typing.Optional[builtins.str]:
+            '''The full repository identifier, including the repository owner and name.
+
+            For example, 'repository-owner/repository-name'.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-definitionrepository.html#cfn-omics-workflowversion-definitionrepository-fullrepositoryid
+            '''
+            result = self._values.get("full_repository_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def source_reference(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.SourceReferenceProperty"]]:
+            '''The source reference for the repository, such as a branch name, tag, or commit ID.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-definitionrepository.html#cfn-omics-workflowversion-definitionrepository-sourcereference
+            '''
+            result = self._values.get("source_reference")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.SourceReferenceProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DefinitionRepositoryProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersion.ImageMappingProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "destination_image": "destinationImage",
+            "source_image": "sourceImage",
+        },
+    )
+    class ImageMappingProperty:
+        def __init__(
+            self,
+            *,
+            destination_image: typing.Optional[builtins.str] = None,
+            source_image: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Specifies image mappings that workflow tasks can use.
+
+            For example, you can replace all the task references of a public image to use an equivalent image in your private ECR repository. You can use image mappings with upstream registries that don't support pull through cache. You need to manually synchronize the upstream registry with your private repository.
+
+            :param destination_image: Specifies the URI of the corresponding image in the private ECR registry.
+            :param source_image: Specifies the URI of the source image in the upstream registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-imagemapping.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_omics as omics
+                
+                image_mapping_property = omics.CfnWorkflowVersion.ImageMappingProperty(
+                    destination_image="destinationImage",
+                    source_image="sourceImage"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__421f9ca400f5d5d6c3aa9a53dbe35757f3408b2b30be15794288deb51c48b293)
+                check_type(argname="argument destination_image", value=destination_image, expected_type=type_hints["destination_image"])
+                check_type(argname="argument source_image", value=source_image, expected_type=type_hints["source_image"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if destination_image is not None:
+                self._values["destination_image"] = destination_image
+            if source_image is not None:
+                self._values["source_image"] = source_image
+
+        @builtins.property
+        def destination_image(self) -> typing.Optional[builtins.str]:
+            '''Specifies the URI of the corresponding image in the private ECR registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-imagemapping.html#cfn-omics-workflowversion-imagemapping-destinationimage
+            '''
+            result = self._values.get("destination_image")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def source_image(self) -> typing.Optional[builtins.str]:
+            '''Specifies the URI of the source image in the upstream registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-imagemapping.html#cfn-omics-workflowversion-imagemapping-sourceimage
+            '''
+            result = self._values.get("source_image")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ImageMappingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersion.RegistryMappingProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "ecr_account_id": "ecrAccountId",
+            "ecr_repository_prefix": "ecrRepositoryPrefix",
+            "upstream_registry_url": "upstreamRegistryUrl",
+            "upstream_repository_prefix": "upstreamRepositoryPrefix",
+        },
+    )
+    class RegistryMappingProperty:
+        def __init__(
+            self,
+            *,
+            ecr_account_id: typing.Optional[builtins.str] = None,
+            ecr_repository_prefix: typing.Optional[builtins.str] = None,
+            upstream_registry_url: typing.Optional[builtins.str] = None,
+            upstream_repository_prefix: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''If you are using the ECR pull through cache feature, the registry mapping maps between the ECR repository and the upstream registry where container images are pulled and synchronized.
+
+            :param ecr_account_id: Account ID of the account that owns the upstream container image.
+            :param ecr_repository_prefix: The repository prefix to use in the ECR private repository.
+            :param upstream_registry_url: The URI of the upstream registry.
+            :param upstream_repository_prefix: The repository prefix of the corresponding repository in the upstream registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-registrymapping.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_omics as omics
+                
+                registry_mapping_property = omics.CfnWorkflowVersion.RegistryMappingProperty(
+                    ecr_account_id="ecrAccountId",
+                    ecr_repository_prefix="ecrRepositoryPrefix",
+                    upstream_registry_url="upstreamRegistryUrl",
+                    upstream_repository_prefix="upstreamRepositoryPrefix"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__9eab95380e8258bf7a10a1ed8080d039134ac7daf1f5f0c979d28cb4f5c4f426)
+                check_type(argname="argument ecr_account_id", value=ecr_account_id, expected_type=type_hints["ecr_account_id"])
+                check_type(argname="argument ecr_repository_prefix", value=ecr_repository_prefix, expected_type=type_hints["ecr_repository_prefix"])
+                check_type(argname="argument upstream_registry_url", value=upstream_registry_url, expected_type=type_hints["upstream_registry_url"])
+                check_type(argname="argument upstream_repository_prefix", value=upstream_repository_prefix, expected_type=type_hints["upstream_repository_prefix"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if ecr_account_id is not None:
+                self._values["ecr_account_id"] = ecr_account_id
+            if ecr_repository_prefix is not None:
+                self._values["ecr_repository_prefix"] = ecr_repository_prefix
+            if upstream_registry_url is not None:
+                self._values["upstream_registry_url"] = upstream_registry_url
+            if upstream_repository_prefix is not None:
+                self._values["upstream_repository_prefix"] = upstream_repository_prefix
+
+        @builtins.property
+        def ecr_account_id(self) -> typing.Optional[builtins.str]:
+            '''Account ID of the account that owns the upstream container image.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-registrymapping.html#cfn-omics-workflowversion-registrymapping-ecraccountid
+            '''
+            result = self._values.get("ecr_account_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def ecr_repository_prefix(self) -> typing.Optional[builtins.str]:
+            '''The repository prefix to use in the ECR private repository.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-registrymapping.html#cfn-omics-workflowversion-registrymapping-ecrrepositoryprefix
+            '''
+            result = self._values.get("ecr_repository_prefix")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def upstream_registry_url(self) -> typing.Optional[builtins.str]:
+            '''The URI of the upstream registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-registrymapping.html#cfn-omics-workflowversion-registrymapping-upstreamregistryurl
+            '''
+            result = self._values.get("upstream_registry_url")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def upstream_repository_prefix(self) -> typing.Optional[builtins.str]:
+            '''The repository prefix of the corresponding repository in the upstream registry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-registrymapping.html#cfn-omics-workflowversion-registrymapping-upstreamrepositoryprefix
+            '''
+            result = self._values.get("upstream_repository_prefix")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RegistryMappingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersion.SourceReferenceProperty",
+        jsii_struct_bases=[],
+        name_mapping={"type": "type", "value": "value"},
+    )
+    class SourceReferenceProperty:
+        def __init__(
+            self,
+            *,
+            type: typing.Optional[builtins.str] = None,
+            value: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Contains information about the source reference in a code repository, such as a branch, tag, or commit.
+
+            :param type: The type of source reference, such as branch, tag, or commit.
+            :param value: The value of the source reference, such as the branch name, tag name, or commit ID.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-sourcereference.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_omics as omics
+                
+                source_reference_property = omics.CfnWorkflowVersion.SourceReferenceProperty(
+                    type="type",
+                    value="value"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__bd0032779911f1051b3896f001118256f2cbf0d060b22c10b5fdeb3b3e488c73)
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if type is not None:
+                self._values["type"] = type
+            if value is not None:
+                self._values["value"] = value
+
+        @builtins.property
+        def type(self) -> typing.Optional[builtins.str]:
+            '''The type of source reference, such as branch, tag, or commit.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-sourcereference.html#cfn-omics-workflowversion-sourcereference-type
+            '''
+            result = self._values.get("type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def value(self) -> typing.Optional[builtins.str]:
+            '''The value of the source reference, such as the branch name, tag name, or commit ID.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-omics-workflowversion-sourcereference.html#cfn-omics-workflowversion-sourcereference-value
+            '''
+            result = self._values.get("value")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SourceReferenceProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersion.WorkflowParameterProperty",
@@ -5220,6 +6321,8 @@ def _typecheckingstub__9cee3839b5919ab156aab54490277c559d790311fd9ea2b761f99373f
 def _typecheckingstub__09bedca50200dd06a4bbe4bb6135e76dacff76287249f3d28b8f285f8205f173(
     *,
     accelerators: typing.Optional[builtins.str] = None,
+    container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.ContainerRegistryMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    container_registry_map_uri: typing.Optional[builtins.str] = None,
     definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.DefinitionRepositoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     definition_uri: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
@@ -5244,11 +6347,18 @@ def _typecheckingstub__32259ddc7b7d888918efaf09deb63ba780f3721ec1da9ea606ed8100a
     version_name: builtins.str,
     workflow_id: builtins.str,
     accelerators: typing.Optional[builtins.str] = None,
+    container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.ContainerRegistryMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    container_registry_map_uri: typing.Optional[builtins.str] = None,
+    definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.DefinitionRepositoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     definition_uri: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     engine: typing.Optional[builtins.str] = None,
     main: typing.Optional[builtins.str] = None,
     parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    parameter_template_path: typing.Optional[builtins.str] = None,
+    readme_markdown: typing.Optional[builtins.str] = None,
+    readme_path: typing.Optional[builtins.str] = None,
+    readme_uri: typing.Optional[builtins.str] = None,
     storage_capacity: typing.Optional[jsii.Number] = None,
     storage_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -5687,6 +6797,8 @@ def _typecheckingstub__b2d05cb293836959a925b22dbe1861bc4457d2d510bd3a480ae858ea9
     id: builtins.str,
     *,
     accelerators: typing.Optional[builtins.str] = None,
+    container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.ContainerRegistryMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    container_registry_map_uri: typing.Optional[builtins.str] = None,
     definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.DefinitionRepositoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     definition_uri: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
@@ -5719,6 +6831,18 @@ def _typecheckingstub__f3d18757469eec460375791b428b2b2a8ebd5be703fbc705cb706233f
     pass
 
 def _typecheckingstub__286f71b00d1993ebc792c6e260606dac95cf17ec599b45b4cb2111b4ca57a0fe(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d61321fc4a694dded60b8fceeeafd83e9ae3f79a0329bdba98cd03787f3daa3c(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflow.ContainerRegistryMapProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1466a9fdbdff03b1c7b3fd5e72f7386ca160db487d501609519ca1c35a987aca(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -5814,12 +6938,38 @@ def _typecheckingstub__fec2ca5e32cee87eaac65d878c60669f18bb90724ac13ab05f21221eb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b93208b886c42793f6b22971c79ed50b456a125a28fedf2949548b0a03f82c3e(
+    *,
+    image_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.ImageMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    registry_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.RegistryMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a3c23b09e8f18584c69d282b6816697f2992e22dbf81773246b66875fbb0c0c8(
     *,
     connection_arn: typing.Optional[builtins.str] = None,
     exclude_file_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
     full_repository_id: typing.Optional[builtins.str] = None,
     source_reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.SourceReferenceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__98f85817eb366199f668581daf61aabd43de777e1bd4110572941bbd0bb03687(
+    *,
+    destination_image: typing.Optional[builtins.str] = None,
+    source_image: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bf8725b8e4b50a33568267e8b0666f0c8b9e8a47c56098879cb0cdba27310fbf(
+    *,
+    ecr_account_id: typing.Optional[builtins.str] = None,
+    ecr_repository_prefix: typing.Optional[builtins.str] = None,
+    upstream_registry_url: typing.Optional[builtins.str] = None,
+    upstream_repository_prefix: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5847,11 +6997,18 @@ def _typecheckingstub__f9bbd83c3821b6d01e1b0445c2a66c0e7c312d81583ae6cf8dbe78c8d
     version_name: builtins.str,
     workflow_id: builtins.str,
     accelerators: typing.Optional[builtins.str] = None,
+    container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.ContainerRegistryMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    container_registry_map_uri: typing.Optional[builtins.str] = None,
+    definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.DefinitionRepositoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     definition_uri: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     engine: typing.Optional[builtins.str] = None,
     main: typing.Optional[builtins.str] = None,
     parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    parameter_template_path: typing.Optional[builtins.str] = None,
+    readme_markdown: typing.Optional[builtins.str] = None,
+    readme_path: typing.Optional[builtins.str] = None,
+    readme_uri: typing.Optional[builtins.str] = None,
     storage_capacity: typing.Optional[jsii.Number] = None,
     storage_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -5890,6 +7047,24 @@ def _typecheckingstub__b69952a53a68976751566fbcf17774d0dfa2d7ede106cb440b751f76c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__46a9bb90d987260f113e2b2c7bfe0d00e76229ce25afbfccf1a386b82f85e224(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.ContainerRegistryMapProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__65acb20ad98b8b631169a3db99c88bd3662a7e2bd947577b5265d087e4b8362d(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__76f88fb7dbfba72f92fec4a64878a9e7fdd595353c2e76e5f675a9f318a5b5e6(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.DefinitionRepositoryProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7a8ff1e5a2ba3fcf1c5fb306e96445a76ec1ac6872615b206206a2a173f64978(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -5920,6 +7095,30 @@ def _typecheckingstub__909f80095cd6043c196e37a387a0f1f32bfcddcd8f9a81c5e8f5ac8b4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1012e58717a3baf054312a40aba36847bbd98b702310ea8aff265f26caeab471(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3cea66896cfd0dfa12a8b3d0b44794207352c9c78eb70c50e46466b4eea34898(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__40cad564b15c28b2c112ad54de257f81d4d31fdfe311871657ae5bd714eb9ee6(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__abe09bb1e32d84773aaf309a744224900a63bf483fa24970e875c0b0a2f1b1cb(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ba60096260fa288ca386a5b2841efb8fa9833ea893400efeba006766f392a7b7(
     value: typing.Optional[jsii.Number],
 ) -> None:
@@ -5940,6 +7139,50 @@ def _typecheckingstub__bfbcbf729952f991d2243244c21c373b5bf1a3947ed2973ab1664037c
 
 def _typecheckingstub__bc6b06c168132bf54bf849b9d49774230af45a049e67f52bc48dd0220c18775d(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__32eb3bf30b3d01f44e56bdf643f62609b8cbc84d473cb19e3564543b645033d4(
+    *,
+    image_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.ImageMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    registry_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.RegistryMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e0748aa0fb5a9a9d624696b0fc54ab2faf0941992918eb234ba6c3bb4a47aef5(
+    *,
+    connection_arn: typing.Optional[builtins.str] = None,
+    exclude_file_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    full_repository_id: typing.Optional[builtins.str] = None,
+    source_reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.SourceReferenceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__421f9ca400f5d5d6c3aa9a53dbe35757f3408b2b30be15794288deb51c48b293(
+    *,
+    destination_image: typing.Optional[builtins.str] = None,
+    source_image: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9eab95380e8258bf7a10a1ed8080d039134ac7daf1f5f0c979d28cb4f5c4f426(
+    *,
+    ecr_account_id: typing.Optional[builtins.str] = None,
+    ecr_repository_prefix: typing.Optional[builtins.str] = None,
+    upstream_registry_url: typing.Optional[builtins.str] = None,
+    upstream_repository_prefix: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bd0032779911f1051b3896f001118256f2cbf0d060b22c10b5fdeb3b3e488c73(
+    *,
+    type: typing.Optional[builtins.str] = None,
+    value: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

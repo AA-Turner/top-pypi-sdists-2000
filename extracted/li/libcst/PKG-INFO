@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: libcst
-Version: 1.8.4
+Version: 1.8.5
 Summary: A concrete syntax tree with AST-like properties for Python 3.0 through 3.13 programs.
 License: All contributions towards LibCST are MIT licensed.
         

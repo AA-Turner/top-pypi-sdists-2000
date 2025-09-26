@@ -22354,7 +22354,7 @@ class CfnUserPoolDomain(
         ) -> None:
             '''The configuration for a hosted UI custom domain.
 
-            :param certificate_arn: The Amazon Resource Name (ARN) of an AWS Certificate Manager SSL certificate. You use this certificate for the subdomain of your custom domain.
+            :param certificate_arn: The Amazon Resource Name (ARN) of an Certificate Manager SSL certificate. You use this certificate for the subdomain of your custom domain.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpooldomain-customdomainconfigtype.html
             :exampleMetadata: fixture=_generated
@@ -22378,7 +22378,7 @@ class CfnUserPoolDomain(
 
         @builtins.property
         def certificate_arn(self) -> typing.Optional[builtins.str]:
-            '''The Amazon Resource Name (ARN) of an AWS Certificate Manager SSL certificate.
+            '''The Amazon Resource Name (ARN) of an Certificate Manager SSL certificate.
 
             You use this certificate for the subdomain of your custom domain.
 

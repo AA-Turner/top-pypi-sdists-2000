@@ -37,6 +37,11 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT HEX_ENCODE('Hello World', 0)")
         self.validate_identity("SELECT CHR(8364)")
         self.validate_identity("SELECT COMPRESS('Hello World', 'ZLIB')")
+        self.validate_identity("SELECT DECOMPRESS_BINARY('compressed_data', 'SNAPPY')")
+        self.validate_identity("SELECT DECOMPRESS_STRING('compressed_data', 'ZSTD')")
+        self.validate_identity("SELECT LPAD('Hello', 10, '*')")
+        self.validate_identity("SELECT LPAD(tbl.bin_col, 10)")
+        self.validate_identity("SELECT JAROWINKLER_SIMILARITY('hello', 'world')")
         self.validate_identity("SELECT {*} FROM my_table")
         self.validate_identity("SELECT {my_table.*} FROM my_table")
         self.validate_identity("SELECT {* ILIKE 'col1%'} FROM my_table")
@@ -77,9 +82,6 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT AI_AGG(review, 'Summarize the reviews')")
         self.validate_identity("SELECT AI_SUMMARIZE_AGG(review)")
         self.validate_identity("SELECT AI_CLASSIFY('text', ['travel', 'cooking'])")
-        self.validate_identity(
-            "SELECT AI_CLASSIFY('text', ['travel', 'cooking'], OBJECT_CONSTRUCT('output_mode', 'multi'))"
-        )
         self.validate_identity("SELECT OBJECT_CONSTRUCT()")
         self.validate_identity("SELECT DAYOFMONTH(CURRENT_TIMESTAMP())")
         self.validate_identity("SELECT DAYOFYEAR(CURRENT_TIMESTAMP())")
@@ -104,10 +106,6 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT CONVERT_TIMEZONE('UTC', 'America/Los_Angeles', col)")
         self.validate_identity("ALTER TABLE a SWAP WITH b")
         self.validate_identity("SELECT MATCH_CONDITION")
-        self.validate_identity(
-            "SELECT * REPLACE (CAST(col AS TEXT) AS scol) FROM t",
-            "SELECT * REPLACE (CAST(col AS VARCHAR) AS scol) FROM t",
-        )
         self.validate_identity("1 /* /* */")
         self.validate_identity("TO_TIMESTAMP(col, fmt)")
         self.validate_identity("SELECT TO_CHAR(CAST('12:05:05' AS TIME))")
@@ -116,6 +114,9 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT GET_PATH(foo, 'bar')")
         self.validate_identity("SELECT a, exclude, b FROM xxx")
         self.validate_identity("SELECT ARRAY_SORT(x, TRUE, FALSE)")
+        self.validate_identity(
+            "SELECT AI_CLASSIFY('text', ['travel', 'cooking'], OBJECT_CONSTRUCT('output_mode', 'multi'))"
+        )
         self.validate_identity(
             "SELECT * FROM table AT (TIMESTAMP => '2024-07-24') UNPIVOT(a FOR b IN (c)) AS pivot_table"
         )
@@ -145,6 +146,14 @@ class TestSnowflake(Validator):
         )
         self.validate_identity(
             """SELECT TO_TIMESTAMP('2025-01-16T14:45:30.123+0500', 'yyyy-mm-DD"T"hh24:mi:ss.ff3TZHTZM')"""
+        )
+        self.validate_identity(
+            "UPDATE sometesttable u FROM (SELECT 5195 AS new_count, '01bee1e5-0000-d31e-0000-e80ef02b9f27' query_id ) b SET qry_hash_count = new_count WHERE u.sample_query_id  = b.query_id",
+            "UPDATE sometesttable AS u SET qry_hash_count = new_count FROM (SELECT 5195 AS new_count, '01bee1e5-0000-d31e-0000-e80ef02b9f27' AS query_id) AS b WHERE u.sample_query_id = b.query_id",
+        )
+        self.validate_identity(
+            "SELECT * REPLACE (CAST(col AS TEXT) AS scol) FROM t",
+            "SELECT * REPLACE (CAST(col AS VARCHAR) AS scol) FROM t",
         )
         self.validate_identity(
             "GET(value, 'foo')::VARCHAR",

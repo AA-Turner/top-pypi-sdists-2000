@@ -5531,6 +5531,10 @@ class EuclideanDistance(Func):
     arg_types = {"this": True, "expression": True}
 
 
+class JarowinklerSimilarity(Func):
+    arg_types = {"this": True, "expression": True}
+
+
 class AggFunc(Func):
     pass
 
@@ -6022,6 +6026,10 @@ class Collate(Binary, Func):
     pass
 
 
+class Collation(Func):
+    pass
+
+
 class Ceil(Func):
     arg_types = {"this": True, "decimals": False, "to": False}
     _sql_names = ["CEIL", "CEILING"]
@@ -6483,6 +6491,7 @@ class HexDecodeString(Func):
     pass
 
 
+# https://docs.snowflake.com/en/sql-reference/functions/hex_encode
 class HexEncode(Func):
     arg_types = {"this": True, "case": False}
 
@@ -6491,6 +6500,16 @@ class HexEncode(Func):
 # Snowflake: https://docs.snowflake.com/en/sql-reference/functions/compress
 class Compress(Func):
     arg_types = {"this": True, "method": False}
+
+
+# Snowflake: https://docs.snowflake.com/en/sql-reference/functions/decompress_binary
+class DecompressBinary(Func):
+    arg_types = {"this": True, "method": True}
+
+
+# Snowflake: https://docs.snowflake.com/en/sql-reference/functions/decompress_string
+class DecompressString(Func):
+    arg_types = {"this": True, "method": True}
 
 
 class LowerHex(Hex):

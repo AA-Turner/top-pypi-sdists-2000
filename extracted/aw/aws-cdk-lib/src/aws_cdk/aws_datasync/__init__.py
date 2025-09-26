@@ -2184,6 +2184,8 @@ class CfnLocationS3Props:
     name_mapping={
         "agent_arns": "agentArns",
         "authentication_type": "authenticationType",
+        "cmk_secret_config": "cmkSecretConfig",
+        "custom_secret_config": "customSecretConfig",
         "dns_ip_addresses": "dnsIpAddresses",
         "domain": "domain",
         "kerberos_keytab": "kerberosKeytab",
@@ -2203,6 +2205,8 @@ class CfnLocationSMBProps:
         *,
         agent_arns: typing.Sequence[builtins.str],
         authentication_type: typing.Optional[builtins.str] = None,
+        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationSMB.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationSMB.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         dns_ip_addresses: typing.Optional[typing.Sequence[builtins.str]] = None,
         domain: typing.Optional[builtins.str] = None,
         kerberos_keytab: typing.Optional[builtins.str] = None,
@@ -2219,6 +2223,8 @@ class CfnLocationSMBProps:
 
         :param agent_arns: Specifies the DataSync agent (or agents) that can connect to your SMB file server. You specify an agent by using its Amazon Resource Name (ARN).
         :param authentication_type: The authentication mode used to determine identity of user.
+        :param cmk_secret_config: Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+        :param custom_secret_config: Specifies configuration information for a customer-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
         :param dns_ip_addresses: Specifies the IPv4 addresses for the DNS servers that your SMB file server belongs to. This parameter applies only if AuthenticationType is set to KERBEROS. If you have multiple domains in your environment, configuring this parameter makes sure that DataSync connects to the right SMB file server.
         :param domain: Specifies the Windows domain name that your SMB file server belongs to. This parameter applies only if ``AuthenticationType`` is set to ``NTLM`` . If you have multiple domains in your environment, configuring this parameter makes sure that DataSync connects to the right file server.
         :param kerberos_keytab: The Base64 string representation of the Keytab file. Specifies your Kerberos key table (keytab) file, which includes mappings between your service principal name (SPN) and encryption keys. To avoid task execution errors, make sure that the SPN in the keytab file matches exactly what you specify for KerberosPrincipal and in your krb5.conf file.
@@ -2245,6 +2251,14 @@ class CfnLocationSMBProps:
             
                 # the properties below are optional
                 authentication_type="authenticationType",
+                cmk_secret_config=datasync.CfnLocationSMB.CmkSecretConfigProperty(
+                    kms_key_arn="kmsKeyArn",
+                    secret_arn="secretArn"
+                ),
+                custom_secret_config=datasync.CfnLocationSMB.CustomSecretConfigProperty(
+                    secret_access_role_arn="secretAccessRoleArn",
+                    secret_arn="secretArn"
+                ),
                 dns_ip_addresses=["dnsIpAddresses"],
                 domain="domain",
                 kerberos_keytab="kerberosKeytab",
@@ -2267,6 +2281,8 @@ class CfnLocationSMBProps:
             type_hints = typing.get_type_hints(_typecheckingstub__b20670d7cb18baa1155ccc397df310282442d51b95170ab568e5c0a9cbea5bc8)
             check_type(argname="argument agent_arns", value=agent_arns, expected_type=type_hints["agent_arns"])
             check_type(argname="argument authentication_type", value=authentication_type, expected_type=type_hints["authentication_type"])
+            check_type(argname="argument cmk_secret_config", value=cmk_secret_config, expected_type=type_hints["cmk_secret_config"])
+            check_type(argname="argument custom_secret_config", value=custom_secret_config, expected_type=type_hints["custom_secret_config"])
             check_type(argname="argument dns_ip_addresses", value=dns_ip_addresses, expected_type=type_hints["dns_ip_addresses"])
             check_type(argname="argument domain", value=domain, expected_type=type_hints["domain"])
             check_type(argname="argument kerberos_keytab", value=kerberos_keytab, expected_type=type_hints["kerberos_keytab"])
@@ -2283,6 +2299,10 @@ class CfnLocationSMBProps:
         }
         if authentication_type is not None:
             self._values["authentication_type"] = authentication_type
+        if cmk_secret_config is not None:
+            self._values["cmk_secret_config"] = cmk_secret_config
+        if custom_secret_config is not None:
+            self._values["custom_secret_config"] = custom_secret_config
         if dns_ip_addresses is not None:
             self._values["dns_ip_addresses"] = dns_ip_addresses
         if domain is not None:
@@ -2326,6 +2346,28 @@ class CfnLocationSMBProps:
         '''
         result = self._values.get("authentication_type")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def cmk_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]]:
+        '''Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationsmb.html#cfn-datasync-locationsmb-cmksecretconfig
+        '''
+        result = self._values.get("cmk_secret_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]], result)
+
+    @builtins.property
+    def custom_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]]:
+        '''Specifies configuration information for a customer-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationsmb.html#cfn-datasync-locationsmb-customsecretconfig
+        '''
+        result = self._values.get("custom_secret_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]], result)
 
     @builtins.property
     def dns_ip_addresses(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8192,6 +8234,14 @@ class CfnLocationSMB(
         
             # the properties below are optional
             authentication_type="authenticationType",
+            cmk_secret_config=datasync.CfnLocationSMB.CmkSecretConfigProperty(
+                kms_key_arn="kmsKeyArn",
+                secret_arn="secretArn"
+            ),
+            custom_secret_config=datasync.CfnLocationSMB.CustomSecretConfigProperty(
+                secret_access_role_arn="secretAccessRoleArn",
+                secret_arn="secretArn"
+            ),
             dns_ip_addresses=["dnsIpAddresses"],
             domain="domain",
             kerberos_keytab="kerberosKeytab",
@@ -8218,6 +8268,8 @@ class CfnLocationSMB(
         *,
         agent_arns: typing.Sequence[builtins.str],
         authentication_type: typing.Optional[builtins.str] = None,
+        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationSMB.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationSMB.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         dns_ip_addresses: typing.Optional[typing.Sequence[builtins.str]] = None,
         domain: typing.Optional[builtins.str] = None,
         kerberos_keytab: typing.Optional[builtins.str] = None,
@@ -8235,6 +8287,8 @@ class CfnLocationSMB(
         :param id: Construct identifier for this resource (unique in its scope).
         :param agent_arns: Specifies the DataSync agent (or agents) that can connect to your SMB file server. You specify an agent by using its Amazon Resource Name (ARN).
         :param authentication_type: The authentication mode used to determine identity of user.
+        :param cmk_secret_config: Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+        :param custom_secret_config: Specifies configuration information for a customer-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
         :param dns_ip_addresses: Specifies the IPv4 addresses for the DNS servers that your SMB file server belongs to. This parameter applies only if AuthenticationType is set to KERBEROS. If you have multiple domains in your environment, configuring this parameter makes sure that DataSync connects to the right SMB file server.
         :param domain: Specifies the Windows domain name that your SMB file server belongs to. This parameter applies only if ``AuthenticationType`` is set to ``NTLM`` . If you have multiple domains in your environment, configuring this parameter makes sure that DataSync connects to the right file server.
         :param kerberos_keytab: The Base64 string representation of the Keytab file. Specifies your Kerberos key table (keytab) file, which includes mappings between your service principal name (SPN) and encryption keys. To avoid task execution errors, make sure that the SPN in the keytab file matches exactly what you specify for KerberosPrincipal and in your krb5.conf file.
@@ -8254,6 +8308,8 @@ class CfnLocationSMB(
         props = CfnLocationSMBProps(
             agent_arns=agent_arns,
             authentication_type=authentication_type,
+            cmk_secret_config=cmk_secret_config,
+            custom_secret_config=custom_secret_config,
             dns_ip_addresses=dns_ip_addresses,
             domain=domain,
             kerberos_keytab=kerberos_keytab,
@@ -8300,6 +8356,15 @@ class CfnLocationSMB(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrCmkSecretConfigSecretArn")
+    def attr_cmk_secret_config_secret_arn(self) -> builtins.str:
+        '''Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+
+        :cloudformationAttribute: CmkSecretConfig.SecretArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCmkSecretConfigSecretArn"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrLocationArn")
     def attr_location_arn(self) -> builtins.str:
         '''The Amazon Resource Name (ARN) of the specified SMB location.
@@ -8316,6 +8381,17 @@ class CfnLocationSMB(
         :cloudformationAttribute: LocationUri
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrLocationUri"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrManagedSecretConfig")
+    def attr_managed_secret_config(self) -> _IResolvable_da3f097b:
+        '''Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location.
+
+        DataSync uses the default AWS-managed KMS key to encrypt this secret in AWS Secrets Manager.
+
+        :cloudformationAttribute: ManagedSecretConfig
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrManagedSecretConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -8359,6 +8435,42 @@ class CfnLocationSMB(
             type_hints = typing.get_type_hints(_typecheckingstub__35de39b9b573d0d6146fa84be08e6a3a14ff5e9ece5535c93fc8af130af7e7ec)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "authenticationType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="cmkSecretConfig")
+    def cmk_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]]:
+        '''Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]], jsii.get(self, "cmkSecretConfig"))
+
+    @cmk_secret_config.setter
+    def cmk_secret_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e407ec55488adbc9f81891a5e15e237e234b987b6214eb331162a8b63f344324)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "cmkSecretConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="customSecretConfig")
+    def custom_secret_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]]:
+        '''Specifies configuration information for a customer-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]], jsii.get(self, "customSecretConfig"))
+
+    @custom_secret_config.setter
+    def custom_secret_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fde88b8f3a9b839e4f9087f93f80eb219e3a48609302336a5ed68bd2edec2ebb)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "customSecretConfig", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="dnsIpAddresses")
@@ -8510,6 +8622,206 @@ class CfnLocationSMB(
             type_hints = typing.get_type_hints(_typecheckingstub__9112e8b177e52fbd055f221015988972f906f8c7291b4a1992bb1656cd033faa)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "user", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datasync.CfnLocationSMB.CmkSecretConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"kms_key_arn": "kmsKeyArn", "secret_arn": "secretArn"},
+    )
+    class CmkSecretConfigProperty:
+        def __init__(
+            self,
+            *,
+            kms_key_arn: typing.Optional[builtins.str] = None,
+            secret_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+
+            :param kms_key_arn: Specifies the ARN for the customer-managed AWS KMS key used to encrypt the secret specified for SecretArn. DataSync provides this key to AWS Secrets Manager.
+            :param secret_arn: Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-cmksecretconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datasync as datasync
+                
+                cmk_secret_config_property = datasync.CfnLocationSMB.CmkSecretConfigProperty(
+                    kms_key_arn="kmsKeyArn",
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__9351aeda2a3946543003130a0d3d622afa774937076186eaabf4b996745ca99f)
+                check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if kms_key_arn is not None:
+                self._values["kms_key_arn"] = kms_key_arn
+            if secret_arn is not None:
+                self._values["secret_arn"] = secret_arn
+
+        @builtins.property
+        def kms_key_arn(self) -> typing.Optional[builtins.str]:
+            '''Specifies the ARN for the customer-managed AWS KMS key used to encrypt the secret specified for SecretArn.
+
+            DataSync provides this key to AWS Secrets Manager.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-cmksecretconfig.html#cfn-datasync-locationsmb-cmksecretconfig-kmskeyarn
+            '''
+            result = self._values.get("kms_key_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def secret_arn(self) -> typing.Optional[builtins.str]:
+            '''Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-cmksecretconfig.html#cfn-datasync-locationsmb-cmksecretconfig-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CmkSecretConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datasync.CfnLocationSMB.CustomSecretConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "secret_access_role_arn": "secretAccessRoleArn",
+            "secret_arn": "secretArn",
+        },
+    )
+    class CustomSecretConfigProperty:
+        def __init__(
+            self,
+            *,
+            secret_access_role_arn: builtins.str,
+            secret_arn: builtins.str,
+        ) -> None:
+            '''Specifies configuration information for a customer-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
+
+            :param secret_access_role_arn: Specifies the ARN for the AWS Identity and Access Management role that DataSync uses to access the secret specified for SecretArn.
+            :param secret_arn: Specifies the ARN for a customer created AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-customsecretconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datasync as datasync
+                
+                custom_secret_config_property = datasync.CfnLocationSMB.CustomSecretConfigProperty(
+                    secret_access_role_arn="secretAccessRoleArn",
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__6049f29f723d7f92a691c991b6232a25e39ba58d2d4400b1c499f542a7a8aee7)
+                check_type(argname="argument secret_access_role_arn", value=secret_access_role_arn, expected_type=type_hints["secret_access_role_arn"])
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "secret_access_role_arn": secret_access_role_arn,
+                "secret_arn": secret_arn,
+            }
+
+        @builtins.property
+        def secret_access_role_arn(self) -> builtins.str:
+            '''Specifies the ARN for the AWS Identity and Access Management role that DataSync uses to access the secret specified for SecretArn.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-customsecretconfig.html#cfn-datasync-locationsmb-customsecretconfig-secretaccessrolearn
+            '''
+            result = self._values.get("secret_access_role_arn")
+            assert result is not None, "Required property 'secret_access_role_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def secret_arn(self) -> builtins.str:
+            '''Specifies the ARN for a customer created AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-customsecretconfig.html#cfn-datasync-locationsmb-customsecretconfig-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            assert result is not None, "Required property 'secret_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CustomSecretConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datasync.CfnLocationSMB.ManagedSecretConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"secret_arn": "secretArn"},
+    )
+    class ManagedSecretConfigProperty:
+        def __init__(self, *, secret_arn: builtins.str) -> None:
+            '''Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location.
+
+            DataSync uses the default AWS-managed KMS key to encrypt this secret in AWS Secrets Manager.
+
+            :param secret_arn: Specifies the ARN for an AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-managedsecretconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datasync as datasync
+                
+                managed_secret_config_property = datasync.CfnLocationSMB.ManagedSecretConfigProperty(
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5db7c95a4b68a63cb100ea0ecc9392535271eaf1c99519a96ebecbd32455f91c)
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "secret_arn": secret_arn,
+            }
+
+        @builtins.property
+        def secret_arn(self) -> builtins.str:
+            '''Specifies the ARN for an AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-managedsecretconfig.html#cfn-datasync-locationsmb-managedsecretconfig-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            assert result is not None, "Required property 'secret_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ManagedSecretConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_datasync.CfnLocationSMB.MountOptionsProperty",
@@ -10720,6 +11032,8 @@ def _typecheckingstub__b20670d7cb18baa1155ccc397df310282442d51b95170ab568e5c0a9c
     *,
     agent_arns: typing.Sequence[builtins.str],
     authentication_type: typing.Optional[builtins.str] = None,
+    cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationSMB.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationSMB.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     dns_ip_addresses: typing.Optional[typing.Sequence[builtins.str]] = None,
     domain: typing.Optional[builtins.str] = None,
     kerberos_keytab: typing.Optional[builtins.str] = None,
@@ -11774,6 +12088,8 @@ def _typecheckingstub__bafa6101408857d4661895c88a8c9839da8768aa52e07d3f2889a4f27
     *,
     agent_arns: typing.Sequence[builtins.str],
     authentication_type: typing.Optional[builtins.str] = None,
+    cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationSMB.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationSMB.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     dns_ip_addresses: typing.Optional[typing.Sequence[builtins.str]] = None,
     domain: typing.Optional[builtins.str] = None,
     kerberos_keytab: typing.Optional[builtins.str] = None,
@@ -11809,6 +12125,18 @@ def _typecheckingstub__21ee66e7697fa761c39fe555b5fae211e45dedf33951d3701b7b6389d
 
 def _typecheckingstub__35de39b9b573d0d6146fa84be08e6a3a14ff5e9ece5535c93fc8af130af7e7ec(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e407ec55488adbc9f81891a5e15e237e234b987b6214eb331162a8b63f344324(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationSMB.CmkSecretConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fde88b8f3a9b839e4f9087f93f80eb219e3a48609302336a5ed68bd2edec2ebb(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationSMB.CustomSecretConfigProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11875,6 +12203,29 @@ def _typecheckingstub__b48314ac3635761aa21132da0f199200c2b741ddeca4e34176ee47fde
 
 def _typecheckingstub__9112e8b177e52fbd055f221015988972f906f8c7291b4a1992bb1656cd033faa(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9351aeda2a3946543003130a0d3d622afa774937076186eaabf4b996745ca99f(
+    *,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+    secret_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6049f29f723d7f92a691c991b6232a25e39ba58d2d4400b1c499f542a7a8aee7(
+    *,
+    secret_access_role_arn: builtins.str,
+    secret_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5db7c95a4b68a63cb100ea0ecc9392535271eaf1c99519a96ebecbd32455f91c(
+    *,
+    secret_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

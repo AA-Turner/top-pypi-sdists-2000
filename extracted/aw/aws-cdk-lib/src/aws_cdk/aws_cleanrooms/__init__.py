@@ -170,6 +170,7 @@ class AnalysisTemplateReference:
         "source": "source",
         "analysis_parameters": "analysisParameters",
         "description": "description",
+        "error_message_configuration": "errorMessageConfiguration",
         "schema": "schema",
         "source_metadata": "sourceMetadata",
         "tags": "tags",
@@ -185,6 +186,7 @@ class CfnAnalysisTemplateProps:
         source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisSourceProperty", typing.Dict[builtins.str, typing.Any]]],
         analysis_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        error_message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.ErrorMessageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisSchemaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         source_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisSourceMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -197,6 +199,7 @@ class CfnAnalysisTemplateProps:
         :param source: The source of the analysis template.
         :param analysis_parameters: The parameters of the analysis template.
         :param description: The description of the analysis template.
+        :param error_message_configuration: The configuration that specifies the level of detail in error messages returned by analyses using this template. When set to ``DETAILED`` , error messages include more information to help troubleshoot issues with PySpark jobs. Detailed error messages may expose underlying data, including sensitive information. Recommended for faster troubleshooting in development and testing environments.
         :param schema: The entire schema object.
         :param source_metadata: The source metadata for the analysis template.
         :param tags: An optional label that you can assign to a resource when you create it. Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
@@ -244,6 +247,9 @@ class CfnAnalysisTemplateProps:
                     default_value="defaultValue"
                 )],
                 description="description",
+                error_message_configuration=cleanrooms.CfnAnalysisTemplate.ErrorMessageConfigurationProperty(
+                    type="type"
+                ),
                 schema=cleanrooms.CfnAnalysisTemplate.AnalysisSchemaProperty(
                     referenced_tables=["referencedTables"]
                 ),
@@ -273,6 +279,7 @@ class CfnAnalysisTemplateProps:
             check_type(argname="argument source", value=source, expected_type=type_hints["source"])
             check_type(argname="argument analysis_parameters", value=analysis_parameters, expected_type=type_hints["analysis_parameters"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument error_message_configuration", value=error_message_configuration, expected_type=type_hints["error_message_configuration"])
             check_type(argname="argument schema", value=schema, expected_type=type_hints["schema"])
             check_type(argname="argument source_metadata", value=source_metadata, expected_type=type_hints["source_metadata"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -286,6 +293,8 @@ class CfnAnalysisTemplateProps:
             self._values["analysis_parameters"] = analysis_parameters
         if description is not None:
             self._values["description"] = description
+        if error_message_configuration is not None:
+            self._values["error_message_configuration"] = error_message_configuration
         if schema is not None:
             self._values["schema"] = schema
         if source_metadata is not None:
@@ -356,6 +365,19 @@ class CfnAnalysisTemplateProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def error_message_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]]:
+        '''The configuration that specifies the level of detail in error messages returned by analyses using this template.
+
+        When set to ``DETAILED`` , error messages include more information to help troubleshoot issues with PySpark jobs. Detailed error messages may expose underlying data, including sensitive information. Recommended for faster troubleshooting in development and testing environments.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-analysistemplate.html#cfn-cleanrooms-analysistemplate-errormessageconfiguration
+        '''
+        result = self._values.get("error_message_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]], result)
+
+    @builtins.property
     def schema(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisSchemaProperty"]]:
@@ -409,6 +431,7 @@ class CfnAnalysisTemplateProps:
         "name": "name",
         "query_log_status": "queryLogStatus",
         "analytics_engine": "analyticsEngine",
+        "auto_approved_change_types": "autoApprovedChangeTypes",
         "creator_member_abilities": "creatorMemberAbilities",
         "creator_ml_member_abilities": "creatorMlMemberAbilities",
         "creator_payment_configuration": "creatorPaymentConfiguration",
@@ -427,6 +450,7 @@ class CfnCollaborationProps:
         name: builtins.str,
         query_log_status: builtins.str,
         analytics_engine: typing.Optional[builtins.str] = None,
+        auto_approved_change_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         creator_member_abilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         creator_ml_member_abilities: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.MLMemberAbilitiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         creator_payment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.PaymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -442,6 +466,7 @@ class CfnCollaborationProps:
         :param name: A human-readable identifier provided by the collaboration owner. Display names are not unique.
         :param query_log_status: An indicator as to whether query logging has been enabled or disabled for the collaboration. When ``ENABLED`` , AWS Clean Rooms logs details about queries run within this collaboration and those logs can be viewed in Amazon CloudWatch Logs. The default value is ``DISABLED`` .
         :param analytics_engine: The analytics engine for the collaboration. .. epigraph:: After July 16, 2025, the ``CLEAN_ROOMS_SQL`` parameter will no longer be available.
+        :param auto_approved_change_types: The types of change requests that are automatically approved for this collaboration.
         :param creator_member_abilities: The abilities granted to the collaboration creator. *Allowed values* ``CAN_QUERY`` | ``CAN_RECEIVE_RESULTS`` | ``CAN_RUN_JOB``
         :param creator_ml_member_abilities: The ML member abilities for a collaboration member.
         :param creator_payment_configuration: An object representing the collaboration member's payment responsibilities set by the collaboration creator.
@@ -467,6 +492,7 @@ class CfnCollaborationProps:
             
                 # the properties below are optional
                 analytics_engine="analyticsEngine",
+                auto_approved_change_types=["autoApprovedChangeTypes"],
                 creator_member_abilities=["creatorMemberAbilities"],
                 creator_ml_member_abilities=cleanrooms.CfnCollaboration.MLMemberAbilitiesProperty(
                     custom_ml_member_abilities=["customMlMemberAbilities"]
@@ -537,6 +563,7 @@ class CfnCollaborationProps:
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument query_log_status", value=query_log_status, expected_type=type_hints["query_log_status"])
             check_type(argname="argument analytics_engine", value=analytics_engine, expected_type=type_hints["analytics_engine"])
+            check_type(argname="argument auto_approved_change_types", value=auto_approved_change_types, expected_type=type_hints["auto_approved_change_types"])
             check_type(argname="argument creator_member_abilities", value=creator_member_abilities, expected_type=type_hints["creator_member_abilities"])
             check_type(argname="argument creator_ml_member_abilities", value=creator_ml_member_abilities, expected_type=type_hints["creator_ml_member_abilities"])
             check_type(argname="argument creator_payment_configuration", value=creator_payment_configuration, expected_type=type_hints["creator_payment_configuration"])
@@ -552,6 +579,8 @@ class CfnCollaborationProps:
         }
         if analytics_engine is not None:
             self._values["analytics_engine"] = analytics_engine
+        if auto_approved_change_types is not None:
+            self._values["auto_approved_change_types"] = auto_approved_change_types
         if creator_member_abilities is not None:
             self._values["creator_member_abilities"] = creator_member_abilities
         if creator_ml_member_abilities is not None:
@@ -623,6 +652,15 @@ class CfnCollaborationProps:
         '''
         result = self._values.get("analytics_engine")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def auto_approved_change_types(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The types of change requests that are automatically approved for this collaboration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-collaboration.html#cfn-cleanrooms-collaboration-autoapprovedchangetypes
+        '''
+        result = self._values.get("auto_approved_change_types")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def creator_member_abilities(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2730,6 +2768,9 @@ class CfnAnalysisTemplate(
                 default_value="defaultValue"
             )],
             description="description",
+            error_message_configuration=cleanrooms.CfnAnalysisTemplate.ErrorMessageConfigurationProperty(
+                type="type"
+            ),
             schema=cleanrooms.CfnAnalysisTemplate.AnalysisSchemaProperty(
                 referenced_tables=["referencedTables"]
             ),
@@ -2763,6 +2804,7 @@ class CfnAnalysisTemplate(
         source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisSourceProperty", typing.Dict[builtins.str, typing.Any]]],
         analysis_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        error_message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.ErrorMessageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisSchemaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         source_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisSourceMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2776,6 +2818,7 @@ class CfnAnalysisTemplate(
         :param source: The source of the analysis template.
         :param analysis_parameters: The parameters of the analysis template.
         :param description: The description of the analysis template.
+        :param error_message_configuration: The configuration that specifies the level of detail in error messages returned by analyses using this template. When set to ``DETAILED`` , error messages include more information to help troubleshoot issues with PySpark jobs. Detailed error messages may expose underlying data, including sensitive information. Recommended for faster troubleshooting in development and testing environments.
         :param schema: The entire schema object.
         :param source_metadata: The source metadata for the analysis template.
         :param tags: An optional label that you can assign to a resource when you create it. Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
@@ -2791,6 +2834,7 @@ class CfnAnalysisTemplate(
             source=source,
             analysis_parameters=analysis_parameters,
             description=description,
+            error_message_configuration=error_message_configuration,
             schema=schema,
             source_metadata=source_metadata,
             tags=tags,
@@ -3003,6 +3047,24 @@ class CfnAnalysisTemplate(
             type_hints = typing.get_type_hints(_typecheckingstub__a8ea0f1530d49d0cf3ea112be450d6887b42e42d18ffdc9233aac36569611c55)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="errorMessageConfiguration")
+    def error_message_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]]:
+        '''The configuration that specifies the level of detail in error messages returned by analyses using this template.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]], jsii.get(self, "errorMessageConfiguration"))
+
+    @error_message_configuration.setter
+    def error_message_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__34831cf7179b15aa74fb46a0ab1a549fbfe4b6acc73cf2a5eabf79947604e497)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "errorMessageConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="schema")
@@ -3606,6 +3668,64 @@ class CfnAnalysisTemplate(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cleanrooms.CfnAnalysisTemplate.ErrorMessageConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"type": "type"},
+    )
+    class ErrorMessageConfigurationProperty:
+        def __init__(self, *, type: builtins.str) -> None:
+            '''A structure that defines the level of detail included in error messages returned by PySpark jobs.
+
+            This configuration allows you to control the verbosity of error messages to help with troubleshooting PySpark jobs while maintaining appropriate security controls.
+
+            :param type: The level of detail for error messages returned by the PySpark job. When set to DETAILED, error messages include more information to help troubleshoot issues with your PySpark job. Because this setting may expose sensitive data, it is recommended for development and testing environments.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-errormessageconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cleanrooms as cleanrooms
+                
+                error_message_configuration_property = cleanrooms.CfnAnalysisTemplate.ErrorMessageConfigurationProperty(
+                    type="type"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__99300f4ea5e5ce616768e3b03748c2f91f6e99c88a31ea4331c5d105bb2a1544)
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "type": type,
+            }
+
+        @builtins.property
+        def type(self) -> builtins.str:
+            '''The level of detail for error messages returned by the PySpark job.
+
+            When set to DETAILED, error messages include more information to help troubleshoot issues with your PySpark job.
+
+            Because this setting may expose sensitive data, it is recommended for development and testing environments.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-errormessageconfiguration.html#cfn-cleanrooms-analysistemplate-errormessageconfiguration-type
+            '''
+            result = self._values.get("type")
+            assert result is not None, "Required property 'type' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ErrorMessageConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_cleanrooms.CfnAnalysisTemplate.HashProperty",
         jsii_struct_bases=[],
         name_mapping={"sha256": "sha256"},
@@ -3749,6 +3869,7 @@ class CfnCollaboration(
         
             # the properties below are optional
             analytics_engine="analyticsEngine",
+            auto_approved_change_types=["autoApprovedChangeTypes"],
             creator_member_abilities=["creatorMemberAbilities"],
             creator_ml_member_abilities=cleanrooms.CfnCollaboration.MLMemberAbilitiesProperty(
                 custom_ml_member_abilities=["customMlMemberAbilities"]
@@ -3823,6 +3944,7 @@ class CfnCollaboration(
         name: builtins.str,
         query_log_status: builtins.str,
         analytics_engine: typing.Optional[builtins.str] = None,
+        auto_approved_change_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         creator_member_abilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         creator_ml_member_abilities: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.MLMemberAbilitiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         creator_payment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.PaymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3839,6 +3961,7 @@ class CfnCollaboration(
         :param name: A human-readable identifier provided by the collaboration owner. Display names are not unique.
         :param query_log_status: An indicator as to whether query logging has been enabled or disabled for the collaboration. When ``ENABLED`` , AWS Clean Rooms logs details about queries run within this collaboration and those logs can be viewed in Amazon CloudWatch Logs. The default value is ``DISABLED`` .
         :param analytics_engine: The analytics engine for the collaboration. .. epigraph:: After July 16, 2025, the ``CLEAN_ROOMS_SQL`` parameter will no longer be available.
+        :param auto_approved_change_types: The types of change requests that are automatically approved for this collaboration.
         :param creator_member_abilities: The abilities granted to the collaboration creator. *Allowed values* ``CAN_QUERY`` | ``CAN_RECEIVE_RESULTS`` | ``CAN_RUN_JOB``
         :param creator_ml_member_abilities: The ML member abilities for a collaboration member.
         :param creator_payment_configuration: An object representing the collaboration member's payment responsibilities set by the collaboration creator.
@@ -3857,6 +3980,7 @@ class CfnCollaboration(
             name=name,
             query_log_status=query_log_status,
             analytics_engine=analytics_engine,
+            auto_approved_change_types=auto_approved_change_types,
             creator_member_abilities=creator_member_abilities,
             creator_ml_member_abilities=creator_ml_member_abilities,
             creator_payment_configuration=creator_payment_configuration,
@@ -4001,6 +4125,22 @@ class CfnCollaboration(
             type_hints = typing.get_type_hints(_typecheckingstub__1052deb6a86709adcf30bca5621af3b50e52d20c54f6e014b8baeaa998273732)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "analyticsEngine", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="autoApprovedChangeTypes")
+    def auto_approved_change_types(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The types of change requests that are automatically approved for this collaboration.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "autoApprovedChangeTypes"))
+
+    @auto_approved_change_types.setter
+    def auto_approved_change_types(
+        self,
+        value: typing.Optional[typing.List[builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bae84907df1f2d3ba640faa4bdd3ba5349c36d0d41a201d71e35e6741dacf1ee)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "autoApprovedChangeTypes", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="creatorMemberAbilities")
@@ -10160,6 +10300,7 @@ def _typecheckingstub__e1c797e3fa5f8683aa0eb66424f00b6b29c5014d5c45e7771fe0c5b1e
     source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSourceProperty, typing.Dict[builtins.str, typing.Any]]],
     analysis_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    error_message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.ErrorMessageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSchemaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     source_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSourceMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -10174,6 +10315,7 @@ def _typecheckingstub__2049291a9933df94c4258b33838a3aa8100d0214a4519c3d84e6d70ed
     name: builtins.str,
     query_log_status: builtins.str,
     analytics_engine: typing.Optional[builtins.str] = None,
+    auto_approved_change_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     creator_member_abilities: typing.Optional[typing.Sequence[builtins.str]] = None,
     creator_ml_member_abilities: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.MLMemberAbilitiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     creator_payment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.PaymentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -10330,6 +10472,7 @@ def _typecheckingstub__0e650aead4f74afeaf90193249293bee92f9a4eb687f4f9678e1a1368
     source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSourceProperty, typing.Dict[builtins.str, typing.Any]]],
     analysis_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    error_message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.ErrorMessageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSchemaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     source_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSourceMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -10381,6 +10524,12 @@ def _typecheckingstub__e1b12f58b0c5fa25bf8c085bcbec4d711cdcbcd2bcea3e5137ba027e3
 
 def _typecheckingstub__a8ea0f1530d49d0cf3ea112be450d6887b42e42d18ffdc9233aac36569611c55(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__34831cf7179b15aa74fb46a0ab1a549fbfe4b6acc73cf2a5eabf79947604e497(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.ErrorMessageConfigurationProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10458,6 +10607,13 @@ def _typecheckingstub__de78ae9ecad686157204e702611c0cf015331e3aa099f1e87ab18d5cd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__99300f4ea5e5ce616768e3b03748c2f91f6e99c88a31ea4331c5d105bb2a1544(
+    *,
+    type: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__43be85fff22ad377febb791857a9bfd90b262e37e83d363df6adfb5783ea6cb5(
     *,
     sha256: typing.Optional[builtins.str] = None,
@@ -10482,6 +10638,7 @@ def _typecheckingstub__a8995527da9ce4212caf3c1fdf601e4947c02ff1e364e92811ac8635b
     name: builtins.str,
     query_log_status: builtins.str,
     analytics_engine: typing.Optional[builtins.str] = None,
+    auto_approved_change_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     creator_member_abilities: typing.Optional[typing.Sequence[builtins.str]] = None,
     creator_ml_member_abilities: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.MLMemberAbilitiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     creator_payment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.PaymentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -10531,6 +10688,12 @@ def _typecheckingstub__fa852049fd80eee6c2543d7576eb0c8f60a43d90ca97006450c31d8a1
 
 def _typecheckingstub__1052deb6a86709adcf30bca5621af3b50e52d20c54f6e014b8baeaa998273732(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bae84907df1f2d3ba640faa4bdd3ba5349c36d0d41a201d71e35e6741dacf1ee(
+    value: typing.Optional[typing.List[builtins.str]],
 ) -> None:
     """Type checking stubs"""
     pass

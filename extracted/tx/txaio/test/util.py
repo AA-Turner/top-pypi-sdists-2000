@@ -24,8 +24,6 @@
 #
 ###############################################################################
 
-import sys
-
 
 def run_once():
     """
@@ -40,14 +38,25 @@ def run_once():
         return
 
     try:
+        import sys
         import asyncio
 
         if sys.version_info >= (3, 7):
             # https://github.com/crossbario/txaio/issues/139
-            from _asyncio_test_utils import run_once as _run_once
+            def _run_once(loop):
+                """Legacy API to run once through the event loop.
+
+                This is the recommended pattern for test code.  It will poll the
+                selector once and run all callbacks scheduled in response to I/O
+                events.
+                """
+                loop.call_soon(loop.stop)
+                loop.run_forever()
+
         else:
             from asyncio.test_utils import run_once as _run_once
-        return _run_once(txaio.config.loop or asyncio.get_event_loop())
+
+        return _run_once(txaio.config.loop or _get_loop())
 
     except ImportError:
         import trollius as asyncio
@@ -64,6 +73,17 @@ def run_once():
         loop.stop()
         loop.run_forever()
         asyncio.gather(*asyncio.Task.all_tasks())
+
+
+def _get_loop():
+    import asyncio
+
+    try:
+        return asyncio.get_event_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        return loop
 
 
 def _await(future):

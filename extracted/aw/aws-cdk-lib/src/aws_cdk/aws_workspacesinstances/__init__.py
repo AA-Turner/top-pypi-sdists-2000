@@ -432,6 +432,13 @@ class CfnWorkspaceInstanceProps:
                         no_device="noDevice",
                         virtual_name="virtualName"
                     )],
+                    capacity_reservation_specification=workspacesinstances.CfnWorkspaceInstance.CapacityReservationSpecificationProperty(
+                        capacity_reservation_preference="capacityReservationPreference",
+                        capacity_reservation_target=workspacesinstances.CfnWorkspaceInstance.CapacityReservationTargetProperty(
+                            capacity_reservation_id="capacityReservationId",
+                            capacity_reservation_resource_group_arn="capacityReservationResourceGroupArn"
+                        )
+                    ),
                     cpu_options=workspacesinstances.CfnWorkspaceInstance.CpuOptionsRequestProperty(
                         core_count=123,
                         threads_per_core=123
@@ -441,6 +448,7 @@ class CfnWorkspaceInstanceProps:
                     ),
                     disable_api_stop=False,
                     ebs_optimized=False,
+                    enable_primary_ipv6=False,
                     enclave_options=workspacesinstances.CfnWorkspaceInstance.EnclaveOptionsRequestProperty(
                         enabled=False
                     ),
@@ -448,9 +456,23 @@ class CfnWorkspaceInstanceProps:
                         configured=False
                     ),
                     iam_instance_profile=workspacesinstances.CfnWorkspaceInstance.IamInstanceProfileSpecificationProperty(
+                        arn="arn",
                         name="name"
                     ),
+                    instance_market_options=workspacesinstances.CfnWorkspaceInstance.InstanceMarketOptionsRequestProperty(
+                        market_type="marketType",
+                        spot_options=workspacesinstances.CfnWorkspaceInstance.SpotMarketOptionsProperty(
+                            instance_interruption_behavior="instanceInterruptionBehavior",
+                            max_price="maxPrice",
+                            spot_instance_type="spotInstanceType",
+                            valid_until_utc="validUntilUtc"
+                        )
+                    ),
+                    ipv6_address_count=123,
                     key_name="keyName",
+                    license_specifications=[workspacesinstances.CfnWorkspaceInstance.LicenseConfigurationRequestProperty(
+                        license_configuration_arn="licenseConfigurationArn"
+                    )],
                     maintenance_options=workspacesinstances.CfnWorkspaceInstance.InstanceMaintenanceOptionsRequestProperty(
                         auto_recovery="autoRecovery"
                     ),
@@ -475,7 +497,9 @@ class CfnWorkspaceInstanceProps:
                     ),
                     placement=workspacesinstances.CfnWorkspaceInstance.PlacementProperty(
                         availability_zone="availabilityZone",
+                        group_id="groupId",
                         group_name="groupName",
+                        partition_number=123,
                         tenancy="tenancy"
                     ),
                     private_dns_name_options=workspacesinstances.CfnWorkspaceInstance.PrivateDnsNameOptionsRequestProperty(
@@ -483,6 +507,7 @@ class CfnWorkspaceInstanceProps:
                         enable_resource_name_dns_aRecord=False,
                         hostname_type="hostnameType"
                     ),
+                    subnet_id="subnetId",
                     tag_specifications=[workspacesinstances.CfnWorkspaceInstance.TagSpecificationProperty(
                         resource_type="resourceType",
                         tags=[CfnTag(
@@ -1367,6 +1392,13 @@ class CfnWorkspaceInstance(
                     no_device="noDevice",
                     virtual_name="virtualName"
                 )],
+                capacity_reservation_specification=workspacesinstances.CfnWorkspaceInstance.CapacityReservationSpecificationProperty(
+                    capacity_reservation_preference="capacityReservationPreference",
+                    capacity_reservation_target=workspacesinstances.CfnWorkspaceInstance.CapacityReservationTargetProperty(
+                        capacity_reservation_id="capacityReservationId",
+                        capacity_reservation_resource_group_arn="capacityReservationResourceGroupArn"
+                    )
+                ),
                 cpu_options=workspacesinstances.CfnWorkspaceInstance.CpuOptionsRequestProperty(
                     core_count=123,
                     threads_per_core=123
@@ -1376,6 +1408,7 @@ class CfnWorkspaceInstance(
                 ),
                 disable_api_stop=False,
                 ebs_optimized=False,
+                enable_primary_ipv6=False,
                 enclave_options=workspacesinstances.CfnWorkspaceInstance.EnclaveOptionsRequestProperty(
                     enabled=False
                 ),
@@ -1383,9 +1416,23 @@ class CfnWorkspaceInstance(
                     configured=False
                 ),
                 iam_instance_profile=workspacesinstances.CfnWorkspaceInstance.IamInstanceProfileSpecificationProperty(
+                    arn="arn",
                     name="name"
                 ),
+                instance_market_options=workspacesinstances.CfnWorkspaceInstance.InstanceMarketOptionsRequestProperty(
+                    market_type="marketType",
+                    spot_options=workspacesinstances.CfnWorkspaceInstance.SpotMarketOptionsProperty(
+                        instance_interruption_behavior="instanceInterruptionBehavior",
+                        max_price="maxPrice",
+                        spot_instance_type="spotInstanceType",
+                        valid_until_utc="validUntilUtc"
+                    )
+                ),
+                ipv6_address_count=123,
                 key_name="keyName",
+                license_specifications=[workspacesinstances.CfnWorkspaceInstance.LicenseConfigurationRequestProperty(
+                    license_configuration_arn="licenseConfigurationArn"
+                )],
                 maintenance_options=workspacesinstances.CfnWorkspaceInstance.InstanceMaintenanceOptionsRequestProperty(
                     auto_recovery="autoRecovery"
                 ),
@@ -1410,7 +1457,9 @@ class CfnWorkspaceInstance(
                 ),
                 placement=workspacesinstances.CfnWorkspaceInstance.PlacementProperty(
                     availability_zone="availabilityZone",
+                    group_id="groupId",
                     group_name="groupName",
+                    partition_number=123,
                     tenancy="tenancy"
                 ),
                 private_dns_name_options=workspacesinstances.CfnWorkspaceInstance.PrivateDnsNameOptionsRequestProperty(
@@ -1418,6 +1467,7 @@ class CfnWorkspaceInstance(
                     enable_resource_name_dns_aRecord=False,
                     hostname_type="hostnameType"
                 ),
+                subnet_id="subnetId",
                 tag_specifications=[workspacesinstances.CfnWorkspaceInstance.TagSpecificationProperty(
                     resource_type="resourceType",
                     tags=[CfnTag(
@@ -1672,6 +1722,153 @@ class CfnWorkspaceInstance(
 
         def __repr__(self) -> str:
             return "BlockDeviceMappingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_workspacesinstances.CfnWorkspaceInstance.CapacityReservationSpecificationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "capacity_reservation_preference": "capacityReservationPreference",
+            "capacity_reservation_target": "capacityReservationTarget",
+        },
+    )
+    class CapacityReservationSpecificationProperty:
+        def __init__(
+            self,
+            *,
+            capacity_reservation_preference: typing.Optional[builtins.str] = None,
+            capacity_reservation_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.CapacityReservationTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param capacity_reservation_preference: 
+            :param capacity_reservation_target: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-capacityreservationspecification.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_workspacesinstances as workspacesinstances
+                
+                capacity_reservation_specification_property = workspacesinstances.CfnWorkspaceInstance.CapacityReservationSpecificationProperty(
+                    capacity_reservation_preference="capacityReservationPreference",
+                    capacity_reservation_target=workspacesinstances.CfnWorkspaceInstance.CapacityReservationTargetProperty(
+                        capacity_reservation_id="capacityReservationId",
+                        capacity_reservation_resource_group_arn="capacityReservationResourceGroupArn"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2c7447c1d8e8482ef6a31cfa322dfe54d81154cc75e07f12f4604ce41d71d250)
+                check_type(argname="argument capacity_reservation_preference", value=capacity_reservation_preference, expected_type=type_hints["capacity_reservation_preference"])
+                check_type(argname="argument capacity_reservation_target", value=capacity_reservation_target, expected_type=type_hints["capacity_reservation_target"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if capacity_reservation_preference is not None:
+                self._values["capacity_reservation_preference"] = capacity_reservation_preference
+            if capacity_reservation_target is not None:
+                self._values["capacity_reservation_target"] = capacity_reservation_target
+
+        @builtins.property
+        def capacity_reservation_preference(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-capacityreservationspecification.html#cfn-workspacesinstances-workspaceinstance-capacityreservationspecification-capacityreservationpreference
+            '''
+            result = self._values.get("capacity_reservation_preference")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def capacity_reservation_target(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.CapacityReservationTargetProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-capacityreservationspecification.html#cfn-workspacesinstances-workspaceinstance-capacityreservationspecification-capacityreservationtarget
+            '''
+            result = self._values.get("capacity_reservation_target")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.CapacityReservationTargetProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CapacityReservationSpecificationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_workspacesinstances.CfnWorkspaceInstance.CapacityReservationTargetProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "capacity_reservation_id": "capacityReservationId",
+            "capacity_reservation_resource_group_arn": "capacityReservationResourceGroupArn",
+        },
+    )
+    class CapacityReservationTargetProperty:
+        def __init__(
+            self,
+            *,
+            capacity_reservation_id: typing.Optional[builtins.str] = None,
+            capacity_reservation_resource_group_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param capacity_reservation_id: 
+            :param capacity_reservation_resource_group_arn: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-capacityreservationtarget.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_workspacesinstances as workspacesinstances
+                
+                capacity_reservation_target_property = workspacesinstances.CfnWorkspaceInstance.CapacityReservationTargetProperty(
+                    capacity_reservation_id="capacityReservationId",
+                    capacity_reservation_resource_group_arn="capacityReservationResourceGroupArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d9f436a25da0d1e919f4f55d90c75f8795f4997204e2fa4a394b043328fc1f18)
+                check_type(argname="argument capacity_reservation_id", value=capacity_reservation_id, expected_type=type_hints["capacity_reservation_id"])
+                check_type(argname="argument capacity_reservation_resource_group_arn", value=capacity_reservation_resource_group_arn, expected_type=type_hints["capacity_reservation_resource_group_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if capacity_reservation_id is not None:
+                self._values["capacity_reservation_id"] = capacity_reservation_id
+            if capacity_reservation_resource_group_arn is not None:
+                self._values["capacity_reservation_resource_group_arn"] = capacity_reservation_resource_group_arn
+
+        @builtins.property
+        def capacity_reservation_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-capacityreservationtarget.html#cfn-workspacesinstances-workspaceinstance-capacityreservationtarget-capacityreservationid
+            '''
+            result = self._values.get("capacity_reservation_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def capacity_reservation_resource_group_arn(
+            self,
+        ) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-capacityreservationtarget.html#cfn-workspacesinstances-workspaceinstance-capacityreservationtarget-capacityreservationresourcegrouparn
+            '''
+            result = self._values.get("capacity_reservation_resource_group_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CapacityReservationTargetProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2093,11 +2290,17 @@ class CfnWorkspaceInstance(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_workspacesinstances.CfnWorkspaceInstance.IamInstanceProfileSpecificationProperty",
         jsii_struct_bases=[],
-        name_mapping={"name": "name"},
+        name_mapping={"arn": "arn", "name": "name"},
     )
     class IamInstanceProfileSpecificationProperty:
-        def __init__(self, *, name: typing.Optional[builtins.str] = None) -> None:
+        def __init__(
+            self,
+            *,
+            arn: typing.Optional[builtins.str] = None,
+            name: typing.Optional[builtins.str] = None,
+        ) -> None:
             '''
+            :param arn: 
             :param name: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-iaminstanceprofilespecification.html
@@ -2110,15 +2313,27 @@ class CfnWorkspaceInstance(
                 from aws_cdk import aws_workspacesinstances as workspacesinstances
                 
                 iam_instance_profile_specification_property = workspacesinstances.CfnWorkspaceInstance.IamInstanceProfileSpecificationProperty(
+                    arn="arn",
                     name="name"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__46446ab38acd11b881b5c7aac1c73f790aba6f0b8215d39325f4bb1081daf531)
+                check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
                 check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if arn is not None:
+                self._values["arn"] = arn
             if name is not None:
                 self._values["name"] = name
+
+        @builtins.property
+        def arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-iaminstanceprofilespecification.html#cfn-workspacesinstances-workspaceinstance-iaminstanceprofilespecification-arn
+            '''
+            result = self._values.get("arn")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
@@ -2189,6 +2404,80 @@ class CfnWorkspaceInstance(
 
         def __repr__(self) -> str:
             return "InstanceMaintenanceOptionsRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_workspacesinstances.CfnWorkspaceInstance.InstanceMarketOptionsRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"market_type": "marketType", "spot_options": "spotOptions"},
+    )
+    class InstanceMarketOptionsRequestProperty:
+        def __init__(
+            self,
+            *,
+            market_type: typing.Optional[builtins.str] = None,
+            spot_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.SpotMarketOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param market_type: 
+            :param spot_options: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-instancemarketoptionsrequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_workspacesinstances as workspacesinstances
+                
+                instance_market_options_request_property = workspacesinstances.CfnWorkspaceInstance.InstanceMarketOptionsRequestProperty(
+                    market_type="marketType",
+                    spot_options=workspacesinstances.CfnWorkspaceInstance.SpotMarketOptionsProperty(
+                        instance_interruption_behavior="instanceInterruptionBehavior",
+                        max_price="maxPrice",
+                        spot_instance_type="spotInstanceType",
+                        valid_until_utc="validUntilUtc"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__b98b268bcbc4c8517d4411ff3cec97b75028e2bf24bcfbe5187fddb5e5ddf912)
+                check_type(argname="argument market_type", value=market_type, expected_type=type_hints["market_type"])
+                check_type(argname="argument spot_options", value=spot_options, expected_type=type_hints["spot_options"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if market_type is not None:
+                self._values["market_type"] = market_type
+            if spot_options is not None:
+                self._values["spot_options"] = spot_options
+
+        @builtins.property
+        def market_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-instancemarketoptionsrequest.html#cfn-workspacesinstances-workspaceinstance-instancemarketoptionsrequest-markettype
+            '''
+            result = self._values.get("market_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def spot_options(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.SpotMarketOptionsProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-instancemarketoptionsrequest.html#cfn-workspacesinstances-workspaceinstance-instancemarketoptionsrequest-spotoptions
+            '''
+            result = self._values.get("spot_options")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.SpotMarketOptionsProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InstanceMarketOptionsRequestProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2461,20 +2750,78 @@ class CfnWorkspaceInstance(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_workspacesinstances.CfnWorkspaceInstance.LicenseConfigurationRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"license_configuration_arn": "licenseConfigurationArn"},
+    )
+    class LicenseConfigurationRequestProperty:
+        def __init__(
+            self,
+            *,
+            license_configuration_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param license_configuration_arn: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-licenseconfigurationrequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_workspacesinstances as workspacesinstances
+                
+                license_configuration_request_property = workspacesinstances.CfnWorkspaceInstance.LicenseConfigurationRequestProperty(
+                    license_configuration_arn="licenseConfigurationArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__88bcc842cecd4571abd8f35580c280ee36aed2ea9152364e215ff691575d151e)
+                check_type(argname="argument license_configuration_arn", value=license_configuration_arn, expected_type=type_hints["license_configuration_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if license_configuration_arn is not None:
+                self._values["license_configuration_arn"] = license_configuration_arn
+
+        @builtins.property
+        def license_configuration_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-licenseconfigurationrequest.html#cfn-workspacesinstances-workspaceinstance-licenseconfigurationrequest-licenseconfigurationarn
+            '''
+            result = self._values.get("license_configuration_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LicenseConfigurationRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_workspacesinstances.CfnWorkspaceInstance.ManagedInstanceProperty",
         jsii_struct_bases=[],
         name_mapping={
             "image_id": "imageId",
             "instance_type": "instanceType",
             "block_device_mappings": "blockDeviceMappings",
+            "capacity_reservation_specification": "capacityReservationSpecification",
             "cpu_options": "cpuOptions",
             "credit_specification": "creditSpecification",
             "disable_api_stop": "disableApiStop",
             "ebs_optimized": "ebsOptimized",
+            "enable_primary_ipv6": "enablePrimaryIpv6",
             "enclave_options": "enclaveOptions",
             "hibernation_options": "hibernationOptions",
             "iam_instance_profile": "iamInstanceProfile",
+            "instance_market_options": "instanceMarketOptions",
+            "ipv6_address_count": "ipv6AddressCount",
             "key_name": "keyName",
+            "license_specifications": "licenseSpecifications",
             "maintenance_options": "maintenanceOptions",
             "metadata_options": "metadataOptions",
             "monitoring": "monitoring",
@@ -2482,6 +2829,7 @@ class CfnWorkspaceInstance(
             "network_performance_options": "networkPerformanceOptions",
             "placement": "placement",
             "private_dns_name_options": "privateDnsNameOptions",
+            "subnet_id": "subnetId",
             "tag_specifications": "tagSpecifications",
             "user_data": "userData",
         },
@@ -2493,14 +2841,19 @@ class CfnWorkspaceInstance(
             image_id: builtins.str,
             instance_type: builtins.str,
             block_device_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.BlockDeviceMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            capacity_reservation_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.CapacityReservationSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             cpu_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.CpuOptionsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             credit_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.CreditSpecificationRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             disable_api_stop: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             ebs_optimized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_primary_ipv6: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             enclave_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.EnclaveOptionsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             hibernation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.HibernationOptionsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             iam_instance_profile: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.IamInstanceProfileSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            instance_market_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.InstanceMarketOptionsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ipv6_address_count: typing.Optional[jsii.Number] = None,
             key_name: typing.Optional[builtins.str] = None,
+            license_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.LicenseConfigurationRequestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             maintenance_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.InstanceMaintenanceOptionsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             metadata_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.InstanceMetadataOptionsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             monitoring: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.RunInstancesMonitoringEnabledProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2508,6 +2861,7 @@ class CfnWorkspaceInstance(
             network_performance_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.InstanceNetworkPerformanceOptionsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             placement: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.PlacementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             private_dns_name_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.PrivateDnsNameOptionsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            subnet_id: typing.Optional[builtins.str] = None,
             tag_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspaceInstance.TagSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             user_data: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2515,14 +2869,19 @@ class CfnWorkspaceInstance(
             :param image_id: 
             :param instance_type: 
             :param block_device_mappings: 
+            :param capacity_reservation_specification: 
             :param cpu_options: 
             :param credit_specification: 
             :param disable_api_stop: 
             :param ebs_optimized: 
+            :param enable_primary_ipv6: 
             :param enclave_options: 
             :param hibernation_options: 
             :param iam_instance_profile: 
+            :param instance_market_options: 
+            :param ipv6_address_count: 
             :param key_name: 
+            :param license_specifications: 
             :param maintenance_options: 
             :param metadata_options: 
             :param monitoring: 
@@ -2530,6 +2889,7 @@ class CfnWorkspaceInstance(
             :param network_performance_options: 
             :param placement: 
             :param private_dns_name_options: 
+            :param subnet_id: 
             :param tag_specifications: 
             :param user_data: 
 
@@ -2560,6 +2920,13 @@ class CfnWorkspaceInstance(
                         no_device="noDevice",
                         virtual_name="virtualName"
                     )],
+                    capacity_reservation_specification=workspacesinstances.CfnWorkspaceInstance.CapacityReservationSpecificationProperty(
+                        capacity_reservation_preference="capacityReservationPreference",
+                        capacity_reservation_target=workspacesinstances.CfnWorkspaceInstance.CapacityReservationTargetProperty(
+                            capacity_reservation_id="capacityReservationId",
+                            capacity_reservation_resource_group_arn="capacityReservationResourceGroupArn"
+                        )
+                    ),
                     cpu_options=workspacesinstances.CfnWorkspaceInstance.CpuOptionsRequestProperty(
                         core_count=123,
                         threads_per_core=123
@@ -2569,6 +2936,7 @@ class CfnWorkspaceInstance(
                     ),
                     disable_api_stop=False,
                     ebs_optimized=False,
+                    enable_primary_ipv6=False,
                     enclave_options=workspacesinstances.CfnWorkspaceInstance.EnclaveOptionsRequestProperty(
                         enabled=False
                     ),
@@ -2576,9 +2944,23 @@ class CfnWorkspaceInstance(
                         configured=False
                     ),
                     iam_instance_profile=workspacesinstances.CfnWorkspaceInstance.IamInstanceProfileSpecificationProperty(
+                        arn="arn",
                         name="name"
                     ),
+                    instance_market_options=workspacesinstances.CfnWorkspaceInstance.InstanceMarketOptionsRequestProperty(
+                        market_type="marketType",
+                        spot_options=workspacesinstances.CfnWorkspaceInstance.SpotMarketOptionsProperty(
+                            instance_interruption_behavior="instanceInterruptionBehavior",
+                            max_price="maxPrice",
+                            spot_instance_type="spotInstanceType",
+                            valid_until_utc="validUntilUtc"
+                        )
+                    ),
+                    ipv6_address_count=123,
                     key_name="keyName",
+                    license_specifications=[workspacesinstances.CfnWorkspaceInstance.LicenseConfigurationRequestProperty(
+                        license_configuration_arn="licenseConfigurationArn"
+                    )],
                     maintenance_options=workspacesinstances.CfnWorkspaceInstance.InstanceMaintenanceOptionsRequestProperty(
                         auto_recovery="autoRecovery"
                     ),
@@ -2603,7 +2985,9 @@ class CfnWorkspaceInstance(
                     ),
                     placement=workspacesinstances.CfnWorkspaceInstance.PlacementProperty(
                         availability_zone="availabilityZone",
+                        group_id="groupId",
                         group_name="groupName",
+                        partition_number=123,
                         tenancy="tenancy"
                     ),
                     private_dns_name_options=workspacesinstances.CfnWorkspaceInstance.PrivateDnsNameOptionsRequestProperty(
@@ -2611,6 +2995,7 @@ class CfnWorkspaceInstance(
                         enable_resource_name_dns_aRecord=False,
                         hostname_type="hostnameType"
                     ),
+                    subnet_id="subnetId",
                     tag_specifications=[workspacesinstances.CfnWorkspaceInstance.TagSpecificationProperty(
                         resource_type="resourceType",
                         tags=[CfnTag(
@@ -2626,14 +3011,19 @@ class CfnWorkspaceInstance(
                 check_type(argname="argument image_id", value=image_id, expected_type=type_hints["image_id"])
                 check_type(argname="argument instance_type", value=instance_type, expected_type=type_hints["instance_type"])
                 check_type(argname="argument block_device_mappings", value=block_device_mappings, expected_type=type_hints["block_device_mappings"])
+                check_type(argname="argument capacity_reservation_specification", value=capacity_reservation_specification, expected_type=type_hints["capacity_reservation_specification"])
                 check_type(argname="argument cpu_options", value=cpu_options, expected_type=type_hints["cpu_options"])
                 check_type(argname="argument credit_specification", value=credit_specification, expected_type=type_hints["credit_specification"])
                 check_type(argname="argument disable_api_stop", value=disable_api_stop, expected_type=type_hints["disable_api_stop"])
                 check_type(argname="argument ebs_optimized", value=ebs_optimized, expected_type=type_hints["ebs_optimized"])
+                check_type(argname="argument enable_primary_ipv6", value=enable_primary_ipv6, expected_type=type_hints["enable_primary_ipv6"])
                 check_type(argname="argument enclave_options", value=enclave_options, expected_type=type_hints["enclave_options"])
                 check_type(argname="argument hibernation_options", value=hibernation_options, expected_type=type_hints["hibernation_options"])
                 check_type(argname="argument iam_instance_profile", value=iam_instance_profile, expected_type=type_hints["iam_instance_profile"])
+                check_type(argname="argument instance_market_options", value=instance_market_options, expected_type=type_hints["instance_market_options"])
+                check_type(argname="argument ipv6_address_count", value=ipv6_address_count, expected_type=type_hints["ipv6_address_count"])
                 check_type(argname="argument key_name", value=key_name, expected_type=type_hints["key_name"])
+                check_type(argname="argument license_specifications", value=license_specifications, expected_type=type_hints["license_specifications"])
                 check_type(argname="argument maintenance_options", value=maintenance_options, expected_type=type_hints["maintenance_options"])
                 check_type(argname="argument metadata_options", value=metadata_options, expected_type=type_hints["metadata_options"])
                 check_type(argname="argument monitoring", value=monitoring, expected_type=type_hints["monitoring"])
@@ -2641,6 +3031,7 @@ class CfnWorkspaceInstance(
                 check_type(argname="argument network_performance_options", value=network_performance_options, expected_type=type_hints["network_performance_options"])
                 check_type(argname="argument placement", value=placement, expected_type=type_hints["placement"])
                 check_type(argname="argument private_dns_name_options", value=private_dns_name_options, expected_type=type_hints["private_dns_name_options"])
+                check_type(argname="argument subnet_id", value=subnet_id, expected_type=type_hints["subnet_id"])
                 check_type(argname="argument tag_specifications", value=tag_specifications, expected_type=type_hints["tag_specifications"])
                 check_type(argname="argument user_data", value=user_data, expected_type=type_hints["user_data"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -2649,6 +3040,8 @@ class CfnWorkspaceInstance(
             }
             if block_device_mappings is not None:
                 self._values["block_device_mappings"] = block_device_mappings
+            if capacity_reservation_specification is not None:
+                self._values["capacity_reservation_specification"] = capacity_reservation_specification
             if cpu_options is not None:
                 self._values["cpu_options"] = cpu_options
             if credit_specification is not None:
@@ -2657,14 +3050,22 @@ class CfnWorkspaceInstance(
                 self._values["disable_api_stop"] = disable_api_stop
             if ebs_optimized is not None:
                 self._values["ebs_optimized"] = ebs_optimized
+            if enable_primary_ipv6 is not None:
+                self._values["enable_primary_ipv6"] = enable_primary_ipv6
             if enclave_options is not None:
                 self._values["enclave_options"] = enclave_options
             if hibernation_options is not None:
                 self._values["hibernation_options"] = hibernation_options
             if iam_instance_profile is not None:
                 self._values["iam_instance_profile"] = iam_instance_profile
+            if instance_market_options is not None:
+                self._values["instance_market_options"] = instance_market_options
+            if ipv6_address_count is not None:
+                self._values["ipv6_address_count"] = ipv6_address_count
             if key_name is not None:
                 self._values["key_name"] = key_name
+            if license_specifications is not None:
+                self._values["license_specifications"] = license_specifications
             if maintenance_options is not None:
                 self._values["maintenance_options"] = maintenance_options
             if metadata_options is not None:
@@ -2679,6 +3080,8 @@ class CfnWorkspaceInstance(
                 self._values["placement"] = placement
             if private_dns_name_options is not None:
                 self._values["private_dns_name_options"] = private_dns_name_options
+            if subnet_id is not None:
+                self._values["subnet_id"] = subnet_id
             if tag_specifications is not None:
                 self._values["tag_specifications"] = tag_specifications
             if user_data is not None:
@@ -2711,6 +3114,16 @@ class CfnWorkspaceInstance(
             '''
             result = self._values.get("block_device_mappings")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.BlockDeviceMappingProperty"]]]], result)
+
+        @builtins.property
+        def capacity_reservation_specification(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.CapacityReservationSpecificationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-managedinstance.html#cfn-workspacesinstances-workspaceinstance-managedinstance-capacityreservationspecification
+            '''
+            result = self._values.get("capacity_reservation_specification")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.CapacityReservationSpecificationProperty"]], result)
 
         @builtins.property
         def cpu_options(
@@ -2753,6 +3166,16 @@ class CfnWorkspaceInstance(
             return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
         @builtins.property
+        def enable_primary_ipv6(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-managedinstance.html#cfn-workspacesinstances-workspaceinstance-managedinstance-enableprimaryipv6
+            '''
+            result = self._values.get("enable_primary_ipv6")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
         def enclave_options(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.EnclaveOptionsRequestProperty"]]:
@@ -2783,12 +3206,40 @@ class CfnWorkspaceInstance(
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.IamInstanceProfileSpecificationProperty"]], result)
 
         @builtins.property
+        def instance_market_options(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.InstanceMarketOptionsRequestProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-managedinstance.html#cfn-workspacesinstances-workspaceinstance-managedinstance-instancemarketoptions
+            '''
+            result = self._values.get("instance_market_options")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.InstanceMarketOptionsRequestProperty"]], result)
+
+        @builtins.property
+        def ipv6_address_count(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-managedinstance.html#cfn-workspacesinstances-workspaceinstance-managedinstance-ipv6addresscount
+            '''
+            result = self._values.get("ipv6_address_count")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
         def key_name(self) -> typing.Optional[builtins.str]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-managedinstance.html#cfn-workspacesinstances-workspaceinstance-managedinstance-keyname
             '''
             result = self._values.get("key_name")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def license_specifications(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.LicenseConfigurationRequestProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-managedinstance.html#cfn-workspacesinstances-workspaceinstance-managedinstance-licensespecifications
+            '''
+            result = self._values.get("license_specifications")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.LicenseConfigurationRequestProperty"]]]], result)
 
         @builtins.property
         def maintenance_options(
@@ -2861,6 +3312,14 @@ class CfnWorkspaceInstance(
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.PrivateDnsNameOptionsRequestProperty"]], result)
 
         @builtins.property
+        def subnet_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-managedinstance.html#cfn-workspacesinstances-workspaceinstance-managedinstance-subnetid
+            '''
+            result = self._values.get("subnet_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
         def tag_specifications(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkspaceInstance.TagSpecificationProperty"]]]]:
@@ -2894,7 +3353,9 @@ class CfnWorkspaceInstance(
         jsii_struct_bases=[],
         name_mapping={
             "availability_zone": "availabilityZone",
+            "group_id": "groupId",
             "group_name": "groupName",
+            "partition_number": "partitionNumber",
             "tenancy": "tenancy",
         },
     )
@@ -2903,12 +3364,16 @@ class CfnWorkspaceInstance(
             self,
             *,
             availability_zone: typing.Optional[builtins.str] = None,
+            group_id: typing.Optional[builtins.str] = None,
             group_name: typing.Optional[builtins.str] = None,
+            partition_number: typing.Optional[jsii.Number] = None,
             tenancy: typing.Optional[builtins.str] = None,
         ) -> None:
             '''
             :param availability_zone: 
+            :param group_id: 
             :param group_name: 
+            :param partition_number: 
             :param tenancy: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-placement.html
@@ -2922,20 +3387,28 @@ class CfnWorkspaceInstance(
                 
                 placement_property = workspacesinstances.CfnWorkspaceInstance.PlacementProperty(
                     availability_zone="availabilityZone",
+                    group_id="groupId",
                     group_name="groupName",
+                    partition_number=123,
                     tenancy="tenancy"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__74aaa065dbb77262ecab6552e5fde4ac2723c645be4dde2327c06e281386c1f8)
                 check_type(argname="argument availability_zone", value=availability_zone, expected_type=type_hints["availability_zone"])
+                check_type(argname="argument group_id", value=group_id, expected_type=type_hints["group_id"])
                 check_type(argname="argument group_name", value=group_name, expected_type=type_hints["group_name"])
+                check_type(argname="argument partition_number", value=partition_number, expected_type=type_hints["partition_number"])
                 check_type(argname="argument tenancy", value=tenancy, expected_type=type_hints["tenancy"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if availability_zone is not None:
                 self._values["availability_zone"] = availability_zone
+            if group_id is not None:
+                self._values["group_id"] = group_id
             if group_name is not None:
                 self._values["group_name"] = group_name
+            if partition_number is not None:
+                self._values["partition_number"] = partition_number
             if tenancy is not None:
                 self._values["tenancy"] = tenancy
 
@@ -2948,12 +3421,28 @@ class CfnWorkspaceInstance(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
+        def group_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-placement.html#cfn-workspacesinstances-workspaceinstance-placement-groupid
+            '''
+            result = self._values.get("group_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
         def group_name(self) -> typing.Optional[builtins.str]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-placement.html#cfn-workspacesinstances-workspaceinstance-placement-groupname
             '''
             result = self._values.get("group_name")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def partition_number(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-placement.html#cfn-workspacesinstances-workspaceinstance-placement-partitionnumber
+            '''
+            result = self._values.get("partition_number")
+            return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
         def tenancy(self) -> typing.Optional[builtins.str]:
@@ -3115,6 +3604,106 @@ class CfnWorkspaceInstance(
 
         def __repr__(self) -> str:
             return "RunInstancesMonitoringEnabledProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_workspacesinstances.CfnWorkspaceInstance.SpotMarketOptionsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "instance_interruption_behavior": "instanceInterruptionBehavior",
+            "max_price": "maxPrice",
+            "spot_instance_type": "spotInstanceType",
+            "valid_until_utc": "validUntilUtc",
+        },
+    )
+    class SpotMarketOptionsProperty:
+        def __init__(
+            self,
+            *,
+            instance_interruption_behavior: typing.Optional[builtins.str] = None,
+            max_price: typing.Optional[builtins.str] = None,
+            spot_instance_type: typing.Optional[builtins.str] = None,
+            valid_until_utc: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param instance_interruption_behavior: 
+            :param max_price: 
+            :param spot_instance_type: 
+            :param valid_until_utc: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-spotmarketoptions.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_workspacesinstances as workspacesinstances
+                
+                spot_market_options_property = workspacesinstances.CfnWorkspaceInstance.SpotMarketOptionsProperty(
+                    instance_interruption_behavior="instanceInterruptionBehavior",
+                    max_price="maxPrice",
+                    spot_instance_type="spotInstanceType",
+                    valid_until_utc="validUntilUtc"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3f2b025a20b39464357aca8413f9d8b09d278990163112ca1429525ca31400ea)
+                check_type(argname="argument instance_interruption_behavior", value=instance_interruption_behavior, expected_type=type_hints["instance_interruption_behavior"])
+                check_type(argname="argument max_price", value=max_price, expected_type=type_hints["max_price"])
+                check_type(argname="argument spot_instance_type", value=spot_instance_type, expected_type=type_hints["spot_instance_type"])
+                check_type(argname="argument valid_until_utc", value=valid_until_utc, expected_type=type_hints["valid_until_utc"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if instance_interruption_behavior is not None:
+                self._values["instance_interruption_behavior"] = instance_interruption_behavior
+            if max_price is not None:
+                self._values["max_price"] = max_price
+            if spot_instance_type is not None:
+                self._values["spot_instance_type"] = spot_instance_type
+            if valid_until_utc is not None:
+                self._values["valid_until_utc"] = valid_until_utc
+
+        @builtins.property
+        def instance_interruption_behavior(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-spotmarketoptions.html#cfn-workspacesinstances-workspaceinstance-spotmarketoptions-instanceinterruptionbehavior
+            '''
+            result = self._values.get("instance_interruption_behavior")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def max_price(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-spotmarketoptions.html#cfn-workspacesinstances-workspaceinstance-spotmarketoptions-maxprice
+            '''
+            result = self._values.get("max_price")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def spot_instance_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-spotmarketoptions.html#cfn-workspacesinstances-workspaceinstance-spotmarketoptions-spotinstancetype
+            '''
+            result = self._values.get("spot_instance_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def valid_until_utc(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesinstances-workspaceinstance-spotmarketoptions.html#cfn-workspacesinstances-workspaceinstance-spotmarketoptions-validuntilutc
+            '''
+            result = self._values.get("valid_until_utc")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SpotMarketOptionsProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -3445,6 +4034,22 @@ def _typecheckingstub__6f2d2dc4f023dfee96411ef0d53c3f207f589b520679a75d9c4a2ca08
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2c7447c1d8e8482ef6a31cfa322dfe54d81154cc75e07f12f4604ce41d71d250(
+    *,
+    capacity_reservation_preference: typing.Optional[builtins.str] = None,
+    capacity_reservation_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.CapacityReservationTargetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d9f436a25da0d1e919f4f55d90c75f8795f4997204e2fa4a394b043328fc1f18(
+    *,
+    capacity_reservation_id: typing.Optional[builtins.str] = None,
+    capacity_reservation_resource_group_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__baf2483b6c10091ca1060d8ca8cb538b6f9eb1223193ab69470e79d02ae05c0f(
     *,
     core_count: typing.Optional[jsii.Number] = None,
@@ -3495,6 +4100,7 @@ def _typecheckingstub__6c8991a0b12bd7048f141f964633e62a1f4e02c6996cbf5ff8a1bf165
 
 def _typecheckingstub__46446ab38acd11b881b5c7aac1c73f790aba6f0b8215d39325f4bb1081daf531(
     *,
+    arn: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3503,6 +4109,14 @@ def _typecheckingstub__46446ab38acd11b881b5c7aac1c73f790aba6f0b8215d39325f4bb108
 def _typecheckingstub__5785155bdccebc0d8fada1620d3c62726134a88a6a448d54e8ea0f622a0cfe50(
     *,
     auto_recovery: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b98b268bcbc4c8517d4411ff3cec97b75028e2bf24bcfbe5187fddb5e5ddf912(
+    *,
+    market_type: typing.Optional[builtins.str] = None,
+    spot_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.SpotMarketOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3535,19 +4149,31 @@ def _typecheckingstub__8457689e343afe3fd18713b744f081cee9dcd43310c6b6befb13b25b5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__88bcc842cecd4571abd8f35580c280ee36aed2ea9152364e215ff691575d151e(
+    *,
+    license_configuration_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__122edb12e6993ba3ae146e0faaf65a6eef7a6651e2293cb5479f0afe37198259(
     *,
     image_id: builtins.str,
     instance_type: builtins.str,
     block_device_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.BlockDeviceMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    capacity_reservation_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.CapacityReservationSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cpu_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.CpuOptionsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     credit_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.CreditSpecificationRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     disable_api_stop: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     ebs_optimized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    enable_primary_ipv6: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     enclave_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.EnclaveOptionsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     hibernation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.HibernationOptionsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     iam_instance_profile: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.IamInstanceProfileSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    instance_market_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.InstanceMarketOptionsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ipv6_address_count: typing.Optional[jsii.Number] = None,
     key_name: typing.Optional[builtins.str] = None,
+    license_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.LicenseConfigurationRequestProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     maintenance_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.InstanceMaintenanceOptionsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     metadata_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.InstanceMetadataOptionsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     monitoring: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.RunInstancesMonitoringEnabledProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3555,6 +4181,7 @@ def _typecheckingstub__122edb12e6993ba3ae146e0faaf65a6eef7a6651e2293cb5479f0afe3
     network_performance_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.InstanceNetworkPerformanceOptionsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     placement: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.PlacementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     private_dns_name_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.PrivateDnsNameOptionsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    subnet_id: typing.Optional[builtins.str] = None,
     tag_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.TagSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     user_data: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -3564,7 +4191,9 @@ def _typecheckingstub__122edb12e6993ba3ae146e0faaf65a6eef7a6651e2293cb5479f0afe3
 def _typecheckingstub__74aaa065dbb77262ecab6552e5fde4ac2723c645be4dde2327c06e281386c1f8(
     *,
     availability_zone: typing.Optional[builtins.str] = None,
+    group_id: typing.Optional[builtins.str] = None,
     group_name: typing.Optional[builtins.str] = None,
+    partition_number: typing.Optional[jsii.Number] = None,
     tenancy: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3582,6 +4211,16 @@ def _typecheckingstub__5bcd696ce9417cfc6075ca9f9d64535711403bc6dc26a7e1e325bcb0b
 def _typecheckingstub__6fcd9d05f58e0d776ba7b11b076d5a7c565bc9ea5ce223eab03cdac46e660811(
     *,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3f2b025a20b39464357aca8413f9d8b09d278990163112ca1429525ca31400ea(
+    *,
+    instance_interruption_behavior: typing.Optional[builtins.str] = None,
+    max_price: typing.Optional[builtins.str] = None,
+    spot_instance_type: typing.Optional[builtins.str] = None,
+    valid_until_utc: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

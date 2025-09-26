@@ -2783,7 +2783,11 @@ class CfnReplicaKey(
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kms.IKey")
 class IKey(_IResource_c80c4260, IKeyRef, typing_extensions.Protocol):
-    '''A KMS Key, either managed by this CDK app, or imported.'''
+    '''A KMS Key, either managed by this CDK app, or imported.
+
+    This interface does double duty: it represents an actual KMS keys, but it
+    also represents things that can behave like KMS keys, like a key alias.
+    '''
 
     @builtins.property
     @jsii.member(jsii_name="keyArn")
@@ -2906,7 +2910,11 @@ class _IKeyProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(IKeyRef), # type: ignore[misc]
 ):
-    '''A KMS Key, either managed by this CDK app, or imported.'''
+    '''A KMS Key, either managed by this CDK app, or imported.
+
+    This interface does double duty: it represents an actual KMS keys, but it
+    also represents things that can behave like KMS keys, like a key alias.
+    '''
 
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_kms.IKey"
 

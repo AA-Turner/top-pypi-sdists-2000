@@ -5843,7 +5843,7 @@ class CfnGuardHookProps:
         :param log_bucket: Specifies the name of an S3 bucket to store the Guard output report. This report contains the results of your Guard rule validations.
         :param options: Specifies the S3 location of your input parameters.
         :param stack_filters: Specifies the stack level filters for the Hook. Example stack level filter in JSON: ``"StackFilters": {"FilteringCriteria": "ALL", "StackNames": {"Exclude": [ "stack-1", "stack-2"]}}`` Example stack level filter in YAML: ``StackFilters: FilteringCriteria: ALL StackNames: Exclude: - stack-1 - stack-2``
-        :param target_filters: Specifies the target filters for the Hook. Example target filter in JSON: ``"TargetFilters": {"Actions": [ "Create", "Update", "Delete" ]}`` Example target filter in YAML: ``TargetFilters: Actions: - CREATE - UPDATE - DELETE``
+        :param target_filters: Specifies the target filters for the Hook. Example target filter in JSON: ``"TargetFilters": {"Actions": [ "CREATE", "UPDATE", "DELETE" ]}`` Example target filter in YAML: ``TargetFilters: Actions: - CREATE - UPDATE - DELETE``
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-guardhook.html
         :exampleMetadata: fixture=_generated
@@ -6057,7 +6057,7 @@ class CfnGuardHookProps:
 
         Example target filter in JSON:
 
-        ``"TargetFilters": {"Actions": [ "Create", "Update", "Delete" ]}``
+        ``"TargetFilters": {"Actions": [ "CREATE", "UPDATE", "DELETE" ]}``
 
         Example target filter in YAML:
 
@@ -6453,7 +6453,7 @@ class CfnHookVersionProps:
         '''Properties for defining a ``CfnHookVersion``.
 
         :param schema_handler_package: A URL to the Amazon S3 bucket for the Hook project package that contains the necessary files for the Hook you want to register. For information on generating a schema handler package, see `Modeling custom CloudFormation Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-model.html>`_ in the *AWS CloudFormation Hooks User Guide* . .. epigraph:: To register the Hook, you must have ``s3:GetObject`` permissions to access the S3 objects.
-        :param type_name: The unique name for your hook. Specifies a three-part namespace for your hook, with a recommended pattern of ``Organization::Service::Hook`` . .. epigraph:: The following organization namespaces are reserved and can't be used in your hook type names: - ``Alexa`` - ``AMZN`` - ``Amazon`` - ``ASK`` - ``AWS`` - ``Custom`` - ``Dev``
+        :param type_name: The unique name for your Hook. Specifies a three-part namespace for your Hook, with a recommended pattern of ``Organization::Service::Hook`` . .. epigraph:: The following organization namespaces are reserved and can't be used in your Hook type names: - ``Alexa`` - ``AMZN`` - ``Amazon`` - ``ASK`` - ``AWS`` - ``Custom`` - ``Dev``
         :param execution_role_arn: The Amazon Resource Name (ARN) of the task execution role that grants the Hook permission.
         :param logging_config: Contains logging configuration information for an extension.
 
@@ -6510,12 +6510,12 @@ class CfnHookVersionProps:
 
     @builtins.property
     def type_name(self) -> builtins.str:
-        '''The unique name for your hook.
+        '''The unique name for your Hook.
 
-        Specifies a three-part namespace for your hook, with a recommended pattern of ``Organization::Service::Hook`` .
+        Specifies a three-part namespace for your Hook, with a recommended pattern of ``Organization::Service::Hook`` .
         .. epigraph::
 
-           The following organization namespaces are reserved and can't be used in your hook type names:
+           The following organization namespaces are reserved and can't be used in your Hook type names:
 
            - ``Alexa``
            - ``AMZN``
@@ -10459,7 +10459,7 @@ class CfnTypeActivationProps:
         :param publisher_id: The ID of the extension publisher. Conditional: You must specify ``PublicTypeArn`` , or ``TypeName`` , ``Type`` , and ``PublisherId`` .
         :param type: The extension type. Conditional: You must specify ``PublicTypeArn`` , or ``TypeName`` , ``Type`` , and ``PublisherId`` .
         :param type_name: The name of the extension. Conditional: You must specify ``PublicTypeArn`` , or ``TypeName`` , ``Type`` , and ``PublisherId`` .
-        :param type_name_alias: An alias to assign to the public extension, in this account and Region. If you specify an alias for the extension, CloudFormation treats the alias as the extension type name within this account and Region. You must use the alias to refer to the extension in your templates, API calls, and CloudFormation console. An extension alias must be unique within a given account and Region. You can activate the same public resource multiple times in the same account and Region, using different type name aliases.
+        :param type_name_alias: An alias to assign to the public extension in this account and Region. If you specify an alias for the extension, CloudFormation treats the alias as the extension type name within this account and Region. You must use the alias to refer to the extension in your templates, API calls, and CloudFormation console. An extension alias must be unique within a given account and Region. You can activate the same public resource multiple times in the same account and Region, using different type name aliases.
         :param version_bump: Manually updates a previously-activated type to a new major or minor version, if available. You can also use this parameter to update the value of ``AutoUpdate`` . - ``MAJOR`` : CloudFormation updates the extension to the newest major version, if one is available. - ``MINOR`` : CloudFormation updates the extension to the newest minor version, if one is available.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-typeactivation.html
@@ -10615,7 +10615,7 @@ class CfnTypeActivationProps:
 
     @builtins.property
     def type_name_alias(self) -> typing.Optional[builtins.str]:
-        '''An alias to assign to the public extension, in this account and Region.
+        '''An alias to assign to the public extension in this account and Region.
 
         If you specify an alias for the extension, CloudFormation treats the alias as the extension type name within this account and Region. You must use the alias to refer to the extension in your templates, API calls, and CloudFormation console.
 
@@ -19296,17 +19296,20 @@ class IgnoreStrategy(
         ...
 
     @jsii.member(jsii_name="completelyIgnores")
-    def completely_ignores(self, absolute_file_path: builtins.str) -> builtins.bool:
-        '''Determines whether a given file path should be ignored and have all of its children ignored if its a directory.
+    def completely_ignores(
+        self,
+        absolute_directory_path: builtins.str,
+    ) -> builtins.bool:
+        '''Determines whether a given directory path should be ignored and have all of its children ignored.
 
-        :param absolute_file_path: absolute file path to be assessed against the pattern.
+        :param absolute_directory_path: absolute directory path to be assessed against the pattern.
 
-        :return: ``true`` if the file should be ignored
+        :return: ``true`` if the directory and all of its children should be ignored
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3a80a66d2944a2c289e3c51a3686487dddf7c755eb54d7726f3fd91652eddcde)
-            check_type(argname="argument absolute_file_path", value=absolute_file_path, expected_type=type_hints["absolute_file_path"])
-        return typing.cast(builtins.bool, jsii.invoke(self, "completelyIgnores", [absolute_file_path]))
+            check_type(argname="argument absolute_directory_path", value=absolute_directory_path, expected_type=type_hints["absolute_directory_path"])
+        return typing.cast(builtins.bool, jsii.invoke(self, "completelyIgnores", [absolute_directory_path]))
 
     @jsii.member(jsii_name="ignores")
     @abc.abstractmethod
@@ -31588,7 +31591,7 @@ class CfnGuardHook(
         :param log_bucket: Specifies the name of an S3 bucket to store the Guard output report. This report contains the results of your Guard rule validations.
         :param options: Specifies the S3 location of your input parameters.
         :param stack_filters: Specifies the stack level filters for the Hook. Example stack level filter in JSON: ``"StackFilters": {"FilteringCriteria": "ALL", "StackNames": {"Exclude": [ "stack-1", "stack-2"]}}`` Example stack level filter in YAML: ``StackFilters: FilteringCriteria: ALL StackNames: Exclude: - stack-1 - stack-2``
-        :param target_filters: Specifies the target filters for the Hook. Example target filter in JSON: ``"TargetFilters": {"Actions": [ "Create", "Update", "Delete" ]}`` Example target filter in YAML: ``TargetFilters: Actions: - CREATE - UPDATE - DELETE``
+        :param target_filters: Specifies the target filters for the Hook. Example target filter in JSON: ``"TargetFilters": {"Actions": [ "CREATE", "UPDATE", "DELETE" ]}`` Example target filter in YAML: ``TargetFilters: Actions: - CREATE - UPDATE - DELETE``
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__af8d2663a8bac5046ca50537b031b46f870c6edd4948ed8528ca4e3ff9367b17)
@@ -32787,7 +32790,7 @@ class CfnHookVersion(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param schema_handler_package: A URL to the Amazon S3 bucket for the Hook project package that contains the necessary files for the Hook you want to register. For information on generating a schema handler package, see `Modeling custom CloudFormation Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-model.html>`_ in the *AWS CloudFormation Hooks User Guide* . .. epigraph:: To register the Hook, you must have ``s3:GetObject`` permissions to access the S3 objects.
-        :param type_name: The unique name for your hook. Specifies a three-part namespace for your hook, with a recommended pattern of ``Organization::Service::Hook`` . .. epigraph:: The following organization namespaces are reserved and can't be used in your hook type names: - ``Alexa`` - ``AMZN`` - ``Amazon`` - ``ASK`` - ``AWS`` - ``Custom`` - ``Dev``
+        :param type_name: The unique name for your Hook. Specifies a three-part namespace for your Hook, with a recommended pattern of ``Organization::Service::Hook`` . .. epigraph:: The following organization namespaces are reserved and can't be used in your Hook type names: - ``Alexa`` - ``AMZN`` - ``Amazon`` - ``ASK`` - ``AWS`` - ``Custom`` - ``Dev``
         :param execution_role_arn: The Amazon Resource Name (ARN) of the task execution role that grants the Hook permission.
         :param logging_config: Contains logging configuration information for an extension.
         '''
@@ -32909,7 +32912,7 @@ class CfnHookVersion(
     @builtins.property
     @jsii.member(jsii_name="typeName")
     def type_name(self) -> builtins.str:
-        '''The unique name for your hook.'''
+        '''The unique name for your Hook.'''
         return typing.cast(builtins.str, jsii.get(self, "typeName"))
 
     @type_name.setter
@@ -36823,7 +36826,7 @@ class CfnTypeActivation(
         :param publisher_id: The ID of the extension publisher. Conditional: You must specify ``PublicTypeArn`` , or ``TypeName`` , ``Type`` , and ``PublisherId`` .
         :param type: The extension type. Conditional: You must specify ``PublicTypeArn`` , or ``TypeName`` , ``Type`` , and ``PublisherId`` .
         :param type_name: The name of the extension. Conditional: You must specify ``PublicTypeArn`` , or ``TypeName`` , ``Type`` , and ``PublisherId`` .
-        :param type_name_alias: An alias to assign to the public extension, in this account and Region. If you specify an alias for the extension, CloudFormation treats the alias as the extension type name within this account and Region. You must use the alias to refer to the extension in your templates, API calls, and CloudFormation console. An extension alias must be unique within a given account and Region. You can activate the same public resource multiple times in the same account and Region, using different type name aliases.
+        :param type_name_alias: An alias to assign to the public extension in this account and Region. If you specify an alias for the extension, CloudFormation treats the alias as the extension type name within this account and Region. You must use the alias to refer to the extension in your templates, API calls, and CloudFormation console. An extension alias must be unique within a given account and Region. You can activate the same public resource multiple times in the same account and Region, using different type name aliases.
         :param version_bump: Manually updates a previously-activated type to a new major or minor version, if available. You can also use this parameter to update the value of ``AutoUpdate`` . - ``MAJOR`` : CloudFormation updates the extension to the newest major version, if one is available. - ``MINOR`` : CloudFormation updates the extension to the newest minor version, if one is available.
         '''
         if __debug__:
@@ -36878,7 +36881,7 @@ class CfnTypeActivation(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the activated extension, in this account and Region.
+        '''The Amazon Resource Name (ARN) of the activated extension in this account and Region.
 
         :cloudformationAttribute: Arn
         '''
@@ -37010,7 +37013,7 @@ class CfnTypeActivation(
     @builtins.property
     @jsii.member(jsii_name="typeNameAlias")
     def type_name_alias(self) -> typing.Optional[builtins.str]:
-        '''An alias to assign to the public extension, in this account and Region.'''
+        '''An alias to assign to the public extension in this account and Region.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "typeNameAlias"))
 
     @type_name_alias.setter
@@ -37994,17 +37997,20 @@ class DockerIgnoreStrategy(
         return typing.cast(None, jsii.invoke(self, "add", [pattern]))
 
     @jsii.member(jsii_name="completelyIgnores")
-    def completely_ignores(self, absolute_file_path: builtins.str) -> builtins.bool:
-        '''Determines whether a given file path should be ignored and have all of its children ignored if its a directory.
+    def completely_ignores(
+        self,
+        absolute_directory_path: builtins.str,
+    ) -> builtins.bool:
+        '''Determines whether a given directory path should be ignored and have all of its children ignored.
 
-        :param absolute_file_path: absolute file path to be assessed against the pattern.
+        :param absolute_directory_path: absolute directory path to be assessed against the pattern.
 
-        :return: ``true`` if the file should be ignored
+        :return: ``true`` if the directory and all of its children should be ignored
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4eeec3aad8660d3f77c7f5fd848b52abf32a847311801373080bbfe35642315a)
-            check_type(argname="argument absolute_file_path", value=absolute_file_path, expected_type=type_hints["absolute_file_path"])
-        return typing.cast(builtins.bool, jsii.invoke(self, "completelyIgnores", [absolute_file_path]))
+            check_type(argname="argument absolute_directory_path", value=absolute_directory_path, expected_type=type_hints["absolute_directory_path"])
+        return typing.cast(builtins.bool, jsii.invoke(self, "completelyIgnores", [absolute_directory_path]))
 
     @jsii.member(jsii_name="ignores")
     def ignores(self, absolute_file_path: builtins.str) -> builtins.bool:
@@ -38065,6 +38071,22 @@ class GitIgnoreStrategy(
             type_hints = typing.get_type_hints(_typecheckingstub__41215ad4567a0e20a39ebe81e961b4c04ce243413f01303ac836fdb48b0e91e0)
             check_type(argname="argument pattern", value=pattern, expected_type=type_hints["pattern"])
         return typing.cast(None, jsii.invoke(self, "add", [pattern]))
+
+    @jsii.member(jsii_name="completelyIgnores")
+    def completely_ignores(
+        self,
+        absolute_directory_path: builtins.str,
+    ) -> builtins.bool:
+        '''Determines whether a given directory path should be ignored and have all of its children ignored.
+
+        :param absolute_directory_path: absolute directory path to be assessed against the pattern.
+
+        :return: ``true`` if the directory and all of its children should be ignored
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e0e824f5e018cd48b279cd34fa185b0a533eed88eee2e88ebb3868389b89b517)
+            check_type(argname="argument absolute_directory_path", value=absolute_directory_path, expected_type=type_hints["absolute_directory_path"])
+        return typing.cast(builtins.bool, jsii.invoke(self, "completelyIgnores", [absolute_directory_path]))
 
     @jsii.member(jsii_name="ignores")
     def ignores(self, absolute_file_path: builtins.str) -> builtins.bool:
@@ -40022,6 +40044,7 @@ __all__ = [
     "aws_batch",
     "aws_bcmdataexports",
     "aws_bedrock",
+    "aws_bedrockagentcore",
     "aws_billingconductor",
     "aws_budgets",
     "aws_cassandra",
@@ -40247,6 +40270,7 @@ __all__ = [
     "aws_shield",
     "aws_signer",
     "aws_simspaceweaver",
+    "aws_smsvoice",
     "aws_sns",
     "aws_sns_subscriptions",
     "aws_sqs",
@@ -40327,6 +40351,7 @@ from . import aws_backupgateway
 from . import aws_batch
 from . import aws_bcmdataexports
 from . import aws_bedrock
+from . import aws_bedrockagentcore
 from . import aws_billingconductor
 from . import aws_budgets
 from . import aws_cassandra
@@ -40552,6 +40577,7 @@ from . import aws_ses_actions
 from . import aws_shield
 from . import aws_signer
 from . import aws_simspaceweaver
+from . import aws_smsvoice
 from . import aws_sns
 from . import aws_sns_subscriptions
 from . import aws_sqs
@@ -42649,7 +42675,7 @@ def _typecheckingstub__eece2ad7e2f3cbe035a92302343ee656a4e8438489e1b15a43554b124
     pass
 
 def _typecheckingstub__3a80a66d2944a2c289e3c51a3686487dddf7c755eb54d7726f3fd91652eddcde(
-    absolute_file_path: builtins.str,
+    absolute_directory_path: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -45354,7 +45380,7 @@ def _typecheckingstub__dce0fd20685d4b7457e08a1567eb5aa8c53335612222538272b7d69db
     pass
 
 def _typecheckingstub__4eeec3aad8660d3f77c7f5fd848b52abf32a847311801373080bbfe35642315a(
-    absolute_file_path: builtins.str,
+    absolute_directory_path: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -45374,6 +45400,12 @@ def _typecheckingstub__32541b501afd1aa1b636269cc472ee73558b6fdd3b779e61c55c852e5
 
 def _typecheckingstub__41215ad4567a0e20a39ebe81e961b4c04ce243413f01303ac836fdb48b0e91e0(
     pattern: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e0e824f5e018cd48b279cd34fa185b0a533eed88eee2e88ebb3868389b89b517(
+    absolute_directory_path: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -86,7 +86,7 @@ class CfnSuiteDefinitionProps:
     ) -> None:
         '''Properties for defining a ``CfnSuiteDefinition``.
 
-        :param suite_definition_configuration: The configuration of the Suite Definition. Listed below are the required elements of the ``SuiteDefinitionConfiguration`` . - ***devicePermissionRoleArn*** - The device permission arn. This is a required element. *Type:* String - ***devices*** - The list of configured devices under test. For more information on devices under test, see `DeviceUnderTest <https://docs.aws.amazon.com/iot/latest/apireference/API_iotdeviceadvisor_DeviceUnderTest.html>`_ Not a required element. *Type:* List of devices under test - ***intendedForQualification*** - The tests intended for qualification in a suite. Not a required element. *Type:* Boolean - ***rootGroup*** - The test suite root group. For more information on creating and using root groups see the `Device Advisor workflow <https://docs.aws.amazon.com/iot/latest/developerguide/device-advisor-workflow.html>`_ . This is a required element. *Type:* String - ***suiteDefinitionName*** - The Suite Definition Configuration name. This is a required element. *Type:* String
+        :param suite_definition_configuration: Gets the suite definition configuration.
         :param tags: Metadata that can be used to manage the the Suite Definition.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotcoredeviceadvisor-suitedefinition.html
@@ -122,37 +122,7 @@ class CfnSuiteDefinitionProps:
 
     @builtins.property
     def suite_definition_configuration(self) -> typing.Any:
-        '''The configuration of the Suite Definition. Listed below are the required elements of the ``SuiteDefinitionConfiguration`` .
-
-        - ***devicePermissionRoleArn*** - The device permission arn.
-
-        This is a required element.
-
-        *Type:* String
-
-        - ***devices*** - The list of configured devices under test. For more information on devices under test, see `DeviceUnderTest <https://docs.aws.amazon.com/iot/latest/apireference/API_iotdeviceadvisor_DeviceUnderTest.html>`_
-
-        Not a required element.
-
-        *Type:* List of devices under test
-
-        - ***intendedForQualification*** - The tests intended for qualification in a suite.
-
-        Not a required element.
-
-        *Type:* Boolean
-
-        - ***rootGroup*** - The test suite root group. For more information on creating and using root groups see the `Device Advisor workflow <https://docs.aws.amazon.com/iot/latest/developerguide/device-advisor-workflow.html>`_ .
-
-        This is a required element.
-
-        *Type:* String
-
-        - ***suiteDefinitionName*** - The Suite Definition Configuration name.
-
-        This is a required element.
-
-        *Type:* String
+        '''Gets the suite definition configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotcoredeviceadvisor-suitedefinition.html#cfn-iotcoredeviceadvisor-suitedefinition-suitedefinitionconfiguration
         '''
@@ -333,7 +303,7 @@ class CfnSuiteDefinition(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param suite_definition_configuration: The configuration of the Suite Definition. Listed below are the required elements of the ``SuiteDefinitionConfiguration`` . - ***devicePermissionRoleArn*** - The device permission arn. This is a required element. *Type:* String - ***devices*** - The list of configured devices under test. For more information on devices under test, see `DeviceUnderTest <https://docs.aws.amazon.com/iot/latest/apireference/API_iotdeviceadvisor_DeviceUnderTest.html>`_ Not a required element. *Type:* List of devices under test - ***intendedForQualification*** - The tests intended for qualification in a suite. Not a required element. *Type:* Boolean - ***rootGroup*** - The test suite root group. For more information on creating and using root groups see the `Device Advisor workflow <https://docs.aws.amazon.com/iot/latest/developerguide/device-advisor-workflow.html>`_ . This is a required element. *Type:* String - ***suiteDefinitionName*** - The Suite Definition Configuration name. This is a required element. *Type:* String
+        :param suite_definition_configuration: Gets the suite definition configuration.
         :param tags: Metadata that can be used to manage the the Suite Definition.
         '''
         if __debug__:
@@ -423,10 +393,7 @@ class CfnSuiteDefinition(
     @builtins.property
     @jsii.member(jsii_name="suiteDefinitionConfiguration")
     def suite_definition_configuration(self) -> typing.Any:
-        '''The configuration of the Suite Definition.
-
-        Listed below are the required elements of the ``SuiteDefinitionConfiguration`` .
-        '''
+        '''Gets the suite definition configuration.'''
         return typing.cast(typing.Any, jsii.get(self, "suiteDefinitionConfiguration"))
 
     @suite_definition_configuration.setter
@@ -542,7 +509,37 @@ class CfnSuiteDefinition(
             intended_for_qualification: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             suite_definition_name: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Gets the suite definition configuration.
+            '''The configuration of the Suite Definition. Listed below are the required elements of the ``SuiteDefinitionConfiguration`` .
+
+            - ***devicePermissionRoleArn*** - The device permission arn.
+
+            This is a required element.
+
+            *Type:* String
+
+            - ***devices*** - The list of configured devices under test. For more information on devices under test, see `DeviceUnderTest <https://docs.aws.amazon.com/iot/latest/apireference/API_iotdeviceadvisor_DeviceUnderTest.html>`_
+
+            Not a required element.
+
+            *Type:* List of devices under test
+
+            - ***intendedForQualification*** - The tests intended for qualification in a suite.
+
+            Not a required element.
+
+            *Type:* Boolean
+
+            - ***rootGroup*** - The test suite root group. For more information on creating and using root groups see the `Device Advisor workflow <https://docs.aws.amazon.com/iot/latest/developerguide/device-advisor-workflow.html>`_ .
+
+            This is a required element.
+
+            *Type:* String
+
+            - ***suiteDefinitionName*** - The Suite Definition Configuration name.
+
+            This is a required element.
+
+            *Type:* String
 
             :param device_permission_role_arn: Gets the device permission ARN. This is a required parameter.
             :param root_group: Gets the test suite root group. This is a required parameter. For updating or creating the latest qualification suite, if ``intendedForQualification`` is set to true, ``rootGroup`` can be an empty string. If ``intendedForQualification`` is false, ``rootGroup`` cannot be an empty string. If ``rootGroup`` is empty, and ``intendedForQualification`` is set to true, all the qualification tests are included, and the configuration is default. For a qualification suite, the minimum length is 0, and the maximum is 2048. For a non-qualification suite, the minimum length is 1, and the maximum is 2048.

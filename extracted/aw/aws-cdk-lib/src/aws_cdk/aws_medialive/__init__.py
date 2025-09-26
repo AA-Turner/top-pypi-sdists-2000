@@ -4656,6 +4656,63 @@ class CfnChannel(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.AdditionalDestinationsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"destination": "destination"},
+    )
+    class AdditionalDestinationsProperty:
+        def __init__(
+            self,
+            *,
+            destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.OutputLocationRefProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param destination: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-additionaldestinations.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                additional_destinations_property = medialive.CfnChannel.AdditionalDestinationsProperty(
+                    destination=medialive.CfnChannel.OutputLocationRefProperty(
+                        destination_ref_id="destinationRefId"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f35ce75f1f33941348d85275d7dc5d6c728631bea4d0fc0ad49a7bc029ddce29)
+                check_type(argname="argument destination", value=destination, expected_type=type_hints["destination"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if destination is not None:
+                self._values["destination"] = destination
+
+        @builtins.property
+        def destination(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.OutputLocationRefProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-additionaldestinations.html#cfn-medialive-channel-additionaldestinations-destination
+            '''
+            result = self._values.get("destination")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.OutputLocationRefProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AdditionalDestinationsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.AncillarySourceSettingsProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -8099,6 +8156,7 @@ class CfnChannel(
             "shadow_opacity": "shadowOpacity",
             "shadow_x_offset": "shadowXOffset",
             "shadow_y_offset": "shadowYOffset",
+            "subtitle_rows": "subtitleRows",
             "teletext_grid_control": "teletextGridControl",
             "x_position": "xPosition",
             "y_position": "yPosition",
@@ -8122,6 +8180,7 @@ class CfnChannel(
             shadow_opacity: typing.Optional[jsii.Number] = None,
             shadow_x_offset: typing.Optional[jsii.Number] = None,
             shadow_y_offset: typing.Optional[jsii.Number] = None,
+            subtitle_rows: typing.Optional[builtins.str] = None,
             teletext_grid_control: typing.Optional[builtins.str] = None,
             x_position: typing.Optional[jsii.Number] = None,
             y_position: typing.Optional[jsii.Number] = None,
@@ -8144,6 +8203,7 @@ class CfnChannel(
             :param shadow_opacity: Specifies the opacity of the shadow. 255 is opaque; 0 is transparent. Keeping this parameter blank is equivalent to setting it to 0 (transparent). All burn-in and DVB-Sub font settings must match.
             :param shadow_x_offset: Specifies the horizontal offset of the shadow that is relative to the captions in pixels. A value of -2 would result in a shadow offset 2 pixels to the left. All burn-in and DVB-Sub font settings must match.
             :param shadow_y_offset: Specifies the vertical offset of the shadow that is relative to the captions in pixels. A value of -2 would result in a shadow offset 2 pixels above the text. All burn-in and DVB-Sub font settings must match.
+            :param subtitle_rows: 
             :param teletext_grid_control: Controls whether a fixed grid size is used to generate the output subtitles bitmap. This applies only to Teletext inputs and DVB-Sub/Burn-in outputs.
             :param x_position: Specifies the horizontal position of the captions relative to the left side of the output in pixels. A value of 10 would result in the captions starting 10 pixels from the left of the output. If no explicit xPosition is provided, the horizontal captions position is determined by the alignment parameter. All burn-in and DVB-Sub font settings must match.
             :param y_position: Specifies the vertical position of the captions relative to the top of the output in pixels. A value of 10 would result in the captions starting 10 pixels from the top of the output. If no explicit yPosition is provided, the captions are positioned towards the bottom of the output. All burn-in and DVB-Sub font settings must match.
@@ -8176,6 +8236,7 @@ class CfnChannel(
                     shadow_opacity=123,
                     shadow_xOffset=123,
                     shadow_yOffset=123,
+                    subtitle_rows="subtitleRows",
                     teletext_grid_control="teletextGridControl",
                     x_position=123,
                     y_position=123
@@ -8197,6 +8258,7 @@ class CfnChannel(
                 check_type(argname="argument shadow_opacity", value=shadow_opacity, expected_type=type_hints["shadow_opacity"])
                 check_type(argname="argument shadow_x_offset", value=shadow_x_offset, expected_type=type_hints["shadow_x_offset"])
                 check_type(argname="argument shadow_y_offset", value=shadow_y_offset, expected_type=type_hints["shadow_y_offset"])
+                check_type(argname="argument subtitle_rows", value=subtitle_rows, expected_type=type_hints["subtitle_rows"])
                 check_type(argname="argument teletext_grid_control", value=teletext_grid_control, expected_type=type_hints["teletext_grid_control"])
                 check_type(argname="argument x_position", value=x_position, expected_type=type_hints["x_position"])
                 check_type(argname="argument y_position", value=y_position, expected_type=type_hints["y_position"])
@@ -8229,6 +8291,8 @@ class CfnChannel(
                 self._values["shadow_x_offset"] = shadow_x_offset
             if shadow_y_offset is not None:
                 self._values["shadow_y_offset"] = shadow_y_offset
+            if subtitle_rows is not None:
+                self._values["subtitle_rows"] = subtitle_rows
             if teletext_grid_control is not None:
                 self._values["teletext_grid_control"] = teletext_grid_control
             if x_position is not None:
@@ -8393,6 +8457,14 @@ class CfnChannel(
             return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
+        def subtitle_rows(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-burnindestinationsettings.html#cfn-medialive-channel-burnindestinationsettings-subtitlerows
+            '''
+            result = self._values.get("subtitle_rows")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
         def teletext_grid_control(self) -> typing.Optional[builtins.str]:
             '''Controls whether a fixed grid size is used to generate the output subtitles bitmap.
 
@@ -8510,6 +8582,7 @@ class CfnChannel(
                             shadow_opacity=123,
                             shadow_xOffset=123,
                             shadow_yOffset=123,
+                            subtitle_rows="subtitleRows",
                             teletext_grid_control="teletextGridControl",
                             x_position=123,
                             y_position=123
@@ -8533,6 +8606,7 @@ class CfnChannel(
                             shadow_opacity=123,
                             shadow_xOffset=123,
                             shadow_yOffset=123,
+                            subtitle_rows="subtitleRows",
                             teletext_grid_control="teletextGridControl",
                             x_position=123,
                             y_position=123
@@ -8766,6 +8840,7 @@ class CfnChannel(
                         shadow_opacity=123,
                         shadow_xOffset=123,
                         shadow_yOffset=123,
+                        subtitle_rows="subtitleRows",
                         teletext_grid_control="teletextGridControl",
                         x_position=123,
                         y_position=123
@@ -8789,6 +8864,7 @@ class CfnChannel(
                         shadow_opacity=123,
                         shadow_xOffset=123,
                         shadow_yOffset=123,
+                        subtitle_rows="subtitleRows",
                         teletext_grid_control="teletextGridControl",
                         x_position=123,
                         y_position=123
@@ -9721,6 +9797,7 @@ class CfnChannel(
         jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.CmafIngestGroupSettingsProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "additional_destinations": "additionalDestinations",
             "caption_language_mappings": "captionLanguageMappings",
             "destination": "destination",
             "id3_behavior": "id3Behavior",
@@ -9743,6 +9820,7 @@ class CfnChannel(
         def __init__(
             self,
             *,
+            additional_destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.AdditionalDestinationsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             caption_language_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.CmafIngestCaptionLanguageMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.OutputLocationRefProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             id3_behavior: typing.Optional[builtins.str] = None,
@@ -9761,6 +9839,7 @@ class CfnChannel(
             timed_metadata_passthrough: typing.Optional[builtins.str] = None,
         ) -> None:
             '''
+            :param additional_destinations: 
             :param caption_language_mappings: 
             :param destination: 
             :param id3_behavior: 
@@ -9788,6 +9867,11 @@ class CfnChannel(
                 from aws_cdk import aws_medialive as medialive
                 
                 cmaf_ingest_group_settings_property = medialive.CfnChannel.CmafIngestGroupSettingsProperty(
+                    additional_destinations=[medialive.CfnChannel.AdditionalDestinationsProperty(
+                        destination=medialive.CfnChannel.OutputLocationRefProperty(
+                            destination_ref_id="destinationRefId"
+                        )
+                    )],
                     caption_language_mappings=[medialive.CfnChannel.CmafIngestCaptionLanguageMappingProperty(
                         caption_channel=123,
                         language_code="languageCode"
@@ -9813,6 +9897,7 @@ class CfnChannel(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__6fe9142b6885e8776c3e51af0733250a73fcd8e45bb4ec5f866206680352c7eb)
+                check_type(argname="argument additional_destinations", value=additional_destinations, expected_type=type_hints["additional_destinations"])
                 check_type(argname="argument caption_language_mappings", value=caption_language_mappings, expected_type=type_hints["caption_language_mappings"])
                 check_type(argname="argument destination", value=destination, expected_type=type_hints["destination"])
                 check_type(argname="argument id3_behavior", value=id3_behavior, expected_type=type_hints["id3_behavior"])
@@ -9830,6 +9915,8 @@ class CfnChannel(
                 check_type(argname="argument timed_metadata_id3_period", value=timed_metadata_id3_period, expected_type=type_hints["timed_metadata_id3_period"])
                 check_type(argname="argument timed_metadata_passthrough", value=timed_metadata_passthrough, expected_type=type_hints["timed_metadata_passthrough"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if additional_destinations is not None:
+                self._values["additional_destinations"] = additional_destinations
             if caption_language_mappings is not None:
                 self._values["caption_language_mappings"] = caption_language_mappings
             if destination is not None:
@@ -9862,6 +9949,16 @@ class CfnChannel(
                 self._values["timed_metadata_id3_period"] = timed_metadata_id3_period
             if timed_metadata_passthrough is not None:
                 self._values["timed_metadata_passthrough"] = timed_metadata_passthrough
+
+        @builtins.property
+        def additional_destinations(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannel.AdditionalDestinationsProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-cmafingestgroupsettings.html#cfn-medialive-channel-cmafingestgroupsettings-additionaldestinations
+            '''
+            result = self._values.get("additional_destinations")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannel.AdditionalDestinationsProperty"]]]], result)
 
         @builtins.property
         def caption_language_mappings(
@@ -10491,6 +10588,7 @@ class CfnChannel(
             "shadow_opacity": "shadowOpacity",
             "shadow_x_offset": "shadowXOffset",
             "shadow_y_offset": "shadowYOffset",
+            "subtitle_rows": "subtitleRows",
             "teletext_grid_control": "teletextGridControl",
             "x_position": "xPosition",
             "y_position": "yPosition",
@@ -10514,6 +10612,7 @@ class CfnChannel(
             shadow_opacity: typing.Optional[jsii.Number] = None,
             shadow_x_offset: typing.Optional[jsii.Number] = None,
             shadow_y_offset: typing.Optional[jsii.Number] = None,
+            subtitle_rows: typing.Optional[builtins.str] = None,
             teletext_grid_control: typing.Optional[builtins.str] = None,
             x_position: typing.Optional[jsii.Number] = None,
             y_position: typing.Optional[jsii.Number] = None,
@@ -10536,6 +10635,7 @@ class CfnChannel(
             :param shadow_opacity: Specifies the opacity of the shadow. 255 is opaque; 0 is transparent. Keeping this parameter blank is equivalent to setting it to 0 (transparent). All burn-in and DVB-Sub font settings must match.
             :param shadow_x_offset: Specifies the horizontal offset of the shadow relative to the captions in pixels. A value of -2 would result in a shadow offset 2 pixels to the left. All burn-in and DVB-Sub font settings must match.
             :param shadow_y_offset: Specifies the vertical offset of the shadow relative to the captions in pixels. A value of -2 would result in a shadow offset 2 pixels above the text. All burn-in and DVB-Sub font settings must match.
+            :param subtitle_rows: 
             :param teletext_grid_control: Controls whether a fixed grid size is used to generate the output subtitles bitmap. This applies to only Teletext inputs and DVB-Sub/Burn-in outputs.
             :param x_position: Specifies the horizontal position of the captions relative to the left side of the output in pixels. A value of 10 would result in the captions starting 10 pixels from the left of the output. If no explicit xPosition is provided, the horizontal captions position is determined by the alignment parameter. This option is not valid for source captions that are STL, 608/embedded, or Teletext. These source settings are already pre-defined by the captions stream. All burn-in and DVB-Sub font settings must match.
             :param y_position: Specifies the vertical position of the captions relative to the top of the output in pixels. A value of 10 would result in the captions starting 10 pixels from the top of the output. If no explicit yPosition is provided, the captions are positioned towards the bottom of the output. This option is not valid for source captions that are STL, 608/embedded, or Teletext. These source settings are already pre-defined by the captions stream. All burn-in and DVB-Sub font settings must match.
@@ -10568,6 +10668,7 @@ class CfnChannel(
                     shadow_opacity=123,
                     shadow_xOffset=123,
                     shadow_yOffset=123,
+                    subtitle_rows="subtitleRows",
                     teletext_grid_control="teletextGridControl",
                     x_position=123,
                     y_position=123
@@ -10589,6 +10690,7 @@ class CfnChannel(
                 check_type(argname="argument shadow_opacity", value=shadow_opacity, expected_type=type_hints["shadow_opacity"])
                 check_type(argname="argument shadow_x_offset", value=shadow_x_offset, expected_type=type_hints["shadow_x_offset"])
                 check_type(argname="argument shadow_y_offset", value=shadow_y_offset, expected_type=type_hints["shadow_y_offset"])
+                check_type(argname="argument subtitle_rows", value=subtitle_rows, expected_type=type_hints["subtitle_rows"])
                 check_type(argname="argument teletext_grid_control", value=teletext_grid_control, expected_type=type_hints["teletext_grid_control"])
                 check_type(argname="argument x_position", value=x_position, expected_type=type_hints["x_position"])
                 check_type(argname="argument y_position", value=y_position, expected_type=type_hints["y_position"])
@@ -10621,6 +10723,8 @@ class CfnChannel(
                 self._values["shadow_x_offset"] = shadow_x_offset
             if shadow_y_offset is not None:
                 self._values["shadow_y_offset"] = shadow_y_offset
+            if subtitle_rows is not None:
+                self._values["subtitle_rows"] = subtitle_rows
             if teletext_grid_control is not None:
                 self._values["teletext_grid_control"] = teletext_grid_control
             if x_position is not None:
@@ -10783,6 +10887,14 @@ class CfnChannel(
             '''
             result = self._values.get("shadow_y_offset")
             return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def subtitle_rows(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-dvbsubdestinationsettings.html#cfn-medialive-channel-dvbsubdestinationsettings-subtitlerows
+            '''
+            result = self._values.get("subtitle_rows")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def teletext_grid_control(self) -> typing.Optional[builtins.str]:
@@ -22807,6 +22919,11 @@ class CfnChannel(
                         rollover_interval=123
                     ),
                     cmaf_ingest_group_settings=medialive.CfnChannel.CmafIngestGroupSettingsProperty(
+                        additional_destinations=[medialive.CfnChannel.AdditionalDestinationsProperty(
+                            destination=medialive.CfnChannel.OutputLocationRefProperty(
+                                destination_ref_id="destinationRefId"
+                            )
+                        )],
                         caption_language_mappings=[medialive.CfnChannel.CmafIngestCaptionLanguageMappingProperty(
                             caption_channel=123,
                             language_code="languageCode"
@@ -34628,6 +34745,13 @@ def _typecheckingstub__3438fa867f11ff502b4fa54f1dd5270220ccbbc83de4185add8ae06b3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f35ce75f1f33941348d85275d7dc5d6c728631bea4d0fc0ad49a7bc029ddce29(
+    *,
+    destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.OutputLocationRefProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8192630f40f6883538117cc4351df30d49295a7620ea561657270b4feacaf984(
     *,
     source_ancillary_channel_number: typing.Optional[jsii.Number] = None,
@@ -34925,6 +35049,7 @@ def _typecheckingstub__33dec7d6f1bff74983258afde73011d8330c6183129c52e7873c9573a
     shadow_opacity: typing.Optional[jsii.Number] = None,
     shadow_x_offset: typing.Optional[jsii.Number] = None,
     shadow_y_offset: typing.Optional[jsii.Number] = None,
+    subtitle_rows: typing.Optional[builtins.str] = None,
     teletext_grid_control: typing.Optional[builtins.str] = None,
     x_position: typing.Optional[jsii.Number] = None,
     y_position: typing.Optional[jsii.Number] = None,
@@ -35030,6 +35155,7 @@ def _typecheckingstub__a833a02632a589afb5026143cbf8803b2228e0f422ab4c5a2dbf59314
 
 def _typecheckingstub__6fe9142b6885e8776c3e51af0733250a73fcd8e45bb4ec5f866206680352c7eb(
     *,
+    additional_destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.AdditionalDestinationsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     caption_language_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.CmafIngestCaptionLanguageMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.OutputLocationRefProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     id3_behavior: typing.Optional[builtins.str] = None,
@@ -35108,6 +35234,7 @@ def _typecheckingstub__8d5d2ee13f6699d87c134941e50183ecf466b424e0dbd1cc71d92035d
     shadow_opacity: typing.Optional[jsii.Number] = None,
     shadow_x_offset: typing.Optional[jsii.Number] = None,
     shadow_y_offset: typing.Optional[jsii.Number] = None,
+    subtitle_rows: typing.Optional[builtins.str] = None,
     teletext_grid_control: typing.Optional[builtins.str] = None,
     x_position: typing.Optional[jsii.Number] = None,
     y_position: typing.Optional[jsii.Number] = None,

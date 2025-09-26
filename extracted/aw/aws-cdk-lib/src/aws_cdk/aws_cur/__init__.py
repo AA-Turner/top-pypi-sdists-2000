@@ -60,8 +60,11 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    CfnTag as _CfnTag_f6864754,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
+    ITaggableV2 as _ITaggableV2_4e6798f8,
+    TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
 
@@ -82,6 +85,7 @@ from .. import (
         "additional_artifacts": "additionalArtifacts",
         "additional_schema_elements": "additionalSchemaElements",
         "billing_view_arn": "billingViewArn",
+        "tags": "tags",
     },
 )
 class CfnReportDefinitionProps:
@@ -100,6 +104,7 @@ class CfnReportDefinitionProps:
         additional_artifacts: typing.Optional[typing.Sequence[builtins.str]] = None,
         additional_schema_elements: typing.Optional[typing.Sequence[builtins.str]] = None,
         billing_view_arn: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnReportDefinition``.
 
@@ -115,6 +120,7 @@ class CfnReportDefinitionProps:
         :param additional_artifacts: A list of manifests that you want AWS to create for this report.
         :param additional_schema_elements: A list of strings that indicate additional content that AWS includes in the report, such as individual resource IDs.
         :param billing_view_arn: The Amazon Resource Name (ARN) of the billing view. You can get this value by using the billing view service public APIs.
+        :param tags: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cur-reportdefinition.html
         :exampleMetadata: fixture=_generated
@@ -139,7 +145,11 @@ class CfnReportDefinitionProps:
                 # the properties below are optional
                 additional_artifacts=["additionalArtifacts"],
                 additional_schema_elements=["additionalSchemaElements"],
-                billing_view_arn="billingViewArn"
+                billing_view_arn="billingViewArn",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
             )
         '''
         if __debug__:
@@ -156,6 +166,7 @@ class CfnReportDefinitionProps:
             check_type(argname="argument additional_artifacts", value=additional_artifacts, expected_type=type_hints["additional_artifacts"])
             check_type(argname="argument additional_schema_elements", value=additional_schema_elements, expected_type=type_hints["additional_schema_elements"])
             check_type(argname="argument billing_view_arn", value=billing_view_arn, expected_type=type_hints["billing_view_arn"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "compression": compression,
             "format": format,
@@ -173,6 +184,8 @@ class CfnReportDefinitionProps:
             self._values["additional_schema_elements"] = additional_schema_elements
         if billing_view_arn is not None:
             self._values["billing_view_arn"] = billing_view_arn
+        if tags is not None:
+            self._values["tags"] = tags
 
     @builtins.property
     def compression(self) -> builtins.str:
@@ -301,6 +314,14 @@ class CfnReportDefinitionProps:
         result = self._values.get("billing_view_arn")
         return typing.cast(typing.Optional[builtins.str], result)
 
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cur-reportdefinition.html#cfn-cur-reportdefinition-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
 
@@ -402,7 +423,7 @@ class ReportDefinitionReference:
         )
 
 
-@jsii.implements(_IInspectable_c2943556, IReportDefinitionRef)
+@jsii.implements(_IInspectable_c2943556, IReportDefinitionRef, _ITaggableV2_4e6798f8)
 class CfnReportDefinition(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -436,7 +457,11 @@ class CfnReportDefinition(
             # the properties below are optional
             additional_artifacts=["additionalArtifacts"],
             additional_schema_elements=["additionalSchemaElements"],
-            billing_view_arn="billingViewArn"
+            billing_view_arn="billingViewArn",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
         )
     '''
 
@@ -457,6 +482,7 @@ class CfnReportDefinition(
         additional_artifacts: typing.Optional[typing.Sequence[builtins.str]] = None,
         additional_schema_elements: typing.Optional[typing.Sequence[builtins.str]] = None,
         billing_view_arn: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
@@ -473,6 +499,7 @@ class CfnReportDefinition(
         :param additional_artifacts: A list of manifests that you want AWS to create for this report.
         :param additional_schema_elements: A list of strings that indicate additional content that AWS includes in the report, such as individual resource IDs.
         :param billing_view_arn: The Amazon Resource Name (ARN) of the billing view. You can get this value by using the billing view service public APIs.
+        :param tags: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa6a90098f39859b607fa8b8453bf94b62703cdf41682ff1f90c565abdedbb57)
@@ -491,6 +518,7 @@ class CfnReportDefinition(
             additional_artifacts=additional_artifacts,
             additional_schema_elements=additional_schema_elements,
             billing_view_arn=billing_view_arn,
+            tags=tags,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -524,6 +552,12 @@ class CfnReportDefinition(
     def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
         '''The CloudFormation resource type name for this resource class.'''
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -703,6 +737,18 @@ class CfnReportDefinition(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "billingViewArn", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2c3a6bd4b3d8e5bf2caff9ee149924611c25e8417d8ee48a520417fd900c1f71)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
 
 __all__ = [
     "CfnReportDefinition",
@@ -727,6 +773,7 @@ def _typecheckingstub__8cc3d7babce4dfa37a62fc4d0d9b1b67c9fdccfaa09ca549a32d3aab0
     additional_artifacts: typing.Optional[typing.Sequence[builtins.str]] = None,
     additional_schema_elements: typing.Optional[typing.Sequence[builtins.str]] = None,
     billing_view_arn: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -754,6 +801,7 @@ def _typecheckingstub__fa6a90098f39859b607fa8b8453bf94b62703cdf41682ff1f90c565ab
     additional_artifacts: typing.Optional[typing.Sequence[builtins.str]] = None,
     additional_schema_elements: typing.Optional[typing.Sequence[builtins.str]] = None,
     billing_view_arn: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -838,6 +886,12 @@ def _typecheckingstub__d002f185c62fde709bf248b43cc6ed35a66954f07c4dd2bb5c26dd743
 
 def _typecheckingstub__ebad8351aece0a3ddcb05b9d4f522316d4c0fa1aeef4e8017b839b424f98ff7d(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2c3a6bd4b3d8e5bf2caff9ee149924611c25e8417d8ee48a520417fd900c1f71(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
     """Type checking stubs"""
     pass

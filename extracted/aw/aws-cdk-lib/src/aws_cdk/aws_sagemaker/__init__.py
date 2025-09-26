@@ -597,7 +597,9 @@ class CfnAppProps:
     jsii_type="aws-cdk-lib.aws_sagemaker.CfnClusterProps",
     jsii_struct_bases=[],
     name_mapping={
+        "auto_scaling": "autoScaling",
         "cluster_name": "clusterName",
+        "cluster_role": "clusterRole",
         "instance_groups": "instanceGroups",
         "node_provisioning_mode": "nodeProvisioningMode",
         "node_recovery": "nodeRecovery",
@@ -611,7 +613,9 @@ class CfnClusterProps:
     def __init__(
         self,
         *,
+        auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterAutoScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         cluster_name: typing.Optional[builtins.str] = None,
+        cluster_role: typing.Optional[builtins.str] = None,
         instance_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterInstanceGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         node_provisioning_mode: typing.Optional[builtins.str] = None,
         node_recovery: typing.Optional[builtins.str] = None,
@@ -622,7 +626,9 @@ class CfnClusterProps:
     ) -> None:
         '''Properties for defining a ``CfnCluster``.
 
+        :param auto_scaling: Configuration for cluster auto-scaling.
         :param cluster_name: The name of the SageMaker HyperPod cluster.
+        :param cluster_role: The cluster role for the autoscaler to assume.
         :param instance_groups: The instance groups of the SageMaker HyperPod cluster. To delete an instance group, remove it from the array.
         :param node_provisioning_mode: Determines the scaling strategy for the SageMaker HyperPod cluster. When set to 'Continuous', enables continuous scaling which dynamically manages node provisioning. If the parameter is omitted, uses the standard scaling approach in previous release.
         :param node_recovery: Specifies whether to enable or disable the automatic node recovery feature of SageMaker HyperPod. Available values are ``Automatic`` for enabling and ``None`` for disabling.
@@ -641,7 +647,14 @@ class CfnClusterProps:
             from aws_cdk import aws_sagemaker as sagemaker
             
             cfn_cluster_props = sagemaker.CfnClusterProps(
+                auto_scaling=sagemaker.CfnCluster.ClusterAutoScalingConfigProperty(
+                    mode="mode",
+            
+                    # the properties below are optional
+                    auto_scaler_type="autoScalerType"
+                ),
                 cluster_name="clusterName",
+                cluster_role="clusterRole",
                 instance_groups=[sagemaker.CfnCluster.ClusterInstanceGroupProperty(
                     execution_role="executionRole",
                     instance_count=123,
@@ -657,6 +670,8 @@ class CfnClusterProps:
                     image_id="imageId",
                     instance_storage_configs=[sagemaker.CfnCluster.ClusterInstanceStorageConfigProperty(
                         ebs_volume_config=sagemaker.CfnCluster.ClusterEbsVolumeConfigProperty(
+                            root_volume=False,
+                            volume_kms_key_id="volumeKmsKeyId",
                             volume_size_in_gb=123
                         )
                     )],
@@ -714,6 +729,8 @@ class CfnClusterProps:
                     current_count=123,
                     instance_storage_configs=[sagemaker.CfnCluster.ClusterInstanceStorageConfigProperty(
                         ebs_volume_config=sagemaker.CfnCluster.ClusterEbsVolumeConfigProperty(
+                            root_volume=False,
+                            volume_kms_key_id="volumeKmsKeyId",
                             volume_size_in_gb=123
                         )
                     )],
@@ -737,7 +754,9 @@ class CfnClusterProps:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c8126a53dc1741a2edde75d8d4eca79c53a2294746ea237dfba0097a758522ce)
+            check_type(argname="argument auto_scaling", value=auto_scaling, expected_type=type_hints["auto_scaling"])
             check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
+            check_type(argname="argument cluster_role", value=cluster_role, expected_type=type_hints["cluster_role"])
             check_type(argname="argument instance_groups", value=instance_groups, expected_type=type_hints["instance_groups"])
             check_type(argname="argument node_provisioning_mode", value=node_provisioning_mode, expected_type=type_hints["node_provisioning_mode"])
             check_type(argname="argument node_recovery", value=node_recovery, expected_type=type_hints["node_recovery"])
@@ -746,8 +765,12 @@ class CfnClusterProps:
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument vpc_config", value=vpc_config, expected_type=type_hints["vpc_config"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if auto_scaling is not None:
+            self._values["auto_scaling"] = auto_scaling
         if cluster_name is not None:
             self._values["cluster_name"] = cluster_name
+        if cluster_role is not None:
+            self._values["cluster_role"] = cluster_role
         if instance_groups is not None:
             self._values["instance_groups"] = instance_groups
         if node_provisioning_mode is not None:
@@ -764,12 +787,32 @@ class CfnClusterProps:
             self._values["vpc_config"] = vpc_config
 
     @builtins.property
+    def auto_scaling(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterAutoScalingConfigProperty"]]:
+        '''Configuration for cluster auto-scaling.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-cluster.html#cfn-sagemaker-cluster-autoscaling
+        '''
+        result = self._values.get("auto_scaling")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterAutoScalingConfigProperty"]], result)
+
+    @builtins.property
     def cluster_name(self) -> typing.Optional[builtins.str]:
         '''The name of the SageMaker HyperPod cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-cluster.html#cfn-sagemaker-cluster-clustername
         '''
         result = self._values.get("cluster_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def cluster_role(self) -> typing.Optional[builtins.str]:
+        '''The cluster role for the autoscaler to assume.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-cluster.html#cfn-sagemaker-cluster-clusterrole
+        '''
+        result = self._values.get("cluster_role")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -13418,7 +13461,14 @@ class CfnCluster(
         from aws_cdk import aws_sagemaker as sagemaker
         
         cfn_cluster = sagemaker.CfnCluster(self, "MyCfnCluster",
+            auto_scaling=sagemaker.CfnCluster.ClusterAutoScalingConfigProperty(
+                mode="mode",
+        
+                # the properties below are optional
+                auto_scaler_type="autoScalerType"
+            ),
             cluster_name="clusterName",
+            cluster_role="clusterRole",
             instance_groups=[sagemaker.CfnCluster.ClusterInstanceGroupProperty(
                 execution_role="executionRole",
                 instance_count=123,
@@ -13434,6 +13484,8 @@ class CfnCluster(
                 image_id="imageId",
                 instance_storage_configs=[sagemaker.CfnCluster.ClusterInstanceStorageConfigProperty(
                     ebs_volume_config=sagemaker.CfnCluster.ClusterEbsVolumeConfigProperty(
+                        root_volume=False,
+                        volume_kms_key_id="volumeKmsKeyId",
                         volume_size_in_gb=123
                     )
                 )],
@@ -13491,6 +13543,8 @@ class CfnCluster(
                 current_count=123,
                 instance_storage_configs=[sagemaker.CfnCluster.ClusterInstanceStorageConfigProperty(
                     ebs_volume_config=sagemaker.CfnCluster.ClusterEbsVolumeConfigProperty(
+                        root_volume=False,
+                        volume_kms_key_id="volumeKmsKeyId",
                         volume_size_in_gb=123
                     )
                 )],
@@ -13518,7 +13572,9 @@ class CfnCluster(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
+        auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterAutoScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         cluster_name: typing.Optional[builtins.str] = None,
+        cluster_role: typing.Optional[builtins.str] = None,
         instance_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterInstanceGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         node_provisioning_mode: typing.Optional[builtins.str] = None,
         node_recovery: typing.Optional[builtins.str] = None,
@@ -13530,7 +13586,9 @@ class CfnCluster(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
+        :param auto_scaling: Configuration for cluster auto-scaling.
         :param cluster_name: The name of the SageMaker HyperPod cluster.
+        :param cluster_role: The cluster role for the autoscaler to assume.
         :param instance_groups: The instance groups of the SageMaker HyperPod cluster. To delete an instance group, remove it from the array.
         :param node_provisioning_mode: Determines the scaling strategy for the SageMaker HyperPod cluster. When set to 'Continuous', enables continuous scaling which dynamically manages node provisioning. If the parameter is omitted, uses the standard scaling approach in previous release.
         :param node_recovery: Specifies whether to enable or disable the automatic node recovery feature of SageMaker HyperPod. Available values are ``Automatic`` for enabling and ``None`` for disabling.
@@ -13544,7 +13602,9 @@ class CfnCluster(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnClusterProps(
+            auto_scaling=auto_scaling,
             cluster_name=cluster_name,
+            cluster_role=cluster_role,
             instance_groups=instance_groups,
             node_provisioning_mode=node_provisioning_mode,
             node_recovery=node_recovery,
@@ -13640,6 +13700,24 @@ class CfnCluster(
         return typing.cast(ClusterReference, jsii.get(self, "clusterRef"))
 
     @builtins.property
+    @jsii.member(jsii_name="autoScaling")
+    def auto_scaling(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterAutoScalingConfigProperty"]]:
+        '''Configuration for cluster auto-scaling.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterAutoScalingConfigProperty"]], jsii.get(self, "autoScaling"))
+
+    @auto_scaling.setter
+    def auto_scaling(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterAutoScalingConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__03d7da9ac656d74f0fd594904f3b0f175e295650a74d5fee51bc8b4e3d92fe9d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "autoScaling", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="clusterName")
     def cluster_name(self) -> typing.Optional[builtins.str]:
         '''The name of the SageMaker HyperPod cluster.'''
@@ -13651,6 +13729,19 @@ class CfnCluster(
             type_hints = typing.get_type_hints(_typecheckingstub__8c72731c4fb9d1b248db78e05e403c022229ea39aa9884e7da88a1c9dd345bfb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "clusterName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="clusterRole")
+    def cluster_role(self) -> typing.Optional[builtins.str]:
+        '''The cluster role for the autoscaler to assume.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "clusterRole"))
+
+    @cluster_role.setter
+    def cluster_role(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__760df6e329ef2dd80dff7b473b5b81ce43f64102d3d691fcbb90473cdbcc9456)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "clusterRole", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="instanceGroups")
@@ -13884,20 +13975,107 @@ class CfnCluster(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnCluster.ClusterAutoScalingConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"mode": "mode", "auto_scaler_type": "autoScalerType"},
+    )
+    class ClusterAutoScalingConfigProperty:
+        def __init__(
+            self,
+            *,
+            mode: builtins.str,
+            auto_scaler_type: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Specifies the autoscaling configuration for a HyperPod cluster.
+
+            :param mode: Describes whether autoscaling is enabled or disabled for the cluster. Valid values are ``Enable`` and ``Disable`` .
+            :param auto_scaler_type: The type of autoscaler to use. Currently supported value is ``Karpenter`` . Default: - "Karpenter"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterautoscalingconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                cluster_auto_scaling_config_property = sagemaker.CfnCluster.ClusterAutoScalingConfigProperty(
+                    mode="mode",
+                
+                    # the properties below are optional
+                    auto_scaler_type="autoScalerType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ae932894a770df5cce53186dfdfa1f99ae9aedbf1a8f0d35bc6a0d5b6b5f9b49)
+                check_type(argname="argument mode", value=mode, expected_type=type_hints["mode"])
+                check_type(argname="argument auto_scaler_type", value=auto_scaler_type, expected_type=type_hints["auto_scaler_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "mode": mode,
+            }
+            if auto_scaler_type is not None:
+                self._values["auto_scaler_type"] = auto_scaler_type
+
+        @builtins.property
+        def mode(self) -> builtins.str:
+            '''Describes whether autoscaling is enabled or disabled for the cluster.
+
+            Valid values are ``Enable`` and ``Disable`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterautoscalingconfig.html#cfn-sagemaker-cluster-clusterautoscalingconfig-mode
+            '''
+            result = self._values.get("mode")
+            assert result is not None, "Required property 'mode' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def auto_scaler_type(self) -> typing.Optional[builtins.str]:
+            '''The type of autoscaler to use.
+
+            Currently supported value is ``Karpenter`` .
+
+            :default: - "Karpenter"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterautoscalingconfig.html#cfn-sagemaker-cluster-clusterautoscalingconfig-autoscalertype
+            '''
+            result = self._values.get("auto_scaler_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ClusterAutoScalingConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_sagemaker.CfnCluster.ClusterEbsVolumeConfigProperty",
         jsii_struct_bases=[],
-        name_mapping={"volume_size_in_gb": "volumeSizeInGb"},
+        name_mapping={
+            "root_volume": "rootVolume",
+            "volume_kms_key_id": "volumeKmsKeyId",
+            "volume_size_in_gb": "volumeSizeInGb",
+        },
     )
     class ClusterEbsVolumeConfigProperty:
         def __init__(
             self,
             *,
+            root_volume: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            volume_kms_key_id: typing.Optional[builtins.str] = None,
             volume_size_in_gb: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Defines the configuration for attaching an additional Amazon Elastic Block Store (EBS) volume to each instance of the SageMaker HyperPod cluster instance group.
 
             To learn more, see `SageMaker HyperPod release notes: June 20, 2024 <https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-hyperpod-release-notes.html#sagemaker-hyperpod-release-notes-20240620>`_ .
 
+            :param root_volume: Specifies whether the configuration is for the cluster's root or secondary Amazon EBS volume. You can specify two ``ClusterEbsVolumeConfig`` fields to configure both the root and secondary volumes. Set the value to ``True`` if you'd like to provide your own customer managed AWS KMS key to encrypt the root volume. When ``True`` : - The configuration is applied to the root volume. - You can't specify the ``VolumeSizeInGB`` field. The size of the root volume is determined for you. - You must specify a KMS key ID for ``VolumeKmsKeyId`` to encrypt the root volume with your own KMS key instead of an AWS owned KMS key. Otherwise, by default, the value is ``False`` , and the following applies: - The configuration is applied to the secondary volume, while the root volume is encrypted with an AWS owned key. - You must specify the ``VolumeSizeInGB`` field. - You can optionally specify the ``VolumeKmsKeyId`` to encrypt the secondary volume with your own KMS key instead of an AWS owned KMS key.
+            :param volume_kms_key_id: The ID of a KMS key to encrypt the Amazon EBS volume.
             :param volume_size_in_gb: The size in gigabytes (GB) of the additional EBS volume to be attached to the instances in the SageMaker HyperPod cluster instance group. The additional EBS volume is attached to each instance within the SageMaker HyperPod cluster instance group and mounted to ``/opt/sagemaker`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterebsvolumeconfig.html
@@ -13910,15 +14088,55 @@ class CfnCluster(
                 from aws_cdk import aws_sagemaker as sagemaker
                 
                 cluster_ebs_volume_config_property = sagemaker.CfnCluster.ClusterEbsVolumeConfigProperty(
+                    root_volume=False,
+                    volume_kms_key_id="volumeKmsKeyId",
                     volume_size_in_gb=123
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__9c3cafd59fbc880606685f87e0e67d5a5ce5428cfebf3db8838122cd54c4a361)
+                check_type(argname="argument root_volume", value=root_volume, expected_type=type_hints["root_volume"])
+                check_type(argname="argument volume_kms_key_id", value=volume_kms_key_id, expected_type=type_hints["volume_kms_key_id"])
                 check_type(argname="argument volume_size_in_gb", value=volume_size_in_gb, expected_type=type_hints["volume_size_in_gb"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if root_volume is not None:
+                self._values["root_volume"] = root_volume
+            if volume_kms_key_id is not None:
+                self._values["volume_kms_key_id"] = volume_kms_key_id
             if volume_size_in_gb is not None:
                 self._values["volume_size_in_gb"] = volume_size_in_gb
+
+        @builtins.property
+        def root_volume(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Specifies whether the configuration is for the cluster's root or secondary Amazon EBS volume.
+
+            You can specify two ``ClusterEbsVolumeConfig`` fields to configure both the root and secondary volumes. Set the value to ``True`` if you'd like to provide your own customer managed AWS KMS key to encrypt the root volume. When ``True`` :
+
+            - The configuration is applied to the root volume.
+            - You can't specify the ``VolumeSizeInGB`` field. The size of the root volume is determined for you.
+            - You must specify a KMS key ID for ``VolumeKmsKeyId`` to encrypt the root volume with your own KMS key instead of an AWS owned KMS key.
+
+            Otherwise, by default, the value is ``False`` , and the following applies:
+
+            - The configuration is applied to the secondary volume, while the root volume is encrypted with an AWS owned key.
+            - You must specify the ``VolumeSizeInGB`` field.
+            - You can optionally specify the ``VolumeKmsKeyId`` to encrypt the secondary volume with your own KMS key instead of an AWS owned KMS key.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterebsvolumeconfig.html#cfn-sagemaker-cluster-clusterebsvolumeconfig-rootvolume
+            '''
+            result = self._values.get("root_volume")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def volume_kms_key_id(self) -> typing.Optional[builtins.str]:
+            '''The ID of a KMS key to encrypt the Amazon EBS volume.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterebsvolumeconfig.html#cfn-sagemaker-cluster-clusterebsvolumeconfig-volumekmskeyid
+            '''
+            result = self._values.get("volume_kms_key_id")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def volume_size_in_gb(self) -> typing.Optional[jsii.Number]:
@@ -14019,6 +14237,8 @@ class CfnCluster(
                     image_id="imageId",
                     instance_storage_configs=[sagemaker.CfnCluster.ClusterInstanceStorageConfigProperty(
                         ebs_volume_config=sagemaker.CfnCluster.ClusterEbsVolumeConfigProperty(
+                            root_volume=False,
+                            volume_kms_key_id="volumeKmsKeyId",
                             volume_size_in_gb=123
                         )
                     )],
@@ -14268,6 +14488,8 @@ class CfnCluster(
                 
                 cluster_instance_storage_config_property = sagemaker.CfnCluster.ClusterInstanceStorageConfigProperty(
                     ebs_volume_config=sagemaker.CfnCluster.ClusterEbsVolumeConfigProperty(
+                        root_volume=False,
+                        volume_kms_key_id="volumeKmsKeyId",
                         volume_size_in_gb=123
                     )
                 )
@@ -14506,6 +14728,8 @@ class CfnCluster(
                     current_count=123,
                     instance_storage_configs=[sagemaker.CfnCluster.ClusterInstanceStorageConfigProperty(
                         ebs_volume_config=sagemaker.CfnCluster.ClusterEbsVolumeConfigProperty(
+                            root_volume=False,
+                            volume_kms_key_id="volumeKmsKeyId",
                             volume_size_in_gb=123
                         )
                     )],
@@ -58475,7 +58699,9 @@ def _typecheckingstub__2f03f5ccb1b2c4633c9ef3bee30e7429d047ef909520efe2cbcf88d12
 
 def _typecheckingstub__c8126a53dc1741a2edde75d8d4eca79c53a2294746ea237dfba0097a758522ce(
     *,
+    auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterAutoScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cluster_name: typing.Optional[builtins.str] = None,
+    cluster_role: typing.Optional[builtins.str] = None,
     instance_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterInstanceGroupProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     node_provisioning_mode: typing.Optional[builtins.str] = None,
     node_recovery: typing.Optional[builtins.str] = None,
@@ -59381,7 +59607,9 @@ def _typecheckingstub__b1441bbec1bb60460bda62b43765e140885fbb36e13b090ded31c919b
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
+    auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterAutoScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cluster_name: typing.Optional[builtins.str] = None,
+    cluster_role: typing.Optional[builtins.str] = None,
     instance_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterInstanceGroupProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     node_provisioning_mode: typing.Optional[builtins.str] = None,
     node_recovery: typing.Optional[builtins.str] = None,
@@ -59405,7 +59633,19 @@ def _typecheckingstub__23ff930ab861d82c5316349d3cb92e229dc76252f7fe321a81296dd80
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__03d7da9ac656d74f0fd594904f3b0f175e295650a74d5fee51bc8b4e3d92fe9d(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ClusterAutoScalingConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8c72731c4fb9d1b248db78e05e403c022229ea39aa9884e7da88a1c9dd345bfb(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__760df6e329ef2dd80dff7b473b5b81ce43f64102d3d691fcbb90473cdbcc9456(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -59468,8 +59708,18 @@ def _typecheckingstub__037781baa9561e3f7cbaf9bb153526c9205251c5775d32248ba6db579
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ae932894a770df5cce53186dfdfa1f99ae9aedbf1a8f0d35bc6a0d5b6b5f9b49(
+    *,
+    mode: builtins.str,
+    auto_scaler_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9c3cafd59fbc880606685f87e0e67d5a5ce5428cfebf3db8838122cd54c4a361(
     *,
+    root_volume: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    volume_kms_key_id: typing.Optional[builtins.str] = None,
     volume_size_in_gb: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""

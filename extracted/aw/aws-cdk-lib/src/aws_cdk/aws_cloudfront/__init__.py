@@ -21872,7 +21872,7 @@ class CfnDistribution(
             - To accept HTTPS connections from only viewers that support SNI, set ``SSLSupportMethod`` to ``sni-only`` . This is recommended. Most browsers and clients support SNI. (In CloudFormation, the field name is ``SslSupportMethod`` . Note the different capitalization.)
             - To accept HTTPS connections from all viewers, including those that don't support SNI, set ``SSLSupportMethod`` to ``vip`` . This is not recommended, and results in additional monthly charges from CloudFront. (In CloudFormation, the field name is ``SslSupportMethod`` . Note the different capitalization.)
             - The minimum SSL/TLS protocol version that the distribution can use to communicate with viewers. To specify a minimum version, choose a value for ``MinimumProtocolVersion`` . For more information, see `Security Policy <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy>`_ in the *Amazon CloudFront Developer Guide* .
-            - The location of the SSL/TLS certificate, `AWS Certificate Manager (ACM) <https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html>`_ (recommended) or `AWS Identity and Access Management (IAM) <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html>`_ . You specify the location by setting a value in one of the following fields (not both):
+            - The location of the SSL/TLS certificate, `Certificate Manager (ACM) <https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html>`_ (recommended) or `AWS Identity and Access Management (IAM) <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html>`_ . You specify the location by setting a value in one of the following fields (not both):
             - ``ACMCertificateArn`` (In CloudFormation, this field name is ``AcmCertificateArn`` . Note the different capitalization.)
             - ``IAMCertificateId`` (In CloudFormation, this field name is ``IamCertificateId`` . Note the different capitalization.)
 
@@ -21880,7 +21880,7 @@ class CfnDistribution(
 
             For more information, see `Using HTTPS with CloudFront <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https.html>`_ and `Using Alternate Domain Names and HTTPS <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-alternate-domain-names.html>`_ in the *Amazon CloudFront Developer Guide* .
 
-            :param acm_certificate_arn: .. epigraph:: In CloudFormation, this field name is ``AcmCertificateArn`` . Note the different capitalization. If the distribution uses ``Aliases`` (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in `AWS Certificate Manager (ACM) <https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html>`_ , provide the Amazon Resource Name (ARN) of the ACM certificate. CloudFront only supports ACM certificates in the US East (N. Virginia) Region ( ``us-east-1`` ). If you specify an ACM certificate ARN, you must also specify values for ``MinimumProtocolVersion`` and ``SSLSupportMethod`` . (In CloudFormation, the field name is ``SslSupportMethod`` . Note the different capitalization.)
+            :param acm_certificate_arn: .. epigraph:: In CloudFormation, this field name is ``AcmCertificateArn`` . Note the different capitalization. If the distribution uses ``Aliases`` (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in `Certificate Manager (ACM) <https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html>`_ , provide the Amazon Resource Name (ARN) of the ACM certificate. CloudFront only supports ACM certificates in the US East (N. Virginia) Region ( ``us-east-1`` ). If you specify an ACM certificate ARN, you must also specify values for ``MinimumProtocolVersion`` and ``SSLSupportMethod`` . (In CloudFormation, the field name is ``SslSupportMethod`` . Note the different capitalization.)
             :param cloud_front_default_certificate: If the distribution uses the CloudFront domain name such as ``d111111abcdef8.cloudfront.net`` , set this field to ``true`` . If the distribution uses ``Aliases`` (alternate domain names or CNAMEs), omit this field and specify values for the following fields: - ``AcmCertificateArn`` or ``IamCertificateId`` (specify a value for one, not both) - ``MinimumProtocolVersion`` - ``SslSupportMethod``
             :param iam_certificate_id: .. epigraph:: This field only supports standard distributions. You can't specify this field for multi-tenant distributions. For more information, see `Unsupported features for SaaS Manager for Amazon CloudFront <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-config-options.html#unsupported-saas>`_ in the *Amazon CloudFront Developer Guide* . > In CloudFormation, this field name is ``IamCertificateId`` . Note the different capitalization. If the distribution uses ``Aliases`` (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in `AWS Identity and Access Management (IAM) <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html>`_ , provide the ID of the IAM certificate. If you specify an IAM certificate ID, you must also specify values for ``MinimumProtocolVersion`` and ``SSLSupportMethod`` . (In CloudFormation, the field name is ``SslSupportMethod`` . Note the different capitalization.)
             :param minimum_protocol_version: If the distribution uses ``Aliases`` (alternate domain names or CNAMEs), specify the security policy that you want CloudFront to use for HTTPS connections with viewers. The security policy determines two settings: - The minimum SSL/TLS protocol that CloudFront can use to communicate with viewers. - The ciphers that CloudFront can use to encrypt the content that it returns to viewers. For more information, see `Security Policy <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy>`_ and `Supported Protocols and Ciphers Between Viewers and CloudFront <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers>`_ in the *Amazon CloudFront Developer Guide* . .. epigraph:: On the CloudFront console, this setting is called *Security Policy* . When you're using SNI only (you set ``SSLSupportMethod`` to ``sni-only`` ), you must specify ``TLSv1`` or higher. (In CloudFormation, the field name is ``SslSupportMethod`` . Note the different capitalization.) If the distribution uses the CloudFront domain name such as ``d111111abcdef8.cloudfront.net`` (you set ``CloudFrontDefaultCertificate`` to ``true`` ), CloudFront automatically sets the security policy to ``TLSv1`` regardless of the value that you set here.
@@ -21928,7 +21928,7 @@ class CfnDistribution(
 
    In CloudFormation, this field name is ``AcmCertificateArn`` . Note the different capitalization.
 
-            If the distribution uses ``Aliases`` (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in `AWS Certificate Manager (ACM) <https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html>`_ , provide the Amazon Resource Name (ARN) of the ACM certificate. CloudFront only supports ACM certificates in the US East (N. Virginia) Region ( ``us-east-1`` ).
+            If the distribution uses ``Aliases`` (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in `Certificate Manager (ACM) <https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html>`_ , provide the Amazon Resource Name (ARN) of the ACM certificate. CloudFront only supports ACM certificates in the US East (N. Virginia) Region ( ``us-east-1`` ).
 
             If you specify an ACM certificate ARN, you must also specify values for ``MinimumProtocolVersion`` and ``SSLSupportMethod`` . (In CloudFormation, the field name is ``SslSupportMethod`` . Note the different capitalization.)
 
@@ -22525,7 +22525,7 @@ class CfnDistributionTenant(
     )
     class CertificateProperty:
         def __init__(self, *, arn: typing.Optional[builtins.str] = None) -> None:
-            '''The AWS Certificate Manager (ACM) certificate associated with your distribution.
+            '''The Certificate Manager (ACM) certificate associated with your distribution.
 
             :param arn: The Amazon Resource Name (ARN) of the ACM certificate.
 
@@ -22590,7 +22590,7 @@ class CfnDistributionTenant(
 
             For each distribution tenant, you can specify the geographic restrictions, and the Amazon Resource Names (ARNs) for the ACM certificate and AWS WAF web ACL. These are specific values that you can override or disable from the multi-tenant distribution that was used to create the distribution tenant.
 
-            :param certificate: The AWS Certificate Manager (ACM) certificate.
+            :param certificate: The Certificate Manager (ACM) certificate.
             :param geo_restrictions: The geographic restrictions.
             :param web_acl: The AWS WAF web ACL.
 
@@ -22634,7 +22634,7 @@ class CfnDistributionTenant(
         def certificate(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.CertificateProperty"]]:
-            '''The AWS Certificate Manager (ACM) certificate.
+            '''The Certificate Manager (ACM) certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributiontenant-customizations.html#cfn-cloudfront-distributiontenant-customizations-certificate
             '''
@@ -22837,7 +22837,7 @@ class CfnDistributionTenant(
         ) -> None:
             '''An object that represents the request for the Amazon CloudFront managed ACM certificate.
 
-            :param certificate_transparency_logging_preference: You can opt out of certificate transparency logging by specifying the ``disabled`` option. Opt in by specifying ``enabled`` . For more information, see `Certificate Transparency Logging <https://docs.aws.amazon.com/acm/latest/userguide/acm-concepts.html#concept-transparency>`_ in the *AWS Certificate Manager User Guide* .
+            :param certificate_transparency_logging_preference: You can opt out of certificate transparency logging by specifying the ``disabled`` option. Opt in by specifying ``enabled`` . For more information, see `Certificate Transparency Logging <https://docs.aws.amazon.com/acm/latest/userguide/acm-concepts.html#concept-transparency>`_ in the *Certificate Manager User Guide* .
             :param primary_domain_name: The primary domain name associated with the CloudFront managed ACM certificate.
             :param validation_token_host: Specify how the HTTP validation token will be served when requesting the CloudFront managed ACM certificate. - For ``cloudfront`` , CloudFront will automatically serve the validation token. Choose this mode if you can point the domain's DNS to CloudFront immediately. - For ``self-hosted`` , you serve the validation token from your existing infrastructure. Choose this mode when you need to maintain current traffic flow while your certificate is being issued. You can place the validation token at the well-known path on your existing web server, wait for ACM to validate and issue the certificate, and then update your DNS to point to CloudFront.
 
@@ -22875,7 +22875,7 @@ class CfnDistributionTenant(
         ) -> typing.Optional[builtins.str]:
             '''You can opt out of certificate transparency logging by specifying the ``disabled`` option.
 
-            Opt in by specifying ``enabled`` . For more information, see `Certificate Transparency Logging <https://docs.aws.amazon.com/acm/latest/userguide/acm-concepts.html#concept-transparency>`_ in the *AWS Certificate Manager User Guide* .
+            Opt in by specifying ``enabled`` . For more information, see `Certificate Transparency Logging <https://docs.aws.amazon.com/acm/latest/userguide/acm-concepts.html#concept-transparency>`_ in the *Certificate Manager User Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributiontenant-managedcertificaterequest.html#cfn-cloudfront-distributiontenant-managedcertificaterequest-certificatetransparencyloggingpreference
             '''
@@ -25046,6 +25046,8 @@ class CfnPublicKey(
 ):
     '''A public key that you can use with `signed URLs and signed cookies <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html>`_ , or with `field-level encryption <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html>`_ .
 
+    CloudFront supports signed URLs and signed cookies with RSA 2048 or ECDSA 256 key signatures. Field-level encryption is only compatible with RSA 2048 key signatures.
+
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-publickey.html
     :cloudformationResource: AWS::CloudFront::PublicKey
     :exampleMetadata: fixture=_generated
@@ -25185,6 +25187,8 @@ class CfnPublicKey(
             comment: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Configuration information about a public key that you can use with `signed URLs and signed cookies <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html>`_ , or with `field-level encryption <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html>`_ .
+
+            CloudFront supports signed URLs and signed cookies with RSA 2048 or ECDSA 256 key signatures. Field-level encryption is only compatible with RSA 2048 key signatures.
 
             :param caller_reference: A string included in the request to help make sure that the request can't be replayed.
             :param encoded_key: The public key that you can use with `signed URLs and signed cookies <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html>`_ , or with `field-level encryption <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html>`_ .

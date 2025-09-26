@@ -30,7 +30,7 @@ from setuptools import setup
 from setuptools.command.build_ext import build_ext
 
 
-version = '8.0'
+version = '8.0.1'
 
 
 class optional_build_ext(build_ext):
@@ -136,7 +136,6 @@ setup(
     },
     include_package_data=True,
     zip_safe=False,
-    install_requires=['setuptools'],
     python_requires='>=3.9',
     extras_require={
         'docs': ['Sphinx',

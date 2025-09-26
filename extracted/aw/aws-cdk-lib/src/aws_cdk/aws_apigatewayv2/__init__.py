@@ -17157,7 +17157,7 @@ class CfnDomainName(
             :param certificate_name: The user-friendly name of the certificate that will be used by the edge-optimized endpoint for this domain name.
             :param endpoint_type: The endpoint type.
             :param ip_address_type: The IP address types that can invoke the domain name. Use ``ipv4`` to allow only IPv4 addresses to invoke your domain name, or use ``dualstack`` to allow both IPv4 and IPv6 addresses to invoke your domain name.
-            :param ownership_verification_certificate_arn: The Amazon resource name (ARN) for the public certificate issued by AWS Certificate Manager . This ARN is used to validate custom domain ownership. It's required only if you configure mutual TLS and use either an ACM-imported or a private CA certificate ARN as the regionalCertificateArn.
+            :param ownership_verification_certificate_arn: The Amazon resource name (ARN) for the public certificate issued by Certificate Manager . This ARN is used to validate custom domain ownership. It's required only if you configure mutual TLS and use either an ACM-imported or a private CA certificate ARN as the regionalCertificateArn.
             :param security_policy: The Transport Layer Security (TLS) version of the security policy for this domain name. The valid values are ``TLS_1_0`` and ``TLS_1_2`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigatewayv2-domainname-domainnameconfiguration.html
@@ -17244,7 +17244,7 @@ class CfnDomainName(
         def ownership_verification_certificate_arn(
             self,
         ) -> typing.Optional[builtins.str]:
-            '''The Amazon resource name (ARN) for the public certificate issued by AWS Certificate Manager .
+            '''The Amazon resource name (ARN) for the public certificate issued by Certificate Manager .
 
             This ARN is used to validate custom domain ownership. It's required only if you configure mutual TLS and use either an ACM-imported or a private CA certificate ARN as the regionalCertificateArn.
 

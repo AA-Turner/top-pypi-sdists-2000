@@ -49,7 +49,7 @@ if WHEEL_CMD in sys.argv:
             # and a few workflows as show for example in this PR:
             # https://github.com/semgrep/semgrep-proprietary/pull/2606/files
             # coupling: semgrep.libsonnet default_python_version
-            python = "cp310.cp311.py310.py311"
+            python = "cp310.cp311.cp312.cp313.py310.py311.py312.py313"
 
             # We don't require a specific Python ABI
             abi = "none"
@@ -133,6 +133,11 @@ install_requires = [
     "requests~=2.22",
     "rich~=13.5.2",
     "ruamel.yaml>=0.18.5",
+    # 0.2.13 is broken on macos
+    # https://sourceforge.net/p/ruamel-yaml-clib/tickets/47/
+    # 0.2.14 is broken on linux
+    # https://sourceforge.net/p/ruamel-yaml-clib/tickets/49/
+    "ruamel.yaml.clib==0.2.12",
     "tomli~=2.0.1",
     "typing-extensions~=4.2",
     "urllib3~=2.0",
@@ -143,7 +148,7 @@ install_requires = [
 
 setuptools.setup(
     name="semgrep",
-    version="1.137.1",
+    version="1.138.0",
     author="Semgrep Inc.",
     author_email="support@semgrep.com",
     description="Lightweight static analysis for many languages. Find bug variants with patterns that look like source code.",
@@ -171,6 +176,8 @@ setuptools.setup(
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Security",
         "Topic :: Software Development :: Quality Assurance",
     ],
