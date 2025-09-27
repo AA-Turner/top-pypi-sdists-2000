@@ -140,7 +140,7 @@ class SimpleIndexTestCase(IndexTestCase):
         i = self.get_simple_index("index")
         changes = list(i.changes_from_tree(MemoryObjectStore(), None))
         self.assertEqual(1, len(changes))
-        (oldname, newname), (oldmode, newmode), (oldsha, newsha) = changes[0]
+        (_oldname, newname), (_oldmode, _newmode), (_oldsha, newsha) = changes[0]
         self.assertEqual(b"bla", newname)
         self.assertEqual(b"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391", newsha)
 
@@ -853,6 +853,51 @@ class GetUnstagedChangesTests(TestCase):
             changes = get_unstaged_changes(repo.open_index(), repo_dir)
 
             self.assertEqual(list(changes), [b"foo1"])
+
+    def test_get_unstaged_changes_with_preload(self) -> None:
+        """Unit test for get_unstaged_changes with preload_index=True."""
+        repo_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, repo_dir)
+        with Repo.init(repo_dir) as repo:
+            # Create multiple files to test parallel processing
+            files = []
+            for i in range(10):
+                filename = f"foo{i}"
+                fullpath = os.path.join(repo_dir, filename)
+                with open(fullpath, "wb") as f:
+                    f.write(b"origstuff" + str(i).encode())
+                files.append(filename)
+
+            repo.stage(files)
+            repo.do_commit(
+                b"test status",
+                author=b"author <email>",
+                committer=b"committer <email>",
+            )
+
+            # Modify some files
+            modified_files = [b"foo1", b"foo3", b"foo5", b"foo7"]
+            for filename in modified_files:
+                fullpath = os.path.join(repo_dir, filename.decode())
+                with open(fullpath, "wb") as f:
+                    f.write(b"newstuff")
+                os.utime(fullpath, (0, 0))
+
+            # Test with preload_index=False (serial)
+            changes_serial = list(
+                get_unstaged_changes(repo.open_index(), repo_dir, preload_index=False)
+            )
+            changes_serial.sort()
+
+            # Test with preload_index=True (parallel)
+            changes_parallel = list(
+                get_unstaged_changes(repo.open_index(), repo_dir, preload_index=True)
+            )
+            changes_parallel.sort()
+
+            # Both should return the same results
+            self.assertEqual(changes_serial, changes_parallel)
+            self.assertEqual(changes_serial, sorted(modified_files))
 
     def test_get_unstaged_deleted_changes(self) -> None:
         """Unit test for get_unstaged_changes."""
@@ -2908,3 +2953,50 @@ class TestUpdateWorkingTree(TestCase):
 
         # file2 should still be a directory
         self.assertTrue(os.path.isdir(file2_path))
+
+    def test_ensure_parent_dir_exists_windows_drive(self):
+        """Test that _ensure_parent_dir_exists handles Windows drive letters correctly."""
+        from dulwich.index import _ensure_parent_dir_exists
+
+        # Create a temporary directory to work with
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Test normal case (creates directory)
+            test_path = os.path.join(tmpdir, "subdir", "file.txt").encode()
+            _ensure_parent_dir_exists(test_path)
+            self.assertTrue(os.path.exists(os.path.dirname(test_path)))
+
+            # Test when parent is a file (should raise error)
+            file_path = os.path.join(tmpdir, "testfile").encode()
+            with open(file_path, "wb") as f:
+                f.write(b"test")
+
+            invalid_path = os.path.join(
+                tmpdir.encode(), b"testfile", b"subdir", b"file.txt"
+            )
+            with self.assertRaisesRegex(
+                OSError, "Cannot create directory, parent path is a file"
+            ):
+                _ensure_parent_dir_exists(invalid_path)
+
+            # Test with nested subdirectories
+            nested_path = os.path.join(tmpdir, "a", "b", "c", "d", "file.txt").encode()
+            _ensure_parent_dir_exists(nested_path)
+            self.assertTrue(os.path.exists(os.path.dirname(nested_path)))
+
+            # Test that various path formats are handled correctly by os.path.dirname
+            # This includes Windows drive letters, UNC paths, etc.
+            # The key is that we're using os.path.dirname which handles these correctly
+            import platform
+
+            if platform.system() == "Windows":
+                # Test Windows-specific paths only on Windows
+                test_cases = [
+                    b"C:\\temp\\test\\file.txt",
+                    b"D:\\file.txt",
+                    b"\\\\server\\share\\folder\\file.txt",
+                ]
+                for path in test_cases:
+                    # Just verify os.path.dirname handles these without errors
+                    parent = os.path.dirname(path)
+                    # We're not creating these directories, just testing the logic doesn't fail
+                    self.assertIsInstance(parent, bytes)

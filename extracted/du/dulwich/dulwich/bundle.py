@@ -21,20 +21,49 @@
 
 """Bundle format support."""
 
-from typing import BinaryIO, Callable, Optional
+from collections.abc import Iterator
+from typing import (
+    TYPE_CHECKING,
+    BinaryIO,
+    Callable,
+    Optional,
+    Protocol,
+    runtime_checkable,
+)
 
-from .pack import PackData, write_pack_data
+from .pack import PackData, UnpackedObject, write_pack_data
+
+
+@runtime_checkable
+class PackDataLike(Protocol):
+    """Protocol for objects that behave like PackData."""
+
+    def __len__(self) -> int:
+        """Return the number of objects in the pack."""
+        ...
+
+    def iter_unpacked(self) -> Iterator[UnpackedObject]:
+        """Iterate over unpacked objects in the pack."""
+        ...
+
+
+if TYPE_CHECKING:
+    from .object_store import BaseObjectStore
+    from .repo import BaseRepo
 
 
 class Bundle:
+    """Git bundle object representation."""
+
     version: Optional[int]
 
     capabilities: dict[str, Optional[str]]
     prerequisites: list[tuple[bytes, bytes]]
     references: dict[bytes, bytes]
-    pack_data: PackData
+    pack_data: Optional[PackDataLike]
 
     def __repr__(self) -> str:
+        """Return string representation of Bundle."""
         return (
             f"<{type(self).__name__}(version={self.version}, "
             f"capabilities={self.capabilities}, "
@@ -43,6 +72,7 @@ class Bundle:
         )
 
     def __eq__(self, other: object) -> bool:
+        """Check equality with another Bundle."""
         if not isinstance(other, type(self)):
             return False
         if self.version != other.version:
@@ -58,8 +88,10 @@ class Bundle:
         return True
 
     def store_objects(
-        self, object_store, progress: Optional[Callable[[str], None]] = None
-    ):
+        self,
+        object_store: "BaseObjectStore",
+        progress: Optional[Callable[[str], None]] = None,
+    ) -> None:
         """Store all objects from this bundle into an object store.
 
         Args:
@@ -68,10 +100,12 @@ class Bundle:
         """
         from .objects import ShaFile
 
+        if self.pack_data is None:
+            raise ValueError("pack_data is not loaded")
         count = 0
         for unpacked in self.pack_data.iter_unpacked():
             # Convert the unpacked object to a proper git object
-            if unpacked.decomp_chunks:
+            if unpacked.decomp_chunks and unpacked.obj_type_num is not None:
                 git_obj = ShaFile.from_raw_chunks(
                     unpacked.obj_type_num, unpacked.decomp_chunks
                 )
@@ -147,6 +181,12 @@ def read_bundle(f: BinaryIO) -> Bundle:
 
 
 def write_bundle(f: BinaryIO, bundle: Bundle) -> None:
+    """Write a bundle to a file.
+
+    Args:
+        f: File-like object to write to
+        bundle: Bundle object to write
+    """
     version = bundle.version
     if version is None:
         if bundle.capabilities:
@@ -170,6 +210,8 @@ def write_bundle(f: BinaryIO, bundle: Bundle) -> None:
     for ref, obj_id in bundle.references.items():
         f.write(obj_id + b" " + ref + b"\n")
     f.write(b"\n")
+    if bundle.pack_data is None:
+        raise ValueError("bundle.pack_data is not loaded")
     write_pack_data(
         f.write,
         num_records=len(bundle.pack_data),
@@ -178,7 +220,7 @@ def write_bundle(f: BinaryIO, bundle: Bundle) -> None:
 
 
 def create_bundle_from_repo(
-    repo,
+    repo: "BaseRepo",
     refs: Optional[list[bytes]] = None,
     prerequisites: Optional[list[bytes]] = None,
     version: Optional[int] = None,
@@ -266,14 +308,14 @@ def create_bundle_from_repo(
     # Store the pack objects directly, we'll write them when saving the bundle
     # For now, create a simple wrapper to hold the data
     class _BundlePackData:
-        def __init__(self, count, objects):
+        def __init__(self, count: int, objects: Iterator[UnpackedObject]) -> None:
             self._count = count
             self._objects = list(objects)  # Materialize the iterator
 
-        def __len__(self):
+        def __len__(self) -> int:
             return self._count
 
-        def iter_unpacked(self):
+        def iter_unpacked(self) -> Iterator[UnpackedObject]:
             return iter(self._objects)
 
     pack_data = _BundlePackData(pack_count, pack_objects)
@@ -284,6 +326,6 @@ def create_bundle_from_repo(
     bundle.capabilities = capabilities
     bundle.prerequisites = bundle_prerequisites
     bundle.references = bundle_refs
-    bundle.pack_data = pack_data  # type: ignore[assignment]
+    bundle.pack_data = pack_data
 
     return bundle

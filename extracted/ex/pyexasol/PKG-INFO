@@ -1,12 +1,12 @@
 Metadata-Version: 2.3
 Name: pyexasol
-Version: 1.1.1
+Version: 1.2.0
 Summary: Exasol python driver with extra features
 License: MIT
 Keywords: exasol,sql,database,performance,websocket,import,export
 Author: Vitaly Markov
 Author-email: wild.desu@gmail.com
-Requires-Python: >=3.9.2,<4.0.0
+Requires-Python: >=3.9.2,<4
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: MIT License
@@ -19,19 +19,19 @@ Classifier: Programming Language :: Python :: 3.9
 Classifier: Topic :: Database
 Provides-Extra: all
 Provides-Extra: examples
-Provides-Extra: numpy
 Provides-Extra: orjson
 Provides-Extra: pandas
 Provides-Extra: polars
+Provides-Extra: pyarrow
 Provides-Extra: rapidjson
 Provides-Extra: ujson
 Requires-Dist: cryptography (>=45.0.7)
-Requires-Dist: numpy (>1.26.0,<2) ; extra == "numpy" or extra == "all"
 Requires-Dist: orjson (>=3.6) ; extra == "orjson" or extra == "all"
 Requires-Dist: packaging
-Requires-Dist: pandas[numpy] (>=2,<3) ; extra == "pandas" or extra == "all"
+Requires-Dist: pandas (>=2,<3) ; extra == "pandas" or extra == "all"
 Requires-Dist: polars (>=1.10,<2.0) ; extra == "polars" or extra == "all"
 Requires-Dist: pproxy ; extra == "examples" or extra == "all"
+Requires-Dist: pyarrow (>=20.0.0,<21.0.0) ; extra == "pyarrow" or extra == "all"
 Requires-Dist: python-rapidjson ; extra == "rapidjson" or extra == "all"
 Requires-Dist: rsa
 Requires-Dist: ujson ; extra == "ujson" or extra == "all"
@@ -64,7 +64,7 @@ Description-Content-Type: text/markdown
 
 PyExasol is the officially supported Python connector for [Exasol](https://www.exasol.com). It helps to handle massive volumes of data commonly associated with this DBMS.
 
-You may expect significant performance improvement over ODBC in a single process scenario involving pandas or polars.
+You may expect significant performance improvement over ODBC in a single process scenario involving pandas, parquet, or polars.
 
 PyExasol provides an [API](https://exasol.github.io/pyexasol/master/api.html) to read & write multiple data streams in parallel using separate processes, which is necessary to fully utilize hardware and achieve linear scalability. With PyExasol you are no longer limited to a single CPU core.
 
@@ -77,7 +77,7 @@ PyExasol provides an [API](https://exasol.github.io/pyexasol/master/api.html) to
 
 - Based on [WebSocket protocol](https://github.com/exasol/websocket-api);
 - Optimized for minimum overhead;
-- Easy integration with pandas and polars via HTTP transport;
+- Easy integration with pandas, parquet, and polars via HTTP transport;
 - Compression to reduce network bottleneck;
 
 

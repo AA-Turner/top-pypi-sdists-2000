@@ -19,7 +19,7 @@ from pandas.core.indexes.accessors import TimedeltaIndexProperties
 from pandas.core.indexes.datetimelike import DatetimeTimedeltaMixin
 from pandas.core.indexes.datetimes import DatetimeIndex
 from pandas.core.indexes.period import PeriodIndex
-from pandas.core.series import TimedeltaSeries
+from pandas.core.series import Series
 from typing_extensions import Self
 
 from pandas._libs import (
@@ -30,6 +30,7 @@ from pandas._libs.tslibs import BaseOffset
 from pandas._typing import (
     AxesData,
     TimedeltaConvertibleTypes,
+    np_ndarray_td,
     num,
 )
 
@@ -49,17 +50,21 @@ class TimedeltaIndex(
     ) -> Self: ...
     # various ignores needed for mypy, as we do want to restrict what can be used in
     # arithmetic for these types
-    @overload
+    @overload  # type: ignore[override]
     def __add__(self, other: Period) -> PeriodIndex: ...
     @overload
     def __add__(self, other: DatetimeIndex) -> DatetimeIndex: ...
     @overload
-    def __add__(self, other: dt.timedelta | Timedelta | Self) -> Self: ...
+    def __add__(  # pyright: ignore[reportIncompatibleMethodOverride]
+        self, other: dt.timedelta | Timedelta | Self
+    ) -> Self: ...
     def __radd__(self, other: dt.datetime | Timestamp | DatetimeIndex) -> DatetimeIndex: ...  # type: ignore[override]
-    def __sub__(self, other: dt.timedelta | Timedelta | Self) -> Self: ...
-    def __mul__(self, other: num) -> Self: ...
+    def __sub__(  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride]
+        self, other: dt.timedelta | np.timedelta64 | np_ndarray_td | Self
+    ) -> Self: ...
+    def __mul__(self, other: float) -> Self: ...  # type: ignore[override]  # pyright: ignore[reportIncompatibleMethodOverride]
     @overload  # type: ignore[override]
-    def __truediv__(self, other: num | Sequence[float]) -> Self: ...
+    def __truediv__(self, other: float | Sequence[float]) -> Self: ...
     @overload
     def __truediv__(  # pyright: ignore[reportIncompatibleMethodOverride]
         self, other: dt.timedelta | Sequence[dt.timedelta]
@@ -76,7 +81,7 @@ class TimedeltaIndex(
     @property
     def inferred_type(self) -> str: ...
     @final
-    def to_series(self, index=..., name: Hashable = ...) -> TimedeltaSeries: ...
+    def to_series(self, index=..., name: Hashable = ...) -> Series[Timedelta]: ...
     def shift(self, periods: int = 1, freq=...) -> Self: ...
 
 @overload

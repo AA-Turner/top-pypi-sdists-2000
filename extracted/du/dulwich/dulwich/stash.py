@@ -23,7 +23,7 @@
 
 import os
 import sys
-from typing import TYPE_CHECKING, Optional, TypedDict
+from typing import TYPE_CHECKING, Optional, TypedDict, Union
 
 from .diff_tree import tree_changes
 from .file import GitFile
@@ -68,6 +68,12 @@ class Stash:
     """
 
     def __init__(self, repo: "Repo", ref: Ref = DEFAULT_STASH_REF) -> None:
+        """Initialize Stash.
+
+        Args:
+          repo: Repository object
+          ref: Stash reference name
+        """
         self._ref = ref
         self._repo = repo
 
@@ -76,6 +82,11 @@ class Stash:
         return os.path.join(self._repo.commondir(), "logs", os.fsdecode(self._ref))
 
     def stashes(self) -> list["Entry"]:
+        """Get list of stash entries.
+
+        Returns:
+          List of stash entries in chronological order
+        """
         try:
             with GitFile(self._reflog_path, "rb") as f:
                 return list(reversed(list(read_reflog(f))))
@@ -151,10 +162,16 @@ class Stash:
             symlink_fn = symlink
         else:
 
-            def symlink_fn(source, target) -> None:  # type: ignore
-                mode = "w" + ("b" if isinstance(source, bytes) else "")
-                with open(target, mode) as f:
-                    f.write(source)
+            def symlink_fn(
+                src: Union[str, bytes, os.PathLike],
+                dst: Union[str, bytes, os.PathLike],
+                target_is_directory: bool = False,
+                *,
+                dir_fd: Optional[int] = None,
+            ) -> None:
+                mode = "w" + ("b" if isinstance(src, bytes) else "")
+                with open(dst, mode) as f:
+                    f.write(src)
 
         # Get blob normalizer for line ending conversion
         blob_normalizer = self._repo.get_blob_normalizer()
@@ -217,7 +234,7 @@ class Stash:
                     entry.mode,
                     full_path,
                     honor_filemode=honor_filemode,
-                    symlink_fn=symlink_fn,
+                    symlink_fn=symlink_fn,  # type: ignore[arg-type]
                 )
 
             # Update index if the file wasn't already staged
@@ -299,7 +316,7 @@ class Stash:
         # TODO(jelmer): Just pass parents into do_commit()?
         self._repo.refs[self._ref] = self._repo.head()
 
-        cid = self._repo.get_worktree().commit(
+        cid: ObjectID = self._repo.get_worktree().commit(
             ref=self._ref,
             tree=stash_tree_id,
             message=message,
@@ -330,7 +347,9 @@ class Stash:
         return cid
 
     def __getitem__(self, index: int) -> "Entry":
+        """Get stash entry by index."""
         return list(self.stashes())[index]
 
     def __len__(self) -> int:
+        """Return number of stash entries."""
         return len(list(self.stashes()))

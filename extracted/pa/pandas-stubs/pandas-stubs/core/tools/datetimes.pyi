@@ -16,10 +16,7 @@ from pandas import (
 )
 from pandas.core.arrays import ExtensionArray
 from pandas.core.indexes.datetimes import DatetimeIndex
-from pandas.core.series import (
-    Series,
-    TimestampSeries,
-)
+from pandas.core.series import Series
 from typing_extensions import TypeAlias
 
 from pandas._libs.tslibs import NaTType
@@ -38,7 +35,9 @@ DatetimeScalar: TypeAlias = Scalar | datetime | np.datetime64 | date
 
 DatetimeScalarOrArrayConvertible: TypeAlias = DatetimeScalar | ArrayConvertible
 
-DatetimeDictArg: TypeAlias = list[Scalar] | tuple[Scalar, ...] | AnyArrayLike
+DatetimeDictArg: TypeAlias = (
+    list[int | str] | tuple[int | str, ...] | AnyArrayLike | int | str
+)
 
 class YearMonthDayDict(TypedDict, total=True):
     year: DatetimeDictArg
@@ -94,7 +93,7 @@ def to_datetime(
     unit: str | None = ...,
     origin: Literal["julian", "unix"] | TimestampConvertibleTypes = ...,
     cache: bool = ...,
-) -> TimestampSeries: ...
+) -> Series[Timestamp]: ...
 @overload
 def to_datetime(
     arg: (

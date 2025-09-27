@@ -549,9 +549,9 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
             | Mapping[str, Any]
             | Mapping[str, SequenceNotStr[Any]]
         ),
-        index: str | SequenceNotStr[Hashable] | None = None,
-        columns: ListLike | None = None,
+        index: str | Axes | None = None,
         exclude: ListLike | None = None,
+        columns: ListLike | None = None,
         coerce_float: bool = False,
         nrows: int | None = None,
     ) -> Self: ...
@@ -763,7 +763,7 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
     @overload
     def to_xml(
         self,
-        path_or_buffer: Literal[None] = ...,
+        path_or_buffer: None = ...,
         index: bool = ...,
         root_name: str | None = ...,
         row_name: str | None = ...,
@@ -1760,7 +1760,9 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
     @property
     def index(self) -> Index: ...
     @index.setter
-    def index(self, idx: Index) -> None: ...
+    def index(
+        self, idx: AnyArrayLike | SequenceNotStr[Hashable] | tuple[Hashable, ...]
+    ) -> None: ...
     @property
     def loc(self) -> _LocIndexerFrame[Self]: ...
     @property
@@ -1772,6 +1774,7 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
     # methods
     @final
     def abs(self) -> Self: ...
+    def __add__(self, other: Any) -> Self: ...
     def add(
         self,
         other: num | ListLike | DataFrame,
@@ -1779,6 +1782,32 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
         level: Level | None = None,
         fill_value: float | None = None,
     ) -> Self: ...
+    def __radd__(self, other: Any) -> Self: ...
+    def radd(
+        self,
+        other,
+        axis: Axis = "columns",
+        level: Level | None = None,
+        fill_value: float | None = None,
+    ) -> Self: ...
+    def __sub__(self, other: Any) -> Self: ...
+    def sub(
+        self,
+        other: num | ListLike | DataFrame,
+        axis: Axis | None = ...,
+        level: Level | None = ...,
+        fill_value: float | None = None,
+    ) -> Self: ...
+    def __rsub__(self, other: Any) -> Self: ...
+    def rsub(
+        self,
+        other,
+        axis: Axis = ...,
+        level: Level | None = ...,
+        fill_value: float | None = None,
+    ) -> Self: ...
+    def __mul__(self, other: Any) -> Self: ...
+    def __rmul__(self, other: Any) -> Self: ...
     @final
     def add_prefix(self, prefix: _str, axis: Axis | None = None) -> Self: ...
     @final
@@ -2222,13 +2251,6 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
         min_count: int = 0,
         **kwargs: Any,
     ) -> Series: ...
-    def radd(
-        self,
-        other,
-        axis: Axis = "columns",
-        level: Level | None = None,
-        fill_value: float | None = None,
-    ) -> Self: ...
     @final
     def rank(
         self,
@@ -2351,13 +2373,6 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
         level: Level | None = ...,
         fill_value: float | None = None,
     ) -> Self: ...
-    def rsub(
-        self,
-        other,
-        axis: Axis = ...,
-        level: Level | None = ...,
-        fill_value: float | None = None,
-    ) -> Self: ...
     def rtruediv(
         self,
         other,
@@ -2403,20 +2418,6 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
         numeric_only: _bool = False,
         **kwargs: Any,
     ) -> Series: ...
-    def sub(
-        self,
-        other: num | ListLike | DataFrame,
-        axis: Axis | None = ...,
-        level: Level | None = ...,
-        fill_value: float | None = None,
-    ) -> Self: ...
-    def subtract(
-        self,
-        other: num | ListLike | DataFrame,
-        axis: Axis | None = ...,
-        level: Level | None = ...,
-        fill_value: float | None = None,
-    ) -> Self: ...
     def sum(
         self,
         axis: Axis = 0,

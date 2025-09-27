@@ -32,6 +32,11 @@ class BisectState:
     """Manages the state of a bisect session."""
 
     def __init__(self, repo: Repo) -> None:
+        """Initialize BisectState.
+
+        Args:
+            repo: Repository to perform bisect on
+        """
         self.repo = repo
         self._bisect_dir = os.path.join(repo.controldir(), "BISECT_START")
 
@@ -44,7 +49,7 @@ class BisectState:
         self,
         bad: Optional[bytes] = None,
         good: Optional[list[bytes]] = None,
-        paths: Optional[list[str]] = None,
+        paths: Optional[list[bytes]] = None,
         no_checkout: bool = False,
         term_bad: str = "bad",
         term_good: str = "good",
@@ -98,7 +103,9 @@ class BisectState:
         names_file = os.path.join(self.repo.controldir(), "BISECT_NAMES")
         with open(names_file, "w") as f:
             if paths:
-                f.write("\n".join(paths) + "\n")
+                f.write(
+                    "\n".join(path.decode("utf-8", "replace") for path in paths) + "\n"
+                )
             else:
                 f.write("\n")
 
@@ -408,7 +415,8 @@ class BisectState:
         obj = self.repo.object_store[sha]
         if isinstance(obj, Commit):
             message = obj.message.decode("utf-8", errors="replace")
-            return message.split("\n")[0]
+            lines = message.split("\n")
+            return lines[0] if lines else ""
         return ""
 
     def _append_to_log(self, line: str) -> None:

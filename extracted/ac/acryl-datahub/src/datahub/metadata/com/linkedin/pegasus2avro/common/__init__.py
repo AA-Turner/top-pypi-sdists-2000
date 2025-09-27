@@ -45,6 +45,7 @@ from .....schema_classes import InputFieldClass
 from .....schema_classes import InputFieldsClass
 from .....schema_classes import InstitutionalMemoryClass
 from .....schema_classes import InstitutionalMemoryMetadataClass
+from .....schema_classes import InstitutionalMemoryMetadataSettingsClass
 from .....schema_classes import MLFeatureDataTypeClass
 from .....schema_classes import MediaClass
 from .....schema_classes import MediaTypeClass
@@ -111,6 +112,7 @@ InputField = InputFieldClass
 InputFields = InputFieldsClass
 InstitutionalMemory = InstitutionalMemoryClass
 InstitutionalMemoryMetadata = InstitutionalMemoryMetadataClass
+InstitutionalMemoryMetadataSettings = InstitutionalMemoryMetadataSettingsClass
 MLFeatureDataType = MLFeatureDataTypeClass
 Media = MediaClass
 MediaType = MediaTypeClass

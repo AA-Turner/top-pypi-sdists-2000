@@ -19,6 +19,19 @@
 # License, Version 2.0.
 #
 
+"""Git Large File Storage (LFS) support.
+
+This module provides support for Git LFS, which is a Git extension for
+versioning large files. It replaces large files with text pointers inside Git,
+while storing the file contents on a remote server.
+
+Key components:
+- LFS pointer file parsing and creation
+- LFS object storage and retrieval
+- HTTP client for LFS server communication
+- Integration with dulwich repositories
+"""
+
 import hashlib
 import json
 import logging
@@ -30,7 +43,11 @@ from typing import TYPE_CHECKING, BinaryIO, Optional, Union
 from urllib.parse import urljoin, urlparse
 from urllib.request import Request, urlopen
 
+logger = logging.getLogger(__name__)
+
 if TYPE_CHECKING:
+    import urllib3
+
     from .config import Config
     from .repo import Repo
 
@@ -76,10 +93,12 @@ class LFSStore:
     """Stores objects on disk, indexed by SHA256."""
 
     def __init__(self, path: str) -> None:
+        """Initialize LFSStore."""
         self.path = path
 
     @classmethod
     def create(cls, lfs_dir: str) -> "LFSStore":
+        """Create a new LFS store."""
         if not os.path.isdir(lfs_dir):
             os.mkdir(lfs_dir)
         tmp_dir = os.path.join(lfs_dir, "tmp")
@@ -92,6 +111,7 @@ class LFSStore:
 
     @classmethod
     def from_repo(cls, repo: "Repo", create: bool = False) -> "LFSStore":
+        """Create LFS store from repository."""
         lfs_dir = os.path.join(repo.controldir(), "lfs")
         if create:
             return cls.create(lfs_dir)
@@ -99,6 +119,7 @@ class LFSStore:
 
     @classmethod
     def from_controldir(cls, controldir: str, create: bool = False) -> "LFSStore":
+        """Create LFS store from control directory."""
         lfs_dir = os.path.join(controldir, "lfs")
         if create:
             return cls.create(lfs_dir)
@@ -119,30 +140,44 @@ class LFSStore:
 
         Returns: object SHA
         """
+        # First pass: compute SHA256 and collect data
         sha = hashlib.sha256()
+        data_chunks = []
+        for chunk in chunks:
+            sha.update(chunk)
+            data_chunks.append(chunk)
+
+        sha_hex = sha.hexdigest()
+        path = self._sha_path(sha_hex)
+
+        # If object already exists, no need to write
+        if os.path.exists(path):
+            return sha_hex
+
+        # Object doesn't exist, write it
+        if not os.path.exists(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+
         tmpdir = os.path.join(self.path, "tmp")
         with tempfile.NamedTemporaryFile(dir=tmpdir, mode="wb", delete=False) as f:
-            for chunk in chunks:
-                sha.update(chunk)
+            for chunk in data_chunks:
                 f.write(chunk)
             f.flush()
             tmppath = f.name
-        path = self._sha_path(sha.hexdigest())
-        if not os.path.exists(os.path.dirname(path)):
-            os.makedirs(os.path.dirname(path))
 
         # Handle concurrent writes - if file already exists, just remove temp file
         if os.path.exists(path):
             os.remove(tmppath)
         else:
             os.rename(tmppath, path)
-        return sha.hexdigest()
+        return sha_hex
 
 
 class LFSPointer:
     """Represents an LFS pointer file."""
 
     def __init__(self, oid: str, size: int) -> None:
+        """Initialize LFSPointer."""
         self.oid = oid
         self.size = size
 
@@ -211,6 +246,7 @@ class LFSFilterDriver:
     def __init__(
         self, lfs_store: "LFSStore", config: Optional["Config"] = None
     ) -> None:
+        """Initialize LFSFilterDriver."""
         self.lfs_store = lfs_store
         self.config = config
 
@@ -251,7 +287,7 @@ class LFSFilterDriver:
                 return content
             except LFSError as e:
                 # Download failed, fall back to returning pointer
-                logging.warning("LFS object download failed for %s: %s", pointer.oid, e)
+                logger.warning("LFS object download failed for %s: %s", pointer.oid, e)
 
                 # Return pointer as-is when object is missing and download failed
                 return data
@@ -288,8 +324,17 @@ class LFSFilterDriver:
 
         return content
 
+    def cleanup(self) -> None:
+        """Clean up any resources held by this filter driver."""
+        # LFSFilterDriver doesn't hold any resources that need cleanup
 
-def _get_lfs_user_agent(config):
+    def reuse(self, config, filter_name: str) -> bool:
+        """Check if this filter driver should be reused with the given configuration."""
+        # LFSFilterDriver is stateless and lightweight, no need to cache
+        return False
+
+
+def _get_lfs_user_agent(config: Optional["Config"]) -> str:
     """Get User-Agent string for LFS requests, respecting git config."""
     try:
         if config:
@@ -317,7 +362,7 @@ class LFSClient:
         """
         self._base_url = url.rstrip("/") + "/"  # Ensure trailing slash for urljoin
         self.config = config
-        self._pool_manager = None
+        self._pool_manager: Optional[urllib3.PoolManager] = None
 
     @classmethod
     def from_config(cls, config: "Config") -> Optional["LFSClient"]:
@@ -365,12 +410,12 @@ class LFSClient:
         """Get the LFS server URL without trailing slash."""
         return self._base_url.rstrip("/")
 
-    def _get_pool_manager(self):
+    def _get_pool_manager(self) -> "urllib3.PoolManager":
         """Get urllib3 pool manager with git config applied."""
         if self._pool_manager is None:
             from dulwich.client import default_urllib3_manager
 
-            self._pool_manager = default_urllib3_manager(self.config)
+            self._pool_manager = default_urllib3_manager(self.config)  # type: ignore[assignment]
         return self._pool_manager
 
     def _make_request(
@@ -397,7 +442,7 @@ class LFSClient:
             raise ValueError(
                 f"HTTP {response.status}: {response.data.decode('utf-8', errors='ignore')}"
             )
-        return response.data
+        return response.data  # type: ignore[return-value]
 
     def batch(
         self,
@@ -513,7 +558,7 @@ class LFSClient:
         if actual_oid != oid:
             raise LFSError(f"Downloaded OID {actual_oid} != expected {oid}")
 
-        return content
+        return content  # type: ignore[return-value]
 
     def upload(
         self, oid: str, size: int, content: bytes, ref: Optional[str] = None

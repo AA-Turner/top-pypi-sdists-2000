@@ -39,8 +39,7 @@ class BlobNotFoundError(Exception):
 
 
 def determine_included_paths(index: Index, lines: list[str], cone: bool) -> set[str]:
-    """Determine which paths in the index should be included based on either
-    a full-pattern match or a cone-mode approach.
+    """Determine which paths in the index should be included based on either a full-pattern match or a cone-mode approach.
 
     Args:
       index: An Index object containing the repository's index.
@@ -165,10 +164,16 @@ def apply_included_paths(
             blob_obj = repo.object_store[index_entry.sha]
         except KeyError:
             return True
-        norm_data = normalizer.checkin_normalize(disk_data, full_path)
+        # Create a temporary blob for normalization
+        temp_blob = Blob()
+        temp_blob.data = disk_data
+        norm_blob = normalizer.checkin_normalize(
+            temp_blob, os.path.relpath(full_path, repo.path).encode()
+        )
+        norm_data = norm_blob.data
         if not isinstance(blob_obj, Blob):
             return True
-        return norm_data != blob_obj.data
+        return bool(norm_data != blob_obj.data)
 
     # 1) Update skip-worktree bits
 

@@ -1,22 +1,22 @@
 """Git garbage collection implementation."""
 
 import collections
+import logging
 import os
 import time
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Callable, Optional
 
 from dulwich.object_store import (
     BaseObjectStore,
     DiskObjectStore,
-    PackBasedObjectStore,
 )
 from dulwich.objects import Commit, ObjectID, Tag, Tree
 from dulwich.refs import RefsContainer
 
 if TYPE_CHECKING:
     from .config import Config
-    from .repo import BaseRepo
+    from .repo import BaseRepo, Repo
 
 
 DEFAULT_GC_AUTO = 6700
@@ -39,7 +39,7 @@ def find_reachable_objects(
     object_store: BaseObjectStore,
     refs_container: RefsContainer,
     include_reflogs: bool = True,
-    progress=None,
+    progress: Optional[Callable[[str], None]] = None,
 ) -> set[bytes]:
     """Find all reachable objects in the repository.
 
@@ -112,7 +112,7 @@ def find_unreachable_objects(
     object_store: BaseObjectStore,
     refs_container: RefsContainer,
     include_reflogs: bool = True,
-    progress=None,
+    progress: Optional[Callable[[str], None]] = None,
 ) -> set[bytes]:
     """Find all unreachable objects in the repository.
 
@@ -138,11 +138,11 @@ def find_unreachable_objects(
 
 
 def prune_unreachable_objects(
-    object_store: PackBasedObjectStore,
+    object_store: DiskObjectStore,
     refs_container: RefsContainer,
     grace_period: Optional[int] = None,
     dry_run: bool = False,
-    progress=None,
+    progress: Optional[Callable[[str], None]] = None,
 ) -> tuple[set[bytes], int]:
     """Remove unreachable objects from the repository.
 
@@ -206,13 +206,13 @@ def prune_unreachable_objects(
 
 
 def garbage_collect(
-    repo,
+    repo: "Repo",
     auto: bool = False,
     aggressive: bool = False,
     prune: bool = True,
     grace_period: Optional[int] = 1209600,  # 2 weeks default
     dry_run: bool = False,
-    progress=None,
+    progress: Optional[Callable[[str], None]] = None,
 ) -> GCStats:
     """Run garbage collection on a repository.
 
@@ -293,10 +293,10 @@ def garbage_collect(
     if not dry_run:
         if prune and unreachable_to_prune:
             # Repack excluding unreachable objects
-            object_store.repack(exclude=unreachable_to_prune)
+            object_store.repack(exclude=unreachable_to_prune, progress=progress)
         else:
             # Normal repack
-            object_store.repack()
+            object_store.repack(progress=progress)
 
     # Prune orphaned temporary files
     if progress:
@@ -368,12 +368,15 @@ def should_run_gc(repo: "BaseRepo", config: Optional["Config"] = None) -> bool:
     return False
 
 
-def maybe_auto_gc(repo: "BaseRepo", config: Optional["Config"] = None) -> bool:
+def maybe_auto_gc(
+    repo: "Repo", config: Optional["Config"] = None, progress: Optional[Callable] = None
+) -> bool:
     """Run automatic garbage collection if needed.
 
     Args:
         repo: Repository to potentially GC
         config: Configuration to use (defaults to repo config)
+        progress: Optional progress reporting callback
 
     Returns:
         True if GC was run, False otherwise
@@ -384,7 +387,7 @@ def maybe_auto_gc(repo: "BaseRepo", config: Optional["Config"] = None) -> bool:
     # Check for gc.log file - only for disk-based repos
     if not hasattr(repo, "controldir"):
         # For non-disk repos, just run GC without gc.log handling
-        garbage_collect(repo, auto=True)
+        garbage_collect(repo, auto=True, progress=progress)
         return True
 
     gc_log_path = os.path.join(repo.controldir(), "gc.log")
@@ -410,7 +413,9 @@ def maybe_auto_gc(repo: "BaseRepo", config: Optional["Config"] = None) -> bool:
         if time.time() - stat_info.st_mtime < expiry_seconds:
             # gc.log exists and is not expired - skip GC
             with open(gc_log_path, "rb") as f:
-                print(f.read().decode("utf-8", errors="replace"))
+                logging.info(
+                    "gc.log content: %s", f.read().decode("utf-8", errors="replace")
+                )
             return False
 
     # TODO: Support gc.autoDetach to run in background
@@ -418,7 +423,7 @@ def maybe_auto_gc(repo: "BaseRepo", config: Optional["Config"] = None) -> bool:
 
     try:
         # Run GC with auto=True flag
-        garbage_collect(repo, auto=True)
+        garbage_collect(repo, auto=True, progress=progress)
 
         # Remove gc.log on successful completion
         if os.path.exists(gc_log_path):

@@ -6888,6 +6888,16 @@ class ParseJSON(Func):
     arg_types = {"this": True, "expression": False, "safe": False}
 
 
+# Snowflake: https://docs.snowflake.com/en/sql-reference/functions/parse_url
+# Databricks: https://docs.databricks.com/aws/en/sql/language-manual/functions/parse_url
+class ParseUrl(Func):
+    arg_types = {"this": True, "part_to_extract": False, "key": False, "permissive": False}
+
+
+class ParseIp(Func):
+    arg_types = {"this": True, "type": True, "permissive": False}
+
+
 class ParseTime(Func):
     arg_types = {"this": True, "format": True}
 
@@ -6916,6 +6926,10 @@ class Reverse(Func):
 class Length(Func):
     arg_types = {"this": True, "binary": False, "encoding": False}
     _sql_names = ["LENGTH", "LEN", "CHAR_LENGTH", "CHARACTER_LENGTH"]
+
+
+class RtrimmedLength(Func):
+    pass
 
 
 class BitLength(Func):

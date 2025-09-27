@@ -27,8 +27,10 @@ from typing import NoReturn
 from dulwich.object_store import MemoryObjectStore
 from dulwich.objects import S_IFGITLINK, Blob, Commit, Tree
 from dulwich.patch import (
+    DiffAlgorithmNotAvailable,
     get_summary,
     git_am_patch_split,
+    unified_diff_with_algorithm,
     write_blob_diff,
     write_commit_patch,
     write_object_diff,
@@ -154,7 +156,7 @@ Subject:  [Dulwich-users] [PATCH] Added unit tests for
 -- 
 1.7.0.4
 """
-        c, diff, version = git_am_patch_split(BytesIO(text), "utf-8")
+        c, _diff, _version = git_am_patch_split(BytesIO(text), "utf-8")
         self.assertEqual(
             b"""\
 Added unit tests for dulwich.object_store.tree_lookup_path.
@@ -186,7 +188,7 @@ From: Jelmer Vernooij <jelmer@debian.org>
 -- 
 1.7.0.4
 """
-        c, diff, version = git_am_patch_split(BytesIO(text), "utf-8")
+        c, _diff, _version = git_am_patch_split(BytesIO(text), "utf-8")
         self.assertEqual(b"Jelmer Vernooij <jelmer@debian.org>", c.author)
         self.assertEqual(
             b"""\
@@ -215,7 +217,7 @@ From: Jelmer Vernooij <jelmer@debian.org>
  mode change 100755 => 100644 pixmaps/prey.ico
 
 """
-        c, diff, version = git_am_patch_split(BytesIO(text), "utf-8")
+        _c, _diff, version = git_am_patch_split(BytesIO(text), "utf-8")
         self.assertEqual(None, version)
 
     def test_extract_mercurial(self) -> NoReturn:
@@ -256,7 +258,7 @@ Unsubscribe : https://launchpad.net/~dulwich-users
 More help   : https://help.launchpad.net/ListHelp
 
 """
-        c, diff, version = git_am_patch_split(BytesIO(text))
+        _c, diff, version = git_am_patch_split(BytesIO(text))
         self.assertEqual(expected_diff, diff)
         self.assertEqual(None, version)
 
@@ -635,3 +637,163 @@ class GetSummaryTests(TestCase):
         c.message = b"This is the first line\nAnd this is the second line.\n"
         c.tree = Tree().id
         self.assertEqual("This-is-the-first-line", get_summary(c))
+
+
+class DiffAlgorithmTests(TestCase):
+    """Tests for diff algorithm selection."""
+
+    def test_unified_diff_with_myers(self) -> None:
+        """Test unified_diff_with_algorithm with default myers algorithm."""
+        a = [b"line1\n", b"line2\n", b"line3\n"]
+        b = [b"line1\n", b"line2 modified\n", b"line3\n"]
+
+        result = list(
+            unified_diff_with_algorithm(
+                a, b, fromfile=b"a.txt", tofile=b"b.txt", algorithm="myers"
+            )
+        )
+
+        # Should contain diff headers and the change
+        self.assertTrue(any(b"---" in line for line in result))
+        self.assertTrue(any(b"+++" in line for line in result))
+        self.assertTrue(any(b"-line2" in line for line in result))
+        self.assertTrue(any(b"+line2 modified" in line for line in result))
+
+    def test_unified_diff_with_patience_not_available(self) -> None:
+        """Test that DiffAlgorithmNotAvailable is raised when patience not available."""
+        # Temporarily mock _get_sequence_matcher to simulate ImportError
+        import dulwich.patch
+
+        original = dulwich.patch._get_sequence_matcher
+
+        def mock_get_sequence_matcher(algorithm, a, b):
+            if algorithm == "patience":
+                raise DiffAlgorithmNotAvailable(
+                    "patience", "Install with: pip install 'dulwich[patiencediff]'"
+                )
+            return original(algorithm, a, b)
+
+        try:
+            dulwich.patch._get_sequence_matcher = mock_get_sequence_matcher
+
+            a = [b"line1\n", b"line2\n", b"line3\n"]
+            b = [b"line1\n", b"line2 modified\n", b"line3\n"]
+
+            with self.assertRaises(DiffAlgorithmNotAvailable) as cm:
+                list(
+                    unified_diff_with_algorithm(
+                        a, b, fromfile=b"a.txt", tofile=b"b.txt", algorithm="patience"
+                    )
+                )
+
+            self.assertIn("patience", str(cm.exception))
+            self.assertIn("pip install", str(cm.exception))
+        finally:
+            dulwich.patch._get_sequence_matcher = original
+
+
+class PatienceDiffTests(TestCase):
+    """Tests for patience diff algorithm support."""
+
+    def setUp(self) -> None:
+        super().setUp()
+        # Skip all patience diff tests if patiencediff is not available
+        try:
+            import patiencediff  # noqa: F401
+        except ImportError:
+            raise SkipTest("patiencediff not available")
+
+    def test_unified_diff_with_patience_available(self) -> None:
+        """Test unified_diff_with_algorithm with patience if available."""
+        a = [b"line1\n", b"line2\n", b"line3\n"]
+        b = [b"line1\n", b"line2 modified\n", b"line3\n"]
+
+        result = list(
+            unified_diff_with_algorithm(
+                a, b, fromfile=b"a.txt", tofile=b"b.txt", algorithm="patience"
+            )
+        )
+
+        # Should contain diff headers and the change
+        self.assertTrue(any(b"---" in line for line in result))
+        self.assertTrue(any(b"+++" in line for line in result))
+        self.assertTrue(any(b"-line2" in line for line in result))
+        self.assertTrue(any(b"+line2 modified" in line for line in result))
+
+    def test_unified_diff_with_patience_not_available(self) -> None:
+        """Test that DiffAlgorithmNotAvailable is raised when patience not available."""
+        # Temporarily mock _get_sequence_matcher to simulate ImportError
+        import dulwich.patch
+
+        original = dulwich.patch._get_sequence_matcher
+
+        def mock_get_sequence_matcher(algorithm, a, b):
+            if algorithm == "patience":
+                raise DiffAlgorithmNotAvailable(
+                    "patience", "Install with: pip install 'dulwich[patiencediff]'"
+                )
+            return original(algorithm, a, b)
+
+        try:
+            dulwich.patch._get_sequence_matcher = mock_get_sequence_matcher
+
+            a = [b"line1\n", b"line2\n", b"line3\n"]
+            b = [b"line1\n", b"line2 modified\n", b"line3\n"]
+
+            with self.assertRaises(DiffAlgorithmNotAvailable) as cm:
+                list(
+                    unified_diff_with_algorithm(
+                        a, b, fromfile=b"a.txt", tofile=b"b.txt", algorithm="patience"
+                    )
+                )
+
+            self.assertIn("patience", str(cm.exception))
+            self.assertIn("pip install", str(cm.exception))
+        finally:
+            dulwich.patch._get_sequence_matcher = original
+
+    def test_write_blob_diff_with_patience(self) -> None:
+        """Test write_blob_diff with patience algorithm if available."""
+        f = BytesIO()
+        old_blob = Blob()
+        old_blob.data = b"line1\nline2\nline3\n"
+        new_blob = Blob()
+        new_blob.data = b"line1\nline2 modified\nline3\n"
+
+        write_blob_diff(
+            f,
+            (b"file.txt", 0o100644, old_blob),
+            (b"file.txt", 0o100644, new_blob),
+            diff_algorithm="patience",
+        )
+
+        diff = f.getvalue()
+        self.assertIn(b"diff --git", diff)
+        self.assertIn(b"-line2", diff)
+        self.assertIn(b"+line2 modified", diff)
+
+    def test_write_object_diff_with_patience(self) -> None:
+        """Test write_object_diff with patience algorithm if available."""
+        f = BytesIO()
+        store = MemoryObjectStore()
+
+        old_blob = Blob()
+        old_blob.data = b"line1\nline2\nline3\n"
+        store.add_object(old_blob)
+
+        new_blob = Blob()
+        new_blob.data = b"line1\nline2 modified\nline3\n"
+        store.add_object(new_blob)
+
+        write_object_diff(
+            f,
+            store,
+            (b"file.txt", 0o100644, old_blob.id),
+            (b"file.txt", 0o100644, new_blob.id),
+            diff_algorithm="patience",
+        )
+
+        diff = f.getvalue()
+        self.assertIn(b"diff --git", diff)
+        self.assertIn(b"-line2", diff)
+        self.assertIn(b"+line2 modified", diff)

@@ -24,16 +24,26 @@
 from typing import TYPE_CHECKING, Optional, Union
 
 from .objects import Commit, ShaFile, Tag, Tree
+from .repo import BaseRepo
 
 if TYPE_CHECKING:
+    from .object_store import BaseObjectStore
     from .refs import Ref, RefsContainer
     from .repo import Repo
 
 
 def to_bytes(text: Union[str, bytes]) -> bytes:
-    if getattr(text, "encode", None) is not None:
-        text = text.encode("ascii")  # type: ignore
-    return text  # type: ignore
+    """Convert text to bytes.
+
+    Args:
+      text: Text to convert (str or bytes)
+
+    Returns:
+      Bytes representation of text
+    """
+    if isinstance(text, str):
+        return text.encode("ascii")
+    return text
 
 
 def _resolve_object(repo: "Repo", ref: bytes) -> "ShaFile":
@@ -81,7 +91,7 @@ def parse_object(repo: "Repo", objectish: Union[bytes, str]) -> "ShaFile":
         if not rev:
             raise NotImplementedError("Index path lookup (:path) not yet supported")
         tree = parse_tree(repo, rev)
-        mode, sha = tree.lookup_path(repo.object_store.__getitem__, path)
+        _mode, sha = tree.lookup_path(repo.object_store.__getitem__, path)
         return repo[sha]
 
     # Handle @{N} - reflog lookup
@@ -105,7 +115,7 @@ def parse_object(repo: "Repo", objectish: Union[bytes, str]) -> "ShaFile":
     if objectish.endswith(b"^{}"):
         obj = _resolve_object(repo, objectish[:-3])
         while isinstance(obj, Tag):
-            obj_type, obj_sha = obj.object
+            _obj_type, obj_sha = obj.object
             obj = repo[obj_sha]
         return obj
 
@@ -127,7 +137,9 @@ def parse_object(repo: "Repo", objectish: Union[bytes, str]) -> "ShaFile":
                         raise ValueError(
                             f"Commit {commit.id.decode('ascii', 'replace')} has no parents"
                         )
-                    commit = repo[commit.parents[0]]
+                    parent_obj = repo[commit.parents[0]]
+                    assert isinstance(parent_obj, Commit)
+                    commit = parent_obj
                 obj = commit
             else:  # sep == b"^"
                 # Get N-th parent (or commit itself if N=0)
@@ -148,11 +160,13 @@ def parse_object(repo: "Repo", objectish: Union[bytes, str]) -> "ShaFile":
     return _resolve_object(repo, objectish)
 
 
-def parse_tree(repo: "Repo", treeish: Union[bytes, str, Tree, Commit, Tag]) -> "Tree":
+def parse_tree(
+    repo: "BaseRepo", treeish: Union[bytes, str, Tree, Commit, Tag]
+) -> "Tree":
     """Parse a string referring to a tree.
 
     Args:
-      repo: A `Repo` object
+      repo: A repository object
       treeish: A string referring to a tree, or a Tree, Commit, or Tag object
     Returns: A Tree object
     Raises:
@@ -164,7 +178,9 @@ def parse_tree(repo: "Repo", treeish: Union[bytes, str, Tree, Commit, Tag]) -> "
 
     # If it's a Commit, return its tree
     if isinstance(treeish, Commit):
-        return repo[treeish.tree]
+        tree = repo[treeish.tree]
+        assert isinstance(tree, Tree)
+        return tree
 
     # For Tag objects or strings, use the existing logic
     if isinstance(treeish, Tag):
@@ -172,7 +188,7 @@ def parse_tree(repo: "Repo", treeish: Union[bytes, str, Tree, Commit, Tag]) -> "
     else:
         treeish = to_bytes(treeish)
     try:
-        treeish = parse_ref(repo, treeish)
+        treeish = parse_ref(repo.refs, treeish)
     except KeyError:  # treeish is commit sha
         pass
     try:
@@ -181,15 +197,21 @@ def parse_tree(repo: "Repo", treeish: Union[bytes, str, Tree, Commit, Tag]) -> "
         # Try parsing as commit (handles short hashes)
         try:
             commit = parse_commit(repo, treeish)
-            return repo[commit.tree]
+            assert isinstance(commit, Commit)
+            tree = repo[commit.tree]
+            assert isinstance(tree, Tree)
+            return tree
         except KeyError:
             raise KeyError(treeish)
-    if o.type_name == b"commit":
-        return repo[o.tree]
-    elif o.type_name == b"tag":
+    if isinstance(o, Commit):
+        tree = repo[o.tree]
+        assert isinstance(tree, Tree)
+        return tree
+    elif isinstance(o, Tag):
         # Tag handling - dereference and recurse
-        obj_type, obj_sha = o.object
+        _obj_type, obj_sha = o.object
         return parse_tree(repo, obj_sha)
+    assert isinstance(o, Tree)
     return o
 
 
@@ -232,6 +254,7 @@ def parse_reftuple(
       lh_container: A RefsContainer object
       rh_container: A RefsContainer object
       refspec: A string
+      force: Whether to force the operation
     Returns: A tuple with left and right ref
     Raises:
       KeyError: If one of the refs can not be found
@@ -267,7 +290,7 @@ def parse_reftuples(
     rh_container: Union["Repo", "RefsContainer"],
     refspecs: Union[bytes, list[bytes]],
     force: bool = False,
-):
+) -> list[tuple[Optional["Ref"], Optional["Ref"], bool]]:
     """Parse a list of reftuple specs to a list of reftuples.
 
     Args:
@@ -288,7 +311,10 @@ def parse_reftuples(
     return ret
 
 
-def parse_refs(container, refspecs):
+def parse_refs(
+    container: Union["Repo", "RefsContainer"],
+    refspecs: Union[bytes, str, list[Union[bytes, str]]],
+) -> list["Ref"]:
     """Parse a list of refspecs to a list of refs.
 
     Args:
@@ -343,12 +369,20 @@ def parse_commit_range(
 class AmbiguousShortId(Exception):
     """The short id is ambiguous."""
 
-    def __init__(self, prefix, options) -> None:
+    def __init__(self, prefix: bytes, options: list[ShaFile]) -> None:
+        """Initialize AmbiguousShortId.
+
+        Args:
+          prefix: The ambiguous prefix
+          options: List of matching objects
+        """
         self.prefix = prefix
         self.options = options
 
 
-def scan_for_short_id(object_store, prefix, tp):
+def scan_for_short_id(
+    object_store: "BaseObjectStore", prefix: bytes, tp: type[ShaFile]
+) -> ShaFile:
     """Scan an object store for a short id."""
     ret = []
     for object_id in object_store.iter_prefix(prefix):
@@ -362,11 +396,13 @@ def scan_for_short_id(object_store, prefix, tp):
     raise AmbiguousShortId(prefix, ret)
 
 
-def parse_commit(repo: "Repo", committish: Union[str, bytes, Commit, Tag]) -> "Commit":
+def parse_commit(
+    repo: "BaseRepo", committish: Union[str, bytes, Commit, Tag]
+) -> "Commit":
     """Parse a string referring to a single commit.
 
     Args:
-      repo: A` Repo` object
+      repo: A repository object
       committish: A string referring to a single commit, or a Commit or Tag object.
     Returns: A Commit object
     Raises:
@@ -374,17 +410,19 @@ def parse_commit(repo: "Repo", committish: Union[str, bytes, Commit, Tag]) -> "C
       ValueError: If the range can not be parsed
     """
 
-    def dereference_tag(obj):
+    def dereference_tag(obj: ShaFile) -> "Commit":
         """Follow tag references until we reach a non-tag object."""
         while isinstance(obj, Tag):
-            obj_type, obj_sha = obj.object
+            _obj_type, obj_sha = obj.object
             try:
                 obj = repo.object_store[obj_sha]
             except KeyError:
                 # Tag points to a missing object
                 raise KeyError(obj_sha)
         if not isinstance(obj, Commit):
-            raise ValueError(f"Expected commit, got {obj.type_name}")
+            raise ValueError(
+                f"Expected commit, got {obj.type_name.decode('ascii', 'replace')}"
+            )
         return obj
 
     # If already a Commit object, return it directly
@@ -403,7 +441,7 @@ def parse_commit(repo: "Repo", committish: Union[str, bytes, Commit, Tag]) -> "C
     else:
         return dereference_tag(obj)
     try:
-        obj = repo[parse_ref(repo, committish)]
+        obj = repo[parse_ref(repo.refs, committish)]
     except KeyError:
         pass
     else:

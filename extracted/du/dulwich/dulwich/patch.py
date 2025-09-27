@@ -30,6 +30,7 @@ import time
 from collections.abc import Generator
 from difflib import SequenceMatcher
 from typing import (
+    IO,
     TYPE_CHECKING,
     BinaryIO,
     Optional,
@@ -46,9 +47,33 @@ from .objects import S_ISGITLINK, Blob, Commit
 
 FIRST_FEW_BYTES = 8000
 
+DEFAULT_DIFF_ALGORITHM = "myers"
+
+
+class DiffAlgorithmNotAvailable(Exception):
+    """Raised when a requested diff algorithm is not available."""
+
+    def __init__(self, algorithm: str, install_hint: str = "") -> None:
+        """Initialize exception.
+
+        Args:
+            algorithm: Name of the unavailable algorithm
+            install_hint: Optional installation hint
+        """
+        self.algorithm = algorithm
+        self.install_hint = install_hint
+        if install_hint:
+            super().__init__(
+                f"Diff algorithm '{algorithm}' requested but not available. {install_hint}"
+            )
+        else:
+            super().__init__(
+                f"Diff algorithm '{algorithm}' requested but not available."
+            )
+
 
 def write_commit_patch(
-    f: BinaryIO,
+    f: IO[bytes],
     commit: "Commit",
     contents: Union[str, bytes],
     progress: tuple[int, int],
@@ -58,8 +83,12 @@ def write_commit_patch(
     """Write a individual file patch.
 
     Args:
+      f: File-like object to write to
       commit: Commit object
+      contents: Contents of the patch
       progress: tuple with current patch number and total.
+      version: Version string to include in patch header
+      encoding: Encoding to use for the patch
 
     Returns:
       tuple with filename and contents
@@ -118,7 +147,8 @@ def get_summary(commit: "Commit") -> str:
     Returns: Summary string
     """
     decoded = commit.message.decode(errors="replace")
-    return decoded.splitlines()[0].replace(" ", "-")
+    lines = decoded.splitlines()
+    return lines[0].replace(" ", "-") if lines else ""
 
 
 #  Unified Diff
@@ -146,13 +176,113 @@ def unified_diff(
     tree_encoding: str = "utf-8",
     output_encoding: str = "utf-8",
 ) -> Generator[bytes, None, None]:
-    """difflib.unified_diff that can detect "No newline at end of file" as
-    original "git diff" does.
+    """difflib.unified_diff that can detect "No newline at end of file" as original "git diff" does.
 
     Based on the same function in Python2.7 difflib.py
     """
     started = False
     for group in SequenceMatcher(a=a, b=b).get_grouped_opcodes(n):
+        if not started:
+            started = True
+            fromdate = f"\t{fromfiledate}" if fromfiledate else ""
+            todate = f"\t{tofiledate}" if tofiledate else ""
+            yield f"--- {fromfile.decode(tree_encoding)}{fromdate}{lineterm}".encode(
+                output_encoding
+            )
+            yield f"+++ {tofile.decode(tree_encoding)}{todate}{lineterm}".encode(
+                output_encoding
+            )
+
+        first, last = group[0], group[-1]
+        file1_range = _format_range_unified(first[1], last[2])
+        file2_range = _format_range_unified(first[3], last[4])
+        yield f"@@ -{file1_range} +{file2_range} @@{lineterm}".encode(output_encoding)
+
+        for tag, i1, i2, j1, j2 in group:
+            if tag == "equal":
+                for line in a[i1:i2]:
+                    yield b" " + line
+                continue
+            if tag in ("replace", "delete"):
+                for line in a[i1:i2]:
+                    if not line[-1:] == b"\n":
+                        line += b"\n\\ No newline at end of file\n"
+                    yield b"-" + line
+            if tag in ("replace", "insert"):
+                for line in b[j1:j2]:
+                    if not line[-1:] == b"\n":
+                        line += b"\n\\ No newline at end of file\n"
+                    yield b"+" + line
+
+
+def _get_sequence_matcher(algorithm: str, a: list[bytes], b: list[bytes]):
+    """Get appropriate sequence matcher for the given algorithm.
+
+    Args:
+        algorithm: Diff algorithm ("myers" or "patience")
+        a: First sequence
+        b: Second sequence
+
+    Returns:
+        Configured sequence matcher instance
+
+    Raises:
+        DiffAlgorithmNotAvailable: If patience requested but not available
+    """
+    if algorithm == "patience":
+        try:
+            from patiencediff import PatienceSequenceMatcher
+
+            return PatienceSequenceMatcher(None, a, b)
+        except ImportError:
+            raise DiffAlgorithmNotAvailable(
+                "patience", "Install with: pip install 'dulwich[patiencediff]'"
+            )
+    else:
+        return SequenceMatcher(a=a, b=b)
+
+
+def unified_diff_with_algorithm(
+    a: list[bytes],
+    b: list[bytes],
+    fromfile: bytes = b"",
+    tofile: bytes = b"",
+    fromfiledate: str = "",
+    tofiledate: str = "",
+    n: int = 3,
+    lineterm: str = "\n",
+    tree_encoding: str = "utf-8",
+    output_encoding: str = "utf-8",
+    algorithm: Optional[str] = None,
+) -> Generator[bytes, None, None]:
+    """Generate unified diff with specified algorithm.
+
+    Args:
+        a: First sequence of lines
+        b: Second sequence of lines
+        fromfile: Name of first file
+        tofile: Name of second file
+        fromfiledate: Date of first file
+        tofiledate: Date of second file
+        n: Number of context lines
+        lineterm: Line terminator
+        tree_encoding: Encoding for tree paths
+        output_encoding: Encoding for output
+        algorithm: Diff algorithm to use ("myers" or "patience")
+
+    Returns:
+        Generator yielding diff lines
+
+    Raises:
+        DiffAlgorithmNotAvailable: If patience algorithm requested but patiencediff not available
+    """
+    if algorithm is None:
+        algorithm = DEFAULT_DIFF_ALGORITHM
+
+    matcher = _get_sequence_matcher(algorithm, a, b)
+
+    started = False
+    for group in matcher.get_grouped_opcodes(n):
         if not started:
             started = True
             fromdate = f"\t{fromfiledate}" if fromfiledate else ""
@@ -196,6 +326,14 @@ def is_binary(content: bytes) -> bool:
 
 
 def shortid(hexsha: Optional[bytes]) -> bytes:
+    """Get short object ID.
+
+    Args:
+        hexsha: Full hex SHA or None
+
+    Returns:
+        7-character short ID
+    """
     if hexsha is None:
         return b"0" * 7
     else:
@@ -203,6 +341,15 @@ def shortid(hexsha: Optional[bytes]) -> bytes:
 
 
 def patch_filename(p: Optional[bytes], root: bytes) -> bytes:
+    """Generate patch filename.
+
+    Args:
+        p: Path or None
+        root: Root directory
+
+    Returns:
+        Full patch filename
+    """
     if p is None:
         return b"/dev/null"
     else:
@@ -210,11 +357,12 @@ def patch_filename(p: Optional[bytes], root: bytes) -> bytes:
 
 
 def write_object_diff(
-    f: BinaryIO,
+    f: IO[bytes],
     store: "BaseObjectStore",
     old_file: tuple[Optional[bytes], Optional[int], Optional[bytes]],
     new_file: tuple[Optional[bytes], Optional[int], Optional[bytes]],
     diff_binary: bool = False,
+    diff_algorithm: Optional[str] = None,
 ) -> None:
     """Write the diff for an object.
 
@@ -225,6 +373,7 @@ def write_object_diff(
       new_file: (path, mode, hexsha) tuple
       diff_binary: Whether to diff files even if they
         are considered binary files by is_binary().
+      diff_algorithm: Algorithm to use for diffing ("myers" or "patience")
 
     Note: the tuple elements should be None for nonexistent files
     """
@@ -234,21 +383,36 @@ def write_object_diff(
     patched_new_path = patch_filename(new_path, b"b")
 
     def content(mode: Optional[int], hexsha: Optional[bytes]) -> Blob:
-        from typing import cast
+        """Get blob content for a file.
 
+        Args:
+            mode: File mode
+            hexsha: Object SHA
+
+        Returns:
+            Blob object
+        """
         if hexsha is None:
-            return cast(Blob, Blob.from_string(b""))
+            return Blob.from_string(b"")
         elif mode is not None and S_ISGITLINK(mode):
-            return cast(Blob, Blob.from_string(b"Subproject commit " + hexsha + b"\n"))
+            return Blob.from_string(b"Subproject commit " + hexsha + b"\n")
         else:
             obj = store[hexsha]
             if isinstance(obj, Blob):
                 return obj
             else:
                 # Fallback for non-blob objects
-                return cast(Blob, Blob.from_string(obj.as_raw_string()))
+                return Blob.from_string(obj.as_raw_string())
 
     def lines(content: "Blob") -> list[bytes]:
+        """Split blob content into lines.
+
+        Args:
+            content: Blob content
+
+        Returns:
+            List of lines
+        """
         if not content:
             return []
         else:
@@ -270,11 +434,12 @@ def write_object_diff(
         f.write(binary_diff)
     else:
         f.writelines(
-            unified_diff(
+            unified_diff_with_algorithm(
                 lines(old_content),
                 lines(new_content),
                 patched_old_path,
                 patched_new_path,
+                algorithm=diff_algorithm,
             )
         )
 
@@ -318,9 +483,10 @@ def gen_diff_header(
 
 # TODO(jelmer): Support writing unicode, rather than bytes.
 def write_blob_diff(
-    f: BinaryIO,
+    f: IO[bytes],
     old_file: tuple[Optional[bytes], Optional[int], Optional["Blob"]],
     new_file: tuple[Optional[bytes], Optional[int], Optional["Blob"]],
+    diff_algorithm: Optional[str] = None,
 ) -> None:
     """Write blob diff.
 
@@ -328,6 +494,7 @@ def write_blob_diff(
       f: File-like object to write to
       old_file: (path, mode, hexsha) tuple (None if nonexisting)
       new_file: (path, mode, hexsha) tuple (None if nonexisting)
+      diff_algorithm: Algorithm to use for diffing ("myers" or "patience")
 
     Note: The use of write_object_diff is recommended over this function.
     """
@@ -337,6 +504,14 @@ def write_blob_diff(
     patched_new_path = patch_filename(new_path, b"b")
 
     def lines(blob: Optional["Blob"]) -> list[bytes]:
+        """Split blob content into lines.
+
+        Args:
+            blob: Blob object or None
+
+        Returns:
+            List of lines
+        """
         if blob is not None:
             return blob.splitlines()
         else:
@@ -352,25 +527,34 @@ def write_blob_diff(
     old_contents = lines(old_blob)
     new_contents = lines(new_blob)
     f.writelines(
-        unified_diff(old_contents, new_contents, patched_old_path, patched_new_path)
+        unified_diff_with_algorithm(
+            old_contents,
+            new_contents,
+            patched_old_path,
+            patched_new_path,
+            algorithm=diff_algorithm,
+        )
     )
 
 
 def write_tree_diff(
-    f: BinaryIO,
+    f: IO[bytes],
     store: "BaseObjectStore",
     old_tree: Optional[bytes],
     new_tree: Optional[bytes],
     diff_binary: bool = False,
+    diff_algorithm: Optional[str] = None,
 ) -> None:
     """Write tree diff.
 
     Args:
       f: File-like object to write to.
+      store: Object store to read from
       old_tree: Old tree id
       new_tree: New tree id
       diff_binary: Whether to diff files even if they
         are considered binary files by is_binary().
+      diff_algorithm: Algorithm to use for diffing ("myers" or "patience")
     """
     changes = store.tree_changes(old_tree, new_tree)
     for (oldpath, newpath), (oldmode, newmode), (oldsha, newsha) in changes:
@@ -380,6 +564,7 @@ def write_tree_diff(
             (oldpath, oldmode, oldsha),
             (newpath, newmode, newsha),
             diff_binary=diff_binary,
+            diff_algorithm=diff_algorithm,
         )
 
 

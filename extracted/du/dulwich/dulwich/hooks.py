@@ -23,6 +23,7 @@
 
 import os
 import subprocess
+from typing import Any, Callable, Optional
 
 from .errors import HookError
 
@@ -30,7 +31,7 @@ from .errors import HookError
 class Hook:
     """Generic hook object."""
 
-    def execute(self, *args):
+    def execute(self, *args: Any) -> Any:  # noqa: ANN401
         """Execute the hook with the given args.
 
         Args:
@@ -53,12 +54,12 @@ class ShellHook(Hook):
 
     def __init__(
         self,
-        name,
-        path,
-        numparam,
-        pre_exec_callback=None,
-        post_exec_callback=None,
-        cwd=None,
+        name: str,
+        path: str,
+        numparam: int,
+        pre_exec_callback: Optional[Callable[..., Any]] = None,
+        post_exec_callback: Optional[Callable[..., Any]] = None,
+        cwd: Optional[str] = None,
     ) -> None:
         """Setup shell hook definition.
 
@@ -85,7 +86,7 @@ class ShellHook(Hook):
 
         self.cwd = cwd
 
-    def execute(self, *args):
+    def execute(self, *args: Any) -> Any:  # noqa: ANN401
         """Execute the hook with given args."""
         if len(args) != self.numparam:
             raise HookError(
@@ -113,7 +114,13 @@ class ShellHook(Hook):
 class PreCommitShellHook(ShellHook):
     """pre-commit shell hook."""
 
-    def __init__(self, cwd, controldir) -> None:
+    def __init__(self, cwd: str, controldir: str) -> None:
+        """Initialize pre-commit hook.
+
+        Args:
+            cwd: Working directory for hook execution
+            controldir: Path to the git control directory (.git)
+        """
         filepath = os.path.join(controldir, "hooks", "pre-commit")
 
         ShellHook.__init__(self, "pre-commit", filepath, 0, cwd=cwd)
@@ -122,7 +129,12 @@ class PreCommitShellHook(ShellHook):
 class PostCommitShellHook(ShellHook):
     """post-commit shell hook."""
 
-    def __init__(self, controldir) -> None:
+    def __init__(self, controldir: str) -> None:
+        """Initialize post-commit hook.
+
+        Args:
+            controldir: Path to the git control directory (.git)
+        """
         filepath = os.path.join(controldir, "hooks", "post-commit")
 
         ShellHook.__init__(self, "post-commit", filepath, 0, cwd=controldir)
@@ -131,10 +143,15 @@ class PostCommitShellHook(ShellHook):
 class CommitMsgShellHook(ShellHook):
     """commit-msg shell hook."""
 
-    def __init__(self, controldir) -> None:
+    def __init__(self, controldir: str) -> None:
+        """Initialize commit-msg hook.
+
+        Args:
+            controldir: Path to the git control directory (.git)
+        """
         filepath = os.path.join(controldir, "hooks", "commit-msg")
 
-        def prepare_msg(*args):
+        def prepare_msg(*args: bytes) -> tuple[str, ...]:
             import tempfile
 
             (fd, path) = tempfile.mkstemp()
@@ -144,13 +161,14 @@ class CommitMsgShellHook(ShellHook):
 
             return (path,)
 
-        def clean_msg(success, *args):
+        def clean_msg(success: int, *args: str) -> Optional[bytes]:
             if success:
                 with open(args[0], "rb") as f:
                     new_msg = f.read()
                 os.unlink(args[0])
                 return new_msg
             os.unlink(args[0])
+            return None
 
         ShellHook.__init__(
             self, "commit-msg", filepath, 1, prepare_msg, clean_msg, controldir
@@ -160,12 +178,29 @@ class CommitMsgShellHook(ShellHook):
 class PostReceiveShellHook(ShellHook):
     """post-receive shell hook."""
 
-    def __init__(self, controldir) -> None:
+    def __init__(self, controldir: str) -> None:
+        """Initialize post-receive hook.
+
+        Args:
+            controldir: Path to the git control directory (.git)
+        """
         self.controldir = controldir
         filepath = os.path.join(controldir, "hooks", "post-receive")
         ShellHook.__init__(self, "post-receive", path=filepath, numparam=0)
 
-    def execute(self, client_refs):
+    def execute(self, client_refs: list[tuple[bytes, bytes, bytes]]) -> Optional[bytes]:
+        """Execute the post-receive hook.
+
+        Args:
+            client_refs: List of tuples containing (old_sha, new_sha, ref_name)
+                        for each updated reference
+
+        Returns:
+            Output from the hook execution or None if hook doesn't exist
+
+        Raises:
+            HookError: If hook execution fails
+        """
         # do nothing if the script doesn't exist
         if not os.path.exists(self.filepath):
             return None

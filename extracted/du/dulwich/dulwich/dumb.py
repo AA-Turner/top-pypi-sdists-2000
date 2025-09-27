@@ -24,9 +24,9 @@
 import os
 import tempfile
 import zlib
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from io import BytesIO
-from typing import Optional
+from typing import Any, Callable, Optional
 from urllib.parse import urljoin
 
 from .errors import NotGitRepository, ObjectFormatException
@@ -44,13 +44,18 @@ from .objects import (
 )
 from .pack import Pack, PackData, PackIndex, UnpackedObject, load_pack_index_file
 from .refs import Ref, read_info_refs, split_peeled_refs
-from .repo import BaseRepo
 
 
 class DumbHTTPObjectStore(BaseObjectStore):
     """Object store implementation that fetches objects over dumb HTTP."""
 
-    def __init__(self, base_url: str, http_request_func):
+    def __init__(
+        self,
+        base_url: str,
+        http_request_func: Callable[
+            [str, dict[str, str]], tuple[Any, Callable[..., bytes]]
+        ],
+    ) -> None:
         """Initialize a DumbHTTPObjectStore.
 
         Args:
@@ -62,9 +67,9 @@ class DumbHTTPObjectStore(BaseObjectStore):
         self._http_request = http_request_func
         self._packs: Optional[list[tuple[str, Optional[PackIndex]]]] = None
         self._cached_objects: dict[bytes, tuple[int, bytes]] = {}
-        self._temp_pack_dir = None
+        self._temp_pack_dir: Optional[str] = None
 
-    def _ensure_temp_pack_dir(self):
+    def _ensure_temp_pack_dir(self) -> None:
         """Ensure we have a temporary directory for storing pack files."""
         if self._temp_pack_dir is None:
             self._temp_pack_dir = tempfile.mkdtemp(prefix="dulwich-dumb-")
@@ -152,7 +157,7 @@ class DumbHTTPObjectStore(BaseObjectStore):
 
         return type_map[obj_type], content
 
-    def _load_packs(self):
+    def _load_packs(self) -> None:
         """Load the list of available packs from the remote."""
         if self._packs is not None:
             return
@@ -320,22 +325,26 @@ class DumbHTTPObjectStore(BaseObjectStore):
                     yield sha_to_hex(sha)
 
     @property
-    def packs(self):
+    def packs(self) -> list[Any]:
         """Iterable of pack objects.
 
         Note: Returns empty list as we don't have actual Pack objects.
         """
         return []
 
-    def add_object(self, obj) -> None:
+    def add_object(self, obj: ShaFile) -> None:
         """Add a single object to this object store."""
         raise NotImplementedError("Cannot add objects to dumb HTTP repository")
 
-    def add_objects(self, objects, progress=None) -> None:
+    def add_objects(
+        self,
+        objects: Sequence[tuple[ShaFile, Optional[str]]],
+        progress: Optional[Callable[[str], None]] = None,
+    ) -> Optional["Pack"]:
         """Add a set of objects to this object store."""
         raise NotImplementedError("Cannot add objects to dumb HTTP repository")
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Clean up temporary directory on deletion."""
         if self._temp_pack_dir and os.path.exists(self._temp_pack_dir):
             import shutil
@@ -343,10 +352,16 @@ class DumbHTTPObjectStore(BaseObjectStore):
             shutil.rmtree(self._temp_pack_dir, ignore_errors=True)
 
 
-class DumbRemoteHTTPRepo(BaseRepo):
+class DumbRemoteHTTPRepo:
     """Repository implementation for dumb HTTP remotes."""
 
-    def __init__(self, base_url: str, http_request_func):
+    def __init__(
+        self,
+        base_url: str,
+        http_request_func: Callable[
+            [str, dict[str, str]], tuple[Any, Callable[..., bytes]]
+        ],
+    ) -> None:
         """Initialize a DumbRemoteHTTPRepo.
 
         Args:
@@ -357,12 +372,7 @@ class DumbRemoteHTTPRepo(BaseRepo):
         self._http_request = http_request_func
         self._refs: Optional[dict[Ref, ObjectID]] = None
         self._peeled: Optional[dict[Ref, ObjectID]] = None
-        self._object_store = DumbHTTPObjectStore(base_url, http_request_func)
-
-    @property
-    def object_store(self):
-        """ObjectStore for this repository."""
-        return self._object_store
+        self.object_store = DumbHTTPObjectStore(base_url, http_request_func)
 
     def _fetch_url(self, path: str) -> bytes:
         """Fetch content from a URL path relative to base_url."""
@@ -400,6 +410,11 @@ class DumbRemoteHTTPRepo(BaseRepo):
         return dict(self._refs)
 
     def get_head(self) -> Ref:
+        """Get the current HEAD reference.
+
+        Returns:
+          HEAD reference name or commit ID
+        """
         head_resp_bytes = self._fetch_url("HEAD")
         head_split = head_resp_bytes.replace(b"\n", b"").split(b" ")
         head_target = head_split[1] if len(head_split) > 1 else head_split[0]
@@ -417,7 +432,14 @@ class DumbRemoteHTTPRepo(BaseRepo):
         sha = self.get_refs().get(ref, None)
         return sha if sha is not None else ZERO_SHA
 
-    def fetch_pack_data(self, graph_walker, determine_wants, progress=None, depth=None):
+    def fetch_pack_data(
+        self,
+        graph_walker: object,
+        determine_wants: Callable[[dict[Ref, ObjectID]], list[ObjectID]],
+        progress: Optional[Callable[[bytes], None]] = None,
+        get_tagged: Optional[bool] = None,
+        depth: Optional[int] = None,
+    ) -> Iterator[UnpackedObject]:
         """Fetch pack data from the remote.
 
         This is the main method for fetching objects from a dumb HTTP remote.
@@ -428,6 +450,7 @@ class DumbRemoteHTTPRepo(BaseRepo):
           graph_walker: GraphWalker instance (not used for dumb HTTP)
           determine_wants: Function that returns list of wanted SHAs
           progress: Optional progress callback
+          get_tagged: Whether to get tagged objects
           depth: Depth for shallow clones (not supported for dumb HTTP)
 
         Returns:
@@ -451,7 +474,7 @@ class DumbRemoteHTTPRepo(BaseRepo):
 
             # Fetch the object
             try:
-                type_num, content = self._object_store.get_raw(sha)
+                type_num, content = self.object_store.get_raw(sha)
             except KeyError:
                 # Object not found, skip it
                 continue

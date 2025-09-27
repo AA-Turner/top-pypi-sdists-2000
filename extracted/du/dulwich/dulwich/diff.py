@@ -47,11 +47,11 @@ Example usage:
 import logging
 import os
 import stat
-from typing import BinaryIO, Optional, cast
+from typing import BinaryIO, Optional
 
 from .index import ConflictedIndexEntry, commit_index
 from .object_store import iter_tree_contents
-from .objects import S_ISGITLINK, Blob
+from .objects import S_ISGITLINK, Blob, Commit
 from .patch import write_blob_diff, write_object_diff
 from .repo import Repo
 
@@ -78,6 +78,7 @@ def diff_index_to_tree(
     outstream: BinaryIO,
     commit_sha: Optional[bytes] = None,
     paths: Optional[list[bytes]] = None,
+    diff_algorithm: Optional[str] = None,
 ) -> None:
     """Show staged changes (index vs commit).
 
@@ -86,16 +87,21 @@ def diff_index_to_tree(
         outstream: Stream to write diff to
         commit_sha: SHA of commit to compare against, or None for HEAD
         paths: Optional list of paths to filter (as bytes)
+        diff_algorithm: Algorithm to use for diffing ("myers" or "patience"), defaults to DEFAULT_DIFF_ALGORITHM if None
     """
     if commit_sha is None:
         try:
             commit_sha = repo.refs[b"HEAD"]
-            old_tree = repo[commit_sha].tree
+            old_commit = repo[commit_sha]
+            assert isinstance(old_commit, Commit)
+            old_tree = old_commit.tree
         except KeyError:
             # No HEAD means no commits yet
             old_tree = None
     else:
-        old_tree = repo[commit_sha].tree
+        old_commit = repo[commit_sha]
+        assert isinstance(old_commit, Commit)
+        old_tree = old_commit.tree
 
     # Get tree from index
     index = repo.open_index()
@@ -108,6 +114,7 @@ def diff_index_to_tree(
             repo.object_store,
             (oldpath, oldmode, oldsha),
             (newpath, newmode, newsha),
+            diff_algorithm=diff_algorithm,
         )
 
 
@@ -116,6 +123,7 @@ def diff_working_tree_to_tree(
     outstream: BinaryIO,
     commit_sha: bytes,
     paths: Optional[list[bytes]] = None,
+    diff_algorithm: Optional[str] = None,
 ) -> None:
     """Compare working tree to a specific commit.
 
@@ -124,8 +132,11 @@ def diff_working_tree_to_tree(
         outstream: Stream to write diff to
         commit_sha: SHA of commit to compare against
         paths: Optional list of paths to filter (as bytes)
+        diff_algorithm: Algorithm to use for diffing ("myers" or "patience"), defaults to DEFAULT_DIFF_ALGORITHM if None
     """
-    tree = repo[commit_sha].tree
+    commit = repo[commit_sha]
+    assert isinstance(commit, Commit)
+    tree = commit.tree
     normalizer = repo.get_blob_normalizer()
     filter_callback = normalizer.checkin_normalize
 
@@ -351,7 +362,10 @@ def diff_working_tree_to_tree(
 
 
 def diff_working_tree_to_index(
-    repo: Repo, outstream: BinaryIO, paths: Optional[list[bytes]] = None
+    repo: Repo,
+    outstream: BinaryIO,
+    paths: Optional[list[bytes]] = None,
+    diff_algorithm: Optional[str] = None,
 ) -> None:
     """Compare working tree to index.
 
@@ -359,6 +373,7 @@ def diff_working_tree_to_index(
         repo: Repository object
         outstream: Stream to write diff to
         paths: Optional list of paths to filter (as bytes)
+        diff_algorithm: Algorithm to use for diffing ("myers" or "patience"), defaults to DEFAULT_DIFF_ALGORITHM if None
     """
     index = repo.open_index()
     normalizer = repo.get_blob_normalizer()
@@ -382,7 +397,7 @@ def diff_working_tree_to_index(
         old_obj = repo.object_store[old_sha]
         # Type check and cast to Blob
         if isinstance(old_obj, Blob):
-            old_blob = cast(Blob, old_obj)
+            old_blob = old_obj
         else:
             old_blob = None
 
@@ -515,7 +530,7 @@ class ColorizedDiffStream:
     """
 
     @staticmethod
-    def is_available():
+    def is_available() -> bool:
         """Check if Rich is available for colorization.
 
         Returns:
@@ -528,7 +543,7 @@ class ColorizedDiffStream:
         except ImportError:
             return False
 
-    def __init__(self, output_stream):
+    def __init__(self, output_stream: BinaryIO) -> None:
         """Initialize the colorized stream wrapper.
 
         Args:
@@ -546,7 +561,7 @@ class ColorizedDiffStream:
         self.console = Console(file=self.text_wrapper, force_terminal=True)
         self.buffer = b""
 
-    def write(self, data):
+    def write(self, data: bytes) -> None:
         """Write data to the stream, applying colorization.
 
         Args:
@@ -560,7 +575,7 @@ class ColorizedDiffStream:
             line, self.buffer = self.buffer.split(b"\n", 1)
             self._colorize_and_write_line(line + b"\n")
 
-    def writelines(self, lines):
+    def writelines(self, lines: list[bytes]) -> None:
         """Write a list of lines to the stream.
 
         Args:
@@ -569,7 +584,7 @@ class ColorizedDiffStream:
         for line in lines:
             self.write(line)
 
-    def _colorize_and_write_line(self, line_bytes):
+    def _colorize_and_write_line(self, line_bytes: bytes) -> None:
         """Apply color formatting to a single line and write it.
 
         Args:
@@ -593,7 +608,7 @@ class ColorizedDiffStream:
             # Fallback to raw output if we can't decode/encode the text
             self.output_stream.write(line_bytes)
 
-    def flush(self):
+    def flush(self) -> None:
         """Flush any remaining buffered content and the underlying stream."""
         # Write any remaining buffer content
         if self.buffer:

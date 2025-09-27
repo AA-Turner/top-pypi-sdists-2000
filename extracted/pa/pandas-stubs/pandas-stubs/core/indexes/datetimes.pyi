@@ -20,12 +20,10 @@ from pandas import (
     TimedeltaIndex,
     Timestamp,
 )
+from pandas.core.arrays import DatetimeArray
 from pandas.core.indexes.accessors import DatetimeIndexProperties
 from pandas.core.indexes.datetimelike import DatetimeTimedeltaMixin
-from pandas.core.series import (
-    TimedeltaSeries,
-    TimestampSeries,
-)
+from pandas.core.series import Series
 from typing_extensions import Self
 
 from pandas._libs.tslibs.offsets import DateOffset
@@ -37,6 +35,8 @@ from pandas._typing import (
     IntervalClosedType,
     TimeUnit,
     TimeZones,
+    np_ndarray_dt,
+    np_ndarray_td,
 )
 
 from pandas.core.dtypes.dtypes import DatetimeTZDtype
@@ -59,26 +59,27 @@ class DatetimeIndex(
         name: Hashable = ...,
     ) -> Self: ...
     def __reduce__(self): ...
+
+    # Override the array property to return DatetimeArray instead of ExtensionArray
+    @property
+    def array(self) -> DatetimeArray: ...
+
     # various ignores needed for mypy, as we do want to restrict what can be used in
     # arithmetic for these types
-    @overload
-    def __add__(self, other: TimedeltaSeries) -> TimestampSeries: ...
-    @overload
-    def __add__(
-        self, other: timedelta | Timedelta | TimedeltaIndex | BaseOffset
+    def __add__(  # pyright: ignore[reportIncompatibleMethodOverride]
+        self, other: timedelta | Timedelta | TimedeltaIndex | BaseOffset  # type: ignore[override]
+    ) -> DatetimeIndex: ...
+    @overload  # type: ignore[override]
+    def __sub__(
+        self,
+        other: timedelta | np.timedelta64 | np_ndarray_td | TimedeltaIndex | BaseOffset,
     ) -> DatetimeIndex: ...
     @overload
-    def __sub__(self, other: TimedeltaSeries) -> TimestampSeries: ...
-    @overload
-    def __sub__(
-        self, other: timedelta | Timedelta | TimedeltaIndex | BaseOffset
-    ) -> DatetimeIndex: ...
-    @overload
-    def __sub__(
-        self, other: datetime | Timestamp | DatetimeIndex
+    def __sub__(  # pyright: ignore[reportIncompatibleMethodOverride]
+        self, other: datetime | np.datetime64 | np_ndarray_dt | DatetimeIndex
     ) -> TimedeltaIndex: ...
     @final
-    def to_series(self, index=..., name: Hashable = ...) -> TimestampSeries: ...
+    def to_series(self, index=..., name: Hashable = ...) -> Series[Timestamp]: ...
     def snap(self, freq: str = ...): ...
     def slice_indexer(self, start=..., end=..., step=...): ...
     def searchsorted(self, value, side: str = ..., sorter=...): ...

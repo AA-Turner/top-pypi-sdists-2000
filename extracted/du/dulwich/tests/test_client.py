@@ -424,6 +424,20 @@ class TestGetTransportAndPath(TestCase):
         self.assertEqual(1234, c._port)
         self.assertEqual("/bar/baz", path)
 
+    def test_tcp_ipv6(self) -> None:
+        c, path = get_transport_and_path("git://[::1]/bar/baz")
+        self.assertIsInstance(c, TCPGitClient)
+        self.assertEqual("::1", c._host)
+        self.assertEqual(TCP_GIT_PORT, c._port)
+        self.assertEqual("/bar/baz", path)
+
+    def test_tcp_ipv6_port(self) -> None:
+        c, path = get_transport_and_path("git://[2001:db8::1]:1234/bar/baz")
+        self.assertIsInstance(c, TCPGitClient)
+        self.assertEqual("2001:db8::1", c._host)
+        self.assertEqual(1234, c._port)
+        self.assertEqual("/bar/baz", path)
+
     def test_git_ssh_explicit(self) -> None:
         c, path = get_transport_and_path("git+ssh://foo.com/bar/baz")
         self.assertIsInstance(c, SSHGitClient)
@@ -534,7 +548,7 @@ class TestGetTransportAndPath(TestCase):
         from dulwich.config import ConfigDict
 
         config = ConfigDict()
-        c, path = get_transport_and_path(
+        c, _path = get_transport_and_path(
             "ssh://git@github.com/user/repo.git", config=config
         )
         self.assertIsInstance(c, SSHGitClient)
@@ -542,14 +556,14 @@ class TestGetTransportAndPath(TestCase):
 
         config.set((b"core",), b"sshCommand", b"custom-ssh -o CustomOption=yes")
 
-        c, path = get_transport_and_path(
+        c, _path = get_transport_and_path(
             "ssh://git@github.com/user/repo.git", config=config
         )
         self.assertIsInstance(c, SSHGitClient)
         self.assertEqual("custom-ssh -o CustomOption=yes", c.ssh_command)
 
         # Test rsync-style URL also gets the config
-        c, path = get_transport_and_path("git@github.com:user/repo.git", config=config)
+        c, _path = get_transport_and_path("git@github.com:user/repo.git", config=config)
         self.assertIsInstance(c, SSHGitClient)
         self.assertEqual("custom-ssh -o CustomOption=yes", c.ssh_command)
 
@@ -562,7 +576,7 @@ class TestGetTransportAndPath(TestCase):
     def test_error(self) -> None:
         # Need to use a known urlparse.uses_netloc URL scheme to get the
         # expected parsing of the URL on Python versions less than 2.6.5
-        c, path = get_transport_and_path("prospero://bar/baz")
+        c, _path = get_transport_and_path("prospero://bar/baz")
         self.assertIsInstance(c, SSHGitClient)
 
     def test_http(self) -> None:
@@ -1092,7 +1106,7 @@ class BundleClientTests(TestCase):
 
     def test_fetch_pack(self) -> None:
         """Test fetching pack from bundle."""
-        bundle_path, source_repo = self._create_test_bundle()
+        bundle_path, _source_repo = self._create_test_bundle()
 
         client = BundleClient()
         pack_data = BytesIO()
@@ -1119,7 +1133,7 @@ class BundleClientTests(TestCase):
 
     def test_fetch(self) -> None:
         """Test fetching from bundle into target repo."""
-        bundle_path, source_repo = self._create_test_bundle()
+        bundle_path, _source_repo = self._create_test_bundle()
 
         client = BundleClient()
         target_repo = MemoryRepo()
@@ -1589,6 +1603,40 @@ class HttpGitClientTests(TestCase):
         c = HttpGitClient(url, config=config, timeout=15)
         self.assertEqual(c._timeout, 15)
 
+    def test_http_extra_headers_from_config(self) -> None:
+        """Test that http.extraHeader config values are applied."""
+        from dulwich.config import ConfigDict
+
+        url = "https://github.com/jelmer/dulwich"
+        config = ConfigDict()
+        # Set a single extra header
+        config.set((b"http",), b"extraHeader", b"X-Custom-Header: test-value")
+
+        c = HttpGitClient(url, config=config)
+        # Check that the header was added to the pool manager
+        self.assertIn("X-Custom-Header", c.pool_manager.headers)
+        self.assertEqual(c.pool_manager.headers["X-Custom-Header"], "test-value")
+
+    def test_http_multiple_extra_headers_from_config(self) -> None:
+        """Test that multiple http.extraHeader config values are applied."""
+        from dulwich.config import ConfigDict
+
+        url = "https://github.com/jelmer/dulwich"
+        config = ConfigDict()
+        # Set multiple extra headers
+        config.set((b"http",), b"extraHeader", b"X-Header-1: value1")
+        config.add((b"http",), b"extraHeader", b"X-Header-2: value2")
+        config.add((b"http",), b"extraHeader", b"Authorization: Bearer token123")
+
+        c = HttpGitClient(url, config=config)
+        # Check that all headers were added to the pool manager
+        self.assertIn("X-Header-1", c.pool_manager.headers)
+        self.assertEqual(c.pool_manager.headers["X-Header-1"], "value1")
+        self.assertIn("X-Header-2", c.pool_manager.headers)
+        self.assertEqual(c.pool_manager.headers["X-Header-2"], "value2")
+        self.assertIn("Authorization", c.pool_manager.headers)
+        self.assertEqual(c.pool_manager.headers["Authorization"], "Bearer token123")
+
 
 class TCPGitClientTests(TestCase):
     def test_get_url(self) -> None:
@@ -1607,6 +1655,32 @@ class TCPGitClientTests(TestCase):
 
         url = c.get_url(path)
         self.assertEqual("git://github.com:9090/jelmer/dulwich", url)
+
+    def test_get_url_with_ipv6(self) -> None:
+        host = "::1"
+        path = "/jelmer/dulwich"
+        c = TCPGitClient(host)
+
+        url = c.get_url(path)
+        self.assertEqual("git://[::1]/jelmer/dulwich", url)
+
+    def test_get_url_with_ipv6_and_port(self) -> None:
+        host = "2001:db8::1"
+        path = "/jelmer/dulwich"
+        port = 9090
+        c = TCPGitClient(host, port=port)
+
+        url = c.get_url(path)
+        self.assertEqual("git://[2001:db8::1]:9090/jelmer/dulwich", url)
+
+    def test_get_url_with_ipv6_default_port(self) -> None:
+        host = "2001:db8::1"
+        path = "/jelmer/dulwich"
+        port = TCP_GIT_PORT  # Default port should not be included in URL
+        c = TCPGitClient(host, port=port)
+
+        url = c.get_url(path)
+        self.assertEqual("git://[2001:db8::1]/jelmer/dulwich", url)
 
 
 class DefaultUrllib3ManagerTest(TestCase):

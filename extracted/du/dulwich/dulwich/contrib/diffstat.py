@@ -33,6 +33,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""Generate diff statistics similar to git's --stat option.
+
+This module provides functionality to parse unified diff output and generate
+statistics about changes, including:
+- Number of lines added and removed per file
+- Binary file detection
+- File rename detection
+- Formatted output similar to git diff --stat
+"""
+
 import re
 import sys
 from typing import Optional
@@ -112,8 +122,7 @@ def _parse_patch(
 # note must all done using bytes not string because on linux filenames
 # may not be encodable even to utf-8
 def diffstat(lines: list[bytes], max_width: int = 80) -> bytes:
-    """Generate summary statistics from a git style diff ala
-       (git diff tag1 tag2 --stat).
+    """Generate summary statistics from a git style diff ala (git diff tag1 tag2 --stat).
 
     Args:
       lines: list of byte string "lines" from the diff to be parsed
@@ -190,6 +199,11 @@ def diffstat(lines: list[bytes], max_width: int = 80) -> bytes:
 
 
 def main() -> int:
+    """Main entry point for diffstat command line tool.
+
+    Returns:
+      Exit code (0 for success)
+    """
     argv = sys.argv
     # allow diffstat.py to also be used from the command line
     if len(sys.argv) > 1:

@@ -31,6 +31,7 @@ class TestSnowflake(Validator):
 
         self.validate_identity("SELECT BIT_LENGTH('abc')")
         self.validate_identity("SELECT BIT_LENGTH(x'A1B2')")
+        self.validate_identity("SELECT RTRIMMED_LENGTH(' ABCD ')")
         self.validate_identity("SELECT HEX_DECODE_STRING('48656C6C6F')")
         self.validate_identity("SELECT HEX_ENCODE('Hello World')")
         self.validate_identity("SELECT HEX_ENCODE('Hello World', 1)")
@@ -41,7 +42,11 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT DECOMPRESS_STRING('compressed_data', 'ZSTD')")
         self.validate_identity("SELECT LPAD('Hello', 10, '*')")
         self.validate_identity("SELECT LPAD(tbl.bin_col, 10)")
+        self.validate_identity("SELECT RPAD('Hello', 10, '*')")
+        self.validate_identity("SELECT RPAD(tbl.bin_col, 10)")
         self.validate_identity("SELECT JAROWINKLER_SIMILARITY('hello', 'world')")
+        self.validate_identity("PARSE_URL('https://example.com/path')")
+        self.validate_identity("PARSE_URL('https://example.com/path', 1)")
         self.validate_identity("SELECT {*} FROM my_table")
         self.validate_identity("SELECT {my_table.*} FROM my_table")
         self.validate_identity("SELECT {* ILIKE 'col1%'} FROM my_table")
@@ -111,6 +116,8 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT TO_CHAR(CAST('12:05:05' AS TIME))")
         self.validate_identity("SELECT TRIM(COALESCE(TO_CHAR(CAST(c AS TIME)), '')) FROM t")
         self.validate_identity("SELECT GET_PATH(PARSE_JSON(foo), 'bar')")
+        self.validate_identity("SELECT PARSE_IP('192.168.1.1', 'INET')")
+        self.validate_identity("SELECT PARSE_IP('192.168.1.1', 'INET', 0)")
         self.validate_identity("SELECT GET_PATH(foo, 'bar')")
         self.validate_identity("SELECT a, exclude, b FROM xxx")
         self.validate_identity("SELECT ARRAY_SORT(x, TRUE, FALSE)")
@@ -1017,6 +1024,24 @@ class TestSnowflake(Validator):
                 "hive": "SELECT a RLIKE b",
                 "snowflake": "SELECT REGEXP_LIKE(a, b)",
                 "spark": "SELECT a RLIKE b",
+            },
+        )
+        self.validate_all(
+            "'foo' REGEXP 'bar'",
+            write={
+                "snowflake": "REGEXP_LIKE('foo', 'bar')",
+                "postgres": "'foo' ~ 'bar'",
+                "mysql": "REGEXP_LIKE('foo', 'bar')",
+                "bigquery": "REGEXP_CONTAINS('foo', 'bar')",
+            },
+        )
+        self.validate_all(
+            "'foo' NOT REGEXP 'bar'",
+            write={
+                "snowflake": "NOT REGEXP_LIKE('foo', 'bar')",
+                "postgres": "NOT 'foo' ~ 'bar'",
+                "mysql": "NOT REGEXP_LIKE('foo', 'bar')",
+                "bigquery": "NOT REGEXP_CONTAINS('foo', 'bar')",
             },
         )
         self.validate_all(

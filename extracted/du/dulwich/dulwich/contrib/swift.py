@@ -43,6 +43,7 @@ from typing import BinaryIO, Callable, Optional, Union, cast
 
 from geventhttpclient import HTTPClient
 
+from ..file import _GitFile
 from ..greenthreads import GreenThreadsMissingObjectFinder
 from ..lru_cache import LRUSizeCache
 from ..object_store import INFODIR, PACKDIR, ObjectContainer, PackBasedObjectStore
@@ -97,7 +98,14 @@ cache_length = 20
 
 
 class PackInfoMissingObjectFinder(GreenThreadsMissingObjectFinder):
+    """Find missing objects required for pack generation."""
+
     def next(self) -> Optional[tuple[bytes, int, Union[bytes, None]]]:
+        """Get the next missing object.
+
+        Returns:
+          Tuple of (sha, pack_type_num, name) or None if no more objects
+        """
         while True:
             if not self.objects_to_send:
                 return None
@@ -179,6 +187,15 @@ def swift_load_pack_index(scon: "SwiftConnector", filename: str) -> "PackIndex":
 
 
 def pack_info_create(pack_data: "PackData", pack_index: "PackIndex") -> bytes:
+    """Create pack info file contents.
+
+    Args:
+      pack_data: The pack data object
+      pack_index: The pack index object
+
+    Returns:
+      Compressed JSON bytes containing pack information
+    """
     pack = Pack.from_objects(pack_data, pack_index)
     info: dict = {}
     for obj in pack.iterobjects():
@@ -213,6 +230,16 @@ def load_pack_info(
     scon: Optional["SwiftConnector"] = None,
     file: Optional[BinaryIO] = None,
 ) -> Optional[dict]:
+    """Load pack info from Swift or file.
+
+    Args:
+      filename: The pack info filename
+      scon: Optional Swift connector to use for loading
+      file: Optional file object to read from instead
+
+    Returns:
+      Dictionary containing pack information or None if not found
+    """
     if not file:
         if scon is None:
             return None
@@ -233,7 +260,7 @@ def load_pack_info(
 
 
 class SwiftException(Exception):
-    pass
+    """Exception raised for Swift-related errors."""
 
 
 class SwiftConnector:
@@ -281,6 +308,14 @@ class SwiftConnector:
         )
 
     def swift_auth_v1(self) -> tuple[str, str]:
+        """Authenticate with Swift using v1 authentication.
+
+        Returns:
+          Tuple of (storage_url, auth_token)
+
+        Raises:
+          SwiftException: If authentication fails
+        """
         self.user = self.user.replace(";", ":")
         auth_httpclient = HTTPClient.from_url(
             self.auth_url,
@@ -304,6 +339,14 @@ class SwiftConnector:
         return storage_url, token
 
     def swift_auth_v2(self) -> tuple[str, str]:
+        """Authenticate with Swift using v2 authentication.
+
+        Returns:
+          Tuple of (storage_url, auth_token)
+
+        Raises:
+          SwiftException: If authentication fails
+        """
         self.tenant, self.user = self.user.split(";")
         auth_dict = {}
         auth_dict["auth"] = {
@@ -605,7 +648,7 @@ class SwiftPackData(PackData):
             raise Exception(f"Could not get stats for {self._filename}")
         self.pack_length = int(headers["content-length"])
         pack_reader = SwiftPackReader(self.scon, str(self._filename), self.pack_length)
-        (version, self._num_objects) = read_pack_header(pack_reader.read)
+        (_version, self._num_objects) = read_pack_header(pack_reader.read)
         self._offset_cache = LRUSizeCache(
             1024 * 1024 * self.scon.cache_length,
             compute_size=_compute_object_size,
@@ -615,6 +658,14 @@ class SwiftPackData(PackData):
     def get_object_at(
         self, offset: int
     ) -> tuple[int, Union[tuple[Union[bytes, int], list[bytes]], list[bytes]]]:
+        """Get the object at a specific offset in the pack.
+
+        Args:
+          offset: The offset in the pack file
+
+        Returns:
+          Tuple of (pack_type_num, object_data)
+        """
         if offset in self._offset_cache:
             return self._offset_cache[offset]
         assert offset >= self._header_size
@@ -625,11 +676,16 @@ class SwiftPackData(PackData):
         return (unpacked.pack_type_num, obj_data)
 
     def get_stored_checksum(self) -> bytes:
+        """Get the stored checksum for this pack.
+
+        Returns:
+          The pack checksum as bytes
+        """
         pack_reader = SwiftPackReader(self.scon, str(self._filename), self.pack_length)
         return pack_reader.read_checksum()
 
     def close(self) -> None:
-        pass
+        """Close the pack data (no-op for Swift)."""
 
 
 class SwiftPack(Pack):
@@ -641,6 +697,12 @@ class SwiftPack(Pack):
     """
 
     def __init__(self, *args: object, **kwargs: object) -> None:
+        """Initialize SwiftPack.
+
+        Args:
+          *args: Arguments to pass to parent class
+          **kwargs: Keyword arguments, must include 'scon' (SwiftConnector)
+        """
         self.scon = kwargs["scon"]
         del kwargs["scon"]
         super().__init__(*args, **kwargs)  # type: ignore
@@ -698,6 +760,14 @@ class SwiftObjectStore(PackBasedObjectStore):
         return iter([])
 
     def pack_info_get(self, sha: bytes) -> Optional[tuple]:
+        """Get pack info for a specific SHA.
+
+        Args:
+          sha: The SHA to look up
+
+        Returns:
+          Pack info tuple or None if not found
+        """
         for pack in self.packs:
             if sha in pack:
                 if hasattr(pack, "pack_info"):
@@ -748,8 +818,17 @@ class SwiftObjectStore(PackBasedObjectStore):
         f = BytesIO()
 
         def commit() -> Optional["SwiftPack"]:
+            """Commit the pack to Swift storage.
+
+            Returns:
+              The created SwiftPack or None if empty
+            """
             f.seek(0)
-            pack = PackData(file=f, filename="")
+            from typing import cast
+
+            from ..file import _GitFile
+
+            pack = PackData(file=cast(_GitFile, f), filename="")
             entries = pack.sorted_entries()
             if entries:
                 basename = posixpath.join(
@@ -770,11 +849,16 @@ class SwiftObjectStore(PackBasedObjectStore):
                 return None
 
         def abort() -> None:
-            pass
+            """Abort the pack operation (no-op)."""
 
         return f, commit, abort
 
     def add_object(self, obj: object) -> None:
+        """Add a single object to the store.
+
+        Args:
+          obj: The object to add
+        """
         self.add_objects(
             [
                 (obj, None),  # type: ignore
@@ -796,7 +880,8 @@ class SwiftObjectStore(PackBasedObjectStore):
         fd, path = tempfile.mkstemp(prefix="tmp_pack_")
         f = os.fdopen(fd, "w+b")
         try:
-            indexer = PackIndexer(f, resolve_ext_ref=None)
+            pack_data = PackData(file=cast(_GitFile, f), filename=path)
+            indexer = PackIndexer(cast(BinaryIO, pack_data._file), resolve_ext_ref=None)
             copier = PackStreamCopier(read_all, read_some, f, delta_iter=indexer)
             copier.verify()
             return self._complete_thin_pack(f, path, copier, indexer)
@@ -849,7 +934,7 @@ class SwiftObjectStore(PackBasedObjectStore):
 
         # Write pack info.
         f.seek(0)
-        pack_data = PackData(filename="", file=f)
+        pack_data = PackData(filename="", file=cast(_GitFile, f))
         index_file.seek(0)
         pack_index = load_pack_index_file("", index_file)
         serialized_pack_info = pack_info_create(pack_data, pack_index)
@@ -871,6 +956,12 @@ class SwiftInfoRefsContainer(InfoRefsContainer):
     """Manage references in info/refs object."""
 
     def __init__(self, scon: SwiftConnector, store: object) -> None:
+        """Initialize SwiftInfoRefsContainer.
+
+        Args:
+          scon: Swift connector instance
+          store: Object store instance
+        """
         self.scon = scon
         self.filename = "info/refs"
         self.store = store
@@ -893,7 +984,7 @@ class SwiftInfoRefsContainer(InfoRefsContainer):
         else:
             f = obj
         refs = read_info_refs(f)
-        (refs, peeled) = split_peeled_refs(refs)
+        (refs, _peeled) = split_peeled_refs(refs)
         if old_ref is not None:
             if refs[name] != old_ref:
                 return False
@@ -945,15 +1036,22 @@ class SwiftInfoRefsContainer(InfoRefsContainer):
         del self._refs[name]
         return True
 
-    def allkeys(self) -> Iterator[bytes]:
+    def allkeys(self) -> set[bytes]:
+        """Get all reference names.
+
+        Returns:
+          Set of reference names as bytes
+        """
         try:
             self._refs[b"HEAD"] = self._refs[b"refs/heads/master"]
         except KeyError:
             pass
-        return iter(self._refs.keys())
+        return set(self._refs.keys())
 
 
 class SwiftRepo(BaseRepo):
+    """A Git repository backed by Swift object storage."""
+
     def __init__(self, root: str, conf: ConfigParser) -> None:
         """Init a Git bare Repository on top of a Swift container.
 
@@ -1020,17 +1118,37 @@ class SwiftRepo(BaseRepo):
 
 
 class SwiftSystemBackend(Backend):
+    """Backend for serving Git repositories from Swift."""
+
     def __init__(self, logger: "logging.Logger", conf: ConfigParser) -> None:
+        """Initialize SwiftSystemBackend.
+
+        Args:
+          logger: Logger instance
+          conf: Configuration parser instance
+        """
         self.conf = conf
         self.logger = logger
 
     def open_repository(self, path: str) -> "BackendRepo":
+        """Open a repository at the given path.
+
+        Args:
+          path: Path to the repository in Swift
+
+        Returns:
+          SwiftRepo instance
+        """
         self.logger.info("opening repository at %s", path)
         return cast("BackendRepo", SwiftRepo(path, self.conf))
 
 
 def cmd_daemon(args: list) -> None:
-    """Entry point for starting a TCP git server."""
+    """Start a TCP git server for Swift repositories.
+
+    Args:
+      args: Command line arguments
+    """
     import optparse
 
     parser = optparse.OptionParser()
@@ -1082,6 +1200,11 @@ def cmd_daemon(args: list) -> None:
 
 
 def cmd_init(args: list) -> None:
+    """Initialize a new Git repository in Swift.
+
+    Args:
+      args: Command line arguments
+    """
     import optparse
 
     parser = optparse.OptionParser()
@@ -1103,6 +1226,11 @@ def cmd_init(args: list) -> None:
 
 
 def main(argv: list = sys.argv) -> None:
+    """Main entry point for Swift Git command line interface.
+
+    Args:
+      argv: Command line arguments
+    """
     commands = {
         "init": cmd_init,
         "daemon": cmd_daemon,

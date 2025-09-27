@@ -51,15 +51,14 @@ from weaviate.collections.classes.config_vector_index import (
     VectorIndexType as VectorIndexTypeAlias,
 )
 from weaviate.collections.classes.config_vectorizers import (
-    CohereModel,
-    _Vectorizer,
-    _VectorizerConfigCreate,
-)
-from weaviate.collections.classes.config_vectorizers import (
     VectorDistances as VectorDistancesAlias,
 )
 from weaviate.collections.classes.config_vectorizers import (
     Vectorizers as VectorizersAlias,
+)
+from weaviate.collections.classes.config_vectorizers import (
+    _Vectorizer,
+    _VectorizerConfigCreate,
 )
 from weaviate.collections.classes.config_vectors import (
     _MultiVectors,
@@ -81,6 +80,19 @@ VectorDistances: TypeAlias = VectorDistancesAlias
 AWSService: TypeAlias = Literal[
     "bedrock",
     "sagemaker",
+]
+
+OpenAiVerbosity: TypeAlias = Literal[
+    "low",
+    "medium",
+    "high",
+]
+
+OpenAiReasoningEffort: TypeAlias = Literal[
+    "minimal",
+    "low",
+    "medium",
+    "high",
 ]
 
 
@@ -417,6 +429,8 @@ class _GenerativeOpenAIConfigBase(_GenerativeProvider):
 
 class _GenerativeOpenAIConfig(_GenerativeOpenAIConfigBase):
     model: Optional[str]
+    verbosity: Optional[str]
+    reasoningEffort: Optional[str]
 
 
 class _GenerativeAzureOpenAIConfig(_GenerativeOpenAIConfigBase):
@@ -464,6 +478,7 @@ class _GenerativeAWSConfig(_GenerativeProvider):
     service: str
     model: Optional[str]
     endpoint: Optional[str]
+    maxTokens: Optional[int]
 
 
 class _GenerativeAnthropicConfig(_GenerativeProvider):
@@ -711,6 +726,9 @@ class _Generative:
         temperature: Optional[float] = None,
         top_p: Optional[float] = None,
         base_url: Optional[AnyHttpUrl] = None,
+        *,
+        verbosity: Optional[Union[OpenAiVerbosity, str]] = None,
+        reasoning_effort: Optional[Union[OpenAiReasoningEffort, str]] = None,
     ) -> _GenerativeProvider:
         """Create a `_GenerativeOpenAIConfig` object for use when performing AI generation using the `generative-openai` module.
 
@@ -725,6 +743,8 @@ class _Generative:
             temperature: The temperature to use. Defaults to `None`, which uses the server-defined default
             top_p: The top P to use. Defaults to `None`, which uses the server-defined default
             base_url: The base URL where the API request should go. Defaults to `None`, which uses the server-defined default
+            verbosity: The verbosity level to use. One of 'low', 'medium', 'high'. Defaults to `None`, which uses the server-defined default
+            reasoning_effort: The reasoning effort level to use. One of 'minimal', 'low
         """
         return _GenerativeOpenAIConfig(
             baseURL=base_url,
@@ -734,6 +754,8 @@ class _Generative:
             presencePenaltyProperty=presence_penalty,
             temperatureProperty=temperature,
             topPProperty=top_p,
+            verbosity=verbosity,
+            reasoningEffort=reasoning_effort,
         )
 
     @staticmethod
@@ -775,7 +797,7 @@ class _Generative:
 
     @staticmethod
     def cohere(
-        model: Optional[Union[CohereModel, str]] = None,
+        model: Optional[str] = None,
         k: Optional[int] = None,
         max_tokens: Optional[int] = None,
         return_likelihoods: Optional[str] = None,
@@ -891,6 +913,7 @@ This method is deprecated and will be removed in Q2 '25. Please use :meth:`~weav
         region: str = "",  # cant have a non-default value after a default value, but we cant change the order for BC
         endpoint: Optional[str] = None,
         service: Union[AWSService, str] = "bedrock",
+        max_tokens: Optional[int] = None,
     ) -> _GenerativeProvider:
         """Create a `_GenerativeAWSConfig` object for use when performing AI generation using the `generative-aws` module.
 
@@ -899,15 +922,13 @@ This method is deprecated and will be removed in Q2 '25. Please use :meth:`~weav
 
         Args:
             model: The model to use, REQUIRED for service "bedrock".
+            max_tokens: The maximum number of tokens to generate. Defaults to `None`, which uses the server-defined default.
             region: The AWS region to run the model from, REQUIRED.
             endpoint: The model to use, REQUIRED for service "sagemaker".
             service: The AWS service to use, options are "bedrock" and "sagemaker".
         """
         return _GenerativeAWSConfig(
-            model=model,
-            region=region,
-            service=service,
-            endpoint=endpoint,
+            model=model, region=region, service=service, endpoint=endpoint, maxTokens=max_tokens
         )
 
     @staticmethod

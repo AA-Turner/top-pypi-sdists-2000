@@ -28,13 +28,13 @@ import posixpath
 import stat
 import sys
 import zlib
-from collections import namedtuple
 from collections.abc import Callable, Iterable, Iterator
 from hashlib import sha1
 from io import BufferedIOBase, BytesIO
 from typing import (
     IO,
     TYPE_CHECKING,
+    NamedTuple,
     Optional,
     Union,
 )
@@ -45,7 +45,7 @@ else:
     from typing_extensions import Self
 
 if sys.version_info >= (3, 10):
-    from typing import TypeGuard  # type: ignore
+    from typing import TypeGuard
 else:
     from typing_extensions import TypeGuard
 
@@ -135,6 +135,14 @@ def hex_to_sha(hex: Union[bytes, str]) -> bytes:
 
 
 def valid_hexsha(hex: Union[bytes, str]) -> bool:
+    """Check if a string is a valid hex SHA.
+
+    Args:
+      hex: Hex string to check
+
+    Returns:
+      True if valid hex SHA, False otherwise
+    """
     if len(hex) != 40:
         return False
     try:
@@ -185,10 +193,24 @@ def serializable_property(name: str, docstring: Optional[str] = None) -> propert
     """A property that helps tracking whether serialization is necessary."""
 
     def set(obj: "ShaFile", value: object) -> None:
+        """Set the property value and mark the object as needing serialization.
+
+        Args:
+          obj: The ShaFile object
+          value: The value to set
+        """
         setattr(obj, "_" + name, value)
         obj._needs_serialization = True
 
     def get(obj: "ShaFile") -> object:
+        """Get the property value.
+
+        Args:
+          obj: The ShaFile object
+
+        Returns:
+          The property value
+        """
         return getattr(obj, "_" + name)
 
     return property(get, set, doc=docstring)
@@ -244,6 +266,13 @@ def check_identity(identity: Optional[bytes], error_msg: str) -> None:
         raise ObjectFormatException(error_msg)
 
 
+def _path_to_bytes(path: Union[str, bytes]) -> bytes:
+    """Convert a path to bytes for use in error messages."""
+    if isinstance(path, str):
+        return path.encode("utf-8", "surrogateescape")
+    return path
+
+
 def check_time(time_seconds: int) -> None:
     """Check if the specified time is not prone to overflow error.
 
@@ -269,8 +298,13 @@ class FixedSha:
     __slots__ = ("_hexsha", "_sha")
 
     def __init__(self, hexsha: Union[str, bytes]) -> None:
+        """Initialize FixedSha with a fixed SHA value.
+
+        Args:
+            hexsha: Hex SHA value as string or bytes
+        """
         if isinstance(hexsha, str):
-            hexsha = hexsha.encode("ascii")  # type: ignore
+            hexsha = hexsha.encode("ascii")
         if not isinstance(hexsha, bytes):
             raise TypeError(f"Expected bytes for hexsha, got {hexsha!r}")
         self._hexsha = hexsha
@@ -396,7 +430,8 @@ class ShaFile:
             self._sha = None
             self._chunked_text = self._serialize()
             self._needs_serialization = False
-        return self._chunked_text  # type: ignore
+        assert self._chunked_text is not None
+        return self._chunked_text
 
     def as_raw_string(self) -> bytes:
         """Return raw string with serialization of the object.
@@ -432,7 +467,7 @@ class ShaFile:
         if sha is None:
             self._sha = None
         else:
-            self._sha = FixedSha(sha)  # type: ignore
+            self._sha = FixedSha(sha)
         self._needs_serialization = False
 
     @staticmethod
@@ -616,6 +651,7 @@ class ShaFile:
         return self.sha().hexdigest().encode("ascii")
 
     def __repr__(self) -> str:
+        """Return string representation of this object."""
         return f"<{self.__class__.__name__} {self.id!r}>"
 
     def __ne__(self, other: object) -> bool:
@@ -650,6 +686,7 @@ class Blob(ShaFile):
     _chunked_text: list[bytes]
 
     def __init__(self) -> None:
+        """Initialize a new Blob object."""
         super().__init__()
         self._chunked_text = []
         self._needs_serialization = False
@@ -684,9 +721,20 @@ class Blob(ShaFile):
 
     @classmethod
     def from_path(cls, path: Union[str, bytes]) -> "Blob":
+        """Read a blob from a file on disk.
+
+        Args:
+          path: Path to the blob file
+
+        Returns:
+          A Blob object
+
+        Raises:
+          NotBlobError: If the file is not a blob
+        """
         blob = ShaFile.from_path(path)
         if not isinstance(blob, cls):
-            raise NotBlobError(path)
+            raise NotBlobError(_path_to_bytes(path))
         return blob
 
     def check(self) -> None:
@@ -706,7 +754,7 @@ class Blob(ShaFile):
         if not chunks:
             return []
         if len(chunks) == 1:
-            return chunks[0].splitlines(True)
+            return chunks[0].splitlines(True)  # type: ignore[no-any-return]
         remaining = None
         ret = []
         for chunk in chunks:
@@ -823,6 +871,7 @@ class Tag(ShaFile):
     _tagger: Optional[bytes]
 
     def __init__(self) -> None:
+        """Initialize a new Tag object."""
         super().__init__()
         self._tagger = None
         self._tag_time = None
@@ -832,9 +881,20 @@ class Tag(ShaFile):
 
     @classmethod
     def from_path(cls, filename: Union[str, bytes]) -> "Tag":
+        """Read a tag from a file on disk.
+
+        Args:
+          filename: Path to the tag file
+
+        Returns:
+          A Tag object
+
+        Raises:
+          NotTagError: If the file is not a tag
+        """
         tag = ShaFile.from_path(filename)
         if not isinstance(tag, cls):
-            raise NotTagError(filename)
+            raise NotTagError(_path_to_bytes(filename))
         return tag
 
     def check(self) -> None:
@@ -984,18 +1044,24 @@ class Tag(ShaFile):
     signature = serializable_property("signature", "Optional detached GPG signature")
 
     def sign(self, keyid: Optional[str] = None) -> None:
+        """Sign this tag with a GPG key.
+
+        Args:
+          keyid: Optional GPG key ID to use for signing. If not specified,
+                 the default GPG key will be used.
+        """
         import gpg
 
         with gpg.Context(armor=True) as c:
             if keyid is not None:
                 key = c.get_key(keyid)
                 with gpg.Context(armor=True, signers=[key]) as ctx:
-                    self.signature, unused_result = ctx.sign(
+                    self.signature, _unused_result = ctx.sign(
                         self.as_raw_string(),
                         mode=gpg.constants.sig.mode.DETACH,
                     )
             else:
-                self.signature, unused_result = c.sign(
+                self.signature, _unused_result = c.sign(
                     self.as_raw_string(), mode=gpg.constants.sig.mode.DETACH
                 )
 
@@ -1043,8 +1109,12 @@ class Tag(ShaFile):
                 raise gpg.errors.MissingSignatures(result, keys, results=(data, result))
 
 
-class TreeEntry(namedtuple("TreeEntry", ["path", "mode", "sha"])):
+class TreeEntry(NamedTuple):
     """Named tuple encapsulating a single tree entry."""
+
+    path: bytes
+    mode: int
+    sha: bytes
 
     def in_path(self, path: bytes) -> "TreeEntry":
         """Return a copy of this entry with the given path prepended."""
@@ -1058,6 +1128,7 @@ def parse_tree(text: bytes, strict: bool = False) -> Iterator[tuple[bytes, int, 
 
     Args:
       text: Serialized text to parse
+      strict: If True, enforce strict validation
     Returns: iterator of tuples of (name, mode, sha)
 
     Raises:
@@ -1148,6 +1219,7 @@ def pretty_format_tree_entry(
       name: Name of the directory entry
       mode: Mode of entry
       hexsha: Hexsha of the referenced object
+      encoding: Character encoding for the name
     Returns: string describing the tree entry
     """
     if mode & stat.S_IFDIR:
@@ -1166,6 +1238,12 @@ class SubmoduleEncountered(Exception):
     """A submodule was encountered while resolving a path."""
 
     def __init__(self, path: bytes, sha: ObjectID) -> None:
+        """Initialize SubmoduleEncountered exception.
+
+        Args:
+            path: Path where the submodule was encountered
+            sha: SHA of the submodule
+        """
         self.path = path
         self.sha = sha
 
@@ -1179,20 +1257,34 @@ class Tree(ShaFile):
     __slots__ = "_entries"
 
     def __init__(self) -> None:
+        """Initialize an empty Tree."""
         super().__init__()
         self._entries: dict[bytes, tuple[int, bytes]] = {}
 
     @classmethod
     def from_path(cls, filename: Union[str, bytes]) -> "Tree":
+        """Read a tree from a file on disk.
+
+        Args:
+          filename: Path to the tree file
+
+        Returns:
+          A Tree object
+
+        Raises:
+          NotTreeError: If the file is not a tree
+        """
         tree = ShaFile.from_path(filename)
         if not isinstance(tree, cls):
-            raise NotTreeError(filename)
+            raise NotTreeError(_path_to_bytes(filename))
         return tree
 
     def __contains__(self, name: bytes) -> bool:
+        """Check if name exists in tree."""
         return name in self._entries
 
     def __getitem__(self, name: bytes) -> tuple[int, ObjectID]:
+        """Get tree entry by name."""
         return self._entries[name]
 
     def __setitem__(self, name: bytes, value: tuple[int, ObjectID]) -> None:
@@ -1209,13 +1301,16 @@ class Tree(ShaFile):
         self._needs_serialization = True
 
     def __delitem__(self, name: bytes) -> None:
+        """Delete tree entry by name."""
         del self._entries[name]
         self._needs_serialization = True
 
     def __len__(self) -> int:
+        """Return number of entries in tree."""
         return len(self._entries)
 
     def __iter__(self) -> Iterator[bytes]:
+        """Iterate over tree entry names."""
         return iter(self._entries)
 
     def add(self, name: bytes, mode: int, hexsha: bytes) -> None:
@@ -1298,6 +1393,11 @@ class Tree(ShaFile):
         return list(serialize_tree(self.iteritems()))
 
     def as_pretty_string(self) -> str:
+        """Return a human-readable string representation of this tree.
+
+        Returns:
+          Pretty-printed tree entries
+        """
         text: list[str] = []
         for name, mode, hexsha in self.iteritems():
             text.append(pretty_format_tree_entry(name, mode, hexsha))
@@ -1523,6 +1623,7 @@ class Commit(ShaFile):
     )
 
     def __init__(self) -> None:
+        """Initialize an empty Commit."""
         super().__init__()
         self._parents: list[bytes] = []
         self._encoding: Optional[bytes] = None
@@ -1534,9 +1635,20 @@ class Commit(ShaFile):
 
     @classmethod
     def from_path(cls, path: Union[str, bytes]) -> "Commit":
+        """Read a commit from a file on disk.
+
+        Args:
+          path: Path to the commit file
+
+        Returns:
+          A Commit object
+
+        Raises:
+          NotCommitError: If the file is not a commit
+        """
         commit = ShaFile.from_path(path)
         if not isinstance(commit, cls):
-            raise NotCommitError(path)
+            raise NotCommitError(_path_to_bytes(path))
         return commit
 
     def _deserialize(self, chunks: list[bytes]) -> None:
@@ -1646,18 +1758,24 @@ class Commit(ShaFile):
         # TODO: optionally check for duplicate parents
 
     def sign(self, keyid: Optional[str] = None) -> None:
+        """Sign this commit with a GPG key.
+
+        Args:
+          keyid: Optional GPG key ID to use for signing. If not specified,
+                 the default GPG key will be used.
+        """
         import gpg
 
         with gpg.Context(armor=True) as c:
             if keyid is not None:
                 key = c.get_key(keyid)
                 with gpg.Context(armor=True, signers=[key]) as ctx:
-                    self.gpgsig, unused_result = ctx.sign(
+                    self.gpgsig, _unused_result = ctx.sign(
                         self.as_raw_string(),
                         mode=gpg.constants.sig.mode.DETACH,
                     )
             else:
-                self.gpgsig, unused_result = c.sign(
+                self.gpgsig, _unused_result = c.sign(
                     self.as_raw_string(), mode=gpg.constants.sig.mode.DETACH
                 )
 
