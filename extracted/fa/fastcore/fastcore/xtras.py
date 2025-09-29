@@ -7,15 +7,15 @@ from __future__ import annotations
 
 # %% auto 0
 __all__ = ['spark_chars', 'UNSET', 'walk', 'globtastic', 'maybe_open', 'mkdir', 'image_size', 'bunzip', 'loads', 'loads_multi',
-           'dumps', 'untar_dir', 'repo_details', 'run', 'open_file', 'save_pickle', 'load_pickle', 'parse_env',
-           'expand_wildcards', 'dict2obj', 'obj2dict', 'repr_dict', 'is_listy', 'mapped', 'IterLen',
-           'ReindexCollection', 'SaveReturn', 'trim_wraps', 'save_iter', 'asave_iter', 'exec_eval', 'get_source_link',
-           'truncstr', 'sparkline', 'modify_exception', 'round_multiple', 'set_num_threads', 'join_path_file',
-           'autostart', 'EventTimer', 'stringfmt_names', 'PartialFormatter', 'partial_format', 'utc2local', 'local2utc',
-           'trace', 'modified_env', 'ContextManagers', 'shufflish', 'console_help', 'hl_md', 'type2str',
-           'dataclass_src', 'Unset', 'nullable_dc', 'make_nullable', 'flexiclass', 'asdict', 'vars_pub', 'is_typeddict',
-           'is_namedtuple', 'CachedIter', 'CachedAwaitable', 'reawaitable', 'flexicache', 'time_policy', 'mtime_policy',
-           'timed_cache']
+           'dumps', 'untar_dir', 'repo_details', 'shell', 'ssh', 'rsync_multi', 'run', 'open_file', 'save_pickle',
+           'load_pickle', 'parse_env', 'expand_wildcards', 'dict2obj', 'obj2dict', 'repr_dict', 'is_listy', 'mapped',
+           'IterLen', 'ReindexCollection', 'SaveReturn', 'trim_wraps', 'save_iter', 'asave_iter', 'friendly_name',
+           'n_friendly_names', 'exec_eval', 'get_source_link', 'truncstr', 'sparkline', 'modify_exception',
+           'round_multiple', 'set_num_threads', 'join_path_file', 'autostart', 'EventTimer', 'stringfmt_names',
+           'PartialFormatter', 'partial_format', 'utc2local', 'local2utc', 'trace', 'modified_env', 'ContextManagers',
+           'shufflish', 'console_help', 'hl_md', 'type2str', 'dataclass_src', 'Unset', 'nullable_dc', 'make_nullable',
+           'flexiclass', 'asdict', 'vars_pub', 'is_typeddict', 'is_namedtuple', 'CachedIter', 'CachedAwaitable',
+           'reawaitable', 'flexicache', 'time_policy', 'mtime_policy', 'timed_cache']
 
 # %% ../nbs/03_xtras.ipynb
 from .imports import *
@@ -197,6 +197,25 @@ def repo_details(url):
     res = remove_suffix(url.strip(), '.git')
     res = res.split(':')[-1]
     return res.split('/')[-2:]
+
+# %% ../nbs/03_xtras.ipynb
+def shell(*args, **kwargs):
+    "Shortcut for `subprocess.run(shell=True)`"
+    import subprocess
+    return subprocess.run(*args, shell=True, **kwargs)
+
+# %% ../nbs/03_xtras.ipynb
+def ssh(host, args='', user='ubuntu', sock=None):
+    "Run SSH command with given arguments"
+    sock_opts = f'-S {sock}' if sock else ''
+    return shell(f'ssh {sock_opts} {args} {user}@{host}')
+
+# %% ../nbs/03_xtras.ipynb
+def rsync_multi(ip, files, user='ubuntu', persist='5m'):
+    "Transfer multiple files with rename using persistent SSH connection"
+    sock = f'/tmp/ssh-{ip}-{user}'
+    ssh(ip, f'-o ControlMaster=auto -o ControlPersist={persist} -N -f', user, sock)
+    for src,dst in files: shell(f'rsync -az -e "ssh -S {sock}" {src} {user}@{ip}:{dst}')
 
 # %% ../nbs/03_xtras.ipynb
 def run(cmd, *rest, same_in_win=False, ignore_ex=False, as_bytes=False, stderr=False):
@@ -452,6 +471,24 @@ def asave_iter(g):
     @trim_wraps(g)
     def _(*args, **kwargs): return _save_iter(g, *args, **kwargs)
     return _
+
+# %% ../nbs/03_xtras.ipynb
+def friendly_name(levels=3, suffix=4):
+    "Generate a random human-readable name with customizable word levels and suffix length"
+    import random,string
+    adjectives = ['admiring', 'adoring', 'amazing', 'awesome', 'beautiful', 'blissful', 'bold', 'brave', 'busy', 'charming', 'clever', 'compassionate', 'confident', 'cool', 'dazzling', 'determined', 'dreamy', 'eager', 'ecstatic', 'elastic', 'elated', 'elegant', 'epic', 'exciting', 'fervent', 'festive', 'flamboyant', 'focused', 'friendly', 'frosty', 'funny', 'gallant', 'gifted', 'goofy', 'gracious', 'great', 'happy', 'hopeful', 'hungry', 'inspiring', 'intelligent', 'interesting', 'jolly', 'jovial', 'keen', 'kind', 'laughing', 'loving', 'lucid', 'magical', 'modest', 'nice', 'nifty', 'nostalgic', 'objective', 'optimistic', 'peaceful', 'pensive', 'practical', 'priceless', 'quirky', 'quizzical', 'relaxed', 'reverent', 'romantic', 'serene', 'sharp', 'silly', 'sleepy', 'stoic', 'sweet', 'tender', 'trusting', 'upbeat', 'vibrant', 'vigilant', 'vigorous', 'wizardly', 'wonderful', 'youthful', 'zealous', 'zen', 'golden', 'silver', 'crimson', 'azure', 'emerald', 'violet', 'amber', 'coral', 'turquoise', 'lavender', 'minty', 'citrus', 'vanilla', 'woody', 'floral', 'fresh', 'gentle', 'sparkling', 'precise', 'curious']
+    nouns = ['tiger', 'eagle', 'river', 'mountain', 'forest', 'ocean', 'star', 'moon', 'wind', 'dragon', 'phoenix', 'wolf', 'bear', 'lion', 'shark', 'falcon', 'raven', 'crystal', 'diamond', 'ruby', 'sapphire', 'pearl', 'wave', 'tide', 'cloud', 'rainbow', 'sunset', 'sunrise', 'galaxy', 'comet', 'meteor', 'planet', 'nebula', 'cosmos', 'universe', 'atom', 'photon', 'quantum', 'matrix', 'cipher', 'code', 'signal', 'pulse', 'beam', 'ray', 'spark', 'frost', 'ice', 'snow', 'mist', 'fog', 'dew', 'rain', 'hail', 'helix', 'prism', 'lens', 'mirror', 'echo', 'heart', 'mind', 'dream', 'vision', 'hope', 'wish', 'magic', 'spell', 'charm', 'rune', 'symbol', 'token', 'key', 'door', 'gate', 'bridge', 'tower', 'castle', 'fortress', 'shield', 'dolphin', 'whale', 'penguin', 'butterfly', 'hummingbird', 'deer', 'rabbit', 'fox', 'otter', 'panda', 'koala', 'zebra', 'giraffe', 'elephant', 'valley', 'canyon', 'meadow', 'prairie', 'island', 'lake', 'pond', 'stream', 'waterfall', 'cliff', 'peak', 'hill', 'grove', 'garden', 'sunlight', 'breeze', 'melody', 'sparkle', 'whirlpool', 'windmill', 'carousel', 'spiral', 'glow']
+    verbs = ['runs', 'flies', 'jumps', 'builds', 'creates', 'flows', 'shines', 'grows', 'moves', 'works', 'dances', 'sings', 'plays', 'dreams', 'thinks', 'learns', 'teaches', 'helps', 'heals', 'saves', 'protects', 'guards', 'watches', 'sees', 'hears', 'feels', 'knows', 'understands', 'discovers', 'explores', 'searches', 'finds', 'seeks', 'holds', 'carries', 'lifts', 'pushes', 'pulls', 'makes', 'crafts', 'forges', 'shapes', 'forms', 'molds', 'carves', 'joins', 'connects', 'links', 'binds', 'ties', 'opens', 'closes', 'starts', 'stops', 'begins', 'ends', 'finishes', 'completes', 'wins', 'triumphs', 'succeeds', 'achieves', 'accomplishes', 'reaches', 'arrives', 'departs', 'leaves', 'returns', 'comes', 'goes', 'travels', 'journeys', 'walks', 'sprints', 'races', 'speeds', 'rushes', 'hurries', 'waits', 'pauses', 'rests', 'sleeps', 'wakes', 'rises', 'climbs', 'ascends', 'descends', 'swims', 'dives', 'surfs', 'sails', 'paddles', 'hikes', 'treks', 'wanders', 'roams', 'ventures', 'navigates', 'glides', 'soars', 'floats', 'drifts', 'tosses', 'divides', 'shares', 'secures', 'settles', 'places', 'wonders', 'questions']
+    adverbs = ['quickly', 'gracefully', 'gently', 'boldly', 'quietly', 'swiftly', 'carefully', 'eagerly', 'smoothly', 'brightly', 'softly', 'steadily', 'cleverly', 'proudly', 'calmly', 'freely', 'wisely', 'kindly', 'firmly', 'lightly', 'deeply', 'clearly', 'warmly', 'coolly', 'sharply', 'slowly', 'rapidly', 'silently', 'loudly', 'perfectly']
+    suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=suffix))
+    words = [random.choice(o) for o in (adjectives,nouns,verbs,adverbs)[:levels]]
+    return f"{'-'.join(words)}-{suffix}"
+
+# %% ../nbs/03_xtras.ipynb
+def n_friendly_names(levels=3, suffix=4):
+    "Number of possible combos for `friendly_names"
+    ns = [102,116,110,30]
+    return product(ns[:levels])*36**suffix
 
 # %% ../nbs/03_xtras.ipynb
 def exec_eval(code,   # Code to exec/eval

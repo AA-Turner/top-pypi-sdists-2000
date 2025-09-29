@@ -49,7 +49,7 @@ dependencies = [
     "pydantic>=1.7.4,!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0",
     "typing-extensions>=4.8.0",
 ]
-version = "0.117.1"
+version = "0.118.0"
 
 [project.urls]
 Homepage = "https://github.com/fastapi/fastapi"
@@ -145,7 +145,6 @@ junit_family = "xunit2"
 filterwarnings = [
     "error",
     "ignore:starlette.middleware.wsgi is deprecated and will be removed in a future release\\..*:DeprecationWarning:starlette",
-    "ignore:'crypt' is deprecated and slated for removal in Python 3.13:DeprecationWarning",
     "ignore:You seem to already have a custom.*:RuntimeWarning:trio",
     "ignore:datetime\\.datetime\\.utcfromtimestamp\\(\\) is deprecated and scheduled for removal in a future version\\..*:DeprecationWarning:sqlalchemy",
     "ignore:The `hash` argument is deprecated*:DeprecationWarning:trio",
