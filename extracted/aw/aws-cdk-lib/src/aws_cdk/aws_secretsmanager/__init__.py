@@ -5796,6 +5796,27 @@ class CfnSecret(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromSecretId")
+    @builtins.classmethod
+    def from_secret_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        secret_id: builtins.str,
+    ) -> ISecretRef:
+        '''Creates a new ISecretRef from a secretId.
+
+        :param scope: -
+        :param id: -
+        :param secret_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e3c3961c2a9f7641d6de2ed58080b5085d027497e32beb9b7b96c3365420ad89)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument secret_id", value=secret_id, expected_type=type_hints["secret_id"])
+        return typing.cast(ISecretRef, jsii.sinvoke(cls, "fromSecretId", [scope, id, secret_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7245,6 +7266,14 @@ def _typecheckingstub__85d618e732c6b1f020908289780221a8947553437136d3d13945c0f22
     replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.ReplicaRegionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     secret_string: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e3c3961c2a9f7641d6de2ed58080b5085d027497e32beb9b7b96c3365420ad89(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    secret_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

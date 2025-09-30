@@ -11728,6 +11728,48 @@ class CfnAlarm(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAlarmArn")
+    @builtins.classmethod
+    def from_alarm_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IAlarmRef:
+        '''Creates a new IAlarmRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__544b0968def3d9b72962fb1bbce7dec4b2d60b4c2518711cc9df447306ed6c4c)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IAlarmRef, jsii.sinvoke(cls, "fromAlarmArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromAlarmName")
+    @builtins.classmethod
+    def from_alarm_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        alarm_name: builtins.str,
+    ) -> IAlarmRef:
+        '''Creates a new IAlarmRef from a alarmName.
+
+        :param scope: -
+        :param id: -
+        :param alarm_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__191b683ee20d5f420eb03eb2e0b1a6e0e7cfed31f66a3afa94d14da0767a90f4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument alarm_name", value=alarm_name, expected_type=type_hints["alarm_name"])
+        return typing.cast(IAlarmRef, jsii.sinvoke(cls, "fromAlarmName", [scope, id, alarm_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -14209,6 +14251,27 @@ class CfnDashboard(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDashboardName")
+    @builtins.classmethod
+    def from_dashboard_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        dashboard_name: builtins.str,
+    ) -> IDashboardRef:
+        '''Creates a new IDashboardRef from a dashboardName.
+
+        :param scope: -
+        :param id: -
+        :param dashboard_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f2a65575230b6782811b6cc1c4a4d1c6cc87f971ef5aa437442cc859d489ff82)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument dashboard_name", value=dashboard_name, expected_type=type_hints["dashboard_name"])
+        return typing.cast(IDashboardRef, jsii.sinvoke(cls, "fromDashboardName", [scope, id, dashboard_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -14600,6 +14663,48 @@ class CfnMetricStream(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromMetricStreamArn")
+    @builtins.classmethod
+    def from_metric_stream_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IMetricStreamRef:
+        '''Creates a new IMetricStreamRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50e36a4aae3592a141f72295c65ce2cf6f01c0153925f610e589758abcc065e2)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IMetricStreamRef, jsii.sinvoke(cls, "fromMetricStreamArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromMetricStreamName")
+    @builtins.classmethod
+    def from_metric_stream_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        metric_stream_name: builtins.str,
+    ) -> IMetricStreamRef:
+        '''Creates a new IMetricStreamRef from a metricStreamName.
+
+        :param scope: -
+        :param id: -
+        :param metric_stream_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__635a32b621fbf5f4f1c0d44f6749043dfa44bfb3ec257d8fe8a02439751244c1)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument metric_stream_name", value=metric_stream_name, expected_type=type_hints["metric_stream_name"])
+        return typing.cast(IMetricStreamRef, jsii.sinvoke(cls, "fromMetricStreamName", [scope, id, metric_stream_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -18417,6 +18522,22 @@ def _typecheckingstub__5adc477b9cef758736625389f1a51dec08eb7b348be35f42b0e37d6d4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__544b0968def3d9b72962fb1bbce7dec4b2d60b4c2518711cc9df447306ed6c4c(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__191b683ee20d5f420eb03eb2e0b1a6e0e7cfed31f66a3afa94d14da0767a90f4(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    alarm_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__83bef261115d965bc301e33589e4c9b4a854da5d951fb8e2186758fba16c7f57(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -18865,6 +18986,14 @@ def _typecheckingstub__5add67d5fc6c551e627bade2623b719ee8c8de03ff6216bc3471bbe52
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f2a65575230b6782811b6cc1c4a4d1c6cc87f971ef5aa437442cc859d489ff82(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    dashboard_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ea2b521a69d5f78d24dc5aba9c387baa4fc450da2dc68bb876531861ee0929b2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -18957,6 +19086,22 @@ def _typecheckingstub__324083d9d1c11bed8d2cf8d1d0cab6adbcb8194552cea34115b984457
     name: typing.Optional[builtins.str] = None,
     statistics_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamStatisticsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__50e36a4aae3592a141f72295c65ce2cf6f01c0153925f610e589758abcc065e2(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__635a32b621fbf5f4f1c0d44f6749043dfa44bfb3ec257d8fe8a02439751244c1(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    metric_stream_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

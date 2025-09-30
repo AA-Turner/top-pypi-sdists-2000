@@ -3,74 +3,57 @@ from __future__ import annotations
 import os
 import sys
 import warnings
+from abc import ABCMeta
+from abc import abstractmethod
+from collections.abc import Iterator
+from collections.abc import Mapping
+from collections.abc import Sequence
 from copy import copy
-from pathlib import Path
 from types import MappingProxyType
 from typing import IO
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import BinaryIO
-from typing import Generator
 from typing import Literal
-from typing import Mapping
-from typing import Sequence
+from typing import NoReturn
 from typing import TextIO
-from typing import TypeVar
 from typing import overload
+from urllib.parse import SplitResult
 from urllib.parse import urlsplit
 
 from fsspec.registry import get_filesystem_class
 from fsspec.spec import AbstractFileSystem
 
-from upath._compat import FSSpecAccessorShim
-from upath._compat import PathlibPathShim
-from upath._compat import method_and_classmethod
-from upath._compat import str_remove_prefix
-from upath._compat import str_remove_suffix
+from upath._chain import DEFAULT_CHAIN_PARSER
+from upath._chain import Chain
+from upath._chain import FSSpecChainParser
 from upath._flavour import LazyFlavourDescriptor
+from upath._flavour import WrappedFileSystemFlavour
 from upath._flavour import upath_get_kwargs_from_url
 from upath._flavour import upath_urijoin
 from upath._protocol import compatible_protocol
 from upath._protocol import get_upath_protocol
 from upath._stat import UPathStatResult
 from upath.registry import get_upath_class
+from upath.types import UNSET_DEFAULT
+from upath.types import JoinablePathLike
+from upath.types import OpenablePath
+from upath.types import PathInfo
+from upath.types import ReadablePathLike
+from upath.types import UPathParser
+from upath.types import WritablePathLike
 
 if TYPE_CHECKING:
-    from urllib.parse import SplitResult
-
     if sys.version_info >= (3, 11):
         from typing import Self
     else:
         from typing_extensions import Self
 
+    from pydantic import GetCoreSchemaHandler
+    from pydantic_core.core_schema import CoreSchema
+
+
 __all__ = ["UPath"]
-
-
-def __getattr__(name):
-    if name == "_UriFlavour":
-        from upath._flavour import default_flavour
-
-        warnings.warn(
-            "upath.core._UriFlavour should not be used anymore."
-            " Please follow the universal_pathlib==0.2.0 migration guide at"
-            " https://github.com/fsspec/universal_pathlib for more"
-            " information.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return default_flavour
-    elif name == "PT":
-        warnings.warn(
-            "upath.core.PT should not be used anymore."
-            " Please follow the universal_pathlib==0.2.0 migration guide at"
-            " https://github.com/fsspec/universal_pathlib for more"
-            " information.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return TypeVar("PT", bound="UPath")
-    else:
-        raise AttributeError(name)
 
 
 _FSSPEC_HAS_WORKING_GLOB = None
@@ -89,183 +72,123 @@ def _check_fsspec_has_working_glob():
 
 def _make_instance(cls, args, kwargs):
     """helper for pickling UPath instances"""
-    return cls(*args, **kwargs)
+    # Extract _relative_base if present
+    relative_base = kwargs.pop("_relative_base", None)
+    instance = cls(*args, **kwargs)
+    if relative_base is not None:
+        instance._relative_base = relative_base
+    return instance
 
 
-_unset: Any = object()
+def _buffering2blocksize(mode: str, buffering: int) -> int | None:
+    if not isinstance(buffering, int):
+        raise TypeError("buffering must be an integer")
+    if buffering == 0:  # buffering disabled
+        if "b" not in mode:  # text mode
+            raise ValueError("can't have unbuffered text I/O")
+        return buffering
+    elif buffering == -1:
+        return None
+    else:
+        return buffering
 
 
-# accessors are deprecated
-_FSSpecAccessor = FSSpecAccessorShim
+def _raise_unsupported(cls_name: str, method: str) -> NoReturn:
+    "relative path does not support method(), because cls_name.cwd() is unsupported"
+    raise NotImplementedError(f"{cls_name}.{method}() is unsupported")
 
 
-class UPath(PathlibPathShim, Path):
-    __slots__ = (
-        "_protocol",
-        "_storage_options",
-        "_fs_cached",
-        *PathlibPathShim.__missing_py312_slots__,
-        "__drv",
-        "__root",
-        "__parts",
-    )
+class _UPathMeta(ABCMeta):
+    if sys.version_info < (3, 11):
+        # pathlib 3.9 and 3.10 supported `Path[str]` but
+        # did not return a GenericAlias but the class itself?
+        def __getitem__(cls, key):
+            return cls
 
-    if TYPE_CHECKING:
-        # public
-        anchor: str
-        drive: str
-        parent: Self
-        parents: Sequence[Self]
-        parts: tuple[str, ...]
-        root: str
-        stem: str
-        suffix: str
-        suffixes: list[str]
-
-        def with_name(self, name: str) -> Self: ...
-        def with_stem(self, stem: str) -> Self: ...
-        def with_suffix(self, suffix: str) -> Self: ...
-
-        # private attributes
-        _protocol: str
-        _storage_options: dict[str, Any]
-        _fs_cached: AbstractFileSystem
-        _tail: str
-
-    _protocol_dispatch: bool | None = None
-    _flavour = LazyFlavourDescriptor()
-
-    if sys.version_info >= (3, 13):
-        parser = _flavour
-
-    # === upath.UPath constructor =====================================
-
-    def __new__(
-        cls, *args, protocol: str | None = None, **storage_options: Any
-    ) -> UPath:
-        # fill empty arguments
-        if not args:
-            args = (".",)
-
+    def __call__(cls, *args, **kwargs):
         # create a copy if UPath class
-        part0, *parts = args
-        if not parts and not storage_options and isinstance(part0, cls):
-            return copy(part0)
-
-        # deprecate 'scheme'
-        if "scheme" in storage_options:
-            warnings.warn(
-                "use 'protocol' kwarg instead of 'scheme'",
-                DeprecationWarning,
-                stacklevel=2,
-            )
-            protocol = storage_options.pop("scheme")
-
-        # determine the protocol
-        pth_protocol = get_upath_protocol(
-            part0, protocol=protocol, storage_options=storage_options
-        )
-        # determine which UPath subclass to dispatch to
-        if cls._protocol_dispatch or cls._protocol_dispatch is None:
-            upath_cls = get_upath_class(protocol=pth_protocol)
-            if upath_cls is None:
-                raise ValueError(f"Unsupported filesystem: {pth_protocol!r}")
+        try:
+            (arg0,) = args
+        except ValueError:
+            pass
         else:
-            # user subclasses can request to disable protocol dispatch
-            # by setting MyUPathSubclass._protocol_dispatch to `False`.
-            # This will effectively ignore the registered UPath
-            # implementations and return an instance of MyUPathSubclass.
-            # This can be useful if a subclass wants to extend the UPath
-            # api, and it is fine to rely on the default implementation
-            # for all supported user protocols.
-            upath_cls = cls
+            if isinstance(arg0, UPath) and not kwargs:
+                return copy(arg0)
+        inst = cls.__new__(cls, *args, **kwargs)
+        inst.__init__(*args, **kwargs)
+        return inst
 
-        # create a new instance
-        if cls is UPath:
-            # we called UPath() directly, and want an instance based on the
-            # provided or detected protocol (i.e. upath_cls)
-            obj: UPath = object.__new__(upath_cls)
-            obj._protocol = pth_protocol
 
-        elif issubclass(cls, upath_cls):
-            # we called a sub- or sub-sub-class of UPath, i.e. S3Path() and the
-            # corresponding upath_cls based on protocol is equal-to or a
-            # parent-of the cls.
-            obj = object.__new__(cls)
-            obj._protocol = pth_protocol
+class _UPathMixin(metaclass=_UPathMeta):
+    __slots__ = ()
 
-        elif issubclass(cls, UPath):
-            # we called a subclass of UPath directly, i.e. S3Path() but the
-            # detected protocol would return a non-related UPath subclass, i.e.
-            # S3Path("file:///abc"). This behavior is going to raise an error
-            # in future versions
-            msg_protocol = repr(pth_protocol)
-            if not pth_protocol:
-                msg_protocol += " (empty string)"
-            msg = (
-                f"{cls.__name__!s}(...) detected protocol {msg_protocol!s} and"
-                f" returns a {upath_cls.__name__} instance that isn't a direct"
-                f" subclass of {cls.__name__}. This will raise an exception in"
-                " future universal_pathlib versions. To prevent the issue, use"
-                " UPath(...) to create instances of unrelated protocols or you"
-                f" can instead derive your subclass {cls.__name__!s}(...) from"
-                f" {upath_cls.__name__} or alternatively override behavior via"
-                f" registering the {cls.__name__} implementation with protocol"
-                f" {msg_protocol!s} replacing the default implementation."
-            )
-            warnings.warn(msg, DeprecationWarning, stacklevel=2)
+    @property
+    @abstractmethod
+    def parser(self) -> UPathParser:
+        raise NotImplementedError
 
-            obj = object.__new__(upath_cls)
-            obj._protocol = pth_protocol
+    @property
+    def _protocol(self) -> str:
+        return self._chain.nest().protocol
 
-            upath_cls.__init__(
-                obj, *args, protocol=pth_protocol, **storage_options
-            )  # type: ignore
+    @_protocol.setter
+    def _protocol(self, value: str) -> None:
+        self._chain = self._chain.replace(protocol=value)
 
-        else:
-            raise RuntimeError("UPath.__new__ expected cls to be subclass of UPath")
+    @property
+    def _storage_options(self) -> dict[str, Any]:
+        return self._chain.nest().storage_options
 
-        return obj
+    @_storage_options.setter
+    def _storage_options(self, value: dict[str, Any]) -> None:
+        self._chain = self._chain.replace(storage_options=value)
 
-    def __init__(
-        self, *args, protocol: str | None = None, **storage_options: Any
-    ) -> None:
-        # allow subclasses to customize __init__ arg parsing
-        base_options = getattr(self, "_storage_options", {})
-        args, protocol, storage_options = type(self)._transform_init_args(
-            args, protocol or self._protocol, {**base_options, **storage_options}
-        )
-        if self._protocol != protocol and protocol:
-            self._protocol = protocol
+    @property
+    @abstractmethod
+    def _chain(self) -> Chain:
+        raise NotImplementedError
 
-        # retrieve storage_options
-        if args:
-            args0 = args[0]
-            if isinstance(args0, UPath):
-                self._storage_options = {**args0.storage_options, **storage_options}
-            else:
-                if hasattr(args0, "__fspath__"):
-                    _args0 = args0.__fspath__()
-                else:
-                    _args0 = str(args0)
-                self._storage_options = type(self)._parse_storage_options(
-                    _args0, protocol, storage_options
-                )
-        else:
-            self._storage_options = storage_options.copy()
+    @_chain.setter
+    @abstractmethod
+    def _chain(self, value: Chain) -> None:
+        raise NotImplementedError
 
-        # check that UPath subclasses in args are compatible
-        # TODO:
-        #   Future versions of UPath could verify that storage_options
-        #   can be combined between UPath instances. Not sure if this
-        #   is really necessary though. A warning might be enough...
-        if not compatible_protocol(self._protocol, *args):
-            raise ValueError("can't combine incompatible UPath protocols")
+    @property
+    @abstractmethod
+    def _chain_parser(self) -> FSSpecChainParser:
+        raise NotImplementedError
 
-        # fill ._raw_paths
-        if hasattr(self, "_raw_paths"):
-            return
-        super().__init__(*args)
+    @_chain_parser.setter
+    @abstractmethod
+    def _chain_parser(self, value: FSSpecChainParser) -> None:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def _fs_cached(self) -> AbstractFileSystem:
+        raise NotImplementedError
+
+    @_fs_cached.setter
+    def _fs_cached(self, value: AbstractFileSystem):
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def _raw_urlpaths(self) -> Sequence[JoinablePathLike]:
+        raise NotImplementedError
+
+    @_raw_urlpaths.setter
+    def _raw_urlpaths(self, value: Sequence[JoinablePathLike]) -> None:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def _relative_base(self) -> str | None:
+        raise NotImplementedError
+
+    @_relative_base.setter
+    def _relative_base(self, value: str | None) -> None:
+        raise NotImplementedError
 
     # === upath.UPath PUBLIC ADDITIONAL API ===========================
 
@@ -293,9 +216,25 @@ class UPath(PathlibPathShim, Path):
     @property
     def path(self) -> str:
         """The path that a fsspec filesystem can use."""
-        return super().__str__()
+        if self._relative_base is not None:
+            try:
+                # For relative paths, we need to resolve to absolute path
+                current_dir = self.cwd()  # type: ignore[attr-defined]
+            except NotImplementedError:
+                raise NotImplementedError(
+                    f"fsspec paths can not be relative and"
+                    f" {type(self).__name__}.cwd() is unsupported"
+                ) from None
+            # Join the current directory with the relative path
+            if (self_path := str(self)) == ".":
+                path = str(current_dir)
+            else:
+                path = current_dir.parser.join(str(self), self_path)
+        else:
+            path = str(self)
+        return self.parser.strip_protocol(path)
 
-    def joinuri(self, uri: str | os.PathLike[str]) -> UPath:
+    def joinuri(self, uri: JoinablePathLike) -> UPath:
         """Join with urljoin behavior for UPath instances"""
         # short circuit if the new uri uses a different protocol
         other_protocol = get_upath_protocol(uri)
@@ -312,16 +251,19 @@ class UPath(PathlibPathShim, Path):
     @classmethod
     def _transform_init_args(
         cls,
-        args: tuple[str | os.PathLike, ...],
+        args: tuple[JoinablePathLike, ...],
         protocol: str,
         storage_options: dict[str, Any],
-    ) -> tuple[tuple[str | os.PathLike, ...], str, dict[str, Any]]:
+    ) -> tuple[tuple[JoinablePathLike, ...], str, dict[str, Any]]:
         """allow customization of init args in subclasses"""
         return args, protocol, storage_options
 
     @classmethod
     def _parse_storage_options(
-        cls, urlpath: str, protocol: str, storage_options: Mapping[str, Any]
+        cls,
+        urlpath: str,
+        protocol: str,
+        storage_options: Mapping[str, Any],
     ) -> dict[str, Any]:
         """Parse storage_options from the urlpath"""
         pth_storage_options = upath_get_kwargs_from_url(urlpath)
@@ -329,7 +271,10 @@ class UPath(PathlibPathShim, Path):
 
     @classmethod
     def _fs_factory(
-        cls, urlpath: str, protocol: str, storage_options: Mapping[str, Any]
+        cls,
+        urlpath: str,
+        protocol: str,
+        storage_options: Mapping[str, Any],
     ) -> AbstractFileSystem:
         """Instantiate the filesystem_spec filesystem class"""
         fs_cls = get_filesystem_class(protocol)
@@ -337,411 +282,435 @@ class UPath(PathlibPathShim, Path):
         so_dct.update(storage_options)
         return fs_cls(**storage_options)
 
-    # === upath.UPath COMPATIBILITY API ===============================
+    # === upath.UPath constructor =====================================
 
-    def __init_subclass__(cls, **kwargs):
-        """provide a clean migration path for custom user subclasses"""
+    _protocol_dispatch: bool | None = None
 
-        # Check if the user subclass has a custom `__new__` method
-        has_custom_new_method = (
-            cls.__new__ is not UPath.__new__
-            and cls.__name__ not in {"PosixUPath", "WindowsUPath"}
-        )
+    def __new__(
+        cls,
+        *args: JoinablePathLike,
+        protocol: str | None = None,
+        chain_parser: FSSpecChainParser = DEFAULT_CHAIN_PARSER,
+        **storage_options: Any,
+    ) -> UPath:
+        # narrow type
+        assert issubclass(
+            cls, UPath
+        ), "UPath.__new__ can't instantiate non-UPath classes"
 
-        if has_custom_new_method and cls._protocol_dispatch is None:
+        # deprecate 'scheme'
+        if "scheme" in storage_options:
             warnings.warn(
-                "Detected a customized `__new__` method in subclass"
-                f" {cls.__name__!r}. Protocol dispatch will be disabled"
-                " for this subclass. Please follow the"
-                " universal_pathlib==0.2.0 migration guide at"
-                " https://github.com/fsspec/universal_pathlib for more"
-                " information.",
+                "use 'protocol' kwarg instead of 'scheme'",
                 DeprecationWarning,
                 stacklevel=2,
             )
-            cls._protocol_dispatch = False
+            protocol = storage_options.pop("scheme")
 
-        # Check if the user subclass has defined a custom accessor class
-        accessor_cls = getattr(cls, "_default_accessor", None)
-
-        has_custom_legacy_accessor = (
-            accessor_cls is not None
-            and issubclass(accessor_cls, FSSpecAccessorShim)
-            and accessor_cls is not FSSpecAccessorShim
+        # determine the protocol
+        pth_protocol = get_upath_protocol(
+            args[0] if args else "",
+            protocol=protocol,
+            storage_options=storage_options,
         )
-        has_customized_fs_instantiation = (
-            accessor_cls.__init__ is not FSSpecAccessorShim.__init__
-            or hasattr(accessor_cls, "_fs")
-        )
+        # determine which UPath subclass to dispatch to
+        if cls._protocol_dispatch or cls._protocol_dispatch is None:
+            upath_cls = get_upath_class(protocol=pth_protocol)
+            if upath_cls is None:
+                raise ValueError(f"Unsupported filesystem: {pth_protocol!r}")
+        else:
+            # user subclasses can request to disable protocol dispatch
+            # by setting MyUPathSubclass._protocol_dispatch to `False`.
+            # This will effectively ignore the registered UPath
+            # implementations and return an instance of MyUPathSubclass.
+            # This can be useful if a subclass wants to extend the UPath
+            # api, and it is fine to rely on the default implementation
+            # for all supported user protocols.
+            upath_cls = cls
 
-        if has_custom_legacy_accessor and has_customized_fs_instantiation:
+        if issubclass(upath_cls, cls):
+            pass
+
+        elif not issubclass(upath_cls, UPath):
+            raise RuntimeError("UPath.__new__ expected cls to be subclass of UPath")
+
+        else:
+            msg_protocol = repr(pth_protocol)
+            if not pth_protocol:
+                msg_protocol += " (empty string)"
+            msg = (
+                f"{cls.__name__!s}(...) detected protocol {msg_protocol!s} and"
+                f" returns a {upath_cls.__name__} instance that isn't a direct"
+                f" subclass of {cls.__name__}. This will raise an exception in"
+                " future universal_pathlib versions. To prevent the issue, use"
+                " UPath(...) to create instances of unrelated protocols or you"
+                f" can instead derive your subclass {cls.__name__!s}(...) from"
+                f" {upath_cls.__name__} or alternatively override behavior via"
+                f" registering the {cls.__name__} implementation with protocol"
+                f" {msg_protocol!s} replacing the default implementation."
+            )
             warnings.warn(
-                "Detected a customized `__init__` method or `_fs` attribute"
-                f" in the provided `_FSSpecAccessor` subclass of {cls.__name__!r}."
-                " It is recommended to instead override the `UPath._fs_factory`"
-                " classmethod to customize filesystem instantiation. Please follow"
-                " the universal_pathlib==0.2.0 migration guide at"
-                " https://github.com/fsspec/universal_pathlib for more"
-                " information.",
+                msg,
                 DeprecationWarning,
                 stacklevel=2,
             )
+            upath_cls = cls
 
-            def _fs_factory(
-                cls_, urlpath: str, protocol: str, storage_options: Mapping[str, Any]
-            ) -> AbstractFileSystem:
-                url = urlsplit(urlpath)
-                if protocol:
-                    url = url._replace(scheme=protocol)
-                inst = cls_._default_accessor(url, **storage_options)
-                return inst._fs
+        return object.__new__(upath_cls)
 
-            def _parse_storage_options(
-                cls_, urlpath: str, protocol: str, storage_options: Mapping[str, Any]
-            ) -> dict[str, Any]:
-                url = urlsplit(urlpath)
-                if protocol:
-                    url = url._replace(scheme=protocol)
-                inst = cls_._default_accessor(url, **storage_options)
-                return inst._fs.storage_options
+    def __init__(
+        self,
+        *args: JoinablePathLike,
+        protocol: str | None = None,
+        chain_parser: FSSpecChainParser = DEFAULT_CHAIN_PARSER,
+        **storage_options: Any,
+    ) -> None:
 
-            cls._fs_factory = classmethod(_fs_factory)
-            cls._parse_storage_options = classmethod(_parse_storage_options)
-
-    @property
-    def _path(self):
-        warnings.warn(
-            "UPath._path is deprecated and should not be used."
-            " Please follow the universal_pathlib==0.2.0 migration guide at"
-            " https://github.com/fsspec/universal_pathlib for more"
-            " information.",
-            DeprecationWarning,
-            stacklevel=2,
+        # todo: avoid duplicating this call from __new__
+        protocol = get_upath_protocol(
+            args[0] if args else "",
+            protocol=protocol,
+            storage_options=storage_options,
         )
-        return self.path
-
-    @property
-    def _kwargs(self):
-        warnings.warn(
-            "UPath._kwargs is deprecated. Please use"
-            " UPath.storage_options instead. Follow the"
-            " universal_pathlib==0.2.0 migration guide at"
-            " https://github.com/fsspec/universal_pathlib for more"
-            " information.",
-            DeprecationWarning,
-            stacklevel=2,
+        args, protocol, storage_options = type(self)._transform_init_args(
+            args, protocol, storage_options
         )
-        return self.storage_options
+
+        # check that UPath subclasses in args are compatible
+        # TODO:
+        #   Future versions of UPath could verify that storage_options
+        #   can be combined between UPath instances. Not sure if this
+        #   is really necessary though. A warning might be enough...
+        if not compatible_protocol(protocol, *args):
+            raise ValueError("can't combine incompatible UPath protocols")
+
+        if args:
+            args0 = args[0]
+            if isinstance(args0, UPath):
+                storage_options = {
+                    **args0._chain.nest().storage_options,
+                    **storage_options,
+                }
+                str_args0 = str(args0)
+
+            else:
+                if hasattr(args0, "__fspath__") and args0.__fspath__ is not None:
+                    str_args0 = args0.__fspath__()
+                else:
+                    str_args0 = str(args0)
+                storage_options = type(self)._parse_storage_options(
+                    str_args0, protocol, storage_options
+                )
+            if len(args) > 1:
+                str_args0 = WrappedFileSystemFlavour.from_protocol(protocol).join(
+                    str_args0, *args[1:]
+                )
+        else:
+            str_args0 = "."
+
+        segments = chain_parser.unchain(
+            str_args0, {"protocol": protocol, **storage_options}
+        )
+        self._chain = Chain.from_list(segments)
+        self._chain_parser = chain_parser
+        self._raw_urlpaths = args
+        self._relative_base = None
+
+    # --- deprecated attributes ---------------------------------------
 
     @property
     def _url(self) -> SplitResult:
         # TODO:
         #   _url should be deprecated, but for now there is no good way of
         #   accessing query parameters from urlpaths...
-        return urlsplit(self.as_posix())
+        return urlsplit(self.__str__())
 
-    if not TYPE_CHECKING:
-        # allow mypy to catch missing attributes
 
-        def __getattr__(self, item):
-            if item == "_accessor":
-                warnings.warn(
-                    "UPath._accessor is deprecated. Please use"
-                    " UPath.fs instead. Follow the"
-                    " universal_pathlib==0.2.0 migration guide at"
-                    " https://github.com/fsspec/universal_pathlib for more"
-                    " information.",
-                    DeprecationWarning,
-                    stacklevel=2,
-                )
-                if hasattr(self, "_default_accessor"):
-                    accessor_cls = self._default_accessor
-                else:
-                    accessor_cls = FSSpecAccessorShim
-                return accessor_cls.from_path(self)
-            else:
-                raise AttributeError(item)
+class UPath(_UPathMixin, OpenablePath):
+    __slots__ = (
+        "_chain",
+        "_chain_parser",
+        "_fs_cached",
+        "_raw_urlpaths",
+        "_relative_base",
+    )
 
-    @classmethod
-    def _from_parts(cls, parts, **kwargs):
-        warnings.warn(
-            "UPath._from_parts is deprecated and should not be used."
-            " Please follow the universal_pathlib==0.2.0 migration guide at"
-            " https://github.com/fsspec/universal_pathlib for more"
-            " information.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        parsed_url = kwargs.pop("url", None)
-        if parsed_url:
-            if protocol := parsed_url.scheme:
-                kwargs["protocol"] = protocol
-            if netloc := parsed_url.netloc:
-                kwargs["netloc"] = netloc
-        obj = UPath.__new__(cls, parts, **kwargs)
-        obj.__init__(*parts, **kwargs)
-        return obj
+    if TYPE_CHECKING:
+        _chain: Chain
+        _chain_parser: FSSpecChainParser
+        _fs_cached: bool
+        _raw_urlpaths: Sequence[JoinablePathLike]
+        _relative_base: str | None
 
-    @classmethod
-    def _parse_args(cls, args):
-        warnings.warn(
-            "UPath._parse_args is deprecated and should not be used."
-            " Please follow the universal_pathlib==0.2.0 migration guide at"
-            " https://github.com/fsspec/universal_pathlib for more"
-            " information.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        # TODO !!!
-        pth = cls._flavour.join(*args)
-        return cls._parse_path(pth)
+    # === JoinablePath attributes =====================================
 
-    @property
-    def _drv(self):
-        # direct access to ._drv should emit a warning,
-        # but there is no good way of doing this for now...
-        try:
-            return self.__drv
-        except AttributeError:
-            self._load_parts()
-            return self.__drv
+    parser: UPathParser = LazyFlavourDescriptor()  # type: ignore[assignment]
 
-    @_drv.setter
-    def _drv(self, value):
-        self.__drv = value
+    def with_segments(self, *pathsegments: JoinablePathLike) -> Self:
+        # we change joinpath behavior if called from a relative path
+        # this is not fully ideal, but currently the best way to move forward
+        if is_relative := self._relative_base is not None:
+            pathsegments = (self._relative_base, *pathsegments)
 
-    @property
-    def _root(self):
-        # direct access to ._root should emit a warning,
-        # but there is no good way of doing this for now...
-        try:
-            return self.__root
-        except AttributeError:
-            self._load_parts()
-            return self.__root
-
-    @_root.setter
-    def _root(self, value):
-        self.__root = value
-
-    @property
-    def _parts(self):
-        # UPath._parts is not used anymore, and not available
-        # in pathlib.Path for Python 3.12 and later.
-        # Direct access to ._parts should emit a deprecation warning,
-        # but there is no good way of doing this for now...
-        try:
-            return self.__parts
-        except AttributeError:
-            self._load_parts()
-            self.__parts = super().parts
-            return list(self.__parts)
-
-    @_parts.setter
-    def _parts(self, value):
-        self.__parts = value
-
-    @property
-    def _cparts(self):
-        # required for pathlib.Path.__eq__ compatibility on Python <3.12
-        return self.parts
-
-    # === pathlib.PurePath ============================================
-
-    def __reduce__(self):
-        args = tuple(self._raw_paths)
-        kwargs = {
-            "protocol": self._protocol,
-            **self._storage_options,
-        }
-        return _make_instance, (type(self), args, kwargs)
-
-    def with_segments(self, *pathsegments: str | os.PathLike[str]) -> Self:
-        return type(self)(
+        new_instance = type(self)(
             *pathsegments,
             protocol=self._protocol,
             **self._storage_options,
         )
 
-    def joinpath(self, *pathsegments: str | os.PathLike[str]) -> Self:
-        return self.with_segments(self, *pathsegments)
+        if is_relative:
+            new_instance._relative_base = self._relative_base
+        return new_instance
 
-    def __truediv__(self, key: str | os.PathLike[str]) -> Self:
-        try:
-            return self.joinpath(key)
-        except TypeError:
-            return NotImplemented
+    def __str__(self) -> str:
+        return self.__vfspath__()
 
-    def __rtruediv__(self, key: str | os.PathLike[str]) -> Self:
-        try:
-            return self.with_segments(key, self)
-        except TypeError:
-            return NotImplemented
+    def __vfspath__(self) -> str:
+        if self._relative_base is not None:
+            active_path = self._chain.active_path
+            stripped_base = self.parser.strip_protocol(
+                self._relative_base
+            ).removesuffix(self.parser.sep)
+            if not active_path.startswith(stripped_base):
+                raise RuntimeError(
+                    f"{active_path!r} is not a subpath of {stripped_base!r}"
+                )
 
-    # === upath.UPath non-standard changes ============================
-
-    # NOTE:
-    #  this is a classmethod on the parent class, but we need to
-    #  override it here to make it possible to provide the _flavour
-    #  with the correct protocol...
-    #  pathlib 3.12 never calls this on the class. Only on the instance.
-    @method_and_classmethod
-    def _parse_path(self_or_cls, path):  # noqa: B902
-        if isinstance(self_or_cls, type):
-            warnings.warn(
-                "UPath._parse_path should not be used as a classmethod."
-                " Please file an issue on the universal_pathlib issue tracker"
-                " and describe your use case.",
-                DeprecationWarning,
-                stacklevel=2,
+            return (
+                active_path.removeprefix(stripped_base).removeprefix(self.parser.sep)
+                or "."
             )
-        flavour = self_or_cls._flavour
-
-        if flavour.supports_empty_parts:
-            drv, root, rel = flavour.splitroot(path)
-            if not root:
-                parsed = []
-            else:
-                parsed = list(map(sys.intern, rel.split(flavour.sep)))
-                if parsed[-1] == ".":
-                    parsed[-1] = ""
-                parsed = [x for x in parsed if x != "."]
-                if not flavour.has_meaningful_trailing_slash and parsed[-1] == "":
-                    parsed.pop()
-            return drv, root, parsed
-        if not path:
-            return "", "", []
-        sep = flavour.sep
-        altsep = flavour.altsep
-        if altsep:
-            path = path.replace(altsep, sep)
-        drv, root, rel = flavour.splitroot(path)
-        if not root and drv.startswith(sep) and not drv.endswith(sep):
-            drv_parts = drv.split(sep)
-            if len(drv_parts) == 4 and drv_parts[2] not in "?.":
-                # e.g. //server/share
-                root = sep
-            elif len(drv_parts) == 6:
-                # e.g. //?/unc/server/share
-                root = sep
-        parsed = [sys.intern(str(x)) for x in rel.split(sep) if x and x != "."]
-        return drv, root, parsed
-
-    @method_and_classmethod
-    def _format_parsed_parts(self_or_cls, drv, root, tail, **kwargs):  # noqa: B902
-        if isinstance(self_or_cls, type):
-            warnings.warn(
-                "UPath._format_parsed_path should not be used as a classmethod."
-                " Please file an issue on the universal_pathlib issue tracker"
-                " and describe your use case.",
-                DeprecationWarning,
-                stacklevel=2,
-            )
-        flavour = self_or_cls._flavour
-
-        if kwargs:
-            warnings.warn(
-                "UPath._format_parsed_parts should not be used with"
-                " additional kwargs. Please follow the"
-                " universal_pathlib==0.2.0 migration guide at"
-                " https://github.com/fsspec/universal_pathlib for more"
-                " information.",
-                DeprecationWarning,
-                stacklevel=2,
-            )
-            if "url" in kwargs and tail[:1] == [f"{drv}{root}"]:
-                # This was called from code that expected py38-py311 behavior
-                # of _format_parsed_parts, which takes drv, root and parts
-                tail = tail[1:]
-
-        if drv or root:
-            return drv + root + flavour.sep.join(tail)
-        elif tail and flavour.splitdrive(tail[0])[0]:
-            tail = ["."] + tail
-        return flavour.sep.join(tail)
-
-    # === upath.UPath changes =========================================
-
-    def __str__(self):
-        if self._protocol:
-            return f"{self._protocol}://{self.path}"
         else:
-            return self.path
+            return self._chain_parser.chain(self._chain.to_list())[0]
 
-    def __fspath__(self):
-        msg = (
-            "in a future version of UPath this will be set to None"
-            " unless the filesystem is local (or caches locally)"
-        )
-        warnings.warn(msg, PendingDeprecationWarning, stacklevel=2)
-        return str(self)
+    def __repr__(self) -> str:
+        if self._relative_base is not None:
+            return f"<relative {type(self).__name__} {str(self)!r}>"
+        return f"{type(self).__name__}({self.path!r}, protocol={self._protocol!r})"
 
-    def __bytes__(self):
-        msg = (
-            "in a future version of UPath this will be set to None"
-            " unless the filesystem is local (or caches locally)"
-        )
-        warnings.warn(msg, PendingDeprecationWarning, stacklevel=2)
-        return os.fsencode(self)
-
-    def as_uri(self) -> str:
-        return str(self)
-
-    def is_reserved(self) -> bool:
-        return False
-
-    def __eq__(self, other: object) -> bool:
-        """UPaths are considered equal if their protocol, path and
-        storage_options are equal."""
-        if not isinstance(other, UPath):
-            return NotImplemented
-        return (
-            self.path == other.path
-            and self.protocol == other.protocol
-            and self.storage_options == other.storage_options
-        )
-
-    def __hash__(self) -> int:
-        """The returned hash is based on the protocol and path only.
-
-        Note: in the future, if hash collisions become an issue, we
-          can add `fsspec.utils.tokenize(storage_options)`
-        """
-        return hash((self.protocol, self.path))
-
-    def relative_to(  # type: ignore[override]
-        self,
-        other,
-        /,
-        *_deprecated,
-        walk_up=False,
-    ) -> Self:
-        if isinstance(other, UPath) and self.storage_options != other.storage_options:
-            raise ValueError(
-                "paths have different storage_options:"
-                f" {self.storage_options!r} != {other.storage_options!r}"
-            )
-        return super().relative_to(other, *_deprecated, walk_up=walk_up)
-
-    def is_relative_to(self, other, /, *_deprecated) -> bool:  # type: ignore[override]
-        if isinstance(other, UPath) and self.storage_options != other.storage_options:
-            return False
-        return super().is_relative_to(other, *_deprecated)
+    # === JoinablePath overrides ======================================
 
     @property
-    def name(self) -> str:
-        tail = self._tail
-        if not tail:
-            return ""
-        name = tail[-1]
-        if not name and len(tail) >= 2:
-            return tail[-2]
+    def parts(self) -> Sequence[str]:
+        # For relative paths, return parts of the relative path only
+        if self._relative_base is not None:
+            rel_str = str(self)
+            if rel_str == ".":
+                return ()
+            return tuple(rel_str.split(self.parser.sep))
+
+        split = self.parser.split
+        sep = self.parser.sep
+
+        path = self._chain.active_path
+        drive = self.parser.splitdrive(self._chain.active_path)[0]
+        stripped_path = self.parser.strip_protocol(path)
+        if stripped_path:
+            _, _, tail = path.partition(stripped_path)
+            path = stripped_path + tail
+
+        parent, name = split(path)
+        names = []
+        while path != parent:
+            names.append(name)
+            path = parent
+            parent, name = split(path)
+
+        if names and names[-1] == drive:
+            names = names[:-1]
+        if names and names[-1].startswith(sep):
+            parts = [*names[:-1], names[-1].removeprefix(sep), drive + sep]
         else:
-            return name
+            parts = [*names, drive + sep]
+        return tuple(reversed(parts))
+
+    def with_name(self, name) -> Self:
+        """Return a new path with the file name changed."""
+        split = self.parser.split
+        if self.parser.sep in name:  # `split(name)[0]`
+            raise ValueError(f"Invalid name {name!r}")
+        path = str(self)
+        path = path.removesuffix(split(path)[1]) + name
+        return self.with_segments(path)
+
+    @property
+    def anchor(self) -> str:
+        if self._relative_base is not None:
+            return ""
+        return self.drive + self.root
+
+    @property
+    def parent(self) -> Self:
+        if self._relative_base is not None:
+            if str(self) == ".":
+                return self
+            else:
+                # this needs to be revisited...
+                pth = type(self)(
+                    self._relative_base,
+                    str(self),
+                    protocol=self._protocol,
+                    **self._storage_options,
+                )
+                parent = pth.parent
+                parent._relative_base = self._relative_base
+                return parent
+        return super().parent
+
+    @property
+    def parents(self) -> Sequence[Self]:
+        if self._relative_base is not None:
+            parents = []
+            parent = self
+            while True:
+                if str(parent) == ".":
+                    break
+                parent = parent.parent
+                parents.append(parent)
+            return parents
+        return super().parents
+
+    # === ReadablePath attributes =====================================
+
+    @property
+    def info(self) -> PathInfo:
+        _raise_unsupported(type(self).__name__, "info")
+
+    def iterdir(self) -> Iterator[Self]:
+        sep = self.parser.sep
+        base = self
+        if self.parts[-1:] == ("",):
+            base = self.parent
+        for name in base.fs.listdir(base.path):
+            # fsspec returns dictionaries
+            if isinstance(name, dict):
+                name = name.get("name")
+            if name in {".", ".."}:
+                # Yielding a path object for these makes little sense
+                continue
+            # only want the path name with iterdir
+            _, _, name = name.removesuffix(sep).rpartition(self.parser.sep)
+            yield base.with_segments(str(base), name)
+
+    def __open_reader__(self) -> BinaryIO:
+        return self.fs.open(self.path, mode="rb")
+
+    def readlink(self) -> Self:
+        _raise_unsupported(type(self).__name__, "readlink")
+
+    # --- WritablePath attributes -------------------------------------
+
+    def symlink_to(
+        self,
+        target: ReadablePathLike,
+        target_is_directory: bool = False,
+    ) -> None:
+        _raise_unsupported(type(self).__name__, "symlink_to")
+
+    def mkdir(
+        self,
+        mode: int = 0o777,
+        parents: bool = False,
+        exist_ok: bool = False,
+    ) -> None:
+        if parents and not exist_ok and self.exists():
+            raise FileExistsError(str(self))
+        try:
+            self.fs.mkdir(
+                self.path,
+                create_parents=parents,
+                mode=mode,
+            )
+        except FileExistsError:
+            if not exist_ok:
+                raise FileExistsError(str(self))
+            if not self.is_dir():
+                raise FileExistsError(str(self))
+
+    def __open_writer__(self, mode: Literal["a", "w", "x"]) -> BinaryIO:
+        return self.fs.open(self.path, mode=f"{mode}b")
+
+    # --- upath overrides ---------------------------------------------
+
+    @overload
+    def open(
+        self,
+        mode: Literal["r", "w", "a"] = ...,
+        buffering: int = ...,
+        encoding: str = ...,
+        errors: str = ...,
+        newline: str = ...,
+        **fsspec_kwargs: Any,
+    ) -> TextIO: ...
+
+    @overload
+    def open(
+        self,
+        mode: Literal["rb", "wb", "ab"] = ...,
+        buffering: int = ...,
+        encoding: str = ...,
+        errors: str = ...,
+        newline: str = ...,
+        **fsspec_kwargs: Any,
+    ) -> BinaryIO: ...
+
+    @overload
+    def open(
+        self,
+        mode: str = ...,
+        buffering: int = ...,
+        encoding: str | None = ...,
+        errors: str | None = ...,
+        newline: str | None = ...,
+        **fsspec_kwargs: Any,
+    ) -> IO[Any]: ...
+
+    def open(
+        self,
+        mode: str = "r",
+        buffering: int = UNSET_DEFAULT,
+        encoding: str | None = UNSET_DEFAULT,
+        errors: str | None = UNSET_DEFAULT,
+        newline: str | None = UNSET_DEFAULT,
+        **fsspec_kwargs: Any,
+    ) -> IO[Any]:
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+
+        Parameters
+        ----------
+        mode:
+            Opening mode. Default is 'r'.
+        buffering:
+            Default is the block size of the underlying fsspec filesystem.
+        encoding:
+            Encoding is only used in text mode. Default is None.
+        errors:
+            Error handling for encoding. Only used in text mode. Default is None.
+        newline:
+            Newline handling. Only used in text mode. Default is None.
+        **fsspec_kwargs:
+            Additional options for the fsspec filesystem.
+        """
+        # match the signature of pathlib.Path.open()
+        if buffering is not UNSET_DEFAULT:
+            if "block_size" in fsspec_kwargs:
+                raise TypeError("cannot specify both 'buffering' and 'block_size'")
+            block_size = _buffering2blocksize(mode, buffering)
+            if block_size is not None:
+                fsspec_kwargs.setdefault("block_size", block_size)
+        if encoding is not UNSET_DEFAULT:
+            fsspec_kwargs["encoding"] = encoding
+        if errors is not UNSET_DEFAULT:
+            fsspec_kwargs["errors"] = errors
+        if newline is not UNSET_DEFAULT:
+            fsspec_kwargs["newline"] = newline
+        return self.fs.open(self.path, mode=mode, **fsspec_kwargs)
 
     # === pathlib.Path ================================================
 
-    def stat(  # type: ignore[override]
+    def stat(
         self,
         *,
         follow_symlinks=True,
@@ -753,10 +722,13 @@ class UPath(PathlibPathShim, Path):
                 UserWarning,
                 stacklevel=2,
             )
-        return UPathStatResult.from_info(self.fs.stat(self.path))
+        return UPathStatResult.from_info(self.fs.info(self.path))
 
-    def lstat(self) -> UPathStatResult:  # type: ignore[override]
+    def lstat(self) -> UPathStatResult:
         return self.stat(follow_symlinks=False)
+
+    def chmod(self, mode: int, *, follow_symlinks: bool = True) -> None:
+        _raise_unsupported(type(self).__name__, "chmod")
 
     def exists(self, *, follow_symlinks=True) -> bool:
         return self.fs.exists(self.path)
@@ -794,153 +766,162 @@ class UPath(PathlibPathShim, Path):
     def is_socket(self) -> bool:
         return False
 
-    def samefile(self, other_path) -> bool:
-        st = self.stat()
-        if isinstance(other_path, UPath):
-            other_st = other_path.stat()
-        else:
-            other_st = self.with_segments(other_path).stat()
-        return st == other_st
+    def is_reserved(self) -> bool:
+        return False
 
-    @overload  # type: ignore[override]
-    def open(
-        self,
-        mode: Literal["r", "w", "a"] = "r",
-        buffering: int = ...,
-        encoding: str = ...,
-        errors: str = ...,
-        newline: str = ...,
-        **fsspec_kwargs: Any,
-    ) -> TextIO: ...
-
-    @overload
-    def open(  # type: ignore[override]
-        self,
-        mode: Literal["rb", "wb", "ab"],
-        buffering: int = ...,
-        encoding: str = ...,
-        errors: str = ...,
-        newline: str = ...,
-        **fsspec_kwargs: Any,
-    ) -> BinaryIO: ...
-
-    def open(
-        self,
-        mode: str = "r",
-        *args: Any,
-        **fsspec_kwargs: Any,
-    ) -> IO[Any]:
-        """
-        Open the file pointed by this path and return a file object, as
-        the built-in open() function does.
-
-        Parameters
-        ----------
-        mode:
-            Opening mode. Default is 'r'.
-        buffering:
-            Default is the block size of the underlying fsspec filesystem.
-        encoding:
-            Encoding is only used in text mode. Default is None.
-        errors:
-            Error handling for encoding. Only used in text mode. Default is None.
-        newline:
-            Newline handling. Only used in text mode. Default is None.
-        **fsspec_kwargs:
-            Additional options for the fsspec filesystem.
-        """
-        # match the signature of pathlib.Path.open()
-        for key, value in zip(["buffering", "encoding", "errors", "newline"], args):
-            if key in fsspec_kwargs:
-                raise TypeError(
-                    f"{type(self).__name__}.open() got multiple values for '{key}'"
-                )
-            fsspec_kwargs[key] = value
-        # translate pathlib buffering to fs block_size
-        if "buffering" in fsspec_kwargs:
-            fsspec_kwargs.setdefault("block_size", fsspec_kwargs.pop("buffering"))
-        return self.fs.open(self.path, mode=mode, **fsspec_kwargs)
-
-    def iterdir(self) -> Generator[UPath, None, None]:
-        for name in self.fs.listdir(self.path):
-            # fsspec returns dictionaries
-            if isinstance(name, dict):
-                name = name.get("name")
-            if name in {".", ".."}:
-                # Yielding a path object for these makes little sense
-                continue
-            # only want the path name with iterdir
-            _, _, name = str_remove_suffix(name, "/").rpartition(self._flavour.sep)
-            yield self.with_segments(*self.parts, name)
-
-    def _scandir(self):
-        raise NotImplementedError  # todo
-
-    def _make_child_relpath(self, name):
-        path = super()._make_child_relpath(name)
-        del path._str  # fix _str = str(self) assignment
-        return path
+    def expanduser(self) -> Self:
+        return self
 
     def glob(
-        self, pattern: str, *, case_sensitive=None
-    ) -> Generator[UPath, None, None]:
+        self,
+        pattern: str,
+        *,
+        case_sensitive: bool = UNSET_DEFAULT,
+        recurse_symlinks: bool = UNSET_DEFAULT,
+    ) -> Iterator[UPath]:
+        if case_sensitive is not UNSET_DEFAULT:
+            warnings.warn(
+                "UPath.glob(): case_sensitive is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+        if recurse_symlinks is not UNSET_DEFAULT:
+            warnings.warn(
+                "UPath.glob(): recurse_symlinks is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+        if self._relative_base is not None:
+            self = self.absolute()
         path_pattern = self.joinpath(pattern).path
-        sep = self._flavour.sep
+        sep = self.parser.sep
         base = self.fs._strip_protocol(self.path)
         for name in self.fs.glob(path_pattern):
-            name = str_remove_prefix(str_remove_prefix(name, base), sep)
+            name = name.removeprefix(base).removeprefix(sep)
             yield self.joinpath(name)
 
     def rglob(
-        self, pattern: str, *, case_sensitive=None
-    ) -> Generator[UPath, None, None]:
+        self,
+        pattern: str,
+        *,
+        case_sensitive: bool = UNSET_DEFAULT,
+        recurse_symlinks: bool = UNSET_DEFAULT,
+    ) -> Iterator[UPath]:
+        if case_sensitive is not UNSET_DEFAULT:
+            warnings.warn(
+                "UPath.glob(): case_sensitive is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+        if recurse_symlinks is not UNSET_DEFAULT:
+            warnings.warn(
+                "UPath.glob(): recurse_symlinks is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
         if _FSSPEC_HAS_WORKING_GLOB is None:
             _check_fsspec_has_working_glob()
 
         if _FSSPEC_HAS_WORKING_GLOB:
             r_path_pattern = self.joinpath("**", pattern).path
-            sep = self._flavour.sep
+            sep = self.parser.sep
             base = self.fs._strip_protocol(self.path)
             for name in self.fs.glob(r_path_pattern):
-                name = str_remove_prefix(str_remove_prefix(name, base), sep)
+                name = name.removeprefix(base).removeprefix(sep)
                 yield self.joinpath(name)
 
         else:
             path_pattern = self.joinpath(pattern).path
             r_path_pattern = self.joinpath("**", pattern).path
-            sep = self._flavour.sep
+            sep = self.parser.sep
             base = self.fs._strip_protocol(self.path)
             seen = set()
             for p in (path_pattern, r_path_pattern):
                 for name in self.fs.glob(p):
-                    name = str_remove_prefix(str_remove_prefix(name, base), sep)
+                    name = name.removeprefix(base).removeprefix(sep)
                     if name in seen:
                         continue
                     else:
                         seen.add(name)
                         yield self.joinpath(name)
 
-    @classmethod
-    def cwd(cls) -> UPath:
-        if cls is UPath:
-            return get_upath_class("").cwd()  # type: ignore[union-attr]
-        else:
-            raise NotImplementedError
+    def owner(self) -> str:
+        _raise_unsupported(type(self).__name__, "owner")
 
-    @classmethod
-    def home(cls) -> UPath:
-        if cls is UPath:
-            return get_upath_class("").home()  # type: ignore[union-attr]
-        else:
-            raise NotImplementedError
+    def group(self) -> str:
+        _raise_unsupported(type(self).__name__, "group")
 
     def absolute(self) -> Self:
+        if self._relative_base is not None:
+            return self.cwd().joinpath(str(self))
         return self
 
     def is_absolute(self) -> bool:
-        return self._flavour.isabs(str(self))
+        if self._relative_base is not None:
+            return False
+        else:
+            return self.parser.isabs(str(self))
+
+    def __eq__(self, other: object) -> bool:
+        """UPaths are considered equal if their protocol, path and
+        storage_options are equal."""
+        if not isinstance(other, UPath):
+            return NotImplemented
+
+        # For relative paths, compare the string representation instead of path
+        if (
+            self._relative_base is not None
+            or getattr(other, "_relative_base", None) is not None
+        ):
+            # If both are relative paths, compare just the relative strings
+            if (
+                self._relative_base is not None
+                and getattr(other, "_relative_base", None) is not None
+            ):
+                return str(self) == str(other)
+            else:
+                # One is relative, one is not - they can't be equal
+                return False
+
+        return (
+            self.path == other.path
+            and self.protocol == other.protocol
+            and self.storage_options == other.storage_options
+        )
+
+    def __hash__(self) -> int:
+        """The returned hash is based on the protocol and path only.
+
+        Note: in the future, if hash collisions become an issue, we
+          can add `fsspec.utils.tokenize(storage_options)`
+        """
+        if self._relative_base is not None:
+            return hash((self.protocol, str(self)))
+        return hash((self.protocol, self.path))
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, UPath) or self.parser is not other.parser:
+            return NotImplemented
+        return self.path < other.path
+
+    def __le__(self, other: object) -> bool:
+        if not isinstance(other, UPath) or self.parser is not other.parser:
+            return NotImplemented
+        return self.path <= other.path
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, UPath) or self.parser is not other.parser:
+            return NotImplemented
+        return self.path > other.path
+
+    def __ge__(self, other: object) -> bool:
+        if not isinstance(other, UPath) or self.parser is not other.parser:
+            return NotImplemented
+        return self.path >= other.path
 
     def resolve(self, strict: bool = False) -> Self:
+        if self._relative_base is not None:
+            self = self.absolute()
         _parts = self.parts
 
         # Do not attempt to normalize path if no parts are dots
@@ -958,15 +939,6 @@ class UPath(PathlibPathShim, Path):
 
         return self.with_segments(*_parts[:1], *resolved)
 
-    def owner(self) -> str:
-        raise NotImplementedError
-
-    def group(self) -> str:
-        raise NotImplementedError
-
-    def readlink(self) -> Self:
-        raise NotImplementedError
-
     def touch(self, mode=0o666, exist_ok=True) -> None:
         exists = self.fs.exists(self.path)
         if exists and not exist_ok:
@@ -979,26 +951,8 @@ class UPath(PathlibPathShim, Path):
             except (NotImplementedError, ValueError):
                 pass  # unsupported by filesystem
 
-    def mkdir(self, mode=0o777, parents=False, exist_ok=False) -> None:
-        if parents and not exist_ok and self.exists():
-            raise FileExistsError(str(self))
-        try:
-            self.fs.mkdir(
-                self.path,
-                create_parents=parents,
-                mode=mode,
-            )
-        except FileExistsError:
-            if not exist_ok:
-                raise FileExistsError(str(self))
-            if not self.is_dir():
-                raise FileExistsError(str(self))
-
-    def chmod(self, mode: int, *, follow_symlinks: bool = True) -> None:
-        raise NotImplementedError
-
     def lchmod(self, mode: int) -> None:
-        raise NotImplementedError
+        _raise_unsupported(type(self).__name__, "lchmod")
 
     def unlink(self, missing_ok: bool = False) -> None:
         if not self.exists():
@@ -1016,14 +970,18 @@ class UPath(PathlibPathShim, Path):
 
     def rename(
         self,
-        target: str | os.PathLike[str] | UPath,
+        target: WritablePathLike,
         *,  # note: non-standard compared to pathlib
-        recursive: bool = _unset,
-        maxdepth: int | None = _unset,
+        recursive: bool = UNSET_DEFAULT,
+        maxdepth: int | None = UNSET_DEFAULT,
         **kwargs: Any,
     ) -> Self:
         if isinstance(target, str) and self.storage_options:
             target = UPath(target, **self.storage_options)
+        if target == self:
+            return self
+        if self._relative_base is not None:
+            self = self.absolute()
         target_protocol = get_upath_protocol(target)
         if target_protocol:
             if target_protocol != self.protocol:
@@ -1042,34 +1000,182 @@ class UPath(PathlibPathShim, Path):
             # avoid calling .resolve for subclasses of UPath
             if ".." in parent.parts or "." in parent.parts:
                 parent = parent.resolve()
-            target_ = parent.joinpath(os.path.normpath(target))
-        assert isinstance(target_, type(self)), "identical protocols enforced above"
-        if recursive is not _unset:
+            target_ = parent.joinpath(os.path.normpath(str(target)))
+        if recursive is not UNSET_DEFAULT:
             kwargs["recursive"] = recursive
-        if maxdepth is not _unset:
+        if maxdepth is not UNSET_DEFAULT:
             kwargs["maxdepth"] = maxdepth
         self.fs.mv(
             self.path,
             target_.path,
             **kwargs,
         )
-        return target_
+        return self.with_segments(target_)
 
-    def replace(self, target: str | os.PathLike[str] | UPath) -> UPath:
-        raise NotImplementedError  # todo
+    def replace(self, target: WritablePathLike) -> Self:
+        _raise_unsupported(type(self).__name__, "replace")
 
-    def symlink_to(  # type: ignore[override]
+    @property
+    def drive(self) -> str:
+        if self._relative_base is not None:
+            return ""
+        return self.parser.splitroot(str(self))[0]
+
+    @property
+    def root(self) -> str:
+        if self._relative_base is not None:
+            return ""
+        return self.parser.splitroot(str(self))[1]
+
+    def __reduce__(self):
+        args = tuple(self._raw_urlpaths)
+        kwargs = {
+            "protocol": self._protocol,
+            **self._storage_options,
+        }
+        # Include _relative_base in the state if it's set
+        if self._relative_base is not None:
+            kwargs["_relative_base"] = self._relative_base
+        return _make_instance, (type(self), args, kwargs)
+
+    def as_uri(self) -> str:
+        if self._relative_base is not None:
+            raise ValueError(
+                f"relative path can't be expressed as a {self.protocol} URI"
+            )
+        return str(self)
+
+    def as_posix(self) -> str:
+        return str(self)
+
+    def samefile(self, other_path) -> bool:
+        st = self.stat()
+        if isinstance(other_path, UPath):
+            other_st = other_path.stat()
+        else:
+            other_st = self.with_segments(other_path).stat()
+        return st == other_st
+
+    @classmethod
+    def cwd(cls) -> Self:
+        if cls is UPath:
+            # default behavior for UPath.cwd() is to return local cwd
+            return get_upath_class("").cwd()  # type: ignore[union-attr,return-value]
+        else:
+            _raise_unsupported(cls.__name__, "cwd")
+
+    @classmethod
+    def home(cls) -> Self:
+        if cls is UPath:
+            return get_upath_class("").home()  # type: ignore[union-attr,return-value]
+        else:
+            _raise_unsupported(cls.__name__, "home")
+
+    def relative_to(  # type: ignore[override]
         self,
-        target: str | os.PathLike[str] | UPath,
-        target_is_directory: bool = False,
-    ) -> None:
+        other: Self | str,
+        /,
+        *_deprecated,
+        walk_up: bool = False,
+    ) -> Self:
+        if walk_up:
+            raise NotImplementedError("walk_up=True is not implemented yet")
+
+        if isinstance(other, UPath):
+            # revisit: ...
+            if self.__class__ is not other.__class__:
+                raise ValueError(
+                    "incompatible protocols:"
+                    f" {self._protocol!r} != {other._protocol!r}"
+                )
+            if self.storage_options != other.storage_options:
+                raise ValueError(
+                    "incompatible storage_options:"
+                    f" {self.storage_options!r} != {other.storage_options!r}"
+                )
+        elif isinstance(other, str):
+            other = self.with_segments(other)
+        else:
+            raise TypeError(f"expected UPath or str, got {type(other).__name__}")
+
+        if other not in self.parents and self != other:
+            raise ValueError(f"{self!s} is not in the subpath of {other!s}")
+        else:
+            rel = copy(self)
+            rel._relative_base = str(other)
+            return rel
+
+    def is_relative_to(self, other, /, *_deprecated) -> bool:  # type: ignore[override]
+        if isinstance(other, UPath) and self.storage_options != other.storage_options:
+            return False
+        return self == other or other in self.parents
+
+    def hardlink_to(self, target: ReadablePathLike) -> None:
         raise NotImplementedError
 
-    def hardlink_to(  # type: ignore[override]
-        self,
-        target: str | os.PathLike[str] | UPath,
-    ) -> None:
-        raise NotImplementedError
+    def match(self, pattern: str) -> bool:
+        # fixme: hacky emulation of match. needs tests...
+        if not pattern:
+            raise ValueError("pattern cannot be empty")
+        return self.full_match(pattern.replace("**", "*"))
 
-    def expanduser(self) -> Self:
-        return self
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, _source_type: Any, _handler: GetCoreSchemaHandler
+    ) -> CoreSchema:
+        from pydantic_core import core_schema
+
+        deserialization_schema = core_schema.chain_schema(
+            [
+                core_schema.no_info_plain_validator_function(
+                    lambda v: {"path": v} if isinstance(v, str) else v,
+                ),
+                core_schema.typed_dict_schema(
+                    {
+                        "path": core_schema.typed_dict_field(
+                            core_schema.str_schema(), required=True
+                        ),
+                        "protocol": core_schema.typed_dict_field(
+                            core_schema.with_default_schema(
+                                core_schema.str_schema(), default=""
+                            ),
+                            required=False,
+                        ),
+                        "storage_options": core_schema.typed_dict_field(
+                            core_schema.with_default_schema(
+                                core_schema.dict_schema(
+                                    core_schema.str_schema(),
+                                    core_schema.any_schema(),
+                                ),
+                                default_factory=dict,
+                            ),
+                            required=False,
+                        ),
+                    },
+                    extra_behavior="forbid",
+                ),
+                core_schema.no_info_plain_validator_function(
+                    lambda dct: cls(
+                        dct.pop("path"),
+                        protocol=dct.pop("protocol"),
+                        **dct["storage_options"],
+                    )
+                ),
+            ]
+        )
+
+        serialization_schema = core_schema.plain_serializer_function_ser_schema(
+            lambda u: {
+                "path": u.path,
+                "protocol": u.protocol,
+                "storage_options": dict(u.storage_options),
+            }
+        )
+
+        return core_schema.json_or_python_schema(
+            json_schema=deserialization_schema,
+            python_schema=core_schema.union_schema(
+                [core_schema.is_instance_schema(UPath), deserialization_schema]
+            ),
+            serialization=serialization_schema,
+        )

@@ -1291,6 +1291,27 @@ class CfnChannel(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromChannelName")
+    @builtins.classmethod
+    def from_channel_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        channel_name: builtins.str,
+    ) -> IChannelRef:
+        '''Creates a new IChannelRef from a channelName.
+
+        :param scope: -
+        :param id: -
+        :param channel_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__60d41c2d674ae69d0583f0829e381b545ba1e9f2c93e0fc29860297fa82ddbf6)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument channel_name", value=channel_name, expected_type=type_hints["channel_name"])
+        return typing.cast(IChannelRef, jsii.sinvoke(cls, "fromChannelName", [scope, id, channel_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1826,6 +1847,27 @@ class CfnDataset(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromDatasetName")
+    @builtins.classmethod
+    def from_dataset_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        dataset_name: builtins.str,
+    ) -> IDatasetRef:
+        '''Creates a new IDatasetRef from a datasetName.
+
+        :param scope: -
+        :param id: -
+        :param dataset_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb340790ab5f3215e0f0c83feac2d20ef7a06d62a08aaa0245a73d812c928bc6)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument dataset_name", value=dataset_name, expected_type=type_hints["dataset_name"])
+        return typing.cast(IDatasetRef, jsii.sinvoke(cls, "fromDatasetName", [scope, id, dataset_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3911,6 +3953,27 @@ class CfnDatastore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDatastoreName")
+    @builtins.classmethod
+    def from_datastore_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        datastore_name: builtins.str,
+    ) -> IDatastoreRef:
+        '''Creates a new IDatastoreRef from a datastoreName.
+
+        :param scope: -
+        :param id: -
+        :param datastore_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__14456e1f4bdbd8cede71a896f8323368877932a1b55f475a9eab0b1898e4295f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument datastore_name", value=datastore_name, expected_type=type_hints["datastore_name"])
+        return typing.cast(IDatastoreRef, jsii.sinvoke(cls, "fromDatastoreName", [scope, id, datastore_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5193,6 +5256,27 @@ class CfnPipeline(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromPipelineName")
+    @builtins.classmethod
+    def from_pipeline_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        pipeline_name: builtins.str,
+    ) -> IPipelineRef:
+        '''Creates a new IPipelineRef from a pipelineName.
+
+        :param scope: -
+        :param id: -
+        :param pipeline_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d6df4d09ae6fc11b39aaafa478e14383bd48de0b0ca658ada135b77e0ecf5e2e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument pipeline_name", value=pipeline_name, expected_type=type_hints["pipeline_name"])
+        return typing.cast(IPipelineRef, jsii.sinvoke(cls, "fromPipelineName", [scope, id, pipeline_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6666,6 +6750,14 @@ def _typecheckingstub__8332c208b00865f2cfdad255e86ebeabe2b2b68a70b8fa26b96ec9b8c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__60d41c2d674ae69d0583f0829e381b545ba1e9f2c93e0fc29860297fa82ddbf6(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    channel_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3afdfadc9a4edd9b5c35f5d06ae9f61c5c1ebaa012686da4a923c736b3fa979b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6739,6 +6831,14 @@ def _typecheckingstub__28e622d1f32fa52fab95276ceeda7ad3576bf8992514bb441ca9b4ec4
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataset.TriggerProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     versioning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataset.VersioningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fb340790ab5f3215e0f0c83feac2d20ef7a06d62a08aaa0245a73d812c928bc6(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    dataset_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6994,6 +7094,14 @@ def _typecheckingstub__80888194774a160a9eb52d698126a6fd1e7e99768082595c8f4810a89
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__14456e1f4bdbd8cede71a896f8323368877932a1b55f475a9eab0b1898e4295f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    datastore_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ade56a7c5d6431a16dde38053efe2001ac1c8ab06985988a23a00267d80a5a16(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7150,6 +7258,14 @@ def _typecheckingstub__780e6e051f6bd102a51bd0b3de8f56cd44681953f4198d82746008555
     pipeline_activities: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ActivityProperty, typing.Dict[builtins.str, typing.Any]]]]],
     pipeline_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d6df4d09ae6fc11b39aaafa478e14383bd48de0b0ca658ada135b77e0ecf5e2e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    pipeline_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

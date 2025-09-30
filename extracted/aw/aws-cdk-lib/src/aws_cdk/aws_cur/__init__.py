@@ -523,6 +523,27 @@ class CfnReportDefinition(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromReportName")
+    @builtins.classmethod
+    def from_report_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        report_name: builtins.str,
+    ) -> IReportDefinitionRef:
+        '''Creates a new IReportDefinitionRef from a reportName.
+
+        :param scope: -
+        :param id: -
+        :param report_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__02865af0c29dc81b4c5c9b0407af3a8814fe9de8c986762beeaf1cfb76e3d846)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument report_name", value=report_name, expected_type=type_hints["report_name"])
+        return typing.cast(IReportDefinitionRef, jsii.sinvoke(cls, "fromReportName", [scope, id, report_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -802,6 +823,14 @@ def _typecheckingstub__fa6a90098f39859b607fa8b8453bf94b62703cdf41682ff1f90c565ab
     additional_schema_elements: typing.Optional[typing.Sequence[builtins.str]] = None,
     billing_view_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__02865af0c29dc81b4c5c9b0407af3a8814fe9de8c986762beeaf1cfb76e3d846(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    report_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

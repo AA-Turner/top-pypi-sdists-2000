@@ -2532,6 +2532,48 @@ class CfnCampaign(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromCampaignArn")
+    @builtins.classmethod
+    def from_campaign_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> ICampaignRef:
+        '''Creates a new ICampaignRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c51ab85405ba663d7d52a30e3c3b34e16806ad52f1c92f929d00fbb7ff2dfcf8)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(ICampaignRef, jsii.sinvoke(cls, "fromCampaignArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromCampaignName")
+    @builtins.classmethod
+    def from_campaign_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        campaign_name: builtins.str,
+    ) -> ICampaignRef:
+        '''Creates a new ICampaignRef from a campaignName.
+
+        :param scope: -
+        :param id: -
+        :param campaign_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ae2c2e2ec2c5152f8ac3315300b27b15147bc728c8312a967a15c3fb997d60ec)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument campaign_name", value=campaign_name, expected_type=type_hints["campaign_name"])
+        return typing.cast(ICampaignRef, jsii.sinvoke(cls, "fromCampaignName", [scope, id, campaign_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6245,6 +6287,48 @@ class CfnFleet(
 
         jsii.create(self.__class__, self, [scope, id_, props])
 
+    @jsii.member(jsii_name="fromFleetArn")
+    @builtins.classmethod
+    def from_fleet_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IFleetRef:
+        '''Creates a new IFleetRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7d7fcef721ba4c089f7301c5aef8c2013b79b8c192a29a9b67a9c0276b6d819a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IFleetRef, jsii.sinvoke(cls, "fromFleetArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromFleetId")
+    @builtins.classmethod
+    def from_fleet_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        fleet_id: builtins.str,
+    ) -> IFleetRef:
+        '''Creates a new IFleetRef from a fleetId.
+
+        :param scope: -
+        :param id: -
+        :param fleet_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__19c86fa181d292c4885e8803f1244f1e6377b8ff0a96227ec1c732e3f5334b5e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument fleet_id", value=fleet_id, expected_type=type_hints["fleet_id"])
+        return typing.cast(IFleetRef, jsii.sinvoke(cls, "fromFleetId", [scope, id, fleet_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8852,6 +8936,22 @@ def _typecheckingstub__f7abc45d2046b48ec3bc5807ec2826a784930a5009b41b194dd6e4bed
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c51ab85405ba663d7d52a30e3c3b34e16806ad52f1c92f929d00fbb7ff2dfcf8(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ae2c2e2ec2c5152f8ac3315300b27b15147bc728c8312a967a15c3fb997d60ec(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    campaign_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__09fbf1d259fb24b3ffc81851949fdbc1abbaa3df7fef9d0031938dd5b723205f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9320,6 +9420,22 @@ def _typecheckingstub__be2399a288ba3f0fe4eba6c31d42082d31eac165febede18736a759d9
     signal_catalog_arn: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7d7fcef721ba4c089f7301c5aef8c2013b79b8c192a29a9b67a9c0276b6d819a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__19c86fa181d292c4885e8803f1244f1e6377b8ff0a96227ec1c732e3f5334b5e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    fleet_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -2761,6 +2761,27 @@ class CfnDetector(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDetectorId")
+    @builtins.classmethod
+    def from_detector_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        detector_id: builtins.str,
+    ) -> IDetectorRef:
+        '''Creates a new IDetectorRef from a detectorId.
+
+        :param scope: -
+        :param id: -
+        :param detector_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3c713ff5c3d63d8b0298c515dac65b7f9b853cb55d0ab5db4ed3060bd60413f3)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument detector_id", value=detector_id, expected_type=type_hints["detector_id"])
+        return typing.cast(IDetectorRef, jsii.sinvoke(cls, "fromDetectorId", [scope, id, detector_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4497,6 +4518,48 @@ class CfnMalwareProtectionPlan(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromMalwareProtectionPlanArn")
+    @builtins.classmethod
+    def from_malware_protection_plan_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IMalwareProtectionPlanRef:
+        '''Creates a new IMalwareProtectionPlanRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9beb0e4b705cb1315021d1597ad3a8ef8f98d51f345baa42f6587d45977f630f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IMalwareProtectionPlanRef, jsii.sinvoke(cls, "fromMalwareProtectionPlanArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromMalwareProtectionPlanId")
+    @builtins.classmethod
+    def from_malware_protection_plan_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        malware_protection_plan_id: builtins.str,
+    ) -> IMalwareProtectionPlanRef:
+        '''Creates a new IMalwareProtectionPlanRef from a malwareProtectionPlanId.
+
+        :param scope: -
+        :param id: -
+        :param malware_protection_plan_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2dc9250482abe101d6509cf926e75331c1ab605e103c4610913931bfc0ff5343)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument malware_protection_plan_id", value=malware_protection_plan_id, expected_type=type_hints["malware_protection_plan_id"])
+        return typing.cast(IMalwareProtectionPlanRef, jsii.sinvoke(cls, "fromMalwareProtectionPlanId", [scope, id, malware_protection_plan_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6892,6 +6955,14 @@ def _typecheckingstub__d4374e73b5cd2e2814bd72eb21f29547df6146e023d23ee6d5c8c8cdb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3c713ff5c3d63d8b0298c515dac65b7f9b853cb55d0ab5db4ed3060bd60413f3(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    detector_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4cd13133d47f23bb91dcc2e425b360777bcd306422761af023eb8654fdc89892(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7175,6 +7246,22 @@ def _typecheckingstub__00ef930fce1d868abb00d70b721805e86a6ec1fb82c9df9f9974877a5
     role: builtins.str,
     actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMalwareProtectionPlan.CFNActionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnMalwareProtectionPlan.TagItemProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9beb0e4b705cb1315021d1597ad3a8ef8f98d51f345baa42f6587d45977f630f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2dc9250482abe101d6509cf926e75331c1ab605e103c4610913931bfc0ff5343(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    malware_protection_plan_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

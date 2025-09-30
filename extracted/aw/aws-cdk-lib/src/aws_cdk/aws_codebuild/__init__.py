@@ -2284,7 +2284,11 @@ class Cache(
             # Control the build environment
             build_environment=codebuild.BuildEnvironment(
                 compute_type=codebuild.ComputeType.LARGE,
-                privileged=True
+                privileged=True,
+                docker_server=codebuild.DockerServerOptions(
+                    compute_type=codebuild.DockerServerComputeType.SMALL,
+                    security_groups=[my_security_group]
+                )
             ),
             timeout=Duration.minutes(90),
             file_system_locations=[
@@ -4434,7 +4438,11 @@ class ComputeType(enum.Enum):
             # Control the build environment
             build_environment=codebuild.BuildEnvironment(
                 compute_type=codebuild.ComputeType.LARGE,
-                privileged=True
+                privileged=True,
+                docker_server=codebuild.DockerServerOptions(
+                    compute_type=codebuild.DockerServerComputeType.SMALL,
+                    security_groups=[my_security_group]
+                )
             ),
             timeout=Duration.minutes(90),
             file_system_locations=[
@@ -4532,6 +4540,62 @@ class DockerServerComputeType(enum.Enum):
     '''Docker server compute type.
 
     :see: https://docs.aws.amazon.com/codebuild/latest/APIReference/API_DockerServer.html
+    :exampleMetadata: infused
+
+    Example::
+
+        # vpc: ec2.Vpc
+        # my_security_group: ec2.SecurityGroup
+        
+        pipelines.CodeBuildStep("Synth",
+            # ...standard ShellStep props...
+            commands=[],
+            env={},
+        
+            # If you are using a CodeBuildStep explicitly, set the 'cdk.out' directory
+            # to be the synth step's output.
+            primary_output_directory="cdk.out",
+        
+            # Control the name of the project
+            project_name="MyProject",
+        
+            # Control parts of the BuildSpec other than the regular 'build' and 'install' commands
+            partial_build_spec=codebuild.BuildSpec.from_object({
+                "version": "0.2"
+            }),
+        
+            # Control the build environment
+            build_environment=codebuild.BuildEnvironment(
+                compute_type=codebuild.ComputeType.LARGE,
+                privileged=True,
+                docker_server=codebuild.DockerServerOptions(
+                    compute_type=codebuild.DockerServerComputeType.SMALL,
+                    security_groups=[my_security_group]
+                )
+            ),
+            timeout=Duration.minutes(90),
+            file_system_locations=[
+                codebuild.FileSystemLocation.efs(
+                    identifier="myidentifier2",
+                    location="myclodation.mydnsroot.com:/loc",
+                    mount_point="/media",
+                    mount_options="opts"
+                )
+            ],
+        
+            # Control Elastic Network Interface creation
+            vpc=vpc,
+            subnet_selection=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS),
+            security_groups=[my_security_group],
+        
+            # Control caching
+            cache=codebuild.Cache.bucket(s3.Bucket(self, "Cache")),
+        
+            # Additional policy statements for the execution role
+            role_policy_statements=[
+                iam.PolicyStatement()
+            ]
+        )
     '''
 
     SMALL = "SMALL"
@@ -4563,22 +4627,61 @@ class DockerServerOptions:
         :param compute_type: The type of compute to use for the docker server. See the ``DockerServerComputeType`` enum for the possible values.
         :param security_groups: A list of maximum 5 security groups. Default: - no security group
 
-        :exampleMetadata: fixture=_generated
+        :exampleMetadata: infused
 
         Example::
 
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_codebuild as codebuild
-            from aws_cdk import aws_ec2 as ec2
+            # vpc: ec2.Vpc
+            # my_security_group: ec2.SecurityGroup
             
-            # security_group: ec2.SecurityGroup
+            pipelines.CodeBuildStep("Synth",
+                # ...standard ShellStep props...
+                commands=[],
+                env={},
             
-            docker_server_options = codebuild.DockerServerOptions(
-                compute_type=codebuild.DockerServerComputeType.SMALL,
+                # If you are using a CodeBuildStep explicitly, set the 'cdk.out' directory
+                # to be the synth step's output.
+                primary_output_directory="cdk.out",
             
-                # the properties below are optional
-                security_groups=[security_group]
+                # Control the name of the project
+                project_name="MyProject",
+            
+                # Control parts of the BuildSpec other than the regular 'build' and 'install' commands
+                partial_build_spec=codebuild.BuildSpec.from_object({
+                    "version": "0.2"
+                }),
+            
+                # Control the build environment
+                build_environment=codebuild.BuildEnvironment(
+                    compute_type=codebuild.ComputeType.LARGE,
+                    privileged=True,
+                    docker_server=codebuild.DockerServerOptions(
+                        compute_type=codebuild.DockerServerComputeType.SMALL,
+                        security_groups=[my_security_group]
+                    )
+                ),
+                timeout=Duration.minutes(90),
+                file_system_locations=[
+                    codebuild.FileSystemLocation.efs(
+                        identifier="myidentifier2",
+                        location="myclodation.mydnsroot.com:/loc",
+                        mount_point="/media",
+                        mount_options="opts"
+                    )
+                ],
+            
+                # Control Elastic Network Interface creation
+                vpc=vpc,
+                subnet_selection=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS),
+                security_groups=[my_security_group],
+            
+                # Control caching
+                cache=codebuild.Cache.bucket(s3.Bucket(self, "Cache")),
+            
+                # Additional policy statements for the execution role
+                role_policy_statements=[
+                    iam.PolicyStatement()
+                ]
             )
         '''
         if __debug__:

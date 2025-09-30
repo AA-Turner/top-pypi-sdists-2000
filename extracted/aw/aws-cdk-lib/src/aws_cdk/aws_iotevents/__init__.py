@@ -1144,6 +1144,27 @@ class CfnAlarmModel(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAlarmModelName")
+    @builtins.classmethod
+    def from_alarm_model_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        alarm_model_name: builtins.str,
+    ) -> IAlarmModelRef:
+        '''Creates a new IAlarmModelRef from a alarmModelName.
+
+        :param scope: -
+        :param id: -
+        :param alarm_model_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__08129328e28cb00ce8f3d88ce6a01d350ff74f935ed83c2a1b71d2c0cb21a69d)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument alarm_model_name", value=alarm_model_name, expected_type=type_hints["alarm_model_name"])
+        return typing.cast(IAlarmModelRef, jsii.sinvoke(cls, "fromAlarmModelName", [scope, id, alarm_model_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3722,6 +3743,27 @@ class CfnDetectorModel(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromDetectorModelName")
+    @builtins.classmethod
+    def from_detector_model_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        detector_model_name: builtins.str,
+    ) -> IDetectorModelRef:
+        '''Creates a new IDetectorModelRef from a detectorModelName.
+
+        :param scope: -
+        :param id: -
+        :param detector_model_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__04cc6f160860cf8d535ff9aaf7f302530f50cadf01201747547313644bde84e7)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument detector_model_name", value=detector_model_name, expected_type=type_hints["detector_model_name"])
+        return typing.cast(IDetectorModelRef, jsii.sinvoke(cls, "fromDetectorModelName", [scope, id, detector_model_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7385,6 +7427,27 @@ class CfnInput(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromInputName")
+    @builtins.classmethod
+    def from_input_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        input_name: builtins.str,
+    ) -> IInputRef:
+        '''Creates a new IInputRef from a inputName.
+
+        :param scope: -
+        :param id: -
+        :param input_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7435d9ce0842ad08e9b33dbbeb8321316d275c48b9389305fbd145a070876eb8)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument input_name", value=input_name, expected_type=type_hints["input_name"])
+        return typing.cast(IInputRef, jsii.sinvoke(cls, "fromInputName", [scope, id, input_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7703,6 +7766,14 @@ def _typecheckingstub__ef7f48b87ae58ab2d16bfb25fbcc61ae8753eb0c9a5b0016eec37a52e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__08129328e28cb00ce8f3d88ce6a01d350ff74f935ed83c2a1b71d2c0cb21a69d(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    alarm_model_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__29efb49b22ff313d9ee99306ea7ca4bf99648d4ec281ef880884544374a005e5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7960,6 +8031,14 @@ def _typecheckingstub__7801b6324e5f272a708fd3542c09e1cc61e7621f542ce11a4795b2717
     evaluation_method: typing.Optional[builtins.str] = None,
     key: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__04cc6f160860cf8d535ff9aaf7f302530f50cadf01201747547313644bde84e7(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    detector_model_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8255,6 +8334,14 @@ def _typecheckingstub__11855be4f7bee53ad741f6363d8e68467f417b7f7483fc55460da1fe9
     input_description: typing.Optional[builtins.str] = None,
     input_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7435d9ce0842ad08e9b33dbbeb8321316d275c48b9389305fbd145a070876eb8(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    input_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

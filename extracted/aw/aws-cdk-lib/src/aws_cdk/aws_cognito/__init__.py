@@ -16268,6 +16268,27 @@ class CfnIdentityPool(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromIdentityPoolId")
+    @builtins.classmethod
+    def from_identity_pool_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        identity_pool_id: builtins.str,
+    ) -> IIdentityPoolRef:
+        '''Creates a new IIdentityPoolRef from a identityPoolId.
+
+        :param scope: -
+        :param id: -
+        :param identity_pool_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__23c766eb59af70f92541dfd9c9cae67b99255f21efd59868b8feff44354f4e77)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument identity_pool_id", value=identity_pool_id, expected_type=type_hints["identity_pool_id"])
+        return typing.cast(IIdentityPoolRef, jsii.sinvoke(cls, "fromIdentityPoolId", [scope, id, identity_pool_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -18477,6 +18498,48 @@ class CfnUserPool(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromUserPoolArn")
+    @builtins.classmethod
+    def from_user_pool_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IUserPoolRef:
+        '''Creates a new IUserPoolRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50cb94accc8d60746f0970af6f3f1428a04180d1d6c471b7ebb0c7eeaf6f5e11)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IUserPoolRef, jsii.sinvoke(cls, "fromUserPoolArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromUserPoolId")
+    @builtins.classmethod
+    def from_user_pool_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        user_pool_id: builtins.str,
+    ) -> IUserPoolRef:
+        '''Creates a new IUserPoolRef from a userPoolId.
+
+        :param scope: -
+        :param id: -
+        :param user_pool_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__77bca4d59ea1b80508c0fd60c8f34e3c4dff94c3e5dada90fee904207040ff1a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument user_pool_id", value=user_pool_id, expected_type=type_hints["user_pool_id"])
+        return typing.cast(IUserPoolRef, jsii.sinvoke(cls, "fromUserPoolId", [scope, id, user_pool_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -27029,6 +27092,14 @@ def _typecheckingstub__d5156c08d9bb3b0ceca6f4ec485d84f9775d7be40128a6614e1b9cbf0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__23c766eb59af70f92541dfd9c9cae67b99255f21efd59868b8feff44354f4e77(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    identity_pool_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d0046422699f4c95c1d9df0a173b8caf8590dc3fcb3ada38e03f96cba1a359bc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -27427,6 +27498,22 @@ def _typecheckingstub__32d20f28e2758f9a461380e2ed5d06233baf0f45541047ba837f26ebc
     verification_message_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPool.VerificationMessageTemplateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     web_authn_relying_party_id: typing.Optional[builtins.str] = None,
     web_authn_user_verification: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__50cb94accc8d60746f0970af6f3f1428a04180d1d6c471b7ebb0c7eeaf6f5e11(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__77bca4d59ea1b80508c0fd60c8f34e3c4dff94c3e5dada90fee904207040ff1a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    user_pool_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

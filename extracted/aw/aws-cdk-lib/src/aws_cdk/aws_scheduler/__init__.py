@@ -4544,6 +4544,27 @@ class CfnSchedule(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromScheduleArn")
+    @builtins.classmethod
+    def from_schedule_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IScheduleRef:
+        '''Creates a new IScheduleRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cfff8a9c559a9db3ae6b5c12009b96cd3f2329516e8d8c74011166bddaac654e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IScheduleRef, jsii.sinvoke(cls, "fromScheduleArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6859,6 +6880,14 @@ def _typecheckingstub__503b74ac170f15626de2456b6f8c40d2cdc1ab21574c821e051517099
     schedule_expression_timezone: typing.Optional[builtins.str] = None,
     start_date: typing.Optional[builtins.str] = None,
     state: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cfff8a9c559a9db3ae6b5c12009b96cd3f2329516e8d8c74011166bddaac654e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

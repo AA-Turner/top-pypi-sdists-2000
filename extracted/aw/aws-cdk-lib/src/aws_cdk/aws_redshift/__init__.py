@@ -4740,6 +4740,27 @@ class CfnClusterParameterGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromParameterGroupName")
+    @builtins.classmethod
+    def from_parameter_group_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        parameter_group_name: builtins.str,
+    ) -> IClusterParameterGroupRef:
+        '''Creates a new IClusterParameterGroupRef from a parameterGroupName.
+
+        :param scope: -
+        :param id: -
+        :param parameter_group_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a4fcc0dd642456f37020bcfe38fd9cfd482cbd79750adda84ea8706f1e6df408)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument parameter_group_name", value=parameter_group_name, expected_type=type_hints["parameter_group_name"])
+        return typing.cast(IClusterParameterGroupRef, jsii.sinvoke(cls, "fromParameterGroupName", [scope, id, parameter_group_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7981,6 +8002,14 @@ def _typecheckingstub__a4414ca463de61620f73bf7c02eb829639136d7dcc505964ba4d9e961
     parameter_group_name: typing.Optional[builtins.str] = None,
     parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnClusterParameterGroup.ParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a4fcc0dd642456f37020bcfe38fd9cfd482cbd79750adda84ea8706f1e6df408(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    parameter_group_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

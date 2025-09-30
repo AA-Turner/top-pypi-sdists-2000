@@ -2967,6 +2967,48 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromApplicationArn")
+    @builtins.classmethod
+    def from_application_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IApplicationRef:
+        '''Creates a new IApplicationRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7588037e663dbdf7e96cc384972e8ccf5a8f2b0ce464c77da36d747c5af4230b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IApplicationRef, jsii.sinvoke(cls, "fromApplicationArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromApplicationId")
+    @builtins.classmethod
+    def from_application_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        application_id: builtins.str,
+    ) -> IApplicationRef:
+        '''Creates a new IApplicationRef from a applicationId.
+
+        :param scope: -
+        :param id: -
+        :param application_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4437623b0c0426c55908d2b586e92137def40e9d7f5f7f4c722a1f1d09bf72f6)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument application_id", value=application_id, expected_type=type_hints["application_id"])
+        return typing.cast(IApplicationRef, jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3793,6 +3835,27 @@ class CfnDataAccessor(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromDataAccessorArn")
+    @builtins.classmethod
+    def from_data_accessor_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IDataAccessorRef:
+        '''Creates a new IDataAccessorRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5a0e659a7fb4d6193851b48d9d000fb8471dad485c72b5df2ff2fa38d7d92164)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IDataAccessorRef, jsii.sinvoke(cls, "fromDataAccessorArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5118,6 +5181,27 @@ class CfnDataSource(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromDataSourceArn")
+    @builtins.classmethod
+    def from_data_source_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IDataSourceRef:
+        '''Creates a new IDataSourceRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__24af26b626bddf8e9a9667a1a2dc808ff322c9948befd24c071538957fb90d8f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IDataSourceRef, jsii.sinvoke(cls, "fromDataSourceArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6545,6 +6629,27 @@ class CfnIndex(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromIndexArn")
+    @builtins.classmethod
+    def from_index_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IIndexRef:
+        '''Creates a new IIndexRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2a23fed42e7e12039495bd27a3b7c5fdfbf5ec36b6abee400c474e47ac541094)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IIndexRef, jsii.sinvoke(cls, "fromIndexArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7392,6 +7497,27 @@ class CfnPlugin(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromPluginArn")
+    @builtins.classmethod
+    def from_plugin_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IPluginRef:
+        '''Creates a new IPluginRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__95106ebbc6f37a4c8285841fdb03d4d394771295890383eb28b353dd5a6fd856)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IPluginRef, jsii.sinvoke(cls, "fromPluginArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8200,6 +8326,27 @@ class CfnRetriever(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromRetrieverArn")
+    @builtins.classmethod
+    def from_retriever_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IRetrieverRef:
+        '''Creates a new IRetrieverRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1cdcd7fa589eaa045ff7b0fa45782e3fc44d996f6e46beb76c443b3677420ba6)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IRetrieverRef, jsii.sinvoke(cls, "fromRetrieverArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8665,6 +8812,27 @@ class CfnWebExperience(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromWebExperienceArn")
+    @builtins.classmethod
+    def from_web_experience_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IWebExperienceRef:
+        '''Creates a new IWebExperienceRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b65cb91fa978c975215eb644ea84dfc07558986e8e90c681ecb3971faddbb192)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IWebExperienceRef, jsii.sinvoke(cls, "fromWebExperienceArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9544,6 +9712,22 @@ def _typecheckingstub__e2c95edfee8896187b03149b15ce3604b3a59bfb3b08abd73c5672b7c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7588037e663dbdf7e96cc384972e8ccf5a8f2b0ce464c77da36d747c5af4230b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4437623b0c0426c55908d2b586e92137def40e9d7f5f7f4c722a1f1d09bf72f6(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    application_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__47a4b6795acfe5e89f676295cf4c40b3a8dced361f2d77a9b9d10c72aa48712c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9697,6 +9881,14 @@ def _typecheckingstub__32b7ecf69912e25edcd2354b3e0497931ea6bf042b1aabc881c8677d2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5a0e659a7fb4d6193851b48d9d000fb8471dad485c72b5df2ff2fa38d7d92164(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ff90302eca1e0f24b3ab926881bc0099a551d74c3a71debb214f222b63ff0ee4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9832,6 +10024,14 @@ def _typecheckingstub__44090f525589bca757ae88a29adc87bbfc36c3149c7964dfd32c2ce59
     sync_schedule: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.DataSourceVpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__24af26b626bddf8e9a9667a1a2dc808ff322c9948befd24c071538957fb90d8f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10023,6 +10223,14 @@ def _typecheckingstub__c457625f955b1ba56d35bffbcea827abe87347b80fd33090422ef2a80
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2a23fed42e7e12039495bd27a3b7c5fdfbf5ec36b6abee400c474e47ac541094(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fc39e6b7456662ae032c4446b1ba1e83f54ae382ca6aabc48cbb69fac624aef4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10188,6 +10396,14 @@ def _typecheckingstub__65b6fb8d65ff428790a22d304932f2713710d70a9f6d789d819489f81
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__95106ebbc6f37a4c8285841fdb03d4d394771295890383eb28b353dd5a6fd856(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fec924728d6923b494037839fb41ee39d956abff0dc273347be667ed27df77ff(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10314,6 +10530,14 @@ def _typecheckingstub__793749362ec6ccd890aa9273b100a2ba004492449f0dba0ea4eb49095
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1cdcd7fa589eaa045ff7b0fa45782e3fc44d996f6e46beb76c443b3677420ba6(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__013b1c812aa4f36fb41a3e6e2da02553a56882a0b9e6a92ca26d883a232dfb06(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10399,6 +10623,14 @@ def _typecheckingstub__357871375e43a0ed6fbb398668ece13df26dff3afca5c98268a56fffd
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     title: typing.Optional[builtins.str] = None,
     welcome_message: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b65cb91fa978c975215eb644ea84dfc07558986e8e90c681ecb3971faddbb192(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

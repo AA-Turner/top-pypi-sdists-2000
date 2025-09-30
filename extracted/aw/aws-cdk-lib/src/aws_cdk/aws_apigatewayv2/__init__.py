@@ -14797,6 +14797,27 @@ class CfnApi(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromApiId")
+    @builtins.classmethod
+    def from_api_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        api_id: builtins.str,
+    ) -> IApiRef:
+        '''Creates a new IApiRef from a apiId.
+
+        :param scope: -
+        :param id: -
+        :param api_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e72694b8b6455e40db5d00a9e28ee2f1c2525f0a06d5518f81443afbd4b3ba6b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument api_id", value=api_id, expected_type=type_hints["api_id"])
+        return typing.cast(IApiRef, jsii.sinvoke(cls, "fromApiId", [scope, id, api_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -20292,6 +20313,27 @@ class CfnVpcLink(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromVpcLinkId")
+    @builtins.classmethod
+    def from_vpc_link_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        vpc_link_id: builtins.str,
+    ) -> IVpcLinkRef:
+        '''Creates a new IVpcLinkRef from a vpcLinkId.
+
+        :param scope: -
+        :param id: -
+        :param vpc_link_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b9997270542b25cedc29d27a7022768673c0aada9df5c4d00bfe1c5924b068d8)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument vpc_link_id", value=vpc_link_id, expected_type=type_hints["vpc_link_id"])
+        return typing.cast(IVpcLinkRef, jsii.sinvoke(cls, "fromVpcLinkId", [scope, id, vpc_link_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -25018,6 +25060,14 @@ def _typecheckingstub__1db7633eb849c7234f54cf8f50ef6e4c6273ca1ab60db537f47e511e2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e72694b8b6455e40db5d00a9e28ee2f1c2525f0a06d5518f81443afbd4b3ba6b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    api_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ea567b8b40be10165a36dab66b11588d141fcb6bb04249eea1d0752e699710d4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -26233,6 +26283,14 @@ def _typecheckingstub__5c311f0c712d17a23f40a3997d551ec4685650a39ccca44f14c887295
     subnet_ids: typing.Sequence[builtins.str],
     security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b9997270542b25cedc29d27a7022768673c0aada9df5c4d00bfe1c5924b068d8(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    vpc_link_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

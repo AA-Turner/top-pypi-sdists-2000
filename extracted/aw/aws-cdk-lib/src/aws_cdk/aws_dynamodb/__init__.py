@@ -13647,6 +13647,48 @@ class CfnTable(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromTableArn")
+    @builtins.classmethod
+    def from_table_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> ITableRef:
+        '''Creates a new ITableRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6e30ad674255f6cf2399988c612add1ec2ca505f9e116d8b733a16173ac1d95e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(ITableRef, jsii.sinvoke(cls, "fromTableArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromTableName")
+    @builtins.classmethod
+    def from_table_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        table_name: builtins.str,
+    ) -> ITableRef:
+        '''Creates a new ITableRef from a tableName.
+
+        :param scope: -
+        :param id: -
+        :param table_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5a4e5ce4c2cecabd4a9a87760152bab9b4254f48ff1e2f8e89e68131d4f9fcdd)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument table_name", value=table_name, expected_type=type_hints["table_name"])
+        return typing.cast(ITableRef, jsii.sinvoke(cls, "fromTableName", [scope, id, table_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -18561,6 +18603,22 @@ def _typecheckingstub__9c4a83992df200bfde2ccfe129994eeacab105432a2509473861feb73
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     time_to_live_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.TimeToLiveSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.WarmThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6e30ad674255f6cf2399988c612add1ec2ca505f9e116d8b733a16173ac1d95e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5a4e5ce4c2cecabd4a9a87760152bab9b4254f48ff1e2f8e89e68131d4f9fcdd(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    table_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

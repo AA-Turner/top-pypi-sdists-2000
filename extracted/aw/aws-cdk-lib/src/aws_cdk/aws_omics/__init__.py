@@ -2379,6 +2379,27 @@ class CfnAnnotationStore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAnnotationStoreName")
+    @builtins.classmethod
+    def from_annotation_store_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        annotation_store_name: builtins.str,
+    ) -> IAnnotationStoreRef:
+        '''Creates a new IAnnotationStoreRef from a annotationStoreName.
+
+        :param scope: -
+        :param id: -
+        :param annotation_store_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ea8d23b9f77f5d9216bba34b2f07ff06220a6053227128a855b380a90746d1fe)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument annotation_store_name", value=annotation_store_name, expected_type=type_hints["annotation_store_name"])
+        return typing.cast(IAnnotationStoreRef, jsii.sinvoke(cls, "fromAnnotationStoreName", [scope, id, annotation_store_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2948,6 +2969,48 @@ class CfnReferenceStore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromReferenceStoreArn")
+    @builtins.classmethod
+    def from_reference_store_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IReferenceStoreRef:
+        '''Creates a new IReferenceStoreRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__03eab96b33743423157434263c495ecf4bb597bb49fcadef0690e503e3540689)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IReferenceStoreRef, jsii.sinvoke(cls, "fromReferenceStoreArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromReferenceStoreId")
+    @builtins.classmethod
+    def from_reference_store_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        reference_store_id: builtins.str,
+    ) -> IReferenceStoreRef:
+        '''Creates a new IReferenceStoreRef from a referenceStoreId.
+
+        :param scope: -
+        :param id: -
+        :param reference_store_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7d3a144262ad49c5d6ecb97bcdeda753c5514368bac2ab437b403dd5ecbff176)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument reference_store_id", value=reference_store_id, expected_type=type_hints["reference_store_id"])
+        return typing.cast(IReferenceStoreRef, jsii.sinvoke(cls, "fromReferenceStoreId", [scope, id, reference_store_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3469,6 +3532,48 @@ class CfnSequenceStore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromSequenceStoreArn")
+    @builtins.classmethod
+    def from_sequence_store_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> ISequenceStoreRef:
+        '''Creates a new ISequenceStoreRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d0401ce1b5169b8a6f265ee186bf5ea3e78a0a8a2b71e6256e2a1effe74e148d)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(ISequenceStoreRef, jsii.sinvoke(cls, "fromSequenceStoreArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromSequenceStoreId")
+    @builtins.classmethod
+    def from_sequence_store_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        sequence_store_id: builtins.str,
+    ) -> ISequenceStoreRef:
+        '''Creates a new ISequenceStoreRef from a sequenceStoreId.
+
+        :param scope: -
+        :param id: -
+        :param sequence_store_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__939e1e0c5383ed843656a8c66c9eeac470cdb45344d2aa8c6353ab2273bb3618)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument sequence_store_id", value=sequence_store_id, expected_type=type_hints["sequence_store_id"])
+        return typing.cast(ISequenceStoreRef, jsii.sinvoke(cls, "fromSequenceStoreId", [scope, id, sequence_store_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3861,6 +3966,27 @@ class CfnVariantStore(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromVariantStoreName")
+    @builtins.classmethod
+    def from_variant_store_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        variant_store_name: builtins.str,
+    ) -> IVariantStoreRef:
+        '''Creates a new IVariantStoreRef from a variantStoreName.
+
+        :param scope: -
+        :param id: -
+        :param variant_store_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2f419b3d012ad3960d3cb7ca202c16de7716902d7708b8a5f93c80ecc69b0794)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument variant_store_name", value=variant_store_name, expected_type=type_hints["variant_store_name"])
+        return typing.cast(IVariantStoreRef, jsii.sinvoke(cls, "fromVariantStoreName", [scope, id, variant_store_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6428,6 +6554,14 @@ def _typecheckingstub__ba5dcb906702f10b4a247a16c504ec605912264b052a73f0ae664d93b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ea8d23b9f77f5d9216bba34b2f07ff06220a6053227128a855b380a90746d1fe(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    annotation_store_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3d66bbde88d332dceb0812bb6bbf08c2418490d8b0e9774a97971a3b895f48b8(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6521,6 +6655,22 @@ def _typecheckingstub__e38c503967033ff76d3e45880727cc62a1df749cb0aac8298f6d06d14
     description: typing.Optional[builtins.str] = None,
     sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnReferenceStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__03eab96b33743423157434263c495ecf4bb597bb49fcadef0690e503e3540689(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7d3a144262ad49c5d6ecb97bcdeda753c5514368bac2ab437b403dd5ecbff176(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    reference_store_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6648,6 +6798,22 @@ def _typecheckingstub__a589aadb7c598845d5e4c6ef138fe8cbeb7253209ba9eb0e5e590611e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d0401ce1b5169b8a6f265ee186bf5ea3e78a0a8a2b71e6256e2a1effe74e148d(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__939e1e0c5383ed843656a8c66c9eeac470cdb45344d2aa8c6353ab2273bb3618(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    sequence_store_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ea9a45fe9e84d5319386c1a777f6361e3fed5c916c543c8964323b54759ee470(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6731,6 +6897,14 @@ def _typecheckingstub__6d38872c12590b13122bc23c110efd40d1aa8369a37e1015fcc0ee252
     description: typing.Optional[builtins.str] = None,
     sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVariantStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2f419b3d012ad3960d3cb7ca202c16de7716902d7708b8a5f93c80ecc69b0794(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    variant_store_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

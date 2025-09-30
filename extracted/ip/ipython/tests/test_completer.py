@@ -905,6 +905,66 @@ class TestCompleter(unittest.TestCase):
         self.assertNotIn("%_bar_cellm", matches)
         self.assertIn("%%_bar_cellm", matches)
 
+    def test_line_magics_with_code_argument(self):
+        ip = get_ipython()
+        c = ip.Completer
+        c.use_jedi = False
+
+        # attribute completion
+        text, matches = c.complete("%timeit -n 2 -r 1 float.as_integer")
+        self.assertEqual(matches, [".as_integer_ratio"])
+
+        text, matches = c.complete("%debug --breakpoint test float.as_integer")
+        self.assertEqual(matches, [".as_integer_ratio"])
+
+        text, matches = c.complete("%time --no-raise-error float.as_integer")
+        self.assertEqual(matches, [".as_integer_ratio"])
+
+        text, matches = c.complete("%prun -l 0.5 -r float.as_integer")
+        self.assertEqual(matches, [".as_integer_ratio"])
+
+        # implicit magics
+        text, matches = c.complete("timeit -n 2 -r 1 float.as_integer")
+        self.assertEqual(matches, [".as_integer_ratio"])
+
+        # built-ins completion
+        text, matches = c.complete("%timeit -n 2 -r 1 flo")
+        self.assertEqual(matches, ["float"])
+
+        # dict completion
+        text, matches = c.complete("%timeit -n 2 -r 1 {'my_key': 1}['my")
+        self.assertEqual(matches, ["my_key"])
+
+        # invalid arguments - should not throw
+        text, matches = c.complete("%timeit -n 2 -r 1 -invalid float.as_integer")
+        self.assertEqual(matches, [])
+
+        text, matches = c.complete("%debug --invalid float.as_integer")
+        self.assertEqual(matches, [])
+
+    def test_line_magics_with_code_argument_shadowing(self):
+        ip = get_ipython()
+        c = ip.Completer
+        c.use_jedi = False
+
+        # shadow
+        ip.run_cell("timeit = 1")
+
+        # should not suggest on implict magic when shadowed
+        text, matches = c.complete("timeit -n 2 -r 1 flo")
+        self.assertEqual(matches, [])
+
+        # should suggest on explicit magic
+        text, matches = c.complete("%timeit -n 2 -r 1 flo")
+        self.assertEqual(matches, ["float"])
+
+        # remove shadow
+        del ip.user_ns["timeit"]
+
+        # should suggest on implicit magic after shadow removal
+        text, matches = c.complete("timeit -n 2 -r 1 flo")
+        self.assertEqual(matches, ["float"])
+
     def test_magic_completion_order(self):
         ip = get_ipython()
         c = ip.Completer
@@ -1912,6 +1972,87 @@ class TestCompleter(unittest.TestCase):
             _(["completion_b"])
             a_matcher.matcher_priority = 3
             _(["completion_a"])
+
+
+@pytest.mark.parametrize(
+    "use_jedi,evaluation",
+    [
+        [True, "minimal"],
+        [False, "limited"],
+    ],
+)
+@pytest.mark.parametrize(
+    "code,insert_text",
+    [
+        [
+            "\n".join(
+                [
+                    "class NotYetDefined:",
+                    "    def my_method(self) -> str:",
+                    "        return 1",
+                    "my_instance = NotYetDefined()",
+                    "my_insta",
+                ]
+            ),
+            "my_instance",
+        ],
+        [
+            "\n".join(
+                [
+                    "class NotYetDefined:",
+                    "    def my_method(self) -> str:",
+                    "        return 1",
+                    "instance = NotYetDefined()",
+                    "instance.",
+                ]
+            ),
+            "my_method",
+        ],
+        [
+            "\n".join(
+                [
+                    "class NotYetDefined:",
+                    "    def my_method(self) -> str:",
+                    "        return 1",
+                    "my_instance = NotYetDefined()",
+                    "my_instance.my_method().",
+                ]
+            ),
+            "capitalize",
+        ],
+        [
+            "\n".join(
+                [
+                    "my_instance = 1.1",
+                    "assert my_instance.",
+                ]
+            ),
+            "as_integer_ratio",
+        ],
+        [
+            "\n".join(
+                [
+                    "def my_test() -> float:",
+                    "    pass",
+                    "my_test().",
+                ]
+            ),
+            "as_integer_ratio",
+        ],
+    ],
+)
+def test_undefined_variables(use_jedi, evaluation, code, insert_text):
+    offset = len(code)
+    ip.Completer.use_jedi = use_jedi
+    ip.Completer.evaluation = evaluation
+
+    with provisionalcompleter():
+        completions = list(ip.Completer.completions(text=code, offset=offset))
+        match = [c for c in completions if c.text.lstrip(".") == insert_text]
+        message_on_fail = (
+            f"{insert_text} not found among {[c.text for c in completions]}"
+        )
+        assert len(match) == 1, message_on_fail
 
 
 @pytest.mark.parametrize(

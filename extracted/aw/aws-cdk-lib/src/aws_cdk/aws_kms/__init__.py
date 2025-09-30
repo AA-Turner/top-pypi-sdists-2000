@@ -2287,6 +2287,48 @@ class CfnKey(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromKeyArn")
+    @builtins.classmethod
+    def from_key_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IKeyRef:
+        '''Creates a new IKeyRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__717dcad4d9cbf2639e4a7706f2520822fc3c58d7d28a72e3e2c89cd6ecd9ec77)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IKeyRef, jsii.sinvoke(cls, "fromKeyArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromKeyId")
+    @builtins.classmethod
+    def from_key_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        key_id: builtins.str,
+    ) -> IKeyRef:
+        '''Creates a new IKeyRef from a keyId.
+
+        :param scope: -
+        :param id: -
+        :param key_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__017d6fb56914db7b54b414d0535f40acc821857d39e3de53a3749ea5b44c245a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument key_id", value=key_id, expected_type=type_hints["key_id"])
+        return typing.cast(IKeyRef, jsii.sinvoke(cls, "fromKeyId", [scope, id, key_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4036,6 +4078,22 @@ def _typecheckingstub__5ea678e9e5a947601d16e5bb11fec3683fbb15bba768bee0b88be7e19
     pending_window_in_days: typing.Optional[jsii.Number] = None,
     rotation_period_in_days: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__717dcad4d9cbf2639e4a7706f2520822fc3c58d7d28a72e3e2c89cd6ecd9ec77(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__017d6fb56914db7b54b414d0535f40acc821857d39e3de53a3749ea5b44c245a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    key_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

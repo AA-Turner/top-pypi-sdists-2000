@@ -160,6 +160,7 @@ CLIENT_ONLY_SETTINGS = (
     "reinit",
     "max_end_of_run_history_metrics",
     "max_end_of_run_summary_metrics",
+    "x_sync_dir_suffix",
 )
 """Python-only keys that are not fields on the settings proto."""
 
@@ -941,6 +942,13 @@ class Settings(BaseModel, validate_assignment=True):
     <!-- lazydoc-ignore-class-attributes -->
     """
 
+    x_sync_dir_suffix: str = ""
+    """Suffix to add to the run's directory name (sync_dir).
+
+    This is set in wandb.init() to avoid naming conflicts.
+    If set, it is joined to the default name with a dash.
+    """
+
     x_update_finish_state: bool = True
     """Flag to indicate whether this process can update the run's final state on the server.
 
@@ -954,6 +962,8 @@ class Settings(BaseModel, validate_assignment=True):
         """Check if a private field is provided and assign to the corresponding public one.
 
         This is a compatibility layer to handle previous versions of the settings.
+
+        <!-- lazydoc-ignore: internal -->
         """
         new_values = {}
         for key in values:
@@ -988,6 +998,10 @@ class Settings(BaseModel, validate_assignment=True):
 
         @model_validator(mode="after")
         def validate_skip_transaction_log(self):
+            """Validate x_skip_transaction_log.
+
+            <!-- lazydoc-ignore: internal -->
+            """
             if self._offline and self.x_skip_transaction_log:
                 raise ValueError("Cannot skip transaction log in offline mode")
             return self
@@ -1445,6 +1459,8 @@ class Settings(BaseModel, validate_assignment=True):
         - Converts single string values to tuple format
         - Preserves None values
 
+        <!-- lazydoc-ignore-classmethod: internal -->
+
         Args:
             value: A string, list, tuple, or None representing tags
 
@@ -1453,8 +1469,6 @@ class Settings(BaseModel, validate_assignment=True):
 
         Raises:
             ValueError: If any tag is empty or exceeds 64 characters
-
-        <!-- lazydoc-ignore-classmethod: internal -->
         """
         if value is None:
             return None
@@ -1733,10 +1747,12 @@ class Settings(BaseModel, validate_assignment=True):
     @property
     def sync_dir(self) -> str:
         """The directory for storing the run's files."""
-        return _path_convert(
-            self.wandb_dir,
-            f"{self.run_mode}-{self.timespec}-{self.run_id}",
-        )
+        name = f"{self.run_mode}-{self.timespec}-{self.run_id}"
+
+        if self.x_sync_dir_suffix:
+            name += f"-{self.x_sync_dir_suffix}"
+
+        return _path_convert(self.wandb_dir, name)
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -1776,7 +1792,10 @@ class Settings(BaseModel, validate_assignment=True):
     # wandb/sdk/wandb_setup.py::_WandbSetup._settings_setup.
 
     def update_from_system_config_file(self):
-        """Update settings from the system config file."""
+        """Update settings from the system config file.
+
+        <!-- lazydoc-ignore: internal -->
+        """
         if not self.settings_system or not os.path.exists(self.settings_system):
             return
         for key, value in self._load_config_file(self.settings_system).items():
@@ -1784,7 +1803,10 @@ class Settings(BaseModel, validate_assignment=True):
                 setattr(self, key, value)
 
     def update_from_workspace_config_file(self):
-        """Update settings from the workspace config file."""
+        """Update settings from the workspace config file.
+
+        <!-- lazydoc-ignore: internal -->
+        """
         if not self.settings_workspace or not os.path.exists(self.settings_workspace):
             return
         for key, value in self._load_config_file(self.settings_workspace).items():
@@ -1792,7 +1814,10 @@ class Settings(BaseModel, validate_assignment=True):
                 setattr(self, key, value)
 
     def update_from_env_vars(self, environ: Dict[str, Any]):
-        """Update settings from environment variables."""
+        """Update settings from environment variables.
+
+        <!-- lazydoc-ignore: internal -->
+        """
         env_prefix: str = "WANDB_"
         private_env_prefix: str = env_prefix + "_"
         special_env_var_names = {
@@ -1829,7 +1854,10 @@ class Settings(BaseModel, validate_assignment=True):
                 setattr(self, key, value)
 
     def update_from_system_environment(self):
-        """Update settings from the system environment."""
+        """Update settings from the system environment.
+
+        <!-- lazydoc-ignore: internal -->
+        """
         # For code saving, only allow env var override if value from server is true, or
         # if no preference was specified.
         if (self.save_code is True or self.save_code is None) and (
@@ -1909,13 +1937,19 @@ class Settings(BaseModel, validate_assignment=True):
         self.program = program
 
     def update_from_dict(self, settings: Dict[str, Any]) -> None:
-        """Update settings from a dictionary."""
+        """Update settings from a dictionary.
+
+        <!-- lazydoc-ignore: internal -->
+        """
         for key, value in dict(settings).items():
             if value is not None:
                 setattr(self, key, value)
 
     def update_from_settings(self, settings: Settings) -> None:
-        """Update settings from another instance of `Settings`."""
+        """Update settings from another instance of `Settings`.
+
+        <!-- lazydoc-ignore: internal -->
+        """
         d = {field: getattr(settings, field) for field in settings.model_fields_set}
         if d:
             self.update_from_dict(d)
@@ -1923,7 +1957,10 @@ class Settings(BaseModel, validate_assignment=True):
     # Helper methods.
 
     def to_proto(self) -> wandb_settings_pb2.Settings:
-        """Generate a protobuf representation of the settings."""
+        """Generate a protobuf representation of the settings.
+
+        <!-- lazydoc-ignore: internal -->
+        """
         settings_proto = wandb_settings_pb2.Settings()
         for k, v in self.model_dump(exclude_none=True).items():
             if k in CLIENT_ONLY_SETTINGS:

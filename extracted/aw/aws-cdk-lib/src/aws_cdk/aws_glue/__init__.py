@@ -7992,6 +7992,27 @@ class CfnCrawler(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromCrawlerName")
+    @builtins.classmethod
+    def from_crawler_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        crawler_name: builtins.str,
+    ) -> ICrawlerRef:
+        '''Creates a new ICrawlerRef from a crawlerName.
+
+        :param scope: -
+        :param id: -
+        :param crawler_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9ad087260b86f149a125685668b821ca3edecc96c6b66bdc38f719435de5a0b5)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument crawler_name", value=crawler_name, expected_type=type_hints["crawler_name"])
+        return typing.cast(ICrawlerRef, jsii.sinvoke(cls, "fromCrawlerName", [scope, id, crawler_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9699,6 +9720,27 @@ class CfnCustomEntityType(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromCustomEntityTypeId")
+    @builtins.classmethod
+    def from_custom_entity_type_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        custom_entity_type_id: builtins.str,
+    ) -> ICustomEntityTypeRef:
+        '''Creates a new ICustomEntityTypeRef from a customEntityTypeId.
+
+        :param scope: -
+        :param id: -
+        :param custom_entity_type_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d9fcfdaedb8245c0773846f383316c653711b4bf502cef627cc38c7a82d234b1)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument custom_entity_type_id", value=custom_entity_type_id, expected_type=type_hints["custom_entity_type_id"])
+        return typing.cast(ICustomEntityTypeRef, jsii.sinvoke(cls, "fromCustomEntityTypeId", [scope, id, custom_entity_type_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10570,6 +10612,27 @@ class CfnDatabase(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromDatabaseName")
+    @builtins.classmethod
+    def from_database_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        database_name: builtins.str,
+    ) -> IDatabaseRef:
+        '''Creates a new IDatabaseRef from a databaseName.
+
+        :param scope: -
+        :param id: -
+        :param database_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__46d072003af0a253294aa99188670d3a5326fb17900c9f4bc5ca0850d973ee94)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument database_name", value=database_name, expected_type=type_hints["database_name"])
+        return typing.cast(IDatabaseRef, jsii.sinvoke(cls, "fromDatabaseName", [scope, id, database_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11635,6 +11698,27 @@ class CfnJob(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromJobName")
+    @builtins.classmethod
+    def from_job_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        job_name: builtins.str,
+    ) -> IJobRef:
+        '''Creates a new IJobRef from a jobName.
+
+        :param scope: -
+        :param id: -
+        :param job_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__800b295a4e0e23b0b95e4eb1a477f6d73e527378c000c53073ea7b72fd6c7b58)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument job_name", value=job_name, expected_type=type_hints["job_name"])
+        return typing.cast(IJobRef, jsii.sinvoke(cls, "fromJobName", [scope, id, job_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -18230,6 +18314,27 @@ class CfnTrigger(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromTriggerName")
+    @builtins.classmethod
+    def from_trigger_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        trigger_name: builtins.str,
+    ) -> ITriggerRef:
+        '''Creates a new ITriggerRef from a triggerName.
+
+        :param scope: -
+        :param id: -
+        :param trigger_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__986602eae0e3d2f16446e9c0e6491a51063164c5666c61327ac4cd04cdc32271)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument trigger_name", value=trigger_name, expected_type=type_hints["trigger_name"])
+        return typing.cast(ITriggerRef, jsii.sinvoke(cls, "fromTriggerName", [scope, id, trigger_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -20217,6 +20322,14 @@ def _typecheckingstub__ff9e598239ccebeecff8b5e3f5f0458f9de0c5c407db27837fb3122ad
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9ad087260b86f149a125685668b821ca3edecc96c6b66bdc38f719435de5a0b5(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    crawler_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8c4320c740e3b9cb750745ec213ccc0ddab6c6f8d0fb2cc3678b58a5eb96963b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20449,6 +20562,14 @@ def _typecheckingstub__513b5382e12edfa036d553799dc23a98aa5ab82a6014b0bf9734336e4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d9fcfdaedb8245c0773846f383316c653711b4bf502cef627cc38c7a82d234b1(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    custom_entity_type_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f1161ed4cb74764a76ad0a2a8d9218348384b8c59f0f79872699c83d6a9671c3(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20621,6 +20742,14 @@ def _typecheckingstub__7145103c869df1a981612b4445af4fee59059eebaa09d55e36fa9961b
     catalog_id: builtins.str,
     database_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDatabase.DatabaseInputProperty, typing.Dict[builtins.str, typing.Any]]],
     database_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__46d072003af0a253294aa99188670d3a5326fb17900c9f4bc5ca0850d973ee94(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    database_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20852,6 +20981,14 @@ def _typecheckingstub__2bea698eff4ea1d2bc08b1ab842f318f77ba719c0241a0959453e2698
     tags: typing.Any = None,
     timeout: typing.Optional[jsii.Number] = None,
     worker_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__800b295a4e0e23b0b95e4eb1a477f6d73e527378c000c53073ea7b72fd6c7b58(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    job_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21892,6 +22029,14 @@ def _typecheckingstub__8db15edfea6b1fa74e017c6bb7603bed442e4f78f4c3c138f4dcc562c
     start_on_creation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Any = None,
     workflow_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__986602eae0e3d2f16446e9c0e6491a51063164c5666c61327ac4cd04cdc32271(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    trigger_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

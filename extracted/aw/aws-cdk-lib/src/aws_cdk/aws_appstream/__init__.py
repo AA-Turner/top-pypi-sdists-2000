@@ -4493,6 +4493,48 @@ class CfnAppBlockBuilder(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAppBlockBuilderArn")
+    @builtins.classmethod
+    def from_app_block_builder_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IAppBlockBuilderRef:
+        '''Creates a new IAppBlockBuilderRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ca5515f8f8fac8a38a30eba99d4e972ef68627c6c23c2c67500523a86f302b1e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IAppBlockBuilderRef, jsii.sinvoke(cls, "fromAppBlockBuilderArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromAppBlockBuilderName")
+    @builtins.classmethod
+    def from_app_block_builder_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        app_block_builder_name: builtins.str,
+    ) -> IAppBlockBuilderRef:
+        '''Creates a new IAppBlockBuilderRef from a appBlockBuilderName.
+
+        :param scope: -
+        :param id: -
+        :param app_block_builder_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6a9f18ac6c35e2ca99250cd6430503031deeb8ca02f9722e26f4755394f3595c)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument app_block_builder_name", value=app_block_builder_name, expected_type=type_hints["app_block_builder_name"])
+        return typing.cast(IAppBlockBuilderRef, jsii.sinvoke(cls, "fromAppBlockBuilderName", [scope, id, app_block_builder_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7004,6 +7046,27 @@ class CfnImageBuilder(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromImageBuilderName")
+    @builtins.classmethod
+    def from_image_builder_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        image_builder_name: builtins.str,
+    ) -> IImageBuilderRef:
+        '''Creates a new IImageBuilderRef from a imageBuilderName.
+
+        :param scope: -
+        :param id: -
+        :param image_builder_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4520f8cce80ece1ce2b95953e6e5a9c2280c7161f0bd40ebd19cf52cb565939a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument image_builder_name", value=image_builder_name, expected_type=type_hints["image_builder_name"])
+        return typing.cast(IImageBuilderRef, jsii.sinvoke(cls, "fromImageBuilderName", [scope, id, image_builder_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9180,6 +9243,22 @@ def _typecheckingstub__f2dbe872e5cba24425b73eff2bd90d7b1c6af7a2b3b47d455ff4683fb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ca5515f8f8fac8a38a30eba99d4e972ef68627c6c23c2c67500523a86f302b1e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6a9f18ac6c35e2ca99250cd6430503031deeb8ca02f9722e26f4755394f3595c(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    app_block_builder_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__560ef45e47870972c6b9d1538088c62bf2a04bfeb5ca9a51c7fe0b65e8ec8511(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9811,6 +9890,14 @@ def _typecheckingstub__25dccb4354e677f39c5c97fd983d6a76f7631b1133ab64219d2975708
     image_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImageBuilder.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4520f8cce80ece1ce2b95953e6e5a9c2280c7161f0bd40ebd19cf52cb565939a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    image_builder_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

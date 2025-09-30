@@ -538,6 +538,48 @@ class CfnTestCase(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromTestCaseArn")
+    @builtins.classmethod
+    def from_test_case_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> ITestCaseRef:
+        '''Creates a new ITestCaseRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__af185a6b4bcb527beec102b04642b87eba08b5275639cb1cbe04609c82aeb6fe)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(ITestCaseRef, jsii.sinvoke(cls, "fromTestCaseArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromTestCaseId")
+    @builtins.classmethod
+    def from_test_case_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        test_case_id: builtins.str,
+    ) -> ITestCaseRef:
+        '''Creates a new ITestCaseRef from a testCaseId.
+
+        :param scope: -
+        :param id: -
+        :param test_case_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3b84b944bc8165e6747da7d77217829834a2d3c5cf56daec44df158bf246a71f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument test_case_id", value=test_case_id, expected_type=type_hints["test_case_id"])
+        return typing.cast(ITestCaseRef, jsii.sinvoke(cls, "fromTestCaseId", [scope, id, test_case_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2939,6 +2981,22 @@ def _typecheckingstub__b54328fdade9df4505a5f85498cf53fc62e7fc59a222ac471d1a63974
     steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTestCase.StepProperty, typing.Dict[builtins.str, typing.Any]]]]],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__af185a6b4bcb527beec102b04642b87eba08b5275639cb1cbe04609c82aeb6fe(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3b84b944bc8165e6747da7d77217829834a2d3c5cf56daec44df158bf246a71f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    test_case_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

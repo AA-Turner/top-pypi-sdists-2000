@@ -541,6 +541,48 @@ class CfnAssessment(
 
         jsii.create(self.__class__, self, [scope_, id, props])
 
+    @jsii.member(jsii_name="fromAssessmentArn")
+    @builtins.classmethod
+    def from_assessment_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IAssessmentRef:
+        '''Creates a new IAssessmentRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__53998ced82653765b84ddead2a4dff0ff2e45ab68892348e05eacca82bb124dc)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IAssessmentRef, jsii.sinvoke(cls, "fromAssessmentArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromAssessmentId")
+    @builtins.classmethod
+    def from_assessment_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        assessment_id: builtins.str,
+    ) -> IAssessmentRef:
+        '''Creates a new IAssessmentRef from a assessmentId.
+
+        :param scope: -
+        :param id: -
+        :param assessment_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__43eb8aeb11f425b57f8a93b31b847effe83f1e71d092fac1c67aa18396a4326f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument assessment_id", value=assessment_id, expected_type=type_hints["assessment_id"])
+        return typing.cast(IAssessmentRef, jsii.sinvoke(cls, "fromAssessmentId", [scope, id, assessment_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1424,6 +1466,22 @@ def _typecheckingstub__92bc07048cc88ff5fa41ca724a6b42a6ae66b35846d9ddafe90b7f486
     scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssessment.ScopeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__53998ced82653765b84ddead2a4dff0ff2e45ab68892348e05eacca82bb124dc(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__43eb8aeb11f425b57f8a93b31b847effe83f1e71d092fac1c67aa18396a4326f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    assessment_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

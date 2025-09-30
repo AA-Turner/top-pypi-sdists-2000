@@ -29,6 +29,29 @@ By default, the master password will be generated and stored in AWS Secrets Mana
 
 Your cluster will be empty by default.
 
+## Serverless Clusters
+
+DocumentDB supports serverless clusters that automatically scale capacity based on your application's needs.
+To create a serverless cluster, specify the `serverlessV2ScalingConfiguration` instead of `instanceType`:
+
+```python
+# vpc: ec2.Vpc
+
+cluster = docdb.DatabaseCluster(self, "Database",
+    master_user=docdb.Login(
+        username="myuser"
+    ),
+    vpc=vpc,
+    serverless_v2_scaling_configuration=docdb.ServerlessV2ScalingConfiguration(
+        min_capacity=0.5,
+        max_capacity=2
+    ),
+    engine_version="5.0.0"
+)
+```
+
+**Note**: DocumentDB serverless requires engine version 5.0.0 or higher and is not compatible with all features. See the [AWS documentation](https://docs.aws.amazon.com/documentdb/latest/developerguide/docdb-serverless-limitations.html) for limitations.
+
 ## Connecting
 
 To control who can access the cluster, use the `.connections` attribute. DocumentDB databases have a default port, so
@@ -303,6 +326,8 @@ cluster = docdb.DatabaseCluster(self, "Database",
 ```
 
 **Note**: `StorageType.IOPT1` is supported starting with engine version 5.0.0.
+
+**Note**: For serverless clusters, storage type is managed automatically and cannot be specified.
 '''
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
@@ -2327,7 +2352,6 @@ class DatabaseClusterAttributes:
     jsii_type="aws-cdk-lib.aws_docdb.DatabaseClusterProps",
     jsii_struct_bases=[],
     name_mapping={
-        "instance_type": "instanceType",
         "master_user": "masterUser",
         "vpc": "vpc",
         "backup": "backup",
@@ -2344,6 +2368,7 @@ class DatabaseClusterAttributes:
         "instance_identifier_base": "instanceIdentifierBase",
         "instance_removal_policy": "instanceRemovalPolicy",
         "instances": "instances",
+        "instance_type": "instanceType",
         "kms_key": "kmsKey",
         "parameter_group": "parameterGroup",
         "port": "port",
@@ -2351,6 +2376,7 @@ class DatabaseClusterAttributes:
         "removal_policy": "removalPolicy",
         "security_group": "securityGroup",
         "security_group_removal_policy": "securityGroupRemovalPolicy",
+        "serverless_v2_scaling_configuration": "serverlessV2ScalingConfiguration",
         "storage_encrypted": "storageEncrypted",
         "storage_type": "storageType",
         "vpc_subnets": "vpcSubnets",
@@ -2360,7 +2386,6 @@ class DatabaseClusterProps:
     def __init__(
         self,
         *,
-        instance_type: _InstanceType_f64915b9,
         master_user: typing.Union["Login", typing.Dict[builtins.str, typing.Any]],
         vpc: _IVpc_f30d5663,
         backup: typing.Optional[typing.Union[BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -2377,6 +2402,7 @@ class DatabaseClusterProps:
         instance_identifier_base: typing.Optional[builtins.str] = None,
         instance_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         instances: typing.Optional[jsii.Number] = None,
+        instance_type: typing.Optional[_InstanceType_f64915b9] = None,
         kms_key: typing.Optional[_IKey_5f11635f] = None,
         parameter_group: typing.Optional["IClusterParameterGroup"] = None,
         port: typing.Optional[jsii.Number] = None,
@@ -2384,13 +2410,13 @@ class DatabaseClusterProps:
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
         security_group_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        serverless_v2_scaling_configuration: typing.Optional[typing.Union["ServerlessV2ScalingConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         storage_encrypted: typing.Optional[builtins.bool] = None,
         storage_type: typing.Optional["StorageType"] = None,
         vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for a new database cluster.
 
-        :param instance_type: What type of instance to start for the replicas.
         :param master_user: Username and password for the administrative user.
         :param vpc: What subnets to run the DocumentDB instances in. Must be at least 2 subnets in two different AZs.
         :param backup: Backup settings. Default: - Backup retention period for automated backups is 1 day. Backup preferred window is set to a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.
@@ -2404,9 +2430,10 @@ class DatabaseClusterProps:
         :param engine_version: What version of the database to start. Default: - the latest major version
         :param export_audit_logs_to_cloud_watch: Whether the audit logs should be exported to CloudWatch. Note that you also have to configure the audit log export in the Cluster's Parameter Group. Default: false
         :param export_profiler_logs_to_cloud_watch: Whether the profiler logs should be exported to CloudWatch. Note that you also have to configure the profiler log export in the Cluster's Parameter Group. Default: false
-        :param instance_identifier_base: Base identifier for instances. Every replica is named by appending the replica number to this string, 1-based. Default: - ``dbClusterName`` is used with the word "Instance" appended. If ``dbClusterName`` is not provided, the identifier is automatically generated.
+        :param instance_identifier_base: Base identifier for instances. Every replica is named by appending the replica number to this string, 1-based. Only applicable for provisioned clusters. Default: - ``dbClusterName`` is used with the word "Instance" appended. If ``dbClusterName`` is not provided, the identifier is automatically generated.
         :param instance_removal_policy: The removal policy to apply to the cluster's instances. Cannot be set to ``SNAPSHOT``. Default: - ``RemovalPolicy.DESTROY`` when ``removalPolicy`` is set to ``SNAPSHOT``, ``removalPolicy`` otherwise.
         :param instances: Number of DocDB compute instances. Default: 1
+        :param instance_type: What type of instance to start for the replicas. Required for provisioned clusters, not applicable for serverless clusters. Default: None
         :param kms_key: The KMS key for storage encryption. Default: - default master key.
         :param parameter_group: The DB parameter group to associate with the instance. Default: no parameter group
         :param port: The port the DocumentDB cluster will listen on. Default: DatabaseCluster.DEFAULT_PORT
@@ -2414,6 +2441,7 @@ class DatabaseClusterProps:
         :param removal_policy: The removal policy to apply when the cluster and its instances are removed or replaced during a stack update, or when the stack is deleted. This removal policy also applies to the implicit security group created for the cluster if one is not supplied as a parameter. When set to ``SNAPSHOT``, the removal policy for the instances and the security group will default to ``DESTROY`` as those resources do not support the policy. Use the ``instanceRemovalPolicy`` and ``securityGroupRemovalPolicy`` to change the behavior. Default: - Retain cluster.
         :param security_group: Security group. Default: a new security group is created.
         :param security_group_removal_policy: The removal policy to apply to the cluster's security group. Cannot be set to ``SNAPSHOT``. Default: - ``RemovalPolicy.DESTROY`` when ``removalPolicy`` is set to ``SNAPSHOT``, ``removalPolicy`` otherwise.
+        :param serverless_v2_scaling_configuration: ServerlessV2 scaling configuration. When specified, the cluster will be created as a serverless cluster. Default: None
         :param storage_encrypted: Whether to enable storage encryption. Default: true
         :param storage_type: The storage type of the DocDB cluster. I/O-optimized storage is supported starting with engine version 5.0.0. Default: StorageType.STANDARD
         :param vpc_subnets: Where to place the instances within the VPC. Default: private subnets
@@ -2424,7 +2452,6 @@ class DatabaseClusterProps:
 
             # vpc: ec2.Vpc
             
-            
             cluster = docdb.DatabaseCluster(self, "Database",
                 master_user=docdb.Login(
                     username="myuser"
@@ -2434,18 +2461,19 @@ class DatabaseClusterProps:
                     subnet_type=ec2.SubnetType.PUBLIC
                 ),
                 vpc=vpc,
-                removal_policy=RemovalPolicy.SNAPSHOT
+                deletion_protection=True
             )
         '''
         if isinstance(master_user, dict):
             master_user = Login(**master_user)
         if isinstance(backup, dict):
             backup = BackupProps(**backup)
+        if isinstance(serverless_v2_scaling_configuration, dict):
+            serverless_v2_scaling_configuration = ServerlessV2ScalingConfiguration(**serverless_v2_scaling_configuration)
         if isinstance(vpc_subnets, dict):
             vpc_subnets = _SubnetSelection_e57d76df(**vpc_subnets)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb24ec128a97ca07df15f55d4e96dda851d4300951806a7a3d7f391cc4e83218)
-            check_type(argname="argument instance_type", value=instance_type, expected_type=type_hints["instance_type"])
             check_type(argname="argument master_user", value=master_user, expected_type=type_hints["master_user"])
             check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
             check_type(argname="argument backup", value=backup, expected_type=type_hints["backup"])
@@ -2462,6 +2490,7 @@ class DatabaseClusterProps:
             check_type(argname="argument instance_identifier_base", value=instance_identifier_base, expected_type=type_hints["instance_identifier_base"])
             check_type(argname="argument instance_removal_policy", value=instance_removal_policy, expected_type=type_hints["instance_removal_policy"])
             check_type(argname="argument instances", value=instances, expected_type=type_hints["instances"])
+            check_type(argname="argument instance_type", value=instance_type, expected_type=type_hints["instance_type"])
             check_type(argname="argument kms_key", value=kms_key, expected_type=type_hints["kms_key"])
             check_type(argname="argument parameter_group", value=parameter_group, expected_type=type_hints["parameter_group"])
             check_type(argname="argument port", value=port, expected_type=type_hints["port"])
@@ -2469,11 +2498,11 @@ class DatabaseClusterProps:
             check_type(argname="argument removal_policy", value=removal_policy, expected_type=type_hints["removal_policy"])
             check_type(argname="argument security_group", value=security_group, expected_type=type_hints["security_group"])
             check_type(argname="argument security_group_removal_policy", value=security_group_removal_policy, expected_type=type_hints["security_group_removal_policy"])
+            check_type(argname="argument serverless_v2_scaling_configuration", value=serverless_v2_scaling_configuration, expected_type=type_hints["serverless_v2_scaling_configuration"])
             check_type(argname="argument storage_encrypted", value=storage_encrypted, expected_type=type_hints["storage_encrypted"])
             check_type(argname="argument storage_type", value=storage_type, expected_type=type_hints["storage_type"])
             check_type(argname="argument vpc_subnets", value=vpc_subnets, expected_type=type_hints["vpc_subnets"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "instance_type": instance_type,
             "master_user": master_user,
             "vpc": vpc,
         }
@@ -2505,6 +2534,8 @@ class DatabaseClusterProps:
             self._values["instance_removal_policy"] = instance_removal_policy
         if instances is not None:
             self._values["instances"] = instances
+        if instance_type is not None:
+            self._values["instance_type"] = instance_type
         if kms_key is not None:
             self._values["kms_key"] = kms_key
         if parameter_group is not None:
@@ -2519,19 +2550,14 @@ class DatabaseClusterProps:
             self._values["security_group"] = security_group
         if security_group_removal_policy is not None:
             self._values["security_group_removal_policy"] = security_group_removal_policy
+        if serverless_v2_scaling_configuration is not None:
+            self._values["serverless_v2_scaling_configuration"] = serverless_v2_scaling_configuration
         if storage_encrypted is not None:
             self._values["storage_encrypted"] = storage_encrypted
         if storage_type is not None:
             self._values["storage_type"] = storage_type
         if vpc_subnets is not None:
             self._values["vpc_subnets"] = vpc_subnets
-
-    @builtins.property
-    def instance_type(self) -> _InstanceType_f64915b9:
-        '''What type of instance to start for the replicas.'''
-        result = self._values.get("instance_type")
-        assert result is not None, "Required property 'instance_type' is missing"
-        return typing.cast(_InstanceType_f64915b9, result)
 
     @builtins.property
     def master_user(self) -> "Login":
@@ -2681,6 +2707,7 @@ class DatabaseClusterProps:
         '''Base identifier for instances.
 
         Every replica is named by appending the replica number to this string, 1-based.
+        Only applicable for provisioned clusters.
 
         :default:
 
@@ -2711,6 +2738,17 @@ class DatabaseClusterProps:
         '''
         result = self._values.get("instances")
         return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def instance_type(self) -> typing.Optional[_InstanceType_f64915b9]:
+        '''What type of instance to start for the replicas.
+
+        Required for provisioned clusters, not applicable for serverless clusters.
+
+        :default: None
+        '''
+        result = self._values.get("instance_type")
+        return typing.cast(typing.Optional[_InstanceType_f64915b9], result)
 
     @builtins.property
     def kms_key(self) -> typing.Optional[_IKey_5f11635f]:
@@ -2796,6 +2834,19 @@ class DatabaseClusterProps:
         '''
         result = self._values.get("security_group_removal_policy")
         return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+
+    @builtins.property
+    def serverless_v2_scaling_configuration(
+        self,
+    ) -> typing.Optional["ServerlessV2ScalingConfiguration"]:
+        '''ServerlessV2 scaling configuration.
+
+        When specified, the cluster will be created as a serverless cluster.
+
+        :default: None
+        '''
+        result = self._values.get("serverless_v2_scaling_configuration")
+        return typing.cast(typing.Optional["ServerlessV2ScalingConfiguration"], result)
 
     @builtins.property
     def storage_encrypted(self) -> typing.Optional[builtins.bool]:
@@ -3883,7 +3934,6 @@ class Login:
 
             # vpc: ec2.Vpc
             
-            
             cluster = docdb.DatabaseCluster(self, "Database",
                 master_user=docdb.Login(
                     username="myuser"
@@ -3893,7 +3943,7 @@ class Login:
                     subnet_type=ec2.SubnetType.PUBLIC
                 ),
                 vpc=vpc,
-                removal_policy=RemovalPolicy.SNAPSHOT
+                deletion_protection=True
             )
         '''
         if __debug__:
@@ -4052,6 +4102,71 @@ class RotationMultiUserOptions:
 
     def __repr__(self) -> str:
         return "RotationMultiUserOptions(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_docdb.ServerlessV2ScalingConfiguration",
+    jsii_struct_bases=[],
+    name_mapping={"max_capacity": "maxCapacity", "min_capacity": "minCapacity"},
+)
+class ServerlessV2ScalingConfiguration:
+    def __init__(self, *, max_capacity: jsii.Number, min_capacity: jsii.Number) -> None:
+        '''ServerlessV2 scaling configuration for DocumentDB clusters.
+
+        :param max_capacity: The maximum number of DocumentDB capacity units (DCUs) for a DocumentDB instance in a DocumentDB Serverless cluster.
+        :param min_capacity: The minimum number of DocumentDB capacity units (DCUs) for a DocumentDB instance in a DocumentDB Serverless cluster.
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # vpc: ec2.Vpc
+            
+            cluster = docdb.DatabaseCluster(self, "Database",
+                master_user=docdb.Login(
+                    username="myuser"
+                ),
+                vpc=vpc,
+                serverless_v2_scaling_configuration=docdb.ServerlessV2ScalingConfiguration(
+                    min_capacity=0.5,
+                    max_capacity=2
+                ),
+                engine_version="5.0.0"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__db0de72551b166907369891918b0eccf227b067c44151aff0f889642ecea6a78)
+            check_type(argname="argument max_capacity", value=max_capacity, expected_type=type_hints["max_capacity"])
+            check_type(argname="argument min_capacity", value=min_capacity, expected_type=type_hints["min_capacity"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "max_capacity": max_capacity,
+            "min_capacity": min_capacity,
+        }
+
+    @builtins.property
+    def max_capacity(self) -> jsii.Number:
+        '''The maximum number of DocumentDB capacity units (DCUs) for a DocumentDB instance in a DocumentDB Serverless cluster.'''
+        result = self._values.get("max_capacity")
+        assert result is not None, "Required property 'max_capacity' is missing"
+        return typing.cast(jsii.Number, result)
+
+    @builtins.property
+    def min_capacity(self) -> jsii.Number:
+        '''The minimum number of DocumentDB capacity units (DCUs) for a DocumentDB instance in a DocumentDB Serverless cluster.'''
+        result = self._values.get("min_capacity")
+        assert result is not None, "Required property 'min_capacity' is missing"
+        return typing.cast(jsii.Number, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "ServerlessV2ScalingConfiguration(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -5887,7 +6002,6 @@ class DatabaseCluster(
 
         # vpc: ec2.Vpc
         
-        
         cluster = docdb.DatabaseCluster(self, "Database",
             master_user=docdb.Login(
                 username="myuser"
@@ -5897,7 +6011,7 @@ class DatabaseCluster(
                 subnet_type=ec2.SubnetType.PUBLIC
             ),
             vpc=vpc,
-            removal_policy=RemovalPolicy.SNAPSHOT
+            deletion_protection=True
         )
     '''
 
@@ -5906,7 +6020,6 @@ class DatabaseCluster(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_type: _InstanceType_f64915b9,
         master_user: typing.Union[Login, typing.Dict[builtins.str, typing.Any]],
         vpc: _IVpc_f30d5663,
         backup: typing.Optional[typing.Union[BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -5923,6 +6036,7 @@ class DatabaseCluster(
         instance_identifier_base: typing.Optional[builtins.str] = None,
         instance_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         instances: typing.Optional[jsii.Number] = None,
+        instance_type: typing.Optional[_InstanceType_f64915b9] = None,
         kms_key: typing.Optional[_IKey_5f11635f] = None,
         parameter_group: typing.Optional[IClusterParameterGroup] = None,
         port: typing.Optional[jsii.Number] = None,
@@ -5930,6 +6044,7 @@ class DatabaseCluster(
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
         security_group_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        serverless_v2_scaling_configuration: typing.Optional[typing.Union[ServerlessV2ScalingConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
         storage_encrypted: typing.Optional[builtins.bool] = None,
         storage_type: typing.Optional[StorageType] = None,
         vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -5937,7 +6052,6 @@ class DatabaseCluster(
         '''
         :param scope: -
         :param id: -
-        :param instance_type: What type of instance to start for the replicas.
         :param master_user: Username and password for the administrative user.
         :param vpc: What subnets to run the DocumentDB instances in. Must be at least 2 subnets in two different AZs.
         :param backup: Backup settings. Default: - Backup retention period for automated backups is 1 day. Backup preferred window is set to a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.
@@ -5951,9 +6065,10 @@ class DatabaseCluster(
         :param engine_version: What version of the database to start. Default: - the latest major version
         :param export_audit_logs_to_cloud_watch: Whether the audit logs should be exported to CloudWatch. Note that you also have to configure the audit log export in the Cluster's Parameter Group. Default: false
         :param export_profiler_logs_to_cloud_watch: Whether the profiler logs should be exported to CloudWatch. Note that you also have to configure the profiler log export in the Cluster's Parameter Group. Default: false
-        :param instance_identifier_base: Base identifier for instances. Every replica is named by appending the replica number to this string, 1-based. Default: - ``dbClusterName`` is used with the word "Instance" appended. If ``dbClusterName`` is not provided, the identifier is automatically generated.
+        :param instance_identifier_base: Base identifier for instances. Every replica is named by appending the replica number to this string, 1-based. Only applicable for provisioned clusters. Default: - ``dbClusterName`` is used with the word "Instance" appended. If ``dbClusterName`` is not provided, the identifier is automatically generated.
         :param instance_removal_policy: The removal policy to apply to the cluster's instances. Cannot be set to ``SNAPSHOT``. Default: - ``RemovalPolicy.DESTROY`` when ``removalPolicy`` is set to ``SNAPSHOT``, ``removalPolicy`` otherwise.
         :param instances: Number of DocDB compute instances. Default: 1
+        :param instance_type: What type of instance to start for the replicas. Required for provisioned clusters, not applicable for serverless clusters. Default: None
         :param kms_key: The KMS key for storage encryption. Default: - default master key.
         :param parameter_group: The DB parameter group to associate with the instance. Default: no parameter group
         :param port: The port the DocumentDB cluster will listen on. Default: DatabaseCluster.DEFAULT_PORT
@@ -5961,6 +6076,7 @@ class DatabaseCluster(
         :param removal_policy: The removal policy to apply when the cluster and its instances are removed or replaced during a stack update, or when the stack is deleted. This removal policy also applies to the implicit security group created for the cluster if one is not supplied as a parameter. When set to ``SNAPSHOT``, the removal policy for the instances and the security group will default to ``DESTROY`` as those resources do not support the policy. Use the ``instanceRemovalPolicy`` and ``securityGroupRemovalPolicy`` to change the behavior. Default: - Retain cluster.
         :param security_group: Security group. Default: a new security group is created.
         :param security_group_removal_policy: The removal policy to apply to the cluster's security group. Cannot be set to ``SNAPSHOT``. Default: - ``RemovalPolicy.DESTROY`` when ``removalPolicy`` is set to ``SNAPSHOT``, ``removalPolicy`` otherwise.
+        :param serverless_v2_scaling_configuration: ServerlessV2 scaling configuration. When specified, the cluster will be created as a serverless cluster. Default: None
         :param storage_encrypted: Whether to enable storage encryption. Default: true
         :param storage_type: The storage type of the DocDB cluster. I/O-optimized storage is supported starting with engine version 5.0.0. Default: StorageType.STANDARD
         :param vpc_subnets: Where to place the instances within the VPC. Default: private subnets
@@ -5970,7 +6086,6 @@ class DatabaseCluster(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = DatabaseClusterProps(
-            instance_type=instance_type,
             master_user=master_user,
             vpc=vpc,
             backup=backup,
@@ -5987,6 +6102,7 @@ class DatabaseCluster(
             instance_identifier_base=instance_identifier_base,
             instance_removal_policy=instance_removal_policy,
             instances=instances,
+            instance_type=instance_type,
             kms_key=kms_key,
             parameter_group=parameter_group,
             port=port,
@@ -5994,6 +6110,7 @@ class DatabaseCluster(
             removal_policy=removal_policy,
             security_group=security_group,
             security_group_removal_policy=security_group_removal_policy,
+            serverless_v2_scaling_configuration=serverless_v2_scaling_configuration,
             storage_encrypted=storage_encrypted,
             storage_type=storage_type,
             vpc_subnets=vpc_subnets,
@@ -6386,6 +6503,7 @@ __all__ = [
     "IEventSubscriptionRef",
     "Login",
     "RotationMultiUserOptions",
+    "ServerlessV2ScalingConfiguration",
     "StorageType",
 ]
 
@@ -6543,7 +6661,6 @@ def _typecheckingstub__d7aaa09fc3d83b3aef333d99a0eb22e9b6c412979a1f20e5f22628ebd
 
 def _typecheckingstub__bb24ec128a97ca07df15f55d4e96dda851d4300951806a7a3d7f391cc4e83218(
     *,
-    instance_type: _InstanceType_f64915b9,
     master_user: typing.Union[Login, typing.Dict[builtins.str, typing.Any]],
     vpc: _IVpc_f30d5663,
     backup: typing.Optional[typing.Union[BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -6560,6 +6677,7 @@ def _typecheckingstub__bb24ec128a97ca07df15f55d4e96dda851d4300951806a7a3d7f391cc
     instance_identifier_base: typing.Optional[builtins.str] = None,
     instance_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     instances: typing.Optional[jsii.Number] = None,
+    instance_type: typing.Optional[_InstanceType_f64915b9] = None,
     kms_key: typing.Optional[_IKey_5f11635f] = None,
     parameter_group: typing.Optional[IClusterParameterGroup] = None,
     port: typing.Optional[jsii.Number] = None,
@@ -6567,6 +6685,7 @@ def _typecheckingstub__bb24ec128a97ca07df15f55d4e96dda851d4300951806a7a3d7f391cc
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
     security_group_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+    serverless_v2_scaling_configuration: typing.Optional[typing.Union[ServerlessV2ScalingConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
     storage_encrypted: typing.Optional[builtins.bool] = None,
     storage_type: typing.Optional[StorageType] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -6651,6 +6770,14 @@ def _typecheckingstub__222dd3344c65bc26a3a94843e3f6ff30239e319d6a229dd3bdf41ceb3
     *,
     secret: _ISecret_6e020e6a,
     automatically_after: typing.Optional[_Duration_4839e8c3] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__db0de72551b166907369891918b0eccf227b067c44151aff0f889642ecea6a78(
+    *,
+    max_capacity: jsii.Number,
+    min_capacity: jsii.Number,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7172,7 +7299,6 @@ def _typecheckingstub__3fef762ebf4d69195051e79f76d91c6d9e93e2a84a6c1e71f7b4a0b8c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_type: _InstanceType_f64915b9,
     master_user: typing.Union[Login, typing.Dict[builtins.str, typing.Any]],
     vpc: _IVpc_f30d5663,
     backup: typing.Optional[typing.Union[BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -7189,6 +7315,7 @@ def _typecheckingstub__3fef762ebf4d69195051e79f76d91c6d9e93e2a84a6c1e71f7b4a0b8c
     instance_identifier_base: typing.Optional[builtins.str] = None,
     instance_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     instances: typing.Optional[jsii.Number] = None,
+    instance_type: typing.Optional[_InstanceType_f64915b9] = None,
     kms_key: typing.Optional[_IKey_5f11635f] = None,
     parameter_group: typing.Optional[IClusterParameterGroup] = None,
     port: typing.Optional[jsii.Number] = None,
@@ -7196,6 +7323,7 @@ def _typecheckingstub__3fef762ebf4d69195051e79f76d91c6d9e93e2a84a6c1e71f7b4a0b8c
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
     security_group_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+    serverless_v2_scaling_configuration: typing.Optional[typing.Union[ServerlessV2ScalingConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
     storage_encrypted: typing.Optional[builtins.bool] = None,
     storage_type: typing.Optional[StorageType] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,

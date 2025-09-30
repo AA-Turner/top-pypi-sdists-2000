@@ -9605,6 +9605,27 @@ class CfnPortfolio(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromPortfolioId")
+    @builtins.classmethod
+    def from_portfolio_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        portfolio_id: builtins.str,
+    ) -> IPortfolioRef:
+        '''Creates a new IPortfolioRef from a portfolioId.
+
+        :param scope: -
+        :param id: -
+        :param portfolio_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__44128417aff4104adae0046cf0d101d90c4fc22515494313689b7b4561643abc)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument portfolio_id", value=portfolio_id, expected_type=type_hints["portfolio_id"])
+        return typing.cast(IPortfolioRef, jsii.sinvoke(cls, "fromPortfolioId", [scope, id, portfolio_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -12895,6 +12916,14 @@ def _typecheckingstub__92ae108da2b169227ca9ff5c8793d6e40826005130d9af692285850c9
     accept_language: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__44128417aff4104adae0046cf0d101d90c4fc22515494313689b7b4561643abc(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    portfolio_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

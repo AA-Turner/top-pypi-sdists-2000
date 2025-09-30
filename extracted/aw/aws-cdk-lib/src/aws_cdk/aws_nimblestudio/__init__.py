@@ -2221,6 +2221,27 @@ class CfnStudio(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromStudioId")
+    @builtins.classmethod
+    def from_studio_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        studio_id: builtins.str,
+    ) -> IStudioRef:
+        '''Creates a new IStudioRef from a studioId.
+
+        :param scope: -
+        :param id: -
+        :param studio_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bd2bf748ce8156650a8f97cdc57655ec8a309bab4bf87feae2916f958649aee9)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument studio_id", value=studio_id, expected_type=type_hints["studio_id"])
+        return typing.cast(IStudioRef, jsii.sinvoke(cls, "fromStudioId", [scope, id, studio_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3729,6 +3750,14 @@ def _typecheckingstub__45420baa577c3a8eb786b8d20404bcbc5573494502885eb1f55a89702
     user_role_arn: builtins.str,
     studio_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStudio.StudioEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bd2bf748ce8156650a8f97cdc57655ec8a309bab4bf87feae2916f958649aee9(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    studio_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

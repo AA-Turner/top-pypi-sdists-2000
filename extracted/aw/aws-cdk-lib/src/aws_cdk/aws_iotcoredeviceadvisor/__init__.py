@@ -316,6 +316,48 @@ class CfnSuiteDefinition(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromSuiteDefinitionArn")
+    @builtins.classmethod
+    def from_suite_definition_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> ISuiteDefinitionRef:
+        '''Creates a new ISuiteDefinitionRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7dba82c752ff993d11a788cce4b31a2a0616eb6f74d90cac98e2ca4f0a536732)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(ISuiteDefinitionRef, jsii.sinvoke(cls, "fromSuiteDefinitionArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromSuiteDefinitionId")
+    @builtins.classmethod
+    def from_suite_definition_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        suite_definition_id: builtins.str,
+    ) -> ISuiteDefinitionRef:
+        '''Creates a new ISuiteDefinitionRef from a suiteDefinitionId.
+
+        :param scope: -
+        :param id: -
+        :param suite_definition_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a8ff18a5c90695b982075ba4cfa4b364bf1607a9f227a0851fadfc97a7569404)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument suite_definition_id", value=suite_definition_id, expected_type=type_hints["suite_definition_id"])
+        return typing.cast(ISuiteDefinitionRef, jsii.sinvoke(cls, "fromSuiteDefinitionId", [scope, id, suite_definition_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -689,6 +731,22 @@ def _typecheckingstub__945861bb0ea34e6da34c3c8b60ba3b233f881a73cecd8fa75200bae6d
     *,
     suite_definition_configuration: typing.Any,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7dba82c752ff993d11a788cce4b31a2a0616eb6f74d90cac98e2ca4f0a536732(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a8ff18a5c90695b982075ba4cfa4b364bf1607a9f227a0851fadfc97a7569404(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    suite_definition_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

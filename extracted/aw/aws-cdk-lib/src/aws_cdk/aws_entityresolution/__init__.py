@@ -1621,6 +1621,27 @@ class CfnIdMappingWorkflow(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromWorkflowName")
+    @builtins.classmethod
+    def from_workflow_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        workflow_name: builtins.str,
+    ) -> IIdMappingWorkflowRef:
+        '''Creates a new IIdMappingWorkflowRef from a workflowName.
+
+        :param scope: -
+        :param id: -
+        :param workflow_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c71e3475fcf92412e60d6b5cded8ce1be5e96efeb895e07d62610a74d2c5d706)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument workflow_name", value=workflow_name, expected_type=type_hints["workflow_name"])
+        return typing.cast(IIdMappingWorkflowRef, jsii.sinvoke(cls, "fromWorkflowName", [scope, id, workflow_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2609,6 +2630,48 @@ class CfnIdNamespace(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromIdNamespaceArn")
+    @builtins.classmethod
+    def from_id_namespace_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IIdNamespaceRef:
+        '''Creates a new IIdNamespaceRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a37393a68cafd76cc27f2d6601ae82638be7969941bff433eb43c0d7ff73e003)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IIdNamespaceRef, jsii.sinvoke(cls, "fromIdNamespaceArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromIdNamespaceName")
+    @builtins.classmethod
+    def from_id_namespace_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        id_namespace_name: builtins.str,
+    ) -> IIdNamespaceRef:
+        '''Creates a new IIdNamespaceRef from a idNamespaceName.
+
+        :param scope: -
+        :param id: -
+        :param id_namespace_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__07807daadfdacde57ae7950ec0b76d29c32466721c6de08f5dc2ea57c64564b1)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument id_namespace_name", value=id_namespace_name, expected_type=type_hints["id_namespace_name"])
+        return typing.cast(IIdNamespaceRef, jsii.sinvoke(cls, "fromIdNamespaceName", [scope, id, id_namespace_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3381,6 +3444,27 @@ class CfnMatchingWorkflow(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromWorkflowName")
+    @builtins.classmethod
+    def from_workflow_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        workflow_name: builtins.str,
+    ) -> IMatchingWorkflowRef:
+        '''Creates a new IMatchingWorkflowRef from a workflowName.
+
+        :param scope: -
+        :param id: -
+        :param workflow_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0297ecf2a3d621f0a163726b6bf516267f2bcd4d3bc199bc19736d31d80c70d0)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument workflow_name", value=workflow_name, expected_type=type_hints["workflow_name"])
+        return typing.cast(IMatchingWorkflowRef, jsii.sinvoke(cls, "fromWorkflowName", [scope, id, workflow_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4820,6 +4904,27 @@ class CfnSchemaMapping(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromSchemaName")
+    @builtins.classmethod
+    def from_schema_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        schema_name: builtins.str,
+    ) -> ISchemaMappingRef:
+        '''Creates a new ISchemaMappingRef from a schemaName.
+
+        :param scope: -
+        :param id: -
+        :param schema_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a4e67d191ac2d56f2d5b950bb060013ba8cf469fdc4b50abec8add67f9b2192b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument schema_name", value=schema_name, expected_type=type_hints["schema_name"])
+        return typing.cast(ISchemaMappingRef, jsii.sinvoke(cls, "fromSchemaName", [scope, id, schema_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5271,6 +5376,14 @@ def _typecheckingstub__498454075de816db2ba240e783f9530effd93522c63f637ee5bff5bbf
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c71e3475fcf92412e60d6b5cded8ce1be5e96efeb895e07d62610a74d2c5d706(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    workflow_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0c638b8f7fe17b0bc0b2a90601d8ca32908c566908652ddf66cd02843ab5b9f3(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5413,6 +5526,22 @@ def _typecheckingstub__725fcecd44cb8acaba43bacc813f1feb11b78b50f21d8344c7e80f5e9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a37393a68cafd76cc27f2d6601ae82638be7969941bff433eb43c0d7ff73e003(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__07807daadfdacde57ae7950ec0b76d29c32466721c6de08f5dc2ea57c64564b1(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    id_namespace_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__acf8c5714be6a867ffa9fef5d36a2331d2ce5ef82287380b1e043fd28e6f21f2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5522,6 +5651,14 @@ def _typecheckingstub__8c9e9b620b89ac2aae774eb42384e0472b5a13eeb28983708b164b240
     description: typing.Optional[builtins.str] = None,
     incremental_run_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMatchingWorkflow.IncrementalRunConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0297ecf2a3d621f0a163726b6bf516267f2bcd4d3bc199bc19736d31d80c70d0(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    workflow_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5748,6 +5885,14 @@ def _typecheckingstub__d4b85e0c42d14b4681c4f948114178ba1c1a3d4eee3aed6f96a55a116
     schema_name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a4e67d191ac2d56f2d5b950bb060013ba8cf469fdc4b50abec8add67f9b2192b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    schema_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

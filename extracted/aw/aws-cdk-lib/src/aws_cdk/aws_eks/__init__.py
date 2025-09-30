@@ -12285,6 +12285,8 @@ class NodegroupAmiType(enum.Enum):
     '''Amazon Linux 2023 with AWS Neuron drivers (x86-64).'''
     AL2023_X86_64_NVIDIA = "AL2023_X86_64_NVIDIA"
     '''Amazon Linux 2023 with NVIDIA drivers (x86-64).'''
+    AL2023_ARM_64_NVIDIA = "AL2023_ARM_64_NVIDIA"
+    '''Amazon Linux 2023 with NVIDIA drivers (ARM-64).'''
     AL2023_ARM_64_STANDARD = "AL2023_ARM_64_STANDARD"
     '''Amazon Linux 2023 (ARM-64).'''
 
@@ -15104,6 +15106,27 @@ class CfnAddon(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAddonArn")
+    @builtins.classmethod
+    def from_addon_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IAddonRef:
+        '''Creates a new IAddonRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e553dfaf756fa282c5fbeb4ef4b974cf0a47d23084cd717224b1311e0a30eb24)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IAddonRef, jsii.sinvoke(cls, "fromAddonArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -15621,6 +15644,48 @@ class CfnCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromClusterArn")
+    @builtins.classmethod
+    def from_cluster_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IClusterRef:
+        '''Creates a new IClusterRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b7520097767a23a7f7b750879adb8df71436766d2ad7c356ce08243330524e31)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IClusterRef, jsii.sinvoke(cls, "fromClusterArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromClusterName")
+    @builtins.classmethod
+    def from_cluster_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        cluster_name: builtins.str,
+    ) -> IClusterRef:
+        '''Creates a new IClusterRef from a clusterName.
+
+        :param scope: -
+        :param id: -
+        :param cluster_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__06b7df746bf67240facb00749c1c399634c9167d5acb1747f034220efaf30f49)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
+        return typing.cast(IClusterRef, jsii.sinvoke(cls, "fromClusterName", [scope, id, cluster_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -17629,6 +17694,27 @@ class CfnFargateProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromFargateProfileArn")
+    @builtins.classmethod
+    def from_fargate_profile_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IFargateProfileRef:
+        '''Creates a new IFargateProfileRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__68f38ef5ce6ebc1ca5dcde1b9e529ea13f0b01c2ccaa9863ca69bece85d4f6e6)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IFargateProfileRef, jsii.sinvoke(cls, "fromFargateProfileArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -24091,6 +24177,14 @@ def _typecheckingstub__45ff0728c7d6fc5f47c97aa791c327f70a32e19bdf463d94d9351053f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e553dfaf756fa282c5fbeb4ef4b974cf0a47d23084cd717224b1311e0a30eb24(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fb634c71637a3029d784eb1cc23e12801a6d069d381448751935635b986d50bc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -24200,6 +24294,22 @@ def _typecheckingstub__d3e62a858014f3867f3039d1328d57223fb0d16e3fb6d1e2d79279938
     upgrade_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.UpgradePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     version: typing.Optional[builtins.str] = None,
     zonal_shift_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ZonalShiftConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b7520097767a23a7f7b750879adb8df71436766d2ad7c356ce08243330524e31(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__06b7df746bf67240facb00749c1c399634c9167d5acb1747f034220efaf30f49(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    cluster_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24481,6 +24591,14 @@ def _typecheckingstub__d74e3378581d3898ad60f22c46414b34a44ce82bd54d09c56466afda9
     fargate_profile_name: typing.Optional[builtins.str] = None,
     subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__68f38ef5ce6ebc1ca5dcde1b9e529ea13f0b01c2ccaa9863ca69bece85d4f6e6(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

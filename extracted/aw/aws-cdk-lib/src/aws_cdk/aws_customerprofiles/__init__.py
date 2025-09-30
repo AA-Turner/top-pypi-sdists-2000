@@ -3505,6 +3505,27 @@ class CfnDomain(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDomainName")
+    @builtins.classmethod
+    def from_domain_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        domain_name: builtins.str,
+    ) -> IDomainRef:
+        '''Creates a new IDomainRef from a domainName.
+
+        :param scope: -
+        :param id: -
+        :param domain_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fd06f1031d674322ba6de287a0e9b6f98bcf7c1e63ca71ee399b0962fde84df9)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
+        return typing.cast(IDomainRef, jsii.sinvoke(cls, "fromDomainName", [scope, id, domain_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4844,6 +4865,27 @@ class CfnEventStream(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromEventStreamArn")
+    @builtins.classmethod
+    def from_event_stream_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IEventStreamRef:
+        '''Creates a new IEventStreamRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2912fbac0dc25602737bb6c243466334029e11fcfdf5487fc65c1a0029b6f9e1)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IEventStreamRef, jsii.sinvoke(cls, "fromEventStreamArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11458,6 +11500,14 @@ def _typecheckingstub__6cc1e612474254ea8edde86de3e08226c0c50e450782b3a99c92e87c3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fd06f1031d674322ba6de287a0e9b6f98bcf7c1e63ca71ee399b0962fde84df9(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    domain_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2bd90568f369097b5d7a19088e675226c1257ad9e9ac30f3a478e941435aaaf5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11619,6 +11669,14 @@ def _typecheckingstub__ab29d0d747428994b84491cb3989a05a67bcb4cf0b84ebeba8fd19114
     event_stream_name: builtins.str,
     uri: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2912fbac0dc25602737bb6c243466334029e11fcfdf5487fc65c1a0029b6f9e1(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -3885,6 +3885,27 @@ class CfnResolverConfig(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromResourceId")
+    @builtins.classmethod
+    def from_resource_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        resource_id: builtins.str,
+    ) -> IResolverConfigRef:
+        '''Creates a new IResolverConfigRef from a resourceId.
+
+        :param scope: -
+        :param id: -
+        :param resource_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f8f6b0479da60df4a0222dc8fed87ef1041d1b88f7275f1bdc7b538b75cb68aa)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument resource_id", value=resource_id, expected_type=type_hints["resource_id"])
+        return typing.cast(IResolverConfigRef, jsii.sinvoke(cls, "fromResourceId", [scope, id, resource_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6007,6 +6028,14 @@ def _typecheckingstub__35122d782a5f80846e3948e7eb0337b124eee2f562394f9f0ac3811b7
     id: builtins.str,
     *,
     autodefined_reverse_flag: builtins.str,
+    resource_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f8f6b0479da60df4a0222dc8fed87ef1041d1b88f7275f1bdc7b538b75cb68aa(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
     resource_id: builtins.str,
 ) -> None:
     """Type checking stubs"""

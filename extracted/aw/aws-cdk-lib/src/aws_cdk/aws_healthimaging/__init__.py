@@ -327,6 +327,48 @@ class CfnDatastore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDatastoreArn")
+    @builtins.classmethod
+    def from_datastore_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IDatastoreRef:
+        '''Creates a new IDatastoreRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5fb5ec4da2c6f352015085ae71237ce8e44cf2dd09fc81359c68bb5cb84b5cf9)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IDatastoreRef, jsii.sinvoke(cls, "fromDatastoreArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromDatastoreId")
+    @builtins.classmethod
+    def from_datastore_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        datastore_id: builtins.str,
+    ) -> IDatastoreRef:
+        '''Creates a new IDatastoreRef from a datastoreId.
+
+        :param scope: -
+        :param id: -
+        :param datastore_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__314be040c8eb5e03acac65995440ca8ecf395de82c807acd51190e6e674c6dac)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument datastore_id", value=datastore_id, expected_type=type_hints["datastore_id"])
+        return typing.cast(IDatastoreRef, jsii.sinvoke(cls, "fromDatastoreId", [scope, id, datastore_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -495,6 +537,22 @@ def _typecheckingstub__79b4005abdc2acc4fbde1f52def5483b4f3842866d771c24e762a57e0
     datastore_name: typing.Optional[builtins.str] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5fb5ec4da2c6f352015085ae71237ce8e44cf2dd09fc81359c68bb5cb84b5cf9(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__314be040c8eb5e03acac65995440ca8ecf395de82c807acd51190e6e674c6dac(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    datastore_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

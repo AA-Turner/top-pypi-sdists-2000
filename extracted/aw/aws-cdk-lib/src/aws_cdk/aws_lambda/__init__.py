@@ -22514,6 +22514,48 @@ class CfnFunction(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromFunctionArn")
+    @builtins.classmethod
+    def from_function_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IFunctionRef:
+        '''Creates a new IFunctionRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__61e0d8c1c28ee6cc884328cf3d8f7451dc1672f27bc4c84cc8a4387c05009036)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IFunctionRef, jsii.sinvoke(cls, "fromFunctionArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromFunctionName")
+    @builtins.classmethod
+    def from_function_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        function_name: builtins.str,
+    ) -> IFunctionRef:
+        '''Creates a new IFunctionRef from a functionName.
+
+        :param scope: -
+        :param id: -
+        :param function_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7302d6fbe27b6ce250ef5234f0c0dd25229f5a3ea8a65ee6de6f6ba4e0b506ad)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument function_name", value=function_name, expected_type=type_hints["function_name"])
+        return typing.cast(IFunctionRef, jsii.sinvoke(cls, "fromFunctionName", [scope, id, function_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -34010,6 +34052,22 @@ def _typecheckingstub__d971f3872acf20816e6da364ff9e6bec83fe2e68bbb9a7debc845b400
     timeout: typing.Optional[jsii.Number] = None,
     tracing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.TracingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__61e0d8c1c28ee6cc884328cf3d8f7451dc1672f27bc4c84cc8a4387c05009036(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7302d6fbe27b6ce250ef5234f0c0dd25229f5a3ea8a65ee6de6f6ba4e0b506ad(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    function_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -4520,6 +4520,48 @@ class CfnBackupPlan(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromBackupPlanArn")
+    @builtins.classmethod
+    def from_backup_plan_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IBackupPlanRef:
+        '''Creates a new IBackupPlanRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__19a621581dc951af9f595672bab4c44806829db988a9a543e73c82aa211347cc)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IBackupPlanRef, jsii.sinvoke(cls, "fromBackupPlanArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromBackupPlanId")
+    @builtins.classmethod
+    def from_backup_plan_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        backup_plan_id: builtins.str,
+    ) -> IBackupPlanRef:
+        '''Creates a new IBackupPlanRef from a backupPlanId.
+
+        :param scope: -
+        :param id: -
+        :param backup_plan_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c10f5f2e9e380d8e917a10f74122d09d2b555c99380ffa6da4e01197e1e097dd)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument backup_plan_id", value=backup_plan_id, expected_type=type_hints["backup_plan_id"])
+        return typing.cast(IBackupPlanRef, jsii.sinvoke(cls, "fromBackupPlanId", [scope, id, backup_plan_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6086,6 +6128,48 @@ class CfnBackupVault(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromBackupVaultArn")
+    @builtins.classmethod
+    def from_backup_vault_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IBackupVaultRef:
+        '''Creates a new IBackupVaultRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2986d116c33dbb1dc995c507e7df9b0cf2f344f357d0a1404d0c2ece4c1fc5b2)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IBackupVaultRef, jsii.sinvoke(cls, "fromBackupVaultArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromBackupVaultName")
+    @builtins.classmethod
+    def from_backup_vault_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        backup_vault_name: builtins.str,
+    ) -> IBackupVaultRef:
+        '''Creates a new IBackupVaultRef from a backupVaultName.
+
+        :param scope: -
+        :param id: -
+        :param backup_vault_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cc137647a726cfa7058e572fdb03e73df8b9f52e786f61edcd64eb6c3fc59645)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument backup_vault_name", value=backup_vault_name, expected_type=type_hints["backup_vault_name"])
+        return typing.cast(IBackupVaultRef, jsii.sinvoke(cls, "fromBackupVaultName", [scope, id, backup_vault_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7792,6 +7876,27 @@ class CfnRestoreTestingPlan(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromRestoreTestingPlanArn")
+    @builtins.classmethod
+    def from_restore_testing_plan_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IRestoreTestingPlanRef:
+        '''Creates a new IRestoreTestingPlanRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f47a7b3e034a517883e53c07ea077732197f8b6f1c58c90dc62e677611bcf32b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IRestoreTestingPlanRef, jsii.sinvoke(cls, "fromRestoreTestingPlanArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9020,6 +9125,22 @@ def _typecheckingstub__8250888ac08b345ef300cc4ce53cc267858e31401cdc7b6a427c98f5b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__19a621581dc951af9f595672bab4c44806829db988a9a543e73c82aa211347cc(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c10f5f2e9e380d8e917a10f74122d09d2b555c99380ffa6da4e01197e1e097dd(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    backup_plan_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ff313ad9e84c3475e4286a17d3e066d3b8ff12dcdde29c7a2727bf7529fa7fbb(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9185,6 +9306,22 @@ def _typecheckingstub__91f579bea882f82608d503a3e561568131d8e8e6d825c152c63d59622
     encryption_key_arn: typing.Optional[builtins.str] = None,
     lock_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupVault.LockConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     notifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupVault.NotificationObjectTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2986d116c33dbb1dc995c507e7df9b0cf2f344f357d0a1404d0c2ece4c1fc5b2(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cc137647a726cfa7058e572fdb03e73df8b9f52e786f61edcd64eb6c3fc59645(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    backup_vault_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9483,6 +9620,14 @@ def _typecheckingstub__ce1d12683247bbd0bcd185e807f3b41b4b53ee7cfd847d57ecbf875d4
     schedule_expression_timezone: typing.Optional[builtins.str] = None,
     start_window_hours: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f47a7b3e034a517883e53c07ea077732197f8b6f1c58c90dc62e677611bcf32b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

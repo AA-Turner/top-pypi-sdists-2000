@@ -4742,6 +4742,48 @@ class CfnTrail(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromTrailArn")
+    @builtins.classmethod
+    def from_trail_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> ITrailRef:
+        '''Creates a new ITrailRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__de13fd6629dabd92566f74df031bb3846b1f0c60616e28f88435c2f70ea1f0dd)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(ITrailRef, jsii.sinvoke(cls, "fromTrailArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromTrailName")
+    @builtins.classmethod
+    def from_trail_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        trail_name: builtins.str,
+    ) -> ITrailRef:
+        '''Creates a new ITrailRef from a trailName.
+
+        :param scope: -
+        :param id: -
+        :param trail_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__de86420b3e78209dc350b0fda0b9e94a90b38d019fdd7b81692f6899942ea4ae)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument trail_name", value=trail_name, expected_type=type_hints["trail_name"])
+        return typing.cast(ITrailRef, jsii.sinvoke(cls, "fromTrailName", [scope, id, trail_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6341,6 +6383,22 @@ def _typecheckingstub__2259d5765ec84e4697f55f0d491871f1aa010feb94b3445a33a9e4b9f
     sns_topic_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     trail_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__de13fd6629dabd92566f74df031bb3846b1f0c60616e28f88435c2f70ea1f0dd(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__de86420b3e78209dc350b0fda0b9e94a90b38d019fdd7b81692f6899942ea4ae(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    trail_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

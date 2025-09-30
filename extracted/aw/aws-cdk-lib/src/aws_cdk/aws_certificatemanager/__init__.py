@@ -2365,6 +2365,27 @@ class CfnCertificate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromCertificateId")
+    @builtins.classmethod
+    def from_certificate_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        certificate_id: builtins.str,
+    ) -> ICertificateRef:
+        '''Creates a new ICertificateRef from a certificateId.
+
+        :param scope: -
+        :param id: -
+        :param certificate_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__74ad5174285b28bb947e64c6319be4642c1bb37681ea5d0d736a58181c45689e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument certificate_id", value=certificate_id, expected_type=type_hints["certificate_id"])
+        return typing.cast(ICertificateRef, jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3108,6 +3129,14 @@ def _typecheckingstub__6f094b3f6a318b9501162c46d45eaf42466c16a9c333dd4021dc90258
     subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     validation_method: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__74ad5174285b28bb947e64c6319be4642c1bb37681ea5d0d736a58181c45689e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    certificate_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

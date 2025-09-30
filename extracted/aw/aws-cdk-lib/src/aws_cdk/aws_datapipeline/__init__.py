@@ -462,6 +462,27 @@ class CfnPipeline(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromPipelineID")
+    @builtins.classmethod
+    def from_pipeline_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        pipeline_id: builtins.str,
+    ) -> IPipelineRef:
+        '''Creates a new IPipelineRef from a pipelineId.
+
+        :param scope: -
+        :param id: -
+        :param pipeline_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2da468833cc5611eaf4299e9e2a7e5f72bf97b5c7d0bb050a1b910af6231aa01)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument pipeline_id", value=pipeline_id, expected_type=type_hints["pipeline_id"])
+        return typing.cast(IPipelineRef, jsii.sinvoke(cls, "fromPipelineID", [scope, id, pipeline_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1164,6 +1185,14 @@ def _typecheckingstub__234bba6a4e11fe2b9f45dcf4e448e89d2ca6fc1f137ad5c70158dbb94
     parameter_values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ParameterValueProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     pipeline_objects: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.PipelineObjectProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     pipeline_tags: typing.Optional[typing.Sequence[typing.Union[CfnPipeline.PipelineTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2da468833cc5611eaf4299e9e2a7e5f72bf97b5c7d0bb050a1b910af6231aa01(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    pipeline_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

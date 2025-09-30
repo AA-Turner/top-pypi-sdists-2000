@@ -2790,6 +2790,27 @@ class CfnCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromClusterId")
+    @builtins.classmethod
+    def from_cluster_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        cluster_id: builtins.str,
+    ) -> IClusterRef:
+        '''Creates a new IClusterRef from a clusterId.
+
+        :param scope: -
+        :param id: -
+        :param cluster_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2e27223ababb66815a1fc03ea8f520f2c9e326c44c677e676f3e8d3e626d3f88)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument cluster_id", value=cluster_id, expected_type=type_hints["cluster_id"])
+        return typing.cast(IClusterRef, jsii.sinvoke(cls, "fromClusterId", [scope, id, cluster_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11793,6 +11814,48 @@ class CfnStudio(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromStudioArn")
+    @builtins.classmethod
+    def from_studio_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IStudioRef:
+        '''Creates a new IStudioRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__18af80ae311cd75bd42e9e025054ae8fe4c14b9c209e71381086c85839dd91e5)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IStudioRef, jsii.sinvoke(cls, "fromStudioArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromStudioId")
+    @builtins.classmethod
+    def from_studio_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        studio_id: builtins.str,
+    ) -> IStudioRef:
+        '''Creates a new IStudioRef from a studioId.
+
+        :param scope: -
+        :param id: -
+        :param studio_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__197887eba05e26dd2d1162e18bd192b5f97b69e18850199c9d5f54f8f0f9d39e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument studio_id", value=studio_id, expected_type=type_hints["studio_id"])
+        return typing.cast(IStudioRef, jsii.sinvoke(cls, "fromStudioId", [scope, id, studio_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -12627,6 +12690,14 @@ def _typecheckingstub__078ec582504b982aedaecb6e8181c3cf53ae51c1b43cd59a31f8379e1
     steps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.StepConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     visible_to_all_users: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2e27223ababb66815a1fc03ea8f520f2c9e326c44c677e676f3e8d3e626d3f88(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    cluster_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13656,6 +13727,22 @@ def _typecheckingstub__9e5fa63dd56ed829e4898f84009809f50f4125ac18a4dd04d19284202
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     trusted_identity_propagation_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     user_role: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__18af80ae311cd75bd42e9e025054ae8fe4c14b9c209e71381086c85839dd91e5(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__197887eba05e26dd2d1162e18bd192b5f97b69e18850199c9d5f54f8f0f9d39e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    studio_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1658,6 +1658,48 @@ class CfnDataIntegration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDataIntegrationArn")
+    @builtins.classmethod
+    def from_data_integration_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IDataIntegrationRef:
+        '''Creates a new IDataIntegrationRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__70d05e99699021c14d7f2458d9284b6643ee07c8bf98a6d7251ec619c575c220)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IDataIntegrationRef, jsii.sinvoke(cls, "fromDataIntegrationArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromDataIntegrationId")
+    @builtins.classmethod
+    def from_data_integration_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        data_integration_id: builtins.str,
+    ) -> IDataIntegrationRef:
+        '''Creates a new IDataIntegrationRef from a dataIntegrationId.
+
+        :param scope: -
+        :param id: -
+        :param data_integration_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__20305a315b3389b912aa7c2944c682e8c102efa0a52d1ebccfdcf5ad58d22c5b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument data_integration_id", value=data_integration_id, expected_type=type_hints["data_integration_id"])
+        return typing.cast(IDataIntegrationRef, jsii.sinvoke(cls, "fromDataIntegrationId", [scope, id, data_integration_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2075,6 +2117,48 @@ class CfnEventIntegration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromEventIntegrationArn")
+    @builtins.classmethod
+    def from_event_integration_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IEventIntegrationRef:
+        '''Creates a new IEventIntegrationRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d4585a8d0fffc3e813b27fd6176836fb851e8dc99a7f5986e1ac81b808e31071)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IEventIntegrationRef, jsii.sinvoke(cls, "fromEventIntegrationArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromEventIntegrationName")
+    @builtins.classmethod
+    def from_event_integration_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        event_integration_name: builtins.str,
+    ) -> IEventIntegrationRef:
+        '''Creates a new IEventIntegrationRef from a eventIntegrationName.
+
+        :param scope: -
+        :param id: -
+        :param event_integration_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0fc7a2e0941d7492b5dc210f140a9f33a60d60a6ccc985e636799c9a535d22b8)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument event_integration_name", value=event_integration_name, expected_type=type_hints["event_integration_name"])
+        return typing.cast(IEventIntegrationRef, jsii.sinvoke(cls, "fromEventIntegrationName", [scope, id, event_integration_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2478,6 +2562,22 @@ def _typecheckingstub__07830c24dc09b0662b03583ee4edbdbaeb4fabf95d85c4f4ed965ea9d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__70d05e99699021c14d7f2458d9284b6643ee07c8bf98a6d7251ec619c575c220(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__20305a315b3389b912aa7c2944c682e8c102efa0a52d1ebccfdcf5ad58d22c5b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    data_integration_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1b6af7441719b460ee4641270770c612fb58e431a8fbcc3d0f99ddae2d585fb7(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2564,6 +2664,22 @@ def _typecheckingstub__7f4a16fc332806342706d2878c9a173a25d599659c9ec58d0c31e1ae7
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d4585a8d0fffc3e813b27fd6176836fb851e8dc99a7f5986e1ac81b808e31071(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0fc7a2e0941d7492b5dc210f140a9f33a60d60a6ccc985e636799c9a535d22b8(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    event_integration_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

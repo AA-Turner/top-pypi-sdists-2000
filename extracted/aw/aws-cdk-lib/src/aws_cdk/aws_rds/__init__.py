@@ -27660,6 +27660,12 @@ class MysqlEngineVersion(
         return typing.cast("MysqlEngineVersion", jsii.sget(cls, "VER_5_7_44_RDS_20250508"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_5_7_44_RDS_20250818")
+    def VER_5_7_44_RDS_20250818(cls) -> "MysqlEngineVersion":
+        '''Version "5.7.44-RDS.20250818".'''
+        return typing.cast("MysqlEngineVersion", jsii.sget(cls, "VER_5_7_44_RDS_20250818"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_8_0")
     def VER_8_0(cls) -> "MysqlEngineVersion":
         '''Version "8.0" (only a major version, without a specific minor version).'''
@@ -43743,6 +43749,27 @@ class CfnEventSubscription(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromSubscriptionName")
+    @builtins.classmethod
+    def from_subscription_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        subscription_name: builtins.str,
+    ) -> IEventSubscriptionRef:
+        '''Creates a new IEventSubscriptionRef from a subscriptionName.
+
+        :param scope: -
+        :param id: -
+        :param subscription_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7bdfa9104a39f2dfe7d880f6e5eebfe1ae057b0ab24bc4fcb634ae8c611941a9)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument subscription_name", value=subscription_name, expected_type=type_hints["subscription_name"])
+        return typing.cast(IEventSubscriptionRef, jsii.sinvoke(cls, "fromSubscriptionName", [scope, id, subscription_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -44536,6 +44563,27 @@ class CfnOptionGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromOptionGroupName")
+    @builtins.classmethod
+    def from_option_group_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        option_group_name: builtins.str,
+    ) -> IOptionGroupRef:
+        '''Creates a new IOptionGroupRef from a optionGroupName.
+
+        :param scope: -
+        :param id: -
+        :param option_group_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__09473afac0fca649ab82afad01fdeee2e7355a6469089e5d88ea99ee003a79de)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument option_group_name", value=option_group_name, expected_type=type_hints["option_group_name"])
+        return typing.cast(IOptionGroupRef, jsii.sinvoke(cls, "fromOptionGroupName", [scope, id, option_group_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -55803,6 +55851,14 @@ def _typecheckingstub__0c5db068cdeb685ae34885c6eea1acaa01b83ca0af2c63429f3a30e0a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7bdfa9104a39f2dfe7d880f6e5eebfe1ae057b0ab24bc4fcb634ae8c611941a9(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    subscription_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__31f076db464d46bf940b81eae58c6d887f3b50913e8d41f1e9eaf45eecb21f4a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -56026,6 +56082,14 @@ def _typecheckingstub__160a45fe55c01086901039aa8bde8bd5ace11ff967acd2154abcc9137
     option_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOptionGroup.OptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     option_group_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__09473afac0fca649ab82afad01fdeee2e7355a6469089e5d88ea99ee003a79de(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    option_group_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

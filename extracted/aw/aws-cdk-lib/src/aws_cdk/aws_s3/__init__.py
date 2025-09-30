@@ -9430,6 +9430,48 @@ class CfnAccessPoint(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAccessPointArn")
+    @builtins.classmethod
+    def from_access_point_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IAccessPointRef:
+        '''Creates a new IAccessPointRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__27c1fdb406b539ade70eea36bce09782bba11b354442fee5c5d43c938bfd0aee)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IAccessPointRef, jsii.sinvoke(cls, "fromAccessPointArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromAccessPointName")
+    @builtins.classmethod
+    def from_access_point_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        access_point_name: builtins.str,
+    ) -> IAccessPointRef:
+        '''Creates a new IAccessPointRef from a accessPointName.
+
+        :param scope: -
+        :param id: -
+        :param access_point_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9af2790fec8caeab2621c276234587e70ab62b4d6d6f7a82947b3b7326f42deb)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument access_point_name", value=access_point_name, expected_type=type_hints["access_point_name"])
+        return typing.cast(IAccessPointRef, jsii.sinvoke(cls, "fromAccessPointName", [scope, id, access_point_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9921,6 +9963,48 @@ class CfnBucket(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromBucketArn")
+    @builtins.classmethod
+    def from_bucket_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IBucketRef:
+        '''Creates a new IBucketRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f218931ccffe0d6407edcfc452f39d64609d0cceec6ea04313fa364cf5a4f3df)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IBucketRef, jsii.sinvoke(cls, "fromBucketArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromBucketName")
+    @builtins.classmethod
+    def from_bucket_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        bucket_name: builtins.str,
+    ) -> IBucketRef:
+        '''Creates a new IBucketRef from a bucketName.
+
+        :param scope: -
+        :param id: -
+        :param bucket_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__08ccc75711c8ec0fedd9747e674f732b2653120a392c01413875cc0df08e91fa)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument bucket_name", value=bucket_name, expected_type=type_hints["bucket_name"])
+        return typing.cast(IBucketRef, jsii.sinvoke(cls, "fromBucketName", [scope, id, bucket_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -24195,6 +24279,22 @@ def _typecheckingstub__effa13924691e4b61b906bb0dc0bd5da8dfc4d4cbd167af0fe9491358
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__27c1fdb406b539ade70eea36bce09782bba11b354442fee5c5d43c938bfd0aee(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9af2790fec8caeab2621c276234587e70ab62b4d6d6f7a82947b3b7326f42deb(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    access_point_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__71b3c7d208bf045aac83ee95ce52f903885375649aecea79c502164e94dcdf8a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -24292,6 +24392,22 @@ def _typecheckingstub__0cfa39e37f5fa17b8234ce2f712ef5cf3bf2c262914967924c19a67f6
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     versioning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.VersioningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     website_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.WebsiteConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f218931ccffe0d6407edcfc452f39d64609d0cceec6ea04313fa364cf5a4f3df(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__08ccc75711c8ec0fedd9747e674f732b2653120a392c01413875cc0df08e91fa(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    bucket_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

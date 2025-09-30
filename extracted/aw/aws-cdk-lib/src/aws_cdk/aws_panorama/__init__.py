@@ -923,6 +923,48 @@ class CfnApplicationInstance(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromApplicationInstanceArn")
+    @builtins.classmethod
+    def from_application_instance_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IApplicationInstanceRef:
+        '''Creates a new IApplicationInstanceRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9f4f68f6afad3612ec12bf875c21240c719f76be3cb147ecb5aa8e2041ee7b3)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IApplicationInstanceRef, jsii.sinvoke(cls, "fromApplicationInstanceArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromApplicationInstanceId")
+    @builtins.classmethod
+    def from_application_instance_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        application_instance_id: builtins.str,
+    ) -> IApplicationInstanceRef:
+        '''Creates a new IApplicationInstanceRef from a applicationInstanceId.
+
+        :param scope: -
+        :param id: -
+        :param application_instance_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cf3c71beda280e35f7832b3400f0af821e251042c4f89db4b42f5975db8cb61e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument application_instance_id", value=application_instance_id, expected_type=type_hints["application_instance_id"])
+        return typing.cast(IApplicationInstanceRef, jsii.sinvoke(cls, "fromApplicationInstanceId", [scope, id, application_instance_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1344,6 +1386,48 @@ class CfnPackage(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromPackageArn")
+    @builtins.classmethod
+    def from_package_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IPackageRef:
+        '''Creates a new IPackageRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dbb1b4451fa22057cbdadb664b6b5291a345b0219fd29e15b98a5e75bc902dc5)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IPackageRef, jsii.sinvoke(cls, "fromPackageArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromPackageId")
+    @builtins.classmethod
+    def from_package_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        package_id: builtins.str,
+    ) -> IPackageRef:
+        '''Creates a new IPackageRef from a packageId.
+
+        :param scope: -
+        :param id: -
+        :param package_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__036c08570129c334f6bca1d78d3bbd858ea49a86a6495c2d28a66c5f7fdd60a9)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument package_id", value=package_id, expected_type=type_hints["package_id"])
+        return typing.cast(IPackageRef, jsii.sinvoke(cls, "fromPackageId", [scope, id, package_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1981,6 +2065,22 @@ def _typecheckingstub__efd0ba4cd6c0b4ee9023df6f956444617b610a622dce5eb667859d9d3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a9f4f68f6afad3612ec12bf875c21240c719f76be3cb147ecb5aa8e2041ee7b3(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cf3c71beda280e35f7832b3400f0af821e251042c4f89db4b42f5975db8cb61e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    application_instance_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f02c8fd6f1a71465462afea3d559ebb5b8ea0af1bc67afc99474bf782789ec30(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2062,6 +2162,22 @@ def _typecheckingstub__014b23b28acc37a82edebe15e1628f0ee03393a0354f498b25ce8519a
     package_name: builtins.str,
     storage_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackage.StorageLocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dbb1b4451fa22057cbdadb664b6b5291a345b0219fd29e15b98a5e75bc902dc5(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__036c08570129c334f6bca1d78d3bbd858ea49a86a6495c2d28a66c5f7fdd60a9(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    package_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

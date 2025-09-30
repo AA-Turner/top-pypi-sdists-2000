@@ -5452,6 +5452,48 @@ class CfnStream(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromStreamArn")
+    @builtins.classmethod
+    def from_stream_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IStreamRef:
+        '''Creates a new IStreamRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3c69677685a82f8e525ad2739006025db5278674d3e523946f160156221a9f73)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IStreamRef, jsii.sinvoke(cls, "fromStreamArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromStreamName")
+    @builtins.classmethod
+    def from_stream_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        stream_name: builtins.str,
+    ) -> IStreamRef:
+        '''Creates a new IStreamRef from a streamName.
+
+        :param scope: -
+        :param id: -
+        :param stream_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__29cb46b7ceb2cd8a127a3866d6508b48f921857bfb60faeb20b84a87cb83f072)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument stream_name", value=stream_name, expected_type=type_hints["stream_name"])
+        return typing.cast(IStreamRef, jsii.sinvoke(cls, "fromStreamName", [scope, id, stream_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6338,6 +6380,22 @@ def _typecheckingstub__b956aa40f3e4f7ebba018fbc1caa3788147e52190c5c7131c5c035b04
     stream_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     stream_mode_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamModeDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3c69677685a82f8e525ad2739006025db5278674d3e523946f160156221a9f73(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__29cb46b7ceb2cd8a127a3866d6508b48f921857bfb60faeb20b84a87cb83f072(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    stream_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

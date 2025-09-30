@@ -5416,6 +5416,27 @@ class CfnAssociation(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAssociationId")
+    @builtins.classmethod
+    def from_association_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        association_id: builtins.str,
+    ) -> IAssociationRef:
+        '''Creates a new IAssociationRef from a associationId.
+
+        :param scope: -
+        :param id: -
+        :param association_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b2a4e2f6f1ad5f1b777c7a5fcb533625aa60df723d920b56a3738329f8b631cb)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument association_id", value=association_id, expected_type=type_hints["association_id"])
+        return typing.cast(IAssociationRef, jsii.sinvoke(cls, "fromAssociationId", [scope, id, association_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6015,6 +6036,27 @@ class CfnDocument(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromDocumentName")
+    @builtins.classmethod
+    def from_document_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        document_name: builtins.str,
+    ) -> IDocumentRef:
+        '''Creates a new IDocumentRef from a documentName.
+
+        :param scope: -
+        :param id: -
+        :param document_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0c67b192e3e153596beb12dc7520f7cbf677768f2e862aa4d968b306611aea53)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument document_name", value=document_name, expected_type=type_hints["document_name"])
+        return typing.cast(IDocumentRef, jsii.sinvoke(cls, "fromDocumentName", [scope, id, document_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9670,6 +9712,27 @@ class CfnResourceDataSync(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromSyncName")
+    @builtins.classmethod
+    def from_sync_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        sync_name: builtins.str,
+    ) -> IResourceDataSyncRef:
+        '''Creates a new IResourceDataSyncRef from a syncName.
+
+        :param scope: -
+        :param id: -
+        :param sync_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8cedf0c69b18eabda62c763c9450657c3f2ff5e3fd11df7e4494672287104d75)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument sync_name", value=sync_name, expected_type=type_hints["sync_name"])
+        return typing.cast(IResourceDataSyncRef, jsii.sinvoke(cls, "fromSyncName", [scope, id, sync_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10873,6 +10936,14 @@ def _typecheckingstub__92579425f735301e17a993e7df464a283a7d42ba685c2d4205cf945db
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b2a4e2f6f1ad5f1b777c7a5fcb533625aa60df723d920b56a3738329f8b631cb(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    association_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__04dced959ace7c06e46713696a2e0111696820a92076dddbfb0d4e73ef74ff78(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11025,6 +11096,14 @@ def _typecheckingstub__4d0587e99b7ec516726ff27f1c34b1714d8645ad06944d59be27a6125
     target_type: typing.Optional[builtins.str] = None,
     update_method: typing.Optional[builtins.str] = None,
     version_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0c67b192e3e153596beb12dc7520f7cbf677768f2e862aa4d968b306611aea53(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    document_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11752,6 +11831,14 @@ def _typecheckingstub__c8a24f4d86cad49691c9635278face17e76a24ad5a69daef9687e1e2d
     sync_format: typing.Optional[builtins.str] = None,
     sync_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResourceDataSync.SyncSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sync_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8cedf0c69b18eabda62c763c9450657c3f2ff5e3fd11df7e4494672287104d75(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    sync_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

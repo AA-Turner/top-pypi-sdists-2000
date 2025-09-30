@@ -6023,6 +6023,27 @@ class CfnStack(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromStackId")
+    @builtins.classmethod
+    def from_stack_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        stack_id: builtins.str,
+    ) -> IStackRef:
+        '''Creates a new IStackRef from a stackId.
+
+        :param scope: -
+        :param id: -
+        :param stack_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3a08e6effaea9838394d050971701d6c3eddd4c0f475e2848dc4ad9837e87246)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument stack_id", value=stack_id, expected_type=type_hints["stack_id"])
+        return typing.cast(IStackRef, jsii.sinvoke(cls, "fromStackId", [scope, id, stack_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8081,6 +8102,14 @@ def _typecheckingstub__6bf36f6bd552e246cec8163081581d4887e2e1838c2af0dfdfec5a942
     use_custom_cookbooks: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     use_opsworks_security_groups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     vpc_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3a08e6effaea9838394d050971701d6c3eddd4c0f475e2848dc4ad9837e87246(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    stack_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

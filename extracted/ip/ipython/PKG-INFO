@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ipython
-Version: 9.5.0
+Version: 9.6.0
 Summary: IPython: Productive Interactive Computing
 Author: The IPython Development Team
 Author-email: ipython-dev@python.org
@@ -44,9 +44,8 @@ Requires-Dist: docrepr; extra == "doc"
 Requires-Dist: exceptiongroup; extra == "doc"
 Requires-Dist: intersphinx_registry; extra == "doc"
 Requires-Dist: ipykernel; extra == "doc"
-Requires-Dist: ipython[test]; extra == "doc"
-Requires-Dist: matplotlib; extra == "doc"
-Requires-Dist: setuptools>=18.5; extra == "doc"
+Requires-Dist: ipython[matplotlib,test]; extra == "doc"
+Requires-Dist: setuptools>=61.2; extra == "doc"
 Requires-Dist: sphinx_toml==0.0.4; extra == "doc"
 Requires-Dist: sphinx-rtd-theme; extra == "doc"
 Requires-Dist: sphinx>=1.3; extra == "doc"
@@ -60,15 +59,15 @@ Provides-Extra: test-extra
 Requires-Dist: ipython[test]; extra == "test-extra"
 Requires-Dist: curio; extra == "test-extra"
 Requires-Dist: jupyter_ai; extra == "test-extra"
-Requires-Dist: matplotlib!=3.2.0; extra == "test-extra"
+Requires-Dist: ipython[matplotlib]; extra == "test-extra"
 Requires-Dist: nbformat; extra == "test-extra"
 Requires-Dist: nbclient; extra == "test-extra"
 Requires-Dist: ipykernel; extra == "test-extra"
-Requires-Dist: numpy>=1.23; extra == "test-extra"
-Requires-Dist: pandas; extra == "test-extra"
+Requires-Dist: numpy>=1.25; extra == "test-extra"
+Requires-Dist: pandas>2.0; extra == "test-extra"
 Requires-Dist: trio; extra == "test-extra"
 Provides-Extra: matplotlib
-Requires-Dist: matplotlib; extra == "matplotlib"
+Requires-Dist: matplotlib>3.7; extra == "matplotlib"
 Provides-Extra: all
 Requires-Dist: ipython[doc,matplotlib,test,test_extra]; extra == "all"
 Dynamic: author

@@ -9594,6 +9594,48 @@ class CfnDomain(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDomainArn")
+    @builtins.classmethod
+    def from_domain_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IDomainRef:
+        '''Creates a new IDomainRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__184266697bd0b40b6137c37aa81e137c2d331c0790dbbb08061a3d04dcf83f9c)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IDomainRef, jsii.sinvoke(cls, "fromDomainArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromDomainId")
+    @builtins.classmethod
+    def from_domain_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        domain_id: builtins.str,
+    ) -> IDomainRef:
+        '''Creates a new IDomainRef from a domainId.
+
+        :param scope: -
+        :param id: -
+        :param domain_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__980a13437d77898f5d34721718082a5f116a6033aaf35aa8e2f76cb08c6ae77c)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument domain_id", value=domain_id, expected_type=type_hints["domain_id"])
+        return typing.cast(IDomainRef, jsii.sinvoke(cls, "fromDomainId", [scope, id, domain_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -17583,6 +17625,22 @@ def _typecheckingstub__047efef40bc572d080b2e64b8f32c1db40e40ba16fc7d29d887073e9c
     service_role: typing.Optional[builtins.str] = None,
     single_sign_on: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.SingleSignOnProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__184266697bd0b40b6137c37aa81e137c2d331c0790dbbb08061a3d04dcf83f9c(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__980a13437d77898f5d34721718082a5f116a6033aaf35aa8e2f76cb08c6ae77c(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    domain_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

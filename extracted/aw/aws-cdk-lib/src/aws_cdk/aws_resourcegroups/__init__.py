@@ -641,6 +641,48 @@ class CfnGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromGroupArn")
+    @builtins.classmethod
+    def from_group_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IGroupRef:
+        '''Creates a new IGroupRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__adf19b20317ea5b1aed5dec2e389f960280f3252e29ef20fd762d0120802a953)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IGroupRef, jsii.sinvoke(cls, "fromGroupArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromGroupName")
+    @builtins.classmethod
+    def from_group_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        group_name: builtins.str,
+    ) -> IGroupRef:
+        '''Creates a new IGroupRef from a groupName.
+
+        :param scope: -
+        :param id: -
+        :param group_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e31bae7be8ddcdc275d883cce7776babcc40916d4526c6139f289f7109c034a5)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument group_name", value=group_name, expected_type=type_hints["group_name"])
+        return typing.cast(IGroupRef, jsii.sinvoke(cls, "fromGroupName", [scope, id, group_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1482,6 +1524,22 @@ def _typecheckingstub__b5a62cc8e7383e674185642c2fff396c4c4bfc5896a81d18b8b2d31ba
     resource_query: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroup.ResourceQueryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     resources: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__adf19b20317ea5b1aed5dec2e389f960280f3252e29ef20fd762d0120802a953(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e31bae7be8ddcdc275d883cce7776babcc40916d4526c6139f289f7109c034a5(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    group_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

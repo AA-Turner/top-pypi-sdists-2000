@@ -602,6 +602,48 @@ class CfnMonitor(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromMonitorArn")
+    @builtins.classmethod
+    def from_monitor_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IMonitorRef:
+        '''Creates a new IMonitorRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__66126f687a34f65103f3987135d59be59beea7b854967ebe7869e56b557196e6)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IMonitorRef, jsii.sinvoke(cls, "fromMonitorArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromMonitorName")
+    @builtins.classmethod
+    def from_monitor_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        monitor_name: builtins.str,
+    ) -> IMonitorRef:
+        '''Creates a new IMonitorRef from a monitorName.
+
+        :param scope: -
+        :param id: -
+        :param monitor_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b08db58b07bcc2642602e00bb759e374c262439bdb8f7478e94d862c65b05ce2)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument monitor_name", value=monitor_name, expected_type=type_hints["monitor_name"])
+        return typing.cast(IMonitorRef, jsii.sinvoke(cls, "fromMonitorName", [scope, id, monitor_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1308,6 +1350,22 @@ def _typecheckingstub__b49625d902a7236b204a8a96b68b35647ded5da14fa0241503fe8aed7
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     traffic_percentage_to_monitor: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__66126f687a34f65103f3987135d59be59beea7b854967ebe7869e56b557196e6(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b08db58b07bcc2642602e00bb759e374c262439bdb8f7478e94d862c65b05ce2(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    monitor_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

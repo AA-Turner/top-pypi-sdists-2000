@@ -8546,6 +8546,27 @@ class CfnConfigurationSet(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromConfigurationSetName")
+    @builtins.classmethod
+    def from_configuration_set_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        configuration_set_name: builtins.str,
+    ) -> IConfigurationSetRef:
+        '''Creates a new IConfigurationSetRef from a configurationSetName.
+
+        :param scope: -
+        :param id: -
+        :param configuration_set_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f7e0cde305853fb2c740f29455949111afc0143ce4346e290a5d583cd414e670)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument configuration_set_name", value=configuration_set_name, expected_type=type_hints["configuration_set_name"])
+        return typing.cast(IConfigurationSetRef, jsii.sinvoke(cls, "fromConfigurationSetName", [scope, id, configuration_set_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10056,6 +10077,27 @@ class CfnContactList(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromContactListName")
+    @builtins.classmethod
+    def from_contact_list_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        contact_list_name: builtins.str,
+    ) -> IContactListRef:
+        '''Creates a new IContactListRef from a contactListName.
+
+        :param scope: -
+        :param id: -
+        :param contact_list_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3b19a50d34c95519a9d081d656ff2b1634828c7fe7a66b655cd9cb5360e9e3f6)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument contact_list_name", value=contact_list_name, expected_type=type_hints["contact_list_name"])
+        return typing.cast(IContactListRef, jsii.sinvoke(cls, "fromContactListName", [scope, id, contact_list_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11156,6 +11198,27 @@ class CfnMailManagerAddonInstance(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAddonInstanceId")
+    @builtins.classmethod
+    def from_addon_instance_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        addon_instance_id: builtins.str,
+    ) -> IMailManagerAddonInstanceRef:
+        '''Creates a new IMailManagerAddonInstanceRef from a addonInstanceId.
+
+        :param scope: -
+        :param id: -
+        :param addon_instance_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4b82d982a648e92902a374694f84ff5e1fb61a1267dc909d615a37c7e086d706)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument addon_instance_id", value=addon_instance_id, expected_type=type_hints["addon_instance_id"])
+        return typing.cast(IMailManagerAddonInstanceRef, jsii.sinvoke(cls, "fromAddonInstanceId", [scope, id, addon_instance_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11309,6 +11372,27 @@ class CfnMailManagerAddonSubscription(
         props = CfnMailManagerAddonSubscriptionProps(addon_name=addon_name, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromAddonSubscriptionId")
+    @builtins.classmethod
+    def from_addon_subscription_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        addon_subscription_id: builtins.str,
+    ) -> IMailManagerAddonSubscriptionRef:
+        '''Creates a new IMailManagerAddonSubscriptionRef from a addonSubscriptionId.
+
+        :param scope: -
+        :param id: -
+        :param addon_subscription_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__285468e4ba3edb67c9b4bcd9489b416e31f4f85a2a5e786f30d01535e38cacdc)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument addon_subscription_id", value=addon_subscription_id, expected_type=type_hints["addon_subscription_id"])
+        return typing.cast(IMailManagerAddonSubscriptionRef, jsii.sinvoke(cls, "fromAddonSubscriptionId", [scope, id, addon_subscription_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11609,6 +11693,27 @@ class CfnMailManagerArchive(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromArchiveId")
+    @builtins.classmethod
+    def from_archive_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        archive_id: builtins.str,
+    ) -> IMailManagerArchiveRef:
+        '''Creates a new IMailManagerArchiveRef from a archiveId.
+
+        :param scope: -
+        :param id: -
+        :param archive_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a42d7ef06c37673fd058e245cd5defc63931aa1bb15399b919109cc87dcb76a2)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument archive_id", value=archive_id, expected_type=type_hints["archive_id"])
+        return typing.cast(IMailManagerArchiveRef, jsii.sinvoke(cls, "fromArchiveId", [scope, id, archive_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11885,6 +11990,27 @@ class CfnMailManagerIngressPoint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromIngressPointId")
+    @builtins.classmethod
+    def from_ingress_point_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        ingress_point_id: builtins.str,
+    ) -> IMailManagerIngressPointRef:
+        '''Creates a new IMailManagerIngressPointRef from a ingressPointId.
+
+        :param scope: -
+        :param id: -
+        :param ingress_point_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__92ffe7e62420c63aff01fd3a633abd4afd6de74cfc9be5956502b4eae1715abc)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument ingress_point_id", value=ingress_point_id, expected_type=type_hints["ingress_point_id"])
+        return typing.cast(IMailManagerIngressPointRef, jsii.sinvoke(cls, "fromIngressPointId", [scope, id, ingress_point_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12418,6 +12544,27 @@ class CfnMailManagerRelay(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromRelayId")
+    @builtins.classmethod
+    def from_relay_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        relay_id: builtins.str,
+    ) -> IMailManagerRelayRef:
+        '''Creates a new IMailManagerRelayRef from a relayId.
+
+        :param scope: -
+        :param id: -
+        :param relay_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__20d085590a05ce27b9599b7ddb5dc4d721ab8fc87c006babf37032cd0ffc46ed)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument relay_id", value=relay_id, expected_type=type_hints["relay_id"])
+        return typing.cast(IMailManagerRelayRef, jsii.sinvoke(cls, "fromRelayId", [scope, id, relay_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -12870,6 +13017,27 @@ class CfnMailManagerRuleSet(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromRuleSetId")
+    @builtins.classmethod
+    def from_rule_set_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        rule_set_id: builtins.str,
+    ) -> IMailManagerRuleSetRef:
+        '''Creates a new IMailManagerRuleSetRef from a ruleSetId.
+
+        :param scope: -
+        :param id: -
+        :param rule_set_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__78355a4a2620715789c2e5c3123619e35973a72ffc685bd95914181f608af137)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument rule_set_id", value=rule_set_id, expected_type=type_hints["rule_set_id"])
+        return typing.cast(IMailManagerRuleSetRef, jsii.sinvoke(cls, "fromRuleSetId", [scope, id, rule_set_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -15796,6 +15964,27 @@ class CfnMailManagerTrafficPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromTrafficPolicyId")
+    @builtins.classmethod
+    def from_traffic_policy_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        traffic_policy_id: builtins.str,
+    ) -> IMailManagerTrafficPolicyRef:
+        '''Creates a new IMailManagerTrafficPolicyRef from a trafficPolicyId.
+
+        :param scope: -
+        :param id: -
+        :param traffic_policy_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__395da52cf16177971e7e9b795c457d2866532863ec94dc2aa23f2270e7a7d028)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument traffic_policy_id", value=traffic_policy_id, expected_type=type_hints["traffic_policy_id"])
+        return typing.cast(IMailManagerTrafficPolicyRef, jsii.sinvoke(cls, "fromTrafficPolicyId", [scope, id, traffic_policy_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -21048,6 +21237,14 @@ def _typecheckingstub__ad84a733d05a7160c0517733c56c249f6a299231ebcf8e982ed1aeda9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f7e0cde305853fb2c740f29455949111afc0143ce4346e290a5d583cd414e670(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    configuration_set_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__703d8eb12ae21101f4f93e6ab7089d820f42a27a22e1028eee983deee4056343(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21265,6 +21462,14 @@ def _typecheckingstub__4f5901f6c4687a5069b93788dd46825d3f820617b06ab7617c713daa1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3b19a50d34c95519a9d081d656ff2b1634828c7fe7a66b655cd9cb5360e9e3f6(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    contact_list_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__04e7980d7184167e42f7e01ae8cec876d43f150d71c7057fca33fc0a3e2d3e6b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21469,6 +21674,14 @@ def _typecheckingstub__b264df921b4ca04913aa8a8375e2c83055fd8df0a14752396030e13fc
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4b82d982a648e92902a374694f84ff5e1fb61a1267dc909d615a37c7e086d706(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    addon_instance_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__af96657c240160581260abbc9d1a8bc62bbf6e2d5f9988be88caa5605fea6193(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21499,6 +21712,14 @@ def _typecheckingstub__0d0f399046a02347b7c8f90e068f3fd2b8d48f9ff28b35ef6bf0ae7e0
     *,
     addon_name: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__285468e4ba3edb67c9b4bcd9489b416e31f4f85a2a5e786f30d01535e38cacdc(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    addon_subscription_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21573,6 +21794,14 @@ def _typecheckingstub__22dd3c6f42e37a1d2959a6aa4871e671e1737ebb4110933d8bfa22c2c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a42d7ef06c37673fd058e245cd5defc63931aa1bb15399b919109cc87dcb76a2(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    archive_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ab6bbd8ed2986ac0e486edacc5048b747fb9a30a15f56c21ed3845accc6da320(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21628,6 +21857,14 @@ def _typecheckingstub__1ceb1a8308b4e72eecdc0962cf663d2c0564dbffbabebaa887b776484
     network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerIngressPoint.NetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     status_to_update: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__92ffe7e62420c63aff01fd3a633abd4afd6de74cfc9be5956502b4eae1715abc(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    ingress_point_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21735,6 +21972,14 @@ def _typecheckingstub__c9ee528cdf366e99e1f68b7018c131315da04193c666245fa2c99e56b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__20d085590a05ce27b9599b7ddb5dc4d721ab8fc87c006babf37032cd0ffc46ed(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    relay_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5816a1b4f596fadebac48eac5ab989ccf692d395eb95689083e0aa60a4ac275e(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21792,6 +22037,14 @@ def _typecheckingstub__105680c1fa2be5692f8220b99da3b58468d88eba3dfec1c0ec0e39050
     rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMailManagerRuleSet.RuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
     rule_set_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__78355a4a2620715789c2e5c3123619e35973a72ffc685bd95914181f608af137(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    rule_set_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22062,6 +22315,14 @@ def _typecheckingstub__450b0bd78f68450d39a41b2242250c64ec412e1a58381c2d9d31cc0b9
     max_message_size_bytes: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     traffic_policy_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__395da52cf16177971e7e9b795c457d2866532863ec94dc2aa23f2270e7a7d028(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    traffic_policy_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -15230,6 +15230,48 @@ class CfnJobDefinition(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromJobDefinitionArn")
+    @builtins.classmethod
+    def from_job_definition_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IJobDefinitionRef:
+        '''Creates a new IJobDefinitionRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9eb64c713801d4b9b5ffb80a279b71c78cb6317fd0c771df22f2646f9d957f0d)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IJobDefinitionRef, jsii.sinvoke(cls, "fromJobDefinitionArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromJobDefinitionName")
+    @builtins.classmethod
+    def from_job_definition_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        job_definition_name: builtins.str,
+    ) -> IJobDefinitionRef:
+        '''Creates a new IJobDefinitionRef from a jobDefinitionName.
+
+        :param scope: -
+        :param id: -
+        :param job_definition_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__825692ecdcf61885a93251433de856e5a5f6a3a7d68b8673883d418e98bd1956)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument job_definition_name", value=job_definition_name, expected_type=type_hints["job_definition_name"])
+        return typing.cast(IJobDefinitionRef, jsii.sinvoke(cls, "fromJobDefinitionName", [scope, id, job_definition_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -27391,6 +27433,22 @@ def _typecheckingstub__37959c68856ab28ea1a57515db976bc2215806d52c75f6166834df6ae
     scheduling_priority: typing.Optional[jsii.Number] = None,
     tags: typing.Any = None,
     timeout: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobDefinition.TimeoutProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9eb64c713801d4b9b5ffb80a279b71c78cb6317fd0c771df22f2646f9d957f0d(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__825692ecdcf61885a93251433de856e5a5f6a3a7d68b8673883d418e98bd1956(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    job_definition_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

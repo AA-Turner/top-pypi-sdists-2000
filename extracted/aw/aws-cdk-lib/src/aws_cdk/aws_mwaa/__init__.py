@@ -909,6 +909,48 @@ class CfnEnvironment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromEnvironmentArn")
+    @builtins.classmethod
+    def from_environment_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IEnvironmentRef:
+        '''Creates a new IEnvironmentRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__eeab8395584e59cc2c2e2e79af17a538406c85ef97d8a9a2859b93823146cf1b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IEnvironmentRef, jsii.sinvoke(cls, "fromEnvironmentArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromEnvironmentName")
+    @builtins.classmethod
+    def from_environment_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        environment_name: builtins.str,
+    ) -> IEnvironmentRef:
+        '''Creates a new IEnvironmentRef from a environmentName.
+
+        :param scope: -
+        :param id: -
+        :param environment_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__00555161bf97ecf8a9091b34e1df9c2c441f970660c275c1bdb7afa29596b2cf)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument environment_name", value=environment_name, expected_type=type_hints["environment_name"])
+        return typing.cast(IEnvironmentRef, jsii.sinvoke(cls, "fromEnvironmentName", [scope, id, environment_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1827,6 +1869,22 @@ def _typecheckingstub__558d6a60af086ab1a40ad8057fcb128456129bbbd328752ab90d8a6d5
     webserver_access_mode: typing.Optional[builtins.str] = None,
     weekly_maintenance_window_start: typing.Optional[builtins.str] = None,
     worker_replacement_strategy: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eeab8395584e59cc2c2e2e79af17a538406c85ef97d8a9a2859b93823146cf1b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__00555161bf97ecf8a9091b34e1df9c2c441f970660c275c1bdb7afa29596b2cf(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    environment_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

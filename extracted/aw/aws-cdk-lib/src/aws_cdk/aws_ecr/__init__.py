@@ -3939,6 +3939,48 @@ class CfnPublicRepository(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromPublicRepositoryArn")
+    @builtins.classmethod
+    def from_public_repository_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IPublicRepositoryRef:
+        '''Creates a new IPublicRepositoryRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__df08363dd3d49b4b281729649cda34a42b796ed2c1c7a9e6c28145049dcd5bf9)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IPublicRepositoryRef, jsii.sinvoke(cls, "fromPublicRepositoryArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromRepositoryName")
+    @builtins.classmethod
+    def from_repository_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        repository_name: builtins.str,
+    ) -> IPublicRepositoryRef:
+        '''Creates a new IPublicRepositoryRef from a repositoryName.
+
+        :param scope: -
+        :param id: -
+        :param repository_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a12c8d1af48bfd21b0af8b54f0dfaf211699928aac8fb0ffb2e0ff8ce482ac1a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument repository_name", value=repository_name, expected_type=type_hints["repository_name"])
+        return typing.cast(IPublicRepositoryRef, jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5287,6 +5329,48 @@ class CfnRepository(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromRepositoryArn")
+    @builtins.classmethod
+    def from_repository_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IRepositoryRef:
+        '''Creates a new IRepositoryRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6f2c393f48c21407d644d8d180231f771c0008028a3e7f9a341eb877c7400902)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IRepositoryRef, jsii.sinvoke(cls, "fromRepositoryArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromRepositoryName")
+    @builtins.classmethod
+    def from_repository_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        repository_name: builtins.str,
+    ) -> IRepositoryRef:
+        '''Creates a new IRepositoryRef from a repositoryName.
+
+        :param scope: -
+        :param id: -
+        :param repository_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__400aec98ced3fb3a08c4f62facc37becec6934bd630cb120fe1d6d380272f46f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument repository_name", value=repository_name, expected_type=type_hints["repository_name"])
+        return typing.cast(IRepositoryRef, jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7014,6 +7098,22 @@ def _typecheckingstub__a5b1b0a44f7b903d10d3e873896cf1709943b67e3503cc3918e4e98f0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__df08363dd3d49b4b281729649cda34a42b796ed2c1c7a9e6c28145049dcd5bf9(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a12c8d1af48bfd21b0af8b54f0dfaf211699928aac8fb0ffb2e0ff8ce482ac1a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    repository_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__317b166576f7593305ca27885da5cd7a621d59c15390c40d8de8d3e3c28eb94b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7271,6 +7371,22 @@ def _typecheckingstub__0c4027f87eb46bfdc341ea831d36476b6bcb3d7c3adf8e4193a6f82d2
     repository_name: typing.Optional[builtins.str] = None,
     repository_policy_text: typing.Any = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6f2c393f48c21407d644d8d180231f771c0008028a3e7f9a341eb877c7400902(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__400aec98ced3fb3a08c4f62facc37becec6934bd630cb120fe1d6d380272f46f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    repository_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

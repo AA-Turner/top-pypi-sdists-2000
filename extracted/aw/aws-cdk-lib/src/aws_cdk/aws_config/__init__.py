@@ -12135,6 +12135,27 @@ class CfnOrganizationConfigRule(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromOrganizationConfigRuleId")
+    @builtins.classmethod
+    def from_organization_config_rule_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        organization_config_rule_id: builtins.str,
+    ) -> IOrganizationConfigRuleRef:
+        '''Creates a new IOrganizationConfigRuleRef from a organizationConfigRuleId.
+
+        :param scope: -
+        :param id: -
+        :param organization_config_rule_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5ec8d3d53086fad35210fcf7f163fa99347478d20effebbfb9e9dc8ae996cc2c)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument organization_config_rule_id", value=organization_config_rule_id, expected_type=type_hints["organization_config_rule_id"])
+        return typing.cast(IOrganizationConfigRuleRef, jsii.sinvoke(cls, "fromOrganizationConfigRuleId", [scope, id, organization_config_rule_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -13281,6 +13302,27 @@ class CfnRemediationConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromRemediationConfigurationId")
+    @builtins.classmethod
+    def from_remediation_configuration_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        remediation_configuration_id: builtins.str,
+    ) -> IRemediationConfigurationRef:
+        '''Creates a new IRemediationConfigurationRef from a remediationConfigurationId.
+
+        :param scope: -
+        :param id: -
+        :param remediation_configuration_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d8ea5c20df565d1c985e68590e4f86ff5021fdfb98b248775d3388a5b00711aa)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument remediation_configuration_id", value=remediation_configuration_id, expected_type=type_hints["remediation_configuration_id"])
+        return typing.cast(IRemediationConfigurationRef, jsii.sinvoke(cls, "fromRemediationConfigurationId", [scope, id, remediation_configuration_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -16497,6 +16539,14 @@ def _typecheckingstub__dbb132a46c30059a4907d7496d2b696999321fd7c5b82f7812c5a4d9b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5ec8d3d53086fad35210fcf7f163fa99347478d20effebbfb9e9dc8ae996cc2c(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    organization_config_rule_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7e581ed53a72e9f3241819d7b60aee8c45b6d8882e96a3754518305e3004fbe5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -16676,6 +16726,14 @@ def _typecheckingstub__7d77d8d51b1a809acec3ca2be829980e6b8f99140bb4eb3ce00b9209c
     resource_type: typing.Optional[builtins.str] = None,
     retry_attempt_seconds: typing.Optional[jsii.Number] = None,
     target_version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d8ea5c20df565d1c985e68590e4f86ff5021fdfb98b248775d3388a5b00711aa(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    remediation_configuration_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

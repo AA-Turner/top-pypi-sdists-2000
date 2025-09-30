@@ -700,7 +700,11 @@ pipelines.CodeBuildStep("Synth",
     # Control the build environment
     build_environment=codebuild.BuildEnvironment(
         compute_type=codebuild.ComputeType.LARGE,
-        privileged=True
+        privileged=True,
+        docker_server=codebuild.DockerServerOptions(
+            compute_type=codebuild.DockerServerComputeType.SMALL,
+            security_groups=[my_security_group]
+        )
     ),
     timeout=Duration.minutes(90),
     file_system_locations=[

@@ -1506,6 +1506,27 @@ class CfnWorkspaceInstance(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromWorkspaceInstanceId")
+    @builtins.classmethod
+    def from_workspace_instance_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        workspace_instance_id: builtins.str,
+    ) -> IWorkspaceInstanceRef:
+        '''Creates a new IWorkspaceInstanceRef from a workspaceInstanceId.
+
+        :param scope: -
+        :param id: -
+        :param workspace_instance_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a94e20479c19b53a7fbafb99ee8ea99ff43ba48f27b5660512919fc6b36a8f4f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument workspace_instance_id", value=workspace_instance_id, expected_type=type_hints["workspace_instance_id"])
+        return typing.cast(IWorkspaceInstanceRef, jsii.sinvoke(cls, "fromWorkspaceInstanceId", [scope, id, workspace_instance_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3996,6 +4017,14 @@ def _typecheckingstub__fe297a4f0279d14c1f9c904fa95a44f828762333773f7e3a7c9943d3b
     *,
     managed_instance: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.ManagedInstanceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a94e20479c19b53a7fbafb99ee8ea99ff43ba48f27b5660512919fc6b36a8f4f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    workspace_instance_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

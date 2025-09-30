@@ -4082,6 +4082,48 @@ class CfnAlias(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAliasArn")
+    @builtins.classmethod
+    def from_alias_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IAliasRef:
+        '''Creates a new IAliasRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0891ad75db2bf874492959e788adcf5ee5a3b7a4699cf9c2ddfce496a136a601)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IAliasRef, jsii.sinvoke(cls, "fromAliasArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromAliasId")
+    @builtins.classmethod
+    def from_alias_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        alias_id: builtins.str,
+    ) -> IAliasRef:
+        '''Creates a new IAliasRef from a aliasId.
+
+        :param scope: -
+        :param id: -
+        :param alias_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a59b299e6043860af26f7752ca92bfb2a6ddcc5cc02cdd40fd28dd726442c36f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument alias_id", value=alias_id, expected_type=type_hints["alias_id"])
+        return typing.cast(IAliasRef, jsii.sinvoke(cls, "fromAliasId", [scope, id, alias_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4380,6 +4422,48 @@ class CfnBuild(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromBuildArn")
+    @builtins.classmethod
+    def from_build_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IBuildRef:
+        '''Creates a new IBuildRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b64baecddf621fae2565c108e8413814c02580087d90dfa34419b75919effaa2)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IBuildRef, jsii.sinvoke(cls, "fromBuildArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromBuildId")
+    @builtins.classmethod
+    def from_build_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        build_id: builtins.str,
+    ) -> IBuildRef:
+        '''Creates a new IBuildRef from a buildId.
+
+        :param scope: -
+        :param id: -
+        :param build_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fce919b179ae0f0256b86c63c73e64f52cf5bc6cc8b69274e60f6c90c64ea1a7)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument build_id", value=build_id, expected_type=type_hints["build_id"])
+        return typing.cast(IBuildRef, jsii.sinvoke(cls, "fromBuildId", [scope, id, build_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4802,6 +4886,27 @@ class CfnContainerFleet(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromFleetId")
+    @builtins.classmethod
+    def from_fleet_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        fleet_id: builtins.str,
+    ) -> IContainerFleetRef:
+        '''Creates a new IContainerFleetRef from a fleetId.
+
+        :param scope: -
+        :param id: -
+        :param fleet_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4bea05f08256bdbf55f0f4481b2104de57302a58c74c37db452b862c9cc716f4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument fleet_id", value=fleet_id, expected_type=type_hints["fleet_id"])
+        return typing.cast(IContainerFleetRef, jsii.sinvoke(cls, "fromFleetId", [scope, id, fleet_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7857,6 +7962,48 @@ class CfnFleet(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromFleetArn")
+    @builtins.classmethod
+    def from_fleet_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IFleetRef:
+        '''Creates a new IFleetRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9d455e8de7d04220b53d8533ff523e203629fe41becf83c008b6eecd38420352)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IFleetRef, jsii.sinvoke(cls, "fromFleetArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromFleetId")
+    @builtins.classmethod
+    def from_fleet_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        fleet_id: builtins.str,
+    ) -> IFleetRef:
+        '''Creates a new IFleetRef from a fleetId.
+
+        :param scope: -
+        :param id: -
+        :param fleet_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8559f65005087aabe3f94a9857ca3ab135fe3fddc5daa3feb2e8cdfac0b9fe44)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument fleet_id", value=fleet_id, expected_type=type_hints["fleet_id"])
+        return typing.cast(IFleetRef, jsii.sinvoke(cls, "fromFleetId", [scope, id, fleet_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10181,6 +10328,48 @@ class CfnGameSessionQueue(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromGameSessionQueueArn")
+    @builtins.classmethod
+    def from_game_session_queue_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IGameSessionQueueRef:
+        '''Creates a new IGameSessionQueueRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__540ac4078b9102d1d66f8574fdf325a0e302bcaf342feee75294bf2204b5907e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IGameSessionQueueRef, jsii.sinvoke(cls, "fromGameSessionQueueArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromGameSessionQueueName")
+    @builtins.classmethod
+    def from_game_session_queue_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        game_session_queue_name: builtins.str,
+    ) -> IGameSessionQueueRef:
+        '''Creates a new IGameSessionQueueRef from a gameSessionQueueName.
+
+        :param scope: -
+        :param id: -
+        :param game_session_queue_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__604e1fe11dcc006d09239a8bce6316a343133e18607927cf4992e8abe62c765d)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument game_session_queue_name", value=game_session_queue_name, expected_type=type_hints["game_session_queue_name"])
+        return typing.cast(IGameSessionQueueRef, jsii.sinvoke(cls, "fromGameSessionQueueName", [scope, id, game_session_queue_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10978,6 +11167,48 @@ class CfnMatchmakingConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromMatchmakingConfigurationArn")
+    @builtins.classmethod
+    def from_matchmaking_configuration_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IMatchmakingConfigurationRef:
+        '''Creates a new IMatchmakingConfigurationRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__314f533f42d53467335b4de1a0b4ad24e756e52a2d7c4b0515ce7509adf3b859)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IMatchmakingConfigurationRef, jsii.sinvoke(cls, "fromMatchmakingConfigurationArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromMatchmakingConfigurationName")
+    @builtins.classmethod
+    def from_matchmaking_configuration_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        matchmaking_configuration_name: builtins.str,
+    ) -> IMatchmakingConfigurationRef:
+        '''Creates a new IMatchmakingConfigurationRef from a matchmakingConfigurationName.
+
+        :param scope: -
+        :param id: -
+        :param matchmaking_configuration_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__44f1d437cf25656e15ed4fd08232b72aae3264ab16d7f3b56203fc14fce035c9)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument matchmaking_configuration_name", value=matchmaking_configuration_name, expected_type=type_hints["matchmaking_configuration_name"])
+        return typing.cast(IMatchmakingConfigurationRef, jsii.sinvoke(cls, "fromMatchmakingConfigurationName", [scope, id, matchmaking_configuration_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11416,6 +11647,48 @@ class CfnMatchmakingRuleSet(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromMatchmakingRuleSetArn")
+    @builtins.classmethod
+    def from_matchmaking_rule_set_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IMatchmakingRuleSetRef:
+        '''Creates a new IMatchmakingRuleSetRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5db6a3778aaefefe0614ddb33692b54c772d255548b2608c42527605805d0968)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IMatchmakingRuleSetRef, jsii.sinvoke(cls, "fromMatchmakingRuleSetArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromMatchmakingRuleSetName")
+    @builtins.classmethod
+    def from_matchmaking_rule_set_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        matchmaking_rule_set_name: builtins.str,
+    ) -> IMatchmakingRuleSetRef:
+        '''Creates a new IMatchmakingRuleSetRef from a matchmakingRuleSetName.
+
+        :param scope: -
+        :param id: -
+        :param matchmaking_rule_set_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e5b9fd099aa59434fcb8a6563f3d9bfcf91d508b750f45d7b65f6d3f2e9ce92)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument matchmaking_rule_set_name", value=matchmaking_rule_set_name, expected_type=type_hints["matchmaking_rule_set_name"])
+        return typing.cast(IMatchmakingRuleSetRef, jsii.sinvoke(cls, "fromMatchmakingRuleSetName", [scope, id, matchmaking_rule_set_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11599,6 +11872,48 @@ class CfnScript(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromScriptArn")
+    @builtins.classmethod
+    def from_script_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IScriptRef:
+        '''Creates a new IScriptRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__05f70751d0eb86aad8868957f46568cda9a897d9759d21070b4720da285bbb70)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IScriptRef, jsii.sinvoke(cls, "fromScriptArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromScriptId")
+    @builtins.classmethod
+    def from_script_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        script_id: builtins.str,
+    ) -> IScriptRef:
+        '''Creates a new IScriptRef from a scriptId.
+
+        :param scope: -
+        :param id: -
+        :param script_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1f59c8d56686af6162141e6c0156e96fdd82f37720262dc218ca572b226b4135)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument script_id", value=script_id, expected_type=type_hints["script_id"])
+        return typing.cast(IScriptRef, jsii.sinvoke(cls, "fromScriptId", [scope, id, script_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12184,6 +12499,22 @@ def _typecheckingstub__6a91f3a4a7dfbcf1655ec6812682d7a8824bfb46a9ce2a65e3c859108
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0891ad75db2bf874492959e788adcf5ee5a3b7a4699cf9c2ddfce496a136a601(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a59b299e6043860af26f7752ca92bfb2a6ddcc5cc02cdd40fd28dd726442c36f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    alias_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e6c7223e714d0339897da2cbb4b67d9e03a5022aa12f568680b86e828460d501(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -12239,6 +12570,22 @@ def _typecheckingstub__d2f3884df6574dd3d4e76d857acf05a15fdc616d818da1cebcfcce408
     storage_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBuild.StorageLocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b64baecddf621fae2565c108e8413814c02580087d90dfa34419b75919effaa2(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fce919b179ae0f0256b86c63c73e64f52cf5bc6cc8b69274e60f6c90c64ea1a7(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    build_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12322,6 +12669,14 @@ def _typecheckingstub__d30a780826320cc5d36af5934da7151d1abdd72973e8cb82c8f063951
     per_instance_container_group_definition_name: typing.Optional[builtins.str] = None,
     scaling_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainerFleet.ScalingPolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4bea05f08256bdbf55f0f4481b2104de57302a58c74c37db452b862c9cc716f4(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    fleet_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12736,6 +13091,22 @@ def _typecheckingstub__21fe09a90444788b3c862f454214d4e160757c9b02d0598d282f68b7f
     server_launch_parameters: typing.Optional[builtins.str] = None,
     server_launch_path: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9d455e8de7d04220b53d8533ff523e203629fe41becf83c008b6eecd38420352(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8559f65005087aabe3f94a9857ca3ab135fe3fddc5daa3feb2e8cdfac0b9fe44(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    fleet_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13165,6 +13536,22 @@ def _typecheckingstub__2435e37790a5987d49478948c0c1ac36c9e463fa29441c46ba0aa4d56
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__540ac4078b9102d1d66f8574fdf325a0e302bcaf342feee75294bf2204b5907e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__604e1fe11dcc006d09239a8bce6316a343133e18607927cf4992e8abe62c765d(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    game_session_queue_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2cc05027a8472775374b6846f6c9ab499cc41f64fa8ed31ccbfd79e142b8b76d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -13327,6 +13714,22 @@ def _typecheckingstub__5991dfcf120df852e2fd4ce6291a275a648645c817c923b70181ea8f5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__314f533f42d53467335b4de1a0b4ad24e756e52a2d7c4b0515ce7509adf3b859(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__44f1d437cf25656e15ed4fd08232b72aae3264ab16d7f3b56203fc14fce035c9(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    matchmaking_configuration_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__97ef86c5f161a3f7e4debb1e365142a6bed6fcfa0560f9575501529b34dee619(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -13460,6 +13863,22 @@ def _typecheckingstub__18ad8102fb28f35f09c9f78c601c99b706ee4e13284fddfd4e85f0e7b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5db6a3778aaefefe0614ddb33692b54c772d255548b2608c42527605805d0968(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8e5b9fd099aa59434fcb8a6563f3d9bfcf91d508b750f45d7b65f6d3f2e9ce92(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    matchmaking_rule_set_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3d61a78aff0b1528ed82cb81e325639d2c75504b437ae15a2e7aac55347f0a30(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -13498,6 +13917,22 @@ def _typecheckingstub__a610f7d9791794a98e26c23e6a2c7f57a2aceb363ba1a205d32cc0011
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__05f70751d0eb86aad8868957f46568cda9a897d9759d21070b4720da285bbb70(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1f59c8d56686af6162141e6c0156e96fdd82f37720262dc218ca572b226b4135(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    script_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

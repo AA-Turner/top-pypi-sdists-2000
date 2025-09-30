@@ -932,6 +932,48 @@ class CfnAccessPoint(
 
         jsii.create(self.__class__, self, [scope_, id, props])
 
+    @jsii.member(jsii_name="fromAccessPointArn")
+    @builtins.classmethod
+    def from_access_point_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IAccessPointRef:
+        '''Creates a new IAccessPointRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a952d5b44a408b548e0bb050b62b58a18b4842662c9403b19a79b867d01abfbb)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IAccessPointRef, jsii.sinvoke(cls, "fromAccessPointArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromAccessPointName")
+    @builtins.classmethod
+    def from_access_point_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        access_point_name: builtins.str,
+    ) -> IAccessPointRef:
+        '''Creates a new IAccessPointRef from a accessPointName.
+
+        :param scope: -
+        :param id: -
+        :param access_point_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2a9ee616abb7adff2a3d54a390a11b5528111ef948a36244f51638aa85b20d21)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument access_point_name", value=access_point_name, expected_type=type_hints["access_point_name"])
+        return typing.cast(IAccessPointRef, jsii.sinvoke(cls, "fromAccessPointName", [scope, id, access_point_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1645,6 +1687,48 @@ class CfnDirectoryBucket(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromBucketName")
+    @builtins.classmethod
+    def from_bucket_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        bucket_name: builtins.str,
+    ) -> IDirectoryBucketRef:
+        '''Creates a new IDirectoryBucketRef from a bucketName.
+
+        :param scope: -
+        :param id: -
+        :param bucket_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ee18bc6af427a08e8172d5b4ff53cd612c8953f566c656085b2ee874f4f2f4d3)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument bucket_name", value=bucket_name, expected_type=type_hints["bucket_name"])
+        return typing.cast(IDirectoryBucketRef, jsii.sinvoke(cls, "fromBucketName", [scope, id, bucket_name]))
+
+    @jsii.member(jsii_name="fromDirectoryBucketArn")
+    @builtins.classmethod
+    def from_directory_bucket_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IDirectoryBucketRef:
+        '''Creates a new IDirectoryBucketRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__75b9ac606a81f7cc58b901653e18aa8fdfc60b403968ba4f37038ce668b4b328)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IDirectoryBucketRef, jsii.sinvoke(cls, "fromDirectoryBucketArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2458,6 +2542,22 @@ def _typecheckingstub__e5fc3ca5d7f872be531c5db2f2626dbbab094b459144a7d293c09461f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a952d5b44a408b548e0bb050b62b58a18b4842662c9403b19a79b867d01abfbb(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2a9ee616abb7adff2a3d54a390a11b5528111ef948a36244f51638aa85b20d21(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    access_point_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__10d052bad8f115c4b5cf2aaa4e73218258b2e771a48bea5518c0d792accadaba(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2587,6 +2687,22 @@ def _typecheckingstub__ea5a1e5897b0467fb93393ad6ea2dbcd3916f27713079e8bef3badf71
     bucket_name: typing.Optional[builtins.str] = None,
     lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDirectoryBucket.LifecycleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ee18bc6af427a08e8172d5b4ff53cd612c8953f566c656085b2ee874f4f2f4d3(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    bucket_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__75b9ac606a81f7cc58b901653e18aa8fdfc60b403968ba4f37038ce668b4b328(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

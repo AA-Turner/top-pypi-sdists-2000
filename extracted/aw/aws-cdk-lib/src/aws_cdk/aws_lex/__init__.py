@@ -13794,6 +13794,27 @@ class CfnBotAlias(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromBotAliasArn")
+    @builtins.classmethod
+    def from_bot_alias_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IBotAliasRef:
+        '''Creates a new IBotAliasRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2ab747fa9eb7cb105192618f589a683ebd337733abaa1cc095d0ab0c0fa55d0d)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IBotAliasRef, jsii.sinvoke(cls, "fromBotAliasArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -16520,6 +16541,14 @@ def _typecheckingstub__57cf179c443f74ff3b1c43c56eef686f369711792e444e53d5668f07a
     conversation_log_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBotAlias.ConversationLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     sentiment_analysis_settings: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2ab747fa9eb7cb105192618f589a683ebd337733abaa1cc095d0ab0c0fa55d0d(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

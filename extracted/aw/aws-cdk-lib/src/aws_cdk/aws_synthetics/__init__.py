@@ -3925,6 +3925,27 @@ class CfnCanary(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromCanaryName")
+    @builtins.classmethod
+    def from_canary_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        canary_name: builtins.str,
+    ) -> ICanaryRef:
+        '''Creates a new ICanaryRef from a canaryName.
+
+        :param scope: -
+        :param id: -
+        :param canary_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9ea9a4c62ed507734c1656b5b5b9ece24a5a15e32aa598350d8dcba80710c99)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument canary_name", value=canary_name, expected_type=type_hints["canary_name"])
+        return typing.cast(ICanaryRef, jsii.sinvoke(cls, "fromCanaryName", [scope, id, canary_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5856,6 +5877,14 @@ def _typecheckingstub__b8fcb3f48eca9399b4d1d31a5ef709e22f9fa52ad1e174b75d8313ef2
     visual_reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.VisualReferenceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     visual_references: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.VisualReferenceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.VPCConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a9ea9a4c62ed507734c1656b5b5b9ece24a5a15e32aa598350d8dcba80710c99(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    canary_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

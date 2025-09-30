@@ -932,6 +932,27 @@ class CfnCRL(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromCrlId")
+    @builtins.classmethod
+    def from_crl_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        crl_id: builtins.str,
+    ) -> ICRLRef:
+        '''Creates a new ICRLRef from a crlId.
+
+        :param scope: -
+        :param id: -
+        :param crl_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8204e9b235056c4607bf2a8db01ddb35e4b3074bbf873b9d68e9be5ab350a5d1)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument crl_id", value=crl_id, expected_type=type_hints["crl_id"])
+        return typing.cast(ICRLRef, jsii.sinvoke(cls, "fromCrlId", [scope, id, crl_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1149,6 +1170,48 @@ class CfnProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromProfileArn")
+    @builtins.classmethod
+    def from_profile_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IProfileRef:
+        '''Creates a new IProfileRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5a599a06fb2ee0316d660e3bf0eb0dc7243ad46e36c87de099cb066eec61d1c3)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IProfileRef, jsii.sinvoke(cls, "fromProfileArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromProfileId")
+    @builtins.classmethod
+    def from_profile_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        profile_id: builtins.str,
+    ) -> IProfileRef:
+        '''Creates a new IProfileRef from a profileId.
+
+        :param scope: -
+        :param id: -
+        :param profile_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1f9aa44b88d6ed3fd5d41a336777d0efa3496e91f55dcf344b750b37d91434a7)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument profile_id", value=profile_id, expected_type=type_hints["profile_id"])
+        return typing.cast(IProfileRef, jsii.sinvoke(cls, "fromProfileId", [scope, id, profile_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1577,6 +1640,48 @@ class CfnTrustAnchor(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromTrustAnchorArn")
+    @builtins.classmethod
+    def from_trust_anchor_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> ITrustAnchorRef:
+        '''Creates a new ITrustAnchorRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__386bedec1c6a93456b654676162c67a7c29651ce39736fdc5c6263cfe6bbad95)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(ITrustAnchorRef, jsii.sinvoke(cls, "fromTrustAnchorArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromTrustAnchorId")
+    @builtins.classmethod
+    def from_trust_anchor_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        trust_anchor_id: builtins.str,
+    ) -> ITrustAnchorRef:
+        '''Creates a new ITrustAnchorRef from a trustAnchorId.
+
+        :param scope: -
+        :param id: -
+        :param trust_anchor_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9c74d8e90ef0bef49a45147e252ba08bc97f3f0738fa055f1700d853fcdf88d5)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument trust_anchor_id", value=trust_anchor_id, expected_type=type_hints["trust_anchor_id"])
+        return typing.cast(ITrustAnchorRef, jsii.sinvoke(cls, "fromTrustAnchorId", [scope, id, trust_anchor_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2088,6 +2193,14 @@ def _typecheckingstub__f35b45debe8136e3de3e7d231f09e2d880d31e3c89eb1adb6a8c5613d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8204e9b235056c4607bf2a8db01ddb35e4b3074bbf873b9d68e9be5ab350a5d1(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    crl_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8dd9193cb33ddf82dba5396e1ae096cc9b451b4296ca2900997bdae6a30a6f44(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2144,6 +2257,22 @@ def _typecheckingstub__15739ec913066dea67815f6297a7c4e3ed351b4df22323a7b46fa138a
     require_instance_properties: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     session_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5a599a06fb2ee0316d660e3bf0eb0dc7243ad46e36c87de099cb066eec61d1c3(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1f9aa44b88d6ed3fd5d41a336777d0efa3496e91f55dcf344b750b37d91434a7(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    profile_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2244,6 +2373,22 @@ def _typecheckingstub__0fba7372f75a907053dd110f3529fe09fcae6182a22a6de9556840fb3
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     notification_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustAnchor.NotificationSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__386bedec1c6a93456b654676162c67a7c29651ce39736fdc5c6263cfe6bbad95(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9c74d8e90ef0bef49a45147e252ba08bc97f3f0738fa055f1700d853fcdf88d5(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    trust_anchor_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

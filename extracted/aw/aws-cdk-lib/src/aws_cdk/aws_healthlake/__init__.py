@@ -418,6 +418,27 @@ class CfnFHIRDatastore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDatastoreId")
+    @builtins.classmethod
+    def from_datastore_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        datastore_id: builtins.str,
+    ) -> IFHIRDatastoreRef:
+        '''Creates a new IFHIRDatastoreRef from a datastoreId.
+
+        :param scope: -
+        :param id: -
+        :param datastore_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1aca17223f33eab4c3c32fe59502f6e15af4d519ea58e4d602d2408ce0b1dfa4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument datastore_id", value=datastore_id, expected_type=type_hints["datastore_id"])
+        return typing.cast(IFHIRDatastoreRef, jsii.sinvoke(cls, "fromDatastoreId", [scope, id, datastore_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1052,6 +1073,14 @@ def _typecheckingstub__5a84066c5df4c48a34d687987d48edfe8b65e8bda26e4da5f30db9c93
     preload_data_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFHIRDatastore.PreloadDataConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sse_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFHIRDatastore.SseConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1aca17223f33eab4c3c32fe59502f6e15af4d519ea58e4d602d2408ce0b1dfa4(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    datastore_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

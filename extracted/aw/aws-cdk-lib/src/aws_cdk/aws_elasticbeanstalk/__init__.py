@@ -1235,6 +1235,27 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromApplicationName")
+    @builtins.classmethod
+    def from_application_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        application_name: builtins.str,
+    ) -> IApplicationRef:
+        '''Creates a new IApplicationRef from a applicationName.
+
+        :param scope: -
+        :param id: -
+        :param application_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f64e0e228a9756a4fe5df231bf425c7ec6801763aba68b5b5c88a2c7a3e01d60)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument application_name", value=application_name, expected_type=type_hints["application_name"])
+        return typing.cast(IApplicationRef, jsii.sinvoke(cls, "fromApplicationName", [scope, id, application_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3015,6 +3036,14 @@ def _typecheckingstub__2037a8b39c672f9e224a0d55f87a787c8f06cc34801647c616c1d3544
     application_name: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     resource_lifecycle_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationResourceLifecycleConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f64e0e228a9756a4fe5df231bf425c7ec6801763aba68b5b5c88a2c7a3e01d60(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    application_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

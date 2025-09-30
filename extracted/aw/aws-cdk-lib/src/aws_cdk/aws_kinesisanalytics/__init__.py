@@ -6503,6 +6503,29 @@ class CfnApplicationV2(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromApplicationName")
+    @builtins.classmethod
+    def from_application_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        application_name: builtins.str,
+    ) -> IApplicationV2Ref:
+        '''(deprecated) Creates a new IApplicationV2Ref from a applicationName.
+
+        :param scope: -
+        :param id: -
+        :param application_name: -
+
+        :stability: deprecated
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6ad6fec85f8d8fd2cbda89e4d5e375818d13d6060f328eec41a9330b6fec772b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument application_name", value=application_name, expected_type=type_hints["application_name"])
+        return typing.cast(IApplicationV2Ref, jsii.sinvoke(cls, "fromApplicationName", [scope, id, application_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''(deprecated) Examines the CloudFormation resource and discloses attributes.
@@ -10921,6 +10944,14 @@ def _typecheckingstub__68f6c265e7d219c8087ecccfd8c8908a6940a2b12916b5234453b46ae
     application_name: typing.Optional[builtins.str] = None,
     run_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationV2.RunConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6ad6fec85f8d8fd2cbda89e4d5e375818d13d6060f328eec41a9330b6fec772b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    application_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

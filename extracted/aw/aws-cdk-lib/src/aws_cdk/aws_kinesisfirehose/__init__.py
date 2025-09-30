@@ -4148,6 +4148,48 @@ class CfnDeliveryStream(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDeliveryStreamArn")
+    @builtins.classmethod
+    def from_delivery_stream_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IDeliveryStreamRef:
+        '''Creates a new IDeliveryStreamRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ac404a7fa1d1175b0b0a315429a21df403efec17716e0d0126de549b60901e43)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IDeliveryStreamRef, jsii.sinvoke(cls, "fromDeliveryStreamArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromDeliveryStreamName")
+    @builtins.classmethod
+    def from_delivery_stream_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        delivery_stream_name: builtins.str,
+    ) -> IDeliveryStreamRef:
+        '''Creates a new IDeliveryStreamRef from a deliveryStreamName.
+
+        :param scope: -
+        :param id: -
+        :param delivery_stream_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__537ae2739e300bc97b7a362a703d67a61ec717ff18fbb371a4140cee84f23b48)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument delivery_stream_name", value=delivery_stream_name, expected_type=type_hints["delivery_stream_name"])
+        return typing.cast(IDeliveryStreamRef, jsii.sinvoke(cls, "fromDeliveryStreamName", [scope, id, delivery_stream_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -13557,6 +13599,22 @@ def _typecheckingstub__b3cd824a2680c7d043cac684bd1be9ca77e94201f1ba00785d60a50ff
     snowflake_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.SnowflakeDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     splunk_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.SplunkDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ac404a7fa1d1175b0b0a315429a21df403efec17716e0d0126de549b60901e43(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__537ae2739e300bc97b7a362a703d67a61ec717ff18fbb371a4140cee84f23b48(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    delivery_stream_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

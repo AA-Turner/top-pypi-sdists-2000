@@ -378,6 +378,27 @@ class CfnCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromIdentifier")
+    @builtins.classmethod
+    def from_identifier(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        identifier: builtins.str,
+    ) -> IClusterRef:
+        '''Creates a new IClusterRef from a identifier.
+
+        :param scope: -
+        :param id: -
+        :param identifier: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bccb1b24da44362c4f4e80968f320da6e8a1b50c7b1913648f91026e37e545ce)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument identifier", value=identifier, expected_type=type_hints["identifier"])
+        return typing.cast(IClusterRef, jsii.sinvoke(cls, "fromIdentifier", [scope, id, identifier]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -751,6 +772,14 @@ def _typecheckingstub__b82b76673b1942e60f823768c857e13a61b0491cdd1ca21c1f2a574e9
     kms_encryption_key: typing.Optional[builtins.str] = None,
     multi_region_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.MultiRegionPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bccb1b24da44362c4f4e80968f320da6e8a1b50c7b1913648f91026e37e545ce(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    identifier: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

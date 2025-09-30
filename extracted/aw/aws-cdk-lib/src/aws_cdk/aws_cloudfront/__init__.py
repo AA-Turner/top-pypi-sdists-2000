@@ -10290,6 +10290,33 @@ class OriginFailoverConfig:
         )
 
 
+@jsii.enum(jsii_type="aws-cdk-lib.aws_cloudfront.OriginIpAddressType")
+class OriginIpAddressType(enum.Enum):
+    '''The IP address type for the origin.
+
+    Determines whether CloudFront uses IPv4, IPv6, or both when connecting to the origin.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        origin = origins.HttpOrigin("www.example.com",
+            ip_address_type=cloudfront.OriginIpAddressType.IPV6
+        )
+        
+        cloudfront.Distribution(self, "Distribution",
+            default_behavior=cloudfront.BehaviorOptions(origin=origin)
+        )
+    '''
+
+    IPV4 = "IPV4"
+    '''Use only IPv4 addresses.'''
+    IPV6 = "IPV6"
+    '''Use only IPv6 addresses.'''
+    DUALSTACK = "DUALSTACK"
+    '''Use both IPv4 and IPv6 addresses.'''
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_cloudfront.OriginOptions",
     jsii_struct_bases=[],
@@ -17365,6 +17392,27 @@ class CfnDistribution(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromDistributionId")
+    @builtins.classmethod
+    def from_distribution_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        distribution_id: builtins.str,
+    ) -> IDistributionRef:
+        '''Creates a new IDistributionRef from a distributionId.
+
+        :param scope: -
+        :param id: -
+        :param distribution_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__515b2d0306d8b0ddb1748f6ce685671bb2aafd2cd036b754a5a5628d11102d18)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument distribution_id", value=distribution_id, expected_type=type_hints["distribution_id"])
+        return typing.cast(IDistributionRef, jsii.sinvoke(cls, "fromDistributionId", [scope, id, distribution_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -31910,6 +31958,7 @@ __all__ = [
     "OriginBindConfig",
     "OriginBindOptions",
     "OriginFailoverConfig",
+    "OriginIpAddressType",
     "OriginOptions",
     "OriginProps",
     "OriginProtocolPolicy",
@@ -33393,6 +33442,14 @@ def _typecheckingstub__81eda5f01ae8971b275cf76ed8b337277ad192ff5b49de8c33ebe25fd
     *,
     distribution_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.DistributionConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__515b2d0306d8b0ddb1748f6ce685671bb2aafd2cd036b754a5a5628d11102d18(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    distribution_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

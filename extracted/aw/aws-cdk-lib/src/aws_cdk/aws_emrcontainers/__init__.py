@@ -373,6 +373,48 @@ class CfnVirtualCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromVirtualClusterArn")
+    @builtins.classmethod
+    def from_virtual_cluster_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IVirtualClusterRef:
+        '''Creates a new IVirtualClusterRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0d7111433bac0bf3eef5f3ffc73c4e649ef41bf63a44cfbc891a7f06a1b9be4b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IVirtualClusterRef, jsii.sinvoke(cls, "fromVirtualClusterArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromVirtualClusterId")
+    @builtins.classmethod
+    def from_virtual_cluster_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        virtual_cluster_id: builtins.str,
+    ) -> IVirtualClusterRef:
+        '''Creates a new IVirtualClusterRef from a virtualClusterId.
+
+        :param scope: -
+        :param id: -
+        :param virtual_cluster_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fcaea2c30abe44238307f21b3c8a59222637a0fd52fab165c6272df6fa333e6a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument virtual_cluster_id", value=virtual_cluster_id, expected_type=type_hints["virtual_cluster_id"])
+        return typing.cast(IVirtualClusterRef, jsii.sinvoke(cls, "fromVirtualClusterId", [scope, id, virtual_cluster_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -749,6 +791,22 @@ def _typecheckingstub__a06dc2760ceb0de7a449a23941f15987094157d1a540c30fa67c9e49a
     name: builtins.str,
     security_configuration_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0d7111433bac0bf3eef5f3ffc73c4e649ef41bf63a44cfbc891a7f06a1b9be4b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fcaea2c30abe44238307f21b3c8a59222637a0fd52fab165c6272df6fa333e6a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    virtual_cluster_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

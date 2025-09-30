@@ -1485,6 +1485,48 @@ class CfnDatabase(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDatabaseArn")
+    @builtins.classmethod
+    def from_database_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IDatabaseRef:
+        '''Creates a new IDatabaseRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ef9fb31e4811ec8f8d4eb09bcb361570b30be71e51de16f1d8bb7d350c98dad3)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IDatabaseRef, jsii.sinvoke(cls, "fromDatabaseArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromDatabaseName")
+    @builtins.classmethod
+    def from_database_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        database_name: builtins.str,
+    ) -> IDatabaseRef:
+        '''Creates a new IDatabaseRef from a databaseName.
+
+        :param scope: -
+        :param id: -
+        :param database_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__443c70e66537de2c34b05ebf9916d47389606d6215ab7cf58e76d81ecc568467)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument database_name", value=database_name, expected_type=type_hints["database_name"])
+        return typing.cast(IDatabaseRef, jsii.sinvoke(cls, "fromDatabaseName", [scope, id, database_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3707,6 +3749,27 @@ class CfnTable(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromTableArn")
+    @builtins.classmethod
+    def from_table_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> ITableRef:
+        '''Creates a new ITableRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fa753463a41b4c926c9b5b8d188dff52c3157fe2316e6dfb94568d8660260ca2)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(ITableRef, jsii.sinvoke(cls, "fromTableArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4486,6 +4549,22 @@ def _typecheckingstub__df267d6c98734bb503e076f315371b3537a6654cdfd5246386d41db61
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ef9fb31e4811ec8f8d4eb09bcb361570b30be71e51de16f1d8bb7d350c98dad3(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__443c70e66537de2c34b05ebf9916d47389606d6215ab7cf58e76d81ecc568467(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    database_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9baaa3cf10dd12d7584c82547f4f62f6168d3a70bb84280e11437c6f39e056e8(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4863,6 +4942,14 @@ def _typecheckingstub__aad96eaee00841ee49968da22b6ed13b3777f265d71c1981b2f1b217c
     schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SchemaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     table_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fa753463a41b4c926c9b5b8d188dff52c3157fe2316e6dfb94568d8660260ca2(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

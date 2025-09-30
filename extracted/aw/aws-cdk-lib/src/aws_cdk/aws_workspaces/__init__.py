@@ -1170,6 +1170,27 @@ class CfnWorkspace(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromWorkspaceId")
+    @builtins.classmethod
+    def from_workspace_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        workspace_id: builtins.str,
+    ) -> IWorkspaceRef:
+        '''Creates a new IWorkspaceRef from a workspaceId.
+
+        :param scope: -
+        :param id: -
+        :param workspace_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4d89928bc3143b40dfcbe60436eb821c87d4ca5d7e96d4ce7e5b5f26125f7d08)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument workspace_id", value=workspace_id, expected_type=type_hints["workspace_id"])
+        return typing.cast(IWorkspaceRef, jsii.sinvoke(cls, "fromWorkspaceId", [scope, id, workspace_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1571,6 +1592,27 @@ class CfnWorkspacesPool(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromPoolId")
+    @builtins.classmethod
+    def from_pool_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        pool_id: builtins.str,
+    ) -> IWorkspacesPoolRef:
+        '''Creates a new IWorkspacesPoolRef from a poolId.
+
+        :param scope: -
+        :param id: -
+        :param pool_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__aca13282ecc7b7c8ac155574994d5d8d845bec6aa4ca0daf161949c9810e9624)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument pool_id", value=pool_id, expected_type=type_hints["pool_id"])
+        return typing.cast(IWorkspacesPoolRef, jsii.sinvoke(cls, "fromPoolId", [scope, id, pool_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2136,6 +2178,14 @@ def _typecheckingstub__ecf9321ac6e165dfc96d72b093b8636e1ff9e82acf9cea2e5176beb79
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4d89928bc3143b40dfcbe60436eb821c87d4ca5d7e96d4ce7e5b5f26125f7d08(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    workspace_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e772192f4dd8e60f99b92beca96b37f99aca30dac13f906848601f52405c8d90(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2220,6 +2270,14 @@ def _typecheckingstub__2d46eb37beb6bc915a0a0c68f02dfa689a2d725a4252e6874da1ed606
     running_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     timeout_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspacesPool.TimeoutSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aca13282ecc7b7c8ac155574994d5d8d845bec6aa4ca0daf161949c9810e9624(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    pool_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

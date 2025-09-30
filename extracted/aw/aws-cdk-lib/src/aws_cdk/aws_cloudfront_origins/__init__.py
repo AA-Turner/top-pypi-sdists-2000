@@ -593,6 +593,20 @@ cloudfront.Distribution(self, "myDist",
 )
 ```
 
+You can specify the IP address type for connecting to the origin:
+
+```python
+origin = origins.HttpOrigin("www.example.com",
+    ip_address_type=cloudfront.OriginIpAddressType.IPV6
+)
+
+cloudfront.Distribution(self, "Distribution",
+    default_behavior=cloudfront.BehaviorOptions(origin=origin)
+)
+```
+
+The `ipAddressType` property allows you to specify whether CloudFront should use IPv4, IPv6, or both (dual-stack) when connecting to your origin.
+
 The origin can be customized with timeout settings to handle different response scenarios:
 
 ```python
@@ -929,6 +943,7 @@ from ..aws_cloudfront import (
     OriginBase as _OriginBase_b8fe5bcc,
     OriginBindConfig as _OriginBindConfig_25a57096,
     OriginBindOptions as _OriginBindOptions_088c2b51,
+    OriginIpAddressType as _OriginIpAddressType_1c01e1a0,
     OriginProps as _OriginProps_0675928d,
     OriginProtocolPolicy as _OriginProtocolPolicy_967ed73c,
     OriginSelectionCriteria as _OriginSelectionCriteria_ba6d3e21,
@@ -1826,6 +1841,7 @@ class HttpOrigin(
         *,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
+        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
         keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
         protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -1844,6 +1860,7 @@ class HttpOrigin(
         :param domain_name: -
         :param http_port: The HTTP port that CloudFront uses to connect to the origin. Default: 80
         :param https_port: The HTTPS port that CloudFront uses to connect to the origin. Default: 443
+        :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability. Default: undefined - AWS Cloudfront default is IPv4
         :param keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(5)
         :param origin_ssl_protocols: The SSL versions to use when interacting with the origin. Default: OriginSslPolicy.TLS_V1_2
         :param protocol_policy: Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin. Default: OriginProtocolPolicy.HTTPS_ONLY
@@ -1864,6 +1881,7 @@ class HttpOrigin(
         props = HttpOriginProps(
             http_port=http_port,
             https_port=https_port,
+            ip_address_type=ip_address_type,
             keepalive_timeout=keepalive_timeout,
             origin_ssl_protocols=origin_ssl_protocols,
             protocol_policy=protocol_policy,
@@ -1903,6 +1921,7 @@ class HttpOrigin(
         "origin_path": "originPath",
         "http_port": "httpPort",
         "https_port": "httpsPort",
+        "ip_address_type": "ipAddressType",
         "keepalive_timeout": "keepaliveTimeout",
         "origin_ssl_protocols": "originSslProtocols",
         "protocol_policy": "protocolPolicy",
@@ -1924,6 +1943,7 @@ class HttpOriginProps(_OriginProps_0675928d):
         origin_path: typing.Optional[builtins.str] = None,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
+        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
         keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
         protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -1942,6 +1962,7 @@ class HttpOriginProps(_OriginProps_0675928d):
         :param origin_path: An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin. Must begin, but not end, with '/' (e.g., '/production/images'). Default: '/'
         :param http_port: The HTTP port that CloudFront uses to connect to the origin. Default: 80
         :param https_port: The HTTPS port that CloudFront uses to connect to the origin. Default: 443
+        :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability. Default: undefined - AWS Cloudfront default is IPv4
         :param keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(5)
         :param origin_ssl_protocols: The SSL versions to use when interacting with the origin. Default: OriginSslPolicy.TLS_V1_2
         :param protocol_policy: Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin. Default: OriginProtocolPolicy.HTTPS_ONLY
@@ -1951,14 +1972,12 @@ class HttpOriginProps(_OriginProps_0675928d):
 
         Example::
 
+            origin = origins.HttpOrigin("www.example.com",
+                ip_address_type=cloudfront.OriginIpAddressType.IPV6
+            )
+            
             cloudfront.Distribution(self, "Distribution",
-                default_behavior=cloudfront.BehaviorOptions(
-                    origin=origins.HttpOrigin("api.example.com",
-                        read_timeout=Duration.seconds(60),
-                        response_completion_timeout=Duration.seconds(120),
-                        keepalive_timeout=Duration.seconds(45)
-                    )
-                )
+                default_behavior=cloudfront.BehaviorOptions(origin=origin)
             )
         '''
         if __debug__:
@@ -1974,6 +1993,7 @@ class HttpOriginProps(_OriginProps_0675928d):
             check_type(argname="argument origin_path", value=origin_path, expected_type=type_hints["origin_path"])
             check_type(argname="argument http_port", value=http_port, expected_type=type_hints["http_port"])
             check_type(argname="argument https_port", value=https_port, expected_type=type_hints["https_port"])
+            check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
             check_type(argname="argument keepalive_timeout", value=keepalive_timeout, expected_type=type_hints["keepalive_timeout"])
             check_type(argname="argument origin_ssl_protocols", value=origin_ssl_protocols, expected_type=type_hints["origin_ssl_protocols"])
             check_type(argname="argument protocol_policy", value=protocol_policy, expected_type=type_hints["protocol_policy"])
@@ -2001,6 +2021,8 @@ class HttpOriginProps(_OriginProps_0675928d):
             self._values["http_port"] = http_port
         if https_port is not None:
             self._values["https_port"] = https_port
+        if ip_address_type is not None:
+            self._values["ip_address_type"] = ip_address_type
         if keepalive_timeout is not None:
             self._values["keepalive_timeout"] = keepalive_timeout
         if origin_ssl_protocols is not None:
@@ -2126,6 +2148,17 @@ class HttpOriginProps(_OriginProps_0675928d):
         '''
         result = self._values.get("https_port")
         return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def ip_address_type(self) -> typing.Optional[_OriginIpAddressType_1c01e1a0]:
+        '''Specifies which IP protocol CloudFront uses when connecting to your origin.
+
+        If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability.
+
+        :default: undefined - AWS Cloudfront default is IPv4
+        '''
+        result = self._values.get("ip_address_type")
+        return typing.cast(typing.Optional[_OriginIpAddressType_1c01e1a0], result)
 
     @builtins.property
     def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -2218,6 +2251,7 @@ class LoadBalancerV2Origin(
         *,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
+        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
         keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
         protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -2236,6 +2270,7 @@ class LoadBalancerV2Origin(
         :param load_balancer: -
         :param http_port: The HTTP port that CloudFront uses to connect to the origin. Default: 80
         :param https_port: The HTTPS port that CloudFront uses to connect to the origin. Default: 443
+        :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability. Default: undefined - AWS Cloudfront default is IPv4
         :param keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(5)
         :param origin_ssl_protocols: The SSL versions to use when interacting with the origin. Default: OriginSslPolicy.TLS_V1_2
         :param protocol_policy: Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin. Default: OriginProtocolPolicy.HTTPS_ONLY
@@ -2256,6 +2291,7 @@ class LoadBalancerV2Origin(
         props = LoadBalancerV2OriginProps(
             http_port=http_port,
             https_port=https_port,
+            ip_address_type=ip_address_type,
             keepalive_timeout=keepalive_timeout,
             origin_ssl_protocols=origin_ssl_protocols,
             protocol_policy=protocol_policy,
@@ -2289,6 +2325,7 @@ class LoadBalancerV2Origin(
         "origin_path": "originPath",
         "http_port": "httpPort",
         "https_port": "httpsPort",
+        "ip_address_type": "ipAddressType",
         "keepalive_timeout": "keepaliveTimeout",
         "origin_ssl_protocols": "originSslProtocols",
         "protocol_policy": "protocolPolicy",
@@ -2310,6 +2347,7 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         origin_path: typing.Optional[builtins.str] = None,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
+        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
         keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
         protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -2328,6 +2366,7 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         :param origin_path: An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin. Must begin, but not end, with '/' (e.g., '/production/images'). Default: '/'
         :param http_port: The HTTP port that CloudFront uses to connect to the origin. Default: 80
         :param https_port: The HTTPS port that CloudFront uses to connect to the origin. Default: 443
+        :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability. Default: undefined - AWS Cloudfront default is IPv4
         :param keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(5)
         :param origin_ssl_protocols: The SSL versions to use when interacting with the origin. Default: OriginSslPolicy.TLS_V1_2
         :param protocol_policy: Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin. Default: OriginProtocolPolicy.HTTPS_ONLY
@@ -2361,6 +2400,7 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
             check_type(argname="argument origin_path", value=origin_path, expected_type=type_hints["origin_path"])
             check_type(argname="argument http_port", value=http_port, expected_type=type_hints["http_port"])
             check_type(argname="argument https_port", value=https_port, expected_type=type_hints["https_port"])
+            check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
             check_type(argname="argument keepalive_timeout", value=keepalive_timeout, expected_type=type_hints["keepalive_timeout"])
             check_type(argname="argument origin_ssl_protocols", value=origin_ssl_protocols, expected_type=type_hints["origin_ssl_protocols"])
             check_type(argname="argument protocol_policy", value=protocol_policy, expected_type=type_hints["protocol_policy"])
@@ -2388,6 +2428,8 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
             self._values["http_port"] = http_port
         if https_port is not None:
             self._values["https_port"] = https_port
+        if ip_address_type is not None:
+            self._values["ip_address_type"] = ip_address_type
         if keepalive_timeout is not None:
             self._values["keepalive_timeout"] = keepalive_timeout
         if origin_ssl_protocols is not None:
@@ -2513,6 +2555,17 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         '''
         result = self._values.get("https_port")
         return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def ip_address_type(self) -> typing.Optional[_OriginIpAddressType_1c01e1a0]:
+        '''Specifies which IP protocol CloudFront uses when connecting to your origin.
+
+        If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability.
+
+        :default: undefined - AWS Cloudfront default is IPv4
+        '''
+        result = self._values.get("ip_address_type")
+        return typing.cast(typing.Optional[_OriginIpAddressType_1c01e1a0], result)
 
     @builtins.property
     def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -4306,6 +4359,7 @@ class S3StaticWebsiteOrigin(
         *,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
+        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
         keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
         protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -4324,6 +4378,7 @@ class S3StaticWebsiteOrigin(
         :param bucket: -
         :param http_port: The HTTP port that CloudFront uses to connect to the origin. Default: 80
         :param https_port: The HTTPS port that CloudFront uses to connect to the origin. Default: 443
+        :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability. Default: undefined - AWS Cloudfront default is IPv4
         :param keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(5)
         :param origin_ssl_protocols: The SSL versions to use when interacting with the origin. Default: OriginSslPolicy.TLS_V1_2
         :param protocol_policy: Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin. Default: OriginProtocolPolicy.HTTPS_ONLY
@@ -4344,6 +4399,7 @@ class S3StaticWebsiteOrigin(
         props = S3StaticWebsiteOriginProps(
             http_port=http_port,
             https_port=https_port,
+            ip_address_type=ip_address_type,
             keepalive_timeout=keepalive_timeout,
             origin_ssl_protocols=origin_ssl_protocols,
             protocol_policy=protocol_policy,
@@ -4377,6 +4433,7 @@ class S3StaticWebsiteOrigin(
         "origin_path": "originPath",
         "http_port": "httpPort",
         "https_port": "httpsPort",
+        "ip_address_type": "ipAddressType",
         "keepalive_timeout": "keepaliveTimeout",
         "origin_ssl_protocols": "originSslProtocols",
         "protocol_policy": "protocolPolicy",
@@ -4398,6 +4455,7 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         origin_path: typing.Optional[builtins.str] = None,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
+        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
         keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
         protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -4416,6 +4474,7 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         :param origin_path: An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin. Must begin, but not end, with '/' (e.g., '/production/images'). Default: '/'
         :param http_port: The HTTP port that CloudFront uses to connect to the origin. Default: 80
         :param https_port: The HTTPS port that CloudFront uses to connect to the origin. Default: 443
+        :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability. Default: undefined - AWS Cloudfront default is IPv4
         :param keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(5)
         :param origin_ssl_protocols: The SSL versions to use when interacting with the origin. Default: OriginSslPolicy.TLS_V1_2
         :param protocol_policy: Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin. Default: OriginProtocolPolicy.HTTPS_ONLY
@@ -4439,6 +4498,7 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
                 },
                 http_port=123,
                 https_port=123,
+                ip_address_type=cloudfront.OriginIpAddressType.IPV4,
                 keepalive_timeout=cdk.Duration.minutes(30),
                 origin_access_control_id="originAccessControlId",
                 origin_id="originId",
@@ -4464,6 +4524,7 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
             check_type(argname="argument origin_path", value=origin_path, expected_type=type_hints["origin_path"])
             check_type(argname="argument http_port", value=http_port, expected_type=type_hints["http_port"])
             check_type(argname="argument https_port", value=https_port, expected_type=type_hints["https_port"])
+            check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
             check_type(argname="argument keepalive_timeout", value=keepalive_timeout, expected_type=type_hints["keepalive_timeout"])
             check_type(argname="argument origin_ssl_protocols", value=origin_ssl_protocols, expected_type=type_hints["origin_ssl_protocols"])
             check_type(argname="argument protocol_policy", value=protocol_policy, expected_type=type_hints["protocol_policy"])
@@ -4491,6 +4552,8 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
             self._values["http_port"] = http_port
         if https_port is not None:
             self._values["https_port"] = https_port
+        if ip_address_type is not None:
+            self._values["ip_address_type"] = ip_address_type
         if keepalive_timeout is not None:
             self._values["keepalive_timeout"] = keepalive_timeout
         if origin_ssl_protocols is not None:
@@ -4616,6 +4679,17 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         '''
         result = self._values.get("https_port")
         return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def ip_address_type(self) -> typing.Optional[_OriginIpAddressType_1c01e1a0]:
+        '''Specifies which IP protocol CloudFront uses when connecting to your origin.
+
+        If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability.
+
+        :default: undefined - AWS Cloudfront default is IPv4
+        '''
+        result = self._values.get("ip_address_type")
+        return typing.cast(typing.Optional[_OriginIpAddressType_1c01e1a0], result)
 
     @builtins.property
     def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -5785,6 +5859,7 @@ def _typecheckingstub__57d13f69f251622e0723aa73c3eb93e482e0deb7a7b1e8439c7d7ad35
     *,
     http_port: typing.Optional[jsii.Number] = None,
     https_port: typing.Optional[jsii.Number] = None,
+    ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
     protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -5815,6 +5890,7 @@ def _typecheckingstub__13f43bf70f0a97ee8ca0e4f7aca38d43089ed2bc254d5c2b57c73b51c
     origin_path: typing.Optional[builtins.str] = None,
     http_port: typing.Optional[jsii.Number] = None,
     https_port: typing.Optional[jsii.Number] = None,
+    ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
     protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -5828,6 +5904,7 @@ def _typecheckingstub__2e5124d4f469d6539077a529c09cfba685fe4a7037b9417216b18f6cc
     *,
     http_port: typing.Optional[jsii.Number] = None,
     https_port: typing.Optional[jsii.Number] = None,
+    ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
     protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -5858,6 +5935,7 @@ def _typecheckingstub__c72b63200b184ae3f51c9b6a19be2eef9bddae313ee00c7378396c0dc
     origin_path: typing.Optional[builtins.str] = None,
     http_port: typing.Optional[jsii.Number] = None,
     https_port: typing.Optional[jsii.Number] = None,
+    ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
     protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -6082,6 +6160,7 @@ def _typecheckingstub__f0edd2083352b96faf3ea9eb05136629dff841fa272ecdb6dfb52772a
     *,
     http_port: typing.Optional[jsii.Number] = None,
     https_port: typing.Optional[jsii.Number] = None,
+    ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
     protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
@@ -6112,6 +6191,7 @@ def _typecheckingstub__5bc18cdba7c0e6d7d0a68d2a1cf3c3f91f50a7e3e7384f5f62ebee600
     origin_path: typing.Optional[builtins.str] = None,
     http_port: typing.Optional[jsii.Number] = None,
     https_port: typing.Optional[jsii.Number] = None,
+    ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
     protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,

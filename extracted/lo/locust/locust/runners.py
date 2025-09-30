@@ -1434,9 +1434,9 @@ class WorkerRunner(DistributedRunner):
         while True:
             current_logs = get_logs()
 
-            if (len(current_logs) - len(self.logs)) > 10:
+            if (len(current_logs) - len(self.logs)) > 70:
                 logger.warning(
-                    "The worker attempted to send more than 10 log lines in one interval. Further log sending was disabled for this worker."
+                    "The worker attempted to send more than 70 log lines in one interval. Further log sending was disabled for this worker."
                 )
                 self._send_logs(get_logs())
                 break
@@ -1474,12 +1474,12 @@ class WorkerRunner(DistributedRunner):
             # dont complain about getting CTRL-C
             sys.exit(1)
         if not success:
-            if self.retry < 3:
+            if self.retry < 30 / CONNECT_TIMEOUT:  # lower log level during the first 30 seconds
                 logger.debug(
                     f"Failed to connect to master {self.master_host}:{self.master_port}{self.web_base_path}, retry {self.retry}/{CONNECT_RETRY_COUNT}."
                 )
             else:
-                logger.warning(
+                logger.info(
                     f"Failed to connect to master {self.master_host}:{self.master_port}{self.web_base_path}, retry {self.retry}/{CONNECT_RETRY_COUNT}."
                 )
             if self.retry > CONNECT_RETRY_COUNT:

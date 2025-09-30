@@ -1781,6 +1781,27 @@ class CfnDataCatalog(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDataCatalogName")
+    @builtins.classmethod
+    def from_data_catalog_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        data_catalog_name: builtins.str,
+    ) -> IDataCatalogRef:
+        '''Creates a new IDataCatalogRef from a dataCatalogName.
+
+        :param scope: -
+        :param id: -
+        :param data_catalog_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d5d2a0246fafbbc6a693f337ada29b85155f59962e79d7c642084d44652d0f2e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument data_catalog_name", value=data_catalog_name, expected_type=type_hints["data_catalog_name"])
+        return typing.cast(IDataCatalogRef, jsii.sinvoke(cls, "fromDataCatalogName", [scope, id, data_catalog_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2417,6 +2438,27 @@ class CfnWorkGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromWorkGroupName")
+    @builtins.classmethod
+    def from_work_group_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        work_group_name: builtins.str,
+    ) -> IWorkGroupRef:
+        '''Creates a new IWorkGroupRef from a workGroupName.
+
+        :param scope: -
+        :param id: -
+        :param work_group_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__be43a8d87adff5435c9f23ab60a2b7d950366fdde534d2500f7e413d6b588f9f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument work_group_name", value=work_group_name, expected_type=type_hints["work_group_name"])
+        return typing.cast(IWorkGroupRef, jsii.sinvoke(cls, "fromWorkGroupName", [scope, id, work_group_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4075,6 +4117,14 @@ def _typecheckingstub__05023d61a95576869568bc095d9889b971a9d8c061cba5833a71f4423
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d5d2a0246fafbbc6a693f337ada29b85155f59962e79d7c642084d44652d0f2e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    data_catalog_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__70484df33f57719ba2197f7ae86dd846651ec89bd9dc9853fbc4fff3bb342b5e(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4249,6 +4299,14 @@ def _typecheckingstub__be0f7d9e26f77f516ae56dabfd6aae7d4d7e7404767cea86eb51dbe5a
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     work_group_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.WorkGroupConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     work_group_configuration_updates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.WorkGroupConfigurationUpdatesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__be43a8d87adff5435c9f23ab60a2b7d950366fdde534d2500f7e413d6b588f9f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    work_group_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

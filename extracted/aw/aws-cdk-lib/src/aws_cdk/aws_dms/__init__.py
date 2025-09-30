@@ -4239,6 +4239,27 @@ class CfnCertificate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromCertificateId")
+    @builtins.classmethod
+    def from_certificate_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        certificate_id: builtins.str,
+    ) -> ICertificateRef:
+        '''Creates a new ICertificateRef from a certificateId.
+
+        :param scope: -
+        :param id: -
+        :param certificate_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__54c58e4c61ec8f4fec86aeebbf242c64f4df21097435a1de2fa86d057deacae4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument certificate_id", value=certificate_id, expected_type=type_hints["certificate_id"])
+        return typing.cast(ICertificateRef, jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7165,6 +7186,27 @@ class CfnEndpoint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromEndpointId")
+    @builtins.classmethod
+    def from_endpoint_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        endpoint_id: builtins.str,
+    ) -> IEndpointRef:
+        '''Creates a new IEndpointRef from a endpointId.
+
+        :param scope: -
+        :param id: -
+        :param endpoint_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cc7544659847cebf1010859beefe92e136eed06aeede14a54bb30e07bc5741a0)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument endpoint_id", value=endpoint_id, expected_type=type_hints["endpoint_id"])
+        return typing.cast(IEndpointRef, jsii.sinvoke(cls, "fromEndpointId", [scope, id, endpoint_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -15725,6 +15767,14 @@ def _typecheckingstub__f7c4a44b8a3c02f3f6ada86310479fa26dc0b32d4fba95316eb3faa44
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__54c58e4c61ec8f4fec86aeebbf242c64f4df21097435a1de2fa86d057deacae4(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    certificate_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ec185f31d9affa5fa834d99f40ff8a27fcf34f84f01e6395782727e60768851f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -16084,6 +16134,14 @@ def _typecheckingstub__738d71cd2300575c2c6537801f3dede195e2179cefcdceb9d0410340f
     sybase_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.SybaseSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     username: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cc7544659847cebf1010859beefe92e136eed06aeede14a54bb30e07bc5741a0(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    endpoint_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

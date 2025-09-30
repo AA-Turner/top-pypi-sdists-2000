@@ -6777,6 +6777,48 @@ class CfnApp(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAppArn")
+    @builtins.classmethod
+    def from_app_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IAppRef:
+        '''Creates a new IAppRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__70f0e32e7cd279e91fc578d15e5825d6dcb28ef1b582e7668a98f90634869397)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IAppRef, jsii.sinvoke(cls, "fromAppArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromAppId")
+    @builtins.classmethod
+    def from_app_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        app_id: builtins.str,
+    ) -> IAppRef:
+        '''Creates a new IAppRef from a appId.
+
+        :param scope: -
+        :param id: -
+        :param app_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a2975d35784fc720a55f6e6753dfa83c2c5fbcdf77820d02fea580038ac4febd)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument app_id", value=app_id, expected_type=type_hints["app_id"])
+        return typing.cast(IAppRef, jsii.sinvoke(cls, "fromAppId", [scope, id, app_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8051,6 +8093,27 @@ class CfnCampaign(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromCampaignArn")
+    @builtins.classmethod
+    def from_campaign_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> ICampaignRef:
+        '''Creates a new ICampaignRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ab591ee16a73472ae59021eed25e4aed98dd4fa5ba18769df90d60eb0376628e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(ICampaignRef, jsii.sinvoke(cls, "fromCampaignArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -14650,6 +14713,27 @@ class CfnSegment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromSegmentArn")
+    @builtins.classmethod
+    def from_segment_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> ISegmentRef:
+        '''Creates a new ISegmentRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bc304a7477cb00665c766619671fb5c20dbf4598b1c401d36d4cda5b8640cf6b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(ISegmentRef, jsii.sinvoke(cls, "fromSegmentArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -17222,6 +17306,22 @@ def _typecheckingstub__6b0f8bd367843c451288aaaaf44baa44f09abffc0daba385520088889
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__70f0e32e7cd279e91fc578d15e5825d6dcb28ef1b582e7668a98f90634869397(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a2975d35784fc720a55f6e6753dfa83c2c5fbcdf77820d02fea580038ac4febd(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    app_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__70a1a0b3dc0d592b65e802e1e0b8f6d8ec8f0dc7df60bf7d1633880668ff742e(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -17398,6 +17498,14 @@ def _typecheckingstub__37daefd9aecddac1551b6da8a771d74af1f7a13678f1d1fb2d351fab8
     template_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.TemplateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     treatment_description: typing.Optional[builtins.str] = None,
     treatment_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ab591ee16a73472ae59021eed25e4aed98dd4fa5ba18769df90d60eb0376628e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18307,6 +18415,14 @@ def _typecheckingstub__f709a034a24c1bdbcf2c3ad69a8ec499d4a31c52228cfccf041a018ef
     dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegment.SegmentDimensionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     segment_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegment.SegmentGroupsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bc304a7477cb00665c766619671fb5c20dbf4598b1c401d36d4cda5b8640cf6b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

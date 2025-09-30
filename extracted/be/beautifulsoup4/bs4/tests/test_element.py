@@ -134,7 +134,7 @@ class TestResultSet:
         with pytest.raises(AttributeError) as e:
             rs.name
         assert (
-            """ResultSet object has no attribute "name". You're probably treating a sequence of elements like a single element. Did you call find_all() when you meant to call find()?"""
+            """ResultSet object has no attribute "name". You're probably treating a list of elements like a single element. Did you call find_all() when you meant to call find()?"""
             == str(e.value)
         )
 
@@ -164,3 +164,15 @@ class TestResultSet:
 
         # Even if the results come from two different sources, the ResultSets are equal.
         assert ResultSet(ElementFilter(), [1,2,3]) == rs1
+
+    def test_mutability(self):
+        # A ResultSet is mutable. (Lots of external code depends on this.)
+        rs = ResultSet(None, [1,2,3])
+        rs[1] = 4
+        assert rs == [1,4,3]
+
+    def test_add_resultsets_together(self):
+        # ResultSets can be added together like lists. (pandas depends on this.)
+        rs1 = ResultSet(None, [1,2,3])
+        rs2 = ResultSet(None, [4,5,6])
+        assert rs1 + rs2 == [1,2,3,4,5,6]

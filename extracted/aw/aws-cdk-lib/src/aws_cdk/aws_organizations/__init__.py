@@ -1513,6 +1513,27 @@ class CfnOrganization(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromOrganizationArn")
+    @builtins.classmethod
+    def from_organization_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IOrganizationRef:
+        '''Creates a new IOrganizationRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__515848a45ac1a11e94d10eb67b5e95998c0de9463e4e884bdcf825dd5ba51a78)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IOrganizationRef, jsii.sinvoke(cls, "fromOrganizationArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1686,6 +1707,27 @@ class CfnOrganizationalUnit(
         props = CfnOrganizationalUnitProps(name=name, parent_id=parent_id, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromOrganizationalUnitArn")
+    @builtins.classmethod
+    def from_organizational_unit_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IOrganizationalUnitRef:
+        '''Creates a new IOrganizationalUnitRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__03592f7b01a6f8ddca2d70c028bd30d41c1e1e7673d1f09e0c518ae88c596b85)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IOrganizationalUnitRef, jsii.sinvoke(cls, "fromOrganizationalUnitArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1876,6 +1918,27 @@ class CfnPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromPolicyArn")
+    @builtins.classmethod
+    def from_policy_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IPolicyRef:
+        '''Creates a new IPolicyRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c3f1c0ab279b67e9d070030146738cd68d5527bbbd1348d1af95c6ae82aee964)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IPolicyRef, jsii.sinvoke(cls, "fromPolicyArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2095,6 +2158,27 @@ class CfnResourcePolicy(
         props = CfnResourcePolicyProps(content=content, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromResourcePolicyArn")
+    @builtins.classmethod
+    def from_resource_policy_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IResourcePolicyRef:
+        '''Creates a new IResourcePolicyRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__26577d2abcd168bbb27ce47e6969e6dc2d8cdcc945dbb56f84cd9fac2e3cd336)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IResourcePolicyRef, jsii.sinvoke(cls, "fromResourcePolicyArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2368,6 +2452,14 @@ def _typecheckingstub__450a54c6b7334fcb8f406a9a29b8e1f90a618bcbd127f2d5a6a9fa43f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__515848a45ac1a11e94d10eb67b5e95998c0de9463e4e884bdcf825dd5ba51a78(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a0b1a88993c76738edf5e9d3584d058cabe1cfc259fb5d620589d5c23507de91(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2393,6 +2485,14 @@ def _typecheckingstub__05eb3e3a6c1c8de7f03913252600dcc42e4c1e99dbbab3f47a3fb8e4c
     name: builtins.str,
     parent_id: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__03592f7b01a6f8ddca2d70c028bd30d41c1e1e7673d1f09e0c518ae88c596b85(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2437,6 +2537,14 @@ def _typecheckingstub__9c8ac465f7818132d3539ff8d8e22250305dad104185434533d033da8
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c3f1c0ab279b67e9d070030146738cd68d5527bbbd1348d1af95c6ae82aee964(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2495,6 +2603,14 @@ def _typecheckingstub__d9208421dfafb85e674bb3b797871f578fa0566480e15ed57d8dbc67f
     *,
     content: typing.Any,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__26577d2abcd168bbb27ce47e6969e6dc2d8cdcc945dbb56f84cd9fac2e3cd336(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

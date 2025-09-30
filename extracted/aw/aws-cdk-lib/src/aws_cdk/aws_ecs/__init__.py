@@ -30740,6 +30740,27 @@ class CfnCapacityProvider(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromCapacityProviderName")
+    @builtins.classmethod
+    def from_capacity_provider_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        capacity_provider_name: builtins.str,
+    ) -> ICapacityProviderRef:
+        '''Creates a new ICapacityProviderRef from a capacityProviderName.
+
+        :param scope: -
+        :param id: -
+        :param capacity_provider_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a3210cc1a506360b31eb93a9301cea4ee37fb10be16276e632ecd13d5269ee37)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
+        return typing.cast(ICapacityProviderRef, jsii.sinvoke(cls, "fromCapacityProviderName", [scope, id, capacity_provider_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -31190,6 +31211,48 @@ class CfnCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromClusterArn")
+    @builtins.classmethod
+    def from_cluster_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IClusterRef:
+        '''Creates a new IClusterRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9038ca700580cd0572770f9742e4717592e5172893091346e7765b19e8ca0875)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IClusterRef, jsii.sinvoke(cls, "fromClusterArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromClusterName")
+    @builtins.classmethod
+    def from_cluster_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        cluster_name: builtins.str,
+    ) -> IClusterRef:
+        '''Creates a new IClusterRef from a clusterName.
+
+        :param scope: -
+        :param id: -
+        :param cluster_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8dd702481aabf1a2f6fa1272c17cda45ce96df207d71c29274cda2cf9273cac3)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
+        return typing.cast(IClusterRef, jsii.sinvoke(cls, "fromClusterName", [scope, id, cluster_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -49121,6 +49184,14 @@ def _typecheckingstub__59a913caee739f6d41600bf8ae89985db638913fbcb77a8abd5451cda
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a3210cc1a506360b31eb93a9301cea4ee37fb10be16276e632ecd13d5269ee37(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    capacity_provider_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__53c0f84221516e5285bbcd4c1565c1b5af2df9c65da6dfc915f76bb224443013(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -49183,6 +49254,22 @@ def _typecheckingstub__ea27f9318b2a509011f1175119715629617e6b8d976d0782e37d54e45
     default_capacity_provider_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.CapacityProviderStrategyItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     service_connect_defaults: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ServiceConnectDefaultsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9038ca700580cd0572770f9742e4717592e5172893091346e7765b19e8ca0875(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8dd702481aabf1a2f6fa1272c17cda45ce96df207d71c29274cda2cf9273cac3(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    cluster_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

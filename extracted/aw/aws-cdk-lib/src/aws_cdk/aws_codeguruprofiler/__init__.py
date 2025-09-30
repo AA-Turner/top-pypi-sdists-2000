@@ -751,6 +751,48 @@ class CfnProfilingGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromProfilingGroupArn")
+    @builtins.classmethod
+    def from_profiling_group_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IProfilingGroupRef:
+        '''Creates a new IProfilingGroupRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6ac4260087f147037940fcb12c380a6fc4400820d9cf220da02e1ddbef07d729)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IProfilingGroupRef, jsii.sinvoke(cls, "fromProfilingGroupArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromProfilingGroupName")
+    @builtins.classmethod
+    def from_profiling_group_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        profiling_group_name: builtins.str,
+    ) -> IProfilingGroupRef:
+        '''Creates a new IProfilingGroupRef from a profilingGroupName.
+
+        :param scope: -
+        :param id: -
+        :param profiling_group_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__552edc8b399fb365e317214fcadc79fac39ae04b205363192ae2b40558614940)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument profiling_group_name", value=profiling_group_name, expected_type=type_hints["profiling_group_name"])
+        return typing.cast(IProfilingGroupRef, jsii.sinvoke(cls, "fromProfilingGroupName", [scope, id, profiling_group_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1104,6 +1146,22 @@ def _typecheckingstub__c9aa0abb6bab44bc6d99509172735702ee5d874bf3f43241d8a04bc9b
     anomaly_detection_notification_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProfilingGroup.ChannelProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     compute_platform: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6ac4260087f147037940fcb12c380a6fc4400820d9cf220da02e1ddbef07d729(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__552edc8b399fb365e317214fcadc79fac39ae04b205363192ae2b40558614940(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    profiling_group_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

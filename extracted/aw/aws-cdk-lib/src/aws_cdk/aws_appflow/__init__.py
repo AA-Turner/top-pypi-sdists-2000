@@ -1492,6 +1492,48 @@ class CfnConnector(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromConnectorArn")
+    @builtins.classmethod
+    def from_connector_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IConnectorRef:
+        '''Creates a new IConnectorRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__89d2d884f75c85f141464085778c5d7675802d8f402fc248b958fe15971d0a0d)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IConnectorRef, jsii.sinvoke(cls, "fromConnectorArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromConnectorLabel")
+    @builtins.classmethod
+    def from_connector_label(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        connector_label: builtins.str,
+    ) -> IConnectorRef:
+        '''Creates a new IConnectorRef from a connectorLabel.
+
+        :param scope: -
+        :param id: -
+        :param connector_label: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b2a0d82bf3f1dccb0b1a3a3a16950daab039427f765764531ebb3fe99604fd95)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument connector_label", value=connector_label, expected_type=type_hints["connector_label"])
+        return typing.cast(IConnectorRef, jsii.sinvoke(cls, "fromConnectorLabel", [scope, id, connector_label]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7414,6 +7456,48 @@ class CfnFlow(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromFlowArn")
+    @builtins.classmethod
+    def from_flow_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IFlowRef:
+        '''Creates a new IFlowRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dbc554537555efcc678f2a70e9afe37fed91d91849925c3480995b2bed939803)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IFlowRef, jsii.sinvoke(cls, "fromFlowArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromFlowName")
+    @builtins.classmethod
+    def from_flow_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        flow_name: builtins.str,
+    ) -> IFlowRef:
+        '''Creates a new IFlowRef from a flowName.
+
+        :param scope: -
+        :param id: -
+        :param flow_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f5e2bf12ef3609a7ef4697ae93b4f27c7df57cdf570994824b72e445f513ba2f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument flow_name", value=flow_name, expected_type=type_hints["flow_name"])
+        return typing.cast(IFlowRef, jsii.sinvoke(cls, "fromFlowName", [scope, id, flow_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -13171,6 +13255,22 @@ def _typecheckingstub__6bcd4af5099c6e263b309786f40e217a7b9534ca68e65e020a22b5811
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__89d2d884f75c85f141464085778c5d7675802d8f402fc248b958fe15971d0a0d(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b2a0d82bf3f1dccb0b1a3a3a16950daab039427f765764531ebb3fe99604fd95(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    connector_label: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__02fe175937a3851291cfe730cc744110fbd6b06062b2f72be6c64c38cb811cc2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -13707,6 +13807,22 @@ def _typecheckingstub__76b6ef95e5f4f4d7b82746abb1435c9e6f43a91ed656c1dd9c1a02064
     kms_arn: typing.Optional[builtins.str] = None,
     metadata_catalog_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.MetadataCatalogConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dbc554537555efcc678f2a70e9afe37fed91d91849925c3480995b2bed939803(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f5e2bf12ef3609a7ef4697ae93b4f27c7df57cdf570994824b72e445f513ba2f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    flow_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

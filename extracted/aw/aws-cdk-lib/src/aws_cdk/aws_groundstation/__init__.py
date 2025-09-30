@@ -2576,6 +2576,48 @@ class CfnDataflowEndpointGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDataflowEndpointGroupArn")
+    @builtins.classmethod
+    def from_dataflow_endpoint_group_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IDataflowEndpointGroupRef:
+        '''Creates a new IDataflowEndpointGroupRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__60c28e2791fd9c2db24e1b61c6453ed2a0648b906a01e1eac7a613e12ab7f864)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IDataflowEndpointGroupRef, jsii.sinvoke(cls, "fromDataflowEndpointGroupArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromDataflowEndpointGroupId")
+    @builtins.classmethod
+    def from_dataflow_endpoint_group_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        dataflow_endpoint_group_id: builtins.str,
+    ) -> IDataflowEndpointGroupRef:
+        '''Creates a new IDataflowEndpointGroupRef from a dataflowEndpointGroupId.
+
+        :param scope: -
+        :param id: -
+        :param dataflow_endpoint_group_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3c98edf5d82cbea0854e26b5ae36e1b3e6768410524dabb6e5699b1ba44e1740)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument dataflow_endpoint_group_id", value=dataflow_endpoint_group_id, expected_type=type_hints["dataflow_endpoint_group_id"])
+        return typing.cast(IDataflowEndpointGroupRef, jsii.sinvoke(cls, "fromDataflowEndpointGroupId", [scope, id, dataflow_endpoint_group_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3616,6 +3658,27 @@ class CfnMissionProfile(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromMissionProfileId")
+    @builtins.classmethod
+    def from_mission_profile_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        mission_profile_id: builtins.str,
+    ) -> IMissionProfileRef:
+        '''Creates a new IMissionProfileRef from a missionProfileId.
+
+        :param scope: -
+        :param id: -
+        :param mission_profile_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bc69a93651f32216a7a090cca1a8e639a92bfb9f3ce9d190d8a13956e2f881cf)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument mission_profile_id", value=mission_profile_id, expected_type=type_hints["mission_profile_id"])
+        return typing.cast(IMissionProfileRef, jsii.sinvoke(cls, "fromMissionProfileId", [scope, id, mission_profile_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4239,6 +4302,22 @@ def _typecheckingstub__669b82a6c91e9541f061b9397341fc4b6628a648faf22449b040ab31e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__60c28e2791fd9c2db24e1b61c6453ed2a0648b906a01e1eac7a613e12ab7f864(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3c98edf5d82cbea0854e26b5ae36e1b3e6768410524dabb6e5699b1ba44e1740(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    dataflow_endpoint_group_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__17d9bea099cdcd1099da7284180003b79769ad1588e3964f28fb913d498709f5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4366,6 +4445,14 @@ def _typecheckingstub__a8c20b1debe7b2cad3b5475e1d2b3d48fdf917b223b50d168e430ffa9
     streams_kms_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMissionProfile.StreamsKmsKeyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     streams_kms_role: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bc69a93651f32216a7a090cca1a8e639a92bfb9f3ce9d190d8a13956e2f881cf(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    mission_profile_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

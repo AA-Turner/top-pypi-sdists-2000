@@ -3369,6 +3369,48 @@ class CfnAccessPoint(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAccessPointArn")
+    @builtins.classmethod
+    def from_access_point_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IAccessPointRef:
+        '''Creates a new IAccessPointRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__92ad86c592cb19a6abd73b1b479fad3b171522816029847cc3a4c5b73c6498de)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IAccessPointRef, jsii.sinvoke(cls, "fromAccessPointArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromAccessPointId")
+    @builtins.classmethod
+    def from_access_point_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        access_point_id: builtins.str,
+    ) -> IAccessPointRef:
+        '''Creates a new IAccessPointRef from a accessPointId.
+
+        :param scope: -
+        :param id: -
+        :param access_point_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8b64390d2c6b604063551974706c8adbb104ec23af46eef06f60815f3f011b40)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument access_point_id", value=access_point_id, expected_type=type_hints["access_point_id"])
+        return typing.cast(IAccessPointRef, jsii.sinvoke(cls, "fromAccessPointId", [scope, id, access_point_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3980,6 +4022,48 @@ class CfnFileSystem(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromFileSystemArn")
+    @builtins.classmethod
+    def from_file_system_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IFileSystemRef:
+        '''Creates a new IFileSystemRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3841b06a5a3cc43b9d7a952dde6883124724edd8a22c2c9508a0d5b531c04980)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IFileSystemRef, jsii.sinvoke(cls, "fromFileSystemArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromFileSystemId")
+    @builtins.classmethod
+    def from_file_system_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        file_system_id: builtins.str,
+    ) -> IFileSystemRef:
+        '''Creates a new IFileSystemRef from a fileSystemId.
+
+        :param scope: -
+        :param id: -
+        :param file_system_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__62d193f49b214070795d7ac368f6d9118aaac887dc977af485a174b4b75fb67f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument file_system_id", value=file_system_id, expected_type=type_hints["file_system_id"])
+        return typing.cast(IFileSystemRef, jsii.sinvoke(cls, "fromFileSystemId", [scope, id, file_system_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5582,6 +5666,22 @@ def _typecheckingstub__ee6cf8e32e236f5b64c41d34d8956a146a19df0d9467273bec84f3053
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__92ad86c592cb19a6abd73b1b479fad3b171522816029847cc3a4c5b73c6498de(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8b64390d2c6b604063551974706c8adbb104ec23af46eef06f60815f3f011b40(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    access_point_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ca8bc4bd98606c2925e8e3beaf6899315a3a8aa05fe42a495c106412587debb7(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5675,6 +5775,22 @@ def _typecheckingstub__cc457ee31ba660f40c549433977317b66ec9b461edc7a3afd3a157dcf
     provisioned_throughput_in_mibps: typing.Optional[jsii.Number] = None,
     replication_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.ReplicationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     throughput_mode: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3841b06a5a3cc43b9d7a952dde6883124724edd8a22c2c9508a0d5b531c04980(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__62d193f49b214070795d7ac368f6d9118aaac887dc977af485a174b4b75fb67f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    file_system_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -35,15 +35,16 @@ import re
 import sys
 import warnings
 from collections import ChainMap
+from collections.abc import Iterator
+from collections.abc import MutableMapping
 from functools import lru_cache
 from importlib import import_module
 from importlib.metadata import entry_points
 from typing import TYPE_CHECKING
-from typing import Iterator
-from typing import MutableMapping
 
 from fsspec.core import get_filesystem_class
 from fsspec.registry import known_implementations as _fsspec_known_implementations
+from fsspec.registry import registry as _fsspec_registry
 
 import upath
 
@@ -76,6 +77,7 @@ class _Registry(MutableMapping[str, "type[upath.UPath]"]):
         "memory": "upath.implementations.memory.MemoryPath",
         "s3": "upath.implementations.cloud.S3Path",
         "s3a": "upath.implementations.cloud.S3Path",
+        "simplecache": "upath.implementations.cached.SimpleCachePath",
         "sftp": "upath.implementations.sftp.SFTPPath",
         "ssh": "upath.implementations.sftp.SFTPPath",
         "webdav": "upath.implementations.webdav.WebdavPath",
@@ -148,11 +150,10 @@ def available_implementations(*, fallback: bool = False) -> list[str]:
         If True, also return protocols for fsspec filesystems without
         an implementation in universal_pathlib.
     """
-    impl = list(_registry)
     if not fallback:
-        return impl
+        return list(_registry)
     else:
-        return list({*impl, *list(_fsspec_known_implementations)})
+        return list({*_registry, *_fsspec_registry, *_fsspec_known_implementations})
 
 
 def register_implementation(
@@ -206,15 +207,15 @@ def get_upath_class(
             if os.name == "nt":
                 from upath.implementations.local import WindowsUPath
 
-                return WindowsUPath
+                return WindowsUPath  # type: ignore[return-value]
             else:
                 from upath.implementations.local import PosixUPath
 
-                return PosixUPath
+                return PosixUPath  # type: ignore[return-value]
         if not fallback:
             return None
         try:
-            _ = get_filesystem_class(protocol)
+            get_filesystem_class(protocol)
         except ValueError:
             return None  # this is an unknown protocol
         else:
@@ -225,4 +226,13 @@ def get_upath_class(
                 UserWarning,
                 stacklevel=2,
             )
-            return upath.UPath
+            import upath.implementations._experimental as upath_experimental
+
+            cls_name = f"_{protocol.title()}Path"
+            cls = type(
+                cls_name,
+                (upath.UPath,),
+                {"__module__": "upath.implementations._experimental"},
+            )
+            setattr(upath_experimental, cls_name, cls)
+            return cls
