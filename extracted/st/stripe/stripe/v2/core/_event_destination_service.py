@@ -3,152 +3,45 @@
 from stripe._request_options import RequestOptions
 from stripe._stripe_service import StripeService
 from stripe._util import sanitize_id
-from stripe.v2._event import Event
-from stripe.v2._event_destination import EventDestination
+from stripe.v2._deleted_object import DeletedObject
 from stripe.v2._list_object import ListObject
-from typing import Dict, List, Optional, cast
-from typing_extensions import Literal, NotRequired, TypedDict
+from stripe.v2.core._event import Event
+from stripe.v2.core._event_destination import EventDestination
+from typing import Optional, cast
+from typing_extensions import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from stripe.params.v2.core._event_destination_create_params import (
+        EventDestinationCreateParams,
+    )
+    from stripe.params.v2.core._event_destination_delete_params import (
+        EventDestinationDeleteParams,
+    )
+    from stripe.params.v2.core._event_destination_disable_params import (
+        EventDestinationDisableParams,
+    )
+    from stripe.params.v2.core._event_destination_enable_params import (
+        EventDestinationEnableParams,
+    )
+    from stripe.params.v2.core._event_destination_list_params import (
+        EventDestinationListParams,
+    )
+    from stripe.params.v2.core._event_destination_ping_params import (
+        EventDestinationPingParams,
+    )
+    from stripe.params.v2.core._event_destination_retrieve_params import (
+        EventDestinationRetrieveParams,
+    )
+    from stripe.params.v2.core._event_destination_update_params import (
+        EventDestinationUpdateParams,
+    )
 
 
 class EventDestinationService(StripeService):
-    class CreateParams(TypedDict):
-        description: NotRequired[str]
-        """
-        An optional description of what the event destination is used for.
-        """
-        enabled_events: List[str]
-        """
-        The list of events to enable for this endpoint.
-        """
-        event_payload: Literal["snapshot", "thin"]
-        """
-        Payload type of events being subscribed to.
-        """
-        events_from: NotRequired[List[Literal["other_accounts", "self"]]]
-        """
-        Where events should be routed from.
-        """
-        include: NotRequired[
-            List[
-                Literal[
-                    "webhook_endpoint.signing_secret", "webhook_endpoint.url"
-                ]
-            ]
-        ]
-        """
-        Additional fields to include in the response.
-        """
-        metadata: NotRequired[Dict[str, str]]
-        """
-        Metadata.
-        """
-        name: str
-        """
-        Event destination name.
-        """
-        snapshot_api_version: NotRequired[str]
-        """
-        If using the snapshot event payload, the API version events are rendered as.
-        """
-        type: Literal["amazon_eventbridge", "webhook_endpoint"]
-        """
-        Event destination type.
-        """
-        amazon_eventbridge: NotRequired[
-            "EventDestinationService.CreateParamsAmazonEventbridge"
-        ]
-        """
-        Amazon EventBridge configuration.
-        """
-        webhook_endpoint: NotRequired[
-            "EventDestinationService.CreateParamsWebhookEndpoint"
-        ]
-        """
-        Webhook endpoint configuration.
-        """
-
-    class CreateParamsAmazonEventbridge(TypedDict):
-        aws_account_id: str
-        """
-        The AWS account ID.
-        """
-        aws_region: str
-        """
-        The region of the AWS event source.
-        """
-
-    class CreateParamsWebhookEndpoint(TypedDict):
-        url: str
-        """
-        The URL of the webhook endpoint.
-        """
-
-    class DeleteParams(TypedDict):
-        pass
-
-    class DisableParams(TypedDict):
-        pass
-
-    class EnableParams(TypedDict):
-        pass
-
-    class ListParams(TypedDict):
-        include: NotRequired[List[Literal["webhook_endpoint.url"]]]
-        """
-        Additional fields to include in the response. Currently supports `webhook_endpoint.url`.
-        """
-        limit: NotRequired[int]
-        """
-        The page size.
-        """
-
-    class PingParams(TypedDict):
-        pass
-
-    class RetrieveParams(TypedDict):
-        include: NotRequired[List[Literal["webhook_endpoint.url"]]]
-        """
-        Additional fields to include in the response.
-        """
-
-    class UpdateParams(TypedDict):
-        description: NotRequired[str]
-        """
-        An optional description of what the event destination is used for.
-        """
-        enabled_events: NotRequired[List[str]]
-        """
-        The list of events to enable for this endpoint.
-        """
-        include: NotRequired[List[Literal["webhook_endpoint.url"]]]
-        """
-        Additional fields to include in the response. Currently supports `webhook_endpoint.url`.
-        """
-        metadata: NotRequired[Dict[str, Optional[str]]]
-        """
-        Metadata.
-        """
-        name: NotRequired[str]
-        """
-        Event destination name.
-        """
-        webhook_endpoint: NotRequired[
-            "EventDestinationService.UpdateParamsWebhookEndpoint"
-        ]
-        """
-        Webhook endpoint configuration.
-        """
-
-    class UpdateParamsWebhookEndpoint(TypedDict):
-        url: str
-        """
-        The URL of the webhook endpoint.
-        """
-
     def list(
         self,
-        params: "EventDestinationService.ListParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationListParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> ListObject[EventDestination]:
         """
         Lists all event destinations.
@@ -166,8 +59,8 @@ class EventDestinationService(StripeService):
 
     async def list_async(
         self,
-        params: "EventDestinationService.ListParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationListParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> ListObject[EventDestination]:
         """
         Lists all event destinations.
@@ -185,8 +78,8 @@ class EventDestinationService(StripeService):
 
     def create(
         self,
-        params: "EventDestinationService.CreateParams",
-        options: RequestOptions = {},
+        params: "EventDestinationCreateParams",
+        options: Optional[RequestOptions] = None,
     ) -> EventDestination:
         """
         Create a new event destination.
@@ -204,8 +97,8 @@ class EventDestinationService(StripeService):
 
     async def create_async(
         self,
-        params: "EventDestinationService.CreateParams",
-        options: RequestOptions = {},
+        params: "EventDestinationCreateParams",
+        options: Optional[RequestOptions] = None,
     ) -> EventDestination:
         """
         Create a new event destination.
@@ -224,14 +117,14 @@ class EventDestinationService(StripeService):
     def delete(
         self,
         id: str,
-        params: "EventDestinationService.DeleteParams" = {},
-        options: RequestOptions = {},
-    ) -> EventDestination:
+        params: Optional["EventDestinationDeleteParams"] = None,
+        options: Optional[RequestOptions] = None,
+    ) -> DeletedObject:
         """
         Delete an event destination.
         """
         return cast(
-            EventDestination,
+            DeletedObject,
             self._request(
                 "delete",
                 "/v2/core/event_destinations/{id}".format(id=sanitize_id(id)),
@@ -244,14 +137,14 @@ class EventDestinationService(StripeService):
     async def delete_async(
         self,
         id: str,
-        params: "EventDestinationService.DeleteParams" = {},
-        options: RequestOptions = {},
-    ) -> EventDestination:
+        params: Optional["EventDestinationDeleteParams"] = None,
+        options: Optional[RequestOptions] = None,
+    ) -> DeletedObject:
         """
         Delete an event destination.
         """
         return cast(
-            EventDestination,
+            DeletedObject,
             await self._request_async(
                 "delete",
                 "/v2/core/event_destinations/{id}".format(id=sanitize_id(id)),
@@ -264,8 +157,8 @@ class EventDestinationService(StripeService):
     def retrieve(
         self,
         id: str,
-        params: "EventDestinationService.RetrieveParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationRetrieveParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> EventDestination:
         """
         Retrieves the details of an event destination.
@@ -284,8 +177,8 @@ class EventDestinationService(StripeService):
     async def retrieve_async(
         self,
         id: str,
-        params: "EventDestinationService.RetrieveParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationRetrieveParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> EventDestination:
         """
         Retrieves the details of an event destination.
@@ -304,8 +197,8 @@ class EventDestinationService(StripeService):
     def update(
         self,
         id: str,
-        params: "EventDestinationService.UpdateParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationUpdateParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> EventDestination:
         """
         Update the details of an event destination.
@@ -324,8 +217,8 @@ class EventDestinationService(StripeService):
     async def update_async(
         self,
         id: str,
-        params: "EventDestinationService.UpdateParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationUpdateParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> EventDestination:
         """
         Update the details of an event destination.
@@ -344,8 +237,8 @@ class EventDestinationService(StripeService):
     def disable(
         self,
         id: str,
-        params: "EventDestinationService.DisableParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationDisableParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> EventDestination:
         """
         Disable an event destination.
@@ -366,8 +259,8 @@ class EventDestinationService(StripeService):
     async def disable_async(
         self,
         id: str,
-        params: "EventDestinationService.DisableParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationDisableParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> EventDestination:
         """
         Disable an event destination.
@@ -388,8 +281,8 @@ class EventDestinationService(StripeService):
     def enable(
         self,
         id: str,
-        params: "EventDestinationService.EnableParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationEnableParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> EventDestination:
         """
         Enable an event destination.
@@ -410,8 +303,8 @@ class EventDestinationService(StripeService):
     async def enable_async(
         self,
         id: str,
-        params: "EventDestinationService.EnableParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationEnableParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> EventDestination:
         """
         Enable an event destination.
@@ -432,8 +325,8 @@ class EventDestinationService(StripeService):
     def ping(
         self,
         id: str,
-        params: "EventDestinationService.PingParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationPingParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Event:
         """
         Send a `ping` event to an event destination.
@@ -454,8 +347,8 @@ class EventDestinationService(StripeService):
     async def ping_async(
         self,
         id: str,
-        params: "EventDestinationService.PingParams" = {},
-        options: RequestOptions = {},
+        params: Optional["EventDestinationPingParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Event:
         """
         Send a `ping` event to an event destination.

@@ -4,92 +4,27 @@ from stripe._request_options import RequestOptions
 from stripe._stripe_service import StripeService
 from stripe._util import sanitize_id
 from stripe.terminal._reader import Reader
-from typing import List, cast
-from typing_extensions import Literal, NotRequired, TypedDict
+from typing import Optional, cast
+from typing_extensions import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from stripe.params.test_helpers.terminal._reader_present_payment_method_params import (
+        ReaderPresentPaymentMethodParams,
+    )
+    from stripe.params.test_helpers.terminal._reader_succeed_input_collection_params import (
+        ReaderSucceedInputCollectionParams,
+    )
+    from stripe.params.test_helpers.terminal._reader_timeout_input_collection_params import (
+        ReaderTimeoutInputCollectionParams,
+    )
 
 
 class ReaderService(StripeService):
-    class PresentPaymentMethodParams(TypedDict):
-        amount_tip: NotRequired[int]
-        """
-        Simulated on-reader tip amount.
-        """
-        card: NotRequired["ReaderService.PresentPaymentMethodParamsCard"]
-        """
-        Simulated data for the card payment method.
-        """
-        card_present: NotRequired[
-            "ReaderService.PresentPaymentMethodParamsCardPresent"
-        ]
-        """
-        Simulated data for the card_present payment method.
-        """
-        expand: NotRequired[List[str]]
-        """
-        Specifies which fields in the response should be expanded.
-        """
-        interac_present: NotRequired[
-            "ReaderService.PresentPaymentMethodParamsInteracPresent"
-        ]
-        """
-        Simulated data for the interac_present payment method.
-        """
-        type: NotRequired[Literal["card", "card_present", "interac_present"]]
-        """
-        Simulated payment type.
-        """
-
-    class PresentPaymentMethodParamsCard(TypedDict):
-        cvc: NotRequired[str]
-        """
-        Card security code.
-        """
-        exp_month: int
-        """
-        Two-digit number representing the card's expiration month.
-        """
-        exp_year: int
-        """
-        Two- or four-digit number representing the card's expiration year.
-        """
-        number: str
-        """
-        The card number, as a string without any separators.
-        """
-
-    class PresentPaymentMethodParamsCardPresent(TypedDict):
-        number: NotRequired[str]
-        """
-        The card number, as a string without any separators.
-        """
-
-    class PresentPaymentMethodParamsInteracPresent(TypedDict):
-        number: NotRequired[str]
-        """
-        Card Number
-        """
-
-    class SucceedInputCollectionParams(TypedDict):
-        expand: NotRequired[List[str]]
-        """
-        Specifies which fields in the response should be expanded.
-        """
-        skip_non_required_inputs: NotRequired[Literal["all", "none"]]
-        """
-        This parameter defines the skip behavior for input collection.
-        """
-
-    class TimeoutInputCollectionParams(TypedDict):
-        expand: NotRequired[List[str]]
-        """
-        Specifies which fields in the response should be expanded.
-        """
-
     def present_payment_method(
         self,
         reader: str,
-        params: "ReaderService.PresentPaymentMethodParams" = {},
-        options: RequestOptions = {},
+        params: Optional["ReaderPresentPaymentMethodParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Reader:
         """
         Presents a payment method on a simulated reader. Can be used to simulate accepting a payment, saving a card or refunding a transaction.
@@ -110,8 +45,8 @@ class ReaderService(StripeService):
     async def present_payment_method_async(
         self,
         reader: str,
-        params: "ReaderService.PresentPaymentMethodParams" = {},
-        options: RequestOptions = {},
+        params: Optional["ReaderPresentPaymentMethodParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Reader:
         """
         Presents a payment method on a simulated reader. Can be used to simulate accepting a payment, saving a card or refunding a transaction.
@@ -132,8 +67,8 @@ class ReaderService(StripeService):
     def succeed_input_collection(
         self,
         reader: str,
-        params: "ReaderService.SucceedInputCollectionParams" = {},
-        options: RequestOptions = {},
+        params: Optional["ReaderSucceedInputCollectionParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Reader:
         """
         Use this endpoint to trigger a successful input collection on a simulated reader.
@@ -154,8 +89,8 @@ class ReaderService(StripeService):
     async def succeed_input_collection_async(
         self,
         reader: str,
-        params: "ReaderService.SucceedInputCollectionParams" = {},
-        options: RequestOptions = {},
+        params: Optional["ReaderSucceedInputCollectionParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Reader:
         """
         Use this endpoint to trigger a successful input collection on a simulated reader.
@@ -176,8 +111,8 @@ class ReaderService(StripeService):
     def timeout_input_collection(
         self,
         reader: str,
-        params: "ReaderService.TimeoutInputCollectionParams" = {},
-        options: RequestOptions = {},
+        params: Optional["ReaderTimeoutInputCollectionParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Reader:
         """
         Use this endpoint to complete an input collection with a timeout error on a simulated reader.
@@ -198,8 +133,8 @@ class ReaderService(StripeService):
     async def timeout_input_collection_async(
         self,
         reader: str,
-        params: "ReaderService.TimeoutInputCollectionParams" = {},
-        options: RequestOptions = {},
+        params: Optional["ReaderTimeoutInputCollectionParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Reader:
         """
         Use this endpoint to complete an input collection with a timeout error on a simulated reader.

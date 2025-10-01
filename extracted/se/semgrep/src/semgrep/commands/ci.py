@@ -279,7 +279,6 @@ def ci(
     x_tr: bool,
     x_pro_naming: bool,
     x_semgrepignore_filename: Optional[str],
-    x_no_python_schema_validation: bool,
     path_sensitive: bool,
     allow_local_builds: bool,
     dump_n_rule_partitions: Optional[int],
@@ -294,7 +293,7 @@ def ci(
     state.traces.configure(trace, trace_endpoint)
     with tracing.TRACER.start_as_current_span(
         "semgrep.commands.ci", kind=tracing.TOP_LEVEL_SPAN_KIND
-    ):
+    ) as semgrep_commands_ci_span:
         state.terminal.configure(
             verbose=verbose,
             debug=debug,
@@ -661,6 +660,9 @@ def ci(
                 )
             final_baseline_commit = metadata.merge_base_ref
 
+        semgrep_commands_ci_span.set_attribute(
+            "scan.scan_type", "diff" if baseline_commit is not None else "full"
+        )
         # Base arguments for actually running the scan. This is done here so we can
         # re-use this in the event we need to perform a second scan. Currently the
         # only case for this is a separate "historical" scan, where we scan the git
@@ -761,6 +763,9 @@ def ci(
                 exit_code = e.code
             else:
                 exit_code = FATAL_EXIT_CODE
+
+            semgrep_commands_ci_span.set_attribute("scan.cli_exitcode", exit_code)
+
             if scan_handler:
                 scan_handler.report_failure(exit_code)
 
@@ -1095,4 +1100,5 @@ def ci(
 
             version_check()
 
+        semgrep_commands_ci_span.set_attribute("scan.cli_exitcode", exit_code)
         sys.exit(exit_code)

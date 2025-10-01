@@ -1191,7 +1191,7 @@ class ModifyEventSubscriptionMessageTypeDef(TypedDict):
     Enabled: NotRequired[bool]
 
 class ModifyGlobalClusterMessageTypeDef(TypedDict):
-    GlobalClusterIdentifier: NotRequired[str]
+    GlobalClusterIdentifier: str
     NewGlobalClusterIdentifier: NotRequired[str]
     DeletionProtection: NotRequired[bool]
     EngineVersion: NotRequired[str]
@@ -1297,8 +1297,8 @@ class RegisterDBProxyTargetsRequestTypeDef(TypedDict):
     DBClusterIdentifiers: NotRequired[Sequence[str]]
 
 class RemoveFromGlobalClusterMessageTypeDef(TypedDict):
-    GlobalClusterIdentifier: NotRequired[str]
-    DbClusterIdentifier: NotRequired[str]
+    GlobalClusterIdentifier: str
+    DbClusterIdentifier: str
 
 class RemoveRoleFromDBClusterMessageTypeDef(TypedDict):
     DBClusterIdentifier: str
@@ -1487,8 +1487,8 @@ class StartActivityStreamResponseTypeDef(TypedDict):
     KinesisStreamName: str
     Status: ActivityStreamStatusType
     Mode: ActivityStreamModeType
-    ApplyImmediately: bool
     EngineNativeAuditFieldsIncluded: bool
+    ApplyImmediately: bool
     ResponseMetadata: ResponseMetadataTypeDef
 
 class StopActivityStreamResponseTypeDef(TypedDict):
@@ -1556,9 +1556,9 @@ class CopyDBSnapshotMessageTypeDef(TypedDict):
     PreSignedUrl: NotRequired[str]
     OptionGroupName: NotRequired[str]
     TargetCustomAvailabilityZone: NotRequired[str]
+    SnapshotTarget: NotRequired[str]
     CopyOptionGroup: NotRequired[bool]
     SnapshotAvailabilityZone: NotRequired[str]
-    SnapshotTarget: NotRequired[str]
     SourceRegion: NotRequired[str]
 
 class CopyOptionGroupMessageTypeDef(TypedDict):
@@ -1588,11 +1588,11 @@ class CreateCustomDBEngineVersionMessageTypeDef(TypedDict):
     DatabaseInstallationFilesS3Prefix: NotRequired[str]
     ImageId: NotRequired[str]
     KMSKeyId: NotRequired[str]
+    SourceCustomDbEngineVersionIdentifier: NotRequired[str]
+    UseAwsProvidedLatestImage: NotRequired[bool]
     Description: NotRequired[str]
     Manifest: NotRequired[str]
     Tags: NotRequired[Sequence[TagTypeDef]]
-    SourceCustomDbEngineVersionIdentifier: NotRequired[str]
-    UseAwsProvidedLatestImage: NotRequired[bool]
 
 class CreateDBClusterEndpointMessageTypeDef(TypedDict):
     DBClusterIdentifier: str
@@ -1663,7 +1663,7 @@ class CreateEventSubscriptionMessageTypeDef(TypedDict):
     Tags: NotRequired[Sequence[TagTypeDef]]
 
 class CreateGlobalClusterMessageTypeDef(TypedDict):
-    GlobalClusterIdentifier: NotRequired[str]
+    GlobalClusterIdentifier: str
     SourceDBClusterIdentifier: NotRequired[str]
     Engine: NotRequired[str]
     EngineVersion: NotRequired[str]
@@ -1724,10 +1724,10 @@ class DBClusterSnapshotTypeDef(TypedDict):
     SourceDBClusterSnapshotArn: NotRequired[str]
     IAMDatabaseAuthenticationEnabled: NotRequired[bool]
     TagList: NotRequired[List[TagTypeDef]]
-    DBSystemId: NotRequired[str]
     StorageType: NotRequired[str]
-    DbClusterResourceId: NotRequired[str]
     StorageThroughput: NotRequired[int]
+    DbClusterResourceId: NotRequired[str]
+    DBSystemId: NotRequired[str]
 
 class DBShardGroupResponseTypeDef(TypedDict):
     DBShardGroupResourceId: str
@@ -1794,6 +1794,7 @@ class OrderableDBInstanceOptionTypeDef(TypedDict):
     SupportsStorageEncryption: NotRequired[bool]
     StorageType: NotRequired[str]
     SupportsIops: NotRequired[bool]
+    SupportsStorageThroughput: NotRequired[bool]
     SupportsEnhancedMonitoring: NotRequired[bool]
     SupportsIAMDatabaseAuthentication: NotRequired[bool]
     SupportsPerformanceInsights: NotRequired[bool]
@@ -1803,6 +1804,10 @@ class OrderableDBInstanceOptionTypeDef(TypedDict):
     MaxIopsPerDbInstance: NotRequired[int]
     MinIopsPerGib: NotRequired[float]
     MaxIopsPerGib: NotRequired[float]
+    MinStorageThroughputPerDbInstance: NotRequired[int]
+    MaxStorageThroughputPerDbInstance: NotRequired[int]
+    MinStorageThroughputPerIops: NotRequired[float]
+    MaxStorageThroughputPerIops: NotRequired[float]
     AvailableProcessorFeatures: NotRequired[List[AvailableProcessorFeatureTypeDef]]
     SupportedEngineModes: NotRequired[List[str]]
     SupportsStorageAutoscaling: NotRequired[bool]
@@ -1810,13 +1815,8 @@ class OrderableDBInstanceOptionTypeDef(TypedDict):
     OutpostCapable: NotRequired[bool]
     SupportedActivityStreamModes: NotRequired[List[str]]
     SupportsGlobalDatabases: NotRequired[bool]
-    SupportsClusters: NotRequired[bool]
     SupportedNetworkTypes: NotRequired[List[str]]
-    SupportsStorageThroughput: NotRequired[bool]
-    MinStorageThroughputPerDbInstance: NotRequired[int]
-    MaxStorageThroughputPerDbInstance: NotRequired[int]
-    MinStorageThroughputPerIops: NotRequired[float]
-    MaxStorageThroughputPerIops: NotRequired[float]
+    SupportsClusters: NotRequired[bool]
     SupportsDedicatedLogVolume: NotRequired[bool]
     SupportsHttpEndpoint: NotRequired[bool]
 
@@ -1856,10 +1856,10 @@ class ClusterPendingModifiedValuesTypeDef(TypedDict):
     IAMDatabaseAuthenticationEnabled: NotRequired[bool]
     EngineVersion: NotRequired[str]
     BackupRetentionPeriod: NotRequired[int]
+    StorageType: NotRequired[str]
     AllocatedStorage: NotRequired[int]
     RdsCustomClusterConfiguration: NotRequired[RdsCustomClusterConfigurationTypeDef]
     Iops: NotRequired[int]
-    StorageType: NotRequired[str]
     CertificateDetails: NotRequired[CertificateDetailsTypeDef]
 
 class DBProxyTargetGroupTypeDef(TypedDict):
@@ -1932,6 +1932,12 @@ class CreateDBClusterMessageTypeDef(TypedDict):
     EngineMode: NotRequired[str]
     ScalingConfiguration: NotRequired[ScalingConfigurationTypeDef]
     RdsCustomClusterConfiguration: NotRequired[RdsCustomClusterConfigurationTypeDef]
+    DBClusterInstanceClass: NotRequired[str]
+    AllocatedStorage: NotRequired[int]
+    StorageType: NotRequired[str]
+    Iops: NotRequired[int]
+    PubliclyAccessible: NotRequired[bool]
+    AutoMinorVersionUpgrade: NotRequired[bool]
     DeletionProtection: NotRequired[bool]
     GlobalClusterIdentifier: NotRequired[str]
     EnableHttpEndpoint: NotRequired[bool]
@@ -1939,12 +1945,8 @@ class CreateDBClusterMessageTypeDef(TypedDict):
     Domain: NotRequired[str]
     DomainIAMRoleName: NotRequired[str]
     EnableGlobalWriteForwarding: NotRequired[bool]
-    DBClusterInstanceClass: NotRequired[str]
-    AllocatedStorage: NotRequired[int]
-    StorageType: NotRequired[str]
-    Iops: NotRequired[int]
-    PubliclyAccessible: NotRequired[bool]
-    AutoMinorVersionUpgrade: NotRequired[bool]
+    NetworkType: NotRequired[str]
+    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationTypeDef]
     MonitoringInterval: NotRequired[int]
     MonitoringRoleArn: NotRequired[str]
     DatabaseInsightsMode: NotRequired[DatabaseInsightsModeType]
@@ -1952,13 +1954,11 @@ class CreateDBClusterMessageTypeDef(TypedDict):
     PerformanceInsightsKMSKeyId: NotRequired[str]
     PerformanceInsightsRetentionPeriod: NotRequired[int]
     EnableLimitlessDatabase: NotRequired[bool]
-    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationTypeDef]
-    NetworkType: NotRequired[str]
     ClusterScalabilityType: NotRequired[ClusterScalabilityTypeType]
     DBSystemId: NotRequired[str]
     ManageMasterUserPassword: NotRequired[bool]
-    MasterUserSecretKmsKeyId: NotRequired[str]
     EnableLocalWriteForwarding: NotRequired[bool]
+    MasterUserSecretKmsKeyId: NotRequired[str]
     CACertificateIdentifier: NotRequired[str]
     EngineLifecycleSupport: NotRequired[str]
     MasterUserAuthenticationType: NotRequired[MasterUserAuthenticationTypeType]
@@ -1994,20 +1994,20 @@ class ModifyDBClusterMessageTypeDef(TypedDict):
     StorageType: NotRequired[str]
     Iops: NotRequired[int]
     AutoMinorVersionUpgrade: NotRequired[bool]
+    NetworkType: NotRequired[str]
+    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationTypeDef]
     MonitoringInterval: NotRequired[int]
     MonitoringRoleArn: NotRequired[str]
     DatabaseInsightsMode: NotRequired[DatabaseInsightsModeType]
     EnablePerformanceInsights: NotRequired[bool]
     PerformanceInsightsKMSKeyId: NotRequired[str]
     PerformanceInsightsRetentionPeriod: NotRequired[int]
-    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationTypeDef]
-    NetworkType: NotRequired[str]
     ManageMasterUserPassword: NotRequired[bool]
     RotateMasterUserPassword: NotRequired[bool]
+    EnableLocalWriteForwarding: NotRequired[bool]
     MasterUserSecretKmsKeyId: NotRequired[str]
     EngineMode: NotRequired[str]
     AllowEngineModeChange: NotRequired[bool]
-    EnableLocalWriteForwarding: NotRequired[bool]
     AwsBackupRecoveryPointArn: NotRequired[str]
     EnableLimitlessDatabase: NotRequired[bool]
     CACertificateIdentifier: NotRequired[str]
@@ -2045,11 +2045,11 @@ class RestoreDBClusterFromS3MessageTypeDef(TypedDict):
     CopyTagsToSnapshot: NotRequired[bool]
     Domain: NotRequired[str]
     DomainIAMRoleName: NotRequired[str]
-    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationTypeDef]
+    StorageType: NotRequired[str]
     NetworkType: NotRequired[str]
+    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationTypeDef]
     ManageMasterUserPassword: NotRequired[bool]
     MasterUserSecretKmsKeyId: NotRequired[str]
-    StorageType: NotRequired[str]
     EngineLifecycleSupport: NotRequired[str]
 
 class RestoreDBClusterFromSnapshotMessageTypeDef(TypedDict):
@@ -2079,8 +2079,8 @@ class RestoreDBClusterFromSnapshotMessageTypeDef(TypedDict):
     StorageType: NotRequired[str]
     Iops: NotRequired[int]
     PubliclyAccessible: NotRequired[bool]
-    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationTypeDef]
     NetworkType: NotRequired[str]
+    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationTypeDef]
     RdsCustomClusterConfiguration: NotRequired[RdsCustomClusterConfigurationTypeDef]
     MonitoringInterval: NotRequired[int]
     MonitoringRoleArn: NotRequired[str]
@@ -2109,15 +2109,15 @@ class RestoreDBClusterToPointInTimeMessageTypeDef(TypedDict):
     CopyTagsToSnapshot: NotRequired[bool]
     Domain: NotRequired[str]
     DomainIAMRoleName: NotRequired[str]
-    ScalingConfiguration: NotRequired[ScalingConfigurationTypeDef]
-    EngineMode: NotRequired[str]
     DBClusterInstanceClass: NotRequired[str]
     StorageType: NotRequired[str]
     PubliclyAccessible: NotRequired[bool]
     Iops: NotRequired[int]
-    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationTypeDef]
     NetworkType: NotRequired[str]
     SourceDbClusterResourceId: NotRequired[str]
+    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationTypeDef]
+    ScalingConfiguration: NotRequired[ScalingConfigurationTypeDef]
+    EngineMode: NotRequired[str]
     RdsCustomClusterConfiguration: NotRequired[RdsCustomClusterConfigurationTypeDef]
     MonitoringInterval: NotRequired[int]
     MonitoringRoleArn: NotRequired[str]
@@ -2148,6 +2148,7 @@ class CreateDBInstanceMessageTypeDef(TypedDict):
     AutoMinorVersionUpgrade: NotRequired[bool]
     LicenseModel: NotRequired[str]
     Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
     OptionGroupName: NotRequired[str]
     CharacterSetName: NotRequired[str]
     NcharCharacterSetName: NotRequired[str]
@@ -2180,16 +2181,15 @@ class CreateDBInstanceMessageTypeDef(TypedDict):
     DeletionProtection: NotRequired[bool]
     MaxAllocatedStorage: NotRequired[int]
     EnableCustomerOwnedIp: NotRequired[bool]
-    CustomIamInstanceProfile: NotRequired[str]
-    BackupTarget: NotRequired[str]
     NetworkType: NotRequired[str]
-    StorageThroughput: NotRequired[int]
+    BackupTarget: NotRequired[str]
+    CustomIamInstanceProfile: NotRequired[str]
+    DBSystemId: NotRequired[str]
+    CACertificateIdentifier: NotRequired[str]
     ManageMasterUserPassword: NotRequired[bool]
     MasterUserSecretKmsKeyId: NotRequired[str]
-    CACertificateIdentifier: NotRequired[str]
-    DBSystemId: NotRequired[str]
-    DedicatedLogVolume: NotRequired[bool]
     MultiTenant: NotRequired[bool]
+    DedicatedLogVolume: NotRequired[bool]
     EngineLifecycleSupport: NotRequired[str]
     MasterUserAuthenticationType: NotRequired[MasterUserAuthenticationTypeType]
 
@@ -2202,6 +2202,7 @@ class CreateDBInstanceReadReplicaMessageTypeDef(TypedDict):
     MultiAZ: NotRequired[bool]
     AutoMinorVersionUpgrade: NotRequired[bool]
     Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
     OptionGroupName: NotRequired[str]
     DBParameterGroupName: NotRequired[str]
     PubliclyAccessible: NotRequired[bool]
@@ -2230,12 +2231,11 @@ class CreateDBInstanceReadReplicaMessageTypeDef(TypedDict):
     DomainAuthSecretArn: NotRequired[str]
     DomainDnsIps: NotRequired[Sequence[str]]
     ReplicaMode: NotRequired[ReplicaModeType]
-    MaxAllocatedStorage: NotRequired[int]
-    CustomIamInstanceProfile: NotRequired[str]
-    NetworkType: NotRequired[str]
-    StorageThroughput: NotRequired[int]
     EnableCustomerOwnedIp: NotRequired[bool]
+    NetworkType: NotRequired[str]
+    MaxAllocatedStorage: NotRequired[int]
     BackupTarget: NotRequired[str]
+    CustomIamInstanceProfile: NotRequired[str]
     AllocatedStorage: NotRequired[int]
     SourceDBClusterIdentifier: NotRequired[str]
     DedicatedLogVolume: NotRequired[bool]
@@ -2259,6 +2259,7 @@ class DBSnapshotTypeDef(TypedDict):
     LicenseModel: NotRequired[str]
     SnapshotType: NotRequired[str]
     Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
     OptionGroupName: NotRequired[str]
     PercentProgress: NotRequired[int]
     SourceRegion: NotRequired[str]
@@ -2273,13 +2274,12 @@ class DBSnapshotTypeDef(TypedDict):
     ProcessorFeatures: NotRequired[List[ProcessorFeatureTypeDef]]
     DbiResourceId: NotRequired[str]
     TagList: NotRequired[List[TagTypeDef]]
+    SnapshotTarget: NotRequired[str]
     OriginalSnapshotCreateTime: NotRequired[datetime]
     SnapshotDatabaseTime: NotRequired[datetime]
-    SnapshotTarget: NotRequired[str]
-    StorageThroughput: NotRequired[int]
     DBSystemId: NotRequired[str]
-    DedicatedLogVolume: NotRequired[bool]
     MultiTenant: NotRequired[bool]
+    DedicatedLogVolume: NotRequired[bool]
     SnapshotAvailabilityZone: NotRequired[str]
 
 class ModifyDBInstanceMessageTypeDef(TypedDict):
@@ -2301,6 +2301,7 @@ class ModifyDBInstanceMessageTypeDef(TypedDict):
     AutoMinorVersionUpgrade: NotRequired[bool]
     LicenseModel: NotRequired[str]
     Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
     OptionGroupName: NotRequired[str]
     NewDBInstanceIdentifier: NotRequired[str]
     StorageType: NotRequired[str]
@@ -2312,13 +2313,13 @@ class ModifyDBInstanceMessageTypeDef(TypedDict):
     DomainOu: NotRequired[str]
     DomainAuthSecretArn: NotRequired[str]
     DomainDnsIps: NotRequired[Sequence[str]]
+    DisableDomain: NotRequired[bool]
     CopyTagsToSnapshot: NotRequired[bool]
     MonitoringInterval: NotRequired[int]
     DBPortNumber: NotRequired[int]
     PubliclyAccessible: NotRequired[bool]
     MonitoringRoleArn: NotRequired[str]
     DomainIAMRoleName: NotRequired[str]
-    DisableDomain: NotRequired[bool]
     PromotionTier: NotRequired[int]
     EnableIAMDatabaseAuthentication: NotRequired[bool]
     DatabaseInsightsMode: NotRequired[DatabaseInsightsModeType]
@@ -2332,18 +2333,17 @@ class ModifyDBInstanceMessageTypeDef(TypedDict):
     MaxAllocatedStorage: NotRequired[int]
     CertificateRotationRestart: NotRequired[bool]
     ReplicaMode: NotRequired[ReplicaModeType]
-    EnableCustomerOwnedIp: NotRequired[bool]
-    AwsBackupRecoveryPointArn: NotRequired[str]
     AutomationMode: NotRequired[AutomationModeType]
     ResumeFullAutomationModeMinutes: NotRequired[int]
+    EnableCustomerOwnedIp: NotRequired[bool]
     NetworkType: NotRequired[str]
-    StorageThroughput: NotRequired[int]
+    AwsBackupRecoveryPointArn: NotRequired[str]
     ManageMasterUserPassword: NotRequired[bool]
     RotateMasterUserPassword: NotRequired[bool]
     MasterUserSecretKmsKeyId: NotRequired[str]
-    Engine: NotRequired[str]
-    DedicatedLogVolume: NotRequired[bool]
     MultiTenant: NotRequired[bool]
+    DedicatedLogVolume: NotRequired[bool]
+    Engine: NotRequired[str]
     MasterUserAuthenticationType: NotRequired[MasterUserAuthenticationTypeType]
 
 class PendingModifiedValuesTypeDef(TypedDict):
@@ -2356,19 +2356,19 @@ class PendingModifiedValuesTypeDef(TypedDict):
     EngineVersion: NotRequired[str]
     LicenseModel: NotRequired[str]
     Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
     DBInstanceIdentifier: NotRequired[str]
     StorageType: NotRequired[str]
     CACertificateIdentifier: NotRequired[str]
     DBSubnetGroupName: NotRequired[str]
     PendingCloudwatchLogsExports: NotRequired[PendingCloudwatchLogsExportsTypeDef]
     ProcessorFeatures: NotRequired[List[ProcessorFeatureTypeDef]]
-    IAMDatabaseAuthenticationEnabled: NotRequired[bool]
     AutomationMode: NotRequired[AutomationModeType]
     ResumeFullAutomationModeTime: NotRequired[datetime]
-    StorageThroughput: NotRequired[int]
-    Engine: NotRequired[str]
-    DedicatedLogVolume: NotRequired[bool]
     MultiTenant: NotRequired[bool]
+    IAMDatabaseAuthenticationEnabled: NotRequired[bool]
+    DedicatedLogVolume: NotRequired[bool]
+    Engine: NotRequired[str]
 
 class RestoreDBInstanceFromDBSnapshotMessageTypeDef(TypedDict):
     DBInstanceIdentifier: str
@@ -2384,6 +2384,7 @@ class RestoreDBInstanceFromDBSnapshotMessageTypeDef(TypedDict):
     DBName: NotRequired[str]
     Engine: NotRequired[str]
     Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
     OptionGroupName: NotRequired[str]
     Tags: NotRequired[Sequence[TagTypeDef]]
     StorageType: NotRequired[str]
@@ -2404,12 +2405,11 @@ class RestoreDBInstanceFromDBSnapshotMessageTypeDef(TypedDict):
     DBParameterGroupName: NotRequired[str]
     DeletionProtection: NotRequired[bool]
     EnableCustomerOwnedIp: NotRequired[bool]
-    CustomIamInstanceProfile: NotRequired[str]
-    BackupTarget: NotRequired[str]
     NetworkType: NotRequired[str]
-    StorageThroughput: NotRequired[int]
-    DBClusterSnapshotIdentifier: NotRequired[str]
+    BackupTarget: NotRequired[str]
+    CustomIamInstanceProfile: NotRequired[str]
     AllocatedStorage: NotRequired[int]
+    DBClusterSnapshotIdentifier: NotRequired[str]
     DedicatedLogVolume: NotRequired[bool]
     CACertificateIdentifier: NotRequired[str]
     EngineLifecycleSupport: NotRequired[str]
@@ -2442,6 +2442,7 @@ class RestoreDBInstanceFromS3MessageTypeDef(TypedDict):
     AutoMinorVersionUpgrade: NotRequired[bool]
     LicenseModel: NotRequired[str]
     Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
     OptionGroupName: NotRequired[str]
     PubliclyAccessible: NotRequired[bool]
     Tags: NotRequired[Sequence[TagTypeDef]]
@@ -2463,7 +2464,6 @@ class RestoreDBInstanceFromS3MessageTypeDef(TypedDict):
     DeletionProtection: NotRequired[bool]
     MaxAllocatedStorage: NotRequired[int]
     NetworkType: NotRequired[str]
-    StorageThroughput: NotRequired[int]
     ManageMasterUserPassword: NotRequired[bool]
     MasterUserSecretKmsKeyId: NotRequired[str]
     DedicatedLogVolume: NotRequired[bool]
@@ -2486,6 +2486,7 @@ class RestoreDBInstanceToPointInTimeMessageTypeDef(TypedDict):
     DBName: NotRequired[str]
     Engine: NotRequired[str]
     Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
     OptionGroupName: NotRequired[str]
     CopyTagsToSnapshot: NotRequired[bool]
     Tags: NotRequired[Sequence[TagTypeDef]]
@@ -2507,12 +2508,11 @@ class RestoreDBInstanceToPointInTimeMessageTypeDef(TypedDict):
     DeletionProtection: NotRequired[bool]
     SourceDbiResourceId: NotRequired[str]
     MaxAllocatedStorage: NotRequired[int]
-    SourceDBInstanceAutomatedBackupsArn: NotRequired[str]
     EnableCustomerOwnedIp: NotRequired[bool]
-    CustomIamInstanceProfile: NotRequired[str]
-    BackupTarget: NotRequired[str]
     NetworkType: NotRequired[str]
-    StorageThroughput: NotRequired[int]
+    SourceDBInstanceAutomatedBackupsArn: NotRequired[str]
+    BackupTarget: NotRequired[str]
+    CustomIamInstanceProfile: NotRequired[str]
     AllocatedStorage: NotRequired[int]
     DedicatedLogVolume: NotRequired[bool]
     CACertificateIdentifier: NotRequired[str]
@@ -2587,8 +2587,8 @@ class DBClusterAutomatedBackupTypeDef(TypedDict):
     KmsKeyId: NotRequired[str]
     StorageType: NotRequired[str]
     Iops: NotRequired[int]
-    AwsBackupRecoveryPointArn: NotRequired[str]
     StorageThroughput: NotRequired[int]
+    AwsBackupRecoveryPointArn: NotRequired[str]
 
 class DBClusterBacktrackMessageTypeDef(TypedDict):
     Marker: str
@@ -2621,13 +2621,20 @@ class DBClusterSnapshotAttributesResultTypeDef(TypedDict):
 
 class DBEngineVersionResponseTypeDef(TypedDict):
     Engine: str
+    MajorEngineVersion: str
     EngineVersion: str
+    DatabaseInstallationFilesS3BucketName: str
+    DatabaseInstallationFilesS3Prefix: str
+    CustomDBEngineVersionManifest: str
     DBParameterGroupFamily: str
     DBEngineDescription: str
+    DBEngineVersionArn: str
     DBEngineVersionDescription: str
     DefaultCharacterSet: CharacterSetTypeDef
     Image: CustomDBEngineVersionAMITypeDef
     DBEngineMediaType: str
+    KMSKeyId: str
+    CreateTime: datetime
     SupportedCharacterSets: List[CharacterSetTypeDef]
     SupportedNcharCharacterSets: List[CharacterSetTypeDef]
     ValidUpgradeTarget: List[UpgradeTargetTypeDef]
@@ -2640,15 +2647,8 @@ class DBEngineVersionResponseTypeDef(TypedDict):
     Status: str
     SupportsParallelQuery: bool
     SupportsGlobalDatabases: bool
-    MajorEngineVersion: str
-    DatabaseInstallationFilesS3BucketName: str
-    DatabaseInstallationFilesS3Prefix: str
-    DBEngineVersionArn: str
-    KMSKeyId: str
-    CreateTime: datetime
     TagList: List[TagTypeDef]
     SupportsBabelfish: bool
-    CustomDBEngineVersionManifest: str
     SupportsLimitlessDatabase: bool
     SupportsCertificateRotationWithoutRestart: bool
     SupportedCACertificateIdentifiers: List[str]
@@ -2659,13 +2659,20 @@ class DBEngineVersionResponseTypeDef(TypedDict):
 
 class DBEngineVersionTypeDef(TypedDict):
     Engine: NotRequired[str]
+    MajorEngineVersion: NotRequired[str]
     EngineVersion: NotRequired[str]
+    DatabaseInstallationFilesS3BucketName: NotRequired[str]
+    DatabaseInstallationFilesS3Prefix: NotRequired[str]
+    CustomDBEngineVersionManifest: NotRequired[str]
     DBParameterGroupFamily: NotRequired[str]
     DBEngineDescription: NotRequired[str]
+    DBEngineVersionArn: NotRequired[str]
     DBEngineVersionDescription: NotRequired[str]
     DefaultCharacterSet: NotRequired[CharacterSetTypeDef]
     Image: NotRequired[CustomDBEngineVersionAMITypeDef]
     DBEngineMediaType: NotRequired[str]
+    KMSKeyId: NotRequired[str]
+    CreateTime: NotRequired[datetime]
     SupportedCharacterSets: NotRequired[List[CharacterSetTypeDef]]
     SupportedNcharCharacterSets: NotRequired[List[CharacterSetTypeDef]]
     ValidUpgradeTarget: NotRequired[List[UpgradeTargetTypeDef]]
@@ -2678,15 +2685,8 @@ class DBEngineVersionTypeDef(TypedDict):
     Status: NotRequired[str]
     SupportsParallelQuery: NotRequired[bool]
     SupportsGlobalDatabases: NotRequired[bool]
-    MajorEngineVersion: NotRequired[str]
-    DatabaseInstallationFilesS3BucketName: NotRequired[str]
-    DatabaseInstallationFilesS3Prefix: NotRequired[str]
-    DBEngineVersionArn: NotRequired[str]
-    KMSKeyId: NotRequired[str]
-    CreateTime: NotRequired[datetime]
     TagList: NotRequired[List[TagTypeDef]]
     SupportsBabelfish: NotRequired[bool]
-    CustomDBEngineVersionManifest: NotRequired[str]
     SupportsLimitlessDatabase: NotRequired[bool]
     SupportsCertificateRotationWithoutRestart: NotRequired[bool]
     SupportedCACertificateIdentifiers: NotRequired[List[str]]
@@ -2711,6 +2711,7 @@ class DBInstanceAutomatedBackupTypeDef(TypedDict):
     EngineVersion: NotRequired[str]
     LicenseModel: NotRequired[str]
     Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
     OptionGroupName: NotRequired[str]
     TdeCredentialArn: NotRequired[str]
     Encrypted: NotRequired[bool]
@@ -2724,10 +2725,9 @@ class DBInstanceAutomatedBackupTypeDef(TypedDict):
         List[DBInstanceAutomatedBackupsReplicationTypeDef]
     ]
     BackupTarget: NotRequired[str]
-    StorageThroughput: NotRequired[int]
+    MultiTenant: NotRequired[bool]
     AwsBackupRecoveryPointArn: NotRequired[str]
     DedicatedLogVolume: NotRequired[bool]
-    MultiTenant: NotRequired[bool]
 
 class DBMajorEngineVersionTypeDef(TypedDict):
     Engine: NotRequired[str]
@@ -3518,10 +3518,10 @@ class IntegrationResponseTypeDef(TypedDict):
     AdditionalEncryptionContext: Dict[str, str]
     Status: IntegrationStatusType
     Tags: List[TagTypeDef]
-    CreateTime: datetime
-    Errors: List[IntegrationErrorTypeDef]
     DataFilter: str
     Description: str
+    CreateTime: datetime
+    Errors: List[IntegrationErrorTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class IntegrationTypeDef(TypedDict):
@@ -3533,10 +3533,10 @@ class IntegrationTypeDef(TypedDict):
     AdditionalEncryptionContext: NotRequired[Dict[str, str]]
     Status: NotRequired[IntegrationStatusType]
     Tags: NotRequired[List[TagTypeDef]]
-    CreateTime: NotRequired[datetime]
-    Errors: NotRequired[List[IntegrationErrorTypeDef]]
     DataFilter: NotRequired[str]
     Description: NotRequired[str]
+    CreateTime: NotRequired[datetime]
+    Errors: NotRequired[List[IntegrationErrorTypeDef]]
 
 class OptionGroupOptionSettingTypeDef(TypedDict):
     SettingName: NotRequired[str]
@@ -3596,9 +3596,9 @@ class ValidStorageOptionsTypeDef(TypedDict):
     StorageSize: NotRequired[List[RangeTypeDef]]
     ProvisionedIops: NotRequired[List[RangeTypeDef]]
     IopsToStorageRatio: NotRequired[List[DoubleRangeTypeDef]]
-    SupportsStorageAutoscaling: NotRequired[bool]
     ProvisionedStorageThroughput: NotRequired[List[RangeTypeDef]]
     StorageThroughputToIopsRatio: NotRequired[List[DoubleRangeTypeDef]]
+    SupportsStorageAutoscaling: NotRequired[bool]
 
 class ReservedDBInstanceTypeDef(TypedDict):
     ReservedDBInstanceId: NotRequired[str]
@@ -3713,7 +3713,6 @@ class DBClusterTypeDef(TypedDict):
     DBClusterParameterGroup: NotRequired[str]
     DBSubnetGroup: NotRequired[str]
     Status: NotRequired[str]
-    AutomaticRestartTime: NotRequired[datetime]
     PercentProgress: NotRequired[str]
     EarliestRestorableTime: NotRequired[datetime]
     Endpoint: NotRequired[str]
@@ -3747,9 +3746,17 @@ class DBClusterTypeDef(TypedDict):
     BacktrackConsumedChangeRecords: NotRequired[int]
     EnabledCloudwatchLogsExports: NotRequired[List[str]]
     Capacity: NotRequired[int]
+    PendingModifiedValues: NotRequired[ClusterPendingModifiedValuesTypeDef]
     EngineMode: NotRequired[str]
     ScalingConfigurationInfo: NotRequired[ScalingConfigurationInfoTypeDef]
     RdsCustomClusterConfiguration: NotRequired[RdsCustomClusterConfigurationTypeDef]
+    DBClusterInstanceClass: NotRequired[str]
+    StorageType: NotRequired[str]
+    Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
+    IOOptimizedNextAllowedModificationTime: NotRequired[datetime]
+    PubliclyAccessible: NotRequired[bool]
+    AutoMinorVersionUpgrade: NotRequired[bool]
     DeletionProtection: NotRequired[bool]
     HttpEndpointEnabled: NotRequired[bool]
     ActivityStreamMode: NotRequired[ActivityStreamModeType]
@@ -3763,28 +3770,21 @@ class DBClusterTypeDef(TypedDict):
     GlobalClusterIdentifier: NotRequired[str]
     GlobalWriteForwardingStatus: NotRequired[WriteForwardingStatusType]
     GlobalWriteForwardingRequested: NotRequired[bool]
-    PendingModifiedValues: NotRequired[ClusterPendingModifiedValuesTypeDef]
-    DBClusterInstanceClass: NotRequired[str]
-    StorageType: NotRequired[str]
-    Iops: NotRequired[int]
-    PubliclyAccessible: NotRequired[bool]
-    AutoMinorVersionUpgrade: NotRequired[bool]
+    NetworkType: NotRequired[str]
+    AutomaticRestartTime: NotRequired[datetime]
+    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationInfoTypeDef]
+    ServerlessV2PlatformVersion: NotRequired[str]
     MonitoringInterval: NotRequired[int]
     MonitoringRoleArn: NotRequired[str]
     DatabaseInsightsMode: NotRequired[DatabaseInsightsModeType]
     PerformanceInsightsEnabled: NotRequired[bool]
     PerformanceInsightsKMSKeyId: NotRequired[str]
     PerformanceInsightsRetentionPeriod: NotRequired[int]
-    ServerlessV2ScalingConfiguration: NotRequired[ServerlessV2ScalingConfigurationInfoTypeDef]
-    ServerlessV2PlatformVersion: NotRequired[str]
-    NetworkType: NotRequired[str]
     DBSystemId: NotRequired[str]
     MasterUserSecret: NotRequired[MasterUserSecretTypeDef]
-    IOOptimizedNextAllowedModificationTime: NotRequired[datetime]
     LocalWriteForwardingStatus: NotRequired[LocalWriteForwardingStatusType]
     AwsBackupRecoveryPointArn: NotRequired[str]
     LimitlessDatabase: NotRequired[LimitlessDatabaseTypeDef]
-    StorageThroughput: NotRequired[int]
     ClusterScalabilityType: NotRequired[ClusterScalabilityTypeType]
     CertificateDetails: NotRequired[CertificateDetailsTypeDef]
     EngineLifecycleSupport: NotRequired[str]
@@ -4153,7 +4153,6 @@ class DBInstanceTypeDef(TypedDict):
     DBInstanceClass: NotRequired[str]
     Engine: NotRequired[str]
     DBInstanceStatus: NotRequired[str]
-    AutomaticRestartTime: NotRequired[datetime]
     MasterUsername: NotRequired[str]
     DBName: NotRequired[str]
     Endpoint: NotRequired[EndpointTypeDef]
@@ -4178,6 +4177,7 @@ class DBInstanceTypeDef(TypedDict):
     ReplicaMode: NotRequired[ReplicaModeType]
     LicenseModel: NotRequired[str]
     Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
     OptionGroupMemberships: NotRequired[List[OptionGroupMembershipTypeDef]]
     CharacterSetName: NotRequired[str]
     NcharCharacterSetName: NotRequired[str]
@@ -4212,31 +4212,31 @@ class DBInstanceTypeDef(TypedDict):
     ListenerEndpoint: NotRequired[EndpointTypeDef]
     MaxAllocatedStorage: NotRequired[int]
     TagList: NotRequired[List[TagTypeDef]]
-    DBInstanceAutomatedBackupsReplications: NotRequired[
-        List[DBInstanceAutomatedBackupsReplicationTypeDef]
-    ]
+    AutomationMode: NotRequired[AutomationModeType]
+    ResumeFullAutomationModeTime: NotRequired[datetime]
     CustomerOwnedIpEnabled: NotRequired[bool]
-    AwsBackupRecoveryPointArn: NotRequired[str]
+    NetworkType: NotRequired[str]
     ActivityStreamStatus: NotRequired[ActivityStreamStatusType]
     ActivityStreamKmsKeyId: NotRequired[str]
     ActivityStreamKinesisStreamName: NotRequired[str]
     ActivityStreamMode: NotRequired[ActivityStreamModeType]
     ActivityStreamEngineNativeAuditFieldsIncluded: NotRequired[bool]
-    AutomationMode: NotRequired[AutomationModeType]
-    ResumeFullAutomationModeTime: NotRequired[datetime]
-    CustomIamInstanceProfile: NotRequired[str]
+    AwsBackupRecoveryPointArn: NotRequired[str]
+    DBInstanceAutomatedBackupsReplications: NotRequired[
+        List[DBInstanceAutomatedBackupsReplicationTypeDef]
+    ]
     BackupTarget: NotRequired[str]
-    NetworkType: NotRequired[str]
+    AutomaticRestartTime: NotRequired[datetime]
+    CustomIamInstanceProfile: NotRequired[str]
     ActivityStreamPolicyStatus: NotRequired[ActivityStreamPolicyStatusType]
-    StorageThroughput: NotRequired[int]
+    CertificateDetails: NotRequired[CertificateDetailsTypeDef]
     DBSystemId: NotRequired[str]
     MasterUserSecret: NotRequired[MasterUserSecretTypeDef]
-    CertificateDetails: NotRequired[CertificateDetailsTypeDef]
     ReadReplicaSourceDBClusterIdentifier: NotRequired[str]
     PercentProgress: NotRequired[str]
+    MultiTenant: NotRequired[bool]
     DedicatedLogVolume: NotRequired[bool]
     IsStorageConfigUpgradeAvailable: NotRequired[bool]
-    MultiTenant: NotRequired[bool]
     EngineLifecycleSupport: NotRequired[str]
 
 class DBSubnetGroupMessageTypeDef(TypedDict):

@@ -153,14 +153,14 @@ class TenancyAttachmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/create_tenancy_attachment.py.html>`__ to see an example of how to use create_tenancy_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/create_tenancy_attachment.py.html>`__ to see an example of how to use create_tenancy_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/tenancyAttachments"
         method = "POST"
         operation_name = "create_tenancy_attachment"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/TenancyAttachment/CreateTenancyAttachment"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -255,14 +255,14 @@ class TenancyAttachmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/delete_tenancy_attachment.py.html>`__ to see an example of how to use delete_tenancy_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/delete_tenancy_attachment.py.html>`__ to see an example of how to use delete_tenancy_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['tenancyAttachmentId']
         resource_path = "/tenancyAttachments/{tenancyAttachmentId}"
         method = "DELETE"
         operation_name = "delete_tenancy_attachment"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/TenancyAttachment/DeleteTenancyAttachment"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -358,14 +358,14 @@ class TenancyAttachmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/get_tenancy_attachment.py.html>`__ to see an example of how to use get_tenancy_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/get_tenancy_attachment.py.html>`__ to see an example of how to use get_tenancy_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['tenancyAttachmentId']
         resource_path = "/tenancyAttachments/{tenancyAttachmentId}"
         method = "GET"
         operation_name = "get_tenancy_attachment"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/TenancyAttachment/GetTenancyAttachment"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -497,14 +497,14 @@ class TenancyAttachmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/list_tenancy_attachments.py.html>`__ to see an example of how to use list_tenancy_attachments API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/list_tenancy_attachments.py.html>`__ to see an example of how to use list_tenancy_attachments API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/tenancyAttachments"
         method = "GET"
         operation_name = "list_tenancy_attachments"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/TenancyAttachmentCollection/ListTenancyAttachments"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -638,14 +638,14 @@ class TenancyAttachmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/update_tenancy_attachment.py.html>`__ to see an example of how to use update_tenancy_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/update_tenancy_attachment.py.html>`__ to see an example of how to use update_tenancy_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['tenancyAttachmentId']
         resource_path = "/tenancyAttachments/{tenancyAttachmentId}"
         method = "PUT"
         operation_name = "update_tenancy_attachment"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/TenancyAttachment/UpdateTenancyAttachment"
 
         # Don't accept unknown kwargs
         expected_kwargs = [

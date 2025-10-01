@@ -1,3 +1,4 @@
+import json
 import logging
 import re
 import warnings
@@ -58,9 +59,12 @@ from langchain_aws.llms.bedrock import (
 )
 from langchain_aws.utils import (
     anthropic_tokens_supported,
+    count_tokens_api_supported_for_model,
     create_aws_client,
     get_num_tokens_anthropic,
     get_token_ids_anthropic,
+    thinking_in_params,
+    trim_message_whitespace,
 )
 
 logger = logging.getLogger(__name__)
@@ -96,16 +100,15 @@ def _convert_one_message_to_text_llama3(message: BaseMessage) -> str:
         )
     elif isinstance(message, HumanMessage):
         message_text = (
-            f"<|start_header_id|>user" f"<|end_header_id|>{message.content}<|eot_id|>"
+            f"<|start_header_id|>user<|end_header_id|>{message.content}<|eot_id|>"
         )
     elif isinstance(message, AIMessage):
         message_text = (
-            f"<|start_header_id|>assistant"
-            f"<|end_header_id|>{message.content}<|eot_id|>"
+            f"<|start_header_id|>assistant<|end_header_id|>{message.content}<|eot_id|>"
         )
     elif isinstance(message, SystemMessage):
         message_text = (
-            f"<|start_header_id|>system" f"<|end_header_id|>{message.content}<|eot_id|>"
+            f"<|start_header_id|>system<|end_header_id|>{message.content}<|eot_id|>"
         )
     else:
         raise ValueError(f"Got unknown type {message}")
@@ -129,21 +132,15 @@ def _convert_one_message_to_text_llama4(message: BaseMessage) -> str:
             f"<|header_start|>{message.role}<|header_end|>{message.content}<|eot|>"
         )
     elif isinstance(message, HumanMessage):
-        message_text = (
-            f"<|header_start|>user<|header_end|>{message.content}<|eot|>"
-        )
+        message_text = f"<|header_start|>user<|header_end|>{message.content}<|eot|>"
     elif isinstance(message, AIMessage):
         message_text = (
             f"<|header_start|>assistant<|header_end|>{message.content}<|eot|>"
         )
     elif isinstance(message, SystemMessage):
-        message_text = (
-            f"<|header_start|>system<|header_end|>{message.content}<|eot|>"
-        )
+        message_text = f"<|header_start|>system<|header_end|>{message.content}<|eot|>"
     elif isinstance(message, ToolMessage):
-        message_text = (
-            f"<|header_start|>ipython<|header_end|>{message.content}<|eom|>"
-        )
+        message_text = f"<|header_start|>ipython<|header_end|>{message.content}<|eom|>"
     else:
         raise ValueError(f"Got unknown type {message}")
 
@@ -195,7 +192,7 @@ def convert_messages_to_prompt_anthropic(
     """
     if messages is None:
         return ""
-    
+
     messages = messages.copy()  # don't mutate the original list
     if len(messages) > 0 and not isinstance(messages[-1], AIMessage):
         messages.append(AIMessage(content=""))
@@ -232,21 +229,13 @@ def convert_messages_to_prompt_mistral(messages: List[BaseMessage]) -> str:
 
 def _convert_one_message_to_text_deepseek(message: BaseMessage) -> str:
     if isinstance(message, ChatMessage):
-        message_text = (
-            f"<|{message.role}|>{message.content}"
-        )
+        message_text = f"<|{message.role}|>{message.content}"
     elif isinstance(message, HumanMessage):
-        message_text = (
-            f"<|User|>{message.content}"
-        )
+        message_text = f"<|User|>{message.content}"
     elif isinstance(message, AIMessage):
-        message_text = (
-            f"<|Assistant|>{message.content}"
-        )
+        message_text = f"<|Assistant|>{message.content}"
     elif isinstance(message, SystemMessage):
-        message_text = (
-            f"<|System|>{message.content}"
-        )
+        message_text = f"<|System|>{message.content}"
     else:
         raise ValueError(f"Got unknown type {message}")
 
@@ -289,30 +278,22 @@ def convert_messages_to_prompt_writer(messages: List[BaseMessage]) -> str:
 
 def _convert_one_message_to_text_openai(message: BaseMessage) -> str:
     if isinstance(message, SystemMessage):
-        message_text = (
-            f"<|start|>system<|message|>{message.content}<|end|>"
-        )
+        message_text = f"<|start|>system<|message|>{message.content}<|end|>"
     elif isinstance(message, ChatMessage):
         # developer role messages
-        message_text = (
-            f"<|start|>{message.role}<|message|>{message.content}<|end|>"
-        )
+        message_text = f"<|start|>{message.role}<|message|>{message.content}<|end|>"
     elif isinstance(message, HumanMessage):
-        message_text = (
-            f"<|start|>user<|message|>{message.content}<|end|>"
-        )
+        message_text = f"<|start|>user<|message|>{message.content}<|end|>"
     elif isinstance(message, AIMessage):
         message_text = (
             f"<|start|>assistant<|channel|>final<|message|>{message.content}<|end|>"
         )
     elif isinstance(message, ToolMessage):
-      # TODO: Tool messages in the OpenAI format should use "<|start|>{toolname} to=assistant<|message|>"
-      # Need to extract the tool name from the ToolMessage content or tool_call_id
-      # For now using generic "to=assistant" format as placeholder until we implement tool calling
-      # Will be resolved in follow-up PR with full tool support
-        message_text = (
-            f"<|start|>to=assistant<|channel|>commentary<|message|>{message.content}<|end|>"
-        )
+        # TODO: Tool messages in the OpenAI format should use "<|start|>{toolname} to=assistant<|message|>"
+        # Need to extract the tool name from the ToolMessage content or tool_call_id
+        # For now using generic "to=assistant" format as placeholder until we implement tool calling
+        # Will be resolved in follow-up PR with full tool support
+        message_text = f"<|start|>to=assistant<|channel|>commentary<|message|>{message.content}<|end|>"
     else:
         raise ValueError(f"Got unknown type {message}")
 
@@ -371,7 +352,7 @@ def _format_data_content_block(block: dict) -> dict:
                     "type": "base64",
                     "media_type": block["mime_type"],
                     "data": block["data"],
-                }
+                },
             }
         else:
             error_message = "Image data only supported through in-line base64 format."
@@ -408,7 +389,10 @@ def _merge_messages(
                     ]
                 )
         last = merged[-1] if merged else None
-        if isinstance(last, HumanMessage) and isinstance(curr, HumanMessage):
+        if any(
+            all(isinstance(m, c) for m in (curr, last))
+            for c in (SystemMessage, HumanMessage)
+        ):
             if isinstance(last.content, str):
                 new_content: List = [{"type": "text", "text": last.content}]
             else:
@@ -430,12 +414,13 @@ def _format_anthropic_messages(
     system: Optional[Union[str, List[Dict]]] = None
     formatted_messages: List[Dict] = []
 
-    merged_messages = _merge_messages(messages)
+    trimmed_messages = trim_message_whitespace(messages)
+    merged_messages = _merge_messages(trimmed_messages)
     for i, message in enumerate(merged_messages):
         if message.type == "system":
-            if i != 0:
-                raise ValueError("System message must be at beginning of message list.")
-            if isinstance(message.content, str):
+            if system is not None:
+                raise ValueError("Received multiple non-consecutive system messages.")
+            elif isinstance(message.content, str):
                 system = message.content
             elif isinstance(message.content, list):
                 system_blocks = []
@@ -474,9 +459,9 @@ def _format_anthropic_messages(
 
         if not isinstance(message.content, str):
             # parse as dict
-            assert isinstance(
-                message.content, list
-            ), "Anthropic message content must be str or list of dicts"
+            assert isinstance(message.content, list), (
+                "Anthropic message content must be str or list of dicts"
+            )
 
             # populate content
             content = []
@@ -506,19 +491,28 @@ def _format_anthropic_messages(
                             # Handle list content inside tool_result
                             processed_list = []
                             for list_item in content_item:
-                                if isinstance(list_item, dict) and list_item.get("type") == "image_url":
+                                if (
+                                    isinstance(list_item, dict)
+                                    and list_item.get("type") == "image_url"
+                                ):
                                     # Process image in list
-                                    source = _format_image(list_item["image_url"]["url"])
-                                    processed_list.append({"type": "image", "source": source})
+                                    source = _format_image(
+                                        list_item["image_url"]["url"]
+                                    )
+                                    processed_list.append(
+                                        {"type": "image", "source": source}
+                                    )
                                 else:
                                     # Keep other items as is
                                     processed_list.append(list_item)
                             # Add processed list to tool_result
-                            tool_blocks.append({
-                                "type": "tool_result",
-                                "tool_use_id": item.get("tool_use_id"),
-                                "content": processed_list
-                            })
+                            tool_blocks.append(
+                                {
+                                    "type": "tool_result",
+                                    "tool_use_id": item.get("tool_use_id"),
+                                    "content": processed_list,
+                                }
+                            )
                         else:
                             # For other content types, keep as is
                             tool_blocks.append(item)
@@ -541,7 +535,9 @@ def _format_anthropic_messages(
                             tool_blocks.append(item)
                     elif item["type"] in ["thinking", "redacted_thinking"]:
                         # Store thinking blocks separately
-                        thinking_blocks.append(item)
+                        thinking_blocks.append(
+                            {k: v for k, v in item.items() if k != "index"}
+                        )
                     elif item["type"] == "text":
                         text = item.get("text", "")
                         # Only add non-empty strings for now as empty ones are not
@@ -778,9 +774,9 @@ class ChatBedrock(BaseChatModel, BedrockBase):
             response = bedrock_client.get_inference_profile(
                 inferenceProfileIdentifier=model_id
             )
-            if 'models' in response and len(response['models']) > 0:
-                model_arn = response['models'][0]['modelArn']
-                resolved_base_model = model_arn.split('/')[-1]
+            if "models" in response and len(response["models"]) > 0:
+                model_arn = response["models"][0]["modelArn"]
+                resolved_base_model = model_arn.split("/")[-1]
                 values["beta_use_converse_api"] = "nova" in resolved_base_model
         return values
 
@@ -867,7 +863,7 @@ class ChatBedrock(BaseChatModel, BedrockBase):
         added_model_name = False
         # Track guardrails trace information for callback handling
         guardrails_trace_info = None
-        
+
         for chunk in self._prepare_input_and_invoke_stream(
             prompt=prompt,
             system=system,
@@ -892,7 +888,7 @@ class ChatBedrock(BaseChatModel, BedrockBase):
                     if services_trace.get("signal") and run_manager:
                         # Store trace info for potential callback
                         guardrails_trace_info = services_trace
-                    
+
                     usage_metadata = generation_info.pop("usage_metadata", None)
                     response_metadata = generation_info
                     if not added_model_name:
@@ -914,7 +910,7 @@ class ChatBedrock(BaseChatModel, BedrockBase):
                         generation_chunk.text, chunk=generation_chunk
                     )
                 yield generation_chunk
-        
+
         # If guardrails intervened during streaming, notify the callback handler
         if guardrails_trace_info and run_manager:
             run_manager.on_llm_error(
@@ -977,7 +973,9 @@ class ChatBedrock(BaseChatModel, BedrockBase):
                     else:
                         system = self.system_prompt_with_tools
             elif provider == "openai":
-                formatted_messages = ChatPromptAdapter.format_messages(provider, messages)
+                formatted_messages = ChatPromptAdapter.format_messages(
+                    provider, messages
+                )
             else:
                 prompt = ChatPromptAdapter.convert_messages_to_prompt(
                     provider=provider, messages=messages, model=self._get_base_model()
@@ -1040,6 +1038,40 @@ class ChatBedrock(BaseChatModel, BedrockBase):
             final_output.update(output)
         final_output["usage"] = final_usage
         return final_output
+    
+    def get_num_tokens_from_messages(
+        self, 
+        messages: list[BaseMessage],
+        tools: Optional[Sequence] = None
+    ):
+        model_id = self._get_base_model()
+        if (
+            self._model_is_anthropic
+            and count_tokens_api_supported_for_model(model_id)
+        ):
+            system, formatted_messages = ChatPromptAdapter.format_messages(
+                "anthropic", messages
+            )
+            input_to_count_tmpl = {
+                "anthropic_version": "bedrock-2023-05-31",
+                "max_tokens": self.max_tokens if self.max_tokens else 8192,
+                "messages": formatted_messages
+            }
+            if system:
+                input_to_count_tmpl["system"] = system
+            input_to_count = json.dumps(input_to_count_tmpl)
+
+            response = self.client.count_tokens(
+                modelId=model_id,
+                input={
+                    "invokeModel": {
+                        "body": input_to_count
+                    }
+                }
+            )
+            return response["inputTokens"]
+
+        return super().get_num_tokens_from_messages(messages, tools)
 
     def get_num_tokens(self, text: str) -> int:
         if (
@@ -1103,6 +1135,34 @@ class ChatBedrock(BaseChatModel, BedrockBase):
             )
         if self._get_provider() == "anthropic":
             formatted_tools = [convert_to_anthropic_tool(tool) for tool in tools]
+
+            # Disallow forced tool use when thinking is enabled on specific Claude models
+            base_model = self._get_base_model()
+            if any(
+                x in base_model
+                for x in ("claude-3-7-", "claude-opus-4-", "claude-sonnet-4-")
+            ) and thinking_in_params(self.model_kwargs or {}):
+                forced = False
+                if isinstance(tool_choice, bool):
+                    forced = bool(tool_choice)
+                elif isinstance(tool_choice, str):
+                    # "any" or specific tool name forces tool use; "auto"/"none" do not
+                    if tool_choice == "any":
+                        forced = True
+                    elif tool_choice not in ("auto", "none"):
+                        # Treat as specific tool name
+                        forced = True
+                elif isinstance(tool_choice, dict) and tool_choice is not None:
+                    tc_type = tool_choice.get("type")
+                    # Bedrock types: "auto", "any", "tool" (function)
+                    if tc_type in ("any", "tool", "function"):
+                        forced = True
+                if forced:
+                    raise ValueError(
+                        "Anthropic Claude (3.7/4/4.1) with thinking enabled does not support forced tool use. "
+                        "Remove forced tool_choice (e.g. 'any' or a specific tool), or set "
+                        "tool_choice='auto', or disable thinking."
+                    )
 
             # true if the model is a claude 3 model
             if "claude-" in self._get_base_model():

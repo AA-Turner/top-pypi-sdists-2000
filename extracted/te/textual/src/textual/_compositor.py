@@ -597,7 +597,7 @@ class Compositor:
 
                 if widget.is_container:
                     # Arrange the layout
-                    arrange_result = widget._arrange(child_region.size)
+                    arrange_result = widget.arrange(child_region.size)
 
                     arranged_widgets = arrange_result.widgets
                     widgets.update(arranged_widgets)
@@ -848,9 +848,10 @@ class Compositor:
             Sequence of (WIDGET, REGION) tuples.
         """
         contains = Region.contains
-        for widget, cropped_region, region in self.layers_visible[y]:
-            if contains(cropped_region, x, y) and widget.visible:
-                yield widget, region
+        if len(self.layers_visible) > y >= 0:
+            for widget, cropped_region, region in self.layers_visible[y]:
+                if contains(cropped_region, x, y) and widget.visible:
+                    yield widget, region
 
     def get_style_at(self, x: int, y: int) -> Style:
         """Get the Style at the given cell or Style.null()

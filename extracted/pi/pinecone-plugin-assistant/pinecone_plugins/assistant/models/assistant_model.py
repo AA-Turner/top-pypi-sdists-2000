@@ -39,7 +39,7 @@ RawMessages = Union[List[Message], List[RawMessage]]
 S = TypeVar("S", bound=BaseStreamChatResponseChunk)
 HOST_SUFFIX = "assistant"
 MODELS = ["gpt-4o", "gpt-4.1", "o4-mini", "claude-3-5-sonnet", "claude-3-7-sonnet", "gemini-2.5-pro"]
-
+API_VERSION = "2025-10"
 
 class AssistantModel:
     def __init__(self, assistant: OpenAIAssistantModel, client_builder, config):
@@ -49,7 +49,7 @@ class AssistantModel:
         self.config = config if config else {}
 
         self._assistant_data_api = client_builder(
-            ApiClient, DataApiClient, "2025-01", host=self.host
+            ApiClient, DataApiClient, API_VERSION, host=self.host
         )
         # initialize types so they can be accessed
         self.name = self.assistant.name

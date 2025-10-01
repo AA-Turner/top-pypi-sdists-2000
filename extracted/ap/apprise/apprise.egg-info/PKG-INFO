@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: apprise
-Version: 1.9.4
+Version: 1.9.5
 Summary: Push Notifications that work with just about every platform!
 Author-email: Chris Caron <lead2gold@gmail.com>
 License: BSD-2-Clause
@@ -32,6 +32,7 @@ Requires-Dist: click>=5.0
 Requires-Dist: markdown
 Requires-Dist: PyYAML
 Requires-Dist: certifi
+Requires-Dist: tzdata; platform_system == "Windows"
 Provides-Extra: dev
 Requires-Dist: coverage; extra == "dev"
 Requires-Dist: mock; extra == "dev"
@@ -50,6 +51,7 @@ Requires-Dist: PGPy; extra == "all-plugins"
 Requires-Dist: smpplib; extra == "all-plugins"
 Provides-Extra: windows
 Requires-Dist: pywin32; extra == "windows"
+Requires-Dist: tzdata; extra == "windows"
 Dynamic: license-file
 
 ![Apprise Logo](https://raw.githubusercontent.com/caronc/apprise/master/apprise/assets/themes/default/apprise-logo.png)
@@ -231,7 +233,7 @@ SMS Notifications for the most part do not have a both a `title` and `body`.  Th
 | [SMSEagle](https://github.com/caronc/apprise/wiki/Notify_smseagle) | smseagle:// or smseagles:// | (TCP) 80 or 443  | smseagles://hostname:port/ToPhoneNo<br/>smseagles://hostname:port/@ToContact<br/>smseagles://hostname:port/#ToGroup<br/>smseagles://hostname:port/ToPhoneNo1/#ToGroup/@ToContact/
 | [SMS Manager](https://github.com/caronc/apprise/wiki/Notify_sms_manager) | smsmgr://  | (TCP) 443   | smsmgr://ApiKey@ToPhoneNo<br/>smsmgr://ApiKey@ToPhoneNo1/ToPhoneNo2/ToPhoneNoN/
 | [Threema Gateway](https://github.com/caronc/apprise/wiki/Notify_threema) | threema://  | (TCP) 443   | threema://GatewayID@secret/ToPhoneNo<br/>threema://GatewayID@secret/ToEmail<br/>threema://GatewayID@secret/ToThreemaID/<br/>threema://GatewayID@secret/ToEmail/ToThreemaID/ToPhoneNo/...
-| [Twilio](https://github.com/caronc/apprise/wiki/Notify_twilio) | twilio://  | (TCP) 443   | twilio://AccountSid:AuthToken@FromPhoneNo<br/>twilio://AccountSid:AuthToken@FromPhoneNo/ToPhoneNo<br/>twilio://AccountSid:AuthToken@FromPhoneNo/ToPhoneNo1/ToPhoneNo2/ToPhoneNoN/<br/>twilio://AccountSid:AuthToken@FromPhoneNo/ToPhoneNo?apikey=Key<br/>twilio://AccountSid:AuthToken@ShortCode/ToPhoneNo<br/>twilio://AccountSid:AuthToken@ShortCode/ToPhoneNo1/ToPhoneNo2/ToPhoneNoN/
+| [Twilio](https://github.com/caronc/apprise/wiki/Notify_twilio) | twilio://  | (TCP) 443   | twilio://AccountSid:AuthToken@FromPhoneNo<br/>twilio://AccountSid:AuthToken@FromPhoneNo/ToPhoneNo<br/>twilio://AccountSid:AuthToken@FromPhoneNo/ToPhoneNo1/ToPhoneNo2/ToPhoneNoN/<br/>twilio://AccountSid:AuthToken@FromPhoneNo/ToPhoneNo?apikey=Key<br/>twilio://AccountSid:AuthToken@ShortCode/ToPhoneNo<br/>twilio://AccountSid:AuthToken@ShortCode/ToPhoneNo1/ToPhoneNo2/ToPhoneNoN/<br/>twilio://AccountSid:AuthToken@FromPhoneNo/ToPhoneNo?method=call<br/>twilio://AccountSid:AuthToken@FromPhoneNo/ToPhoneNo1/ToPhoneNo2/ToPhoneNoN?method=call
 | [Voipms](https://github.com/caronc/apprise/wiki/Notify_voipms) | voipms://  | (TCP) 443   | voipms://password:email/FromPhoneNo<br/>voipms://password:email/FromPhoneNo/ToPhoneNo<br/>voipms://password:email/FromPhoneNo/ToPhoneNo1/ToPhoneNo2/ToPhoneNoN/
 | [Vonage](https://github.com/caronc/apprise/wiki/Notify_nexmo) (formerly Nexmo) | nexmo://  | (TCP) 443   | nexmo://ApiKey:ApiSecret@FromPhoneNo<br/>nexmo://ApiKey:ApiSecret@FromPhoneNo/ToPhoneNo<br/>nexmo://ApiKey:ApiSecret@FromPhoneNo/ToPhoneNo1/ToPhoneNo2/ToPhoneNoN/
 

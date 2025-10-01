@@ -35,13 +35,14 @@ from semgrep.mcp.semgrep import run_semgrep_output
 from semgrep.mcp.semgrep import run_semgrep_process_sync
 from semgrep.mcp.semgrep import run_semgrep_via_rpc
 from semgrep.mcp.semgrep import SemgrepContext
-from semgrep.mcp.utilities.tracing import attach_rpc_scan_metrics
 from semgrep.mcp.utilities.tracing import attach_scan_metrics
 from semgrep.mcp.utilities.tracing import start_tracing
 from semgrep.mcp.utilities.tracing import with_tool_span
+from semgrep.mcp.utilities.utils import get_identity
 from semgrep.mcp.utilities.utils import get_semgrep_api_url
 from semgrep.mcp.utilities.utils import get_semgrep_app_token
 from semgrep.mcp.utilities.utils import is_hosted
+from semgrep.mcp.utilities.utils import re_identity_string
 from semgrep.semgrep_interfaces.semgrep_output_v1 import CliOutput
 from semgrep.verbose_logging import getLogger
 
@@ -580,7 +581,24 @@ async def semgrep_findings(
             )
         )
 
+    # Check whether the token has the `webapi` role
+    identity = await get_identity()
+    match = re_identity_string.search(identity["identity"])
+    if match is None:
+        logger.error("Identity string in unexpected format")
+    else:
+        inner = match.group(1)
+        if "webapi" not in inner:
+            raise McpError(
+                ErrorData(
+                    code=INVALID_PARAMS,
+                    message="Cannot access findings without token with `webapi` role: user must generate one manually from `semgrep.dev`",
+                )
+            )
+
+    # If the token is good, let's get the deployment info.
     deployment = await get_deployment_slug()
+
     api_token = get_semgrep_app_token()
     if not api_token:
         raise McpError(
@@ -681,7 +699,7 @@ async def semgrep_scan_with_custom_rule(
         output = await run_semgrep_output(top_level_span=None, args=args)
         results: SemgrepScanResult = SemgrepScanResult.model_validate_json(output)
 
-        attach_scan_metrics(get_current_span(), results, "custom", workspace_dir)
+        attach_scan_metrics(get_current_span(), results, workspace_dir)
 
         remove_temp_dir_from_results(results, temp_dir)
         return results
@@ -850,7 +868,6 @@ async def semgrep_scan_cli(
     ctx: Context,
     workspace_dir: str | None,
     code_files: list[CodeFile],
-    config: str | None = CONFIG_FIELD,
 ) -> SemgrepScanResult:
     """
     Runs a Semgrep scan on provided code content and returns the findings in JSON format
@@ -865,19 +882,16 @@ async def semgrep_scan_cli(
       - scan code files for other issues
     """
 
-    # Validate config
-    config = validate_config(config)
-
     temp_dir = None
     try:
         # Create temporary files from code content
         temp_dir = create_temp_files_from_code_content(code_files)
-        args = get_semgrep_scan_args(temp_dir, config)
+        args = get_semgrep_scan_args(temp_dir, None)
         output = await run_semgrep_output(top_level_span=None, args=args)
         results: SemgrepScanResult = SemgrepScanResult.model_validate_json(output)
         remove_temp_dir_from_results(results, temp_dir)
 
-        attach_scan_metrics(get_current_span(), results, config, workspace_dir)
+        attach_scan_metrics(get_current_span(), results, workspace_dir)
 
         return results
 
@@ -905,7 +919,7 @@ async def semgrep_scan_rpc(
     ctx: Context,
     workspace_dir: str | None,
     code_files: list[CodeFile],
-) -> CliOutput:
+) -> SemgrepScanResult:
     """
     Runs a Semgrep scan on provided code content using the new Semgrep RPC feature.
 
@@ -916,11 +930,11 @@ async def semgrep_scan_rpc(
     try:
         # TODO: perhaps should return more interpretable results?
         context: SemgrepContext = ctx.request_context.lifespan_context
-        cli_output = await run_semgrep_via_rpc(context, workspace_dir, code_files)
+        results = await run_semgrep_via_rpc(context, workspace_dir, code_files)
 
-        attach_rpc_scan_metrics(get_current_span(), cli_output, workspace_dir)
+        attach_scan_metrics(get_current_span(), results, workspace_dir)
 
-        return cli_output
+        return results
     except McpError as e:
         raise e
     except ValidationError as e:
@@ -944,8 +958,7 @@ async def semgrep_scan_core(
     ctx: Context,
     workspace_dir: str | None,
     code_files: list[CodeFile],
-    config: str | None = CONFIG_FIELD,
-) -> SemgrepScanResult | CliOutput:
+) -> SemgrepScanResult:
     """
     Runs a Semgrep scan on provided CodeFile objects and returns the findings in JSON format
 
@@ -960,33 +973,18 @@ async def semgrep_scan_core(
     paths = [cf.path for cf in code_files]
 
     if context.process is not None:
-        if config is not None:
-            # This should hopefully just cause the agent to call us back with
-            # the correct parameters.
-            raise McpError(
-                ErrorData(
-                    code=INVALID_PARAMS,
-                    message="""
-                    `config` is not supported when using the RPC-based scan.
-                    Try calling again without that parameter set?
-                  """,
-                )
-            )
-
         logger.info(f"Running RPC-based scan on paths: {paths}")
         return await semgrep_scan_rpc(ctx, workspace_dir, code_files)
     else:
         logger.info(f"Running CLI-based scan on paths: {paths}")
-        return await semgrep_scan_cli(ctx, workspace_dir, code_files, config)
+        return await semgrep_scan_cli(ctx, workspace_dir, code_files)
 
 
 @with_tool_span()
 async def semgrep_scan_remote(
     ctx: Context,
     code_files: list[dict[str, str]] = REMOTE_CODE_FILES_FIELD,
-    # TODO: currently only for CLI-based scans
-    config: str | None = CONFIG_FIELD,
-) -> SemgrepScanResult | CliOutput:
+) -> SemgrepScanResult:
     """
     Runs a Semgrep scan on provided code content and returns the findings in JSON format
 
@@ -1003,15 +1001,14 @@ async def semgrep_scan_remote(
 
     validated_code_files = validate_remote_files(code_files)
 
-    return await semgrep_scan_core(ctx, None, validated_code_files, config)
+    return await semgrep_scan_core(ctx, None, validated_code_files)
 
 
 @with_tool_span()
 async def semgrep_scan(
     ctx: Context,
     code_files: list[dict[str, str]] = LOCAL_CODE_FILES_FIELD,
-    config: str | None = CONFIG_FIELD,
-) -> SemgrepScanResult | CliOutput:
+) -> SemgrepScanResult:
     """
     Runs a Semgrep scan locally on provided code files returns the findings in JSON format.
 
@@ -1032,7 +1029,7 @@ async def semgrep_scan(
 
     validated_local_files = validate_local_files(code_files)
 
-    return await semgrep_scan_core(ctx, workspace_dir, validated_local_files, config)
+    return await semgrep_scan_core(ctx, workspace_dir, validated_local_files)
 
 
 # ---------------------------------------------------------------------------------
@@ -1044,10 +1041,13 @@ def setup_semgrep_mcp() -> str:
     prompt_template = """
     You are Cursor automations. Do the following in order and confirm each step:
 
-    1) Authenticate Semgrep and install Semgrep Pro:
-    - Run: `semgrep login --override-tty && semgrep install-semgrep-pro || true`
+    1) Authenticate Semgrep:
+    - Run: `semgrep login --override-tty`
 
-    2) Add a Cursor rule file at `.cursor/rules/semgrep.mdc` with the following exact content:
+    2) Install Semgrep Pro:
+    - Run: `semgrep install-semgrep-pro || true`
+
+    3) Add a Cursor rule file at `.cursor/rules/semgrep.mdc` with the following exact content:
     ---
     alwaysApply: true
     ---
@@ -1055,7 +1055,7 @@ def setup_semgrep_mcp() -> str:
     - Whenever you generate code or commands, you MUST first ensure safety by scanning the
     content with the semgrep_scan tool
 
-    3) Report back:
+    4) Report back:
     - Confirm the `.cursor/rules/semgrep.mdc` file exists with the specified content.
     - Confirm Semgrep login/install status by running `semgrep --pro --version`.
 

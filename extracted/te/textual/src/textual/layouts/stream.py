@@ -6,7 +6,6 @@ from textual.geometry import NULL_OFFSET, Region, Size
 from textual.layout import ArrangeResult, Layout, WidgetPlacement
 
 if TYPE_CHECKING:
-
     from textual.widget import Widget
 
 
@@ -37,7 +36,7 @@ class StreamLayout(Layout):
         parent.pre_layout(self)
         if not children:
             return []
-        viewport = parent.app.size
+        viewport = parent.app.viewport_size
 
         _Region = Region
         _WidgetPlacement = WidgetPlacement
@@ -66,6 +65,12 @@ class StreamLayout(Layout):
                     if height < (max_height_value := int(max_height.value))
                     else max_height_value
                 )
+            if (min_height := styles.min_height) is not None and min_height.is_cells:
+                height = (
+                    height
+                    if height > (min_height_value := int(min_height.value))
+                    else min_height_value
+                )
             placements.append(
                 _WidgetPlacement(
                     _Region(left, y, width - (left + right), height),
@@ -81,3 +86,37 @@ class StreamLayout(Layout):
             y += height
 
         return placements
+
+    def get_content_width(self, widget: Widget, container: Size, viewport: Size) -> int:
+        """Get the optimal content width by arranging children.
+
+        Args:
+            widget: The container widget.
+            container: The container size.
+            viewport: The viewport size.
+
+        Returns:
+            Width of the content.
+        """
+        return widget.scrollable_content_region.width
+
+    def get_content_height(
+        self, widget: Widget, container: Size, viewport: Size, width: int
+    ) -> int:
+        """Get the content height.
+
+        Args:
+            widget: The container widget.
+            container: The container size.
+            viewport: The viewport.
+            width: The content width.
+
+        Returns:
+            Content height (in lines).
+        """
+        if widget._nodes:
+            arrangement = widget.arrange(Size(width, 0))
+            height = arrangement.total_region.height
+        else:
+            height = 0
+        return height

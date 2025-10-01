@@ -120,19 +120,43 @@ class Expression(metaclass=_Expression):
     def __eq__(self, other) -> bool:
         return type(self) is type(other) and hash(self) == hash(other)
 
-    @property
-    def hashable_args(self) -> t.Any:
-        return frozenset(
-            (k, tuple(_norm_arg(a) for a in v) if type(v) is list else _norm_arg(v))
-            for k, v in self.args.items()
-            if not (v is None or v is False or (type(v) is list and not v))
-        )
-
     def __hash__(self) -> int:
-        if self._hash is not None:
-            return self._hash
+        if self._hash is None:
+            nodes = []
+            queue = deque([self])
 
-        return hash((self.__class__, self.hashable_args))
+            while queue:
+                node = queue.popleft()
+                nodes.append(node)
+
+                for v in node.iter_expressions():
+                    if v._hash is None:
+                        queue.append(v)
+
+            for node in reversed(nodes):
+                hash_ = hash(node.key)
+                t = type(node)
+
+                if t is Literal or t is Identifier:
+                    for k, v in sorted(node.args.items()):
+                        if v:
+                            hash_ = hash((hash_, k, v))
+                else:
+                    for k, v in sorted(node.args.items()):
+                        t = type(v)
+
+                        if t is list:
+                            for x in v:
+                                if x is not None and x is not False:
+                                    hash_ = hash((hash_, k, x.lower() if type(x) is str else x))
+                                else:
+                                    hash_ = hash((hash_, k))
+                        elif v is not None and v is not False:
+                            hash_ = hash((hash_, k, v.lower() if t is str else v))
+
+                node._hash = hash_
+        assert self._hash
+        return self._hash
 
     def __reduce__(self) -> t.Tuple[t.Callable, t.Tuple[t.List[t.Dict[str, t.Any]]]]:
         from sqlglot.serde import dump, load
@@ -369,6 +393,12 @@ class Expression(metaclass=_Expression):
             overwrite: assuming an index is given, this determines whether to overwrite the
                 list entry instead of only inserting a new value (i.e., like list.insert).
         """
+        expression: t.Optional[Expression] = self
+
+        while expression and expression._hash is not None:
+            expression._hash = None
+            expression = expression.parent
+
         if index is not None:
             expressions = self.args.get(arg_key) or []
 
@@ -2235,8 +2265,12 @@ class Prior(Expression):
 
 
 class Directory(Expression):
-    # https://spark.apache.org/docs/3.0.0-preview/sql-ref-syntax-dml-insert-overwrite-directory-hive.html
     arg_types = {"this": True, "local": False, "row_format": False}
+
+
+# https://docs.snowflake.com/en/user-guide/data-load-dirtables-query
+class DirectoryStage(Expression):
+    pass
 
 
 class ForeignKey(Expression):
@@ -2297,10 +2331,6 @@ class Identifier(Expression):
     @property
     def quoted(self) -> bool:
         return bool(self.args.get("quoted"))
-
-    @property
-    def hashable_args(self) -> t.Any:
-        return (self.this, self.quoted)
 
     @property
     def output_name(self) -> str:
@@ -2535,10 +2565,6 @@ class LimitOptions(Expression):
 
 class Literal(Condition):
     arg_types = {"this": True, "is_string": True}
-
-    @property
-    def hashable_args(self) -> t.Any:
-        return (self.this, self.args.get("is_string"))
 
     @classmethod
     def number(cls, number) -> Literal:
@@ -6427,12 +6453,34 @@ class Base64DecodeBinary(Func):
     arg_types = {"this": True, "alphabet": False}
 
 
+# https://docs.snowflake.com/en/sql-reference/functions/base64_decode_string
 class Base64DecodeString(Func):
     arg_types = {"this": True, "alphabet": False}
 
 
+# https://docs.snowflake.com/en/sql-reference/functions/base64_encode
 class Base64Encode(Func):
     arg_types = {"this": True, "max_line_length": False, "alphabet": False}
+
+
+# https://docs.snowflake.com/en/sql-reference/functions/try_base64_decode_binary
+class TryBase64DecodeBinary(Func):
+    arg_types = {"this": True, "alphabet": False}
+
+
+# https://docs.snowflake.com/en/sql-reference/functions/try_base64_decode_string
+class TryBase64DecodeString(Func):
+    arg_types = {"this": True, "alphabet": False}
+
+
+# https://docs.snowflake.com/en/sql-reference/functions/try_hex_decode_binary
+class TryHexDecodeBinary(Func):
+    pass
+
+
+# https://docs.snowflake.com/en/sql-reference/functions/try_hex_decode_string
+class TryHexDecodeString(Func):
+    pass
 
 
 # https://trino.io/docs/current/functions/datetime.html#from_iso8601_timestamp
@@ -7249,6 +7297,15 @@ class RegexpSplit(Func):
     arg_types = {"this": True, "expression": True, "limit": False}
 
 
+class RegexpCount(Func):
+    arg_types = {
+        "this": True,
+        "expression": True,
+        "position": False,
+        "parameters": False,
+    }
+
+
 class Repeat(Func):
     arg_types = {"this": True, "times": True}
 
@@ -7710,10 +7767,6 @@ class Semicolon(Expression):
 # type is intended to be constructed by qualify so that we can properly annotate its type later
 class TableColumn(Expression):
     pass
-
-
-def _norm_arg(arg):
-    return arg.lower() if type(arg) is str else arg
 
 
 ALL_FUNCTIONS = subclasses(__name__, Func, (AggFunc, Anonymous, Func))

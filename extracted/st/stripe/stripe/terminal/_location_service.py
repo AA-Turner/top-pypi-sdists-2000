@@ -5,139 +5,31 @@ from stripe._request_options import RequestOptions
 from stripe._stripe_service import StripeService
 from stripe._util import sanitize_id
 from stripe.terminal._location import Location
-from typing import Dict, List, cast
-from typing_extensions import Literal, NotRequired, TypedDict
+from typing import Optional, cast
+from typing_extensions import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from stripe.params.terminal._location_create_params import (
+        LocationCreateParams,
+    )
+    from stripe.params.terminal._location_delete_params import (
+        LocationDeleteParams,
+    )
+    from stripe.params.terminal._location_list_params import LocationListParams
+    from stripe.params.terminal._location_retrieve_params import (
+        LocationRetrieveParams,
+    )
+    from stripe.params.terminal._location_update_params import (
+        LocationUpdateParams,
+    )
 
 
 class LocationService(StripeService):
-    class CreateParams(TypedDict):
-        address: "LocationService.CreateParamsAddress"
-        """
-        The full address of the location.
-        """
-        configuration_overrides: NotRequired[str]
-        """
-        The ID of a configuration that will be used to customize all readers in this location.
-        """
-        display_name: str
-        """
-        A name for the location. Maximum length is 1000 characters.
-        """
-        expand: NotRequired[List[str]]
-        """
-        Specifies which fields in the response should be expanded.
-        """
-        metadata: NotRequired["Literal['']|Dict[str, str]"]
-        """
-        Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        """
-
-    class CreateParamsAddress(TypedDict):
-        city: NotRequired[str]
-        """
-        City, district, suburb, town, or village.
-        """
-        country: str
-        """
-        Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-        """
-        line1: NotRequired[str]
-        """
-        Address line 1 (e.g., street, PO Box, or company name).
-        """
-        line2: NotRequired[str]
-        """
-        Address line 2 (e.g., apartment, suite, unit, or building).
-        """
-        postal_code: NotRequired[str]
-        """
-        ZIP or postal code.
-        """
-        state: NotRequired[str]
-        """
-        State, county, province, or region.
-        """
-
-    class DeleteParams(TypedDict):
-        pass
-
-    class ListParams(TypedDict):
-        ending_before: NotRequired[str]
-        """
-        A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
-        """
-        expand: NotRequired[List[str]]
-        """
-        Specifies which fields in the response should be expanded.
-        """
-        limit: NotRequired[int]
-        """
-        A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
-        """
-        starting_after: NotRequired[str]
-        """
-        A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
-        """
-
-    class RetrieveParams(TypedDict):
-        expand: NotRequired[List[str]]
-        """
-        Specifies which fields in the response should be expanded.
-        """
-
-    class UpdateParams(TypedDict):
-        address: NotRequired["LocationService.UpdateParamsAddress"]
-        """
-        The full address of the location. You can't change the location's `country`. If you need to modify the `country` field, create a new `Location` object and re-register any existing readers to that location.
-        """
-        configuration_overrides: NotRequired["Literal['']|str"]
-        """
-        The ID of a configuration that will be used to customize all readers in this location.
-        """
-        display_name: NotRequired["Literal['']|str"]
-        """
-        A name for the location.
-        """
-        expand: NotRequired[List[str]]
-        """
-        Specifies which fields in the response should be expanded.
-        """
-        metadata: NotRequired["Literal['']|Dict[str, str]"]
-        """
-        Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        """
-
-    class UpdateParamsAddress(TypedDict):
-        city: NotRequired[str]
-        """
-        City, district, suburb, town, or village.
-        """
-        country: NotRequired[str]
-        """
-        Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-        """
-        line1: NotRequired[str]
-        """
-        Address line 1 (e.g., street, PO Box, or company name).
-        """
-        line2: NotRequired[str]
-        """
-        Address line 2 (e.g., apartment, suite, unit, or building).
-        """
-        postal_code: NotRequired[str]
-        """
-        ZIP or postal code.
-        """
-        state: NotRequired[str]
-        """
-        State, county, province, or region.
-        """
-
     def delete(
         self,
         location: str,
-        params: "LocationService.DeleteParams" = {},
-        options: RequestOptions = {},
+        params: Optional["LocationDeleteParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Location:
         """
         Deletes a Location object.
@@ -158,8 +50,8 @@ class LocationService(StripeService):
     async def delete_async(
         self,
         location: str,
-        params: "LocationService.DeleteParams" = {},
-        options: RequestOptions = {},
+        params: Optional["LocationDeleteParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Location:
         """
         Deletes a Location object.
@@ -180,8 +72,8 @@ class LocationService(StripeService):
     def retrieve(
         self,
         location: str,
-        params: "LocationService.RetrieveParams" = {},
-        options: RequestOptions = {},
+        params: Optional["LocationRetrieveParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Location:
         """
         Retrieves a Location object.
@@ -202,8 +94,8 @@ class LocationService(StripeService):
     async def retrieve_async(
         self,
         location: str,
-        params: "LocationService.RetrieveParams" = {},
-        options: RequestOptions = {},
+        params: Optional["LocationRetrieveParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Location:
         """
         Retrieves a Location object.
@@ -224,8 +116,8 @@ class LocationService(StripeService):
     def update(
         self,
         location: str,
-        params: "LocationService.UpdateParams" = {},
-        options: RequestOptions = {},
+        params: Optional["LocationUpdateParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Location:
         """
         Updates a Location object by setting the values of the parameters passed. Any parameters not provided will be left unchanged.
@@ -246,8 +138,8 @@ class LocationService(StripeService):
     async def update_async(
         self,
         location: str,
-        params: "LocationService.UpdateParams" = {},
-        options: RequestOptions = {},
+        params: Optional["LocationUpdateParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Location:
         """
         Updates a Location object by setting the values of the parameters passed. Any parameters not provided will be left unchanged.
@@ -267,8 +159,8 @@ class LocationService(StripeService):
 
     def list(
         self,
-        params: "LocationService.ListParams" = {},
-        options: RequestOptions = {},
+        params: Optional["LocationListParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> ListObject[Location]:
         """
         Returns a list of Location objects.
@@ -286,8 +178,8 @@ class LocationService(StripeService):
 
     async def list_async(
         self,
-        params: "LocationService.ListParams" = {},
-        options: RequestOptions = {},
+        params: Optional["LocationListParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> ListObject[Location]:
         """
         Returns a list of Location objects.
@@ -305,8 +197,8 @@ class LocationService(StripeService):
 
     def create(
         self,
-        params: "LocationService.CreateParams",
-        options: RequestOptions = {},
+        params: Optional["LocationCreateParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Location:
         """
         Creates a new Location object.
@@ -325,8 +217,8 @@ class LocationService(StripeService):
 
     async def create_async(
         self,
-        params: "LocationService.CreateParams",
-        options: RequestOptions = {},
+        params: Optional["LocationCreateParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Location:
         """
         Creates a new Location object.

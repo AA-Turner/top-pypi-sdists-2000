@@ -154,14 +154,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}"
         method = "DELETE"
         operation_name = "cancel_work_request"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/WorkRequest/CancelWorkRequest"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -269,14 +269,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/change_resource_analytics_instance_compartment.py.html>`__ to see an example of how to use change_resource_analytics_instance_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/change_resource_analytics_instance_compartment.py.html>`__ to see an example of how to use change_resource_analytics_instance_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['resourceAnalyticsInstanceId']
         resource_path = "/resourceAnalyticsInstances/{resourceAnalyticsInstanceId}/actions/changeCompartment"
         method = "POST"
         operation_name = "change_resource_analytics_instance_compartment"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/ResourceAnalyticsInstance/ChangeResourceAnalyticsInstanceCompartment"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -379,14 +379,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/create_resource_analytics_instance.py.html>`__ to see an example of how to use create_resource_analytics_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/create_resource_analytics_instance.py.html>`__ to see an example of how to use create_resource_analytics_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/resourceAnalyticsInstances"
         method = "POST"
         operation_name = "create_resource_analytics_instance"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/ResourceAnalyticsInstance/CreateResourceAnalyticsInstance"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -481,14 +481,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/delete_resource_analytics_instance.py.html>`__ to see an example of how to use delete_resource_analytics_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/delete_resource_analytics_instance.py.html>`__ to see an example of how to use delete_resource_analytics_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['resourceAnalyticsInstanceId']
         resource_path = "/resourceAnalyticsInstances/{resourceAnalyticsInstanceId}"
         method = "DELETE"
         operation_name = "delete_resource_analytics_instance"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/ResourceAnalyticsInstance/DeleteResourceAnalyticsInstance"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -584,14 +584,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/get_resource_analytics_instance.py.html>`__ to see an example of how to use get_resource_analytics_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/get_resource_analytics_instance.py.html>`__ to see an example of how to use get_resource_analytics_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['resourceAnalyticsInstanceId']
         resource_path = "/resourceAnalyticsInstances/{resourceAnalyticsInstanceId}"
         method = "GET"
         operation_name = "get_resource_analytics_instance"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/ResourceAnalyticsInstance/GetResourceAnalyticsInstance"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -687,14 +687,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}"
         method = "GET"
         operation_name = "get_work_request"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/WorkRequest/GetWorkRequest"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -829,14 +829,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/list_resource_analytics_instances.py.html>`__ to see an example of how to use list_resource_analytics_instances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/list_resource_analytics_instances.py.html>`__ to see an example of how to use list_resource_analytics_instances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/resourceAnalyticsInstances"
         method = "GET"
         operation_name = "list_resource_analytics_instances"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/ResourceAnalyticsInstanceCollection/ListResourceAnalyticsInstances"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -987,14 +987,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}/errors"
         method = "GET"
         operation_name = "list_work_request_errors"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/WorkRequestError/ListWorkRequestErrors"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1142,14 +1142,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}/logs"
         method = "GET"
         operation_name = "list_work_request_logs"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/WorkRequestLogEntry/ListWorkRequestLogs"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1312,14 +1312,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/workRequests"
         method = "GET"
         operation_name = "list_work_requests"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/WorkRequest/ListWorkRequests"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1452,14 +1452,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/resource_analytics_instance_disable_oac.py.html>`__ to see an example of how to use resource_analytics_instance_disable_oac API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/resource_analytics_instance_disable_oac.py.html>`__ to see an example of how to use resource_analytics_instance_disable_oac API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['resourceAnalyticsInstanceId']
         resource_path = "/resourceAnalyticsInstances/{resourceAnalyticsInstanceId}/actions/disableOac"
         method = "POST"
         operation_name = "resource_analytics_instance_disable_oac"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/ResourceAnalyticsInstance/ResourceAnalyticsInstanceDisableOac"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1562,14 +1562,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/resource_analytics_instance_enable_oac.py.html>`__ to see an example of how to use resource_analytics_instance_enable_oac API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/resource_analytics_instance_enable_oac.py.html>`__ to see an example of how to use resource_analytics_instance_enable_oac API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['resourceAnalyticsInstanceId']
         resource_path = "/resourceAnalyticsInstances/{resourceAnalyticsInstanceId}/actions/enableOac"
         method = "POST"
         operation_name = "resource_analytics_instance_enable_oac"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/ResourceAnalyticsInstance/ResourceAnalyticsInstanceEnableOac"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1674,14 +1674,14 @@ class ResourceAnalyticsInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/update_resource_analytics_instance.py.html>`__ to see an example of how to use update_resource_analytics_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/update_resource_analytics_instance.py.html>`__ to see an example of how to use update_resource_analytics_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['resourceAnalyticsInstanceId']
         resource_path = "/resourceAnalyticsInstances/{resourceAnalyticsInstanceId}"
         method = "PUT"
         operation_name = "update_resource_analytics_instance"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/ResourceAnalyticsInstance/UpdateResourceAnalyticsInstance"
 
         # Don't accept unknown kwargs
         expected_kwargs = [

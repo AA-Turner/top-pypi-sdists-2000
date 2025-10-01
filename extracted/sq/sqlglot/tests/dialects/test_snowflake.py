@@ -44,7 +44,9 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT LPAD(tbl.bin_col, 10)")
         self.validate_identity("SELECT RPAD('Hello', 10, '*')")
         self.validate_identity("SELECT RPAD(tbl.bin_col, 10)")
+        self.validate_identity("SELECT SOUNDEX(column_name)")
         self.validate_identity("SELECT JAROWINKLER_SIMILARITY('hello', 'world')")
+        self.validate_identity("SELECT SPLIT_PART('11.22.33', '.', 1)")
         self.validate_identity("PARSE_URL('https://example.com/path')")
         self.validate_identity("PARSE_URL('https://example.com/path', 1)")
         self.validate_identity("SELECT {*} FROM my_table")
@@ -121,6 +123,9 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT GET_PATH(foo, 'bar')")
         self.validate_identity("SELECT a, exclude, b FROM xxx")
         self.validate_identity("SELECT ARRAY_SORT(x, TRUE, FALSE)")
+        self.validate_identity("SELECT FILE_URL FROM DIRECTORY(@mystage) WHERE SIZE > 100000").args[
+            "from"
+        ].this.this.assert_is(exp.DirectoryStage).this.assert_is(exp.Var)
         self.validate_identity(
             "SELECT AI_CLASSIFY('text', ['travel', 'cooking'], OBJECT_CONSTRUCT('output_mode', 'multi'))"
         )
@@ -1392,6 +1397,20 @@ class TestSnowflake(Validator):
             "SELECT BASE64_ENCODE('Hello World', 76, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')"
         )
 
+        self.validate_identity("SELECT TRY_BASE64_DECODE_BINARY('SGVsbG8=')")
+        self.validate_identity(
+            "SELECT TRY_BASE64_DECODE_BINARY('SGVsbG8=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')"
+        )
+
+        self.validate_identity("SELECT TRY_BASE64_DECODE_STRING('SGVsbG8gV29ybGQ=')")
+        self.validate_identity(
+            "SELECT TRY_BASE64_DECODE_STRING('SGVsbG8gV29ybGQ=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')"
+        )
+
+        self.validate_identity("SELECT TRY_HEX_DECODE_BINARY('48656C6C6F')")
+
+        self.validate_identity("SELECT TRY_HEX_DECODE_STRING('48656C6C6F')")
+
     def test_null_treatment(self):
         self.validate_all(
             r"SELECT FIRST_VALUE(TABLE1.COLUMN1) OVER (PARTITION BY RANDOM_COLUMN1, RANDOM_COLUMN2 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS MY_ALIAS FROM TABLE1",
@@ -2406,6 +2425,10 @@ FROM persons AS p, LATERAL FLATTEN(input => p.c, path => 'contact') AS _flattene
             "REGEXP_SUBSTR_ALL(subject, pattern)",
             "REGEXP_EXTRACT_ALL(subject, pattern)",
         )
+
+        self.validate_identity("SELECT REGEXP_COUNT('hello world', 'l')")
+        self.validate_identity("SELECT REGEXP_COUNT('hello world', 'l', 1)")
+        self.validate_identity("SELECT REGEXP_COUNT('hello world', 'l', 1, 'i')")
 
     @mock.patch("sqlglot.generator.logger")
     def test_regexp_replace(self, logger):

@@ -132,7 +132,7 @@ ClientPasswordAuthTypeType = Literal[
     "POSTGRES_SCRAM_SHA_256",
     "SQL_SERVER_AUTHENTICATION",
 ]
-ClusterScalabilityTypeType = Literal["limitless", "standard"]
+ClusterScalabilityTypeType = Literal["limitless", "scaleout", "standard"]
 CustomEngineVersionStatusType = Literal["available", "inactive", "inactive-except-restore"]
 DBClusterAvailableWaiterName = Literal["db_cluster_available"]
 DBClusterDeletedWaiterName = Literal["db_cluster_deleted"]
@@ -246,7 +246,9 @@ SourceTypeType = Literal[
     "db-parameter-group",
     "db-proxy",
     "db-security-group",
+    "db-shard-group",
     "db-snapshot",
+    "zero-etl",
 ]
 TargetConnectionNetworkTypeType = Literal["IPV4", "IPV6"]
 TargetHealthReasonType = Literal[
@@ -254,10 +256,11 @@ TargetHealthReasonType = Literal[
     "CONNECTION_FAILED",
     "INVALID_REPLICATION_STATE",
     "PENDING_PROXY_CAPACITY",
+    "PROMOTED",
     "UNREACHABLE",
 ]
 TargetRoleType = Literal["READ_ONLY", "READ_WRITE", "UNKNOWN"]
-TargetStateType = Literal["AVAILABLE", "REGISTERING", "UNAVAILABLE"]
+TargetStateType = Literal["AVAILABLE", "REGISTERING", "UNAVAILABLE", "UNUSED"]
 TargetTypeType = Literal["RDS_INSTANCE", "RDS_SERVERLESS_ENDPOINT", "TRACKED_CLUSTER"]
 TenantDatabaseAvailableWaiterName = Literal["tenant_database_available"]
 TenantDatabaseDeletedWaiterName = Literal["tenant_database_deleted"]
@@ -628,7 +631,6 @@ ServiceName = Literal[
     "shield",
     "signer",
     "simspaceweaver",
-    "sms",
     "snow-device-management",
     "snowball",
     "sns",

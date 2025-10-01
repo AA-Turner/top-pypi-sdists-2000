@@ -1,14 +1,14 @@
 Metadata-Version: 2.4
 Name: python-socketio
-Version: 5.13.0
+Version: 5.14.0
 Summary: Socket.IO server and client for Python
 Author-email: Miguel Grinberg <miguel.grinberg@gmail.com>
+License: MIT
 Project-URL: Homepage, https://github.com/miguelgrinberg/python-socketio
 Project-URL: Bug Tracker, https://github.com/miguelgrinberg/python-socketio/issues
 Classifier: Environment :: Web Environment
 Classifier: Intended Audience :: Developers
 Classifier: Programming Language :: Python :: 3
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown

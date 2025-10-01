@@ -3,21 +3,18 @@
 from stripe._balance import Balance
 from stripe._request_options import RequestOptions
 from stripe._stripe_service import StripeService
-from typing import List, cast
-from typing_extensions import NotRequired, TypedDict
+from typing import Optional, cast
+from typing_extensions import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from stripe.params._balance_retrieve_params import BalanceRetrieveParams
 
 
 class BalanceService(StripeService):
-    class RetrieveParams(TypedDict):
-        expand: NotRequired[List[str]]
-        """
-        Specifies which fields in the response should be expanded.
-        """
-
     def retrieve(
         self,
-        params: "BalanceService.RetrieveParams" = {},
-        options: RequestOptions = {},
+        params: Optional["BalanceRetrieveParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Balance:
         """
         Retrieves the current account balance, based on the authentication that was used to make the request.
@@ -36,8 +33,8 @@ class BalanceService(StripeService):
 
     async def retrieve_async(
         self,
-        params: "BalanceService.RetrieveParams" = {},
-        options: RequestOptions = {},
+        params: Optional["BalanceRetrieveParams"] = None,
+        options: Optional[RequestOptions] = None,
     ) -> Balance:
         """
         Retrieves the current account balance, based on the authentication that was used to make the request.

@@ -79,7 +79,7 @@ from textual.geometry import (
     Spacing,
     clamp,
 )
-from textual.layout import Layout
+from textual.layout import Layout, WidgetPlacement
 from textual.layouts.vertical import VerticalLayout
 from textual.message import Message
 from textual.messages import CallbackType, Prune
@@ -460,7 +460,7 @@ class Widget(DOMNode):
         self._content_height_cache: tuple[object, int] = (None, 0)
 
         self._arrangement_cache: FIFOCache[
-            tuple[Size, int, Widget], DockArrangeResult
+            tuple[Size, int, bool], DockArrangeResult
         ] = FIFOCache(4)
 
         self._styles_cache = StylesCache()
@@ -605,7 +605,7 @@ class Widget(DOMNode):
         Returns:
             Relative offset.
         """
-        return self.styles.offset.resolve(self.size, self.app.size)
+        return self.styles.offset.resolve(self.size, self.screen.size)
 
     @offset.setter
     def offset(self, offset: tuple[int, int]) -> None:
@@ -721,6 +721,22 @@ class Widget(DOMNode):
         widget._post_register(self.app)
         self.app.stylesheet.apply(widget)
         self.refresh(layout=True)
+
+    def process_layout(
+        self, placements: list[WidgetPlacement]
+    ) -> list[WidgetPlacement]:
+        """A hook to allow for the manipulation of widget placements before rendering.
+
+        You could use this as a way to modify the positions / margins of widgets if your requirement is
+        not supported in TCSS. In practice, this method is rarely needed!
+
+        Args:
+            placements: A list of [`WidgetPlacement`][textual.layout.WidgetPlacement] objects.
+
+        Returns:
+            A new list of placements.
+        """
+        return placements
 
     def _uncover(self) -> None:
         """Remove any widget, previously set via [`_cover`][textual.widget.Widget._cover]."""
@@ -1248,11 +1264,14 @@ class Widget(DOMNode):
             return text_content
         return Content.from_markup(text_content)
 
-    def _arrange(self, size: Size, optimal: bool = False) -> DockArrangeResult:
-        """Arrange children.
+    def arrange(self, size: Size, optimal: bool = False) -> DockArrangeResult:
+        """Arrange child widgets.
+
+        This method is best left alone, unless you have a deep understanding of what it does.
 
         Args:
             size: Size of container.
+            optimal: Whether fr units should expand the widget (`False`) or avoid expanding the widget (`True`).
 
         Returns:
             Widget locations.
@@ -4185,6 +4204,8 @@ class Widget(DOMNode):
                 if not isinstance(ancestor, Widget):
                     break
                 ancestor._clear_arrangement_cache()
+                if not ancestor.styles.auto_dimensions:
+                    break
 
         if recompose:
             self._recompose_required = True

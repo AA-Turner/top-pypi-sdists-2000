@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sqlglot
-Version: 27.19.0
+Version: 27.20.0
 Summary: An easily customizable SQL parser and transpiler
 Author-email: Toby Mao <toby.mao@gmail.com>
 License-Expression: MIT
@@ -89,12 +89,14 @@ pip3 install "sqlglot[rs]"
 Or with a local checkout:
 
 ```
+# Optionally prefix with UV=1 to use uv for the installation
 make install
 ```
 
 Requirements for development (optional):
 
 ```
+# Optionally prefix with UV=1 to use uv for the installation
 make install-dev
 ```
 

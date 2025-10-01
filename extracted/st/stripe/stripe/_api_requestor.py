@@ -66,6 +66,10 @@ HttpVerb = Literal["get", "post", "delete"]
 _default_proxy: Optional[str] = None
 
 
+def is_v2_delete_resp(method: str, api_mode: ApiMode) -> bool:
+    return method == "delete" and api_mode == "V2"
+
+
 class _APIRequestor(object):
     _instance: ClassVar["_APIRequestor|None"] = None
 
@@ -201,6 +205,7 @@ class _APIRequestor(object):
             params=params,
             requestor=requestor,
             api_mode=api_mode,
+            is_v2_deleted_object=is_v2_delete_resp(method, api_mode),
         )
 
         return obj
@@ -234,6 +239,7 @@ class _APIRequestor(object):
             params=params,
             requestor=requestor,
             api_mode=api_mode,
+            is_v2_deleted_object=is_v2_delete_resp(method, api_mode),
         )
 
         return obj
@@ -494,8 +500,8 @@ class _APIRequestor(object):
             headers["Stripe-Account"] = stripe_account
 
         stripe_context = options.get("stripe_context")
-        if stripe_context:
-            headers["Stripe-Context"] = stripe_context
+        if stripe_context and str(stripe_context):
+            headers["Stripe-Context"] = str(stripe_context)
 
         idempotency_key = options.get("idempotency_key")
         if idempotency_key:
@@ -821,7 +827,7 @@ class _APIRequestor(object):
 
         return rcontent, rcode, rheaders
 
-    def _should_handle_code_as_error(self, rcode):
+    def _should_handle_code_as_error(self, rcode: int) -> bool:
         return not 200 <= rcode < 300
 
     def _interpret_response(

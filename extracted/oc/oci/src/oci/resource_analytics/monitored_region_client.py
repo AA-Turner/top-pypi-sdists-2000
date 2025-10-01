@@ -153,14 +153,14 @@ class MonitoredRegionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/create_monitored_region.py.html>`__ to see an example of how to use create_monitored_region API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/create_monitored_region.py.html>`__ to see an example of how to use create_monitored_region API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/monitoredRegions"
         method = "POST"
         operation_name = "create_monitored_region"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/MonitoredRegion/CreateMonitoredRegion"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -255,14 +255,14 @@ class MonitoredRegionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/delete_monitored_region.py.html>`__ to see an example of how to use delete_monitored_region API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/delete_monitored_region.py.html>`__ to see an example of how to use delete_monitored_region API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['monitoredRegionId']
         resource_path = "/monitoredRegions/{monitoredRegionId}"
         method = "DELETE"
         operation_name = "delete_monitored_region"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/MonitoredRegion/DeleteMonitoredRegion"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -358,14 +358,14 @@ class MonitoredRegionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/get_monitored_region.py.html>`__ to see an example of how to use get_monitored_region API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/get_monitored_region.py.html>`__ to see an example of how to use get_monitored_region API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['monitoredRegionId']
         resource_path = "/monitoredRegions/{monitoredRegionId}"
         method = "GET"
         operation_name = "get_monitored_region"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/MonitoredRegion/GetMonitoredRegion"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -497,14 +497,14 @@ class MonitoredRegionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/resourceanalytics/list_monitored_regions.py.html>`__ to see an example of how to use list_monitored_regions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/resourceanalytics/list_monitored_regions.py.html>`__ to see an example of how to use list_monitored_regions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/monitoredRegions"
         method = "GET"
         operation_name = "list_monitored_regions"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/resource-analytics/20241031/MonitoredRegionCollection/ListMonitoredRegions"
 
         # Don't accept unknown kwargs
         expected_kwargs = [

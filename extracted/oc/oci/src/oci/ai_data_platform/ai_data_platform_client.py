@@ -154,14 +154,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}"
         method = "DELETE"
         operation_name = "cancel_work_request"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/WorkRequest/CancelWorkRequest"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -269,14 +269,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/change_ai_data_platform_compartment.py.html>`__ to see an example of how to use change_ai_data_platform_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/change_ai_data_platform_compartment.py.html>`__ to see an example of how to use change_ai_data_platform_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['aiDataPlatformId']
         resource_path = "/aiDataPlatforms/{aiDataPlatformId}/actions/changeCompartment"
         method = "POST"
         operation_name = "change_ai_data_platform_compartment"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/AiDataPlatform/ChangeAiDataPlatformCompartment"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -379,14 +379,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/create_ai_data_platform.py.html>`__ to see an example of how to use create_ai_data_platform API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/create_ai_data_platform.py.html>`__ to see an example of how to use create_ai_data_platform API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/aiDataPlatforms"
         method = "POST"
         operation_name = "create_ai_data_platform"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/AiDataPlatform/CreateAiDataPlatform"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -484,14 +484,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/delete_ai_data_platform.py.html>`__ to see an example of how to use delete_ai_data_platform API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/delete_ai_data_platform.py.html>`__ to see an example of how to use delete_ai_data_platform API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['aiDataPlatformId']
         resource_path = "/aiDataPlatforms/{aiDataPlatformId}"
         method = "DELETE"
         operation_name = "delete_ai_data_platform"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/AiDataPlatform/DeleteAiDataPlatform"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -595,14 +595,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/get_ai_data_platform.py.html>`__ to see an example of how to use get_ai_data_platform API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/get_ai_data_platform.py.html>`__ to see an example of how to use get_ai_data_platform API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['aiDataPlatformId']
         resource_path = "/aiDataPlatforms/{aiDataPlatformId}"
         method = "GET"
         operation_name = "get_ai_data_platform"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/AiDataPlatform/GetAiDataPlatform"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -698,14 +698,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}"
         method = "GET"
         operation_name = "get_work_request"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/WorkRequest/GetWorkRequest"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -849,14 +849,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/list_ai_data_platforms.py.html>`__ to see an example of how to use list_ai_data_platforms API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/list_ai_data_platforms.py.html>`__ to see an example of how to use list_ai_data_platforms API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/aiDataPlatforms"
         method = "GET"
         operation_name = "list_ai_data_platforms"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/AiDataPlatformCollection/ListAiDataPlatforms"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1018,14 +1018,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}/errors"
         method = "GET"
         operation_name = "list_work_request_errors"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/WorkRequestError/ListWorkRequestErrors"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1173,14 +1173,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}/logs"
         method = "GET"
         operation_name = "list_work_request_logs"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/WorkRequestLogEntry/ListWorkRequestLogs"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1343,14 +1343,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/workRequests"
         method = "GET"
         operation_name = "list_work_requests"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/WorkRequest/ListWorkRequests"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1486,14 +1486,14 @@ class AiDataPlatformClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.2/aidataplatform/update_ai_data_platform.py.html>`__ to see an example of how to use update_ai_data_platform API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.160.3/aidataplatform/update_ai_data_platform.py.html>`__ to see an example of how to use update_ai_data_platform API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['aiDataPlatformId']
         resource_path = "/aiDataPlatforms/{aiDataPlatformId}"
         method = "PUT"
         operation_name = "update_ai_data_platform"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/AiDataPlatform/UpdateAiDataPlatform"
 
         # Don't accept unknown kwargs
         expected_kwargs = [

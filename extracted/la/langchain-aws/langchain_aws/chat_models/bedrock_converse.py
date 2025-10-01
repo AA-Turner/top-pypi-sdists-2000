@@ -57,7 +57,11 @@ from pydantic import BaseModel, ConfigDict, Field, SecretStr, model_validator
 from typing_extensions import Self
 
 from langchain_aws.function_calling import ToolsOutputParser
-from langchain_aws.utils import create_aws_client
+from langchain_aws.utils import (
+    count_tokens_api_supported_for_model,
+    create_aws_client,
+    trim_message_whitespace,
+)
 
 logger = logging.getLogger(__name__)
 _BM = TypeVar("_BM", bound=BaseModel)
@@ -349,16 +353,16 @@ class ChatBedrockConverse(BaseChatModel):
 
     model_id: str = Field(alias="model")
     """Id of the model to call.
-    
-    e.g., ``"anthropic.claude-3-sonnet-20240229-v1:0"``. This is equivalent to the 
-    modelID property in the list-foundation-models api. For custom and provisioned 
-    models, an ARN value is expected. See 
-    https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html#model-ids-arns 
+
+    e.g., ``"anthropic.claude-3-sonnet-20240229-v1:0"``. This is equivalent to the
+    modelID property in the list-foundation-models api. For custom and provisioned
+    models, an ARN value is expected. See
+    https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html#model-ids-arns
     for a list of all supported built-in models.
     """
 
     base_model_id: Optional[str] = Field(default=None, alias="base_model")
-    """An optional field to pass the base model id. If provided, this will be used over 
+    """An optional field to pass the base model id. If provided, this will be used over
     the value of model_id to identify the base model.
     """
 
@@ -373,73 +377,73 @@ class ChatBedrockConverse(BaseChatModel):
 
     top_p: Optional[float] = None
     """The percentage of most-likely candidates that are considered for the next token.
-    
+
     Must be 0 to 1.
-    
-    For example, if you choose a value of 0.8 for topP, the model selects from 
-    the top 80% of the probability distribution of tokens that could be next in the 
+
+    For example, if you choose a value of 0.8 for topP, the model selects from
+    the top 80% of the probability distribution of tokens that could be next in the
     sequence."""
 
     region_name: Optional[str] = None
-    """The aws region, e.g., `us-west-2`. 
-    
-    Falls back to AWS_REGION or AWS_DEFAULT_REGION env variable or region specified in 
+    """The aws region, e.g., `us-west-2`.
+
+    Falls back to AWS_REGION or AWS_DEFAULT_REGION env variable or region specified in
     ~/.aws/config in case it is not provided here.
     """
 
     credentials_profile_name: Optional[str] = Field(default=None, exclude=True)
     """The name of the profile in the ~/.aws/credentials or ~/.aws/config files.
-    
+
     Profile should either have access keys or role information specified.
     If not specified, the default credential profile or, if on an EC2 instance,
-    credentials from IMDS will be used. 
+    credentials from IMDS will be used.
     See: https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html
     """
 
     aws_access_key_id: Optional[SecretStr] = Field(
         default_factory=secret_from_env("AWS_ACCESS_KEY_ID", default=None)
     )
-    """AWS access key id. 
-    
+    """AWS access key id.
+
     If provided, aws_secret_access_key must also be provided.
     If not specified, the default credential profile or, if on an EC2 instance,
     credentials from IMDS will be used.
     See: https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html
-    
+
     If not provided, will be read from 'AWS_ACCESS_KEY_ID' environment variable.
     """
 
     aws_secret_access_key: Optional[SecretStr] = Field(
         default_factory=secret_from_env("AWS_SECRET_ACCESS_KEY", default=None)
     )
-    """AWS secret_access_key. 
-    
+    """AWS secret_access_key.
+
     If provided, aws_access_key_id must also be provided.
     If not specified, the default credential profile or, if on an EC2 instance,
     credentials from IMDS will be used.
     See: https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html
-    
+
     If not provided, will be read from 'AWS_SECRET_ACCESS_KEY' environment variable.
     """
 
     aws_session_token: Optional[SecretStr] = Field(
         default_factory=secret_from_env("AWS_SESSION_TOKEN", default=None)
     )
-    """AWS session token. 
-    
-    If provided, aws_access_key_id and aws_secret_access_key must 
+    """AWS session token.
+
+    If provided, aws_access_key_id and aws_secret_access_key must
     also be provided. Not required unless using temporary credentials.
     See: https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html
-    
+
     If not provided, will be read from 'AWS_SESSION_TOKEN' environment variable.
     """
 
     provider: str = ""
-    """The model provider, e.g., amazon, cohere, ai21, etc. 
-    
-    When not supplied, provider is extracted from the first part of the model_id, e.g. 
-    'amazon' in 'amazon.titan-text-express-v1'. This value should be provided for model 
-    ids that do not have the provider in them, like custom and provisioned models that 
+    """The model provider, e.g., amazon, cohere, ai21, etc.
+
+    When not supplied, provider is extracted from the first part of the model_id, e.g.
+    'amazon' in 'amazon.titan-text-express-v1'. This value should be provided for model
+    ids that do not have the provider in them, like custom and provisioned models that
     have an ARN associated with them.
     """
 
@@ -454,33 +458,33 @@ class ChatBedrockConverse(BaseChatModel):
 
     additional_model_request_fields: Optional[Dict[str, Any]] = None
     """Additional inference parameters that the model supports.
-    
+
     Parameters beyond the base set of inference parameters that Converse supports in the
     inferenceConfig field.
     """
 
     additional_model_response_field_paths: Optional[List[str]] = None
-    """Additional model parameters field paths to return in the response. 
-    
-    Converse returns the requested fields as a JSON Pointer object in the 
-    additionalModelResponseFields field. The following is example JSON for 
+    """Additional model parameters field paths to return in the response.
+
+    Converse returns the requested fields as a JSON Pointer object in the
+    additionalModelResponseFields field. The following is example JSON for
     additionalModelResponseFieldPaths.
     """
 
-    supports_tool_choice_values: Optional[
-        Sequence[Literal["auto", "any", "tool"]]
-    ] = None
+    supports_tool_choice_values: Optional[Sequence[Literal["auto", "any", "tool"]]] = (
+        None
+    )
     """Which types of tool_choice values the model supports.
-    
-    Inferred if not specified. Inferred as ('auto', 'any', 'tool') if a 'claude-3' 
-    model is used, ('auto', 'any') if a 'mistral-large' model is used, 
+
+    Inferred if not specified. Inferred as ('auto', 'any', 'tool') if a 'claude-3'
+    model is used, ('auto', 'any') if a 'mistral-large' model is used,
     ('auto') if a 'nova' model is used, empty otherwise.
     """
 
     performance_config: Optional[Mapping[str, Any]] = Field(
         default=None,
         description="""Performance configuration settings for latency optimization.
-        
+
         Example:
             performance_config={'latency': 'optimized'}
         If not provided, defaults to standard latency.
@@ -657,10 +661,33 @@ class ChatBedrockConverse(BaseChatModel):
     def validate_environment(self) -> Self:
         """Validate that AWS credentials to and python package exists in environment."""
 
+        # Skip creating new client if passed in constructor
+        if self.client is None:
+            self.client = create_aws_client(
+                region_name=self.region_name,
+                credentials_profile_name=self.credentials_profile_name,
+                aws_access_key_id=self.aws_access_key_id,
+                aws_secret_access_key=self.aws_secret_access_key,
+                aws_session_token=self.aws_session_token,
+                endpoint_url=self.endpoint_url,
+                config=self.config,
+                service_name="bedrock-runtime",
+            )
+
         # Create bedrock client for control plane API call
         if self.bedrock_client is None:
+            bedrock_client_cfg = {}
+            if self.client:
+                try:
+                    if hasattr(self.client, "meta") and hasattr(
+                        self.client.meta, "region_name"
+                    ):
+                        bedrock_client_cfg["region_name"] = self.client.meta.region_name
+                except (AttributeError, TypeError):
+                    pass
+
             self.bedrock_client = create_aws_client(
-                region_name=self.region_name,
+                region_name=self.region_name or bedrock_client_cfg.get("region_name"),
                 credentials_profile_name=self.credentials_profile_name,
                 aws_access_key_id=self.aws_access_key_id,
                 aws_secret_access_key=self.aws_secret_access_key,
@@ -669,6 +696,19 @@ class ChatBedrockConverse(BaseChatModel):
                 config=self.config,
                 service_name="bedrock",
             )
+
+        # For AIPs, pull base model ID via GetInferenceProfile API call
+        if (
+            self.base_model_id is None
+            and "application-inference-profile" in self.model_id
+        ):
+            response = self.bedrock_client.get_inference_profile(
+                inferenceProfileIdentifier=self.model_id
+            )
+            if "models" in response and len(response["models"]) > 0:
+                model_arn = response["models"][0]["modelArn"]
+                # Format: arn:aws:bedrock:region::foundation-model/provider.model-name
+                self.base_model_id = model_arn.split("/")[-1]
 
         # Handle streaming configuration for application inference profiles
         if "application-inference-profile" in self.model_id:
@@ -681,14 +721,19 @@ class ChatBedrockConverse(BaseChatModel):
             base_model = self._get_base_model()
             if "claude" in base_model:
                 # Tool choice not supported when thinking is enabled
+                thinking_claude_models = (
+                    "claude-3-7-sonnet",
+                    "claude-sonnet-4",
+                    "claude-opus-4",
+                )
                 thinking_params = (self.additional_model_request_fields or {}).get(
                     "thinking", {}
                 )
                 if (
-                    "claude-3-7-sonnet" in base_model
+                    any(model in base_model for model in thinking_claude_models)
                     and thinking_params.get("type") == "enabled"
                 ):
-                    self.supports_tool_choice_values = ()
+                    self.supports_tool_choice_values = ("auto",)
                 else:
                     self.supports_tool_choice_values = ("auto", "any", "tool")
             elif "llama4" in base_model:
@@ -710,19 +755,6 @@ class ChatBedrockConverse(BaseChatModel):
             else:
                 self.supports_tool_choice_values = ()
 
-        # Skip creating new client if passed in constructor
-        if self.client is None:
-            self.client = create_aws_client(
-                region_name=self.region_name,
-                credentials_profile_name=self.credentials_profile_name,
-                aws_access_key_id=self.aws_access_key_id,
-                aws_secret_access_key=self.aws_secret_access_key,
-                aws_session_token=self.aws_session_token,
-                endpoint_url=self.endpoint_url,
-                config=self.config,
-                service_name="bedrock-runtime",
-            )
-
         if self.guard_last_turn_only and not self.guardrail_config:
             raise ValueError(
                 "`guard_last_turn_only=True` but no `guardrail_config` supplied. "
@@ -733,20 +765,17 @@ class ChatBedrockConverse(BaseChatModel):
         return self
 
     def _get_base_model(self) -> str:
-        # identify the base model id used in the application inference profile (AIP)
-        # Format: arn:aws:bedrock:us-east-1:<accountId>:application-inference-profile/<id>
-        if (
-            self.base_model_id is None
-            and "application-inference-profile" in self.model_id
-        ):
-            response = self.bedrock_client.get_inference_profile(
-                inferenceProfileIdentifier=self.model_id
-            )
-            if "models" in response and len(response["models"]) > 0:
-                model_arn = response["models"][0]["modelArn"]
-                # Format: arn:aws:bedrock:region::foundation-model/provider.model-name
-                self.base_model_id = model_arn.split("/")[-1]
-        return self.base_model_id if self.base_model_id else self.model_id
+        """Return base model id, stripping any regional prefix."""
+
+        if self.base_model_id:
+            return self.base_model_id
+
+        # For regional model IDs (e.g., us.anthropic.claude-3-5-haiku-20241022-v1:0),
+        # get the base model ID by removing the regional prefix
+        if self.model_id.startswith(("eu.", "us.", "us-gov.", "apac.", "sa.", "amer.", "global.")):
+            return self.model_id.partition(".")[2]
+
+        return self.model_id
 
     def _configure_streaming_for_resolved_model(self) -> None:
         """Configure streaming support after resolving the base model for application inference profiles."""
@@ -805,7 +834,9 @@ class ChatBedrockConverse(BaseChatModel):
         )
 
         # Check for tool blocks without toolConfig and handle conversion
-        if params.get("toolConfig") is None and _has_tool_use_or_result_blocks(bedrock_messages):
+        if params.get("toolConfig") is None and _has_tool_use_or_result_blocks(
+            bedrock_messages
+        ):
             logger.warning(
                 "Tool messages (toolUse/toolResult) detected without toolConfig. "
                 "Converting tool blocks to text format to avoid ValidationException."
@@ -852,7 +883,9 @@ class ChatBedrockConverse(BaseChatModel):
         )
 
         # Check for tool blocks without toolConfig and handle conversion
-        if params.get("toolConfig") is None and _has_tool_use_or_result_blocks(bedrock_messages):
+        if params.get("toolConfig") is None and _has_tool_use_or_result_blocks(
+            bedrock_messages
+        ):
             logger.warning(
                 "Tool messages (toolUse/toolResult) detected without toolConfig. "
                 "Converting tool blocks to text format to avoid ValidationException."
@@ -976,9 +1009,16 @@ class ChatBedrockConverse(BaseChatModel):
             tool_choice = "any"
         else:
             tool_choice = None
-        if tool_choice is None and "claude-3-7-sonnet" in self._get_base_model():
-            # TODO: remove restriction to Claude 3.7. If a model does not support
-            # forced tool calling, we we should raise an exception instead of
+        thinking_claude_models = (
+            "claude-3-7-sonnet",
+            "claude-sonnet-4",
+            "claude-opus-4",
+        )
+        if tool_choice is None and any(
+            model in self._get_base_model() for model in thinking_claude_models
+        ):
+            # TODO: remove restriction to thinking Claude models. If a model does not
+            # support forced tool calling, we we should raise an exception instead of
             # returning None when no tool calls are generated.
             llm = self._get_llm_for_structured_output_no_tool_choice(schema)
         else:
@@ -1111,6 +1151,57 @@ class ChatBedrockConverse(BaseChatModel):
             "aws_session_token": "AWS_SESSION_TOKEN",
         }
 
+    def get_num_tokens_from_messages(
+        self,
+        messages: list[BaseMessage],
+        tools: Optional[Sequence] = None,
+    ) -> int:
+        """
+        Get the number of tokens in the messages using AWS Bedrock count_tokens API.
+
+        This method uses AWS Bedrock's count_tokens API which provides accurate
+        token counting for supported models before inference. Falls back to the base
+        implementation for unsupported models.
+
+        Args:
+            messages: The message inputs to tokenize.
+            tools: Tool schemas (currently ignored as count_tokens API doesn't support them).
+
+        Returns:
+            The number of input tokens in the messages.
+        """
+        model_id = self._get_base_model()
+        # Check if the model supports count_tokens API
+        if not count_tokens_api_supported_for_model(model_id):
+            return super().get_num_tokens_from_messages(messages, tools=tools)
+
+        if tools is not None:
+            warnings.warn(
+                "Tool schemas are not yet supported by AWS Bedrock count_tokens API. "
+                "Ignoring tools parameter.",
+                stacklevel=2,
+            )
+
+        try:
+            bedrock_messages, system = (
+                (self.raw_blocks, [])
+                if self.raw_blocks
+                else _messages_to_bedrock(messages)
+            )
+
+            input_data = {"converse": {"messages": bedrock_messages}}
+            if system:
+                input_data["converse"]["system"] = system
+
+            response = self.client.count_tokens(
+                modelId=model_id, input=input_data
+            )
+            return response["inputTokens"]
+
+        except Exception as e:
+            logger.warning(f"count_tokens API failed: {e}. Using fallback.")
+            return super().get_num_tokens_from_messages(messages, tools=tools)
+
 
 def _messages_to_bedrock(
     messages: List[BaseMessage],
@@ -1118,9 +1209,9 @@ def _messages_to_bedrock(
     """Handle Bedrock converse and Anthropic style content blocks"""
     bedrock_messages: List[Dict[str, Any]] = []
     bedrock_system: List[Dict[str, Any]] = []
-    # Merge system, human, ai message runs because Anthropic expects (at most) 1
-    # system message then alternating human/ai messages.
-    messages = merge_message_runs(messages)
+    trimmed_messages = trim_message_whitespace(messages)
+    messages = merge_message_runs(trimmed_messages)
+
     for msg in messages:
         content = _lc_content_to_bedrock(msg.content)
         if isinstance(msg, HumanMessage):
@@ -1167,7 +1258,7 @@ def _messages_to_bedrock(
             bedrock_messages.append(curr)
         else:
             raise ValueError(f"Unsupported message type {type(msg)}")
-        
+
     if not bedrock_messages:
         bedrock_messages.append({"role": "user", "content": [{"text": EMPTY_CONTENT}]})
 
@@ -1383,7 +1474,9 @@ def _lc_content_to_bedrock(
         ):
             bedrock_content.append(_format_data_content_block(block))
         elif block["type"] == "text":
-            if not block["text"] or (isinstance(block["text"], str) and block["text"].isspace()):
+            if not block["text"] or (
+                isinstance(block["text"], str) and block["text"].isspace()
+            ):
                 bedrock_content.append({"text": EMPTY_CONTENT})
             else:
                 text_block = {"text": block["text"]}
@@ -1641,11 +1734,7 @@ def _bedrock_to_lc(content: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
         elif "citation" in block:  # streaming citations
             lc_content.append(
-                {
-                    "type": "text",
-                    "text": "",
-                    "citations": [block["citation"]]
-                }
+                {"type": "text", "text": "", "citations": [block["citation"]]}
             )
 
         else:
