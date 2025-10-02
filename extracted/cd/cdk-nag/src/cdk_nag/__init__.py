@@ -518,7 +518,7 @@ Aspects.of(app).add(
 
 ## Using on CloudFormation templates
 
-You can use cdk-nag on existing CloudFormation templates by using the [cloudformation-include](https://docs.aws.amazon.com/cdk/latest/guide/use_cfn_template.html#use_cfn_template_install) module.
+You can use cdk-nag on existing CloudFormation templates by using the [cloudformation-include](https://docs.aws.amazon.com/cdk/latest/guide/use-cfn-template.html#use-cfn-template-import) module.
 
 <details>
   <summary>Example 1) CloudFormation template with suppression</summary>
@@ -4571,3 +4571,6 @@ def _typecheckingstub__1d2e84fa7d4ba03aa7bf298104f9e6a7521c3facd75b8d248d072c427
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IApplyRule, INagLogger, INagSuppressionIgnore]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

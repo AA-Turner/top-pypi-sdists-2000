@@ -1,4 +1,5 @@
 import argparse
+from importlib.metadata import PackageNotFoundError, version
 from typing import List
 
 from .proxies import GenericProxyConfig, WebshareProxyConfig
@@ -33,14 +34,11 @@ class YouTubeTranscriptCli:
                 proxy_password=parsed_args.webshare_proxy_password,
             )
 
-        cookie_path = parsed_args.cookies
-
         transcripts = []
         exceptions = []
 
         ytt_api = YouTubeTranscriptApi(
             proxy_config=proxy_config,
-            cookie_path=cookie_path,
         )
 
         for video_id in parsed_args.video_ids:
@@ -94,6 +92,12 @@ class YouTubeTranscriptCli:
 
         return transcript.fetch()
 
+    def _get_version(self):
+        try:
+            return version("youtube-transcript-api")
+        except PackageNotFoundError:
+            return "unknown"
+
     def _parse_args(self):
         parser = argparse.ArgumentParser(
             description=(
@@ -101,6 +105,11 @@ class YouTubeTranscriptCli:
                 "It also works for automatically generated subtitles and it does not require a headless browser, like "
                 "other selenium based solutions do!"
             )
+        )
+        parser.add_argument(
+            "--version",
+            action="version",
+            version=f"%(prog)s, version {self._get_version()}",
         )
         parser.add_argument(
             "--list-transcripts",
@@ -179,11 +188,13 @@ class YouTubeTranscriptCli:
             metavar="URL",
             help="Use the specified HTTPS proxy.",
         )
-        parser.add_argument(
-            "--cookies",
-            default=None,
-            help="The cookie file that will be used for authorization with youtube.",
-        )
+        # Cookie auth has been temporarily disabled, as it is not working properly with
+        # YouTube's most recent changes.
+        # parser.add_argument(
+        #     "--cookies",
+        #     default=None,
+        #     help="The cookie file that will be used for authorization with youtube.",
+        # )
 
         return self._sanitize_video_ids(parser.parse_args(self._args))
 

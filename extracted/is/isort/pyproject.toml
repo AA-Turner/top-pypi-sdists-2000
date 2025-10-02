@@ -25,13 +25,13 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development :: Libraries",
     "Topic :: Utilities",
 ]
-urls = { changelog = "https://github.com/PyCQA/isort/releases" }
 include = [
     { path = "tests", format = "sdist" },
     { path = "ACKNOWLEDGEMENTS.md", format = "sdist" },
@@ -39,7 +39,19 @@ include = [
 ]
 requires-python = ">=3.9.0"
 
-dependencies = []
+dependencies = [
+    # we only need the entry_points() function, which appeared in the stdlib
+    # in Python 3.10.
+    # importlib_metadata 4.6 is the version matching stdlib 3.10
+    # See grid at https://pypi.org/project/importlib-metadata/
+    "importlib_metadata >= 4.6.0; python_version < '3.10'",
+]
+
+[project.urls]
+Homepage = "https://pycqa.github.io/isort/index.html"
+Documentation = "https://pycqa.github.io/isort/index.html"
+Repository = "https://github.com/PyCQA/isort"
+Changelog = "https://github.com/PyCQA/isort/releases"
 
 [tool.hatch.version]
 source = "vcs"
@@ -71,6 +83,7 @@ tests = ["tests", "*/tests"]
 
 [tool.coverage.run]
 branch = true
+parallel = true
 source = ["isort", "tests"]
 omit = [
     "isort/_vendored/*",
@@ -136,6 +149,8 @@ dev = [
     "ruff>=0.9.6",
     "stdlibs>=2024.10.21.16",
     "toml>=0.10.2",
+    "tox>=4.24.1",
+    "tox-uv>=1.25.0",
     "types-colorama>=0.4.2",
     "types-setuptools>=70.0.0.20240523",
     "types-toml>=0.1.3",
@@ -165,6 +180,10 @@ module = "tests.*"
 allow_untyped_defs = true
 allow_incomplete_defs = true
 allow_untyped_calls = true
+
+[[tool.mypy.overrides]]
+module = "importlib_metadata.*"
+ignore_missing_imports = true
 
 [tool.ruff]
 line-length = 100

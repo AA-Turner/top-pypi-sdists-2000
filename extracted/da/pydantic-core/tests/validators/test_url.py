@@ -121,6 +121,12 @@ def url_test_case_helper(
         ('http://example.com:65535', 'http://example.com:65535/'),
         ('http:\\\\example.com', 'http://example.com/'),
         ('http:example.com', 'http://example.com/'),
+        ('http:example.com/path', 'http://example.com/path'),
+        ('http:example.com/path/', 'http://example.com/path/'),
+        ('http:example.com?query=nopath', 'http://example.com/?query=nopath'),
+        ('http:example.com/?query=haspath', 'http://example.com/?query=haspath'),
+        ('http:example.com#nopath', 'http://example.com/#nopath'),
+        ('http:example.com/#haspath', 'http://example.com/#haspath'),
         ('http://example.com:65536', Err('invalid port number')),
         ('http://1...1', Err('invalid IPv4 address')),
         ('https://[2001:0db8:85a3:0000:0000:8a2e:0370:7334[', Err('invalid IPv6 address')),
@@ -269,6 +275,79 @@ def url_test_case_helper(
 )
 def test_url_cases(url_validator, url, expected, mode):
     url_test_case_helper(url, expected, mode, url_validator)
+
+
+@pytest.mark.parametrize(
+    ('url', 'expected', 'expected_path'),
+    [
+        ('http://example.com', 'http://example.com', None),
+        ('http:example.com', 'http://example.com', None),
+        ('http:/example.com', 'http://example.com', None),
+        ('http://example.com/', 'http://example.com/', '/'),
+        ('http:example.com/', 'http://example.com/', '/'),
+        ('http:/example.com/', 'http://example.com/', '/'),
+        ('http://example.com?x=1', 'http://example.com?x=1', None),
+        ('http://example.com/?x=1', 'http://example.com/?x=1', '/'),
+        ('http://example.com#foo', 'http://example.com#foo', None),
+        ('http://example.com/#foo', 'http://example.com/#foo', '/'),
+        ('http://example.com/path', 'http://example.com/path', '/path'),
+        ('http://example.com/path/', 'http://example.com/path/', '/path/'),
+        ('http://example.com/path?x=1', 'http://example.com/path?x=1', '/path'),
+        ('http://example.com/path/?x=1', 'http://example.com/path/?x=1', '/path/'),
+    ],
+)
+def test_trailing_slash(url: str, expected: str, expected_path: Optional[str]):
+    url1 = Url(url, preserve_empty_path=True)
+    assert str(url1) == expected
+    assert url1.unicode_string() == expected
+    assert url1.path == expected_path
+
+    v = SchemaValidator(core_schema.url_schema(preserve_empty_path=True))
+    url2 = v.validate_python(url)
+    assert str(url2) == expected
+    assert url2.unicode_string() == expected
+    assert url2.path == expected_path
+
+    v = SchemaValidator(core_schema.url_schema(), CoreConfig(url_preserve_empty_path=True))
+    url3 = v.validate_python(url)
+    assert str(url3) == expected
+    assert url3.unicode_string() == expected
+    assert url3.path == expected_path
+
+
+@pytest.mark.parametrize(
+    ('url', 'expected', 'expected_path'),
+    [
+        ('http://example.com', 'http://example.com', None),
+        ('http://example.com/', 'http://example.com/', '/'),
+        ('http://example.com/path', 'http://example.com/path', '/path'),
+        ('http://example.com/path/', 'http://example.com/path/', '/path/'),
+        ('http://example.com,example.org', 'http://example.com,example.org', None),
+        ('http://example.com,example.org/', 'http://example.com,example.org/', '/'),
+        ('http://localhost,127.0.0.1', 'http://localhost,127.0.0.1', None),
+        ('http://localhost,127.0.0.1/', 'http://localhost,127.0.0.1/', '/'),
+        ('http:localhost,127.0.0.1', 'http://localhost,127.0.0.1', None),
+        ('http://localhost,127.0.0.1/path', 'http://localhost,127.0.0.1/path', '/path'),
+        ('http://localhost,127.0.0.1/path/', 'http://localhost,127.0.0.1/path/', '/path/'),
+    ],
+)
+def test_multi_trailing_slash(url: str, expected: str, expected_path: Optional[str]):
+    url1 = MultiHostUrl(url, preserve_empty_path=True)
+    assert str(url1) == expected
+    assert url1.unicode_string() == expected
+    assert url1.path == expected_path
+
+    v = SchemaValidator(core_schema.multi_host_url_schema(preserve_empty_path=True))
+    url2 = v.validate_python(url)
+    assert str(url2) == expected
+    assert url2.unicode_string() == expected
+    assert url2.path == expected_path
+
+    v = SchemaValidator(core_schema.multi_host_url_schema(), CoreConfig(url_preserve_empty_path=True))
+    url3 = v.validate_python(url)
+    assert str(url3) == expected
+    assert url3.unicode_string() == expected
+    assert url3.path == expected_path
 
 
 @pytest.mark.parametrize(

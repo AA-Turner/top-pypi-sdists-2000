@@ -208,7 +208,7 @@ class CfnClusterPolicyProps:
         '''Properties for defining a ``CfnClusterPolicy``.
 
         :param cluster_arn: The Amazon Resource Name (ARN) that uniquely identifies the cluster.
-        :param policy: Resource policy for the cluster.
+        :param policy: Resource policy for the cluster. The maximum size supported for a resource-based policy document is 20 KB.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-clusterpolicy.html
         :exampleMetadata: fixture=_generated
@@ -248,6 +248,8 @@ class CfnClusterPolicyProps:
     @builtins.property
     def policy(self) -> typing.Any:
         '''Resource policy for the cluster.
+
+        The maximum size supported for a resource-based policy document is 20 KB.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-clusterpolicy.html#cfn-msk-clusterpolicy-policy
         '''
@@ -4776,7 +4778,7 @@ class CfnClusterPolicy(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param cluster_arn: The Amazon Resource Name (ARN) that uniquely identifies the cluster.
-        :param policy: Resource policy for the cluster.
+        :param policy: Resource policy for the cluster. The maximum size supported for a resource-based policy document is 20 KB.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__44054483e71e00fc0cc8de4a0043676504f8ba8eaef21e7597ca21b373e44603)

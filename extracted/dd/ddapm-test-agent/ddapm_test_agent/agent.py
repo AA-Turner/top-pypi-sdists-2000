@@ -133,7 +133,7 @@ def _session_token(request: Request) -> Optional[str]:
 
 async def _vcr_proxy_cassette_prefix(request: Request) -> Optional[str]:
     try:
-        request_body: dict[str, str] = await request.json()
+        request_body: Dict[str, str] = await request.json()
         requested_test_name = request_body.get("test_name")
         return requested_test_name
     except (json.JSONDecodeError, UnicodeDecodeError):
@@ -165,7 +165,7 @@ async def handle_exception_middleware(request: Request, handler: _Handler) -> we
 
 async def _forward_request(
     request_data: bytes, headers: Mapping[str, str], full_agent_url: str
-) -> tuple[ClientResponse, str]:
+) -> Tuple[ClientResponse, str]:
     async with ClientSession() as session:
         async with session.post(
             full_agent_url,
@@ -831,7 +831,6 @@ class Agent:
                 "peer_tags": ["db.name", "mongodb.db", "messaging.system"],
                 "span_events": True,  # Advertise support for the top-level Span field for Span Events
             },
-            headers={"Datadog-Agent-State": "03e868b3ecdd62a91423cc4c3917d0d151fb9fa486736911ab7f5a0750c63824"},
         )
 
     async def _handle_traces(self, request: Request, version: Literal["v0.4", "v0.5", "v0.7", "v1"]) -> web.Response:
@@ -929,10 +928,9 @@ class Agent:
         # Get the span attributes that are to be removed for this snapshot.
         default_attribute_regex_replaces: Dict[str, str] = request.app["snapshot_regex_placeholders"]
         regex_overrides = _parse_map(request.url.query.get("regex_placeholders", ""))
-        attribute_regex_replaces = dict(
-            (f"{{{key}}}", re.compile(regex))
-            for (key, regex) in (default_attribute_regex_replaces | regex_overrides).items()
-        )
+        regex_replaces = default_attribute_regex_replaces.copy()
+        regex_replaces.update(regex_overrides)
+        attribute_regex_replaces = dict((f"{{{key}}}", re.compile(regex)) for (key, regex) in regex_replaces.items())
         log.info("using regex placeholders %r", attribute_regex_replaces)
 
         if "span_id" in span_removes:
@@ -1357,6 +1355,7 @@ def make_app(
     snapshot_removed_attrs: List[str],
     snapshot_regex_placeholders: Dict[str, str],
     vcr_cassettes_directory: str,
+    vcr_ci_mode: bool,
 ) -> web.Application:
     agent = Agent()
     app = web.Application(
@@ -1418,7 +1417,7 @@ def make_app(
             web.route(
                 "*",
                 "/vcr/{path:.*}",
-                lambda request: proxy_request(request, vcr_cassettes_directory),
+                lambda request: proxy_request(request, vcr_cassettes_directory, vcr_ci_mode),
             ),
         ]
     )
@@ -1583,6 +1582,12 @@ def main(args: Optional[List[str]] = None) -> None:
         default=os.environ.get("VCR_CASSETTES_DIRECTORY", os.path.join(os.getcwd(), "vcr-cassettes")),
         help="Directory to read and store third party API cassettes.",
     )
+    parser.add_argument(
+        "--vcr-ci-mode",
+        type=bool,
+        default=os.environ.get("VCR_CI_MODE", False),
+        help="Will change the test agent to record VCR cassettes in CI mode, throwing an error if a cassette is not found on /vcr/{provider}",
+    )
     parsed_args = parser.parse_args(args=args)
     logging.basicConfig(level=parsed_args.log_level)
 
@@ -1626,6 +1631,7 @@ def main(args: Optional[List[str]] = None) -> None:
         snapshot_removed_attrs=parsed_args.snapshot_removed_attrs,
         snapshot_regex_placeholders=parsed_args.snapshot_regex_placeholders,
         vcr_cassettes_directory=parsed_args.vcr_cassettes_directory,
+        vcr_ci_mode=parsed_args.vcr_ci_mode,
     )
 
     # Validate port configuration

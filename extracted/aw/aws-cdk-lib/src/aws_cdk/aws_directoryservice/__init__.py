@@ -1026,27 +1026,6 @@ class CfnSimpleAD(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromDirectoryId")
-    @builtins.classmethod
-    def from_directory_id(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        directory_id: builtins.str,
-    ) -> ISimpleADRef:
-        '''Creates a new ISimpleADRef from a directoryId.
-
-        :param scope: -
-        :param id: -
-        :param directory_id: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__4edb8188cf1a787819f9e08e002165b6e7e58550d088f80151ce91f3ee2ad4f0)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument directory_id", value=directory_id, expected_type=type_hints["directory_id"])
-        return typing.cast(ISimpleADRef, jsii.sinvoke(cls, "fromDirectoryId", [scope, id, directory_id]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1463,14 +1442,6 @@ def _typecheckingstub__40820ee1ed03f2cd4befa65e6404c1024999677e0624ca5450f4b1f92
     enable_sso: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     password: typing.Optional[builtins.str] = None,
     short_name: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__4edb8188cf1a787819f9e08e002165b6e7e58550d088f80151ce91f3ee2ad4f0(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    directory_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

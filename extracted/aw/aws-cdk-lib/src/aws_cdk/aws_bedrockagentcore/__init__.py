@@ -152,12 +152,12 @@ class CfnBrowserCustomProps:
     ) -> None:
         '''Properties for defining a ``CfnBrowserCustom``.
 
-        :param name: The name of the browser.
-        :param network_configuration: Network configuration for browser.
-        :param description: The description of the browser.
-        :param execution_role_arn: The Amazon Resource Name (ARN) of the IAM role.
-        :param recording_config: Recording configuration for browser.
-        :param tags: A map of tag keys and values.
+        :param name: The name of the custom browser.
+        :param network_configuration: The network configuration for a code interpreter. This structure defines how the code interpreter connects to the network.
+        :param description: The custom browser.
+        :param execution_role_arn: The Amazon Resource Name (ARN) of the execution role.
+        :param recording_config: THe custom browser configuration.
+        :param tags: The tags for the custom browser.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-browsercustom.html
         :exampleMetadata: fixture=_generated
@@ -212,7 +212,7 @@ class CfnBrowserCustomProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''The name of the browser.
+        '''The name of the custom browser.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-browsercustom.html#cfn-bedrockagentcore-browsercustom-name
         '''
@@ -224,7 +224,9 @@ class CfnBrowserCustomProps:
     def network_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.BrowserNetworkConfigurationProperty"]:
-        '''Network configuration for browser.
+        '''The network configuration for a code interpreter.
+
+        This structure defines how the code interpreter connects to the network.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-browsercustom.html#cfn-bedrockagentcore-browsercustom-networkconfiguration
         '''
@@ -234,7 +236,7 @@ class CfnBrowserCustomProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''The description of the browser.
+        '''The custom browser.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-browsercustom.html#cfn-bedrockagentcore-browsercustom-description
         '''
@@ -243,7 +245,7 @@ class CfnBrowserCustomProps:
 
     @builtins.property
     def execution_role_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the IAM role.
+        '''The Amazon Resource Name (ARN) of the execution role.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-browsercustom.html#cfn-bedrockagentcore-browsercustom-executionrolearn
         '''
@@ -254,7 +256,7 @@ class CfnBrowserCustomProps:
     def recording_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.RecordingConfigProperty"]]:
-        '''Recording configuration for browser.
+        '''THe custom browser configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-browsercustom.html#cfn-bedrockagentcore-browsercustom-recordingconfig
         '''
@@ -263,7 +265,7 @@ class CfnBrowserCustomProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of tag keys and values.
+        '''The tags for the custom browser.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-browsercustom.html#cfn-bedrockagentcore-browsercustom-tags
         '''
@@ -305,11 +307,11 @@ class CfnCodeInterpreterCustomProps:
     ) -> None:
         '''Properties for defining a ``CfnCodeInterpreterCustom``.
 
-        :param name: The name of the sandbox.
-        :param network_configuration: Network configuration for code interpreter.
-        :param description: Description of the code interpreter.
-        :param execution_role_arn: The ARN of the IAM role.
-        :param tags: A map of tag keys and values.
+        :param name: The name of the code interpreter.
+        :param network_configuration: The network configuration for a code interpreter. This structure defines how the code interpreter connects to the network.
+        :param description: The code interpreter description.
+        :param execution_role_arn: The Amazon Resource Name (ARN) of the execution role.
+        :param tags: The tags for the code interpreter.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-codeinterpretercustom.html
         :exampleMetadata: fixture=_generated
@@ -354,7 +356,7 @@ class CfnCodeInterpreterCustomProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''The name of the sandbox.
+        '''The name of the code interpreter.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-codeinterpretercustom.html#cfn-bedrockagentcore-codeinterpretercustom-name
         '''
@@ -366,7 +368,9 @@ class CfnCodeInterpreterCustomProps:
     def network_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"]:
-        '''Network configuration for code interpreter.
+        '''The network configuration for a code interpreter.
+
+        This structure defines how the code interpreter connects to the network.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-codeinterpretercustom.html#cfn-bedrockagentcore-codeinterpretercustom-networkconfiguration
         '''
@@ -376,7 +380,7 @@ class CfnCodeInterpreterCustomProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''Description of the code interpreter.
+        '''The code interpreter description.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-codeinterpretercustom.html#cfn-bedrockagentcore-codeinterpretercustom-description
         '''
@@ -385,7 +389,7 @@ class CfnCodeInterpreterCustomProps:
 
     @builtins.property
     def execution_role_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the IAM role.
+        '''The Amazon Resource Name (ARN) of the execution role.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-codeinterpretercustom.html#cfn-bedrockagentcore-codeinterpretercustom-executionrolearn
         '''
@@ -394,7 +398,7 @@ class CfnCodeInterpreterCustomProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of tag keys and values.
+        '''The tags for the code interpreter.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-codeinterpretercustom.html#cfn-bedrockagentcore-codeinterpretercustom-tags
         '''
@@ -436,11 +440,11 @@ class CfnRuntimeEndpointProps:
     ) -> None:
         '''Properties for defining a ``CfnRuntimeEndpoint``.
 
-        :param agent_runtime_id: The ID of the parent Agent Runtime.
-        :param name: 
-        :param agent_runtime_version: 
-        :param description: 
-        :param tags: A map of tag keys and values.
+        :param agent_runtime_id: The agent runtime ID.
+        :param name: The name of the AgentCore Runtime endpoint.
+        :param agent_runtime_version: The version of the agent.
+        :param description: Contains information about an agent runtime endpoint. An agent runtime is the execution environment for a Amazon Bedrock Agent.
+        :param tags: The tags for the AgentCore Runtime endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtimeendpoint.html
         :exampleMetadata: fixture=_generated
@@ -483,7 +487,7 @@ class CfnRuntimeEndpointProps:
 
     @builtins.property
     def agent_runtime_id(self) -> builtins.str:
-        '''The ID of the parent Agent Runtime.
+        '''The agent runtime ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtimeendpoint.html#cfn-bedrockagentcore-runtimeendpoint-agentruntimeid
         '''
@@ -493,7 +497,8 @@ class CfnRuntimeEndpointProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''
+        '''The name of the AgentCore Runtime endpoint.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtimeendpoint.html#cfn-bedrockagentcore-runtimeendpoint-name
         '''
         result = self._values.get("name")
@@ -502,7 +507,8 @@ class CfnRuntimeEndpointProps:
 
     @builtins.property
     def agent_runtime_version(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The version of the agent.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtimeendpoint.html#cfn-bedrockagentcore-runtimeendpoint-agentruntimeversion
         '''
         result = self._values.get("agent_runtime_version")
@@ -510,7 +516,10 @@ class CfnRuntimeEndpointProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''
+        '''Contains information about an agent runtime endpoint.
+
+        An agent runtime is the execution environment for a Amazon Bedrock Agent.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtimeendpoint.html#cfn-bedrockagentcore-runtimeendpoint-description
         '''
         result = self._values.get("description")
@@ -518,7 +527,7 @@ class CfnRuntimeEndpointProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of tag keys and values.
+        '''The tags for the AgentCore Runtime endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtimeendpoint.html#cfn-bedrockagentcore-runtimeendpoint-tags
         '''
@@ -568,15 +577,15 @@ class CfnRuntimeProps:
     ) -> None:
         '''Properties for defining a ``CfnRuntime``.
 
-        :param agent_runtime_artifact: 
-        :param agent_runtime_name: 
-        :param network_configuration: 
-        :param role_arn: 
-        :param authorizer_configuration: Configuration for the authorizer.
-        :param description: 
-        :param environment_variables: Environment variable attributes.
-        :param protocol_configuration: 
-        :param tags: A map of tag keys and values.
+        :param agent_runtime_artifact: The artifact of the agent.
+        :param agent_runtime_name: The name of the AgentCore Runtime endpoint.
+        :param network_configuration: The network configuration.
+        :param role_arn: The Amazon Resource Name (ARN) for for the role.
+        :param authorizer_configuration: Represents inbound authorization configuration options used to authenticate incoming requests.
+        :param description: The agent runtime description.
+        :param environment_variables: The environment variables for the agent.
+        :param protocol_configuration: The protocol configuration for an agent runtime. This structure defines how the agent runtime communicates with clients.
+        :param tags: The tags for the agent.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html
         :exampleMetadata: fixture=_generated
@@ -651,7 +660,8 @@ class CfnRuntimeProps:
     def agent_runtime_artifact(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnRuntime.AgentRuntimeArtifactProperty"]:
-        '''
+        '''The artifact of the agent.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-agentruntimeartifact
         '''
         result = self._values.get("agent_runtime_artifact")
@@ -660,7 +670,8 @@ class CfnRuntimeProps:
 
     @builtins.property
     def agent_runtime_name(self) -> builtins.str:
-        '''
+        '''The name of the AgentCore Runtime endpoint.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-agentruntimename
         '''
         result = self._values.get("agent_runtime_name")
@@ -671,7 +682,8 @@ class CfnRuntimeProps:
     def network_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnRuntime.NetworkConfigurationProperty"]:
-        '''
+        '''The network configuration.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-networkconfiguration
         '''
         result = self._values.get("network_configuration")
@@ -680,7 +692,8 @@ class CfnRuntimeProps:
 
     @builtins.property
     def role_arn(self) -> builtins.str:
-        '''
+        '''The Amazon Resource Name (ARN) for for the role.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-rolearn
         '''
         result = self._values.get("role_arn")
@@ -691,7 +704,7 @@ class CfnRuntimeProps:
     def authorizer_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.AuthorizerConfigurationProperty"]]:
-        '''Configuration for the authorizer.
+        '''Represents inbound authorization configuration options used to authenticate incoming requests.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-authorizerconfiguration
         '''
@@ -700,7 +713,8 @@ class CfnRuntimeProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The agent runtime description.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-description
         '''
         result = self._values.get("description")
@@ -710,7 +724,7 @@ class CfnRuntimeProps:
     def environment_variables(
         self,
     ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
-        '''Environment variable attributes.
+        '''The environment variables for the agent.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-environmentvariables
         '''
@@ -719,7 +733,10 @@ class CfnRuntimeProps:
 
     @builtins.property
     def protocol_configuration(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The protocol configuration for an agent runtime.
+
+        This structure defines how the agent runtime communicates with clients.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-protocolconfiguration
         '''
         result = self._values.get("protocol_configuration")
@@ -727,7 +744,7 @@ class CfnRuntimeProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of tag keys and values.
+        '''The tags for the agent.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-tags
         '''
@@ -1062,7 +1079,15 @@ class CfnBrowserCustom(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnBrowserCustom",
 ):
-    '''Resource definition for AWS::BedrockAgentCore::BrowserCustom.
+    '''.. epigraph::
+
+   Amazon Bedrock AgentCore is in preview release and is subject to change.
+
+    AgentCore Browser tool provides a fast, secure, cloud-based browser runtime to enable AI agents to interact with websites at scale.
+
+    For more information about using the custom browser, see `Interact with web applications using Amazon Bedrock AgentCore Browser <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/browser-tool.html>`_ .
+
+    See the *Properties* section below for descriptions of both the required and optional properties.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-browsercustom.html
     :cloudformationResource: AWS::BedrockAgentCore::BrowserCustom
@@ -1111,12 +1136,12 @@ class CfnBrowserCustom(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param name: The name of the browser.
-        :param network_configuration: Network configuration for browser.
-        :param description: The description of the browser.
-        :param execution_role_arn: The Amazon Resource Name (ARN) of the IAM role.
-        :param recording_config: Recording configuration for browser.
-        :param tags: A map of tag keys and values.
+        :param name: The name of the custom browser.
+        :param network_configuration: The network configuration for a code interpreter. This structure defines how the code interpreter connects to the network.
+        :param description: The custom browser.
+        :param execution_role_arn: The Amazon Resource Name (ARN) of the execution role.
+        :param recording_config: THe custom browser configuration.
+        :param tags: The tags for the custom browser.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e817ad5ee6496ab54cf569758c4d73da62a4d6f5cf0c34866960f6e4677343e1)
@@ -1132,6 +1157,27 @@ class CfnBrowserCustom(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromBrowserId")
+    @builtins.classmethod
+    def from_browser_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        browser_id: builtins.str,
+    ) -> IBrowserCustomRef:
+        '''Creates a new IBrowserCustomRef from a browserId.
+
+        :param scope: -
+        :param id: -
+        :param browser_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1a5d38dc7619d36a2a4f39c13ec237b55f560a41ac9a162b787880e8e6ba2f47)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument browser_id", value=browser_id, expected_type=type_hints["browser_id"])
+        return typing.cast(IBrowserCustomRef, jsii.sinvoke(cls, "fromBrowserId", [scope, id, browser_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1166,7 +1212,7 @@ class CfnBrowserCustom(
     @builtins.property
     @jsii.member(jsii_name="attrBrowserArn")
     def attr_browser_arn(self) -> builtins.str:
-        '''The ARN of a Browser resource.
+        '''The ARN for the custom browser.
 
         :cloudformationAttribute: BrowserArn
         '''
@@ -1175,7 +1221,7 @@ class CfnBrowserCustom(
     @builtins.property
     @jsii.member(jsii_name="attrBrowserId")
     def attr_browser_id(self) -> builtins.str:
-        '''The id of the browser.
+        '''The ID for the custom browser.
 
         :cloudformationAttribute: BrowserId
         '''
@@ -1184,7 +1230,7 @@ class CfnBrowserCustom(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedAt")
     def attr_created_at(self) -> builtins.str:
-        '''Timestamp when the browser was created.
+        '''The time at which the custom browser was created.
 
         :cloudformationAttribute: CreatedAt
         '''
@@ -1193,7 +1239,7 @@ class CfnBrowserCustom(
     @builtins.property
     @jsii.member(jsii_name="attrLastUpdatedAt")
     def attr_last_updated_at(self) -> builtins.str:
-        '''Timestamp when the browser was last updated.
+        '''The time at which the custom browser was last updated.
 
         :cloudformationAttribute: LastUpdatedAt
         '''
@@ -1202,7 +1248,7 @@ class CfnBrowserCustom(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''Status of browser.
+        '''The status of the custom browser.
 
         :cloudformationAttribute: Status
         '''
@@ -1228,7 +1274,7 @@ class CfnBrowserCustom(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''The name of the browser.'''
+        '''The name of the custom browser.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -1243,7 +1289,7 @@ class CfnBrowserCustom(
     def network_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.BrowserNetworkConfigurationProperty"]:
-        '''Network configuration for browser.'''
+        '''The network configuration for a code interpreter.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.BrowserNetworkConfigurationProperty"], jsii.get(self, "networkConfiguration"))
 
     @network_configuration.setter
@@ -1259,7 +1305,7 @@ class CfnBrowserCustom(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
-        '''The description of the browser.'''
+        '''The custom browser.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -1272,7 +1318,7 @@ class CfnBrowserCustom(
     @builtins.property
     @jsii.member(jsii_name="executionRoleArn")
     def execution_role_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the IAM role.'''
+        '''The Amazon Resource Name (ARN) of the execution role.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "executionRoleArn"))
 
     @execution_role_arn.setter
@@ -1287,7 +1333,7 @@ class CfnBrowserCustom(
     def recording_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.RecordingConfigProperty"]]:
-        '''Recording configuration for browser.'''
+        '''THe custom browser configuration.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.RecordingConfigProperty"]], jsii.get(self, "recordingConfig"))
 
     @recording_config.setter
@@ -1303,7 +1349,7 @@ class CfnBrowserCustom(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of tag keys and values.'''
+        '''The tags for the custom browser.'''
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -1323,9 +1369,9 @@ class CfnBrowserCustom(
     )
     class BrowserNetworkConfigurationProperty:
         def __init__(self, *, network_mode: builtins.str) -> None:
-            '''Network configuration for browser.
+            '''The network configuration.
 
-            :param network_mode: Network modes supported by browser.
+            :param network_mode: The network mode.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-browsernetworkconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1349,7 +1395,7 @@ class CfnBrowserCustom(
 
         @builtins.property
         def network_mode(self) -> builtins.str:
-            '''Network modes supported by browser.
+            '''The network mode.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-browsernetworkconfiguration.html#cfn-bedrockagentcore-browsercustom-browsernetworkconfiguration-networkmode
             '''
@@ -1380,10 +1426,10 @@ class CfnBrowserCustom(
             enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBrowserCustom.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''Recording configuration for browser.
+            '''The recording configuration.
 
-            :param enabled: Default: - false
-            :param s3_location: S3 Location Configuration.
+            :param enabled: The recording configuration for a browser. This structure defines how browser sessions are recorded. Default: - false
+            :param s3_location: The S3 location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-recordingconfig.html
             :exampleMetadata: fixture=_generated
@@ -1416,7 +1462,10 @@ class CfnBrowserCustom(
         def enabled(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''
+            '''The recording configuration for a browser.
+
+            This structure defines how browser sessions are recorded.
+
             :default: - false
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-recordingconfig.html#cfn-bedrockagentcore-browsercustom-recordingconfig-enabled
@@ -1428,7 +1477,7 @@ class CfnBrowserCustom(
         def s3_location(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.S3LocationProperty"]]:
-            '''S3 Location Configuration.
+            '''The S3 location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-recordingconfig.html#cfn-bedrockagentcore-browsercustom-recordingconfig-s3location
             '''
@@ -1453,10 +1502,10 @@ class CfnBrowserCustom(
     )
     class S3LocationProperty:
         def __init__(self, *, bucket: builtins.str, prefix: builtins.str) -> None:
-            '''S3 Location Configuration.
+            '''The S3 location.
 
-            :param bucket: 
-            :param prefix: 
+            :param bucket: The S3 location bucket name.
+            :param prefix: The S3 location object prefix.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-s3location.html
             :exampleMetadata: fixture=_generated
@@ -1483,7 +1532,8 @@ class CfnBrowserCustom(
 
         @builtins.property
         def bucket(self) -> builtins.str:
-            '''
+            '''The S3 location bucket name.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-s3location.html#cfn-bedrockagentcore-browsercustom-s3location-bucket
             '''
             result = self._values.get("bucket")
@@ -1492,7 +1542,8 @@ class CfnBrowserCustom(
 
         @builtins.property
         def prefix(self) -> builtins.str:
-            '''
+            '''The S3 location object prefix.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-s3location.html#cfn-bedrockagentcore-browsercustom-s3location-prefix
             '''
             result = self._values.get("prefix")
@@ -1517,7 +1568,15 @@ class CfnCodeInterpreterCustom(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnCodeInterpreterCustom",
 ):
-    '''Resource definition for AWS::BedrockAgentCore::CodeInterpreterCustom.
+    '''.. epigraph::
+
+   Amazon Bedrock AgentCore is in preview release and is subject to change.
+
+    The AgentCore Code Interpreter tool enables agents to securely execute code in isolated sandbox environments. It offers advanced configuration support and seamless integration with popular frameworks.
+
+    For more information about using the custom code interpreter, see `Execute code and analyze data using Amazon Bedrock AgentCore Code Interpreter <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/code-interpreter-tool.html>`_ .
+
+    See the *Properties* section below for descriptions of both the required and optional properties.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-codeinterpretercustom.html
     :cloudformationResource: AWS::BedrockAgentCore::CodeInterpreterCustom
@@ -1558,11 +1617,11 @@ class CfnCodeInterpreterCustom(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param name: The name of the sandbox.
-        :param network_configuration: Network configuration for code interpreter.
-        :param description: Description of the code interpreter.
-        :param execution_role_arn: The ARN of the IAM role.
-        :param tags: A map of tag keys and values.
+        :param name: The name of the code interpreter.
+        :param network_configuration: The network configuration for a code interpreter. This structure defines how the code interpreter connects to the network.
+        :param description: The code interpreter description.
+        :param execution_role_arn: The Amazon Resource Name (ARN) of the execution role.
+        :param tags: The tags for the code interpreter.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1aaa167a6af98d626969b5bd2de9377658de4e8d04df0b48dc5916f9e503a029)
@@ -1577,6 +1636,27 @@ class CfnCodeInterpreterCustom(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromCodeInterpreterId")
+    @builtins.classmethod
+    def from_code_interpreter_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        code_interpreter_id: builtins.str,
+    ) -> ICodeInterpreterCustomRef:
+        '''Creates a new ICodeInterpreterCustomRef from a codeInterpreterId.
+
+        :param scope: -
+        :param id: -
+        :param code_interpreter_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d2e6193c6a8378455a4decc0c525a09a78674fd7ad426e58017e57035bc1789a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument code_interpreter_id", value=code_interpreter_id, expected_type=type_hints["code_interpreter_id"])
+        return typing.cast(ICodeInterpreterCustomRef, jsii.sinvoke(cls, "fromCodeInterpreterId", [scope, id, code_interpreter_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1611,7 +1691,7 @@ class CfnCodeInterpreterCustom(
     @builtins.property
     @jsii.member(jsii_name="attrCodeInterpreterArn")
     def attr_code_interpreter_arn(self) -> builtins.str:
-        '''The ARN of a CodeInterpreter resource.
+        '''The code interpreter Amazon Resource Name (ARN).
 
         :cloudformationAttribute: CodeInterpreterArn
         '''
@@ -1620,7 +1700,7 @@ class CfnCodeInterpreterCustom(
     @builtins.property
     @jsii.member(jsii_name="attrCodeInterpreterId")
     def attr_code_interpreter_id(self) -> builtins.str:
-        '''The id of the code interpreter.
+        '''The ID of the code interpreter.
 
         :cloudformationAttribute: CodeInterpreterId
         '''
@@ -1629,7 +1709,7 @@ class CfnCodeInterpreterCustom(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedAt")
     def attr_created_at(self) -> builtins.str:
-        '''Timestamp when the code interpreter was created.
+        '''The time at which the code interpreter was created.
 
         :cloudformationAttribute: CreatedAt
         '''
@@ -1638,7 +1718,7 @@ class CfnCodeInterpreterCustom(
     @builtins.property
     @jsii.member(jsii_name="attrLastUpdatedAt")
     def attr_last_updated_at(self) -> builtins.str:
-        '''Timestamp when the code interpreter was last updated.
+        '''The time at which the code interpreter was last updated.
 
         :cloudformationAttribute: LastUpdatedAt
         '''
@@ -1647,7 +1727,7 @@ class CfnCodeInterpreterCustom(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''Status of Code interpreter.
+        '''The status of the custom code interpreter.
 
         :cloudformationAttribute: Status
         '''
@@ -1673,7 +1753,7 @@ class CfnCodeInterpreterCustom(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''The name of the sandbox.'''
+        '''The name of the code interpreter.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -1688,7 +1768,7 @@ class CfnCodeInterpreterCustom(
     def network_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"]:
-        '''Network configuration for code interpreter.'''
+        '''The network configuration for a code interpreter.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"], jsii.get(self, "networkConfiguration"))
 
     @network_configuration.setter
@@ -1704,7 +1784,7 @@ class CfnCodeInterpreterCustom(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
-        '''Description of the code interpreter.'''
+        '''The code interpreter description.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -1717,7 +1797,7 @@ class CfnCodeInterpreterCustom(
     @builtins.property
     @jsii.member(jsii_name="executionRoleArn")
     def execution_role_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the IAM role.'''
+        '''The Amazon Resource Name (ARN) of the execution role.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "executionRoleArn"))
 
     @execution_role_arn.setter
@@ -1730,7 +1810,7 @@ class CfnCodeInterpreterCustom(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of tag keys and values.'''
+        '''The tags for the code interpreter.'''
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -1750,9 +1830,9 @@ class CfnCodeInterpreterCustom(
     )
     class CodeInterpreterNetworkConfigurationProperty:
         def __init__(self, *, network_mode: builtins.str) -> None:
-            '''Network configuration for code interpreter.
+            '''The network configuration.
 
-            :param network_mode: Network modes supported by code interpreter.
+            :param network_mode: The network mode.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-codeinterpretercustom-codeinterpreternetworkconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1776,7 +1856,7 @@ class CfnCodeInterpreterCustom(
 
         @builtins.property
         def network_mode(self) -> builtins.str:
-            '''Network modes supported by code interpreter.
+            '''The network mode.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-codeinterpretercustom-codeinterpreternetworkconfiguration.html#cfn-bedrockagentcore-codeinterpretercustom-codeinterpreternetworkconfiguration-networkmode
             '''
@@ -1802,7 +1882,17 @@ class CfnRuntime(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnRuntime",
 ):
-    '''Resource Type definition for AWS::BedrockAgentCore::Runtime.
+    '''.. epigraph::
+
+   Amazon Bedrock AgentCore is in preview release and is subject to change.
+
+    Contains information about an agent runtime. An agent runtime is the execution environment for a Amazon Bedrock Agent.
+
+    AgentCore Runtime is a secure, serverless runtime purpose-built for deploying and scaling dynamic AI agents and tools using any open-source framework including LangGraph, CrewAI, and Strands Agents, any protocol, and any model.
+
+    For more information about using agent runtime in Amazon Bedrock AgentCore, see `Host agent or tools with Amazon Bedrock AgentCore Runtime <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agents-tools-runtime.html>`_ .
+
+    See the *Properties* section below for descriptions of both the required and optional properties.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html
     :cloudformationResource: AWS::BedrockAgentCore::Runtime
@@ -1865,15 +1955,15 @@ class CfnRuntime(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param agent_runtime_artifact: 
-        :param agent_runtime_name: 
-        :param network_configuration: 
-        :param role_arn: 
-        :param authorizer_configuration: Configuration for the authorizer.
-        :param description: 
-        :param environment_variables: Environment variable attributes.
-        :param protocol_configuration: 
-        :param tags: A map of tag keys and values.
+        :param agent_runtime_artifact: The artifact of the agent.
+        :param agent_runtime_name: The name of the AgentCore Runtime endpoint.
+        :param network_configuration: The network configuration.
+        :param role_arn: The Amazon Resource Name (ARN) for for the role.
+        :param authorizer_configuration: Represents inbound authorization configuration options used to authenticate incoming requests.
+        :param description: The agent runtime description.
+        :param environment_variables: The environment variables for the agent.
+        :param protocol_configuration: The protocol configuration for an agent runtime. This structure defines how the agent runtime communicates with clients.
+        :param tags: The tags for the agent.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d8f75c2b58380182b53165109480fecdbf9bcd35c2fcfcfea5141466ba05b7e7)
@@ -1926,7 +2016,8 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="attrAgentRuntimeArn")
     def attr_agent_runtime_arn(self) -> builtins.str:
-        '''
+        '''The agent runtime ARN.
+
         :cloudformationAttribute: AgentRuntimeArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrAgentRuntimeArn"))
@@ -1934,7 +2025,8 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="attrAgentRuntimeId")
     def attr_agent_runtime_id(self) -> builtins.str:
-        '''
+        '''The ID for the agent runtime.
+
         :cloudformationAttribute: AgentRuntimeId
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrAgentRuntimeId"))
@@ -1942,7 +2034,8 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="attrAgentRuntimeVersion")
     def attr_agent_runtime_version(self) -> builtins.str:
-        '''
+        '''The version for the agent runtime.
+
         :cloudformationAttribute: AgentRuntimeVersion
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrAgentRuntimeVersion"))
@@ -1950,7 +2043,8 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedAt")
     def attr_created_at(self) -> builtins.str:
-        '''
+        '''The time at which the runtime was created.
+
         :cloudformationAttribute: CreatedAt
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
@@ -1958,7 +2052,8 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="attrLastUpdatedAt")
     def attr_last_updated_at(self) -> builtins.str:
-        '''
+        '''The time at which the runtime was last updated.
+
         :cloudformationAttribute: LastUpdatedAt
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrLastUpdatedAt"))
@@ -1966,7 +2061,8 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''
+        '''The status for the agent runtime.
+
         :cloudformationAttribute: Status
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
@@ -2002,6 +2098,7 @@ class CfnRuntime(
     def agent_runtime_artifact(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnRuntime.AgentRuntimeArtifactProperty"]:
+        '''The artifact of the agent.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRuntime.AgentRuntimeArtifactProperty"], jsii.get(self, "agentRuntimeArtifact"))
 
     @agent_runtime_artifact.setter
@@ -2017,6 +2114,7 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="agentRuntimeName")
     def agent_runtime_name(self) -> builtins.str:
+        '''The name of the AgentCore Runtime endpoint.'''
         return typing.cast(builtins.str, jsii.get(self, "agentRuntimeName"))
 
     @agent_runtime_name.setter
@@ -2031,6 +2129,7 @@ class CfnRuntime(
     def network_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnRuntime.NetworkConfigurationProperty"]:
+        '''The network configuration.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRuntime.NetworkConfigurationProperty"], jsii.get(self, "networkConfiguration"))
 
     @network_configuration.setter
@@ -2046,6 +2145,7 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="roleArn")
     def role_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) for for the role.'''
         return typing.cast(builtins.str, jsii.get(self, "roleArn"))
 
     @role_arn.setter
@@ -2060,7 +2160,7 @@ class CfnRuntime(
     def authorizer_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.AuthorizerConfigurationProperty"]]:
-        '''Configuration for the authorizer.'''
+        '''Represents inbound authorization configuration options used to authenticate incoming requests.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.AuthorizerConfigurationProperty"]], jsii.get(self, "authorizerConfiguration"))
 
     @authorizer_configuration.setter
@@ -2076,6 +2176,7 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
+        '''The agent runtime description.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -2090,7 +2191,7 @@ class CfnRuntime(
     def environment_variables(
         self,
     ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
-        '''Environment variable attributes.'''
+        '''The environment variables for the agent.'''
         return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "environmentVariables"))
 
     @environment_variables.setter
@@ -2106,6 +2207,7 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="protocolConfiguration")
     def protocol_configuration(self) -> typing.Optional[builtins.str]:
+        '''The protocol configuration for an agent runtime.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "protocolConfiguration"))
 
     @protocol_configuration.setter
@@ -2118,7 +2220,7 @@ class CfnRuntime(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of tag keys and values.'''
+        '''The tags for the agent.'''
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -2142,8 +2244,9 @@ class CfnRuntime(
             *,
             container_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.ContainerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param container_configuration: 
+            '''The artifact of the agent.
+
+            :param container_configuration: Representation of a container configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-agentruntimeartifact.html
             :exampleMetadata: fixture=_generated
@@ -2171,7 +2274,8 @@ class CfnRuntime(
         def container_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.ContainerConfigurationProperty"]]:
-            '''
+            '''Representation of a container configuration.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-agentruntimeartifact.html#cfn-bedrockagentcore-runtime-agentruntimeartifact-containerconfiguration
             '''
             result = self._values.get("container_configuration")
@@ -2199,9 +2303,9 @@ class CfnRuntime(
             *,
             custom_jwt_authorizer: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.CustomJWTAuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''Configuration for the authorizer.
+            '''The authorizer configuration.
 
-            :param custom_jwt_authorizer: Configuration for custom JWT authorizer.
+            :param custom_jwt_authorizer: Represents inbound authorization configuration options used to authenticate incoming requests.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-authorizerconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2233,7 +2337,7 @@ class CfnRuntime(
         def custom_jwt_authorizer(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.CustomJWTAuthorizerConfigurationProperty"]]:
-            '''Configuration for custom JWT authorizer.
+            '''Represents inbound authorization configuration options used to authenticate incoming requests.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-authorizerconfiguration.html#cfn-bedrockagentcore-runtime-authorizerconfiguration-customjwtauthorizer
             '''
@@ -2258,8 +2362,9 @@ class CfnRuntime(
     )
     class ContainerConfigurationProperty:
         def __init__(self, *, container_uri: builtins.str) -> None:
-            '''
-            :param container_uri: The ECR URI of the container.
+            '''The container configuration.
+
+            :param container_uri: The container Uri.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-containerconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2283,7 +2388,7 @@ class CfnRuntime(
 
         @builtins.property
         def container_uri(self) -> builtins.str:
-            '''The ECR URI of the container.
+            '''The container Uri.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-containerconfiguration.html#cfn-bedrockagentcore-runtime-containerconfiguration-containeruri
             '''
@@ -2321,9 +2426,9 @@ class CfnRuntime(
         ) -> None:
             '''Configuration for custom JWT authorizer.
 
-            :param discovery_url: OpenID Connect discovery URL.
-            :param allowed_audience: List of allowed audiences.
-            :param allowed_clients: List of allowed clients.
+            :param discovery_url: The configuration authorization.
+            :param allowed_audience: Represents inbound authorization configuration options used to authenticate incoming requests.
+            :param allowed_clients: Represents individual client IDs that are validated in the incoming JWT token validation process.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-customjwtauthorizerconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2357,7 +2462,7 @@ class CfnRuntime(
 
         @builtins.property
         def discovery_url(self) -> builtins.str:
-            '''OpenID Connect discovery URL.
+            '''The configuration authorization.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-customjwtauthorizerconfiguration.html#cfn-bedrockagentcore-runtime-customjwtauthorizerconfiguration-discoveryurl
             '''
@@ -2367,7 +2472,7 @@ class CfnRuntime(
 
         @builtins.property
         def allowed_audience(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''List of allowed audiences.
+            '''Represents inbound authorization configuration options used to authenticate incoming requests.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-customjwtauthorizerconfiguration.html#cfn-bedrockagentcore-runtime-customjwtauthorizerconfiguration-allowedaudience
             '''
@@ -2376,7 +2481,7 @@ class CfnRuntime(
 
         @builtins.property
         def allowed_clients(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''List of allowed clients.
+            '''Represents individual client IDs that are validated in the incoming JWT token validation process.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-customjwtauthorizerconfiguration.html#cfn-bedrockagentcore-runtime-customjwtauthorizerconfiguration-allowedclients
             '''
@@ -2401,8 +2506,9 @@ class CfnRuntime(
     )
     class NetworkConfigurationProperty:
         def __init__(self, *, network_mode: builtins.str) -> None:
-            '''
-            :param network_mode: Network mode configuration type.
+            '''The network configuration for the agent.
+
+            :param network_mode: The network mode.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-networkconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2426,7 +2532,7 @@ class CfnRuntime(
 
         @builtins.property
         def network_mode(self) -> builtins.str:
-            '''Network mode configuration type.
+            '''The network mode.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-networkconfiguration.html#cfn-bedrockagentcore-runtime-networkconfiguration-networkmode
             '''
@@ -2452,9 +2558,9 @@ class CfnRuntime(
     )
     class WorkloadIdentityDetailsProperty:
         def __init__(self, *, workload_identity_arn: builtins.str) -> None:
-            '''Configuration for workload identity.
+            '''The workload identity details for the agent.
 
-            :param workload_identity_arn: ARN of the workload identity.
+            :param workload_identity_arn: The Amazon Resource Name (ARN) for the workload identity.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-workloadidentitydetails.html
             :exampleMetadata: fixture=_generated
@@ -2478,7 +2584,7 @@ class CfnRuntime(
 
         @builtins.property
         def workload_identity_arn(self) -> builtins.str:
-            '''ARN of the workload identity.
+            '''The Amazon Resource Name (ARN) for the workload identity.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-workloadidentitydetails.html#cfn-bedrockagentcore-runtime-workloadidentitydetails-workloadidentityarn
             '''
@@ -2504,7 +2610,15 @@ class CfnRuntimeEndpoint(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnRuntimeEndpoint",
 ):
-    '''Resource definition for AWS::BedrockAgentCore::RuntimeEndpoint.
+    '''.. epigraph::
+
+   Amazon Bedrock AgentCore is in preview release and is subject to change.
+
+    AgentCore Runtime is a secure, serverless runtime purpose-built for deploying and scaling dynamic AI agents and tools using any open-source framework including LangGraph, CrewAI, and Strands Agents, any protocol, and any model.
+
+    For more information about using agent runtime endpoints in Amazon Bedrock AgentCore, see `AgentCore Runtime versioning and endpoints <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agent-runtime-versioning.html>`_ .
+
+    See the *Properties* section below for descriptions of both the required and optional properties.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtimeendpoint.html
     :cloudformationResource: AWS::BedrockAgentCore::RuntimeEndpoint
@@ -2543,11 +2657,11 @@ class CfnRuntimeEndpoint(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param agent_runtime_id: The ID of the parent Agent Runtime.
-        :param name: 
-        :param agent_runtime_version: 
-        :param description: 
-        :param tags: A map of tag keys and values.
+        :param agent_runtime_id: The agent runtime ID.
+        :param name: The name of the AgentCore Runtime endpoint.
+        :param agent_runtime_version: The version of the agent.
+        :param description: Contains information about an agent runtime endpoint. An agent runtime is the execution environment for a Amazon Bedrock Agent.
+        :param tags: The tags for the AgentCore Runtime endpoint.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f889c0edf8dd4715192bf69e6433f02f671ca35ed9b8e8f7622b298a7b14955a)
@@ -2596,7 +2710,8 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="attrAgentRuntimeArn")
     def attr_agent_runtime_arn(self) -> builtins.str:
-        '''
+        '''The Amazon Resource Name (ARN) of the runtime agent.
+
         :cloudformationAttribute: AgentRuntimeArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrAgentRuntimeArn"))
@@ -2604,7 +2719,8 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="attrAgentRuntimeEndpointArn")
     def attr_agent_runtime_endpoint_arn(self) -> builtins.str:
-        '''
+        '''The endpoint Amazon Resource Name (ARN).
+
         :cloudformationAttribute: AgentRuntimeEndpointArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrAgentRuntimeEndpointArn"))
@@ -2612,7 +2728,8 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedAt")
     def attr_created_at(self) -> builtins.str:
-        '''
+        '''The time at which the endpoint was created.
+
         :cloudformationAttribute: CreatedAt
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
@@ -2620,7 +2737,7 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="attrFailureReason")
     def attr_failure_reason(self) -> builtins.str:
-        '''The reason for failure if the endpoint is in a failed state.
+        '''The reason for failure if the memory is in a failed state.
 
         :cloudformationAttribute: FailureReason
         '''
@@ -2629,7 +2746,7 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="attrId")
     def attr_id(self) -> builtins.str:
-        '''The unique ID of the Agent Runtime Endpoint itself.
+        '''The ID of the runtime endpoint.
 
         :cloudformationAttribute: Id
         '''
@@ -2638,7 +2755,8 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="attrLastUpdatedAt")
     def attr_last_updated_at(self) -> builtins.str:
-        '''
+        '''The time at which the endpoint was last updated.
+
         :cloudformationAttribute: LastUpdatedAt
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrLastUpdatedAt"))
@@ -2646,7 +2764,8 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="attrLiveVersion")
     def attr_live_version(self) -> builtins.str:
-        '''
+        '''The live version for the runtime endpoint.
+
         :cloudformationAttribute: LiveVersion
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrLiveVersion"))
@@ -2654,7 +2773,8 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''
+        '''The status of the runtime endpoint.
+
         :cloudformationAttribute: Status
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
@@ -2662,7 +2782,8 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="attrTargetVersion")
     def attr_target_version(self) -> builtins.str:
-        '''
+        '''The target version.
+
         :cloudformationAttribute: TargetVersion
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrTargetVersion"))
@@ -2687,7 +2808,7 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="agentRuntimeId")
     def agent_runtime_id(self) -> builtins.str:
-        '''The ID of the parent Agent Runtime.'''
+        '''The agent runtime ID.'''
         return typing.cast(builtins.str, jsii.get(self, "agentRuntimeId"))
 
     @agent_runtime_id.setter
@@ -2700,6 +2821,7 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
+        '''The name of the AgentCore Runtime endpoint.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -2712,6 +2834,7 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="agentRuntimeVersion")
     def agent_runtime_version(self) -> typing.Optional[builtins.str]:
+        '''The version of the agent.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "agentRuntimeVersion"))
 
     @agent_runtime_version.setter
@@ -2724,6 +2847,7 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
+        '''Contains information about an agent runtime endpoint.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -2736,7 +2860,7 @@ class CfnRuntimeEndpoint(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of tag keys and values.'''
+        '''The tags for the AgentCore Runtime endpoint.'''
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -2862,6 +2986,14 @@ def _typecheckingstub__e817ad5ee6496ab54cf569758c4d73da62a4d6f5cf0c34866960f6e46
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1a5d38dc7619d36a2a4f39c13ec237b55f560a41ac9a162b787880e8e6ba2f47(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    browser_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__12637c5685b21eb50c5acd05eb9308d8266fc2816549a6a2816d9399823e8551(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2942,6 +3074,14 @@ def _typecheckingstub__1aaa167a6af98d626969b5bd2de9377658de4e8d04df0b48dc5916f9e
     description: typing.Optional[builtins.str] = None,
     execution_role_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d2e6193c6a8378455a4decc0c525a09a78674fd7ad426e58017e57035bc1789a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    code_interpreter_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

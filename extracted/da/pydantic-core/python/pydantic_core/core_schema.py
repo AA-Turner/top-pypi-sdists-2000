@@ -1939,6 +1939,7 @@ class DictSchema(TypedDict, total=False):
     values_schema: CoreSchema  # default: AnySchema
     min_length: int
     max_length: int
+    fail_fast: bool
     strict: bool
     ref: str
     metadata: dict[str, Any]
@@ -1951,6 +1952,7 @@ def dict_schema(
     *,
     min_length: int | None = None,
     max_length: int | None = None,
+    fail_fast: bool | None = None,
     strict: bool | None = None,
     ref: str | None = None,
     metadata: dict[str, Any] | None = None,
@@ -1974,6 +1976,7 @@ def dict_schema(
         values_schema: The value must be a dict with values that match this schema
         min_length: The value must be a dict with at least this many items
         max_length: The value must be a dict with at most this many items
+        fail_fast: Stop validation on the first error
         strict: Whether the keys and values should be validated with strict mode
         ref: optional unique identifier of the schema, used to reference the schema in other places
         metadata: Any other information you want to include with the schema, not used by pydantic-core
@@ -1985,6 +1988,7 @@ def dict_schema(
         values_schema=values_schema,
         min_length=min_length,
         max_length=max_length,
+        fail_fast=fail_fast,
         strict=strict,
         ref=ref,
         metadata=metadata,
@@ -3904,6 +3908,7 @@ def url_schema(
     default_host: str | None = None,
     default_port: int | None = None,
     default_path: str | None = None,
+    preserve_empty_path: bool | None = None,
     strict: bool | None = None,
     ref: str | None = None,
     metadata: dict[str, Any] | None = None,
@@ -3928,6 +3933,7 @@ def url_schema(
         default_host: The default host to use if the URL does not have a host
         default_port: The default port to use if the URL does not have a port
         default_path: The default path to use if the URL does not have a path
+        preserve_empty_path: Whether to preserve an empty path or convert it to '/', default False
         strict: Whether to use strict URL parsing
         ref: optional unique identifier of the schema, used to reference the schema in other places
         metadata: Any other information you want to include with the schema, not used by pydantic-core
@@ -3941,6 +3947,7 @@ def url_schema(
         default_host=default_host,
         default_port=default_port,
         default_path=default_path,
+        preserve_empty_path=preserve_empty_path,
         strict=strict,
         ref=ref,
         metadata=metadata,
@@ -3970,6 +3977,7 @@ def multi_host_url_schema(
     default_host: str | None = None,
     default_port: int | None = None,
     default_path: str | None = None,
+    preserve_empty_path: bool | None = None,
     strict: bool | None = None,
     ref: str | None = None,
     metadata: dict[str, Any] | None = None,
@@ -3994,6 +4002,7 @@ def multi_host_url_schema(
         default_host: The default host to use if the URL does not have a host
         default_port: The default port to use if the URL does not have a port
         default_path: The default path to use if the URL does not have a path
+        preserve_empty_path: Whether to preserve an empty path or convert it to '/', default False
         strict: Whether to use strict URL parsing
         ref: optional unique identifier of the schema, used to reference the schema in other places
         metadata: Any other information you want to include with the schema, not used by pydantic-core
@@ -4007,6 +4016,7 @@ def multi_host_url_schema(
         default_host=default_host,
         default_port=default_port,
         default_path=default_path,
+        preserve_empty_path=preserve_empty_path,
         strict=strict,
         ref=ref,
         metadata=metadata,

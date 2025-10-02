@@ -129,6 +129,7 @@ class CfnIdMappingWorkflowProps:
             cfn_id_mapping_workflow_props = entityresolution.CfnIdMappingWorkflowProps(
                 id_mapping_techniques=entityresolution.CfnIdMappingWorkflow.IdMappingTechniquesProperty(
                     id_mapping_type="idMappingType",
+                    normalization_version="normalizationVersion",
                     provider_properties=entityresolution.CfnIdMappingWorkflow.ProviderPropertiesProperty(
                         provider_service_arn="providerServiceArn",
             
@@ -1527,6 +1528,7 @@ class CfnIdMappingWorkflow(
         cfn_id_mapping_workflow = entityresolution.CfnIdMappingWorkflow(self, "MyCfnIdMappingWorkflow",
             id_mapping_techniques=entityresolution.CfnIdMappingWorkflow.IdMappingTechniquesProperty(
                 id_mapping_type="idMappingType",
+                normalization_version="normalizationVersion",
                 provider_properties=entityresolution.CfnIdMappingWorkflow.ProviderPropertiesProperty(
                     provider_service_arn="providerServiceArn",
         
@@ -2017,6 +2019,7 @@ class CfnIdMappingWorkflow(
         jsii_struct_bases=[],
         name_mapping={
             "id_mapping_type": "idMappingType",
+            "normalization_version": "normalizationVersion",
             "provider_properties": "providerProperties",
             "rule_based_properties": "ruleBasedProperties",
         },
@@ -2026,12 +2029,14 @@ class CfnIdMappingWorkflow(
             self,
             *,
             id_mapping_type: typing.Optional[builtins.str] = None,
+            normalization_version: typing.Optional[builtins.str] = None,
             provider_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdMappingWorkflow.ProviderPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             rule_based_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdMappingWorkflow.IdMappingRuleBasedPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object which defines the ID mapping technique and any additional configurations.
 
             :param id_mapping_type: The type of ID mapping.
+            :param normalization_version: 
             :param provider_properties: An object which defines any additional configurations required by the provider service.
             :param rule_based_properties: An object which defines any additional configurations required by rule-based matching.
 
@@ -2046,6 +2051,7 @@ class CfnIdMappingWorkflow(
                 
                 id_mapping_techniques_property = entityresolution.CfnIdMappingWorkflow.IdMappingTechniquesProperty(
                     id_mapping_type="idMappingType",
+                    normalization_version="normalizationVersion",
                     provider_properties=entityresolution.CfnIdMappingWorkflow.ProviderPropertiesProperty(
                         provider_service_arn="providerServiceArn",
                 
@@ -2073,11 +2079,14 @@ class CfnIdMappingWorkflow(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__14f084baf89be97b69b754d6755f29c921f7ef9044bf1e234a903b93f7718bcc)
                 check_type(argname="argument id_mapping_type", value=id_mapping_type, expected_type=type_hints["id_mapping_type"])
+                check_type(argname="argument normalization_version", value=normalization_version, expected_type=type_hints["normalization_version"])
                 check_type(argname="argument provider_properties", value=provider_properties, expected_type=type_hints["provider_properties"])
                 check_type(argname="argument rule_based_properties", value=rule_based_properties, expected_type=type_hints["rule_based_properties"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if id_mapping_type is not None:
                 self._values["id_mapping_type"] = id_mapping_type
+            if normalization_version is not None:
+                self._values["normalization_version"] = normalization_version
             if provider_properties is not None:
                 self._values["provider_properties"] = provider_properties
             if rule_based_properties is not None:
@@ -2090,6 +2099,14 @@ class CfnIdMappingWorkflow(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-entityresolution-idmappingworkflow-idmappingtechniques.html#cfn-entityresolution-idmappingworkflow-idmappingtechniques-idmappingtype
             '''
             result = self._values.get("id_mapping_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def normalization_version(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-entityresolution-idmappingworkflow-idmappingtechniques.html#cfn-entityresolution-idmappingworkflow-idmappingtechniques-normalizationversion
+            '''
+            result = self._values.get("normalization_version")
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
@@ -5464,6 +5481,7 @@ def _typecheckingstub__4bb92f6ba90c637e6800332c85746dca9a127a9d4ac3f6130ef5f9057
 def _typecheckingstub__14f084baf89be97b69b754d6755f29c921f7ef9044bf1e234a903b93f7718bcc(
     *,
     id_mapping_type: typing.Optional[builtins.str] = None,
+    normalization_version: typing.Optional[builtins.str] = None,
     provider_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdMappingWorkflow.ProviderPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     rule_based_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdMappingWorkflow.IdMappingRuleBasedPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

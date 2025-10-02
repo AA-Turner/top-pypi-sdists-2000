@@ -6622,6 +6622,7 @@ class CfnResourceProps:
         "name": "name",
         "parameters": "parameters",
         "policy": "policy",
+        "security_policy": "securityPolicy",
         "tags": "tags",
     },
 )
@@ -6643,6 +6644,7 @@ class CfnRestApiProps:
         name: typing.Optional[builtins.str] = None,
         parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         policy: typing.Any = None,
+        security_policy: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRestApi``.
@@ -6661,6 +6663,7 @@ class CfnRestApiProps:
         :param name: The name of the RestApi. A name is required if the REST API is not based on an OpenAPI specification.
         :param parameters: Custom header parameters as part of the request. For example, to exclude DocumentationParts from an imported API, set ``ignore=documentation`` as a ``parameters`` value, as in the AWS CLI command of ``aws apigateway import-rest-api --parameters ignore=documentation --body 'file:///path/to/imported-api-body.json'`` .
         :param policy: A policy document that contains the permissions for the ``RestApi`` resource. To set the ARN for the policy, use the ``!Join`` intrinsic function with ``""`` as delimiter and values of ``"execute-api:/"`` and ``"*"`` .
+        :param security_policy: 
         :param tags: The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with ``aws:`` . The tag value can be up to 256 characters.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html
@@ -6701,6 +6704,7 @@ class CfnRestApiProps:
                     "parameters_key": "parameters"
                 },
                 policy=policy,
+                security_policy="securityPolicy",
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -6723,6 +6727,7 @@ class CfnRestApiProps:
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
             check_type(argname="argument policy", value=policy, expected_type=type_hints["policy"])
+            check_type(argname="argument security_policy", value=security_policy, expected_type=type_hints["security_policy"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if api_key_source_type is not None:
@@ -6753,6 +6758,8 @@ class CfnRestApiProps:
             self._values["parameters"] = parameters
         if policy is not None:
             self._values["policy"] = policy
+        if security_policy is not None:
+            self._values["security_policy"] = security_policy
         if tags is not None:
             self._values["tags"] = tags
 
@@ -6923,6 +6930,14 @@ class CfnRestApiProps:
         '''
         result = self._values.get("policy")
         return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def security_policy(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-securitypolicy
+        '''
+        result = self._values.get("security_policy")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -27462,6 +27477,7 @@ class CfnRestApi(
                 "parameters_key": "parameters"
             },
             policy=policy,
+            security_policy="securityPolicy",
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -27488,6 +27504,7 @@ class CfnRestApi(
         name: typing.Optional[builtins.str] = None,
         parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         policy: typing.Any = None,
+        security_policy: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
@@ -27507,6 +27524,7 @@ class CfnRestApi(
         :param name: The name of the RestApi. A name is required if the REST API is not based on an OpenAPI specification.
         :param parameters: Custom header parameters as part of the request. For example, to exclude DocumentationParts from an imported API, set ``ignore=documentation`` as a ``parameters`` value, as in the AWS CLI command of ``aws apigateway import-rest-api --parameters ignore=documentation --body 'file:///path/to/imported-api-body.json'`` .
         :param policy: A policy document that contains the permissions for the ``RestApi`` resource. To set the ARN for the policy, use the ``!Join`` intrinsic function with ``""`` as delimiter and values of ``"execute-api:/"`` and ``"*"`` .
+        :param security_policy: 
         :param tags: The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with ``aws:`` . The tag value can be up to 256 characters.
         '''
         if __debug__:
@@ -27528,6 +27546,7 @@ class CfnRestApi(
             name=name,
             parameters=parameters,
             policy=policy,
+            security_policy=security_policy,
             tags=tags,
         )
 
@@ -27828,6 +27847,18 @@ class CfnRestApi(
             type_hints = typing.get_type_hints(_typecheckingstub__b7c411e289712e4a9bfc8e944902e0103f628540a4cf7e48a8c9167888e17d8f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "policy", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="securityPolicy")
+    def security_policy(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "securityPolicy"))
+
+    @security_policy.setter
+    def security_policy(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b5cbad8ea7b13cc4138aea2c1f4832de11327b51e38539bb2f152732a2d44409)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "securityPolicy", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
@@ -36725,6 +36756,7 @@ def _typecheckingstub__5e6d4ed4722f0c07021ff207940f8656b0bbeb24224daef1a2a167c70
     name: typing.Optional[builtins.str] = None,
     parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     policy: typing.Any = None,
+    security_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -39167,6 +39199,7 @@ def _typecheckingstub__781aae0a2f2512495cbd89d2be23edec0478e71fd6a59c0527cabb245
     name: typing.Optional[builtins.str] = None,
     parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     policy: typing.Any = None,
+    security_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -39272,6 +39305,12 @@ def _typecheckingstub__ccaf03012418784e0b764088769b0e23937e2028288348151f0ccfbfd
 
 def _typecheckingstub__b7c411e289712e4a9bfc8e944902e0103f628540a4cf7e48a8c9167888e17d8f(
     value: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b5cbad8ea7b13cc4138aea2c1f4832de11327b51e38539bb2f152732a2d44409(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass

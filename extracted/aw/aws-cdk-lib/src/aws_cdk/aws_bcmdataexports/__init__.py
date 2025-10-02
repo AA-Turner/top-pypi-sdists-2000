@@ -404,6 +404,15 @@ class CfnExport(
         return typing.cast(builtins.str, jsii.get(self, "attrExportArn"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrExportExportArn")
+    def attr_export_export_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) for this export.
+
+        :cloudformationAttribute: Export.ExportArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrExportExportArn"))
+
+    @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
     def cdk_tag_manager(self) -> _TagManager_0a598cb3:
         '''Tag Manager which manages the tags for this resource.'''

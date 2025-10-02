@@ -60,6 +60,26 @@ class QuantizationScheme(BaseModel):
         format = model.format
 
         if inputs is not None:
+            if inputs.strategy not in (
+                QuantizationStrategy.TOKEN,
+                QuantizationStrategy.TENSOR,
+                QuantizationStrategy.GROUP,
+                QuantizationStrategy.TENSOR_GROUP,
+            ):
+                if (
+                    inputs.strategy == QuantizationStrategy.GROUP
+                    and inputs.dynamic is True
+                ):
+                    raise NotImplementedError(
+                        "Static and local group-wise activation "
+                        "quantization is not supported"
+                    )
+
+                raise NotImplementedError(
+                    f"Using {inputs.strategy} strategy is not supported for "
+                    "activation quantization"
+                )
+
             if inputs.actorder is not None:
                 raise ValueError("Cannot apply actorder to input activations")
 
@@ -81,9 +101,10 @@ class QuantizationScheme(BaseModel):
         ):
             warnings.warn(
                 "Using GROUP strategy for both weights and input_activations "
-                f"with different group sizes ({weights.group_size} vs {inputs.group_size}) "
-                "may complicate fused kernel implementations. Consider using "
-                "TENSOR_GROUP strategy for both or matching group sizes.",
+                f"with different group sizes ({weights.group_size} vs "
+                f"{inputs.group_size}) may complicate fused kernel implementations. "
+                "Consider using TENSOR_GROUP strategy for both or matching group"
+                " sizes.",
                 UserWarning,
                 stacklevel=2,
             )

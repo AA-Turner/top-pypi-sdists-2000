@@ -78,6 +78,7 @@ def main(locustfiles: list[str] | None = None):
             if env_variable.startswith("LOCUST_")
             and env_variable
             not in [
+                "LOCUST_LOCUSTFILE",
                 "LOCUST_USERS",
                 "LOCUST_WEB_HOST_DISPLAY_NAME",
                 "LOCUST_SKIP_MONKEY_PATCH",
@@ -86,7 +87,7 @@ def main(locustfiles: list[str] | None = None):
         ]
 
         locust_args = [
-            {"name": "LOCUST_USERS", "value": str(options.users)},
+            {"name": "LOCUST_LOCUSTFILE", "value": ",".join([str(file) for file in relative_locustfiles])},
             {"name": "LOCUST_FLAGS", "value": " ".join([option for option in locust_options if option != "--cloud"])},
             {"name": "LOCUSTCLOUD_DEPLOYER_URL", "value": session.api_url},
             *locust_env_variables,
@@ -98,7 +99,6 @@ def main(locustfiles: list[str] | None = None):
         payload = {
             "locust_args": locust_args,
             "project_data": project_data,
-            "user_count": options.users,
         }
 
         if options.image_tag is not None:
@@ -110,6 +110,10 @@ def main(locustfiles: list[str] | None = None):
 
         if options.workers is not None:
             payload["worker_count"] = options.workers
+
+        if options.users:
+            payload["user_count"] = options.users
+            locust_args.append({"name": "LOCUST_USERS", "value": str(options.users)})
 
         if options.requirements:
             payload["requirements"] = options.requirements

@@ -269,11 +269,15 @@ Parameters specified on command line override env vars, which in turn override c
     add_config_file_help=False,
     add_env_var_help=False,
 )
+# Consume locustfile flag to not be forwarded into load generators
+combined_cloud_parser.add_argument(
+    "-f",
+    "--locustfile",
+)
 combined_cloud_parser.add_argument(
     "-u",
     "--users",
     type=int,
-    default=1,
     help="Number of users to launch. This is the same as the regular Locust argument, but also affects how many workers to launch.",
     env_var="LOCUST_USERS",
 )

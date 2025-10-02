@@ -16,12 +16,16 @@ class CookieError(YouTubeTranscriptApiException):
 
 
 class CookiePathInvalid(CookieError):
-    def __init__(self, cookie_path: Path):
+    def __init__(
+        self, cookie_path: Path
+    ):  # pragma: no cover until cookie authentication is re-implemented
         super().__init__(f"Can't load the provided cookie file: {cookie_path}")
 
 
 class CookieInvalid(CookieError):
-    def __init__(self, cookie_path: Path):
+    def __init__(
+        self, cookie_path: Path
+    ):  # pragma: no cover until cookie authentication is re-implemented
         super().__init__(
             f"The cookies provided are not valid (may have expired): {cookie_path}"
         )
@@ -119,8 +123,8 @@ class VideoUnavailable(CouldNotRetrieveTranscript):
 class InvalidVideoId(CouldNotRetrieveTranscript):
     CAUSE_MESSAGE = (
         "You provided an invalid video id. Make sure you are using the video id and NOT the url!\n\n"
-        'Do NOT run: `YouTubeTranscriptApi.get_transcript("https://www.youtube.com/watch?v=1234")`\n'
-        'Instead run: `YouTubeTranscriptApi.get_transcript("1234")`'
+        'Do NOT run: `YouTubeTranscriptApi().fetch("https://www.youtube.com/watch?v=1234")`\n'
+        'Instead run: `YouTubeTranscriptApi().fetch("1234")`'
     )
 
 
@@ -148,8 +152,9 @@ class RequestBlocked(CouldNotRetrieveTranscript):
     )
     WITH_GENERIC_PROXY_CAUSE_MESSAGE = (
         "YouTube is blocking your requests, despite you using proxies. Keep in mind "
-        "a proxy is just a way to hide your real IP behind the IP of that proxy, but "
-        "there is no guarantee that the IP of that proxy won't be blocked as well.\n\n"
+        "that a proxy is just a way to hide your real IP behind the IP of that proxy, "
+        "but there is no guarantee that the IP of that proxy won't be blocked as "
+        "well.\n\n"
         "The only truly reliable way to prevent IP blocks is rotating through a large "
         "pool of residential IPs, by using a provider like Webshare "
         "(https://www.webshare.io/?referral_code=w0xno53eb50g), which provides you "
@@ -208,12 +213,19 @@ class TranscriptsDisabled(CouldNotRetrieveTranscript):
 
 
 class AgeRestricted(CouldNotRetrieveTranscript):
+    # CAUSE_MESSAGE = (
+    #     "This video is age-restricted. Therefore, you will have to authenticate to be "
+    #     "able to retrieve transcripts for it. You will have to provide a cookie to "
+    #     'authenticate yourself, as explained in the "Cookie Authentication" section of '
+    #     "the README (https://github.com/jdepoix/youtube-transcript-api"
+    #     "?tab=readme-ov-file#cookie-authentication)"
+    # )
     CAUSE_MESSAGE = (
-        "This video is age-restricted. Therefore, you will have to authenticate to be "
-        "able to retrieve transcripts for it. You will have to provide a cookie to "
-        'authenticate yourself, as explained in the "Cookie Authentication" section of '
-        "the README (https://github.com/jdepoix/youtube-transcript-api"
-        "?tab=readme-ov-file#cookie-authentication)"
+        "This video is age-restricted. Therefore, you are unable to retrieve "
+        "transcripts for it without authenticating yourself.\n\n"
+        "Unfortunately, Cookie Authentication is temporarily unsupported in "
+        "youtube-transcript-api, as recent changes in YouTube's API broke the previous "
+        "implementation. I will do my best to re-implement it as soon as possible."
     )
 
 
@@ -251,3 +263,10 @@ class NoTranscriptFound(CouldNotRetrieveTranscript):
             requested_language_codes=self._requested_language_codes,
             transcript_data=str(self._transcript_data),
         )
+
+
+class PoTokenRequired(CouldNotRetrieveTranscript):
+    CAUSE_MESSAGE = (
+        "The requested video cannot be retrieved without a PO Token. If this happens, "
+        "please open a GitHub issue!"
+    )

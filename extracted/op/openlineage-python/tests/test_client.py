@@ -2,23 +2,20 @@
 # SPDX-License-Identifier: Apache-2.0
 from __future__ import annotations
 
+import json
 import logging
 import os
 import re
 from typing import TYPE_CHECKING
-from unittest.mock import MagicMock, patch
+from unittest.mock import ANY, MagicMock, patch
 
 import attr
 import pytest
 from openlineage.client import event_v2
 from openlineage.client.client import OpenLineageClient, OpenLineageClientOptions, OpenLineageConfig
+from openlineage.client.constants import __version__ as OPENLINEAGE_CLIENT_VERSION
+from openlineage.client.facet_v2 import environment_variables_run, tags_job, tags_run
 from openlineage.client.facets import FacetsConfig
-from openlineage.client.generated.environment_variables_run import (
-    EnvironmentVariable,
-    EnvironmentVariablesRunFacet,
-)
-from openlineage.client.generated.tags_job import TagsJobFacet, TagsJobFacetFields
-from openlineage.client.generated.tags_run import TagsRunFacet, TagsRunFacetFields
 from openlineage.client.run import (
     SCHEMA_URL,
     Dataset,
@@ -104,13 +101,6 @@ def test_client_sends_proper_json_with_minimal_run_event(mock_http_session_class
         ),
     )
 
-    body = (
-        '{"eventTime": "2021-11-03T10:53:52.427343", "eventType": "START", "inputs": [], "job": '
-        '{"facets": {}, "name": "job", "namespace": "openlineage"}, "outputs": [], '
-        '"producer": "producer", "run": {"facets": {}, "runId": '
-        f'"69f4acab-b87d-4fc0-b27b-8ea950370ff3"}}, "schemaURL": "{SCHEMA_URL}"}}'
-    )
-
     # Verify the post was called with correct parameters
     mock_client.post.assert_called_once()
     call_args = mock_client.post.call_args
@@ -119,8 +109,38 @@ def test_client_sends_proper_json_with_minimal_run_event(mock_http_session_class
     assert call_args.kwargs["headers"]["Content-Type"] == "application/json"
 
     # Verify the content is the expected JSON
-    actual_content = call_args.kwargs["data"]
-    assert actual_content == body
+    actual_content = json.loads(call_args.kwargs["data"])
+    expected_content = {
+        "eventTime": "2021-11-03T10:53:52.427343",
+        "eventType": "START",
+        "inputs": [],
+        "job": {
+            "facets": {},
+            "name": "job",
+            "namespace": "openlineage",
+        },
+        "outputs": [],
+        "producer": "producer",
+        "run": {
+            "facets": {
+                "tags": {
+                    "_producer": ANY,
+                    "_schemaURL": ANY,
+                    "tags": [
+                        {
+                            "key": "openlineage_client_version",
+                            "value": OPENLINEAGE_CLIENT_VERSION,
+                            "source": "OPENLINEAGE_CLIENT",
+                        }
+                    ],
+                }
+            },
+            "runId": "69f4acab-b87d-4fc0-b27b-8ea950370ff3",
+        },
+        "schemaURL": SCHEMA_URL,
+    }
+
+    assert actual_content == expected_content
 
 
 def test_client_sends_proper_json_with_minimal_dataset_event(mock_http_session_class) -> None:
@@ -520,8 +540,10 @@ def test_add_environment_facets():
     modified_event = client.add_environment_facets(event)
 
     assert "environmentVariables" in modified_event.run.facets
-    assert modified_event.run.facets["environmentVariables"] == EnvironmentVariablesRunFacet(
-        [EnvironmentVariable(name="ENV_VAR_1", value="value1")]
+    assert modified_event.run.facets[
+        "environmentVariables"
+    ] == environment_variables_run.EnvironmentVariablesRunFacet(
+        [environment_variables_run.EnvironmentVariable(name="ENV_VAR_1", value="value1")]
     )
 
     event2 = event_v2.RunEvent(
@@ -536,8 +558,10 @@ def test_add_environment_facets():
     modified_event2 = client.add_environment_facets(event2)
 
     assert "environmentVariables" in modified_event2.run.facets
-    assert modified_event2.run.facets["environmentVariables"] == EnvironmentVariablesRunFacet(
-        [EnvironmentVariable(name="ENV_VAR_1", value="value1")]
+    assert modified_event2.run.facets[
+        "environmentVariables"
+    ] == environment_variables_run.EnvironmentVariablesRunFacet(
+        [environment_variables_run.EnvironmentVariable(name="ENV_VAR_1", value="value1")]
     )
 
 
@@ -586,7 +610,7 @@ def test_composite_transport_with_aliased_url() -> None:
     assert transport.kind == CompositeTransport.kind
     assert len(transport.transports) == 1
     assert transport.transports[0].kind == HttpTransport.kind
-    assert isinstance(transport.transports[0].config.auth, TokenProvider)
+    assert type(transport.transports[0].config.auth) is TokenProvider
 
 
 @patch.dict(
@@ -602,7 +626,7 @@ def test_composite_transport_with_aliased_url_and_api_key() -> None:
     assert transport.kind == CompositeTransport.kind
     assert len(transport.transports) == 1
     assert transport.transports[0].kind == HttpTransport.kind
-    assert isinstance(transport.transports[0].config.auth, ApiKeyTokenProvider)
+    assert type(transport.transports[0].config.auth) is ApiKeyTokenProvider
     assert transport.transports[0].config.auth.api_key == "random_key"
 
 
@@ -641,7 +665,7 @@ def test_composite_transport_with_aliased_url_and_overriden_alias() -> None:
     os.environ,
     {
         "OPENLINEAGE__TRANSPORT": '{"type": "async_http", "url": "https://data-obs-intake.datadoghq.com", '
-        '"auth": {"type": "apiKey", "apiKey": "YOUR_API_KEY"}}',
+        '"auth": {"type": "api_key", "apiKey": "YOUR_API_KEY"}}',
     },
 )
 def test_configures_async_transport() -> None:
@@ -651,6 +675,8 @@ def test_configures_async_transport() -> None:
     transport: AsyncHttpTransport = client.transport
     with closing_immediately(transport) as transport:
         assert transport.kind == "async_http"
+        assert type(transport.config.auth) is ApiKeyTokenProvider
+        assert transport.config.auth.api_key == "YOUR_API_KEY"
 
 
 @patch.dict(
@@ -776,7 +802,9 @@ def test_add_environment_facets_with_custom_env_var(mock_resolve_transport) -> N
     client.emit(event)
     assert mock_transport.emit.call_args[0][0].run.facets[
         "environmentVariables"
-    ] == EnvironmentVariablesRunFacet([EnvironmentVariable(name="CUSTOM_ENV_VAR", value="custom_value")])
+    ] == environment_variables_run.EnvironmentVariablesRunFacet(
+        [environment_variables_run.EnvironmentVariable(name="CUSTOM_ENV_VAR", value="custom_value")]
+    )
 
     mock_transport.emit.reset_mock()
     assert mock_transport.emit.call_args is None
@@ -791,7 +819,9 @@ def test_add_environment_facets_with_custom_env_var(mock_resolve_transport) -> N
     client.emit(event2)
     assert mock_transport.emit.call_args[0][0].run.facets[
         "environmentVariables"
-    ] == EnvironmentVariablesRunFacet([EnvironmentVariable(name="CUSTOM_ENV_VAR", value="custom_value")])
+    ] == environment_variables_run.EnvironmentVariablesRunFacet(
+        [environment_variables_run.EnvironmentVariable(name="CUSTOM_ENV_VAR", value="custom_value")]
+    )
 
 
 @patch.dict(
@@ -1102,6 +1132,33 @@ def job_event_multi(request):
     return event_type(**event_args)
 
 
+def test_run_tags():
+    tag_environment_variables = {"OPENLINEAGE__TAGS__RUN__ENVIRONMENT": "PRODUCTION"}
+
+    expected_tags = [
+        tags_run.TagsRunFacetFields("environment", "PRODUCTION", "USER"),
+        tags_run.TagsRunFacetFields(  # Added default run tag
+            "openlineage_client_version", OPENLINEAGE_CLIENT_VERSION, "OPENLINEAGE_CLIENT"
+        ),
+    ]
+
+    with patch.dict(os.environ, tag_environment_variables):
+        client = OpenLineageClient()
+        result = sorted(client._run_tags, key=lambda x: x.key)
+        assert result == expected_tags
+
+
+def test_job_tags():
+    tag_environment_variables = {"OPENLINEAGE__TAGS__JOB__ENVIRONMENT": "PRODUCTION"}
+
+    expected_tags = [tags_job.TagsJobFacetFields("environment", "PRODUCTION", "USER")]
+
+    with patch.dict(os.environ, tag_environment_variables):
+        client = OpenLineageClient()
+        result = sorted(client._job_tags, key=lambda x: x.key)
+        assert result == expected_tags
+
+
 def test_client_creates_new_job_tag_facet(transport, run_event_multi):
     tag_environment_variables = {
         "OPENLINEAGE__TAGS__JOB__ENVIRONMENT": "PRODUCTION",
@@ -1109,8 +1166,8 @@ def test_client_creates_new_job_tag_facet(transport, run_event_multi):
     }
 
     tags = [
-        TagsJobFacetFields("environment", "PRODUCTION", "USER"),
-        TagsJobFacetFields("pipeline", "SALES", "USER"),
+        tags_job.TagsJobFacetFields("environment", "PRODUCTION", "USER"),
+        tags_job.TagsJobFacetFields("pipeline", "SALES", "USER"),
     ]
 
     with patch.dict(os.environ, tag_environment_variables):
@@ -1129,15 +1186,15 @@ def test_client_updates_existing_job_tags_facet(transport, run_event_multi):
     }
 
     existing_tags = [
-        TagsJobFacetFields("environment", "STAGING", "USER"),
-        TagsJobFacetFields("foo", "bar", "USER"),
+        tags_job.TagsJobFacetFields("environment", "STAGING", "USER"),
+        tags_job.TagsJobFacetFields("foo", "bar", "USER"),
     ]
-    run_event_multi.job.facets["tags"] = TagsJobFacet(tags=existing_tags)
+    run_event_multi.job.facets["tags"] = tags_job.TagsJobFacet(tags=existing_tags)
 
     tags = [
-        TagsJobFacetFields("foo", "bar", "USER"),
-        TagsJobFacetFields("environment", "PRODUCTION", "USER"),
-        TagsJobFacetFields("pipeline", "SALES", "USER"),
+        tags_job.TagsJobFacetFields("foo", "bar", "USER"),
+        tags_job.TagsJobFacetFields("environment", "PRODUCTION", "USER"),
+        tags_job.TagsJobFacetFields("pipeline", "SALES", "USER"),
     ]
 
     with patch.dict(os.environ, tag_environment_variables):
@@ -1156,8 +1213,11 @@ def test_client_creates_new_run_tags_facet(transport, run_event_multi):
     }
 
     tags = [
-        TagsRunFacetFields("environment", "PRODUCTION", "USER"),
-        TagsRunFacetFields("pipeline", "SALES", "USER"),
+        tags_run.TagsRunFacetFields("environment", "PRODUCTION", "USER"),
+        tags_run.TagsRunFacetFields("pipeline", "SALES", "USER"),
+        tags_run.TagsRunFacetFields(
+            "openlineage_client_version", OPENLINEAGE_CLIENT_VERSION, "OPENLINEAGE_CLIENT"
+        ),
     ]
 
     with patch.dict(os.environ, tag_environment_variables):
@@ -1176,16 +1236,19 @@ def test_client_updates_existing_run_tags_facet(transport, run_event_multi):
     }
 
     existing_tags = [
-        TagsRunFacetFields("ENVIRONMENT", "STAGING", "USER"),
-        TagsRunFacetFields("foo", "bar", "USER"),
+        tags_run.TagsRunFacetFields("ENVIRONMENT", "STAGING", "USER"),
+        tags_run.TagsRunFacetFields("foo", "bar", "USER"),
     ]
-    run_event_multi.run.facets["tags"] = TagsRunFacet(tags=existing_tags)
+    run_event_multi.run.facets["tags"] = tags_run.TagsRunFacet(tags=existing_tags)
 
-    # One existing tag (not updated), one existing tag (updated), one new tag from the user
+    # One existing tag (not updated), one existing tag (updated), one new tag from the user, one default tag
     tags = [
-        TagsRunFacetFields("foo", "bar", "USER"),
-        TagsRunFacetFields("ENVIRONMENT", "PRODUCTION", "USER"),
-        TagsRunFacetFields("pipeline", "SALES", "USER"),
+        tags_run.TagsRunFacetFields("foo", "bar", "USER"),
+        tags_run.TagsRunFacetFields("ENVIRONMENT", "PRODUCTION", "USER"),
+        tags_run.TagsRunFacetFields("pipeline", "SALES", "USER"),
+        tags_run.TagsRunFacetFields(
+            "openlineage_client_version", OPENLINEAGE_CLIENT_VERSION, "OPENLINEAGE_CLIENT"
+        ),
     ]
 
     with patch.dict(os.environ, tag_environment_variables):
@@ -1204,15 +1267,18 @@ def test_client_keeps_key_case_for_existing_tags(transport, run_event_multi):
     }
 
     tags = [
-        TagsRunFacetFields("environment", "STAGING", "USER"),
-        TagsRunFacetFields("PIPELINE", "FINANCE", "USER"),
+        tags_run.TagsRunFacetFields("environment", "STAGING", "USER"),
+        tags_run.TagsRunFacetFields("PIPELINE", "FINANCE", "USER"),
     ]
 
-    run_event_multi.run.facets["tags"] = TagsRunFacet(tags=tags)
+    run_event_multi.run.facets["tags"] = tags_run.TagsRunFacet(tags=tags)
 
     tags = [
-        TagsRunFacetFields("environment", "PRODUCTION", "USER"),
-        TagsRunFacetFields("PIPELINE", "SALES", "USER"),
+        tags_run.TagsRunFacetFields("environment", "PRODUCTION", "USER"),
+        tags_run.TagsRunFacetFields("PIPELINE", "SALES", "USER"),
+        tags_run.TagsRunFacetFields(
+            "openlineage_client_version", OPENLINEAGE_CLIENT_VERSION, "OPENLINEAGE_CLIENT"
+        ),
     ]
 
     with patch.dict(os.environ, tag_environment_variables):
@@ -1235,8 +1301,8 @@ def test_client_creates_tag_facets_for_job_events(transport, job_event_multi):
     }
 
     tags = [
-        TagsJobFacetFields("environment", "production", "USER"),
-        TagsJobFacetFields("pipeline", "sales", "USER"),
+        tags_job.TagsJobFacetFields("environment", "production", "USER"),
+        tags_job.TagsJobFacetFields("pipeline", "sales", "USER"),
     ]
 
     with patch.dict(os.environ, tag_environment_variables):
@@ -1260,8 +1326,8 @@ def test_client_does_not_update_run_tags_for_job_events(transport, job_event_mul
     }
 
     tags = [
-        TagsJobFacetFields("environment", "production", "USER"),
-        TagsJobFacetFields("pipeline", "sales", "USER"),
+        tags_job.TagsJobFacetFields("environment", "production", "USER"),
+        tags_job.TagsJobFacetFields("pipeline", "sales", "USER"),
     ]
 
     with patch.dict(os.environ, tag_environment_variables):
@@ -1539,3 +1605,58 @@ def test_client_transport_from_env_var_composite_with_user_config_non_composite(
     assert transport.url == "http://user.com"
     assert transport.endpoint == "api/v1/lineage"
     assert transport.compression == HttpCompression.GZIP
+
+
+@patch.dict(
+    os.environ,
+    {
+        "OPENLINEAGE__TRANSPORT__TYPE": "http",
+        "OPENLINEAGE__TRANSPORT__URL": "http://example.com",
+        "OPENLINEAGE__TRANSPORT__AUTH__TYPE": "api_key",
+        "OPENLINEAGE__TRANSPORT__AUTH__APIKEY": "secret1",
+    },
+)
+def test_client_http_transport_from_env_vars_with_separate_api_key_lowercase(recwarn):
+    user_config = {}
+    transport = OpenLineageClient(config=user_config).transport
+    assert not recwarn
+    assert transport.kind == "http"
+    assert transport.url == "http://example.com"
+    assert transport.config.auth.api_key == "secret1"
+
+
+@patch.dict(
+    os.environ,
+    {
+        "OPENLINEAGE__TRANSPORT__TYPE": "http",
+        "OPENLINEAGE__TRANSPORT__URL": "http://example.com",
+        "OPENLINEAGE__TRANSPORT__AUTH__TYPE": "api_key",
+        "OPENLINEAGE__TRANSPORT__AUTH__API_KEY": "secret1",
+    },
+)
+def test_client_http_transport_from_env_vars_with_separate_api_key_snakecase(recwarn):
+    user_config = {}
+    transport = OpenLineageClient(config=user_config).transport
+    assert not recwarn
+    assert transport.kind == "http"
+    assert transport.url == "http://example.com"
+    assert transport.config.auth.api_key == "secret1"
+
+
+@patch.dict(
+    os.environ,
+    {
+        "OPENLINEAGE__TRANSPORT__TYPE": "http",
+        "OPENLINEAGE__TRANSPORT__URL": "http://example.com",
+        "OPENLINEAGE__TRANSPORT__AUTH__TYPE": "api_key",
+        "OPENLINEAGE__TRANSPORT__AUTH__API_KEY": "secret1",
+        "OPENLINEAGE__TRANSPORT__AUTH__APIKEY": "secret2",
+    },
+)
+def test_client_http_transport_from_env_vars_with_separate_api_key_precedence(recwarn):
+    user_config = {}
+    transport = OpenLineageClient(config=user_config).transport
+    assert not recwarn
+    assert transport.kind == "http"
+    assert transport.url == "http://example.com"
+    assert transport.config.auth.api_key == "secret2"

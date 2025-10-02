@@ -1658,6 +1658,16 @@ class CfnDataAutomationProjectProps:
                                 state="state",
             
                                 # the properties below are optional
+                                type_configuration=bedrock.CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty(
+                                    transcript=bedrock.CfnDataAutomationProject.TranscriptConfigurationProperty(
+                                        channel_labeling=bedrock.CfnDataAutomationProject.ChannelLabelingConfigurationProperty(
+                                            state="state"
+                                        ),
+                                        speaker_labeling=bedrock.CfnDataAutomationProject.SpeakerLabelingConfigurationProperty(
+                                            state="state"
+                                        )
+                                    )
+                                ),
                                 types=["types"]
                             )
                         ),
@@ -4807,6 +4817,12 @@ class FoundationModelIdentifier(
     def ANTHROPIC_CLAUDE_SONNET_4_20250514_V1_0(cls) -> "FoundationModelIdentifier":
         '''Base model "anthropic.claude-sonnet-4-20250514-v1:0".'''
         return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "ANTHROPIC_CLAUDE_SONNET_4_20250514_V1_0"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="ANTHROPIC_CLAUDE_SONNET_4_5_20250929_V1_0")
+    def ANTHROPIC_CLAUDE_SONNET_4_5_20250929_V1_0(cls) -> "FoundationModelIdentifier":
+        '''Base model "anthropic.claude-sonnet-4-5-20250929-v1:0".'''
+        return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "ANTHROPIC_CLAUDE_SONNET_4_5_20250929_V1_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ANTHROPIC_CLAUDE_V1")
@@ -10957,6 +10973,16 @@ class CfnDataAutomationProject(
                             state="state",
         
                             # the properties below are optional
+                            type_configuration=bedrock.CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty(
+                                transcript=bedrock.CfnDataAutomationProject.TranscriptConfigurationProperty(
+                                    channel_labeling=bedrock.CfnDataAutomationProject.ChannelLabelingConfigurationProperty(
+                                        state="state"
+                                    ),
+                                    speaker_labeling=bedrock.CfnDataAutomationProject.SpeakerLabelingConfigurationProperty(
+                                        state="state"
+                                    )
+                                )
+                            ),
                             types=["types"]
                         )
                     ),
@@ -11296,18 +11322,24 @@ class CfnDataAutomationProject(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.AudioExtractionCategoryProperty",
         jsii_struct_bases=[],
-        name_mapping={"state": "state", "types": "types"},
+        name_mapping={
+            "state": "state",
+            "type_configuration": "typeConfiguration",
+            "types": "types",
+        },
     )
     class AudioExtractionCategoryProperty:
         def __init__(
             self,
             *,
             state: builtins.str,
+            type_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             types: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Settings for generating data from audio.
 
             :param state: Whether generating categorical data from audio is enabled.
+            :param type_configuration: 
             :param types: The types of data to generate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audioextractioncategory.html
@@ -11323,16 +11355,29 @@ class CfnDataAutomationProject(
                     state="state",
                 
                     # the properties below are optional
+                    type_configuration=bedrock.CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty(
+                        transcript=bedrock.CfnDataAutomationProject.TranscriptConfigurationProperty(
+                            channel_labeling=bedrock.CfnDataAutomationProject.ChannelLabelingConfigurationProperty(
+                                state="state"
+                            ),
+                            speaker_labeling=bedrock.CfnDataAutomationProject.SpeakerLabelingConfigurationProperty(
+                                state="state"
+                            )
+                        )
+                    ),
                     types=["types"]
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__17b4067ba061b31b33f6982f8b1ce49b15211698a89239a94ac83de6e9a86fd0)
                 check_type(argname="argument state", value=state, expected_type=type_hints["state"])
+                check_type(argname="argument type_configuration", value=type_configuration, expected_type=type_hints["type_configuration"])
                 check_type(argname="argument types", value=types, expected_type=type_hints["types"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "state": state,
             }
+            if type_configuration is not None:
+                self._values["type_configuration"] = type_configuration
             if types is not None:
                 self._values["types"] = types
 
@@ -11345,6 +11390,16 @@ class CfnDataAutomationProject(
             result = self._values.get("state")
             assert result is not None, "Required property 'state' is missing"
             return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def type_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audioextractioncategory.html#cfn-bedrock-dataautomationproject-audioextractioncategory-typeconfiguration
+            '''
+            result = self._values.get("type_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty"]], result)
 
         @builtins.property
         def types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -11363,6 +11418,68 @@ class CfnDataAutomationProject(
 
         def __repr__(self) -> str:
             return "AudioExtractionCategoryProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"transcript": "transcript"},
+    )
+    class AudioExtractionCategoryTypeConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            transcript: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.TranscriptConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param transcript: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audioextractioncategorytypeconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                audio_extraction_category_type_configuration_property = bedrock.CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty(
+                    transcript=bedrock.CfnDataAutomationProject.TranscriptConfigurationProperty(
+                        channel_labeling=bedrock.CfnDataAutomationProject.ChannelLabelingConfigurationProperty(
+                            state="state"
+                        ),
+                        speaker_labeling=bedrock.CfnDataAutomationProject.SpeakerLabelingConfigurationProperty(
+                            state="state"
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8259388fe308ef50a8381c8a690422dc9a617fc5ee0ec19395a6049b94fc76bc)
+                check_type(argname="argument transcript", value=transcript, expected_type=type_hints["transcript"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if transcript is not None:
+                self._values["transcript"] = transcript
+
+        @builtins.property
+        def transcript(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.TranscriptConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audioextractioncategorytypeconfiguration.html#cfn-bedrock-dataautomationproject-audioextractioncategorytypeconfiguration-transcript
+            '''
+            result = self._values.get("transcript")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.TranscriptConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AudioExtractionCategoryTypeConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -11456,6 +11573,16 @@ class CfnDataAutomationProject(
                         state="state",
                 
                         # the properties below are optional
+                        type_configuration=bedrock.CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty(
+                            transcript=bedrock.CfnDataAutomationProject.TranscriptConfigurationProperty(
+                                channel_labeling=bedrock.CfnDataAutomationProject.ChannelLabelingConfigurationProperty(
+                                    state="state"
+                                ),
+                                speaker_labeling=bedrock.CfnDataAutomationProject.SpeakerLabelingConfigurationProperty(
+                                    state="state"
+                                )
+                            )
+                        ),
                         types=["types"]
                     )
                 )
@@ -11598,6 +11725,16 @@ class CfnDataAutomationProject(
                             state="state",
                 
                             # the properties below are optional
+                            type_configuration=bedrock.CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty(
+                                transcript=bedrock.CfnDataAutomationProject.TranscriptConfigurationProperty(
+                                    channel_labeling=bedrock.CfnDataAutomationProject.ChannelLabelingConfigurationProperty(
+                                        state="state"
+                                    ),
+                                    speaker_labeling=bedrock.CfnDataAutomationProject.SpeakerLabelingConfigurationProperty(
+                                        state="state"
+                                    )
+                                )
+                            ),
                             types=["types"]
                         )
                     ),
@@ -11741,6 +11878,56 @@ class CfnDataAutomationProject(
 
         def __repr__(self) -> str:
             return "BlueprintItemProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.ChannelLabelingConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"state": "state"},
+    )
+    class ChannelLabelingConfigurationProperty:
+        def __init__(self, *, state: builtins.str) -> None:
+            '''
+            :param state: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-channellabelingconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                channel_labeling_configuration_property = bedrock.CfnDataAutomationProject.ChannelLabelingConfigurationProperty(
+                    state="state"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7ab1d892e7ed4872447a0903e83dac79c4c5e818a7f8c79fc389710519cc6ac8)
+                check_type(argname="argument state", value=state, expected_type=type_hints["state"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "state": state,
+            }
+
+        @builtins.property
+        def state(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-channellabelingconfiguration.html#cfn-bedrock-dataautomationproject-channellabelingconfiguration-state
+            '''
+            result = self._values.get("state")
+            assert result is not None, "Required property 'state' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ChannelLabelingConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -13172,6 +13359,56 @@ class CfnDataAutomationProject(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.SpeakerLabelingConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"state": "state"},
+    )
+    class SpeakerLabelingConfigurationProperty:
+        def __init__(self, *, state: builtins.str) -> None:
+            '''
+            :param state: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-speakerlabelingconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                speaker_labeling_configuration_property = bedrock.CfnDataAutomationProject.SpeakerLabelingConfigurationProperty(
+                    state="state"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__725244e9aa37705dc01f5ef13c43668850d124b3c4788e4cf95166bc4ec818cf)
+                check_type(argname="argument state", value=state, expected_type=type_hints["state"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "state": state,
+            }
+
+        @builtins.property
+        def state(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-speakerlabelingconfiguration.html#cfn-bedrock-dataautomationproject-speakerlabelingconfiguration-state
+            '''
+            result = self._values.get("state")
+            assert result is not None, "Required property 'state' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SpeakerLabelingConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.SplitterConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={"state": "state"},
@@ -13266,6 +13503,16 @@ class CfnDataAutomationProject(
                                 state="state",
                 
                                 # the properties below are optional
+                                type_configuration=bedrock.CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty(
+                                    transcript=bedrock.CfnDataAutomationProject.TranscriptConfigurationProperty(
+                                        channel_labeling=bedrock.CfnDataAutomationProject.ChannelLabelingConfigurationProperty(
+                                            state="state"
+                                        ),
+                                        speaker_labeling=bedrock.CfnDataAutomationProject.SpeakerLabelingConfigurationProperty(
+                                            state="state"
+                                        )
+                                    )
+                                ),
                                 types=["types"]
                             )
                         ),
@@ -13405,6 +13652,84 @@ class CfnDataAutomationProject(
 
         def __repr__(self) -> str:
             return "StandardOutputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.TranscriptConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "channel_labeling": "channelLabeling",
+            "speaker_labeling": "speakerLabeling",
+        },
+    )
+    class TranscriptConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            channel_labeling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.ChannelLabelingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            speaker_labeling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.SpeakerLabelingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param channel_labeling: 
+            :param speaker_labeling: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-transcriptconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                transcript_configuration_property = bedrock.CfnDataAutomationProject.TranscriptConfigurationProperty(
+                    channel_labeling=bedrock.CfnDataAutomationProject.ChannelLabelingConfigurationProperty(
+                        state="state"
+                    ),
+                    speaker_labeling=bedrock.CfnDataAutomationProject.SpeakerLabelingConfigurationProperty(
+                        state="state"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f07f4b0c00b57db46daaddf10a2a13658595b6b33385465d29dac371457691d4)
+                check_type(argname="argument channel_labeling", value=channel_labeling, expected_type=type_hints["channel_labeling"])
+                check_type(argname="argument speaker_labeling", value=speaker_labeling, expected_type=type_hints["speaker_labeling"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if channel_labeling is not None:
+                self._values["channel_labeling"] = channel_labeling
+            if speaker_labeling is not None:
+                self._values["speaker_labeling"] = speaker_labeling
+
+        @builtins.property
+        def channel_labeling(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.ChannelLabelingConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-transcriptconfiguration.html#cfn-bedrock-dataautomationproject-transcriptconfiguration-channellabeling
+            '''
+            result = self._values.get("channel_labeling")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.ChannelLabelingConfigurationProperty"]], result)
+
+        @builtins.property
+        def speaker_labeling(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SpeakerLabelingConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-transcriptconfiguration.html#cfn-bedrock-dataautomationproject-transcriptconfiguration-speakerlabeling
+            '''
+            result = self._values.get("speaker_labeling")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SpeakerLabelingConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TranscriptConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -41126,7 +41451,15 @@ def _typecheckingstub__c8adc93c3ad061e5a2be17a8fdad5d0761d30eeec1c7a815fcdef93e3
 def _typecheckingstub__17b4067ba061b31b33f6982f8b1ce49b15211698a89239a94ac83de6e9a86fd0(
     *,
     state: builtins.str,
+    type_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     types: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8259388fe308ef50a8381c8a690422dc9a617fc5ee0ec19395a6049b94fc76bc(
+    *,
+    transcript: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.TranscriptConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -41166,6 +41499,13 @@ def _typecheckingstub__b0aacb3579a06fb3e50ee6ecb37244fb2c3691447d7c0d5ce515e59f8
     blueprint_arn: builtins.str,
     blueprint_stage: typing.Optional[builtins.str] = None,
     blueprint_version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7ab1d892e7ed4872447a0903e83dac79c4c5e818a7f8c79fc389710519cc6ac8(
+    *,
+    state: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -41319,6 +41659,13 @@ def _typecheckingstub__400a92e228907b33f71ad10276a9ad472a21d517da3941d1621dda605
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__725244e9aa37705dc01f5ef13c43668850d124b3c4788e4cf95166bc4ec818cf(
+    *,
+    state: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c7cc9940422898532f5a5c63c45d42dbf9d52852abdd7380d339b4a0b5631abd(
     *,
     state: typing.Optional[builtins.str] = None,
@@ -41332,6 +41679,14 @@ def _typecheckingstub__73065f098ecb2ad872a4a32fc68952239056e92bbe4974bed8c813d74
     document: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.DocumentStandardOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.ImageStandardOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     video: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.VideoStandardOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f07f4b0c00b57db46daaddf10a2a13658595b6b33385465d29dac371457691d4(
+    *,
+    channel_labeling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.ChannelLabelingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    speaker_labeling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.SpeakerLabelingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1,9 +1,11 @@
 Metadata-Version: 2.4
 Name: openlineage-python
-Version: 1.37.0
+Version: 1.38.0
 Summary: OpenLineage Python Client
 Author-email: OpenLineage <info@openlineage.io>
+License-File: LICENSE
 Keywords: openlineage
+Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3 :: Only
@@ -27,9 +29,13 @@ Requires-Dist: beautifulsoup4>=4.12.0; extra == 'docs'
 Requires-Dist: pydata-sphinx-theme>=0.13; extra == 'docs'
 Requires-Dist: sphinx-autodoc-typehints>=2.0.0; extra == 'docs'
 Requires-Dist: sphinx>=7.0; extra == 'docs'
+Provides-Extra: fsspec
+Requires-Dist: fsspec>=2023.1.0; extra == 'fsspec'
+Provides-Extra: gcplineage
+Requires-Dist: google-cloud-datacatalog-lineage>=0.3.14; extra == 'gcplineage'
 Provides-Extra: generator
 Requires-Dist: click; extra == 'generator'
-Requires-Dist: datamodel-code-generator==0.25.4; extra == 'generator'
+Requires-Dist: datamodel-code-generator==0.33.0; extra == 'generator'
 Requires-Dist: ruff; extra == 'generator'
 Provides-Extra: kafka
 Requires-Dist: confluent-kafka>=2.1.1; extra == 'kafka'

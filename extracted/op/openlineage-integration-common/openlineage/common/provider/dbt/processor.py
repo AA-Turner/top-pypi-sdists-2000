@@ -16,17 +16,19 @@ from openlineage.client.facet_v2 import (
     InputDatasetFacet,
     JobFacet,
     OutputDatasetFacet,
+    RunFacet,
     column_lineage_dataset,
     data_quality_assertions_dataset,
     datasource_dataset,
     documentation_dataset,
+    external_query_run,
     job_type_job,
     output_statistics_output_dataset,
     processing_engine_run,
     schema_dataset,
     sql_job,
+    tags_run,
 )
-from openlineage.client.generated.external_query_run import ExternalQueryRunFacet
 from openlineage.client.uuid import generate_new_uuid
 from openlineage.common.provider.dbt.facets import DbtRunRunFacet, DbtVersionRunFacet, ParentRunMetadata
 from openlineage.common.provider.dbt.utils import __version__ as openlineage_version
@@ -73,6 +75,9 @@ class UnsupportedDbtCommand(Exception):
 
 @attr.define
 class ModelNode:
+    # in reality Literal["model", "test", "snapshot", "source", "seed"]
+    # but way too much work to convince mypy that it's true
+    type: str
     metadata_node: Dict
     catalog_node: Optional[Dict] = None
 
@@ -261,15 +266,17 @@ class DbtArtifactProcessor:
                 if node.startswith("model."):
                     inputs.append(
                         ModelNode(
-                            nodes[node],
-                            get_from_nullable_chain(context.catalog, ["nodes", node]),
+                            type="model",
+                            metadata_node=nodes[node],
+                            catalog_node=get_from_nullable_chain(context.catalog, ["nodes", node]),
                         )
                     )
                 elif node.startswith("source."):
                     inputs.append(
                         ModelNode(
-                            context.manifest["sources"][node],
-                            get_from_nullable_chain(context.catalog, ["sources", node]),
+                            type="source",
+                            metadata_node=context.manifest["sources"][node],
+                            catalog_node=get_from_nullable_chain(context.catalog, ["sources", node]),
                         )
                     )
 
@@ -305,10 +312,17 @@ class DbtArtifactProcessor:
             if sql:
                 job_facets["sql"] = sql_job.SQLJobFacet(query=sql, dialect=self.extract_dialect())
 
+            run_facets: Dict[str, RunFacet] = {}
+            if tags := output_node.get("tags", None):
+                run_facets["tags"] = tags_run.TagsRunFacet(
+                    tags=[tags_run.TagsRunFacetFields(key=tag, value="true", source="DBT") for tag in tags]
+                )
+
             output_dataset = self.node_to_output_dataset(
                 ModelNode(
-                    output_node,
-                    get_from_nullable_chain(context.catalog, ["nodes", run["unique_id"]]),
+                    type=jobType.lower(),
+                    metadata_node=output_node,
+                    catalog_node=get_from_nullable_chain(context.catalog, ["nodes", run["unique_id"]]),
                 ),
                 has_facets=True,
                 adapter_response=run.get("adapter_response", None),
@@ -325,7 +339,7 @@ class DbtArtifactProcessor:
                     run["status"],
                     started_at,
                     completed_at,
-                    self.get_run(run_id=run_id, query_id=query_id),
+                    self.get_run(run_id=run_id, query_id=query_id, run_facets=run_facets),
                     Job(namespace=self.job_namespace, name=job_name, facets=job_facets),
                     [self.node_to_dataset(node, has_facets=True) for node in inputs],
                     output_dataset,
@@ -343,7 +357,11 @@ class DbtArtifactProcessor:
         events = DbtEvents()
         manifest_nodes = {**context.manifest["nodes"], **context.manifest["sources"]}
         for name, node in manifest_nodes.items():
-            if not name.startswith("model.") and not name.startswith("source."):
+            if name.startswith("model."):
+                node_type = "model"
+            elif name.startswith("source."):
+                node_type = "source"
+            else:
                 continue
             if len(assertions[name]) == 0:
                 continue
@@ -353,7 +371,7 @@ class DbtArtifactProcessor:
             )
 
             namespace, name, _, _ = self.extract_dataset_data(
-                ModelNode(node), assertion_facet, has_facets=False
+                ModelNode(type=node_type, metadata_node=node), assertion_facet, has_facets=False
             )
 
             job_name = self._format_dataset_name(
@@ -371,6 +389,12 @@ class DbtArtifactProcessor:
                 )
             }
 
+            run_facets: Dict[str, RunFacet] = {}
+            if tags := node.get("tags", None):
+                run_facets["tags"] = tags_run.TagsRunFacet(
+                    tags=[tags_run.TagsRunFacetFields(key=tag, value="true", source="DBT") for tag in tags]
+                )
+
             run_id = str(generate_new_uuid())
             dataset_facets: Dict[str, InputDatasetFacet] = {"dataQualityAssertions": assertion_facet}
             events.add(
@@ -378,7 +402,7 @@ class DbtArtifactProcessor:
                     "success",
                     started_at,
                     completed_at,
-                    self.get_run(run_id=run_id),
+                    self.get_run(run_id=run_id, run_facets=run_facets),
                     Job(namespace=self.job_namespace, name=job_name, facets=job_facets),
                     [
                         InputDataset(
@@ -598,12 +622,16 @@ class DbtArtifactProcessor:
                 facets["schema"] = schema_dataset.SchemaDatasetFacet(fields=fields)
         else:
             facets = {}
+        if node.type == "source":
+            table = node.metadata_node["name"]
+        else:
+            table = node.metadata_node["alias"]
         return (
             self.dataset_namespace,
             self._format_dataset_name(
                 node.metadata_node["database"],
                 node.metadata_node["schema"],
-                node.metadata_node["name"],
+                table,
             ),
             facets,
             input_facets,
@@ -713,17 +741,24 @@ class DbtArtifactProcessor:
             return None
         return self.adapter_type.value.lower()
 
-    def get_run(self, run_id: str, query_id: Optional[str] = None) -> Run:
-        run_facets = {
-            **self.dbt_version_facet(),
-            **self.dbt_run_run_facet(),
-            **self.processing_engine_facet(),
-        }
+    def get_run(
+        self, run_id: str, query_id: Optional[str] = None, run_facets: Optional[dict[str, Any]] = None
+    ) -> Run:
+        if run_facets is None:
+            run_facets = {}
+
+        run_facets.update(
+            {
+                **self.dbt_version_facet(),
+                **self.dbt_run_run_facet(),
+                **self.processing_engine_facet(),
+            }
+        )
         if self._dbt_run_metadata:
             run_facets["parent"] = self._dbt_run_metadata.to_openlineage()
 
         if query_id:
-            run_facets["externalQuery"] = ExternalQueryRunFacet(
+            run_facets["externalQuery"] = external_query_run.ExternalQueryRunFacet(
                 externalQueryId=query_id, source=self.dataset_namespace
             )
 
@@ -744,11 +779,9 @@ class DbtArtifactProcessor:
         )
         return {"dbt_version": DbtVersionRunFacet(version=dbt_version)}
 
+    @abstractmethod
     def dbt_run_run_facet(self) -> dict[str, DbtRunRunFacet]:
-        invocation_id = self.run_metadata.get("invocation_id")
-        if not invocation_id:
-            return {}
-        return {"dbt_run": DbtRunRunFacet(invocation_id=invocation_id)}
+        ...
 
     def processing_engine_facet(self) -> dict[str, processing_engine_run.ProcessingEngineRunFacet]:
         dbt_version = self.run_metadata.get("dbt_version")

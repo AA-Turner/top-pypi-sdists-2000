@@ -120,7 +120,7 @@ class CfnReportDefinitionProps:
         :param additional_artifacts: A list of manifests that you want AWS to create for this report.
         :param additional_schema_elements: A list of strings that indicate additional content that AWS includes in the report, such as individual resource IDs.
         :param billing_view_arn: The Amazon Resource Name (ARN) of the billing view. You can get this value by using the billing view service public APIs.
-        :param tags: 
+        :param tags: The tags to be assigned to the report definition resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cur-reportdefinition.html
         :exampleMetadata: fixture=_generated
@@ -316,7 +316,8 @@ class CfnReportDefinitionProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''
+        '''The tags to be assigned to the report definition resource.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cur-reportdefinition.html#cfn-cur-reportdefinition-tags
         '''
         result = self._values.get("tags")
@@ -499,7 +500,7 @@ class CfnReportDefinition(
         :param additional_artifacts: A list of manifests that you want AWS to create for this report.
         :param additional_schema_elements: A list of strings that indicate additional content that AWS includes in the report, such as individual resource IDs.
         :param billing_view_arn: The Amazon Resource Name (ARN) of the billing view. You can get this value by using the billing view service public APIs.
-        :param tags: 
+        :param tags: The tags to be assigned to the report definition resource.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa6a90098f39859b607fa8b8453bf94b62703cdf41682ff1f90c565abdedbb57)
@@ -761,6 +762,7 @@ class CfnReportDefinition(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags to be assigned to the report definition resource.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter

@@ -2223,8 +2223,8 @@ class CfnLocationSMBProps:
 
         :param agent_arns: Specifies the DataSync agent (or agents) that can connect to your SMB file server. You specify an agent by using its Amazon Resource Name (ARN).
         :param authentication_type: The authentication mode used to determine identity of user.
-        :param cmk_secret_config: Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
-        :param custom_secret_config: Specifies configuration information for a customer-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
+        :param cmk_secret_config: Specifies configuration information for a DataSync-managed secret, such as an authentication token or secret key that DataSync uses to access a specific storage location, with a customer-managed AWS KMS key . .. epigraph:: You can use either ``CmkSecretConfig`` or ``CustomSecretConfig`` to provide credentials for a ``CreateLocation`` request. Do not provide both parameters for the same request.
+        :param custom_secret_config: Specifies configuration information for a customer-managed Secrets Manager secret where a storage location authentication token or secret key is stored in plain text. This configuration includes the secret ARN, and the ARN for an IAM role that provides access to the secret. .. epigraph:: You can use either ``CmkSecretConfig`` or ``CustomSecretConfig`` to provide credentials for a ``CreateLocation`` request. Do not provide both parameters for the same request.
         :param dns_ip_addresses: Specifies the IPv4 addresses for the DNS servers that your SMB file server belongs to. This parameter applies only if AuthenticationType is set to KERBEROS. If you have multiple domains in your environment, configuring this parameter makes sure that DataSync connects to the right SMB file server.
         :param domain: Specifies the Windows domain name that your SMB file server belongs to. This parameter applies only if ``AuthenticationType`` is set to ``NTLM`` . If you have multiple domains in your environment, configuring this parameter makes sure that DataSync connects to the right file server.
         :param kerberos_keytab: The Base64 string representation of the Keytab file. Specifies your Kerberos key table (keytab) file, which includes mappings between your service principal name (SPN) and encryption keys. To avoid task execution errors, make sure that the SPN in the keytab file matches exactly what you specify for KerberosPrincipal and in your krb5.conf file.
@@ -2351,7 +2351,11 @@ class CfnLocationSMBProps:
     def cmk_secret_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]]:
-        '''Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+        '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or secret key that DataSync uses to access a specific storage location, with a customer-managed AWS KMS key .
+
+        .. epigraph::
+
+           You can use either ``CmkSecretConfig`` or ``CustomSecretConfig`` to provide credentials for a ``CreateLocation`` request. Do not provide both parameters for the same request.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationsmb.html#cfn-datasync-locationsmb-cmksecretconfig
         '''
@@ -2362,7 +2366,12 @@ class CfnLocationSMBProps:
     def custom_secret_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]]:
-        '''Specifies configuration information for a customer-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
+        '''Specifies configuration information for a customer-managed Secrets Manager secret where a storage location authentication token or secret key is stored in plain text.
+
+        This configuration includes the secret ARN, and the ARN for an IAM role that provides access to the secret.
+        .. epigraph::
+
+           You can use either ``CmkSecretConfig`` or ``CustomSecretConfig`` to provide credentials for a ``CreateLocation`` request. Do not provide both parameters for the same request.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationsmb.html#cfn-datasync-locationsmb-customsecretconfig
         '''
@@ -8287,8 +8296,8 @@ class CfnLocationSMB(
         :param id: Construct identifier for this resource (unique in its scope).
         :param agent_arns: Specifies the DataSync agent (or agents) that can connect to your SMB file server. You specify an agent by using its Amazon Resource Name (ARN).
         :param authentication_type: The authentication mode used to determine identity of user.
-        :param cmk_secret_config: Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
-        :param custom_secret_config: Specifies configuration information for a customer-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
+        :param cmk_secret_config: Specifies configuration information for a DataSync-managed secret, such as an authentication token or secret key that DataSync uses to access a specific storage location, with a customer-managed AWS KMS key . .. epigraph:: You can use either ``CmkSecretConfig`` or ``CustomSecretConfig`` to provide credentials for a ``CreateLocation`` request. Do not provide both parameters for the same request.
+        :param custom_secret_config: Specifies configuration information for a customer-managed Secrets Manager secret where a storage location authentication token or secret key is stored in plain text. This configuration includes the secret ARN, and the ARN for an IAM role that provides access to the secret. .. epigraph:: You can use either ``CmkSecretConfig`` or ``CustomSecretConfig`` to provide credentials for a ``CreateLocation`` request. Do not provide both parameters for the same request.
         :param dns_ip_addresses: Specifies the IPv4 addresses for the DNS servers that your SMB file server belongs to. This parameter applies only if AuthenticationType is set to KERBEROS. If you have multiple domains in your environment, configuring this parameter makes sure that DataSync connects to the right SMB file server.
         :param domain: Specifies the Windows domain name that your SMB file server belongs to. This parameter applies only if ``AuthenticationType`` is set to ``NTLM`` . If you have multiple domains in your environment, configuring this parameter makes sure that DataSync connects to the right file server.
         :param kerberos_keytab: The Base64 string representation of the Keytab file. Specifies your Kerberos key table (keytab) file, which includes mappings between your service principal name (SPN) and encryption keys. To avoid task execution errors, make sure that the SPN in the keytab file matches exactly what you specify for KerberosPrincipal and in your krb5.conf file.
@@ -8358,7 +8367,9 @@ class CfnLocationSMB(
     @builtins.property
     @jsii.member(jsii_name="attrCmkSecretConfigSecretArn")
     def attr_cmk_secret_config_secret_arn(self) -> builtins.str:
-        '''Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+        '''Specifies the ARN for the DataSync-managed AWS Secrets Manager secret that that is used to access a specific storage location.
+
+        This property is generated by DataSync and is read-only. DataSync encrypts this secret with the KMS key that you specify for ``KmsKeyArn`` .
 
         :cloudformationAttribute: CmkSecretConfig.SecretArn
         '''
@@ -8441,7 +8452,7 @@ class CfnLocationSMB(
     def cmk_secret_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]]:
-        '''Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.'''
+        '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or secret key that DataSync uses to access a specific storage location, with a customer-managed AWS KMS key .'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]], jsii.get(self, "cmkSecretConfig"))
 
     @cmk_secret_config.setter
@@ -8459,7 +8470,7 @@ class CfnLocationSMB(
     def custom_secret_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]]:
-        '''Specifies configuration information for a customer-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.'''
+        '''Specifies configuration information for a customer-managed Secrets Manager secret where a storage location authentication token or secret key is stored in plain text.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]], jsii.get(self, "customSecretConfig"))
 
     @custom_secret_config.setter
@@ -8635,10 +8646,14 @@ class CfnLocationSMB(
             kms_key_arn: typing.Optional[builtins.str] = None,
             secret_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and a customer-managed AWS KMS key.
+            '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or secret key that DataSync uses to access a specific storage location, with a customer-managed AWS KMS key .
 
-            :param kms_key_arn: Specifies the ARN for the customer-managed AWS KMS key used to encrypt the secret specified for SecretArn. DataSync provides this key to AWS Secrets Manager.
-            :param secret_arn: Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+            .. epigraph::
+
+               You can use either ``CmkSecretConfig`` or ``CustomSecretConfig`` to provide credentials for a ``CreateLocation`` request. Do not provide both parameters for the same request.
+
+            :param kms_key_arn: Specifies the ARN for the customer-managed AWS KMS key that DataSync uses to encrypt the DataSync-managed secret stored for ``SecretArn`` . DataSync provides this key to AWS Secrets Manager .
+            :param secret_arn: Specifies the ARN for the DataSync-managed AWS Secrets Manager secret that that is used to access a specific storage location. This property is generated by DataSync and is read-only. DataSync encrypts this secret with the KMS key that you specify for ``KmsKeyArn`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-cmksecretconfig.html
             :exampleMetadata: fixture=_generated
@@ -8666,9 +8681,9 @@ class CfnLocationSMB(
 
         @builtins.property
         def kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''Specifies the ARN for the customer-managed AWS KMS key used to encrypt the secret specified for SecretArn.
+            '''Specifies the ARN for the customer-managed AWS KMS key that DataSync uses to encrypt the DataSync-managed secret stored for ``SecretArn`` .
 
-            DataSync provides this key to AWS Secrets Manager.
+            DataSync provides this key to AWS Secrets Manager .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-cmksecretconfig.html#cfn-datasync-locationsmb-cmksecretconfig-kmskeyarn
             '''
@@ -8677,7 +8692,9 @@ class CfnLocationSMB(
 
         @builtins.property
         def secret_arn(self) -> typing.Optional[builtins.str]:
-            '''Specifies the ARN for an AWS Secrets Manager secret, managed by DataSync.
+            '''Specifies the ARN for the DataSync-managed AWS Secrets Manager secret that that is used to access a specific storage location.
+
+            This property is generated by DataSync and is read-only. DataSync encrypts this secret with the KMS key that you specify for ``KmsKeyArn`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-cmksecretconfig.html#cfn-datasync-locationsmb-cmksecretconfig-secretarn
             '''
@@ -8710,10 +8727,15 @@ class CfnLocationSMB(
             secret_access_role_arn: builtins.str,
             secret_arn: builtins.str,
         ) -> None:
-            '''Specifies configuration information for a customer-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location, and an IAM role that DataSync can assume and access the customer-managed secret.
+            '''Specifies configuration information for a customer-managed Secrets Manager secret where a storage location authentication token or secret key is stored in plain text.
 
-            :param secret_access_role_arn: Specifies the ARN for the AWS Identity and Access Management role that DataSync uses to access the secret specified for SecretArn.
-            :param secret_arn: Specifies the ARN for a customer created AWS Secrets Manager secret.
+            This configuration includes the secret ARN, and the ARN for an IAM role that provides access to the secret.
+            .. epigraph::
+
+               You can use either ``CmkSecretConfig`` or ``CustomSecretConfig`` to provide credentials for a ``CreateLocation`` request. Do not provide both parameters for the same request.
+
+            :param secret_access_role_arn: Specifies the ARN for the AWS Identity and Access Management role that DataSync uses to access the secret specified for ``SecretArn`` .
+            :param secret_arn: Specifies the ARN for an AWS Secrets Manager secret.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-customsecretconfig.html
             :exampleMetadata: fixture=_generated
@@ -8740,7 +8762,7 @@ class CfnLocationSMB(
 
         @builtins.property
         def secret_access_role_arn(self) -> builtins.str:
-            '''Specifies the ARN for the AWS Identity and Access Management role that DataSync uses to access the secret specified for SecretArn.
+            '''Specifies the ARN for the AWS Identity and Access Management role that DataSync uses to access the secret specified for ``SecretArn`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-customsecretconfig.html#cfn-datasync-locationsmb-customsecretconfig-secretaccessrolearn
             '''
@@ -8750,7 +8772,7 @@ class CfnLocationSMB(
 
         @builtins.property
         def secret_arn(self) -> builtins.str:
-            '''Specifies the ARN for a customer created AWS Secrets Manager secret.
+            '''Specifies the ARN for an AWS Secrets Manager secret.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationsmb-customsecretconfig.html#cfn-datasync-locationsmb-customsecretconfig-secretarn
             '''
@@ -8776,9 +8798,9 @@ class CfnLocationSMB(
     )
     class ManagedSecretConfigProperty:
         def __init__(self, *, secret_arn: builtins.str) -> None:
-            '''Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location.
+            '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location.
 
-            DataSync uses the default AWS-managed KMS key to encrypt this secret in AWS Secrets Manager.
+            DataSync uses the default AWS -managed KMS key to encrypt this secret in AWS Secrets Manager .
 
             :param secret_arn: Specifies the ARN for an AWS Secrets Manager secret.
 

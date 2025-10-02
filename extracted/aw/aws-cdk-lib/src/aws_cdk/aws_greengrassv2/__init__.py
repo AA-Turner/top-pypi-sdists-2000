@@ -2117,6 +2117,27 @@ class CfnDeployment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromDeploymentId")
+    @builtins.classmethod
+    def from_deployment_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        deployment_id: builtins.str,
+    ) -> IDeploymentRef:
+        '''Creates a new IDeploymentRef from a deploymentId.
+
+        :param scope: -
+        :param id: -
+        :param deployment_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__246faf33f5221b348f2a0ea67e53581cd4ccc87b4011ca763f4a218cbfd4d249)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument deployment_id", value=deployment_id, expected_type=type_hints["deployment_id"])
+        return typing.cast(IDeploymentRef, jsii.sinvoke(cls, "fromDeploymentId", [scope, id, deployment_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3618,6 +3639,14 @@ def _typecheckingstub__e0099ed4b9647f1e31fee9e80f3453ed07e5b916846f269d15cb7aa59
     iot_job_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.DeploymentIoTJobConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     parent_target_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__246faf33f5221b348f2a0ea67e53581cd4ccc87b4011ca763f4a218cbfd4d249(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    deployment_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

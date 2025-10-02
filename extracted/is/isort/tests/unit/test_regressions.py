@@ -212,7 +212,7 @@ from openzwave.option import ZWaveOption
 
 
 def test_trailing_comma_doesnt_introduce_broken_code_with_comment_and_wrap_issue_1302():
-    """Tests to assert the combination of include_trailing_comma and a wrapped line doesnt break.
+    """Tests to assert the combination of include_trailing_comma and a wrapped line doesn't break.
     See: https://github.com/pycqa/isort/issues/1302.
     """
     assert (
@@ -319,7 +319,7 @@ from this_is_a_very_long_import_statement.that_will_occur_across_two_lines"""
 
 
 def test_isort_shouldnt_add_extra_new_line_when_fass_and_n_issue_1315():
-    """Test to ensure isort doesnt add a second extra new line when combining --fss and -n options.
+    """Test to ensure isort doesn't add a second extra new line when combining --fss and -n options.
     See: https://github.com/pycqa/isort/issues/1315
     """
     assert isort.check_code(
@@ -653,7 +653,7 @@ from package import *  # noqa
 
 
 def test_isort_doesnt_misplace_comments_issue_1431():
-    """Test to ensure isort wont misplace comments.
+    """Test to ensure isort won't misplace comments.
     See: https://github.com/PyCQA/isort/issues/1431
     """
     input_text = """from com.my_lovely_company.my_lovely_team.my_lovely_project.my_lovely_component import (
@@ -924,7 +924,7 @@ def bar():
 
     assert (
         isort.code(
-            '''#!/bin/bash
+            '''#!/usr/bin/env bash
 """My comment
 
 
@@ -939,7 +939,7 @@ def bar():
 ''',
             float_to_top=True,
         )
-        == '''#!/bin/bash
+        == '''#!/usr/bin/env bash
 """My comment
 
 
@@ -958,7 +958,7 @@ def bar():
 
     assert (
         isort.code(
-            '''#!/bin/bash
+            '''#!/usr/bin/env bash
 
 """My comment
 
@@ -974,7 +974,7 @@ def bar():
 ''',
             float_to_top=True,
         )
-        == '''#!/bin/bash
+        == '''#!/usr/bin/env bash
 
 """My comment
 
@@ -1171,7 +1171,7 @@ def test_isort_float_to_top_correctly_identifies_single_line_comments_1499():
     """
     assert (
         isort.code(
-            '''#!/bin/bash
+            '''#!/usr/bin/env bash
 """My comment"""
 def foo():
     pass
@@ -1184,7 +1184,7 @@ def bar():
             float_to_top=True,
         )
         == (
-            '''#!/bin/bash
+            '''#!/usr/bin/env bash
 """My comment"""
 import a
 
@@ -1200,7 +1200,7 @@ def bar():
     )
     assert (
         isort.code(
-            """#!/bin/bash
+            """#!/usr/bin/env bash
 '''My comment'''
 def foo():
     pass
@@ -1213,7 +1213,7 @@ def bar():
             float_to_top=True,
         )
         == (
-            """#!/bin/bash
+            """#!/usr/bin/env bash
 '''My comment'''
 import a
 
@@ -1229,7 +1229,7 @@ def bar():
     )
 
     assert isort.check_code(
-        """#!/bin/bash
+        """#!/usr/bin/env bash
 '''My comment'''
 import a
 
@@ -1457,7 +1457,7 @@ from tools.developer_pruning.prune_developers import x  # isort:skip
 
 
 def test_isort_losing_imports_vertical_prefix_from_module_import_wrap_mode_issue_1542():
-    """Ensure isort doesnt lose imports when a comment is combined with an import and
+    """Ensure isort doesn't lose imports when a comment is combined with an import and
     wrap mode VERTICAL_PREFIX_FROM_MODULE_IMPORT is used.
     See: https://github.com/PyCQA/isort/issues/1542.
     """
@@ -1493,7 +1493,7 @@ print(CCCCCCCCC)
 
 
 def test_isort_adding_second_comma_issue_1621():
-    """Ensure isort doesnt add a second comma when very long comment is present
+    """Ensure isort doesn't add a second comma when very long comment is present
     See: https://github.com/PyCQA/isort/issues/1621.
     """
     assert isort.check_code(
@@ -1875,11 +1875,7 @@ class Bar:
 def test_isort_should_produce_the_same_code_on_subsequent_runs_issue_1799(tmpdir):
     code = """import sys
 
-if sys.version_info[:2] >= (3, 8):
-    # TODO: Import directly (no need for conditional) when `python_requires = >= 3.8`
-    from importlib.metadata import PackageNotFoundError, version  # pragma: no cover
-else:
-    from importlib_metadata import PackageNotFoundError, version  # pragma: no cover
+from importlib.metadata import PackageNotFoundError, version
 """
     config_file = tmpdir.join(".isort.cfg")
     config_file.write(

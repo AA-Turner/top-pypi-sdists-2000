@@ -16,9 +16,6 @@ setup(
     author_email="kyle@verhoog.ca",
     classifiers=[
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
@@ -37,6 +34,7 @@ setup(
         "typing_extensions",
         "yarl",
         "vcrpy",
+        "requests-aws4auth",
         # ddtrace libraries officially support opentelemetry-proto 1.33.1
         # which implements the v1.7.0 spec
         "opentelemetry-proto>1.33.0,<1.37.0",

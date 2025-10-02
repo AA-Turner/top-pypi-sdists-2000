@@ -1696,6 +1696,108 @@ ecs.Ec2Service(self, "EC2Service",
 )
 ```
 
+### Managed Instances Capacity Providers
+
+Managed Instances Capacity Providers allow you to use AWS-managed EC2 instances for your ECS tasks while providing more control over instance selection than standard Fargate. AWS handles the instance lifecycle, patching, and maintenance while you can specify detailed instance requirements.
+
+To create a Managed Instances Capacity Provider, you need to specify the required EC2 instance profile, and networking configuration. You can also define detailed instance requirements to control which types of instances are used for your workloads.
+
+```python
+# vpc: ec2.Vpc
+# infrastructure_role: iam.Role
+# instance_profile: iam.InstanceProfile
+
+
+cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
+
+# Create a Managed Instances Capacity Provider
+mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+    infrastructure_role=infrastructure_role,
+    ec2_instance_profile=instance_profile,
+    subnets=vpc.private_subnets,
+    security_groups=[ec2.SecurityGroup(self, "MISecurityGroup", vpc=vpc)],
+    instance_requirements=ec2.InstanceRequirementsConfig(
+        v_cpu_count_min=1,
+        memory_min=Size.gibibytes(2),
+        cpu_manufacturers=[ec2.CpuManufacturer.INTEL],
+        accelerator_manufacturers=[ec2.AcceleratorManufacturer.NVIDIA]
+    ),
+    propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
+)
+
+# Add the capacity provider to the cluster
+cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
+
+task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+
+task_definition.add_container("web",
+    image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+    memory_reservation_mi_b=256
+)
+
+ecs.Ec2Service(self, "EC2Service",
+    cluster=cluster,
+    task_definition=task_definition,
+    min_healthy_percent=100,
+    capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+        capacity_provider=mi_capacity_provider.capacity_provider_name,
+        weight=1
+    )
+    ]
+)
+```
+
+You can specify detailed instance requirements to control which types of instances are used:
+
+```python
+# infrastructure_role: iam.Role
+# instance_profile: iam.InstanceProfile
+# vpc: ec2.Vpc
+
+
+mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+    infrastructure_role=infrastructure_role,
+    ec2_instance_profile=instance_profile,
+    subnets=vpc.private_subnets,
+    instance_requirements=ec2.InstanceRequirementsConfig(
+        # Required: CPU and memory constraints
+        v_cpu_count_min=2,
+        v_cpu_count_max=8,
+        memory_min=Size.gibibytes(4),
+        memory_max=Size.gibibytes(32),
+
+        # CPU preferences
+        cpu_manufacturers=[ec2.CpuManufacturer.INTEL, ec2.CpuManufacturer.AMD],
+        instance_generations=[ec2.InstanceGeneration.CURRENT],
+
+        # Instance type filtering
+        allowed_instance_types=["m5.*", "c5.*"],
+
+        # Performance characteristics
+        burstable_performance=ec2.BurstablePerformance.EXCLUDED,
+        bare_metal=ec2.BareMetal.EXCLUDED,
+
+        # Accelerator requirements (for ML/AI workloads)
+        accelerator_types=[ec2.AcceleratorType.GPU],
+        accelerator_manufacturers=[ec2.AcceleratorManufacturer.NVIDIA],
+        accelerator_names=[ec2.AcceleratorName.T4, ec2.AcceleratorName.V100],
+        accelerator_count_min=1,
+
+        # Storage requirements
+        local_storage=ec2.LocalStorage.REQUIRED,
+        local_storage_types=[ec2.LocalStorageType.SSD],
+        total_local_storage_gBMin=100,
+
+        # Network requirements
+        network_interface_count_min=2,
+        network_bandwidth_gbps_min=10,
+
+        # Cost optimization
+        on_demand_max_price_percentage_over_lowest_price=10
+    )
+)
+```
+
 ### Cluster Default Provider Strategy
 
 A capacity provider strategy determines whether ECS tasks are launched on EC2 instances or Fargate/Fargate Spot. It can be specified at the cluster, service, or task level, and consists of one or more capacity providers. You can specify an optional base and weight value for finer control of how tasks are launched. The `base` specifies a minimum number of tasks on one capacity provider, and the `weight`s of each capacity provider determine how tasks are distributed after `base` is satisfied.
@@ -2271,8 +2373,10 @@ from ..aws_ec2 import (
     IKeyPair as _IKeyPair_bc344eda,
     IMachineImage as _IMachineImage_0e8bd50b,
     ISecurityGroup as _ISecurityGroup_acf8a799,
+    ISubnet as _ISubnet_d57d1229,
     IVpc as _IVpc_f30d5663,
     InstanceArchitecture as _InstanceArchitecture_7721cb36,
+    InstanceRequirementsConfig as _InstanceRequirementsConfig_1b353659,
     InstanceType as _InstanceType_f64915b9,
     MachineImageConfig as _MachineImageConfig_187edaee,
     SubnetSelection as _SubnetSelection_e57d76df,
@@ -2313,6 +2417,7 @@ from ..aws_elasticloadbalancingv2 import (
 from ..aws_iam import (
     Grant as _Grant_a7ae64f8,
     IGrantable as _IGrantable_71c4f5de,
+    IInstanceProfile as _IInstanceProfile_10d5ce2c,
     IRole as _IRole_235f5d8e,
     PolicyStatement as _PolicyStatement_0fe33853,
 )
@@ -6757,6 +6862,8 @@ class CapacityProviderStrategy:
     jsii_struct_bases=[],
     name_mapping={
         "auto_scaling_group_provider": "autoScalingGroupProvider",
+        "cluster_name": "clusterName",
+        "managed_instances_provider": "managedInstancesProvider",
         "name": "name",
         "tags": "tags",
     },
@@ -6766,12 +6873,16 @@ class CfnCapacityProviderProps:
         self,
         *,
         auto_scaling_group_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.AutoScalingGroupProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cluster_name: typing.Optional[builtins.str] = None,
+        managed_instances_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.ManagedInstancesProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCapacityProvider``.
 
         :param auto_scaling_group_provider: The Auto Scaling group settings for the capacity provider.
+        :param cluster_name: 
+        :param managed_instances_provider: 
         :param name: The name of the capacity provider. If a name is specified, it cannot start with ``aws`` , ``ecs`` , or ``fargate`` . If no name is specified, a default name in the ``CFNStackName-CFNResourceName-RandomString`` format is used.
         :param tags: The metadata that you apply to the capacity provider to help you categorize and organize it. Each tag consists of a key and an optional value. You define both. The following basic restrictions apply to tags: - Maximum number of tags per resource - 50 - For each resource, each tag key must be unique, and each tag key can have only one value. - Maximum key length - 128 Unicode characters in UTF-8 - Maximum value length - 256 Unicode characters in UTF-8 - If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : /
 
@@ -6799,6 +6910,87 @@ class CfnCapacityProviderProps:
                     ),
                     managed_termination_protection="managedTerminationProtection"
                 ),
+                cluster_name="clusterName",
+                managed_instances_provider=ecs.CfnCapacityProvider.ManagedInstancesProviderProperty(
+                    infrastructure_role_arn="infrastructureRoleArn",
+                    instance_launch_template=ecs.CfnCapacityProvider.InstanceLaunchTemplateProperty(
+                        ec2_instance_profile_arn="ec2InstanceProfileArn",
+                        network_configuration=ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty(
+                            subnets=["subnets"],
+            
+                            # the properties below are optional
+                            security_groups=["securityGroups"]
+                        ),
+            
+                        # the properties below are optional
+                        instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
+                            memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
+                                min=123,
+            
+                                # the properties below are optional
+                                max=123
+                            ),
+                            v_cpu_count=ecs.CfnCapacityProvider.VCpuCountRangeRequestProperty(
+                                min=123,
+            
+                                # the properties below are optional
+                                max=123
+                            ),
+            
+                            # the properties below are optional
+                            accelerator_count=ecs.CfnCapacityProvider.AcceleratorCountRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            accelerator_manufacturers=["acceleratorManufacturers"],
+                            accelerator_names=["acceleratorNames"],
+                            accelerator_total_memory_mi_b=ecs.CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            accelerator_types=["acceleratorTypes"],
+                            allowed_instance_types=["allowedInstanceTypes"],
+                            bare_metal="bareMetal",
+                            baseline_ebs_bandwidth_mbps=ecs.CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            burstable_performance="burstablePerformance",
+                            cpu_manufacturers=["cpuManufacturers"],
+                            excluded_instance_types=["excludedInstanceTypes"],
+                            instance_generations=["instanceGenerations"],
+                            local_storage="localStorage",
+                            local_storage_types=["localStorageTypes"],
+                            max_spot_price_as_percentage_of_optimal_on_demand_price=123,
+                            memory_gi_bPer_vCpu=ecs.CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            network_bandwidth_gbps=ecs.CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            network_interface_count=ecs.CfnCapacityProvider.NetworkInterfaceCountRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            on_demand_max_price_percentage_over_lowest_price=123,
+                            require_hibernate_support=False,
+                            spot_max_price_percentage_over_lowest_price=123,
+                            total_local_storage_gb=ecs.CfnCapacityProvider.TotalLocalStorageGBRequestProperty(
+                                max=123,
+                                min=123
+                            )
+                        ),
+                        monitoring="monitoring",
+                        storage_configuration=ecs.CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty(
+                            storage_size_gi_b=123
+                        )
+                    ),
+            
+                    # the properties below are optional
+                    propagate_tags="propagateTags"
+                ),
                 name="name",
                 tags=[CfnTag(
                     key="key",
@@ -6809,11 +7001,17 @@ class CfnCapacityProviderProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__48080bdf05dc1c4ca9ab46c833774163f6afcd0d1551b378b8d59e67bc180c3f)
             check_type(argname="argument auto_scaling_group_provider", value=auto_scaling_group_provider, expected_type=type_hints["auto_scaling_group_provider"])
+            check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
+            check_type(argname="argument managed_instances_provider", value=managed_instances_provider, expected_type=type_hints["managed_instances_provider"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if auto_scaling_group_provider is not None:
             self._values["auto_scaling_group_provider"] = auto_scaling_group_provider
+        if cluster_name is not None:
+            self._values["cluster_name"] = cluster_name
+        if managed_instances_provider is not None:
+            self._values["managed_instances_provider"] = managed_instances_provider
         if name is not None:
             self._values["name"] = name
         if tags is not None:
@@ -6829,6 +7027,24 @@ class CfnCapacityProviderProps:
         '''
         result = self._values.get("auto_scaling_group_provider")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.AutoScalingGroupProviderProperty"]], result)
+
+    @builtins.property
+    def cluster_name(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-capacityprovider.html#cfn-ecs-capacityprovider-clustername
+        '''
+        result = self._values.get("cluster_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def managed_instances_provider(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesProviderProperty"]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-capacityprovider.html#cfn-ecs-capacityprovider-managedinstancesprovider
+        '''
+        result = self._values.get("managed_instances_provider")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesProviderProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -10174,6 +10390,14 @@ class Compatibility(enum.Enum):
     '''The task can specify either the EC2 or Fargate launch types.'''
     EXTERNAL = "EXTERNAL"
     '''The task should specify the External launch type.'''
+    MANAGED_INSTANCES = "MANAGED_INSTANCES"
+    '''The task should specify the Managed Instances launch type.'''
+    EC2_AND_MANAGED_INSTANCES = "EC2_AND_MANAGED_INSTANCES"
+    '''The task can specify either the EC2 or Managed Instances launch types.'''
+    FARGATE_AND_MANAGED_INSTANCES = "FARGATE_AND_MANAGED_INSTANCES"
+    '''The task can specify either the Fargate or Managed Instances launch types.'''
+    FARGATE_AND_EC2_AND_MANAGED_INSTANCES = "FARGATE_AND_EC2_AND_MANAGED_INSTANCES"
+    '''The task can specify either the Fargate, EC2 or Managed Instances launch types.'''
 
 
 class ContainerDefinition(
@@ -12357,32 +12581,24 @@ class ContainerImage(
 
     Example::
 
-        # vpc: ec2.Vpc
+        # my_file_system: efs.IFileSystem
+        # my_job_role: iam.Role
         
+        my_file_system.grant_read(my_job_role)
         
-        cluster = ecs.Cluster(self, "FargateCPCluster",
-            vpc=vpc,
-            enable_fargate_capacity_providers=True
-        )
-        
-        task_definition = ecs.FargateTaskDefinition(self, "TaskDef")
-        
-        task_definition.add_container("web",
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
-        )
-        
-        ecs.FargateService(self, "FargateService",
-            cluster=cluster,
-            task_definition=task_definition,
-            min_healthy_percent=100,
-            capacity_provider_strategies=[ecs.CapacityProviderStrategy(
-                capacity_provider="FARGATE_SPOT",
-                weight=2
-            ), ecs.CapacityProviderStrategy(
-                capacity_provider="FARGATE",
-                weight=1
+        job_defn = batch.EcsJobDefinition(self, "JobDefn",
+            container=batch.EcsEc2ContainerDefinition(self, "containerDefn",
+                image=ecs.ContainerImage.from_registry("public.ecr.aws/amazonlinux/amazonlinux:latest"),
+                memory=cdk.Size.mebibytes(2048),
+                cpu=256,
+                volumes=[batch.EcsVolume.efs(
+                    name="myVolume",
+                    file_system=my_file_system,
+                    container_path="/Volumes/myVolume",
+                    use_job_role=True
+                )],
+                job_role=my_job_role
             )
-            ]
         )
     '''
 
@@ -14348,30 +14564,33 @@ class Ec2ServiceProps(BaseServiceOptions):
 
         Example::
 
-            # vpc: ec2.Vpc
+            # task_definition: ecs.TaskDefinition
+            # cluster: ecs.Cluster
             
             
-            # Create an ECS cluster
-            cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
-            
-            # Add capacity to it
-            cluster.add_capacity("DefaultAutoScalingGroupCapacity",
-                instance_type=ec2.InstanceType("t2.xlarge"),
-                desired_capacity=3
+            # Add a container to the task definition
+            specific_container = task_definition.add_container("Container",
+                image=ecs.ContainerImage.from_registry("/aws/aws-example-app"),
+                memory_limit_mi_b=2048
             )
             
-            task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
-            
-            task_definition.add_container("DefaultContainer",
-                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
-                memory_limit_mi_b=512
+            # Add a port mapping
+            specific_container.add_port_mappings(
+                container_port=7600,
+                protocol=ecs.Protocol.TCP
             )
             
-            # Instantiate an Amazon ECS Service
-            ecs_service = ecs.Ec2Service(self, "Service",
+            ecs.Ec2Service(self, "Service",
                 cluster=cluster,
                 task_definition=task_definition,
-                min_healthy_percent=100
+                min_healthy_percent=100,
+                cloud_map_options=ecs.CloudMapOptions(
+                    # Create SRV records - useful for bridge networking
+                    dns_record_type=cloudmap.DnsRecordType.SRV,
+                    # Targets port TCP port 7600 `specificContainer`
+                    container=specific_container,
+                    container_port=7600
+                )
             )
         '''
         if isinstance(circuit_breaker, dict):
@@ -21723,6 +21942,12 @@ class ITaskDefinition(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @builtins.property
+    @jsii.member(jsii_name="isManagedInstancesCompatible")
+    def is_managed_instances_compatible(self) -> builtins.bool:
+        '''Return true if the task definition can be run on Managed Instances.'''
+        ...
+
+    @builtins.property
     @jsii.member(jsii_name="networkMode")
     def network_mode(self) -> "NetworkMode":
         '''The networking mode to use for the containers in the task.'''
@@ -21780,6 +22005,12 @@ class _ITaskDefinitionProxy(
     def is_fargate_compatible(self) -> builtins.bool:
         '''Return true if the task definition can be run on a Fargate cluster.'''
         return typing.cast(builtins.bool, jsii.get(self, "isFargateCompatible"))
+
+    @builtins.property
+    @jsii.member(jsii_name="isManagedInstancesCompatible")
+    def is_managed_instances_compatible(self) -> builtins.bool:
+        '''Return true if the task definition can be run on Managed Instances.'''
+        return typing.cast(builtins.bool, jsii.get(self, "isManagedInstancesCompatible"))
 
     @builtins.property
     @jsii.member(jsii_name="networkMode")
@@ -22011,6 +22242,16 @@ class InferenceAccelerator:
         return "InferenceAccelerator(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.enum(jsii_type="aws-cdk-lib.aws_ecs.InstanceMonitoring")
+class InstanceMonitoring(enum.Enum):
+    '''The monitoring configuration for EC2 instances.'''
+
+    BASIC = "BASIC"
+    '''Basic monitoring (5-minute intervals).'''
+    DETAILED = "DETAILED"
+    '''Detailed monitoring (1-minute intervals).'''
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_ecs.IpcMode")
@@ -23565,6 +23806,383 @@ class MachineImageType(enum.Enum):
     '''Bottlerocket AMI.'''
 
 
+class ManagedInstancesCapacityProvider(
+    _constructs_77d1e7e8.Construct,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_ecs.ManagedInstancesCapacityProvider",
+):
+    '''A Managed Instances Capacity Provider.
+
+    This allows an ECS cluster to use
+    Managed Instances for task placement with managed infrastructure.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        # vpc: ec2.Vpc
+        # infrastructure_role: iam.Role
+        # instance_profile: iam.InstanceProfile
+        
+        
+        cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
+        
+        # Create a Managed Instances Capacity Provider
+        mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+            infrastructure_role=infrastructure_role,
+            ec2_instance_profile=instance_profile,
+            subnets=vpc.private_subnets,
+            security_groups=[ec2.SecurityGroup(self, "MISecurityGroup", vpc=vpc)],
+            instance_requirements=ec2.InstanceRequirementsConfig(
+                v_cpu_count_min=1,
+                memory_min=Size.gibibytes(2),
+                cpu_manufacturers=[ec2.CpuManufacturer.INTEL],
+                accelerator_manufacturers=[ec2.AcceleratorManufacturer.NVIDIA]
+            ),
+            propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
+        )
+        
+        # Add the capacity provider to the cluster
+        cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
+        
+        task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+        
+        task_definition.add_container("web",
+            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+            memory_reservation_mi_b=256
+        )
+        
+        ecs.Ec2Service(self, "EC2Service",
+            cluster=cluster,
+            task_definition=task_definition,
+            min_healthy_percent=100,
+            capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+                capacity_provider=mi_capacity_provider.capacity_provider_name,
+                weight=1
+            )
+            ]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        ec2_instance_profile: _IInstanceProfile_10d5ce2c,
+        subnets: typing.Sequence[_ISubnet_d57d1229],
+        capacity_provider_name: typing.Optional[builtins.str] = None,
+        infrastructure_role: typing.Optional[_IRole_235f5d8e] = None,
+        instance_requirements: typing.Optional[typing.Union[_InstanceRequirementsConfig_1b353659, typing.Dict[builtins.str, typing.Any]]] = None,
+        monitoring: typing.Optional[InstanceMonitoring] = None,
+        propagate_tags: typing.Optional["PropagateManagedInstancesTags"] = None,
+        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        task_volume_storage: typing.Optional[_Size_7b441c34] = None,
+    ) -> None:
+        '''
+        :param scope: -
+        :param id: -
+        :param ec2_instance_profile: The EC2 instance profile that will be attached to instances launched by this capacity provider. This instance profile must contain the necessary IAM permissions for ECS container instances to register with the cluster and run tasks. At minimum, it should include permissions for ECS agent communication, ECR image pulling, and CloudWatch logging.
+        :param subnets: The VPC subnets where EC2 instances will be launched. This array must be non-empty and should contain subnets from the VPC where you want the managed instances to be deployed.
+        :param capacity_provider_name: The name of the capacity provider. If a name is specified, it cannot start with ``aws``, ``ecs``, or ``fargate``. If no name is specified, a default name in the CFNStackName-CFNResourceName-RandomString format is used. If the stack name starts with ``aws``, ``ecs``, or ``fargate``, a unique resource name is generated that starts with ``cp-``. Default: CloudFormation-generated name
+        :param infrastructure_role: The IAM role that ECS uses to manage the infrastructure for the capacity provider. This role is used by ECS to perform actions such as launching and terminating instances, managing Auto Scaling Groups, and other infrastructure operations required for the managed instances capacity provider. Default: - A new role will be created with the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy
+        :param instance_requirements: The instance requirements configuration for EC2 instance selection. This allows you to specify detailed requirements for instance selection including vCPU count ranges, memory ranges, CPU manufacturers (Intel, AMD, AWS Graviton), instance generations, network performance requirements, and many other criteria. ECS will automatically select appropriate instance types that meet these requirements. Default: - no specific instance requirements, ECS will choose appropriate instances
+        :param monitoring: The CloudWatch monitoring configuration for the EC2 instances. Determines the granularity of CloudWatch metrics collection for the instances. Detailed monitoring incurs additional costs but provides better observability. Default: - no enhanced monitoring (basic monitoring only)
+        :param propagate_tags: Specifies whether to propagate tags from the capacity provider to the launched instances. When set to CAPACITY_PROVIDER, tags applied to the capacity provider resource will be automatically applied to all EC2 instances launched by this capacity provider. Default: PropagateManagedInstancesTags.NONE - no tag propagation
+        :param security_groups: The security groups to associate with the launched EC2 instances. These security groups control the network traffic allowed to and from the instances. If not specified, the default security group of the VPC containing the subnets will be used. Default: - default security group of the VPC
+        :param task_volume_storage: The size of the task volume storage attached to each instance. This storage is used for container images, container logs, and temporary files. Larger storage may be needed for workloads with large container images or applications that generate significant temporary data. Default: Size.gibibytes(80)
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__718bb820f1409b5f15556f2e394659a060bda46e302dbb4e973a6484f24497de)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = ManagedInstancesCapacityProviderProps(
+            ec2_instance_profile=ec2_instance_profile,
+            subnets=subnets,
+            capacity_provider_name=capacity_provider_name,
+            infrastructure_role=infrastructure_role,
+            instance_requirements=instance_requirements,
+            monitoring=monitoring,
+            propagate_tags=propagate_tags,
+            security_groups=security_groups,
+            task_volume_storage=task_volume_storage,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="bind")
+    def bind(self, cluster: ICluster) -> None:
+        '''Associates the capacity provider with the specified cluster.
+
+        This method is called by the cluster when adding the capacity provider.
+
+        :param cluster: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__86f1df235e6255faeece6081f964f386186a84532c53bb8fad57fd4ab50e809d)
+            check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
+        return typing.cast(None, jsii.invoke(self, "bind", [cluster]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderName")
+    def capacity_provider_name(self) -> builtins.str:
+        '''Capacity provider name.'''
+        return typing.cast(builtins.str, jsii.get(self, "capacityProviderName"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_ecs.ManagedInstancesCapacityProviderProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "ec2_instance_profile": "ec2InstanceProfile",
+        "subnets": "subnets",
+        "capacity_provider_name": "capacityProviderName",
+        "infrastructure_role": "infrastructureRole",
+        "instance_requirements": "instanceRequirements",
+        "monitoring": "monitoring",
+        "propagate_tags": "propagateTags",
+        "security_groups": "securityGroups",
+        "task_volume_storage": "taskVolumeStorage",
+    },
+)
+class ManagedInstancesCapacityProviderProps:
+    def __init__(
+        self,
+        *,
+        ec2_instance_profile: _IInstanceProfile_10d5ce2c,
+        subnets: typing.Sequence[_ISubnet_d57d1229],
+        capacity_provider_name: typing.Optional[builtins.str] = None,
+        infrastructure_role: typing.Optional[_IRole_235f5d8e] = None,
+        instance_requirements: typing.Optional[typing.Union[_InstanceRequirementsConfig_1b353659, typing.Dict[builtins.str, typing.Any]]] = None,
+        monitoring: typing.Optional[InstanceMonitoring] = None,
+        propagate_tags: typing.Optional["PropagateManagedInstancesTags"] = None,
+        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        task_volume_storage: typing.Optional[_Size_7b441c34] = None,
+    ) -> None:
+        '''The options for creating a Managed Instances Capacity Provider.
+
+        :param ec2_instance_profile: The EC2 instance profile that will be attached to instances launched by this capacity provider. This instance profile must contain the necessary IAM permissions for ECS container instances to register with the cluster and run tasks. At minimum, it should include permissions for ECS agent communication, ECR image pulling, and CloudWatch logging.
+        :param subnets: The VPC subnets where EC2 instances will be launched. This array must be non-empty and should contain subnets from the VPC where you want the managed instances to be deployed.
+        :param capacity_provider_name: The name of the capacity provider. If a name is specified, it cannot start with ``aws``, ``ecs``, or ``fargate``. If no name is specified, a default name in the CFNStackName-CFNResourceName-RandomString format is used. If the stack name starts with ``aws``, ``ecs``, or ``fargate``, a unique resource name is generated that starts with ``cp-``. Default: CloudFormation-generated name
+        :param infrastructure_role: The IAM role that ECS uses to manage the infrastructure for the capacity provider. This role is used by ECS to perform actions such as launching and terminating instances, managing Auto Scaling Groups, and other infrastructure operations required for the managed instances capacity provider. Default: - A new role will be created with the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy
+        :param instance_requirements: The instance requirements configuration for EC2 instance selection. This allows you to specify detailed requirements for instance selection including vCPU count ranges, memory ranges, CPU manufacturers (Intel, AMD, AWS Graviton), instance generations, network performance requirements, and many other criteria. ECS will automatically select appropriate instance types that meet these requirements. Default: - no specific instance requirements, ECS will choose appropriate instances
+        :param monitoring: The CloudWatch monitoring configuration for the EC2 instances. Determines the granularity of CloudWatch metrics collection for the instances. Detailed monitoring incurs additional costs but provides better observability. Default: - no enhanced monitoring (basic monitoring only)
+        :param propagate_tags: Specifies whether to propagate tags from the capacity provider to the launched instances. When set to CAPACITY_PROVIDER, tags applied to the capacity provider resource will be automatically applied to all EC2 instances launched by this capacity provider. Default: PropagateManagedInstancesTags.NONE - no tag propagation
+        :param security_groups: The security groups to associate with the launched EC2 instances. These security groups control the network traffic allowed to and from the instances. If not specified, the default security group of the VPC containing the subnets will be used. Default: - default security group of the VPC
+        :param task_volume_storage: The size of the task volume storage attached to each instance. This storage is used for container images, container logs, and temporary files. Larger storage may be needed for workloads with large container images or applications that generate significant temporary data. Default: Size.gibibytes(80)
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # vpc: ec2.Vpc
+            # infrastructure_role: iam.Role
+            # instance_profile: iam.InstanceProfile
+            
+            
+            cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
+            
+            # Create a Managed Instances Capacity Provider
+            mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+                infrastructure_role=infrastructure_role,
+                ec2_instance_profile=instance_profile,
+                subnets=vpc.private_subnets,
+                security_groups=[ec2.SecurityGroup(self, "MISecurityGroup", vpc=vpc)],
+                instance_requirements=ec2.InstanceRequirementsConfig(
+                    v_cpu_count_min=1,
+                    memory_min=Size.gibibytes(2),
+                    cpu_manufacturers=[ec2.CpuManufacturer.INTEL],
+                    accelerator_manufacturers=[ec2.AcceleratorManufacturer.NVIDIA]
+                ),
+                propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
+            )
+            
+            # Add the capacity provider to the cluster
+            cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
+            
+            task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+            
+            task_definition.add_container("web",
+                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+                memory_reservation_mi_b=256
+            )
+            
+            ecs.Ec2Service(self, "EC2Service",
+                cluster=cluster,
+                task_definition=task_definition,
+                min_healthy_percent=100,
+                capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+                    capacity_provider=mi_capacity_provider.capacity_provider_name,
+                    weight=1
+                )
+                ]
+            )
+        '''
+        if isinstance(instance_requirements, dict):
+            instance_requirements = _InstanceRequirementsConfig_1b353659(**instance_requirements)
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__efa15b9a00384128ebdb40ffd56f7e66e8863f1c3a6b8d4cf8bc61fb9e822e92)
+            check_type(argname="argument ec2_instance_profile", value=ec2_instance_profile, expected_type=type_hints["ec2_instance_profile"])
+            check_type(argname="argument subnets", value=subnets, expected_type=type_hints["subnets"])
+            check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
+            check_type(argname="argument infrastructure_role", value=infrastructure_role, expected_type=type_hints["infrastructure_role"])
+            check_type(argname="argument instance_requirements", value=instance_requirements, expected_type=type_hints["instance_requirements"])
+            check_type(argname="argument monitoring", value=monitoring, expected_type=type_hints["monitoring"])
+            check_type(argname="argument propagate_tags", value=propagate_tags, expected_type=type_hints["propagate_tags"])
+            check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
+            check_type(argname="argument task_volume_storage", value=task_volume_storage, expected_type=type_hints["task_volume_storage"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "ec2_instance_profile": ec2_instance_profile,
+            "subnets": subnets,
+        }
+        if capacity_provider_name is not None:
+            self._values["capacity_provider_name"] = capacity_provider_name
+        if infrastructure_role is not None:
+            self._values["infrastructure_role"] = infrastructure_role
+        if instance_requirements is not None:
+            self._values["instance_requirements"] = instance_requirements
+        if monitoring is not None:
+            self._values["monitoring"] = monitoring
+        if propagate_tags is not None:
+            self._values["propagate_tags"] = propagate_tags
+        if security_groups is not None:
+            self._values["security_groups"] = security_groups
+        if task_volume_storage is not None:
+            self._values["task_volume_storage"] = task_volume_storage
+
+    @builtins.property
+    def ec2_instance_profile(self) -> _IInstanceProfile_10d5ce2c:
+        '''The EC2 instance profile that will be attached to instances launched by this capacity provider.
+
+        This instance profile must contain the necessary IAM permissions for ECS container instances
+        to register with the cluster and run tasks. At minimum, it should include permissions for
+        ECS agent communication, ECR image pulling, and CloudWatch logging.
+        '''
+        result = self._values.get("ec2_instance_profile")
+        assert result is not None, "Required property 'ec2_instance_profile' is missing"
+        return typing.cast(_IInstanceProfile_10d5ce2c, result)
+
+    @builtins.property
+    def subnets(self) -> typing.List[_ISubnet_d57d1229]:
+        '''The VPC subnets where EC2 instances will be launched.
+
+        This array must be non-empty and should contain subnets from the VPC where you want
+        the managed instances to be deployed.
+        '''
+        result = self._values.get("subnets")
+        assert result is not None, "Required property 'subnets' is missing"
+        return typing.cast(typing.List[_ISubnet_d57d1229], result)
+
+    @builtins.property
+    def capacity_provider_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the capacity provider.
+
+        If a name is specified, it cannot start with ``aws``, ``ecs``, or ``fargate``.
+        If no name is specified, a default name in the CFNStackName-CFNResourceName-RandomString format is used.
+        If the stack name starts with ``aws``, ``ecs``, or ``fargate``, a unique resource name
+        is generated that starts with ``cp-``.
+
+        :default: CloudFormation-generated name
+        '''
+        result = self._values.get("capacity_provider_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def infrastructure_role(self) -> typing.Optional[_IRole_235f5d8e]:
+        '''The IAM role that ECS uses to manage the infrastructure for the capacity provider.
+
+        This role is used by ECS to perform actions such as launching and terminating instances,
+        managing Auto Scaling Groups, and other infrastructure operations required for the
+        managed instances capacity provider.
+
+        :default: - A new role will be created with the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy
+        '''
+        result = self._values.get("infrastructure_role")
+        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+
+    @builtins.property
+    def instance_requirements(
+        self,
+    ) -> typing.Optional[_InstanceRequirementsConfig_1b353659]:
+        '''The instance requirements configuration for EC2 instance selection.
+
+        This allows you to specify detailed requirements for instance selection including
+        vCPU count ranges, memory ranges, CPU manufacturers (Intel, AMD, AWS Graviton),
+        instance generations, network performance requirements, and many other criteria.
+        ECS will automatically select appropriate instance types that meet these requirements.
+
+        :default: - no specific instance requirements, ECS will choose appropriate instances
+        '''
+        result = self._values.get("instance_requirements")
+        return typing.cast(typing.Optional[_InstanceRequirementsConfig_1b353659], result)
+
+    @builtins.property
+    def monitoring(self) -> typing.Optional[InstanceMonitoring]:
+        '''The CloudWatch monitoring configuration for the EC2 instances.
+
+        Determines the granularity of CloudWatch metrics collection for the instances.
+        Detailed monitoring incurs additional costs but provides better observability.
+
+        :default: - no enhanced monitoring (basic monitoring only)
+        '''
+        result = self._values.get("monitoring")
+        return typing.cast(typing.Optional[InstanceMonitoring], result)
+
+    @builtins.property
+    def propagate_tags(self) -> typing.Optional["PropagateManagedInstancesTags"]:
+        '''Specifies whether to propagate tags from the capacity provider to the launched instances.
+
+        When set to CAPACITY_PROVIDER, tags applied to the capacity provider resource will be
+        automatically applied to all EC2 instances launched by this capacity provider.
+
+        :default: PropagateManagedInstancesTags.NONE - no tag propagation
+        '''
+        result = self._values.get("propagate_tags")
+        return typing.cast(typing.Optional["PropagateManagedInstancesTags"], result)
+
+    @builtins.property
+    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+        '''The security groups to associate with the launched EC2 instances.
+
+        These security groups control the network traffic allowed to and from the instances.
+        If not specified, the default security group of the VPC containing the subnets will be used.
+
+        :default: - default security group of the VPC
+        '''
+        result = self._values.get("security_groups")
+        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+
+    @builtins.property
+    def task_volume_storage(self) -> typing.Optional[_Size_7b441c34]:
+        '''The size of the task volume storage attached to each instance.
+
+        This storage is used for container images, container logs, and temporary files.
+        Larger storage may be needed for workloads with large container images or
+        applications that generate significant temporary data.
+
+        :default: Size.gibibytes(80)
+        '''
+        result = self._values.get("task_volume_storage")
+        return typing.cast(typing.Optional[_Size_7b441c34], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "ManagedInstancesCapacityProviderProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_ecs.ManagedStorageConfiguration",
     jsii_struct_bases=[],
@@ -24558,6 +25176,64 @@ class PrimaryTaskSetReference:
         return "PrimaryTaskSetReference(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.enum(jsii_type="aws-cdk-lib.aws_ecs.PropagateManagedInstancesTags")
+class PropagateManagedInstancesTags(enum.Enum):
+    '''Propagate tags for Managed Instances.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        # vpc: ec2.Vpc
+        # infrastructure_role: iam.Role
+        # instance_profile: iam.InstanceProfile
+        
+        
+        cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
+        
+        # Create a Managed Instances Capacity Provider
+        mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+            infrastructure_role=infrastructure_role,
+            ec2_instance_profile=instance_profile,
+            subnets=vpc.private_subnets,
+            security_groups=[ec2.SecurityGroup(self, "MISecurityGroup", vpc=vpc)],
+            instance_requirements=ec2.InstanceRequirementsConfig(
+                v_cpu_count_min=1,
+                memory_min=Size.gibibytes(2),
+                cpu_manufacturers=[ec2.CpuManufacturer.INTEL],
+                accelerator_manufacturers=[ec2.AcceleratorManufacturer.NVIDIA]
+            ),
+            propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
+        )
+        
+        # Add the capacity provider to the cluster
+        cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
+        
+        task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+        
+        task_definition.add_container("web",
+            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+            memory_reservation_mi_b=256
+        )
+        
+        ecs.Ec2Service(self, "EC2Service",
+            cluster=cluster,
+            task_definition=task_definition,
+            min_healthy_percent=100,
+            capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+                capacity_provider=mi_capacity_provider.capacity_provider_name,
+                weight=1
+            )
+            ]
+        )
+    '''
+
+    CAPACITY_PROVIDER = "CAPACITY_PROVIDER"
+    '''Propagate tags from the capacity provider.'''
+    NONE = "NONE"
+    '''Do not propagate tags.'''
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_ecs.PropagatedTagSource")
@@ -28048,21 +28724,33 @@ class TaskDefinition(
 
     Example::
 
+        import aws_cdk.aws_cloudwatch as cw
+        
         # cluster: ecs.Cluster
         # task_definition: ecs.TaskDefinition
-        # vpc: ec2.Vpc
+        # elb_alarm: cw.Alarm
         
-        service = ecs.FargateService(self, "Service", cluster=cluster, task_definition=task_definition, min_healthy_percent=100)
         
-        lb = elbv2.ApplicationLoadBalancer(self, "LB", vpc=vpc, internet_facing=True)
-        listener = lb.add_listener("Listener", port=80)
-        service.register_load_balancer_targets(
-            container_name="web",
-            container_port=80,
-            new_target_group_id="ECS",
-            listener=ecs.ListenerConfig.application_listener(listener,
-                protocol=elbv2.ApplicationProtocol.HTTPS
+        service = ecs.FargateService(self, "Service",
+            cluster=cluster,
+            task_definition=task_definition,
+            min_healthy_percent=100,
+            deployment_alarms=ecs.DeploymentAlarmConfig(
+                alarm_names=[elb_alarm.alarm_name],
+                behavior=ecs.AlarmBehavior.ROLLBACK_ON_ALARM
             )
+        )
+        
+        # Defining a deployment alarm after the service has been created
+        cpu_alarm_name = "MyCpuMetricAlarm"
+        cw.Alarm(self, "CPUAlarm",
+            alarm_name=cpu_alarm_name,
+            metric=service.metric_cpu_utilization(),
+            evaluation_periods=2,
+            threshold=80
+        )
+        service.enable_deployment_alarms([cpu_alarm_name],
+            behavior=ecs.AlarmBehavior.FAIL_ON_ALARM
         )
     '''
 
@@ -28668,6 +29356,12 @@ class TaskDefinition(
     def is_fargate_compatible(self) -> builtins.bool:
         '''Return true if the task definition can be run on a Fargate cluster.'''
         return typing.cast(builtins.bool, jsii.get(self, "isFargateCompatible"))
+
+    @builtins.property
+    @jsii.member(jsii_name="isManagedInstancesCompatible")
+    def is_managed_instances_compatible(self) -> builtins.bool:
+        '''Return true if the task definition can be run on Managed Instances.'''
+        return typing.cast(builtins.bool, jsii.get(self, "isManagedInstancesCompatible"))
 
     @builtins.property
     @jsii.member(jsii_name="networkMode")
@@ -30704,6 +31398,87 @@ class CfnCapacityProvider(
                 ),
                 managed_termination_protection="managedTerminationProtection"
             ),
+            cluster_name="clusterName",
+            managed_instances_provider=ecs.CfnCapacityProvider.ManagedInstancesProviderProperty(
+                infrastructure_role_arn="infrastructureRoleArn",
+                instance_launch_template=ecs.CfnCapacityProvider.InstanceLaunchTemplateProperty(
+                    ec2_instance_profile_arn="ec2InstanceProfileArn",
+                    network_configuration=ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty(
+                        subnets=["subnets"],
+        
+                        # the properties below are optional
+                        security_groups=["securityGroups"]
+                    ),
+        
+                    # the properties below are optional
+                    instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
+                        memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
+                            min=123,
+        
+                            # the properties below are optional
+                            max=123
+                        ),
+                        v_cpu_count=ecs.CfnCapacityProvider.VCpuCountRangeRequestProperty(
+                            min=123,
+        
+                            # the properties below are optional
+                            max=123
+                        ),
+        
+                        # the properties below are optional
+                        accelerator_count=ecs.CfnCapacityProvider.AcceleratorCountRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        accelerator_manufacturers=["acceleratorManufacturers"],
+                        accelerator_names=["acceleratorNames"],
+                        accelerator_total_memory_mi_b=ecs.CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        accelerator_types=["acceleratorTypes"],
+                        allowed_instance_types=["allowedInstanceTypes"],
+                        bare_metal="bareMetal",
+                        baseline_ebs_bandwidth_mbps=ecs.CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        burstable_performance="burstablePerformance",
+                        cpu_manufacturers=["cpuManufacturers"],
+                        excluded_instance_types=["excludedInstanceTypes"],
+                        instance_generations=["instanceGenerations"],
+                        local_storage="localStorage",
+                        local_storage_types=["localStorageTypes"],
+                        max_spot_price_as_percentage_of_optimal_on_demand_price=123,
+                        memory_gi_bPer_vCpu=ecs.CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        network_bandwidth_gbps=ecs.CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        network_interface_count=ecs.CfnCapacityProvider.NetworkInterfaceCountRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        on_demand_max_price_percentage_over_lowest_price=123,
+                        require_hibernate_support=False,
+                        spot_max_price_percentage_over_lowest_price=123,
+                        total_local_storage_gb=ecs.CfnCapacityProvider.TotalLocalStorageGBRequestProperty(
+                            max=123,
+                            min=123
+                        )
+                    ),
+                    monitoring="monitoring",
+                    storage_configuration=ecs.CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty(
+                        storage_size_gi_b=123
+                    )
+                ),
+        
+                # the properties below are optional
+                propagate_tags="propagateTags"
+            ),
             name="name",
             tags=[CfnTag(
                 key="key",
@@ -30718,6 +31493,8 @@ class CfnCapacityProvider(
         id: builtins.str,
         *,
         auto_scaling_group_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.AutoScalingGroupProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cluster_name: typing.Optional[builtins.str] = None,
+        managed_instances_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.ManagedInstancesProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -30725,6 +31502,8 @@ class CfnCapacityProvider(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param auto_scaling_group_provider: The Auto Scaling group settings for the capacity provider.
+        :param cluster_name: 
+        :param managed_instances_provider: 
         :param name: The name of the capacity provider. If a name is specified, it cannot start with ``aws`` , ``ecs`` , or ``fargate`` . If no name is specified, a default name in the ``CFNStackName-CFNResourceName-RandomString`` format is used.
         :param tags: The metadata that you apply to the capacity provider to help you categorize and organize it. Each tag consists of a key and an optional value. You define both. The following basic restrictions apply to tags: - Maximum number of tags per resource - 50 - For each resource, each tag key must be unique, and each tag key can have only one value. - Maximum key length - 128 Unicode characters in UTF-8 - Maximum value length - 256 Unicode characters in UTF-8 - If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : /
         '''
@@ -30734,6 +31513,8 @@ class CfnCapacityProvider(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnCapacityProviderProps(
             auto_scaling_group_provider=auto_scaling_group_provider,
+            cluster_name=cluster_name,
+            managed_instances_provider=managed_instances_provider,
             name=name,
             tags=tags,
         )
@@ -30827,6 +31608,35 @@ class CfnCapacityProvider(
         jsii.set(self, "autoScalingGroupProvider", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="clusterName")
+    def cluster_name(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "clusterName"))
+
+    @cluster_name.setter
+    def cluster_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__56e821d6de113ad791628d9a188368814c7c0fb94ce466313a674dfb2a04780b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "clusterName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="managedInstancesProvider")
+    def managed_instances_provider(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesProviderProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesProviderProperty"]], jsii.get(self, "managedInstancesProvider"))
+
+    @managed_instances_provider.setter
+    def managed_instances_provider(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesProviderProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1eade181f601623fa0955313b90bd74d62cfcd3ee4f4809fd9998abc514cb4bc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "managedInstancesProvider", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> typing.Optional[builtins.str]:
         '''The name of the capacity provider.'''
@@ -30851,6 +31661,140 @@ class CfnCapacityProvider(
             type_hints = typing.get_type_hints(_typecheckingstub__81c56757bceb2c5880b41cbaabe62c67844b248e61c810588b5c50b5f7053aae)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.AcceleratorCountRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"max": "max", "min": "min"},
+    )
+    class AcceleratorCountRequestProperty:
+        def __init__(
+            self,
+            *,
+            max: typing.Optional[jsii.Number] = None,
+            min: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param max: 
+            :param min: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratorcountrequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                accelerator_count_request_property = ecs.CfnCapacityProvider.AcceleratorCountRequestProperty(
+                    max=123,
+                    min=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__43d53bcba92c90cf6f4d328d0942a76121d27482644e63c47c94438bbe161846)
+                check_type(argname="argument max", value=max, expected_type=type_hints["max"])
+                check_type(argname="argument min", value=min, expected_type=type_hints["min"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max is not None:
+                self._values["max"] = max
+            if min is not None:
+                self._values["min"] = min
+
+        @builtins.property
+        def max(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratorcountrequest.html#cfn-ecs-capacityprovider-acceleratorcountrequest-max
+            '''
+            result = self._values.get("max")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratorcountrequest.html#cfn-ecs-capacityprovider-acceleratorcountrequest-min
+            '''
+            result = self._values.get("min")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AcceleratorCountRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"max": "max", "min": "min"},
+    )
+    class AcceleratorTotalMemoryMiBRequestProperty:
+        def __init__(
+            self,
+            *,
+            max: typing.Optional[jsii.Number] = None,
+            min: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param max: 
+            :param min: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratortotalmemorymibrequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                accelerator_total_memory_mi_bRequest_property = ecs.CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty(
+                    max=123,
+                    min=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__05b0b4abd870382eb40911671e91b829abe416723b1b38346d22783d1a2c8f67)
+                check_type(argname="argument max", value=max, expected_type=type_hints["max"])
+                check_type(argname="argument min", value=min, expected_type=type_hints["min"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max is not None:
+                self._values["max"] = max
+            if min is not None:
+                self._values["min"] = min
+
+        @builtins.property
+        def max(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratortotalmemorymibrequest.html#cfn-ecs-capacityprovider-acceleratortotalmemorymibrequest-max
+            '''
+            result = self._values.get("max")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratortotalmemorymibrequest.html#cfn-ecs-capacityprovider-acceleratortotalmemorymibrequest-min
+            '''
+            result = self._values.get("min")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AcceleratorTotalMemoryMiBRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.AutoScalingGroupProviderProperty",
@@ -30976,6 +31920,1007 @@ class CfnCapacityProvider(
 
         def __repr__(self) -> str:
             return "AutoScalingGroupProviderProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"max": "max", "min": "min"},
+    )
+    class BaselineEbsBandwidthMbpsRequestProperty:
+        def __init__(
+            self,
+            *,
+            max: typing.Optional[jsii.Number] = None,
+            min: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param max: 
+            :param min: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-baselineebsbandwidthmbpsrequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                baseline_ebs_bandwidth_mbps_request_property = ecs.CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty(
+                    max=123,
+                    min=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__55f829b236ccb12cc42e7c374a47c6c0909fecf313bf4ebb779169af029b2ba4)
+                check_type(argname="argument max", value=max, expected_type=type_hints["max"])
+                check_type(argname="argument min", value=min, expected_type=type_hints["min"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max is not None:
+                self._values["max"] = max
+            if min is not None:
+                self._values["min"] = min
+
+        @builtins.property
+        def max(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-baselineebsbandwidthmbpsrequest.html#cfn-ecs-capacityprovider-baselineebsbandwidthmbpsrequest-max
+            '''
+            result = self._values.get("max")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-baselineebsbandwidthmbpsrequest.html#cfn-ecs-capacityprovider-baselineebsbandwidthmbpsrequest-min
+            '''
+            result = self._values.get("min")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "BaselineEbsBandwidthMbpsRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.InstanceLaunchTemplateProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "ec2_instance_profile_arn": "ec2InstanceProfileArn",
+            "network_configuration": "networkConfiguration",
+            "instance_requirements": "instanceRequirements",
+            "monitoring": "monitoring",
+            "storage_configuration": "storageConfiguration",
+        },
+    )
+    class InstanceLaunchTemplateProperty:
+        def __init__(
+            self,
+            *,
+            ec2_instance_profile_arn: builtins.str,
+            network_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            instance_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.InstanceRequirementsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            monitoring: typing.Optional[builtins.str] = None,
+            storage_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param ec2_instance_profile_arn: 
+            :param network_configuration: 
+            :param instance_requirements: 
+            :param monitoring: 
+            :param storage_configuration: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                instance_launch_template_property = ecs.CfnCapacityProvider.InstanceLaunchTemplateProperty(
+                    ec2_instance_profile_arn="ec2InstanceProfileArn",
+                    network_configuration=ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty(
+                        subnets=["subnets"],
+                
+                        # the properties below are optional
+                        security_groups=["securityGroups"]
+                    ),
+                
+                    # the properties below are optional
+                    instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
+                        memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
+                            min=123,
+                
+                            # the properties below are optional
+                            max=123
+                        ),
+                        v_cpu_count=ecs.CfnCapacityProvider.VCpuCountRangeRequestProperty(
+                            min=123,
+                
+                            # the properties below are optional
+                            max=123
+                        ),
+                
+                        # the properties below are optional
+                        accelerator_count=ecs.CfnCapacityProvider.AcceleratorCountRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        accelerator_manufacturers=["acceleratorManufacturers"],
+                        accelerator_names=["acceleratorNames"],
+                        accelerator_total_memory_mi_b=ecs.CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        accelerator_types=["acceleratorTypes"],
+                        allowed_instance_types=["allowedInstanceTypes"],
+                        bare_metal="bareMetal",
+                        baseline_ebs_bandwidth_mbps=ecs.CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        burstable_performance="burstablePerformance",
+                        cpu_manufacturers=["cpuManufacturers"],
+                        excluded_instance_types=["excludedInstanceTypes"],
+                        instance_generations=["instanceGenerations"],
+                        local_storage="localStorage",
+                        local_storage_types=["localStorageTypes"],
+                        max_spot_price_as_percentage_of_optimal_on_demand_price=123,
+                        memory_gi_bPer_vCpu=ecs.CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        network_bandwidth_gbps=ecs.CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        network_interface_count=ecs.CfnCapacityProvider.NetworkInterfaceCountRequestProperty(
+                            max=123,
+                            min=123
+                        ),
+                        on_demand_max_price_percentage_over_lowest_price=123,
+                        require_hibernate_support=False,
+                        spot_max_price_percentage_over_lowest_price=123,
+                        total_local_storage_gb=ecs.CfnCapacityProvider.TotalLocalStorageGBRequestProperty(
+                            max=123,
+                            min=123
+                        )
+                    ),
+                    monitoring="monitoring",
+                    storage_configuration=ecs.CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty(
+                        storage_size_gi_b=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__cb545da33f3067adee24bf90d3e903b06a7562a7e6ea6b3785f5b0ae6f3e105d)
+                check_type(argname="argument ec2_instance_profile_arn", value=ec2_instance_profile_arn, expected_type=type_hints["ec2_instance_profile_arn"])
+                check_type(argname="argument network_configuration", value=network_configuration, expected_type=type_hints["network_configuration"])
+                check_type(argname="argument instance_requirements", value=instance_requirements, expected_type=type_hints["instance_requirements"])
+                check_type(argname="argument monitoring", value=monitoring, expected_type=type_hints["monitoring"])
+                check_type(argname="argument storage_configuration", value=storage_configuration, expected_type=type_hints["storage_configuration"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "ec2_instance_profile_arn": ec2_instance_profile_arn,
+                "network_configuration": network_configuration,
+            }
+            if instance_requirements is not None:
+                self._values["instance_requirements"] = instance_requirements
+            if monitoring is not None:
+                self._values["monitoring"] = monitoring
+            if storage_configuration is not None:
+                self._values["storage_configuration"] = storage_configuration
+
+        @builtins.property
+        def ec2_instance_profile_arn(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-ec2instanceprofilearn
+            '''
+            result = self._values.get("ec2_instance_profile_arn")
+            assert result is not None, "Required property 'ec2_instance_profile_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def network_configuration(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-networkconfiguration
+            '''
+            result = self._values.get("network_configuration")
+            assert result is not None, "Required property 'network_configuration' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty"], result)
+
+        @builtins.property
+        def instance_requirements(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceRequirementsRequestProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-instancerequirements
+            '''
+            result = self._values.get("instance_requirements")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceRequirementsRequestProperty"]], result)
+
+        @builtins.property
+        def monitoring(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-monitoring
+            '''
+            result = self._values.get("monitoring")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def storage_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-storageconfiguration
+            '''
+            result = self._values.get("storage_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InstanceLaunchTemplateProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "memory_mib": "memoryMiB",
+            "v_cpu_count": "vCpuCount",
+            "accelerator_count": "acceleratorCount",
+            "accelerator_manufacturers": "acceleratorManufacturers",
+            "accelerator_names": "acceleratorNames",
+            "accelerator_total_memory_mib": "acceleratorTotalMemoryMiB",
+            "accelerator_types": "acceleratorTypes",
+            "allowed_instance_types": "allowedInstanceTypes",
+            "bare_metal": "bareMetal",
+            "baseline_ebs_bandwidth_mbps": "baselineEbsBandwidthMbps",
+            "burstable_performance": "burstablePerformance",
+            "cpu_manufacturers": "cpuManufacturers",
+            "excluded_instance_types": "excludedInstanceTypes",
+            "instance_generations": "instanceGenerations",
+            "local_storage": "localStorage",
+            "local_storage_types": "localStorageTypes",
+            "max_spot_price_as_percentage_of_optimal_on_demand_price": "maxSpotPriceAsPercentageOfOptimalOnDemandPrice",
+            "memory_gib_per_v_cpu": "memoryGiBPerVCpu",
+            "network_bandwidth_gbps": "networkBandwidthGbps",
+            "network_interface_count": "networkInterfaceCount",
+            "on_demand_max_price_percentage_over_lowest_price": "onDemandMaxPricePercentageOverLowestPrice",
+            "require_hibernate_support": "requireHibernateSupport",
+            "spot_max_price_percentage_over_lowest_price": "spotMaxPricePercentageOverLowestPrice",
+            "total_local_storage_gb": "totalLocalStorageGb",
+        },
+    )
+    class InstanceRequirementsRequestProperty:
+        def __init__(
+            self,
+            *,
+            memory_mib: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.MemoryMiBRequestProperty", typing.Dict[builtins.str, typing.Any]]],
+            v_cpu_count: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.VCpuCountRangeRequestProperty", typing.Dict[builtins.str, typing.Any]]],
+            accelerator_count: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.AcceleratorCountRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            accelerator_manufacturers: typing.Optional[typing.Sequence[builtins.str]] = None,
+            accelerator_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+            accelerator_total_memory_mib: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            accelerator_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+            allowed_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+            bare_metal: typing.Optional[builtins.str] = None,
+            baseline_ebs_bandwidth_mbps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            burstable_performance: typing.Optional[builtins.str] = None,
+            cpu_manufacturers: typing.Optional[typing.Sequence[builtins.str]] = None,
+            excluded_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+            instance_generations: typing.Optional[typing.Sequence[builtins.str]] = None,
+            local_storage: typing.Optional[builtins.str] = None,
+            local_storage_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+            max_spot_price_as_percentage_of_optimal_on_demand_price: typing.Optional[jsii.Number] = None,
+            memory_gib_per_v_cpu: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            network_bandwidth_gbps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            network_interface_count: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.NetworkInterfaceCountRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            on_demand_max_price_percentage_over_lowest_price: typing.Optional[jsii.Number] = None,
+            require_hibernate_support: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            spot_max_price_percentage_over_lowest_price: typing.Optional[jsii.Number] = None,
+            total_local_storage_gb: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.TotalLocalStorageGBRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param memory_mib: 
+            :param v_cpu_count: 
+            :param accelerator_count: 
+            :param accelerator_manufacturers: 
+            :param accelerator_names: 
+            :param accelerator_total_memory_mib: 
+            :param accelerator_types: 
+            :param allowed_instance_types: 
+            :param bare_metal: 
+            :param baseline_ebs_bandwidth_mbps: 
+            :param burstable_performance: 
+            :param cpu_manufacturers: 
+            :param excluded_instance_types: 
+            :param instance_generations: 
+            :param local_storage: 
+            :param local_storage_types: 
+            :param max_spot_price_as_percentage_of_optimal_on_demand_price: 
+            :param memory_gib_per_v_cpu: 
+            :param network_bandwidth_gbps: 
+            :param network_interface_count: 
+            :param on_demand_max_price_percentage_over_lowest_price: 
+            :param require_hibernate_support: 
+            :param spot_max_price_percentage_over_lowest_price: 
+            :param total_local_storage_gb: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                instance_requirements_request_property = ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
+                    memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
+                        min=123,
+                
+                        # the properties below are optional
+                        max=123
+                    ),
+                    v_cpu_count=ecs.CfnCapacityProvider.VCpuCountRangeRequestProperty(
+                        min=123,
+                
+                        # the properties below are optional
+                        max=123
+                    ),
+                
+                    # the properties below are optional
+                    accelerator_count=ecs.CfnCapacityProvider.AcceleratorCountRequestProperty(
+                        max=123,
+                        min=123
+                    ),
+                    accelerator_manufacturers=["acceleratorManufacturers"],
+                    accelerator_names=["acceleratorNames"],
+                    accelerator_total_memory_mi_b=ecs.CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty(
+                        max=123,
+                        min=123
+                    ),
+                    accelerator_types=["acceleratorTypes"],
+                    allowed_instance_types=["allowedInstanceTypes"],
+                    bare_metal="bareMetal",
+                    baseline_ebs_bandwidth_mbps=ecs.CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty(
+                        max=123,
+                        min=123
+                    ),
+                    burstable_performance="burstablePerformance",
+                    cpu_manufacturers=["cpuManufacturers"],
+                    excluded_instance_types=["excludedInstanceTypes"],
+                    instance_generations=["instanceGenerations"],
+                    local_storage="localStorage",
+                    local_storage_types=["localStorageTypes"],
+                    max_spot_price_as_percentage_of_optimal_on_demand_price=123,
+                    memory_gi_bPer_vCpu=ecs.CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty(
+                        max=123,
+                        min=123
+                    ),
+                    network_bandwidth_gbps=ecs.CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty(
+                        max=123,
+                        min=123
+                    ),
+                    network_interface_count=ecs.CfnCapacityProvider.NetworkInterfaceCountRequestProperty(
+                        max=123,
+                        min=123
+                    ),
+                    on_demand_max_price_percentage_over_lowest_price=123,
+                    require_hibernate_support=False,
+                    spot_max_price_percentage_over_lowest_price=123,
+                    total_local_storage_gb=ecs.CfnCapacityProvider.TotalLocalStorageGBRequestProperty(
+                        max=123,
+                        min=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d2fd7f319e7a3e49a0d45d342ee067f3719bf8c8519bbab1a3a3c81f41641bec)
+                check_type(argname="argument memory_mib", value=memory_mib, expected_type=type_hints["memory_mib"])
+                check_type(argname="argument v_cpu_count", value=v_cpu_count, expected_type=type_hints["v_cpu_count"])
+                check_type(argname="argument accelerator_count", value=accelerator_count, expected_type=type_hints["accelerator_count"])
+                check_type(argname="argument accelerator_manufacturers", value=accelerator_manufacturers, expected_type=type_hints["accelerator_manufacturers"])
+                check_type(argname="argument accelerator_names", value=accelerator_names, expected_type=type_hints["accelerator_names"])
+                check_type(argname="argument accelerator_total_memory_mib", value=accelerator_total_memory_mib, expected_type=type_hints["accelerator_total_memory_mib"])
+                check_type(argname="argument accelerator_types", value=accelerator_types, expected_type=type_hints["accelerator_types"])
+                check_type(argname="argument allowed_instance_types", value=allowed_instance_types, expected_type=type_hints["allowed_instance_types"])
+                check_type(argname="argument bare_metal", value=bare_metal, expected_type=type_hints["bare_metal"])
+                check_type(argname="argument baseline_ebs_bandwidth_mbps", value=baseline_ebs_bandwidth_mbps, expected_type=type_hints["baseline_ebs_bandwidth_mbps"])
+                check_type(argname="argument burstable_performance", value=burstable_performance, expected_type=type_hints["burstable_performance"])
+                check_type(argname="argument cpu_manufacturers", value=cpu_manufacturers, expected_type=type_hints["cpu_manufacturers"])
+                check_type(argname="argument excluded_instance_types", value=excluded_instance_types, expected_type=type_hints["excluded_instance_types"])
+                check_type(argname="argument instance_generations", value=instance_generations, expected_type=type_hints["instance_generations"])
+                check_type(argname="argument local_storage", value=local_storage, expected_type=type_hints["local_storage"])
+                check_type(argname="argument local_storage_types", value=local_storage_types, expected_type=type_hints["local_storage_types"])
+                check_type(argname="argument max_spot_price_as_percentage_of_optimal_on_demand_price", value=max_spot_price_as_percentage_of_optimal_on_demand_price, expected_type=type_hints["max_spot_price_as_percentage_of_optimal_on_demand_price"])
+                check_type(argname="argument memory_gib_per_v_cpu", value=memory_gib_per_v_cpu, expected_type=type_hints["memory_gib_per_v_cpu"])
+                check_type(argname="argument network_bandwidth_gbps", value=network_bandwidth_gbps, expected_type=type_hints["network_bandwidth_gbps"])
+                check_type(argname="argument network_interface_count", value=network_interface_count, expected_type=type_hints["network_interface_count"])
+                check_type(argname="argument on_demand_max_price_percentage_over_lowest_price", value=on_demand_max_price_percentage_over_lowest_price, expected_type=type_hints["on_demand_max_price_percentage_over_lowest_price"])
+                check_type(argname="argument require_hibernate_support", value=require_hibernate_support, expected_type=type_hints["require_hibernate_support"])
+                check_type(argname="argument spot_max_price_percentage_over_lowest_price", value=spot_max_price_percentage_over_lowest_price, expected_type=type_hints["spot_max_price_percentage_over_lowest_price"])
+                check_type(argname="argument total_local_storage_gb", value=total_local_storage_gb, expected_type=type_hints["total_local_storage_gb"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "memory_mib": memory_mib,
+                "v_cpu_count": v_cpu_count,
+            }
+            if accelerator_count is not None:
+                self._values["accelerator_count"] = accelerator_count
+            if accelerator_manufacturers is not None:
+                self._values["accelerator_manufacturers"] = accelerator_manufacturers
+            if accelerator_names is not None:
+                self._values["accelerator_names"] = accelerator_names
+            if accelerator_total_memory_mib is not None:
+                self._values["accelerator_total_memory_mib"] = accelerator_total_memory_mib
+            if accelerator_types is not None:
+                self._values["accelerator_types"] = accelerator_types
+            if allowed_instance_types is not None:
+                self._values["allowed_instance_types"] = allowed_instance_types
+            if bare_metal is not None:
+                self._values["bare_metal"] = bare_metal
+            if baseline_ebs_bandwidth_mbps is not None:
+                self._values["baseline_ebs_bandwidth_mbps"] = baseline_ebs_bandwidth_mbps
+            if burstable_performance is not None:
+                self._values["burstable_performance"] = burstable_performance
+            if cpu_manufacturers is not None:
+                self._values["cpu_manufacturers"] = cpu_manufacturers
+            if excluded_instance_types is not None:
+                self._values["excluded_instance_types"] = excluded_instance_types
+            if instance_generations is not None:
+                self._values["instance_generations"] = instance_generations
+            if local_storage is not None:
+                self._values["local_storage"] = local_storage
+            if local_storage_types is not None:
+                self._values["local_storage_types"] = local_storage_types
+            if max_spot_price_as_percentage_of_optimal_on_demand_price is not None:
+                self._values["max_spot_price_as_percentage_of_optimal_on_demand_price"] = max_spot_price_as_percentage_of_optimal_on_demand_price
+            if memory_gib_per_v_cpu is not None:
+                self._values["memory_gib_per_v_cpu"] = memory_gib_per_v_cpu
+            if network_bandwidth_gbps is not None:
+                self._values["network_bandwidth_gbps"] = network_bandwidth_gbps
+            if network_interface_count is not None:
+                self._values["network_interface_count"] = network_interface_count
+            if on_demand_max_price_percentage_over_lowest_price is not None:
+                self._values["on_demand_max_price_percentage_over_lowest_price"] = on_demand_max_price_percentage_over_lowest_price
+            if require_hibernate_support is not None:
+                self._values["require_hibernate_support"] = require_hibernate_support
+            if spot_max_price_percentage_over_lowest_price is not None:
+                self._values["spot_max_price_percentage_over_lowest_price"] = spot_max_price_percentage_over_lowest_price
+            if total_local_storage_gb is not None:
+                self._values["total_local_storage_gb"] = total_local_storage_gb
+
+        @builtins.property
+        def memory_mib(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.MemoryMiBRequestProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-memorymib
+            '''
+            result = self._values.get("memory_mib")
+            assert result is not None, "Required property 'memory_mib' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.MemoryMiBRequestProperty"], result)
+
+        @builtins.property
+        def v_cpu_count(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.VCpuCountRangeRequestProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-vcpucount
+            '''
+            result = self._values.get("v_cpu_count")
+            assert result is not None, "Required property 'v_cpu_count' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.VCpuCountRangeRequestProperty"], result)
+
+        @builtins.property
+        def accelerator_count(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.AcceleratorCountRequestProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-acceleratorcount
+            '''
+            result = self._values.get("accelerator_count")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.AcceleratorCountRequestProperty"]], result)
+
+        @builtins.property
+        def accelerator_manufacturers(
+            self,
+        ) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-acceleratormanufacturers
+            '''
+            result = self._values.get("accelerator_manufacturers")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def accelerator_names(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-acceleratornames
+            '''
+            result = self._values.get("accelerator_names")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def accelerator_total_memory_mib(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-acceleratortotalmemorymib
+            '''
+            result = self._values.get("accelerator_total_memory_mib")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty"]], result)
+
+        @builtins.property
+        def accelerator_types(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-acceleratortypes
+            '''
+            result = self._values.get("accelerator_types")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def allowed_instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-allowedinstancetypes
+            '''
+            result = self._values.get("allowed_instance_types")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def bare_metal(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-baremetal
+            '''
+            result = self._values.get("bare_metal")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def baseline_ebs_bandwidth_mbps(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-baselineebsbandwidthmbps
+            '''
+            result = self._values.get("baseline_ebs_bandwidth_mbps")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty"]], result)
+
+        @builtins.property
+        def burstable_performance(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-burstableperformance
+            '''
+            result = self._values.get("burstable_performance")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def cpu_manufacturers(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-cpumanufacturers
+            '''
+            result = self._values.get("cpu_manufacturers")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def excluded_instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-excludedinstancetypes
+            '''
+            result = self._values.get("excluded_instance_types")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def instance_generations(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-instancegenerations
+            '''
+            result = self._values.get("instance_generations")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def local_storage(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-localstorage
+            '''
+            result = self._values.get("local_storage")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def local_storage_types(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-localstoragetypes
+            '''
+            result = self._values.get("local_storage_types")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def max_spot_price_as_percentage_of_optimal_on_demand_price(
+            self,
+        ) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-maxspotpriceaspercentageofoptimalondemandprice
+            '''
+            result = self._values.get("max_spot_price_as_percentage_of_optimal_on_demand_price")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def memory_gib_per_v_cpu(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-memorygibpervcpu
+            '''
+            result = self._values.get("memory_gib_per_v_cpu")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty"]], result)
+
+        @builtins.property
+        def network_bandwidth_gbps(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-networkbandwidthgbps
+            '''
+            result = self._values.get("network_bandwidth_gbps")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty"]], result)
+
+        @builtins.property
+        def network_interface_count(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.NetworkInterfaceCountRequestProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-networkinterfacecount
+            '''
+            result = self._values.get("network_interface_count")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.NetworkInterfaceCountRequestProperty"]], result)
+
+        @builtins.property
+        def on_demand_max_price_percentage_over_lowest_price(
+            self,
+        ) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-ondemandmaxpricepercentageoverlowestprice
+            '''
+            result = self._values.get("on_demand_max_price_percentage_over_lowest_price")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def require_hibernate_support(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-requirehibernatesupport
+            '''
+            result = self._values.get("require_hibernate_support")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def spot_max_price_percentage_over_lowest_price(
+            self,
+        ) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-spotmaxpricepercentageoverlowestprice
+            '''
+            result = self._values.get("spot_max_price_percentage_over_lowest_price")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def total_local_storage_gb(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.TotalLocalStorageGBRequestProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-totallocalstoragegb
+            '''
+            result = self._values.get("total_local_storage_gb")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.TotalLocalStorageGBRequestProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InstanceRequirementsRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"subnets": "subnets", "security_groups": "securityGroups"},
+    )
+    class ManagedInstancesNetworkConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            subnets: typing.Sequence[builtins.str],
+            security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''
+            :param subnets: 
+            :param security_groups: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesnetworkconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                managed_instances_network_configuration_property = ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty(
+                    subnets=["subnets"],
+                
+                    # the properties below are optional
+                    security_groups=["securityGroups"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__b8cf486af6edb309081654dbba3fcab445314c93a7a69231f0ca16b32fff9ae0)
+                check_type(argname="argument subnets", value=subnets, expected_type=type_hints["subnets"])
+                check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "subnets": subnets,
+            }
+            if security_groups is not None:
+                self._values["security_groups"] = security_groups
+
+        @builtins.property
+        def subnets(self) -> typing.List[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesnetworkconfiguration.html#cfn-ecs-capacityprovider-managedinstancesnetworkconfiguration-subnets
+            '''
+            result = self._values.get("subnets")
+            assert result is not None, "Required property 'subnets' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesnetworkconfiguration.html#cfn-ecs-capacityprovider-managedinstancesnetworkconfiguration-securitygroups
+            '''
+            result = self._values.get("security_groups")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ManagedInstancesNetworkConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.ManagedInstancesProviderProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "infrastructure_role_arn": "infrastructureRoleArn",
+            "instance_launch_template": "instanceLaunchTemplate",
+            "propagate_tags": "propagateTags",
+        },
+    )
+    class ManagedInstancesProviderProperty:
+        def __init__(
+            self,
+            *,
+            infrastructure_role_arn: builtins.str,
+            instance_launch_template: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.InstanceLaunchTemplateProperty", typing.Dict[builtins.str, typing.Any]]],
+            propagate_tags: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param infrastructure_role_arn: 
+            :param instance_launch_template: 
+            :param propagate_tags: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                managed_instances_provider_property = ecs.CfnCapacityProvider.ManagedInstancesProviderProperty(
+                    infrastructure_role_arn="infrastructureRoleArn",
+                    instance_launch_template=ecs.CfnCapacityProvider.InstanceLaunchTemplateProperty(
+                        ec2_instance_profile_arn="ec2InstanceProfileArn",
+                        network_configuration=ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty(
+                            subnets=["subnets"],
+                
+                            # the properties below are optional
+                            security_groups=["securityGroups"]
+                        ),
+                
+                        # the properties below are optional
+                        instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
+                            memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
+                                min=123,
+                
+                                # the properties below are optional
+                                max=123
+                            ),
+                            v_cpu_count=ecs.CfnCapacityProvider.VCpuCountRangeRequestProperty(
+                                min=123,
+                
+                                # the properties below are optional
+                                max=123
+                            ),
+                
+                            # the properties below are optional
+                            accelerator_count=ecs.CfnCapacityProvider.AcceleratorCountRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            accelerator_manufacturers=["acceleratorManufacturers"],
+                            accelerator_names=["acceleratorNames"],
+                            accelerator_total_memory_mi_b=ecs.CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            accelerator_types=["acceleratorTypes"],
+                            allowed_instance_types=["allowedInstanceTypes"],
+                            bare_metal="bareMetal",
+                            baseline_ebs_bandwidth_mbps=ecs.CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            burstable_performance="burstablePerformance",
+                            cpu_manufacturers=["cpuManufacturers"],
+                            excluded_instance_types=["excludedInstanceTypes"],
+                            instance_generations=["instanceGenerations"],
+                            local_storage="localStorage",
+                            local_storage_types=["localStorageTypes"],
+                            max_spot_price_as_percentage_of_optimal_on_demand_price=123,
+                            memory_gi_bPer_vCpu=ecs.CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            network_bandwidth_gbps=ecs.CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            network_interface_count=ecs.CfnCapacityProvider.NetworkInterfaceCountRequestProperty(
+                                max=123,
+                                min=123
+                            ),
+                            on_demand_max_price_percentage_over_lowest_price=123,
+                            require_hibernate_support=False,
+                            spot_max_price_percentage_over_lowest_price=123,
+                            total_local_storage_gb=ecs.CfnCapacityProvider.TotalLocalStorageGBRequestProperty(
+                                max=123,
+                                min=123
+                            )
+                        ),
+                        monitoring="monitoring",
+                        storage_configuration=ecs.CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty(
+                            storage_size_gi_b=123
+                        )
+                    ),
+                
+                    # the properties below are optional
+                    propagate_tags="propagateTags"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__45a3888e29c1b6fb29bc3dbf90f279f8c543b8924bb51956a75f3290eca0b7c9)
+                check_type(argname="argument infrastructure_role_arn", value=infrastructure_role_arn, expected_type=type_hints["infrastructure_role_arn"])
+                check_type(argname="argument instance_launch_template", value=instance_launch_template, expected_type=type_hints["instance_launch_template"])
+                check_type(argname="argument propagate_tags", value=propagate_tags, expected_type=type_hints["propagate_tags"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "infrastructure_role_arn": infrastructure_role_arn,
+                "instance_launch_template": instance_launch_template,
+            }
+            if propagate_tags is not None:
+                self._values["propagate_tags"] = propagate_tags
+
+        @builtins.property
+        def infrastructure_role_arn(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html#cfn-ecs-capacityprovider-managedinstancesprovider-infrastructurerolearn
+            '''
+            result = self._values.get("infrastructure_role_arn")
+            assert result is not None, "Required property 'infrastructure_role_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def instance_launch_template(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceLaunchTemplateProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html#cfn-ecs-capacityprovider-managedinstancesprovider-instancelaunchtemplate
+            '''
+            result = self._values.get("instance_launch_template")
+            assert result is not None, "Required property 'instance_launch_template' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceLaunchTemplateProperty"], result)
+
+        @builtins.property
+        def propagate_tags(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html#cfn-ecs-capacityprovider-managedinstancesprovider-propagatetags
+            '''
+            result = self._values.get("propagate_tags")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ManagedInstancesProviderProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"storage_size_gib": "storageSizeGiB"},
+    )
+    class ManagedInstancesStorageConfigurationProperty:
+        def __init__(self, *, storage_size_gib: jsii.Number) -> None:
+            '''
+            :param storage_size_gib: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesstorageconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                managed_instances_storage_configuration_property = ecs.CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty(
+                    storage_size_gi_b=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8d1e06667171eb082ce77bd8060c435a6f130ac6e9384412fb372763b838e22b)
+                check_type(argname="argument storage_size_gib", value=storage_size_gib, expected_type=type_hints["storage_size_gib"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "storage_size_gib": storage_size_gib,
+            }
+
+        @builtins.property
+        def storage_size_gib(self) -> jsii.Number:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesstorageconfiguration.html#cfn-ecs-capacityprovider-managedinstancesstorageconfiguration-storagesizegib
+            '''
+            result = self._values.get("storage_size_gib")
+            assert result is not None, "Required property 'storage_size_gib' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ManagedInstancesStorageConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -31111,6 +33056,414 @@ class CfnCapacityProvider(
 
         def __repr__(self) -> str:
             return "ManagedScalingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"max": "max", "min": "min"},
+    )
+    class MemoryGiBPerVCpuRequestProperty:
+        def __init__(
+            self,
+            *,
+            max: typing.Optional[jsii.Number] = None,
+            min: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param max: 
+            :param min: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorygibpervcpurequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                memory_gi_bPer_vCpu_request_property = ecs.CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty(
+                    max=123,
+                    min=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__01b8a285c0250eb2fa8268dc32a515cb17c662ef0085fef55300ca206a1a746c)
+                check_type(argname="argument max", value=max, expected_type=type_hints["max"])
+                check_type(argname="argument min", value=min, expected_type=type_hints["min"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max is not None:
+                self._values["max"] = max
+            if min is not None:
+                self._values["min"] = min
+
+        @builtins.property
+        def max(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorygibpervcpurequest.html#cfn-ecs-capacityprovider-memorygibpervcpurequest-max
+            '''
+            result = self._values.get("max")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorygibpervcpurequest.html#cfn-ecs-capacityprovider-memorygibpervcpurequest-min
+            '''
+            result = self._values.get("min")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MemoryGiBPerVCpuRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.MemoryMiBRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"min": "min", "max": "max"},
+    )
+    class MemoryMiBRequestProperty:
+        def __init__(
+            self,
+            *,
+            min: jsii.Number,
+            max: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param min: 
+            :param max: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorymibrequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                memory_mi_bRequest_property = ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
+                    min=123,
+                
+                    # the properties below are optional
+                    max=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a69680081ccdd5c785405398f4f1d616d0c97b874ced183049da2f9c6e34787e)
+                check_type(argname="argument min", value=min, expected_type=type_hints["min"])
+                check_type(argname="argument max", value=max, expected_type=type_hints["max"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "min": min,
+            }
+            if max is not None:
+                self._values["max"] = max
+
+        @builtins.property
+        def min(self) -> jsii.Number:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorymibrequest.html#cfn-ecs-capacityprovider-memorymibrequest-min
+            '''
+            result = self._values.get("min")
+            assert result is not None, "Required property 'min' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def max(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorymibrequest.html#cfn-ecs-capacityprovider-memorymibrequest-max
+            '''
+            result = self._values.get("max")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MemoryMiBRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"max": "max", "min": "min"},
+    )
+    class NetworkBandwidthGbpsRequestProperty:
+        def __init__(
+            self,
+            *,
+            max: typing.Optional[jsii.Number] = None,
+            min: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param max: 
+            :param min: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkbandwidthgbpsrequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                network_bandwidth_gbps_request_property = ecs.CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty(
+                    max=123,
+                    min=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0b64349de0e0aa036cd2591e8e4db2f873feceecef981a341ecb449ccf6868be)
+                check_type(argname="argument max", value=max, expected_type=type_hints["max"])
+                check_type(argname="argument min", value=min, expected_type=type_hints["min"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max is not None:
+                self._values["max"] = max
+            if min is not None:
+                self._values["min"] = min
+
+        @builtins.property
+        def max(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkbandwidthgbpsrequest.html#cfn-ecs-capacityprovider-networkbandwidthgbpsrequest-max
+            '''
+            result = self._values.get("max")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkbandwidthgbpsrequest.html#cfn-ecs-capacityprovider-networkbandwidthgbpsrequest-min
+            '''
+            result = self._values.get("min")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "NetworkBandwidthGbpsRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.NetworkInterfaceCountRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"max": "max", "min": "min"},
+    )
+    class NetworkInterfaceCountRequestProperty:
+        def __init__(
+            self,
+            *,
+            max: typing.Optional[jsii.Number] = None,
+            min: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param max: 
+            :param min: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkinterfacecountrequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                network_interface_count_request_property = ecs.CfnCapacityProvider.NetworkInterfaceCountRequestProperty(
+                    max=123,
+                    min=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__b7767213e94df32328c6564e342330aa95c25ac187a4114099951ea2e0802ddb)
+                check_type(argname="argument max", value=max, expected_type=type_hints["max"])
+                check_type(argname="argument min", value=min, expected_type=type_hints["min"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max is not None:
+                self._values["max"] = max
+            if min is not None:
+                self._values["min"] = min
+
+        @builtins.property
+        def max(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkinterfacecountrequest.html#cfn-ecs-capacityprovider-networkinterfacecountrequest-max
+            '''
+            result = self._values.get("max")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkinterfacecountrequest.html#cfn-ecs-capacityprovider-networkinterfacecountrequest-min
+            '''
+            result = self._values.get("min")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "NetworkInterfaceCountRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.TotalLocalStorageGBRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"max": "max", "min": "min"},
+    )
+    class TotalLocalStorageGBRequestProperty:
+        def __init__(
+            self,
+            *,
+            max: typing.Optional[jsii.Number] = None,
+            min: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param max: 
+            :param min: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-totallocalstoragegbrequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                total_local_storage_gBRequest_property = ecs.CfnCapacityProvider.TotalLocalStorageGBRequestProperty(
+                    max=123,
+                    min=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0b9cda28d66272632c4d42fbe68333883ca70c46c98159c2cd3f806c8bcc87fb)
+                check_type(argname="argument max", value=max, expected_type=type_hints["max"])
+                check_type(argname="argument min", value=min, expected_type=type_hints["min"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max is not None:
+                self._values["max"] = max
+            if min is not None:
+                self._values["min"] = min
+
+        @builtins.property
+        def max(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-totallocalstoragegbrequest.html#cfn-ecs-capacityprovider-totallocalstoragegbrequest-max
+            '''
+            result = self._values.get("max")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-totallocalstoragegbrequest.html#cfn-ecs-capacityprovider-totallocalstoragegbrequest-min
+            '''
+            result = self._values.get("min")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TotalLocalStorageGBRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.VCpuCountRangeRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"min": "min", "max": "max"},
+    )
+    class VCpuCountRangeRequestProperty:
+        def __init__(
+            self,
+            *,
+            min: jsii.Number,
+            max: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param min: 
+            :param max: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-vcpucountrangerequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                v_cpu_count_range_request_property = ecs.CfnCapacityProvider.VCpuCountRangeRequestProperty(
+                    min=123,
+                
+                    # the properties below are optional
+                    max=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f6d818d37cfd5e478cf4f6075fe0ba45bdd81aa83e9eb5b3f01094a71abf8822)
+                check_type(argname="argument min", value=min, expected_type=type_hints["min"])
+                check_type(argname="argument max", value=max, expected_type=type_hints["max"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "min": min,
+            }
+            if max is not None:
+                self._values["max"] = max
+
+        @builtins.property
+        def min(self) -> jsii.Number:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-vcpucountrangerequest.html#cfn-ecs-capacityprovider-vcpucountrangerequest-min
+            '''
+            result = self._values.get("min")
+            assert result is not None, "Required property 'min' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def max(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-vcpucountrangerequest.html#cfn-ecs-capacityprovider-vcpucountrangerequest-max
+            '''
+            result = self._values.get("max")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "VCpuCountRangeRequestProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -42799,24 +45152,43 @@ class Cluster(
 
     Example::
 
-        from aws_cdk import Tags
+        # vpc: ec2.Vpc
         
         
-        vpc = ec2.Vpc(self, "Vpc", max_azs=1)
-        cluster = ecs.Cluster(self, "EcsCluster", vpc=vpc)
-        task_definition = ecs.FargateTaskDefinition(self, "TaskDef",
-            memory_limit_mi_b=512,
-            cpu=256
+        cluster = ecs.Cluster(self, "Cluster",
+            vpc=vpc
         )
-        task_definition.add_container("WebContainer",
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+        
+        auto_scaling_group = autoscaling.AutoScalingGroup(self, "ASG",
+            vpc=vpc,
+            instance_type=ec2.InstanceType("t2.micro"),
+            machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
+            min_capacity=0,
+            max_capacity=100
         )
-        Tags.of(task_definition).add("my-tag", "my-tag-value")
-        scheduled_fargate_task = ecs_patterns.ScheduledFargateTask(self, "ScheduledFargateTask",
+        
+        capacity_provider = ecs.AsgCapacityProvider(self, "AsgCapacityProvider",
+            auto_scaling_group=auto_scaling_group,
+            instance_warmup_period=300
+        )
+        cluster.add_asg_capacity_provider(capacity_provider)
+        
+        task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+        
+        task_definition.add_container("web",
+            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+            memory_reservation_mi_b=256
+        )
+        
+        ecs.Ec2Service(self, "EC2Service",
             cluster=cluster,
             task_definition=task_definition,
-            schedule=appscaling.Schedule.expression("rate(1 minute)"),
-            propagate_tags=ecs.PropagatedTagSource.TASK_DEFINITION
+            min_healthy_percent=100,
+            capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+                capacity_provider=capacity_provider.capacity_provider_name,
+                weight=1
+            )
+            ]
         )
     '''
 
@@ -43145,6 +45517,20 @@ class Cluster(
 
         return typing.cast(_INamespace_6b61e84f, jsii.invoke(self, "addDefaultCloudMapNamespace", [options]))
 
+    @jsii.member(jsii_name="addManagedInstancesCapacityProvider")
+    def add_managed_instances_capacity_provider(
+        self,
+        provider: ManagedInstancesCapacityProvider,
+    ) -> None:
+        '''This method adds a Managed Instances Capacity Provider to a cluster.
+
+        :param provider: the capacity provider to add to this cluster.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5a82d1be969d3085ebea9661809bac2d0fcfb12723cd197d9b51420e44f7dbe3)
+            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
+        return typing.cast(None, jsii.invoke(self, "addManagedInstancesCapacityProvider", [provider]))
+
     @jsii.member(jsii_name="arnForTasks")
     def arn_for_tasks(self, key_pattern: builtins.str) -> builtins.str:
         '''Returns an ARN that represents all tasks within the cluster that match the task pattern specified.
@@ -43458,6 +45844,15 @@ class Cluster(
     def cluster_name(self) -> builtins.str:
         '''The name of the cluster.'''
         return typing.cast(builtins.str, jsii.get(self, "clusterName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="clusterScopedCapacityProviderNames")
+    def cluster_scoped_capacity_provider_names(self) -> typing.List[builtins.str]:
+        '''Getter for _clusterScopedCapacityProviderNames.
+
+        :attribute: true
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "clusterScopedCapacityProviderNames"))
 
     @builtins.property
     @jsii.member(jsii_name="connections")
@@ -44972,30 +47367,33 @@ class Ec2Service(
 
     Example::
 
-        # vpc: ec2.Vpc
+        # task_definition: ecs.TaskDefinition
+        # cluster: ecs.Cluster
         
         
-        # Create an ECS cluster
-        cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
-        
-        # Add capacity to it
-        cluster.add_capacity("DefaultAutoScalingGroupCapacity",
-            instance_type=ec2.InstanceType("t2.xlarge"),
-            desired_capacity=3
+        # Add a container to the task definition
+        specific_container = task_definition.add_container("Container",
+            image=ecs.ContainerImage.from_registry("/aws/aws-example-app"),
+            memory_limit_mi_b=2048
         )
         
-        task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
-        
-        task_definition.add_container("DefaultContainer",
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
-            memory_limit_mi_b=512
+        # Add a port mapping
+        specific_container.add_port_mappings(
+            container_port=7600,
+            protocol=ecs.Protocol.TCP
         )
         
-        # Instantiate an Amazon ECS Service
-        ecs_service = ecs.Ec2Service(self, "Service",
+        ecs.Ec2Service(self, "Service",
             cluster=cluster,
             task_definition=task_definition,
-            min_healthy_percent=100
+            min_healthy_percent=100,
+            cloud_map_options=ecs.CloudMapOptions(
+                # Create SRV records - useful for bridge networking
+                dns_record_type=cloudmap.DnsRecordType.SRV,
+                # Targets port TCP port 7600 `specificContainer`
+                container=specific_container,
+                container_port=7600
+            )
         )
     '''
 
@@ -45953,6 +48351,9 @@ class FargateService(
 ):
     '''This creates a service using the Fargate launch type on an ECS cluster.
 
+    Can also be used with Managed Instances compatible task definitions when using
+    capacity provider strategies.
+
     :resource: AWS::ECS::Service
     :exampleMetadata: infused
 
@@ -46510,6 +48911,7 @@ __all__ = [
     "ITaskDefinitionRef",
     "ITaskSetRef",
     "InferenceAccelerator",
+    "InstanceMonitoring",
     "IpcMode",
     "JournaldLogDriver",
     "JournaldLogDriverProps",
@@ -46525,6 +48927,8 @@ __all__ = [
     "LogDriverConfig",
     "LogDrivers",
     "MachineImageType",
+    "ManagedInstancesCapacityProvider",
+    "ManagedInstancesCapacityProviderProps",
     "ManagedStorageConfiguration",
     "MemoryUtilizationScalingProps",
     "MountPoint",
@@ -46536,6 +48940,7 @@ __all__ = [
     "PortMap",
     "PortMapping",
     "PrimaryTaskSetReference",
+    "PropagateManagedInstancesTags",
     "PropagatedTagSource",
     "Protocol",
     "ProxyConfiguration",
@@ -46914,6 +49319,8 @@ def _typecheckingstub__481a7064afb879135819febdd572a91fb6799e4bfadf66c711f640b51
 def _typecheckingstub__48080bdf05dc1c4ca9ab46c833774163f6afcd0d1551b378b8d59e67bc180c3f(
     *,
     auto_scaling_group_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.AutoScalingGroupProviderProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    cluster_name: typing.Optional[builtins.str] = None,
+    managed_instances_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.ManagedInstancesProviderProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -48323,6 +50730,44 @@ def _typecheckingstub__4028d39adfbd4018be781b02eae5afae009ba3d6754c9cac3c26580b7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__718bb820f1409b5f15556f2e394659a060bda46e302dbb4e973a6484f24497de(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    ec2_instance_profile: _IInstanceProfile_10d5ce2c,
+    subnets: typing.Sequence[_ISubnet_d57d1229],
+    capacity_provider_name: typing.Optional[builtins.str] = None,
+    infrastructure_role: typing.Optional[_IRole_235f5d8e] = None,
+    instance_requirements: typing.Optional[typing.Union[_InstanceRequirementsConfig_1b353659, typing.Dict[builtins.str, typing.Any]]] = None,
+    monitoring: typing.Optional[InstanceMonitoring] = None,
+    propagate_tags: typing.Optional[PropagateManagedInstancesTags] = None,
+    security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+    task_volume_storage: typing.Optional[_Size_7b441c34] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__86f1df235e6255faeece6081f964f386186a84532c53bb8fad57fd4ab50e809d(
+    cluster: ICluster,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__efa15b9a00384128ebdb40ffd56f7e66e8863f1c3a6b8d4cf8bc61fb9e822e92(
+    *,
+    ec2_instance_profile: _IInstanceProfile_10d5ce2c,
+    subnets: typing.Sequence[_ISubnet_d57d1229],
+    capacity_provider_name: typing.Optional[builtins.str] = None,
+    infrastructure_role: typing.Optional[_IRole_235f5d8e] = None,
+    instance_requirements: typing.Optional[typing.Union[_InstanceRequirementsConfig_1b353659, typing.Dict[builtins.str, typing.Any]]] = None,
+    monitoring: typing.Optional[InstanceMonitoring] = None,
+    propagate_tags: typing.Optional[PropagateManagedInstancesTags] = None,
+    security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+    task_volume_storage: typing.Optional[_Size_7b441c34] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2f9a1356d6603371cc25e0653216ab0167448ba43002bef5b32c489376e7fbb9(
     *,
     fargate_ephemeral_storage_kms_key: typing.Optional[_IKey_5f11635f] = None,
@@ -49178,6 +51623,8 @@ def _typecheckingstub__59a913caee739f6d41600bf8ae89985db638913fbcb77a8abd5451cda
     id: builtins.str,
     *,
     auto_scaling_group_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.AutoScalingGroupProviderProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    cluster_name: typing.Optional[builtins.str] = None,
+    managed_instances_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.ManagedInstancesProviderProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -49210,6 +51657,18 @@ def _typecheckingstub__5888da07adc4050987d977b4699983a6760a2abcd538f800018e65953
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__56e821d6de113ad791628d9a188368814c7c0fb94ce466313a674dfb2a04780b(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1eade181f601623fa0955313b90bd74d62cfcd3ee4f4809fd9998abc514cb4bc(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.ManagedInstancesProviderProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6b097d35daad25c1c594150aba1acbb2fe2a7052d42d247db35563ec5fed6bd4(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -49218,6 +51677,22 @@ def _typecheckingstub__6b097d35daad25c1c594150aba1acbb2fe2a7052d42d247db35563ec5
 
 def _typecheckingstub__81c56757bceb2c5880b41cbaabe62c67844b248e61c810588b5c50b5f7053aae(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__43d53bcba92c90cf6f4d328d0942a76121d27482644e63c47c94438bbe161846(
+    *,
+    max: typing.Optional[jsii.Number] = None,
+    min: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__05b0b4abd870382eb40911671e91b829abe416723b1b38346d22783d1a2c8f67(
+    *,
+    max: typing.Optional[jsii.Number] = None,
+    min: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -49232,6 +51707,79 @@ def _typecheckingstub__ca441075e92a847965e776db4f5ab9f545ce368b5efa4bc2476d58061
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__55f829b236ccb12cc42e7c374a47c6c0909fecf313bf4ebb779169af029b2ba4(
+    *,
+    max: typing.Optional[jsii.Number] = None,
+    min: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cb545da33f3067adee24bf90d3e903b06a7562a7e6ea6b3785f5b0ae6f3e105d(
+    *,
+    ec2_instance_profile_arn: builtins.str,
+    network_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    instance_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.InstanceRequirementsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    monitoring: typing.Optional[builtins.str] = None,
+    storage_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d2fd7f319e7a3e49a0d45d342ee067f3719bf8c8519bbab1a3a3c81f41641bec(
+    *,
+    memory_mib: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.MemoryMiBRequestProperty, typing.Dict[builtins.str, typing.Any]]],
+    v_cpu_count: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.VCpuCountRangeRequestProperty, typing.Dict[builtins.str, typing.Any]]],
+    accelerator_count: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.AcceleratorCountRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    accelerator_manufacturers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    accelerator_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    accelerator_total_memory_mib: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    accelerator_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+    allowed_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+    bare_metal: typing.Optional[builtins.str] = None,
+    baseline_ebs_bandwidth_mbps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    burstable_performance: typing.Optional[builtins.str] = None,
+    cpu_manufacturers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    excluded_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+    instance_generations: typing.Optional[typing.Sequence[builtins.str]] = None,
+    local_storage: typing.Optional[builtins.str] = None,
+    local_storage_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+    max_spot_price_as_percentage_of_optimal_on_demand_price: typing.Optional[jsii.Number] = None,
+    memory_gib_per_v_cpu: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    network_bandwidth_gbps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    network_interface_count: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.NetworkInterfaceCountRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    on_demand_max_price_percentage_over_lowest_price: typing.Optional[jsii.Number] = None,
+    require_hibernate_support: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    spot_max_price_percentage_over_lowest_price: typing.Optional[jsii.Number] = None,
+    total_local_storage_gb: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.TotalLocalStorageGBRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b8cf486af6edb309081654dbba3fcab445314c93a7a69231f0ca16b32fff9ae0(
+    *,
+    subnets: typing.Sequence[builtins.str],
+    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__45a3888e29c1b6fb29bc3dbf90f279f8c543b8924bb51956a75f3290eca0b7c9(
+    *,
+    infrastructure_role_arn: builtins.str,
+    instance_launch_template: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.InstanceLaunchTemplateProperty, typing.Dict[builtins.str, typing.Any]]],
+    propagate_tags: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8d1e06667171eb082ce77bd8060c435a6f130ac6e9384412fb372763b838e22b(
+    *,
+    storage_size_gib: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b6ba7d15ac2121ea6e10f20fe3e2441ae17d00f30897db384f8f72e7d6406865(
     *,
     instance_warmup_period: typing.Optional[jsii.Number] = None,
@@ -49239,6 +51787,54 @@ def _typecheckingstub__b6ba7d15ac2121ea6e10f20fe3e2441ae17d00f30897db384f8f72e7d
     minimum_scaling_step_size: typing.Optional[jsii.Number] = None,
     status: typing.Optional[builtins.str] = None,
     target_capacity: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__01b8a285c0250eb2fa8268dc32a515cb17c662ef0085fef55300ca206a1a746c(
+    *,
+    max: typing.Optional[jsii.Number] = None,
+    min: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a69680081ccdd5c785405398f4f1d616d0c97b874ced183049da2f9c6e34787e(
+    *,
+    min: jsii.Number,
+    max: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0b64349de0e0aa036cd2591e8e4db2f873feceecef981a341ecb449ccf6868be(
+    *,
+    max: typing.Optional[jsii.Number] = None,
+    min: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b7767213e94df32328c6564e342330aa95c25ac187a4114099951ea2e0802ddb(
+    *,
+    max: typing.Optional[jsii.Number] = None,
+    min: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0b9cda28d66272632c4d42fbe68333883ca70c46c98159c2cd3f806c8bcc87fb(
+    *,
+    max: typing.Optional[jsii.Number] = None,
+    min: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f6d818d37cfd5e478cf4f6075fe0ba45bdd81aa83e9eb5b3f01094a71abf8822(
+    *,
+    min: jsii.Number,
+    max: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -50679,6 +53275,12 @@ def _typecheckingstub__63e98e008463515927d4aee3c938d64639e34ce8a2c09fa766883be6a
 
 def _typecheckingstub__e4b0382e0260e2588867571eddfb9f2d145389bea69e7e0b00917ba8a3298e6d(
     default_capacity_provider_strategy: typing.Sequence[typing.Union[CapacityProviderStrategy, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5a82d1be969d3085ebea9661809bac2d0fcfb12723cd197d9b51420e44f7dbe3(
+    provider: ManagedInstancesCapacityProvider,
 ) -> None:
     """Type checking stubs"""
     pass

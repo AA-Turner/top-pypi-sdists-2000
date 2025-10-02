@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ansible-lint
-Version: 25.9.0
+Version: 25.9.1
 Summary: Checks playbooks for practices and behavior that could potentially be improved
 Author-email: Will Thames <will@thames.id.au>
 Maintainer-email: Ansible by Red Hat <info@ansible.com>
@@ -34,6 +34,7 @@ Description-Content-Type: text/markdown
 License-File: COPYING
 Requires-Dist: ansible-compat>=25.8.0
 Requires-Dist: ansible-core>=2.16.11
+Requires-Dist: ansible-core>=2.20.0b1; python_full_version >= "3.14"
 Requires-Dist: black>=24.3.0
 Requires-Dist: cffi>=1.17.1
 Requires-Dist: cryptography>=38
@@ -44,9 +45,10 @@ Requires-Dist: jsonschema>=4.10.0
 Requires-Dist: packaging>=22.0
 Requires-Dist: pathspec>=0.10.3
 Requires-Dist: pyyaml>=6.0.2
+Requires-Dist: pyyaml>=6.0.3; python_full_version < "3.14"
 Requires-Dist: referencing>=0.36.2
-Requires-Dist: ruamel-yaml-clib>=0.2.12; python_full_version < "3.14"
 Requires-Dist: ruamel-yaml>=0.18.11
+Requires-Dist: ruamel-yaml-clib>=0.2.12; python_full_version < "3.14"
 Requires-Dist: subprocess-tee>=0.4.1
 Requires-Dist: wcmatch>=8.1.2; python_full_version < "3.12"
 Requires-Dist: wcmatch>=8.5.0; python_full_version >= "3.12"

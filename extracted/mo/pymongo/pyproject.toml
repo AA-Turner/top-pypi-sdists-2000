@@ -65,7 +65,7 @@ pymongocrypt_source = [
 ]
 perf = ["simplejson"]
 typing = [
-    "mypy==1.18.1",
+    "mypy==1.17.1",
     "pyright==1.1.405",
     "typing_extensions",
     "pip"
@@ -270,8 +270,6 @@ partial_branches = ["if (.*and +)*not _use_c( and.*)*:"]
 directory = "htmlcov"
 
 [tool.cibuildwheel]
-# Enable free-threaded support
-free-threaded-support = true
 skip = "pp* *-musllinux*"
 build-frontend = "build"
 test-command = "python {project}/tools/fail_if_no_c.py"

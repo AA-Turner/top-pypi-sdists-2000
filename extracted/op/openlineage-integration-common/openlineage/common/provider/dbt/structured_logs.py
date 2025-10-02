@@ -16,11 +16,12 @@ from openlineage.client.facet_v2 import (
 )
 from openlineage.client.facet_v2 import (
     error_message_run,
+    external_query_run,
     job_type_job,
     processing_engine_run,
     sql_job,
+    tags_run,
 )
-from openlineage.client.generated import external_query_run
 from openlineage.client.run import InputDataset
 from openlineage.client.uuid import generate_new_uuid
 from openlineage.common.provider.dbt.facets import DbtRunRunFacet, DbtVersionRunFacet, ParentRunMetadata
@@ -334,6 +335,12 @@ class DbtStructuredLogsProcessor(DbtLocalArtifactProcessor):
             "parent": self.dbt_run_metadata.to_openlineage(),
         }
 
+        # Add tags if they exist for this node
+        if tags := self._get_node_tags(node_unique_id):
+            run_facets["tags"] = tags_run.TagsRunFacet(
+                tags=[tags_run.TagsRunFacetFields(key=tag, value="true", source="DBT") for tag in tags]
+            )
+
         job_name = self._get_job_name(event)
         job_facets = {
             "jobType": job_type_job.JobTypeJobFacet(
@@ -379,6 +386,12 @@ class DbtStructuredLogsProcessor(DbtLocalArtifactProcessor):
             **self.dbt_run_run_facet(),
             "parent": self.dbt_run_metadata.to_openlineage(),
         }
+
+        # Add tags if they exist for this node
+        if tags := self._get_node_tags(node_unique_id):
+            run_facets["tags"] = tags_run.TagsRunFacet(
+                tags=[tags_run.TagsRunFacetFields(key=tag, value="true", source="DBT") for tag in tags]
+            )
 
         job_name = self._get_job_name(event)
         job_facets = {
@@ -635,7 +648,15 @@ class DbtStructuredLogsProcessor(DbtLocalArtifactProcessor):
     def dbt_run_run_facet(self) -> Dict[str, DbtRunRunFacet]:
         if not self.invocation_id:
             return {}
-        return {"dbt_run": DbtRunRunFacet(invocation_id=self.invocation_id)}
+        return {
+            "dbt_run": DbtRunRunFacet(
+                invocation_id=self.invocation_id,
+                project_name=self.project_name,
+                project_version=self.project_version,
+                profile_name=self.profile_name,
+                dbt_runtime="core",
+            )
+        }
 
     def processing_engine_facet(self) -> Dict[str, processing_engine_run.ProcessingEngineRunFacet]:
         if not self.dbt_version:
@@ -801,10 +822,25 @@ class DbtStructuredLogsProcessor(DbtLocalArtifactProcessor):
         """
         Builds a ModelNode of a given node_id
         """
+        if node_id in self.compiled_manifest["nodes"]:
+            node_type = "model"
+            manifest_node = self.compiled_manifest["nodes"][node_id]
+        elif node_id in self.compiled_manifest["sources"]:
+            node_type = "source"
+            manifest_node = self.compiled_manifest["sources"][node_id]
+        else:
+            raise RuntimeError(f"{node_id} not found in nodes or sources")
+        catalog_node = get_from_nullable_chain(self.catalog, ["nodes", node_id])
+        return ModelNode(type=node_type, metadata_node=manifest_node, catalog_node=catalog_node)
+
+    @handle_keyerror
+    def _get_node_tags(self, node_id: str) -> List[str]:
+        """
+        Extract tags from a dbt node in the compiled manifest
+        """
         all_nodes = {**self.compiled_manifest["nodes"], **self.compiled_manifest["sources"]}
         manifest_node = all_nodes[node_id]
-        catalog_node = get_from_nullable_chain(self.catalog, ["nodes", node_id])
-        return ModelNode(metadata_node=manifest_node, catalog_node=catalog_node)
+        return manifest_node.get("tags", [])
 
     def _get_model_inputs(self, node_id) -> List[ModelNode]:
         """

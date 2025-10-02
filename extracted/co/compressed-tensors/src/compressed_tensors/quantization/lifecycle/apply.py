@@ -13,18 +13,14 @@
 # limitations under the License.
 
 import logging
-import re
-from collections import OrderedDict, defaultdict
+from collections import OrderedDict
 from copy import deepcopy
 from typing import Dict, Iterable, List, Optional
 from typing import OrderedDict as OrderedDictType
-from typing import Set, Union
+from typing import Union
 
 import torch
 from compressed_tensors.config import CompressionFormat
-from compressed_tensors.quantization.lifecycle.compressed import (
-    compress_quantized_weights,
-)
 from compressed_tensors.quantization.lifecycle.initialize import (
     initialize_module_for_quantization,
 )
@@ -36,10 +32,10 @@ from compressed_tensors.quantization.quant_config import (
 from compressed_tensors.quantization.quant_scheme import QuantizationScheme
 from compressed_tensors.quantization.utils import (
     KV_CACHE_TARGETS,
-    infer_quantization_status,
     is_kv_cache_quant_scheme,
 )
-from compressed_tensors.utils.helpers import fix_fsdp_module_name, replace_module
+from compressed_tensors.utils.helpers import deprecated, replace_module
+from compressed_tensors.utils.match import match_named_modules, match_targets
 from compressed_tensors.utils.offload import update_parameter_data
 from compressed_tensors.utils.safetensors_load import get_safetensors_folder
 from safetensors import safe_open
@@ -49,10 +45,7 @@ from torch.nn import Module
 __all__ = [
     "load_pretrained_quantization_parameters",
     "apply_quantization_config",
-    "apply_quantization_status",
     "find_name_or_class_matches",
-    "expand_target_names",
-    "is_target",
 ]
 
 from compressed_tensors.quantization.utils.helpers import is_module_quantized
@@ -67,20 +60,20 @@ _LOGGER = logging.getLogger(__name__)
 def load_pretrained_quantization_parameters(
     model: Module,
     model_name_or_path: Optional[str] = None,
-    load_weight_quantization: Optional[bool] = False,
+    load_weight_qparams: Optional[bool] = False,
 ):
     """
     Loads the quantization parameters (scale and zero point) from model_name_or_path to
     a model that has already been initialized with a quantization config.
 
-    NOTE: Will always load inputs/output parameters.
-    Will conditioanlly load weight parameters, if load_weight_quantization is set to True.
+    NOTE: Will always load inputs/output parameters. Will conditioanlly load weight
+    parameters, if load_weight_qparams is set to True.
 
     :param model: model to load pretrained quantization parameters to
     :param model_name_or_path: Hugging Face stub or local folder containing a quantized
         model, which is used to load quantization parameters
-    :param load_weight_quantization: whether or not the weight quantization parameters shoud
-        be laoded
+    :param load_weight_qparams: whether or not the weight quantization parameters
+        should be loaded
     """
     model_path = get_safetensors_folder(model_name_or_path)
     mapping = get_quantization_parameter_to_path_mapping(model_path)
@@ -105,7 +98,7 @@ def load_pretrained_quantization_parameters(
                 mapping=mapping,
             )
 
-        if load_weight_quantization and submodule.quantization_scheme.weights:
+        if load_weight_qparams and submodule.quantization_scheme.weights:
             base_name = "weight"
             _load_quant_args_from_mapping(
                 base_name=base_name,
@@ -117,7 +110,7 @@ def load_pretrained_quantization_parameters(
 
 def apply_quantization_config(
     model: Module, config: Union[QuantizationConfig, None], run_compressed: bool = False
-) -> Dict[str, QuantizationScheme]:
+):
     """
     Initializes the model for quantization in-place based on the given config.
     Optionally coverts quantizable modules to compressed_linear modules
@@ -127,71 +120,56 @@ def apply_quantization_config(
     :param run_compressed: Whether the model will be run in compressed mode or
         decompressed fully on load
     """
-    # Workaround for when HF Quantizer passes None, see PR #180
-    if config is None:
+    from compressed_tensors.linear.compressed_linear import CompressedLinear
+
+    config = deepcopy(config)
+    if config is None:  # see PR #180
         return dict()
 
-    # remove reference to the original `config`
-    # argument. This function can mutate it, and we'd
-    # like to keep the original `config` as it is.
-    config = deepcopy(config)
+    # preprocess to support kv cache scheme
+    config = process_quantization_config(config)
+
     # build mapping of targets to schemes for easier matching
     # use ordered dict to preserve target ordering in config
     target_to_scheme = OrderedDict()
-    config = process_quantization_config(config)
-    names_to_scheme = dict()
     for scheme in config.config_groups.values():
         for target in scheme.targets:
             target_to_scheme[target] = scheme
 
-    if run_compressed:
-        from compressed_tensors.linear.compressed_linear import CompressedLinear
-
-    # list of submodules to ignore
-    ignored_submodules = defaultdict(list)
     # mark appropriate layers for quantization by setting their quantization schemes
-    for name, submodule in model.named_modules():
-        # potentially fix module name to remove FSDP wrapper prefix
-        name = fix_fsdp_module_name(name)
-        if matches := find_name_or_class_matches(name, submodule, config.ignore):
-            for match in matches:
-                ignored_submodules[match].append(name)
-            continue  # layer matches ignore list, continue
+    for name, submodule in match_named_modules(
+        model, target_to_scheme, config.ignore, warn_on_fail=True
+    ):
+        # mark modules to be quantized by adding
+        # quant scheme to the matching layers
+        matched_targets = match_targets(name, submodule, target_to_scheme)
+        scheme = _scheme_from_targets(target_to_scheme, matched_targets, name)
+        # target matched - add layer and scheme to target list
+        submodule.quantization_scheme = scheme
 
-        targets = find_name_or_class_matches(name, submodule, target_to_scheme)
+        # replace with run compressed if applicable
+        # FUTURE: move this to model compressor
+        if (
+            run_compressed
+            and isinstance(submodule, torch.nn.Linear)
+            and config.format != CompressionFormat.dense.value
+        ):
+            # TODO: expand to more module types
+            compressed_linear = CompressedLinear.from_linear(
+                submodule,
+                quantization_scheme=scheme,
+                quantization_format=config.format,
+            )
+            replace_module(model, name, compressed_linear)
 
-        if targets:
-            # mark modules to be quantized by adding
-            # quant scheme to the matching layers
-            scheme = _scheme_from_targets(target_to_scheme, targets, name)
-            if run_compressed:
-                format = config.format
-                if format != CompressionFormat.dense.value:
-                    if isinstance(submodule, torch.nn.Linear):
-                        # TODO: expand to more module types
-                        compressed_linear = CompressedLinear.from_linear(
-                            submodule,
-                            quantization_scheme=scheme,
-                            quantization_format=format,
-                        )
-                        replace_module(model, name, compressed_linear)
-
-            # target matched - add layer and scheme to target list
-            submodule.quantization_scheme = scheme
-
-            names_to_scheme[name] = submodule.quantization_scheme
-
-    if config.ignore is not None and ignored_submodules is not None:
-        if set(config.ignore) - set(ignored_submodules):
-            _LOGGER.warning(
-                "Some layers that were to be ignored were "
-                "not found in the model: "
-                f"{set(config.ignore) - set(ignored_submodules)}"
+        else:
+            initialize_module_for_quantization(
+                submodule,
+                force_zero_point=config.quantization_status
+                != QuantizationStatus.COMPRESSED,
             )
 
-    # apply current quantization status across all targeted layers
-    apply_quantization_status(model, config.quantization_status)
-    return names_to_scheme
+        submodule.quantization_status = config.quantization_status
 
 
 def process_quantization_config(config: QuantizationConfig) -> QuantizationConfig:
@@ -230,86 +208,10 @@ def process_kv_cache_config(
     return config
 
 
-def apply_quantization_status(model: Module, status: QuantizationStatus):
-    """
-    Applies in place the quantization lifecycle up to the given status
-
-    :param model: model to apply quantization to
-    :param status: status to update the module to
-    """
-
-    current_status = infer_quantization_status(model)
-
-    if status >= QuantizationStatus.INITIALIZED > current_status:
-        force_zero_point_init = status != QuantizationStatus.COMPRESSED
-
-        # When decompressing, we set the scale_dtype as the model's dtype
-        # This is because the normal workflow of using the weight's dtype
-        # will be incorrect as the model weight will be compressed
-        # Therfore, use the dtype set by the user using the PretrainedModel
-        scale_dtype = None
-        if status == QuantizationStatus.FROZEN:
-            if hasattr(model, "dtype"):
-                scale_dtype = model.dtype
-
-        model.apply(
-            lambda module: initialize_module_for_quantization(
-                module, force_zero_point=force_zero_point_init, scale_dtype=scale_dtype
-            )
-        )
-
-    if current_status < status >= QuantizationStatus.COMPRESSED > current_status:
-        model.apply(compress_quantized_weights)
-
-
-def expand_target_names(
-    model: Module,
-    targets: Optional[Iterable[str]] = None,
-    ignore: Optional[Iterable[str]] = None,
-) -> Set[str]:
-    """
-    Finds all unique module names in the model that match the given
-    targets and ignore lists.
-
-    Note: Targets must be regexes, layer types, or full layer names.
-
-    :param model: model to search for targets in
-    :param targets: Iterable of targets to search for
-    :param ignore: Iterable of targets to ignore
-    :return: set of all targets that match the given targets and should
-        not be ignored
-    """
-    return {
-        name
-        for name, module in model.named_modules()
-        if is_target(name, module, targets, ignore)
-    }
-
-
-def is_target(
-    name: str,
-    module: Module,
-    targets: Optional[Iterable[str]] = None,
-    ignore: Optional[Iterable[str]] = None,
-) -> bool:
-    """
-    Determines if a module should be included in the targets based on the
-    targets and ignore lists.
-
-    Note: Targets must be regexes, layer types, or full layer names.
-
-    :param name: name of the module
-    :param module: the module itself
-    :param targets: Iterable of targets to search for
-    :param ignore: Iterable of targets to ignore
-    :return: True if the module is a target and not ignored, False otherwise
-    """
-    return bool(
-        find_name_or_class_matches(name, module, targets or [])
-        and not find_name_or_class_matches(name, module, ignore or [])
-    )
-
-
+@deprecated(
+    message="This function is deprecated and will be removed in a future release."
+    "Please use `match_targets` from `compressed_tensors.utils.match` instead."
+)
 def find_name_or_class_matches(
     name: str, module: Module, targets: Iterable[str], check_contains: bool = False
 ) -> List[str]:
@@ -322,46 +224,13 @@ def find_name_or_class_matches(
         2. matches on regex patterns
         3. matches on module names
     """
-    from compressed_tensors import InternalModule
-
-    if isinstance(module, InternalModule):
-        return []
-
-    targets = sorted(targets, key=lambda x: ("re:" in x, x))
-    if isinstance(targets, Iterable):
-        matches = _find_matches(name, targets) + _find_matches(
-            module.__class__.__name__, targets, check_contains
+    if check_contains:
+        raise NotImplementedError(
+            "This function is deprecated, and the check_contains=True option has been"
+            " removed."
         )
-        matches = [match for match in matches if match is not None]
-        return matches
 
-
-def _find_matches(
-    value: str, targets: Iterable[str], check_contains: bool = False
-) -> List[str]:
-    # returns all the targets that match value either
-    # exactly or as a regex after 're:'. if check_contains is set to True,
-    # additionally checks if the target string is contained with value.
-    matches = []
-    for target in targets:
-        if target.startswith("re:"):
-            pattern = target[3:]
-            if re.match(pattern, value):
-                matches.append(target)
-        elif check_contains:
-            if target.lower() in value.lower():
-                matches.append(target)
-        elif target == value:
-            matches.append(target)
-    return matches
-
-
-def _infer_status(model: Module) -> Optional[QuantizationStatus]:
-    for module in model.modules():
-        status = getattr(module, "quantization_status", None)
-        if status is not None:
-            return status
-    return None
+    return match_targets(name, module, targets)
 
 
 def _load_quant_args_from_mapping(
@@ -429,7 +298,6 @@ def _scheme_from_targets(
 def _merge_schemes(
     schemes_to_merge: List[QuantizationScheme], name: str
 ) -> QuantizationScheme:
-
     kv_cache_quantization_scheme = [
         scheme for scheme in schemes_to_merge if is_kv_cache_quant_scheme(scheme)
     ]

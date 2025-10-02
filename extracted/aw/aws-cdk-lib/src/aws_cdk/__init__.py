@@ -1022,7 +1022,7 @@ The properties passed to the level 2 constructs `AutoScalingGroup` and `Instance
 `aws-ec2` module abstract what is passed into the `CfnOption` properties `resourceSignal` and
 `autoScalingCreationPolicy`, but when using level 1 constructs you can specify these yourself.
 
-The CfnWaitCondition resource from the `aws-cloudformation` module suppports the `resourceSignal`.
+The CfnWaitCondition resource from the `aws-cloudformation` module supports the `resourceSignal`.
 The format of the timeout is `PT#H#M#S`. In the example below AWS Cloudformation will wait for
 3 success signals to occur within 15 minutes before the status of the resource will be set to
 `CREATE_COMPLETE`.
@@ -23289,24 +23289,24 @@ class Size(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Size"):
 
     Example::
 
-        # my_file_system: efs.IFileSystem
-        # my_job_role: iam.Role
-        
-        my_file_system.grant_read(my_job_role)
-        
-        job_defn = batch.EcsJobDefinition(self, "JobDefn",
-            container=batch.EcsEc2ContainerDefinition(self, "containerDefn",
-                image=ecs.ContainerImage.from_registry("public.ecr.aws/amazonlinux/amazonlinux:latest"),
-                memory=cdk.Size.mebibytes(2048),
-                cpu=256,
-                volumes=[batch.EcsVolume.efs(
-                    name="myVolume",
-                    file_system=my_file_system,
-                    container_path="/Volumes/myVolume",
-                    use_job_role=True
-                )],
-                job_role=my_job_role
-            )
+        # bucket: s3.Bucket
+        # Provide a Lambda function that will transform records before delivery, with custom
+        # buffering and retry configuration
+        lambda_function = lambda_.Function(self, "Processor",
+            runtime=lambda_.Runtime.NODEJS_LATEST,
+            handler="index.handler",
+            code=lambda_.Code.from_asset(path.join(__dirname, "process-records"))
+        )
+        lambda_processor = firehose.LambdaFunctionProcessor(lambda_function,
+            buffer_interval=Duration.minutes(5),
+            buffer_size=Size.mebibytes(5),
+            retries=5
+        )
+        s3_destination = firehose.S3Bucket(bucket,
+            processor=lambda_processor
+        )
+        firehose.DeliveryStream(self, "Delivery Stream",
+            destination=s3_destination
         )
     '''
 

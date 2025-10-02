@@ -29,6 +29,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Internet",
     "Typing :: Typed",
 ]
@@ -36,7 +37,7 @@ dependencies = [
     "anyio >=3.4.0,<5.0",
     "typing_extensions >=4.8.0; python_version < '3.10'",
 ]
-version = "0.0.8"
+version = "0.0.9"
 
 [project.urls]
 Homepage = "https://github.com/fastapi/asyncer"

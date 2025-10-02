@@ -584,6 +584,82 @@ fleet = codebuild.Fleet(self, "MyFleet",
 )
 ```
 
+### Custom instance types
+
+You can use [specific EC2 instance
+types](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment-reserved-capacity.instance-types)
+for your fleet by setting the `computeType` to `CUSTOM_INSTANCE_TYPE`.  This
+allows you to specify the `instanceType` in `computeConfiguration`. Only certain
+EC2 instance types are supported; see the linked documentation for details.
+
+```python
+from aws_cdk import Size
+
+
+fleet = codebuild.Fleet(self, "MyFleet",
+    base_capacity=1,
+    compute_type=codebuild.FleetComputeType.CUSTOM_INSTANCE_TYPE,
+    environment_type=codebuild.EnvironmentType.LINUX_CONTAINER,
+    compute_configuration=codebuild.ComputeConfiguration(
+        instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MEDIUM),
+        # By default, 64 GiB of disk space is included. Any value optionally
+        # specified here is _incremental_ on top of the included disk space.
+        disk=Size.gibibytes(10)
+    )
+)
+```
+
+### Fleet overflow behavior
+
+When your builds exceed the capacity of your fleet, you can specify how CodeBuild should handle the overflow builds by setting the `overflowBehavior` property:
+
+```python
+fleet = codebuild.Fleet(self, "Fleet",
+    compute_type=codebuild.FleetComputeType.MEDIUM,
+    environment_type=codebuild.EnvironmentType.LINUX_CONTAINER,
+    base_capacity=1,
+    overflow_behavior=codebuild.FleetOverflowBehavior.ON_DEMAND
+)
+```
+
+The available overflow behaviors are:
+
+* `QUEUE` (default): Overflow builds wait for existing fleet instances to become available
+* `ON_DEMAND`: Overflow builds run on CodeBuild on-demand instances
+
+Note: If you set overflow behavior to `ON_DEMAND` for a VPC-connected fleet, ensure your VPC settings allow access to public AWS services.
+
+### VPCs
+
+The same considerations that apply to [Project
+VPCs](#definition-of-vpc-configuration-in-codebuild-project) also apply to Fleet
+VPCs.  When using a Fleet in a CodeBuild Project, it is an error to configure a
+VPC on the Project. Configure a VPC on the fleet instead.
+
+```python
+# load_balancer: elbv2.ApplicationLoadBalancer
+
+
+vpc = ec2.Vpc(self, "MyVPC")
+fleet = codebuild.Fleet(self, "MyProject",
+    compute_type=codebuild.FleetComputeType.MEDIUM,
+    environment_type=codebuild.EnvironmentType.LINUX_CONTAINER,
+    base_capacity=1,
+    vpc=vpc
+)
+
+fleet.connections.allow_to(load_balancer, ec2.Port.tcp(443))
+
+project = codebuild.Project(self, "MyProject",
+    environment=codebuild.BuildEnvironment(
+        fleet=fleet
+    ),
+    build_spec=codebuild.BuildSpec.from_object({})
+)
+```
+
+> > > > > > > 39ec36ec6a (feat(codebuild): add custom instance type and VPC to Fleets)
+
 ## Logs
 
 CodeBuild lets you specify an S3 Bucket, CloudWatch Log Group or both to receive logs from your projects.
@@ -1160,6 +1236,7 @@ from ..aws_ec2 import (
     IConnectable as _IConnectable_10015a05,
     ISecurityGroup as _ISecurityGroup_acf8a799,
     IVpc as _IVpc_f30d5663,
+    InstanceType as _InstanceType_f64915b9,
     SubnetSelection as _SubnetSelection_e57d76df,
 )
 from ..aws_ecr import IRepository as _IRepository_e6004aa6
@@ -4295,6 +4372,7 @@ class CommonProjectProps:
     jsii_struct_bases=[],
     name_mapping={
         "disk": "disk",
+        "instance_type": "instanceType",
         "machine_type": "machineType",
         "memory": "memory",
         "v_cpu": "vCpu",
@@ -4305,23 +4383,18 @@ class ComputeConfiguration:
         self,
         *,
         disk: typing.Optional[_Size_7b441c34] = None,
+        instance_type: typing.Optional[_InstanceType_f64915b9] = None,
         machine_type: typing.Optional["MachineType"] = None,
         memory: typing.Optional[_Size_7b441c34] = None,
         v_cpu: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''The compute configuration for the fleet.
 
-        Despite what the CloudFormation schema says, the numeric properties (disk, memory, vCpu) are not optional.
-        An ``undefined`` value will cause the CloudFormation deployment to fail, e.g.
-        .. epigraph::
-
-           Cannot invoke "java.lang.Integer.intValue()" because the return value of "software.amazon.codebuild.fleet.ComputeConfiguration.getMemory()" is null
-           Therefore, these properties default value is set to 0.
-
-        :param disk: The amount of disk space of the instance type included in your fleet. Default: - No requirement, the actual value will be based on the other selected configuration properties
-        :param machine_type: The machine type of the instance type included in your fleet. Default: - No requirement, the actual value will be based on the other selected configuration properties
-        :param memory: The amount of memory of the instance type included in your fleet. Default: - No requirement, the actual value will be based on the other selected configuration properties
-        :param v_cpu: The number of vCPUs of the instance type included in your fleet. Default: - No requirement, the actual value will be based on the other selected configuration properties
+        :param disk: When using ATTRIBUTE_BASED, the amount of disk space of the instance type included in your fleet. When using CUSTOM_INSTANCE_TYPE, the additional amount of disk space to provision over the 64GB included by default. Default: - No requirement, the actual value will be based on the other selected configuration properties
+        :param instance_type: When using CUSTOM_INSTANCE_TYPE, the EC2 instance type to use for fleet instances. Not all instance types are supported by CodeBuild. If you use a disallowed type, the CloudFormation deployment will fail. Default: none
+        :param machine_type: When using ATTRIBUTE_BASED, the machine type of the instance type included in your fleet. Default: - No requirement, the actual value will be based on the other selected configuration properties
+        :param memory: When using ATTRIBUTE_BASED, the amount of memory of the instance type included in your fleet. Default: - No requirement, the actual value will be based on the other selected configuration properties
+        :param v_cpu: When using ATTRIBUTE_BASED, the number of vCPUs of the instance type included in your fleet. Default: - No requirement, the actual value will be based on the other selected configuration properties
 
         :exampleMetadata: infused
 
@@ -4345,12 +4418,15 @@ class ComputeConfiguration:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b104977b55c72c0577553444ac08838cdefde5acef91d6c00ad996d1c464b61b)
             check_type(argname="argument disk", value=disk, expected_type=type_hints["disk"])
+            check_type(argname="argument instance_type", value=instance_type, expected_type=type_hints["instance_type"])
             check_type(argname="argument machine_type", value=machine_type, expected_type=type_hints["machine_type"])
             check_type(argname="argument memory", value=memory, expected_type=type_hints["memory"])
             check_type(argname="argument v_cpu", value=v_cpu, expected_type=type_hints["v_cpu"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if disk is not None:
             self._values["disk"] = disk
+        if instance_type is not None:
+            self._values["instance_type"] = instance_type
         if machine_type is not None:
             self._values["machine_type"] = machine_type
         if memory is not None:
@@ -4360,7 +4436,11 @@ class ComputeConfiguration:
 
     @builtins.property
     def disk(self) -> typing.Optional[_Size_7b441c34]:
-        '''The amount of disk space of the instance type included in your fleet.
+        '''When using ATTRIBUTE_BASED, the amount of disk space of the instance type included in your fleet.
+
+        When using CUSTOM_INSTANCE_TYPE,
+        the additional amount of disk space to provision over the 64GB included by
+        default.
 
         :default: - No requirement, the actual value will be based on the other selected configuration properties
         '''
@@ -4368,8 +4448,22 @@ class ComputeConfiguration:
         return typing.cast(typing.Optional[_Size_7b441c34], result)
 
     @builtins.property
+    def instance_type(self) -> typing.Optional[_InstanceType_f64915b9]:
+        '''When using CUSTOM_INSTANCE_TYPE, the EC2 instance type to use for fleet instances.
+
+        Not all instance types are supported by CodeBuild. If you use a disallowed type, the
+        CloudFormation deployment will fail.
+
+        :default: none
+
+        :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment-reserved-capacity.instance-types
+        '''
+        result = self._values.get("instance_type")
+        return typing.cast(typing.Optional[_InstanceType_f64915b9], result)
+
+    @builtins.property
     def machine_type(self) -> typing.Optional["MachineType"]:
-        '''The machine type of the instance type included in your fleet.
+        '''When using ATTRIBUTE_BASED, the machine type of the instance type included in your fleet.
 
         :default: - No requirement, the actual value will be based on the other selected configuration properties
         '''
@@ -4378,7 +4472,7 @@ class ComputeConfiguration:
 
     @builtins.property
     def memory(self) -> typing.Optional[_Size_7b441c34]:
-        '''The amount of memory of the instance type included in your fleet.
+        '''When using ATTRIBUTE_BASED, the amount of memory of the instance type included in your fleet.
 
         :default: - No requirement, the actual value will be based on the other selected configuration properties
         '''
@@ -4387,7 +4481,7 @@ class ComputeConfiguration:
 
     @builtins.property
     def v_cpu(self) -> typing.Optional[jsii.Number]:
-        '''The number of vCPUs of the instance type included in your fleet.
+        '''When using ATTRIBUTE_BASED, the number of vCPUs of the instance type included in your fleet.
 
         :default: - No requirement, the actual value will be based on the other selected configuration properties
         '''
@@ -4480,6 +4574,7 @@ class ComputeType(enum.Enum):
     LAMBDA_8GB = "LAMBDA_8GB"
     LAMBDA_10GB = "LAMBDA_10GB"
     ATTRIBUTE_BASED = "ATTRIBUTE_BASED"
+    CUSTOM_INSTANCE_TYPE = "CUSTOM_INSTANCE_TYPE"
 
 
 @jsii.data_type(
@@ -4842,16 +4937,18 @@ class EnvironmentType(enum.Enum):
 
     Example::
 
-        fleet = codebuild.Fleet(self, "Fleet",
-            compute_type=codebuild.FleetComputeType.MEDIUM,
-            environment_type=codebuild.EnvironmentType.LINUX_CONTAINER,
-            base_capacity=1
-        )
+        from aws_cdk import Size
         
-        codebuild.Project(self, "Project",
-            environment=codebuild.BuildEnvironment(
-                fleet=fleet,
-                build_image=codebuild.LinuxBuildImage.STANDARD_7_0
+        
+        fleet = codebuild.Fleet(self, "MyFleet",
+            base_capacity=1,
+            compute_type=codebuild.FleetComputeType.CUSTOM_INSTANCE_TYPE,
+            environment_type=codebuild.EnvironmentType.LINUX_CONTAINER,
+            compute_configuration=codebuild.ComputeConfiguration(
+                instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MEDIUM),
+                # By default, 64 GiB of disk space is included. Any value optionally
+                # specified here is _incremental_ on top of the included disk space.
+                disk=Size.gibibytes(10)
             )
         )
     '''
@@ -5311,7 +5408,7 @@ class FilterGroup(
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_codebuild.FleetComputeType")
 class FleetComputeType(enum.Enum):
-    '''Fleet build machine compute type. Subset of Fleet compatible {@link ComputeType} values.
+    '''Fleet build machine compute type. Subset of Fleet compatible ComputeType values.
 
     The allocated memory, vCPU count and disk space of the build machine for a
     given compute type are dependent on the environment type.
@@ -5322,16 +5419,18 @@ class FleetComputeType(enum.Enum):
 
     Example::
 
-        fleet = codebuild.Fleet(self, "Fleet",
-            compute_type=codebuild.FleetComputeType.MEDIUM,
-            environment_type=codebuild.EnvironmentType.LINUX_CONTAINER,
-            base_capacity=1
-        )
+        from aws_cdk import Size
         
-        codebuild.Project(self, "Project",
-            environment=codebuild.BuildEnvironment(
-                fleet=fleet,
-                build_image=codebuild.LinuxBuildImage.STANDARD_7_0
+        
+        fleet = codebuild.Fleet(self, "MyFleet",
+            base_capacity=1,
+            compute_type=codebuild.FleetComputeType.CUSTOM_INSTANCE_TYPE,
+            environment_type=codebuild.EnvironmentType.LINUX_CONTAINER,
+            compute_configuration=codebuild.ComputeConfiguration(
+                instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MEDIUM),
+                # By default, 64 GiB of disk space is included. Any value optionally
+                # specified here is _incremental_ on top of the included disk space.
+                disk=Size.gibibytes(10)
             )
         )
     '''
@@ -5339,32 +5438,32 @@ class FleetComputeType(enum.Enum):
     SMALL = "SMALL"
     '''Small compute type.
 
-    May not be available for all environment types, see
-    {@link https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment.types docs}
-    for more information.
+    May not be available for all environment types.
+
+    :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment.types
     '''
     MEDIUM = "MEDIUM"
     '''Medium compute type.
 
-    May not be available for all environment types, see
-    {@link https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment.types docs}
-    for more information.
+    May not be available for all environment types.
+
+    :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment.types
     '''
     LARGE = "LARGE"
     '''Large compute type.'''
     X_LARGE = "X_LARGE"
     '''Extra Large compute type.
 
-    May not be available for all environment types, see
-    {@link https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment.types docs}
-    for more information.
+    May not be available for all environment types.
+
+    :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment.types
     '''
     X2_LARGE = "X2_LARGE"
     '''Extra, Extra Large compute type.
 
-    May not be available for all environment types, see
-    {@link https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment.types docs}
-    for more information.
+    May not be available for all environment types.
+
+    :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment.types
     '''
     ATTRIBUTE_BASED = "ATTRIBUTE_BASED"
     '''Specify the amount of vCPUs, memory, disk space, and the type of machine.
@@ -5373,6 +5472,36 @@ class FleetComputeType(enum.Enum):
 
     :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment-reserved-capacity.types
     '''
+    CUSTOM_INSTANCE_TYPE = "CUSTOM_INSTANCE_TYPE"
+    '''Specify a specific EC2 instance type to use for compute.
+
+    You must set ``instanceType`` on ``computeConfiguration``, and optionally set a
+    ``disk`` size if the provided 64GB is insufficient.
+
+    :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment-reserved-capacity.instance-types
+    '''
+
+
+@jsii.enum(jsii_type="aws-cdk-lib.aws_codebuild.FleetOverflowBehavior")
+class FleetOverflowBehavior(enum.Enum):
+    '''The compute fleet overflow behavior.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        fleet = codebuild.Fleet(self, "Fleet",
+            compute_type=codebuild.FleetComputeType.MEDIUM,
+            environment_type=codebuild.EnvironmentType.LINUX_CONTAINER,
+            base_capacity=1,
+            overflow_behavior=codebuild.FleetOverflowBehavior.ON_DEMAND
+        )
+    '''
+
+    QUEUE = "QUEUE"
+    '''Overflow builds wait for existing fleet instances to become available.'''
+    ON_DEMAND = "ON_DEMAND"
+    '''Overflow builds run on CodeBuild on-demand instances.'''
 
 
 @jsii.data_type(
@@ -5384,6 +5513,11 @@ class FleetComputeType(enum.Enum):
         "environment_type": "environmentType",
         "compute_configuration": "computeConfiguration",
         "fleet_name": "fleetName",
+        "overflow_behavior": "overflowBehavior",
+        "role": "role",
+        "security_groups": "securityGroups",
+        "subnet_selection": "subnetSelection",
+        "vpc": "vpc",
     },
 )
 class FleetProps:
@@ -5395,34 +5529,48 @@ class FleetProps:
         environment_type: EnvironmentType,
         compute_configuration: typing.Optional[typing.Union[ComputeConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
         fleet_name: typing.Optional[builtins.str] = None,
+        overflow_behavior: typing.Optional[FleetOverflowBehavior] = None,
+        role: typing.Optional[_IRole_235f5d8e] = None,
+        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional[_IVpc_f30d5663] = None,
     ) -> None:
-        '''Construction properties of a CodeBuild {@link Fleet}.
+        '''Construction properties of a CodeBuild Fleet.
 
         :param base_capacity: The number of machines allocated to the compute ﬂeet. Deﬁnes the number of builds that can run in parallel. Minimum value of 1.
         :param compute_type: The instance type of the compute fleet.
         :param environment_type: The build environment (operating system/architecture/accelerator) type made available to projects using this fleet.
-        :param compute_configuration: The compute configuration of the compute fleet. This is only required if ``computeType`` is set to ATTRIBUTE_BASED. Default: - do not specify compute configuration
+        :param compute_configuration: The compute configuration of the compute fleet. This is only permitted if ``computeType`` is set to ATTRIBUTE_BASED or CUSTOM_INSTANCE_TYPE. In such cases, this is required. Default: - do not specify compute configuration
         :param fleet_name: The name of the Fleet. Default: - CloudFormation generated name
+        :param overflow_behavior: The compute fleet overflow behavior. For overflow behavior ``QUEUE``, overflow builds need to wait on the existing fleet instances to become available. For overflow behavior ``ON_DEMAND``, overflow builds run on CodeBuild on-demand. Default: undefined - AWS CodeBuild default behavior is QUEUE
+        :param role: Service Role assumed by Fleet instances. This Role is not used by Project builds running on Fleet instances; Project builds assume the ``role`` on Project instead. Default: - A role will be created if any permissions are granted
+        :param security_groups: What security groups to associate with the fleet's network interfaces. If none are provided, one will be created automatically. Only used if ``vpc`` is supplied. Default: - A security group will be automatically created.
+        :param subnet_selection: Where to place the network interfaces within the VPC. To access AWS services, your fleet needs to be in one of the following types of subnets: 1. Subnets with access to the internet (of type PRIVATE_WITH_EGRESS). 2. Private subnets unconnected to the internet, but with `VPC endpoints <https://docs.aws.amazon.com/codebuild/latest/userguide/use-vpc-endpoints-with-codebuild.html>`_ for the necessary services. If you don't specify a subnet selection, the default behavior is to use PRIVATE_WITH_EGRESS subnets first if they exist, then PRIVATE_WITHOUT_EGRESS, and finally PUBLIC subnets. If your VPC doesn't have PRIVATE_WITH_EGRESS subnets but you need AWS service access, add VPC Endpoints to your private subnets. Default: - private subnets if available else public subnets
+        :param vpc: VPC network to place fleet instance network interfaces. Specify this if the fleet needs to access resources in a VPC. Default: - No VPC is specified.
 
         :exampleMetadata: infused
 
         Example::
 
-            fleet = codebuild.Fleet(self, "Fleet",
-                compute_type=codebuild.FleetComputeType.MEDIUM,
-                environment_type=codebuild.EnvironmentType.LINUX_CONTAINER,
-                base_capacity=1
-            )
+            from aws_cdk import Size
             
-            codebuild.Project(self, "Project",
-                environment=codebuild.BuildEnvironment(
-                    fleet=fleet,
-                    build_image=codebuild.LinuxBuildImage.STANDARD_7_0
+            
+            fleet = codebuild.Fleet(self, "MyFleet",
+                base_capacity=1,
+                compute_type=codebuild.FleetComputeType.CUSTOM_INSTANCE_TYPE,
+                environment_type=codebuild.EnvironmentType.LINUX_CONTAINER,
+                compute_configuration=codebuild.ComputeConfiguration(
+                    instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MEDIUM),
+                    # By default, 64 GiB of disk space is included. Any value optionally
+                    # specified here is _incremental_ on top of the included disk space.
+                    disk=Size.gibibytes(10)
                 )
             )
         '''
         if isinstance(compute_configuration, dict):
             compute_configuration = ComputeConfiguration(**compute_configuration)
+        if isinstance(subnet_selection, dict):
+            subnet_selection = _SubnetSelection_e57d76df(**subnet_selection)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e7911aefc20674030e6eb6a13611d08046f9412fc45f97ff43a4ecf7591a2d5d)
             check_type(argname="argument base_capacity", value=base_capacity, expected_type=type_hints["base_capacity"])
@@ -5430,6 +5578,11 @@ class FleetProps:
             check_type(argname="argument environment_type", value=environment_type, expected_type=type_hints["environment_type"])
             check_type(argname="argument compute_configuration", value=compute_configuration, expected_type=type_hints["compute_configuration"])
             check_type(argname="argument fleet_name", value=fleet_name, expected_type=type_hints["fleet_name"])
+            check_type(argname="argument overflow_behavior", value=overflow_behavior, expected_type=type_hints["overflow_behavior"])
+            check_type(argname="argument role", value=role, expected_type=type_hints["role"])
+            check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
+            check_type(argname="argument subnet_selection", value=subnet_selection, expected_type=type_hints["subnet_selection"])
+            check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "base_capacity": base_capacity,
             "compute_type": compute_type,
@@ -5439,6 +5592,16 @@ class FleetProps:
             self._values["compute_configuration"] = compute_configuration
         if fleet_name is not None:
             self._values["fleet_name"] = fleet_name
+        if overflow_behavior is not None:
+            self._values["overflow_behavior"] = overflow_behavior
+        if role is not None:
+            self._values["role"] = role
+        if security_groups is not None:
+            self._values["security_groups"] = security_groups
+        if subnet_selection is not None:
+            self._values["subnet_selection"] = subnet_selection
+        if vpc is not None:
+            self._values["vpc"] = vpc
 
     @builtins.property
     def base_capacity(self) -> jsii.Number:
@@ -5471,7 +5634,8 @@ class FleetProps:
     def compute_configuration(self) -> typing.Optional[ComputeConfiguration]:
         '''The compute configuration of the compute fleet.
 
-        This is only required if ``computeType`` is set to ATTRIBUTE_BASED.
+        This is only permitted if ``computeType`` is set to ATTRIBUTE_BASED or
+        CUSTOM_INSTANCE_TYPE. In such cases, this is required.
 
         :default: - do not specify compute configuration
 
@@ -5488,6 +5652,73 @@ class FleetProps:
         '''
         result = self._values.get("fleet_name")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def overflow_behavior(self) -> typing.Optional[FleetOverflowBehavior]:
+        '''The compute fleet overflow behavior.
+
+        For overflow behavior ``QUEUE``, overflow builds need to wait on the existing fleet instances to become available.
+
+        For overflow behavior ``ON_DEMAND``, overflow builds run on CodeBuild on-demand.
+
+        :default: undefined - AWS CodeBuild default behavior is QUEUE
+        '''
+        result = self._values.get("overflow_behavior")
+        return typing.cast(typing.Optional[FleetOverflowBehavior], result)
+
+    @builtins.property
+    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+        '''Service Role assumed by Fleet instances.
+
+        This Role is not used by Project builds running on Fleet instances; Project
+        builds assume the ``role`` on Project instead.
+
+        :default: - A role will be created if any permissions are granted
+        '''
+        result = self._values.get("role")
+        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+
+    @builtins.property
+    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+        '''What security groups to associate with the fleet's network interfaces. If none are provided, one will be created automatically.
+
+        Only used if ``vpc`` is supplied.
+
+        :default: - A security group will be automatically created.
+        '''
+        result = self._values.get("security_groups")
+        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+
+    @builtins.property
+    def subnet_selection(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+        '''Where to place the network interfaces within the VPC.
+
+        To access AWS services, your fleet needs to be in one of the following types of subnets:
+
+        1. Subnets with access to the internet (of type PRIVATE_WITH_EGRESS).
+        2. Private subnets unconnected to the internet, but with `VPC endpoints <https://docs.aws.amazon.com/codebuild/latest/userguide/use-vpc-endpoints-with-codebuild.html>`_ for the necessary services.
+
+        If you don't specify a subnet selection, the default behavior is to use PRIVATE_WITH_EGRESS subnets first if they exist,
+        then PRIVATE_WITHOUT_EGRESS, and finally PUBLIC subnets. If your VPC doesn't have PRIVATE_WITH_EGRESS subnets but you need
+        AWS service access, add VPC Endpoints to your private subnets.
+
+        :default: - private subnets if available else public subnets
+
+        :see: https://docs.aws.amazon.com/codebuild/latest/userguide/vpc-support.html
+        '''
+        result = self._values.get("subnet_selection")
+        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+
+    @builtins.property
+    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+        '''VPC network to place fleet instance network interfaces.
+
+        Specify this if the fleet needs to access resources in a VPC.
+
+        :default: - No VPC is specified.
+        '''
+        result = self._values.get("vpc")
+        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6076,8 +6307,13 @@ typing.cast(typing.Any, IFileSystemLocation).__jsii_proxy_class__ = lambda : _IF
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codebuild.IFleet")
-class IFleet(_IResource_c80c4260, typing_extensions.Protocol):
-    '''Represents a {@link Fleet} for a reserved capacity CodeBuild project.'''
+class IFleet(
+    _IResource_c80c4260,
+    _IGrantable_71c4f5de,
+    _IConnectable_10015a05,
+    typing_extensions.Protocol,
+):
+    '''Represents a Fleet for a reserved capacity CodeBuild project.'''
 
     @builtins.property
     @jsii.member(jsii_name="computeType")
@@ -6115,8 +6351,10 @@ class IFleet(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IFleetProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IGrantable_71c4f5de), # type: ignore[misc]
+    jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
 ):
-    '''Represents a {@link Fleet} for a reserved capacity CodeBuild project.'''
+    '''Represents a Fleet for a reserved capacity CodeBuild project.'''
 
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_codebuild.IFleet"
 
@@ -18585,6 +18823,11 @@ class Fleet(
         environment_type: EnvironmentType,
         compute_configuration: typing.Optional[typing.Union[ComputeConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
         fleet_name: typing.Optional[builtins.str] = None,
+        overflow_behavior: typing.Optional[FleetOverflowBehavior] = None,
+        role: typing.Optional[_IRole_235f5d8e] = None,
+        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional[_IVpc_f30d5663] = None,
     ) -> None:
         '''
         :param scope: -
@@ -18592,8 +18835,13 @@ class Fleet(
         :param base_capacity: The number of machines allocated to the compute ﬂeet. Deﬁnes the number of builds that can run in parallel. Minimum value of 1.
         :param compute_type: The instance type of the compute fleet.
         :param environment_type: The build environment (operating system/architecture/accelerator) type made available to projects using this fleet.
-        :param compute_configuration: The compute configuration of the compute fleet. This is only required if ``computeType`` is set to ATTRIBUTE_BASED. Default: - do not specify compute configuration
+        :param compute_configuration: The compute configuration of the compute fleet. This is only permitted if ``computeType`` is set to ATTRIBUTE_BASED or CUSTOM_INSTANCE_TYPE. In such cases, this is required. Default: - do not specify compute configuration
         :param fleet_name: The name of the Fleet. Default: - CloudFormation generated name
+        :param overflow_behavior: The compute fleet overflow behavior. For overflow behavior ``QUEUE``, overflow builds need to wait on the existing fleet instances to become available. For overflow behavior ``ON_DEMAND``, overflow builds run on CodeBuild on-demand. Default: undefined - AWS CodeBuild default behavior is QUEUE
+        :param role: Service Role assumed by Fleet instances. This Role is not used by Project builds running on Fleet instances; Project builds assume the ``role`` on Project instead. Default: - A role will be created if any permissions are granted
+        :param security_groups: What security groups to associate with the fleet's network interfaces. If none are provided, one will be created automatically. Only used if ``vpc`` is supplied. Default: - A security group will be automatically created.
+        :param subnet_selection: Where to place the network interfaces within the VPC. To access AWS services, your fleet needs to be in one of the following types of subnets: 1. Subnets with access to the internet (of type PRIVATE_WITH_EGRESS). 2. Private subnets unconnected to the internet, but with `VPC endpoints <https://docs.aws.amazon.com/codebuild/latest/userguide/use-vpc-endpoints-with-codebuild.html>`_ for the necessary services. If you don't specify a subnet selection, the default behavior is to use PRIVATE_WITH_EGRESS subnets first if they exist, then PRIVATE_WITHOUT_EGRESS, and finally PUBLIC subnets. If your VPC doesn't have PRIVATE_WITH_EGRESS subnets but you need AWS service access, add VPC Endpoints to your private subnets. Default: - private subnets if available else public subnets
+        :param vpc: VPC network to place fleet instance network interfaces. Specify this if the fleet needs to access resources in a VPC. Default: - No VPC is specified.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__68e9f035c12fa2c35bc62bc8d306e3651814bea9f53875aeea43b85f6612b957)
@@ -18605,6 +18853,11 @@ class Fleet(
             environment_type=environment_type,
             compute_configuration=compute_configuration,
             fleet_name=fleet_name,
+            overflow_behavior=overflow_behavior,
+            role=role,
+            security_groups=security_groups,
+            subnet_selection=subnet_selection,
+            vpc=vpc,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -18646,6 +18899,12 @@ class Fleet(
         return typing.cast(FleetComputeType, jsii.get(self, "computeType"))
 
     @builtins.property
+    @jsii.member(jsii_name="connections")
+    def connections(self) -> _Connections_0f31fce8:
+        '''The network connections associated with this Fleet's security group(s) in the configured VPC.'''
+        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+
+    @builtins.property
     @jsii.member(jsii_name="environmentType")
     def environment_type(self) -> EnvironmentType:
         '''The build environment (operating system/architecture/accelerator) type made available to projects using this fleet.'''
@@ -18662,6 +18921,12 @@ class Fleet(
     def fleet_name(self) -> builtins.str:
         '''The name of the fleet.'''
         return typing.cast(builtins.str, jsii.get(self, "fleetName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="grantPrincipal")
+    def grant_principal(self) -> _IPrincipal_539bb2fd:
+        '''The grant principal for this Fleet's service role.'''
+        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
 
 
 @jsii.data_type(
@@ -19787,6 +20052,7 @@ __all__ = [
     "FilterGroup",
     "Fleet",
     "FleetComputeType",
+    "FleetOverflowBehavior",
     "FleetProps",
     "FleetReference",
     "GitHubEnterpriseSourceCredentials",
@@ -20085,6 +20351,7 @@ def _typecheckingstub__45bdedf6c9b38dcb0797768fa0fdec382e282ebd8679405f7dd9df6cb
 def _typecheckingstub__b104977b55c72c0577553444ac08838cdefde5acef91d6c00ad996d1c464b61b(
     *,
     disk: typing.Optional[_Size_7b441c34] = None,
+    instance_type: typing.Optional[_InstanceType_f64915b9] = None,
     machine_type: typing.Optional[MachineType] = None,
     memory: typing.Optional[_Size_7b441c34] = None,
     v_cpu: typing.Optional[jsii.Number] = None,
@@ -20245,6 +20512,11 @@ def _typecheckingstub__e7911aefc20674030e6eb6a13611d08046f9412fc45f97ff43a4ecf75
     environment_type: EnvironmentType,
     compute_configuration: typing.Optional[typing.Union[ComputeConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
     fleet_name: typing.Optional[builtins.str] = None,
+    overflow_behavior: typing.Optional[FleetOverflowBehavior] = None,
+    role: typing.Optional[_IRole_235f5d8e] = None,
+    security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+    subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+    vpc: typing.Optional[_IVpc_f30d5663] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21803,6 +22075,11 @@ def _typecheckingstub__68e9f035c12fa2c35bc62bc8d306e3651814bea9f53875aeea43b85f6
     environment_type: EnvironmentType,
     compute_configuration: typing.Optional[typing.Union[ComputeConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
     fleet_name: typing.Optional[builtins.str] = None,
+    overflow_behavior: typing.Optional[FleetOverflowBehavior] = None,
+    role: typing.Optional[_IRole_235f5d8e] = None,
+    security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+    subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+    vpc: typing.Optional[_IVpc_f30d5663] = None,
 ) -> None:
     """Type checking stubs"""
     pass

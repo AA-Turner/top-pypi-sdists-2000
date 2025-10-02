@@ -2684,7 +2684,7 @@ class CfnRoutingProfileProps:
         :param media_concurrencies: The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.
         :param name: The name of the routing profile.
         :param agent_availability_timer: Whether agents with this routing profile will have their routing order calculated based on *time since their last inbound contact* or *longest idle time* .
-        :param manual_assignment_queue_configs: The manual assignment queues to associate with this routing profile.
+        :param manual_assignment_queue_configs: Contains information about the queue and channel for manual assignment behaviour can be enabled.
         :param queue_configs: The inbound queues associated with the routing profile. If no queue is added, the agent can make only outbound calls.
         :param tags: The tags used to organize, track, or control access for this resource. For example, { "Tags": {"key1":"value1", "key2":"value2"} }.
 
@@ -2826,7 +2826,7 @@ class CfnRoutingProfileProps:
     def manual_assignment_queue_configs(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty"]]]]:
-        '''The manual assignment queues to associate with this routing profile.
+        '''Contains information about the queue and channel for manual assignment behaviour can be enabled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-routingprofile.html#cfn-connect-routingprofile-manualassignmentqueueconfigs
         '''
@@ -14021,7 +14021,7 @@ class CfnRoutingProfile(
         :param media_concurrencies: The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.
         :param name: The name of the routing profile.
         :param agent_availability_timer: Whether agents with this routing profile will have their routing order calculated based on *time since their last inbound contact* or *longest idle time* .
-        :param manual_assignment_queue_configs: The manual assignment queues to associate with this routing profile.
+        :param manual_assignment_queue_configs: Contains information about the queue and channel for manual assignment behaviour can be enabled.
         :param queue_configs: The inbound queues associated with the routing profile. If no queue is added, the agent can make only outbound calls.
         :param tags: The tags used to organize, track, or control access for this resource. For example, { "Tags": {"key1":"value1", "key2":"value2"} }.
         '''
@@ -14187,7 +14187,7 @@ class CfnRoutingProfile(
     def manual_assignment_queue_configs(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty"]]]]:
-        '''The manual assignment queues to associate with this routing profile.'''
+        '''Contains information about the queue and channel for manual assignment behaviour can be enabled.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty"]]]], jsii.get(self, "manualAssignmentQueueConfigs"))
 
     @manual_assignment_queue_configs.setter
@@ -14398,9 +14398,9 @@ class CfnRoutingProfile(
             *,
             queue_reference: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingProfile.RoutingProfileQueueReferenceProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
-            '''Contains information about the manual assignment queue and channel.
+            '''Contains information about the queue and channel for manual assignment behaviour can be enabled.
 
-            :param queue_reference: Contains the channel and queue identifier for a routing profile.
+            :param queue_reference: Contains information about a queue resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-routingprofile-routingprofilemanualassignmentqueueconfig.html
             :exampleMetadata: fixture=_generated
@@ -14429,7 +14429,7 @@ class CfnRoutingProfile(
         def queue_reference(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnRoutingProfile.RoutingProfileQueueReferenceProperty"]:
-            '''Contains the channel and queue identifier for a routing profile.
+            '''Contains information about a queue resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-routingprofile-routingprofilemanualassignmentqueueconfig.html#cfn-connect-routingprofile-routingprofilemanualassignmentqueueconfig-queuereference
             '''
@@ -18125,7 +18125,7 @@ class CfnUser(
             :param after_contact_work_time_limit: The After Call Work (ACW) timeout setting, in seconds. This parameter has a minimum value of 0 and a maximum value of 2,000,000 seconds (24 days). Enter 0 if you don't want to allocate a specific amount of ACW time. It essentially means an indefinite amount of time. When the conversation ends, ACW starts; the agent must choose Close contact to end ACW. .. epigraph:: When returned by a ``SearchUsers`` call, ``AfterContactWorkTimeLimit`` is returned in milliseconds.
             :param auto_accept: The Auto accept setting.
             :param desk_phone_number: The phone number for the user's desk phone.
-            :param persistent_connection: The Persistent Connection setting.
+            :param persistent_connection: The persistent connection setting for the user.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-user-userphoneconfig.html
             :exampleMetadata: fixture=_generated
@@ -18213,7 +18213,7 @@ class CfnUser(
         def persistent_connection(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''The Persistent Connection setting.
+            '''The persistent connection setting for the user.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-user-userphoneconfig.html#cfn-connect-user-userphoneconfig-persistentconnection
             '''

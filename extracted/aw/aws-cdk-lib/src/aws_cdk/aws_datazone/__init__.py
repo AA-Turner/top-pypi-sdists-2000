@@ -1709,12 +1709,12 @@ class CfnFormTypeProps:
     ) -> None:
         '''Properties for defining a ``CfnFormType``.
 
-        :param domain_identifier: The ID of the Amazon DataZone domain in which this metadata form type is created.
-        :param model: Indicates the smithy model of the API.
-        :param name: The name of this Amazon DataZone metadata form type.
-        :param owning_project_identifier: The ID of the Amazon DataZone project that owns this metadata form type.
-        :param description: The description of this Amazon DataZone metadata form type.
-        :param status: The status of this Amazon DataZone metadata form type.
+        :param domain_identifier: The identifier of the Amazon DataZone domain in which the form type exists.
+        :param model: The model of the form type.
+        :param name: The name of the form type.
+        :param owning_project_identifier: The identifier of the project that owns the form type.
+        :param description: The description of the metadata form type.
+        :param status: The status of the form type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html
         :exampleMetadata: fixture=_generated
@@ -1759,7 +1759,7 @@ class CfnFormTypeProps:
 
     @builtins.property
     def domain_identifier(self) -> builtins.str:
-        '''The ID of the Amazon DataZone domain in which this metadata form type is created.
+        '''The identifier of the Amazon DataZone domain in which the form type exists.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-domainidentifier
         '''
@@ -1769,7 +1769,7 @@ class CfnFormTypeProps:
 
     @builtins.property
     def model(self) -> typing.Union[_IResolvable_da3f097b, "CfnFormType.ModelProperty"]:
-        '''Indicates the smithy model of the API.
+        '''The model of the form type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-model
         '''
@@ -1779,7 +1779,7 @@ class CfnFormTypeProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''The name of this Amazon DataZone metadata form type.
+        '''The name of the form type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-name
         '''
@@ -1789,7 +1789,7 @@ class CfnFormTypeProps:
 
     @builtins.property
     def owning_project_identifier(self) -> builtins.str:
-        '''The ID of the Amazon DataZone project that owns this metadata form type.
+        '''The identifier of the project that owns the form type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-owningprojectidentifier
         '''
@@ -1799,7 +1799,7 @@ class CfnFormTypeProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''The description of this Amazon DataZone metadata form type.
+        '''The description of the metadata form type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-description
         '''
@@ -1808,7 +1808,7 @@ class CfnFormTypeProps:
 
     @builtins.property
     def status(self) -> typing.Optional[builtins.str]:
-        '''The status of this Amazon DataZone metadata form type.
+        '''The status of the form type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html#cfn-datazone-formtype-status
         '''
@@ -11744,7 +11744,7 @@ class CfnFormType(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_datazone.CfnFormType",
 ):
-    '''Create and manage form types in Amazon Datazone.
+    '''The details of the metadata form type.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-formtype.html
     :cloudformationResource: AWS::DataZone::FormType
@@ -11785,12 +11785,12 @@ class CfnFormType(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param domain_identifier: The ID of the Amazon DataZone domain in which this metadata form type is created.
-        :param model: Indicates the smithy model of the API.
-        :param name: The name of this Amazon DataZone metadata form type.
-        :param owning_project_identifier: The ID of the Amazon DataZone project that owns this metadata form type.
-        :param description: The description of this Amazon DataZone metadata form type.
-        :param status: The status of this Amazon DataZone metadata form type.
+        :param domain_identifier: The identifier of the Amazon DataZone domain in which the form type exists.
+        :param model: The model of the form type.
+        :param name: The name of the form type.
+        :param owning_project_identifier: The identifier of the project that owns the form type.
+        :param description: The description of the metadata form type.
+        :param status: The status of the form type.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f81071a1a99e5415d6626de96c93bf3bae9973b224056b0dd081b7dea58b9c42)
@@ -11840,7 +11840,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedAt")
     def attr_created_at(self) -> builtins.str:
-        '''The timestamp of when this Amazon DataZone metadata form type was created.
+        '''The timestamp of when the metadata form type was created.
 
         :cloudformationAttribute: CreatedAt
         '''
@@ -11849,7 +11849,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedBy")
     def attr_created_by(self) -> builtins.str:
-        '''The user who created this Amazon DataZone metadata form type.
+        '''The Amazon DataZone user who created teh metadata form type.
 
         :cloudformationAttribute: CreatedBy
         '''
@@ -11858,7 +11858,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="attrDomainId")
     def attr_domain_id(self) -> builtins.str:
-        '''The ID of the Amazon DataZone domain in which this metadata form type is created.
+        '''The identifier of the Amazon DataZone domain in which the form type exists.
 
         :cloudformationAttribute: DomainId
         '''
@@ -11867,7 +11867,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="attrFormTypeIdentifier")
     def attr_form_type_identifier(self) -> builtins.str:
-        '''The ID of this Amazon DataZone metadata form type.
+        '''The ID of the metadata form type.
 
         :cloudformationAttribute: FormTypeIdentifier
         '''
@@ -11876,7 +11876,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="attrOwningProjectId")
     def attr_owning_project_id(self) -> builtins.str:
-        '''The ID of the project that owns this Amazon DataZone metadata form type.
+        '''The identifier of the project that owns the form type.
 
         :cloudformationAttribute: OwningProjectId
         '''
@@ -11885,7 +11885,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="attrRevision")
     def attr_revision(self) -> builtins.str:
-        '''The revision of this Amazon DataZone metadata form type.
+        '''The revision of the form type.
 
         :cloudformationAttribute: Revision
         '''
@@ -11905,7 +11905,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="domainIdentifier")
     def domain_identifier(self) -> builtins.str:
-        '''The ID of the Amazon DataZone domain in which this metadata form type is created.'''
+        '''The identifier of the Amazon DataZone domain in which the form type exists.'''
         return typing.cast(builtins.str, jsii.get(self, "domainIdentifier"))
 
     @domain_identifier.setter
@@ -11918,7 +11918,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="model")
     def model(self) -> typing.Union[_IResolvable_da3f097b, "CfnFormType.ModelProperty"]:
-        '''Indicates the smithy model of the API.'''
+        '''The model of the form type.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFormType.ModelProperty"], jsii.get(self, "model"))
 
     @model.setter
@@ -11934,7 +11934,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''The name of this Amazon DataZone metadata form type.'''
+        '''The name of the form type.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -11947,7 +11947,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="owningProjectIdentifier")
     def owning_project_identifier(self) -> builtins.str:
-        '''The ID of the Amazon DataZone project that owns this metadata form type.'''
+        '''The identifier of the project that owns the form type.'''
         return typing.cast(builtins.str, jsii.get(self, "owningProjectIdentifier"))
 
     @owning_project_identifier.setter
@@ -11960,7 +11960,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
-        '''The description of this Amazon DataZone metadata form type.'''
+        '''The description of the metadata form type.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -11973,7 +11973,7 @@ class CfnFormType(
     @builtins.property
     @jsii.member(jsii_name="status")
     def status(self) -> typing.Optional[builtins.str]:
-        '''The status of this Amazon DataZone metadata form type.'''
+        '''The status of the form type.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "status"))
 
     @status.setter
@@ -12294,7 +12294,8 @@ class CfnOwner(
     @builtins.property
     @jsii.member(jsii_name="attrOwnerIdentifier")
     def attr_owner_identifier(self) -> builtins.str:
-        '''
+        '''The ID of the entity to which you want to add an owner.
+
         :cloudformationAttribute: OwnerIdentifier
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrOwnerIdentifier"))
@@ -12302,7 +12303,8 @@ class CfnOwner(
     @builtins.property
     @jsii.member(jsii_name="attrOwnerType")
     def attr_owner_type(self) -> builtins.str:
-        '''
+        '''The owner that you want to add to the entity.
+
         :cloudformationAttribute: OwnerType
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrOwnerType"))

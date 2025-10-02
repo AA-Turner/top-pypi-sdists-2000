@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: llvmlite
-Version: 0.45.0
+Version: 0.45.1
 Summary: lightweight wrapper around basic LLVM functionality
 Home-page: http://llvmlite.readthedocs.io
 License: BSD

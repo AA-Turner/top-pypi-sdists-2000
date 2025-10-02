@@ -6,7 +6,6 @@ import gzip
 import http.client as http_client
 import inspect
 import logging
-import warnings
 from enum import Enum
 from typing import TYPE_CHECKING, Any
 from urllib.parse import urljoin
@@ -15,7 +14,7 @@ import attr
 import urllib3.util
 from openlineage.client.serde import Serde
 from openlineage.client.transport.transport import Config, Transport
-from openlineage.client.utils import get_only_specified_fields, try_import_from_string
+from openlineage.client.utils import get_only_specified_fields, import_from_string
 from requests import Session
 from requests.adapters import HTTPAdapter
 
@@ -45,28 +44,34 @@ class HttpCompression(Enum):
 class ApiKeyTokenProvider(TokenProvider):
     def __init__(self, config: dict[str, str]) -> None:
         super().__init__(config)
-        try:
-            self.api_key = config["api_key"]
-            msg = "'api_key' option is deprecated, please use 'apiKey'"
-            warnings.warn(msg, DeprecationWarning, stacklevel=2)
-        except KeyError:
-            self.api_key = config["apiKey"]
+        self.api_key = config.get("apiKey") or config.get("apikey") or config.get("api_key")
+        if not self.api_key:
+            msg = "apiKey is required for HTTP Transport when auth type is `api_key`."
+            raise KeyError(msg)
 
     def get_bearer(self) -> str | None:
         return f"Bearer {self.api_key}"
 
 
 def create_token_provider(auth: dict[str, str]) -> TokenProvider:
-    if "type" in auth:
-        if auth["type"] == "api_key":
-            return ApiKeyTokenProvider(auth)
+    if "type" not in auth:
+        log.debug("No auth type specified, fallback to default TokenProvider")
+        return TokenProvider({})
 
-        of_type: str = auth["type"]
-        subclass = try_import_from_string(of_type)
-        if inspect.isclass(subclass) and issubclass(subclass, TokenProvider):
-            return subclass(auth)
+    if auth["type"] == "api_key":
+        log.debug("Using ApiKeyTokenProvider")
+        return ApiKeyTokenProvider(auth)
 
-    return TokenProvider({})
+    of_type: str = auth["type"]
+    subclass = import_from_string(of_type)
+
+    if not inspect.isclass(subclass):
+        raise TypeError(f"Expected token provider {subclass} to be a class")
+    if not issubclass(subclass, TokenProvider):
+        raise TypeError(f"{subclass} is not a subclass of TokenProvider")
+
+    log.debug("Using %s as token provider", subclass)
+    return subclass(auth)
 
 
 def get_session() -> Session:

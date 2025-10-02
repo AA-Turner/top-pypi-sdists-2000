@@ -137,7 +137,6 @@ class BrokerReference:
         "engine_type": "engineType",
         "host_instance_type": "hostInstanceType",
         "publicly_accessible": "publiclyAccessible",
-        "users": "users",
         "authentication_strategy": "authenticationStrategy",
         "auto_minor_version_upgrade": "autoMinorVersionUpgrade",
         "configuration": "configuration",
@@ -152,6 +151,7 @@ class BrokerReference:
         "storage_type": "storageType",
         "subnet_ids": "subnetIds",
         "tags": "tags",
+        "users": "users",
     },
 )
 class CfnBrokerProps:
@@ -163,7 +163,6 @@ class CfnBrokerProps:
         engine_type: builtins.str,
         host_instance_type: builtins.str,
         publicly_accessible: typing.Union[builtins.bool, _IResolvable_da3f097b],
-        users: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.UserProperty", typing.Dict[builtins.str, typing.Any]]]]],
         authentication_strategy: typing.Optional[builtins.str] = None,
         auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.ConfigurationIdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -178,6 +177,7 @@ class CfnBrokerProps:
         storage_type: typing.Optional[builtins.str] = None,
         subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnBroker.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        users: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.UserProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBroker``.
 
@@ -186,7 +186,6 @@ class CfnBrokerProps:
         :param engine_type: The type of broker engine. Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
         :param host_instance_type: The broker's instance type.
         :param publicly_accessible: Enables connections from applications outside of the VPC that hosts the broker's subnets.
-        :param users: The list of broker users (persons or applications) who can access queues and topics. For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent RabbitMQ users are created by via the RabbitMQ web console or by using the RabbitMQ management API.
         :param authentication_strategy: Optional. The authentication strategy used to secure the broker. The default is ``SIMPLE`` .
         :param auto_minor_version_upgrade: Enables automatic upgrades to new minor versions for brokers, as new broker engine versions are released and supported by Amazon MQ. Automatic upgrades occur during the scheduled maintenance window of the broker or after a manual broker reboot.
         :param configuration: A list of information about the configuration. Does not apply to RabbitMQ brokers.
@@ -201,6 +200,7 @@ class CfnBrokerProps:
         :param storage_type: The broker's storage type.
         :param subnet_ids: The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. If you specify more than one subnet, the subnets must be in different Availability Zones. Amazon MQ will not be able to create VPC endpoints for your broker with multiple subnets in the same Availability Zone. A SINGLE_INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE_STANDBY_MULTI_AZ deployment (ACTIVEMQ) requires two subnets. A CLUSTER_MULTI_AZ deployment (RABBITMQ) has no subnet requirements when deployed with public accessibility, deployment without public accessibility requires at least one subnet. .. epigraph:: If you specify subnets in a shared VPC for a RabbitMQ broker, the associated VPC to which the specified subnets belong must be owned by your AWS account . Amazon MQ will not be able to create VPC enpoints in VPCs that are not owned by your AWS account .
         :param tags: An array of key-value pairs. For more information, see `Using Cost Allocation Tags <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html>`_ in the *Billing and Cost Management User Guide* .
+        :param users: The list of broker users (persons or applications) who can access queues and topics. For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent RabbitMQ users are created by via the RabbitMQ web console or by using the RabbitMQ management API.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html
         :exampleMetadata: fixture=_generated
@@ -217,15 +217,6 @@ class CfnBrokerProps:
                 engine_type="engineType",
                 host_instance_type="hostInstanceType",
                 publicly_accessible=False,
-                users=[amazonmq.CfnBroker.UserProperty(
-                    password="password",
-                    username="username",
-            
-                    # the properties below are optional
-                    console_access=False,
-                    groups=["groups"],
-                    replication_user=False
-                )],
             
                 # the properties below are optional
                 authentication_strategy="authenticationStrategy",
@@ -247,7 +238,6 @@ class CfnBrokerProps:
                     hosts=["hosts"],
                     role_base="roleBase",
                     role_search_matching="roleSearchMatching",
-                    service_account_password="serviceAccountPassword",
                     service_account_username="serviceAccountUsername",
                     user_base="userBase",
                     user_search_matching="userSearchMatching",
@@ -255,6 +245,7 @@ class CfnBrokerProps:
                     # the properties below are optional
                     role_name="roleName",
                     role_search_subtree=False,
+                    service_account_password="serviceAccountPassword",
                     user_role_name="userRoleName",
                     user_search_subtree=False
                 ),
@@ -273,6 +264,15 @@ class CfnBrokerProps:
                 tags=[amazonmq.CfnBroker.TagsEntryProperty(
                     key="key",
                     value="value"
+                )],
+                users=[amazonmq.CfnBroker.UserProperty(
+                    password="password",
+                    username="username",
+            
+                    # the properties below are optional
+                    console_access=False,
+                    groups=["groups"],
+                    replication_user=False
                 )]
             )
         '''
@@ -283,7 +283,6 @@ class CfnBrokerProps:
             check_type(argname="argument engine_type", value=engine_type, expected_type=type_hints["engine_type"])
             check_type(argname="argument host_instance_type", value=host_instance_type, expected_type=type_hints["host_instance_type"])
             check_type(argname="argument publicly_accessible", value=publicly_accessible, expected_type=type_hints["publicly_accessible"])
-            check_type(argname="argument users", value=users, expected_type=type_hints["users"])
             check_type(argname="argument authentication_strategy", value=authentication_strategy, expected_type=type_hints["authentication_strategy"])
             check_type(argname="argument auto_minor_version_upgrade", value=auto_minor_version_upgrade, expected_type=type_hints["auto_minor_version_upgrade"])
             check_type(argname="argument configuration", value=configuration, expected_type=type_hints["configuration"])
@@ -298,13 +297,13 @@ class CfnBrokerProps:
             check_type(argname="argument storage_type", value=storage_type, expected_type=type_hints["storage_type"])
             check_type(argname="argument subnet_ids", value=subnet_ids, expected_type=type_hints["subnet_ids"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument users", value=users, expected_type=type_hints["users"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "broker_name": broker_name,
             "deployment_mode": deployment_mode,
             "engine_type": engine_type,
             "host_instance_type": host_instance_type,
             "publicly_accessible": publicly_accessible,
-            "users": users,
         }
         if authentication_strategy is not None:
             self._values["authentication_strategy"] = authentication_strategy
@@ -334,6 +333,8 @@ class CfnBrokerProps:
             self._values["subnet_ids"] = subnet_ids
         if tags is not None:
             self._values["tags"] = tags
+        if users is not None:
+            self._values["users"] = users
 
     @builtins.property
     def broker_name(self) -> builtins.str:
@@ -395,20 +396,6 @@ class CfnBrokerProps:
         result = self._values.get("publicly_accessible")
         assert result is not None, "Required property 'publicly_accessible' is missing"
         return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
-
-    @builtins.property
-    def users(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]:
-        '''The list of broker users (persons or applications) who can access queues and topics.
-
-        For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent RabbitMQ users are created by via the RabbitMQ web console or by using the RabbitMQ management API.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-users
-        '''
-        result = self._values.get("users")
-        assert result is not None, "Required property 'users' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]], result)
 
     @builtins.property
     def authentication_strategy(self) -> typing.Optional[builtins.str]:
@@ -568,6 +555,19 @@ class CfnBrokerProps:
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List["CfnBroker.TagsEntryProperty"]], result)
+
+    @builtins.property
+    def users(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]]:
+        '''The list of broker users (persons or applications) who can access queues and topics.
+
+        For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent RabbitMQ users are created by via the RabbitMQ web console or by using the RabbitMQ management API.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-users
+        '''
+        result = self._values.get("users")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1115,15 +1115,6 @@ class CfnBroker(
             engine_type="engineType",
             host_instance_type="hostInstanceType",
             publicly_accessible=False,
-            users=[amazonmq.CfnBroker.UserProperty(
-                password="password",
-                username="username",
-        
-                # the properties below are optional
-                console_access=False,
-                groups=["groups"],
-                replication_user=False
-            )],
         
             # the properties below are optional
             authentication_strategy="authenticationStrategy",
@@ -1145,7 +1136,6 @@ class CfnBroker(
                 hosts=["hosts"],
                 role_base="roleBase",
                 role_search_matching="roleSearchMatching",
-                service_account_password="serviceAccountPassword",
                 service_account_username="serviceAccountUsername",
                 user_base="userBase",
                 user_search_matching="userSearchMatching",
@@ -1153,6 +1143,7 @@ class CfnBroker(
                 # the properties below are optional
                 role_name="roleName",
                 role_search_subtree=False,
+                service_account_password="serviceAccountPassword",
                 user_role_name="userRoleName",
                 user_search_subtree=False
             ),
@@ -1171,6 +1162,15 @@ class CfnBroker(
             tags=[amazonmq.CfnBroker.TagsEntryProperty(
                 key="key",
                 value="value"
+            )],
+            users=[amazonmq.CfnBroker.UserProperty(
+                password="password",
+                username="username",
+        
+                # the properties below are optional
+                console_access=False,
+                groups=["groups"],
+                replication_user=False
             )]
         )
     '''
@@ -1185,7 +1185,6 @@ class CfnBroker(
         engine_type: builtins.str,
         host_instance_type: builtins.str,
         publicly_accessible: typing.Union[builtins.bool, _IResolvable_da3f097b],
-        users: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.UserProperty", typing.Dict[builtins.str, typing.Any]]]]],
         authentication_strategy: typing.Optional[builtins.str] = None,
         auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.ConfigurationIdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1200,6 +1199,7 @@ class CfnBroker(
         storage_type: typing.Optional[builtins.str] = None,
         subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnBroker.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        users: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.UserProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
@@ -1209,7 +1209,6 @@ class CfnBroker(
         :param engine_type: The type of broker engine. Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
         :param host_instance_type: The broker's instance type.
         :param publicly_accessible: Enables connections from applications outside of the VPC that hosts the broker's subnets.
-        :param users: The list of broker users (persons or applications) who can access queues and topics. For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent RabbitMQ users are created by via the RabbitMQ web console or by using the RabbitMQ management API.
         :param authentication_strategy: Optional. The authentication strategy used to secure the broker. The default is ``SIMPLE`` .
         :param auto_minor_version_upgrade: Enables automatic upgrades to new minor versions for brokers, as new broker engine versions are released and supported by Amazon MQ. Automatic upgrades occur during the scheduled maintenance window of the broker or after a manual broker reboot.
         :param configuration: A list of information about the configuration. Does not apply to RabbitMQ brokers.
@@ -1224,6 +1223,7 @@ class CfnBroker(
         :param storage_type: The broker's storage type.
         :param subnet_ids: The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. If you specify more than one subnet, the subnets must be in different Availability Zones. Amazon MQ will not be able to create VPC endpoints for your broker with multiple subnets in the same Availability Zone. A SINGLE_INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE_STANDBY_MULTI_AZ deployment (ACTIVEMQ) requires two subnets. A CLUSTER_MULTI_AZ deployment (RABBITMQ) has no subnet requirements when deployed with public accessibility, deployment without public accessibility requires at least one subnet. .. epigraph:: If you specify subnets in a shared VPC for a RabbitMQ broker, the associated VPC to which the specified subnets belong must be owned by your AWS account . Amazon MQ will not be able to create VPC enpoints in VPCs that are not owned by your AWS account .
         :param tags: An array of key-value pairs. For more information, see `Using Cost Allocation Tags <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html>`_ in the *Billing and Cost Management User Guide* .
+        :param users: The list of broker users (persons or applications) who can access queues and topics. For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent RabbitMQ users are created by via the RabbitMQ web console or by using the RabbitMQ management API.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d16f84aeefdd69c636acf0c8b4d958b93ded39c1da5d5eecb39ce87535c69cb7)
@@ -1235,7 +1235,6 @@ class CfnBroker(
             engine_type=engine_type,
             host_instance_type=host_instance_type,
             publicly_accessible=publicly_accessible,
-            users=users,
             authentication_strategy=authentication_strategy,
             auto_minor_version_upgrade=auto_minor_version_upgrade,
             configuration=configuration,
@@ -1250,6 +1249,7 @@ class CfnBroker(
             storage_type=storage_type,
             subnet_ids=subnet_ids,
             tags=tags,
+            users=users,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -1356,6 +1356,17 @@ class CfnBroker(
         :cloudformationAttribute: ConsoleURLs
         '''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "attrConsoleUrLs"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrEngineVersionCurrent")
+    def attr_engine_version_current(self) -> builtins.str:
+        '''The version in use.
+
+        This may have more precision than the specified EngineVersion.
+
+        :cloudformationAttribute: EngineVersionCurrent
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrEngineVersionCurrent"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -1510,24 +1521,6 @@ class CfnBroker(
             type_hints = typing.get_type_hints(_typecheckingstub__4a82a112ececec828f3c746f7c18e6b6ce32a5aa08550a05a69d7babd8852a7e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "publiclyAccessible", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="users")
-    def users(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]:
-        '''The list of broker users (persons or applications) who can access queues and topics.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]], jsii.get(self, "users"))
-
-    @users.setter
-    def users(
-        self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__85b9c0c3c3aa438279362aeaae2a3de844ec906edf5b12b7601c78bc63fbfd6b)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "users", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="authenticationStrategy")
@@ -1750,6 +1743,24 @@ class CfnBroker(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="users")
+    def users(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]]:
+        '''The list of broker users (persons or applications) who can access queues and topics.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]], jsii.get(self, "users"))
+
+    @users.setter
+    def users(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__85b9c0c3c3aa438279362aeaae2a3de844ec906edf5b12b7601c78bc63fbfd6b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "users", value) # pyright: ignore[reportArgumentType]
+
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_amazonmq.CfnBroker.ConfigurationIdProperty",
         jsii_struct_bases=[],
@@ -1910,12 +1921,12 @@ class CfnBroker(
             "hosts": "hosts",
             "role_base": "roleBase",
             "role_search_matching": "roleSearchMatching",
-            "service_account_password": "serviceAccountPassword",
             "service_account_username": "serviceAccountUsername",
             "user_base": "userBase",
             "user_search_matching": "userSearchMatching",
             "role_name": "roleName",
             "role_search_subtree": "roleSearchSubtree",
+            "service_account_password": "serviceAccountPassword",
             "user_role_name": "userRoleName",
             "user_search_subtree": "userSearchSubtree",
         },
@@ -1927,12 +1938,12 @@ class CfnBroker(
             hosts: typing.Sequence[builtins.str],
             role_base: builtins.str,
             role_search_matching: builtins.str,
-            service_account_password: builtins.str,
             service_account_username: builtins.str,
             user_base: builtins.str,
             user_search_matching: builtins.str,
             role_name: typing.Optional[builtins.str] = None,
             role_search_subtree: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            service_account_password: typing.Optional[builtins.str] = None,
             user_role_name: typing.Optional[builtins.str] = None,
             user_search_subtree: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ) -> None:
@@ -1945,12 +1956,12 @@ class CfnBroker(
             :param hosts: Specifies the location of the LDAP server such as AWS Directory Service for Microsoft Active Directory . Optional failover server.
             :param role_base: The distinguished name of the node in the directory information tree (DIT) to search for roles or groups. For example, ``ou=group`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
             :param role_search_matching: The LDAP search filter used to find roles within the roleBase. The distinguished name of the user matched by userSearchMatching is substituted into the ``{0}`` placeholder in the search filter. The client's username is substituted into the ``{1}`` placeholder. For example, if you set this option to ``(member=uid={1})`` for the user janedoe, the search filter becomes ``(member=uid=janedoe)`` after string substitution. It matches all role entries that have a member attribute equal to ``uid=janedoe`` under the subtree selected by the ``RoleBases`` .
-            :param service_account_password: Service account password. A service account is an account in your LDAP server that has access to initiate a connection. For example, ``cn=admin`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
             :param service_account_username: Service account username. A service account is an account in your LDAP server that has access to initiate a connection. For example, ``cn=admin`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
             :param user_base: Select a particular subtree of the directory information tree (DIT) to search for user entries. The subtree is specified by a DN, which specifies the base node of the subtree. For example, by setting this option to ``ou=Users`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` , the search for user entries is restricted to the subtree beneath ``ou=Users`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
             :param user_search_matching: The LDAP search filter used to find users within the ``userBase`` . The client's username is substituted into the ``{0}`` placeholder in the search filter. For example, if this option is set to ``(uid={0})`` and the received username is ``janedoe`` , the search filter becomes ``(uid=janedoe)`` after string substitution. It will result in matching an entry like ``uid=janedoe`` , ``ou=Users`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
             :param role_name: The group name attribute in a role entry whose value is the name of that role. For example, you can specify ``cn`` for a group entry's common name. If authentication succeeds, then the user is assigned the the value of the ``cn`` attribute for each role entry that they are a member of.
             :param role_search_subtree: The directory search scope for the role. If set to true, scope is to search the entire subtree.
+            :param service_account_password: Service account password. A service account is an account in your LDAP server that has access to initiate a connection. For example, ``cn=admin`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
             :param user_role_name: The name of the LDAP attribute in the user's directory entry for the user's group membership. In some cases, user roles may be identified by the value of an attribute in the user's directory entry. The ``UserRoleName`` option allows you to provide the name of this attribute.
             :param user_search_subtree: The directory search scope for the user. If set to true, scope is to search the entire subtree.
 
@@ -1967,7 +1978,6 @@ class CfnBroker(
                     hosts=["hosts"],
                     role_base="roleBase",
                     role_search_matching="roleSearchMatching",
-                    service_account_password="serviceAccountPassword",
                     service_account_username="serviceAccountUsername",
                     user_base="userBase",
                     user_search_matching="userSearchMatching",
@@ -1975,6 +1985,7 @@ class CfnBroker(
                     # the properties below are optional
                     role_name="roleName",
                     role_search_subtree=False,
+                    service_account_password="serviceAccountPassword",
                     user_role_name="userRoleName",
                     user_search_subtree=False
                 )
@@ -1984,19 +1995,18 @@ class CfnBroker(
                 check_type(argname="argument hosts", value=hosts, expected_type=type_hints["hosts"])
                 check_type(argname="argument role_base", value=role_base, expected_type=type_hints["role_base"])
                 check_type(argname="argument role_search_matching", value=role_search_matching, expected_type=type_hints["role_search_matching"])
-                check_type(argname="argument service_account_password", value=service_account_password, expected_type=type_hints["service_account_password"])
                 check_type(argname="argument service_account_username", value=service_account_username, expected_type=type_hints["service_account_username"])
                 check_type(argname="argument user_base", value=user_base, expected_type=type_hints["user_base"])
                 check_type(argname="argument user_search_matching", value=user_search_matching, expected_type=type_hints["user_search_matching"])
                 check_type(argname="argument role_name", value=role_name, expected_type=type_hints["role_name"])
                 check_type(argname="argument role_search_subtree", value=role_search_subtree, expected_type=type_hints["role_search_subtree"])
+                check_type(argname="argument service_account_password", value=service_account_password, expected_type=type_hints["service_account_password"])
                 check_type(argname="argument user_role_name", value=user_role_name, expected_type=type_hints["user_role_name"])
                 check_type(argname="argument user_search_subtree", value=user_search_subtree, expected_type=type_hints["user_search_subtree"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "hosts": hosts,
                 "role_base": role_base,
                 "role_search_matching": role_search_matching,
-                "service_account_password": service_account_password,
                 "service_account_username": service_account_username,
                 "user_base": user_base,
                 "user_search_matching": user_search_matching,
@@ -2005,6 +2015,8 @@ class CfnBroker(
                 self._values["role_name"] = role_name
             if role_search_subtree is not None:
                 self._values["role_search_subtree"] = role_search_subtree
+            if service_account_password is not None:
+                self._values["service_account_password"] = service_account_password
             if user_role_name is not None:
                 self._values["user_role_name"] = user_role_name
             if user_search_subtree is not None:
@@ -2044,18 +2056,6 @@ class CfnBroker(
             '''
             result = self._values.get("role_search_matching")
             assert result is not None, "Required property 'role_search_matching' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def service_account_password(self) -> builtins.str:
-            '''Service account password.
-
-            A service account is an account in your LDAP server that has access to initiate a connection. For example, ``cn=admin`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-serviceaccountpassword
-            '''
-            result = self._values.get("service_account_password")
-            assert result is not None, "Required property 'service_account_password' is missing"
             return typing.cast(builtins.str, result)
 
         @builtins.property
@@ -2117,6 +2117,17 @@ class CfnBroker(
             '''
             result = self._values.get("role_search_subtree")
             return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def service_account_password(self) -> typing.Optional[builtins.str]:
+            '''Service account password.
+
+            A service account is an account in your LDAP server that has access to initiate a connection. For example, ``cn=admin`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-serviceaccountpassword
+            '''
+            result = self._values.get("service_account_password")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def user_role_name(self) -> typing.Optional[builtins.str]:
@@ -3127,7 +3138,6 @@ def _typecheckingstub__d255f8718bac4d1453cb7e2ae3f8fb5a5ac0ed5b3551f73d52e4123fa
     engine_type: builtins.str,
     host_instance_type: builtins.str,
     publicly_accessible: typing.Union[builtins.bool, _IResolvable_da3f097b],
-    users: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.UserProperty, typing.Dict[builtins.str, typing.Any]]]]],
     authentication_strategy: typing.Optional[builtins.str] = None,
     auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.ConfigurationIdProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3142,6 +3152,7 @@ def _typecheckingstub__d255f8718bac4d1453cb7e2ae3f8fb5a5ac0ed5b3551f73d52e4123fa
     storage_type: typing.Optional[builtins.str] = None,
     subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnBroker.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    users: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.UserProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3191,7 +3202,6 @@ def _typecheckingstub__d16f84aeefdd69c636acf0c8b4d958b93ded39c1da5d5eecb39ce8753
     engine_type: builtins.str,
     host_instance_type: builtins.str,
     publicly_accessible: typing.Union[builtins.bool, _IResolvable_da3f097b],
-    users: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.UserProperty, typing.Dict[builtins.str, typing.Any]]]]],
     authentication_strategy: typing.Optional[builtins.str] = None,
     auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.ConfigurationIdProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3206,6 +3216,7 @@ def _typecheckingstub__d16f84aeefdd69c636acf0c8b4d958b93ded39c1da5d5eecb39ce8753
     storage_type: typing.Optional[builtins.str] = None,
     subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnBroker.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    users: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.UserProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3256,12 +3267,6 @@ def _typecheckingstub__a8a51a01838222e13c8eba50f7d568dc975a2e3c5c2d18f21339bc702
 
 def _typecheckingstub__4a82a112ececec828f3c746f7c18e6b6ce32a5aa08550a05a69d7babd8852a7e(
     value: typing.Union[builtins.bool, _IResolvable_da3f097b],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__85b9c0c3c3aa438279362aeaae2a3de844ec906edf5b12b7601c78bc63fbfd6b(
-    value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnBroker.UserProperty]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3350,6 +3355,12 @@ def _typecheckingstub__739d50e75e2a93ab9671710563ad1ed5176802aef44a2986de718c86a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__85b9c0c3c3aa438279362aeaae2a3de844ec906edf5b12b7601c78bc63fbfd6b(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnBroker.UserProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f9d5131bf29ed360bf06fb2fc10b8d6ac62da622a4f41bd0e435a4436ba5511c(
     *,
     id: builtins.str,
@@ -3371,12 +3382,12 @@ def _typecheckingstub__282093319da5ca5716ae9202b23fde6f2380a3a720f7bac369f166119
     hosts: typing.Sequence[builtins.str],
     role_base: builtins.str,
     role_search_matching: builtins.str,
-    service_account_password: builtins.str,
     service_account_username: builtins.str,
     user_base: builtins.str,
     user_search_matching: builtins.str,
     role_name: typing.Optional[builtins.str] = None,
     role_search_subtree: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    service_account_password: typing.Optional[builtins.str] = None,
     user_role_name: typing.Optional[builtins.str] = None,
     user_search_subtree: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
