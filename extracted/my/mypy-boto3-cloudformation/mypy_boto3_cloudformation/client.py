@@ -1074,8 +1074,8 @@ class CloudFormationClient(BaseClient):
         self, **kwargs: Unpack[SetTypeConfigurationInputTypeDef]
     ) -> SetTypeConfigurationOutputTypeDef:
         """
-        Specifies the configuration data for a registered CloudFormation extension, in
-        the given account and Region.
+        Specifies the configuration data for a CloudFormation extension, such as a
+        resource or Hook, in the given account and Region.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/cloudformation/client/set_type_configuration.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_cloudformation/client/#set_type_configuration)

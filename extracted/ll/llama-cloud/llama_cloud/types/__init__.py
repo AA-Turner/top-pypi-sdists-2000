@@ -42,7 +42,6 @@ from .chat_app import ChatApp
 from .chat_app_response import ChatAppResponse
 from .chat_data import ChatData
 from .chat_message import ChatMessage
-from .chunk_mode import ChunkMode
 from .classification_result import ClassificationResult
 from .classifier_rule import ClassifierRule
 from .classify_job import ClassifyJob
@@ -91,6 +90,7 @@ from .data_source_reader_version_metadata import DataSourceReaderVersionMetadata
 from .data_source_reader_version_metadata_reader_version import DataSourceReaderVersionMetadataReaderVersion
 from .data_source_update_dispatcher_config import DataSourceUpdateDispatcherConfig
 from .delete_params import DeleteParams
+from .delete_response import DeleteResponse
 from .document_chunk_mode import DocumentChunkMode
 from .document_ingestion_job_params import DocumentIngestionJobParams
 from .element_segmentation_config import ElementSegmentationConfig
@@ -122,10 +122,6 @@ from .extract_agent_data_schema_value import ExtractAgentDataSchemaValue
 from .extract_config import ExtractConfig
 from .extract_config_priority import ExtractConfigPriority
 from .extract_job import ExtractJob
-from .extract_job_create import ExtractJobCreate
-from .extract_job_create_data_schema_override import ExtractJobCreateDataSchemaOverride
-from .extract_job_create_data_schema_override_zero_value import ExtractJobCreateDataSchemaOverrideZeroValue
-from .extract_job_create_priority import ExtractJobCreatePriority
 from .extract_mode import ExtractMode
 from .extract_models import ExtractModels
 from .extract_resultset import ExtractResultset
@@ -145,6 +141,7 @@ from .extract_schema_validate_response import ExtractSchemaValidateResponse
 from .extract_schema_validate_response_data_schema_value import ExtractSchemaValidateResponseDataSchemaValue
 from .extract_state import ExtractState
 from .extract_target import ExtractTarget
+from .extracted_table import ExtractedTable
 from .fail_page_mode import FailPageMode
 from .failure_handling_config import FailureHandlingConfig
 from .file import File
@@ -202,7 +199,6 @@ from .license_info_response import LicenseInfoResponse
 from .llama_extract_feature_availability import LlamaExtractFeatureAvailability
 from .llama_extract_mode_availability import LlamaExtractModeAvailability
 from .llama_extract_mode_availability_status import LlamaExtractModeAvailabilityStatus
-from .llama_extract_settings import LlamaExtractSettings
 from .llama_parse_parameters import LlamaParseParameters
 from .llama_parse_parameters_priority import LlamaParseParametersPriority
 from .llama_parse_supported_file_extensions import LlamaParseSupportedFileExtensions
@@ -219,7 +215,6 @@ from .metadata_filter import MetadataFilter
 from .metadata_filter_value import MetadataFilterValue
 from .metadata_filters import MetadataFilters
 from .metadata_filters_filters_item import MetadataFiltersFiltersItem
-from .multimodal_parse_resolution import MultimodalParseResolution
 from .node_relationship import NodeRelationship
 from .none_chunking_config import NoneChunkingConfig
 from .none_segmentation_config import NoneSegmentationConfig
@@ -241,6 +236,7 @@ from .paginated_response_agent_data import PaginatedResponseAgentData
 from .paginated_response_aggregate_group import PaginatedResponseAggregateGroup
 from .paginated_response_classify_job import PaginatedResponseClassifyJob
 from .paginated_response_quota_configuration import PaginatedResponseQuotaConfiguration
+from .paginated_response_spreadsheet_job import PaginatedResponseSpreadsheetJob
 from .parse_configuration import ParseConfiguration
 from .parse_configuration_create import ParseConfigurationCreate
 from .parse_configuration_filter import ParseConfigurationFilter
@@ -322,7 +318,6 @@ from .preset_retrieval_params_search_filters_inference_schema_value import (
 from .presigned_url import PresignedUrl
 from .project import Project
 from .project_create import ProjectCreate
-from .prompt_conf import PromptConf
 from .public_model_name import PublicModelName
 from .quota_configuration import QuotaConfiguration
 from .quota_configuration_configuration_type import QuotaConfigurationConfigurationType
@@ -342,14 +337,13 @@ from .retriever_pipeline import RetrieverPipeline
 from .role import Role
 from .schema_generation_availability import SchemaGenerationAvailability
 from .schema_generation_availability_status import SchemaGenerationAvailabilityStatus
-from .schema_relax_mode import SchemaRelaxMode
 from .semantic_chunking_config import SemanticChunkingConfig
 from .sentence_chunking_config import SentenceChunkingConfig
 from .sparse_model_config import SparseModelConfig
 from .sparse_model_type import SparseModelType
+from .spreadsheet_job import SpreadsheetJob
+from .spreadsheet_parsing_config import SpreadsheetParsingConfig
 from .status_enum import StatusEnum
-from .struct_mode import StructMode
-from .struct_parse_conf import StructParseConf
 from .supported_llm_model import SupportedLlmModel
 from .supported_llm_model_names import SupportedLlmModelNames
 from .text_node import TextNode
@@ -414,7 +408,6 @@ __all__ = [
     "ChatAppResponse",
     "ChatData",
     "ChatMessage",
-    "ChunkMode",
     "ClassificationResult",
     "ClassifierRule",
     "ClassifyJob",
@@ -463,6 +456,7 @@ __all__ = [
     "DataSourceReaderVersionMetadataReaderVersion",
     "DataSourceUpdateDispatcherConfig",
     "DeleteParams",
+    "DeleteResponse",
     "DocumentChunkMode",
     "DocumentIngestionJobParams",
     "ElementSegmentationConfig",
@@ -490,10 +484,6 @@ __all__ = [
     "ExtractConfig",
     "ExtractConfigPriority",
     "ExtractJob",
-    "ExtractJobCreate",
-    "ExtractJobCreateDataSchemaOverride",
-    "ExtractJobCreateDataSchemaOverrideZeroValue",
-    "ExtractJobCreatePriority",
     "ExtractMode",
     "ExtractModels",
     "ExtractResultset",
@@ -513,6 +503,7 @@ __all__ = [
     "ExtractSchemaValidateResponseDataSchemaValue",
     "ExtractState",
     "ExtractTarget",
+    "ExtractedTable",
     "FailPageMode",
     "FailureHandlingConfig",
     "File",
@@ -568,7 +559,6 @@ __all__ = [
     "LlamaExtractFeatureAvailability",
     "LlamaExtractModeAvailability",
     "LlamaExtractModeAvailabilityStatus",
-    "LlamaExtractSettings",
     "LlamaParseParameters",
     "LlamaParseParametersPriority",
     "LlamaParseSupportedFileExtensions",
@@ -585,7 +575,6 @@ __all__ = [
     "MetadataFilterValue",
     "MetadataFilters",
     "MetadataFiltersFiltersItem",
-    "MultimodalParseResolution",
     "NodeRelationship",
     "NoneChunkingConfig",
     "NoneSegmentationConfig",
@@ -607,6 +596,7 @@ __all__ = [
     "PaginatedResponseAggregateGroup",
     "PaginatedResponseClassifyJob",
     "PaginatedResponseQuotaConfiguration",
+    "PaginatedResponseSpreadsheetJob",
     "ParseConfiguration",
     "ParseConfigurationCreate",
     "ParseConfigurationFilter",
@@ -680,7 +670,6 @@ __all__ = [
     "PresignedUrl",
     "Project",
     "ProjectCreate",
-    "PromptConf",
     "PublicModelName",
     "QuotaConfiguration",
     "QuotaConfigurationConfigurationType",
@@ -700,14 +689,13 @@ __all__ = [
     "Role",
     "SchemaGenerationAvailability",
     "SchemaGenerationAvailabilityStatus",
-    "SchemaRelaxMode",
     "SemanticChunkingConfig",
     "SentenceChunkingConfig",
     "SparseModelConfig",
     "SparseModelType",
+    "SpreadsheetJob",
+    "SpreadsheetParsingConfig",
     "StatusEnum",
-    "StructMode",
-    "StructParseConf",
     "SupportedLlmModel",
     "SupportedLlmModelNames",
     "TextNode",

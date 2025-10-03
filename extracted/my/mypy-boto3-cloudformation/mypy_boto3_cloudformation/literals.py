@@ -391,6 +391,7 @@ VersionBumpType = Literal["MAJOR", "MINOR"]
 VisibilityType = Literal["PRIVATE", "PUBLIC"]
 WarningTypeType = Literal[
     "EXCLUDED_PROPERTIES",
+    "EXCLUDED_RESOURCES",
     "MUTUALLY_EXCLUSIVE_PROPERTIES",
     "MUTUALLY_EXCLUSIVE_TYPES",
     "UNSUPPORTED_PROPERTIES",
@@ -761,7 +762,6 @@ ServiceName = Literal[
     "shield",
     "signer",
     "simspaceweaver",
-    "sms",
     "snow-device-management",
     "snowball",
     "sns",

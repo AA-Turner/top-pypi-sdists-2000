@@ -15,7 +15,7 @@ async def test_icons_and_website_url():
     test_icon = Icon(
         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
         mimeType="image/png",
-        sizes="1x1",
+        sizes=["1x1"],
     )
 
     # Create server with website URL and icon
@@ -38,6 +38,12 @@ async def test_icons_and_website_url():
     def test_prompt(text: str) -> str:
         """A test prompt with an icon."""
         return text
+
+    # Create resource template with icon
+    @mcp.resource("test://weather/{city}", icons=[test_icon])
+    def test_resource_template(city: str) -> str:
+        """Get weather for a city."""
+        return f"Weather for {city}"
 
     # Test server metadata includes websiteUrl and icons
     assert mcp.name == "TestServer"
@@ -75,14 +81,24 @@ async def test_icons_and_website_url():
     assert len(prompt.icons) == 1
     assert prompt.icons[0].src == test_icon.src
 
+    # Test resource template includes icon
+    templates = await mcp.list_resource_templates()
+    assert len(templates) == 1
+    template = templates[0]
+    assert template.name == "test_resource_template"
+    assert template.uriTemplate == "test://weather/{city}"
+    assert template.icons is not None
+    assert len(template.icons) == 1
+    assert template.icons[0].src == test_icon.src
+
 
 async def test_multiple_icons():
     """Test that multiple icons can be added to tools, resources, and prompts."""
 
     # Create multiple test icons
-    icon1 = Icon(src="data:image/png;base64,icon1", mimeType="image/png", sizes="16x16")
-    icon2 = Icon(src="data:image/png;base64,icon2", mimeType="image/png", sizes="32x32")
-    icon3 = Icon(src="data:image/png;base64,icon3", mimeType="image/png", sizes="64x64")
+    icon1 = Icon(src="data:image/png;base64,icon1", mimeType="image/png", sizes=["16x16"])
+    icon2 = Icon(src="data:image/png;base64,icon2", mimeType="image/png", sizes=["32x32"])
+    icon3 = Icon(src="data:image/png;base64,icon3", mimeType="image/png", sizes=["64x64"])
 
     mcp = FastMCP("MultiIconServer")
 
@@ -98,9 +114,9 @@ async def test_multiple_icons():
     tool = tools[0]
     assert tool.icons is not None
     assert len(tool.icons) == 3
-    assert tool.icons[0].sizes == "16x16"
-    assert tool.icons[1].sizes == "32x32"
-    assert tool.icons[2].sizes == "64x64"
+    assert tool.icons[0].sizes == ["16x16"]
+    assert tool.icons[1].sizes == ["32x32"]
+    assert tool.icons[2].sizes == ["64x64"]
 
 
 async def test_no_icons_or_website():

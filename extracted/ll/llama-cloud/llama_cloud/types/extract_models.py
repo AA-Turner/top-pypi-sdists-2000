@@ -14,6 +14,7 @@ class ExtractModels(str, enum.Enum):
     OPENAI_GPT_5_MINI = "openai-gpt-5-mini"
     GEMINI_20_FLASH = "gemini-2.0-flash"
     GEMINI_25_FLASH = "gemini-2.5-flash"
+    GEMINI_25_FLASH_LITE = "gemini-2.5-flash-lite"
     GEMINI_25_PRO = "gemini-2.5-pro"
     OPENAI_GPT_4_O = "openai-gpt-4o"
     OPENAI_GPT_4_O_MINI = "openai-gpt-4o-mini"
@@ -27,6 +28,7 @@ class ExtractModels(str, enum.Enum):
         openai_gpt_5_mini: typing.Callable[[], T_Result],
         gemini_20_flash: typing.Callable[[], T_Result],
         gemini_25_flash: typing.Callable[[], T_Result],
+        gemini_25_flash_lite: typing.Callable[[], T_Result],
         gemini_25_pro: typing.Callable[[], T_Result],
         openai_gpt_4_o: typing.Callable[[], T_Result],
         openai_gpt_4_o_mini: typing.Callable[[], T_Result],
@@ -45,6 +47,8 @@ class ExtractModels(str, enum.Enum):
             return gemini_20_flash()
         if self is ExtractModels.GEMINI_25_FLASH:
             return gemini_25_flash()
+        if self is ExtractModels.GEMINI_25_FLASH_LITE:
+            return gemini_25_flash_lite()
         if self is ExtractModels.GEMINI_25_PRO:
             return gemini_25_pro()
         if self is ExtractModels.OPENAI_GPT_4_O:

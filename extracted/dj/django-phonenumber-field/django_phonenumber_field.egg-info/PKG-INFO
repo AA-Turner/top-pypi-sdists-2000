@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: django-phonenumber-field
-Version: 8.1.0
+Version: 8.2.0
 Summary: An international phone number field for django models.
 Author-email: Stefan Foulis <stefan@foulis.ch>, François Freitag <mail@franek.fr>
 Maintainer-email: François Freitag <mail@franek.fr>, Stefan Foulis <stefan@foulis.ch>

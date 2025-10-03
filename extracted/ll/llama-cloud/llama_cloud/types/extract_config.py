@@ -50,6 +50,7 @@ class ExtractConfig(pydantic.BaseModel):
     invalidate_cache: typing.Optional[bool] = pydantic.Field(
         description="Whether to invalidate the cache for the extraction."
     )
+    num_pages_context: typing.Optional[int]
     page_range: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:

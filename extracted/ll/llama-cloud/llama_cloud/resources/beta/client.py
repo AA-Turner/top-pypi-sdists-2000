@@ -18,6 +18,7 @@ from ...types.api_key_type import ApiKeyType
 from ...types.batch import Batch
 from ...types.batch_paginated_list import BatchPaginatedList
 from ...types.batch_public_output import BatchPublicOutput
+from ...types.delete_response import DeleteResponse
 from ...types.file import File
 from ...types.file_create import FileCreate
 from ...types.file_filter import FileFilter
@@ -28,10 +29,14 @@ from ...types.llama_parse_parameters import LlamaParseParameters
 from ...types.paginated_response_agent_data import PaginatedResponseAgentData
 from ...types.paginated_response_aggregate_group import PaginatedResponseAggregateGroup
 from ...types.paginated_response_quota_configuration import PaginatedResponseQuotaConfiguration
+from ...types.paginated_response_spreadsheet_job import PaginatedResponseSpreadsheetJob
 from ...types.parse_configuration import ParseConfiguration
 from ...types.parse_configuration_create import ParseConfigurationCreate
 from ...types.parse_configuration_filter import ParseConfigurationFilter
 from ...types.parse_configuration_query_response import ParseConfigurationQueryResponse
+from ...types.presigned_url import PresignedUrl
+from ...types.spreadsheet_job import SpreadsheetJob
+from ...types.spreadsheet_parsing_config import SpreadsheetParsingConfig
 
 try:
     import pydantic
@@ -778,6 +783,61 @@ class BetaClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedResponseAggregateGroup, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        deployment_name: str,
+        collection: typing.Optional[str] = OMIT,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
+    ) -> DeleteResponse:
+        """
+        Bulk delete agent data by query (deployment_name, collection, optional filters).
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - deployment_name: str. The agent deployment's name to delete data for
+
+            - collection: typing.Optional[str]. The logical agent data collection to delete from
+
+            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
+            deployment_name="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
+        if collection is not OMIT:
+            _request["collection"] = collection
+        if filter is not OMIT:
+            _request["filter"] = filter
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:delete"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DeleteResponse, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -1569,6 +1629,226 @@ class BetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    def list_spreadsheet_jobs(
+        self,
+        *,
+        include_results: typing.Optional[bool] = None,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        page_size: typing.Optional[int] = None,
+        page_token: typing.Optional[str] = None,
+    ) -> PaginatedResponseSpreadsheetJob:
+        """
+        List spreadsheet parsing jobs.
+        Experimental: This endpoint is not yet ready for production use and is subject to change at any time.
+
+        Parameters:
+            - include_results: typing.Optional[bool].
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.list_spreadsheet_jobs()
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/spreadsheet/jobs"),
+            params=remove_none_from_dict(
+                {
+                    "include_results": include_results,
+                    "project_id": project_id,
+                    "organization_id": organization_id,
+                    "page_size": page_size,
+                    "page_token": page_token,
+                }
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PaginatedResponseSpreadsheetJob, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def create_spreadsheet_job(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        file_id: str,
+        config: typing.Optional[SpreadsheetParsingConfig] = OMIT,
+    ) -> SpreadsheetJob:
+        """
+        Create a spreadsheet parsing job.
+        Experimental: This endpoint is not yet ready for production use and is subject to change at any time.
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - file_id: str. The ID of the file to parse
+
+            - config: typing.Optional[SpreadsheetParsingConfig]. Configuration for the parsing job
+        ---
+        from llama_cloud import SpreadsheetParsingConfig
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.create_spreadsheet_job(
+            file_id="string",
+            config=SpreadsheetParsingConfig(),
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {"file_id": file_id}
+        if config is not OMIT:
+            _request["config"] = config
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/spreadsheet/jobs"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(SpreadsheetJob, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_spreadsheet_job(
+        self,
+        spreadsheet_job_id: str,
+        *,
+        include_results: typing.Optional[bool] = None,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> SpreadsheetJob:
+        """
+        Get a spreadsheet parsing job.
+
+        When include_results=True (default), the response will include extracted tables and results
+        if the job is complete, eliminating the need for a separate /results call.
+
+        Experimental: This endpoint is not yet ready for production use and is subject to change at any time.
+
+        Parameters:
+            - spreadsheet_job_id: str.
+
+            - include_results: typing.Optional[bool].
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.get_spreadsheet_job(
+            spreadsheet_job_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/spreadsheet/jobs/{spreadsheet_job_id}"
+            ),
+            params=remove_none_from_dict(
+                {"include_results": include_results, "project_id": project_id, "organization_id": organization_id}
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(SpreadsheetJob, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_table_download_presigned_url(
+        self,
+        spreadsheet_job_id: str,
+        table_id: int,
+        *,
+        expires_at_seconds: typing.Optional[int] = None,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> PresignedUrl:
+        """
+        Generate a presigned URL to download a specific extracted table.
+        Experimental: This endpoint is not yet ready for production use and is subject to change at any time.
+
+        Parameters:
+            - spreadsheet_job_id: str.
+
+            - table_id: int.
+
+            - expires_at_seconds: typing.Optional[int].
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.get_table_download_presigned_url(
+            spreadsheet_job_id="string",
+            table_id=1,
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/",
+                f"api/v1/beta/spreadsheet/jobs/{spreadsheet_job_id}/tables/{table_id}/result",
+            ),
+            params=remove_none_from_dict(
+                {"expires_at_seconds": expires_at_seconds, "project_id": project_id, "organization_id": organization_id}
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PresignedUrl, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
 
 class AsyncBetaClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -2303,6 +2583,61 @@ class AsyncBetaClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(PaginatedResponseAggregateGroup, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        deployment_name: str,
+        collection: typing.Optional[str] = OMIT,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
+    ) -> DeleteResponse:
+        """
+        Bulk delete agent data by query (deployment_name, collection, optional filters).
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - deployment_name: str. The agent deployment's name to delete data for
+
+            - collection: typing.Optional[str]. The logical agent data collection to delete from
+
+            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
+            deployment_name="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
+        if collection is not OMIT:
+            _request["collection"] = collection
+        if filter is not OMIT:
+            _request["filter"] = filter
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:delete"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DeleteResponse, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -3086,6 +3421,226 @@ class AsyncBetaClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(typing.Optional[ParseConfiguration], _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def list_spreadsheet_jobs(
+        self,
+        *,
+        include_results: typing.Optional[bool] = None,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        page_size: typing.Optional[int] = None,
+        page_token: typing.Optional[str] = None,
+    ) -> PaginatedResponseSpreadsheetJob:
+        """
+        List spreadsheet parsing jobs.
+        Experimental: This endpoint is not yet ready for production use and is subject to change at any time.
+
+        Parameters:
+            - include_results: typing.Optional[bool].
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.list_spreadsheet_jobs()
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/spreadsheet/jobs"),
+            params=remove_none_from_dict(
+                {
+                    "include_results": include_results,
+                    "project_id": project_id,
+                    "organization_id": organization_id,
+                    "page_size": page_size,
+                    "page_token": page_token,
+                }
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PaginatedResponseSpreadsheetJob, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def create_spreadsheet_job(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        file_id: str,
+        config: typing.Optional[SpreadsheetParsingConfig] = OMIT,
+    ) -> SpreadsheetJob:
+        """
+        Create a spreadsheet parsing job.
+        Experimental: This endpoint is not yet ready for production use and is subject to change at any time.
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - file_id: str. The ID of the file to parse
+
+            - config: typing.Optional[SpreadsheetParsingConfig]. Configuration for the parsing job
+        ---
+        from llama_cloud import SpreadsheetParsingConfig
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.create_spreadsheet_job(
+            file_id="string",
+            config=SpreadsheetParsingConfig(),
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {"file_id": file_id}
+        if config is not OMIT:
+            _request["config"] = config
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/spreadsheet/jobs"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(SpreadsheetJob, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_spreadsheet_job(
+        self,
+        spreadsheet_job_id: str,
+        *,
+        include_results: typing.Optional[bool] = None,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> SpreadsheetJob:
+        """
+        Get a spreadsheet parsing job.
+
+        When include_results=True (default), the response will include extracted tables and results
+        if the job is complete, eliminating the need for a separate /results call.
+
+        Experimental: This endpoint is not yet ready for production use and is subject to change at any time.
+
+        Parameters:
+            - spreadsheet_job_id: str.
+
+            - include_results: typing.Optional[bool].
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.get_spreadsheet_job(
+            spreadsheet_job_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/spreadsheet/jobs/{spreadsheet_job_id}"
+            ),
+            params=remove_none_from_dict(
+                {"include_results": include_results, "project_id": project_id, "organization_id": organization_id}
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(SpreadsheetJob, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_table_download_presigned_url(
+        self,
+        spreadsheet_job_id: str,
+        table_id: int,
+        *,
+        expires_at_seconds: typing.Optional[int] = None,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> PresignedUrl:
+        """
+        Generate a presigned URL to download a specific extracted table.
+        Experimental: This endpoint is not yet ready for production use and is subject to change at any time.
+
+        Parameters:
+            - spreadsheet_job_id: str.
+
+            - table_id: int.
+
+            - expires_at_seconds: typing.Optional[int].
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.get_table_download_presigned_url(
+            spreadsheet_job_id="string",
+            table_id=1,
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/",
+                f"api/v1/beta/spreadsheet/jobs/{spreadsheet_job_id}/tables/{table_id}/result",
+            ),
+            params=remove_none_from_dict(
+                {"expires_at_seconds": expires_at_seconds, "project_id": project_id, "organization_id": organization_id}
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PresignedUrl, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:

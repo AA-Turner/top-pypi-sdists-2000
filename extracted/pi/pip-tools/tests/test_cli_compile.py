@@ -14,6 +14,7 @@ from unittest import mock
 from unittest.mock import MagicMock
 
 import pytest
+from pip._internal.network.session import PipSession
 from pip._internal.req.constructors import install_req_from_line
 from pip._internal.utils.hashes import FAVORITE_HASH
 from pip._internal.utils.urls import path_to_url
@@ -4042,5 +4043,145 @@ def test_second_order_requirements_relative_path_in_separate_dir(
         f"""\
         small-fake-a==0.2
             # via -r {output_path}
+        """
+    )
+
+
+@pytest.mark.parametrize(
+    "input_path_absolute", (True, False), ids=("absolute-input", "relative-input")
+)
+def test_url_constraints_are_not_treated_as_file_paths(
+    pip_conf,
+    make_package,
+    runner,
+    tmp_path,
+    monkeypatch,
+    input_path_absolute,
+):
+    """
+    Test normalization of ``-c`` constraints when the constraints are HTTPS URLs.
+    The constraints should be preserved verbatim.
+
+    This is a regression test for
+    https://github.com/jazzband/pip-tools/issues/2223
+    """
+    constraints_url = "https://example.com/files/common_constraints.txt"
+
+    reqs_in = tmp_path / "requirements.in"
+    reqs_in.write_text(
+        f"""
+        small-fake-a
+        -c {constraints_url}
+        """
+    )
+
+    input_dir_path = tmp_path if input_path_absolute else pathlib.Path(".")
+    input_path = (input_dir_path / "requirements.in").as_posix()
+
+    # TODO: find a better way of mocking the callout to get the constraints
+    #       file (use `responses`?)
+    #
+    # we need a mock response for `GET https://...` as fetched by pip
+    # although this is fragile, it can be adapted if pip changes
+    def fake_url_get(url):
+        response = mock.Mock()
+        response.reason = "Ok"
+        response.status_code = 200
+        response.url = url
+        response.text = "small-fake-a==0.2"
+        return response
+
+    mock_get = mock.Mock(side_effect=fake_url_get)
+
+    with monkeypatch.context() as revertable_ctx:
+        revertable_ctx.chdir(tmp_path)
+        revertable_ctx.setattr(PipSession, "get", mock_get)
+        out = runner.invoke(
+            cli,
+            [
+                "--output-file",
+                "-",
+                "--quiet",
+                "--no-header",
+                "--no-emit-options",
+                "-r",
+                input_path,
+            ],
+        )
+
+    # sanity check, pip should have tried to fetch the constraints
+    mock_get.assert_called_once_with(constraints_url)
+
+    assert out.exit_code == 0
+    assert out.stdout == dedent(
+        f"""\
+        small-fake-a==0.2
+            # via
+            #   -c {constraints_url}
+            #   -r {input_path}
+        """
+    )
+
+
+@pytest.mark.parametrize(
+    "pyproject_path_is_absolute",
+    (True, False),
+    ids=("absolute-input", "relative-input"),
+)
+def test_that_self_referential_pyproject_toml_extra_can_be_compiled(
+    pip_conf, runner, tmp_path, monkeypatch, pyproject_path_is_absolute
+):
+    """
+    Test that a :file:`pyproject.toml` source file can use self-referential extras
+    which point back to the original package name.
+
+    This is a regression test for:
+    https://github.com/jazzband/pip-tools/issues/2215
+    """
+    src_file = tmp_path / "pyproject.toml"
+    src_file.write_text(
+        dedent(
+            """
+            [project]
+            name = "foo"
+            version = "0.1.0"
+            [project.optional-dependencies]
+            ext1 = ["small-fake-a"]
+            ext2 = ["foo[ext1]"]
+            """
+        )
+    )
+
+    if pyproject_path_is_absolute:
+        input_path = src_file.as_posix()
+    else:
+        input_path = src_file.relative_to(tmp_path).as_posix()
+
+    with monkeypatch.context() as revertable_ctx:
+        revertable_ctx.chdir(tmp_path)
+        out = runner.invoke(
+            cli,
+            [
+                "--output-file",
+                "-",
+                "--quiet",
+                "--no-header",
+                "--no-emit-options",
+                # use in-process setuptools
+                "--no-build-isolation",
+                # importantly, request the extra which uses the self-reference
+                "--extra",
+                "ext2",
+                input_path,
+            ],
+        )
+
+    assert out.exit_code == 0
+    assert out.stdout == dedent(
+        f"""\
+        foo[ext1] @ {src_file.parent.absolute().as_uri()}
+            # via foo ({input_path})
+        small-fake-a==0.2
+            # via foo
         """
     )

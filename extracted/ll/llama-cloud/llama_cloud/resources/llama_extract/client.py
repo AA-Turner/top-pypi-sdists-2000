@@ -12,19 +12,19 @@ from ...errors.unprocessable_entity_error import UnprocessableEntityError
 from ...types.extract_agent import ExtractAgent
 from ...types.extract_config import ExtractConfig
 from ...types.extract_job import ExtractJob
-from ...types.extract_job_create import ExtractJobCreate
 from ...types.extract_resultset import ExtractResultset
 from ...types.extract_run import ExtractRun
 from ...types.extract_schema_generate_response import ExtractSchemaGenerateResponse
 from ...types.extract_schema_validate_response import ExtractSchemaValidateResponse
 from ...types.file_data import FileData
 from ...types.http_validation_error import HttpValidationError
-from ...types.llama_extract_settings import LlamaExtractSettings
 from ...types.paginated_extract_runs_response import PaginatedExtractRunsResponse
 from ...types.webhook_configuration import WebhookConfiguration
 from .types.extract_agent_create_data_schema import ExtractAgentCreateDataSchema
 from .types.extract_agent_update_data_schema import ExtractAgentUpdateDataSchema
 from .types.extract_job_create_batch_data_schema_override import ExtractJobCreateBatchDataSchemaOverride
+from .types.extract_job_create_data_schema_override import ExtractJobCreateDataSchemaOverride
+from .types.extract_job_create_priority import ExtractJobCreatePriority
 from .types.extract_schema_validate_request_data_schema import ExtractSchemaValidateRequestDataSchema
 from .types.extract_stateless_request_data_schema import ExtractStatelessRequestDataSchema
 
@@ -43,397 +43,6 @@ OMIT = typing.cast(typing.Any, ...)
 class LlamaExtractClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
-
-    def list_extraction_agents(
-        self,
-        *,
-        include_default: typing.Optional[bool] = None,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-    ) -> typing.List[ExtractAgent]:
-        """
-        Parameters:
-            - include_default: typing.Optional[bool]. Whether to include default agents in the results
-
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.llama_extract.list_extraction_agents()
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents"),
-            params=remove_none_from_dict(
-                {"include_default": include_default, "project_id": project_id, "organization_id": organization_id}
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[ExtractAgent], _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def create_extraction_agent(
-        self,
-        *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        name: str,
-        data_schema: ExtractAgentCreateDataSchema,
-        config: ExtractConfig,
-    ) -> ExtractAgent:
-        """
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-
-            - name: str. The name of the extraction schema
-
-            - data_schema: ExtractAgentCreateDataSchema. The schema of the data.
-
-            - config: ExtractConfig. The configuration parameters for the extraction agent.
-        ---
-        from llama_cloud import (
-            DocumentChunkMode,
-            ExtractConfig,
-            ExtractConfigPriority,
-            ExtractMode,
-            ExtractModels,
-            ExtractTarget,
-            PublicModelName,
-        )
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.llama_extract.create_extraction_agent(
-            name="string",
-            config=ExtractConfig(
-                priority=ExtractConfigPriority.LOW,
-                extraction_target=ExtractTarget.PER_DOC,
-                extraction_mode=ExtractMode.FAST,
-                parse_model=PublicModelName.OPENAI_GPT_4_O,
-                extract_model=ExtractModels.OPENAI_GPT_4_1,
-                chunk_mode=DocumentChunkMode.PAGE,
-            ),
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder({"name": name, "data_schema": data_schema, "config": config}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExtractAgent, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def validate_extraction_schema(
-        self, *, data_schema: ExtractSchemaValidateRequestDataSchema
-    ) -> ExtractSchemaValidateResponse:
-        """
-        Validates an extraction agent's schema definition.
-        Returns the normalized and validated schema if valid, otherwise raises an HTTP 400.
-
-        Parameters:
-            - data_schema: ExtractSchemaValidateRequestDataSchema.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.llama_extract.validate_extraction_schema()
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents/schema/validation"
-            ),
-            json=jsonable_encoder({"data_schema": data_schema}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExtractSchemaValidateResponse, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def generate_extraction_schema(
-        self,
-        *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        prompt: typing.Optional[str] = OMIT,
-        file_id: typing.Optional[str] = OMIT,
-    ) -> ExtractSchemaGenerateResponse:
-        """
-        Generates an extraction agent's schema definition from a file and/or natural language prompt.
-
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-
-            - prompt: typing.Optional[str].
-
-            - file_id: typing.Optional[str].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.llama_extract.generate_extraction_schema()
-        """
-        _request: typing.Dict[str, typing.Any] = {}
-        if prompt is not OMIT:
-            _request["prompt"] = prompt
-        if file_id is not OMIT:
-            _request["file_id"] = file_id
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents/schema/generate"
-            ),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExtractSchemaGenerateResponse, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_extraction_agent_by_name(
-        self, name: str, *, project_id: typing.Optional[str] = None, organization_id: typing.Optional[str] = None
-    ) -> ExtractAgent:
-        """
-        Parameters:
-            - name: str.
-
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.llama_extract.get_extraction_agent_by_name(
-            name="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/by-name/{name}"
-            ),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExtractAgent, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_or_create_default_extraction_agent(
-        self, *, project_id: typing.Optional[str] = None, organization_id: typing.Optional[str] = None
-    ) -> ExtractAgent:
-        """
-        Get or create a default extraction agent for the current project.
-        The default agent has an empty schema and default configuration.
-
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.llama_extract.get_or_create_default_extraction_agent()
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents/default"
-            ),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExtractAgent, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_extraction_agent(self, extraction_agent_id: str) -> ExtractAgent:
-        """
-        Parameters:
-            - extraction_agent_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.llama_extract.get_extraction_agent(
-            extraction_agent_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/{extraction_agent_id}"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExtractAgent, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def update_extraction_agent(
-        self, extraction_agent_id: str, *, data_schema: ExtractAgentUpdateDataSchema, config: ExtractConfig
-    ) -> ExtractAgent:
-        """
-        Parameters:
-            - extraction_agent_id: str.
-
-            - data_schema: ExtractAgentUpdateDataSchema. The schema of the data
-
-            - config: ExtractConfig. The configuration parameters for the extraction agent.
-        ---
-        from llama_cloud import (
-            DocumentChunkMode,
-            ExtractConfig,
-            ExtractConfigPriority,
-            ExtractMode,
-            ExtractModels,
-            ExtractTarget,
-            PublicModelName,
-        )
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.llama_extract.update_extraction_agent(
-            extraction_agent_id="string",
-            config=ExtractConfig(
-                priority=ExtractConfigPriority.LOW,
-                extraction_target=ExtractTarget.PER_DOC,
-                extraction_mode=ExtractMode.FAST,
-                parse_model=PublicModelName.OPENAI_GPT_4_O,
-                extract_model=ExtractModels.OPENAI_GPT_4_1,
-                chunk_mode=DocumentChunkMode.PAGE,
-            ),
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "PUT",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/{extraction_agent_id}"
-            ),
-            json=jsonable_encoder({"data_schema": data_schema, "config": config}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExtractAgent, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def delete_extraction_agent(self, extraction_agent_id: str) -> typing.Any:
-        """
-        Parameters:
-            - extraction_agent_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.llama_extract.delete_extraction_agent(
-            extraction_agent_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/{extraction_agent_id}"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def list_jobs(self, *, extraction_agent_id: str) -> typing.List[ExtractJob]:
         """
@@ -466,18 +75,37 @@ class LlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def run_job(self, *, from_ui: typing.Optional[bool] = None, request: ExtractJobCreate) -> ExtractJob:
+    def run_job(
+        self,
+        *,
+        from_ui: typing.Optional[bool] = None,
+        priority: typing.Optional[ExtractJobCreatePriority] = OMIT,
+        webhook_configurations: typing.Optional[typing.List[WebhookConfiguration]] = OMIT,
+        extraction_agent_id: str,
+        file_id: str,
+        data_schema_override: typing.Optional[ExtractJobCreateDataSchemaOverride] = OMIT,
+        config_override: typing.Optional[ExtractConfig] = OMIT,
+    ) -> ExtractJob:
         """
         Parameters:
             - from_ui: typing.Optional[bool].
 
-            - request: ExtractJobCreate.
+            - priority: typing.Optional[ExtractJobCreatePriority].
+
+            - webhook_configurations: typing.Optional[typing.List[WebhookConfiguration]].
+
+            - extraction_agent_id: str. The id of the extraction agent
+
+            - file_id: str. The id of the file
+
+            - data_schema_override: typing.Optional[ExtractJobCreateDataSchemaOverride]. The data schema to override the extraction agent's data schema with
+
+            - config_override: typing.Optional[ExtractConfig].
         ---
         from llama_cloud import (
             DocumentChunkMode,
             ExtractConfig,
             ExtractConfigPriority,
-            ExtractJobCreate,
             ExtractJobCreatePriority,
             ExtractMode,
             ExtractModels,
@@ -490,26 +118,33 @@ class LlamaExtractClient:
             token="YOUR_TOKEN",
         )
         client.llama_extract.run_job(
-            request=ExtractJobCreate(
-                priority=ExtractJobCreatePriority.LOW,
-                extraction_agent_id="string",
-                file_id="string",
-                config_override=ExtractConfig(
-                    priority=ExtractConfigPriority.LOW,
-                    extraction_target=ExtractTarget.PER_DOC,
-                    extraction_mode=ExtractMode.FAST,
-                    parse_model=PublicModelName.OPENAI_GPT_4_O,
-                    extract_model=ExtractModels.OPENAI_GPT_4_1,
-                    chunk_mode=DocumentChunkMode.PAGE,
-                ),
+            priority=ExtractJobCreatePriority.LOW,
+            extraction_agent_id="string",
+            file_id="string",
+            config_override=ExtractConfig(
+                priority=ExtractConfigPriority.LOW,
+                extraction_target=ExtractTarget.PER_DOC,
+                extraction_mode=ExtractMode.FAST,
+                parse_model=PublicModelName.OPENAI_GPT_4_O,
+                extract_model=ExtractModels.OPENAI_GPT_4_1,
+                chunk_mode=DocumentChunkMode.PAGE,
             ),
         )
         """
+        _request: typing.Dict[str, typing.Any] = {"extraction_agent_id": extraction_agent_id, "file_id": file_id}
+        if priority is not OMIT:
+            _request["priority"] = priority
+        if webhook_configurations is not OMIT:
+            _request["webhook_configurations"] = webhook_configurations
+        if data_schema_override is not OMIT:
+            _request["data_schema_override"] = data_schema_override
+        if config_override is not OMIT:
+            _request["config_override"] = config_override
         _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/jobs"),
             params=remove_none_from_dict({"from_ui": from_ui}),
-            json=jsonable_encoder(request),
+            json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
@@ -540,90 +175,6 @@ class LlamaExtractClient:
         _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/jobs/{job_id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExtractJob, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def run_job_test_user(
-        self,
-        *,
-        from_ui: typing.Optional[bool] = None,
-        job_create: ExtractJobCreate,
-        extract_settings: typing.Optional[LlamaExtractSettings] = OMIT,
-    ) -> ExtractJob:
-        """
-        Parameters:
-            - from_ui: typing.Optional[bool].
-
-            - job_create: ExtractJobCreate.
-
-            - extract_settings: typing.Optional[LlamaExtractSettings].
-        ---
-        from llama_cloud import (
-            ChunkMode,
-            DocumentChunkMode,
-            ExtractConfig,
-            ExtractConfigPriority,
-            ExtractJobCreate,
-            ExtractJobCreatePriority,
-            ExtractMode,
-            ExtractModels,
-            ExtractTarget,
-            FailPageMode,
-            LlamaExtractSettings,
-            LlamaParseParameters,
-            LlamaParseParametersPriority,
-            MultimodalParseResolution,
-            ParsingMode,
-            PublicModelName,
-        )
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.llama_extract.run_job_test_user(
-            job_create=ExtractJobCreate(
-                priority=ExtractJobCreatePriority.LOW,
-                extraction_agent_id="string",
-                file_id="string",
-                config_override=ExtractConfig(
-                    priority=ExtractConfigPriority.LOW,
-                    extraction_target=ExtractTarget.PER_DOC,
-                    extraction_mode=ExtractMode.FAST,
-                    parse_model=PublicModelName.OPENAI_GPT_4_O,
-                    extract_model=ExtractModels.OPENAI_GPT_4_1,
-                    chunk_mode=DocumentChunkMode.PAGE,
-                ),
-            ),
-            extract_settings=LlamaExtractSettings(
-                chunk_mode=ChunkMode.PAGE,
-                llama_parse_params=LlamaParseParameters(
-                    priority=LlamaParseParametersPriority.LOW,
-                    parse_mode=ParsingMode.PARSE_PAGE_WITHOUT_LLM,
-                    replace_failed_page_mode=FailPageMode.RAW_TEXT,
-                ),
-                multimodal_parse_resolution=MultimodalParseResolution.MEDIUM,
-            ),
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {"job_create": job_create}
-        if extract_settings is not OMIT:
-            _request["extract_settings"] = extract_settings
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/jobs/test"),
-            params=remove_none_from_dict({"from_ui": from_ui}),
-            json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
@@ -1060,12 +611,7 @@ class LlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-
-class AsyncLlamaExtractClient:
-    def __init__(self, *, client_wrapper: AsyncClientWrapper):
-        self._client_wrapper = client_wrapper
-
-    async def list_extraction_agents(
+    def list_extraction_agents(
         self,
         *,
         include_default: typing.Optional[bool] = None,
@@ -1080,14 +626,14 @@ class AsyncLlamaExtractClient:
 
             - organization_id: typing.Optional[str].
         ---
-        from llama_cloud.client import AsyncLlamaCloud
+        from llama_cloud.client import LlamaCloud
 
-        client = AsyncLlamaCloud(
+        client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.llama_extract.list_extraction_agents()
+        client.llama_extract.list_extraction_agents()
         """
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents"),
             params=remove_none_from_dict(
@@ -1106,7 +652,7 @@ class AsyncLlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def create_extraction_agent(
+    def create_extraction_agent(
         self,
         *,
         project_id: typing.Optional[str] = None,
@@ -1136,12 +682,12 @@ class AsyncLlamaExtractClient:
             ExtractTarget,
             PublicModelName,
         )
-        from llama_cloud.client import AsyncLlamaCloud
+        from llama_cloud.client import LlamaCloud
 
-        client = AsyncLlamaCloud(
+        client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.llama_extract.create_extraction_agent(
+        client.llama_extract.create_extraction_agent(
             name="string",
             config=ExtractConfig(
                 priority=ExtractConfigPriority.LOW,
@@ -1153,7 +699,7 @@ class AsyncLlamaExtractClient:
             ),
         )
         """
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents"),
             params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
@@ -1171,7 +717,7 @@ class AsyncLlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def validate_extraction_schema(
+    def validate_extraction_schema(
         self, *, data_schema: ExtractSchemaValidateRequestDataSchema
     ) -> ExtractSchemaValidateResponse:
         """
@@ -1181,14 +727,14 @@ class AsyncLlamaExtractClient:
         Parameters:
             - data_schema: ExtractSchemaValidateRequestDataSchema.
         ---
-        from llama_cloud.client import AsyncLlamaCloud
+        from llama_cloud.client import LlamaCloud
 
-        client = AsyncLlamaCloud(
+        client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.llama_extract.validate_extraction_schema()
+        client.llama_extract.validate_extraction_schema()
         """
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents/schema/validation"
@@ -1207,7 +753,7 @@ class AsyncLlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def generate_extraction_schema(
+    def generate_extraction_schema(
         self,
         *,
         project_id: typing.Optional[str] = None,
@@ -1227,19 +773,19 @@ class AsyncLlamaExtractClient:
 
             - file_id: typing.Optional[str].
         ---
-        from llama_cloud.client import AsyncLlamaCloud
+        from llama_cloud.client import LlamaCloud
 
-        client = AsyncLlamaCloud(
+        client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.llama_extract.generate_extraction_schema()
+        client.llama_extract.generate_extraction_schema()
         """
         _request: typing.Dict[str, typing.Any] = {}
         if prompt is not OMIT:
             _request["prompt"] = prompt
         if file_id is not OMIT:
             _request["file_id"] = file_id
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents/schema/generate"
@@ -1259,7 +805,7 @@ class AsyncLlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_extraction_agent_by_name(
+    def get_extraction_agent_by_name(
         self, name: str, *, project_id: typing.Optional[str] = None, organization_id: typing.Optional[str] = None
     ) -> ExtractAgent:
         """
@@ -1270,16 +816,16 @@ class AsyncLlamaExtractClient:
 
             - organization_id: typing.Optional[str].
         ---
-        from llama_cloud.client import AsyncLlamaCloud
+        from llama_cloud.client import LlamaCloud
 
-        client = AsyncLlamaCloud(
+        client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.llama_extract.get_extraction_agent_by_name(
+        client.llama_extract.get_extraction_agent_by_name(
             name="string",
         )
         """
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/by-name/{name}"
@@ -1298,7 +844,7 @@ class AsyncLlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_or_create_default_extraction_agent(
+    def get_or_create_default_extraction_agent(
         self, *, project_id: typing.Optional[str] = None, organization_id: typing.Optional[str] = None
     ) -> ExtractAgent:
         """
@@ -1310,14 +856,14 @@ class AsyncLlamaExtractClient:
 
             - organization_id: typing.Optional[str].
         ---
-        from llama_cloud.client import AsyncLlamaCloud
+        from llama_cloud.client import LlamaCloud
 
-        client = AsyncLlamaCloud(
+        client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.llama_extract.get_or_create_default_extraction_agent()
+        client.llama_extract.get_or_create_default_extraction_agent()
         """
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents/default"
@@ -1336,21 +882,21 @@ class AsyncLlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_extraction_agent(self, extraction_agent_id: str) -> ExtractAgent:
+    def get_extraction_agent(self, extraction_agent_id: str) -> ExtractAgent:
         """
         Parameters:
             - extraction_agent_id: str.
         ---
-        from llama_cloud.client import AsyncLlamaCloud
+        from llama_cloud.client import LlamaCloud
 
-        client = AsyncLlamaCloud(
+        client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.llama_extract.get_extraction_agent(
+        client.llama_extract.get_extraction_agent(
             extraction_agent_id="string",
         )
         """
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/{extraction_agent_id}"
@@ -1368,7 +914,7 @@ class AsyncLlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def update_extraction_agent(
+    def update_extraction_agent(
         self, extraction_agent_id: str, *, data_schema: ExtractAgentUpdateDataSchema, config: ExtractConfig
     ) -> ExtractAgent:
         """
@@ -1388,12 +934,12 @@ class AsyncLlamaExtractClient:
             ExtractTarget,
             PublicModelName,
         )
-        from llama_cloud.client import AsyncLlamaCloud
+        from llama_cloud.client import LlamaCloud
 
-        client = AsyncLlamaCloud(
+        client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.llama_extract.update_extraction_agent(
+        client.llama_extract.update_extraction_agent(
             extraction_agent_id="string",
             config=ExtractConfig(
                 priority=ExtractConfigPriority.LOW,
@@ -1405,7 +951,7 @@ class AsyncLlamaExtractClient:
             ),
         )
         """
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "PUT",
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/{extraction_agent_id}"
@@ -1424,21 +970,21 @@ class AsyncLlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def delete_extraction_agent(self, extraction_agent_id: str) -> typing.Any:
+    def delete_extraction_agent(self, extraction_agent_id: str) -> typing.Any:
         """
         Parameters:
             - extraction_agent_id: str.
         ---
-        from llama_cloud.client import AsyncLlamaCloud
+        from llama_cloud.client import LlamaCloud
 
-        client = AsyncLlamaCloud(
+        client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.llama_extract.delete_extraction_agent(
+        client.llama_extract.delete_extraction_agent(
             extraction_agent_id="string",
         )
         """
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "DELETE",
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/{extraction_agent_id}"
@@ -1455,6 +1001,11 @@ class AsyncLlamaExtractClient:
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
+
+
+class AsyncLlamaExtractClient:
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
+        self._client_wrapper = client_wrapper
 
     async def list_jobs(self, *, extraction_agent_id: str) -> typing.List[ExtractJob]:
         """
@@ -1487,18 +1038,37 @@ class AsyncLlamaExtractClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def run_job(self, *, from_ui: typing.Optional[bool] = None, request: ExtractJobCreate) -> ExtractJob:
+    async def run_job(
+        self,
+        *,
+        from_ui: typing.Optional[bool] = None,
+        priority: typing.Optional[ExtractJobCreatePriority] = OMIT,
+        webhook_configurations: typing.Optional[typing.List[WebhookConfiguration]] = OMIT,
+        extraction_agent_id: str,
+        file_id: str,
+        data_schema_override: typing.Optional[ExtractJobCreateDataSchemaOverride] = OMIT,
+        config_override: typing.Optional[ExtractConfig] = OMIT,
+    ) -> ExtractJob:
         """
         Parameters:
             - from_ui: typing.Optional[bool].
 
-            - request: ExtractJobCreate.
+            - priority: typing.Optional[ExtractJobCreatePriority].
+
+            - webhook_configurations: typing.Optional[typing.List[WebhookConfiguration]].
+
+            - extraction_agent_id: str. The id of the extraction agent
+
+            - file_id: str. The id of the file
+
+            - data_schema_override: typing.Optional[ExtractJobCreateDataSchemaOverride]. The data schema to override the extraction agent's data schema with
+
+            - config_override: typing.Optional[ExtractConfig].
         ---
         from llama_cloud import (
             DocumentChunkMode,
             ExtractConfig,
             ExtractConfigPriority,
-            ExtractJobCreate,
             ExtractJobCreatePriority,
             ExtractMode,
             ExtractModels,
@@ -1511,26 +1081,33 @@ class AsyncLlamaExtractClient:
             token="YOUR_TOKEN",
         )
         await client.llama_extract.run_job(
-            request=ExtractJobCreate(
-                priority=ExtractJobCreatePriority.LOW,
-                extraction_agent_id="string",
-                file_id="string",
-                config_override=ExtractConfig(
-                    priority=ExtractConfigPriority.LOW,
-                    extraction_target=ExtractTarget.PER_DOC,
-                    extraction_mode=ExtractMode.FAST,
-                    parse_model=PublicModelName.OPENAI_GPT_4_O,
-                    extract_model=ExtractModels.OPENAI_GPT_4_1,
-                    chunk_mode=DocumentChunkMode.PAGE,
-                ),
+            priority=ExtractJobCreatePriority.LOW,
+            extraction_agent_id="string",
+            file_id="string",
+            config_override=ExtractConfig(
+                priority=ExtractConfigPriority.LOW,
+                extraction_target=ExtractTarget.PER_DOC,
+                extraction_mode=ExtractMode.FAST,
+                parse_model=PublicModelName.OPENAI_GPT_4_O,
+                extract_model=ExtractModels.OPENAI_GPT_4_1,
+                chunk_mode=DocumentChunkMode.PAGE,
             ),
         )
         """
+        _request: typing.Dict[str, typing.Any] = {"extraction_agent_id": extraction_agent_id, "file_id": file_id}
+        if priority is not OMIT:
+            _request["priority"] = priority
+        if webhook_configurations is not OMIT:
+            _request["webhook_configurations"] = webhook_configurations
+        if data_schema_override is not OMIT:
+            _request["data_schema_override"] = data_schema_override
+        if config_override is not OMIT:
+            _request["config_override"] = config_override
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/jobs"),
             params=remove_none_from_dict({"from_ui": from_ui}),
-            json=jsonable_encoder(request),
+            json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
@@ -1561,90 +1138,6 @@ class AsyncLlamaExtractClient:
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/jobs/{job_id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ExtractJob, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def run_job_test_user(
-        self,
-        *,
-        from_ui: typing.Optional[bool] = None,
-        job_create: ExtractJobCreate,
-        extract_settings: typing.Optional[LlamaExtractSettings] = OMIT,
-    ) -> ExtractJob:
-        """
-        Parameters:
-            - from_ui: typing.Optional[bool].
-
-            - job_create: ExtractJobCreate.
-
-            - extract_settings: typing.Optional[LlamaExtractSettings].
-        ---
-        from llama_cloud import (
-            ChunkMode,
-            DocumentChunkMode,
-            ExtractConfig,
-            ExtractConfigPriority,
-            ExtractJobCreate,
-            ExtractJobCreatePriority,
-            ExtractMode,
-            ExtractModels,
-            ExtractTarget,
-            FailPageMode,
-            LlamaExtractSettings,
-            LlamaParseParameters,
-            LlamaParseParametersPriority,
-            MultimodalParseResolution,
-            ParsingMode,
-            PublicModelName,
-        )
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.llama_extract.run_job_test_user(
-            job_create=ExtractJobCreate(
-                priority=ExtractJobCreatePriority.LOW,
-                extraction_agent_id="string",
-                file_id="string",
-                config_override=ExtractConfig(
-                    priority=ExtractConfigPriority.LOW,
-                    extraction_target=ExtractTarget.PER_DOC,
-                    extraction_mode=ExtractMode.FAST,
-                    parse_model=PublicModelName.OPENAI_GPT_4_O,
-                    extract_model=ExtractModels.OPENAI_GPT_4_1,
-                    chunk_mode=DocumentChunkMode.PAGE,
-                ),
-            ),
-            extract_settings=LlamaExtractSettings(
-                chunk_mode=ChunkMode.PAGE,
-                llama_parse_params=LlamaParseParameters(
-                    priority=LlamaParseParametersPriority.LOW,
-                    parse_mode=ParsingMode.PARSE_PAGE_WITHOUT_LLM,
-                    replace_failed_page_mode=FailPageMode.RAW_TEXT,
-                ),
-                multimodal_parse_resolution=MultimodalParseResolution.MEDIUM,
-            ),
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {"job_create": job_create}
-        if extract_settings is not OMIT:
-            _request["extract_settings"] = extract_settings
-        _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/jobs/test"),
-            params=remove_none_from_dict({"from_ui": from_ui}),
-            json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
@@ -2073,6 +1566,397 @@ class AsyncLlamaExtractClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(ExtractJob, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def list_extraction_agents(
+        self,
+        *,
+        include_default: typing.Optional[bool] = None,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> typing.List[ExtractAgent]:
+        """
+        Parameters:
+            - include_default: typing.Optional[bool]. Whether to include default agents in the results
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.llama_extract.list_extraction_agents()
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents"),
+            params=remove_none_from_dict(
+                {"include_default": include_default, "project_id": project_id, "organization_id": organization_id}
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.List[ExtractAgent], _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def create_extraction_agent(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        name: str,
+        data_schema: ExtractAgentCreateDataSchema,
+        config: ExtractConfig,
+    ) -> ExtractAgent:
+        """
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - name: str. The name of the extraction schema
+
+            - data_schema: ExtractAgentCreateDataSchema. The schema of the data.
+
+            - config: ExtractConfig. The configuration parameters for the extraction agent.
+        ---
+        from llama_cloud import (
+            DocumentChunkMode,
+            ExtractConfig,
+            ExtractConfigPriority,
+            ExtractMode,
+            ExtractModels,
+            ExtractTarget,
+            PublicModelName,
+        )
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.llama_extract.create_extraction_agent(
+            name="string",
+            config=ExtractConfig(
+                priority=ExtractConfigPriority.LOW,
+                extraction_target=ExtractTarget.PER_DOC,
+                extraction_mode=ExtractMode.FAST,
+                parse_model=PublicModelName.OPENAI_GPT_4_O,
+                extract_model=ExtractModels.OPENAI_GPT_4_1,
+                chunk_mode=DocumentChunkMode.PAGE,
+            ),
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder({"name": name, "data_schema": data_schema, "config": config}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExtractAgent, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def validate_extraction_schema(
+        self, *, data_schema: ExtractSchemaValidateRequestDataSchema
+    ) -> ExtractSchemaValidateResponse:
+        """
+        Validates an extraction agent's schema definition.
+        Returns the normalized and validated schema if valid, otherwise raises an HTTP 400.
+
+        Parameters:
+            - data_schema: ExtractSchemaValidateRequestDataSchema.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.llama_extract.validate_extraction_schema()
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents/schema/validation"
+            ),
+            json=jsonable_encoder({"data_schema": data_schema}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExtractSchemaValidateResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def generate_extraction_schema(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        prompt: typing.Optional[str] = OMIT,
+        file_id: typing.Optional[str] = OMIT,
+    ) -> ExtractSchemaGenerateResponse:
+        """
+        Generates an extraction agent's schema definition from a file and/or natural language prompt.
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - prompt: typing.Optional[str].
+
+            - file_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.llama_extract.generate_extraction_schema()
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if prompt is not OMIT:
+            _request["prompt"] = prompt
+        if file_id is not OMIT:
+            _request["file_id"] = file_id
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents/schema/generate"
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExtractSchemaGenerateResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_extraction_agent_by_name(
+        self, name: str, *, project_id: typing.Optional[str] = None, organization_id: typing.Optional[str] = None
+    ) -> ExtractAgent:
+        """
+        Parameters:
+            - name: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.llama_extract.get_extraction_agent_by_name(
+            name="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/by-name/{name}"
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExtractAgent, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_or_create_default_extraction_agent(
+        self, *, project_id: typing.Optional[str] = None, organization_id: typing.Optional[str] = None
+    ) -> ExtractAgent:
+        """
+        Get or create a default extraction agent for the current project.
+        The default agent has an empty schema and default configuration.
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.llama_extract.get_or_create_default_extraction_agent()
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", "api/v1/extraction/extraction-agents/default"
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExtractAgent, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_extraction_agent(self, extraction_agent_id: str) -> ExtractAgent:
+        """
+        Parameters:
+            - extraction_agent_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.llama_extract.get_extraction_agent(
+            extraction_agent_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/{extraction_agent_id}"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExtractAgent, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def update_extraction_agent(
+        self, extraction_agent_id: str, *, data_schema: ExtractAgentUpdateDataSchema, config: ExtractConfig
+    ) -> ExtractAgent:
+        """
+        Parameters:
+            - extraction_agent_id: str.
+
+            - data_schema: ExtractAgentUpdateDataSchema. The schema of the data
+
+            - config: ExtractConfig. The configuration parameters for the extraction agent.
+        ---
+        from llama_cloud import (
+            DocumentChunkMode,
+            ExtractConfig,
+            ExtractConfigPriority,
+            ExtractMode,
+            ExtractModels,
+            ExtractTarget,
+            PublicModelName,
+        )
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.llama_extract.update_extraction_agent(
+            extraction_agent_id="string",
+            config=ExtractConfig(
+                priority=ExtractConfigPriority.LOW,
+                extraction_target=ExtractTarget.PER_DOC,
+                extraction_mode=ExtractMode.FAST,
+                parse_model=PublicModelName.OPENAI_GPT_4_O,
+                extract_model=ExtractModels.OPENAI_GPT_4_1,
+                chunk_mode=DocumentChunkMode.PAGE,
+            ),
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "PUT",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/{extraction_agent_id}"
+            ),
+            json=jsonable_encoder({"data_schema": data_schema, "config": config}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ExtractAgent, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def delete_extraction_agent(self, extraction_agent_id: str) -> typing.Any:
+        """
+        Parameters:
+            - extraction_agent_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.llama_extract.delete_extraction_agent(
+            extraction_agent_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/extraction/extraction-agents/{extraction_agent_id}"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:

@@ -26,6 +26,7 @@ class PublicModelName(str, enum.Enum):
     GEMINI_25_PRO = "gemini-2.5-pro"
     GEMINI_20_FLASH = "gemini-2.0-flash"
     GEMINI_20_FLASH_LITE = "gemini-2.0-flash-lite"
+    GEMINI_25_FLASH_LITE = "gemini-2.5-flash-lite"
     GEMINI_15_FLASH = "gemini-1.5-flash"
     GEMINI_15_PRO = "gemini-1.5-pro"
 
@@ -50,6 +51,7 @@ class PublicModelName(str, enum.Enum):
         gemini_25_pro: typing.Callable[[], T_Result],
         gemini_20_flash: typing.Callable[[], T_Result],
         gemini_20_flash_lite: typing.Callable[[], T_Result],
+        gemini_25_flash_lite: typing.Callable[[], T_Result],
         gemini_15_flash: typing.Callable[[], T_Result],
         gemini_15_pro: typing.Callable[[], T_Result],
     ) -> T_Result:
@@ -91,6 +93,8 @@ class PublicModelName(str, enum.Enum):
             return gemini_20_flash()
         if self is PublicModelName.GEMINI_20_FLASH_LITE:
             return gemini_20_flash_lite()
+        if self is PublicModelName.GEMINI_25_FLASH_LITE:
+            return gemini_25_flash_lite()
         if self is PublicModelName.GEMINI_15_FLASH:
             return gemini_15_flash()
         if self is PublicModelName.GEMINI_15_PRO:
