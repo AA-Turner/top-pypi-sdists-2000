@@ -505,7 +505,7 @@ class TestAuthorizationCodeView(BaseTest):
         """
         Test that in case of error the querystring of the redirection uri is preserved
 
-        See https://github.com/jazzband/django-oauth-toolkit/issues/238
+        See https://github.com/django-oauth/django-oauth-toolkit/issues/238
         """
         self.client.login(username="test_user", password="123456")
 
@@ -989,7 +989,7 @@ class TestAuthorizationCodeTokenView(BaseAuthorizationCodeTokenView):
     def test_refresh_repeating_requests_revokes_old_token(self):
         """
         If a refresh token is reused, the server should invalidate *all* access tokens that have a relation
-        to the re-used token. This forces a malicious actor to be logged out.
+        to the reused token. This forces a malicious actor to be logged out.
         The server can't determine whether the first or the second client was legitimate, so it needs to
         revoke both.
         See https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#name-recommendations
@@ -1867,7 +1867,7 @@ class TestOIDCAuthorizationCodeHSAlgorithm(BaseAuthorizationCodeTokenView):
 
         # Check decoding JWT using HS256
         key = self.application.jwk_key
-        assert key.key_type == "oct"
+        assert key.kty == "oct"
         jwt_token = jwt.JWT(key=key, jwt=content["id_token"])
         claims = json.loads(jwt_token.claims)
         assert claims["sub"] == "1"

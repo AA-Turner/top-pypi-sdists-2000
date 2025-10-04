@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: vllm
-Version: 0.10.2
+Version: 0.11.0
 Summary: A high-throughput and memory-efficient inference and serving engine for LLMs
 Author: vLLM Team
 License-Expression: Apache-2.0
@@ -45,7 +45,7 @@ Requires-Dist: llguidance<0.8.0,>=0.7.11; platform_machine == "x86_64" or platfo
 Requires-Dist: outlines_core==0.2.11
 Requires-Dist: diskcache==5.6.3
 Requires-Dist: lark==1.2.2
-Requires-Dist: xgrammar==0.1.23; platform_machine == "x86_64" or platform_machine == "aarch64" or platform_machine == "arm64"
+Requires-Dist: xgrammar==0.1.25; platform_machine == "x86_64" or platform_machine == "aarch64" or platform_machine == "arm64"
 Requires-Dist: typing_extensions>=4.10
 Requires-Dist: filelock>=3.16.1
 Requires-Dist: partial-json-parser
@@ -96,7 +96,7 @@ Requires-Dist: soundfile; extra == "audio"
 Requires-Dist: mistral_common[audio]; extra == "audio"
 Provides-Extra: video
 Provides-Extra: flashinfer
-Requires-Dist: flashinfer-python==0.3.0; extra == "flashinfer"
+Requires-Dist: flashinfer-python==0.3.1; extra == "flashinfer"
 Provides-Extra: petit-kernel
 Requires-Dist: petit-kernel; extra == "petit-kernel"
 Dynamic: license-file
@@ -186,7 +186,7 @@ vLLM is flexible and easy to use with:
 - Tensor, pipeline, data and expert parallelism support for distributed inference
 - Streaming outputs
 - OpenAI-compatible API server
-- Support NVIDIA GPUs, AMD CPUs and GPUs, Intel CPUs and GPUs, PowerPC CPUs, TPU, and AWS Neuron
+- Support for NVIDIA GPUs, AMD CPUs and GPUs, Intel CPUs and GPUs, PowerPC CPUs, and TPU. Additionally, support for diverse hardware plugins such as Intel Gaudi, IBM Spyre and Huawei Ascend.
 - Prefix caching support
 - Multi-LoRA support
 

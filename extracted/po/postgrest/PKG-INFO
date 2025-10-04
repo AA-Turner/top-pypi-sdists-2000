@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: postgrest
-Version: 2.20.0
+Version: 2.21.1
 Summary: PostgREST client for Python. This library provides an ORM interface to PostgREST.
 Author: Lương Quang Mạnh, Joel Lee, Anand, Oliver Rice, Andrew Smith
 Author-email: Lương Quang Mạnh <luongquangmanh85@gmail.com>, Joel Lee <joel@joellee.org>, Andrew Smith <a.smith@silentworks.co.uk>
@@ -15,6 +15,7 @@ Requires-Dist: strenum>=0.4.9 ; python_full_version < '3.11'
 Maintainer: Leonardo Santiago
 Maintainer-email: Leonardo Santiago <leonardo.santiago@supabase.io>
 Requires-Python: >=3.9
+Project-URL: changelog, https://github.com/supabase/supabase-py/CHANGELOG.md
 Project-URL: documentation, https://postgrest-py.rtfd.io
 Project-URL: homepage, https://github.com/supabase/supabase/tree/main/src/postgrest
 Project-URL: repository, https://github.com/supabase/supabase-py

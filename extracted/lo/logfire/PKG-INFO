@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: logfire
-Version: 4.10.0
+Version: 4.11.0
 Summary: The best Python observability tool! 🪵🔥
 Project-URL: Homepage, https://logfire.pydantic.dev/
 Project-URL: Source, https://github.com/pydantic/logfire
@@ -19,7 +19,6 @@ Classifier: Framework :: OpenTelemetry :: Instrumentations
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: Information Technology
 Classifier: Intended Audience :: System Administrators
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: POSIX :: Linux
 Classifier: Operating System :: Unix
 Classifier: Programming Language :: Python

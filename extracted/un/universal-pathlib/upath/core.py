@@ -17,6 +17,7 @@ from typing import BinaryIO
 from typing import Literal
 from typing import NoReturn
 from typing import TextIO
+from typing import TypeVar
 from typing import overload
 from urllib.parse import SplitResult
 from urllib.parse import urlsplit
@@ -31,16 +32,19 @@ from upath._flavour import LazyFlavourDescriptor
 from upath._flavour import WrappedFileSystemFlavour
 from upath._flavour import upath_get_kwargs_from_url
 from upath._flavour import upath_urijoin
+from upath._info import UPathInfo
 from upath._protocol import compatible_protocol
 from upath._protocol import get_upath_protocol
 from upath._stat import UPathStatResult
 from upath.registry import get_upath_class
 from upath.types import UNSET_DEFAULT
 from upath.types import JoinablePathLike
-from upath.types import OpenablePath
 from upath.types import PathInfo
+from upath.types import ReadablePath
 from upath.types import ReadablePathLike
+from upath.types import SupportsPathLike
 from upath.types import UPathParser
+from upath.types import WritablePath
 from upath.types import WritablePathLike
 
 if TYPE_CHECKING:
@@ -52,9 +56,9 @@ if TYPE_CHECKING:
     from pydantic import GetCoreSchemaHandler
     from pydantic_core.core_schema import CoreSchema
 
+    _WT = TypeVar("_WT", bound="WritablePath")
 
 __all__ = ["UPath"]
-
 
 _FSSPEC_HAS_WORKING_GLOB = None
 
@@ -426,7 +430,7 @@ class _UPathMixin(metaclass=_UPathMeta):
         return urlsplit(self.__str__())
 
 
-class UPath(_UPathMixin, OpenablePath):
+class UPath(_UPathMixin, WritablePath, ReadablePath):
     __slots__ = (
         "_chain",
         "_chain_parser",
@@ -524,7 +528,7 @@ class UPath(_UPathMixin, OpenablePath):
             parts = [*names, drive + sep]
         return tuple(reversed(parts))
 
-    def with_name(self, name) -> Self:
+    def with_name(self, name: str) -> Self:
         """Return a new path with the file name changed."""
         split = self.parser.split
         if self.parser.sep in name:  # `split(name)[0]`
@@ -570,11 +574,26 @@ class UPath(_UPathMixin, OpenablePath):
             return parents
         return super().parents
 
+    def joinpath(self, *pathsegments: JoinablePathLike) -> Self:
+        return self.with_segments(self.__vfspath__(), *pathsegments)
+
+    def __truediv__(self, key: JoinablePathLike) -> Self:
+        try:
+            return self.with_segments(self.__vfspath__(), key)
+        except TypeError:
+            return NotImplemented
+
+    def __rtruediv__(self, key: JoinablePathLike) -> Self:
+        try:
+            return self.with_segments(key, self.__vfspath__())
+        except TypeError:
+            return NotImplemented
+
     # === ReadablePath attributes =====================================
 
     @property
     def info(self) -> PathInfo:
-        _raise_unsupported(type(self).__name__, "info")
+        return UPathInfo(self)
 
     def iterdir(self) -> Iterator[Self]:
         sep = self.parser.sep
@@ -595,8 +614,68 @@ class UPath(_UPathMixin, OpenablePath):
     def __open_reader__(self) -> BinaryIO:
         return self.fs.open(self.path, mode="rb")
 
+    if sys.version_info >= (3, 14):
+
+        def __open_rb__(self, buffering: int = UNSET_DEFAULT) -> BinaryIO:
+            return self.open("rb", buffering=buffering)
+
     def readlink(self) -> Self:
         _raise_unsupported(type(self).__name__, "readlink")
+
+    @overload
+    def copy(self, target: _WT, **kwargs: Any) -> _WT: ...
+
+    @overload
+    def copy(self, target: SupportsPathLike | str, **kwargs: Any) -> Self: ...
+
+    def copy(self, target: _WT | SupportsPathLike | str, **kwargs: Any) -> _WT | UPath:
+        if not isinstance(target, UPath):
+            return super().copy(self.with_segments(target), **kwargs)
+        else:
+            return super().copy(target, **kwargs)
+
+    @overload
+    def copy_into(self, target_dir: _WT, **kwargs: Any) -> _WT: ...
+
+    @overload
+    def copy_into(self, target_dir: SupportsPathLike | str, **kwargs: Any) -> Self: ...
+
+    def copy_into(
+        self, target_dir: _WT | SupportsPathLike | str, **kwargs: Any
+    ) -> _WT | UPath:
+        if not isinstance(target_dir, UPath):
+            return super().copy_into(self.with_segments(target_dir), **kwargs)
+        else:
+            return super().copy_into(target_dir, **kwargs)
+
+    @overload
+    def move(self, target: _WT, **kwargs: Any) -> _WT: ...
+
+    @overload
+    def move(self, target: SupportsPathLike | str, **kwargs: Any) -> Self: ...
+
+    def move(self, target: _WT | SupportsPathLike | str, **kwargs: Any) -> _WT | UPath:
+        target = self.copy(target, **kwargs)
+        self.fs.rm(self.path, recursive=self.is_dir())
+        return target
+
+    @overload
+    def move_into(self, target_dir: _WT, **kwargs: Any) -> _WT: ...
+
+    @overload
+    def move_into(self, target_dir: SupportsPathLike | str, **kwargs: Any) -> Self: ...
+
+    def move_into(
+        self, target_dir: _WT | SupportsPathLike | str, **kwargs: Any
+    ) -> _WT | UPath:
+        name = self.name
+        if not name:
+            raise ValueError(f"{self!r} has an empty name")
+        elif hasattr(target_dir, "with_segments"):
+            target = target_dir.with_segments(target_dir, name)  # type: ignore
+        else:
+            target = self.with_segments(target_dir, name)
+        return self.move(target)
 
     # --- WritablePath attributes -------------------------------------
 
@@ -713,7 +792,7 @@ class UPath(_UPathMixin, OpenablePath):
     def stat(
         self,
         *,
-        follow_symlinks=True,
+        follow_symlinks: bool = True,
     ) -> UPathStatResult:
         if not follow_symlinks:
             warnings.warn(
@@ -730,7 +809,7 @@ class UPath(_UPathMixin, OpenablePath):
     def chmod(self, mode: int, *, follow_symlinks: bool = True) -> None:
         _raise_unsupported(type(self).__name__, "chmod")
 
-    def exists(self, *, follow_symlinks=True) -> bool:
+    def exists(self, *, follow_symlinks: bool = True) -> bool:
         return self.fs.exists(self.path)
 
     def is_dir(self) -> bool:
@@ -778,7 +857,7 @@ class UPath(_UPathMixin, OpenablePath):
         *,
         case_sensitive: bool = UNSET_DEFAULT,
         recurse_symlinks: bool = UNSET_DEFAULT,
-    ) -> Iterator[UPath]:
+    ) -> Iterator[Self]:
         if case_sensitive is not UNSET_DEFAULT:
             warnings.warn(
                 "UPath.glob(): case_sensitive is currently ignored.",
@@ -806,7 +885,7 @@ class UPath(_UPathMixin, OpenablePath):
         *,
         case_sensitive: bool = UNSET_DEFAULT,
         recurse_symlinks: bool = UNSET_DEFAULT,
-    ) -> Iterator[UPath]:
+    ) -> Iterator[Self]:
         if case_sensitive is not UNSET_DEFAULT:
             warnings.warn(
                 "UPath.glob(): case_sensitive is currently ignored.",
@@ -939,7 +1018,7 @@ class UPath(_UPathMixin, OpenablePath):
 
         return self.with_segments(*_parts[:1], *resolved)
 
-    def touch(self, mode=0o666, exist_ok=True) -> None:
+    def touch(self, mode: int = 0o666, exist_ok: bool = True) -> None:
         exists = self.fs.exists(self.path)
         if exists and not exist_ok:
             raise FileExistsError(str(self))
@@ -1037,6 +1116,10 @@ class UPath(_UPathMixin, OpenablePath):
         if self._relative_base is not None:
             kwargs["_relative_base"] = self._relative_base
         return _make_instance, (type(self), args, kwargs)
+
+    @classmethod
+    def from_uri(cls, uri: str, **storage_options: Any) -> Self:
+        return cls(uri, **storage_options)
 
     def as_uri(self) -> str:
         if self._relative_base is not None:

@@ -96,11 +96,14 @@ class ProxyUPath:
     def parser(self) -> UPathParser:
         return self.__wrapped__.parser
 
-    def with_segments(self) -> Self:
-        return self._from_upath(self.__wrapped__.with_segments())
+    def with_segments(self, *pathsegments: JoinablePathLike) -> Self:
+        return self._from_upath(self.__wrapped__.with_segments(*pathsegments))
 
     def __str__(self) -> str:
         return self.__wrapped__.__str__()
+
+    def __vfspath__(self) -> str:
+        return self.__wrapped__.__vfspath__()
 
     def __repr__(self) -> str:
         return (
@@ -341,6 +344,10 @@ class ProxyUPath:
     def __reduce__(self):
         return type(self)._from_upath, (self.__wrapped__,)
 
+    @classmethod
+    def from_uri(cls, uri: str, **storage_options: Any) -> Self:
+        return cls(uri, **storage_options)
+
     def as_uri(self) -> str:
         return self.__wrapped__.as_uri()
 
@@ -425,11 +432,17 @@ class ProxyUPath:
         ):
             yield self._from_upath(pth), dirnames, filenames
 
-    def copy(self, target: UPath, **kwargs: Any) -> Self:
+    def copy(self, target: WritablePathLike, **kwargs: Any) -> Self:  # type: ignore[override]  # noqa: E501
         return self._from_upath(self.__wrapped__.copy(target, **kwargs))
 
-    def copy_into(self, target_dir: UPath, **kwargs: Any) -> Self:
+    def copy_into(self, target_dir: WritablePathLike, **kwargs: Any) -> Self:  # type: ignore[override]  # noqa: E501
         return self._from_upath(self.__wrapped__.copy_into(target_dir, **kwargs))
+
+    def move(self, target: WritablePathLike, **kwargs: Any) -> Self:  # type: ignore[override]  # noqa: E501
+        return self._from_upath(self.__wrapped__.move(target, **kwargs))
+
+    def move_into(self, target_dir: WritablePathLike, **kwargs: Any) -> Self:  # type: ignore[override]  # noqa: E501
+        return self._from_upath(self.__wrapped__.move_into(target_dir, **kwargs))
 
     def write_bytes(self, data: bytes) -> int:
         return self.__wrapped__.write_bytes(data)
@@ -445,8 +458,10 @@ class ProxyUPath:
             data, encoding=encoding, errors=errors, newline=newline
         )
 
-    def _copy_from(self, source: ReadablePath, follow_symlinks: bool = True) -> None:
-        self.__wrapped__._copy_from(source, follow_symlinks=follow_symlinks)
+    def _copy_from(
+        self, source: ReadablePath | Self, follow_symlinks: bool = True
+    ) -> None:
+        self.__wrapped__._copy_from(source, follow_symlinks=follow_symlinks)  # type: ignore  # noqa: E501
 
     @property
     def anchor(self) -> str:
@@ -461,7 +476,7 @@ class ProxyUPath:
         return self.__wrapped__.suffix
 
     @property
-    def suffixes(self) -> Sequence[str]:
+    def suffixes(self) -> list[str]:
         return self.__wrapped__.suffixes
 
     @property
@@ -474,7 +489,7 @@ class ProxyUPath:
     def with_suffix(self, suffix: str) -> Self:
         return self._from_upath(self.__wrapped__.with_suffix(suffix))
 
-    def joinpath(self, *pathsegments: str) -> Self:
+    def joinpath(self, *pathsegments: JoinablePathLike) -> Self:
         return self._from_upath(self.__wrapped__.joinpath(*pathsegments))
 
     def __truediv__(self, other: str | Self) -> Self:

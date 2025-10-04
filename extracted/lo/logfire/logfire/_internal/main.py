@@ -26,7 +26,7 @@ import opentelemetry.trace as trace_api
 from opentelemetry.context import Context
 from opentelemetry.metrics import CallbackT, Counter, Histogram, UpDownCounter
 from opentelemetry.sdk.trace import ReadableSpan, Span
-from opentelemetry.trace import SpanContext, Tracer
+from opentelemetry.trace import SpanContext
 from opentelemetry.util import types as otel_types
 from typing_extensions import LiteralString, ParamSpec
 
@@ -60,7 +60,12 @@ from .json_schema import (
 )
 from .metrics import ProxyMeterProvider
 from .stack_info import get_user_stack_info
-from .tracer import ProxyTracerProvider, _LogfireWrappedSpan, record_exception, set_exception_status  # type: ignore
+from .tracer import (
+    ProxyTracerProvider,
+    _LogfireWrappedSpan,  # type: ignore
+    _ProxyTracer,  # type: ignore
+    set_exception_status,
+)
 from .utils import get_version, handle_internal_errors, log_internal_error, uniquify_sequence
 
 if TYPE_CHECKING:
@@ -157,14 +162,14 @@ class Logfire:
         return self._meter_provider.get_meter(self._otel_scope, VERSION)
 
     @cached_property
-    def _logs_tracer(self) -> Tracer:
+    def _logs_tracer(self) -> _ProxyTracer:
         return self._get_tracer(is_span_tracer=False)
 
     @cached_property
-    def _spans_tracer(self) -> Tracer:
+    def _spans_tracer(self) -> _ProxyTracer:
         return self._get_tracer(is_span_tracer=True)
 
-    def _get_tracer(self, *, is_span_tracer: bool) -> Tracer:  # pragma: no cover
+    def _get_tracer(self, *, is_span_tracer: bool) -> _ProxyTracer:
         return self._tracer_provider.get_tracer(
             self._otel_scope,
             VERSION,
@@ -759,7 +764,7 @@ class Logfire:
                 if isinstance(exc_info, tuple):
                     exc_info = exc_info[1]
                 if isinstance(exc_info, BaseException):
-                    record_exception(span, exc_info)
+                    span.record_exception(exc_info)
                     if otlp_attributes[ATTRIBUTES_LOG_LEVEL_NUM_KEY] >= LEVEL_NUMBERS['error']:  # type: ignore
                         # Set the status description to the exception message.
                         # OTEL only lets us set the description when the status code is ERROR,
@@ -1816,6 +1821,7 @@ class Logfire:
     def instrument_sqlalchemy(
         self,
         engine: AsyncEngine | Engine | None = None,
+        engines: Iterable[AsyncEngine | Engine] | None = None,
         enable_commenter: bool = False,
         commenter_options: SQLAlchemyCommenterOptions | None = None,
         **kwargs: Any,
@@ -1827,7 +1833,8 @@ class Logfire:
         library, specifically `SQLAlchemyInstrumentor().instrument()`, to which it passes `**kwargs`.
 
         Args:
-            engine: The `sqlalchemy` engine to instrument, or `None` to instrument all engines.
+            engine: The `sqlalchemy` engine to instrument.
+            engines: An iterable of `sqlalchemy` engines to instrument.
             enable_commenter: Adds comments to SQL queries performed by SQLAlchemy, so that database logs have additional context.
             commenter_options: Configure the tags to be added to the SQL comments.
             **kwargs: Additional keyword arguments to pass to the OpenTelemetry `instrument` methods.
@@ -1837,6 +1844,7 @@ class Logfire:
         self._warn_if_not_initialized_for_instrumentation()
         return instrument_sqlalchemy(
             engine=engine,
+            engines=engines,
             enable_commenter=enable_commenter,
             commenter_options=commenter_options or {},
             **{
@@ -2325,7 +2333,7 @@ class LogfireSpan(ReadableSpan):
         self,
         span_name: str,
         otlp_attributes: dict[str, otel_types.AttributeValue],
-        tracer: Tracer,
+        tracer: _ProxyTracer,
         json_schema_properties: JsonSchemaProperties,
         links: Sequence[tuple[SpanContext, otel_types.Attributes]],
     ) -> None:
@@ -2337,7 +2345,7 @@ class LogfireSpan(ReadableSpan):
 
         self._added_attributes = False
         self._token: None | Token[Context] = None
-        self._span: None | trace_api.Span = None
+        self._span: None | _LogfireWrappedSpan = None
 
     if not TYPE_CHECKING:  # pragma: no branch
 
@@ -2455,11 +2463,7 @@ class LogfireSpan(ReadableSpan):
         if not self._span.is_recording():
             return
 
-        span = self._span
-        while isinstance(span, _LogfireWrappedSpan):
-            span = span.span
-        record_exception(
-            span,
+        self._span.record_exception(
             exception,
             attributes=attributes,
             timestamp=timestamp,
