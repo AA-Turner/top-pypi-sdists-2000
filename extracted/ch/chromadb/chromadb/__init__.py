@@ -37,6 +37,8 @@ from chromadb.execution.expression.operator import (
     K,  # Alias for Key
     # KNN-based ranking for hybrid search
     Knn,
+    # Reciprocal Rank Fusion for combining rankings
+    Rrf,
 )
 from pathlib import Path
 import os
@@ -66,6 +68,7 @@ __all__ = [
     "Key",
     "K",
     "Knn",
+    "Rrf",
 ]
 
 from chromadb.types import CloudClientArg
@@ -74,7 +77,7 @@ logger = logging.getLogger(__name__)
 
 __settings = Settings()
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 
 # Workaround to deal with Colab's old sqlite3 version

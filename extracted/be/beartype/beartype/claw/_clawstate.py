@@ -13,6 +13,10 @@ This private submodule is *not* intended for importation by downstream callers.
 '''
 
 # ....................{ IMPORTS                            }....................
+from beartype.claw._ast._scope.clawastscopebefore import (
+    BeartypeNodeScopeBeforelist,
+    make_node_scope_beforelist_global,
+)
 from beartype.claw._importlib.clawimpcache import ModuleNameToBeartypeConf
 from beartype.claw._package.clawpkgtrie import (
     PackagesTrieBlacklist,
@@ -20,13 +24,13 @@ from beartype.claw._package.clawpkgtrie import (
     PackagesTrieWhitelist,
     PackageBasenameToTrieBlacklist,
 )
-from beartype._data.api.external.datamodthirdparty import (
-    THIRDPARTY_PACKAGE_NAMES_BLACKLIST)
+from beartype._data.conf.dataconfblack import (
+    BLACKLIST_PACKAGE_NAMES)
 from beartype.typing import (
     TYPE_CHECKING,
     Optional,
 )
-from beartype._data.hint.datahinttyping import ImportPathHook
+from beartype._data.typing.datatyping import ImportPathHook
 from threading import RLock
 
 # ....................{ CLASSES                            }....................
@@ -46,12 +50,12 @@ class BeartypeClawState(object):
           :func:`beartype.claw._importlib.clawimppath.add_beartype_pathhook`
           function has been previously called at least once under the active
           Python interpreter and the
-          :func:`beartype.claw._importlib.clawimppath.add_beartype_pathhook`
-          function has not been called more recently, the **Beartype import path
+          :func:`beartype.claw._importlib.clawimppath.remove_beartype_pathhook`
+          function has not been called more recently, the **beartype import path
           hook singleton** (i.e., factory closure creating and returning a new
           :class:`importlib.machinery.FileFinder` instance itself creating and
           leveraging a new :class:`.BeartypeSourceFileLoader` instance).
-        * Else, :data:`None` otherwise.
+        * Else, :data:`None`.
 
         Initialized to :data:`None`.
     module_name_to_beartype_conf : ModuleNameToBeartypeConf
@@ -60,20 +64,25 @@ class BeartypeClawState(object):
         imported submodule of each package previously registered in our global
         package trie to the beartype configuration configuring type-checking by
         the :func:`beartype.beartype` decorator of that submodule).
+    node_scope_beforelist_global : BeartypeNodeScopeBeforelist
+        **Abstract syntax tree (AST) global scope beforelist** (i.e., low-level
+        dataclass aggregating all metadata required to manage the beforelist
+        automating decorator positioning across all global scopes of all modules
+        recursively visited by :mod:`beartype.claw` AST transformers).
     packages_trie_blacklist : PackagesTrieWhitelist
         **Package trie blacklist** (i.e., non-thread-safe recursively nested
         dictionary implementing a prefix tree such that each key-value pair maps
         from the unqualified basename of each subpackage to *not* be implicitly
         type-checked on the first importation of that subpackage to another
-        instance of the :class:`.PackagesTrieWhitelist` class similarly describing the
-        sub-subpackages of that subpackage).
+        instance of the :class:`.PackagesTrieWhitelist` class similarly
+        describing the sub-subpackages of that subpackage).
     packages_trie_whitelist : PackagesTrieWhitelist
         **Package trie whitelist** (i.e., non-thread-safe recursively nested
         dictionary implementing a prefix tree such that each key-value pair maps
         from the unqualified basename of each subpackage to be implicitly
         type-checked on the first importation of that subpackage to another
-        instance of the :class:`.PackagesTrieWhitelist` class similarly describing the
-        sub-subpackages of that subpackage).
+        instance of the :class:`.PackagesTrieWhitelist` class similarly
+        describing the sub-subpackages of that subpackage).
     '''
 
     # ..................{ CLASS VARIABLES                    }..................
@@ -82,14 +91,12 @@ class BeartypeClawState(object):
     # variables *MUST* additionally slot those variables. Subclasses violating
     # this constraint will be usable but unslotted, which defeats our purposes.
     #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    # Slot all instance variables defined on this object to minimize the time
-    # complexity of both reading and writing variables across frequently called
-    # cache dunder methods. Slotting has been shown to reduce read and write
-    # costs by approximately ~10%, which is non-trivial.
+    # Slot all instance variables defined on this object to reduce the costs of
+    # both reading and writing these variables by approximately ~10%.
     __slots__ = (
         'beartype_pathhook',
         'module_name_to_beartype_conf',
+        'node_scope_beforelist_global',
         'packages_trie_blacklist',
         'packages_trie_whitelist',
     )
@@ -99,6 +106,7 @@ class BeartypeClawState(object):
     if TYPE_CHECKING:
         beartype_pathhook: Optional[ImportPathHook]
         module_name_to_beartype_conf: ModuleNameToBeartypeConf
+        node_scope_beforelist_global: BeartypeNodeScopeBeforelist
         packages_trie_blacklist: PackagesTrieBlacklist
         packages_trie_whitelist: PackagesTrieWhitelist
 
@@ -126,9 +134,11 @@ class BeartypeClawState(object):
 
         # One one-liner to reinitialize them all.
         self.module_name_to_beartype_conf = ModuleNameToBeartypeConf()
+        self.node_scope_beforelist_global = make_node_scope_beforelist_global()
         self.packages_trie_whitelist = PackagesTrieWhitelist()
         self.packages_trie_blacklist = PackagesTrieBlacklist(
             subpackage_basename_to_trie=_PACKAGE_NAME_TO_TRIE_BLACKLISTED)
+        # print(f'node_scope_beforelist_global: {self.node_scope_beforelist_global}')
 
         #FIXME: Preserved because the above will inevitably break. *sigh*
         # self.packages_trie_blacklist = PackagesTrieBlacklist()
@@ -141,6 +151,7 @@ class BeartypeClawState(object):
         pertaining to previously hooked packages and configurations installed by
         previously called beartype import hooks.
         '''
+        # print('Renitializing "beartype.claw" state...')
 
         # Avoid circular import dependencies.
         from beartype.claw._importlib.clawimppath import (
@@ -165,6 +176,7 @@ class BeartypeClawState(object):
             f'{self.__class__.__name__}(\n',
             f'    beartype_pathhook={repr(self.beartype_pathhook)},\n',
             f'    module_name_to_beartype_conf={repr(self.module_name_to_beartype_conf)},\n',
+            f'    node_scope_beforelist_global={repr(self.node_scope_beforelist_global)},\n',
             f'    packages_trie_blacklist={repr(self.packages_trie_blacklist)},\n',
             f'    packages_trie_whitelist={repr(self.packages_trie_whitelist)},\n',
             f')',
@@ -197,13 +209,13 @@ def _init() -> None:
     #   method docstring for further commentary.
     #
     # Note that "beartype" is intentionally *OMITTED* from the global
-    # "THIRDPARTY_PACKAGE_NAMES_BLACKLIST" frozen set iterated over below. Why?
+    # "BLACKLIST_PACKAGE_NAMES" frozen set iterated over below. Why?
     # Because "beartype" should *ONLY* be blacklisted with respect to
     # "beartype.claw" import hooks. "beartype" should *NOT* be unilaterally
     # blacklisted across the entirety of this codebase, as doing so would
     # erroneously destroy our ability to (in no particular order):
     # * Define deeply type-checkable PEP 484- and 585-compliant generics.
-    package_names_blacklist = THIRDPARTY_PACKAGE_NAMES_BLACKLIST | {
+    package_names_blacklist = BLACKLIST_PACKAGE_NAMES | {
         'beartype',
     }
 

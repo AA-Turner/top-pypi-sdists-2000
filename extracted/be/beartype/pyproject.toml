@@ -82,6 +82,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development :: Code Generators",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -265,6 +266,13 @@ doc-rtd = [
     # La-Z-Boy.
     "pydata-sphinx-theme <=0.7.2",
 
+    # The older version of "pydata-sphinx-theme" currently required above to
+    # build this documentation assumes that Python bundles the "distutils"
+    # package, which Python >= 3.12 no longer does. Instead, explicitly install
+    # the third-party "setuptools" toolchain, which implicitly installs
+    # "distutils" as well... via a horribly antiquated hack. Just do it. \o/
+    "setuptools",
+
     # Third-party Sphinx extensions.
     "autoapi >=0.9.0",
     "sphinxext-opengraph >=0.7.5",
@@ -308,28 +316,89 @@ test-tox = [
     # ....................{ ETC                            }....................
     # Miscellaneous optional test-time dependencies.
 
-    # Required by optional Click-specific integration tests.
-    "click",
-    "rich-click",
-
+    #FIXME: Reenable Python >= 3.14 support *AFTER* nuitka and all reverse
+    #dependencies thereof officially ship Python 3.14 wheels.
     #FIXME: Let's avoid attempting to remotely compile with nuitka under GitHub
     #Actions-hosted continuous integration (CI) for the moment. Doing so is
     #non-trivial enough under local testing workflows. *sigh*
     # Required by optional nuitka-specific integration tests if the current
     # platform is a Linux distribution.
-    "nuitka >=1.2.6; sys_platform == 'linux'",
+    "nuitka >=1.2.6; sys_platform == 'linux' and python_version < '3.14.0'",
 
     # Required by optional SQLAlchemy-specific integration tests.
     "sqlalchemy",
 
+    # ....................{ CLI                            }....................
+    # Required by optional Typer-specific integration tests.
+    "typer",
+
+    # ....................{ CLI ~ click                    }....................
+    # Required by optional Click-specific integration tests.
+    "click",
+    "rich-click",
+
+    # Required by optional Celery-specific integration tests. Note that Celery
+    # requires Click.
+    "celery",
+
     # ....................{ SCIENCE ~ data                 }....................
     # Data science-centric optional test-time dependencies.
 
-    #FIXME: Reenable Python >= 3.13 support *AFTER* Numba resolves:
-    #    https://github.com/numba/numba/issues/9413
+    #FIXME: Reenable Python >= 3.14 support *AFTER* Numba supports Python 3.14.
     # Required by optional numba-specific integration tests.
-    "numba; python_version < '3.13.0'",
+    "numba; python_version < '3.14.0'",
 
+    # ....................{ SCIENCE ~ data : ml            }....................
+    # Machine learning-centric optional test-time dependencies. These
+    # dependencies are well-known to be extremely non-trivial to install,
+    # typically due to conditionally depending on low-level C(++)-driven
+    # hardware GPU and TPU compute APIs (e.g., Nvidia CUDA, AMD OpenCL). To
+    # improve the likelihood of success on both local and remote workflows,
+    # these dependencies are intentionally confined to Linux.
+
+    #FIXME: Reenable Python >= 3.14 support *AFTER* PyTorch supports Python
+    #3.14.
+    # Required by optional PyTorch-specific integration tests if the current
+    # platform is a Linux distribution.
+    "torch; sys_platform == 'linux' and python_version < '3.14.0'",
+
+    # ....................{ SCIENCE ~ data : ml : jax      }....................
+    # JAX-specific optional test-time dependencies.
+
+    #FIXME: Reenable Python >= 3.14 support *AFTER* JAX is readily installable
+    #under Python 3.14. JAX requires so many mandatory dependencies that this
+    #may take some time indeed. For example, JAX transitively requires SciPy,
+    #which currently fails to ship Python 3.14 wheels and, moreover, is not even
+    #readily buildable under my local Arch machine that can build anything.
+    # Required by optional JAX-specific integration tests and JAX-dependent
+    # packages (e.g., Equinox) if the current platform is a Linux distribution.
+    #
+    # Note that JAX *MUST* be installed with one or more subscripted extras.
+    # Omitting extras installs only the high-level pure-Python "jax" package
+    # *WITHOUT* also installing a low-level hardware-specific variant of the
+    # typically C-based "jaxlib" package, which results in the "jax" package
+    # being unimportable and thus non-working. Listing the "cpu" extra also
+    # installs a low-level CPU-specific variant of the C-based "jaxlib" package.
+    # Since GitHub Actions-based continuous integration (CI) workflows are
+    # unlikely to reliably provide GPU or TPU compute hardware or APIs, the only
+    # safe and reliable alternative is CPU-specific.
+    "jax[cpu]; sys_platform == 'linux' and python_version < '3.14.0'",
+
+    # Required by optional JAX- and Equinox-specific integration tests.
+    "jaxtyping; sys_platform == 'linux'",
+
+    #FIXME: Reenable Python >= 3.14 support *AFTER* JAX is readily installable
+    #under Python 3.14. See above for further commentary.
+    # Required by optional Equinox-specific integration tests. Note that Equinox
+    # requires JAX.
+    "equinox; sys_platform == 'linux' and python_version < '3.14.0'",
+
+    # ....................{ SCIENCE ~ data : ml : numpy    }....................
+    # NumPy-specific optional test-time dependencies.
+
+    #FIXME: Reenable Python >= 3.14 support *AFTER* NumPy supports Python 3.14.
+    #See also this currently open upstream issue:
+    #   https://github.com/numpy/numpy/issues/29062
     #FIXME: Consider dropping the 'and platform_python_implementation != "PyPy"'
     #clause now that "tox.ini" installs NumPy wheels from a third-party vendor
     #explicitly supporting PyPy.
@@ -356,69 +425,63 @@ test-tox = [
     #
     # See also this upstream NumPy issue:
     #     https://github.com/numpy/numpy/issues/15947
-    "numpy; sys_platform != 'darwin' and platform_python_implementation != 'PyPy'",
+    """numpy; \
+       python_version < '3.14.0' and \
+       sys_platform != 'darwin' and \
+       platform_python_implementation != 'PyPy'\
+    """,
 
-    #FIXME: Actually, let's *NOT* install "pyarrow". "pyarrow" is super-intense,
-    #because Apache Arrow is super-intense. Since nothing in @beartype requires
-    #"pyarrow", let's tamp down on all this bare-knuckle intensity for now.
-    # Required by optional pandera-specific integration tests. Dismantled, this
-    # is:
-    # * "pyarrow", a technically optional runtime dependency of pandera that
-    #   appears to now be effectively mandatory under modern versions of
-    #   pandera. If "pyarrow" is *NOT* installed, pandera raises exceptions from
-    #   the @beartype test suite despite tests neither referencing nor requiring
-    #   "pyarrow"-specific dtypes resembling:
-    #       TypeError: pyarrow must be installed to use pyarrow dtypes.
-    "pandera",
-    # "pyarrow",
+    #FIXME: Reenable Python >= 3.14 support *AFTER* NumPy supports Python 3.14.
+    #See above for further commentary.
+    # Required by optional LangChain-specific integration tests. Note that
+    # LangChain requires both NumPy and Pydantic.
+    """langchain; \
+       python_version < '3.14.0' and \
+       sys_platform != 'darwin' and \
+       platform_python_implementation != 'PyPy'\
+    """,
 
-    # Required by optional xarray-specific integration tests.
-    "xarray",
+    # ....................{ SCIENCE ~ data : ml : dataframe}....................
+    # DataFrame (e.g., Pandas, Polars)-specific optional test-time dependencies.
 
-    # ....................{ SCIENCE ~ data : ml            }....................
-    # Machine learning-centric optional test-time dependencies. These
-    # dependencies are well-known to be extremely non-trivial to install,
-    # typically due to conditionally depending on low-level C(++)-driven
-    # hardware GPU and TPU compute APIs (e.g., Nvidia CUDA, AMD OpenCL). To
-    # improve the likelihood of success on both local and remote workflows,
-    # these dependencies are intentionally confined to Linux.
+    #FIXME: Reenable Python >= 3.14 support *AFTER* Pydantic supports Python
+    #3.14. Pydantic currently fails to ship Python 3.14 wheels and is
+    #non-trivial to build, due to requiring Rust.
+    # Required by optional Pandera-specific integration tests. Note that:
+    # * Pandera requires Pydantic and Pandas.
+    # * The @beartype test suite requires pandera >= 0.26.0. Prior pandera
+    #   versions were Pandas-specific. Modern pandera versions are API-agnostic
+    #   and now support a wide variety of DataFrame-like APIs, including Polars.
+    "pandera >= 0.26.0; python_version < '3.14.0'",
 
-    # ....................{ SCIENCE ~ data : ml : jax      }....................
-    # JAX-specific optional test-time dependencies.
+    # Required by optional Pandera- and Polars-specific integration tests.
+    "polars; python_version < '3.14.0'",
 
-    # Required by optional JAX-specific integration tests and JAX-dependent
-    # packages (e.g., Equinox) if the current platform is a Linux distribution.
-    #
-    # Note that JAX *MUST* be installed with one or more subscripted extras.
-    # Omitting extras installs only the high-level pure-Python "jax" package
-    # *WITHOUT* also installing a low-level hardware-specific variant of the
-    # typically C-based "jaxlib" package, which results in the "jax" package
-    # being unimportable and thus non-working. Listing the "cpu" extra also
-    # installs a low-level CPU-specific variant of the C-based "jaxlib" package.
-    # Since GitHub Actions-based continuous integration (CI) workflows are
-    # unlikely to reliably provide GPU or TPU compute hardware or APIs, the only
-    # safe and reliable alternative is CPU-specific.
-    "jax[cpu]; sys_platform == 'linux'",
-
-    # Required by optional JAX- and Equinox-specific integration tests.
-    "jaxtyping; sys_platform == 'linux'",
-
-    # Required by optional Equinox-specific integration tests. Note that Equinox
-    # requires JAX.
-    "equinox; sys_platform == 'linux'",
-
-    #FIXME: Temporarily disabled for sanity.
-    # Required by optional PyTorch-specific integration tests.
-    #
-    # Note that PyTorch has yet to release a Python >= 3.12-compatible version.
-    # 'torch; python_version < "3.12.0"',
+    #FIXME: Reenable Python >= 3.14 support *AFTER* Pandas supports Python
+    #3.14. Pandas currently fails to ship Python 3.14 wheels and is non-trivial
+    #to build.
+    # Required by optional xarray-specific integration tests. Note that xarray
+    # requires Pandas.
+    "xarray; python_version < '3.14.0'",
 
     # ....................{ SCIENCE ~ data : ml : pydantic }....................
     # Pydantic-specific optional test-time dependencies.
 
-    # Required by optional LangChain-specific integration tests. Note that
-    # LangChain requires Pydantic.
-    "langchain",
+    # Required by optional FastMCP-specific integration tests. Note that FastMCP
+    # requires Pydantic.
+    """fastmcp; python_version > '3.9.0' and python_version < '3.14.0'""",
+
+    #FIXME: Actually, let's *NOT* install "pyarrow". "pyarrow" is super-intense,
+    #because Apache Arrow is super-intense. Since nothing in @beartype requires
+    #"pyarrow", let's tamp down on all this bare-knuckle intensity for now.
+    # Required by optional pandera-specific integration tests. Technically,
+    # "pyarrow" is an optional runtime dependency of pandera that appears to now
+    # be effectively mandatory under modern versions of pandera. If "pyarrow" is
+    # *NOT* installed, pandera raises exceptions from the @beartype test suite
+    # despite tests neither referencing nor requiring "pyarrow"-specific dtypes
+    # resembling:
+    #       TypeError: pyarrow must be installed to use pyarrow dtypes.
+    # "pyarrow",
 
     # ....................{ TYPING                         }....................
     # Typing-centric optional test-time dependencies.
@@ -574,7 +637,8 @@ include = [
 
     # Relative basenames of all requisite top-level installation-time files.
     "/LICENSE",
-    "/README.rst",
+    "/*.md",
+    "/*.rst",
     "/conftest.py",
     "/mypy",
     "/mypy.ini",
@@ -594,6 +658,7 @@ include = [
     # * All files documenting this project.
     "/doc/Makefile",
     "/doc/*.bat",
+    "/doc/*.md",
     "/doc/*.rst",
     "/doc/src",
 
@@ -614,8 +679,7 @@ include = [
 ]
 
 # ....................{ NON-PEP ~ pyright                  }....................
-# PEP-noncompliant section declaring pyright-specific version settings. See
-# also:
+# PEP-noncompliant section declaring pyright-specific settings. See also:
 # * Official documentation for this section.
 #   https://github.com/microsoft/pyright/blob/main/docs/configuration.md
 [tool.pyright]

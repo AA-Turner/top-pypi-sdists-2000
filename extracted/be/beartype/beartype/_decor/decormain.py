@@ -25,7 +25,7 @@ from beartype.typing import (
 )
 from beartype._conf.confmain import BeartypeConf
 from beartype._conf.confcommon import BEARTYPE_CONF_DEFAULT
-from beartype._data.hint.datahinttyping import (
+from beartype._data.typing.datatyping import (
     BeartypeReturn,
     BeartypeableT,
 )
@@ -53,8 +53,8 @@ from typing import overload
 @overload  # type: ignore[misc,no-overload-impl]
 def beartype(obj: BeartypeableT) -> BeartypeableT: ...
 @overload
-def beartype(*, conf: BeartypeConf) -> Callable[
-    [BeartypeableT], BeartypeableT]: ...
+def beartype(*, conf: BeartypeConf) -> (
+    Callable[[BeartypeableT], BeartypeableT]): ...
 
 # ....................{ DECORATORS                         }....................
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

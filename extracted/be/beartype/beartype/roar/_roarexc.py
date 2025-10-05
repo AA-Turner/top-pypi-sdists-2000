@@ -652,6 +652,19 @@ class BeartypeDecorHintPep557Exception(BeartypeDecorHintPepException):
     pass
 
 
+class BeartypeDecorHintPep560Exception(BeartypeDecorHintPepException):
+    '''
+    **Beartype decorator** :pep:`560`-compliant **type hint exception.**
+
+    This exception is raised at decoration time from the
+    :func:`beartype.beartype` decorator on receiving a callable annotated with
+    one or more PEP-compliant type hints either violating :pep:`560` *or* this
+    decorator's implementation of :pep:`560`.
+    '''
+
+    pass
+
+
 class BeartypeDecorHintPep585Exception(BeartypeDecorHintPepException):
     '''
     **Beartype decorator** :pep:`585`-compliant **type hint exception.**
@@ -743,6 +756,20 @@ class BeartypeDecorHintPep646Exception(BeartypeDecorHintPepException):
     pass
 
 
+class BeartypeDecorHintPep646692Exception(BeartypeDecorHintPepException):
+    '''
+    **Beartype decorator** :pep:`646`- or :pep:`692`-compliant **type hint
+    exception.**
+
+    This exception is raised at decoration time from the
+    :func:`beartype.beartype` decorator on receiving a callable annotated with
+    one or more PEP-compliant type hints either violating both :pep:`646` and
+    :pep:`692` *or* this decorator's implementation of those PEPs.
+    '''
+
+    pass
+
+
 class BeartypeDecorHintPep647Exception(BeartypeDecorHintPepException):
     '''
     **Beartype decorator** :pep:`647`-compliant **type hint exception.**
@@ -751,6 +778,19 @@ class BeartypeDecorHintPep647Exception(BeartypeDecorHintPepException):
     :func:`beartype.beartype` decorator on receiving a callable annotated with
     one or more PEP-compliant type hints either violating :pep:`647` *or* this
     decorator's implementation of :pep:`647`.
+    '''
+
+    pass
+
+
+class BeartypeDecorHintPep649Exception(BeartypeDecorHintPepException):
+    '''
+    **Beartype decorator** :pep:`649`-compliant **type hint exception.**
+
+    This exception is raised at decoration time from the
+    :func:`beartype.beartype` decorator on receiving an object violating
+    :pep:`649` (e.g., due to defining neither the ``__annotations__`` dunder
+    dictionary nor ``__annotate__()`` dunder method).
     '''
 
     pass
@@ -795,6 +835,19 @@ class BeartypeDecorHintPep695Exception(BeartypeDecorHintPepException):
     pass
 
 
+class BeartypeDecorHintPep696Exception(BeartypeDecorHintPepException):
+    '''
+    **Beartype decorator** :pep:`696`-compliant **type hint exception.**
+
+    This exception is raised at decoration time from the
+    :func:`beartype.beartype` decorator on receiving a callable annotated with
+    one or more PEP-compliant type hints either violating :pep:`696` *or* this
+    decorator's implementation of :pep:`696`.
+    '''
+
+    pass
+
+
 class BeartypeDecorHintPep742Exception(BeartypeDecorHintPepException):
     '''
     **Beartype decorator** :pep:`742`-compliant **type hint exception.**
@@ -803,6 +856,19 @@ class BeartypeDecorHintPep742Exception(BeartypeDecorHintPepException):
     :func:`beartype.beartype` decorator on receiving a callable annotated with
     one or more PEP-compliant type hints either violating :pep:`742` *or* this
     decorator's implementation of :pep:`742`.
+    '''
+
+    pass
+
+
+class BeartypeDecorHintPep749Exception(BeartypeDecorHintPepException):
+    '''
+    **Beartype decorator** :pep:`749`-compliant **type hint exception.**
+
+    This exception is raised at decoration time from the
+    :func:`beartype.beartype` decorator on receiving an object violating
+    :pep:`749` (e.g., due to a type hint failing to define a
+    :pep:`749`-compliant evaluation function).
     '''
 
     pass
@@ -1141,6 +1207,32 @@ class BeartypeClawException(BeartypeException):
 
     pass
 
+# ....................{ API ~ claw : ast                   }....................
+class BeartypeClawAstException(BeartypeClawException):
+    '''
+    Abstract base class of all **beartype import hook abstract syntax tree (AST)
+    exceptions.**
+
+    Instances of subclasses of this exception from various submodules of the
+    private :func:`beartype.claw._ast` subpackage.
+    '''
+
+    pass
+
+
+class BeartypeClawAstImportException(BeartypeClawAstException):
+    '''
+    **Beartype import hook abstract syntax tree (AST) import exceptions.**
+
+    This exception is raised at **AST transformation time** (i.e., the early
+    time encompassing the automatic injection of runtime type-checking into an
+    imported third-party module registered by a beartype import hook published
+    by the :mod:`beartype.claw` subpackage in a downstream third-party codebase)
+    on failing to parse an ``import`` statement in user-defined code.
+    '''
+
+    pass
+
 # ....................{ API ~ claw : hook                  }....................
 class BeartypeClawHookException(BeartypeClawException):
     '''
@@ -1363,7 +1455,7 @@ class BeartypeKindFrozenDictException(BeartypeException):
     **Beartype frozen dictionary exception.**
 
     This exception is raised from various methods of the public
-    :class:`beartype._util.kind.map.utilmapfrozen.FrozenDict` class publicly
+    :class:`beartype._util.kind.maplike.utilmapfrozen.FrozenDict` class publicly
     exposed as the :class:`beartype.FrozenDict` subclass, typically due to
     external attempts to erroneously modify the contents of a frozen dictionary.
     '''
@@ -1391,7 +1483,7 @@ class BeartypeLibraryNumpyException(BeartypeLibraryException):
     :class:`beartype._util.api.external.utilnumpy` submodule internally called by
     various public APIs interfacing with the third-party :mod:`numpy` package
     (e.g., NumPy array type hint inference implemented by the public
-    :func:`beartype.door.infer_hint` function).
+    :func:`beartype.bite.infer_hint` function).
     '''
 
     pass
@@ -1474,6 +1566,21 @@ class BeartypeValeValidationException(BeartypeValeException):
 
     pass
 
+# ....................{ PRIVATE ~ claw                       }..................
+class _BeartypeClawAstNodeScopesException(BeartypeClawAstException):
+    '''
+    **Beartype import hook abstract syntax tree (ast) node scopes exception.**
+
+    This exception is raised at :mod:`beartype.claw` import hook time from the
+    :class:`beartype.claw._ast._scope.clawastscope.BeartypeNodeScopes` class on
+    detecting an invalid AST node scope.
+
+    This exception denotes a critical internal issue and should thus *never* be
+    raised -- let alone allowed to percolate up the call stack to end users.
+    '''
+
+    pass
+
 # ....................{ PRIVATE ~ door                       }..................
 class _BeartypeDoorTextException(BeartypeDoorException):
     '''
@@ -1482,6 +1589,9 @@ class _BeartypeDoorTextException(BeartypeDoorException):
     This exception is raised at call time from :func:`beartype.door` callables
     and classes on detecting invalid strings (e.g., on raising an exception
     whose message is *not* prefixed by the expected substring).
+
+    This exception denotes a critical internal issue and should thus *never* be
+    raised -- let alone allowed to percolate up the call stack to end users.
     '''
 
     pass
@@ -1576,6 +1686,21 @@ class _BeartypeUtilCacheLruException(_BeartypeUtilCachedException):
     :func:`beartype._util.cache.utilcache.utilcachelru.CacheLruStrong` class
     on various fatal errors (e.g., when the cache capacity is *not* a positive
     integer).
+
+    This exception denotes a critical internal issue and should thus *never* be
+    raised -- let alone allowed to percolate up the call stack to end users.
+    '''
+
+    pass
+
+
+class _BeartypeUtilCacheObjectAttributeException(_BeartypeUtilCachedException):
+    '''
+    **Beartype memoized object attribute exception.**
+
+    This exception is raised by the :mod:`beartype._util.cache.utilcacheobjattr`
+    submodule on various fatal errors (e.g., when the passed object *not* a
+    positive integer).
 
     This exception denotes a critical internal issue and should thus *never* be
     raised -- let alone allowed to percolate up the call stack to end users.
@@ -1711,29 +1836,9 @@ class _BeartypeUtilMappingException(_BeartypeUtilException):
     **Beartype mapping utility exception.**
 
     This exception is raised by various functions of the private
-    :mod:`beartype._util.kind.map` subpackage. This exception denotes a
+    :mod:`beartype._util.kind.maplike` subpackage. This exception denotes a
     critical internal issue and should thus *never* be raised -- let alone
     allowed to percolate up the call stack to end users.
-    '''
-
-    pass
-
-
-class _BeartypeUtilModuleException(_BeartypeUtilException):
-    '''
-    **Beartype module utility exception.**
-
-    This exception is raised by various functions of the private
-    :mod:`beartype._util.module.utilmodget` subpackage. Notably, this includes:
-
-    * When dynamically importing an unimportable external user-defined module,
-      typically due to a **PEP-compliant forward reference type hint** (i.e.,
-      string whose value is the name of a user-defined class that has yet to be
-      defined) erroneously referencing a non-existent module or module
-      attribute.
-
-    This exception denotes a critical internal issue and should thus *never* be
-    raised -- let alone allowed to percolate up the call stack to end users.
     '''
 
     pass
@@ -1815,6 +1920,39 @@ class _BeartypeUtilCallableWrapperException(_BeartypeUtilCallableException):
     This exception is raised by various functions of the private
     :mod:`beartype._util.func.utilfuncwrap` subpackage. This exception denotes a
     critical internal issue and should thus *never* be raised -- let alone
+    allowed to percolate up the call stack to end users.
+    '''
+
+    pass
+
+# ....................{ PRIVATE ~ util : kind : module       }..................
+class _BeartypeUtilModuleException(_BeartypeUtilException):
+    '''
+    **Beartype module utility exception.**
+
+    This exception is raised by various functions of the private
+    :mod:`beartype._util.module.utilmodget` subpackage. Notably, this includes:
+
+    * When dynamically importing an unimportable external user-defined module,
+      typically due to a **PEP-compliant forward reference type hint** (i.e.,
+      string whose value is the name of a user-defined class that has yet to be
+      defined) erroneously referencing a non-existent module or module
+      attribute.
+
+    This exception denotes a critical internal issue and should thus *never* be
+    raised -- let alone allowed to percolate up the call stack to end users.
+    '''
+
+    pass
+
+
+class _BeartypeUtilModulePep328Exception(_BeartypeUtilModuleException):
+    '''
+    **Beartype module** :pep:`3119`-compliant **exception.**
+
+    This exception is raised by various functions of the private
+    :mod:`beartype._util.module.pep.modpep328` submodule. This exception denotes
+    a critical internal issue and should thus *never* be raised -- let alone
     allowed to percolate up the call stack to end users.
     '''
 

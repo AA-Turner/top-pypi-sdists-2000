@@ -42,15 +42,18 @@ def hints_pep_meta() -> 'Tuple[HintPepMetadata]':
     # ..................{ LIST                               }..................
     _hints_pep_meta = make_container_from_funcs((
         # PEP-compliant type hints.
-        'beartype_test.a00_unit.data.hint.pep.proposal.data_pep484.hints_pep484_meta',
+        'beartype_test.a00_unit.data.hint.pep.proposal._data_pep484.hints_pep484_meta',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep544.hints_pep544_meta',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep585.hints_pep585_meta',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep586.hints_pep586_meta',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep589.hints_pep589_meta',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep593.hints_pep593_meta',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep604.hints_pep604_meta',
+        'beartype_test.a00_unit.data.hint.pep.proposal._data_pep646.hints_pep646_meta',
+        'beartype_test.a00_unit.data.hint.pep.proposal._data_pep649.hints_pep649_meta',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep675.hints_pep675_meta',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep695.hints_pep695_meta',
+        'beartype_test.a00_unit.data.hint.pep.proposal._data_pep696.hints_pep696_meta',
 
         # PEP-noncompliant type hints defined by both standard and third-party
         # packages internally treated by @beartype as PEP-compliant to
@@ -112,7 +115,7 @@ def hints_pep_ignorable_shallow() -> frozenset:
     Session-scoped fixture yielding a frozen set of **shallowly ignorable
     PEP-compliant type hints** (i.e., ignorable on the trivial basis of their
     machine-readable representations alone and thus in the low-level
-    :obj:`beartype._data.hint.pep.datapeprepr.HINTS_REPR_IGNORABLE_SHALLOW` set,
+    :obj:`beartype._data.hint.datahintrepr.HINTS_REPR_IGNORABLE_SHALLOW` set,
     but which are typically *not* safely instantiable from those representations
     and thus require explicit instantiation here).
     '''
@@ -124,7 +127,7 @@ def hints_pep_ignorable_shallow() -> frozenset:
     # ..................{ FIXTURE                            }..................
     # List of all shallowly ignorable PEP-compliant type hints to be returned.
     _hints_pep_ignorable_shallow = make_container_from_funcs((
-        'beartype_test.a00_unit.data.hint.pep.proposal.data_pep484.hints_pep484_ignorable_shallow',
+        'beartype_test.a00_unit.data.hint.pep.proposal._data_pep484.hints_pep484_ignorable_shallow',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep544.hints_pep544_ignorable_shallow',
     ))
 
@@ -138,8 +141,8 @@ def hints_pep_ignorable_deep() -> frozenset:
     Session-scoped fixture yielding a frozen set of **deeply ignorable
     PEP-compliant type hints** (i.e., *not* ignorable on the trivial basis of
     their machine-readable representations alone and thus *not* in the low-level
-    :obj:`beartype._data.hint.pep.datapeprepr.HINTS_REPR_IGNORABLE_DEEP` set,
-    but which are nonetheless ignorable and thus require dynamic testing by the
+    :obj:`beartype._data.hint.datahintrepr.HINTS_REPR_IGNORABLE_DEEP` set, but
+    which are nonetheless ignorable and thus require dynamic testing by the
     high-level :func:`beartype._util.hint.utilhinttest.is_hint_ignorable` tester
     function to demonstrate this fact).
     '''
@@ -151,7 +154,7 @@ def hints_pep_ignorable_deep() -> frozenset:
     # ..................{ FIXTURE                            }..................
     # List of all deeply ignorable PEP-compliant type hints to be returned.
     _hints_pep_ignorable_deep = make_container_from_funcs((
-        'beartype_test.a00_unit.data.hint.pep.proposal.data_pep484.hints_pep484_ignorable_deep',
+        'beartype_test.a00_unit.data.hint.pep.proposal._data_pep484.hints_pep484_ignorable_deep',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep544.hints_pep544_ignorable_deep',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep593.hints_pep593_ignorable_deep',
         'beartype_test.a00_unit.data.hint.pep.proposal._data_pep604.hints_pep604_ignorable_deep',

@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{collections::HashSet, time::Duration};
 
 use async_trait::async_trait;
 use chroma_blockstore::provider::BlockfileProvider;
@@ -58,6 +58,7 @@ pub struct WorkerServer {
     // config
     fetch_log_batch_size: u32,
     shutdown_grace_period: Duration,
+    bm25_tenant: HashSet<String>,
 }
 
 #[async_trait]
@@ -101,6 +102,7 @@ impl Configurable<(QueryServiceConfig, System)> for WorkerServer {
             jemalloc_pprof_server_port: config.jemalloc_pprof_server_port,
             fetch_log_batch_size: config.fetch_log_batch_size,
             shutdown_grace_period: config.grpc_shutdown_grace_period,
+            bm25_tenant: config.bm25_tenant.clone(),
         })
     }
 }
@@ -316,11 +318,9 @@ impl WorkerServer {
             return Ok(Response::new(KnnBatchResult::default().try_into()?));
         }
 
-        // If dimension is not set and segment is uninitialized, we assume
-        // this is a query on empty collection, so we return early here
-        if collection_and_segments.collection.dimension.is_none()
-            && collection_and_segments.vector_segment.file_path.is_empty()
-        {
+        // We return early on uninitialized collection, otherwise
+        // the downstream will error due to missing dimension
+        if collection_and_segments.is_uninitialized() {
             return Ok(Response::new(
                 KnnBatchResult {
                     pulled_log_bytes: 0,
@@ -481,6 +481,12 @@ impl WorkerServer {
         let search_payload = SearchPayload::try_from(payload)?;
         let fetch_log = self.fetch_log(&collection_and_segments, self.fetch_log_batch_size);
 
+        // We return early on uninitialized collection, otherwise
+        // the downstream will error due to missing dimension
+        if collection_and_segments.is_uninitialized() {
+            return Ok(RankOrchestratorOutput::default());
+        }
+
         let knn_filter_orchestrator = KnnFilterOrchestrator::new(
             self.blockfile_provider.clone(),
             self.clone_dispatcher()?,
@@ -556,11 +562,13 @@ impl WorkerServer {
                     }
                     QueryVector::Sparse(query) => {
                         // Use Sparse KNN orchestrator
+                        let tenant = collection_and_segments_clone.collection.tenant.clone();
                         let sparse_orchestrator = SparseKnnOrchestrator::new(
                             blockfile_provider,
                             dispatcher,
                             1000,
                             collection_and_segments_clone,
+                            self.bm25_tenant.contains(&tenant),
                             knn_filter_output_clone,
                             query,
                             knn_query.key.clone(),
@@ -727,6 +735,7 @@ mod tests {
             jemalloc_pprof_server_port: None,
             fetch_log_batch_size: 100,
             shutdown_grace_period: Duration::from_secs(1),
+            bm25_tenant: HashSet::new(),
         };
 
         let dispatcher = Dispatcher::new(DispatcherConfig {

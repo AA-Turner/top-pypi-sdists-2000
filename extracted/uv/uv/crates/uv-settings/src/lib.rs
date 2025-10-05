@@ -2,6 +2,7 @@ use std::ops::Deref;
 use std::path::{Path, PathBuf};
 
 use uv_dirs::{system_config_file, user_config_dir};
+use uv_flags::EnvironmentFlags;
 use uv_fs::Simplified;
 use uv_static::EnvVars;
 use uv_warnings::warn_user;
@@ -568,18 +569,42 @@ pub enum Error {
 /// the CLI level, however there are limited semantics in that context.
 #[derive(Debug, Clone)]
 pub struct EnvironmentOptions {
+    pub skip_wheel_filename_check: Option<bool>,
     pub python_install_bin: Option<bool>,
     pub python_install_registry: Option<bool>,
+    pub install_mirrors: PythonInstallMirrors,
+    pub log_context: Option<bool>,
+    #[cfg(feature = "tracing-durations-export")]
+    pub tracing_durations_file: Option<PathBuf>,
 }
 
 impl EnvironmentOptions {
     /// Create a new [`EnvironmentOptions`] from environment variables.
     pub fn new() -> Result<Self, Error> {
         Ok(Self {
+            skip_wheel_filename_check: parse_boolish_environment_variable(
+                EnvVars::UV_SKIP_WHEEL_FILENAME_CHECK,
+            )?,
             python_install_bin: parse_boolish_environment_variable(EnvVars::UV_PYTHON_INSTALL_BIN)?,
             python_install_registry: parse_boolish_environment_variable(
                 EnvVars::UV_PYTHON_INSTALL_REGISTRY,
             )?,
+            install_mirrors: PythonInstallMirrors {
+                python_install_mirror: parse_string_environment_variable(
+                    EnvVars::UV_PYTHON_INSTALL_MIRROR,
+                )?,
+                pypy_install_mirror: parse_string_environment_variable(
+                    EnvVars::UV_PYPY_INSTALL_MIRROR,
+                )?,
+                python_downloads_json_url: parse_string_environment_variable(
+                    EnvVars::UV_PYTHON_DOWNLOADS_JSON_URL,
+                )?,
+            },
+            log_context: parse_boolish_environment_variable(EnvVars::UV_LOG_CONTEXT)?,
+            #[cfg(feature = "tracing-durations-export")]
+            tracing_durations_file: parse_path_environment_variable(
+                EnvVars::TRACING_DURATIONS_FILE,
+            ),
         })
     }
 }
@@ -634,4 +659,48 @@ fn parse_boolish_environment_variable(name: &'static str) -> Result<Option<bool>
     };
 
     Ok(Some(value))
+}
+
+/// Parse a string environment variable.
+fn parse_string_environment_variable(name: &'static str) -> Result<Option<String>, Error> {
+    match std::env::var(name) {
+        Ok(v) => {
+            if v.is_empty() {
+                Ok(None)
+            } else {
+                Ok(Some(v))
+            }
+        }
+        Err(e) => match e {
+            std::env::VarError::NotPresent => Ok(None),
+            std::env::VarError::NotUnicode(err) => Err(Error::InvalidEnvironmentVariable {
+                name: name.to_string(),
+                value: err.to_string_lossy().to_string(),
+                err: "expected a valid UTF-8 string".to_string(),
+            }),
+        },
+    }
+}
+
+#[cfg(feature = "tracing-durations-export")]
+/// Parse a path environment variable.
+fn parse_path_environment_variable(name: &'static str) -> Option<PathBuf> {
+    let value = std::env::var_os(name)?;
+
+    if value.is_empty() {
+        return None;
+    }
+
+    Some(PathBuf::from(value))
+}
+
+/// Populate the [`EnvironmentFlags`] from the given [`EnvironmentOptions`].
+impl From<&EnvironmentOptions> for EnvironmentFlags {
+    fn from(options: &EnvironmentOptions) -> Self {
+        let mut flags = Self::empty();
+        if options.skip_wheel_filename_check == Some(true) {
+            flags.insert(Self::SKIP_WHEEL_FILENAME_CHECK);
+        }
+        flags
+    }
 }

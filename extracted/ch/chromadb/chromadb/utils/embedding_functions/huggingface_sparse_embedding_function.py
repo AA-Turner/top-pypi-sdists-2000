@@ -7,6 +7,7 @@ from typing import Dict, Any, TypedDict, Optional
 import numpy as np
 from typing import cast, Literal
 from chromadb.utils.embedding_functions.schemas import validate_config_schema
+from chromadb.utils.sparse_embedding_utils import _sort_sparse_vectors
 
 TaskType = Literal["document", "query"]
 
@@ -30,7 +31,7 @@ class HuggingFaceSparseEmbeddingFunction(SparseEmbeddingFunction[Documents]):
         """Initialize SparseEncoderEmbeddingFunction.
 
         Args:
-            model_name (str, optional): Identifier of the Splade model
+            model_name (str, optional): Identifier of the Huggingface SparseEncoder model
             Some common models: prithivida/Splade_PP_en_v1, naver/splade-cocondenser-ensembledistil, naver/splade-v3
             device (str, optional): Device used for computation
             **kwargs: Additional arguments to pass to the Splade model.
@@ -98,6 +99,7 @@ class HuggingFaceSparseEmbeddingFunction(SparseEmbeddingFunction[Documents]):
                 {"indices": nz.tolist(), "values": vec_dense[nz].tolist()}
             )
 
+        _sort_sparse_vectors(sparse_embeddings)
         return sparse_embeddings
 
     def embed_query(self, input: Documents) -> SparseEmbeddings:
@@ -134,6 +136,7 @@ class HuggingFaceSparseEmbeddingFunction(SparseEmbeddingFunction[Documents]):
                     {"indices": nz.tolist(), "values": vec_dense[nz].tolist()}
                 )
 
+            _sort_sparse_vectors(sparse_embeddings)
             return sparse_embeddings
 
         else:

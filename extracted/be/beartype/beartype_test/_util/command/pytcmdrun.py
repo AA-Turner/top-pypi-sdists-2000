@@ -57,7 +57,7 @@ from beartype.typing import (
     Optional,
     Tuple,
 )
-from beartype._data.hint.datahinttyping import CommandWords
+from beartype._data.typing.datatyping import CommandWords
 from collections.abc import (
     Iterable as IterableABC,
     Mapping as MappingABC,
@@ -414,7 +414,7 @@ def _init_popen_kwargs(
     '''
 
     # Defer test-specific imports.
-    from beartype._util.kind.map.utilmaptest import is_mapping_keys_any
+    from beartype._util.kind.maplike.utilmaptest import is_mapping_keys_any
     from beartype._util.os.utilostest import is_os_windows_vanilla
 
     # If these keyword arguments are empty, default to the empty dictionary

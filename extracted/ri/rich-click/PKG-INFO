@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: rich-click
-Version: 1.9.1
+Version: 1.9.2
 Summary: Format click help output nicely with rich
 Author-email: Phil Ewels <phil@ewels.co.uk>
 Maintainer-email: Phil Ewels <phil@ewels.co.uk>, Daniel Reeves <xdanielreeves@gmail.com>
@@ -44,6 +44,7 @@ Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: click>=8
+Requires-Dist: colorama; platform_system == "Windows"
 Requires-Dist: rich>=12
 Requires-Dist: typing-extensions>=4; python_version < "3.11"
 Provides-Extra: dev

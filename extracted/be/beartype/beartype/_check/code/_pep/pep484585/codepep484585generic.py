@@ -21,6 +21,8 @@ from beartype._data.code.pep.datacodepep484585 import (
     CODE_PEP484585_GENERIC_SUFFIX,
 )
 from beartype._data.code.datacodemagic import LINE_RSTRIP_INDEX_AND
+from beartype._util.hint.pep.proposal.pep484585.generic.pep484585genget import (
+    get_hint_pep484585_generic_type_isinstanceable)
 
 # ....................{ FACTORIES                          }....................
 def make_hint_pep484585_generic_unsubbed_check_expr(
@@ -59,6 +61,16 @@ def make_hint_pep484585_generic_unsubbed_check_expr(
     # Metadata encapsulating the sanification of this unsubscripted generic,
     # localized for both usability and efficiency.
     hint_sane = hints_meta.hint_curr_meta.hint_sane
+
+    # Unsubscripted generic encapsulated by this metadata.
+    hint = hint_sane.hint
+
+    # Isinstanceable type against which to type-check instances of this generic,
+    # defaulting to this generic. Although most generics are isinstanceable,
+    # some are not. This type enables this code generator to transparently
+    # support the subset of generics that are *NOT* isinstanceable.
+    hint_isinstanceable = get_hint_pep484585_generic_type_isinstanceable(
+        hint=hint, exception_prefix=hints_meta.exception_prefix)
 
     # ....................{ FORMAT                         }....................
     # Initialize the code type-checking this pith against this generic to the
@@ -101,7 +113,9 @@ def make_hint_pep484585_generic_unsubbed_check_expr(
         # Indentation deferred above for efficiency.
         indent_curr=hints_meta.indent_curr,
         pith_curr_assign_expr=hints_meta.pith_curr_assign_expr,
-        # Python expression evaluating to this unsubscripted generic type.
-        hint_curr_expr=hints_meta.add_func_scope_type_or_types(hint_sane.hint),  # type: ignore[arg-type]
+        # Python expression evaluating to this unsubscripted isinstanceable
+        # generic type.
+        hint_curr_expr=hints_meta.add_func_scope_type_or_types(
+            hint_isinstanceable),
     )
     # print(f'{hint_curr_exception_prefix} PEP generic {repr(hint)} handled.')

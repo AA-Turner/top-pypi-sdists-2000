@@ -18,7 +18,7 @@ from beartype.typing import (
     Optional,
     Tuple,
 )
-from beartype._data.hint.datahinttyping import TypeException
+from beartype._data.typing.datatyping import TypeException
 from beartype._data.kind.datakindiota import Iota
 from beartype._data.kind.datakindmap import FROZENDICT_EMPTY
 from beartype._util.func.arg.utilfuncarglen import get_func_args_lens
@@ -129,7 +129,7 @@ this arises include:
 
 The caller is thus responsible for mapping parameters to type hints. Thankfully,
 the existing
-:attr:`beartype._check.meta.checkdecor.BeartypeDecorMeta.func_arg_name_to_hint`
+:attr:`beartype._check.meta.checkdecor.BeartypeDecorMeta.func_annotations`
 dictionary makes this trivial for most use cases.
 '''
 

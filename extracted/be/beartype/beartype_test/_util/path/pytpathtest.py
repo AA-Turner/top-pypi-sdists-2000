@@ -63,7 +63,7 @@ def get_test_func_data_dir() -> Path:
     # Questionable destination!
     return DirRelative(get_test_func_subpackage_dir(), 'data')
 
-# ....................{ GETTERS ~ dir : func : lib         }....................
+# ....................{ GETTERS ~ dir : func : api         }....................
 @callable_cached
 def get_test_func_data_lib_dir() -> Path:
     '''
@@ -75,7 +75,7 @@ def get_test_func_data_lib_dir() -> Path:
     '''
 
     # Ejective bijection!
-    return DirRelative(get_test_func_data_dir(), 'lib')
+    return DirRelative(get_test_func_data_dir(), 'external')
 
 
 @callable_cached

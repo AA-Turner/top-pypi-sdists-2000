@@ -28,10 +28,12 @@ from beartype._cave._cavefast import (
     ClassType,
     EnumMemberType,
     FunctionType,
+    # MethodBoundInstanceOrClassType,
     MethodDecoratorBuiltinTypes,
+    # ModuleType,
     NoneType,
 )
-from beartype._data.hint.datahinttyping import (
+from beartype._data.typing.datatyping import (
     DictStrToType,
     FrozenSetTypes,
     TupleTypes,
@@ -227,7 +229,7 @@ Frozen set of all **generic superclasses** (i.e., types defined by the standard
 # ....................{ PEP ~ 586                          }....................
 TYPES_PEP586_ARG = (bool, bytes, int, str, EnumMemberType, NoneType)
 '''
-Tuple of all types of objects permissible as arguments subscripting the
+Tuple of the types of all objects permissible as arguments subscripting the
 :pep:`586`-compliant :attr:`typing.Literal` singleton.
 
 These types are explicitly listed by :pep:`586` as follows:

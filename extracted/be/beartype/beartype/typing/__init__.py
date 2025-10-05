@@ -134,8 +134,10 @@ this submodule rather than from :mod:`typing` directly: e.g.,
 # "import_typing_attr_or_none('Annotated')").
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 from beartype._util.py.utilpyversion import (
+    IS_PYTHON_AT_MOST_3_16  as _IS_PYTHON_AT_MOST_3_16,
     IS_PYTHON_AT_MOST_3_15  as _IS_PYTHON_AT_MOST_3_15,
     IS_PYTHON_AT_MOST_3_13  as _IS_PYTHON_AT_MOST_3_13,
+    IS_PYTHON_AT_LEAST_3_14 as _IS_PYTHON_AT_LEAST_3_14,
     IS_PYTHON_AT_LEAST_3_13 as _IS_PYTHON_AT_LEAST_3_13,
     IS_PYTHON_AT_LEAST_3_12 as _IS_PYTHON_AT_LEAST_3_12,
     IS_PYTHON_AT_LEAST_3_11 as _IS_PYTHON_AT_LEAST_3_11,
@@ -262,27 +264,38 @@ if _IS_PYTHON_AT_LEAST_3_10:
                     is_protocol as is_protocol,  # pyright: ignore
                 )
 
+                # If the active Python interpreter targets Python >= 3.14...
+                if _IS_PYTHON_AT_LEAST_3_14:
+                    from typing import (  # type: ignore[attr-defined]
+                        evaluate_forward_ref as evaluate_forward_ref,  # pyright: ignore
+                    )
+
 # ....................{ IMPORTS ~ version : at most        }....................
 # Import all public attributes of the "typing" module both available under at
 # most some Python interpreter version (typically due to having been deprecated
 # by a prior Python interpreter version).
 
-# If the active Python interpreter targets at most Python <= 3.15...
-if _IS_PYTHON_AT_MOST_3_15:
-    # "typing.AnyStr" has been scheduled for removal under Python 3.16 by
-    # upstream CPython issue:
-    #     https://github.com/python/cpython/issues/105578
-    from typing import AnyStr as AnyStr
+# If the active Python interpreter targets at most Python <= 3.16...
+if _IS_PYTHON_AT_MOST_3_16:
+    # Import the PEP 585-compliant "collections.abc.ByteString" attribute
+    # under 3.9 <= Python <= 3.13. Both "collections.abc.ByteString" *AND*
+    # "typing.ByteString" have been scheduled for removal under Python 3.17 by
+    # the upstream CPython issue:
+    #     https://github.com/python/cpython/issues/91896
+    #
+    # Note that these attributes were originally scheduled for removal under
+    # Python 3.14. This removal was since deferred by three minor versions (and
+    # thus three years) to inform downstream third-party packages with proper
+    # "DeprecationWarning" warnings emitted by the "typing" module.
+    from collections.abc import ByteString as ByteString  # type: ignore[attr-defined]
 
-    # If the active Python interpreter targets at most Python <= 3.13...
-    if _IS_PYTHON_AT_MOST_3_13:
-        # Both "collections.abc.ByteString" *AND* "typing.ByteString" have been
-        # scheduled for removal under Python 3.14 by upstream CPython issue:
-        #     https://github.com/python/cpython/issues/91896
-        #
-        # Import the PEP 585-compliant "collections.abc.ByteString" attribute
-        # under 3.9 <= Python <= 3.13.
-        from collections.abc import ByteString as ByteString
+    # If the active Python interpreter targets at most Python <= 3.15...
+    if _IS_PYTHON_AT_MOST_3_15:
+        # Import the PEP 484-compliant "typing.AnyStr" attribute under 3.9 <=
+        # Python <= 3.15. This attribute has been scheduled for removal under
+        # Python 3.16 by the upstream CPython issue:
+        #     https://github.com/python/cpython/issues/105578
+        from typing import AnyStr as AnyStr
 
 # ....................{ PEP ~ 544                          }....................
 # If this interpreter is performing static type-checking (e.g., via mypy), defer

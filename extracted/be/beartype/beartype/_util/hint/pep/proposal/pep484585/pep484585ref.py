@@ -22,12 +22,12 @@ from beartype._data.cls.datacls import (
     TYPE_BUILTIN_NAME_TO_TYPE,
     TYPES_PEP484585_REF,
 )
-from beartype._data.hint.datahinttyping import (
+from beartype._data.typing.datatyping import (
     Pep484585ForwardRef,
     TypeException,
     TypeStack,
 )
-from beartype._data.api.standard.datamodpy import BUILTINS_MODULE_NAME
+from beartype._data.api.standard.datapy import BUILTINS_MODULE_NAME
 from beartype._util.module.utilmodget import get_object_module_name_or_none
 from beartype._util.module.utilmodtest import is_module
 from beartype._util.py.utilpyversion import IS_PYTHON_AT_LEAST_3_10
@@ -37,7 +37,7 @@ from collections.abc import (
     Sequence,
 )
 
-# ....................{ VALIDATORS                         }....................
+# ....................{ RAISERS                            }....................
 #FIXME: Validate that this forward reference string is *NOT* the empty string.
 #FIXME: Validate that this forward reference string is a syntactically valid
 #"."-delimited concatenation of Python identifiers. We already have logic
@@ -71,12 +71,12 @@ def die_unless_hint_pep484585_ref(
     ----------
     hint : object
         Object to be validated.
-    exception_cls : Type[Exception]
+    exception_cls : Type[Exception], default: BeartypeDecorHintForwardRefException
         Type of exception to be raised in the event of a fatal error. Defaults
         to :exc:`.BeartypeDecorHintForwardRefException`.
-    exception_prefix : str, optional
-        Human-readable label prefixing the representation of this object in the
-        exception message. Defaults to the empty string.
+    exception_prefix : str, default: ''
+        Human-readable substring prefixing raised exception messages. Defaults
+        to the empty string.
 
     Raises
     ------
