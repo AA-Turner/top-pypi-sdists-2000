@@ -629,7 +629,12 @@ scope_type : {self._atomic.scope_type}
             and parent_node.iter == node
             and parent_node.target in found_nodes
         ):
-            found_nodes = None
+            # Only filter out the for-loop target if there are other definitions besides the target
+            other_definitions = [fn for fn in found_nodes if fn != parent_node.target]
+            if other_definitions:
+                found_nodes = other_definitions
+            else:
+                found_nodes = None
 
         # Before filtering, check that this node's name is not a nonlocal
         if any(
@@ -1947,22 +1952,21 @@ class VariablesChecker(BaseChecker):
 
                 # Skip postponed evaluation of annotations
                 # and unevaluated annotations inside a function body
+                # as well as TypeAlias nodes.
                 if not (
                     self._postponed_evaluation_enabled
                     and (
                         isinstance(stmt, nodes.AnnAssign)
-                        or (
-                            isinstance(stmt, nodes.FunctionDef)
-                            and node
-                            not in {
-                                *(stmt.args.defaults or ()),
-                                *(stmt.args.kw_defaults or ()),
-                            }
-                        )
+                        or isinstance(stmt, nodes.FunctionDef)
+                        and node
+                        not in {
+                            *(stmt.args.defaults or ()),
+                            *(stmt.args.kw_defaults or ()),
+                        }
                     )
-                ) and not (
-                    isinstance(stmt, nodes.AnnAssign)
+                    or isinstance(stmt, nodes.AnnAssign)
                     and utils.get_node_first_ancestor_of_type(stmt, nodes.FunctionDef)
+                    or isinstance(stmt, nodes.TypeAlias)
                 ):
                     self.add_message(
                         "used-before-assignment",
@@ -2034,7 +2038,7 @@ class VariablesChecker(BaseChecker):
         if (
             self._postponed_evaluation_enabled
             and utils.is_node_in_type_annotation_context(node)
-        ):
+        ) or utils.is_node_in_pep695_type_context(node):
             return
         if self._is_builtin(node.name):
             return

@@ -5,15 +5,25 @@ from collections.abc import Iterator
 from typing import TYPE_CHECKING
 from typing import Any
 
+from upath._chain import DEFAULT_CHAIN_PARSER
 from upath._flavour import upath_strip_protocol
 from upath.core import UPath
 from upath.types import JoinablePathLike
 
 if TYPE_CHECKING:
+    from typing import Literal
+
     if sys.version_info >= (3, 11):
         from typing import Self
+        from typing import Unpack
     else:
         from typing_extensions import Self
+        from typing_extensions import Unpack
+
+    from upath._chain import FSSpecChainParser
+    from upath.types.storage_options import AzureBlobStorageOptions
+    from upath.types.storage_options import GCSStorageOptions
+    from upath.types.storage_options import S3StorageOptions
 
 __all__ = [
     "CloudPath",
@@ -58,6 +68,13 @@ class CloudPath(UPath):
                 return f"{path}{self.root}"
         return path
 
+    @property
+    def path(self) -> str:
+        self_path = super().path
+        if self._relative_base is None and self.parser.sep not in self_path:
+            return self_path + self.root
+        return self_path
+
     def mkdir(
         self, mode: int = 0o777, parents: bool = False, exist_ok: bool = False
     ) -> None:
@@ -77,10 +94,13 @@ class GCSPath(CloudPath):
     def __init__(
         self,
         *args: JoinablePathLike,
-        protocol: str | None = None,
-        **storage_options: Any,
+        protocol: Literal["gcs", "gs"] | None = None,
+        chain_parser: FSSpecChainParser = DEFAULT_CHAIN_PARSER,
+        **storage_options: Unpack[GCSStorageOptions],
     ) -> None:
-        super().__init__(*args, protocol=protocol, **storage_options)
+        super().__init__(
+            *args, protocol=protocol, chain_parser=chain_parser, **storage_options
+        )
         if not self.drive and len(self.parts) > 1:
             raise ValueError("non key-like path provided (bucket/container missing)")
 
@@ -107,10 +127,13 @@ class S3Path(CloudPath):
     def __init__(
         self,
         *args: JoinablePathLike,
-        protocol: str | None = None,
-        **storage_options: Any,
+        protocol: Literal["s3", "s3a"] | None = None,
+        chain_parser: FSSpecChainParser = DEFAULT_CHAIN_PARSER,
+        **storage_options: Unpack[S3StorageOptions],
     ) -> None:
-        super().__init__(*args, protocol=protocol, **storage_options)
+        super().__init__(
+            *args, protocol=protocol, chain_parser=chain_parser, **storage_options
+        )
         if not self.drive and len(self.parts) > 1:
             raise ValueError("non key-like path provided (bucket/container missing)")
 
@@ -121,9 +144,12 @@ class AzurePath(CloudPath):
     def __init__(
         self,
         *args: JoinablePathLike,
-        protocol: str | None = None,
-        **storage_options: Any,
+        protocol: Literal["abfs", "abfss", "adl", "az"] | None = None,
+        chain_parser: FSSpecChainParser = DEFAULT_CHAIN_PARSER,
+        **storage_options: Unpack[AzureBlobStorageOptions],
     ) -> None:
-        super().__init__(*args, protocol=protocol, **storage_options)
+        super().__init__(
+            *args, protocol=protocol, chain_parser=chain_parser, **storage_options
+        )
         if not self.drive and len(self.parts) > 1:
             raise ValueError("non key-like path provided (bucket/container missing)")

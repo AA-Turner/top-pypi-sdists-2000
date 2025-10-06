@@ -27,6 +27,7 @@ import tests.testdata.python3.data.fake_module_with_collection_getattribute as f
 import tests.testdata.python3.data.fake_module_with_warnings as fm
 from astroid.builder import AstroidBuilder
 from astroid.const import IS_PYPY, PY312_PLUS
+from astroid.manager import AstroidManager
 from astroid.raw_building import (
     attach_dummy_node,
     build_class,
@@ -53,33 +54,33 @@ class RawBuildingTC(unittest.TestCase):
         self.assertEqual(node.parent, None)
 
     def test_build_class(self) -> None:
-        node = build_class("MyClass")
+        node = build_class("MyClass", DUMMY_MOD)
         self.assertEqual(node.name, "MyClass")
         self.assertEqual(node.doc_node, None)
 
     def test_build_function(self) -> None:
-        node = build_function("MyFunction")
+        node = build_function("MyFunction", DUMMY_MOD)
         self.assertEqual(node.name, "MyFunction")
         self.assertEqual(node.doc_node, None)
 
     def test_build_function_args(self) -> None:
         args = ["myArgs1", "myArgs2"]
-        node = build_function("MyFunction", args)
+        node = build_function("MyFunction", DUMMY_MOD, args)
         self.assertEqual("myArgs1", node.args.args[0].name)
         self.assertEqual("myArgs2", node.args.args[1].name)
         self.assertEqual(2, len(node.args.args))
 
     def test_build_function_defaults(self) -> None:
         defaults = ["defaults1", "defaults2"]
-        node = build_function(name="MyFunction", args=None, defaults=defaults)
+        node = build_function("MyFunction", DUMMY_MOD, args=None, defaults=defaults)
         self.assertEqual(2, len(node.args.defaults))
 
     def test_build_function_posonlyargs(self) -> None:
-        node = build_function(name="MyFunction", posonlyargs=["a", "b"])
+        node = build_function("MyFunction", DUMMY_MOD, posonlyargs=["a", "b"])
         self.assertEqual(2, len(node.args.posonlyargs))
 
     def test_build_function_kwonlyargs(self) -> None:
-        node = build_function(name="MyFunction", kwonlyargs=["a", "b"])
+        node = build_function("MyFunction", DUMMY_MOD, kwonlyargs=["a", "b"])
         assert len(node.args.kwonlyargs) == 2
         assert node.args.kwonlyargs[0].name == "a"
         assert node.args.kwonlyargs[1].name == "b"
@@ -96,7 +97,7 @@ class RawBuildingTC(unittest.TestCase):
         # what io.BufferedReader is. The code that handles this
         # is in astroid.raw_building.imported_member, which verifies
         # the true name of the module.
-        builder = AstroidBuilder()
+        builder = AstroidBuilder(AstroidManager())
         module = builder.inspect_build(_io)
         buffered_reader = module.getattr("BufferedReader")[0]
         expected = "_io" if PY312_PLUS else "io"
@@ -113,7 +114,7 @@ class RawBuildingTC(unittest.TestCase):
         m.pd = fm
 
         # This should not raise an exception
-        AstroidBuilder().module_build(m, "test")
+        AstroidBuilder(AstroidManager()).module_build(m, "test")
 
     def test_module_object_with_broken_getattr(self) -> None:
         # Tests https://github.com/pylint-dev/astroid/issues/1958
@@ -121,7 +122,7 @@ class RawBuildingTC(unittest.TestCase):
         # errors when using hasattr().
 
         # This should not raise an exception
-        AstroidBuilder().inspect_build(fm_getattr, "test")
+        AstroidBuilder(AstroidManager()).inspect_build(fm_getattr, "test")
 
     def test_module_collection_with_object_getattribute(self) -> None:
         # Tests https://github.com/pylint-dev/astroid/issues/2686
@@ -129,7 +130,7 @@ class RawBuildingTC(unittest.TestCase):
         # error when element __getattribute__ causes collection to change size.
 
         # This should not raise an exception
-        AstroidBuilder().inspect_build(fm_collection, "test")
+        AstroidBuilder(AstroidManager()).inspect_build(fm_collection, "test")
 
 
 @pytest.mark.skipif(
@@ -162,7 +163,7 @@ def test_build_module_getattr_catch_output(
 
     with mock.patch("astroid.raw_building.sys.modules") as sys_mock:
         sys_mock.__getitem__.side_effect = mocked_sys_modules_getitem
-        builder = AstroidBuilder()
+        builder = AstroidBuilder(AstroidManager())
         builder.inspect_build(os)
 
     out, err = capsys.readouterr()
@@ -174,4 +175,4 @@ def test_build_module_getattr_catch_output(
 
 def test_missing__dict__():
     # This shouldn't raise an exception.
-    object_build_class(DUMMY_MOD, mypy.build.ModuleNotFound, "arbitrary_name")
+    object_build_class(DUMMY_MOD, mypy.build.ModuleNotFound)

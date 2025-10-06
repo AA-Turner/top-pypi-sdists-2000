@@ -19,12 +19,15 @@ import warnings
 from collections.abc import Iterator, Sequence
 from io import TextIOWrapper
 from tokenize import detect_encoding
+from typing import TYPE_CHECKING
 
 from astroid import bases, modutils, nodes, raw_building, rebuilder, util
 from astroid._ast import ParserModule, get_parser_module
 from astroid.const import PY312_PLUS
 from astroid.exceptions import AstroidBuildingError, AstroidSyntaxError, InferenceError
-from astroid.manager import AstroidManager
+
+if TYPE_CHECKING:
+    from astroid.manager import AstroidManager
 
 # The name of the transient function that is used to
 # wrap expressions to be extracted when calling
@@ -62,20 +65,17 @@ def _can_assign_attr(node: nodes.ClassDef, attrname: str | None) -> bool:
 class AstroidBuilder(raw_building.InspectBuilder):
     """Class for building an astroid tree from source code or from a live module.
 
-    The param *manager* specifies the manager class which should be used.
-    If no manager is given, then the default one will be used. The
+    The param *manager* specifies the manager class which should be used. The
     param *apply_transforms* determines if the transforms should be
     applied after the tree was built from source or from a live object,
     by default being True.
     """
 
-    def __init__(
-        self, manager: AstroidManager | None = None, apply_transforms: bool = True
-    ) -> None:
+    def __init__(self, manager: AstroidManager, apply_transforms: bool = True) -> None:
         super().__init__(manager)
         self._apply_transforms = apply_transforms
         if not raw_building.InspectBuilder.bootstrapped:
-            raw_building._astroid_bootstrapping()
+            manager.bootstrap()
 
     def module_build(
         self, module: types.ModuleType, modname: str | None = None
@@ -181,7 +181,7 @@ class AstroidBuilder(raw_building.InspectBuilder):
             node, parser_module = _parse_string(
                 data, type_comments=True, modname=modname
             )
-        except (TypeError, ValueError, SyntaxError) as exc:
+        except (TypeError, ValueError, SyntaxError, MemoryError) as exc:
             raise AstroidSyntaxError(
                 "Parsing Python code failed:\n{error}",
                 source=data,
@@ -233,7 +233,7 @@ class AstroidBuilder(raw_building.InspectBuilder):
                 sort_locals(node.parent.scope().locals[asname or name])  # type: ignore[arg-type]
 
     def delayed_assattr(self, node: nodes.AssignAttr) -> None:
-        """Visit a AssAttr node.
+        """Visit an AssignAttr node.
 
         This adds name to locals and handle members definition.
         """
@@ -244,8 +244,7 @@ class AstroidBuilder(raw_building.InspectBuilder):
                 if isinstance(inferred, util.UninferableBase):
                     continue
                 try:
-                    # pylint: disable=unidiomatic-typecheck # We want a narrow check on the
-                    # parent type, not all of its subclasses
+                    # We want a narrow check on the parent type, not all of its subclasses
                     if type(inferred) in {bases.Instance, objects.ExceptionInstance}:
                         inferred = inferred._proxied
                         iattrs = inferred.instance_attrs
@@ -293,10 +292,11 @@ def parse(
         Apply the transforms for the give code. Use it if you
         don't want the default transforms to be applied.
     """
+    # pylint: disable-next=import-outside-toplevel
+    from astroid.manager import AstroidManager
+
     code = textwrap.dedent(code)
-    builder = AstroidBuilder(
-        manager=AstroidManager(), apply_transforms=apply_transforms
-    )
+    builder = AstroidBuilder(AstroidManager(), apply_transforms=apply_transforms)
     return builder.string_build(code, modname=module_name, path=path)
 
 

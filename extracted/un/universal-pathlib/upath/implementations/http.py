@@ -15,15 +15,33 @@ from upath.core import UPath
 from upath.types import JoinablePathLike
 
 if TYPE_CHECKING:
+    from typing import Literal
+
     if sys.version_info >= (3, 11):
         from typing import Self
+        from typing import Unpack
     else:
         from typing_extensions import Self
+        from typing_extensions import Unpack
+
+    from upath._chain import FSSpecChainParser
+    from upath.types.storage_options import HTTPStorageOptions
 
 __all__ = ["HTTPPath"]
 
 
 class HTTPPath(UPath):
+    __slots__ = ()
+
+    if TYPE_CHECKING:
+
+        def __init__(
+            self,
+            *args: JoinablePathLike,
+            protocol: Literal["http", "https"] | None = ...,
+            chain_parser: FSSpecChainParser = ...,
+            **storage_options: Unpack[HTTPStorageOptions],
+        ) -> None: ...
 
     @classmethod
     def _transform_init_args(
@@ -39,6 +57,11 @@ class HTTPPath(UPath):
 
     def __str__(self) -> str:
         sr = urlsplit(super().__str__())
+        return sr._replace(path=sr.path or "/").geturl()
+
+    @property
+    def path(self) -> str:
+        sr = urlsplit(super().path)
         return sr._replace(path=sr.path or "/").geturl()
 
     def is_file(self) -> bool:

@@ -21,10 +21,12 @@ from moto.dynamodb.models import DynamoDBBackend, dynamodb_backends
 from moto.ec2 import ec2_backends
 from moto.ecs.models import EC2ContainerServiceBackend, ecs_backends
 from moto.efs.models import EFSBackend, efs_backends
+from moto.elasticache.models import ElastiCacheBackend, elasticache_backends
 from moto.elb.models import ELBBackend, elb_backends
 from moto.elbv2.models import ELBv2Backend, elbv2_backends
 from moto.emr.models import ElasticMapReduceBackend, emr_backends
 from moto.events.models import EventsBackend, events_backends
+from moto.firehose.models import FirehoseBackend, firehose_backends
 from moto.glacier.models import GlacierBackend, glacier_backends
 from moto.glue.models import GlueBackend, glue_backends
 from moto.kafka.models import KafkaBackend, kafka_backends
@@ -53,7 +55,7 @@ from moto.utilities.utils import get_partition
 from moto.workspaces.models import WorkSpacesBackend, workspaces_backends
 from moto.workspacesweb.models import WorkSpacesWebBackend, workspacesweb_backends
 
-# Left: EC2 ElastiCache RDS ELB Lambda EMR Glacier Kinesis Redshift Route53
+# Left: EC2 RDS ELB Lambda EMR Glacier Kinesis Redshift Route53
 # StorageGateway DynamoDB MachineLearning ACM DirectConnect DirectoryService CloudHSM
 # Inspector Elasticsearch
 
@@ -149,6 +151,10 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
         return ecs_backends[self.account_id][self.region_name]
 
     @property
+    def firehose_backend(self) -> FirehoseBackend:
+        return firehose_backends[self.account_id][self.region_name]
+
+    @property
     def acm_backend(self) -> AWSCertificateManagerBackend:
         return acm_backends[self.account_id][self.region_name]
 
@@ -242,6 +248,10 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
             return quicksight_backends[self.account_id][self.region_name]
         return None
 
+    @property
+    def elasticache_backend(self) -> ElastiCacheBackend:
+        return elasticache_backends[self.account_id][self.region_name]
+
     def _get_resources_generator(
         self,
         tag_filters: Optional[List[Dict[str, Any]]] = None,
@@ -325,29 +335,29 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
             # Capacity Reservations
             for capacity_reservation in athena_backend.capacity_reservations.values():
                 tags = athena_backend.tagger.list_tags_for_resource(
-                    capacity_reservation.name
+                    capacity_reservation.arn
                 )["Tags"]
                 if not tags or not tag_filter(tags):
                     continue
-                yield {"ResourceARN": f"{capacity_reservation.name}", "Tags": tags}
+                yield {"ResourceARN": f"{capacity_reservation.arn}", "Tags": tags}
 
             # Workgroups
             for work_group in athena_backend.work_groups.values():
-                tags = athena_backend.tagger.list_tags_for_resource(work_group.name)[
+                tags = athena_backend.tagger.list_tags_for_resource(work_group.arn)[
                     "Tags"
                 ]
                 if not tags or not tag_filter(tags):
                     continue
-                yield {"ResourceARN": f"{work_group.name}", "Tags": tags}
+                yield {"ResourceARN": f"{work_group.arn}", "Tags": tags}
 
             # Data Catalogs
             for data_catalog in athena_backend.data_catalogs.values():
-                tags = athena_backend.tagger.list_tags_for_resource(data_catalog.name)[
+                tags = athena_backend.tagger.list_tags_for_resource(data_catalog.arn)[
                     "Tags"
                 ]
                 if not tags or not tag_filter(tags):
                     continue
-                yield {"ResourceARN": f"{data_catalog.name}", "Tags": tags}
+                yield {"ResourceARN": f"{data_catalog.arn}", "Tags": tags}
 
         # Backup
         if not resource_type_filters or "backup" in resource_type_filters:
@@ -414,6 +424,21 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
                     if not tags or not tag_filter(tags):
                         continue
                     yield {"ResourceARN": f"{directory.directory_arn}", "Tags": tags}
+
+        # Firehose
+        if self.firehose_backend:
+            if not resource_type_filters or "firehose" in resource_type_filters:
+                firehose_backend = firehose_backends[self.account_id][self.region_name]
+                for delivery_stream in firehose_backend.delivery_streams.values():
+                    tags = firehose_backend.tagger.list_tags_for_resource(
+                        delivery_stream.delivery_stream_arn
+                    )["Tags"]
+                    if not tags or not tag_filter(tags):
+                        continue
+                    yield {
+                        "ResourceARN": f"{delivery_stream.delivery_stream_arn}",
+                        "Tags": tags,
+                    }
 
         # CloudFormation
         if not resource_type_filters or "cloudformation:stack" in resource_type_filters:
@@ -642,6 +667,40 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
                 if not tag_filter(tags):
                     continue
                 yield {"ResourceARN": f"{fs.file_system_arn}", "Tags": tags}
+
+        elasticache_resource_map: dict[str, dict[str, Any]] = {
+            "elasticache:cache_clusters": dict(self.elasticache_backend.cache_clusters),
+            "elasticache:replication-group": dict(
+                self.elasticache_backend.replication_groups
+            ),
+            "elasticache:snapshots": dict(self.elasticache_backend.snapshots),
+            "elasticache:cache_subnet_groups": dict(
+                self.elasticache_backend.cache_subnet_groups
+            ),
+            "elasticache:users": dict(self.elasticache_backend.users),
+        }
+
+        for resource_type, resource_source in elasticache_resource_map.items():
+            if (
+                not resource_type_filters
+                or "elasticache" in resource_type_filters
+                or resource_type in resource_type_filters
+            ):
+                for resource in resource_source.values():
+                    if (
+                        resource_type == "elasticache:users"
+                        and resource.id == "default"
+                    ):
+                        continue
+
+                    tags = (
+                        self.elasticache_backend.tagging_service.list_tags_for_resource(
+                            resource.arn
+                        )["Tags"]
+                    )
+                    if not tag_filter(tags):
+                        continue
+                    yield {"ResourceARN": f"{resource.arn}", "Tags": tags}
 
         # ELB (Classic Load Balancers)
         if (
@@ -1377,7 +1436,7 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
         self, resource_arns: List[str], tags: Dict[str, str]
     ) -> Dict[str, Dict[str, Any]]:
         """
-        Only DynamoDB, EFS, Lambda Logs, Quicksight RDS, and SageMaker resources are currently supported
+        Only DynamoDB, EFS, Elasticache, Lambda Logs, Quicksight RDS, and SageMaker resources are currently supported
         """
         missing_resources = []
         missing_error: Dict[str, Any] = {
@@ -1428,6 +1487,10 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
                 self.quicksight_backend.tag_resource(
                     arn, TaggingService.convert_dict_to_tags_input(tags)
                 )
+            elif arn.startswith(f"arn:{get_partition(self.region_name)}:elasticache:"):
+                self.elasticache_backend.add_tags_to_resource(
+                    arn, TaggingService.convert_dict_to_tags_input(tags)
+                )
             else:
                 missing_resources.append(arn)
         return {arn: missing_error for arn in missing_resources}
@@ -1436,7 +1499,7 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
         self, resource_arn_list: List[str], tag_keys: List[str]
     ) -> Dict[str, Dict[str, Any]]:
         """
-        Only EFS, Lambda, and Quicksight resources are currently supported
+        Only EFS, Elasticache, Lambda, and Quicksight resources are currently supported
         """
         missing_resources = []
         missing_error: Dict[str, Any] = {
@@ -1456,6 +1519,8 @@ class ResourceGroupsTaggingAPIBackend(BaseBackend):
             elif arn.startswith(f"arn:{get_partition(self.region_name)}:quicksight:"):
                 assert self.quicksight_backend is not None
                 self.quicksight_backend.untag_resource(arn, tag_keys)
+            elif arn.startswith(f"arn:{get_partition(self.region_name)}:elasticache:"):
+                self.elasticache_backend.remove_tags_from_resource(arn, tag_keys)
             else:
                 missing_resources.append(arn)
 

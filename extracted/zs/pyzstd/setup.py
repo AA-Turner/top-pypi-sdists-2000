@@ -22,6 +22,20 @@ def read_stuff():
         m = re.search(r'''__version__\s*=\s*(['"])(.*?)\1''', file_content)
         module_version = m.group(2)
 
+    # Create LICENSE_zstd
+    LICENSE_ZSTD_SRC = os.path.join(ROOT_PATH, 'zstd', 'LICENSE')
+    with open(LICENSE_ZSTD_SRC, 'r', encoding='utf-8') as file:
+        license_zstd = file.read()
+    LICENSE_ZSTD_DST = os.path.join(ROOT_PATH, 'LICENSE_zstd')
+    with open(LICENSE_ZSTD_DST, 'w', encoding='utf-8') as file:
+        file.write(
+            "Depending on how it is build, this package may distribute the zstd library,\n"
+            "partially or in its integrality, in source or binary form.\n\n"
+            "Its license is reproduced below.\n\n"
+            "---\n\n"
+        )
+        file.write(license_zstd)
+
     return long_description, module_version
 
 def get_zstd_files_list():
@@ -218,6 +232,7 @@ def do_setup():
             "Programming Language :: Python :: 3.11",
             "Programming Language :: Python :: 3.12",
             "Programming Language :: Python :: 3.13",
+            "Programming Language :: Python :: 3.14",
         ],
         keywords='zstandard zstd zst compress decompress tar file seekable format',
         package_dir={'pyzstd': 'src'},
