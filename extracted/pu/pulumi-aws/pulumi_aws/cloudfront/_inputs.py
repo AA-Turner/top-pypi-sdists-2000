@@ -2435,6 +2435,10 @@ if not MYPY:
         """
         CloudFront Origin Shield configuration information. Using Origin Shield can help reduce the load on your origin. For more information, see [Using Origin Shield](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/origin-shield.html) in the Amazon CloudFront Developer Guide.
         """
+        response_completion_timeout: NotRequired[pulumi.Input[_builtins.int]]
+        """
+        Time (in seconds) that a request from CloudFront to the origin can stay open and wait for a response. Must be integer greater than or equal to the value of `origin_read_timeout`. If omitted or explicitly set to `0`, no maximum value is enforced.
+        """
         s3_origin_config: NotRequired[pulumi.Input['DistributionOriginS3OriginConfigArgsDict']]
         """
         CloudFront S3 origin configuration information. If a custom origin is required, use `custom_origin_config` instead.
@@ -2458,6 +2462,7 @@ class DistributionOriginArgs:
                  origin_access_control_id: Optional[pulumi.Input[_builtins.str]] = None,
                  origin_path: Optional[pulumi.Input[_builtins.str]] = None,
                  origin_shield: Optional[pulumi.Input['DistributionOriginOriginShieldArgs']] = None,
+                 response_completion_timeout: Optional[pulumi.Input[_builtins.int]] = None,
                  s3_origin_config: Optional[pulumi.Input['DistributionOriginS3OriginConfigArgs']] = None,
                  vpc_origin_config: Optional[pulumi.Input['DistributionOriginVpcOriginConfigArgs']] = None):
         """
@@ -2469,6 +2474,7 @@ class DistributionOriginArgs:
         :param pulumi.Input[_builtins.str] origin_access_control_id: Unique identifier of a [CloudFront origin access control][8] for this origin.
         :param pulumi.Input[_builtins.str] origin_path: Optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin.
         :param pulumi.Input['DistributionOriginOriginShieldArgs'] origin_shield: CloudFront Origin Shield configuration information. Using Origin Shield can help reduce the load on your origin. For more information, see [Using Origin Shield](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/origin-shield.html) in the Amazon CloudFront Developer Guide.
+        :param pulumi.Input[_builtins.int] response_completion_timeout: Time (in seconds) that a request from CloudFront to the origin can stay open and wait for a response. Must be integer greater than or equal to the value of `origin_read_timeout`. If omitted or explicitly set to `0`, no maximum value is enforced.
         :param pulumi.Input['DistributionOriginS3OriginConfigArgs'] s3_origin_config: CloudFront S3 origin configuration information. If a custom origin is required, use `custom_origin_config` instead.
         :param pulumi.Input['DistributionOriginVpcOriginConfigArgs'] vpc_origin_config: The VPC origin configuration.
         """
@@ -2488,6 +2494,8 @@ class DistributionOriginArgs:
             pulumi.set(__self__, "origin_path", origin_path)
         if origin_shield is not None:
             pulumi.set(__self__, "origin_shield", origin_shield)
+        if response_completion_timeout is not None:
+            pulumi.set(__self__, "response_completion_timeout", response_completion_timeout)
         if s3_origin_config is not None:
             pulumi.set(__self__, "s3_origin_config", s3_origin_config)
         if vpc_origin_config is not None:
@@ -2599,6 +2607,18 @@ class DistributionOriginArgs:
         pulumi.set(self, "origin_shield", value)
 
     @_builtins.property
+    @pulumi.getter(name="responseCompletionTimeout")
+    def response_completion_timeout(self) -> Optional[pulumi.Input[_builtins.int]]:
+        """
+        Time (in seconds) that a request from CloudFront to the origin can stay open and wait for a response. Must be integer greater than or equal to the value of `origin_read_timeout`. If omitted or explicitly set to `0`, no maximum value is enforced.
+        """
+        return pulumi.get(self, "response_completion_timeout")
+
+    @response_completion_timeout.setter
+    def response_completion_timeout(self, value: Optional[pulumi.Input[_builtins.int]]):
+        pulumi.set(self, "response_completion_timeout", value)
+
+    @_builtins.property
     @pulumi.getter(name="s3OriginConfig")
     def s3_origin_config(self) -> Optional[pulumi.Input['DistributionOriginS3OriginConfigArgs']]:
         """
@@ -2675,6 +2695,10 @@ if not MYPY:
         """
         List of SSL/TLS protocols that CloudFront can use when connecting to your origin over HTTPS. Valid values: `SSLv3`, `TLSv1`, `TLSv1.1`, `TLSv1.2`. For more information, see [Minimum Origin SSL Protocol](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginSSLProtocols) in the Amazon CloudFront Developer Guide.
         """
+        ip_address_type: NotRequired[pulumi.Input[_builtins.str]]
+        """
+        IP protocol CloudFront uses when connecting to your origin. Valid values: `ipv4`, `ipv6`, `dualstack`.
+        """
         origin_keepalive_timeout: NotRequired[pulumi.Input[_builtins.int]]
         origin_read_timeout: NotRequired[pulumi.Input[_builtins.int]]
 elif False:
@@ -2687,6 +2711,7 @@ class DistributionOriginCustomOriginConfigArgs:
                  https_port: pulumi.Input[_builtins.int],
                  origin_protocol_policy: pulumi.Input[_builtins.str],
                  origin_ssl_protocols: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]],
+                 ip_address_type: Optional[pulumi.Input[_builtins.str]] = None,
                  origin_keepalive_timeout: Optional[pulumi.Input[_builtins.int]] = None,
                  origin_read_timeout: Optional[pulumi.Input[_builtins.int]] = None):
         """
@@ -2694,11 +2719,14 @@ class DistributionOriginCustomOriginConfigArgs:
         :param pulumi.Input[_builtins.int] https_port: HTTPS port the custom origin listens on.
         :param pulumi.Input[_builtins.str] origin_protocol_policy: Origin protocol policy to apply to your origin. One of `http-only`, `https-only`, or `match-viewer`.
         :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] origin_ssl_protocols: List of SSL/TLS protocols that CloudFront can use when connecting to your origin over HTTPS. Valid values: `SSLv3`, `TLSv1`, `TLSv1.1`, `TLSv1.2`. For more information, see [Minimum Origin SSL Protocol](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginSSLProtocols) in the Amazon CloudFront Developer Guide.
+        :param pulumi.Input[_builtins.str] ip_address_type: IP protocol CloudFront uses when connecting to your origin. Valid values: `ipv4`, `ipv6`, `dualstack`.
         """
         pulumi.set(__self__, "http_port", http_port)
         pulumi.set(__self__, "https_port", https_port)
         pulumi.set(__self__, "origin_protocol_policy", origin_protocol_policy)
         pulumi.set(__self__, "origin_ssl_protocols", origin_ssl_protocols)
+        if ip_address_type is not None:
+            pulumi.set(__self__, "ip_address_type", ip_address_type)
         if origin_keepalive_timeout is not None:
             pulumi.set(__self__, "origin_keepalive_timeout", origin_keepalive_timeout)
         if origin_read_timeout is not None:
@@ -2751,6 +2779,18 @@ class DistributionOriginCustomOriginConfigArgs:
     @origin_ssl_protocols.setter
     def origin_ssl_protocols(self, value: pulumi.Input[Sequence[pulumi.Input[_builtins.str]]]):
         pulumi.set(self, "origin_ssl_protocols", value)
+
+    @_builtins.property
+    @pulumi.getter(name="ipAddressType")
+    def ip_address_type(self) -> Optional[pulumi.Input[_builtins.str]]:
+        """
+        IP protocol CloudFront uses when connecting to your origin. Valid values: `ipv4`, `ipv6`, `dualstack`.
+        """
+        return pulumi.get(self, "ip_address_type")
+
+    @ip_address_type.setter
+    def ip_address_type(self, value: Optional[pulumi.Input[_builtins.str]]):
+        pulumi.set(self, "ip_address_type", value)
 
     @_builtins.property
     @pulumi.getter(name="originKeepaliveTimeout")

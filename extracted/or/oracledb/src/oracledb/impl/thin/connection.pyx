@@ -546,6 +546,45 @@ cdef class ThinConnImpl(BaseThinConnImpl):
         lob_impl.create_temp()
         return lob_impl
 
+    def direct_path_load(self, str schema_name, str table_name,
+                         list column_names, object data,
+                         uint32_t batch_size):
+        cdef:
+            Protocol protocol = <Protocol> self._protocol
+            DirectPathPrepareMessage prepare_message
+            DirectPathLoadStreamMessage load_message
+            DirectPathOpMessage op_message
+            BatchLoadManager manager
+
+        # prepare message
+        prepare_message = self._create_message(DirectPathPrepareMessage)
+        prepare_message.schema_name = schema_name
+        prepare_message.table_name = table_name
+        prepare_message.column_names = column_names
+        protocol._process_single_message(prepare_message)
+
+        # setup op message
+        op_message = self._create_message(DirectPathOpMessage)
+        op_message.prepare(prepare_message.cursor_id, TNS_DP_OP_ABORT)
+
+        # load message
+        load_message = self._create_message(DirectPathLoadStreamMessage)
+        try:
+            manager = BatchLoadManager.create_for_direct_path_load(
+                data, prepare_message.column_metadata, batch_size
+            )
+            while manager.num_rows > 0:
+                load_message.prepare(
+                    prepare_message.cursor_id,
+                    manager,
+                    prepare_message.column_metadata
+                )
+                protocol._process_single_message(load_message)
+                manager.next_batch()
+            op_message.op_code = TNS_DP_OP_FINISH
+        finally:
+            protocol._process_single_message(op_message)
+
     def get_type(self, object conn, str name):
         cdef ThinDbObjectTypeCache cache = \
                 get_dbobject_type_cache(self._dbobject_type_cache_num)
@@ -871,27 +910,36 @@ cdef class AsyncThinConnImpl(BaseThinConnImpl):
         elif op_impl.op_type == PIPELINE_OP_TYPE_EXECUTE:
             cursor._prepare_for_execute(op_impl.statement, op_impl.parameters)
         elif op_impl.op_type == PIPELINE_OP_TYPE_EXECUTE_MANY:
-            num_execs = cursor_impl._prepare_for_executemany(
-                cursor, op_impl.statement, op_impl.parameters
+            op_impl.batch_load_manager = cursor_impl._prepare_for_executemany(
+                cursor,
+                op_impl.statement,
+                op_impl.parameters,
+                2 ** 32 - 1
             )
-            op_impl.num_execs = num_execs
-            if cursor_impl._statement.requires_single_execute():
-                num_execs = 1
+            op_impl.num_execs = op_impl.batch_load_manager.num_rows
+            if not cursor_impl._statement.requires_single_execute():
+                num_execs = op_impl.num_execs
         elif op_impl.op_type == PIPELINE_OP_TYPE_FETCH_ONE:
             cursor._prepare_for_execute(op_impl.statement, op_impl.parameters)
             cursor_impl.prefetchrows = 1
             cursor_impl.arraysize = 1
             cursor_impl.rowfactory = op_impl.rowfactory
+            cursor_impl.fetch_lobs = op_impl.fetch_lobs
+            cursor_impl.fetch_decimals = op_impl.fetch_decimals
         elif op_impl.op_type == PIPELINE_OP_TYPE_FETCH_MANY:
             cursor._prepare_for_execute(op_impl.statement, op_impl.parameters)
             cursor_impl.prefetchrows = op_impl.num_rows
             cursor_impl.arraysize = op_impl.num_rows
             cursor_impl.rowfactory = op_impl.rowfactory
+            cursor_impl.fetch_lobs = op_impl.fetch_lobs
+            cursor_impl.fetch_decimals = op_impl.fetch_decimals
         elif op_impl.op_type == PIPELINE_OP_TYPE_FETCH_ALL:
             cursor._prepare_for_execute(op_impl.statement, op_impl.parameters)
             cursor_impl.prefetchrows = op_impl.arraysize
             cursor_impl.arraysize = op_impl.arraysize
             cursor_impl.rowfactory = op_impl.rowfactory
+            cursor_impl.fetch_lobs = op_impl.fetch_lobs
+            cursor_impl.fetch_decimals = op_impl.fetch_decimals
         else:
             errors._raise_err(errors.ERR_UNSUPPORTED_PIPELINE_OPERATION,
                               op_type=op_impl.op_type)
@@ -1115,6 +1163,45 @@ cdef class AsyncThinConnImpl(BaseThinConnImpl):
         await lob_impl.create_temp()
         return lob_impl
 
+    async def direct_path_load(self, str schema_name, str table_name,
+                               list column_names, object data,
+                               uint32_t batch_size):
+        cdef:
+            BaseAsyncProtocol protocol = <BaseAsyncProtocol> self._protocol
+            DirectPathPrepareMessage prepare_message
+            DirectPathLoadStreamMessage load_message
+            DirectPathOpMessage op_message
+            BatchLoadManager manager
+
+        # prepare message
+        prepare_message = self._create_message(DirectPathPrepareMessage)
+        prepare_message.schema_name = schema_name
+        prepare_message.table_name = table_name
+        prepare_message.column_names = column_names
+        await protocol._process_single_message(prepare_message)
+
+        # setup op message
+        op_message = self._create_message(DirectPathOpMessage)
+        op_message.prepare(prepare_message.cursor_id, TNS_DP_OP_ABORT)
+
+        # load message
+        load_message = self._create_message(DirectPathLoadStreamMessage)
+        try:
+            manager = BatchLoadManager.create_for_direct_path_load(
+                data, prepare_message.column_metadata, batch_size
+            )
+            while manager.num_rows > 0:
+                load_message.prepare(
+                    prepare_message.cursor_id,
+                    manager,
+                    prepare_message.column_metadata
+                )
+                await protocol._process_single_message(load_message)
+                manager.next_batch()
+            op_message.op_code = TNS_DP_OP_FINISH
+        finally:
+            await protocol._process_single_message(op_message)
+
     async def get_type(self, object conn, str name):
         cdef AsyncThinDbObjectTypeCache cache = \
                 get_dbobject_type_cache(self._dbobject_type_cache_num)
@@ -1210,7 +1297,7 @@ cdef class AsyncThinConnImpl(BaseThinConnImpl):
     def supports_pipelining(self):
         """
         Returns whether the connection supports pipelining. Currently this is
-        only supported with asyncio and Oracle Database 23ai and later.
+        only supported with asyncio and Oracle Database version 23, and later.
         """
         return self._protocol._caps.supports_pipelining
 

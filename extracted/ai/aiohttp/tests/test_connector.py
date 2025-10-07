@@ -492,10 +492,11 @@ async def test_release(loop, key) -> None:
     conn._acquired_per_host[key].add(proto)
 
     conn._release(key, proto)
+    loop_time = loop.time()
     assert conn._release_waiter.called
     assert conn._cleanup_handle is not None
     assert conn._conns[key][0][0] == proto
-    assert conn._conns[key][0][1] == pytest.approx(loop.time(), abs=0.1)
+    assert conn._conns[key][0][1] == pytest.approx(loop_time, abs=0.1)
     assert not conn._cleanup_closed_transports
     await conn.close()
 
@@ -1344,7 +1345,6 @@ async def test_tcp_connector_dns_throttle_requests_exception_spread(loop) -> Non
 async def test_tcp_connector_dns_throttle_requests_cancelled_when_close(
     loop, dns_response
 ):
-
     with mock.patch("aiohttp.connector.DefaultResolver") as m_resolver:
         conn = aiohttp.TCPConnector(loop=loop, use_dns_cache=True, ttl_dns_cache=10)
         m_resolver().resolve.return_value = dns_response()
@@ -1375,7 +1375,6 @@ def dns_response_error(loop):
 async def test_tcp_connector_cancel_dns_error_captured(
     loop, dns_response_error
 ) -> None:
-
     exception_handler_called = False
 
     def exception_handler(loop, context):
@@ -1606,10 +1605,11 @@ async def test_release_not_started(loop) -> None:
     key = 1
     conn._acquired.add(proto)
     conn._release(key, proto)
+    loop_time = loop.time()
     # assert conn._conns == {1: [(proto, 10)]}
     rec = conn._conns[1]
     assert rec[0][0] == proto
-    assert rec[0][1] == pytest.approx(loop.time(), abs=0.05)
+    assert rec[0][1] == pytest.approx(loop_time, abs=0.05)
     assert not proto.close.called
     await conn.close()
 
@@ -3289,7 +3289,6 @@ async def test_connect_with_no_limits(loop, key) -> None:
 
 
 async def test_connect_with_limit_cancelled(loop) -> None:
-
     proto = create_mocked_conn()
     proto.is_connected.return_value = True
 

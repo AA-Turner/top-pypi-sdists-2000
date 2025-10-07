@@ -44,7 +44,7 @@ def get_user_agent(prefix: Optional[str] = None, suffix: Optional[str] = None):
 
     Returns:
         The user agent string.
-        e.g. 'Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0'
+        e.g. 'Python/3.7.17 slackclient/2.0.0 Darwin/17.7.0'
     """
     # __name__ returns all classes, we only want the client
     client = "{0}/{1}".format("slackclient", version.__version__)
@@ -91,7 +91,7 @@ def _get_headers(
             e.g. {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer xoxb-1234-1243',
-                'User-Agent': 'Python/3.6.8 slack/2.1.0 Darwin/17.7.0'
+                'User-Agent': 'Python/3.7.17 slack/2.1.0 Darwin/17.7.0'
             }
     """
     final_headers = {
@@ -247,10 +247,15 @@ def _to_0_or_1_if_bool(v: Any) -> Union[Any, str]:
     return v
 
 
-def _warn_if_text_or_attachment_fallback_is_missing(endpoint: str, kwargs: Dict[str, Any]) -> None:
+def _warn_if_message_text_content_is_missing(endpoint: str, kwargs: Dict[str, Any]) -> None:
     text = kwargs.get("text")
     if text and len(text.strip()) > 0:
         # If a top-level text arg is provided, we are good. This is the recommended accessibility field to always provide.
+        return
+
+    markdown_text = kwargs.get("markdown_text")
+    if markdown_text and len(markdown_text.strip()) > 0:
+        # If a top-level markdown_text arg is provided, we are good. It should not be used in conjunction with text.
         return
 
     # for unit tests etc.
@@ -267,19 +272,19 @@ def _warn_if_text_or_attachment_fallback_is_missing(endpoint: str, kwargs: Dict[
         "system push notifications, assistive technology such as screen readers, etc."
     )
 
-    # https://api.slack.com/reference/messaging/attachments
+    # https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments
     # Check if the fallback field exists for all the attachments
     # Not all attachments have a fallback property; warn about this too!
     missing_fallback_message = (
         f"Additionally, the attachment-level `fallback` argument is missing in the request payload for a {endpoint} call"
         " - To avoid this warning, it is recommended to always provide a top-level `text` argument when posting a"
         " message. Alternatively you can provide an attachment-level `fallback` argument, though this is now considered"
-        " a legacy field (see https://api.slack.com/reference/messaging/attachments#legacy_fields for more details)."
+        " a legacy field (see https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#legacy_fields for more details)."  # noqa: E501
     )
 
     # Additionally, specifically for attachments, there is a legacy field available at the attachment level called `fallback`
     # Even with a missing text, one can provide a `fallback` per attachment.
-    # More details here: https://api.slack.com/reference/messaging/attachments#legacy_fields
+    # More details here: https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#legacy_fields
     attachments = kwargs.get("attachments")
     # Note that this method does not verify attachments
     # if the value is already serialized as a single str value.
@@ -389,19 +394,19 @@ def _upload_file_via_v2_url(
     else:
         resp = urlopen(req, context=ssl, timeout=timeout)
 
-    charset = resp.headers.get_content_charset() or "utf-8"  # type: ignore[union-attr]
+    charset = resp.headers.get_content_charset() or "utf-8"
     # read the response body here
-    body: str = resp.read().decode(charset)  # type: ignore[union-attr]
+    body: str = resp.read().decode(charset)
     if logger.level <= logging.DEBUG:
         message = (
             "Received the following response - "
-            f"status: {resp.status}, "  # type: ignore[union-attr]
-            f"headers: {dict(resp.headers)}, "  # type: ignore[union-attr]
+            f"status: {resp.status}, "
+            f"headers: {dict(resp.headers)}, "
             f"body: {body}"
         )
         logger.debug(message)
 
-    return {"status": resp.status, "headers": resp.headers, "body": body}  # type: ignore[union-attr]
+    return {"status": resp.status, "headers": resp.headers, "body": body}
 
 
 def _validate_for_legacy_client(

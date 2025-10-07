@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: yarl
-Version: 1.21.0
+Version: 1.22.0
 Summary: Yet another URL library
 Home-page: https://github.com/aio-libs/yarl
 Author: Andrew Svetlov
@@ -267,6 +267,25 @@ Changelog
     WARNING: Don't drop the next directive!
 
 .. towncrier release notes start
+
+1.22.0
+======
+
+*(2025-10-05)*
+
+
+Features
+--------
+
+- Added arm64 Windows wheel builds
+  -- by `@finnagin <https://github.com/sponsors/finnagin>`__.
+
+  *Related issues and pull requests on GitHub:*
+  `#1516 <https://github.com/aio-libs/yarl/issues/1516>`__.
+
+
+----
+
 
 1.21.0
 ======

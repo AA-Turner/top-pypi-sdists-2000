@@ -883,6 +883,9 @@ class BucketAclAccessControlPolicyGrantGranteeArgs:
         """
         pulumi.set(__self__, "type", type)
         if display_name is not None:
+            warnings.warn("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""", DeprecationWarning)
+            pulumi.log.warn("""display_name is deprecated: display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
+        if display_name is not None:
             pulumi.set(__self__, "display_name", display_name)
         if email_address is not None:
             pulumi.set(__self__, "email_address", email_address)
@@ -905,6 +908,7 @@ class BucketAclAccessControlPolicyGrantGranteeArgs:
 
     @_builtins.property
     @pulumi.getter(name="displayName")
+    @_utilities.deprecated("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
     def display_name(self) -> Optional[pulumi.Input[_builtins.str]]:
         """
         Display name of the owner.
@@ -976,6 +980,9 @@ class BucketAclAccessControlPolicyOwnerArgs:
         """
         pulumi.set(__self__, "id", id)
         if display_name is not None:
+            warnings.warn("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""", DeprecationWarning)
+            pulumi.log.warn("""display_name is deprecated: display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
+        if display_name is not None:
             pulumi.set(__self__, "display_name", display_name)
 
     @_builtins.property
@@ -992,6 +999,7 @@ class BucketAclAccessControlPolicyOwnerArgs:
 
     @_builtins.property
     @pulumi.getter(name="displayName")
+    @_utilities.deprecated("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
     def display_name(self) -> Optional[pulumi.Input[_builtins.str]]:
         """
         Display name of the owner.
@@ -1147,6 +1155,9 @@ class BucketAclV2AccessControlPolicyGrantGranteeArgs:
         """
         pulumi.set(__self__, "type", type)
         if display_name is not None:
+            warnings.warn("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""", DeprecationWarning)
+            pulumi.log.warn("""display_name is deprecated: display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
+        if display_name is not None:
             pulumi.set(__self__, "display_name", display_name)
         if email_address is not None:
             pulumi.set(__self__, "email_address", email_address)
@@ -1169,6 +1180,7 @@ class BucketAclV2AccessControlPolicyGrantGranteeArgs:
 
     @_builtins.property
     @pulumi.getter(name="displayName")
+    @_utilities.deprecated("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
     def display_name(self) -> Optional[pulumi.Input[_builtins.str]]:
         """
         Display name of the owner.
@@ -1240,6 +1252,9 @@ class BucketAclV2AccessControlPolicyOwnerArgs:
         """
         pulumi.set(__self__, "id", id)
         if display_name is not None:
+            warnings.warn("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""", DeprecationWarning)
+            pulumi.log.warn("""display_name is deprecated: display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
+        if display_name is not None:
             pulumi.set(__self__, "display_name", display_name)
 
     @_builtins.property
@@ -1256,6 +1271,7 @@ class BucketAclV2AccessControlPolicyOwnerArgs:
 
     @_builtins.property
     @pulumi.getter(name="displayName")
+    @_utilities.deprecated("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
     def display_name(self) -> Optional[pulumi.Input[_builtins.str]]:
         """
         Display name of the owner.
@@ -1851,8 +1867,6 @@ if not MYPY:
         """
         Configuration block used to identify objects that a Lifecycle Rule applies to.
         See below.
-        If not specified, the `rule` will default to using `prefix`.
-        One of `filter` or `prefix` should be specified.
         """
         noncurrent_version_expiration: NotRequired[pulumi.Input['BucketLifecycleConfigurationRuleNoncurrentVersionExpirationArgsDict']]
         """
@@ -1867,8 +1881,6 @@ if not MYPY:
         **DEPRECATED** Use `filter` instead.
         This has been deprecated by Amazon S3.
         Prefix identifying one or more objects to which the rule applies.
-        Defaults to an empty string (`""`) if `filter` is not specified.
-        One of `prefix` or `filter` should be specified.
         """
         transitions: NotRequired[pulumi.Input[Sequence[pulumi.Input['BucketLifecycleConfigurationRuleTransitionArgsDict']]]]
         """
@@ -1896,15 +1908,11 @@ class BucketLifecycleConfigurationRuleArgs:
         :param pulumi.Input['BucketLifecycleConfigurationRuleExpirationArgs'] expiration: Configuration block that specifies the expiration for the lifecycle of the object in the form of date, days and, whether the object has a delete marker. See below.
         :param pulumi.Input['BucketLifecycleConfigurationRuleFilterArgs'] filter: Configuration block used to identify objects that a Lifecycle Rule applies to.
                See below.
-               If not specified, the `rule` will default to using `prefix`.
-               One of `filter` or `prefix` should be specified.
         :param pulumi.Input['BucketLifecycleConfigurationRuleNoncurrentVersionExpirationArgs'] noncurrent_version_expiration: Configuration block that specifies when noncurrent object versions expire. See below.
         :param pulumi.Input[Sequence[pulumi.Input['BucketLifecycleConfigurationRuleNoncurrentVersionTransitionArgs']]] noncurrent_version_transitions: Set of configuration blocks that specify the transition rule for the lifecycle rule that describes when noncurrent objects transition to a specific storage class. See below.
         :param pulumi.Input[_builtins.str] prefix: **DEPRECATED** Use `filter` instead.
                This has been deprecated by Amazon S3.
                Prefix identifying one or more objects to which the rule applies.
-               Defaults to an empty string (`""`) if `filter` is not specified.
-               One of `prefix` or `filter` should be specified.
         :param pulumi.Input[Sequence[pulumi.Input['BucketLifecycleConfigurationRuleTransitionArgs']]] transitions: Set of configuration blocks that specify when an Amazon S3 object transitions to a specified storage class. See below.
         """
         pulumi.set(__self__, "id", id)
@@ -1981,8 +1989,6 @@ class BucketLifecycleConfigurationRuleArgs:
         """
         Configuration block used to identify objects that a Lifecycle Rule applies to.
         See below.
-        If not specified, the `rule` will default to using `prefix`.
-        One of `filter` or `prefix` should be specified.
         """
         return pulumi.get(self, "filter")
 
@@ -2022,8 +2028,6 @@ class BucketLifecycleConfigurationRuleArgs:
         **DEPRECATED** Use `filter` instead.
         This has been deprecated by Amazon S3.
         Prefix identifying one or more objects to which the rule applies.
-        Defaults to an empty string (`""`) if `filter` is not specified.
-        One of `prefix` or `filter` should be specified.
         """
         return pulumi.get(self, "prefix")
 
@@ -2674,8 +2678,6 @@ if not MYPY:
         """
         Configuration block used to identify objects that a Lifecycle Rule applies to.
         See below.
-        If not specified, the `rule` will default to using `prefix`.
-        One of `filter` or `prefix` should be specified.
         """
         noncurrent_version_expiration: NotRequired[pulumi.Input['BucketLifecycleConfigurationV2RuleNoncurrentVersionExpirationArgsDict']]
         """
@@ -2690,8 +2692,6 @@ if not MYPY:
         **DEPRECATED** Use `filter` instead.
         This has been deprecated by Amazon S3.
         Prefix identifying one or more objects to which the rule applies.
-        Defaults to an empty string (`""`) if `filter` is not specified.
-        One of `prefix` or `filter` should be specified.
         """
         transitions: NotRequired[pulumi.Input[Sequence[pulumi.Input['BucketLifecycleConfigurationV2RuleTransitionArgsDict']]]]
         """
@@ -2719,15 +2719,11 @@ class BucketLifecycleConfigurationV2RuleArgs:
         :param pulumi.Input['BucketLifecycleConfigurationV2RuleExpirationArgs'] expiration: Configuration block that specifies the expiration for the lifecycle of the object in the form of date, days and, whether the object has a delete marker. See below.
         :param pulumi.Input['BucketLifecycleConfigurationV2RuleFilterArgs'] filter: Configuration block used to identify objects that a Lifecycle Rule applies to.
                See below.
-               If not specified, the `rule` will default to using `prefix`.
-               One of `filter` or `prefix` should be specified.
         :param pulumi.Input['BucketLifecycleConfigurationV2RuleNoncurrentVersionExpirationArgs'] noncurrent_version_expiration: Configuration block that specifies when noncurrent object versions expire. See below.
         :param pulumi.Input[Sequence[pulumi.Input['BucketLifecycleConfigurationV2RuleNoncurrentVersionTransitionArgs']]] noncurrent_version_transitions: Set of configuration blocks that specify the transition rule for the lifecycle rule that describes when noncurrent objects transition to a specific storage class. See below.
         :param pulumi.Input[_builtins.str] prefix: **DEPRECATED** Use `filter` instead.
                This has been deprecated by Amazon S3.
                Prefix identifying one or more objects to which the rule applies.
-               Defaults to an empty string (`""`) if `filter` is not specified.
-               One of `prefix` or `filter` should be specified.
         :param pulumi.Input[Sequence[pulumi.Input['BucketLifecycleConfigurationV2RuleTransitionArgs']]] transitions: Set of configuration blocks that specify when an Amazon S3 object transitions to a specified storage class. See below.
         """
         pulumi.set(__self__, "id", id)
@@ -2804,8 +2800,6 @@ class BucketLifecycleConfigurationV2RuleArgs:
         """
         Configuration block used to identify objects that a Lifecycle Rule applies to.
         See below.
-        If not specified, the `rule` will default to using `prefix`.
-        One of `filter` or `prefix` should be specified.
         """
         return pulumi.get(self, "filter")
 
@@ -2845,8 +2839,6 @@ class BucketLifecycleConfigurationV2RuleArgs:
         **DEPRECATED** Use `filter` instead.
         This has been deprecated by Amazon S3.
         Prefix identifying one or more objects to which the rule applies.
-        Defaults to an empty string (`""`) if `filter` is not specified.
-        One of `prefix` or `filter` should be specified.
         """
         return pulumi.get(self, "prefix")
 
@@ -4031,6 +4023,9 @@ class BucketLoggingTargetGrantGranteeArgs:
         """
         pulumi.set(__self__, "type", type)
         if display_name is not None:
+            warnings.warn("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""", DeprecationWarning)
+            pulumi.log.warn("""display_name is deprecated: display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
+        if display_name is not None:
             pulumi.set(__self__, "display_name", display_name)
         if email_address is not None:
             pulumi.set(__self__, "email_address", email_address)
@@ -4053,6 +4048,7 @@ class BucketLoggingTargetGrantGranteeArgs:
 
     @_builtins.property
     @pulumi.getter(name="displayName")
+    @_utilities.deprecated("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
     def display_name(self) -> Optional[pulumi.Input[_builtins.str]]:
         return pulumi.get(self, "display_name")
 
@@ -4280,6 +4276,9 @@ class BucketLoggingV2TargetGrantGranteeArgs:
         """
         pulumi.set(__self__, "type", type)
         if display_name is not None:
+            warnings.warn("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""", DeprecationWarning)
+            pulumi.log.warn("""display_name is deprecated: display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
+        if display_name is not None:
             pulumi.set(__self__, "display_name", display_name)
         if email_address is not None:
             pulumi.set(__self__, "email_address", email_address)
@@ -4302,6 +4301,7 @@ class BucketLoggingV2TargetGrantGranteeArgs:
 
     @_builtins.property
     @pulumi.getter(name="displayName")
+    @_utilities.deprecated("""display_name is deprecated. This attribute is no longer returned by AWS and will be removed in a future major version.""")
     def display_name(self) -> Optional[pulumi.Input[_builtins.str]]:
         return pulumi.get(self, "display_name")
 

@@ -10,8 +10,6 @@ from box_sdk_gen.schemas.ai_response_full import *
 
 from box_sdk_gen.schemas.ai_dialogue_history import *
 
-from box_sdk_gen.schemas.ai_extract_response import *
-
 from box_sdk_gen.schemas.ai_extract_structured_response import *
 
 from box_sdk_gen.schemas.ai_item_base import *
@@ -155,8 +153,6 @@ from box_sdk_gen.schemas.resource_scope import *
 from box_sdk_gen.schemas.access_token import *
 
 from box_sdk_gen.schemas.folder_reference import *
-
-from box_sdk_gen.schemas.generic_source import *
 
 from box_sdk_gen.schemas.group_base import *
 

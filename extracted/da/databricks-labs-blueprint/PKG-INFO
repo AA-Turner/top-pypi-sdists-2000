@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: databricks-labs-blueprint
-Version: 0.11.3
+Version: 0.11.4
 Summary: Common libraries for Databricks Labs
 Project-URL: Issues, https://github.com/databrickslabs/blueprint/issues
 Project-URL: Source, https://github.com/databrickslabs/blueprint
@@ -408,6 +408,25 @@ print(f'Answer is: {answer}')
 ![multiple choice](docs/prompts-choice-from-dict.gif)
 
 [[back to top](#databricks-labs-blueprint)]
+
+### Hidden (Password) Prompt
+
+Use to prompt for text without showing the response in the terminal.
+
+Example:
+
+```python
+from databricks.labs.blueprint.tui import Prompts
+
+prompts = Prompts()
+secret = prompts.password('Enter a password')
+print(f'Secret without redaction: {secret}')
+```
+
+![secret_prompt](docs/prompt-password.gif)
+
+[[back to top](#databricks-labs-blueprint)]
+
 
 ### Unit Testing Prompts
 

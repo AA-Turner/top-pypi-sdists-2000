@@ -2346,6 +2346,7 @@ class DataQualityRuleResultTypeDef(TypedDict):
     EvaluatedMetrics: NotRequired[Dict[str, float]]
     EvaluatedRule: NotRequired[str]
     RuleMetrics: NotRequired[Dict[str, float]]
+    Labels: NotRequired[Dict[str, str]]
 
 class GlueTableOutputTypeDef(TypedDict):
     DatabaseName: str

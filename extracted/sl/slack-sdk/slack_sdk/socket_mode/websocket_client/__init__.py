@@ -1,7 +1,7 @@
 """websocket-client bassd Socket Mode client
 
-* https://api.slack.com/apis/connections/socket
-* https://slack.dev/python-slack-sdk/socket-mode/
+* https://docs.slack.dev/apis/events-api/using-socket-mode/
+* https://docs.slack.dev/tools/python-slack-sdk/socket-mode/
 * https://pypi.org/project/websocket-client/
 
 """
@@ -58,7 +58,7 @@ class SocketModeClient(BaseSocketModeClient):
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
 
-    close: bool  # type: ignore[assignment]
+    closed: bool
     connect_operation_lock: Lock
 
     on_open_listeners: List[Callable[[WebSocketApp], None]]
@@ -225,7 +225,7 @@ class SocketModeClient(BaseSocketModeClient):
                     )
                     raise e
 
-    def close(self) -> None:  # type: ignore[explicit-override, no-redef]
+    def close(self) -> None:
         self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()
