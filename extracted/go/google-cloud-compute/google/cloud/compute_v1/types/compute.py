@@ -1516,6 +1516,9 @@ __protobuf__ = proto.module(
         "SubnetworkLogConfig",
         "SubnetworkParams",
         "SubnetworkSecondaryRange",
+        "SubnetworkUtilizationDetails",
+        "SubnetworkUtilizationDetailsIPV4Utilization",
+        "SubnetworkUtilizationDetailsIPV6Utilization",
         "SubnetworksExpandIpCidrRangeRequest",
         "SubnetworksScopedList",
         "SubnetworksScopedWarning",
@@ -36251,6 +36254,9 @@ class GetSubnetworkRequest(proto.Message):
     r"""A request message for Subnetworks.Get. See the method
     description for details.
 
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
     Attributes:
         project (str):
             Project ID for this request.
@@ -36258,7 +36264,32 @@ class GetSubnetworkRequest(proto.Message):
             Name of the region scoping this request.
         subnetwork (str):
             Name of the Subnetwork resource to return.
+        views (str):
+            Defines the extra views returned back in the subnetwork
+            resource. Supported values: - WITH_UTILIZATION: Utilization
+            data is included in the response. Check the Views enum for
+            the list of possible values.
+
+            This field is a member of `oneof`_ ``_views``.
     """
+
+    class Views(proto.Enum):
+        r"""Defines the extra views returned back in the subnetwork resource.
+        Supported values: - WITH_UTILIZATION: Utilization data is included
+        in the response.
+
+        Values:
+            UNDEFINED_VIEWS (0):
+                A value indicating that the enum field is not
+                set.
+            DEFAULT (115302945):
+                No description available.
+            WITH_UTILIZATION (504090633):
+                Utilization data is included in the response.
+        """
+        UNDEFINED_VIEWS = 0
+        DEFAULT = 115302945
+        WITH_UTILIZATION = 504090633
 
     project: str = proto.Field(
         proto.STRING,
@@ -36271,6 +36302,11 @@ class GetSubnetworkRequest(proto.Message):
     subnetwork: str = proto.Field(
         proto.STRING,
         number=307827694,
+    )
+    views: str = proto.Field(
+        proto.STRING,
+        number=112204398,
+        optional=True,
     )
 
 
@@ -55309,6 +55345,11 @@ class InterconnectLocation(proto.Message):
             [Output Only] Server-defined URL for the resource.
 
             This field is a member of `oneof`_ ``_self_link``.
+        single_region_production_critical_peer_locations (MutableSequence[str]):
+            [Output Only] URLs of the other locations that can pair up
+            with this location to support Single-Region 99.99% SLA. E.g.
+            iad-zone1-1 and iad-zone2-5467 are Single-Region 99.99% peer
+            locations of each other.
         status (str):
             [Output Only] The status of this InterconnectLocation, which
             can take one of the following values: - CLOSED: The
@@ -55500,6 +55541,12 @@ class InterconnectLocation(proto.Message):
         proto.STRING,
         number=456214797,
         optional=True,
+    )
+    single_region_production_critical_peer_locations: MutableSequence[
+        str
+    ] = proto.RepeatedField(
+        proto.STRING,
+        number=439537103,
     )
     status: str = proto.Field(
         proto.STRING,
@@ -56113,6 +56160,13 @@ class InterconnectRemoteLocation(proto.Message):
             requestedLinkCount cannot exceed max_lag_size_10_gbps.
 
             This field is a member of `oneof`_ ``_max_lag_size10_gbps``.
+        max_lag_size400_gbps (int):
+            [Output Only] The maximum number of 400 Gbps ports supported
+            in a link aggregation group (LAG). When linkType is 400
+            Gbps, requestedLinkCount cannot exceed
+            max_lag_size_400_gbps.
+
+            This field is a member of `oneof`_ ``_max_lag_size400_gbps``.
         name (str):
             [Output Only] Name of the resource.
 
@@ -56288,6 +56342,11 @@ class InterconnectRemoteLocation(proto.Message):
     max_lag_size10_gbps: int = proto.Field(
         proto.INT32,
         number=294007573,
+        optional=True,
+    )
+    max_lag_size400_gbps: int = proto.Field(
+        proto.INT32,
+        number=104941138,
         optional=True,
     )
     name: str = proto.Field(
@@ -70835,7 +70894,32 @@ class ListSubnetworksRequest(proto.Message):
             resources, with an error code.
 
             This field is a member of `oneof`_ ``_return_partial_success``.
+        views (str):
+            Defines the extra views returned back in the subnetwork
+            resource. Supported values: - WITH_UTILIZATION: Utilization
+            data is included in the response. Check the Views enum for
+            the list of possible values.
+
+            This field is a member of `oneof`_ ``_views``.
     """
+
+    class Views(proto.Enum):
+        r"""Defines the extra views returned back in the subnetwork resource.
+        Supported values: - WITH_UTILIZATION: Utilization data is included
+        in the response.
+
+        Values:
+            UNDEFINED_VIEWS (0):
+                A value indicating that the enum field is not
+                set.
+            DEFAULT (115302945):
+                No description available.
+            WITH_UTILIZATION (504090633):
+                Utilization data is included in the response.
+        """
+        UNDEFINED_VIEWS = 0
+        DEFAULT = 115302945
+        WITH_UTILIZATION = 504090633
 
     filter: str = proto.Field(
         proto.STRING,
@@ -70868,6 +70952,11 @@ class ListSubnetworksRequest(proto.Message):
     return_partial_success: bool = proto.Field(
         proto.BOOL,
         number=517198390,
+        optional=True,
+    )
+    views: str = proto.Field(
+        proto.STRING,
+        number=112204398,
         optional=True,
     )
 
@@ -92428,11 +92517,21 @@ class RequestMirrorPolicy(proto.Message):
             supported as a mirrored backend service.
 
             This field is a member of `oneof`_ ``_backend_service``.
+        mirror_percent (float):
+            The percentage of requests to be mirrored to
+            ``backend_service``.
+
+            This field is a member of `oneof`_ ``_mirror_percent``.
     """
 
     backend_service: str = proto.Field(
         proto.STRING,
         number=306946058,
+        optional=True,
+    )
+    mirror_percent: float = proto.Field(
+        proto.DOUBLE,
+        number=277432261,
         optional=True,
     )
 
@@ -112676,6 +112775,12 @@ class Subnetwork(proto.Message):
             Output only. [Output Only] The array of internal IPv6
             network ranges reserved from the subnetwork's internal IPv6
             range for system use.
+        utilization_details (google.cloud.compute_v1.types.SubnetworkUtilizationDetails):
+            Output only. [Output Only] The current IP utilization of all
+            subnetwork ranges. Contains the total number of allocated
+            and free IPs in each range.
+
+            This field is a member of `oneof`_ ``_utilization_details``.
     """
 
     class Ipv6AccessType(proto.Enum):
@@ -113018,6 +113123,12 @@ class Subnetwork(proto.Message):
     system_reserved_internal_ipv6_ranges: MutableSequence[str] = proto.RepeatedField(
         proto.STRING,
         number=432294995,
+    )
+    utilization_details: "SubnetworkUtilizationDetails" = proto.Field(
+        proto.MESSAGE,
+        number=125404453,
+        optional=True,
+        message="SubnetworkUtilizationDetails",
     )
 
 
@@ -113386,6 +113497,127 @@ class SubnetworkSecondaryRange(proto.Message):
         proto.STRING,
         number=286248754,
         optional=True,
+    )
+
+
+class SubnetworkUtilizationDetails(proto.Message):
+    r"""The current IP utilization of all subnetwork ranges. Contains
+    the total number of allocated and free IPs in each range.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        external_ipv6_instance_utilization (google.cloud.compute_v1.types.SubnetworkUtilizationDetailsIPV6Utilization):
+            Utilizations of external IPV6 IP range.
+
+            This field is a member of `oneof`_ ``_external_ipv6_instance_utilization``.
+        external_ipv6_lb_utilization (google.cloud.compute_v1.types.SubnetworkUtilizationDetailsIPV6Utilization):
+            Utilizations of external IPV6 IP range for
+            NetLB.
+
+            This field is a member of `oneof`_ ``_external_ipv6_lb_utilization``.
+        internal_ipv6_utilization (google.cloud.compute_v1.types.SubnetworkUtilizationDetailsIPV6Utilization):
+            Utilizations of internal IPV6 IP range.
+
+            This field is a member of `oneof`_ ``_internal_ipv6_utilization``.
+        ipv4_utilizations (MutableSequence[google.cloud.compute_v1.types.SubnetworkUtilizationDetailsIPV4Utilization]):
+            Utilizations of all IPV4 IP ranges. For
+            primary ranges, the range name will be empty.
+    """
+
+    external_ipv6_instance_utilization: "SubnetworkUtilizationDetailsIPV6Utilization" = proto.Field(
+        proto.MESSAGE,
+        number=419750236,
+        optional=True,
+        message="SubnetworkUtilizationDetailsIPV6Utilization",
+    )
+    external_ipv6_lb_utilization: "SubnetworkUtilizationDetailsIPV6Utilization" = (
+        proto.Field(
+            proto.MESSAGE,
+            number=136563645,
+            optional=True,
+            message="SubnetworkUtilizationDetailsIPV6Utilization",
+        )
+    )
+    internal_ipv6_utilization: "SubnetworkUtilizationDetailsIPV6Utilization" = (
+        proto.Field(
+            proto.MESSAGE,
+            number=69707020,
+            optional=True,
+            message="SubnetworkUtilizationDetailsIPV6Utilization",
+        )
+    )
+    ipv4_utilizations: MutableSequence[
+        "SubnetworkUtilizationDetailsIPV4Utilization"
+    ] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=206180011,
+        message="SubnetworkUtilizationDetailsIPV4Utilization",
+    )
+
+
+class SubnetworkUtilizationDetailsIPV4Utilization(proto.Message):
+    r"""The IPV4 utilization of a single IP range.
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        range_name (str):
+            Will be set for secondary range. Empty for
+            primary IPv4 range.
+
+            This field is a member of `oneof`_ ``_range_name``.
+        total_allocated_ip (int):
+
+            This field is a member of `oneof`_ ``_total_allocated_ip``.
+        total_free_ip (int):
+
+            This field is a member of `oneof`_ ``_total_free_ip``.
+    """
+
+    range_name: str = proto.Field(
+        proto.STRING,
+        number=332216397,
+        optional=True,
+    )
+    total_allocated_ip: int = proto.Field(
+        proto.INT64,
+        number=279055546,
+        optional=True,
+    )
+    total_free_ip: int = proto.Field(
+        proto.INT64,
+        number=105624031,
+        optional=True,
+    )
+
+
+class SubnetworkUtilizationDetailsIPV6Utilization(proto.Message):
+    r"""The IPV6 utilization of a single IP range.
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        total_allocated_ip (google.cloud.compute_v1.types.Uint128):
+
+            This field is a member of `oneof`_ ``_total_allocated_ip``.
+        total_free_ip (google.cloud.compute_v1.types.Uint128):
+
+            This field is a member of `oneof`_ ``_total_free_ip``.
+    """
+
+    total_allocated_ip: "Uint128" = proto.Field(
+        proto.MESSAGE,
+        number=279055546,
+        optional=True,
+        message="Uint128",
+    )
+    total_free_ip: "Uint128" = proto.Field(
+        proto.MESSAGE,
+        number=105624031,
+        optional=True,
+        message="Uint128",
     )
 
 

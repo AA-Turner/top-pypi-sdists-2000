@@ -3,7 +3,16 @@ LoginRadius BaseOAuth2 backend, docs at:
     https://python-social-auth.readthedocs.io/en/latest/backends/loginradius.html
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, Literal
+
 from .oauth import BaseOAuth2
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from requests.auth import AuthBase
 
 
 class LoginRadiusAuth(BaseOAuth2):
@@ -21,7 +30,7 @@ class LoginRadiusAuth(BaseOAuth2):
         return False
 
     def auth_html(self):
-        key, secret = self.get_key_and_secret()
+        key, _secret = self.get_key_and_secret()
         tpl = self.setting("TEMPLATE", "loginradius.html")
         return self.strategy.render_html(
             tpl=tpl,
@@ -32,11 +41,25 @@ class LoginRadiusAuth(BaseOAuth2):
             },
         )
 
-    def request_access_token(self, *args, **kwargs):
-        return self.get_json(
-            params={"token": self.data.get("token"), "secret": self.setting("SECRET")},
-            *args,
-            **kwargs,
+    def request_access_token(
+        self,
+        url: str,
+        method: Literal["GET", "POST", "DELETE"] = "GET",
+        headers: Mapping[str, str | bytes] | None = None,
+        data: dict | bytes | str | None = None,
+        auth: tuple[str, str] | AuthBase | None = None,
+        params: dict | None = None,
+    ) -> dict[Any, Any]:
+        return super().request_access_token(
+            url,
+            method,
+            headers,
+            data,
+            auth,
+            {
+                "token": self.data.get("token"),
+                "secret": self.setting("SECRET"),
+            },
         )
 
     def user_data(self, access_token, *args, **kwargs):

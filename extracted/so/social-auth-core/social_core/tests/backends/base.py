@@ -66,7 +66,7 @@ class BaseBackendTest(unittest.TestCase, Generic[BackendT]):
         responses.stop()
         responses.reset()
 
-    def extra_settings(self) -> dict[str, str]:
+    def extra_settings(self) -> dict[str, str | list[str]]:
         return {}
 
     def do_start(self):

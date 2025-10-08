@@ -23,6 +23,7 @@ from social_core.utils import (
     handle_http_errors,
     parse_qs,
     url_add_parameters,
+    wrap_access_token_error,
 )
 
 from .base import BaseAuth
@@ -60,11 +61,18 @@ class OAuthAuth(BaseAuth):
     REDIRECT_STATE = False
     STATE_PARAMETER = False
 
-    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
+    def extra_data(
+        self,
+        user,
+        uid: str,
+        response: dict[str, Any],
+        details: dict[str, Any],
+        pipeline_kwargs: dict[str, Any],
+    ) -> dict[str, Any]:
         """Return access_token and extra defined names to store in
         extra_data field"""
-        data = super().extra_data(user, uid, response, details, *args, **kwargs)
-        data["access_token"] = response.get("access_token", "") or kwargs.get(
+        data = super().extra_data(user, uid, response, details, pipeline_kwargs)
+        data["access_token"] = response.get("access_token") or pipeline_kwargs.get(
             "access_token"
         )
         return data
@@ -352,7 +360,7 @@ class BaseOAuth2(OAuthAuth):
         return self.USE_BASIC_AUTH
 
     def auth_params(self, state: str | None = None) -> dict[str, str]:
-        client_id, client_secret = self.get_key_and_secret()
+        client_id, _client_secret = self.get_key_and_secret()
         params = {"client_id": client_id, "redirect_uri": self.get_redirect_uri(state)}
         if self.STATE_PARAMETER and state:
             params["state"] = state
@@ -400,11 +408,20 @@ class BaseOAuth2(OAuthAuth):
             "Accept": "application/json",
         }
 
-    def extra_data(self, user, uid, response, details, *args, **kwargs):
+    def extra_data(
+        self,
+        user,
+        uid: str,
+        response: dict[str, Any],
+        details: dict[str, Any],
+        pipeline_kwargs: dict[str, Any],
+    ) -> dict[str, Any]:
         """Return access_token, token_type, and extra defined names to store in
         extra_data field"""
-        data = super().extra_data(user, uid, response, details=details, *args, **kwargs)
-        data["token_type"] = response.get("token_type") or kwargs.get("token_type")
+        data = super().extra_data(user, uid, response, details, pipeline_kwargs)
+        data["token_type"] = response.get("token_type") or pipeline_kwargs.get(
+            "token_type"
+        )
         return data
 
     def request_access_token(
@@ -416,9 +433,10 @@ class BaseOAuth2(OAuthAuth):
         auth: tuple[str, str] | AuthBase | None = None,
         params: dict | None = None,
     ) -> dict[Any, Any]:
-        return self.get_json(
-            url, method=method, headers=headers, data=data, auth=auth, params=params
-        )
+        with wrap_access_token_error(self):
+            return self.get_json(
+                url, method=method, headers=headers, data=data, auth=auth, params=params
+            )
 
     def process_error(self, data) -> None:
         if data.get("error"):
@@ -449,7 +467,7 @@ class BaseOAuth2(OAuthAuth):
         )
         self.process_error(response)
         return self.do_auth(
-            response["access_token"], response=response, *args, **kwargs
+            response["access_token"], *args, response=response, **kwargs
         )
 
     @handle_http_errors

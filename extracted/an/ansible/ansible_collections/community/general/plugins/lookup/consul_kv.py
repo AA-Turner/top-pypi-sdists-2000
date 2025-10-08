@@ -16,7 +16,7 @@ description:
     with simple rest commands.
   - C(curl -X PUT -d 'some-value' http://localhost:8500/v1/kv/ansible/somedata).
 requirements:
-  - 'python-consul python library U(https://python-consul.readthedocs.io/en/latest/#installation)'
+  - 'py-consul python library U(https://github.com/criteo/py-consul?tab=readme-ov-file#installation)'
 options:
   _raw:
     description: List of key(s) to retrieve.
@@ -112,7 +112,8 @@ _raw:
   type: dict
 """
 
-from ansible.module_utils.six.moves.urllib.parse import urlparse
+from urllib.parse import urlparse
+
 from ansible.errors import AnsibleError, AnsibleAssertionError
 from ansible.plugins.lookup import LookupBase
 from ansible.module_utils.common.text.converters import to_text
@@ -131,7 +132,7 @@ class LookupModule(LookupBase):
 
         if not HAS_CONSUL:
             raise AnsibleError(
-                'python-consul is required for consul_kv lookup. see http://python-consul.readthedocs.org/en/latest/#installation')
+                'py-consul is required for consul_kv lookup. see https://github.com/criteo/py-consul?tab=readme-ov-file#installation')
 
         # get options
         self.set_options(direct=kwargs)

@@ -402,6 +402,7 @@ pub(crate) struct RunArgs {
     #[arg(
         long,
         conflicts_with_all = ["all_files", "from_ref", "to_ref"],
+        num_args = 0..,
         value_hint = ValueHint::AnyPath)
     ]
     pub(crate) files: Vec<String>,
@@ -549,7 +550,7 @@ pub(crate) struct AutoUpdateArgs {
     #[arg(long)]
     pub(crate) dry_run: bool,
     /// Number of threads to use.
-    #[arg(short, long, default_value_t = 3)]
+    #[arg(short, long, default_value_t = 0)]
     pub(crate) jobs: usize,
 }
 

@@ -32,7 +32,7 @@ class LineOAuth2(BaseOAuth2):
     ]
 
     def auth_params(self, state=None):
-        client_id, client_secret = self.get_key_and_secret()
+        client_id, _client_secret = self.get_key_and_secret()
         return {
             "response_type": self.RESPONSE_TYPE,
             "client_id": client_id,
@@ -64,7 +64,7 @@ class LineOAuth2(BaseOAuth2):
             self.process_error(response)
 
             return self.do_auth(
-                response["access_token"], response=response, *args, **kwargs
+                response["access_token"], *args, response=response, **kwargs
             )
         except requests.HTTPError as err:
             self.process_error(json.loads(err.response.content))

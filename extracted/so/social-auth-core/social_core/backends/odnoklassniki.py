@@ -3,7 +3,10 @@ Odnoklassniki OAuth2 and Iframe Application backends, docs at:
     https://python-social-auth.readthedocs.io/en/latest/backends/odnoklassnikiru.html
 """
 
+from __future__ import annotations
+
 from hashlib import md5
+from typing import Any
 from urllib.parse import unquote
 
 from social_core.exceptions import AuthFailed
@@ -50,7 +53,7 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Odnoklassniki REST API"""
         data = {"access_token": access_token, "method": "users.getCurrentUser"}
-        key, secret = self.get_key_and_secret()
+        _key, secret = self.get_key_and_secret()
         public_key = self.setting("PUBLIC_NAME")
         return odnoklassniki_api(
             self, data, "https://api.ok.ru/", public_key, secret, "oauth"
@@ -63,7 +66,14 @@ class OdnoklassnikiApp(BaseAuth):
     name = "odnoklassniki-app"
     ID_KEY = "uid"
 
-    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
+    def extra_data(
+        self,
+        user,
+        uid: str,
+        response: dict[str, Any],
+        details: dict[str, Any],
+        pipeline_kwargs: dict[str, Any],
+    ) -> dict[str, Any]:
         return {
             key: value
             for key, value in response.items()
@@ -99,7 +109,7 @@ class OdnoklassnikiApp(BaseAuth):
             "uids": "{}".format(response["logged_user_id"]),
             "fields": ",".join(fields),
         }
-        client_key, client_secret = self.get_key_and_secret()
+        _client_key, client_secret = self.get_key_and_secret()
         public_key = self.setting("PUBLIC_NAME")
         details = odnoklassniki_api(
             self,

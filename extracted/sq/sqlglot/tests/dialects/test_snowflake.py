@@ -19,6 +19,8 @@ class TestSnowflake(Validator):
         self.assertEqual(ast.sql("snowflake"), "DATEADD(MONTH, n, d)")
 
         self.validate_identity("SELECT GET(a, b)")
+        self.validate_identity("SELECT TAN(x)")
+        self.validate_identity("SELECT COS(x)")
         self.assertEqual(
             # Ensures we don't fail when generating ParseJSON with the `safe` arg set to `True`
             self.validate_identity("""SELECT TRY_PARSE_JSON('{"x: 1}')""").sql(),
@@ -29,6 +31,7 @@ class TestSnowflake(Validator):
         expr.selects[0].assert_is(exp.AggFunc)
         self.assertEqual(expr.sql(dialect="snowflake"), "SELECT APPROX_TOP_K(C4, 3, 5) FROM t")
 
+        self.validate_identity("SELECT EXP(1)")
         self.validate_identity("SELECT BIT_LENGTH('abc')")
         self.validate_identity("SELECT BIT_LENGTH(x'A1B2')")
         self.validate_identity("SELECT RTRIMMED_LENGTH(' ABCD ')")
@@ -45,8 +48,16 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT RPAD('Hello', 10, '*')")
         self.validate_identity("SELECT RPAD(tbl.bin_col, 10)")
         self.validate_identity("SELECT SOUNDEX(column_name)")
+        self.validate_identity("SELECT SOUNDEX_P123(column_name)")
+        self.validate_identity("SELECT ABS(x)")
+        self.validate_identity("SELECT SIGN(x)")
+        self.validate_identity("SELECT COSH(1.5)")
         self.validate_identity("SELECT JAROWINKLER_SIMILARITY('hello', 'world')")
+        self.validate_identity("SELECT TRANSLATE(column_name, 'abc', '123')")
+        self.validate_identity("SELECT UNICODE(column_name)")
         self.validate_identity("SELECT SPLIT_PART('11.22.33', '.', 1)")
+        self.validate_identity("SELECT DEGREES(PI() / 3)")
+        self.validate_identity("SELECT DEGREES(1)")
         self.validate_identity("PARSE_URL('https://example.com/path')")
         self.validate_identity("PARSE_URL('https://example.com/path', 1)")
         self.validate_identity("SELECT {*} FROM my_table")
@@ -123,6 +134,18 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT GET_PATH(foo, 'bar')")
         self.validate_identity("SELECT a, exclude, b FROM xxx")
         self.validate_identity("SELECT ARRAY_SORT(x, TRUE, FALSE)")
+        self.validate_identity(
+            "SELECT DATEADD(DAY, -7, DATEADD(t.m, 1, CAST('2023-01-03' AS DATE))) FROM (SELECT 'month' AS m) AS t"
+        ).selects[0].this.unit.assert_is(exp.Column)
+        self.validate_identity(
+            "SELECT STRTOK('hello world')", "SELECT SPLIT_PART('hello world', ' ', 1)"
+        )
+        self.validate_identity(
+            "SELECT STRTOK('hello world', ' ')", "SELECT SPLIT_PART('hello world', ' ', 1)"
+        )
+        self.validate_identity(
+            "SELECT STRTOK('hello world', ' ', 2)", "SELECT SPLIT_PART('hello world', ' ', 2)"
+        )
         self.validate_identity("SELECT FILE_URL FROM DIRECTORY(@mystage) WHERE SIZE > 100000").args[
             "from"
         ].this.this.assert_is(exp.DirectoryStage).this.assert_is(exp.Var)
@@ -827,6 +850,28 @@ class TestSnowflake(Validator):
             },
         )
         self.validate_all(
+            "DIV0NULL(foo, bar)",
+            write={
+                "snowflake": "IFF(bar = 0 OR bar IS NULL, 0, foo / bar)",
+                "sqlite": "IIF(bar = 0 OR bar IS NULL, 0, CAST(foo AS REAL) / bar)",
+                "presto": "IF(bar = 0 OR bar IS NULL, 0, CAST(foo AS DOUBLE) / bar)",
+                "spark": "IF(bar = 0 OR bar IS NULL, 0, foo / bar)",
+                "hive": "IF(bar = 0 OR bar IS NULL, 0, foo / bar)",
+                "duckdb": "CASE WHEN bar = 0 OR bar IS NULL THEN 0 ELSE foo / bar END",
+            },
+        )
+        self.validate_all(
+            "DIV0NULL(a - b, c - d)",
+            write={
+                "snowflake": "IFF((c - d) = 0 OR (c - d) IS NULL, 0, (a - b) / (c - d))",
+                "sqlite": "IIF((c - d) = 0 OR (c - d) IS NULL, 0, CAST((a - b) AS REAL) / (c - d))",
+                "presto": "IF((c - d) = 0 OR (c - d) IS NULL, 0, CAST((a - b) AS DOUBLE) / (c - d))",
+                "spark": "IF((c - d) = 0 OR (c - d) IS NULL, 0, (a - b) / (c - d))",
+                "hive": "IF((c - d) = 0 OR (c - d) IS NULL, 0, (a - b) / (c - d))",
+                "duckdb": "CASE WHEN (c - d) = 0 OR (c - d) IS NULL THEN 0 ELSE (a - b) / (c - d) END",
+            },
+        )
+        self.validate_all(
             "ZEROIFNULL(foo)",
             write={
                 "snowflake": "IFF(foo IS NULL, 0, foo)",
@@ -1410,6 +1455,22 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT TRY_HEX_DECODE_BINARY('48656C6C6F')")
 
         self.validate_identity("SELECT TRY_HEX_DECODE_STRING('48656C6C6F')")
+
+        self.validate_all(
+            "SELECT ARRAY_CONTAINS(CAST('1' AS VARIANT), ['1'])",
+            read={
+                "presto": "SELECT CONTAINS(ARRAY['1'], '1')",
+                "snowflake": "SELECT ARRAY_CONTAINS(CAST('1' AS VARIANT), ['1'])",
+            },
+        )
+        self.validate_all(
+            "SELECT ARRAY_CONTAINS(CAST(CAST('2020-10-10' AS DATE) AS VARIANT), [CAST('2020-10-10' AS DATE)])",
+            read={
+                "presto": "SELECT CONTAINS(ARRAY[DATE '2020-10-10'], DATE '2020-10-10')",
+                "snowflake": "SELECT ARRAY_CONTAINS(CAST(CAST('2020-10-10' AS DATE) AS VARIANT), [CAST('2020-10-10' AS DATE)])",
+            },
+        )
+        self.validate_identity("SELECT ARRAY_CONTAINS(1, [1])")
 
     def test_null_treatment(self):
         self.validate_all(
@@ -2426,7 +2487,43 @@ FROM persons AS p, LATERAL FLATTEN(input => p.c, path => 'contact') AS _flattene
             "REGEXP_EXTRACT_ALL(subject, pattern)",
         )
 
-        self.validate_identity("SELECT REGEXP_COUNT('hello world', 'l')")
+        self.validate_identity("SELECT SEARCH((play, line), 'dream')")
+        self.validate_identity("SELECT SEARCH(line, 'king', ANALYZER => 'UNICODE_ANALYZER')")
+        self.validate_identity("SELECT SEARCH(character, 'king queen', SEARCH_MODE => 'AND')")
+        self.validate_identity(
+            "SELECT SEARCH(line, 'king', ANALYZER => 'UNICODE_ANALYZER', SEARCH_MODE => 'OR')"
+        )
+
+        # AST validation tests - verify argument mapping
+        ast = self.validate_identity("SELECT SEARCH(line, 'king')")
+        search_ast = ast.find(exp.Search)
+        self.assertEqual(list(search_ast.args), ["this", "expression"])
+        self.assertIsNone(search_ast.args.get("analyzer"))
+        self.assertIsNone(search_ast.args.get("search_mode"))
+
+        ast = self.validate_identity("SELECT SEARCH(line, 'king', ANALYZER => 'UNICODE_ANALYZER')")
+        search_ast = ast.find(exp.Search)
+        self.assertIsNotNone(search_ast.args.get("analyzer"))
+        self.assertIsNone(search_ast.args.get("search_mode"))
+
+        ast = self.validate_identity("SELECT SEARCH(character, 'king queen', SEARCH_MODE => 'AND')")
+        search_ast = ast.find(exp.Search)
+        self.assertIsNone(search_ast.args.get("analyzer"))
+        self.assertIsNotNone(search_ast.args.get("search_mode"))
+
+        # Test with arguments in different order (search_mode first, then analyzer)
+        ast = self.validate_identity(
+            "SELECT SEARCH(line, 'king', SEARCH_MODE => 'AND', ANALYZER => 'PATTERN_ANALYZER')",
+            "SELECT SEARCH(line, 'king', ANALYZER => 'PATTERN_ANALYZER', SEARCH_MODE => 'AND')",
+        )
+        search_ast = ast.find(exp.Search)
+        self.assertEqual(list(search_ast.args), ["this", "expression", "search_mode", "analyzer"])
+        analyzer = search_ast.args.get("analyzer")
+        self.assertIsNotNone(analyzer)
+        search_mode = search_ast.args.get("search_mode")
+        self.assertIsNotNone(search_mode)
+
+        self.validate_identity("SELECT REGEXP_COUNT('hello world', 'l ')")
         self.validate_identity("SELECT REGEXP_COUNT('hello world', 'l', 1)")
         self.validate_identity("SELECT REGEXP_COUNT('hello world', 'l', 1, 'i')")
 

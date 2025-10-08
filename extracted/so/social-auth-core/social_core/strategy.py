@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 from .backends.utils import get_backend
 from .exceptions import StrategyMissingFeatureError
 from .pipeline import DEFAULT_AUTH_PIPELINE, DEFAULT_DISCONNECT_PIPELINE
-from .pipeline.utils import partial_load, partial_prepare, partial_store
+from .pipeline.utils import partial_load
 from .store import OpenIdSessionWrapper, OpenIdStore
 from .utils import PARTIAL_TOKEN_SESSION_NAME, module_member, setting_name
 
@@ -104,12 +104,6 @@ class BaseStrategy:
     def from_session_value(self, val):
         return val
 
-    def partial_save(self, next_step, backend: BaseAuth, *args, **kwargs):
-        return partial_store(self, backend, next_step, *args, **kwargs)
-
-    def partial_prepare(self, next_step, backend: BaseAuth, *args, **kwargs):
-        return partial_prepare(self, backend, next_step, *args, **kwargs)
-
     def partial_load(self, token):
         return partial_load(self, token)
 
@@ -195,7 +189,7 @@ class BaseStrategy:
     def get_backend(self, name, redirect_uri=None, *args, **kwargs):
         """Return a configured backend instance"""
         Backend = self.get_backend_class(name)
-        return Backend(self, redirect_uri=redirect_uri, *args, **kwargs)
+        return Backend(self, *args, redirect_uri=redirect_uri, **kwargs)
 
     # Implement the following methods on strategies sub-classes
 

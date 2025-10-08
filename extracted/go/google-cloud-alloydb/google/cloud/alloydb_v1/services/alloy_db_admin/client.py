@@ -273,6 +273,30 @@ class AlloyDBAdminClient(metaclass=AlloyDBAdminClientMeta):
         return m.groupdict() if m else {}
 
     @staticmethod
+    def crypto_key_path(
+        project: str,
+        location: str,
+        key_ring: str,
+        crypto_key: str,
+    ) -> str:
+        """Returns a fully-qualified crypto_key string."""
+        return "projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}".format(
+            project=project,
+            location=location,
+            key_ring=key_ring,
+            crypto_key=crypto_key,
+        )
+
+    @staticmethod
+    def parse_crypto_key_path(path: str) -> Dict[str, str]:
+        """Parses a crypto_key path into its component segments."""
+        m = re.match(
+            r"^projects/(?P<project>.+?)/locations/(?P<location>.+?)/keyRings/(?P<key_ring>.+?)/cryptoKeys/(?P<crypto_key>.+?)$",
+            path,
+        )
+        return m.groupdict() if m else {}
+
+    @staticmethod
     def crypto_key_version_path(
         project: str,
         location: str,
@@ -362,6 +386,28 @@ class AlloyDBAdminClient(metaclass=AlloyDBAdminClientMeta):
         """Parses a network path into its component segments."""
         m = re.match(
             r"^projects/(?P<project>.+?)/global/networks/(?P<network>.+?)$", path
+        )
+        return m.groupdict() if m else {}
+
+    @staticmethod
+    def service_attachment_path(
+        project: str,
+        region: str,
+        service_attachment: str,
+    ) -> str:
+        """Returns a fully-qualified service_attachment string."""
+        return "projects/{project}/regions/{region}/serviceAttachments/{service_attachment}".format(
+            project=project,
+            region=region,
+            service_attachment=service_attachment,
+        )
+
+    @staticmethod
+    def parse_service_attachment_path(path: str) -> Dict[str, str]:
+        """Parses a service_attachment path into its component segments."""
+        m = re.match(
+            r"^projects/(?P<project>.+?)/regions/(?P<region>.+?)/serviceAttachments/(?P<service_attachment>.+?)$",
+            path,
         )
         return m.groupdict() if m else {}
 
@@ -949,7 +995,7 @@ class AlloyDBAdminClient(metaclass=AlloyDBAdminClientMeta):
                 operation by specifying a value with the following
                 format:
 
-                -  projects/{project}/locations/-
+                - projects/{project}/locations/-
 
                 This corresponds to the ``parent`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -1808,7 +1854,7 @@ class AlloyDBAdminClient(metaclass=AlloyDBAdminClientMeta):
                 # Initialize request argument(s)
                 request = alloydb_v1.UpgradeClusterRequest(
                     name="name_value",
-                    version="POSTGRES_16",
+                    version="POSTGRES_17",
                 )
 
                 # Make the request
@@ -2611,8 +2657,8 @@ class AlloyDBAdminClient(metaclass=AlloyDBAdminClientMeta):
                 operation by specifying a value with one of the
                 following formats:
 
-                -  projects/{project}/locations/-/clusters/-
-                -  projects/{project}/locations/{region}/clusters/-
+                - projects/{project}/locations/-/clusters/-
+                - projects/{project}/locations/{region}/clusters/-
 
                 This corresponds to the ``parent`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -4708,7 +4754,7 @@ class AlloyDBAdminClient(metaclass=AlloyDBAdminClientMeta):
                 Required. The name of the parent resource. The required
                 format is:
 
-                -  projects/{project}/locations/{location}
+                - projects/{project}/locations/{location}
 
                 Regardless of the parent specified here, as long it is
                 contains a valid project and location, the service will
@@ -4846,7 +4892,7 @@ class AlloyDBAdminClient(metaclass=AlloyDBAdminClientMeta):
                 Required. The name of the parent resource. The required
                 format is:
 
-                -  projects/{project}/locations/{location}/clusters/{cluster}
+                - projects/{project}/locations/{location}/clusters/{cluster}
 
                 This corresponds to the ``parent`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -5627,8 +5673,7 @@ class AlloyDBAdminClient(metaclass=AlloyDBAdminClientMeta):
 
         Args:
             request (Union[google.cloud.alloydb_v1.types.ListDatabasesRequest, dict]):
-                The request object. Message for requesting list of
-                Databases.
+                The request object. Message for ListDatabases request.
             parent (str):
                 Required. Parent value for
                 ListDatabasesRequest.
@@ -5646,8 +5691,8 @@ class AlloyDBAdminClient(metaclass=AlloyDBAdminClientMeta):
 
         Returns:
             google.cloud.alloydb_v1.services.alloy_db_admin.pagers.ListDatabasesPager:
-                Message for response to listing
-                Databases.
+                Message for ListDatabases response.
+
                 Iterating over this object will yield
                 results and resolve additional pages
                 automatically.

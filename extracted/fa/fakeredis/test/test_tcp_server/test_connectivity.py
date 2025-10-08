@@ -20,7 +20,7 @@ def test_tcp_server_started():
         assert r.get("foo") == b"bar"
     server.server_close()
     server.shutdown()
-    server.socket.close()
+    r.shutdown()
     t.join()
 
 
@@ -36,7 +36,25 @@ def test_tcp_server_lock():
     lock.acquire()
     print(f"Acquired lock {lock.locked()}")
     lock.release()
-    r.shutdown()
+    r.close()
+    server.server_close()
+    server.shutdown()
+    t.join()
+
+
+def test_tcp_server_connection_reset_error():
+    server_address = ("127.0.0.1", 19000)
+    server = TcpFakeServer(server_address, server_type="redis")
+    t = Thread(target=server.serve_forever, daemon=True)
+    t.start()
+    time.sleep(0.1)
+
+    with redis.Redis(*server_address) as r:
+        r.rpush("test", b"foo")
+
+    with redis.Redis(*server_address) as r:
+        assert r.rpop("test") == b"foo"
+
     server.server_close()
     server.shutdown()
     t.join()

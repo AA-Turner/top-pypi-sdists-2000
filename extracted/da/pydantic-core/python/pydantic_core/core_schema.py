@@ -79,6 +79,7 @@ class CoreConfig(TypedDict, total=False):
         validate_by_alias: Whether to use the field's alias when validating against the provided input data. Default is `True`.
         validate_by_name: Whether to use the field's name when validating against the provided input data. Default is `False`. Replacement for `populate_by_name`.
         serialize_by_alias: Whether to serialize by alias. Default is `False`, expected to change to `True` in V3.
+        url_preserve_empty_path: Whether to preserve empty URL paths when validating values for a URL type. Defaults to `False`.
     """
 
     title: str
@@ -119,6 +120,7 @@ class CoreConfig(TypedDict, total=False):
     validate_by_alias: bool  # default: True
     validate_by_name: bool  # default: False
     serialize_by_alias: bool  # default: False
+    url_preserve_empty_path: bool  # default: False
 
 
 IncExCall: TypeAlias = 'set[int | str] | dict[int | str, IncExCall] | None'
@@ -4236,6 +4238,7 @@ ErrorType = Literal[
     'model_attributes_type',
     'dataclass_type',
     'dataclass_exact_type',
+    'default_factory_not_called',
     'none_required',
     'greater_than',
     'greater_than_equal',

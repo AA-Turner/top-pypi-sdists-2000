@@ -28,7 +28,7 @@ import time
 from typing import TYPE_CHECKING
 
 import jwt
-from jwt.algorithms import RSAAlgorithm
+from jwt.algorithms import RSAAlgorithm  # ty: ignore[possibly-unbound-import]
 from jwt.exceptions import PyJWTError
 
 from social_core.backends.oauth import BaseOAuth2
@@ -171,4 +171,4 @@ class AppleIdAuth(BaseOAuth2):
             raise AuthFailed(self, "Missing id_token parameter")
 
         decoded_data = self.decode_id_token(jwt_string)
-        return super().do_auth(access_token, response=decoded_data, *args, **kwargs)
+        return super().do_auth(access_token, *args, response=decoded_data, **kwargs)

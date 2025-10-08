@@ -54,7 +54,7 @@ class WeixinOAuth2(BaseOAuth2):
         return data
 
     def auth_params(self, state=None):
-        appid, secret = self.get_key_and_secret()
+        appid, _secret = self.get_key_and_secret()
         params = {"appid": appid, "redirect_uri": self.get_redirect_uri(state)}
         if self.STATE_PARAMETER and state:
             params["state"] = state
@@ -101,7 +101,7 @@ class WeixinOAuth2(BaseOAuth2):
             raise AuthCanceled(self)
         self.process_error(response)
         return self.do_auth(
-            response["access_token"], response=response, *args, **kwargs
+            response["access_token"], *args, response=response, **kwargs
         )
 
 
@@ -172,5 +172,5 @@ class WeixinOAuth2APP(WeixinOAuth2):
             raise AuthCanceled(self)
         self.process_error(response)
         return self.do_auth(
-            response["access_token"], response=response, *args, **kwargs
+            response["access_token"], *args, response=response, **kwargs
         )

@@ -12,13 +12,13 @@ LONG_DESCRIPTION = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name="types-aiobotocore",
-    version="2.24.2",
+    version="2.24.3",
     packages=["aiobotocore-stubs"],
     url="https://github.com/youtype/mypy_boto3_builder",
     license="MIT License",
     author="Vlad Emelianov",
     author_email="vlad.emelianov.nz@gmail.com",
-    description="Type annotations for aiobotocore 2.24.2 generated with mypy-boto3-builder 8.11.0",
+    description="Type annotations for aiobotocore 2.24.3 generated with mypy-boto3-builder 8.11.0",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -51,7 +51,7 @@ setup(
     install_requires=["botocore-stubs", 'typing-extensions>=4.1.0; python_version<"3.12"'],
     extras_require={
         "full": ["types-aiobotocore-full>=2.24.0, <2.25.0"],
-        "aiobotocore": ["aiobotocore==2.24.2"],
+        "aiobotocore": ["aiobotocore==2.24.3"],
         "all": [
             "types-aiobotocore-accessanalyzer>=2.24.0, <2.25.0",
             "types-aiobotocore-account>=2.24.0, <2.25.0",
@@ -336,8 +336,6 @@ setup(
             "types-aiobotocore-omics>=2.24.0, <2.25.0",
             "types-aiobotocore-opensearch>=2.24.0, <2.25.0",
             "types-aiobotocore-opensearchserverless>=2.24.0, <2.25.0",
-            "types-aiobotocore-opsworks>=2.24.0, <2.25.0",
-            "types-aiobotocore-opsworkscm>=2.24.0, <2.25.0",
             "types-aiobotocore-organizations>=2.24.0, <2.25.0",
             "types-aiobotocore-osis>=2.24.0, <2.25.0",
             "types-aiobotocore-outposts>=2.24.0, <2.25.0",
@@ -419,7 +417,6 @@ setup(
             "types-aiobotocore-shield>=2.24.0, <2.25.0",
             "types-aiobotocore-signer>=2.24.0, <2.25.0",
             "types-aiobotocore-simspaceweaver>=2.24.0, <2.25.0",
-            "types-aiobotocore-sms>=2.24.0, <2.25.0",
             "types-aiobotocore-snow-device-management>=2.24.0, <2.25.0",
             "types-aiobotocore-snowball>=2.24.0, <2.25.0",
             "types-aiobotocore-sns>=2.24.0, <2.25.0",
@@ -779,8 +776,6 @@ setup(
         "omics": ["types-aiobotocore-omics>=2.24.0, <2.25.0"],
         "opensearch": ["types-aiobotocore-opensearch>=2.24.0, <2.25.0"],
         "opensearchserverless": ["types-aiobotocore-opensearchserverless>=2.24.0, <2.25.0"],
-        "opsworks": ["types-aiobotocore-opsworks>=2.24.0, <2.25.0"],
-        "opsworkscm": ["types-aiobotocore-opsworkscm>=2.24.0, <2.25.0"],
         "organizations": ["types-aiobotocore-organizations>=2.24.0, <2.25.0"],
         "osis": ["types-aiobotocore-osis>=2.24.0, <2.25.0"],
         "outposts": ["types-aiobotocore-outposts>=2.24.0, <2.25.0"],
@@ -872,7 +867,6 @@ setup(
         "shield": ["types-aiobotocore-shield>=2.24.0, <2.25.0"],
         "signer": ["types-aiobotocore-signer>=2.24.0, <2.25.0"],
         "simspaceweaver": ["types-aiobotocore-simspaceweaver>=2.24.0, <2.25.0"],
-        "sms": ["types-aiobotocore-sms>=2.24.0, <2.25.0"],
         "snow-device-management": ["types-aiobotocore-snow-device-management>=2.24.0, <2.25.0"],
         "snowball": ["types-aiobotocore-snowball>=2.24.0, <2.25.0"],
         "sns": ["types-aiobotocore-sns>=2.24.0, <2.25.0"],

@@ -14,6 +14,11 @@ short_description: Manages logical devices (LDEVs) on Hitachi VSP storage system
 description:
   - This module allows for the creation, modification, or deletion of logical devices (LDEVs) on Hitachi VSP storage systems.
   - It supports operations such as creating a new LDEV, updating an existing LDEV, or deleting a LDEV.
+  - To create multiple volumes/LDEVs in a single task on VSP One Block or VSP E
+      Series storage systems, use `hv_vsp_one_volume` module for faster execution.
+      See `hv_vsp_one_volume` module documentation for more information. For other
+      volume/LDEV configurations not available in `hv_vsp_one_volume` module, use
+      `hv_ldev` module.
   - For examples, go to URL
     U(https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/ldev.yml)
 version_added: '3.0.0'
@@ -36,7 +41,7 @@ options:
     description: The desired state of the LDEV.
     type: str
     required: false
-    choices: ['present', 'absent']
+    choices: ['present', 'absent', 'assign_virtual_ldev']
     default: 'present'
   storage_system_info:
     description: Information about the storage system. This field is an optional field.
@@ -138,7 +143,7 @@ options:
             type: int
             required: false
       vldev_id:
-        description: Specify the virtual LDEV id.
+        description: Specify the virtual LDEV id. Specify -1 if you want to unassign the vldev_id.
         type: int
         required: false
       force:

@@ -4,14 +4,14 @@ import time
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import requests
-from requests import Response
 
 from social_core.exceptions import AuthConnectionError, AuthUnknownError
-from social_core.utils import module_member, parse_qs, user_agent
+from social_core.utils import module_member, parse_qs, social_logger, user_agent
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
+    from requests import Response
     from requests.auth import AuthBase
 
 
@@ -25,13 +25,19 @@ class BaseAuth:
     EXTRA_DATA: list[str | tuple[str, str] | tuple[str, str, bool]] | None = None
     GET_ALL_EXTRA_DATA = False
     REQUIRES_EMAIL_VALIDATION = False
-    SEND_USER_AGENT = False
+    SEND_USER_AGENT = True
 
     def __init__(self, strategy, redirect_uri=None) -> None:
         self.strategy = strategy
         self.redirect_uri = redirect_uri
         self.data = self.strategy.request_data()
         self.redirect_uri = self.strategy.absolute_uri(self.redirect_uri)
+
+    def log_debug(self, message, *args) -> None:
+        social_logger.debug(f"{self.name}: {message}", *args)
+
+    def log_warning(self, message, *args) -> None:
+        social_logger.warning(f"{self.name}: {message}", *args)
 
     def setting(self, name, default=None):
         """Return setting value from strategy"""
@@ -133,15 +139,16 @@ class BaseAuth:
         uid: str,
         response: dict[str, Any],
         details: dict[str, Any],
-        *args,
-        **kwargs,
+        pipeline_kwargs: dict[str, Any],
     ) -> dict[str, Any]:
         """Return default extra data to store in extra_data field"""
         data: dict[str, Any] = {
             # store the last time authentication took place
             "auth_time": int(time.time())
         }
-        extra_data_entries: list[str | tuple[str, str] | tuple[str, str, bool]] = []
+        extra_data_entries: (
+            list[str] | list[str | tuple[str, str] | tuple[str, str, bool]]
+        ) = []
         if self.GET_ALL_EXTRA_DATA or self.setting("GET_ALL_EXTRA_DATA", False):
             extra_data_entries = list(response.keys())
         else:
@@ -221,7 +228,7 @@ class BaseAuth:
     def continue_pipeline(self, partial):
         """Continue previous halted pipeline"""
         return self.strategy.authenticate(
-            self, pipeline_index=partial.next_step, *partial.args, **partial.kwargs
+            self, *partial.args, pipeline_index=partial.next_step, **partial.kwargs
         )
 
     def auth_extra_arguments(self) -> dict[str, str]:

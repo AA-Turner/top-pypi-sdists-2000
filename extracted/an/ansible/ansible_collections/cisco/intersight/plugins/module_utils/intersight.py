@@ -48,7 +48,7 @@ from ansible.module_utils.basic import env_fallback
 
 try:
     from cryptography.hazmat.primitives import serialization, hashes
-    from cryptography.hazmat.primitives.asymmetric import padding, ec
+    from cryptography.hazmat.primitives.asymmetric import padding, ec, rsa
     from cryptography.hazmat.backends import default_backend
 
     HAS_CRYPTOGRAPHY = True
@@ -153,6 +153,15 @@ def compare_values(expected, actual):
         return True
 
 
+# This will fix the format of a v3 secret key, if needed.
+# Some v3 keys PEM files are incorrectly formatted with
+# "BEGIN EC PRIVATE KEY" instead of "BEGIN PRIVATE KEY"
+def _fix_v3_key_format(secret_key: bytes):
+    return secret_key.replace(
+        b"-----BEGIN EC PRIVATE KEY-----", b"-----BEGIN PRIVATE KEY-----"
+    ).replace(b"-----END EC PRIVATE KEY-----", b"-----END PRIVATE KEY-----")
+
+
 class IntersightModule():
 
     def __init__(self, module):
@@ -178,21 +187,19 @@ class IntersightModule():
         :param digest: string to be signed & hashed
         :return: instance of digest object
         """
-        # Python SDK code: Verify PEM Pre-Encapsulation Boundary
-        r = re.compile(r"\s*-----BEGIN (.*)-----\s+")
-        m = r.match(self.private_key)
-        if not m:
-            raise ValueError("Not a valid PEM pre boundary")
-        pem_header = m.group(1)
-        key = serialization.load_pem_private_key(self.private_key.encode(), None, default_backend())
-        if pem_header == 'RSA PRIVATE KEY':
+        try:
+            key = serialization.load_pem_private_key(self.private_key.encode(), None, default_backend())
+        except (ValueError):
+            key = serialization.load_pem_private_key(_fix_v3_key_format(self.private_key.encode()), None, default_backend())
+
+        if isinstance(key, rsa.RSAPrivateKey):
             sign = key.sign(data.encode(), padding.PKCS1v15(), hashes.SHA256())
             self.digest_algorithm = 'rsa-sha256'
-        elif pem_header == 'EC PRIVATE KEY':
+        elif isinstance(key, ec.EllipticCurvePrivateKey):
             sign = key.sign(data.encode(), ec.ECDSA(hashes.SHA256()))
             self.digest_algorithm = 'hs2019'
         else:
-            raise Exception("Unsupported key: {0}".format(pem_header))
+            raise Exception("Unsupported key: {0}".format(type(key).__name__))
 
         return b64encode(sign)
 
@@ -360,7 +367,13 @@ class IntersightModule():
                     self.module.warn('More than 1 resource found, returning the 1st one')
                 # return the 1st list element
                 self.result['api_response'] = response['Results'][0]
-        self.result['count'] = response.get('Count')
+        else:
+            # Clear api_response when no results found to prevent returning stale data
+            if return_list:
+                self.result['api_response'] = []
+            else:
+                self.result['api_response'] = {}
+        self.result['count'] = response.get('Count', 0)
         self.result['trace_id'] = response.get('trace_id')
 
     def configure_resource(self, moid, resource_path, body, query_params, update_method=''):
@@ -378,6 +391,10 @@ class IntersightModule():
                 if response_dict.get('Results'):
                     # return the 1st element in the results list
                     self.result['api_response'] = response_dict['Results'][0]
+                    self.result['trace_id'] = response_dict.get('trace_id')
+                elif response_dict and 'Moid' in response_dict:
+                    # PATCH returned the updated object directly (not in Results array)
+                    self.result['api_response'] = response_dict
                     self.result['trace_id'] = response_dict.get('trace_id')
             else:
                 # create the resource
@@ -412,13 +429,15 @@ class IntersightModule():
             self.result['trace_id'] = resp.get('trace_id')
         self.result['changed'] = True
 
-    def configure_policy_or_profile(self, resource_path):
+    def configure_policy_or_profile(self, resource_path, filter_key=None, filter_value=None):
         # Configure (create, update, or delete) the policy or profile
         organization_moid = self.get_moid_by_name(resource_path='/organization/Organizations', resource_name=self.module.params['organization'])
 
         self.result['api_response'] = {}
         # Get the current state of the resource
         filter_str = "Name eq '" + self.module.params['name'] + "'"
+        if filter_value and filter_key:
+            filter_str += " and " + filter_key + " eq '" + filter_value + "'"
         filter_str += "and Organization.Moid eq '" + organization_moid + "'"
         self.get_resource(
             resource_path=resource_path,
@@ -464,13 +483,18 @@ class IntersightModule():
 
         return moid
 
-    def configure_secondary_resource(self, resource_path, resource_name, state):
+    def configure_secondary_resource(self, resource_path, resource_name=None, state='present', custom_filter=None):
         # Configure (create, update, or delete) resources
         # This method is used to configure secondery resources that are part of a policy or profile (e.g. VLANs)
 
         self.result['api_response'] = {}
         # Get the current state of the resource
-        filter_str = "Name eq '" + resource_name + "'"
+        if custom_filter:
+            filter_str = custom_filter
+        elif resource_name:
+            filter_str = "Name eq '" + resource_name + "'"
+        else:
+            raise ValueError("Either resource_name or custom_filter must be provided")
         self.get_resource(
             resource_path=resource_path,
             query_params={
@@ -525,12 +549,10 @@ class IntersightModule():
             return self.result['api_response']['Moid']
         return None
 
-    def set_query_params(self) -> dict:
+    def set_query_params(self, filter_key=None, filter_value=None) -> dict:
         filter_conditions = []
-
         name_to_filter = self.module.params.get('name')
         org_to_filter = self.module.params.get('organization')
-
         if name_to_filter:
             filter_conditions.append(f"Name eq '{name_to_filter}'")
 
@@ -538,7 +560,19 @@ class IntersightModule():
             org_moid = self.get_moid_by_name(resource_path='/organization/Organizations', resource_name=org_to_filter)
             filter_conditions.append(f"Organization.Moid eq '{org_moid}'")
 
+        if filter_value and filter_key:
+            filter_conditions.append(f"'{filter_key}' eq '{filter_value}'")
+
         query_params = {}
         if filter_conditions:
             query_params["$filter"] = " and ".join(filter_conditions)
         return query_params
+
+    def set_tags_and_description(self):
+        """
+        Generalize the pattern of setting tags and description in api_body if they are provided in module params.
+        """
+        if self.module.params.get('tags'):
+            self.api_body['Tags'] = self.module.params['tags']
+        if self.module.params.get('description'):
+            self.api_body['Description'] = self.module.params['description']

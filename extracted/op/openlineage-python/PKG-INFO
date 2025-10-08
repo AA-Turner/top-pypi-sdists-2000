@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: openlineage-python
-Version: 1.38.0
+Version: 1.39.0
 Summary: OpenLineage Python Client
 Author-email: OpenLineage <info@openlineage.io>
 License-File: LICENSE

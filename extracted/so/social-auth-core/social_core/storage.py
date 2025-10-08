@@ -23,7 +23,7 @@ class UserMixin:
 
     provider = ""
     uid = None
-    extra_data = None
+    extra_data: dict[str, Any] | None = None
 
     @abstractmethod
     def save(self): ...
@@ -49,7 +49,9 @@ class UserMixin:
         backend = self.get_backend_instance(strategy)
         if token and backend and hasattr(backend, "refresh_token"):
             response = backend.refresh_token(token, *args, **kwargs)
-            extra_data = backend.extra_data(self, self.uid, response, self.extra_data)
+            extra_data = backend.extra_data(
+                self, self.uid, response, self.extra_data, {}
+            )
             if self.set_extra_data(extra_data):
                 self.save()
 
@@ -61,9 +63,9 @@ class UserMixin:
         timedelta is inferred from current time (using UTC timezone). None is
         returned if there's no value stored or it's invalid.
         """
-        if self.extra_data and "expires" in self.extra_data:
+        if self.extra_data and (expires := self.extra_data.get("expires")) is not None:
             try:
-                expires = int(self.extra_data.get("expires"))
+                expires = int(expires)
             except (ValueError, TypeError):
                 return None
 
@@ -102,14 +104,14 @@ class UserMixin:
             self.refresh_token(strategy)
         return self.access_token
 
-    def set_extra_data(self, extra_data=None) -> bool | None:
+    def set_extra_data(self, extra_data: dict[str, Any] | None = None) -> bool:
         if extra_data and self.extra_data != extra_data:
             if self.extra_data and not isinstance(self.extra_data, str):
                 self.extra_data.update(extra_data)
             else:
                 self.extra_data = extra_data
             return True
-        return None
+        return False
 
     @classmethod
     def clean_username(cls, value):

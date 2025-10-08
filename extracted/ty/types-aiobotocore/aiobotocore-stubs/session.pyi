@@ -309,8 +309,6 @@ from types_aiobotocore_odb.client import OdbClient
 from types_aiobotocore_omics.client import OmicsClient
 from types_aiobotocore_opensearch.client import OpenSearchServiceClient
 from types_aiobotocore_opensearchserverless.client import OpenSearchServiceServerlessClient
-from types_aiobotocore_opsworks.client import OpsWorksClient
-from types_aiobotocore_opsworkscm.client import OpsWorksCMClient
 from types_aiobotocore_organizations.client import OrganizationsClient
 from types_aiobotocore_osis.client import OpenSearchIngestionClient
 from types_aiobotocore_outposts.client import OutpostsClient
@@ -396,7 +394,6 @@ from types_aiobotocore_sesv2.client import SESV2Client
 from types_aiobotocore_shield.client import ShieldClient
 from types_aiobotocore_signer.client import SignerClient
 from types_aiobotocore_simspaceweaver.client import SimSpaceWeaverClient
-from types_aiobotocore_sms.client import SMSClient
 from types_aiobotocore_snow_device_management.client import SnowDeviceManagementClient
 from types_aiobotocore_snowball.client import SnowballClient
 from types_aiobotocore_sns.client import SNSClient
@@ -5874,44 +5871,6 @@ class AioSession(BotocoreSession):
     @overload  # type: ignore[override]
     def create_client(  # type: ignore[override]
         self,
-        service_name: Literal["opsworks"],
-        region_name: str | None = ...,
-        api_version: str | None = ...,
-        use_ssl: bool | None = ...,
-        verify: bool | str | None = ...,
-        endpoint_url: str | None = ...,
-        aws_access_key_id: str | None = ...,
-        aws_secret_access_key: str | None = ...,
-        aws_session_token: str | None = ...,
-        config: AioConfig | None = ...,
-        aws_account_id: str | None = ...,
-    ) -> ClientCreatorContext[OpsWorksClient]:
-        """
-        Create client for OpsWorks service.
-        """
-
-    @overload  # type: ignore[override]
-    def create_client(  # type: ignore[override]
-        self,
-        service_name: Literal["opsworkscm"],
-        region_name: str | None = ...,
-        api_version: str | None = ...,
-        use_ssl: bool | None = ...,
-        verify: bool | str | None = ...,
-        endpoint_url: str | None = ...,
-        aws_access_key_id: str | None = ...,
-        aws_secret_access_key: str | None = ...,
-        aws_session_token: str | None = ...,
-        config: AioConfig | None = ...,
-        aws_account_id: str | None = ...,
-    ) -> ClientCreatorContext[OpsWorksCMClient]:
-        """
-        Create client for OpsWorksCM service.
-        """
-
-    @overload  # type: ignore[override]
-    def create_client(  # type: ignore[override]
-        self,
         service_name: Literal["organizations"],
         region_name: str | None = ...,
         api_version: str | None = ...,
@@ -7446,25 +7405,6 @@ class AioSession(BotocoreSession):
     ) -> ClientCreatorContext[SimSpaceWeaverClient]:
         """
         Create client for SimSpaceWeaver service.
-        """
-
-    @overload  # type: ignore[override]
-    def create_client(  # type: ignore[override]
-        self,
-        service_name: Literal["sms"],
-        region_name: str | None = ...,
-        api_version: str | None = ...,
-        use_ssl: bool | None = ...,
-        verify: bool | str | None = ...,
-        endpoint_url: str | None = ...,
-        aws_access_key_id: str | None = ...,
-        aws_secret_access_key: str | None = ...,
-        aws_session_token: str | None = ...,
-        config: AioConfig | None = ...,
-        aws_account_id: str | None = ...,
-    ) -> ClientCreatorContext[SMSClient]:
-        """
-        Create client for SMS service.
         """
 
     @overload  # type: ignore[override]

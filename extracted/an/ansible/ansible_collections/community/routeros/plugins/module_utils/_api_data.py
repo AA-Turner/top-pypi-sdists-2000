@@ -3785,6 +3785,7 @@ PATHS = {
                 'new-hop-limit': KeyInfo(),
                 'new-mss': KeyInfo(),
                 'new-packet-mark': KeyInfo(),
+                'new-priority': KeyInfo(can_disable=True),
                 'new-routing-mark': KeyInfo(),
                 'nth': KeyInfo(can_disable=True),
                 'out-bridge-port': KeyInfo(can_disable=True),
@@ -5065,6 +5066,8 @@ PATHS = {
             versioned_fields=[
                 ([('7.19', '<')], 'address-families', KeyInfo()),
                 ([('7.19', '>=')], 'afi', KeyInfo()),
+                ([('7.20', '<')], 'router-id', KeyInfo()),
+                ([('7.20', '>=')], 'instance', KeyInfo(required=True)),
             ],
             fields={
                 'as': KeyInfo(),
@@ -5112,7 +5115,6 @@ PATHS = {
                 'remote.as': KeyInfo(),
                 'remote.allowed-as': KeyInfo(),
                 'remote.ttl': KeyInfo(),
-                'router-id': KeyInfo(),
                 'routing-table': KeyInfo(),
                 'save-to': KeyInfo(),
                 'tcp-md5-key': KeyInfo(),
@@ -5251,6 +5253,7 @@ PATHS = {
                 ([('7.18', '>=')], 'remote-log-format', KeyInfo(default='default')),
                 ([('7.18', '>=')], 'remote-protocol', KeyInfo(default='udp')),
                 ([('7.18', '>=')], 'cef-event-delimiter', KeyInfo(default='\r\n')),
+                ([('7.19.6', '>=')], 'vrf', KeyInfo(default='main')),
             ],
             fields={
                 'bsd-syslog': KeyInfo(default=False),

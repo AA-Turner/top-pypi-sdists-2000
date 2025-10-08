@@ -19,12 +19,14 @@ extends_documentation_fragment:
   - community.general.attributes
   - community.general.django
 options:
-  database:
+  databases:
     description:
       - Specify databases to run checks against.
       - If not specified, Django does not run database tests.
+      - The parameter has been renamed to O(databases) in community.general 11.3.0. The old name is still available as an alias.
     type: list
     elements: str
+    aliases: ["database"]
   deploy:
     description:
       - Include additional checks relevant in a deployment setting.
@@ -86,13 +88,12 @@ version:
 """
 
 from ansible_collections.community.general.plugins.module_utils.django import DjangoModuleHelper
-from ansible_collections.community.general.plugins.module_utils.cmd_runner import cmd_runner_fmt
 
 
 class DjangoCheck(DjangoModuleHelper):
     module = dict(
         argument_spec=dict(
-            database=dict(type="list", elements="str"),
+            databases=dict(type="list", elements="str", aliases=["database"]),
             deploy=dict(type="bool", default=False),
             fail_level=dict(type="str", choices=["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]),
             tags=dict(type="list", elements="str"),
@@ -100,15 +101,11 @@ class DjangoCheck(DjangoModuleHelper):
         ),
         supports_check_mode=True,
     )
-    arg_formats = dict(
-        database=cmd_runner_fmt.stack(cmd_runner_fmt.as_opt_val)("--database"),
-        deploy=cmd_runner_fmt.as_bool("--deploy"),
-        fail_level=cmd_runner_fmt.as_opt_val("--fail-level"),
-        tags=cmd_runner_fmt.stack(cmd_runner_fmt.as_opt_val)("--tag"),
-        apps=cmd_runner_fmt.as_list(),
-    )
     django_admin_cmd = "check"
-    django_admin_arg_order = "database deploy fail_level tags apps"
+    django_admin_arg_order = "database_stacked_dash deploy fail_level tags apps"
+
+    def __init_module__(self):
+        self.vars.set("database_stacked_dash", self.vars.databases, output=False)
 
 
 def main():

@@ -365,17 +365,17 @@ class Connection:
         Returns:
             BaseClient: A boto3 client
         """
-        DefaulAwsServicesByConnectionType = {
+        default_aws_services_by_connection_type = {
             "ATHENA": "athena",
             "DYNAMODB": "dynamodb",
             "REDSHIFT": "redshift",
             "S3": "s3",
             "S3_FOLDER": "s3",
         }
-        if not service_name and self.type not in DefaulAwsServicesByConnectionType:
+        if not service_name and self.type not in default_aws_services_by_connection_type:
             raise RuntimeError("Please specify a service name to initialize a client")
         return self._get_aws_client_with_connection_credentials(
-            service_name or DefaulAwsServicesByConnectionType[self.type],
+            service_name or default_aws_services_by_connection_type[self.type],
             self._connection_creds,
             self._secrets_manager_api,
         )

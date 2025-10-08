@@ -12,7 +12,8 @@ module: gitlab_project_variable
 short_description: Creates/updates/deletes GitLab Projects Variables
 description:
   - When a project variable does not exist, it is created.
-  - When a project variable does exist, its value is updated when the values are different.
+  - When a project variable does exist and is not hidden, its value is updated when the values are different.
+    When a project variable does exist and is hidden, its value is updated. In this case, the module is B(not idempotent).
   - Variables which are untouched in the playbook, but are not untouched in the GitLab project, they stay untouched (O(purge=false))
     or are deleted (O(purge=true)).
 author:
@@ -50,11 +51,12 @@ options:
     type: bool
   vars:
     description:
-      - When the list element is a simple key-value pair, masked, raw and protected are set to V(false).
-      - When the list element is a dict with the keys C(value), C(masked), C(raw) and C(protected), the user can have full
-        control about whether a value should be masked, raw, protected or both.
+      - When the list element is a simple key-value pair, C(masked), C(hidden), C(raw), and C(protected) are set to V(false).
+      - When the list element is a dict with the keys C(value), C(masked), C(hidden), C(raw), and C(protected), the user can have full
+        control about whether a value should be masked, hidden, raw, protected, or a combination.
       - Support for protected values requires GitLab >= 9.3.
       - Support for masked values requires GitLab >= 11.10.
+      - Support for hidden values requires GitLab >= 17.4, and was added in community.general 11.3.0.
       - Support for raw values requires GitLab >= 15.7.
       - Support for environment_scope requires GitLab Premium >= 13.11.
       - Support for variable_type requires GitLab >= 11.11.
@@ -84,12 +86,26 @@ options:
           - The variable value.
           - Required when O(state=present).
         type: str
+      description:
+        description:
+          - A description for the variable.
+          - Support for descriptions requires GitLab >= 16.2.
+        type: str
+        version_added: '11.4.0'
       masked:
         description:
           - Whether variable value is masked or not.
           - Support for masked values requires GitLab >= 11.10.
         type: bool
         default: false
+      hidden:
+        description:
+          - Whether variable value is hidden or not.
+          - Implies C(masked).
+          - Support for hidden values requires GitLab >= 17.4.
+        type: bool
+        default: false
+        version_added: '11.3.0'
       protected:
         description:
           - Whether variable value is protected or not.
@@ -250,7 +266,9 @@ class GitlabProjectVariables(object):
         var = {
             "key": var_obj.get('key'),
             "value": var_obj.get('value'),
+            "description": var_obj.get('description'),
             "masked": var_obj.get('masked'),
+            "masked_and_hidden": var_obj.get('hidden'),
             "protected": var_obj.get('protected'),
             "raw": var_obj.get('raw'),
             "variable_type": var_obj.get('variable_type'),
@@ -327,6 +345,8 @@ def native_python_main(this_gitlab, purge, requested_variables, state, module):
             item['raw'] = False
         if item.get('masked') is None:
             item['masked'] = False
+        if item.get('hidden') is None:
+            item['hidden'] = False
         if item.get('environment_scope') is None:
             item['environment_scope'] = '*'
         if item.get('variable_type') is None:
@@ -357,14 +377,13 @@ def native_python_main(this_gitlab, purge, requested_variables, state, module):
                     return_value['removed'].append(item)
 
     elif state == 'absent':
-        # value does not matter on removing variables.
-        # key and environment scope are sufficient
-        for item in existing_variables:
-            item.pop('value')
-            item.pop('variable_type')
-        for item in requested_variables:
-            item.pop('value')
-            item.pop('variable_type')
+        # value, type, and description do not matter on removing variables.
+        keys_ignored_on_deletion = ['value', 'variable_type', 'description']
+        for key in keys_ignored_on_deletion:
+            for item in existing_variables:
+                item.pop(key)
+            for item in requested_variables:
+                item.pop(key)
 
         if not purge:
             remove_requested = [x for x in requested_variables if x in existing_variables]
@@ -401,7 +420,9 @@ def main():
         variables=dict(type='list', elements='dict', default=list(), options=dict(
             name=dict(type='str', required=True),
             value=dict(type='str', no_log=True),
+            description=dict(type='str'),
             masked=dict(type='bool', default=False),
+            hidden=dict(type='bool', default=False),
             protected=dict(type='bool', default=False),
             raw=dict(type='bool', default=False),
             environment_scope=dict(type='str', default='*'),

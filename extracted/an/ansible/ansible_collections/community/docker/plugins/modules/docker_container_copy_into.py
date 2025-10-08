@@ -171,9 +171,9 @@ import os
 import stat
 import traceback
 
-from ansible.module_utils._text import to_bytes, to_native, to_text
+from ansible.module_utils.common.text.converters import to_bytes, to_native, to_text
 from ansible.module_utils.common.validation import check_type_int
-from ansible.module_utils.six import integer_types, string_types
+from ansible_collections.community.docker.plugins.module_utils._six import integer_types, string_types
 
 from ansible_collections.community.docker.plugins.module_utils._api.errors import APIError, DockerException, NotFound
 

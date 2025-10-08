@@ -6,12 +6,14 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-from ansible_collections.community.general.plugins.module_utils.cmd_runner import CmdRunner, cmd_runner_fmt
+import re
 
+from ansible_collections.community.general.plugins.module_utils.cmd_runner import CmdRunner, cmd_runner_fmt
 
 _state_map = {
     "present": "create",
     "absent": "remove",
+    "cloned": "clone",
     "status": "status",
     "enabled": "enable",
     "disabled": "disable",
@@ -45,7 +47,8 @@ def fmt_resource_argument(value):
 def get_pacemaker_maintenance_mode(runner):
     with runner("cli_action config") as ctx:
         rc, out, err = ctx.run(cli_action="property")
-        maintenance_mode_output = list(filter(lambda string: "maintenance-mode=true" in string.lower(), out.splitlines()))
+        maint_mode_re = re.compile(r"maintenance-mode.*true", re.IGNORECASE)
+        maintenance_mode_output = [line for line in out.splitlines() if maint_mode_re.search(line)]
         return bool(maintenance_mode_output)
 
 
@@ -63,7 +66,10 @@ def pacemaker_runner(module, **kwargs):
             resource_operation=cmd_runner_fmt.as_func(fmt_resource_operation),
             resource_meta=cmd_runner_fmt.stack(cmd_runner_fmt.as_opt_val)("meta"),
             resource_argument=cmd_runner_fmt.as_func(fmt_resource_argument),
+            resource_clone_ids=cmd_runner_fmt.as_list(),
+            resource_clone_meta=cmd_runner_fmt.as_list(),
             apply_all=cmd_runner_fmt.as_bool("--all"),
+            agent_validation=cmd_runner_fmt.as_bool("--agent-validation"),
             wait=cmd_runner_fmt.as_opt_eq_val("--wait"),
             config=cmd_runner_fmt.as_fixed("config"),
             force=cmd_runner_fmt.as_bool("--force"),
