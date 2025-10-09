@@ -7,7 +7,7 @@ if sys.version_info[:3] < (3, 6, 1):
     sys.exit("""\
 ****************************************************************************
 *   bitarray requires Python 3.6.1 or later.
-*   The last version supporting Python 2 is bitarray 2.9.3.
+*   The last bitarray version supporting Python 2.7 is bitarray 2.9.3.
 ****************************************************************************
 """)
 
@@ -55,6 +55,7 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Utilities",
     ],
     description = "efficient arrays of booleans -- C extension",

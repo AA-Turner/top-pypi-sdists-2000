@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: postgrest
-Version: 2.21.1
+Version: 2.22.0
 Summary: PostgREST client for Python. This library provides an ORM interface to PostgREST.
 Author: Lương Quang Mạnh, Joel Lee, Anand, Oliver Rice, Andrew Smith
 Author-email: Lương Quang Mạnh <luongquangmanh85@gmail.com>, Joel Lee <joel@joellee.org>, Andrew Smith <a.smith@silentworks.co.uk>
@@ -12,6 +12,7 @@ Requires-Dist: httpx[http2]>=0.26,<0.29
 Requires-Dist: deprecation>=2.1.0
 Requires-Dist: pydantic>=1.9,<3.0
 Requires-Dist: strenum>=0.4.9 ; python_full_version < '3.11'
+Requires-Dist: yarl>=1.20.1
 Maintainer: Leonardo Santiago
 Maintainer-email: Leonardo Santiago <leonardo.santiago@supabase.io>
 Requires-Python: >=3.9

@@ -1,6 +1,5 @@
 [project]
 name = "ormsgpack"
-repository = "https://github.com/aviramha/ormsgpack"
 requires-python = ">=3.9"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -16,6 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Programming Language :: Python",
@@ -23,6 +23,10 @@ classifiers = [
     "Typing :: Typed",
 ]
 dynamic = ["version"]
+authors = [
+    {name = "Aviram Hassan", email = "aviramyhassan@gmail.com"},
+    {name = "Emanuele Giaquinta", email = "emanuele.giaquinta@gmail.com"},
+]
 
 [dependency-groups]
 dev = [
@@ -76,6 +80,14 @@ ignore = [
 
 [tool.ruff.lint.isort]
 known-first-party = ["ormsgpack"]
+
+[tool.uv]
+cache-keys = [
+  { file = "**/*.rs" },
+  { file = "Cargo.lock" },
+  { file = "Cargo.toml" },
+  { file = "pyproject.toml" },
+]
 
 [project.entry-points.pyinstaller40]
 hook-dirs = "ormsgpack._pyinstaller:get_hook_dirs"

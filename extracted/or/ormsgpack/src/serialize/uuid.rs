@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-use crate::typeref::*;
+use crate::state::State;
 use byteorder::WriteBytesExt;
 use serde::ser::{Serialize, Serializer};
 use std::os::raw::c_uchar;
 
 pub struct UUID {
     ptr: *mut pyo3::ffi::PyObject,
+    state: *mut State,
 }
 
 const HEX: [u8; 16] = [
@@ -25,19 +26,22 @@ where
 }
 
 impl UUID {
-    pub fn new(ptr: *mut pyo3::ffi::PyObject) -> Self {
-        UUID { ptr: ptr }
+    pub fn new(ptr: *mut pyo3::ffi::PyObject, state: *mut State) -> Self {
+        UUID {
+            ptr: ptr,
+            state: state,
+        }
     }
     pub fn write_buf<W>(&self, writer: &mut W) -> Result<(), std::io::Error>
     where
         W: std::io::Write,
     {
-        let buffer: [c_uchar; 16] = [0; 16];
+        let mut buffer: [c_uchar; 16] = [0; 16];
         unsafe {
-            let value = pyo3::ffi::PyObject_GetAttr(self.ptr, INT_ATTR_STR);
+            let value = pyo3::ffi::PyObject_GetAttr(self.ptr, (*self.state).int_str);
             pyo3::ffi::_PyLong_AsByteArray(
-                value as *mut pyo3::ffi::PyLongObject,
-                buffer.as_ptr() as *mut c_uchar,
+                value.cast::<pyo3::ffi::PyLongObject>(),
+                buffer.as_mut_ptr(),
                 16,
                 0, // little_endian
                 0, // is_signed

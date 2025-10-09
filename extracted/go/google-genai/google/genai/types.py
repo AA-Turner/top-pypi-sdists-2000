@@ -1117,6 +1117,40 @@ class FunctionResponsePart(_common.BaseModel):
       default=None, description="""Optional. URI based data."""
   )
 
+  @classmethod
+  def from_bytes(cls, *, data: bytes, mime_type: str) -> 'FunctionResponsePart':
+    """Creates a FunctionResponsePart from bytes and mime type.
+
+    Args:
+      data (bytes): The bytes of the data
+      mime_type (str): mime_type: The MIME type of the data.
+    """
+    inline_data = FunctionResponseBlob(
+        data=data,
+        mime_type=mime_type,
+    )
+    return cls(inline_data=inline_data)
+
+  @classmethod
+  def from_uri(
+      cls, *, file_uri: str, mime_type: Optional[str] = None
+  ) -> 'FunctionResponsePart':
+    """Creates a FunctionResponsePart from a file uri.
+
+    Args:
+      file_uri (str): The uri of the file
+      mime_type (str): mime_type: The MIME type of the file. If not provided,
+        the MIME type will be automatically determined.
+    """
+    if mime_type is None:
+      import mimetypes
+
+      mime_type, _ = mimetypes.guess_type(file_uri)
+      if not mime_type:
+        raise ValueError(f'Failed to determine mime type for file: {file_uri}')
+    file_data = FunctionResponseFileData(file_uri=file_uri, mime_type=mime_type)
+    return cls(file_data=file_data)
+
 
 class FunctionResponsePartDict(TypedDict, total=False):
   """A datatype containing media that is part of a `FunctionResponse` message.
@@ -1274,7 +1308,7 @@ class Part(_common.BaseModel):
 
     Args:
       file_uri (str): The uri of the file
-      mime_type (str): mime_type: The MIME type of the image. If not provided,
+      mime_type (str): mime_type: The MIME type of the file. If not provided,
         the MIME type will be automatically determined.
     """
     if mime_type is None:
@@ -1305,9 +1339,15 @@ class Part(_common.BaseModel):
 
   @classmethod
   def from_function_response(
-      cls, *, name: str, response: dict[str, Any]
+      cls,
+      *,
+      name: str,
+      response: dict[str, Any],
+      parts: Optional[list[FunctionResponsePart]] = None,
   ) -> 'Part':
-    function_response = FunctionResponse(name=name, response=response)
+    function_response = FunctionResponse(
+        name=name, response=response, parts=parts
+    )
     return cls(function_response=function_response)
 
   @classmethod
@@ -6259,6 +6299,10 @@ class GenerateImagesConfig(_common.BaseModel):
       default=None,
       description="""Whether to add a watermark to the generated images.""",
   )
+  labels: Optional[dict[str, str]] = Field(
+      default=None,
+      description="""User specified labels to track billing usage.""",
+  )
   image_size: Optional[str] = Field(
       default=None,
       description="""The size of the largest dimension of the generated image.
@@ -6323,6 +6367,9 @@ class GenerateImagesConfigDict(TypedDict, total=False):
 
   add_watermark: Optional[bool]
   """Whether to add a watermark to the generated images."""
+
+  labels: Optional[dict[str, str]]
+  """User specified labels to track billing usage."""
 
   image_size: Optional[str]
   """The size of the largest dimension of the generated image.
@@ -6901,6 +6948,10 @@ class EditImageConfig(_common.BaseModel):
       default=None,
       description="""Whether to add a watermark to the generated images.""",
   )
+  labels: Optional[dict[str, str]] = Field(
+      default=None,
+      description="""User specified labels to track billing usage.""",
+  )
   edit_mode: Optional[EditMode] = Field(
       default=None,
       description="""Describes the editing mode for the request.""",
@@ -6966,6 +7017,9 @@ class EditImageConfigDict(TypedDict, total=False):
 
   add_watermark: Optional[bool]
   """Whether to add a watermark to the generated images."""
+
+  labels: Optional[dict[str, str]]
+  """User specified labels to track billing usage."""
 
   edit_mode: Optional[EditMode]
   """Describes the editing mode for the request."""
@@ -7082,6 +7136,10 @@ class _UpscaleImageAPIConfig(_common.BaseModel):
       output image will have be more different from the input image, but
       with finer details and less noise.""",
   )
+  labels: Optional[dict[str, str]] = Field(
+      default=None,
+      description="""User specified labels to track billing usage.""",
+  )
   number_of_images: Optional[int] = Field(default=None, description="""""")
   mode: Optional[str] = Field(default=None, description="""""")
 
@@ -7120,6 +7178,9 @@ class _UpscaleImageAPIConfigDict(TypedDict, total=False):
       pixels are more respected. With a lower image preservation factor, the
       output image will have be more different from the input image, but
       with finer details and less noise."""
+
+  labels: Optional[dict[str, str]]
+  """User specified labels to track billing usage."""
 
   number_of_images: Optional[int]
   """"""
@@ -7297,6 +7358,10 @@ class RecontextImageConfig(_common.BaseModel):
   enhance_prompt: Optional[bool] = Field(
       default=None, description="""Whether to use the prompt rewriting logic."""
   )
+  labels: Optional[dict[str, str]] = Field(
+      default=None,
+      description="""User specified labels to track billing usage.""",
+  )
 
 
 class RecontextImageConfigDict(TypedDict, total=False):
@@ -7337,6 +7402,9 @@ class RecontextImageConfigDict(TypedDict, total=False):
 
   enhance_prompt: Optional[bool]
   """Whether to use the prompt rewriting logic."""
+
+  labels: Optional[dict[str, str]]
+  """User specified labels to track billing usage."""
 
 
 RecontextImageConfigOrDict = Union[
@@ -7488,6 +7556,10 @@ class SegmentImageConfig(_common.BaseModel):
       can be set to a decimal value between 0 and 255 non-inclusive.
       Set to -1 for no binary color thresholding.""",
   )
+  labels: Optional[dict[str, str]] = Field(
+      default=None,
+      description="""User specified labels to track billing usage.""",
+  )
 
 
 class SegmentImageConfigDict(TypedDict, total=False):
@@ -7517,6 +7589,9 @@ class SegmentImageConfigDict(TypedDict, total=False):
   """The binary color threshold to apply to the masks. The threshold
       can be set to a decimal value between 0 and 255 non-inclusive.
       Set to -1 for no binary color thresholding."""
+
+  labels: Optional[dict[str, str]]
+  """User specified labels to track billing usage."""
 
 
 SegmentImageConfigOrDict = Union[SegmentImageConfig, SegmentImageConfigDict]
@@ -8980,6 +9055,7 @@ class GenerateVideosOperation(_common.BaseModel, Operation):
       cls, api_response: Any, is_vertex_ai: bool = False
   ) -> Self:
     """Instantiates a GenerateVideosOperation from an API response."""
+
     if is_vertex_ai:
       response_dict = _GenerateVideosOperation_from_vertex(api_response)
     else:
@@ -13000,6 +13076,10 @@ class UpscaleImageConfig(_common.BaseModel):
       output image will have be more different from the input image, but
       with finer details and less noise.""",
   )
+  labels: Optional[dict[str, str]] = Field(
+      default=None,
+      description="""User specified labels to track billing usage.""",
+  )
 
 
 class UpscaleImageConfigDict(TypedDict, total=False):
@@ -13037,6 +13117,9 @@ class UpscaleImageConfigDict(TypedDict, total=False):
       pixels are more respected. With a lower image preservation factor, the
       output image will have be more different from the input image, but
       with finer details and less noise."""
+
+  labels: Optional[dict[str, str]]
+  """User specified labels to track billing usage."""
 
 
 UpscaleImageConfigOrDict = Union[UpscaleImageConfig, UpscaleImageConfigDict]

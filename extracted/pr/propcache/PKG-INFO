@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: propcache
-Version: 0.4.0
+Version: 0.4.1
 Summary: Accelerated property cache
 Home-page: https://github.com/aio-libs/propcache
 Author: Andrew Svetlov
@@ -152,6 +152,36 @@ Changelog
     WARNING: Don't drop the next directive!
 
 .. towncrier release notes start
+
+0.4.1
+=====
+
+*(2025-10-08)*
+
+
+Bug fixes
+---------
+
+- Fixed reference leak caused by ``Py_INCREF`` because Cython has its own reference counter systems -- by `@Vizonex <https://github.com/sponsors/Vizonex>`__.
+
+  *Related issues and pull requests on GitHub:*
+  `#162 <https://github.com/aio-libs/propcache/issues/162>`__.
+
+
+Contributor-facing changes
+--------------------------
+
+- Fixes the default value for the ``os``
+  parameter in ``reusable-build-wheel.yml``
+  to be ``ubuntu-latest`` instead of
+  ``ubuntu``.
+
+  *Related issues and pull requests on GitHub:*
+  `#155 <https://github.com/aio-libs/propcache/issues/155>`__.
+
+
+----
+
 
 0.4.0
 =====

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: types-jsonschema
-Version: 4.25.1.20251008
+Version: 4.25.1.20251009
 Summary: Typing stubs for jsonschema
 License-Expression: Apache-2.0
 Project-URL: Homepage, https://github.com/python/typeshed
@@ -36,4 +36,4 @@ This package was tested with the following type checkers:
 * [pyright](https://github.com/microsoft/pyright) 1.1.406
 
 It was generated from typeshed commit
-[`058aa6246b9c5b61267dadf1ea25b7040960d86a`](https://github.com/python/typeshed/commit/058aa6246b9c5b61267dadf1ea25b7040960d86a).
+[`2ed2765d8d4a90b043d6511ab801dd7dc8b8e992`](https://github.com/python/typeshed/commit/2ed2765d8d4a90b043d6511ab801dd7dc8b8e992).
