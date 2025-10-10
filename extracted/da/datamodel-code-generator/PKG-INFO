@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: datamodel-code-generator
-Version: 0.34.0
+Version: 0.35.0
 Summary: Datamodel Code Generator
 Project-URL: Homepage, https://github.com/koxudaxi/datamodel-code-generator
 Project-URL: Source, https://github.com/koxudaxi/datamodel-code-generator
@@ -16,6 +16,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Requires-Python: >=3.9
 Requires-Dist: argcomplete<4,>=2.10.1
@@ -516,7 +517,7 @@ Model customization:
                         Set name of models defined inline from the parent model
   --reuse-model         Reuse models on the field when a module has the model with the same
                         content
-  --target-python-version {3.9,3.10,3.11,3.12,3.13}
+  --target-python-version {3.9,3.10,3.11,3.12,3.13,3.14}
                         target python version
   --treat-dot-as-module
                         treat dotted module names as modules

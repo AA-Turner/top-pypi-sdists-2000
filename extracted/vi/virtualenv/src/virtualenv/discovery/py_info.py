@@ -27,10 +27,10 @@ def _get_path_extensions():
 
 
 EXTENSIONS = _get_path_extensions()
-_CONF_VAR_RE = re.compile(r"\{\w+\}")
+_CONF_VAR_RE = re.compile(r"\{\w+}")
 
 
-class PythonInfo:
+class PythonInfo:  # noqa: PLR0904
     """Contains information for a Python interpreter."""
 
     def __init__(self) -> None:  # noqa: PLR0915
@@ -135,6 +135,7 @@ class PythonInfo:
         self.system_stdlib = self.sysconfig_path("stdlib", confs)
         self.system_stdlib_platform = self.sysconfig_path("platstdlib", confs)
         self.max_size = getattr(sys, "maxsize", getattr(sys, "maxint", None))
+        self._creators = None
 
     @staticmethod
     def _get_tcl_tk_libs():
@@ -310,6 +311,13 @@ class PythonInfo:
             config_var = base
         return pattern.format(**config_var).replace("/", sep)
 
+    def creators(self, refresh=False):  # noqa: FBT002
+        if self._creators is None or refresh is True:
+            from virtualenv.run.plugin.creators import CreatorSelector  # noqa: PLC0415
+
+        self._creators = CreatorSelector.for_interpreter(self)
+        return self._creators
+
     @property
     def system_include(self):
         path = self.sysconfig_path(
@@ -378,11 +386,11 @@ class PythonInfo:
         )
 
     @classmethod
-    def clear_cache(cls, app_data, cache=None):
+    def clear_cache(cls, cache=None):
         # this method is not used by itself, so here and called functions can import stuff locally
         from virtualenv.discovery.cached_py_info import clear  # noqa: PLC0415
 
-        clear(app_data, cache)
+        clear(cache)
         cls._cache_exe_discovery.clear()
 
     def satisfies(self, spec, impl_must_match):  # noqa: C901, PLR0911
@@ -432,9 +440,9 @@ class PythonInfo:
             cls._current = cls.from_exe(
                 sys.executable,
                 app_data,
+                cache,
                 raise_on_error=True,
                 resolve_to_host=False,
-                cache=cache,
             )
         return cls._current
 
@@ -448,9 +456,9 @@ class PythonInfo:
             cls._current_system = cls.from_exe(
                 sys.executable,
                 app_data,
+                cache,
                 raise_on_error=True,
                 resolve_to_host=True,
-                cache=cache,
             )
         return cls._current_system
 
@@ -468,11 +476,11 @@ class PythonInfo:
         cls,
         exe,
         app_data=None,
+        cache=None,
         raise_on_error=True,  # noqa: FBT002
         ignore_cache=False,  # noqa: FBT002
         resolve_to_host=True,  # noqa: FBT002
         env=None,
-        cache=None,
     ):
         """Given a path to an executable get the python information."""
         # this method is not used by itself, so here and called functions can import stuff locally
@@ -480,13 +488,7 @@ class PythonInfo:
 
         env = os.environ if env is None else env
         proposed = from_exe_cache(
-            cls,
-            app_data,
-            exe,
-            env=env,
-            raise_on_error=raise_on_error,
-            ignore_cache=ignore_cache,
-            cache=cache,
+            cls, app_data, exe, env=env, raise_on_error=raise_on_error, ignore_cache=ignore_cache, cache=cache
         )
 
         if isinstance(proposed, PythonInfo) and resolve_to_host:
@@ -513,7 +515,7 @@ class PythonInfo:
         return result
 
     @classmethod
-    def _resolve_to_system(cls, app_data, target, cache=None):
+    def _resolve_to_system(cls, app_data, target, cache):
         start_executable = target.executable
         prefixes = OrderedDict()
         while target.system_executable is None:
@@ -532,7 +534,7 @@ class PythonInfo:
             prefixes[prefix] = target
             target = target.discover_exe(app_data, prefix=prefix, exact=False, cache=cache)
         if target.executable != target.system_executable:
-            target = cls.from_exe(target.system_executable, app_data, cache=cache)
+            target = cls.from_exe(target.system_executable, app_data, cache)
         target.executable = start_executable
         return target
 
@@ -551,7 +553,7 @@ class PythonInfo:
         env = os.environ if env is None else env
         for folder in possible_folders:
             for name in possible_names:
-                info = self._check_exe(app_data, folder, name, exact, discovered, env, cache)
+                info = self._check_exe(app_data, cache, folder, name, exact, discovered, env)
                 if info is not None:
                     self._cache_exe_discovery[key] = info
                     return info
@@ -564,18 +566,11 @@ class PythonInfo:
         msg = "failed to detect {} in {}".format("|".join(possible_names), os.pathsep.join(possible_folders))
         raise RuntimeError(msg)
 
-    def _check_exe(self, app_data, folder, name, exact, discovered, env, cache):  # noqa: PLR0913
+    def _check_exe(self, app_data, cache, folder, name, exact, discovered, env):  # noqa: PLR0913
         exe_path = os.path.join(folder, name)
         if not os.path.exists(exe_path):
             return None
-        info = self.from_exe(
-            exe_path,
-            app_data,
-            resolve_to_host=False,
-            raise_on_error=False,
-            env=env,
-            cache=cache,
-        )
+        info = self.from_exe(exe_path, app_data, cache, resolve_to_host=False, raise_on_error=False, env=env)
         if info is None:  # ignore if for some reason we can't query
             return None
         for item in ["implementation", "architecture", "version_info"]:
@@ -660,7 +655,7 @@ class PythonInfo:
             lower = base.lower()
             yield lower
 
-            from .info import fs_is_case_sensitive  # noqa: PLC0415
+            from virtualenv.discovery.info import fs_is_case_sensitive  # noqa: PLC0415
 
             if fs_is_case_sensitive():
                 if base != lower:

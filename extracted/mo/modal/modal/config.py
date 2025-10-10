@@ -66,8 +66,8 @@ Other possible configuration options are:
 * `traceback` (in the .toml file) / `MODAL_TRACEBACK` (as an env var).
   Defaults to False. Enables printing full tracebacks on unexpected CLI
   errors, which can be useful for debugging client issues.
-* `log_pattern` (in the .toml file) / MODAL_LOG_PATTERN` (as an env var).
-  Defaults to "[modal-client] %(asctime)s %(message)s"
+* `log_pattern` (in the .toml file) / `MODAL_LOG_PATTERN` (as an env var).
+  Defaults to `"[modal-client] %(asctime)s %(message)s"`
   The log formatting pattern that will be used by the modal client itself.
   See https://docs.python.org/3/library/logging.html#logrecord-attributes for available
   log attributes.
@@ -239,6 +239,11 @@ _SETTINGS = {
     "snapshot_debug": _Setting(False, transform=_to_boolean),
     "cuda_checkpoint_path": _Setting("/__modal/.bin/cuda-checkpoint"),  # Used for snapshotting GPU memory.
     "build_validation": _Setting("error", transform=_check_value(["error", "warn", "ignore"])),
+    # Payload format for function inputs/outputs: 'pickle' (default) or 'cbor'
+    "payload_format": _Setting(
+        "pickle",
+        transform=lambda s: _check_value(["pickle", "cbor"])(s.lower()),
+    ),
 }
 
 

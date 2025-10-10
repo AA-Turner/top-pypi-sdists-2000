@@ -110,6 +110,7 @@ class _App:
     _container_app: typing.ClassVar[typing.Optional[_App]]
     _name: typing.Optional[str]
     _description: typing.Optional[str]
+    _tags: dict[str, str]
     _functions: dict[str, modal._functions._Function]
     _classes: dict[str, modal.cls._Cls]
     _image: typing.Optional[modal.image._Image]
@@ -126,6 +127,7 @@ class _App:
         self,
         name: typing.Optional[str] = None,
         *,
+        tags: typing.Optional[dict[str, str]] = None,
         image: typing.Optional[modal.image._Image] = None,
         secrets: collections.abc.Sequence[modal.secret._Secret] = [],
         volumes: dict[typing.Union[str, pathlib.PurePosixPath], modal.volume._Volume] = {},
@@ -149,7 +151,11 @@ class _App:
 
     @property
     def is_interactive(self) -> bool:
-        """Whether the current app for the app is running in interactive mode."""
+        """mdmd:hidden
+        Whether the current app for the app is running in interactive mode.
+
+        Note: this method will likely be deprecated in the future.
+        """
         ...
 
     @property
@@ -183,12 +189,30 @@ class _App:
         """
         ...
 
-    def set_description(self, description: str): ...
+    def set_description(self, description: str):
+        """mdmd:hidden
+        Set the description of the App before it starts running.
+
+        Note: we don't recommend using the method and may deprecate it in the future.
+        """
+        ...
+
     def _validate_blueprint_value(self, key: str, value: typing.Any): ...
     @property
-    def image(self) -> modal.image._Image: ...
+    def image(self) -> modal.image._Image:
+        """mdmd:hidden
+        Retrieve the Image that will be used as the default for any Functions registered to the App.
+
+        Note: This property is only relevant in the build phase and won't be populated on a deployed
+        App that is retrieved via `modal.App.lookup`. It is likely to be deprecated in the future.
+        """
+        ...
+
     @image.setter
-    def image(self, value): ...
+    def image(self, value):
+        """mdmd:hidden"""
+        ...
+
     def _uncreate_all_objects(self): ...
     def _set_local_app(
         self, client: modal.client._Client, running_app: modal.running_app.RunningApp
@@ -299,37 +323,48 @@ class _App:
     def _init_container(self, client: modal.client._Client, running_app: modal.running_app.RunningApp): ...
     @property
     def registered_functions(self) -> dict[str, modal._functions._Function]:
-        """All modal.Function objects registered on the app.
+        """mdmd:hidden
+        All modal.Function objects registered on the app.
 
         Note: this property is populated only during the build phase, and it is not
         expected to work when a deplyoed App has been retrieved via `modal.App.lookup`.
+        This method is likely to be deprecated in the future in favor of a different
+        approach for retrieving the layout of a deployed App.
         """
         ...
 
     @property
     def registered_classes(self) -> dict[str, modal.cls._Cls]:
-        """All modal.Cls objects registered on the app.
+        """mdmd:hidden
+        All modal.Cls objects registered on the app.
 
         Note: this property is populated only during the build phase, and it is not
         expected to work when a deplyoed App has been retrieved via `modal.App.lookup`.
+        This method is likely to be deprecated in the future in favor of a different
+        approach for retrieving the layout of a deployed App.
         """
         ...
 
     @property
     def registered_entrypoints(self) -> dict[str, _LocalEntrypoint]:
-        """All local CLI entrypoints registered on the app.
+        """mdmd:hidden
+        All local CLI entrypoints registered on the app.
 
         Note: this property is populated only during the build phase, and it is not
         expected to work when a deplyoed App has been retrieved via `modal.App.lookup`.
+        This method is likely to be deprecated in the future.
         """
         ...
 
     @property
     def registered_web_endpoints(self) -> list[str]:
-        """Names of web endpoint (ie. webhook) functions registered on the app.
+        """mdmd:hidden
+        Names of web endpoint (ie. webhook) functions registered on the app.
 
         Note: this property is populated only during the build phase, and it is not
         expected to work when a deplyoed App has been retrieved via `modal.App.lookup`.
+        This method is likely to be deprecated in the future in favor of a different
+        approach for retrieving the layout of a deployed App.
         """
         ...
 
@@ -391,7 +426,8 @@ class _App:
         *,
         image: typing.Optional[modal.image._Image] = None,
         schedule: typing.Optional[modal.schedule.Schedule] = None,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = (),
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig, list[typing.Union[None, str, modal.gpu._GPUConfig]]] = None,
         serialized: bool = False,
         network_file_systems: dict[
@@ -426,11 +462,11 @@ class _App:
         _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
         _experimental_proxy_ip: typing.Optional[str] = None,
         _experimental_custom_scaling_factor: typing.Optional[float] = None,
+        _experimental_restrict_output: bool = False,
         keep_warm: typing.Optional[int] = None,
         concurrency_limit: typing.Optional[int] = None,
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
-        allow_cross_region_volumes: typing.Optional[bool] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
     ) -> _FunctionDecoratorType:
         """Decorator to register a new Modal Function with this App."""
@@ -445,7 +481,8 @@ class _App:
         _warn_parentheses_missing=None,
         *,
         image: typing.Optional[modal.image._Image] = None,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = (),
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig, list[typing.Union[None, str, modal.gpu._GPUConfig]]] = None,
         serialized: bool = False,
         network_file_systems: dict[
@@ -478,17 +515,17 @@ class _App:
         _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
         _experimental_proxy_ip: typing.Optional[str] = None,
         _experimental_custom_scaling_factor: typing.Optional[float] = None,
+        _experimental_restrict_output: bool = False,
         keep_warm: typing.Optional[int] = None,
         concurrency_limit: typing.Optional[int] = None,
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
-        allow_cross_region_volumes: typing.Optional[bool] = None,
     ) -> collections.abc.Callable[[typing.Union[CLS_T, modal._partial_function._PartialFunction]], CLS_T]:
         """Decorator to register a new Modal [Cls](https://modal.com/docs/reference/modal.Cls) with this App."""
         ...
 
-    def include(self, /, other_app: _App) -> typing_extensions.Self:
+    def include(self, /, other_app: _App, inherit_tags: bool = True) -> typing_extensions.Self:
         """Include another App's objects in this one.
 
         Useful for splitting up Modal Apps across different self-contained files.
@@ -511,7 +548,28 @@ class _App:
             # use function declared on the included app
             bar.remote()
         ```
+
+        When `inherit_tags=True` any tags set on the other App will be inherited by this App
+        (with this App's tags taking precedence in the case of conflicts).
         """
+        ...
+
+    async def set_tags(
+        self, tags: collections.abc.Mapping[str, str], *, client: typing.Optional[modal.client._Client] = None
+    ) -> None:
+        """Attach key-value metadata to the App.
+
+        Tag metadata can be used to add organization-specific context to the App and can be
+        included in billing reports and other informational APIs. Tags can also be set in
+        the App constructor.
+
+        Any tags set on the App before calling this method will be removed if they are not
+        included in the argument (i.e., this method does not have `.update()` semantics).
+        """
+        ...
+
+    async def get_tags(self, *, client: typing.Optional[modal.client._Client] = None) -> dict[str, str]:
+        """Get the tags that are currently attached to the App."""
         ...
 
     def _logs(self, client: typing.Optional[modal.client._Client] = None) -> collections.abc.AsyncGenerator[str, None]:
@@ -572,6 +630,7 @@ class App:
     _container_app: typing.ClassVar[typing.Optional[App]]
     _name: typing.Optional[str]
     _description: typing.Optional[str]
+    _tags: dict[str, str]
     _functions: dict[str, modal.functions.Function]
     _classes: dict[str, modal.cls.Cls]
     _image: typing.Optional[modal.image.Image]
@@ -588,6 +647,7 @@ class App:
         self,
         name: typing.Optional[str] = None,
         *,
+        tags: typing.Optional[dict[str, str]] = None,
         image: typing.Optional[modal.image.Image] = None,
         secrets: collections.abc.Sequence[modal.secret.Secret] = [],
         volumes: dict[typing.Union[str, pathlib.PurePosixPath], modal.volume.Volume] = {},
@@ -611,7 +671,11 @@ class App:
 
     @property
     def is_interactive(self) -> bool:
-        """Whether the current app for the app is running in interactive mode."""
+        """mdmd:hidden
+        Whether the current app for the app is running in interactive mode.
+
+        Note: this method will likely be deprecated in the future.
+        """
         ...
 
     @property
@@ -671,12 +735,30 @@ class App:
 
     lookup: __lookup_spec
 
-    def set_description(self, description: str): ...
+    def set_description(self, description: str):
+        """mdmd:hidden
+        Set the description of the App before it starts running.
+
+        Note: we don't recommend using the method and may deprecate it in the future.
+        """
+        ...
+
     def _validate_blueprint_value(self, key: str, value: typing.Any): ...
     @property
-    def image(self) -> modal.image.Image: ...
+    def image(self) -> modal.image.Image:
+        """mdmd:hidden
+        Retrieve the Image that will be used as the default for any Functions registered to the App.
+
+        Note: This property is only relevant in the build phase and won't be populated on a deployed
+        App that is retrieved via `modal.App.lookup`. It is likely to be deprecated in the future.
+        """
+        ...
+
     @image.setter
-    def image(self, value): ...
+    def image(self, value):
+        """mdmd:hidden"""
+        ...
+
     def _uncreate_all_objects(self): ...
 
     class ___set_local_app_spec(typing_extensions.Protocol[SUPERSELF]):
@@ -904,37 +986,48 @@ class App:
     def _init_container(self, client: modal.client.Client, running_app: modal.running_app.RunningApp): ...
     @property
     def registered_functions(self) -> dict[str, modal.functions.Function]:
-        """All modal.Function objects registered on the app.
+        """mdmd:hidden
+        All modal.Function objects registered on the app.
 
         Note: this property is populated only during the build phase, and it is not
         expected to work when a deplyoed App has been retrieved via `modal.App.lookup`.
+        This method is likely to be deprecated in the future in favor of a different
+        approach for retrieving the layout of a deployed App.
         """
         ...
 
     @property
     def registered_classes(self) -> dict[str, modal.cls.Cls]:
-        """All modal.Cls objects registered on the app.
+        """mdmd:hidden
+        All modal.Cls objects registered on the app.
 
         Note: this property is populated only during the build phase, and it is not
         expected to work when a deplyoed App has been retrieved via `modal.App.lookup`.
+        This method is likely to be deprecated in the future in favor of a different
+        approach for retrieving the layout of a deployed App.
         """
         ...
 
     @property
     def registered_entrypoints(self) -> dict[str, LocalEntrypoint]:
-        """All local CLI entrypoints registered on the app.
+        """mdmd:hidden
+        All local CLI entrypoints registered on the app.
 
         Note: this property is populated only during the build phase, and it is not
         expected to work when a deplyoed App has been retrieved via `modal.App.lookup`.
+        This method is likely to be deprecated in the future.
         """
         ...
 
     @property
     def registered_web_endpoints(self) -> list[str]:
-        """Names of web endpoint (ie. webhook) functions registered on the app.
+        """mdmd:hidden
+        Names of web endpoint (ie. webhook) functions registered on the app.
 
         Note: this property is populated only during the build phase, and it is not
         expected to work when a deplyoed App has been retrieved via `modal.App.lookup`.
+        This method is likely to be deprecated in the future in favor of a different
+        approach for retrieving the layout of a deployed App.
         """
         ...
 
@@ -996,7 +1089,8 @@ class App:
         *,
         image: typing.Optional[modal.image.Image] = None,
         schedule: typing.Optional[modal.schedule.Schedule] = None,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = (),
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig, list[typing.Union[None, str, modal.gpu._GPUConfig]]] = None,
         serialized: bool = False,
         network_file_systems: dict[
@@ -1031,11 +1125,11 @@ class App:
         _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
         _experimental_proxy_ip: typing.Optional[str] = None,
         _experimental_custom_scaling_factor: typing.Optional[float] = None,
+        _experimental_restrict_output: bool = False,
         keep_warm: typing.Optional[int] = None,
         concurrency_limit: typing.Optional[int] = None,
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
-        allow_cross_region_volumes: typing.Optional[bool] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
     ) -> _FunctionDecoratorType:
         """Decorator to register a new Modal Function with this App."""
@@ -1050,7 +1144,8 @@ class App:
         _warn_parentheses_missing=None,
         *,
         image: typing.Optional[modal.image.Image] = None,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = (),
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig, list[typing.Union[None, str, modal.gpu._GPUConfig]]] = None,
         serialized: bool = False,
         network_file_systems: dict[
@@ -1083,17 +1178,17 @@ class App:
         _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
         _experimental_proxy_ip: typing.Optional[str] = None,
         _experimental_custom_scaling_factor: typing.Optional[float] = None,
+        _experimental_restrict_output: bool = False,
         keep_warm: typing.Optional[int] = None,
         concurrency_limit: typing.Optional[int] = None,
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
-        allow_cross_region_volumes: typing.Optional[bool] = None,
     ) -> collections.abc.Callable[[typing.Union[CLS_T, modal.partial_function.PartialFunction]], CLS_T]:
         """Decorator to register a new Modal [Cls](https://modal.com/docs/reference/modal.Cls) with this App."""
         ...
 
-    def include(self, /, other_app: App) -> typing_extensions.Self:
+    def include(self, /, other_app: App, inherit_tags: bool = True) -> typing_extensions.Self:
         """Include another App's objects in this one.
 
         Useful for splitting up Modal Apps across different self-contained files.
@@ -1116,8 +1211,53 @@ class App:
             # use function declared on the included app
             bar.remote()
         ```
+
+        When `inherit_tags=True` any tags set on the other App will be inherited by this App
+        (with this App's tags taking precedence in the case of conflicts).
         """
         ...
+
+    class __set_tags_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(
+            self, /, tags: collections.abc.Mapping[str, str], *, client: typing.Optional[modal.client.Client] = None
+        ) -> None:
+            """Attach key-value metadata to the App.
+
+            Tag metadata can be used to add organization-specific context to the App and can be
+            included in billing reports and other informational APIs. Tags can also be set in
+            the App constructor.
+
+            Any tags set on the App before calling this method will be removed if they are not
+            included in the argument (i.e., this method does not have `.update()` semantics).
+            """
+            ...
+
+        async def aio(
+            self, /, tags: collections.abc.Mapping[str, str], *, client: typing.Optional[modal.client.Client] = None
+        ) -> None:
+            """Attach key-value metadata to the App.
+
+            Tag metadata can be used to add organization-specific context to the App and can be
+            included in billing reports and other informational APIs. Tags can also be set in
+            the App constructor.
+
+            Any tags set on the App before calling this method will be removed if they are not
+            included in the argument (i.e., this method does not have `.update()` semantics).
+            """
+            ...
+
+    set_tags: __set_tags_spec[typing_extensions.Self]
+
+    class __get_tags_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(self, /, *, client: typing.Optional[modal.client.Client] = None) -> dict[str, str]:
+            """Get the tags that are currently attached to the App."""
+            ...
+
+        async def aio(self, /, *, client: typing.Optional[modal.client.Client] = None) -> dict[str, str]:
+            """Get the tags that are currently attached to the App."""
+            ...
+
+    get_tags: __get_tags_spec[typing_extensions.Self]
 
     class ___logs_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /, client: typing.Optional[modal.client.Client] = None) -> typing.Generator[str, None, None]:

@@ -9,9 +9,9 @@ import grpclib.client
 if typing.TYPE_CHECKING:
     import grpclib.server
 
-import modal_proto.options_pb2
 import google.protobuf.empty_pb2
 import google.protobuf.struct_pb2
+import google.protobuf.timestamp_pb2
 import google.protobuf.wrappers_pb2
 import modal_proto.api_pb2
 
@@ -55,6 +55,10 @@ class ModalClientBase(abc.ABC):
         pass
 
     @abc.abstractmethod
+    async def AppGetTags(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.AppGetTagsRequest, modal_proto.api_pb2.AppGetTagsResponse]') -> None:
+        pass
+
+    @abc.abstractmethod
     async def AppHeartbeat(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.AppHeartbeatRequest, google.protobuf.empty_pb2.Empty]') -> None:
         pass
 
@@ -76,6 +80,10 @@ class ModalClientBase(abc.ABC):
 
     @abc.abstractmethod
     async def AppSetObjects(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.AppSetObjectsRequest, google.protobuf.empty_pb2.Empty]') -> None:
+        pass
+
+    @abc.abstractmethod
+    async def AppSetTags(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.AppSetTagsRequest, google.protobuf.empty_pb2.Empty]') -> None:
         pass
 
     @abc.abstractmethod
@@ -260,6 +268,10 @@ class ModalClientBase(abc.ABC):
 
     @abc.abstractmethod
     async def FlashContainerRegister(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.FlashContainerRegisterRequest, modal_proto.api_pb2.FlashContainerRegisterResponse]') -> None:
+        pass
+
+    @abc.abstractmethod
+    async def FlashSetTargetSlotsMetrics(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.FlashSetTargetSlotsMetricsRequest, modal_proto.api_pb2.FlashSetTargetSlotsMetricsResponse]') -> None:
         pass
 
     @abc.abstractmethod
@@ -467,6 +479,14 @@ class ModalClientBase(abc.ABC):
         pass
 
     @abc.abstractmethod
+    async def SandboxCreateConnectToken(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.SandboxCreateConnectTokenRequest, modal_proto.api_pb2.SandboxCreateConnectTokenResponse]') -> None:
+        pass
+
+    @abc.abstractmethod
+    async def SandboxGetCommandRouterAccess(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.SandboxGetCommandRouterAccessRequest, modal_proto.api_pb2.SandboxGetCommandRouterAccessResponse]') -> None:
+        pass
+
+    @abc.abstractmethod
     async def SandboxGetFromName(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.SandboxGetFromNameRequest, modal_proto.api_pb2.SandboxGetFromNameResponse]') -> None:
         pass
 
@@ -520,6 +540,10 @@ class ModalClientBase(abc.ABC):
 
     @abc.abstractmethod
     async def SandboxStdinWrite(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.SandboxStdinWriteRequest, modal_proto.api_pb2.SandboxStdinWriteResponse]') -> None:
+        pass
+
+    @abc.abstractmethod
+    async def SandboxTagsGet(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.SandboxTagsGetRequest, modal_proto.api_pb2.SandboxTagsGetResponse]') -> None:
         pass
 
     @abc.abstractmethod
@@ -592,6 +616,10 @@ class ModalClientBase(abc.ABC):
 
     @abc.abstractmethod
     async def TaskGetAutoscalingMetrics(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.TaskGetAutoscalingMetricsRequest, modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse]') -> None:
+        pass
+
+    @abc.abstractmethod
+    async def TaskGetCommandRouterAccess(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.TaskGetCommandRouterAccessRequest, modal_proto.api_pb2.TaskGetCommandRouterAccessResponse]') -> None:
         pass
 
     @abc.abstractmethod
@@ -687,6 +715,10 @@ class ModalClientBase(abc.ABC):
         pass
 
     @abc.abstractmethod
+    async def WorkspaceBillingReport(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.WorkspaceBillingReportRequest, modal_proto.api_pb2.WorkspaceBillingReportItem]') -> None:
+        pass
+
+    @abc.abstractmethod
     async def WorkspaceNameLookup(self, stream: 'grpclib.server.Stream[google.protobuf.empty_pb2.Empty, modal_proto.api_pb2.WorkspaceNameLookupResponse]') -> None:
         pass
 
@@ -746,6 +778,12 @@ class ModalClientBase(abc.ABC):
                 modal_proto.api_pb2.AppGetOrCreateRequest,
                 modal_proto.api_pb2.AppGetOrCreateResponse,
             ),
+            '/modal.client.ModalClient/AppGetTags': grpclib.const.Handler(
+                self.AppGetTags,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                modal_proto.api_pb2.AppGetTagsRequest,
+                modal_proto.api_pb2.AppGetTagsResponse,
+            ),
             '/modal.client.ModalClient/AppHeartbeat': grpclib.const.Handler(
                 self.AppHeartbeat,
                 grpclib.const.Cardinality.UNARY_UNARY,
@@ -780,6 +818,12 @@ class ModalClientBase(abc.ABC):
                 self.AppSetObjects,
                 grpclib.const.Cardinality.UNARY_UNARY,
                 modal_proto.api_pb2.AppSetObjectsRequest,
+                google.protobuf.empty_pb2.Empty,
+            ),
+            '/modal.client.ModalClient/AppSetTags': grpclib.const.Handler(
+                self.AppSetTags,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                modal_proto.api_pb2.AppSetTagsRequest,
                 google.protobuf.empty_pb2.Empty,
             ),
             '/modal.client.ModalClient/AppStop': grpclib.const.Handler(
@@ -1057,6 +1101,12 @@ class ModalClientBase(abc.ABC):
                 grpclib.const.Cardinality.UNARY_UNARY,
                 modal_proto.api_pb2.FlashContainerRegisterRequest,
                 modal_proto.api_pb2.FlashContainerRegisterResponse,
+            ),
+            '/modal.client.ModalClient/FlashSetTargetSlotsMetrics': grpclib.const.Handler(
+                self.FlashSetTargetSlotsMetrics,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                modal_proto.api_pb2.FlashSetTargetSlotsMetricsRequest,
+                modal_proto.api_pb2.FlashSetTargetSlotsMetricsResponse,
             ),
             '/modal.client.ModalClient/FunctionAsyncInvoke': grpclib.const.Handler(
                 self.FunctionAsyncInvoke,
@@ -1364,6 +1414,18 @@ class ModalClientBase(abc.ABC):
                 modal_proto.api_pb2.SandboxCreateRequest,
                 modal_proto.api_pb2.SandboxCreateResponse,
             ),
+            '/modal.client.ModalClient/SandboxCreateConnectToken': grpclib.const.Handler(
+                self.SandboxCreateConnectToken,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                modal_proto.api_pb2.SandboxCreateConnectTokenRequest,
+                modal_proto.api_pb2.SandboxCreateConnectTokenResponse,
+            ),
+            '/modal.client.ModalClient/SandboxGetCommandRouterAccess': grpclib.const.Handler(
+                self.SandboxGetCommandRouterAccess,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                modal_proto.api_pb2.SandboxGetCommandRouterAccessRequest,
+                modal_proto.api_pb2.SandboxGetCommandRouterAccessResponse,
+            ),
             '/modal.client.ModalClient/SandboxGetFromName': grpclib.const.Handler(
                 self.SandboxGetFromName,
                 grpclib.const.Cardinality.UNARY_UNARY,
@@ -1447,6 +1509,12 @@ class ModalClientBase(abc.ABC):
                 grpclib.const.Cardinality.UNARY_UNARY,
                 modal_proto.api_pb2.SandboxStdinWriteRequest,
                 modal_proto.api_pb2.SandboxStdinWriteResponse,
+            ),
+            '/modal.client.ModalClient/SandboxTagsGet': grpclib.const.Handler(
+                self.SandboxTagsGet,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                modal_proto.api_pb2.SandboxTagsGetRequest,
+                modal_proto.api_pb2.SandboxTagsGetResponse,
             ),
             '/modal.client.ModalClient/SandboxTagsSet': grpclib.const.Handler(
                 self.SandboxTagsSet,
@@ -1555,6 +1623,12 @@ class ModalClientBase(abc.ABC):
                 grpclib.const.Cardinality.UNARY_UNARY,
                 modal_proto.api_pb2.TaskGetAutoscalingMetricsRequest,
                 modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse,
+            ),
+            '/modal.client.ModalClient/TaskGetCommandRouterAccess': grpclib.const.Handler(
+                self.TaskGetCommandRouterAccess,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                modal_proto.api_pb2.TaskGetCommandRouterAccessRequest,
+                modal_proto.api_pb2.TaskGetCommandRouterAccessResponse,
             ),
             '/modal.client.ModalClient/TaskList': grpclib.const.Handler(
                 self.TaskList,
@@ -1694,6 +1768,12 @@ class ModalClientBase(abc.ABC):
                 modal_proto.api_pb2.VolumeRenameRequest,
                 google.protobuf.empty_pb2.Empty,
             ),
+            '/modal.client.ModalClient/WorkspaceBillingReport': grpclib.const.Handler(
+                self.WorkspaceBillingReport,
+                grpclib.const.Cardinality.UNARY_STREAM,
+                modal_proto.api_pb2.WorkspaceBillingReportRequest,
+                modal_proto.api_pb2.WorkspaceBillingReportItem,
+            ),
             '/modal.client.ModalClient/WorkspaceNameLookup': grpclib.const.Handler(
                 self.WorkspaceNameLookup,
                 grpclib.const.Cardinality.UNARY_UNARY,
@@ -1760,6 +1840,12 @@ class ModalClientStub:
             modal_proto.api_pb2.AppGetOrCreateRequest,
             modal_proto.api_pb2.AppGetOrCreateResponse,
         )
+        self.AppGetTags = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/modal.client.ModalClient/AppGetTags',
+            modal_proto.api_pb2.AppGetTagsRequest,
+            modal_proto.api_pb2.AppGetTagsResponse,
+        )
         self.AppHeartbeat = grpclib.client.UnaryUnaryMethod(
             channel,
             '/modal.client.ModalClient/AppHeartbeat',
@@ -1794,6 +1880,12 @@ class ModalClientStub:
             channel,
             '/modal.client.ModalClient/AppSetObjects',
             modal_proto.api_pb2.AppSetObjectsRequest,
+            google.protobuf.empty_pb2.Empty,
+        )
+        self.AppSetTags = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/modal.client.ModalClient/AppSetTags',
+            modal_proto.api_pb2.AppSetTagsRequest,
             google.protobuf.empty_pb2.Empty,
         )
         self.AppStop = grpclib.client.UnaryUnaryMethod(
@@ -2071,6 +2163,12 @@ class ModalClientStub:
             '/modal.client.ModalClient/FlashContainerRegister',
             modal_proto.api_pb2.FlashContainerRegisterRequest,
             modal_proto.api_pb2.FlashContainerRegisterResponse,
+        )
+        self.FlashSetTargetSlotsMetrics = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/modal.client.ModalClient/FlashSetTargetSlotsMetrics',
+            modal_proto.api_pb2.FlashSetTargetSlotsMetricsRequest,
+            modal_proto.api_pb2.FlashSetTargetSlotsMetricsResponse,
         )
         self.FunctionAsyncInvoke = grpclib.client.UnaryUnaryMethod(
             channel,
@@ -2378,6 +2476,18 @@ class ModalClientStub:
             modal_proto.api_pb2.SandboxCreateRequest,
             modal_proto.api_pb2.SandboxCreateResponse,
         )
+        self.SandboxCreateConnectToken = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/modal.client.ModalClient/SandboxCreateConnectToken',
+            modal_proto.api_pb2.SandboxCreateConnectTokenRequest,
+            modal_proto.api_pb2.SandboxCreateConnectTokenResponse,
+        )
+        self.SandboxGetCommandRouterAccess = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/modal.client.ModalClient/SandboxGetCommandRouterAccess',
+            modal_proto.api_pb2.SandboxGetCommandRouterAccessRequest,
+            modal_proto.api_pb2.SandboxGetCommandRouterAccessResponse,
+        )
         self.SandboxGetFromName = grpclib.client.UnaryUnaryMethod(
             channel,
             '/modal.client.ModalClient/SandboxGetFromName',
@@ -2461,6 +2571,12 @@ class ModalClientStub:
             '/modal.client.ModalClient/SandboxStdinWrite',
             modal_proto.api_pb2.SandboxStdinWriteRequest,
             modal_proto.api_pb2.SandboxStdinWriteResponse,
+        )
+        self.SandboxTagsGet = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/modal.client.ModalClient/SandboxTagsGet',
+            modal_proto.api_pb2.SandboxTagsGetRequest,
+            modal_proto.api_pb2.SandboxTagsGetResponse,
         )
         self.SandboxTagsSet = grpclib.client.UnaryUnaryMethod(
             channel,
@@ -2569,6 +2685,12 @@ class ModalClientStub:
             '/modal.client.ModalClient/TaskGetAutoscalingMetrics',
             modal_proto.api_pb2.TaskGetAutoscalingMetricsRequest,
             modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse,
+        )
+        self.TaskGetCommandRouterAccess = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/modal.client.ModalClient/TaskGetCommandRouterAccess',
+            modal_proto.api_pb2.TaskGetCommandRouterAccessRequest,
+            modal_proto.api_pb2.TaskGetCommandRouterAccessResponse,
         )
         self.TaskList = grpclib.client.UnaryUnaryMethod(
             channel,
@@ -2707,6 +2829,12 @@ class ModalClientStub:
             '/modal.client.ModalClient/VolumeRename',
             modal_proto.api_pb2.VolumeRenameRequest,
             google.protobuf.empty_pb2.Empty,
+        )
+        self.WorkspaceBillingReport = grpclib.client.UnaryStreamMethod(
+            channel,
+            '/modal.client.ModalClient/WorkspaceBillingReport',
+            modal_proto.api_pb2.WorkspaceBillingReportRequest,
+            modal_proto.api_pb2.WorkspaceBillingReportItem,
         )
         self.WorkspaceNameLookup = grpclib.client.UnaryUnaryMethod(
             channel,

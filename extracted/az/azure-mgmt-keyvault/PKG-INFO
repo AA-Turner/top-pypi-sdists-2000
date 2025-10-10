@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: azure-mgmt-keyvault
-Version: 12.1.0
+Version: 12.1.1
 Summary: Microsoft Azure Keyvault Management Client Library for Python
 Author-email: Microsoft Corporation <azpysdkhelp@microsoft.com>
 License-Expression: MIT
@@ -86,6 +86,12 @@ If you encounter any bugs or have suggestions, please file an issue in the
 section of the project. 
 
 # Release History
+
+## 12.1.1 (2025-10-09)
+
+### Bugs Fixed
+
+- Exclude `generated_samples` and `generated_tests` from wheel
 
 ## 12.1.0 (2025-09-22)
 

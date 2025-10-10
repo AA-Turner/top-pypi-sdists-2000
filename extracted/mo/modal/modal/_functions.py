@@ -6,7 +6,7 @@ import textwrap
 import time
 import typing
 import warnings
-from collections.abc import AsyncGenerator, Sequence, Sized
+from collections.abc import AsyncGenerator, Collection, Sequence, Sized
 from dataclasses import dataclass
 from pathlib import PurePosixPath
 from typing import TYPE_CHECKING, Any, AsyncIterator, Callable, Optional, Union
@@ -94,10 +94,8 @@ from .secret import _Secret
 from .volume import _Volume
 
 if TYPE_CHECKING:
-    import modal._partial_function
     import modal.app
     import modal.cls
-    import modal.partial_function
 
 MAX_INTERNAL_FAILURE_COUNT = 8
 TERMINAL_STATUSES = (
@@ -152,8 +150,7 @@ class _Invocation:
             args,
             kwargs,
             stub,
-            max_object_size_bytes=function._max_object_size_bytes,
-            method_name=function._use_method_name,
+            function=function,
             function_call_invocation_type=function_call_invocation_type,
         )
 
@@ -441,8 +438,7 @@ class _InputPlaneInvocation:
             args,
             kwargs,
             control_plane_stub,
-            max_object_size_bytes=function._max_object_size_bytes,
-            method_name=function._use_method_name,
+            function=function,
         )
 
         request = api_pb2.AttemptStartRequest(
@@ -479,34 +475,34 @@ class _InputPlaneInvocation:
                 metadata=metadata,
             )
 
-            if await_response.HasField("output"):
-                if await_response.output.result.status in TERMINAL_STATUSES:
-                    return await _process_result(
-                        await_response.output.result, await_response.output.data_format, self.client.stub, self.client
-                    )
+            # Keep awaiting until we get an output.
+            if not await_response.HasField("output"):
+                continue
 
-                if await_response.output.result.status == api_pb2.GenericResult.GENERIC_STATUS_INTERNAL_FAILURE:
-                    internal_failure_count += 1
-                    # Limit the number of times we retry
-                    if internal_failure_count < MAX_INTERNAL_FAILURE_COUNT:
-                        # For system failures on the server, we retry immediately,
-                        # and the failure does not count towards the retry policy.
-                        self.attempt_token = await self._retry_input(metadata)
-                        continue
+            # If we have a final output, return.
+            if await_response.output.result.status in TERMINAL_STATUSES:
+                return await _process_result(
+                    await_response.output.result, await_response.output.data_format, self.client.stub, self.client
+                )
 
-                # We add delays between retries for non-internal failures.
-                delay_ms = user_retry_manager.get_delay_ms()
-                if delay_ms is None:
-                    # No more retries either because we reached the retry limit or user didn't set a retry policy
-                    # and the limit defaulted to 0.
-                    # An unsuccessful status should raise an error when it's converted to an exception.
-                    # Note: Blob download is done on the control plane stub not the input plane stub!
-                    return await _process_result(
-                        await_response.output.result, await_response.output.data_format, self.client.stub, self.client
-                    )
+            # We have a failure (internal or application), so see if there are any retries left, and if so, retry.
+            if await_response.output.result.status == api_pb2.GenericResult.GENERIC_STATUS_INTERNAL_FAILURE:
+                internal_failure_count += 1
+                # Limit the number of times we retry internal failures.
+                if internal_failure_count < MAX_INTERNAL_FAILURE_COUNT:
+                    # We immediately retry internal failures and the failure doesn't count towards the retry policy.
+                    self.attempt_token = await self._retry_input(metadata)
+                    continue
+            elif (delay_ms := user_retry_manager.get_delay_ms()) is not None:
+                # We still have user retries left, so sleep and retry.
                 await asyncio.sleep(delay_ms / 1000)
+                self.attempt_token = await self._retry_input(metadata)
+                continue
 
-            await self._retry_input(metadata)
+            # No more retries left.
+            return await _process_result(
+                await_response.output.result, await_response.output.data_format, self.client.stub, self.client
+            )
 
     async def _retry_input(self, metadata: list[tuple[str, str]]) -> str:
         retry_request = api_pb2.AttemptRetryRequest(
@@ -515,7 +511,6 @@ class _InputPlaneInvocation:
             input=self.input_item,
             attempt_token=self.attempt_token,
         )
-        # TODO(ryan): Add exponential backoff?
         retry_response = await retry_transient_errors(
             self.stub.AttemptRetry,
             retry_request,
@@ -597,7 +592,7 @@ class _FunctionSpec:
 
     image: Optional[_Image]
     mounts: Sequence[_Mount]
-    secrets: Sequence[_Secret]
+    secrets: Collection[_Secret]
     network_file_systems: dict[Union[str, PurePosixPath], _NetworkFileSystem]
     volumes: dict[Union[str, PurePosixPath], Union[_Volume, _CloudBucketMount]]
     # TODO(irfansharif): Somehow assert that it's the first kind, in sandboxes
@@ -608,6 +603,21 @@ class _FunctionSpec:
     ephemeral_disk: Optional[int]
     scheduler_placement: Optional[SchedulerPlacement]
     proxy: Optional[_Proxy]
+
+
+def _get_supported_input_output_formats(is_web_endpoint: bool, is_generator: bool, restrict_output: bool):
+    if is_web_endpoint:
+        supported_input_formats = [api_pb2.DATA_FORMAT_ASGI]
+        supported_output_formats = [api_pb2.DATA_FORMAT_ASGI, api_pb2.DATA_FORMAT_GENERATOR_DONE]
+    else:
+        supported_input_formats = [api_pb2.DATA_FORMAT_PICKLE, api_pb2.DATA_FORMAT_CBOR]
+        if restrict_output:
+            supported_output_formats = [api_pb2.DATA_FORMAT_CBOR]
+        else:
+            supported_output_formats = [api_pb2.DATA_FORMAT_PICKLE, api_pb2.DATA_FORMAT_CBOR]
+        if is_generator:
+            supported_output_formats.append(api_pb2.DATA_FORMAT_GENERATOR_DONE)
+    return supported_input_formats, supported_output_formats
 
 
 P = typing_extensions.ParamSpec("P")
@@ -661,7 +671,8 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
         info: FunctionInfo,
         app,
         image: _Image,
-        secrets: Sequence[_Secret] = (),
+        env: Optional[dict[str, Optional[str]]] = None,
+        secrets: Optional[Collection[_Secret]] = None,
         schedule: Optional[Schedule] = None,
         is_generator: bool = False,
         gpu: Union[GPU_T, list[GPU_T]] = None,
@@ -700,8 +711,12 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
         experimental_options: Optional[dict[str, str]] = None,
         _experimental_proxy_ip: Optional[str] = None,
         _experimental_custom_scaling_factor: Optional[float] = None,
+        restrict_output: bool = False,
     ) -> "_Function":
-        """mdmd:hidden"""
+        """mdmd:hidden
+
+        Note: This is not intended to be public API.
+        """
         # Needed to avoid circular imports
         from ._partial_function import _find_partial_methods_for_user_cls, _PartialFunctionFlags
 
@@ -735,6 +750,13 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
                 raise InvalidError("Web endpoints do not support retries.")
             if is_generator:
                 raise InvalidError("Generator functions do not support retries.")
+
+        if timeout is None:  # type: ignore[unreachable]  # Help users who aren't using type checkers
+            raise InvalidError("The `timeout` parameter cannot be set to None: https://modal.com/docs/guide/timeouts")
+
+        secrets = secrets or []
+        if env:
+            secrets = [*secrets, _Secret.from_dict(env)]
 
         function_spec = _FunctionSpec(
             mounts=all_mounts,
@@ -823,10 +845,14 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
             for method_name, partial_function in interface_methods.items():
                 function_type = get_function_type(partial_function.params.is_generator)
                 function_name = f"{info.user_cls.__name__}.{method_name}"
+                is_web_endpoint = partial_function._is_web_endpoint()
                 method_schema = get_callable_schema(
                     partial_function._get_raw_f(),
-                    is_web_endpoint=partial_function._is_web_endpoint(),
+                    is_web_endpoint=is_web_endpoint,
                     ignore_first_argument=True,
+                )
+                method_input_formats, method_output_formats = _get_supported_input_output_formats(
+                    is_web_endpoint, partial_function.params.is_generator or False, restrict_output
                 )
 
                 method_definition = api_pb2.MethodDefinition(
@@ -834,6 +860,8 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
                     function_type=function_type,
                     function_name=function_name,
                     function_schema=method_schema,
+                    supported_input_formats=method_input_formats,
+                    supported_output_formats=method_output_formats,
                 )
                 method_definitions[method_name] = method_definition
 
@@ -857,6 +885,16 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
 
             return deps
 
+        if info.is_service_class():
+            # classes don't have data formats themselves - input/output formats are set per method above
+            supported_input_formats = []
+            supported_output_formats = []
+        else:
+            is_web_endpoint = webhook_config is not None and webhook_config.type != api_pb2.WEBHOOK_TYPE_UNSPECIFIED
+            supported_input_formats, supported_output_formats = _get_supported_input_output_formats(
+                is_web_endpoint, is_generator, restrict_output
+            )
+
         async def _preload(self: _Function, resolver: Resolver, existing_object_id: Optional[str]):
             assert resolver.client and resolver.client.stub
 
@@ -869,6 +907,8 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
                 function_schema=get_callable_schema(info.raw_f, is_web_endpoint=bool(webhook_config))
                 if info.raw_f
                 else None,
+                supported_input_formats=supported_input_formats,
+                supported_output_formats=supported_output_formats,
             )
             if method_definitions:
                 for method_name, method_definition in method_definitions.items():
@@ -947,6 +987,7 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
                 function_schema = (
                     get_callable_schema(info.raw_f, is_web_endpoint=bool(webhook_config)) if info.raw_f else None
                 )
+
                 # Create function remotely
                 function_definition = api_pb2.Function(
                     module_name=info.module_name or "",
@@ -1008,6 +1049,8 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
                     task_idle_timeout_secs=scaledown_window or 0,
                     # ---
                     function_schema=function_schema,
+                    supported_input_formats=supported_input_formats,
+                    supported_output_formats=supported_output_formats,
                 )
 
                 if isinstance(gpu, list):
@@ -1043,6 +1086,8 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
                         runtime_perf_record=function_definition.runtime_perf_record,
                         function_schema=function_schema,
                         untrusted=function_definition.untrusted,
+                        supported_input_formats=supported_input_formats,
+                        supported_output_formats=supported_output_formats,
                     )
 
                     ranked_functions = []
@@ -1193,6 +1238,8 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
                     replace_secret_ids=bool(options.secrets),
                     replace_volume_mounts=len(volume_mounts) > 0,
                     volume_mounts=volume_mounts,
+                    cloud_bucket_mounts=cloud_bucket_mounts_to_proto(options.cloud_bucket_mounts),
+                    replace_cloud_bucket_mounts=bool(options.cloud_bucket_mounts),
                     resources=options.resources,
                     retry_policy=options.retry_policy,
                     concurrency_limit=options.max_containers,
@@ -1222,7 +1269,11 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
 
         def _deps():
             if options:
-                all_deps = [v for _, v in options.validated_volumes] + list(options.secrets)
+                all_deps = (
+                    [v for _, v in options.validated_volumes]
+                    + list(options.secrets)
+                    + [mount.secret for _, mount in options.cloud_bucket_mounts if mount.secret]
+                )
                 return [dep for dep in all_deps if not dep.is_hydrated]
             return []
 
@@ -1386,40 +1437,6 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
         warn_if_passing_namespace(namespace, "modal.Function.from_name")
         return cls._from_name(app_name, name, environment_name=environment_name)
 
-    @staticmethod
-    async def lookup(
-        app_name: str,
-        name: str,
-        namespace=None,  # mdmd:line-hidden
-        client: Optional[_Client] = None,
-        environment_name: Optional[str] = None,
-    ) -> "_Function":
-        """mdmd:hidden
-        Lookup a Function from a deployed App by its name.
-
-        DEPRECATED: This method is deprecated in favor of `modal.Function.from_name`.
-
-        In contrast to `modal.Function.from_name`, this is an eager method
-        that will hydrate the local object with metadata from Modal servers.
-
-        ```python notest
-        f = modal.Function.lookup("other-app", "function")
-        ```
-        """
-        deprecation_warning(
-            (2025, 1, 27),
-            "`modal.Function.lookup` is deprecated and will be removed in a future release."
-            " It can be replaced with `modal.Function.from_name`."
-            "\n\nSee https://modal.com/docs/guide/modal-1-0-migration for more information.",
-        )
-        warn_if_passing_namespace(namespace, "modal.Function.lookup")
-        obj = _Function.from_name(app_name, name, environment_name=environment_name)
-        if client is None:
-            client = await _Client.from_env()
-        resolver = Resolver(client=client)
-        await resolver.load(obj)
-        return obj
-
     @property
     def tag(self) -> str:
         """mdmd:hidden"""
@@ -1521,6 +1538,8 @@ class _Function(typing.Generic[P, ReturnType, OriginalReturnType], _Object, type
             input_plane_region=self._input_plane_region,
             max_object_size_bytes=self._max_object_size_bytes,
             _experimental_flash_urls=self._experimental_flash_urls,
+            supported_input_formats=self._metadata.supported_input_formats if self._metadata else [],
+            supported_output_formats=self._metadata.supported_output_formats if self._metadata else [],
         )
 
     def _check_no_web_url(self, fn_name: str):
@@ -1766,8 +1785,9 @@ Use the `Function.get_web_url()` method instead.
         # "user code" to run on the synchronicity thread, which seems bad
         if not self._is_local():
             msg = (
-                "The definition for this function is missing here so it is not possible to invoke it locally. "
-                "If this function was retrieved via `Function.lookup` you need to use `.remote()`."
+                "The definition for this Function is missing, so it is not possible to invoke it locally. "
+                "If this function was retrieved via `Function.from_name`, "
+                "you need to use one of the remote invocation methods instead."
             )
             raise ExecutionError(msg)
 

@@ -14040,7 +14040,7 @@ class CorpUserEditableInfoClass(_Aspect):
         else:
             self.skills = skills
         if pictureLink is None:
-            # default: 'https://raw.githubusercontent.com/datahub-project/datahub/master/datahub-web-react/src/images/default_avatar.png'
+            # default: 'assets/platforms/default_avatar.png'
             self.pictureLink = self.RECORD_SCHEMA.fields_dict["pictureLink"].default
         else:
             self.pictureLink = pictureLink
@@ -21758,6 +21758,153 @@ class ParametersClass(DictWrapper):
         pass
     
     
+class RelationshipChangeEventClass(DictWrapper):
+    """Kafka event for proposing a relationship change between two entities.
+    For example, when dataset1 establishes a new downstream relationship with dataset2."""
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.platform.event.v1.RelationshipChangeEvent")
+    def __init__(self,
+        sourceUrn: str,
+        destinationUrn: str,
+        operation: Union[str, "RelationshipChangeOperationClass"],
+        relationshipType: str,
+        auditStamp: "AuditStampClass",
+        auditHeader: Union[None, "KafkaAuditHeaderClass"]=None,
+        lifecycleOwner: Union[None, str]=None,
+        via: Union[None, str]=None,
+        properties: Union[None, Dict[str, str]]=None,
+    ):
+        super().__init__()
+        
+        self.auditHeader = auditHeader
+        self.sourceUrn = sourceUrn
+        self.destinationUrn = destinationUrn
+        self.operation = operation
+        self.relationshipType = relationshipType
+        self.lifecycleOwner = lifecycleOwner
+        self.via = via
+        self.properties = properties
+        self.auditStamp = auditStamp
+    
+    def _restore_defaults(self) -> None:
+        self.auditHeader = self.RECORD_SCHEMA.fields_dict["auditHeader"].default
+        self.sourceUrn = str()
+        self.destinationUrn = str()
+        self.operation = RelationshipChangeOperationClass.ADD
+        self.relationshipType = str()
+        self.lifecycleOwner = self.RECORD_SCHEMA.fields_dict["lifecycleOwner"].default
+        self.via = self.RECORD_SCHEMA.fields_dict["via"].default
+        self.properties = self.RECORD_SCHEMA.fields_dict["properties"].default
+        self.auditStamp = AuditStampClass._construct_with_defaults()
+    
+    
+    @property
+    def auditHeader(self) -> Union[None, "KafkaAuditHeaderClass"]:
+        """Kafka audit header containing metadata about the message itself.
+    Includes information like message ID, timestamp, and server details."""
+        return self._inner_dict.get('auditHeader')  # type: ignore
+    
+    @auditHeader.setter
+    def auditHeader(self, value: Union[None, "KafkaAuditHeaderClass"]) -> None:
+        self._inner_dict['auditHeader'] = value
+    
+    
+    @property
+    def sourceUrn(self) -> str:
+        """The URN (Uniform Resource Name) of the source entity in the relationship.
+    In a downstream relationship example, this would be the URN of the upstream dataset."""
+        return self._inner_dict.get('sourceUrn')  # type: ignore
+    
+    @sourceUrn.setter
+    def sourceUrn(self, value: str) -> None:
+        self._inner_dict['sourceUrn'] = value
+    
+    
+    @property
+    def destinationUrn(self) -> str:
+        """The URN of the destination entity in the relationship.
+    In a downstream relationship example, this would be the URN of the downstream dataset."""
+        return self._inner_dict.get('destinationUrn')  # type: ignore
+    
+    @destinationUrn.setter
+    def destinationUrn(self, value: str) -> None:
+        self._inner_dict['destinationUrn'] = value
+    
+    
+    @property
+    def operation(self) -> Union[str, "RelationshipChangeOperationClass"]:
+        """The operation being performed on this relationship.
+    Typically includes operations like ADD, REMOVE, or RESTATE."""
+        return self._inner_dict.get('operation')  # type: ignore
+    
+    @operation.setter
+    def operation(self, value: Union[str, "RelationshipChangeOperationClass"]) -> None:
+        self._inner_dict['operation'] = value
+    
+    
+    @property
+    def relationshipType(self) -> str:
+        """The type/category of relationship being established or modified.
+    Examples: "DownstreamOf", "Contains", "OwnedBy", "DerivedFrom", etc."""
+        return self._inner_dict.get('relationshipType')  # type: ignore
+    
+    @relationshipType.setter
+    def relationshipType(self, value: str) -> None:
+        self._inner_dict['relationshipType'] = value
+    
+    
+    @property
+    def lifecycleOwner(self) -> Union[None, str]:
+        """The system or service responsible for managing the lifecycle of this relationship.
+    This helps identify which component has authority over the relationship."""
+        return self._inner_dict.get('lifecycleOwner')  # type: ignore
+    
+    @lifecycleOwner.setter
+    def lifecycleOwner(self, value: Union[None, str]) -> None:
+        self._inner_dict['lifecycleOwner'] = value
+    
+    
+    @property
+    def via(self) -> Union[None, str]:
+        """Information about how or through what means this relationship was established.
+    Could indicate a specific pipeline, process, or tool that discovered/created the relationship."""
+        return self._inner_dict.get('via')  # type: ignore
+    
+    @via.setter
+    def via(self, value: Union[None, str]) -> None:
+        self._inner_dict['via'] = value
+    
+    
+    @property
+    def properties(self) -> Union[None, Dict[str, str]]:
+        """Additional custom properties associated with this relationship.
+    Allows for flexible extension without changing the schema."""
+        return self._inner_dict.get('properties')  # type: ignore
+    
+    @properties.setter
+    def properties(self, value: Union[None, Dict[str, str]]) -> None:
+        self._inner_dict['properties'] = value
+    
+    
+    @property
+    def auditStamp(self) -> "AuditStampClass":
+        """Stores information about who made this change and when.
+    Contains the actor (user or system) that performed the action and the timestamp."""
+        return self._inner_dict.get('auditStamp')  # type: ignore
+    
+    @auditStamp.setter
+    def auditStamp(self, value: "AuditStampClass") -> None:
+        self._inner_dict['auditStamp'] = value
+    
+    
+class RelationshipChangeOperationClass(object):
+    # No docs available.
+    
+    ADD = "ADD"
+    REMOVE = "REMOVE"
+    RESTATE = "RESTATE"
+    
+    
 class PlatformResourceInfoClass(_Aspect):
     """Platform Resource Info.
     These entities are for miscelaneous data that is used in non-core parts of the system.
@@ -25875,6 +26022,7 @@ class StructuredPropertySettingsClass(_Aspect):
         isHidden: Optional[bool]=None,
         showInSearchFilters: Optional[bool]=None,
         showInAssetSummary: Optional[bool]=None,
+        hideInAssetSummaryWhenEmpty: Optional[bool]=None,
         showAsAssetBadge: Optional[bool]=None,
         showInColumnsTable: Optional[bool]=None,
         lastModified: Union[None, "AuditStampClass"]=None,
@@ -25896,6 +26044,11 @@ class StructuredPropertySettingsClass(_Aspect):
             self.showInAssetSummary = self.RECORD_SCHEMA.fields_dict["showInAssetSummary"].default
         else:
             self.showInAssetSummary = showInAssetSummary
+        if hideInAssetSummaryWhenEmpty is None:
+            # default: False
+            self.hideInAssetSummaryWhenEmpty = self.RECORD_SCHEMA.fields_dict["hideInAssetSummaryWhenEmpty"].default
+        else:
+            self.hideInAssetSummaryWhenEmpty = hideInAssetSummaryWhenEmpty
         if showAsAssetBadge is None:
             # default: False
             self.showAsAssetBadge = self.RECORD_SCHEMA.fields_dict["showAsAssetBadge"].default
@@ -25912,6 +26065,7 @@ class StructuredPropertySettingsClass(_Aspect):
         self.isHidden = self.RECORD_SCHEMA.fields_dict["isHidden"].default
         self.showInSearchFilters = self.RECORD_SCHEMA.fields_dict["showInSearchFilters"].default
         self.showInAssetSummary = self.RECORD_SCHEMA.fields_dict["showInAssetSummary"].default
+        self.hideInAssetSummaryWhenEmpty = self.RECORD_SCHEMA.fields_dict["hideInAssetSummaryWhenEmpty"].default
         self.showAsAssetBadge = self.RECORD_SCHEMA.fields_dict["showAsAssetBadge"].default
         self.showInColumnsTable = self.RECORD_SCHEMA.fields_dict["showInColumnsTable"].default
         self.lastModified = self.RECORD_SCHEMA.fields_dict["lastModified"].default
@@ -25945,6 +26099,17 @@ class StructuredPropertySettingsClass(_Aspect):
     @showInAssetSummary.setter
     def showInAssetSummary(self, value: bool) -> None:
         self._inner_dict['showInAssetSummary'] = value
+    
+    
+    @property
+    def hideInAssetSummaryWhenEmpty(self) -> bool:
+        """Whether or not this asset should be hidden in the asset sidebar (showInAssetSummary should be enabled)
+    when its value is empty"""
+        return self._inner_dict.get('hideInAssetSummaryWhenEmpty')  # type: ignore
+    
+    @hideInAssetSummaryWhenEmpty.setter
+    def hideInAssetSummaryWhenEmpty(self, value: bool) -> None:
+        self._inner_dict['hideInAssetSummaryWhenEmpty'] = value
     
     
     @property
@@ -27759,6 +27924,8 @@ __SCHEMA_TYPES = {
     'com.linkedin.pegasus2avro.persona.DataHubPersonaInfo': DataHubPersonaInfoClass,
     'com.linkedin.pegasus2avro.platform.event.v1.EntityChangeEvent': EntityChangeEventClass,
     'com.linkedin.pegasus2avro.platform.event.v1.Parameters': ParametersClass,
+    'com.linkedin.pegasus2avro.platform.event.v1.RelationshipChangeEvent': RelationshipChangeEventClass,
+    'com.linkedin.pegasus2avro.platform.event.v1.RelationshipChangeOperation': RelationshipChangeOperationClass,
     'com.linkedin.pegasus2avro.platformresource.PlatformResourceInfo': PlatformResourceInfoClass,
     'com.linkedin.pegasus2avro.platformresource.PlatformResourceKey': PlatformResourceKeyClass,
     'com.linkedin.pegasus2avro.policy.DataHubActorFilter': DataHubActorFilterClass,
@@ -28279,6 +28446,8 @@ __SCHEMA_TYPES = {
     'DataHubPersonaInfo': DataHubPersonaInfoClass,
     'EntityChangeEvent': EntityChangeEventClass,
     'Parameters': ParametersClass,
+    'RelationshipChangeEvent': RelationshipChangeEventClass,
+    'RelationshipChangeOperation': RelationshipChangeOperationClass,
     'PlatformResourceInfo': PlatformResourceInfoClass,
     'PlatformResourceKey': PlatformResourceKeyClass,
     'DataHubActorFilter': DataHubActorFilterClass,

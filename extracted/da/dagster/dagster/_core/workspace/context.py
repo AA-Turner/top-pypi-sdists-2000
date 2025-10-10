@@ -16,7 +16,9 @@ import dagster._check as check
 from dagster._config.snap import ConfigTypeSnap
 from dagster._core.definitions.asset_key import AssetKey
 from dagster._core.definitions.assets.graph.remote_asset_graph import (
+    RemoteAssetCheckNode,
     RemoteAssetGraph,
+    RemoteAssetNode,
     RemoteRepositoryAssetNode,
 )
 from dagster._core.definitions.data_time import CachingDataTimeResolver
@@ -103,6 +105,14 @@ T = TypeVar("T")
 
 WEBSERVER_GRPC_SERVER_HEARTBEAT_TTL = 45
 
+RemoteDefinition = Union[
+    RemoteAssetNode,
+    RemoteAssetCheckNode,
+    RemoteJob,
+    RemoteSchedule,
+    RemoteSensor,
+]
+
 
 class BaseWorkspaceRequestContext(LoadingContext):
     """This class is a request-scoped object that stores (1) a reference to all repository locations
@@ -187,6 +197,10 @@ class BaseWorkspaceRequestContext(LoadingContext):
     def permissions_for_location(self, *, location_name: str) -> Mapping[str, PermissionResult]:
         pass
 
+    @abstractmethod
+    def permissions_for_owner(self, *, owner: str) -> Mapping[str, PermissionResult]:
+        pass
+
     def has_permission_for_location(self, permission: str, location_name: str) -> bool:
         if self.has_code_location_name(location_name):
             permissions = self.permissions_for_location(location_name=location_name)
@@ -201,6 +215,60 @@ class BaseWorkspaceRequestContext(LoadingContext):
     @abstractmethod
     def was_permission_checked(self, permission: str) -> bool: ...
 
+    def has_permission_for_selector(
+        self,
+        permission: str,
+        selector: Union[AssetKey, JobSelector, ScheduleSelector, SensorSelector],
+    ) -> bool:
+        if self.has_permission(permission):
+            return True
+
+        if isinstance(selector, AssetKey):
+            if not self.asset_graph.has(selector):
+                return False
+
+            node = self.asset_graph.get(selector).resolve_to_singular_repo_scoped_node()
+            location_name = node.repository_handle.location_name
+        else:
+            location_name = selector.location_name
+
+        if not self.has_code_location_name(location_name):
+            return False
+
+        if self.has_permission_for_location(permission, location_name):
+            return True
+
+        if not self.viewer_has_any_owner_definition_permissions():
+            return False
+
+        owners = self.get_owners_for_selector(selector)
+        return self.has_permission_for_owners(permission, owners)
+
+    def get_owners_for_selector(
+        self, selector: Union[AssetKey, JobSelector, ScheduleSelector, SensorSelector]
+    ) -> Sequence[str]:
+        if isinstance(selector, AssetKey):
+            remote_definition = self.asset_graph.get(selector)
+        elif isinstance(selector, JobSelector):
+            remote_definition = self.get_full_job(selector)
+        elif isinstance(selector, ScheduleSelector):
+            remote_definition = self.get_schedule(selector)
+        elif isinstance(selector, SensorSelector):
+            remote_definition = self.get_sensor(selector)
+
+        if not remote_definition:
+            return []
+
+        return get_owners_for_definition(remote_definition)
+
+    def has_permission_for_owners(self, permission: str, owners: Sequence[str]) -> bool:
+        return any(
+            self.permissions_for_owner(owner=owner)
+            .get(permission, PermissionResult(enabled=False, disabled_reason=None))
+            .enabled
+            for owner in owners
+        )
+
     @property
     @abstractmethod
     def records_for_run_default_limit(self) -> Optional[int]: ...
@@ -208,6 +276,9 @@ class BaseWorkspaceRequestContext(LoadingContext):
     @property
     def show_instance_config(self) -> bool:
         return True
+
+    def viewer_has_any_owner_definition_permissions(self) -> bool:
+        return False
 
     def get_viewer_tags(self) -> dict[str, str]:
         return {}
@@ -299,7 +370,7 @@ class BaseWorkspaceRequestContext(LoadingContext):
         return self.process_context.create_request_context()
 
     def has_job(self, selector: Union[JobSubsetSelector, JobSelector]) -> bool:
-        check.inst_param(selector, "selector", JobSubsetSelector)
+        check.inst_param(selector, "selector", (JobSubsetSelector, JobSelector))
         if not self.has_code_location(selector.location_name):
             return False
 
@@ -319,7 +390,10 @@ class BaseWorkspaceRequestContext(LoadingContext):
         self,
         selector: JobSubsetSelector,
     ) -> RemoteJob:
-        return await self.get_code_location(selector.location_name).gen_job(selector)
+        if not selector.is_subset_selection:
+            return self.get_full_job(selector)
+
+        return await self.get_code_location(selector.location_name).gen_subset_job(selector)
 
     def get_execution_plan(
         self,
@@ -462,12 +536,9 @@ class BaseWorkspaceRequestContext(LoadingContext):
         job_selector: JobSelector,
         selected_asset_keys: Optional[AbstractSet[AssetKey]],
     ) -> Optional[PartitionsDefinition]:
-        asset_nodes = self.get_assets_in_job(job_selector)
+        asset_nodes = self.get_assets_in_job(job_selector, selected_asset_keys)
         unique_partitions_defs: set[PartitionsDefinition] = set()
         for asset_node in asset_nodes:
-            if selected_asset_keys is not None and asset_node.key not in selected_asset_keys:
-                continue
-
             if asset_node.asset_node_snap.partitions is not None:
                 unique_partitions_defs.add(
                     asset_node.asset_node_snap.partitions.get_partitions_definition()
@@ -606,10 +677,10 @@ class BaseWorkspaceRequestContext(LoadingContext):
         )
         return repository.sensors_by_job_name.get(selector.job_name, [])
 
-    def get_assets_in_job(
+    def get_asset_keys_in_job(
         self,
         selector: Union[JobSubsetSelector, JobSelector],
-    ) -> Sequence[RemoteRepositoryAssetNode]:
+    ) -> Sequence[AssetKey]:
         if not self.has_code_location(selector.location_name):
             return []
 
@@ -619,13 +690,23 @@ class BaseWorkspaceRequestContext(LoadingContext):
 
         repository = location.get_repository(selector.repository_name)
         snaps = repository.get_asset_node_snaps(job_name=selector.job_name)
+        return [snap.asset_key for snap in snaps]
 
-        # use repository scoped nodes to match existing behavior,
-        # easily switched to workspace scope nodes by using self.asset_graph
+    def get_assets_in_job(
+        self,
+        selector: Union[JobSubsetSelector, JobSelector],
+        selected_asset_keys: Optional[AbstractSet[AssetKey]] = None,
+    ) -> Sequence[RemoteRepositoryAssetNode]:
+        keys = self.get_asset_keys_in_job(selector)
+        if not keys:
+            return []
+
+        if selected_asset_keys is not None:
+            keys = [key for key in keys if key in selected_asset_keys]
+
+        repo_asset_graph = self.get_repository(selector.repository_selector).asset_graph
         return [
-            repository.asset_graph.get(snap.asset_key)
-            for snap in snaps
-            if repository.asset_graph.has(snap.asset_key)
+            repo_asset_graph.get(asset_key) for asset_key in keys if repo_asset_graph.has(asset_key)
         ]
 
     def get_partition_sets(
@@ -713,6 +794,9 @@ class WorkspaceRequestContext(BaseWorkspaceRequestContext):
         if location_name in self._read_only_locations:
             return get_location_scoped_user_permissions(self._read_only_locations[location_name])
         return get_location_scoped_user_permissions(self._read_only)
+
+    def permissions_for_owner(self, *, owner: str) -> Mapping[str, PermissionResult]:
+        return {}
 
     def has_permission(self, permission: str) -> bool:
         permissions = self.permissions
@@ -924,6 +1008,9 @@ class WorkspaceProcessContext(IWorkspaceProcessContext):
 
     def permissions_for_location(self, *, location_name: str) -> Mapping[str, PermissionResult]:
         return get_location_scoped_user_permissions(True)
+
+    def permissions_for_owner(self, *, owner: str) -> Mapping[str, PermissionResult]:
+        return {}
 
     @property
     def version(self) -> str:
@@ -1165,3 +1252,25 @@ class WorkspaceProcessContext(IWorkspaceProcessContext):
             read_only=self.read_only,
             grpc_server_registry=self._grpc_server_registry,
         )
+
+
+def get_location_name_for_definition(remote_definition: RemoteDefinition) -> str:
+    if isinstance(remote_definition, RemoteAssetNode):
+        return (
+            remote_definition.resolve_to_singular_repo_scoped_node().repository_handle.location_name
+        )
+    elif isinstance(
+        remote_definition,
+        (RemoteJob, RemoteSchedule, RemoteSensor, RemoteAssetCheckNode),
+    ):
+        return remote_definition.handle.location_name
+    else:
+        check.failed(f"Unexpected remote definition type {type(remote_definition)}")
+
+
+def get_owners_for_definition(remote_definition: RemoteDefinition) -> Sequence[str]:
+    if isinstance(remote_definition, RemoteAssetCheckNode):
+        return []
+    if not remote_definition.owners:
+        return []
+    return remote_definition.owners

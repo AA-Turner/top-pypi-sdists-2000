@@ -15,7 +15,9 @@ class _FlashManager:
         """Initialize self.  See help(type(self)) for accurate signature."""
         ...
 
-    async def check_port_connection(self, process: typing.Optional[subprocess.Popen], timeout: int = 10): ...
+    async def is_port_connection_healthy(
+        self, process: typing.Optional[subprocess.Popen], timeout: float = 0.5
+    ) -> tuple[bool, typing.Optional[Exception]]: ...
     async def _start(self): ...
     async def _drain_container(self):
         """Background task that checks if we've encountered too many failures and drains the container if so."""
@@ -37,11 +39,15 @@ class FlashManager:
         health_check_url: typing.Optional[str] = None,
     ): ...
 
-    class __check_port_connection_spec(typing_extensions.Protocol[SUPERSELF]):
-        def __call__(self, /, process: typing.Optional[subprocess.Popen], timeout: int = 10): ...
-        async def aio(self, /, process: typing.Optional[subprocess.Popen], timeout: int = 10): ...
+    class __is_port_connection_healthy_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(
+            self, /, process: typing.Optional[subprocess.Popen], timeout: float = 0.5
+        ) -> tuple[bool, typing.Optional[Exception]]: ...
+        async def aio(
+            self, /, process: typing.Optional[subprocess.Popen], timeout: float = 0.5
+        ) -> tuple[bool, typing.Optional[Exception]]: ...
 
-    check_port_connection: __check_port_connection_spec[typing_extensions.Self]
+    is_port_connection_healthy: __is_port_connection_healthy_spec[typing_extensions.Self]
 
     class ___start_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /): ...
@@ -120,6 +126,7 @@ class _FlashPrometheusAutoscaler:
         target_metric_value: float,
         min_containers: typing.Optional[int],
         max_containers: typing.Optional[int],
+        buffer_containers: typing.Optional[int],
         scale_up_tolerance: float,
         scale_down_tolerance: float,
         scale_up_stabilization_window_seconds: int,
@@ -131,16 +138,31 @@ class _FlashPrometheusAutoscaler:
 
     async def start(self): ...
     async def _run_autoscaler_loop(self): ...
-    async def _compute_target_containers_internal(self, current_replicas: int) -> int:
+    async def _compute_target_containers(self, current_replicas: int) -> int:
         """Gets internal metrics from container to autoscale up or down."""
         ...
 
-    async def _compute_target_containers_prometheus(self, current_replicas: int) -> int: ...
+    def _calculate_desired_replicas(
+        self,
+        n_current_replicas: int,
+        sum_metric: float,
+        n_containers_with_metrics: int,
+        n_total_containers: int,
+        target_metric_value: float,
+    ) -> int:
+        """Calculate the desired number of replicas to autoscale to."""
+        ...
+
+    async def _get_scaling_info(self, containers) -> tuple[float, int]:
+        """Get metrics using either internal container metrics API or prometheus HTTP endpoints."""
+        ...
+
     async def _get_metrics(self, url: str) -> typing.Optional[dict[str, list[typing.Any]]]: ...
     async def _get_container_metrics(
         self, container_id: str
     ) -> typing.Optional[modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse]: ...
     async def _get_all_containers(self): ...
+    async def _set_target_slots(self, target_slots: int): ...
     def _make_scaling_decision(
         self,
         current_replicas: int,
@@ -149,6 +171,7 @@ class _FlashPrometheusAutoscaler:
         scale_down_stabilization_window_seconds: int = 300,
         min_containers: typing.Optional[int] = None,
         max_containers: typing.Optional[int] = None,
+        buffer_containers: typing.Optional[int] = None,
     ) -> int:
         """Return the target number of containers following (simplified) Kubernetes HPA
         stabilization-window semantics.
@@ -181,6 +204,7 @@ class FlashPrometheusAutoscaler:
         target_metric_value: float,
         min_containers: typing.Optional[int],
         max_containers: typing.Optional[int],
+        buffer_containers: typing.Optional[int],
         scale_up_tolerance: float,
         scale_down_tolerance: float,
         scale_up_stabilization_window_seconds: int,
@@ -200,7 +224,7 @@ class FlashPrometheusAutoscaler:
 
     _run_autoscaler_loop: ___run_autoscaler_loop_spec[typing_extensions.Self]
 
-    class ___compute_target_containers_internal_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___compute_target_containers_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /, current_replicas: int) -> int:
             """Gets internal metrics from container to autoscale up or down."""
             ...
@@ -209,13 +233,29 @@ class FlashPrometheusAutoscaler:
             """Gets internal metrics from container to autoscale up or down."""
             ...
 
-    _compute_target_containers_internal: ___compute_target_containers_internal_spec[typing_extensions.Self]
+    _compute_target_containers: ___compute_target_containers_spec[typing_extensions.Self]
 
-    class ___compute_target_containers_prometheus_spec(typing_extensions.Protocol[SUPERSELF]):
-        def __call__(self, /, current_replicas: int) -> int: ...
-        async def aio(self, /, current_replicas: int) -> int: ...
+    def _calculate_desired_replicas(
+        self,
+        n_current_replicas: int,
+        sum_metric: float,
+        n_containers_with_metrics: int,
+        n_total_containers: int,
+        target_metric_value: float,
+    ) -> int:
+        """Calculate the desired number of replicas to autoscale to."""
+        ...
 
-    _compute_target_containers_prometheus: ___compute_target_containers_prometheus_spec[typing_extensions.Self]
+    class ___get_scaling_info_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(self, /, containers) -> tuple[float, int]:
+            """Get metrics using either internal container metrics API or prometheus HTTP endpoints."""
+            ...
+
+        async def aio(self, /, containers) -> tuple[float, int]:
+            """Get metrics using either internal container metrics API or prometheus HTTP endpoints."""
+            ...
+
+    _get_scaling_info: ___get_scaling_info_spec[typing_extensions.Self]
 
     class ___get_metrics_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /, url: str) -> typing.Optional[dict[str, list[typing.Any]]]: ...
@@ -239,6 +279,12 @@ class FlashPrometheusAutoscaler:
 
     _get_all_containers: ___get_all_containers_spec[typing_extensions.Self]
 
+    class ___set_target_slots_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(self, /, target_slots: int): ...
+        async def aio(self, /, target_slots: int): ...
+
+    _set_target_slots: ___set_target_slots_spec[typing_extensions.Self]
+
     def _make_scaling_decision(
         self,
         current_replicas: int,
@@ -247,6 +293,7 @@ class FlashPrometheusAutoscaler:
         scale_down_stabilization_window_seconds: int = 300,
         min_containers: typing.Optional[int] = None,
         max_containers: typing.Optional[int] = None,
+        buffer_containers: typing.Optional[int] = None,
     ) -> int:
         """Return the target number of containers following (simplified) Kubernetes HPA
         stabilization-window semantics.
@@ -288,6 +335,7 @@ class __flash_prometheus_autoscaler_spec(typing_extensions.Protocol):
         scale_up_stabilization_window_seconds: int = 0,
         scale_down_stabilization_window_seconds: int = 300,
         autoscaling_interval_seconds: int = 15,
+        buffer_containers: typing.Optional[int] = None,
     ) -> FlashPrometheusAutoscaler:
         """Autoscale a Flash service based on containers' Prometheus metrics.
 
@@ -313,6 +361,7 @@ class __flash_prometheus_autoscaler_spec(typing_extensions.Protocol):
         scale_up_stabilization_window_seconds: int = 0,
         scale_down_stabilization_window_seconds: int = 300,
         autoscaling_interval_seconds: int = 15,
+        buffer_containers: typing.Optional[int] = None,
     ) -> FlashPrometheusAutoscaler:
         """Autoscale a Flash service based on containers' Prometheus metrics.
 

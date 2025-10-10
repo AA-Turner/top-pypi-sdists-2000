@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from argparse import ArgumentParser
     from collections.abc import Callable, Generator, Iterable, Mapping, Sequence
 
-    from virtualenv.app_data.base import AppData
+    from .app_data import AppData
 LOGGER = logging.getLogger(__name__)
 
 
@@ -27,8 +27,8 @@ class Builtin(Discover):
     app_data: AppData
     try_first_with: Sequence[str]
 
-    def __init__(self, options) -> None:
-        super().__init__(options)
+    def __init__(self, options, cache=None) -> None:
+        super().__init__(options, cache)
         self.python_spec = options.python or [sys.executable]
         if self._env.get("VIRTUALENV_PYTHON"):
             self.python_spec = self.python_spec[1:] + self.python_spec[:1]  # Rotate the list
@@ -60,7 +60,7 @@ class Builtin(Discover):
 
     def run(self) -> PythonInfo | None:
         for python_spec in self.python_spec:
-            result = get_interpreter(python_spec, self.try_first_with, self.app_data, self._env)
+            result = get_interpreter(python_spec, self.try_first_with, self.app_data, self.cache, self._env)
             if result is not None:
                 return result
         return None
@@ -71,13 +71,36 @@ class Builtin(Discover):
 
 
 def get_interpreter(
-    key, try_first_with: Iterable[str], app_data: AppData | None = None, env: Mapping[str, str] | None = None
+    key,
+    try_first_with: Iterable[str],
+    app_data: AppData | None = None,
+    cache=None,
+    env: Mapping[str, str] | None = None,
 ) -> PythonInfo | None:
+    """
+    Find an interpreter that matches a given specification.
+
+    :param key: the specification of the interpreter to find
+    :param try_first_with: a list of interpreters to try first
+    :param app_data: the application data folder
+    :param cache: a cache of python information
+    :param env: the environment to use
+    :return: the interpreter if found, otherwise None
+    """
+    if cache is None:
+        # Import locally to avoid a circular dependency
+        from virtualenv.app_data import AppDataDisabled  # noqa: PLC0415
+        from virtualenv.cache import FileCache  # noqa: PLC0415
+
+        if app_data is None:
+            app_data = AppDataDisabled()
+        cache = FileCache(store_factory=app_data.py_info, clearer=app_data.py_info_clear)
+
     spec = PythonSpec.from_string_spec(key)
     LOGGER.info("find interpreter for spec %r", spec)
     proposed_paths = set()
     env = os.environ if env is None else env
-    for interpreter, impl_must_match in propose_interpreters(spec, try_first_with, app_data, env):
+    for interpreter, impl_must_match in propose_interpreters(spec, try_first_with, app_data, cache, env):
         key = interpreter.system_executable, impl_must_match
         if key in proposed_paths:
             continue
@@ -93,6 +116,7 @@ def propose_interpreters(  # noqa: C901, PLR0912, PLR0915
     spec: PythonSpec,
     try_first_with: Iterable[str],
     app_data: AppData | None = None,
+    cache=None,
     env: Mapping[str, str] | None = None,
 ) -> Generator[tuple[PythonInfo, bool], None, None]:
     # 0. if it's a path and exists, and is absolute path, this is the only option we consider
@@ -108,7 +132,7 @@ def propose_interpreters(  # noqa: C901, PLR0912, PLR0915
             exe_id = fs_path_id(exe_raw)
             if exe_id not in tested_exes:
                 tested_exes.add(exe_id)
-                yield PythonInfo.from_exe(exe_raw, app_data, env=env), True
+                yield PythonInfo.from_exe(exe_raw, app_data, cache, env=env), True
         return
 
     # 1. try with first
@@ -124,7 +148,7 @@ def propose_interpreters(  # noqa: C901, PLR0912, PLR0915
             if exe_id in tested_exes:
                 continue
             tested_exes.add(exe_id)
-            yield PythonInfo.from_exe(exe_raw, app_data, env=env), True
+            yield PythonInfo.from_exe(exe_raw, app_data, cache, env=env), True
 
     # 1. if it's a path and exists
     if spec.path is not None:
@@ -137,12 +161,12 @@ def propose_interpreters(  # noqa: C901, PLR0912, PLR0915
             exe_id = fs_path_id(exe_raw)
             if exe_id not in tested_exes:
                 tested_exes.add(exe_id)
-                yield PythonInfo.from_exe(exe_raw, app_data, env=env), True
+                yield PythonInfo.from_exe(exe_raw, app_data, cache, env=env), True
         if spec.is_abs:
             return
     else:
         # 2. otherwise try with the current
-        current_python = PythonInfo.current_system(app_data)
+        current_python = PythonInfo.current_system(app_data, cache)
         exe_raw = str(current_python.executable)
         exe_id = fs_path_id(exe_raw)
         if exe_id not in tested_exes:
@@ -153,7 +177,7 @@ def propose_interpreters(  # noqa: C901, PLR0912, PLR0915
         if IS_WIN:
             from .windows import propose_interpreters  # noqa: PLC0415
 
-            for interpreter in propose_interpreters(spec, app_data, env):
+            for interpreter in propose_interpreters(spec, app_data, cache, env):
                 exe_raw = str(interpreter.executable)
                 exe_id = fs_path_id(exe_raw)
                 if exe_id in tested_exes:
@@ -171,7 +195,7 @@ def propose_interpreters(  # noqa: C901, PLR0912, PLR0915
             if exe_id in tested_exes:
                 continue
             tested_exes.add(exe_id)
-            interpreter = PathPythonInfo.from_exe(exe_raw, app_data, raise_on_error=False, env=env)
+            interpreter = PathPythonInfo.from_exe(exe_raw, app_data, cache, raise_on_error=False, env=env)
             if interpreter is not None:
                 yield interpreter, impl_must_match
 
@@ -184,7 +208,7 @@ def propose_interpreters(  # noqa: C901, PLR0912, PLR0915
         uv_python_path = user_data_path("uv") / "python"
 
     for exe_path in uv_python_path.glob("*/bin/python"):
-        interpreter = PathPythonInfo.from_exe(str(exe_path), app_data, raise_on_error=False, env=env)
+        interpreter = PathPythonInfo.from_exe(str(exe_path), app_data, cache, raise_on_error=False, env=env)
         if interpreter is not None:
             yield interpreter, True
 

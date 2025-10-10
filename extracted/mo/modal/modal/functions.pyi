@@ -68,7 +68,8 @@ class Function(
         info: modal._utils.function_utils.FunctionInfo,
         app,
         image: modal.image.Image,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = (),
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         schedule: typing.Optional[modal.schedule.Schedule] = None,
         is_generator: bool = False,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig, list[typing.Union[None, str, modal.gpu._GPUConfig]]] = None,
@@ -110,8 +111,12 @@ class Function(
         experimental_options: typing.Optional[dict[str, str]] = None,
         _experimental_proxy_ip: typing.Optional[str] = None,
         _experimental_custom_scaling_factor: typing.Optional[float] = None,
+        restrict_output: bool = False,
     ) -> Function:
-        """mdmd:hidden"""
+        """mdmd:hidden
+
+        Note: This is not intended to be public API.
+        """
         ...
 
     def _bind_parameters(
@@ -257,55 +262,6 @@ class Function(
         """
         ...
 
-    class __lookup_spec(typing_extensions.Protocol):
-        def __call__(
-            self,
-            /,
-            app_name: str,
-            name: str,
-            namespace=None,
-            client: typing.Optional[modal.client.Client] = None,
-            environment_name: typing.Optional[str] = None,
-        ) -> Function:
-            """mdmd:hidden
-            Lookup a Function from a deployed App by its name.
-
-            DEPRECATED: This method is deprecated in favor of `modal.Function.from_name`.
-
-            In contrast to `modal.Function.from_name`, this is an eager method
-            that will hydrate the local object with metadata from Modal servers.
-
-            ```python notest
-            f = modal.Function.lookup("other-app", "function")
-            ```
-            """
-            ...
-
-        async def aio(
-            self,
-            /,
-            app_name: str,
-            name: str,
-            namespace=None,
-            client: typing.Optional[modal.client.Client] = None,
-            environment_name: typing.Optional[str] = None,
-        ) -> Function:
-            """mdmd:hidden
-            Lookup a Function from a deployed App by its name.
-
-            DEPRECATED: This method is deprecated in favor of `modal.Function.from_name`.
-
-            In contrast to `modal.Function.from_name`, this is an eager method
-            that will hydrate the local object with metadata from Modal servers.
-
-            ```python notest
-            f = modal.Function.lookup("other-app", "function")
-            ```
-            """
-            ...
-
-    lookup: __lookup_spec
-
     @property
     def tag(self) -> str:
         """mdmd:hidden"""
@@ -445,7 +401,7 @@ class Function(
 
     _call_generator: ___call_generator_spec[typing_extensions.Self]
 
-    class __remote_spec(typing_extensions.Protocol[P_INNER, ReturnType_INNER, SUPERSELF]):
+    class __remote_spec(typing_extensions.Protocol[ReturnType_INNER, P_INNER, SUPERSELF]):
         def __call__(self, /, *args: P_INNER.args, **kwargs: P_INNER.kwargs) -> ReturnType_INNER:
             """Calls the function remotely, executing it with the given arguments and returning the execution's result."""
             ...
@@ -454,7 +410,7 @@ class Function(
             """Calls the function remotely, executing it with the given arguments and returning the execution's result."""
             ...
 
-    remote: __remote_spec[modal._functions.P, modal._functions.ReturnType, typing_extensions.Self]
+    remote: __remote_spec[modal._functions.ReturnType, modal._functions.P, typing_extensions.Self]
 
     class __remote_gen_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /, *args, **kwargs) -> typing.Generator[typing.Any, None, None]:
@@ -481,7 +437,7 @@ class Function(
         """
         ...
 
-    class ___experimental_spawn_spec(typing_extensions.Protocol[P_INNER, ReturnType_INNER, SUPERSELF]):
+    class ___experimental_spawn_spec(typing_extensions.Protocol[ReturnType_INNER, P_INNER, SUPERSELF]):
         def __call__(self, /, *args: P_INNER.args, **kwargs: P_INNER.kwargs) -> FunctionCall[ReturnType_INNER]:
             """[Experimental] Calls the function with the given arguments, without waiting for the results.
 
@@ -505,7 +461,7 @@ class Function(
             ...
 
     _experimental_spawn: ___experimental_spawn_spec[
-        modal._functions.P, modal._functions.ReturnType, typing_extensions.Self
+        modal._functions.ReturnType, modal._functions.P, typing_extensions.Self
     ]
 
     class ___spawn_map_inner_spec(typing_extensions.Protocol[P_INNER, SUPERSELF]):
@@ -514,7 +470,7 @@ class Function(
 
     _spawn_map_inner: ___spawn_map_inner_spec[modal._functions.P, typing_extensions.Self]
 
-    class __spawn_spec(typing_extensions.Protocol[P_INNER, ReturnType_INNER, SUPERSELF]):
+    class __spawn_spec(typing_extensions.Protocol[ReturnType_INNER, P_INNER, SUPERSELF]):
         def __call__(self, /, *args: P_INNER.args, **kwargs: P_INNER.kwargs) -> FunctionCall[ReturnType_INNER]:
             """Calls the function with the given arguments, without waiting for the results.
 
@@ -535,7 +491,7 @@ class Function(
             """
             ...
 
-    spawn: __spawn_spec[modal._functions.P, modal._functions.ReturnType, typing_extensions.Self]
+    spawn: __spawn_spec[modal._functions.ReturnType, modal._functions.P, typing_extensions.Self]
 
     def get_raw_f(self) -> collections.abc.Callable[..., typing.Any]:
         """Return the inner Python object wrapped by this Modal Function."""

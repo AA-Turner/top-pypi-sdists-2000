@@ -442,17 +442,6 @@ class _Secret(modal._object._Object):
         ...
 
     @staticmethod
-    async def lookup(
-        name: str,
-        namespace=None,
-        client: typing.Optional[modal.client._Client] = None,
-        environment_name: typing.Optional[str] = None,
-        required_keys: list[str] = [],
-    ) -> _Secret:
-        """mdmd:hidden"""
-        ...
-
-    @staticmethod
     async def create_deployed(
         deployment_name: str,
         env_dict: dict[str, str],
@@ -571,33 +560,6 @@ class Secret(modal.object.Object):
         ```
         """
         ...
-
-    class __lookup_spec(typing_extensions.Protocol):
-        def __call__(
-            self,
-            /,
-            name: str,
-            namespace=None,
-            client: typing.Optional[modal.client.Client] = None,
-            environment_name: typing.Optional[str] = None,
-            required_keys: list[str] = [],
-        ) -> Secret:
-            """mdmd:hidden"""
-            ...
-
-        async def aio(
-            self,
-            /,
-            name: str,
-            namespace=None,
-            client: typing.Optional[modal.client.Client] = None,
-            environment_name: typing.Optional[str] = None,
-            required_keys: list[str] = [],
-        ) -> Secret:
-            """mdmd:hidden"""
-            ...
-
-    lookup: __lookup_spec
 
     class __create_deployed_spec(typing_extensions.Protocol):
         def __call__(

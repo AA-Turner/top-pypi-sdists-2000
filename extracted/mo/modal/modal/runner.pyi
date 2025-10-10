@@ -43,7 +43,8 @@ async def _publish_app(
     functions: dict[str, modal._functions._Function],
     classes: dict[str, modal.cls._Cls],
     name: str = "",
-    tag: str = "",
+    tags: dict[str, str] = {},
+    deployment_tag: str = "",
     commit_info: typing.Optional[modal_proto.api_pb2.CommitInfo] = None,
 ) -> tuple[str, list[modal_proto.api_pb2.Warning]]:
     """Wrapper for AppPublish RPC."""

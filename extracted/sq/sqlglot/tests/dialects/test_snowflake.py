@@ -26,6 +26,9 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT ROUND(123.456, -1)")
         self.validate_identity("SELECT ROUND(123.456, 2, 'HALF_AWAY_FROM_ZERO')")
 
+        self.validate_identity("SELECT FLOOR(x)")
+        self.validate_identity("SELECT FLOOR(135.135, 1)")
+        self.validate_identity("SELECT FLOOR(x, -1)")
         self.assertEqual(
             # Ensures we don't fail when generating ParseJSON with the `safe` arg set to `True`
             self.validate_identity("""SELECT TRY_PARSE_JSON('{"x: 1}')""").sql(),
@@ -37,6 +40,7 @@ class TestSnowflake(Validator):
         self.assertEqual(expr.sql(dialect="snowflake"), "SELECT APPROX_TOP_K(C4, 3, 5) FROM t")
 
         self.validate_identity("SELECT EXP(1)")
+        self.validate_identity("SELECT FACTORIAL(5)")
         self.validate_identity("SELECT BIT_LENGTH('abc')")
         self.validate_identity("SELECT BIT_LENGTH(x'A1B2')")
         self.validate_identity("SELECT RTRIMMED_LENGTH(' ABCD ')")
@@ -55,6 +59,9 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT SOUNDEX(column_name)")
         self.validate_identity("SELECT SOUNDEX_P123(column_name)")
         self.validate_identity("SELECT ABS(x)")
+        self.validate_identity("SELECT ASIN(0.5)")
+        self.validate_identity("SELECT ATANH(0.5)")
+        self.validate_identity("SELECT CBRT(27.0)")
         self.validate_identity("SELECT SIGN(x)")
         self.validate_identity("SELECT COSH(1.5)")
         self.validate_identity("SELECT JAROWINKLER_SIMILARITY('hello', 'world')")

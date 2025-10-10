@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: prefect
-Version: 3.4.22
+Version: 3.4.23
 Summary: Workflow orchestration and management.
 Project-URL: Changelog, https://github.com/PrefectHQ/prefect/releases
 Project-URL: Documentation, https://docs.prefect.io
@@ -75,7 +75,7 @@ Requires-Dist: typing-extensions<5.0.0,>=4.10.0
 Requires-Dist: uv>=0.6.0
 Requires-Dist: uvicorn!=0.29.0,>=0.14.0
 Requires-Dist: websockets<16.0,>=13.0
-Requires-Dist: whenever<0.9.0,>=0.7.3; python_version >= '3.13'
+Requires-Dist: whenever<0.10.0,>=0.7.3; python_version >= '3.13'
 Provides-Extra: aws
 Requires-Dist: prefect-aws>=0.5.8; extra == 'aws'
 Provides-Extra: azure

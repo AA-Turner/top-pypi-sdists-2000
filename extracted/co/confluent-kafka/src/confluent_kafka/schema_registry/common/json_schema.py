@@ -73,19 +73,27 @@ def transform(
     field_ctx = ctx.current_field()
     if field_ctx is not None:
         field_ctx.field_type = get_type(schema)
+    original_type = schema.get("type")
+    if isinstance(original_type, list) and len(original_type) > 0:
+        subschema = _validate_subtypes(schema, message, ref_registry)
+        try:
+            if subschema is not None:
+                return transform(ctx, subschema, ref_registry, ref_resolver, path, message, field_transform)
+        finally:
+            schema["type"] = original_type  # restore original type
     all_of = schema.get("allOf")
     if all_of is not None:
-        subschema = _validate_subschemas(all_of, message, ref_registry)
+        subschema = _validate_subschemas(all_of, message, ref_registry, ref_resolver)
         if subschema is not None:
             return transform(ctx, subschema, ref_registry, ref_resolver, path, message, field_transform)
     any_of = schema.get("anyOf")
     if any_of is not None:
-        subschema = _validate_subschemas(any_of, message, ref_registry)
+        subschema = _validate_subschemas(any_of, message, ref_registry, ref_resolver)
         if subschema is not None:
             return transform(ctx, subschema, ref_registry, ref_resolver, path, message, field_transform)
     one_of = schema.get("oneOf")
     if one_of is not None:
-        subschema = _validate_subschemas(one_of, message, ref_registry)
+        subschema = _validate_subschemas(one_of, message, ref_registry, ref_resolver)
         if subschema is not None:
             return transform(ctx, subschema, ref_registry, ref_resolver, path, message, field_transform)
     items = schema.get("items")
@@ -125,25 +133,47 @@ def _transform_field(
             get_type(prop_schema),
             get_inline_tags(prop_schema)
         )
-        value = message[prop_name]
-        new_value = transform(ctx, prop_schema, ref_registry, ref_resolver, full_name, value, field_transform)
-        if ctx.rule.kind == RuleKind.CONDITION:
-            if new_value is False:
-                raise RuleConditionError(ctx.rule)
-        else:
-            message[prop_name] = new_value
+        value = message.get(prop_name)
+        if value is not None:
+            new_value = transform(ctx, prop_schema, ref_registry, ref_resolver, full_name, value, field_transform)
+            if ctx.rule.kind == RuleKind.CONDITION:
+                if new_value is False:
+                    raise RuleConditionError(ctx.rule)
+            else:
+                message[prop_name] = new_value
     finally:
         ctx.exit_field()
+
+
+def _validate_subtypes(
+    schema: JsonSchema, message: JsonMessage, registry: Registry
+) -> Optional[JsonSchema]:
+    schema_type = schema.get("type")
+    if not isinstance(schema_type, list) or len(schema_type) == 0:
+        return None
+    for typ in schema_type:
+        schema["type"] = typ
+        try:
+            validate(instance=message, schema=schema, registry=registry)
+            return schema
+        except ValidationError:
+            pass
+    return None
 
 
 def _validate_subschemas(
     subschemas: List[JsonSchema],
     message: JsonMessage,
-    registry: Registry
+    registry: Registry,
+    resolver: Resolver,
 ) -> Optional[JsonSchema]:
     for subschema in subschemas:
         try:
-            validate(instance=message, schema=subschema, registry=registry)
+            ref = subschema.get("$ref")
+            if ref is not None:
+                # resolve $ref before validating
+                subschema = resolver.lookup(ref).contents
+            validate(instance=message, schema=subschema, registry=registry, resolver=resolver)
             return subschema
         except ValidationError:
             pass
@@ -178,6 +208,11 @@ def get_type(schema: JsonSchema) -> FieldType:
         return FieldType.BOOLEAN
     if schema_type == "null":
         return FieldType.NULL
+
+    props = schema.get("properties")
+    if props is not None:
+        return FieldType.RECORD
+
     return FieldType.NULL
 
 

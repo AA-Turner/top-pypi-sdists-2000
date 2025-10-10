@@ -14,8 +14,6 @@ from ._helpers import (
 T = TypeVar("T")
 F = TypeVar("F", bound=Callable)
 
-Decorator = Callable[[F], F]
-
 
 class OptionStackItem(NamedTuple):
     param_decls: Tuple[str, ...]
@@ -97,7 +95,7 @@ class _OptGroup:
         help: Optional[str] = None,
         cls: Optional[Type[OptionGroup]] = None,
         **attrs: Any,
-    ) -> Decorator[F]:
+    ) -> Callable[[F], F]:
         """The decorator creates a new group and collects its options
 
         Creates the option group and registers all grouped options
@@ -153,7 +151,7 @@ class _OptGroup:
 
         return decorator
 
-    def option(self, *param_decls: str, **attrs: Any) -> Decorator[F]:
+    def option(self, *param_decls: str, **attrs: Any) -> Callable[[F], F]:
         """The decorator adds a new option to the group
 
         The decorator is lazy. It adds option decls and attrs.
@@ -177,7 +175,7 @@ class _OptGroup:
 
         return decorator
 
-    def help_option(self, *param_decls: str, **attrs: Any) -> Decorator[F]:
+    def help_option(self, *param_decls: str, **attrs: Any) -> Callable[[F], F]:
         """This decorator adds a help option to the group, which prints
         the command's help text and exits.
         """

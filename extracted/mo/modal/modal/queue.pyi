@@ -480,29 +480,6 @@ class _Queue(modal._object._Object):
         ...
 
     @staticmethod
-    async def lookup(
-        name: str,
-        namespace=None,
-        client: typing.Optional[modal.client._Client] = None,
-        environment_name: typing.Optional[str] = None,
-        create_if_missing: bool = False,
-    ) -> _Queue:
-        """mdmd:hidden
-        Lookup a named Queue.
-
-        DEPRECATED: This method is deprecated in favor of `modal.Queue.from_name`.
-
-        In contrast to `modal.Queue.from_name`, this is an eager method
-        that will hydrate the local object with metadata from Modal servers.
-
-        ```python notest
-        q = modal.Queue.lookup("my-queue")
-        q.put(123)
-        ```
-        """
-        ...
-
-    @staticmethod
     async def delete(
         name: str,
         *,
@@ -758,57 +735,6 @@ class Queue(modal.object.Object):
         ```
         """
         ...
-
-    class __lookup_spec(typing_extensions.Protocol):
-        def __call__(
-            self,
-            /,
-            name: str,
-            namespace=None,
-            client: typing.Optional[modal.client.Client] = None,
-            environment_name: typing.Optional[str] = None,
-            create_if_missing: bool = False,
-        ) -> Queue:
-            """mdmd:hidden
-            Lookup a named Queue.
-
-            DEPRECATED: This method is deprecated in favor of `modal.Queue.from_name`.
-
-            In contrast to `modal.Queue.from_name`, this is an eager method
-            that will hydrate the local object with metadata from Modal servers.
-
-            ```python notest
-            q = modal.Queue.lookup("my-queue")
-            q.put(123)
-            ```
-            """
-            ...
-
-        async def aio(
-            self,
-            /,
-            name: str,
-            namespace=None,
-            client: typing.Optional[modal.client.Client] = None,
-            environment_name: typing.Optional[str] = None,
-            create_if_missing: bool = False,
-        ) -> Queue:
-            """mdmd:hidden
-            Lookup a named Queue.
-
-            DEPRECATED: This method is deprecated in favor of `modal.Queue.from_name`.
-
-            In contrast to `modal.Queue.from_name`, this is an eager method
-            that will hydrate the local object with metadata from Modal servers.
-
-            ```python notest
-            q = modal.Queue.lookup("my-queue")
-            q.put(123)
-            ```
-            """
-            ...
-
-    lookup: __lookup_spec
 
     class __delete_spec(typing_extensions.Protocol):
         def __call__(

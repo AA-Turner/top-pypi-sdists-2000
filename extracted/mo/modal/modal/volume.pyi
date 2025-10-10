@@ -534,30 +534,6 @@ class _Volume(modal._object._Object):
         ...
 
     @staticmethod
-    async def lookup(
-        name: str,
-        namespace=None,
-        client: typing.Optional[modal.client._Client] = None,
-        environment_name: typing.Optional[str] = None,
-        create_if_missing: bool = False,
-        version: typing.Optional[int] = None,
-    ) -> _Volume:
-        """mdmd:hidden
-        Lookup a named Volume.
-
-        DEPRECATED: This method is deprecated in favor of `modal.Volume.from_name`.
-
-        In contrast to `modal.Volume.from_name`, this is an eager method
-        that will hydrate the local object with metadata from Modal servers.
-
-        ```python notest
-        vol = modal.Volume.from_name("my-volume")
-        print(vol.listdir("/"))
-        ```
-        """
-        ...
-
-    @staticmethod
     async def create_deployed(
         deployment_name: str,
         namespace=None,
@@ -865,59 +841,6 @@ class Volume(modal.object.Object):
         ```
         """
         ...
-
-    class __lookup_spec(typing_extensions.Protocol):
-        def __call__(
-            self,
-            /,
-            name: str,
-            namespace=None,
-            client: typing.Optional[modal.client.Client] = None,
-            environment_name: typing.Optional[str] = None,
-            create_if_missing: bool = False,
-            version: typing.Optional[int] = None,
-        ) -> Volume:
-            """mdmd:hidden
-            Lookup a named Volume.
-
-            DEPRECATED: This method is deprecated in favor of `modal.Volume.from_name`.
-
-            In contrast to `modal.Volume.from_name`, this is an eager method
-            that will hydrate the local object with metadata from Modal servers.
-
-            ```python notest
-            vol = modal.Volume.from_name("my-volume")
-            print(vol.listdir("/"))
-            ```
-            """
-            ...
-
-        async def aio(
-            self,
-            /,
-            name: str,
-            namespace=None,
-            client: typing.Optional[modal.client.Client] = None,
-            environment_name: typing.Optional[str] = None,
-            create_if_missing: bool = False,
-            version: typing.Optional[int] = None,
-        ) -> Volume:
-            """mdmd:hidden
-            Lookup a named Volume.
-
-            DEPRECATED: This method is deprecated in favor of `modal.Volume.from_name`.
-
-            In contrast to `modal.Volume.from_name`, this is an eager method
-            that will hydrate the local object with metadata from Modal servers.
-
-            ```python notest
-            vol = modal.Volume.from_name("my-volume")
-            print(vol.listdir("/"))
-            ```
-            """
-            ...
-
-    lookup: __lookup_spec
 
     class __create_deployed_spec(typing_extensions.Protocol):
         def __call__(

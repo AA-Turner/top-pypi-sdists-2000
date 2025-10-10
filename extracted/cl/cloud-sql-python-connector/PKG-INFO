@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: cloud-sql-python-connector
-Version: 1.18.4
+Version: 1.18.5
 Summary: Google Cloud SQL Python Connector library
 Author-email: Google LLC <googleapis-packages@google.com>
 License-Expression: Apache-2.0
@@ -605,7 +605,7 @@ from google.cloud.sql.connector import Connector, create_async_connector
 
 async def main():
     # initialize Connector object for connections to Cloud SQL
-    connector = create_async_connector()
+    connector = await create_async_connector()
 
     # creation function to generate asyncpg connections as the 'connect' arg
     async def getconn(instance_connection_name, **kwargs) -> asyncpg.Connection:

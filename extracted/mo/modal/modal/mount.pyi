@@ -190,30 +190,6 @@ class _Mount(modal._object._Object):
         ...
 
     @staticmethod
-    def from_local_dir(
-        local_path: typing.Union[str, pathlib.Path],
-        *,
-        remote_path: typing.Union[str, pathlib.PurePosixPath, None] = None,
-        condition: typing.Optional[collections.abc.Callable[[str], bool]] = None,
-        recursive: bool = True,
-    ) -> _Mount:
-        """**Deprecated:** Use image.add_local_dir() instead
-
-        Create a `Mount` from a local directory.
-
-        **Usage**
-
-        ```python notest
-        assets = modal.Mount.from_local_dir(
-            "~/assets",
-            condition=lambda pth: not ".venv" in pth,
-            remote_path="/assets",
-        )
-        ```
-        """
-        ...
-
-    @staticmethod
     def _from_local_dir(
         local_path: typing.Union[str, pathlib.Path],
         *,
@@ -230,26 +206,6 @@ class _Mount(modal._object._Object):
         ...
 
     @staticmethod
-    def from_local_file(
-        local_path: typing.Union[str, pathlib.Path], remote_path: typing.Union[str, pathlib.PurePosixPath, None] = None
-    ) -> _Mount:
-        """**Deprecated**: Use image.add_local_file() instead
-
-        Create a `Mount` mounting a single local file.
-
-        **Usage**
-
-        ```python notest
-        # Mount the DBT profile in user's home directory into container.
-        dbt_profiles = modal.Mount.from_local_file(
-            local_path="~/profiles.yml",
-            remote_path="/root/dbt_profile/profiles.yml",
-        )
-        ```
-        """
-        ...
-
-    @staticmethod
     def _from_local_file(
         local_path: typing.Union[str, pathlib.Path], remote_path: typing.Union[str, pathlib.PurePosixPath, None] = None
     ) -> _Mount: ...
@@ -263,36 +219,6 @@ class _Mount(modal._object._Object):
         self: _Mount, resolver: modal._resolver.Resolver, existing_object_id: typing.Optional[str]
     ): ...
     @staticmethod
-    def from_local_python_packages(
-        *module_names: str,
-        remote_dir: typing.Union[str, pathlib.PurePosixPath] = "/root",
-        condition: typing.Optional[collections.abc.Callable[[str], bool]] = None,
-        ignore: typing.Union[typing.Sequence[str], collections.abc.Callable[[pathlib.Path], bool], None] = None,
-    ) -> _Mount:
-        """**Deprecated**: Use image.add_local_python_source instead
-
-        Returns a `modal.Mount` that makes local modules listed in `module_names` available inside the container.
-        This works by mounting the local path of each module's package to a directory inside the container
-        that's on `PYTHONPATH`.
-
-        **Usage**
-
-        ```python notest
-        import modal
-        import my_local_module
-
-        app = modal.App()
-
-        @app.function(mounts=[
-            modal.Mount.from_local_python_packages("my_local_module", "my_other_module"),
-        ])
-        def f():
-            my_local_module.do_stuff()
-        ```
-        """
-        ...
-
-    @staticmethod
     def _from_local_python_packages(
         *module_names: str,
         remote_dir: typing.Union[str, pathlib.PurePosixPath] = "/root",
@@ -301,17 +227,6 @@ class _Mount(modal._object._Object):
     ) -> _Mount: ...
     @staticmethod
     def from_name(name: str, *, namespace=1, environment_name: typing.Optional[str] = None) -> _Mount:
-        """mdmd:hidden"""
-        ...
-
-    @classmethod
-    async def lookup(
-        cls: type[_Mount],
-        name: str,
-        namespace=1,
-        client: typing.Optional[modal.client._Client] = None,
-        environment_name: typing.Optional[str] = None,
-    ) -> _Mount:
         """mdmd:hidden"""
         ...
 
@@ -394,30 +309,6 @@ class Mount(modal.object.Object):
         ...
 
     @staticmethod
-    def from_local_dir(
-        local_path: typing.Union[str, pathlib.Path],
-        *,
-        remote_path: typing.Union[str, pathlib.PurePosixPath, None] = None,
-        condition: typing.Optional[collections.abc.Callable[[str], bool]] = None,
-        recursive: bool = True,
-    ) -> Mount:
-        """**Deprecated:** Use image.add_local_dir() instead
-
-        Create a `Mount` from a local directory.
-
-        **Usage**
-
-        ```python notest
-        assets = modal.Mount.from_local_dir(
-            "~/assets",
-            condition=lambda pth: not ".venv" in pth,
-            remote_path="/assets",
-        )
-        ```
-        """
-        ...
-
-    @staticmethod
     def _from_local_dir(
         local_path: typing.Union[str, pathlib.Path],
         *,
@@ -431,26 +322,6 @@ class Mount(modal.object.Object):
         remote_path: typing.Union[str, pathlib.PurePosixPath, None] = None,
     ) -> Mount:
         """Add a local file to the `Mount` object."""
-        ...
-
-    @staticmethod
-    def from_local_file(
-        local_path: typing.Union[str, pathlib.Path], remote_path: typing.Union[str, pathlib.PurePosixPath, None] = None
-    ) -> Mount:
-        """**Deprecated**: Use image.add_local_file() instead
-
-        Create a `Mount` mounting a single local file.
-
-        **Usage**
-
-        ```python notest
-        # Mount the DBT profile in user's home directory into container.
-        dbt_profiles = modal.Mount.from_local_file(
-            local_path="~/profiles.yml",
-            remote_path="/root/dbt_profile/profiles.yml",
-        )
-        ```
-        """
         ...
 
     @staticmethod
@@ -477,36 +348,6 @@ class Mount(modal.object.Object):
     _load_mount: ___load_mount_spec[typing_extensions.Self]
 
     @staticmethod
-    def from_local_python_packages(
-        *module_names: str,
-        remote_dir: typing.Union[str, pathlib.PurePosixPath] = "/root",
-        condition: typing.Optional[collections.abc.Callable[[str], bool]] = None,
-        ignore: typing.Union[typing.Sequence[str], collections.abc.Callable[[pathlib.Path], bool], None] = None,
-    ) -> Mount:
-        """**Deprecated**: Use image.add_local_python_source instead
-
-        Returns a `modal.Mount` that makes local modules listed in `module_names` available inside the container.
-        This works by mounting the local path of each module's package to a directory inside the container
-        that's on `PYTHONPATH`.
-
-        **Usage**
-
-        ```python notest
-        import modal
-        import my_local_module
-
-        app = modal.App()
-
-        @app.function(mounts=[
-            modal.Mount.from_local_python_packages("my_local_module", "my_other_module"),
-        ])
-        def f():
-            my_local_module.do_stuff()
-        ```
-        """
-        ...
-
-    @staticmethod
     def _from_local_python_packages(
         *module_names: str,
         remote_dir: typing.Union[str, pathlib.PurePosixPath] = "/root",
@@ -515,17 +356,6 @@ class Mount(modal.object.Object):
     ) -> Mount: ...
     @staticmethod
     def from_name(name: str, *, namespace=1, environment_name: typing.Optional[str] = None) -> Mount:
-        """mdmd:hidden"""
-        ...
-
-    @classmethod
-    def lookup(
-        cls: type[Mount],
-        name: str,
-        namespace=1,
-        client: typing.Optional[modal.client.Client] = None,
-        environment_name: typing.Optional[str] = None,
-    ) -> Mount:
         """mdmd:hidden"""
         ...
 

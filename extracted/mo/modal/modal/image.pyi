@@ -2,6 +2,7 @@ import collections.abc
 import google.protobuf.message
 import modal._functions
 import modal._object
+import modal.app
 import modal.client
 import modal.cloud_bucket_mount
 import modal.functions
@@ -90,7 +91,6 @@ def _create_context_mount_function(
     ],
     dockerfile_cmds: list[str] = [],
     dockerfile_path: typing.Optional[pathlib.Path] = None,
-    context_mount: typing.Optional[modal.mount._Mount] = None,
     context_dir: typing.Union[str, pathlib.Path, None] = None,
 ): ...
 
@@ -166,7 +166,7 @@ class _Image(modal._object._Object):
                 [typing.Literal["2023.12", "2024.04", "2024.10", "2025.06", "PREVIEW"]], DockerfileSpec
             ]
         ] = None,
-        secrets: typing.Optional[collections.abc.Sequence[modal.secret._Secret]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu_config: typing.Optional[modal_proto.api_pb2.GPUConfig] = None,
         build_function: typing.Optional[modal._functions._Function] = None,
         build_function_input: typing.Optional[modal_proto.api_pb2.FunctionInput] = None,
@@ -318,6 +318,59 @@ class _Image(modal._object._Object):
         """
         ...
 
+    async def build(self, app: modal.app._App) -> _Image:
+        """Eagerly build an image.
+
+        If your image was previously built, then this method will not rebuild your image
+        and your cached image is returned.
+
+        **Examples**
+
+        ```python
+        image = modal.Image.debian_slim().uv_pip_install("scipy", "numpy")
+
+        app = modal.App("build-image")
+        with modal.enable_output(), app.run():
+            image.build(app)
+
+        # Save the image id
+        my_image_id = image.object_id
+
+        # Reference the image with the id or uses it another context.
+        built_image = modal.Image.from_id(my_image_id)
+        ```
+
+        Alternatively, you can pre-build a image and use it in a sandbox.
+
+        ```python notest
+        app = modal.App.lookup("sandbox-example")
+
+        with modal.enable_output():
+            image = modal.Image.debian_slim().uv_pip_install("scipy")
+            image.build(app)
+
+        sb = modal.Sandbox.create("python", "-c", "import scipy; print(scipy)", app=app, image=image)
+        print(sb.stdout.read())
+        sb.terminate()
+        ```
+
+        **Note**
+
+        For defining Modal functions, images are built automatically when deploying or running an App.
+        You do not need to built the image explicitly:
+
+        ```python notest
+        app = modal.App()
+        image = modal.Image.debian_slim()
+
+        # No need to explicitly build the image for defining a function.
+        @app.function(image=image)
+        def f():
+            ...
+        ```
+        """
+        ...
+
     def pip_install(
         self,
         *packages: typing.Union[str, list[str]],
@@ -327,7 +380,8 @@ class _Image(modal._object._Object):
         pre: bool = False,
         extra_options: str = "",
         force_build: bool = False,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> _Image:
         """Install a list of Python packages using pip.
@@ -369,7 +423,8 @@ class _Image(modal._object._Object):
         pre: bool = False,
         extra_options: str = "",
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         force_build: bool = False,
     ) -> _Image:
         """Install a list of Python packages from private git repositories using pip.
@@ -414,7 +469,8 @@ class _Image(modal._object._Object):
         pre: bool = False,
         extra_options: str = "",
         force_build: bool = False,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> _Image:
         """Install a list of Python packages from a local `requirements.txt` file."""
@@ -431,7 +487,8 @@ class _Image(modal._object._Object):
         pre: bool = False,
         extra_options: str = "",
         force_build: bool = False,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> _Image:
         """Install dependencies specified by a local `pyproject.toml` file.
@@ -454,7 +511,8 @@ class _Image(modal._object._Object):
         extra_options: str = "",
         force_build: bool = False,
         uv_version: typing.Optional[str] = None,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> _Image:
         """Install a list of Python packages using uv pip install.
@@ -487,7 +545,8 @@ class _Image(modal._object._Object):
         only: list[str] = [],
         poetry_version: typing.Optional[str] = "latest",
         old_installer: bool = False,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> _Image:
         """Install poetry *dependencies* specified by a local `pyproject.toml` file.
@@ -514,7 +573,8 @@ class _Image(modal._object._Object):
         frozen: bool = True,
         extra_options: str = "",
         uv_version: typing.Optional[str] = None,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> _Image:
         """Creates a virtual environment with the dependencies in a uv managed project with `uv sync`.
@@ -527,6 +587,15 @@ class _Image(modal._object._Object):
         The `pyproject.toml` and `uv.lock` in `uv_project_dir` are automatically added to the build context. The
         `uv_project_dir` is relative to the current working directory of where `modal` is called.
 
+        NOTE: This does *not* install the project itself into the environment (this is equivalent to the
+        `--no-install-project` flag in the `uv sync` command) and you would be expected to add any local python source
+        files using `Image.add_local_python_source` or similar methods after this call.
+
+        This ensures that updates to your project code wouldn't require reinstalling third-party dependencies
+        after every change.
+
+        uv workspaces are currently not supported.
+
         Added in v1.1.0.
         """
         ...
@@ -535,9 +604,9 @@ class _Image(modal._object._Object):
         self,
         *dockerfile_commands: typing.Union[str, list[str]],
         context_files: dict[str, str] = {},
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
-        context_mount: typing.Optional[modal.mount._Mount] = None,
         context_dir: typing.Union[str, pathlib.Path, None] = None,
         force_build: bool = False,
         ignore: typing.Union[
@@ -597,7 +666,8 @@ class _Image(modal._object._Object):
     def run_commands(
         self,
         *commands: typing.Union[str, list[str]],
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
         force_build: bool = False,
     ) -> _Image:
@@ -615,7 +685,8 @@ class _Image(modal._object._Object):
         spec_file: typing.Optional[str] = None,
         channels: list[str] = [],
         force_build: bool = False,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> _Image:
         """Install a list of additional packages using micromamba."""
@@ -753,10 +824,10 @@ class _Image(modal._object._Object):
     def from_dockerfile(
         path: typing.Union[str, pathlib.Path],
         *,
-        context_mount: typing.Optional[modal.mount._Mount] = None,
         force_build: bool = False,
         context_dir: typing.Union[str, pathlib.Path, None] = None,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
         add_python: typing.Optional[str] = None,
         build_args: dict[str, str] = {},
@@ -824,7 +895,8 @@ class _Image(modal._object._Object):
         self,
         *packages: typing.Union[str, list[str]],
         force_build: bool = False,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> _Image:
         """Install a list of Debian packages using `apt`.
@@ -841,7 +913,8 @@ class _Image(modal._object._Object):
         self,
         raw_f: collections.abc.Callable[..., typing.Any],
         *,
-        secrets: collections.abc.Sequence[modal.secret._Secret] = (),
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
         volumes: dict[
             typing.Union[str, pathlib.PurePosixPath],
             typing.Union[modal.volume._Volume, modal.cloud_bucket_mount._CloudBucketMount],
@@ -1008,7 +1081,7 @@ class Image(modal.object.Object):
                 [typing.Literal["2023.12", "2024.04", "2024.10", "2025.06", "PREVIEW"]], DockerfileSpec
             ]
         ] = None,
-        secrets: typing.Optional[collections.abc.Sequence[modal.secret.Secret]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu_config: typing.Optional[modal_proto.api_pb2.GPUConfig] = None,
         build_function: typing.Optional[modal.functions.Function] = None,
         build_function_input: typing.Optional[modal_proto.api_pb2.FunctionInput] = None,
@@ -1169,6 +1242,115 @@ class Image(modal.object.Object):
 
     from_id: __from_id_spec
 
+    class __build_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(self, /, app: modal.app.App) -> Image:
+            """Eagerly build an image.
+
+            If your image was previously built, then this method will not rebuild your image
+            and your cached image is returned.
+
+            **Examples**
+
+            ```python
+            image = modal.Image.debian_slim().uv_pip_install("scipy", "numpy")
+
+            app = modal.App("build-image")
+            with modal.enable_output(), app.run():
+                image.build(app)
+
+            # Save the image id
+            my_image_id = image.object_id
+
+            # Reference the image with the id or uses it another context.
+            built_image = modal.Image.from_id(my_image_id)
+            ```
+
+            Alternatively, you can pre-build a image and use it in a sandbox.
+
+            ```python notest
+            app = modal.App.lookup("sandbox-example")
+
+            with modal.enable_output():
+                image = modal.Image.debian_slim().uv_pip_install("scipy")
+                image.build(app)
+
+            sb = modal.Sandbox.create("python", "-c", "import scipy; print(scipy)", app=app, image=image)
+            print(sb.stdout.read())
+            sb.terminate()
+            ```
+
+            **Note**
+
+            For defining Modal functions, images are built automatically when deploying or running an App.
+            You do not need to built the image explicitly:
+
+            ```python notest
+            app = modal.App()
+            image = modal.Image.debian_slim()
+
+            # No need to explicitly build the image for defining a function.
+            @app.function(image=image)
+            def f():
+                ...
+            ```
+            """
+            ...
+
+        async def aio(self, /, app: modal.app.App) -> Image:
+            """Eagerly build an image.
+
+            If your image was previously built, then this method will not rebuild your image
+            and your cached image is returned.
+
+            **Examples**
+
+            ```python
+            image = modal.Image.debian_slim().uv_pip_install("scipy", "numpy")
+
+            app = modal.App("build-image")
+            with modal.enable_output(), app.run():
+                image.build(app)
+
+            # Save the image id
+            my_image_id = image.object_id
+
+            # Reference the image with the id or uses it another context.
+            built_image = modal.Image.from_id(my_image_id)
+            ```
+
+            Alternatively, you can pre-build a image and use it in a sandbox.
+
+            ```python notest
+            app = modal.App.lookup("sandbox-example")
+
+            with modal.enable_output():
+                image = modal.Image.debian_slim().uv_pip_install("scipy")
+                image.build(app)
+
+            sb = modal.Sandbox.create("python", "-c", "import scipy; print(scipy)", app=app, image=image)
+            print(sb.stdout.read())
+            sb.terminate()
+            ```
+
+            **Note**
+
+            For defining Modal functions, images are built automatically when deploying or running an App.
+            You do not need to built the image explicitly:
+
+            ```python notest
+            app = modal.App()
+            image = modal.Image.debian_slim()
+
+            # No need to explicitly build the image for defining a function.
+            @app.function(image=image)
+            def f():
+                ...
+            ```
+            """
+            ...
+
+    build: __build_spec[typing_extensions.Self]
+
     def pip_install(
         self,
         *packages: typing.Union[str, list[str]],
@@ -1178,7 +1360,8 @@ class Image(modal.object.Object):
         pre: bool = False,
         extra_options: str = "",
         force_build: bool = False,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> Image:
         """Install a list of Python packages using pip.
@@ -1220,7 +1403,8 @@ class Image(modal.object.Object):
         pre: bool = False,
         extra_options: str = "",
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         force_build: bool = False,
     ) -> Image:
         """Install a list of Python packages from private git repositories using pip.
@@ -1265,7 +1449,8 @@ class Image(modal.object.Object):
         pre: bool = False,
         extra_options: str = "",
         force_build: bool = False,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> Image:
         """Install a list of Python packages from a local `requirements.txt` file."""
@@ -1282,7 +1467,8 @@ class Image(modal.object.Object):
         pre: bool = False,
         extra_options: str = "",
         force_build: bool = False,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> Image:
         """Install dependencies specified by a local `pyproject.toml` file.
@@ -1305,7 +1491,8 @@ class Image(modal.object.Object):
         extra_options: str = "",
         force_build: bool = False,
         uv_version: typing.Optional[str] = None,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> Image:
         """Install a list of Python packages using uv pip install.
@@ -1338,7 +1525,8 @@ class Image(modal.object.Object):
         only: list[str] = [],
         poetry_version: typing.Optional[str] = "latest",
         old_installer: bool = False,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> Image:
         """Install poetry *dependencies* specified by a local `pyproject.toml` file.
@@ -1365,7 +1553,8 @@ class Image(modal.object.Object):
         frozen: bool = True,
         extra_options: str = "",
         uv_version: typing.Optional[str] = None,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> Image:
         """Creates a virtual environment with the dependencies in a uv managed project with `uv sync`.
@@ -1378,6 +1567,15 @@ class Image(modal.object.Object):
         The `pyproject.toml` and `uv.lock` in `uv_project_dir` are automatically added to the build context. The
         `uv_project_dir` is relative to the current working directory of where `modal` is called.
 
+        NOTE: This does *not* install the project itself into the environment (this is equivalent to the
+        `--no-install-project` flag in the `uv sync` command) and you would be expected to add any local python source
+        files using `Image.add_local_python_source` or similar methods after this call.
+
+        This ensures that updates to your project code wouldn't require reinstalling third-party dependencies
+        after every change.
+
+        uv workspaces are currently not supported.
+
         Added in v1.1.0.
         """
         ...
@@ -1386,9 +1584,9 @@ class Image(modal.object.Object):
         self,
         *dockerfile_commands: typing.Union[str, list[str]],
         context_files: dict[str, str] = {},
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
-        context_mount: typing.Optional[modal.mount.Mount] = None,
         context_dir: typing.Union[str, pathlib.Path, None] = None,
         force_build: bool = False,
         ignore: typing.Union[
@@ -1448,7 +1646,8 @@ class Image(modal.object.Object):
     def run_commands(
         self,
         *commands: typing.Union[str, list[str]],
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
         force_build: bool = False,
     ) -> Image:
@@ -1466,7 +1665,8 @@ class Image(modal.object.Object):
         spec_file: typing.Optional[str] = None,
         channels: list[str] = [],
         force_build: bool = False,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> Image:
         """Install a list of additional packages using micromamba."""
@@ -1604,10 +1804,10 @@ class Image(modal.object.Object):
     def from_dockerfile(
         path: typing.Union[str, pathlib.Path],
         *,
-        context_mount: typing.Optional[modal.mount.Mount] = None,
         force_build: bool = False,
         context_dir: typing.Union[str, pathlib.Path, None] = None,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
         add_python: typing.Optional[str] = None,
         build_args: dict[str, str] = {},
@@ -1675,7 +1875,8 @@ class Image(modal.object.Object):
         self,
         *packages: typing.Union[str, list[str]],
         force_build: bool = False,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = [],
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
     ) -> Image:
         """Install a list of Debian packages using `apt`.
@@ -1692,7 +1893,8 @@ class Image(modal.object.Object):
         self,
         raw_f: collections.abc.Callable[..., typing.Any],
         *,
-        secrets: collections.abc.Sequence[modal.secret.Secret] = (),
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
         volumes: dict[
             typing.Union[str, pathlib.PurePosixPath],
             typing.Union[modal.volume.Volume, modal.cloud_bucket_mount.CloudBucketMount],
