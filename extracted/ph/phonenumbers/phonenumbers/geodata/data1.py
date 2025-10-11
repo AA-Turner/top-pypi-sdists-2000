@@ -19,6 +19,7 @@ from ..util import u
 # limitations under the License.
 
 data = {
+ '1414489':{'en': 'Cudahy, WI'},
  '1414527':{'en': 'Milwaukee, WI'},
  '1414535':{'en': 'Milwaukee, WI'},
  '1414536':{'en': 'Milwaukee, WI'},
@@ -1223,7 +1224,7 @@ data = {
  '1435896':{'en': 'Richfield, UT'},
  '1435946':{'en': 'Garden City, UT'},
  '1435986':{'en': 'St. George, UT'},
- '1437':{'en': 'Ontario'},
+ '1437':{'en': 'Toronto'},
  '1438':{'en': 'Quebec'},
  '1438380':{'en': 'Montreal, QC'},
  '1440':{'en': 'Ohio'},
@@ -10018,5 +10019,4 @@ data = {
  '1705356':{'en': 'Blind River, ON'},
  '1705357':{'en': 'Sunderland, ON'},
  '1705360':{'en': 'Timmins, ON'},
- '1705362':{'en': 'Hearst, ON'},
 }

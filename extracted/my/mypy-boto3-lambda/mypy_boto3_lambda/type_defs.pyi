@@ -319,6 +319,7 @@ class AddPermissionRequestTypeDef(TypedDict):
     RevisionId: NotRequired[str]
     PrincipalOrgID: NotRequired[str]
     FunctionUrlAuthType: NotRequired[FunctionUrlAuthTypeType]
+    InvokedViaFunctionUrl: NotRequired[bool]
 
 class AliasRoutingConfigurationOutputTypeDef(TypedDict):
     AdditionalVersionWeights: NotRequired[Dict[str, float]]

@@ -785,6 +785,9 @@ def test_2736():
 
 
 def test_subset_fonts():
+    if os.environ.get('PYODIDE_ROOT'):
+        print('test_subset_fonts(): not running on Pyodide - ValueError: No font code \'ubuntu\' found in pymupdf-fonts.')
+        return
     """Confirm subset_fonts is working."""
     if not hasattr(pymupdf, "mupdf"):
         print("Not testing 'test_subset_fonts' in classic.")
@@ -1026,6 +1029,10 @@ def test_3140():
     os.remove(oldfile)
 
 def test_cli():
+    if os.environ.get('PYODIDE_ROOT'):
+        print('test_cli(): not running on Pyodide - cannot run child processes.')
+        return
+        
     if not hasattr(pymupdf, 'mupdf'):
         print('test_cli(): Not running on classic because of fitz_old.')
         return
@@ -1063,6 +1070,10 @@ def test_cli_out():
     Check redirection of messages and log diagnostics with environment
     variables PYMUPDF_LOG and PYMUPDF_MESSAGE.
     '''
+    if os.environ.get('PYODIDE_ROOT'):
+        print('test_cli_out(): not running on Pyodide - cannot run child processes.')
+        return
+        
     if not hasattr(pymupdf, 'mupdf'):
         print('test_cli(): Not running on classic because of fitz_old.')
         return
@@ -1150,6 +1161,10 @@ def test_use_python_logging():
     '''
     Checks pymupdf.use_python_logging().
     '''
+    if os.environ.get('PYODIDE_ROOT'):
+        print('test_cli(): not running on Pyodide - cannot run child processes.')
+        return
+        
     log_prefix = None
     if os.environ.get('PYMUPDF_USE_EXTRA') == '0':
         log_prefix = f'.+Using non-default setting from PYMUPDF_USE_EXTRA: \'0\''
@@ -1433,6 +1448,10 @@ def test_open2():
     Checks behaviour of fz_open_document() and fz_open_document_with_stream()
     with different filenames/magic values.
     '''
+    if os.environ.get('PYODIDE_ROOT'):
+        print('test_open2(): not running on Pyodide - cannot run child processes.')
+        return
+        
     if platform.system() == 'Windows':
         print(f'test_open2(): not running on Windows because `git ls-files` known fail on Github Windows runners.')
         return
@@ -1789,6 +1808,10 @@ def test_4309():
     document.delete_page()
 
 def test_4263():
+    if os.environ.get('PYODIDE_ROOT'):
+        print('test_4263(): not running on Pyodide - cannot run child processes.')
+        return
+        
     path = os.path.normpath(f'{__file__}/../../tests/resources/test_4263.pdf')
     path_out = f'{path}.linerarized.pdf'
     command = f'pymupdf clean -linear {path} {path_out}'
@@ -1915,6 +1938,10 @@ def test_4479():
         
 
 def test_4533():
+    if os.environ.get('PYODIDE_ROOT'):
+        print('test_4533(): not running on Pyodide - cannot run child processes.')
+        return
+        
     print()
     path = util.download(
             'https://github.com/user-attachments/files/20497146/NineData_user_manual_V3.0.5.pdf',
@@ -1962,10 +1989,16 @@ def test_gitinfo():
     print(f'{pymupdf.pymupdf_git_branch=}')
     print(f'{pymupdf.pymupdf_git_sha=}')
     print(f'{pymupdf.pymupdf_version=}')
-    print(f'pymupdf.pymupdf_git_diff:\n{textwrap.indent(pymupdf.pymupdf_git_diff, "    ")}')
+    print(f'{pymupdf.pymupdf_git_diff=}')
+    if pymupdf.pymupdf_git_diff:
+        print(f'pymupdf.pymupdf_git_diff:\n{textwrap.indent(pymupdf.pymupdf_git_diff, "    ")}')
     
 
 def test_4392():
+    if os.environ.get('PYODIDE_ROOT'):
+        print('test_4392(): not running on Pyodide - cannot run child processes.')
+        return
+        
     print()
     path = os.path.normpath(f'{__file__}/../../tests/test_4392.py')
     with open(path, 'w') as f:
@@ -2051,3 +2084,99 @@ def test_4590():
     # Check pymupdf.Document.scrub() works.
     with pymupdf.open(path) as document:
         document.scrub()
+
+
+def test_4702():
+    if os.environ.get('PYODIDE_ROOT'):
+        # util.download() uses subprocess.
+        print('test_4702(): not running on Pyodide - cannot run child processes.')
+        return
+
+    path = util.download(
+            'https://github.com/user-attachments/files/22403483/01995b6ca7837b52abaa24e38e8c076d.pdf',
+            'test_4702.pdf',
+            )
+    with pymupdf.open(path) as document:
+        for xref in range(1, document.xref_length()):
+            print(f'{xref=}')
+            try:
+                _ = document.xref_object(xref)
+            except Exception as e1:
+                print(f'{e1=}')
+                try:
+                    document.update_object(xref, "<<>>")
+                except Exception as e2:
+                    print(f'{e2=}')
+                    raise
+    wt = pymupdf.TOOLS.mupdf_warnings()
+    assert wt == 'repairing PDF document'
+    
+    with pymupdf.open(path) as document:
+        for xref in range(1, document.xref_length()):
+            print(f'{xref=}')
+            _ = document.xref_object(xref)
+    wt = pymupdf.TOOLS.mupdf_warnings()
+    assert wt == 'repairing PDF document'
+
+
+def test_4712():
+    '''
+    Crash with "corrupted double-linked list
+    '''
+    if 1:
+        print(f'test_4712(): Not running because known to fail.')
+        return
+    path_a = os.path.normpath(f'{__file__}/../../tests/resources/test_4712_a.pdf')
+    path_b = os.path.normpath(f'{__file__}/../../tests/resources/test_4712_b.pdf')
+    doc1 = pymupdf.open(path_a)
+    for i in range(6):
+        doc1.load_page(i).get_pixmap()
+    doc2 = pymupdf.open(path_b)
+    for i in range(6):
+        doc2.load_page(i).get_pixmap()
+
+
+def test_4712m():
+    if 1:
+        print(f'test_4712b(): Not running because known to fail.')
+        return
+    
+    path_a = os.path.normpath(f'{__file__}/../../tests/resources/test_4712_a.pdf')
+    path_b = os.path.normpath(f'{__file__}/../../tests/resources/test_4712_b.pdf')
+    
+    mupdf = pymupdf.mupdf
+    def get_pixmap(page):
+        displaylist = mupdf.fz_new_display_list_from_page(page)
+        rect = mupdf.fz_bound_display_list(displaylist)
+        irect = mupdf.fz_round_rect(rect)
+        pixmap = mupdf.fz_new_pixmap_with_bbox(
+                mupdf.FzColorspace(mupdf.FzColorspace.Fixed_RGB),
+                irect,
+                mupdf.FzSeparations(),
+                0,  # alpha
+                )
+        mupdf.fz_clear_pixmap_with_value(pixmap, 0xFF)
+        matrix = mupdf.FzMatrix()
+        device = mupdf.fz_new_draw_device(matrix, pixmap)
+        mupdf.fz_run_display_list(
+                displaylist,
+                device,
+                mupdf.FzMatrix(),
+                mupdf.FzRect(mupdf.FzRect.Fixed_INFINITE),
+                mupdf.FzCookie(),
+                )
+        mupdf.fz_close_device(device)
+    
+    def process_document(document):
+        for i in range(6):
+            print(f'    {i=}', flush=1)
+            page = mupdf.fz_load_page(document, i)
+            get_pixmap(page)
+
+    print(f'Processing {path_a=}', flush=1)
+    document_a = mupdf.fz_open_document(path_a)
+    process_document(document_a)
+
+    print(f'Processing {path_b=}', flush=1)
+    document_b = mupdf.fz_open_document(path_b)
+    process_document(document_b)

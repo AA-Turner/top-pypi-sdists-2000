@@ -6,25 +6,22 @@ None of the functions in the module are meant for use outside of the
 package.
 """
 
-from __future__ import annotations
-
 import io
+import keyword
 import re
+import unicodedata
+from collections.abc import Generator, Mapping
 from fractions import Fraction
-from typing import TYPE_CHECKING, SupportsFloat
+from typing import TYPE_CHECKING, Literal, SupportsFloat
 
 import numpy as np
 from numpy import finfo
 
 from .errors import UnitScaleError
+from .typing import UnitPower, UnitPowerLike, UnitScale, UnitScaleLike
 
 if TYPE_CHECKING:
-    from collections.abc import Generator, Mapping
-    from typing import Literal
-
-    from .core import NamedUnit
-    from .typing import UnitPower, UnitPowerLike, UnitScale, UnitScaleLike
-
+    import astropy.units.core
 
 _float_finfo = finfo(float)
 # take float here to ensure comparison with another float is fast
@@ -46,7 +43,11 @@ def _get_first_sentence(s: str) -> str:
 
 def _iter_unit_summary(
     namespace: Mapping[str, object],
-) -> Generator[tuple[NamedUnit, str, str, str, Literal["Yes", "No"]], None, None]:
+) -> Generator[
+    tuple["astropy.units.core.NamedUnit", str, str, str, Literal["Yes", "No"]],
+    None,
+    None,
+]:
     """
     Generates the ``(unit, doc, represents, aliases, prefixes)``
     tuple used to format the unit summary docs in `generate_unit_summary`.
@@ -176,6 +177,21 @@ def generate_prefixonly_unit_summary(namespace: Mapping[str, object]) -> str:
         docstring.write(template.format(*unit_summary))
 
     return docstring.getvalue()
+
+
+def generate_dunder_all(namespace: Mapping[str, object]) -> list[str]:
+    from .core import UnitBase
+
+    return [
+        name
+        for name, value in namespace.items()
+        if (
+            isinstance(value, UnitBase)
+            and name.isidentifier()
+            and not keyword.iskeyword(name)
+            and name == unicodedata.normalize("NFKC", name)
+        )
+    ]
 
 
 def is_effectively_unity(value: UnitScaleLike) -> bool | np.bool_:

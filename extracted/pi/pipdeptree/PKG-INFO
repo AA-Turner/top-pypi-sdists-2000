@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pipdeptree
-Version: 2.28.0
+Version: 2.29.0
 Summary: Command line utility to show dependency tree of packages.
 Project-URL: Changelog, https://github.com/tox-dev/pipdeptree/releases
 Project-URL: Documentation, https://github.com/tox-dev/pipdeptree/blob/main/README.md#pipdeptree
@@ -17,23 +17,23 @@ Classifier: Intended Audience :: Developers
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
-Requires-Python: >=3.9
-Requires-Dist: packaging>=24.1
-Requires-Dist: pip>=24.2
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.10
+Requires-Dist: packaging>=25
+Requires-Dist: pip>=25.2
 Provides-Extra: graphviz
-Requires-Dist: graphviz>=0.20.3; extra == 'graphviz'
+Requires-Dist: graphviz>=0.21; extra == 'graphviz'
 Provides-Extra: test
 Requires-Dist: covdefaults>=2.3; extra == 'test'
-Requires-Dist: diff-cover>=9.1.1; extra == 'test'
-Requires-Dist: pytest-cov>=5; extra == 'test'
-Requires-Dist: pytest-mock>=3.14; extra == 'test'
-Requires-Dist: pytest>=8.3.2; extra == 'test'
-Requires-Dist: virtualenv<21,>=20.31.1; extra == 'test'
+Requires-Dist: diff-cover>=9.7.1; extra == 'test'
+Requires-Dist: pytest-cov>=7; extra == 'test'
+Requires-Dist: pytest-mock>=3.15.1; extra == 'test'
+Requires-Dist: pytest>=8.4.2; extra == 'test'
+Requires-Dist: virtualenv<21,>=20.34; extra == 'test'
 Description-Content-Type: text/markdown
 
 # pipdeptree

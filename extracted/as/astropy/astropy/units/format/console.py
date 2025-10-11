@@ -4,16 +4,11 @@
 Handles the "Console" unit format.
 """
 
-from __future__ import annotations
+from typing import ClassVar, Literal
 
-from typing import TYPE_CHECKING
+from astropy.units.core import UnitBase
 
 from . import base
-
-if TYPE_CHECKING:
-    from typing import ClassVar, Literal
-
-    from astropy.units import UnitBase
 
 
 class Console(base.Base):

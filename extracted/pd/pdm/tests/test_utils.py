@@ -10,7 +10,7 @@ from pdm import utils
 from pdm._types import RepositoryConfig
 from pdm.cli import utils as cli_utils
 from pdm.cli.filters import GroupSelection
-from pdm.exceptions import PdmUsageError, PDMWarning
+from pdm.exceptions import PdmException, PdmUsageError, PDMWarning
 
 
 @pytest.mark.parametrize(
@@ -31,7 +31,7 @@ from pdm.exceptions import PdmUsageError, PDMWarning
 @mock.patch("pdm.utils.os.makedirs")
 @mock.patch("pdm.utils.tempfile.mkdtemp")
 def test_create_tracked_tempdir(mock_tempfile_mkdtemp, mock_os_makedirs, mock_atexit_register, given, dirname):
-    test_suffix, test_prefix, test_dir = given
+    test_suffix, test_prefix, _ = given
     mock_tempfile_mkdtemp.return_value = dirname
     received_dirname = utils.create_tracked_tempdir(suffix=test_suffix, prefix=test_prefix, dir=dirname)
     mock_tempfile_mkdtemp.assert_called_once_with(suffix=test_suffix, prefix=test_prefix, dir=dirname)
@@ -496,6 +496,9 @@ def test_invalidate_project_name(name):
 )
 def test_sanitize_project_name(given, sanitized):
     assert utils.sanitize_project_name(given) == sanitized
+
+    with pytest.raises(PdmException):
+        utils.sanitize_project_name("@#$")
 
 
 @pytest.mark.parametrize(

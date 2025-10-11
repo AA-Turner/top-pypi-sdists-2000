@@ -13,7 +13,7 @@ from numpy.testing import assert_allclose
 
 from astropy import constants as c
 from astropy import units as u
-from astropy.units import utils
+from astropy.units import cds, utils
 from astropy.units.required_by_vounit import GsolLum, ksolMass, nsolRad
 from astropy.utils.compat.optional_deps import HAS_ARRAY_API_STRICT, HAS_DASK
 from astropy.utils.exceptions import AstropyDeprecationWarning
@@ -736,6 +736,24 @@ def test_duplicate_define(name):
         ),
     ):
         u.def_unit(name, u.hourangle, namespace=namespace)
+
+
+def test_unit_module_dunder_all_nfkc_normalization():
+    # Python applies NFKC normalization to identifiers, so inserting a name to __all__
+    # that changes with NFKC normalization can only cause trouble.
+    assert "ℓ" not in u.__all__
+    assert u.ℓ is u.liter
+
+
+@pytest.mark.parametrize(
+    "string",
+    [
+        pytest.param("°", id="invalid characters"),  # Regression test for #18606
+        pytest.param("as", id="keyword"),  # Regression test for #18614
+    ],
+)
+def test_unit_module_dunder_all_only_indentifiers(string):
+    assert string not in cds.__all__
 
 
 def test_all_units():

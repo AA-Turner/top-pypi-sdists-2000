@@ -292,6 +292,7 @@ class TestDuckDB(Validator):
         self.validate_identity(
             "ARG_MAX(keyword_name, keyword_category, 3 ORDER BY keyword_name DESC)"
         )
+        self.validate_identity("INSERT INTO t DEFAULT VALUES RETURNING (c1)")
         self.validate_identity("CREATE TABLE notes (watermark TEXT)")
         self.validate_identity("SELECT LIST_TRANSFORM([5, NULL, 6], LAMBDA x : COALESCE(x, 0) + 1)")
         self.validate_identity("SELECT LIST_TRANSFORM(nbr, LAMBDA x : x + 1) FROM article AS a")
@@ -1094,6 +1095,10 @@ class TestDuckDB(Validator):
 
         self.validate_identity("SELECT row")
 
+        self.validate_identity(
+            "DELETE FROM t USING (VALUES (1)) AS t1(c), (VALUES (1), (2)) AS t2(c) WHERE t.c = t1.c AND t.c = t2.c"
+        )
+
     def test_array_index(self):
         with self.assertLogs(helper_logger) as cm:
             self.validate_all(
@@ -1850,3 +1855,11 @@ class TestDuckDB(Validator):
         self.validate_identity("FORCE INSTALL httpfs FROM community")
         self.validate_identity("FORCE INSTALL httpfs FROM 'https://extensions.duckdb.org'")
         self.validate_identity("FORCE CHECKPOINT db", check_command_warning=True)
+
+    def test_cte_using_key(self):
+        self.validate_identity(
+            "WITH RECURSIVE tbl(a, b) USING KEY (a) AS (SELECT a, b FROM (VALUES (1, 3), (2, 4)) AS t(a, b) UNION SELECT a + 1, b FROM tbl WHERE a < 3) SELECT * FROM tbl"
+        )
+        self.validate_identity(
+            "WITH RECURSIVE tbl(a, b) USING KEY (a, b) AS (SELECT a, b FROM (VALUES (1, 3), (2, 4)) AS t(a, b) UNION SELECT a + 1, b FROM tbl WHERE a < 3) SELECT * FROM tbl"
+        )

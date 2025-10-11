@@ -4,8 +4,6 @@ Framework and base classes for coordinate frames/"low-level" coordinate
 classes.
 """
 
-from __future__ import annotations
-
 __all__ = [
     "BaseCoordinateFrame",
     "CoordinateFrameInfo",
@@ -18,12 +16,13 @@ import copy
 import operator
 import warnings
 from collections import defaultdict
-from typing import TYPE_CHECKING, NamedTuple
+from typing import TYPE_CHECKING, Literal, NamedTuple, Union
 
 import numpy as np
 
 from astropy import units as u
 from astropy.table import QTable
+from astropy.units import Unit
 from astropy.utils import ShapedLikeNDArray
 from astropy.utils.data_info import MixinInfo
 from astropy.utils.decorators import format_doc, lazyproperty
@@ -31,7 +30,7 @@ from astropy.utils.exceptions import AstropyWarning
 from astropy.utils.masked import MaskableShapedLikeNDArray, combine_masks
 
 from . import representation as r
-from .angles import Angle, position_angle
+from .angles import Angle, Latitude, Longitude, position_angle
 from .attributes import Attribute
 from .errors import NonRotationTransformationError, NonRotationTransformationWarning
 from .transformations import (
@@ -41,10 +40,7 @@ from .transformations import (
 )
 
 if TYPE_CHECKING:
-    from typing import Literal
-
-    from astropy.coordinates import Latitude, Longitude, SkyCoord
-    from astropy.units import Unit
+    from astropy.coordinates import SkyCoord
 
 # the graph used for all transformations between frames
 frame_transform_graph = TransformGraph()
@@ -913,8 +909,8 @@ class BaseCoordinateFrame(MaskableShapedLikeNDArray):
     @property
     def data(self):
         """
-        The coordinate data for this object.  If this frame has no data, an
-        `ValueError` will be raised.  Use `has_data` to
+        The coordinate data for this object.  If this frame has no data,
+        a `ValueError` will be raised.  Use `has_data` to
         check if data is present on this frame object.
         """
         if self._data is None:
@@ -1829,9 +1825,6 @@ class BaseCoordinateFrame(MaskableShapedLikeNDArray):
                 "does not support item assignment"
             )
 
-        if self._data is None:
-            raise ValueError("can only set frame if it has data")
-
         if self._data.__class__ is not value._data.__class__:
             raise TypeError(
                 "can only set from object of same class: "
@@ -1967,7 +1960,7 @@ class BaseCoordinateFrame(MaskableShapedLikeNDArray):
 
     def _prepare_unit_sphere_coords(
         self,
-        other: BaseCoordinateFrame | SkyCoord,
+        other: Union["BaseCoordinateFrame", "SkyCoord"],
         origin_mismatch: Literal["ignore", "warn", "error"],
     ) -> tuple[Longitude, Latitude, Longitude, Latitude]:
         other_frame = getattr(other, "frame", other)
@@ -1996,7 +1989,7 @@ class BaseCoordinateFrame(MaskableShapedLikeNDArray):
         )
         return self_sph.lon, self_sph.lat, other_sph.lon, other_sph.lat
 
-    def position_angle(self, other: BaseCoordinateFrame | SkyCoord) -> Angle:
+    def position_angle(self, other: Union["BaseCoordinateFrame", "SkyCoord"]) -> Angle:
         """Compute the on-sky position angle to another coordinate.
 
         Parameters
@@ -2031,7 +2024,7 @@ class BaseCoordinateFrame(MaskableShapedLikeNDArray):
 
     def separation(
         self,
-        other: BaseCoordinateFrame | SkyCoord,
+        other: Union["BaseCoordinateFrame", "SkyCoord"],
         *,
         origin_mismatch: Literal["ignore", "warn", "error"] = "warn",
     ) -> Angle:

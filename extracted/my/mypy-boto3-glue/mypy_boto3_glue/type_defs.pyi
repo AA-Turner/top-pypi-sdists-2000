@@ -4540,6 +4540,7 @@ class GetTableRequestTypeDef(TypedDict):
     CatalogId: NotRequired[str]
     TransactionId: NotRequired[str]
     QueryAsOfTime: NotRequired[TimestampTypeDef]
+    AuditContext: NotRequired[AuditContextTypeDef]
     IncludeStatusDetails: NotRequired[bool]
 
 class GetTablesRequestTypeDef(TypedDict):
@@ -4550,6 +4551,7 @@ class GetTablesRequestTypeDef(TypedDict):
     MaxResults: NotRequired[int]
     TransactionId: NotRequired[str]
     QueryAsOfTime: NotRequired[TimestampTypeDef]
+    AuditContext: NotRequired[AuditContextTypeDef]
     IncludeStatusDetails: NotRequired[bool]
     AttributesToGet: NotRequired[Sequence[TableAttributesType]]
 
@@ -5058,6 +5060,7 @@ class GetTablesRequestPaginateTypeDef(TypedDict):
     Expression: NotRequired[str]
     TransactionId: NotRequired[str]
     QueryAsOfTime: NotRequired[TimestampTypeDef]
+    AuditContext: NotRequired[AuditContextTypeDef]
     IncludeStatusDetails: NotRequired[bool]
     AttributesToGet: NotRequired[Sequence[TableAttributesType]]
     PaginationConfig: NotRequired[PaginatorConfigTypeDef]

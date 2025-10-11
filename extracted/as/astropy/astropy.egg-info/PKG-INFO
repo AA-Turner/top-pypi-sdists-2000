@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: astropy
-Version: 7.1.0
+Version: 7.1.1
 Summary: Astronomy and astrophysics core library
 Author-email: The Astropy Developers <astropy.team@gmail.com>
 License-Expression: BSD-3-Clause
@@ -38,7 +38,7 @@ License-File: licenses/README.rst
 License-File: licenses/WCSLIB_LICENSE.rst
 Requires-Dist: numpy>=1.23.2
 Requires-Dist: pyerfa>=2.0.1.1
-Requires-Dist: astropy-iers-data>=0.2025.4.28.0.37.27
+Requires-Dist: astropy-iers-data>=0.2025.9.29.0.35.48
 Requires-Dist: PyYAML>=6.0.0
 Requires-Dist: packaging>=22.0.0
 Provides-Extra: recommended
@@ -91,6 +91,7 @@ Requires-Dist: objgraph>=1.6.0; extra == "test-all"
 Requires-Dist: skyfield>=1.20; extra == "test-all"
 Requires-Dist: sgp4>=2.3; extra == "test-all"
 Requires-Dist: array-api-strict>=1.0; extra == "test-all"
+Requires-Dist: array-api-strict<2.4; python_version < "3.12" and extra == "test-all"
 Provides-Extra: typing
 Requires-Dist: pandas-stubs>=2.0; extra == "typing"
 Provides-Extra: docs
@@ -118,7 +119,7 @@ Dynamic: license-file
 
 ----
 
-|Actions Status| |CircleCI Status| |Coverage Status| |PyPI Status| |Documentation Status| |Pre-Commit| |Ruff| |Zenodo|
+|Actions Status| |CircleCI Status| |Coverage Status| |PyPI Status| |Supported Python Versions| |Documentation Status| |Pre-Commit| |Ruff| |Zenodo|
 
 ----
 
@@ -220,6 +221,10 @@ Astropy is licensed under a 3-clause BSD style license - see the
 .. |PyPI Status| image:: https://img.shields.io/pypi/v/astropy.svg
     :target: https://pypi.org/project/astropy
     :alt: Astropy's PyPI Status
+
+.. |Supported Python Versions| image:: https://img.shields.io/pypi/pyversions/astropy
+    :target: https://pypi.org/project/astropy
+    :alt: Supported Python Versions of latest released astropy
 
 .. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4670728.svg
     :target: https://doi.org/10.5281/zenodo.4670728

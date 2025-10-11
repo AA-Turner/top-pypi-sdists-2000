@@ -43,8 +43,8 @@ keywords = [
 ]
 dependencies = [
     "numpy>=1.23.2",
-    "pyerfa>=2.0.1.1",
-    "astropy-iers-data>=0.2025.4.28.0.37.27",
+    "pyerfa>=2.0.1.1",  # For >=2.0.1.7, adjust structured_units.rst and doctest-requires
+    "astropy-iers-data>=0.2025.9.29.0.35.48",
     "PyYAML>=6.0.0",
     "packaging>=22.0.0",
 ]
@@ -118,6 +118,7 @@ test_all = [
     "skyfield>=1.20",
     "sgp4>=2.3",
     "array-api-strict>=1.0",
+    "array-api-strict<2.4;python_version<'3.12'",  # PYTHON_LT_3_12
 ]
 typing = [
     "pandas-stubs>=2.0",
@@ -227,6 +228,8 @@ log_cli_level = "info"
 xfail_strict = true
 filterwarnings = [
     "error",
+    # https://github.com/astropy/astropy/issues/18126
+    "ignore:'_UnionGenericAlias' is deprecated and slated for removal in Python 3.17:DeprecationWarning", # not PYTHON_LT_3_14
 ]
 doctest_norecursedirs = [
     "*/setup_package.py",
@@ -240,6 +243,7 @@ doctest_subpackage_requires = [
     "astropy/table/mixins/dask.py = dask",
     "docs/* = numpy>=2",   # not NUMPY_LT_2_0 (PR 15065)
     "docs/units/type_hints.rst = python<=3.13",  # PYTHON_LT_3_14 (PR 18140)
+    "docs/units/structured_units.rst = pyerfa<2.0.1.7",  # PYERFA_LT_2_0_1_7
     "docs/timeseries/index.rst = numpy<2.2.0.dev0",  # NUMPY_LT_2_2 (PR 17364)
     "astropy/stats/info_theory.py = numpy>=2",  # not NUMPY_LT_2_0 (PR 15065)
     "astropy/stats/jackknife.py = numpy>=2",  # not NUMPY_LT_2_0 (PR 15065)
@@ -263,6 +267,7 @@ markers = [
 # We disable testing for the following wheels:
 # - MuslLinux (tests hang non-deterministically)
 test-skip = "*-musllinux_x86_64"
+skip = ["cp*t-*"] # https://github.com/astropy/astropy/issues/16916
 
 [tool.cibuildwheel.macos]
 archs = ["x86_64", "arm64"]
@@ -270,6 +275,11 @@ archs = ["x86_64", "arm64"]
 [tool.cibuildwheel.linux]
 archs = ["auto", "aarch64"]
 
+[[tool.cibuildwheel.overrides]]
+# https://github.com/pypa/cibuildwheel/issues/2612
+select = "cp314-macosx_x86_64"
+inherit.environment="append"
+environment = {MACOSX_DEPLOYMENT_TARGET="10.15"}
 
 [tool.docformatter]
     # The ``summaries`` are not (yet) 75 characters because the summary lines can't be
@@ -381,6 +391,10 @@ lint.ignore = [  # NOTE: non-permanent exclusions should be added to `.ruff.toml
     # flake8-self (SLF)
     "SLF001", # private member access
 
+    # flake8-type-checking (TC)
+    "TC002",  # typing-only-third-party-import
+    "TC003",  # typing-only-standard-library-import
+
     # flake8-todos (TD)
     "TD002",  # Missing author in TODO
 
@@ -424,9 +438,6 @@ mypy-init-return = true
 
 [tool.ruff.lint.flake8-comprehensions]
 allow-dict-calls-with-keyword-arguments = true
-
-[tool.ruff.lint.flake8-type-checking]
-exempt-modules = []
 
 [tool.ruff.lint.isort]
 known-first-party = ["astropy", "extension_helpers"]

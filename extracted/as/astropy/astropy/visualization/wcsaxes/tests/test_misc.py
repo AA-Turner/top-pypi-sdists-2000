@@ -8,6 +8,7 @@ import pytest
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.contour import QuadContourSet
 from matplotlib.figure import Figure
+from numpy.testing import assert_allclose
 from packaging.version import Version
 
 from astropy import units as u
@@ -24,7 +25,7 @@ from astropy.visualization.wcsaxes.ticklabels import TickLabels
 from astropy.visualization.wcsaxes.transforms import CurvedTransform
 from astropy.visualization.wcsaxes.utils import get_coord_meta
 from astropy.wcs import WCS
-from astropy.wcs.wcsapi import HighLevelWCSWrapper, SlicedLowLevelWCS
+from astropy.wcs.wcsapi import BaseLowLevelWCS, HighLevelWCSWrapper, SlicedLowLevelWCS
 
 ft_version = Version(mpl.ft2font.__freetype_version__)
 FREETYPE_261 = ft_version == Version("2.6.1")
@@ -728,3 +729,153 @@ def test_plot_coord_slicing(ignore_matplotlibrc):
 
     c = SkyCoord(52 * u.deg, 30.5 * u.deg)
     ax.plot_coord(c, "o")
+
+
+SIMPLIFY_CASES = [
+    (["13d14m15s", "13d14m15s"], ["13d14m15s", "15s"]),
+    (["13d14m5s", "13d14m15s"], ["13d14m5s", "15s"]),
+    (
+        ["−29°25'55\"", "−29°25'54\"", "−29°25'53\"", "−29°25'52\"", "−29°25'51\""],
+        ["−29°25'55\"", '54"', '53"', '52"', '51"'],
+    ),
+    (
+        [
+            r"0$\mathregular{^h}$",
+            r"10$\mathregular{^h}$",
+            r"10$\mathregular{^h}$",
+            r"5$\mathregular{^h}$",
+        ],
+        [
+            r"0$\mathregular{^h}$",
+            r"10$\mathregular{^h}$",
+            r"10$\mathregular{^h}$",
+            r"5$\mathregular{^h}$",
+        ],
+    ),
+    (
+        [
+            r"0$\mathregular{^h}$10$\mathregular{^m}$5$\mathregular{^m}$",
+            r"0$\mathregular{^h}$10$\mathregular{^m}$10$\mathregular{^m}$",
+            r"0$\mathregular{^h}$10$\mathregular{^m}$15$\mathregular{^m}$",
+            r"0$\mathregular{^h}$10$\mathregular{^m}$15$\mathregular{^m}$",
+        ],
+        [
+            r"0$\mathregular{^h}$10$\mathregular{^m}$5$\mathregular{^m}$",
+            r"10$\mathregular{^m}$",
+            r"15$\mathregular{^m}$",
+            r"15$\mathregular{^m}$",
+        ],
+    ),
+    (
+        [
+            "$17^{\\mathrm{h}}47^{\\mathrm{m}}53.8^{\\mathrm{s}}$",
+            "$17^{\\mathrm{h}}47^{\\mathrm{m}}53.6^{\\mathrm{s}}$",
+        ],
+        [
+            "$17^{\\mathrm{h}}47^{\\mathrm{m}}53.8^{\\mathrm{s}}$",
+            "$53.6^{\\mathrm{s}}$",
+        ],
+    ),
+]
+
+
+@pytest.mark.parametrize(("before", "after"), SIMPLIFY_CASES)
+def test_simplify_cases(before, after):
+    # Regression test for a bug that caused the simplification to not work
+    # correctly in the presence of dollar signs in LaTeX strings.
+
+    ticklabels = TickLabels(None)
+    expected_labels = []
+
+    for i, label in enumerate(before):
+        ticklabels.add(
+            axis="axis",
+            world=0,
+            angle=0,
+            text=label,
+            axis_displacement=i,
+            data=(i, i),
+        )
+
+    ticklabels.simplify_labels()
+    assert ticklabels.text["axis"] == after
+
+
+class ArcminWCS(BaseLowLevelWCS):
+    def __init__(self, wcs_deg):
+        self.wcs_deg = wcs_deg
+
+    @property
+    def pixel_n_dim(self):
+        return 2
+
+    @property
+    def world_n_dim(self):
+        return 2
+
+    @property
+    def world_axis_physical_types(self):
+        return [
+            "pos.eq.ra",
+            "pos.eq.dec",
+        ]
+
+    @property
+    def world_axis_units(self):
+        return ["arcmin", "arcmin"]
+
+    @property
+    def world_axis_names(self):
+        return ["RA", "DEC"]
+
+    def pixel_to_world_values(self, *pixel_arrays):
+        world = self.wcs_deg.pixel_to_world_values(*pixel_arrays)
+        return world[0] * 60, world[1] * 60
+
+    def world_to_pixel_values(self, *world_arrays):
+        world = world_arrays[0] / 60, world_arrays[1] / 60
+        return self.wcs_deg.world_to_pixel_values(*world_arrays)
+
+    @property
+    def world_axis_object_components(self):
+        return [
+            ("celestial", 0, "spherical.lon.arcmin"),
+            ("celestial", 1, "spherical.lat.arcmin"),
+        ]
+
+    @property
+    def world_axis_object_classes(self):
+        return {
+            "celestial": (SkyCoord, (), {"unit": "arcmin"}),
+        }
+
+
+def test_get_transform_unit_mismatch():
+    """
+    Regression test for a bug that caused get_transform to ignore differences
+    in WCS units.
+
+    https://github.com/astropy/astropy/issues/18246
+    """
+
+    wcs_deg = WCS(naxis=2)
+    wcs_deg.wcs.ctype = "RA---TAN", "DEC--TAN"
+    wcs_deg.wcs.crval = 20, 30
+    wcs_deg.wcs.cunit = "deg", "deg"
+    wcs_deg.wcs.crpix = 1, 1
+    wcs_deg.wcs.cdelt = 1 / 60, 1 / 60
+
+    wcs_arcmin = ArcminWCS(wcs_deg)
+
+    fig = Figure(figsize=(6, 6))
+    ax = fig.add_subplot(projection=wcs_arcmin)
+    transform1 = ax.get_transform(wcs_arcmin)
+    transform2 = ax.get_transform(wcs_deg)
+
+    # Since the two WCS are equivalent, the returned transforms should also
+    # be equivalent
+
+    rng = np.random.default_rng(12345)
+    pixels = rng.uniform(0, 100, (2, 100))
+
+    assert_allclose(transform1.transform(pixels), transform2.transform(pixels))

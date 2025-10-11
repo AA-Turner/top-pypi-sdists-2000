@@ -1,19 +1,18 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 # ruff: noqa: RUF009
 
-from __future__ import annotations
-
 __all__ = ["FLRW", "FlatFLRWMixin"]
 
 import inspect
 import warnings
 from abc import abstractmethod
+from collections.abc import Mapping
 from dataclasses import field
 from functools import cached_property
 from inspect import signature
 from math import exp, floor, log, pi, sqrt
 from numbers import Number
-from typing import TYPE_CHECKING, TypeVar, overload
+from typing import Self, TypeVar, overload
 
 import numpy as np
 from numpy import inf, sin
@@ -46,13 +45,6 @@ from astropy.cosmology._src.utils import (
     deprecated_keywords,
     vectorize_redshift_method,
 )
-
-if TYPE_CHECKING:
-    from collections.abc import Mapping
-    from typing import Self
-
-    import astropy.units
-
 
 # isort: split
 if HAS_SCIPY:
@@ -1080,16 +1072,14 @@ class FLRW(Cosmology, ScaleFactor, TemperatureCMB, _CriticalDensity, _BaryonComp
     # Comoving distance
 
     @overload
-    def comoving_distance(self, z: _InputT) -> astropy.units.Quantity: ...
+    def comoving_distance(self, z: _InputT) -> u.Quantity: ...
 
     @overload
-    def comoving_distance(self, z: _InputT, z2: _InputT) -> astropy.units.Quantity: ...
+    def comoving_distance(self, z: _InputT, z2: _InputT) -> u.Quantity: ...
 
     @deprecated_keywords("z2", since="7.1")
     @deprecated_keywords("z", since="7.0")
-    def comoving_distance(
-        self, z: _InputT, z2: _InputT | None = None
-    ) -> astropy.units.Quantity:
+    def comoving_distance(self, z: _InputT, z2: _InputT | None = None) -> u.Quantity:
         r"""Comoving line-of-sight distance :math:`d_c(z1, z2)` in Mpc.
 
         The comoving distance along the line-of-sight between two objects

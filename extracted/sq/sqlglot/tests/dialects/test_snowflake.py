@@ -21,6 +21,7 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT GET(a, b)")
         self.validate_identity("SELECT TAN(x)")
         self.validate_identity("SELECT COS(x)")
+        self.validate_identity("SELECT SINH(1.5)")
         self.validate_identity("SELECT MOD(x, y)", "SELECT x % y")
         self.validate_identity("SELECT ROUND(x)")
         self.validate_identity("SELECT ROUND(123.456, -1)")
@@ -60,14 +61,22 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT SOUNDEX_P123(column_name)")
         self.validate_identity("SELECT ABS(x)")
         self.validate_identity("SELECT ASIN(0.5)")
+        self.validate_identity("SELECT ASINH(0.5)")
+        self.validate_identity("SELECT ATAN(0.5)")
+        self.validate_identity("SELECT ATAN2(0.5, 0.3)")
         self.validate_identity("SELECT ATANH(0.5)")
         self.validate_identity("SELECT CBRT(27.0)")
+        self.validate_identity("SELECT POW(2, 3)", "SELECT POWER(2, 3)")
+        self.validate_identity("SELECT POW(2.5, 3.0)", "SELECT POWER(2.5, 3.0)")
+        self.validate_identity("SELECT SQUARE(2.5)", "SELECT POWER(2.5, 2)")
         self.validate_identity("SELECT SIGN(x)")
         self.validate_identity("SELECT COSH(1.5)")
+        self.validate_identity("SELECT TANH(0.5)")
         self.validate_identity("SELECT JAROWINKLER_SIMILARITY('hello', 'world')")
         self.validate_identity("SELECT TRANSLATE(column_name, 'abc', '123')")
         self.validate_identity("SELECT UNICODE(column_name)")
         self.validate_identity("SELECT SPLIT_PART('11.22.33', '.', 1)")
+        self.validate_identity("SELECT PI()")
         self.validate_identity("SELECT DEGREES(PI() / 3)")
         self.validate_identity("SELECT DEGREES(1)")
         self.validate_identity("PARSE_URL('https://example.com/path')")
@@ -353,6 +362,12 @@ class TestSnowflake(Validator):
         self.validate_identity(
             "SELECT {fn CEILING(5.3)}",
             "SELECT CEIL(5.3)",
+        )
+        self.validate_identity(
+            "SELECT CEIL(3.14)",
+        )
+        self.validate_identity(
+            "SELECT CEIL(3.14, 1)",
         )
         self.validate_identity(
             "CAST(x AS BYTEINT)",
@@ -1483,6 +1498,14 @@ class TestSnowflake(Validator):
             },
         )
         self.validate_identity("SELECT ARRAY_CONTAINS(1, [1])")
+
+        self.validate_all(
+            "SELECT x'ABCD'",
+            write={
+                "snowflake": "SELECT x'ABCD'",
+                "duckdb": "SELECT CAST(HEX(FROM_HEX('ABCD')) AS VARBINARY)",
+            },
+        )
 
     def test_null_treatment(self):
         self.validate_all(

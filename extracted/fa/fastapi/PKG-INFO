@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: fastapi
-Version: 0.118.2
+Version: 0.118.3
 Summary: FastAPI framework, high performance, easy to learn, fast to code, ready for production
 Author-Email: =?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>
 Classifier: Intended Audience :: Information Technology
@@ -30,6 +30,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Internet :: WWW/HTTP :: HTTP Servers
 Classifier: Topic :: Internet :: WWW/HTTP
 Project-URL: Homepage, https://github.com/fastapi/fastapi

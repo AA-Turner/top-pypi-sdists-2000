@@ -4,6 +4,7 @@ import io
 import os
 from contextlib import nullcontext
 from datetime import datetime
+from multiprocessing.pool import ThreadPool
 
 import numpy as np
 import pytest
@@ -1424,6 +1425,25 @@ def test_naxis():
     assert w.pixel_bounds is None
 
 
+def test_naxis_1d():
+    w = wcs.WCS(
+        {
+            "naxis1": 100,
+            "crval1": 1,
+            "cdelt1": 0.1,
+            "crpix1": 1,
+        }
+    )
+    assert w.pixel_shape == (100,)
+    assert w.array_shape == (100,)
+
+    w.pixel_shape = (99,)
+    assert w._naxis == [99]
+
+    w.pixel_shape = None
+    assert w.pixel_bounds is None
+
+
 def test_sip_with_altkey():
     """
     Test that when creating a WCS object using a key, CTYPE with
@@ -1922,3 +1942,35 @@ def test_DistortionLookupTable():
             img_world_wcs.pixel_to_world_values(12 + dx * 3, 22 + dy * 3),
             [12 + dx * 3, 22 + dy * 3],
         )
+
+
+def test_thread_safe_conversions():
+    # This is a regression test for a bug which caused wcsset to be called
+    # unnecessarily multiple times, including every time some attribute were
+    # accessed on the WCS. This meant that if one was doing a series of
+    # coordinate transforms in a multi-threaded environment, wcsset could
+    # get called in the process and modify the WCS object, which was not
+    # thread-safe. Now wcsset is not actually called after the initial time.
+    # This was discussed in more detail in https://github.com/astropy/astropy/issues/16245
+
+    w = wcs.WCS(naxis=2)
+    w.wcs.crpix = [-234.75, 8.3393]
+    w.wcs.cdelt = np.array([-0.066667, 0.066667])
+    w.wcs.crval = [0, -90]
+    w.wcs.ctype = ["RA---AIR", "DEC--AIR"]
+    w.wcs.set()
+
+    N = 1_000_000
+
+    pixel = np.random.randint(-1000, 1000, N * 2).reshape((N, 2)).astype(float)
+
+    def round_trip_transform(pixel):
+        world = w.wcs.p2s(pixel.copy(), 1)["world"]
+        w.wcs.lng  # this access causes issues, without it all works
+        pixel = w.wcs.s2p(world, 1)["pixcrd"]
+        return pixel
+
+    with ThreadPool(8) as pool:
+        results = pool.map(round_trip_transform, (pixel,) * 8)
+        for pixel2 in results:
+            assert_allclose(pixel, pixel2, atol=1e-7)

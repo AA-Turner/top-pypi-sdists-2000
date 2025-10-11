@@ -70,7 +70,7 @@ def test_pilsave():
         pix2 = pymupdf.Pixmap(stream)
         assert repr(pix1) == repr(pix2)
     except ModuleNotFoundError:
-        assert platform.system() == 'Windows' and sys.maxsize == 2**31 - 1
+        assert platform.system() in ('Windows', 'Emscripten') and sys.maxsize == 2**31 - 1
 
 
 def test_save(tmpdir):
@@ -556,6 +556,9 @@ def test_4423():
 
 
 def test_4445():
+    if os.environ.get('PYODIDE_ROOT'):
+        print('test_4445(): not running on Pyodide - cannot run child processes.')
+        return
     print()
     # Test case is large so we download it instead of having it in PyMuPDF
     # git. We put it in `cache/` directory do it is not removed by `git clean`
@@ -628,3 +631,22 @@ def test_4388():
         assert rms == 0
     else:
         assert rms >= 10
+
+
+def test_4699():
+    path = os.path.normpath(f'{__file__}/../../tests/resources/test_4699.pdf')
+    path_png_expected = os.path.normpath(f'{__file__}/../../tests/resources/test_4699.png')
+    path_png_actual = os.path.normpath(f'{__file__}/../../tests/test_4699.png')
+    with pymupdf.open(path) as document:
+        page = document[0]
+        pixmap = page.get_pixmap()
+        pixmap.save(path_png_actual)
+    print(f'Have saved to {path_png_actual=}.')
+    rms = gentle_compare.pixmaps_rms(path_png_expected, pixmap)
+    print(f'test_4699(): {rms=}')
+    if pymupdf.mupdf_version_tuple >= (1, 27):
+        assert rms == 0
+    else:
+        wt = pymupdf.TOOLS.mupdf_warnings()
+        assert 'syntax error: cannot find ExtGState resource' in wt
+        assert rms > 20

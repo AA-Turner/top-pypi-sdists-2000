@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: sagemaker
-Version: 2.252.0
+Version: 2.253.0
 Summary: Open source library for training and deploying models on Amazon SageMaker.
 Project-URL: Homepage, https://github.com/aws/sagemaker-python-sdk
 Author: Amazon Web Services
@@ -24,7 +24,7 @@ Requires-Dist: google-pasta
 Requires-Dist: graphene<4,>=3
 Requires-Dist: importlib-metadata<7.0,>=1.4.0
 Requires-Dist: jsonschema
-Requires-Dist: numpy==1.26.4
+Requires-Dist: numpy<2.3.3,>=1.26.4
 Requires-Dist: omegaconf<3,>=2.2
 Requires-Dist: packaging<25,>=23.0
 Requires-Dist: pandas
@@ -51,7 +51,7 @@ Requires-Dist: pyyaml<7,>=6.0.1; extra == 'all'
 Requires-Dist: sagemaker-feature-store-pyspark-3-3; extra == 'all'
 Requires-Dist: sagemaker-mlflow>=0.1.0; extra == 'all'
 Requires-Dist: sagemaker-schema-inference-artifacts>=0.0.5; extra == 'all'
-Requires-Dist: scipy==1.11.3; extra == 'all'
+Requires-Dist: scipy==1.13.0; extra == 'all'
 Requires-Dist: urllib3<3.0.0,>=1.26.8; extra == 'all'
 Requires-Dist: uvicorn>=0.30.1; extra == 'all'
 Provides-Extra: feature-processor
@@ -70,7 +70,7 @@ Requires-Dist: urllib3<3.0.0,>=1.26.8; extra == 'local'
 Provides-Extra: sagemaker-mlflow
 Requires-Dist: sagemaker-mlflow>=0.1.0; extra == 'sagemaker-mlflow'
 Provides-Extra: scipy
-Requires-Dist: scipy==1.11.3; extra == 'scipy'
+Requires-Dist: scipy==1.13.0; extra == 'scipy'
 Provides-Extra: test
 Requires-Dist: accelerate<=0.27.0,>=0.24.1; extra == 'test'
 Requires-Dist: apache-airflow-providers-amazon==7.2.1; extra == 'test'
@@ -104,12 +104,12 @@ Requires-Dist: mypy==1.9.0; extra == 'test'
 Requires-Dist: nbformat<6,>=5.9; extra == 'test'
 Requires-Dist: nest-asyncio; extra == 'test'
 Requires-Dist: networkx==3.2.1; extra == 'test'
-Requires-Dist: numpy==1.26.4; extra == 'test'
+Requires-Dist: numpy<2.3.3,>=2.0.0; extra == 'test'
 Requires-Dist: onnx==1.17.0; extra == 'test'
 Requires-Dist: opentelemetry-exporter-otlp==1.27.0; extra == 'test'
 Requires-Dist: opentelemetry-proto==1.27.0; extra == 'test'
 Requires-Dist: orderly-set<5.4.0; extra == 'test'
-Requires-Dist: pandas==1.4.4; extra == 'test'
+Requires-Dist: pandas>=2.3.0; extra == 'test'
 Requires-Dist: pillow<=11,>=10.0.1; extra == 'test'
 Requires-Dist: protobuf==4.25.8; extra == 'test'
 Requires-Dist: pyspark==3.3.2; extra == 'test'
@@ -127,11 +127,11 @@ Requires-Dist: sagemaker-feature-store-pyspark-3-3; extra == 'test'
 Requires-Dist: sagemaker-mlflow>=0.1.0; extra == 'test'
 Requires-Dist: sagemaker-schema-inference-artifacts>=0.0.5; extra == 'test'
 Requires-Dist: schema==0.7.5; extra == 'test'
-Requires-Dist: scikit-learn==1.3.0; extra == 'test'
-Requires-Dist: scipy==1.11.3; extra == 'test'
+Requires-Dist: scikit-learn==1.6.1; extra == 'test'
+Requires-Dist: scipy==1.13.0; extra == 'test'
 Requires-Dist: stopit==1.1.2; extra == 'test'
 Requires-Dist: tensorboard<=2.18.0,>=2.16.2; extra == 'test'
-Requires-Dist: tensorflow<=2.18.0,>=2.16.2; extra == 'test'
+Requires-Dist: tensorflow<=2.19.0,>=2.16.2; extra == 'test'
 Requires-Dist: tox==3.24.5; extra == 'test'
 Requires-Dist: tritonclient[http]<2.37.0; extra == 'test'
 Requires-Dist: urllib3<3.0.0,>=1.26.8; extra == 'test'

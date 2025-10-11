@@ -3,16 +3,19 @@
 Handles the "VOUnit" unit format.
 """
 
-from __future__ import annotations
-
 import re
 import warnings
-from typing import TYPE_CHECKING
+from re import Pattern
+from typing import ClassVar, Literal
 
+import numpy as np
+
+from astropy.extern.ply.lex import LexToken
 from astropy.units.core import (
     CompositeUnit,
     NamedUnit,
     PrefixUnit,
+    UnitBase,
     def_unit,
     dimensionless_unscaled,
     si_prefixes,
@@ -23,20 +26,11 @@ from astropy.units.errors import (
     UnitsError,
     UnitsWarning,
 )
+from astropy.units.typing import UnitScale
 from astropy.utils import classproperty
 
 from . import Base, utils
 from .generic import _GenericParserMixin
-
-if TYPE_CHECKING:
-    from re import Pattern
-    from typing import ClassVar, Literal
-
-    import numpy as np
-
-    from astropy.extern.ply.lex import LexToken
-    from astropy.units import UnitBase
-    from astropy.units.typing import UnitScale
 
 
 class VOUnit(Base, _GenericParserMixin):

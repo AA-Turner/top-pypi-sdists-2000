@@ -408,7 +408,13 @@ class DefaultRequirements(SuiteRequirements):
         gc.collect() is called, as well as clean out unreferenced subclasses.
 
         """
-        return self.cpython + skip_if("+aiosqlite")
+        return self.cpython + self.gil_enabled + skip_if("+aiosqlite")
+
+    @property
+    def multithreading_support(self):
+        """target platform allows use of threads without any problem"""
+
+        return skip_if("+aiosqlite") + skip_if(self.sqlite_memory)
 
     @property
     def memory_process_intensive(self):
@@ -666,6 +672,10 @@ class DefaultRequirements(SuiteRequirements):
                 self._mysql_and_check_constraints_exist,
             ]
         )
+
+    @property
+    def indexes_check_column_order(self):
+        return exclusions.open()
 
     @property
     def indexes_with_expressions(self):
@@ -1599,6 +1609,12 @@ class DefaultRequirements(SuiteRequirements):
                 "Async dialect required",
             )
         )
+
+    @property
+    def async_dialect_with_await_close(self):
+        """dialect's cursor has a close() method called with await"""
+
+        return only_on(["+aioodbc", "+aiomysql", "+asyncmy"])
 
     def _has_oracle_test_dblink(self, key):
         def check(config):

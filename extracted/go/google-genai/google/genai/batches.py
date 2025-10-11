@@ -1016,6 +1016,20 @@ def _GetBatchJobParameters_to_vertex(
   return to_object
 
 
+def _GoogleMaps_to_mldev(
+    from_object: Union[dict[str, Any], object],
+    parent_object: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+  to_object: dict[str, Any] = {}
+  if getv(from_object, ['auth_config']) is not None:
+    raise ValueError('auth_config parameter is not supported in Gemini API.')
+
+  if getv(from_object, ['enable_widget']) is not None:
+    setv(to_object, ['enableWidget'], getv(from_object, ['enable_widget']))
+
+  return to_object
+
+
 def _GoogleSearch_to_mldev(
     from_object: Union[dict[str, Any], object],
     parent_object: Optional[dict[str, Any]] = None,
@@ -1056,6 +1070,9 @@ def _InlinedRequest_to_mldev(
             for item in t.t_contents(getv(from_object, ['contents']))
         ],
     )
+
+  if getv(from_object, ['metadata']) is not None:
+    setv(to_object, ['metadata'], getv(from_object, ['metadata']))
 
   if getv(from_object, ['config']) is not None:
     setv(
@@ -1323,7 +1340,11 @@ def _Tool_to_mldev(
     )
 
   if getv(from_object, ['google_maps']) is not None:
-    raise ValueError('google_maps parameter is not supported in Gemini API.')
+    setv(
+        to_object,
+        ['googleMaps'],
+        _GoogleMaps_to_mldev(getv(from_object, ['google_maps']), to_object),
+    )
 
   if getv(from_object, ['url_context']) is not None:
     setv(to_object, ['urlContext'], getv(from_object, ['url_context']))
