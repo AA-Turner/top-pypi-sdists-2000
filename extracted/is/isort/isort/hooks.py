@@ -7,12 +7,11 @@ usage:
 import os
 import subprocess  # nosec
 from pathlib import Path
-from typing import List, Optional
 
 from isort import Config, api, exceptions
 
 
-def get_output(command: List[str]) -> str:
+def get_output(command: list[str]) -> str:
     """Run a command and return raw output
 
     :param str command: the command to run
@@ -22,7 +21,7 @@ def get_output(command: List[str]) -> str:
     return result.stdout.decode()
 
 
-def get_lines(command: List[str]) -> List[str]:
+def get_lines(command: list[str]) -> list[str]:
     """Run a command and return lines of output
 
     :param str command: the command to run
@@ -37,7 +36,7 @@ def git_hook(
     modify: bool = False,
     lazy: bool = False,
     settings_file: str = "",
-    directories: Optional[List[str]] = None,
+    directories: list[str] | None = None,
 ) -> int:
     """Git pre-commit hook to check staged files for isort errors
 
