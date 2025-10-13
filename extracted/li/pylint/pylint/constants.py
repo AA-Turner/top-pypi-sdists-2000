@@ -14,9 +14,9 @@ import platformdirs
 from pylint.__pkginfo__ import __version__
 from pylint.typing import MessageTypesFullName
 
-PY310_PLUS = sys.version_info[:2] >= (3, 10)
 PY311_PLUS = sys.version_info[:2] >= (3, 11)
 PY312_PLUS = sys.version_info[:2] >= (3, 12)
+PY314_PLUS = sys.version_info[:2] >= (3, 14)
 
 IS_PYPY = platform.python_implementation() == "PyPy"
 
@@ -75,6 +75,8 @@ HUMAN_READABLE_TYPES = {
     "class_const": "class constant",
     "inlinevar": "inline iteration",
     "typevar": "type variable",
+    "paramspec": "parameter specification variable",
+    "typevartuple": "type variable tuple",
     "typealias": "type alias",
 }
 
