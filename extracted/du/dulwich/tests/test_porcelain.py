@@ -625,7 +625,7 @@ class CommitSignTests(PorcelainGpgTestCase):
             message="Some message",
             author="Joe <joe@example.com>",
             committer="Bob <bob@example.com>",
-            signoff=True,
+            sign=True,
         )
         self.assertIsInstance(sha, bytes)
         self.assertEqual(len(sha), 40)
@@ -694,7 +694,7 @@ class CommitSignTests(PorcelainGpgTestCase):
             message="Signed with configured key",
             author="Joe <joe@example.com>",
             committer="Bob <bob@example.com>",
-            signoff=True,  # This should read user.signingKey from config
+            sign=True,  # This should read user.signingKey from config
         )
 
         self.assertIsInstance(sha, bytes)
@@ -809,7 +809,7 @@ class CommitSignTests(PorcelainGpgTestCase):
         )
         self.repo.refs[b"HEAD"] = c3.id
 
-        # Set up commit.gpgSign=false but explicitly pass signoff=True
+        # Set up commit.gpgSign=false but explicitly pass sign=True
         cfg = self.repo.get_config()
         cfg.set(("user",), "signingKey", PorcelainGpgTestCase.DEFAULT_KEY_ID)
         cfg.set(("commit",), "gpgSign", False)
@@ -817,13 +817,13 @@ class CommitSignTests(PorcelainGpgTestCase):
 
         self.import_default_key()
 
-        # Create commit with explicit signoff=True (should override config)
+        # Create commit with explicit sign=True (should override config)
         sha = porcelain.commit(
             self.repo.path,
             message="Explicitly signed commit",
             author="Joe <joe@example.com>",
             committer="Bob <bob@example.com>",
-            signoff=True,  # This should override commit.gpgSign=false
+            sign=True,  # This should override commit.gpgSign=false
         )
 
         self.assertIsInstance(sha, bytes)
@@ -842,7 +842,7 @@ class CommitSignTests(PorcelainGpgTestCase):
         )
         self.repo.refs[b"HEAD"] = c3.id
 
-        # Set up commit.gpgSign=true but explicitly pass signoff=False
+        # Set up commit.gpgSign=true but explicitly pass sign=False
         cfg = self.repo.get_config()
         cfg.set(("user",), "signingKey", PorcelainGpgTestCase.DEFAULT_KEY_ID)
         cfg.set(("commit",), "gpgSign", True)
@@ -850,13 +850,13 @@ class CommitSignTests(PorcelainGpgTestCase):
 
         self.import_default_key()
 
-        # Create commit with explicit signoff=False (should disable signing)
+        # Create commit with explicit sign=False (should disable signing)
         sha = porcelain.commit(
             self.repo.path,
             message="Explicitly unsigned commit",
             author="Joe <joe@example.com>",
             committer="Bob <bob@example.com>",
-            signoff=False,  # This should override commit.gpgSign=true
+            sign=False,  # This should override commit.gpgSign=true
         )
 
         self.assertIsInstance(sha, bytes)
@@ -866,6 +866,165 @@ class CommitSignTests(PorcelainGpgTestCase):
         assert isinstance(commit, Commit)
         # Verify the commit is NOT signed despite config=true
         self.assertIsNone(commit._gpgsig)
+
+
+@skipIf(
+    platform.python_implementation() == "PyPy" or sys.platform == "win32",
+    "gpgme not easily available or supported on Windows and PyPy",
+)
+class VerifyCommitTests(PorcelainGpgTestCase):
+    def test_verify_commit_valid_signature(self) -> None:
+        """Test verifying a commit with a valid GPG signature."""
+        _c1, _c2, c3 = build_commit_graph(
+            self.repo.object_store, [[1], [2, 1], [3, 1, 2]]
+        )
+        self.repo.refs[b"HEAD"] = c3.id
+        cfg = self.repo.get_config()
+        cfg.set(("user",), "signingKey", PorcelainGpgTestCase.DEFAULT_KEY_ID)
+        cfg.write_to_path()
+        self.import_default_key()
+
+        # Create a signed commit
+        sha = porcelain.commit(
+            self.repo.path,
+            message="Signed commit",
+            author="Joe <joe@example.com>",
+            committer="Bob <bob@example.com>",
+            sign=True,
+        )
+
+        # Verify should not raise
+        porcelain.verify_commit(self.repo.path, sha)
+        porcelain.verify_commit(
+            self.repo.path, sha, keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID]
+        )
+
+    def test_verify_commit_with_wrong_key(self) -> None:
+        """Test that verifying with wrong keyid raises MissingSignatures."""
+        _c1, _c2, c3 = build_commit_graph(
+            self.repo.object_store, [[1], [2, 1], [3, 1, 2]]
+        )
+        self.repo.refs[b"HEAD"] = c3.id
+        cfg = self.repo.get_config()
+        cfg.set(("user",), "signingKey", PorcelainGpgTestCase.DEFAULT_KEY_ID)
+        cfg.write_to_path()
+        self.import_default_key()
+
+        sha = porcelain.commit(
+            self.repo.path,
+            message="Signed commit",
+            author="Joe <joe@example.com>",
+            committer="Bob <bob@example.com>",
+            sign=True,
+        )
+
+        self.import_non_default_key()
+        self.assertRaises(
+            gpg.errors.MissingSignatures,
+            porcelain.verify_commit,
+            self.repo.path,
+            sha,
+            keyids=[PorcelainGpgTestCase.NON_DEFAULT_KEY_ID],
+        )
+
+    def test_verify_commit_unsigned(self) -> None:
+        """Test that verifying an unsigned commit succeeds (no signature to verify)."""
+        _c1, _c2, c3 = build_commit_graph(
+            self.repo.object_store, [[1], [2, 1], [3, 1, 2]]
+        )
+        self.repo.refs[b"HEAD"] = c3.id
+
+        sha = porcelain.commit(
+            self.repo.path,
+            message="Unsigned commit",
+            author="Joe <joe@example.com>",
+            committer="Bob <bob@example.com>",
+            sign=False,
+        )
+
+        # Verify should not raise for unsigned commits
+        porcelain.verify_commit(self.repo.path, sha)
+
+
+@skipIf(
+    platform.python_implementation() == "PyPy" or sys.platform == "win32",
+    "gpgme not easily available or supported on Windows and PyPy",
+)
+class VerifyTagTests(PorcelainGpgTestCase):
+    def test_verify_tag_valid_signature(self) -> None:
+        """Test verifying a tag with a valid GPG signature."""
+        _c1, _c2, c3 = build_commit_graph(
+            self.repo.object_store, [[1], [2, 1], [3, 1, 2]]
+        )
+        self.repo.refs[b"HEAD"] = c3.id
+        cfg = self.repo.get_config()
+        cfg.set(("user",), "signingKey", PorcelainGpgTestCase.DEFAULT_KEY_ID)
+        cfg.write_to_path()
+        self.import_default_key()
+
+        # Create a signed tag
+        porcelain.tag_create(
+            self.repo.path,
+            b"signed-tag",
+            b"Tagger <tagger@example.com>",
+            b"Signed tag message",
+            annotated=True,
+            sign=True,
+        )
+
+        # Verify should not raise
+        porcelain.verify_tag(self.repo.path, b"signed-tag")
+        porcelain.verify_tag(
+            self.repo.path, b"signed-tag", keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID]
+        )
+
+    def test_verify_tag_with_wrong_key(self) -> None:
+        """Test that verifying with wrong keyid raises MissingSignatures."""
+        _c1, _c2, c3 = build_commit_graph(
+            self.repo.object_store, [[1], [2, 1], [3, 1, 2]]
+        )
+        self.repo.refs[b"HEAD"] = c3.id
+        cfg = self.repo.get_config()
+        cfg.set(("user",), "signingKey", PorcelainGpgTestCase.DEFAULT_KEY_ID)
+        cfg.write_to_path()
+        self.import_default_key()
+
+        porcelain.tag_create(
+            self.repo.path,
+            b"signed-tag",
+            b"Tagger <tagger@example.com>",
+            b"Signed tag message",
+            annotated=True,
+            sign=True,
+        )
+
+        self.import_non_default_key()
+        self.assertRaises(
+            gpg.errors.MissingSignatures,
+            porcelain.verify_tag,
+            self.repo.path,
+            b"signed-tag",
+            keyids=[PorcelainGpgTestCase.NON_DEFAULT_KEY_ID],
+        )
+
+    def test_verify_tag_unsigned(self) -> None:
+        """Test that verifying an unsigned tag succeeds (no signature to verify)."""
+        _c1, _c2, c3 = build_commit_graph(
+            self.repo.object_store, [[1], [2, 1], [3, 1, 2]]
+        )
+        self.repo.refs[b"HEAD"] = c3.id
+
+        porcelain.tag_create(
+            self.repo.path,
+            b"unsigned-tag",
+            b"Tagger <tagger@example.com>",
+            b"Unsigned tag message",
+            annotated=True,
+            sign=False,
+        )
+
+        # Verify should not raise for unsigned tags
+        porcelain.verify_tag(self.repo.path, b"unsigned-tag")
 
 
 class TimezoneTests(PorcelainTestCase):
@@ -9585,3 +9744,300 @@ class WorktreePorcelainTests(PorcelainTestCase):
         paths = [wt.path for wt in worktrees]
         self.assertIn(new_path, paths)
         self.assertNotIn(old_path, paths)
+
+
+class VarTests(PorcelainTestCase):
+    """Tests for the var command."""
+
+    def test_var_author_ident(self):
+        """Test getting GIT_AUTHOR_IDENT."""
+        # Set up user config
+        config = self.repo.get_config()
+        config.set((b"user",), b"name", b"Test Author")
+        config.set((b"user",), b"email", b"author@example.com")
+        config.write_to_path()
+
+        result = porcelain.var(self.repo_path, variable="GIT_AUTHOR_IDENT")
+        self.assertIn("Test Author <author@example.com>", result)
+        # Check that timestamp and timezone are included
+        # Format: Name <email> timestamp timezone
+        # "Test Author" is 2 words, so we have: Test, Author, <email>, timestamp, timezone
+        parts = result.split()
+        self.assertGreaterEqual(
+            len(parts), 4
+        )  # At least name, <email>, timestamp, timezone
+        # Check last two parts are timestamp and timezone
+        self.assertTrue(parts[-2].isdigit())  # timestamp
+        self.assertRegex(parts[-1], r"[+-]\d{4}")  # timezone
+
+    def test_var_committer_ident(self):
+        """Test getting GIT_COMMITTER_IDENT."""
+        # Set up user config
+        config = self.repo.get_config()
+        config.set((b"user",), b"name", b"Test Committer")
+        config.set((b"user",), b"email", b"committer@example.com")
+        config.write_to_path()
+
+        result = porcelain.var(self.repo_path, variable="GIT_COMMITTER_IDENT")
+        self.assertIn("Test Committer <committer@example.com>", result)
+        # Check that timestamp and timezone are included
+        parts = result.split()
+        self.assertGreaterEqual(
+            len(parts), 4
+        )  # At least name, <email>, timestamp, timezone
+        # Check last two parts are timestamp and timezone
+        self.assertTrue(parts[-2].isdigit())  # timestamp
+        self.assertRegex(parts[-1], r"[+-]\d{4}")  # timezone
+
+    def test_var_editor(self):
+        """Test getting GIT_EDITOR."""
+        # Test with environment variable
+        self.overrideEnv("GIT_EDITOR", "vim")
+        result = porcelain.var(self.repo_path, variable="GIT_EDITOR")
+        self.assertEqual(result, "vim")
+
+    def test_var_editor_from_config(self):
+        """Test getting GIT_EDITOR from config."""
+        # Set up editor in config
+        config = self.repo.get_config()
+        config.set((b"core",), b"editor", b"emacs")
+        config.write_to_path()
+
+        # Make sure env var is not set
+        self.overrideEnv("GIT_EDITOR", None)
+        result = porcelain.var(self.repo_path, variable="GIT_EDITOR")
+        self.assertEqual(result, "emacs")
+
+    def test_var_pager(self):
+        """Test getting GIT_PAGER."""
+        # Test with environment variable
+        self.overrideEnv("GIT_PAGER", "less")
+        result = porcelain.var(self.repo_path, variable="GIT_PAGER")
+        self.assertEqual(result, "less")
+
+    def test_var_pager_from_config(self):
+        """Test getting GIT_PAGER from config."""
+        # Set up pager in config
+        config = self.repo.get_config()
+        config.set((b"core",), b"pager", b"more")
+        config.write_to_path()
+
+        # Make sure env var is not set
+        self.overrideEnv("GIT_PAGER", None)
+        result = porcelain.var(self.repo_path, variable="GIT_PAGER")
+        self.assertEqual(result, "more")
+
+    def test_var_default_branch(self):
+        """Test getting GIT_DEFAULT_BRANCH."""
+        # Set up default branch in config
+        config = self.repo.get_config()
+        config.set((b"init",), b"defaultBranch", b"main")
+        config.write_to_path()
+
+        result = porcelain.var(self.repo_path, variable="GIT_DEFAULT_BRANCH")
+        self.assertEqual(result, "main")
+
+    def test_var_default_branch_default(self):
+        """Test getting GIT_DEFAULT_BRANCH with default value."""
+        result = porcelain.var(self.repo_path, variable="GIT_DEFAULT_BRANCH")
+        self.assertEqual(result, "master")
+
+    def test_var_list_all(self):
+        """Test listing all logical variables."""
+        # Set up some config
+        config = self.repo.get_config()
+        config.set((b"user",), b"name", b"Test User")
+        config.set((b"user",), b"email", b"test@example.com")
+        config.write_to_path()
+
+        result = porcelain.var_list(self.repo_path)
+        self.assertIsInstance(result, dict)
+        # Check that logical variables are present
+        self.assertIn("GIT_AUTHOR_IDENT", result)
+        self.assertIn("GIT_COMMITTER_IDENT", result)
+        self.assertIn("GIT_DEFAULT_BRANCH", result)
+        # Config variables should NOT be included (deprecated feature)
+        self.assertNotIn("user.name", result)
+        self.assertNotIn("user.email", result)
+        # Verify only logical variables are present
+        for key in result.keys():
+            self.assertTrue(key.startswith("GIT_"))
+
+    def test_var_unknown_variable(self):
+        """Test requesting an unknown variable."""
+        with self.assertRaises(KeyError):
+            porcelain.var(self.repo_path, variable="UNKNOWN_VARIABLE")
+
+
+class MergeBaseTests(PorcelainTestCase):
+    """Tests for merge-base, is_ancestor, and independent_commits."""
+
+    def test_merge_base_linear_history(self):
+        """Test merge-base with linear history."""
+        # Create linear history: c1 <- c2 <- c3
+        _c1, c2, c3 = build_commit_graph(self.repo.object_store, [[1], [2, 1], [3, 2]])
+        self.repo.refs[b"refs/heads/branch1"] = c2.id
+        self.repo.refs[b"refs/heads/branch2"] = c3.id
+
+        result = porcelain.merge_base(
+            self.repo.path, committishes=["refs/heads/branch1", "refs/heads/branch2"]
+        )
+        self.assertEqual([c2.id], result)
+
+    def test_merge_base_diverged(self):
+        """Test merge-base with diverged branches."""
+        # Create diverged history: c1 <- c2a, c1 <- c2b
+        c1, c2a, c2b = build_commit_graph(self.repo.object_store, [[1], [2, 1], [3, 1]])
+        self.repo.refs[b"refs/heads/branch-a"] = c2a.id
+        self.repo.refs[b"refs/heads/branch-b"] = c2b.id
+
+        result = porcelain.merge_base(
+            self.repo.path, committishes=["refs/heads/branch-a", "refs/heads/branch-b"]
+        )
+        self.assertEqual([c1.id], result)
+
+    def test_merge_base_all(self):
+        """Test merge-base with --all flag."""
+        # Create history with multiple common ancestors
+        commits = build_commit_graph(
+            self.repo.object_store,
+            [[1], [2, 1], [3, 1], [4, 2, 3], [5, 2, 3]],
+        )
+        _c1, c2, c3, c4, c5 = commits
+        self.repo.refs[b"refs/heads/branch1"] = c4.id
+        self.repo.refs[b"refs/heads/branch2"] = c5.id
+
+        # Without --all, should return only first result
+        result = porcelain.merge_base(
+            self.repo.path,
+            committishes=["refs/heads/branch1", "refs/heads/branch2"],
+            all=False,
+        )
+        self.assertEqual(1, len(result))
+
+        # With --all, should return all merge bases
+        result_all = porcelain.merge_base(
+            self.repo.path,
+            committishes=["refs/heads/branch1", "refs/heads/branch2"],
+            all=True,
+        )
+        self.assertEqual(2, len(result_all))
+        self.assertIn(c2.id, result_all)
+        self.assertIn(c3.id, result_all)
+
+    def test_merge_base_octopus(self):
+        """Test merge-base with --octopus flag."""
+        # Create three-way diverged history
+        commits = build_commit_graph(
+            self.repo.object_store, [[1], [2, 1], [3, 1], [4, 1]]
+        )
+        c1, c2, c3, c4 = commits
+        self.repo.refs[b"refs/heads/a"] = c2.id
+        self.repo.refs[b"refs/heads/b"] = c3.id
+        self.repo.refs[b"refs/heads/c"] = c4.id
+
+        result = porcelain.merge_base(
+            self.repo.path,
+            committishes=["refs/heads/a", "refs/heads/b", "refs/heads/c"],
+            octopus=True,
+        )
+        self.assertEqual([c1.id], result)
+
+    def test_merge_base_requires_two_commits(self):
+        """Test merge-base requires at least two commits."""
+        with self.assertRaises(ValueError):
+            porcelain.merge_base(self.repo.path, committishes=["HEAD"])
+
+    def test_is_ancestor_true(self):
+        """Test is_ancestor returns True when commit is an ancestor."""
+        # Create linear history: c1 <- c2 <- c3
+        c1, c2, c3 = build_commit_graph(self.repo.object_store, [[1], [2, 1], [3, 2]])
+        self.repo.refs[b"refs/heads/main"] = c3.id
+
+        # c1 is ancestor of c3
+        result = porcelain.is_ancestor(
+            self.repo.path, ancestor=c1.id.decode(), descendant=c3.id.decode()
+        )
+        self.assertTrue(result)
+
+        # c2 is ancestor of c3
+        result = porcelain.is_ancestor(
+            self.repo.path, ancestor=c2.id.decode(), descendant=c3.id.decode()
+        )
+        self.assertTrue(result)
+
+    def test_is_ancestor_false(self):
+        """Test is_ancestor returns False when commit is not an ancestor."""
+        # Create diverged history: c1 <- c2a, c1 <- c2b
+        _c1, c2a, c2b = build_commit_graph(
+            self.repo.object_store, [[1], [2, 1], [3, 1]]
+        )
+
+        # c2a is not ancestor of c2b
+        result = porcelain.is_ancestor(
+            self.repo.path, ancestor=c2a.id.decode(), descendant=c2b.id.decode()
+        )
+        self.assertFalse(result)
+
+        # c2b is not ancestor of c2a
+        result = porcelain.is_ancestor(
+            self.repo.path, ancestor=c2b.id.decode(), descendant=c2a.id.decode()
+        )
+        self.assertFalse(result)
+
+    def test_is_ancestor_requires_both(self):
+        """Test is_ancestor requires both ancestor and descendant."""
+        with self.assertRaises(ValueError):
+            porcelain.is_ancestor(self.repo.path, ancestor="HEAD", descendant=None)
+        with self.assertRaises(ValueError):
+            porcelain.is_ancestor(self.repo.path, ancestor=None, descendant="HEAD")
+
+    def test_independent_commits_linear(self):
+        """Test independent_commits with linear history."""
+        # Create linear history: c1 <- c2 <- c3
+        c1, c2, c3 = build_commit_graph(self.repo.object_store, [[1], [2, 1], [3, 2]])
+
+        # Only c3 is independent (c1 and c2 are ancestors)
+        result = porcelain.independent_commits(
+            self.repo.path,
+            committishes=[c1.id.decode(), c2.id.decode(), c3.id.decode()],
+        )
+        self.assertEqual([c3.id], result)
+
+    def test_independent_commits_diverged(self):
+        """Test independent_commits with diverged branches."""
+        # Create diverged history: c1 <- c2a, c1 <- c2b
+        _c1, c2a, c2b = build_commit_graph(
+            self.repo.object_store, [[1], [2, 1], [3, 1]]
+        )
+
+        # c2a and c2b are both independent (neither is ancestor of the other)
+        result = porcelain.independent_commits(
+            self.repo.path, committishes=[c2a.id.decode(), c2b.id.decode()]
+        )
+        self.assertEqual(2, len(result))
+        self.assertIn(c2a.id, result)
+        self.assertIn(c2b.id, result)
+
+    def test_independent_commits_mixed(self):
+        """Test independent_commits with mixed history."""
+        # Create mixed history
+        commits = build_commit_graph(
+            self.repo.object_store, [[1], [2, 1], [3, 1], [4, 2]]
+        )
+        _c1, c2, c3, c4 = commits
+
+        # c4 and c3 are independent; c2 is ancestor of c4
+        result = porcelain.independent_commits(
+            self.repo.path,
+            committishes=[c2.id.decode(), c3.id.decode(), c4.id.decode()],
+        )
+        self.assertEqual(2, len(result))
+        self.assertIn(c3.id, result)
+        self.assertIn(c4.id, result)
+        self.assertNotIn(c2.id, result)
+
+    def test_independent_commits_empty(self):
+        """Test independent_commits with empty list."""
+        result = porcelain.independent_commits(self.repo.path, committishes=[])
+        self.assertEqual([], result)

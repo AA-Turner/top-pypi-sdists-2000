@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: prek
-Version: 0.2.5
+Version: 0.2.6
 Classifier: Development Status :: 2 - Pre-Alpha
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -129,7 +129,7 @@ On Linux and macOS:
 
 <!-- linux-standalone-install:start -->
 ```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.5/prek-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.6/prek-installer.sh | sh
 ```
 <!-- linux-standalone-install:end -->
 
@@ -137,7 +137,7 @@ On Windows:
 
 <!-- windows-standalone-install:start -->
 ```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.5/prek-installer.ps1 | iex"
+powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.6/prek-installer.ps1 | iex"
 ```
 <!-- windows-standalone-install:end -->
 
@@ -146,9 +146,9 @@ powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases
 <details>
 <summary>PyPI</summary>
 
+<!-- pypi-install:start -->
 prek is published as Python binary wheel to PyPI, you can install it using `pip`, `uv` (recommended), or `pipx`:
 
-<!-- pypi-install:start -->
 ```bash
 # Using uv (recommended)
 uv tool install prek
@@ -197,6 +197,64 @@ Build from source using Cargo (Rust 1.89+ is required):
 cargo install --locked --git https://github.com/j178/prek
 ```
 <!-- cargo-install:end -->
+
+</details>
+
+<details>
+<summary>npmjs</summary>
+
+<!-- npmjs-install:start -->
+prek is published as a Node.js package, you can install it using `npm`, `pnpm`, or `npx`:
+
+```bash
+# Using npm
+npm add -D @j178/prek
+
+# Using pnpm
+pnpm add -D @j178/prek
+
+# Using npx
+npx @j178/prek --version
+
+# or install globally
+npm install -g @j178/prek
+
+# then use `prek` command
+prek --version
+```
+<!-- npmjs-install:end -->
+
+</details>
+
+<details>
+<summary>Nix</summary>
+
+<!-- nix-install:start -->
+prek is [available in Nix as `prek`](https://search.nixos.org/packages?channel=unstable&show=prek&query=prek).
+
+```shell
+# Choose what's appropriate for your use case.
+# One-off in a shell:
+nix-shell -p prek
+# NixOS or non-NixOS without flakes:
+nix-env -iA nixos.prek
+# Non-NixOS with flakes:
+nix profile install nixpkgs#prek
+```
+<!-- nix-install:end -->
+
+</details>
+
+<details>
+<summary>Conda</summary>
+
+<!-- conda-forge-install:start -->
+prek is [available as `prek` via conda-forge](https://anaconda.org/conda-forge/prek).
+
+```shell
+conda install conda-forge::prek
+```
+<!-- conda-forge-install:end -->
 
 </details>
 

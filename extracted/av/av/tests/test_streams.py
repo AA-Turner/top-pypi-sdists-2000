@@ -4,6 +4,7 @@ from fractions import Fraction
 import pytest
 
 import av
+import av.datasets
 
 from .common import fate_suite
 
@@ -12,7 +13,14 @@ class TestStreams:
     @pytest.fixture(autouse=True)
     def cleanup(self):
         yield
-        for file in ("data.ts", "out.mkv"):
+        for file in (
+            "data.ts",
+            "data_source.ts",
+            "data_copy.ts",
+            "out.mkv",
+            "video_with_attachment.mkv",
+            "remuxed_attachment.mkv",
+        ):
             if os.path.exists(file):
                 os.remove(file)
 
@@ -146,3 +154,100 @@ class TestStreams:
         assert repr.startswith("<av.DataStream #0") and repr.endswith(">")
 
         container.close()
+
+    def test_data_stream_from_template(self) -> None:
+        source_path = "data_source.ts"
+        payloads = [b"payload-a", b"payload-b", b"payload-c"]
+
+        with av.open(source_path, "w") as source:
+            source_stream = source.add_data_stream()
+            for i, payload in enumerate(payloads):
+                packet = av.Packet(payload)
+                packet.pts = i
+                packet.stream = source_stream
+                source.mux(packet)
+
+        copied_payloads: list[bytes] = []
+
+        with av.open(source_path) as input_container:
+            input_data_stream = input_container.streams.data[0]
+
+            with av.open("data_copy.ts", "w") as output_container:
+                output_data_stream = output_container.add_stream_from_template(
+                    input_data_stream
+                )
+
+                for packet in input_container.demux(input_data_stream):
+                    payload = bytes(packet)
+                    if not payload:
+                        continue
+                    copied_payloads.append(payload)
+                    clone = av.Packet(payload)
+                    clone.pts = packet.pts
+                    clone.dts = packet.dts
+                    clone.time_base = packet.time_base
+                    clone.stream = output_data_stream
+                    output_container.mux(clone)
+
+        with av.open("data_copy.ts") as remuxed:
+            output_stream = remuxed.streams.data[0]
+            assert output_stream.codec_context is None
+
+            remuxed_payloads: list[bytes] = []
+            for packet in remuxed.demux(output_stream):
+                payload = bytes(packet)
+                if payload:
+                    remuxed_payloads.append(payload)
+
+        assert remuxed_payloads == copied_payloads
+
+    def test_attachment_stream(self) -> None:
+        input_path = av.datasets.curated(
+            "pexels/time-lapse-video-of-night-sky-857195.mp4"
+        )
+        input_ = av.open(input_path)
+        out1_path = "video_with_attachment.mkv"
+
+        with av.open(out1_path, "w") as out1:
+            out1.add_attachment(
+                name="attachment.txt", mimetype="text/plain", data=b"hello\n"
+            )
+
+            in_v = input_.streams.video[0]
+            out_v = out1.add_stream_from_template(in_v)
+
+            for packet in input_.demux(in_v):
+                if packet.dts is None:
+                    continue
+                packet.stream = out_v
+                out1.mux(packet)
+
+        input_.close()
+
+        with av.open(out1_path) as c:
+            attachments = c.streams.attachments
+            assert len(attachments) == 1
+            att = attachments[0]
+            assert att.name == "attachment.txt"
+            assert att.mimetype == "text/plain"
+            assert att.data == b"hello\n"
+
+        out2_path = "remuxed_attachment.mkv"
+        with av.open(out1_path) as ic, av.open(out2_path, "w") as oc:
+            stream_map = {}
+            for s in ic.streams:
+                stream_map[s.index] = oc.add_stream_from_template(s)
+
+            for packet in ic.demux(ic.streams.video):
+                if packet.dts is None:
+                    continue
+                packet.stream = stream_map[packet.stream.index]
+                oc.mux(packet)
+
+        with av.open(out2_path) as c:
+            attachments = c.streams.attachments
+            assert len(attachments) == 1
+            att = attachments[0]
+            assert att.name == "attachment.txt"
+            assert att.mimetype == "text/plain"
+            assert att.data == b"hello\n"

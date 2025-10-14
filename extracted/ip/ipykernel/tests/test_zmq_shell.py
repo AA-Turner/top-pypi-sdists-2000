@@ -1,4 +1,4 @@
-""" Tests for zmq shell / display publisher. """
+"""Tests for zmq shell / display publisher."""
 
 # Copyright (c) IPython Development Team.
 # Distributed under the terms of the Modified BSD License.
@@ -245,7 +245,7 @@ def test_zmq_interactive_shell(kernel):
         shell.data_pub
     shell.kernel = kernel
     shell.set_next_input("hi")
-    assert shell.get_parent() is None
+    assert shell.get_parent() == {}
     if os.name == "posix":
         shell.system_piped("ls")
     else:

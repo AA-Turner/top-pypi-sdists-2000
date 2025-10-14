@@ -57,6 +57,12 @@ def test_read_simple_table_to_dict():
     ).read_all()["id"].to_pylist() == [5, 7, 9]
 
 
+def test_table_count():
+    table_path = "../crates/test/tests/data/COVID-19_NYT"
+    dt = DeltaTable(table_path)
+    assert dt.count() == 1111930
+
+
 class _SerializableException(BaseException):
     pass
 
@@ -506,9 +512,8 @@ def test_add_actions_table(flatten: bool):
         ]
     )
     assert actions_df["size_bytes"] == pa.array([414, 414, 414, 407, 414, 414])
-    assert actions_df["data_change"] == pa.array([True] * 6)
     assert actions_df["modification_time"] == pa.array(
-        [1615555646000] * 6, type=pa.timestamp("ms")
+        [1615555646000] * 6, type=pa.int64()
     )
 
     if flatten:
@@ -516,9 +521,9 @@ def test_add_actions_table(flatten: bool):
         partition_month = actions_df["partition.month"]
         partition_day = actions_df["partition.day"]
     else:
-        partition_year = actions_df["partition_values"].field("year")
-        partition_month = actions_df["partition_values"].field("month")
-        partition_day = actions_df["partition_values"].field("day")
+        partition_year = actions_df["partition"].field("year")
+        partition_month = actions_df["partition"].field("month")
+        partition_day = actions_df["partition"].field("day")
 
     assert partition_year == pa.array(["2020"] * 3 + ["2021"] * 3)
     assert partition_month == pa.array(["1", "2", "2", "12", "12", "4"])
@@ -602,7 +607,7 @@ def test_get_files_partitioned_table():
         dt.files(partition_filters)
     assert (
         str(exception.value)
-        == 'Tried to filter partitions on non-partitioned columns: [\n    "unknown",\n]'
+        == "Data does not match the schema or partitions of the table: Field 'unknown' is not a root table field."
     )
 
 
@@ -1016,6 +1021,7 @@ def test_partitions_unpartitioned_table():
     assert len(dt.partitions()) == 0
 
 
+@pytest.mark.skip(reason="Requires upstream fix in delta-kernel")
 def test_read_table_last_checkpoint_not_updated():
     dt = DeltaTable("../crates/test/tests/data/table_failed_last_checkpoint_update")
 

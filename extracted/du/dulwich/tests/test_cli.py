@@ -865,6 +865,99 @@ class TagCommandTest(DulwichCliTestCase):
         self.assertIn(b"refs/tags/v1.0", self.repo.refs.keys())
 
 
+class VerifyCommitCommandTest(DulwichCliTestCase):
+    """Tests for verify-commit command."""
+
+    def test_verify_commit_basic(self):
+        # Create initial commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Initial")
+
+        # Mock the porcelain.verify_commit function since we don't have GPG setup
+        with patch("dulwich.cli.porcelain.verify_commit") as mock_verify:
+            _result, stdout, _stderr = self._run_cli("verify-commit", "HEAD")
+            mock_verify.assert_called_once_with(".", "HEAD")
+            self.assertIn("Good signature", stdout)
+
+    def test_verify_commit_multiple(self):
+        # Create multiple commits
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test1")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=First")
+
+        with open(test_file, "w") as f:
+            f.write("test2")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Second")
+
+        # Mock the porcelain.verify_commit function
+        with patch("dulwich.cli.porcelain.verify_commit") as mock_verify:
+            _result, stdout, _stderr = self._run_cli("verify-commit", "HEAD", "HEAD~1")
+            self.assertEqual(mock_verify.call_count, 2)
+            self.assertIn("HEAD", stdout)
+            self.assertIn("HEAD~1", stdout)
+
+    def test_verify_commit_default_head(self):
+        # Create initial commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Initial")
+
+        # Mock the porcelain.verify_commit function
+        with patch("dulwich.cli.porcelain.verify_commit") as mock_verify:
+            # Test that verify-commit without arguments defaults to HEAD
+            _result, stdout, _stderr = self._run_cli("verify-commit")
+            mock_verify.assert_called_once_with(".", "HEAD")
+            self.assertIn("Good signature", stdout)
+
+
+class VerifyTagCommandTest(DulwichCliTestCase):
+    """Tests for verify-tag command."""
+
+    def test_verify_tag_basic(self):
+        # Create initial commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Initial")
+
+        # Create an annotated tag
+        self._run_cli("tag", "--annotated", "v1.0")
+
+        # Mock the porcelain.verify_tag function since we don't have GPG setup
+        with patch("dulwich.cli.porcelain.verify_tag") as mock_verify:
+            _result, stdout, _stderr = self._run_cli("verify-tag", "v1.0")
+            mock_verify.assert_called_once_with(".", "v1.0")
+            self.assertIn("Good signature", stdout)
+
+    def test_verify_tag_multiple(self):
+        # Create initial commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Initial")
+
+        # Create multiple annotated tags
+        self._run_cli("tag", "--annotated", "v1.0")
+        self._run_cli("tag", "--annotated", "v2.0")
+
+        # Mock the porcelain.verify_tag function
+        with patch("dulwich.cli.porcelain.verify_tag") as mock_verify:
+            _result, stdout, _stderr = self._run_cli("verify-tag", "v1.0", "v2.0")
+            self.assertEqual(mock_verify.call_count, 2)
+            self.assertIn("v1.0", stdout)
+            self.assertIn("v2.0", stdout)
+
+
 class DiffCommandTest(DulwichCliTestCase):
     """Tests for diff command."""
 
@@ -2920,6 +3013,88 @@ class WorktreeCliTests(DulwichCliTestCase):
         with patch("sys.stderr", new_callable=io.StringIO):
             with self.assertRaises(SystemExit):
                 cmd.run(["invalid"])
+
+
+class MergeBaseCommandTest(DulwichCliTestCase):
+    """Tests for merge-base command."""
+
+    def _create_commits(self):
+        """Helper to create a commit history for testing."""
+        # Create three commits in linear history
+        for i in range(1, 4):
+            test_file = os.path.join(self.repo_path, f"file{i}.txt")
+            with open(test_file, "w") as f:
+                f.write(f"content{i}")
+            self._run_cli("add", f"file{i}.txt")
+            self._run_cli("commit", f"--message=Commit {i}")
+
+    def test_merge_base_linear_history(self):
+        """Test merge-base with linear history."""
+        self._create_commits()
+
+        result, stdout, _stderr = self._run_cli("merge-base", "HEAD", "HEAD~1")
+        self.assertEqual(result, 0)
+
+        # Should return HEAD~1 as the merge base
+        output = stdout.strip()
+        # Verify it's a valid commit ID (40 hex chars)
+        self.assertEqual(len(output), 40)
+        self.assertTrue(all(c in "0123456789abcdef" for c in output))
+
+    def test_merge_base_is_ancestor_true(self):
+        """Test merge-base --is-ancestor when true."""
+        self._create_commits()
+
+        result, _stdout, _stderr = self._run_cli(
+            "merge-base", "--is-ancestor", "HEAD~1", "HEAD"
+        )
+        self.assertEqual(result, 0)  # Exit code 0 means true
+
+    def test_merge_base_is_ancestor_false(self):
+        """Test merge-base --is-ancestor when false."""
+        self._create_commits()
+
+        result, _stdout, _stderr = self._run_cli(
+            "merge-base", "--is-ancestor", "HEAD", "HEAD~1"
+        )
+        self.assertEqual(result, 1)  # Exit code 1 means false
+
+    def test_merge_base_independent(self):
+        """Test merge-base --independent."""
+        self._create_commits()
+
+        # All three commits in linear history - only HEAD should be independent
+        head = self.repo.refs[b"HEAD"]
+        head_1 = self.repo[head].parents[0]
+        head_2 = self.repo[head_1].parents[0]
+
+        result, stdout, _stderr = self._run_cli(
+            "merge-base",
+            "--independent",
+            head.decode(),
+            head_1.decode(),
+            head_2.decode(),
+        )
+        self.assertEqual(result, 0)
+
+        # Only HEAD should be in output (as it's the only independent commit)
+        lines = stdout.strip().split("\n")
+        self.assertEqual(len(lines), 1)
+        self.assertEqual(lines[0], head.decode())
+
+    def test_merge_base_requires_two_commits(self):
+        """Test merge-base requires at least two commits."""
+        self._create_commits()
+
+        result, _stdout, _stderr = self._run_cli("merge-base", "HEAD")
+        self.assertEqual(result, 1)
+
+    def test_merge_base_is_ancestor_requires_two_commits(self):
+        """Test merge-base --is-ancestor requires exactly two commits."""
+        self._create_commits()
+
+        result, _stdout, _stderr = self._run_cli("merge-base", "--is-ancestor", "HEAD")
+        self.assertEqual(result, 1)
 
 
 if __name__ == "__main__":

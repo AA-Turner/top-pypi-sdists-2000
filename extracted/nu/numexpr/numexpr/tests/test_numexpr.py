@@ -480,6 +480,13 @@ class test_evaluate(TestCase):
         assert_array_equal(evaluate("x | y"), x | y) # or
         assert_array_equal(evaluate("~x"), ~x) # invert
 
+    def test_complex_tan(self):
+        # old version of NumExpr had overflow problems
+        x = np.arange(1, 400., step=16., dtype=np.complex128)
+        y = 1j*np.arange(1, 400., step=16., dtype=np.complex128)
+        assert_array_almost_equal(evaluate("tan(x + y)"), tan(x + y))
+        assert_array_almost_equal(evaluate("tanh(x + y)"), tanh(x + y))
+
     def test_maximum_minimum(self):
         for dtype in [float, double, int, np.int64]:
             x = arange(10, dtype=dtype)
@@ -956,7 +963,11 @@ def test_expressions(
     # "overflows" or "divide by zero" in plain eval().
     warnings.simplefilter("ignore")
     try:
-        npval = eval(expr, globals(), locals())
+        npexpr = expr
+        if "sign" in expr and dtype==complex and np.__version__<"2.0":
+            #definition of sign changed in numpy 2.0 for complex numbers
+            npexpr = expr.replace("sign(b+c)", "(b+c)/abs(b+c)")
+        npval = eval(npexpr, globals(), locals())
     except Exception as ex:
         np_exception = ex
         npval = None

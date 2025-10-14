@@ -28,7 +28,7 @@ import posixpath
 import stat
 import sys
 import zlib
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from hashlib import sha1
 from io import BufferedIOBase, BytesIO
 from typing import (
@@ -36,6 +36,7 @@ from typing import (
     TYPE_CHECKING,
     NamedTuple,
     Optional,
+    TypeVar,
     Union,
 )
 
@@ -90,6 +91,11 @@ S_IFGITLINK = 0o160000
 MAX_TIME = 9223372036854775807  # (2**63) - 1 - signed long int max
 
 BEGIN_PGP_SIGNATURE = b"-----BEGIN PGP SIGNATURE-----"
+BEGIN_SSH_SIGNATURE = b"-----BEGIN SSH SIGNATURE-----"
+
+# Signature type constants
+SIGNATURE_PGP = b"pgp"
+SIGNATURE_SSH = b"ssh"
 
 
 ObjectID = bytes
@@ -153,30 +159,58 @@ def valid_hexsha(hex: Union[bytes, str]) -> bool:
         return True
 
 
-def hex_to_filename(
-    path: Union[str, bytes], hex: Union[str, bytes]
-) -> Union[str, bytes]:
+PathT = TypeVar("PathT", str, bytes)
+
+
+def hex_to_filename(path: PathT, hex: Union[str, bytes]) -> PathT:
     """Takes a hex sha and returns its filename relative to the given path."""
     # os.path.join accepts bytes or unicode, but all args must be of the same
     # type. Make sure that hex which is expected to be bytes, is the same type
     # as path.
-    if type(path) is not type(hex) and isinstance(path, str):
-        hex = hex.decode("ascii")  # type: ignore
-    dir_name = hex[:2]
-    file_name = hex[2:]
-    # Check from object dir
-    return os.path.join(path, dir_name, file_name)  # type: ignore
+    if isinstance(path, str):
+        if isinstance(hex, bytes):
+            hex_str = hex.decode("ascii")
+        else:
+            hex_str = hex
+        dir_name = hex_str[:2]
+        file_name = hex_str[2:]
+        result = os.path.join(path, dir_name, file_name)
+        assert isinstance(result, str)
+        return result
+    else:
+        # path is bytes
+        if isinstance(hex, str):
+            hex_bytes = hex.encode("ascii")
+        else:
+            hex_bytes = hex
+        dir_name_b = hex_bytes[:2]
+        file_name_b = hex_bytes[2:]
+        result_b = os.path.join(path, dir_name_b, file_name_b)
+        assert isinstance(result_b, bytes)
+        return result_b
 
 
 def filename_to_hex(filename: Union[str, bytes]) -> str:
     """Takes an object filename and returns its corresponding hex sha."""
     # grab the last (up to) two path components
-    names = filename.rsplit(os.path.sep, 2)[-2:]  # type: ignore
     errmsg = f"Invalid object filename: {filename!r}"
-    assert len(names) == 2, errmsg
-    base, rest = names
-    assert len(base) == 2 and len(rest) == 38, errmsg
-    hex_bytes = (base + rest).encode("ascii")  # type: ignore
+    if isinstance(filename, str):
+        names = filename.rsplit(os.path.sep, 2)[-2:]
+        assert len(names) == 2, errmsg
+        base, rest = names
+        assert len(base) == 2 and len(rest) == 38, errmsg
+        hex_str = base + rest
+        hex_bytes = hex_str.encode("ascii")
+    else:
+        # filename is bytes
+        sep = (
+            os.path.sep.encode("ascii") if isinstance(os.path.sep, str) else os.path.sep
+        )
+        names_b = filename.rsplit(sep, 2)[-2:]
+        assert len(names_b) == 2, errmsg
+        base_b, rest_b = names_b
+        assert len(base_b) == 2 and len(rest_b) == 38, errmsg
+        hex_bytes = base_b + rest_b
     hex_to_sha(hex_bytes)
     return hex_bytes.decode("ascii")
 
@@ -754,7 +788,8 @@ class Blob(ShaFile):
         if not chunks:
             return []
         if len(chunks) == 1:
-            return chunks[0].splitlines(True)  # type: ignore[no-any-return]
+            result: list[bytes] = chunks[0].splitlines(True)
+            return result
         remaining = None
         ret = []
         for chunk in chunks:
@@ -830,7 +865,7 @@ def _parse_message(
 
 
 def _format_message(
-    headers: list[tuple[bytes, bytes]], body: Optional[bytes]
+    headers: Sequence[tuple[bytes, bytes]], body: Optional[bytes]
 ) -> Iterator[bytes]:
     for field, value in headers:
         lines = value.split(b"\n")
@@ -1000,14 +1035,22 @@ class Tag(ShaFile):
                     self._message = None
                     self._signature = None
                 else:
+                    # Try to find either PGP or SSH signature
+                    sig_idx = None
                     try:
                         sig_idx = value.index(BEGIN_PGP_SIGNATURE)
                     except ValueError:
-                        self._message = value
-                        self._signature = None
-                    else:
+                        try:
+                            sig_idx = value.index(BEGIN_SSH_SIGNATURE)
+                        except ValueError:
+                            pass
+
+                    if sig_idx is not None:
                         self._message = value[:sig_idx]
                         self._signature = value[sig_idx:]
+                    else:
+                        self._message = value
+                        self._signature = None
             else:
                 raise ObjectFormatException(
                     f"Unknown field {field.decode('ascii', 'replace')}"
@@ -1075,6 +1118,33 @@ class Tag(ShaFile):
             ret = ret[: -len(self._signature)]
         return ret
 
+    def extract_signature(self) -> tuple[bytes, Optional[bytes], Optional[bytes]]:
+        """Extract the payload, signature, and signature type from this tag.
+
+        Returns:
+          Tuple of (payload, signature, signature_type) where:
+          - payload: The raw tag data without the signature
+          - signature: The signature bytes if present, None otherwise
+          - signature_type: SIGNATURE_PGP for PGP, SIGNATURE_SSH for SSH, None if no signature
+
+        Raises:
+          ObjectFormatException: If signature has unknown format
+        """
+        if self._signature is None:
+            return self.as_raw_string(), None, None
+
+        payload = self.raw_without_sig()
+
+        # Determine signature type
+        if self._signature.startswith(BEGIN_PGP_SIGNATURE):
+            sig_type = SIGNATURE_PGP
+        elif self._signature.startswith(BEGIN_SSH_SIGNATURE):
+            sig_type = SIGNATURE_SSH
+        else:
+            raise ObjectFormatException("Unknown signature format")
+
+        return payload, self._signature, sig_type
+
     def verify(self, keyids: Optional[Iterable[str]] = None) -> None:
         """Verify GPG signature for this tag (if it is signed).
 
@@ -1102,7 +1172,7 @@ class Tag(ShaFile):
             if keyids:
                 keys = [ctx.get_key(key) for key in keyids]
                 for key in keys:
-                    for subkey in keys:
+                    for subkey in key.subkeys:
                         for sig in result.signatures:
                             if subkey.can_sign and subkey.fpr == sig.fpr:
                                 return
@@ -1399,8 +1469,13 @@ class Tree(ShaFile):
           Pretty-printed tree entries
         """
         text: list[str] = []
-        for name, mode, hexsha in self.iteritems():
-            text.append(pretty_format_tree_entry(name, mode, hexsha))
+        for entry in self.iteritems():
+            if (
+                entry.path is not None
+                and entry.mode is not None
+                and entry.sha is not None
+            ):
+                text.append(pretty_format_tree_entry(entry.path, entry.mode, entry.sha))
         return "".join(text)
 
     def lookup_path(
@@ -1790,6 +1865,33 @@ class Commit(ShaFile):
         tmp.gpgsig = None
         return tmp.as_raw_string()
 
+    def extract_signature(self) -> tuple[bytes, Optional[bytes], Optional[bytes]]:
+        """Extract the payload, signature, and signature type from this commit.
+
+        Returns:
+          Tuple of (payload, signature, signature_type) where:
+          - payload: The raw commit data without the signature
+          - signature: The signature bytes if present, None otherwise
+          - signature_type: SIGNATURE_PGP for PGP, SIGNATURE_SSH for SSH, None if no signature
+
+        Raises:
+          ObjectFormatException: If signature has unknown format
+        """
+        if self._gpgsig is None:
+            return self.as_raw_string(), None, None
+
+        payload = self.raw_without_sig()
+
+        # Determine signature type
+        if self._gpgsig.startswith(BEGIN_PGP_SIGNATURE):
+            sig_type = SIGNATURE_PGP
+        elif self._gpgsig.startswith(BEGIN_SSH_SIGNATURE):
+            sig_type = SIGNATURE_SSH
+        else:
+            raise ObjectFormatException("Unknown signature format")
+
+        return payload, self._gpgsig, sig_type
+
     def verify(self, keyids: Optional[Iterable[str]] = None) -> None:
         """Verify GPG signature for this commit (if it is signed).
 
@@ -1817,7 +1919,7 @@ class Commit(ShaFile):
             if keyids:
                 keys = [ctx.get_key(key) for key in keyids]
                 for key in keys:
-                    for subkey in keys:
+                    for subkey in key.subkeys:
                         for sig in result.signatures:
                             if subkey.can_sign and subkey.fpr == sig.fpr:
                                 return

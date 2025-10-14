@@ -391,7 +391,7 @@ impl ConvertToDeltaBuilder {
                     match field.data_type() {
                         DataType::Primitive(p) => p.parse_scalar(decoded.as_ref()),
                         _ => Err(delta_kernel::Error::Generic(format!(
-                            "Exprected primitive type, found: {:?}",
+                            "Expected primitive type, found: {:?}",
                             field.data_type()
                         ))),
                     }
@@ -519,9 +519,10 @@ impl std::future::IntoFuture for ConvertToDeltaBuilder {
 mod tests {
     use std::fs;
 
-    use arrow::array::{Int32Array, TimestampMicrosecondArray, TimestampMillisecondArray};
+    use arrow::array::{Int32Array, TimestampMillisecondArray};
     use arrow::record_batch::RecordBatch;
     use delta_kernel::expressions::Scalar;
+    use futures::StreamExt;
     use itertools::Itertools;
     use parquet::arrow::ArrowWriter;
     use pretty_assertions::assert_eq;
@@ -607,7 +608,8 @@ mod tests {
             .unwrap_or_else(|e| {
                 panic!("Failed to convert to Delta table. Location: {path}. Error: {e}")
             });
-        open_table(temp_dir).await.expect("Failed to open table")
+        let table_uri = url::Url::from_directory_path(std::path::Path::new(temp_dir)).unwrap();
+        open_table(table_uri).await.expect("Failed to open table")
     }
 
     fn assert_delta_table(
@@ -625,7 +627,7 @@ mod tests {
             "Testing location: {test_data_from:?}"
         );
 
-        let mut files = table.get_files_iter().unwrap().collect_vec();
+        let mut files = table.snapshot().unwrap().file_paths_iter().collect_vec();
         files.sort();
         assert_eq!(
             files, expected_paths,
@@ -633,8 +635,9 @@ mod tests {
         );
 
         let mut schema_fields = table
-            .get_schema()
-            .expect("Failed to get schema")
+            .snapshot()
+            .expect("Failed to get snapshot")
+            .schema()
             .fields()
             .cloned()
             .collect_vec();
@@ -648,12 +651,15 @@ mod tests {
             .snapshot()
             .unwrap()
             .log_data()
-            .into_iter()
+            .iter()
             .flat_map(|add| {
-                add.partition_values()
-                    .unwrap()
+                let Some(vals) = add.partition_values() else {
+                    return Vec::new();
+                };
+                vals.fields()
                     .iter()
-                    .map(|(k, v)| (k.to_string(), v.clone()))
+                    .zip(vals.values().iter())
+                    .map(|(k, v)| (k.name().to_string(), v.clone()))
                     .collect::<Vec<_>>()
             })
             .collect::<Vec<_>>();
@@ -680,8 +686,8 @@ mod tests {
         let table = create_delta_table(path, Vec::new(), false).await;
         let action = table
             .get_active_add_actions_by_partitions(&[])
-            .expect("Failed to get Add actions")
             .next()
+            .await
             .expect("Iterator index overflows")
             .unwrap();
         assert_eq!(
@@ -1233,10 +1239,11 @@ mod tests {
             .with_location(temp_dir.path().to_str().unwrap())
             .await
             .expect("Failed to convert to Delta table");
+        let state = table.snapshot().unwrap();
 
-        assert_eq!(table.version(), Some(0));
+        assert_eq!(state.version(), 0);
 
-        let delta_schema = table.get_schema().expect("Failed to get schema");
+        let delta_schema = state.schema();
         let fields: Vec<_> = delta_schema.fields().collect();
         let timestamp_fields: Vec<_> = fields
             .iter()
@@ -1257,12 +1264,8 @@ mod tests {
             "Should have 3 timestamp fields (Timestamp + TimestampNtz)"
         );
 
-        // Verify table can be read
-        let files: Vec<_> = table.get_files_iter().unwrap().collect();
-        assert_eq!(files.len(), 1, "Should have one data file");
-
         // Verify can get file metadata
-        let snapshot = table.snapshot().unwrap();
-        assert_eq!(snapshot.files_count(), 1);
+        let state = table.snapshot().unwrap();
+        assert_eq!(state.log_data().num_files(), 1);
     }
 }

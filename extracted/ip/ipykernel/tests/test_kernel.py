@@ -17,7 +17,6 @@ from tempfile import TemporaryDirectory
 import IPython
 import psutil
 import pytest
-from flaky import flaky
 from IPython.paths import locate_profile
 
 from .utils import (
@@ -106,7 +105,9 @@ def test_print_to_correct_cell_from_child_thread():
 
     def parent_target():
         sleep({interval})
-        Thread(target=child_target).start()
+        thread = Thread(target=child_target)
+        thread.start()
+        thread.join()
 
     Thread(target=parent_target).start()
     """
@@ -210,9 +211,9 @@ def test_sys_path_profile_dir():
     assert "" in sys_path
 
 
-@flaky(max_runs=3)
+@pytest.mark.flaky(max_runs=3)
 @pytest.mark.skipif(
-    sys.platform == "win32" or (sys.platform == "darwin" and sys.version_info >= (3, 8)),
+    sys.platform == "win32" or (sys.platform == "darwin"),
     reason="subprocess prints fail on Windows and MacOS Python 3.8+",
 )
 def test_subprocess_print():
@@ -242,7 +243,7 @@ def test_subprocess_print():
         _check_master(kc, expected=True, stream="stderr")
 
 
-@flaky(max_runs=3)
+@pytest.mark.flaky(max_runs=3)
 def test_subprocess_noprint():
     """mp.Process without print doesn't trigger iostream mp_mode"""
     with kernel() as kc:
@@ -265,9 +266,9 @@ def test_subprocess_noprint():
         _check_master(kc, expected=True, stream="stderr")
 
 
-@flaky(max_runs=3)
+@pytest.mark.flaky(max_runs=3)
 @pytest.mark.skipif(
-    sys.platform == "win32" or (sys.platform == "darwin" and sys.version_info >= (3, 8)),
+    (sys.platform == "win32") or (sys.platform == "darwin"),
     reason="subprocess prints fail on Windows and MacOS Python 3.8+",
 )
 def test_subprocess_error():
@@ -633,7 +634,7 @@ def test_sequential_control_messages():
 
         # Check messages are processed in order, one at a time, and of a sensible duration.
         previous_end = None
-        for reply, sleep in zip(replies, sleeps):
+        for reply, sleep in zip(replies, sleeps, strict=False):
             start = ensure_datetime(reply["metadata"]["started"])
             end = ensure_datetime(reply["header"]["date"])
 
@@ -716,3 +717,44 @@ def test_shutdown_subprocesses():
             child_newpg.terminate()
         except psutil.NoSuchProcess:
             pass
+
+
+def test_parent_header_and_ident():
+    # Kernel._parent_ident is private but kept for backward compatibility,
+    # see https://github.com/jupyterlab/jupyterlab/issues/17785
+    with kernel() as kc:
+        # get_parent('shell')
+        msg_id, _ = execute(
+            kc=kc,
+            code="k=get_ipython().kernel; p=k.get_parent('shell'); print(p['header']['msg_id'], p['header']['session'])",
+        )
+        stdout, _ = assemble_output(kc.get_iopub_msg, parent_msg_id=msg_id)
+        check_msg_id, session = stdout.split()
+        assert check_msg_id == msg_id
+        assert check_msg_id.startswith(msg_id)
+
+        # _parent_ident['shell']
+        msg_id, _ = execute(kc=kc, code="print(k._parent_ident['shell'])")
+        stdout, _ = assemble_output(kc.get_iopub_msg, parent_msg_id=msg_id)
+        assert stdout == f"[b'{session}']\n"
+
+        # Send a control message
+        msg = kc.session.msg("kernel_info_request")
+        kc.control_channel.send(msg)
+        control_msg_id = msg["header"]["msg_id"]
+        assemble_output(kc.get_iopub_msg, parent_msg_id=control_msg_id)
+
+        # get_parent('control')
+        msg_id, _ = execute(
+            kc=kc,
+            code="p=k.get_parent('control'); print(p['header']['msg_id'], p['header']['session'])",
+        )
+        stdout, _ = assemble_output(kc.get_iopub_msg, parent_msg_id=msg_id)
+        check_msg_id, session = stdout.split()
+        assert check_msg_id == control_msg_id
+        assert check_msg_id.startswith(control_msg_id)
+
+        # _parent_ident['control']
+        msg_id, _ = execute(kc=kc, code="print(k._parent_ident['control'])")
+        stdout, _ = assemble_output(kc.get_iopub_msg, parent_msg_id=msg_id)
+        assert stdout == f"[b'{session}']\n"
