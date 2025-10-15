@@ -135,7 +135,7 @@ class CfnEnvironmentProps:
 
         :param name: The name of your Amazon MWAA environment.
         :param airflow_configuration_options: A list of key-value pairs containing the Airflow configuration options for your environment. For example, ``core.default_timezone: utc`` . To learn more, see `Apache Airflow configuration options <https://docs.aws.amazon.com/mwaa/latest/userguide/configuring-env-variables.html>`_ .
-        :param airflow_version: The version of Apache Airflow to use for the environment. If no value is specified, defaults to the latest version. If you specify a newer version number for an existing environment, the version update requires some service interruption before taking effect. *Allowed Values* : ``1.10.12`` | ``2.0.2`` | ``2.2.2`` | ``2.4.3`` | ``2.5.1`` | ``2.6.3`` | ``2.7.2`` | ``2.8.1`` | ``2.9.2`` | ``2.10.1`` (latest)
+        :param airflow_version: The version of Apache Airflow to use for the environment. If no value is specified, defaults to the latest version. If you specify a newer version number for an existing environment, the version update requires some service interruption before taking effect. *Allowed Values* : ``2.7.2`` | ``2.8.1`` | ``2.9.2`` | ``2.10.1`` | ``2.10.3`` | ``3.0.6`` (latest)
         :param dag_s3_path: The relative path to the DAGs folder on your Amazon S3 bucket. For example, ``dags`` . To learn more, see `Adding or updating DAGs <https://docs.aws.amazon.com/mwaa/latest/userguide/configuring-dag-folder.html>`_ .
         :param endpoint_management: Defines whether the VPC endpoints configured for the environment are created, and managed, by the customer or by Amazon MWAA. If set to ``SERVICE`` , Amazon MWAA will create and manage the required VPC endpoints in your VPC. If set to ``CUSTOMER`` , you must create, and manage, the VPC endpoints in your VPC.
         :param environment_class: The environment class type. Valid values: ``mw1.micro`` , ``mw1.small`` , ``mw1.medium`` , ``mw1.large`` , ``mw1.1large`` , and ``mw1.2large`` . To learn more, see `Amazon MWAA environment class <https://docs.aws.amazon.com/mwaa/latest/userguide/environment-class.html>`_ .
@@ -343,7 +343,7 @@ class CfnEnvironmentProps:
 
         If you specify a newer version number for an existing environment, the version update requires some service interruption before taking effect.
 
-        *Allowed Values* : ``1.10.12`` | ``2.0.2`` | ``2.2.2`` | ``2.4.3`` | ``2.5.1`` | ``2.6.3`` | ``2.7.2`` | ``2.8.1`` | ``2.9.2`` | ``2.10.1`` (latest)
+        *Allowed Values* : ``2.7.2`` | ``2.8.1`` | ``2.9.2`` | ``2.10.1`` | ``2.10.3`` | ``3.0.6`` (latest)
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mwaa-environment.html#cfn-mwaa-environment-airflowversion
         '''
@@ -849,7 +849,7 @@ class CfnEnvironment(
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The name of your Amazon MWAA environment.
         :param airflow_configuration_options: A list of key-value pairs containing the Airflow configuration options for your environment. For example, ``core.default_timezone: utc`` . To learn more, see `Apache Airflow configuration options <https://docs.aws.amazon.com/mwaa/latest/userguide/configuring-env-variables.html>`_ .
-        :param airflow_version: The version of Apache Airflow to use for the environment. If no value is specified, defaults to the latest version. If you specify a newer version number for an existing environment, the version update requires some service interruption before taking effect. *Allowed Values* : ``1.10.12`` | ``2.0.2`` | ``2.2.2`` | ``2.4.3`` | ``2.5.1`` | ``2.6.3`` | ``2.7.2`` | ``2.8.1`` | ``2.9.2`` | ``2.10.1`` (latest)
+        :param airflow_version: The version of Apache Airflow to use for the environment. If no value is specified, defaults to the latest version. If you specify a newer version number for an existing environment, the version update requires some service interruption before taking effect. *Allowed Values* : ``2.7.2`` | ``2.8.1`` | ``2.9.2`` | ``2.10.1`` | ``2.10.3`` | ``3.0.6`` (latest)
         :param dag_s3_path: The relative path to the DAGs folder on your Amazon S3 bucket. For example, ``dags`` . To learn more, see `Adding or updating DAGs <https://docs.aws.amazon.com/mwaa/latest/userguide/configuring-dag-folder.html>`_ .
         :param endpoint_management: Defines whether the VPC endpoints configured for the environment are created, and managed, by the customer or by Amazon MWAA. If set to ``SERVICE`` , Amazon MWAA will create and manage the required VPC endpoints in your VPC. If set to ``CUSTOMER`` , you must create, and manage, the VPC endpoints in your VPC.
         :param environment_class: The environment class type. Valid values: ``mw1.micro`` , ``mw1.small`` , ``mw1.medium`` , ``mw1.large`` , ``mw1.1large`` , and ``mw1.2large`` . To learn more, see `Amazon MWAA environment class <https://docs.aws.amazon.com/mwaa/latest/userguide/environment-class.html>`_ .
@@ -1636,7 +1636,7 @@ class CfnEnvironment(
 
             :param cloud_watch_log_group_arn: The ARN of the CloudWatch Logs log group for each type of Apache Airflow log type that you have enabled. .. epigraph:: ``CloudWatchLogGroupArn`` is available only as a return value, accessible when specified as an attribute in the ```Fn:GetAtt`` <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mwaa-environment.html#aws-resource-mwaa-environment-return-values>`_ intrinsic function. Any value you provide for ``CloudWatchLogGroupArn`` is discarded by Amazon MWAA.
             :param enabled: Indicates whether to enable the Apache Airflow log type (e.g. ``DagProcessingLogs`` ) in CloudWatch Logs.
-            :param log_level: Defines the Apache Airflow logs to send for the log type (e.g. ``DagProcessingLogs`` ) to CloudWatch Logs. Valid values: ``CRITICAL`` , ``ERROR`` , ``WARNING`` , ``INFO`` .
+            :param log_level: Defines the Apache Airflow logs to send for the log type (e.g. ``DagProcessingLogs`` ) to CloudWatch Logs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mwaa-environment-moduleloggingconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1692,7 +1692,7 @@ class CfnEnvironment(
 
         @builtins.property
         def log_level(self) -> typing.Optional[builtins.str]:
-            '''Defines the Apache Airflow logs to send for the log type (e.g. ``DagProcessingLogs`` ) to CloudWatch Logs. Valid values: ``CRITICAL`` , ``ERROR`` , ``WARNING`` , ``INFO`` .
+            '''Defines the Apache Airflow logs to send for the log type (e.g. ``DagProcessingLogs`` ) to CloudWatch Logs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mwaa-environment-moduleloggingconfiguration.html#cfn-mwaa-environment-moduleloggingconfiguration-loglevel
             '''

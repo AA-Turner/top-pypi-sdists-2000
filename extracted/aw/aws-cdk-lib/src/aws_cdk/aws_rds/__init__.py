@@ -3273,6 +3273,12 @@ class AuroraMysqlEngineVersion(
         return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_3_10_0"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_3_10_1")
+    def VER_3_10_1(cls) -> "AuroraMysqlEngineVersion":
+        '''Version "8.0.mysql_aurora.3.10.1".'''
+        return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_3_10_1"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_5_7_12")
     def VER_5_7_12(cls) -> "AuroraMysqlEngineVersion":
         '''(deprecated) Version "5.7.12".
@@ -17009,7 +17015,7 @@ class DatabaseInstanceNewProps:
         :param s3_import_role: Role that will be associated with this DB instance to enable S3 import. This feature is only supported by the Microsoft SQL Server, Oracle, and PostgreSQL engines. This property must not be used if ``s3ImportBuckets`` is used. For Microsoft SQL Server: Default: - New role is created if ``s3ImportBuckets`` is set, no role is defined otherwise
         :param security_groups: The security groups to assign to the DB instance. Default: - a new security group is created
         :param storage_throughput: The storage throughput, specified in mebibytes per second (MiBps). Only applicable for GP3. Default: - 125 MiBps if allocated storage is less than 400 GiB for MariaDB, MySQL, and PostgreSQL, less than 200 GiB for Oracle and less than 20 GiB for SQL Server. 500 MiBps otherwise (except for SQL Server where the default is always 125 MiBps).
-        :param storage_type: The storage type. Storage types supported are gp2, io1, standard. Default: GP2
+        :param storage_type: The storage type to associate with the DB instance. Storage types supported are gp2, gp3, io1, io2, and standard. Default: StorageType.GP2
         :param subnet_group: Existing subnet group for the instance. Default: - a new subnet group will be created.
         :param vpc_subnets: The type of subnets to add to the created DB subnet group. Default: - private subnets
 
@@ -17717,11 +17723,11 @@ class DatabaseInstanceNewProps:
 
     @builtins.property
     def storage_type(self) -> typing.Optional["StorageType"]:
-        '''The storage type.
+        '''The storage type to associate with the DB instance.
 
-        Storage types supported are gp2, io1, standard.
+        Storage types supported are gp2, gp3, io1, io2, and standard.
 
-        :default: GP2
+        :default: StorageType.GP2
 
         :see: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#Concepts.Storage.GeneralSSD
         '''
@@ -17910,7 +17916,7 @@ class DatabaseInstanceReadReplicaProps(DatabaseInstanceNewProps):
         :param s3_import_role: Role that will be associated with this DB instance to enable S3 import. This feature is only supported by the Microsoft SQL Server, Oracle, and PostgreSQL engines. This property must not be used if ``s3ImportBuckets`` is used. For Microsoft SQL Server: Default: - New role is created if ``s3ImportBuckets`` is set, no role is defined otherwise
         :param security_groups: The security groups to assign to the DB instance. Default: - a new security group is created
         :param storage_throughput: The storage throughput, specified in mebibytes per second (MiBps). Only applicable for GP3. Default: - 125 MiBps if allocated storage is less than 400 GiB for MariaDB, MySQL, and PostgreSQL, less than 200 GiB for Oracle and less than 20 GiB for SQL Server. 500 MiBps otherwise (except for SQL Server where the default is always 125 MiBps).
-        :param storage_type: The storage type. Storage types supported are gp2, io1, standard. Default: GP2
+        :param storage_type: The storage type to associate with the DB instance. Storage types supported are gp2, gp3, io1, io2, and standard. Default: StorageType.GP2
         :param subnet_group: Existing subnet group for the instance. Default: - a new subnet group will be created.
         :param vpc_subnets: The type of subnets to add to the created DB subnet group. Default: - private subnets
         :param instance_type: The name of the compute and memory capacity classes.
@@ -18571,11 +18577,11 @@ class DatabaseInstanceReadReplicaProps(DatabaseInstanceNewProps):
 
     @builtins.property
     def storage_type(self) -> typing.Optional["StorageType"]:
-        '''The storage type.
+        '''The storage type to associate with the DB instance.
 
-        Storage types supported are gp2, io1, standard.
+        Storage types supported are gp2, gp3, io1, io2, and standard.
 
-        :default: GP2
+        :default: StorageType.GP2
 
         :see: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#Concepts.Storage.GeneralSSD
         '''
@@ -18815,7 +18821,7 @@ class DatabaseInstanceSourceProps(DatabaseInstanceNewProps):
         :param s3_import_role: Role that will be associated with this DB instance to enable S3 import. This feature is only supported by the Microsoft SQL Server, Oracle, and PostgreSQL engines. This property must not be used if ``s3ImportBuckets`` is used. For Microsoft SQL Server: Default: - New role is created if ``s3ImportBuckets`` is set, no role is defined otherwise
         :param security_groups: The security groups to assign to the DB instance. Default: - a new security group is created
         :param storage_throughput: The storage throughput, specified in mebibytes per second (MiBps). Only applicable for GP3. Default: - 125 MiBps if allocated storage is less than 400 GiB for MariaDB, MySQL, and PostgreSQL, less than 200 GiB for Oracle and less than 20 GiB for SQL Server. 500 MiBps otherwise (except for SQL Server where the default is always 125 MiBps).
-        :param storage_type: The storage type. Storage types supported are gp2, io1, standard. Default: GP2
+        :param storage_type: The storage type to associate with the DB instance. Storage types supported are gp2, gp3, io1, io2, and standard. Default: StorageType.GP2
         :param subnet_group: Existing subnet group for the instance. Default: - a new subnet group will be created.
         :param vpc_subnets: The type of subnets to add to the created DB subnet group. Default: - private subnets
         :param engine: The database engine.
@@ -19566,11 +19572,11 @@ class DatabaseInstanceSourceProps(DatabaseInstanceNewProps):
 
     @builtins.property
     def storage_type(self) -> typing.Optional["StorageType"]:
-        '''The storage type.
+        '''The storage type to associate with the DB instance.
 
-        Storage types supported are gp2, io1, standard.
+        Storage types supported are gp2, gp3, io1, io2, and standard.
 
-        :default: GP2
+        :default: StorageType.GP2
 
         :see: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#Concepts.Storage.GeneralSSD
         '''
@@ -47714,7 +47720,7 @@ class DatabaseInstanceFromSnapshot(
         :param s3_import_role: Role that will be associated with this DB instance to enable S3 import. This feature is only supported by the Microsoft SQL Server, Oracle, and PostgreSQL engines. This property must not be used if ``s3ImportBuckets`` is used. For Microsoft SQL Server: Default: - New role is created if ``s3ImportBuckets`` is set, no role is defined otherwise
         :param security_groups: The security groups to assign to the DB instance. Default: - a new security group is created
         :param storage_throughput: The storage throughput, specified in mebibytes per second (MiBps). Only applicable for GP3. Default: - 125 MiBps if allocated storage is less than 400 GiB for MariaDB, MySQL, and PostgreSQL, less than 200 GiB for Oracle and less than 20 GiB for SQL Server. 500 MiBps otherwise (except for SQL Server where the default is always 125 MiBps).
-        :param storage_type: The storage type. Storage types supported are gp2, io1, standard. Default: GP2
+        :param storage_type: The storage type to associate with the DB instance. Storage types supported are gp2, gp3, io1, io2, and standard. Default: StorageType.GP2
         :param subnet_group: Existing subnet group for the instance. Default: - a new subnet group will be created.
         :param vpc_subnets: The type of subnets to add to the created DB subnet group. Default: - private subnets
         '''
@@ -48148,7 +48154,7 @@ class DatabaseInstanceFromSnapshotProps(DatabaseInstanceSourceProps):
         :param s3_import_role: Role that will be associated with this DB instance to enable S3 import. This feature is only supported by the Microsoft SQL Server, Oracle, and PostgreSQL engines. This property must not be used if ``s3ImportBuckets`` is used. For Microsoft SQL Server: Default: - New role is created if ``s3ImportBuckets`` is set, no role is defined otherwise
         :param security_groups: The security groups to assign to the DB instance. Default: - a new security group is created
         :param storage_throughput: The storage throughput, specified in mebibytes per second (MiBps). Only applicable for GP3. Default: - 125 MiBps if allocated storage is less than 400 GiB for MariaDB, MySQL, and PostgreSQL, less than 200 GiB for Oracle and less than 20 GiB for SQL Server. 500 MiBps otherwise (except for SQL Server where the default is always 125 MiBps).
-        :param storage_type: The storage type. Storage types supported are gp2, io1, standard. Default: GP2
+        :param storage_type: The storage type to associate with the DB instance. Storage types supported are gp2, gp3, io1, io2, and standard. Default: StorageType.GP2
         :param subnet_group: Existing subnet group for the instance. Default: - a new subnet group will be created.
         :param vpc_subnets: The type of subnets to add to the created DB subnet group. Default: - private subnets
         :param engine: The database engine.
@@ -48833,11 +48839,11 @@ class DatabaseInstanceFromSnapshotProps(DatabaseInstanceSourceProps):
 
     @builtins.property
     def storage_type(self) -> typing.Optional[StorageType]:
-        '''The storage type.
+        '''The storage type to associate with the DB instance.
 
-        Storage types supported are gp2, io1, standard.
+        Storage types supported are gp2, gp3, io1, io2, and standard.
 
-        :default: GP2
+        :default: StorageType.GP2
 
         :see: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#Concepts.Storage.GeneralSSD
         '''
@@ -49163,7 +49169,7 @@ class DatabaseInstanceProps(DatabaseInstanceSourceProps):
         :param s3_import_role: Role that will be associated with this DB instance to enable S3 import. This feature is only supported by the Microsoft SQL Server, Oracle, and PostgreSQL engines. This property must not be used if ``s3ImportBuckets`` is used. For Microsoft SQL Server: Default: - New role is created if ``s3ImportBuckets`` is set, no role is defined otherwise
         :param security_groups: The security groups to assign to the DB instance. Default: - a new security group is created
         :param storage_throughput: The storage throughput, specified in mebibytes per second (MiBps). Only applicable for GP3. Default: - 125 MiBps if allocated storage is less than 400 GiB for MariaDB, MySQL, and PostgreSQL, less than 200 GiB for Oracle and less than 20 GiB for SQL Server. 500 MiBps otherwise (except for SQL Server where the default is always 125 MiBps).
-        :param storage_type: The storage type. Storage types supported are gp2, io1, standard. Default: GP2
+        :param storage_type: The storage type to associate with the DB instance. Storage types supported are gp2, gp3, io1, io2, and standard. Default: StorageType.GP2
         :param subnet_group: Existing subnet group for the instance. Default: - a new subnet group will be created.
         :param vpc_subnets: The type of subnets to add to the created DB subnet group. Default: - private subnets
         :param engine: The database engine.
@@ -49854,11 +49860,11 @@ class DatabaseInstanceProps(DatabaseInstanceSourceProps):
 
     @builtins.property
     def storage_type(self) -> typing.Optional[StorageType]:
-        '''The storage type.
+        '''The storage type to associate with the DB instance.
 
-        Storage types supported are gp2, io1, standard.
+        Storage types supported are gp2, gp3, io1, io2, and standard.
 
-        :default: GP2
+        :default: StorageType.GP2
 
         :see: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#Concepts.Storage.GeneralSSD
         '''
@@ -50141,7 +50147,7 @@ class DatabaseInstanceReadReplica(
         :param s3_import_role: Role that will be associated with this DB instance to enable S3 import. This feature is only supported by the Microsoft SQL Server, Oracle, and PostgreSQL engines. This property must not be used if ``s3ImportBuckets`` is used. For Microsoft SQL Server: Default: - New role is created if ``s3ImportBuckets`` is set, no role is defined otherwise
         :param security_groups: The security groups to assign to the DB instance. Default: - a new security group is created
         :param storage_throughput: The storage throughput, specified in mebibytes per second (MiBps). Only applicable for GP3. Default: - 125 MiBps if allocated storage is less than 400 GiB for MariaDB, MySQL, and PostgreSQL, less than 200 GiB for Oracle and less than 20 GiB for SQL Server. 500 MiBps otherwise (except for SQL Server where the default is always 125 MiBps).
-        :param storage_type: The storage type. Storage types supported are gp2, io1, standard. Default: GP2
+        :param storage_type: The storage type to associate with the DB instance. Storage types supported are gp2, gp3, io1, io2, and standard. Default: StorageType.GP2
         :param subnet_group: Existing subnet group for the instance. Default: - a new subnet group will be created.
         :param vpc_subnets: The type of subnets to add to the created DB subnet group. Default: - private subnets
         '''
@@ -51607,7 +51613,7 @@ class DatabaseInstance(
         :param s3_import_role: Role that will be associated with this DB instance to enable S3 import. This feature is only supported by the Microsoft SQL Server, Oracle, and PostgreSQL engines. This property must not be used if ``s3ImportBuckets`` is used. For Microsoft SQL Server: Default: - New role is created if ``s3ImportBuckets`` is set, no role is defined otherwise
         :param security_groups: The security groups to assign to the DB instance. Default: - a new security group is created
         :param storage_throughput: The storage throughput, specified in mebibytes per second (MiBps). Only applicable for GP3. Default: - 125 MiBps if allocated storage is less than 400 GiB for MariaDB, MySQL, and PostgreSQL, less than 200 GiB for Oracle and less than 20 GiB for SQL Server. 500 MiBps otherwise (except for SQL Server where the default is always 125 MiBps).
-        :param storage_type: The storage type. Storage types supported are gp2, io1, standard. Default: GP2
+        :param storage_type: The storage type to associate with the DB instance. Storage types supported are gp2, gp3, io1, io2, and standard. Default: StorageType.GP2
         :param subnet_group: Existing subnet group for the instance. Default: - a new subnet group will be created.
         :param vpc_subnets: The type of subnets to add to the created DB subnet group. Default: - private subnets
         '''

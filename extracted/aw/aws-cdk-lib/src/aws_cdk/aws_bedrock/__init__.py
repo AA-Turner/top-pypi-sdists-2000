@@ -4962,6 +4962,12 @@ class FoundationModelIdentifier(
         return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "COHERE_EMBED_MULTILINGUAL_V3_0_512"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="COHERE_EMBED_V4")
+    def COHERE_EMBED_V4(cls) -> "FoundationModelIdentifier":
+        '''Base model "cohere.embed-v4:0".'''
+        return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "COHERE_EMBED_V4"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="COHERE_RERANK_V3_5")
     def COHERE_RERANK_V3_5(cls) -> "FoundationModelIdentifier":
         '''Base model "cohere.rerank-v3-5:0".'''
@@ -11339,7 +11345,7 @@ class CfnDataAutomationProject(
             '''Settings for generating data from audio.
 
             :param state: Whether generating categorical data from audio is enabled.
-            :param type_configuration: 
+            :param type_configuration: This element contains information about extractions from different types. Used to enable speaker and channel labeling for transcripts.
             :param types: The types of data to generate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audioextractioncategory.html
@@ -11395,7 +11401,10 @@ class CfnDataAutomationProject(
         def type_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.AudioExtractionCategoryTypeConfigurationProperty"]]:
-            '''
+            '''This element contains information about extractions from different types.
+
+            Used to enable speaker and channel labeling for transcripts.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audioextractioncategory.html#cfn-bedrock-dataautomationproject-audioextractioncategory-typeconfiguration
             '''
             result = self._values.get("type_configuration")
@@ -11432,8 +11441,9 @@ class CfnDataAutomationProject(
             *,
             transcript: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.TranscriptConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param transcript: 
+            '''Allows configuration of extractions for different types of data, such as transcript and content moderation.
+
+            :param transcript: This element allows you to configure different extractions for your transcript data, such as speaker and channel labeling.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audioextractioncategorytypeconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -11466,7 +11476,8 @@ class CfnDataAutomationProject(
         def transcript(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.TranscriptConfigurationProperty"]]:
-            '''
+            '''This element allows you to configure different extractions for your transcript data, such as speaker and channel labeling.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audioextractioncategorytypeconfiguration.html#cfn-bedrock-dataautomationproject-audioextractioncategorytypeconfiguration-transcript
             '''
             result = self._values.get("transcript")
@@ -11888,8 +11899,11 @@ class CfnDataAutomationProject(
     )
     class ChannelLabelingConfigurationProperty:
         def __init__(self, *, state: builtins.str) -> None:
-            '''
-            :param state: 
+            '''Enables or disables channel labeling.
+
+            Channel labeling, when enabled will assign a number to each audio channel, and indicate which channel is being used in each portion of the transcript. This appears in the response as "ch_0" for the first channel, and "ch_1" for the second.
+
+            :param state: State of channel labeling, either enabled or disabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-channellabelingconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -11913,7 +11927,8 @@ class CfnDataAutomationProject(
 
         @builtins.property
         def state(self) -> builtins.str:
-            '''
+            '''State of channel labeling, either enabled or disabled.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-channellabelingconfiguration.html#cfn-bedrock-dataautomationproject-channellabelingconfiguration-state
             '''
             result = self._values.get("state")
@@ -13365,8 +13380,11 @@ class CfnDataAutomationProject(
     )
     class SpeakerLabelingConfigurationProperty:
         def __init__(self, *, state: builtins.str) -> None:
-            '''
-            :param state: 
+            '''Enables or disables speaker labeling.
+
+            Speaker labeling, when enabled will assign a number to each speaker, and indicate which speaker is talking in each portion of the transcript. This appears in the response as "spk_0" for the first speaker, "spk_1" for the second, and so on for up to 30 speakers.
+
+            :param state: State of speaker labeling, either enabled or disabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-speakerlabelingconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -13390,7 +13408,8 @@ class CfnDataAutomationProject(
 
         @builtins.property
         def state(self) -> builtins.str:
-            '''
+            '''State of speaker labeling, either enabled or disabled.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-speakerlabelingconfiguration.html#cfn-bedrock-dataautomationproject-speakerlabelingconfiguration-state
             '''
             result = self._values.get("state")
@@ -13670,9 +13689,12 @@ class CfnDataAutomationProject(
             channel_labeling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.ChannelLabelingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             speaker_labeling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.SpeakerLabelingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param channel_labeling: 
-            :param speaker_labeling: 
+            '''Configuration for transcript options.
+
+            This option allows you to enable speaker labeling and channel labeling.
+
+            :param channel_labeling: Enables channel labeling. Each audio channel will be labeled with a number, and the transcript will indicate which channel is being used.
+            :param speaker_labeling: Enables speaker labeling. Each speaker within a transcript will recieve a number, and the transcript will note which speaker is talking.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-transcriptconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -13706,7 +13728,10 @@ class CfnDataAutomationProject(
         def channel_labeling(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.ChannelLabelingConfigurationProperty"]]:
-            '''
+            '''Enables channel labeling.
+
+            Each audio channel will be labeled with a number, and the transcript will indicate which channel is being used.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-transcriptconfiguration.html#cfn-bedrock-dataautomationproject-transcriptconfiguration-channellabeling
             '''
             result = self._values.get("channel_labeling")
@@ -13716,7 +13741,10 @@ class CfnDataAutomationProject(
         def speaker_labeling(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SpeakerLabelingConfigurationProperty"]]:
-            '''
+            '''Enables speaker labeling.
+
+            Each speaker within a transcript will recieve a number, and the transcript will note which speaker is talking.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-transcriptconfiguration.html#cfn-bedrock-dataautomationproject-transcriptconfiguration-speakerlabeling
             '''
             result = self._values.get("speaker_labeling")

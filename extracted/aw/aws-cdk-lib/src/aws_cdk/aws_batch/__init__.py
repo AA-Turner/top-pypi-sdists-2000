@@ -66,7 +66,18 @@ For stateful or otherwise non-interruption-tolerant workflows, omit `spot` or se
 
 #### Choosing Your Instance Types
 
-Batch allows you to choose the instance types or classes that will run your workload.
+Batch allows you to choose most up-to-date instance classes based on your region.
+This example configures your `ComputeEnvironment` to use only ARM64 instance:
+
+```python
+vpc = ec2.Vpc(self, "VPC")
+
+batch.ManagedEc2EcsComputeEnvironment(self, "myEc2ComputeEnv",
+    vpc=vpc,
+    default_instance_classes=[batch.DefaultInstanceClass.ARM64]
+)
+```
+
 This example configures your `ComputeEnvironment` to use only the `M5AD.large` instance:
 
 ```python
@@ -90,6 +101,9 @@ batch.ManagedEc2EcsComputeEnvironment(self, "myEc2ComputeEnv",
     instance_classes=[ec2.InstanceClass.R4]
 )
 ```
+
+> [!WARNING]
+> `useOptimalInstanceClasses` is deprecated! Use `defaultInstanceClasses` instead.
 
 Unless you explicitly specify `useOptimalInstanceClasses: false`, this compute environment will use `'optimal'` instances,
 which tells Batch to pick an instance from the C4, M4, and R4 instance families.
@@ -2432,6 +2446,29 @@ class CustomReason:
         return "CustomReason(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.enum(jsii_type="aws-cdk-lib.aws_batch.DefaultInstanceClass")
+class DefaultInstanceClass(enum.Enum):
+    '''Batch default instances types.
+
+    :see: https://docs.aws.amazon.com/batch/latest/userguide/instance-type-compute-table.html
+    :exampleMetadata: infused
+
+    Example::
+
+        vpc = ec2.Vpc(self, "VPC")
+        
+        batch.ManagedEc2EcsComputeEnvironment(self, "myEc2ComputeEnv",
+            vpc=vpc,
+            default_instance_classes=[batch.DefaultInstanceClass.ARM64]
+        )
+    '''
+
+    X86_64 = "X86_64"
+    '''x86 based instance types (from the m6i, c6i, r6i, and c7i instance families).'''
+    ARM64 = "ARM64"
+    '''ARM64 based instance types (from the m6g, c6g, r6g, and c7g instance families).'''
 
 
 @jsii.data_type(
@@ -9710,6 +9747,7 @@ class ManagedEc2EcsComputeEnvironment(
         id: builtins.str,
         *,
         allocation_strategy: typing.Optional[AllocationStrategy] = None,
+        default_instance_classes: typing.Optional[typing.Sequence[DefaultInstanceClass]] = None,
         images: typing.Optional[typing.Sequence[typing.Union[EcsMachineImage, typing.Dict[builtins.str, typing.Any]]]] = None,
         instance_classes: typing.Optional[typing.Sequence[_InstanceClass_85a592e7]] = None,
         instance_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -9737,6 +9775,7 @@ class ManagedEc2EcsComputeEnvironment(
         :param scope: -
         :param id: -
         :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        :param default_instance_classes: Use batch's default instance types. A simpler way to choose up-to-date instance classes based on region instead of specifying exact instance classes. Default: - choose from instanceTypes and instanceClasses
         :param images: Configure which AMIs this Compute Environment can launch. If you specify this property with only ``image`` specified, then the ``imageType`` will default to ``ECS_AL2``. *If your image needs GPU resources, specify ``ECS_AL2_NVIDIA``; otherwise, the instances will not be able to properly join the ComputeEnvironment*. Default: - ECS_AL2 for non-GPU instances, ECS_AL2_NVIDIA for GPU instances
         :param instance_classes: The instance classes that this Compute Environment can launch. Which one is chosen depends on the ``AllocationStrategy`` used. Batch will automatically choose the instance size. Default: - the instances Batch considers will be used (currently C4, M4, and R4)
         :param instance_role: The execution Role that instances launched by this Compute Environment will use. Default: - a role will be created
@@ -9746,7 +9785,7 @@ class ManagedEc2EcsComputeEnvironment(
         :param placement_group: The EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to this Compute Environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. Default: - no placement group
         :param spot_bid_percentage: The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, the Spot price must be less than 20% of the current On-Demand price for that Instance. You always pay the lowest market price and never more than your maximum percentage. For most use cases, Batch recommends leaving this field empty. Implies ``spot == true`` if set Default: 100%
         :param spot_fleet_role: The service-linked role that Spot Fleet needs to launch instances on your behalf. Default: - a new role will be created
-        :param use_optimal_instance_classes: Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
+        :param use_optimal_instance_classes: (deprecated) Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
         :param vpc: VPC in which this Compute Environment will launch Instances.
         :param maxv_cpus: The maximum vCpus this ``ManagedComputeEnvironment`` can scale up to. Each vCPU is equivalent to 1024 CPU shares. *Note*: if this Compute Environment uses EC2 resources (not Fargate) with either ``AllocationStrategy.BEST_FIT_PROGRESSIVE`` or ``AllocationStrategy.SPOT_CAPACITY_OPTIMIZED``, or ``AllocationStrategy.BEST_FIT`` with Spot instances, The scheduler may exceed this number by at most one of the instances specified in ``instanceTypes`` or ``instanceClasses``. Default: 256
         :param replace_compute_environment: Specifies whether this Compute Environment is replaced if an update is made that requires replacing its instances. To enable more properties to be updated, set this property to ``false``. When changing the value of this property to false, do not change any other properties at the same time. If other properties are changed at the same time, and the change needs to be rolled back but it can't, it's possible for the stack to go into the UPDATE_ROLLBACK_FAILED state. You can't update a stack that is in the UPDATE_ROLLBACK_FAILED state. However, if you can continue to roll it back, you can return the stack to its original settings and then try to update it again. The properties which require a replacement of the Compute Environment are: Default: false
@@ -9766,6 +9805,7 @@ class ManagedEc2EcsComputeEnvironment(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = ManagedEc2EcsComputeEnvironmentProps(
             allocation_strategy=allocation_strategy,
+            default_instance_classes=default_instance_classes,
             images=images,
             instance_classes=instance_classes,
             instance_role=instance_role,
@@ -10076,6 +10116,7 @@ class ManagedEc2EcsComputeEnvironment(
         "update_to_latest_image_version": "updateToLatestImageVersion",
         "vpc_subnets": "vpcSubnets",
         "allocation_strategy": "allocationStrategy",
+        "default_instance_classes": "defaultInstanceClasses",
         "images": "images",
         "instance_classes": "instanceClasses",
         "instance_role": "instanceRole",
@@ -10105,6 +10146,7 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         update_to_latest_image_version: typing.Optional[builtins.bool] = None,
         vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
         allocation_strategy: typing.Optional[AllocationStrategy] = None,
+        default_instance_classes: typing.Optional[typing.Sequence[DefaultInstanceClass]] = None,
         images: typing.Optional[typing.Sequence[typing.Union[EcsMachineImage, typing.Dict[builtins.str, typing.Any]]]] = None,
         instance_classes: typing.Optional[typing.Sequence[_InstanceClass_85a592e7]] = None,
         instance_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -10131,6 +10173,7 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         :param update_to_latest_image_version: Whether or not the AMI is updated to the latest one supported by Batch when an infrastructure update occurs. If you specify a specific AMI, this property will be ignored. Note: the CDK will never set this value by default, ``false`` will set by CFN. This is to avoid a deployment failure that occurs when this value is set. Default: false
         :param vpc_subnets: The VPC Subnets this Compute Environment will launch instances in. Default: new subnets will be created
         :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        :param default_instance_classes: Use batch's default instance types. A simpler way to choose up-to-date instance classes based on region instead of specifying exact instance classes. Default: - choose from instanceTypes and instanceClasses
         :param images: Configure which AMIs this Compute Environment can launch. If you specify this property with only ``image`` specified, then the ``imageType`` will default to ``ECS_AL2``. *If your image needs GPU resources, specify ``ECS_AL2_NVIDIA``; otherwise, the instances will not be able to properly join the ComputeEnvironment*. Default: - ECS_AL2 for non-GPU instances, ECS_AL2_NVIDIA for GPU instances
         :param instance_classes: The instance classes that this Compute Environment can launch. Which one is chosen depends on the ``AllocationStrategy`` used. Batch will automatically choose the instance size. Default: - the instances Batch considers will be used (currently C4, M4, and R4)
         :param instance_role: The execution Role that instances launched by this Compute Environment will use. Default: - a role will be created
@@ -10140,7 +10183,7 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         :param placement_group: The EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to this Compute Environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. Default: - no placement group
         :param spot_bid_percentage: The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, the Spot price must be less than 20% of the current On-Demand price for that Instance. You always pay the lowest market price and never more than your maximum percentage. For most use cases, Batch recommends leaving this field empty. Implies ``spot == true`` if set Default: 100%
         :param spot_fleet_role: The service-linked role that Spot Fleet needs to launch instances on your behalf. Default: - a new role will be created
-        :param use_optimal_instance_classes: Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
+        :param use_optimal_instance_classes: (deprecated) Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
 
         :exampleMetadata: infused
 
@@ -10172,6 +10215,7 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
             check_type(argname="argument update_to_latest_image_version", value=update_to_latest_image_version, expected_type=type_hints["update_to_latest_image_version"])
             check_type(argname="argument vpc_subnets", value=vpc_subnets, expected_type=type_hints["vpc_subnets"])
             check_type(argname="argument allocation_strategy", value=allocation_strategy, expected_type=type_hints["allocation_strategy"])
+            check_type(argname="argument default_instance_classes", value=default_instance_classes, expected_type=type_hints["default_instance_classes"])
             check_type(argname="argument images", value=images, expected_type=type_hints["images"])
             check_type(argname="argument instance_classes", value=instance_classes, expected_type=type_hints["instance_classes"])
             check_type(argname="argument instance_role", value=instance_role, expected_type=type_hints["instance_role"])
@@ -10209,6 +10253,8 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
             self._values["vpc_subnets"] = vpc_subnets
         if allocation_strategy is not None:
             self._values["allocation_strategy"] = allocation_strategy
+        if default_instance_classes is not None:
+            self._values["default_instance_classes"] = default_instance_classes
         if images is not None:
             self._values["images"] = images
         if instance_classes is not None:
@@ -10401,6 +10447,22 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         return typing.cast(typing.Optional[AllocationStrategy], result)
 
     @builtins.property
+    def default_instance_classes(
+        self,
+    ) -> typing.Optional[typing.List[DefaultInstanceClass]]:
+        '''Use batch's default instance types.
+
+        A simpler way to choose up-to-date instance classes based on region
+        instead of specifying exact instance classes.
+
+        :default: - choose from instanceTypes and instanceClasses
+
+        :see: https://docs.aws.amazon.com/batch/latest/userguide/instance-type-compute-table.html
+        '''
+        result = self._values.get("default_instance_classes")
+        return typing.cast(typing.Optional[typing.List[DefaultInstanceClass]], result)
+
+    @builtins.property
     def images(self) -> typing.Optional[typing.List[EcsMachineImage]]:
         '''Configure which AMIs this Compute Environment can launch.
 
@@ -10514,13 +10576,17 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
 
     @builtins.property
     def use_optimal_instance_classes(self) -> typing.Optional[builtins.bool]:
-        '''Whether or not to use batch's optimal instance type.
+        '''(deprecated) Whether or not to use batch's optimal instance type.
 
         The optimal instance type is equivalent to adding the
         C4, M4, and R4 instance classes. You can specify other instance classes
         (of the same architecture) in addition to the optimal instance classes.
 
         :default: true
+
+        :deprecated: use defaultInstanceClasses instead
+
+        :stability: deprecated
         '''
         result = self._values.get("use_optimal_instance_classes")
         return typing.cast(typing.Optional[builtins.bool], result)
@@ -10577,6 +10643,7 @@ class ManagedEc2EksComputeEnvironment(
             # the properties below are optional
             allocation_strategy=batch.AllocationStrategy.BEST_FIT,
             compute_environment_name="computeEnvironmentName",
+            default_instance_classes=[batch.DefaultInstanceClass.X86_64],
             enabled=False,
             images=[batch.EksMachineImage(
                 image=machine_image,
@@ -10617,6 +10684,7 @@ class ManagedEc2EksComputeEnvironment(
         eks_cluster: _ICluster_6b2b80df,
         kubernetes_namespace: builtins.str,
         allocation_strategy: typing.Optional[AllocationStrategy] = None,
+        default_instance_classes: typing.Optional[typing.Sequence[DefaultInstanceClass]] = None,
         images: typing.Optional[typing.Sequence[typing.Union[EksMachineImage, typing.Dict[builtins.str, typing.Any]]]] = None,
         instance_classes: typing.Optional[typing.Sequence[_InstanceClass_85a592e7]] = None,
         instance_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -10645,6 +10713,7 @@ class ManagedEc2EksComputeEnvironment(
         :param eks_cluster: The cluster that backs this Compute Environment. Required for Compute Environments running Kubernetes jobs. Please ensure that you have followed the steps at https://docs.aws.amazon.com/batch/latest/userguide/getting-started-eks.html before attempting to deploy a ``ManagedEc2EksComputeEnvironment`` that uses this cluster. If you do not follow the steps in the link, the deployment fail with a message that the compute environment did not stabilize.
         :param kubernetes_namespace: The namespace of the Cluster.
         :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        :param default_instance_classes: Use batch's default instance types. A simpler way to choose up-to-date instance classes based on region instead of specifying exact instance classes. Default: - choose from instanceTypes and instanceClasses
         :param images: Configure which AMIs this Compute Environment can launch. Default: If ``imageKubernetesVersion`` is specified, - EKS_AL2 for non-GPU instances, EKS_AL2_NVIDIA for GPU instances, Otherwise, - ECS_AL2 for non-GPU instances, ECS_AL2_NVIDIA for GPU instances,
         :param instance_classes: The instance types that this Compute Environment can launch. Which one is chosen depends on the ``AllocationStrategy`` used. Batch will automatically choose the instance size. Default: - the instances Batch considers will be used (currently C4, M4, and R4)
         :param instance_role: The execution Role that instances launched by this Compute Environment will use. Default: - a role will be created
@@ -10653,7 +10722,7 @@ class ManagedEc2EksComputeEnvironment(
         :param minv_cpus: The minimum vCPUs that an environment should maintain, even if the compute environment is DISABLED. Default: 0
         :param placement_group: The EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to this Compute Environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. Default: - no placement group
         :param spot_bid_percentage: The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, the Spot price must be less than 20% of the current On-Demand price for that Instance. You always pay the lowest market price and never more than your maximum percentage. For most use cases, Batch recommends leaving this field empty. Implies ``spot == true`` if set Default: - 100%
-        :param use_optimal_instance_classes: Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
+        :param use_optimal_instance_classes: (deprecated) Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
         :param vpc: VPC in which this Compute Environment will launch Instances.
         :param maxv_cpus: The maximum vCpus this ``ManagedComputeEnvironment`` can scale up to. Each vCPU is equivalent to 1024 CPU shares. *Note*: if this Compute Environment uses EC2 resources (not Fargate) with either ``AllocationStrategy.BEST_FIT_PROGRESSIVE`` or ``AllocationStrategy.SPOT_CAPACITY_OPTIMIZED``, or ``AllocationStrategy.BEST_FIT`` with Spot instances, The scheduler may exceed this number by at most one of the instances specified in ``instanceTypes`` or ``instanceClasses``. Default: 256
         :param replace_compute_environment: Specifies whether this Compute Environment is replaced if an update is made that requires replacing its instances. To enable more properties to be updated, set this property to ``false``. When changing the value of this property to false, do not change any other properties at the same time. If other properties are changed at the same time, and the change needs to be rolled back but it can't, it's possible for the stack to go into the UPDATE_ROLLBACK_FAILED state. You can't update a stack that is in the UPDATE_ROLLBACK_FAILED state. However, if you can continue to roll it back, you can return the stack to its original settings and then try to update it again. The properties which require a replacement of the Compute Environment are: Default: false
@@ -10675,6 +10744,7 @@ class ManagedEc2EksComputeEnvironment(
             eks_cluster=eks_cluster,
             kubernetes_namespace=kubernetes_namespace,
             allocation_strategy=allocation_strategy,
+            default_instance_classes=default_instance_classes,
             images=images,
             instance_classes=instance_classes,
             instance_role=instance_role,
@@ -10981,6 +11051,7 @@ class ManagedEc2EksComputeEnvironment(
         "eks_cluster": "eksCluster",
         "kubernetes_namespace": "kubernetesNamespace",
         "allocation_strategy": "allocationStrategy",
+        "default_instance_classes": "defaultInstanceClasses",
         "images": "images",
         "instance_classes": "instanceClasses",
         "instance_role": "instanceRole",
@@ -11011,6 +11082,7 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         eks_cluster: _ICluster_6b2b80df,
         kubernetes_namespace: builtins.str,
         allocation_strategy: typing.Optional[AllocationStrategy] = None,
+        default_instance_classes: typing.Optional[typing.Sequence[DefaultInstanceClass]] = None,
         images: typing.Optional[typing.Sequence[typing.Union[EksMachineImage, typing.Dict[builtins.str, typing.Any]]]] = None,
         instance_classes: typing.Optional[typing.Sequence[_InstanceClass_85a592e7]] = None,
         instance_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -11038,6 +11110,7 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         :param eks_cluster: The cluster that backs this Compute Environment. Required for Compute Environments running Kubernetes jobs. Please ensure that you have followed the steps at https://docs.aws.amazon.com/batch/latest/userguide/getting-started-eks.html before attempting to deploy a ``ManagedEc2EksComputeEnvironment`` that uses this cluster. If you do not follow the steps in the link, the deployment fail with a message that the compute environment did not stabilize.
         :param kubernetes_namespace: The namespace of the Cluster.
         :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        :param default_instance_classes: Use batch's default instance types. A simpler way to choose up-to-date instance classes based on region instead of specifying exact instance classes. Default: - choose from instanceTypes and instanceClasses
         :param images: Configure which AMIs this Compute Environment can launch. Default: If ``imageKubernetesVersion`` is specified, - EKS_AL2 for non-GPU instances, EKS_AL2_NVIDIA for GPU instances, Otherwise, - ECS_AL2 for non-GPU instances, ECS_AL2_NVIDIA for GPU instances,
         :param instance_classes: The instance types that this Compute Environment can launch. Which one is chosen depends on the ``AllocationStrategy`` used. Batch will automatically choose the instance size. Default: - the instances Batch considers will be used (currently C4, M4, and R4)
         :param instance_role: The execution Role that instances launched by this Compute Environment will use. Default: - a role will be created
@@ -11046,7 +11119,7 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         :param minv_cpus: The minimum vCPUs that an environment should maintain, even if the compute environment is DISABLED. Default: 0
         :param placement_group: The EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to this Compute Environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. Default: - no placement group
         :param spot_bid_percentage: The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, the Spot price must be less than 20% of the current On-Demand price for that Instance. You always pay the lowest market price and never more than your maximum percentage. For most use cases, Batch recommends leaving this field empty. Implies ``spot == true`` if set Default: - 100%
-        :param use_optimal_instance_classes: Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
+        :param use_optimal_instance_classes: (deprecated) Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
 
         :exampleMetadata: fixture=_generated
 
@@ -11079,6 +11152,7 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
                 # the properties below are optional
                 allocation_strategy=batch.AllocationStrategy.BEST_FIT,
                 compute_environment_name="computeEnvironmentName",
+                default_instance_classes=[batch.DefaultInstanceClass.X86_64],
                 enabled=False,
                 images=[batch.EksMachineImage(
                     image=machine_image,
@@ -11129,6 +11203,7 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
             check_type(argname="argument eks_cluster", value=eks_cluster, expected_type=type_hints["eks_cluster"])
             check_type(argname="argument kubernetes_namespace", value=kubernetes_namespace, expected_type=type_hints["kubernetes_namespace"])
             check_type(argname="argument allocation_strategy", value=allocation_strategy, expected_type=type_hints["allocation_strategy"])
+            check_type(argname="argument default_instance_classes", value=default_instance_classes, expected_type=type_hints["default_instance_classes"])
             check_type(argname="argument images", value=images, expected_type=type_hints["images"])
             check_type(argname="argument instance_classes", value=instance_classes, expected_type=type_hints["instance_classes"])
             check_type(argname="argument instance_role", value=instance_role, expected_type=type_hints["instance_role"])
@@ -11167,6 +11242,8 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
             self._values["vpc_subnets"] = vpc_subnets
         if allocation_strategy is not None:
             self._values["allocation_strategy"] = allocation_strategy
+        if default_instance_classes is not None:
+            self._values["default_instance_classes"] = default_instance_classes
         if images is not None:
             self._values["images"] = images
         if instance_classes is not None:
@@ -11380,6 +11457,22 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         return typing.cast(typing.Optional[AllocationStrategy], result)
 
     @builtins.property
+    def default_instance_classes(
+        self,
+    ) -> typing.Optional[typing.List[DefaultInstanceClass]]:
+        '''Use batch's default instance types.
+
+        A simpler way to choose up-to-date instance classes based on region
+        instead of specifying exact instance classes.
+
+        :default: - choose from instanceTypes and instanceClasses
+
+        :see: https://docs.aws.amazon.com/batch/latest/userguide/instance-type-compute-table.html
+        '''
+        result = self._values.get("default_instance_classes")
+        return typing.cast(typing.Optional[typing.List[DefaultInstanceClass]], result)
+
+    @builtins.property
     def images(self) -> typing.Optional[typing.List[EksMachineImage]]:
         '''Configure which AMIs this Compute Environment can launch.
 
@@ -11483,13 +11576,17 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
 
     @builtins.property
     def use_optimal_instance_classes(self) -> typing.Optional[builtins.bool]:
-        '''Whether or not to use batch's optimal instance type.
+        '''(deprecated) Whether or not to use batch's optimal instance type.
 
         The optimal instance type is equivalent to adding the
         C4, M4, and R4 instance classes. You can specify other instance classes
         (of the same architecture) in addition to the optimal instance classes.
 
         :default: true
+
+        :deprecated: use defaultInstanceClasses instead
+
+        :stability: deprecated
         '''
         result = self._values.get("use_optimal_instance_classes")
         return typing.cast(typing.Optional[builtins.bool], result)
@@ -26252,6 +26349,7 @@ __all__ = [
     "ComputeEnvironmentReference",
     "ConsumableResourceReference",
     "CustomReason",
+    "DefaultInstanceClass",
     "Device",
     "DevicePermission",
     "DnsPolicy",
@@ -26849,6 +26947,7 @@ def _typecheckingstub__f512f54787789f74db02e15bede1080e7c35d142bce05240edb789cee
     id: builtins.str,
     *,
     allocation_strategy: typing.Optional[AllocationStrategy] = None,
+    default_instance_classes: typing.Optional[typing.Sequence[DefaultInstanceClass]] = None,
     images: typing.Optional[typing.Sequence[typing.Union[EcsMachineImage, typing.Dict[builtins.str, typing.Any]]]] = None,
     instance_classes: typing.Optional[typing.Sequence[_InstanceClass_85a592e7]] = None,
     instance_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -26910,6 +27009,7 @@ def _typecheckingstub__8eb858d67ed25e3f273cc247ebf45f3c3f60ddc697df4791d3298b29a
     update_to_latest_image_version: typing.Optional[builtins.bool] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     allocation_strategy: typing.Optional[AllocationStrategy] = None,
+    default_instance_classes: typing.Optional[typing.Sequence[DefaultInstanceClass]] = None,
     images: typing.Optional[typing.Sequence[typing.Union[EcsMachineImage, typing.Dict[builtins.str, typing.Any]]]] = None,
     instance_classes: typing.Optional[typing.Sequence[_InstanceClass_85a592e7]] = None,
     instance_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -26931,6 +27031,7 @@ def _typecheckingstub__9d1d04f77f1ffdbbe37085b164b175a3e5f0615a7fcde154dcc7f2b64
     eks_cluster: _ICluster_6b2b80df,
     kubernetes_namespace: builtins.str,
     allocation_strategy: typing.Optional[AllocationStrategy] = None,
+    default_instance_classes: typing.Optional[typing.Sequence[DefaultInstanceClass]] = None,
     images: typing.Optional[typing.Sequence[typing.Union[EksMachineImage, typing.Dict[builtins.str, typing.Any]]]] = None,
     instance_classes: typing.Optional[typing.Sequence[_InstanceClass_85a592e7]] = None,
     instance_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -26985,6 +27086,7 @@ def _typecheckingstub__0a94139ce5fac0f77a3f41888dd3906c6a6876b7e2df289a2bb742a8c
     eks_cluster: _ICluster_6b2b80df,
     kubernetes_namespace: builtins.str,
     allocation_strategy: typing.Optional[AllocationStrategy] = None,
+    default_instance_classes: typing.Optional[typing.Sequence[DefaultInstanceClass]] = None,
     images: typing.Optional[typing.Sequence[typing.Union[EksMachineImage, typing.Dict[builtins.str, typing.Any]]]] = None,
     instance_classes: typing.Optional[typing.Sequence[_InstanceClass_85a592e7]] = None,
     instance_role: typing.Optional[_IRole_235f5d8e] = None,

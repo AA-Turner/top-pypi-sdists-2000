@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "nox"
-version = "2025.05.01"
+version = "2025.10.14"
 description = "Flexible test automation."
 readme = "README.md"
 keywords = [
@@ -35,16 +35,20 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Software Development :: Testing",
 ]
 dependencies = [
   "argcomplete>=1.9.4,<4",
-  "attrs>=23.1",
+  "attrs>=24.1",
   "colorlog>=2.6.1,<7",
   "dependency-groups>=1.1",
-  "packaging>=20.9",
-  "tomli>=1; python_version<'3.11'",
-  "virtualenv>=20.14.1",
+  "packaging>=20.9; python_version<'3.10'",
+  "packaging>=21; python_version>='3.10'",
+  "pbs-installer[all]>=2025.1.6",
+  "tomli>=1.1; python_version<'3.11'",
+  "virtualenv>=20.14.1; python_version<'3.10'",
+  "virtualenv>=20.15; python_version>='3.10'",
 ]
 optional-dependencies.tox_to_nox = [
   "importlib-resources; python_version<'3.9'",
@@ -63,13 +67,13 @@ scripts.tox-to-nox = "nox.tox_to_nox:main"
 
 [dependency-groups]
 dev = [
-  { include-group = "docs" },
   { include-group = "test" },
 ]
 test = [
   "coverage[toml]>=7.2",
-  "pytest>=6",
-  "pytest-cov",
+  "pytest>=7.4; python_version>='3.12'",
+  "pytest>=7; python_version<'3.12'",
+  "pytest-cov>=3",
 ]
 docs = [
   "myst-parser",
@@ -114,7 +118,6 @@ lint.extend-select = [
   "YTT", # flake8-2020
 ]
 lint.ignore = [
-  "ISC001",  # Conflicts with formatter
   "N802",    # Function name should be lowercase
   "N818",    # Error suffix for errors
   "PLR09",   # Too many X
@@ -130,7 +133,7 @@ lint.typing-modules = [ "nox._typing" ]
 lint.flake8-unused-arguments.ignore-variadic-names = true
 
 [tool.pyproject-fmt]
-max_supported_python = "3.13"
+max_supported_python = "3.14"
 
 [tool.pytest.ini_options]
 minversion = "7.0"
@@ -140,16 +143,27 @@ filterwarnings = [ "error" ]
 log_cli_level = "INFO"
 testpaths = [ "tests" ]
 pythonpath = [ ".github/" ]
+markers = [
+  "conda: test requires conda",
+]
 
 [tool.coverage]
 run.branch = true
 run.relative_files = true
 run.source_pkgs = [ "nox" ]
-report.exclude_also = [ "def __dir__()", "if TYPE_CHECKING:", "@overload" ]
+run.disable_warnings = [
+  "no-ctracer",
+]
+report.exclude_also = [
+  "@overload",
+  "def __dir__()",
+  "def __repr__",
+  "if TYPE_CHECKING:",
+]
 report.omit = [ "nox/_typing.py" ]
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 strict = true
 warn_unreachable = true
 enable_error_code = [ "ignore-without-code", "redundant-expr", "truthy-bool" ]

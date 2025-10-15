@@ -661,6 +661,17 @@ CfnOutput(self, "TheUrl",
 )
 ```
 
+### Important Function URL Permission Update - Oct 2025
+
+Starting Oct 2025, Function URL invocation will require two permissions
+
+* lambda:InvokeFunctionUrl
+* lambda:InvokeFunction (New)
+
+CDK has updated `grantInvokeUrl` and `addFunctionUrl` to add both permission above.
+
+If your existing CDK stack uses `grantInvokeUrl` or `addFunctionUrl`, your next deployment will automatically add the `lambda:InvokeFunction` permission without requiring any code changes. This ensures your Function URLs continue working seamlessly. No additional actions are needed.
+
 ### CORS configuration for Function URLs
 
 If you want your Function URLs to be invokable from a web page in browser, you
@@ -15337,6 +15348,7 @@ class ParamsAndSecretsVersions(enum.Enum):
         "action": "action",
         "event_source_token": "eventSourceToken",
         "function_url_auth_type": "functionUrlAuthType",
+        "invoked_via_function_url": "invokedViaFunctionUrl",
         "organization_id": "organizationId",
         "scope": "scope",
         "source_account": "sourceAccount",
@@ -15351,6 +15363,7 @@ class Permission:
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+        invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
         scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
         source_account: typing.Optional[builtins.str] = None,
@@ -15362,6 +15375,7 @@ class Permission:
         :param action: The Lambda actions that you want to allow in this statement. For example, you can specify lambda:CreateFunction to specify a certain action, or use a wildcard (``lambda:*``) to grant permission to all Lambda actions. For a list of actions, see Actions and Condition Context Keys for AWS Lambda in the IAM User Guide. Default: 'lambda:InvokeFunction'
         :param event_source_token: A unique token that must be supplied by the principal invoking the function. Default: - The caller would not need to present a token.
         :param function_url_auth_type: The authType for the function URL that you are granting permissions for. Default: - No functionUrlAuthType
+        :param invoked_via_function_url: The condition key for limiting the scope of lambda:InvokeFunction action to Function URL only. When set to true, it restricts the principal in this policy to perform invokes for the resource only via Function URLs. Default: - false
         :param organization_id: The organization you want to grant permissions to. Use this ONLY if you need to grant permissions to a subset of the organization. If you want to grant permissions to the entire organization, sending the organization principal through the ``principal`` property will suffice. You can use this property to ensure that all source principals are owned by a specific organization. Default: - No organizationId
         :param scope: The scope to which the permission constructs be attached. The default is the Lambda function construct itself, but this would need to be different in cases such as cross-stack references where the Permissions would need to sit closer to the consumer of this permission (i.e., the caller). Default: - The instance of lambda.IFunction
         :param source_account: The AWS account ID (without hyphens) of the source owner. For example, if you specify an S3 bucket in the SourceArn property, this value is the bucket owner's account ID. You can use this property to ensure that all source principals are owned by a specific account.
@@ -15389,6 +15403,7 @@ class Permission:
             check_type(argname="argument action", value=action, expected_type=type_hints["action"])
             check_type(argname="argument event_source_token", value=event_source_token, expected_type=type_hints["event_source_token"])
             check_type(argname="argument function_url_auth_type", value=function_url_auth_type, expected_type=type_hints["function_url_auth_type"])
+            check_type(argname="argument invoked_via_function_url", value=invoked_via_function_url, expected_type=type_hints["invoked_via_function_url"])
             check_type(argname="argument organization_id", value=organization_id, expected_type=type_hints["organization_id"])
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument source_account", value=source_account, expected_type=type_hints["source_account"])
@@ -15402,6 +15417,8 @@ class Permission:
             self._values["event_source_token"] = event_source_token
         if function_url_auth_type is not None:
             self._values["function_url_auth_type"] = function_url_auth_type
+        if invoked_via_function_url is not None:
+            self._values["invoked_via_function_url"] = invoked_via_function_url
         if organization_id is not None:
             self._values["organization_id"] = organization_id
         if scope is not None:
@@ -15462,6 +15479,17 @@ class Permission:
         '''
         result = self._values.get("function_url_auth_type")
         return typing.cast(typing.Optional[FunctionUrlAuthType], result)
+
+    @builtins.property
+    def invoked_via_function_url(self) -> typing.Optional[builtins.bool]:
+        '''The condition key for limiting the scope of lambda:InvokeFunction action to Function URL only.
+
+        When set to true, it restricts the principal in this policy to perform invokes for the resource only via Function URLs.
+
+        :default: - false
+        '''
+        result = self._values.get("invoked_via_function_url")
+        return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
     def organization_id(self) -> typing.Optional[builtins.str]:
@@ -27005,6 +27033,7 @@ class IFunction(
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+        invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
         scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
         source_account: typing.Optional[builtins.str] = None,
@@ -27017,6 +27046,7 @@ class IFunction(
         :param action: The Lambda actions that you want to allow in this statement. For example, you can specify lambda:CreateFunction to specify a certain action, or use a wildcard (``lambda:*``) to grant permission to all Lambda actions. For a list of actions, see Actions and Condition Context Keys for AWS Lambda in the IAM User Guide. Default: 'lambda:InvokeFunction'
         :param event_source_token: A unique token that must be supplied by the principal invoking the function. Default: - The caller would not need to present a token.
         :param function_url_auth_type: The authType for the function URL that you are granting permissions for. Default: - No functionUrlAuthType
+        :param invoked_via_function_url: The condition key for limiting the scope of lambda:InvokeFunction action to Function URL only. When set to true, it restricts the principal in this policy to perform invokes for the resource only via Function URLs. Default: - false
         :param organization_id: The organization you want to grant permissions to. Use this ONLY if you need to grant permissions to a subset of the organization. If you want to grant permissions to the entire organization, sending the organization principal through the ``principal`` property will suffice. You can use this property to ensure that all source principals are owned by a specific organization. Default: - No organizationId
         :param scope: The scope to which the permission constructs be attached. The default is the Lambda function construct itself, but this would need to be different in cases such as cross-stack references where the Permissions would need to sit closer to the consumer of this permission (i.e., the caller). Default: - The instance of lambda.IFunction
         :param source_account: The AWS account ID (without hyphens) of the source owner. For example, if you specify an S3 bucket in the SourceArn property, this value is the bucket owner's account ID. You can use this property to ensure that all source principals are owned by a specific account.
@@ -27504,6 +27534,7 @@ class _IFunctionProxy(
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+        invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
         scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
         source_account: typing.Optional[builtins.str] = None,
@@ -27516,6 +27547,7 @@ class _IFunctionProxy(
         :param action: The Lambda actions that you want to allow in this statement. For example, you can specify lambda:CreateFunction to specify a certain action, or use a wildcard (``lambda:*``) to grant permission to all Lambda actions. For a list of actions, see Actions and Condition Context Keys for AWS Lambda in the IAM User Guide. Default: 'lambda:InvokeFunction'
         :param event_source_token: A unique token that must be supplied by the principal invoking the function. Default: - The caller would not need to present a token.
         :param function_url_auth_type: The authType for the function URL that you are granting permissions for. Default: - No functionUrlAuthType
+        :param invoked_via_function_url: The condition key for limiting the scope of lambda:InvokeFunction action to Function URL only. When set to true, it restricts the principal in this policy to perform invokes for the resource only via Function URLs. Default: - false
         :param organization_id: The organization you want to grant permissions to. Use this ONLY if you need to grant permissions to a subset of the organization. If you want to grant permissions to the entire organization, sending the organization principal through the ``principal`` property will suffice. You can use this property to ensure that all source principals are owned by a specific organization. Default: - No organizationId
         :param scope: The scope to which the permission constructs be attached. The default is the Lambda function construct itself, but this would need to be different in cases such as cross-stack references where the Permissions would need to sit closer to the consumer of this permission (i.e., the caller). Default: - The instance of lambda.IFunction
         :param source_account: The AWS account ID (without hyphens) of the source owner. For example, if you specify an S3 bucket in the SourceArn property, this value is the bucket owner's account ID. You can use this property to ensure that all source principals are owned by a specific account.
@@ -27531,6 +27563,7 @@ class _IFunctionProxy(
             action=action,
             event_source_token=event_source_token,
             function_url_auth_type=function_url_auth_type,
+            invoked_via_function_url=invoked_via_function_url,
             organization_id=organization_id,
             scope=scope,
             source_account=source_account,
@@ -28806,6 +28839,7 @@ class FunctionBase(
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+        invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
         scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
         source_account: typing.Optional[builtins.str] = None,
@@ -28818,6 +28852,7 @@ class FunctionBase(
         :param action: The Lambda actions that you want to allow in this statement. For example, you can specify lambda:CreateFunction to specify a certain action, or use a wildcard (``lambda:*``) to grant permission to all Lambda actions. For a list of actions, see Actions and Condition Context Keys for AWS Lambda in the IAM User Guide. Default: 'lambda:InvokeFunction'
         :param event_source_token: A unique token that must be supplied by the principal invoking the function. Default: - The caller would not need to present a token.
         :param function_url_auth_type: The authType for the function URL that you are granting permissions for. Default: - No functionUrlAuthType
+        :param invoked_via_function_url: The condition key for limiting the scope of lambda:InvokeFunction action to Function URL only. When set to true, it restricts the principal in this policy to perform invokes for the resource only via Function URLs. Default: - false
         :param organization_id: The organization you want to grant permissions to. Use this ONLY if you need to grant permissions to a subset of the organization. If you want to grant permissions to the entire organization, sending the organization principal through the ``principal`` property will suffice. You can use this property to ensure that all source principals are owned by a specific organization. Default: - No organizationId
         :param scope: The scope to which the permission constructs be attached. The default is the Lambda function construct itself, but this would need to be different in cases such as cross-stack references where the Permissions would need to sit closer to the consumer of this permission (i.e., the caller). Default: - The instance of lambda.IFunction
         :param source_account: The AWS account ID (without hyphens) of the source owner. For example, if you specify an S3 bucket in the SourceArn property, this value is the bucket owner's account ID. You can use this property to ensure that all source principals are owned by a specific account.
@@ -28833,6 +28868,7 @@ class FunctionBase(
             action=action,
             event_source_token=event_source_token,
             function_url_auth_type=function_url_auth_type,
+            invoked_via_function_url=invoked_via_function_url,
             organization_id=organization_id,
             scope=scope,
             source_account=source_account,
@@ -29892,6 +29928,7 @@ class SingletonFunction(
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+        invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
         scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
         source_account: typing.Optional[builtins.str] = None,
@@ -29904,6 +29941,7 @@ class SingletonFunction(
         :param action: The Lambda actions that you want to allow in this statement. For example, you can specify lambda:CreateFunction to specify a certain action, or use a wildcard (``lambda:*``) to grant permission to all Lambda actions. For a list of actions, see Actions and Condition Context Keys for AWS Lambda in the IAM User Guide. Default: 'lambda:InvokeFunction'
         :param event_source_token: A unique token that must be supplied by the principal invoking the function. Default: - The caller would not need to present a token.
         :param function_url_auth_type: The authType for the function URL that you are granting permissions for. Default: - No functionUrlAuthType
+        :param invoked_via_function_url: The condition key for limiting the scope of lambda:InvokeFunction action to Function URL only. When set to true, it restricts the principal in this policy to perform invokes for the resource only via Function URLs. Default: - false
         :param organization_id: The organization you want to grant permissions to. Use this ONLY if you need to grant permissions to a subset of the organization. If you want to grant permissions to the entire organization, sending the organization principal through the ``principal`` property will suffice. You can use this property to ensure that all source principals are owned by a specific organization. Default: - No organizationId
         :param scope: The scope to which the permission constructs be attached. The default is the Lambda function construct itself, but this would need to be different in cases such as cross-stack references where the Permissions would need to sit closer to the consumer of this permission (i.e., the caller). Default: - The instance of lambda.IFunction
         :param source_account: The AWS account ID (without hyphens) of the source owner. For example, if you specify an S3 bucket in the SourceArn property, this value is the bucket owner's account ID. You can use this property to ensure that all source principals are owned by a specific account.
@@ -29917,6 +29955,7 @@ class SingletonFunction(
             action=action,
             event_source_token=event_source_token,
             function_url_auth_type=function_url_auth_type,
+            invoked_via_function_url=invoked_via_function_url,
             organization_id=organization_id,
             scope=scope,
             source_account=source_account,
@@ -33115,6 +33154,7 @@ def _typecheckingstub__43f02634f6ed895ea88b35db6c7a6ba5a7da45fa4945d0f90bf36d079
     action: typing.Optional[builtins.str] = None,
     event_source_token: typing.Optional[builtins.str] = None,
     function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+    invoked_via_function_url: typing.Optional[builtins.bool] = None,
     organization_id: typing.Optional[builtins.str] = None,
     scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
     source_account: typing.Optional[builtins.str] = None,
@@ -34803,6 +34843,7 @@ def _typecheckingstub__012ac5126b1401118a0cd31e22b2fef5e1ab897a320c6edf7d16633af
     action: typing.Optional[builtins.str] = None,
     event_source_token: typing.Optional[builtins.str] = None,
     function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+    invoked_via_function_url: typing.Optional[builtins.bool] = None,
     organization_id: typing.Optional[builtins.str] = None,
     scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
     source_account: typing.Optional[builtins.str] = None,
@@ -35048,6 +35089,7 @@ def _typecheckingstub__213097e02686d5b4e582802e2e3e822fb2c79f2920c55d92f2f4f8f05
     action: typing.Optional[builtins.str] = None,
     event_source_token: typing.Optional[builtins.str] = None,
     function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+    invoked_via_function_url: typing.Optional[builtins.bool] = None,
     organization_id: typing.Optional[builtins.str] = None,
     scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
     source_account: typing.Optional[builtins.str] = None,
@@ -35245,6 +35287,7 @@ def _typecheckingstub__6d48a048e22819587505668ae6e1fbdfeedaaaf355ad52bd1196e683b
     action: typing.Optional[builtins.str] = None,
     event_source_token: typing.Optional[builtins.str] = None,
     function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+    invoked_via_function_url: typing.Optional[builtins.bool] = None,
     organization_id: typing.Optional[builtins.str] = None,
     scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
     source_account: typing.Optional[builtins.str] = None,

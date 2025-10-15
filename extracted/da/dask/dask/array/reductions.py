@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import builtins
+import inspect
 import math
 import operator
 import warnings
@@ -542,7 +543,7 @@ def moment_agg(
             inner_term = np.abs(divide(totals, ns) - mu)
         else:
             inner_term = divide(totals, ns, dtype=dtype) - mu
-
+    inner_term = np.where(ns == 0, 0, inner_term)
     M = _moment_helper(Ms, ns, inner_term, order, sum, axis, kwargs)
 
     denominator = n.sum(axis=axis, **kwargs) - ddof
@@ -676,7 +677,7 @@ def nanvar(
             numel=nannumel,
             implicit_complex_dtype=implicit_complex_dtype,
         ),
-        partial(moment_agg, sum=np.nansum, ddof=ddof),
+        partial(moment_agg, sum=np.sum, ddof=ddof),
         axis=axis,
         keepdims=keepdims,
         dtype=dt,
@@ -1216,7 +1217,10 @@ def cumreduction(
     assert isinstance(axis, Integral)
     axis = validate_axis(axis, x.ndim)
 
-    m = x.map_blocks(func, axis=axis, dtype=dtype)
+    if "dtype" in inspect.signature(func).parameters:
+        m = x.map_blocks(partial(func, dtype=dtype), axis=axis, dtype=dtype)
+    else:
+        m = x.map_blocks(func, axis=axis, dtype=dtype)
 
     name = f"{func.__name__}-{tokenize(func, axis, binop, ident, x, dtype)}"
     n = x.numblocks[axis]

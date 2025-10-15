@@ -5920,13 +5920,14 @@ class PortfolioShareOptions:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_servicecatalog.PortfolioShareReference",
     jsii_struct_bases=[],
-    name_mapping={"portfolio_share_id": "portfolioShareId"},
+    name_mapping={"account_id": "accountId", "portfolio_id": "portfolioId"},
 )
 class PortfolioShareReference:
-    def __init__(self, *, portfolio_share_id: builtins.str) -> None:
+    def __init__(self, *, account_id: builtins.str, portfolio_id: builtins.str) -> None:
         '''A reference to a PortfolioShare resource.
 
-        :param portfolio_share_id: The Id of the PortfolioShare resource.
+        :param account_id: The AccountId of the PortfolioShare resource.
+        :param portfolio_id: The PortfolioId of the PortfolioShare resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -5937,21 +5938,31 @@ class PortfolioShareReference:
             from aws_cdk import aws_servicecatalog as servicecatalog
             
             portfolio_share_reference = servicecatalog.PortfolioShareReference(
-                portfolio_share_id="portfolioShareId"
+                account_id="accountId",
+                portfolio_id="portfolioId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__47bf57dd430337266528b07d46c4fa85ec8fdf2a3fbe5ce72a6b4889e91fa7b8)
-            check_type(argname="argument portfolio_share_id", value=portfolio_share_id, expected_type=type_hints["portfolio_share_id"])
+            check_type(argname="argument account_id", value=account_id, expected_type=type_hints["account_id"])
+            check_type(argname="argument portfolio_id", value=portfolio_id, expected_type=type_hints["portfolio_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "portfolio_share_id": portfolio_share_id,
+            "account_id": account_id,
+            "portfolio_id": portfolio_id,
         }
 
     @builtins.property
-    def portfolio_share_id(self) -> builtins.str:
-        '''The Id of the PortfolioShare resource.'''
-        result = self._values.get("portfolio_share_id")
-        assert result is not None, "Required property 'portfolio_share_id' is missing"
+    def account_id(self) -> builtins.str:
+        '''The AccountId of the PortfolioShare resource.'''
+        result = self._values.get("account_id")
+        assert result is not None, "Required property 'account_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def portfolio_id(self) -> builtins.str:
+        '''The PortfolioId of the PortfolioShare resource.'''
+        result = self._values.get("portfolio_id")
+        assert result is not None, "Required property 'portfolio_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -10163,14 +10174,6 @@ class CfnPortfolioShare(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
-
-    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
@@ -10335,7 +10338,8 @@ class CfnResourceUpdateConstraint(
     @builtins.property
     @jsii.member(jsii_name="attrId")
     def attr_id(self) -> builtins.str:
-        '''
+        '''Unique identifier for the constraint.
+
         :cloudformationAttribute: Id
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrId"))
@@ -12233,7 +12237,8 @@ def _typecheckingstub__fcaaa8353ed1607f501f7b9fcd87b34c195d54486861a0e11ed689dd4
 
 def _typecheckingstub__47bf57dd430337266528b07d46c4fa85ec8fdf2a3fbe5ce72a6b4889e91fa7b8(
     *,
-    portfolio_share_id: builtins.str,
+    account_id: builtins.str,
+    portfolio_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

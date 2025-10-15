@@ -7114,6 +7114,27 @@ class CfnLogicallyAirGappedBackupVault(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromBackupVaultName")
+    @builtins.classmethod
+    def from_backup_vault_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        backup_vault_name: builtins.str,
+    ) -> ILogicallyAirGappedBackupVaultRef:
+        '''Creates a new ILogicallyAirGappedBackupVaultRef from a backupVaultName.
+
+        :param scope: -
+        :param id: -
+        :param backup_vault_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e2d7a451581b8c789f1a800340871c2a6bccebe8622af1e2f5b447a3a98d1dbb)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument backup_vault_name", value=backup_vault_name, expected_type=type_hints["backup_vault_name"])
+        return typing.cast(ILogicallyAirGappedBackupVaultRef, jsii.sinvoke(cls, "fromBackupVaultName", [scope, id, backup_vault_name]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9475,6 +9496,14 @@ def _typecheckingstub__f46c2d817c43abec9e204fc8a7211b43dd15b93e11a637e67a9711664
     access_policy: typing.Any = None,
     backup_vault_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     notifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLogicallyAirGappedBackupVault.NotificationObjectTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e2d7a451581b8c789f1a800340871c2a6bccebe8622af1e2f5b447a3a98d1dbb(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    backup_vault_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

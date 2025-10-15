@@ -422,13 +422,13 @@ class CfnEnvironmentProps:
         :param name: The name of the runtime environment.
         :param description: The description of the runtime environment.
         :param engine_version: The version of the runtime engine.
-        :param high_availability_config: Defines the details of a high availability configuration.
+        :param high_availability_config: .. epigraph:: AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025. If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ . Defines the details of a high availability configuration.
         :param kms_key_id: The identifier of a customer managed key.
         :param network_type: The network type supported by the runtime environment.
         :param preferred_maintenance_window: Configures the maintenance window that you want for the runtime environment. The maintenance window must have the format ``ddd:hh24:mi-ddd:hh24:mi`` and must be less than 24 hours. The following two examples are valid maintenance windows: ``sun:23:45-mon:00:15`` or ``sat:01:00-sat:03:00`` . If you do not provide a value, a random system-generated value will be assigned.
         :param publicly_accessible: Specifies whether the runtime environment is publicly accessible.
         :param security_group_ids: The list of security groups for the VPC associated with this runtime environment.
-        :param storage_configurations: Defines the storage configuration for a runtime environment.
+        :param storage_configurations: .. epigraph:: AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025. If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ . Defines the storage configuration for a runtime environment.
         :param subnet_ids: The list of subnets associated with the VPC for this runtime environment.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
 
@@ -569,7 +569,13 @@ class CfnEnvironmentProps:
     def high_availability_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.HighAvailabilityConfigProperty"]]:
-        '''Defines the details of a high availability configuration.
+        '''.. epigraph::
+
+   AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.
+
+        If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ .
+
+        Defines the details of a high availability configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-m2-environment.html#cfn-m2-environment-highavailabilityconfig
         '''
@@ -631,7 +637,13 @@ class CfnEnvironmentProps:
     def storage_configurations(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.StorageConfigurationProperty"]]]]:
-        '''Defines the storage configuration for a runtime environment.
+        '''.. epigraph::
+
+   AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.
+
+        If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ .
+
+        Defines the storage configuration for a runtime environment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-m2-environment.html#cfn-m2-environment-storageconfigurations
         '''
@@ -1214,7 +1226,13 @@ class CfnDeployment(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_m2.CfnDeployment",
 ):
-    '''Creates and starts a deployment to deploy an application into a runtime environment.
+    '''.. epigraph::
+
+   AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.
+
+    If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ .
+
+    Creates and starts a deployment to deploy an application into a runtime environment.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-m2-deployment.html
     :cloudformationResource: AWS::M2::Deployment
@@ -1439,13 +1457,13 @@ class CfnEnvironment(
         :param name: The name of the runtime environment.
         :param description: The description of the runtime environment.
         :param engine_version: The version of the runtime engine.
-        :param high_availability_config: Defines the details of a high availability configuration.
+        :param high_availability_config: .. epigraph:: AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025. If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ . Defines the details of a high availability configuration.
         :param kms_key_id: The identifier of a customer managed key.
         :param network_type: The network type supported by the runtime environment.
         :param preferred_maintenance_window: Configures the maintenance window that you want for the runtime environment. The maintenance window must have the format ``ddd:hh24:mi-ddd:hh24:mi`` and must be less than 24 hours. The following two examples are valid maintenance windows: ``sun:23:45-mon:00:15`` or ``sat:01:00-sat:03:00`` . If you do not provide a value, a random system-generated value will be assigned.
         :param publicly_accessible: Specifies whether the runtime environment is publicly accessible.
         :param security_group_ids: The list of security groups for the VPC associated with this runtime environment.
-        :param storage_configurations: Defines the storage configuration for a runtime environment.
+        :param storage_configurations: .. epigraph:: AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025. If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ . Defines the storage configuration for a runtime environment.
         :param subnet_ids: The list of subnets associated with the VPC for this runtime environment.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         '''
@@ -1607,7 +1625,9 @@ class CfnEnvironment(
     def high_availability_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.HighAvailabilityConfigProperty"]]:
-        '''Defines the details of a high availability configuration.'''
+        '''.. epigraph::
+
+   AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.HighAvailabilityConfigProperty"]], jsii.get(self, "highAvailabilityConfig"))
 
     @high_availability_config.setter
@@ -1701,7 +1721,9 @@ class CfnEnvironment(
     def storage_configurations(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.StorageConfigurationProperty"]]]]:
-        '''Defines the storage configuration for a runtime environment.'''
+        '''.. epigraph::
+
+   AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.StorageConfigurationProperty"]]]], jsii.get(self, "storageConfigurations"))
 
     @storage_configurations.setter
@@ -1755,7 +1777,13 @@ class CfnEnvironment(
             file_system_id: builtins.str,
             mount_point: builtins.str,
         ) -> None:
-            '''Defines the storage configuration for an Amazon EFS file system.
+            '''.. epigraph::
+
+   AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.
+
+            If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ .
+
+            Defines the storage configuration for an Amazon EFS file system.
 
             :param file_system_id: The file system identifier.
             :param mount_point: The mount point for the file system.
@@ -1826,7 +1854,13 @@ class CfnEnvironment(
             file_system_id: builtins.str,
             mount_point: builtins.str,
         ) -> None:
-            '''Defines the storage configuration for an Amazon FSx file system.
+            '''.. epigraph::
+
+   AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.
+
+            If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ .
+
+            Defines the storage configuration for an Amazon FSx file system.
 
             :param file_system_id: The file system identifier.
             :param mount_point: The mount point for the file system.
@@ -1892,7 +1926,13 @@ class CfnEnvironment(
     )
     class HighAvailabilityConfigProperty:
         def __init__(self, *, desired_capacity: jsii.Number) -> None:
-            '''Defines the details of a high availability configuration.
+            '''.. epigraph::
+
+   AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.
+
+            If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ .
+
+            Defines the details of a high availability configuration.
 
             :param desired_capacity: The number of instances in a high availability configuration. The minimum possible value is 1 and the maximum is 100.
 
@@ -1951,7 +1991,13 @@ class CfnEnvironment(
             efs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.EfsStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             fsx: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.FsxStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''Defines the storage configuration for a runtime environment.
+            '''.. epigraph::
+
+   AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.
+
+            If you would like to use the service, please sign up prior to November 7, 2025. For capabilities similar to AWS Mainframe Modernization Service (Managed Runtime Environment experience) explore AWS Mainframe Modernization Service (Self-Managed Experience). Existing customers can continue to use the service as normal. For more information, see `AWS Mainframe Modernization availability change <https://docs.aws.amazon.com/m2/latest/userguide/mainframe-modernization-availability-change.html>`_ .
+
+            Defines the storage configuration for a runtime environment.
 
             :param efs: Defines the storage configuration for an Amazon EFS file system.
             :param fsx: Defines the storage configuration for an Amazon FSx file system.

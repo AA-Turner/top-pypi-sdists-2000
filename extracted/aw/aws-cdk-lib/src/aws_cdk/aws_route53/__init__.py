@@ -572,6 +572,18 @@ zone_from_attributes = route53.PublicHostedZone.from_public_hosted_zone_attribut
 zone_from_id = route53.PublicHostedZone.from_public_hosted_zone_id(self, "MyZone", "ZOJJZC49E0EPZ")
 ```
 
+You can import a Private Hosted Zone with `PrivateHostedZone.fromPrivateHostedZoneId` and `PrivateHostedZone.fromPrivateHostedZoneAttributes` methods:
+
+```python
+private_zone_from_attributes = route53.PrivateHostedZone.from_private_hosted_zone_attributes(self, "MyPrivateZone",
+    zone_name="example.local",
+    hosted_zone_id="ZOJJZC49E0EPZ"
+)
+
+# Does not know zoneName
+private_zone_from_id = route53.PrivateHostedZone.from_private_hosted_zone_id(self, "MyPrivateZone", "ZOJJZC49E0EPZ")
+```
+
 You can use `CrossAccountZoneDelegationRecord` on imported Hosted Zones with the `grantDelegation` method:
 
 ```python
@@ -5065,6 +5077,70 @@ class MxRecordValue:
 
     def __repr__(self) -> str:
         return "MxRecordValue(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_route53.PrivateHostedZoneAttributes",
+    jsii_struct_bases=[HostedZoneAttributes],
+    name_mapping={"hosted_zone_id": "hostedZoneId", "zone_name": "zoneName"},
+)
+class PrivateHostedZoneAttributes(HostedZoneAttributes):
+    def __init__(
+        self,
+        *,
+        hosted_zone_id: builtins.str,
+        zone_name: builtins.str,
+    ) -> None:
+        '''Reference to a private hosted zone.
+
+        :param hosted_zone_id: Identifier of the hosted zone.
+        :param zone_name: Name of the hosted zone.
+
+        :exampleMetadata: infused
+
+        Example::
+
+            private_zone_from_attributes = route53.PrivateHostedZone.from_private_hosted_zone_attributes(self, "MyPrivateZone",
+                zone_name="example.local",
+                hosted_zone_id="ZOJJZC49E0EPZ"
+            )
+            
+            # Does not know zoneName
+            private_zone_from_id = route53.PrivateHostedZone.from_private_hosted_zone_id(self, "MyPrivateZone", "ZOJJZC49E0EPZ")
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7d59e6606b03cf3d00569e659297984570c743e09eb89316ce4d0048cd192732)
+            check_type(argname="argument hosted_zone_id", value=hosted_zone_id, expected_type=type_hints["hosted_zone_id"])
+            check_type(argname="argument zone_name", value=zone_name, expected_type=type_hints["zone_name"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "hosted_zone_id": hosted_zone_id,
+            "zone_name": zone_name,
+        }
+
+    @builtins.property
+    def hosted_zone_id(self) -> builtins.str:
+        '''Identifier of the hosted zone.'''
+        result = self._values.get("hosted_zone_id")
+        assert result is not None, "Required property 'hosted_zone_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def zone_name(self) -> builtins.str:
+        '''Name of the hosted zone.'''
+        result = self._values.get("zone_name")
+        assert result is not None, "Required property 'zone_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "PrivateHostedZoneAttributes(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -17080,13 +17156,13 @@ class PrivateHostedZone(
 
     Example::
 
-        # vpc: ec2.Vpc
-        
-        
-        zone = route53.PrivateHostedZone(self, "HostedZone",
-            zone_name="fully.qualified.domain.com",
-            vpc=vpc
+        private_zone_from_attributes = route53.PrivateHostedZone.from_private_hosted_zone_attributes(self, "MyPrivateZone",
+            zone_name="example.local",
+            hosted_zone_id="ZOJJZC49E0EPZ"
         )
+        
+        # Does not know zoneName
+        private_zone_from_id = route53.PrivateHostedZone.from_private_hosted_zone_id(self, "MyPrivateZone", "ZOJJZC49E0EPZ")
     '''
 
     def __init__(
@@ -17122,6 +17198,35 @@ class PrivateHostedZone(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromPrivateHostedZoneAttributes")
+    @builtins.classmethod
+    def from_private_hosted_zone_attributes(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        hosted_zone_id: builtins.str,
+        zone_name: builtins.str,
+    ) -> IPrivateHostedZone:
+        '''Imports a private hosted zone from another stack.
+
+        Use when both hosted zone ID and hosted zone name are known.
+
+        :param scope: the parent Construct for this Construct.
+        :param id: the logical name of this Construct.
+        :param hosted_zone_id: Identifier of the hosted zone.
+        :param zone_name: Name of the hosted zone.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2854fdc710e9385a23e0748e6a26b1a8050ddd16e7e432970959903de7650f09)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        attrs = PrivateHostedZoneAttributes(
+            hosted_zone_id=hosted_zone_id, zone_name=zone_name
+        )
+
+        return typing.cast(IPrivateHostedZone, jsii.sinvoke(cls, "fromPrivateHostedZoneAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromPrivateHostedZoneId")
     @builtins.classmethod
@@ -17517,6 +17622,7 @@ __all__ = [
     "NsRecord",
     "NsRecordProps",
     "PrivateHostedZone",
+    "PrivateHostedZoneAttributes",
     "PrivateHostedZoneProps",
     "PublicHostedZone",
     "PublicHostedZoneAttributes",
@@ -17878,6 +17984,14 @@ def _typecheckingstub__2600b3ca2027fe7d531738c20a112cef3282c7ef114758a51ee386360
     *,
     host_name: builtins.str,
     priority: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7d59e6606b03cf3d00569e659297984570c743e09eb89316ce4d0048cd192732(
+    *,
+    hosted_zone_id: builtins.str,
+    zone_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19307,6 +19421,16 @@ def _typecheckingstub__b5513b0f840f5eafaeee3e3a9c7776204d075ee417c3cce2c38a14213
     add_trailing_dot: typing.Optional[builtins.bool] = None,
     comment: typing.Optional[builtins.str] = None,
     query_logs_log_group_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2854fdc710e9385a23e0748e6a26b1a8050ddd16e7e432970959903de7650f09(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    hosted_zone_id: builtins.str,
+    zone_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

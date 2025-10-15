@@ -3061,6 +3061,12 @@ class EngineVersion(
         '''AWS OpenSearch 2.9.'''
         return typing.cast("EngineVersion", jsii.sget(cls, "OPENSEARCH_2_9"))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="OPENSEARCH_3_1")
+    def OPENSEARCH_3_1(cls) -> "EngineVersion":
+        '''AWS OpenSearch 3.1.'''
+        return typing.cast("EngineVersion", jsii.sget(cls, "OPENSEARCH_3_1"))
+
     @builtins.property
     @jsii.member(jsii_name="version")
     def version(self) -> builtins.str:

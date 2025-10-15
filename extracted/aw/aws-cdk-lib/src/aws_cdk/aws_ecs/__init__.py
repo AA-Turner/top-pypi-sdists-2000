@@ -6882,7 +6882,7 @@ class CfnCapacityProviderProps:
 
         :param auto_scaling_group_provider: The Auto Scaling group settings for the capacity provider.
         :param cluster_name: 
-        :param managed_instances_provider: 
+        :param managed_instances_provider: The configuration for the Amazon ECS Managed Instances provider. This includes the infrastructure role, the launch template configuration, and tag propagation settings.
         :param name: The name of the capacity provider. If a name is specified, it cannot start with ``aws`` , ``ecs`` , or ``fargate`` . If no name is specified, a default name in the ``CFNStackName-CFNResourceName-RandomString`` format is used.
         :param tags: The metadata that you apply to the capacity provider to help you categorize and organize it. Each tag consists of a key and an optional value. You define both. The following basic restrictions apply to tags: - Maximum number of tags per resource - 50 - For each resource, each tag key must be unique, and each tag key can have only one value. - Maximum key length - 128 Unicode characters in UTF-8 - Maximum value length - 256 Unicode characters in UTF-8 - If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : /
 
@@ -7040,7 +7040,10 @@ class CfnCapacityProviderProps:
     def managed_instances_provider(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesProviderProperty"]]:
-        '''
+        '''The configuration for the Amazon ECS Managed Instances provider.
+
+        This includes the infrastructure role, the launch template configuration, and tag propagation settings.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-capacityprovider.html#cfn-ecs-capacityprovider-managedinstancesprovider
         '''
         result = self._values.get("managed_instances_provider")
@@ -7586,7 +7589,7 @@ class CfnServiceProps:
         :param enable_ecs_managed_tags: Specifies whether to turn on Amazon ECS managed tags for the tasks within the service. For more information, see `Tagging your Amazon ECS resources <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-using-tags.html>`_ in the *Amazon Elastic Container Service Developer Guide* . When you use Amazon ECS managed tags, you must set the ``propagateTags`` request parameter.
         :param enable_execute_command: Determines whether the execute command functionality is turned on for the service. If ``true`` , the execute command functionality is turned on for all containers in tasks as part of the service.
         :param force_new_deployment: Determines whether to force a new deployment of the service. By default, deployments aren't forced. You can use this option to start a new deployment with no service definition changes. For example, you can update a service's tasks to use a newer Docker image with the same image/tag combination ( ``my_image:latest`` ) or to roll Fargate tasks onto a newer platform version.
-        :param health_check_grace_period_seconds: The period of time, in seconds, that the Amazon Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started. If you do not specify a health check grace period value, the default value of 0 is used. If you do not use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused. If your service has more running tasks than desired, unhealthy tasks in the grace period might be stopped to reach the desired count.
+        :param health_check_grace_period_seconds: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started. If you do not specify a health check grace period value, the default value of 0 is used. If you do not use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused. If your service has more running tasks than desired, unhealthy tasks in the grace period might be stopped to reach the desired count.
         :param launch_type: The launch type on which to run your service. For more information, see `Amazon ECS Launch Types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
         :param load_balancers: A list of load balancer objects to associate with the service. If you specify the ``Role`` property, ``LoadBalancers`` must be specified as well. For information about the number of load balancers that you can specify per service, see `Service Load Balancing <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html>`_ in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: To remove this property from your service resource, specify an empty ``LoadBalancer`` array.
         :param network_configuration: The network configuration for the service. This parameter is required for task definitions that use the ``awsvpc`` network mode to receive their own elastic network interface, and it is not supported for other network modes. For more information, see `Task Networking <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
@@ -8004,7 +8007,7 @@ class CfnServiceProps:
 
     @builtins.property
     def health_check_grace_period_seconds(self) -> typing.Optional[jsii.Number]:
-        '''The period of time, in seconds, that the Amazon Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started.
+        '''The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started.
 
         If you do not specify a health check grace period value, the default value of 0 is used. If you do not use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused.
 
@@ -8332,7 +8335,7 @@ class CfnTaskDefinitionProps:
         :param pid_mode: The process namespace to use for the containers in the task. The valid values are ``host`` or ``task`` . On Fargate for Linux containers, the only valid value is ``task`` . For example, monitoring sidecars might need ``pidMode`` to access information about other containers running in the same task. If ``host`` is specified, all containers within the tasks that specified the ``host`` PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If ``task`` is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace for each container. If the ``host`` PID mode is used, there's a heightened risk of undesired process namespace exposure. .. epigraph:: This parameter is not supported for Windows containers. > This parameter is only supported for tasks that are hosted on AWS Fargate if the tasks are using platform version ``1.4.0`` or later (Linux). This isn't supported for Windows containers on Fargate.
         :param placement_constraints: An array of placement constraint objects to use for tasks. .. epigraph:: This parameter isn't supported for tasks run on AWS Fargate .
         :param proxy_configuration: The configuration details for the App Mesh proxy. Your Amazon ECS container instances require at least version 1.26.0 of the container agent and at least version 1.26.0-1 of the ``ecs-init`` package to use a proxy configuration. If your container instances are launched from the Amazon ECS optimized AMI version ``20190301`` or later, they contain the required versions of the container agent and ``ecs-init`` . For more information, see `Amazon ECS-optimized Linux AMI <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
-        :param requires_compatibilities: The task launch types the task definition was validated against. The valid values are ``EC2`` , ``FARGATE`` , and ``EXTERNAL`` . For more information, see `Amazon ECS launch types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
+        :param requires_compatibilities: The task launch types the task definition was validated against. The valid values are ``MANAGED_INSTANCES`` , ``EC2`` , ``FARGATE`` , and ``EXTERNAL`` . For more information, see `Amazon ECS launch types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
         :param runtime_platform: The operating system that your tasks definitions run on. A platform family is specified only for tasks using the Fargate launch type.
         :param tags: The metadata that you apply to the task definition to help you categorize and organize them. Each tag consists of a key and an optional value. You define both of them. The following basic restrictions apply to tags: - Maximum number of tags per resource - 50 - For each resource, each tag key must be unique, and each tag key can have only one value. - Maximum key length - 128 Unicode characters in UTF-8 - Maximum value length - 256 Unicode characters in UTF-8 - If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : /
         :param task_role_arn: The short name or full Amazon Resource Name (ARN) of the AWS Identity and Access Management role that grants containers in the task permission to call AWS APIs on your behalf. For more information, see `Amazon ECS Task Role <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html>`_ in the *Amazon Elastic Container Service Developer Guide* . IAM roles for tasks on Windows require that the ``-EnableTaskIAMRole`` option is set when you launch the Amazon ECS-optimized Windows AMI. Your containers must also run some configuration code to use the feature. For more information, see `Windows IAM roles for tasks <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/windows_task_IAM_roles.html>`_ in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: String validation is done on the ECS side. If an invalid string value is given for ``TaskRoleArn`` , it may cause the Cloudformation job to hang.
@@ -8841,7 +8844,7 @@ class CfnTaskDefinitionProps:
     def requires_compatibilities(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The task launch types the task definition was validated against.
 
-        The valid values are ``EC2`` , ``FARGATE`` , and ``EXTERNAL`` . For more information, see `Amazon ECS launch types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
+        The valid values are ``MANAGED_INSTANCES`` , ``EC2`` , ``FARGATE`` , and ``EXTERNAL`` . For more information, see `Amazon ECS launch types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-requirescompatibilities
         '''
@@ -31367,11 +31370,9 @@ class CfnCapacityProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider",
 ):
-    '''Creates a new capacity provider.
+    '''Creates a capacity provider.
 
-    Capacity providers are associated with an Amazon ECS cluster and are used in capacity provider strategies to facilitate cluster auto scaling.
-
-    Only capacity providers that use an Auto Scaling group can be created. Amazon ECS tasks on AWS Fargate use the ``FARGATE`` and ``FARGATE_SPOT`` capacity providers. These providers are available to all accounts in the AWS Regions that AWS Fargate supports.
+    Capacity providers are associated with a cluster and are used in capacity provider strategies to facilitate cluster auto scaling. You can create capacity providers for Amazon ECS Managed Instances and EC2 instances. AWS Fargate has the predefined ``FARGATE`` and ``FARGATE_SPOT`` capacity providers.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-capacityprovider.html
     :cloudformationResource: AWS::ECS::CapacityProvider
@@ -31503,7 +31504,7 @@ class CfnCapacityProvider(
         :param id: Construct identifier for this resource (unique in its scope).
         :param auto_scaling_group_provider: The Auto Scaling group settings for the capacity provider.
         :param cluster_name: 
-        :param managed_instances_provider: 
+        :param managed_instances_provider: The configuration for the Amazon ECS Managed Instances provider. This includes the infrastructure role, the launch template configuration, and tag propagation settings.
         :param name: The name of the capacity provider. If a name is specified, it cannot start with ``aws`` , ``ecs`` , or ``fargate`` . If no name is specified, a default name in the ``CFNStackName-CFNResourceName-RandomString`` format is used.
         :param tags: The metadata that you apply to the capacity provider to help you categorize and organize it. Each tag consists of a key and an optional value. You define both. The following basic restrictions apply to tags: - Maximum number of tags per resource - 50 - For each resource, each tag key must be unique, and each tag key can have only one value. - Maximum key length - 128 Unicode characters in UTF-8 - Maximum value length - 256 Unicode characters in UTF-8 - If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : /
         '''
@@ -31624,6 +31625,7 @@ class CfnCapacityProvider(
     def managed_instances_provider(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesProviderProperty"]]:
+        '''The configuration for the Amazon ECS Managed Instances provider.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesProviderProperty"]], jsii.get(self, "managedInstancesProvider"))
 
     @managed_instances_provider.setter
@@ -31674,9 +31676,12 @@ class CfnCapacityProvider(
             max: typing.Optional[jsii.Number] = None,
             min: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param max: 
-            :param min: 
+            '''The minimum and maximum number of accelerators (such as GPUs) for instance type selection.
+
+            This is used for workloads that require specific numbers of accelerators.
+
+            :param max: The maximum number of accelerators. Instance types with more accelerators are excluded from selection.
+            :param min: The minimum number of accelerators. Instance types with fewer accelerators are excluded from selection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratorcountrequest.html
             :exampleMetadata: fixture=_generated
@@ -31704,7 +31709,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def max(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum number of accelerators.
+
+            Instance types with more accelerators are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratorcountrequest.html#cfn-ecs-capacityprovider-acceleratorcountrequest-max
             '''
             result = self._values.get("max")
@@ -31712,7 +31720,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def min(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The minimum number of accelerators.
+
+            Instance types with fewer accelerators are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratorcountrequest.html#cfn-ecs-capacityprovider-acceleratorcountrequest-min
             '''
             result = self._values.get("min")
@@ -31741,9 +31752,12 @@ class CfnCapacityProvider(
             max: typing.Optional[jsii.Number] = None,
             min: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param max: 
-            :param min: 
+            '''The minimum and maximum total accelerator memory in mebibytes (MiB) for instance type selection.
+
+            This is important for GPU workloads that require specific amounts of video memory.
+
+            :param max: The maximum total accelerator memory in MiB. Instance types with more accelerator memory are excluded from selection.
+            :param min: The minimum total accelerator memory in MiB. Instance types with less accelerator memory are excluded from selection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratortotalmemorymibrequest.html
             :exampleMetadata: fixture=_generated
@@ -31771,7 +31785,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def max(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum total accelerator memory in MiB.
+
+            Instance types with more accelerator memory are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratortotalmemorymibrequest.html#cfn-ecs-capacityprovider-acceleratortotalmemorymibrequest-max
             '''
             result = self._values.get("max")
@@ -31779,7 +31796,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def min(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The minimum total accelerator memory in MiB.
+
+            Instance types with less accelerator memory are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-acceleratortotalmemorymibrequest.html#cfn-ecs-capacityprovider-acceleratortotalmemorymibrequest-min
             '''
             result = self._values.get("min")
@@ -31935,9 +31955,12 @@ class CfnCapacityProvider(
             max: typing.Optional[jsii.Number] = None,
             min: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param max: 
-            :param min: 
+            '''The minimum and maximum baseline Amazon EBS bandwidth in megabits per second (Mbps) for instance type selection.
+
+            This is important for workloads with high storage I/O requirements.
+
+            :param max: The maximum baseline Amazon EBS bandwidth in Mbps. Instance types with higher Amazon EBS bandwidth are excluded from selection.
+            :param min: The minimum baseline Amazon EBS bandwidth in Mbps. Instance types with lower Amazon EBS bandwidth are excluded from selection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-baselineebsbandwidthmbpsrequest.html
             :exampleMetadata: fixture=_generated
@@ -31965,7 +31988,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def max(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum baseline Amazon EBS bandwidth in Mbps.
+
+            Instance types with higher Amazon EBS bandwidth are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-baselineebsbandwidthmbpsrequest.html#cfn-ecs-capacityprovider-baselineebsbandwidthmbpsrequest-max
             '''
             result = self._values.get("max")
@@ -31973,7 +31999,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def min(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The minimum baseline Amazon EBS bandwidth in Mbps.
+
+            Instance types with lower Amazon EBS bandwidth are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-baselineebsbandwidthmbpsrequest.html#cfn-ecs-capacityprovider-baselineebsbandwidthmbpsrequest-min
             '''
             result = self._values.get("min")
@@ -32011,12 +32040,15 @@ class CfnCapacityProvider(
             monitoring: typing.Optional[builtins.str] = None,
             storage_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param ec2_instance_profile_arn: 
-            :param network_configuration: 
-            :param instance_requirements: 
-            :param monitoring: 
-            :param storage_configuration: 
+            '''The launch template configuration for Amazon ECS Managed Instances.
+
+            This defines how Amazon ECS launches Amazon EC2 instances, including the instance profile for your tasks, network and storage configuration, capacity options, and instance requirements for flexible instance type selection.
+
+            :param ec2_instance_profile_arn: The Amazon Resource Name (ARN) of the instance profile that Amazon ECS applies to Amazon ECS Managed Instances. This instance profile must include the necessary permissions for your tasks to access AWS services and resources. For more information, see `Amazon ECS instance profile for Managed Instances <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html>`_ in the *Amazon ECS Developer Guide* .
+            :param network_configuration: The network configuration for Amazon ECS Managed Instances. This specifies the subnets and security groups that instances use for network connectivity.
+            :param instance_requirements: The instance requirements. You can specify:. - The instance types - Instance requirements such as vCPU count, memory, network performance, and accelerator specifications Amazon ECS automatically selects the instances that match the specified criteria.
+            :param monitoring: CloudWatch provides two categories of monitoring: basic monitoring and detailed monitoring. By default, your managed instance is configured for basic monitoring. You can optionally enable detailed monitoring to help you more quickly identify and act on operational issues. You can enable or turn off detailed monitoring at launch or when the managed instance is running or stopped. For more information, see `Detailed monitoring for Amazon ECS Managed Instances <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/detailed-monitoring-managed-instances.html>`_ in the Amazon ECS Developer Guide.
+            :param storage_configuration: The storage configuration for Amazon ECS Managed Instances. This defines the root volume size and type for the instances.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html
             :exampleMetadata: fixture=_generated
@@ -32122,7 +32154,12 @@ class CfnCapacityProvider(
 
         @builtins.property
         def ec2_instance_profile_arn(self) -> builtins.str:
-            '''
+            '''The Amazon Resource Name (ARN) of the instance profile that Amazon ECS applies to Amazon ECS Managed Instances.
+
+            This instance profile must include the necessary permissions for your tasks to access AWS services and resources.
+
+            For more information, see `Amazon ECS instance profile for Managed Instances <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html>`_ in the *Amazon ECS Developer Guide* .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-ec2instanceprofilearn
             '''
             result = self._values.get("ec2_instance_profile_arn")
@@ -32133,7 +32170,10 @@ class CfnCapacityProvider(
         def network_configuration(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty"]:
-            '''
+            '''The network configuration for Amazon ECS Managed Instances.
+
+            This specifies the subnets and security groups that instances use for network connectivity.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-networkconfiguration
             '''
             result = self._values.get("network_configuration")
@@ -32144,7 +32184,13 @@ class CfnCapacityProvider(
         def instance_requirements(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceRequirementsRequestProperty"]]:
-            '''
+            '''The instance requirements. You can specify:.
+
+            - The instance types
+            - Instance requirements such as vCPU count, memory, network performance, and accelerator specifications
+
+            Amazon ECS automatically selects the instances that match the specified criteria.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-instancerequirements
             '''
             result = self._values.get("instance_requirements")
@@ -32152,7 +32198,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def monitoring(self) -> typing.Optional[builtins.str]:
-            '''
+            '''CloudWatch provides two categories of monitoring: basic monitoring and detailed monitoring.
+
+            By default, your managed instance is configured for basic monitoring. You can optionally enable detailed monitoring to help you more quickly identify and act on operational issues. You can enable or turn off detailed monitoring at launch or when the managed instance is running or stopped. For more information, see `Detailed monitoring for Amazon ECS Managed Instances <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/detailed-monitoring-managed-instances.html>`_ in the Amazon ECS Developer Guide.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-monitoring
             '''
             result = self._values.get("monitoring")
@@ -32162,7 +32211,10 @@ class CfnCapacityProvider(
         def storage_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty"]]:
-            '''
+            '''The storage configuration for Amazon ECS Managed Instances.
+
+            This defines the root volume size and type for the instances.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-storageconfiguration
             '''
             result = self._values.get("storage_configuration")
@@ -32238,31 +32290,34 @@ class CfnCapacityProvider(
             spot_max_price_percentage_over_lowest_price: typing.Optional[jsii.Number] = None,
             total_local_storage_gb: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.TotalLocalStorageGBRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param memory_mib: 
-            :param v_cpu_count: 
-            :param accelerator_count: 
-            :param accelerator_manufacturers: 
-            :param accelerator_names: 
-            :param accelerator_total_memory_mib: 
-            :param accelerator_types: 
-            :param allowed_instance_types: 
-            :param bare_metal: 
-            :param baseline_ebs_bandwidth_mbps: 
-            :param burstable_performance: 
-            :param cpu_manufacturers: 
-            :param excluded_instance_types: 
-            :param instance_generations: 
-            :param local_storage: 
-            :param local_storage_types: 
-            :param max_spot_price_as_percentage_of_optimal_on_demand_price: 
-            :param memory_gib_per_v_cpu: 
-            :param network_bandwidth_gbps: 
-            :param network_interface_count: 
-            :param on_demand_max_price_percentage_over_lowest_price: 
-            :param require_hibernate_support: 
-            :param spot_max_price_percentage_over_lowest_price: 
-            :param total_local_storage_gb: 
+            '''The instance requirements for attribute-based instance type selection.
+
+            Instead of specifying exact instance types, you define requirements such as vCPU count, memory size, network performance, and accelerator specifications. Amazon ECS automatically selects Amazon EC2 instance types that match these requirements, providing flexibility and helping to mitigate capacity constraints.
+
+            :param memory_mib: The minimum and maximum amount of memory in mebibytes (MiB) for the instance types. Amazon ECS selects instance types that have memory within this range.
+            :param v_cpu_count: The minimum and maximum number of vCPUs for the instance types. Amazon ECS selects instance types that have vCPU counts within this range.
+            :param accelerator_count: The minimum and maximum number of accelerators for the instance types. This is used when you need instances with specific numbers of GPUs or other accelerators.
+            :param accelerator_manufacturers: The accelerator manufacturers to include. You can specify ``nvidia`` , ``amd`` , ``amazon-web-services`` , or ``xilinx`` depending on your accelerator requirements.
+            :param accelerator_names: The specific accelerator names to include. For example, you can specify ``a100`` , ``v100`` , ``k80`` , or other specific accelerator models.
+            :param accelerator_total_memory_mib: The minimum and maximum total accelerator memory in mebibytes (MiB). This is important for GPU workloads that require specific amounts of video memory.
+            :param accelerator_types: The accelerator types to include. You can specify ``gpu`` for graphics processing units, ``fpga`` for field programmable gate arrays, or ``inference`` for machine learning inference accelerators.
+            :param allowed_instance_types: The instance types to include in the selection. When specified, Amazon ECS only considers these instance types, subject to the other requirements specified.
+            :param bare_metal: Indicates whether to include bare metal instance types. Set to ``included`` to allow bare metal instances, ``excluded`` to exclude them, or ``required`` to use only bare metal instances.
+            :param baseline_ebs_bandwidth_mbps: The minimum and maximum baseline Amazon EBS bandwidth in megabits per second (Mbps). This is important for workloads with high storage I/O requirements.
+            :param burstable_performance: Indicates whether to include burstable performance instance types (T2, T3, T3a, T4g). Set to ``included`` to allow burstable instances, ``excluded`` to exclude them, or ``required`` to use only burstable instances.
+            :param cpu_manufacturers: The CPU manufacturers to include or exclude. You can specify ``intel`` , ``amd`` , or ``amazon-web-services`` to control which CPU types are used for your workloads.
+            :param excluded_instance_types: The instance types to exclude from selection. Use this to prevent Amazon ECS from selecting specific instance types that may not be suitable for your workloads.
+            :param instance_generations: The instance generations to include. You can specify ``current`` to use the latest generation instances, or ``previous`` to include previous generation instances for cost optimization.
+            :param local_storage: Indicates whether to include instance types with local storage. Set to ``included`` to allow local storage, ``excluded`` to exclude it, or ``required`` to use only instances with local storage.
+            :param local_storage_types: The local storage types to include. You can specify ``hdd`` for hard disk drives, ``ssd`` for solid state drives, or both.
+            :param max_spot_price_as_percentage_of_optimal_on_demand_price: The maximum price for Spot instances as a percentage of the optimal On-Demand price. This provides more precise cost control for Spot instance selection.
+            :param memory_gib_per_v_cpu: The minimum and maximum amount of memory per vCPU in gibibytes (GiB). This helps ensure that instance types have the appropriate memory-to-CPU ratio for your workloads.
+            :param network_bandwidth_gbps: The minimum and maximum network bandwidth in gigabits per second (Gbps). This is crucial for network-intensive workloads that require high throughput.
+            :param network_interface_count: The minimum and maximum number of network interfaces for the instance types. This is useful for workloads that require multiple network interfaces.
+            :param on_demand_max_price_percentage_over_lowest_price: The price protection threshold for On-Demand Instances, as a percentage higher than an identified On-Demand price. The identified On-Demand price is the price of the lowest priced current generation C, M, or R instance type with your specified attributes. If no current generation C, M, or R instance type matches your attributes, then the identified price is from either the lowest priced current generation instance types or, failing that, the lowest priced previous generation instance types that match your attributes. When Amazon ECS selects instance types with your attributes, we will exclude instance types whose price exceeds your specified threshold.
+            :param require_hibernate_support: Indicates whether the instance types must support hibernation. When set to ``true`` , only instance types that support hibernation are selected.
+            :param spot_max_price_percentage_over_lowest_price: The maximum price for Spot instances as a percentage over the lowest priced On-Demand instance. This helps control Spot instance costs while maintaining access to capacity.
+            :param total_local_storage_gb: The minimum and maximum total local storage in gigabytes (GB) for instance types with local storage.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html
             :exampleMetadata: fixture=_generated
@@ -32412,7 +32467,10 @@ class CfnCapacityProvider(
         def memory_mib(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.MemoryMiBRequestProperty"]:
-            '''
+            '''The minimum and maximum amount of memory in mebibytes (MiB) for the instance types.
+
+            Amazon ECS selects instance types that have memory within this range.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-memorymib
             '''
             result = self._values.get("memory_mib")
@@ -32423,7 +32481,10 @@ class CfnCapacityProvider(
         def v_cpu_count(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.VCpuCountRangeRequestProperty"]:
-            '''
+            '''The minimum and maximum number of vCPUs for the instance types.
+
+            Amazon ECS selects instance types that have vCPU counts within this range.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-vcpucount
             '''
             result = self._values.get("v_cpu_count")
@@ -32434,7 +32495,10 @@ class CfnCapacityProvider(
         def accelerator_count(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.AcceleratorCountRequestProperty"]]:
-            '''
+            '''The minimum and maximum number of accelerators for the instance types.
+
+            This is used when you need instances with specific numbers of GPUs or other accelerators.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-acceleratorcount
             '''
             result = self._values.get("accelerator_count")
@@ -32444,7 +32508,10 @@ class CfnCapacityProvider(
         def accelerator_manufacturers(
             self,
         ) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The accelerator manufacturers to include.
+
+            You can specify ``nvidia`` , ``amd`` , ``amazon-web-services`` , or ``xilinx`` depending on your accelerator requirements.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-acceleratormanufacturers
             '''
             result = self._values.get("accelerator_manufacturers")
@@ -32452,7 +32519,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def accelerator_names(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The specific accelerator names to include.
+
+            For example, you can specify ``a100`` , ``v100`` , ``k80`` , or other specific accelerator models.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-acceleratornames
             '''
             result = self._values.get("accelerator_names")
@@ -32462,7 +32532,10 @@ class CfnCapacityProvider(
         def accelerator_total_memory_mib(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.AcceleratorTotalMemoryMiBRequestProperty"]]:
-            '''
+            '''The minimum and maximum total accelerator memory in mebibytes (MiB).
+
+            This is important for GPU workloads that require specific amounts of video memory.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-acceleratortotalmemorymib
             '''
             result = self._values.get("accelerator_total_memory_mib")
@@ -32470,7 +32543,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def accelerator_types(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The accelerator types to include.
+
+            You can specify ``gpu`` for graphics processing units, ``fpga`` for field programmable gate arrays, or ``inference`` for machine learning inference accelerators.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-acceleratortypes
             '''
             result = self._values.get("accelerator_types")
@@ -32478,7 +32554,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def allowed_instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The instance types to include in the selection.
+
+            When specified, Amazon ECS only considers these instance types, subject to the other requirements specified.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-allowedinstancetypes
             '''
             result = self._values.get("allowed_instance_types")
@@ -32486,7 +32565,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def bare_metal(self) -> typing.Optional[builtins.str]:
-            '''
+            '''Indicates whether to include bare metal instance types.
+
+            Set to ``included`` to allow bare metal instances, ``excluded`` to exclude them, or ``required`` to use only bare metal instances.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-baremetal
             '''
             result = self._values.get("bare_metal")
@@ -32496,7 +32578,10 @@ class CfnCapacityProvider(
         def baseline_ebs_bandwidth_mbps(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.BaselineEbsBandwidthMbpsRequestProperty"]]:
-            '''
+            '''The minimum and maximum baseline Amazon EBS bandwidth in megabits per second (Mbps).
+
+            This is important for workloads with high storage I/O requirements.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-baselineebsbandwidthmbps
             '''
             result = self._values.get("baseline_ebs_bandwidth_mbps")
@@ -32504,7 +32589,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def burstable_performance(self) -> typing.Optional[builtins.str]:
-            '''
+            '''Indicates whether to include burstable performance instance types (T2, T3, T3a, T4g).
+
+            Set to ``included`` to allow burstable instances, ``excluded`` to exclude them, or ``required`` to use only burstable instances.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-burstableperformance
             '''
             result = self._values.get("burstable_performance")
@@ -32512,7 +32600,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def cpu_manufacturers(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The CPU manufacturers to include or exclude.
+
+            You can specify ``intel`` , ``amd`` , or ``amazon-web-services`` to control which CPU types are used for your workloads.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-cpumanufacturers
             '''
             result = self._values.get("cpu_manufacturers")
@@ -32520,7 +32611,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def excluded_instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The instance types to exclude from selection.
+
+            Use this to prevent Amazon ECS from selecting specific instance types that may not be suitable for your workloads.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-excludedinstancetypes
             '''
             result = self._values.get("excluded_instance_types")
@@ -32528,7 +32622,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def instance_generations(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The instance generations to include.
+
+            You can specify ``current`` to use the latest generation instances, or ``previous`` to include previous generation instances for cost optimization.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-instancegenerations
             '''
             result = self._values.get("instance_generations")
@@ -32536,7 +32633,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def local_storage(self) -> typing.Optional[builtins.str]:
-            '''
+            '''Indicates whether to include instance types with local storage.
+
+            Set to ``included`` to allow local storage, ``excluded`` to exclude it, or ``required`` to use only instances with local storage.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-localstorage
             '''
             result = self._values.get("local_storage")
@@ -32544,7 +32644,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def local_storage_types(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The local storage types to include.
+
+            You can specify ``hdd`` for hard disk drives, ``ssd`` for solid state drives, or both.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-localstoragetypes
             '''
             result = self._values.get("local_storage_types")
@@ -32554,7 +32657,10 @@ class CfnCapacityProvider(
         def max_spot_price_as_percentage_of_optimal_on_demand_price(
             self,
         ) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum price for Spot instances as a percentage of the optimal On-Demand price.
+
+            This provides more precise cost control for Spot instance selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-maxspotpriceaspercentageofoptimalondemandprice
             '''
             result = self._values.get("max_spot_price_as_percentage_of_optimal_on_demand_price")
@@ -32564,7 +32670,10 @@ class CfnCapacityProvider(
         def memory_gib_per_v_cpu(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.MemoryGiBPerVCpuRequestProperty"]]:
-            '''
+            '''The minimum and maximum amount of memory per vCPU in gibibytes (GiB).
+
+            This helps ensure that instance types have the appropriate memory-to-CPU ratio for your workloads.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-memorygibpervcpu
             '''
             result = self._values.get("memory_gib_per_v_cpu")
@@ -32574,7 +32683,10 @@ class CfnCapacityProvider(
         def network_bandwidth_gbps(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.NetworkBandwidthGbpsRequestProperty"]]:
-            '''
+            '''The minimum and maximum network bandwidth in gigabits per second (Gbps).
+
+            This is crucial for network-intensive workloads that require high throughput.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-networkbandwidthgbps
             '''
             result = self._values.get("network_bandwidth_gbps")
@@ -32584,7 +32696,10 @@ class CfnCapacityProvider(
         def network_interface_count(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.NetworkInterfaceCountRequestProperty"]]:
-            '''
+            '''The minimum and maximum number of network interfaces for the instance types.
+
+            This is useful for workloads that require multiple network interfaces.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-networkinterfacecount
             '''
             result = self._values.get("network_interface_count")
@@ -32594,7 +32709,10 @@ class CfnCapacityProvider(
         def on_demand_max_price_percentage_over_lowest_price(
             self,
         ) -> typing.Optional[jsii.Number]:
-            '''
+            '''The price protection threshold for On-Demand Instances, as a percentage higher than an identified On-Demand price.
+
+            The identified On-Demand price is the price of the lowest priced current generation C, M, or R instance type with your specified attributes. If no current generation C, M, or R instance type matches your attributes, then the identified price is from either the lowest priced current generation instance types or, failing that, the lowest priced previous generation instance types that match your attributes. When Amazon ECS selects instance types with your attributes, we will exclude instance types whose price exceeds your specified threshold.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-ondemandmaxpricepercentageoverlowestprice
             '''
             result = self._values.get("on_demand_max_price_percentage_over_lowest_price")
@@ -32604,7 +32722,10 @@ class CfnCapacityProvider(
         def require_hibernate_support(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''
+            '''Indicates whether the instance types must support hibernation.
+
+            When set to ``true`` , only instance types that support hibernation are selected.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-requirehibernatesupport
             '''
             result = self._values.get("require_hibernate_support")
@@ -32614,7 +32735,10 @@ class CfnCapacityProvider(
         def spot_max_price_percentage_over_lowest_price(
             self,
         ) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum price for Spot instances as a percentage over the lowest priced On-Demand instance.
+
+            This helps control Spot instance costs while maintaining access to capacity.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-spotmaxpricepercentageoverlowestprice
             '''
             result = self._values.get("spot_max_price_percentage_over_lowest_price")
@@ -32624,7 +32748,8 @@ class CfnCapacityProvider(
         def total_local_storage_gb(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.TotalLocalStorageGBRequestProperty"]]:
-            '''
+            '''The minimum and maximum total local storage in gigabytes (GB) for instance types with local storage.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancerequirementsrequest.html#cfn-ecs-capacityprovider-instancerequirementsrequest-totallocalstoragegb
             '''
             result = self._values.get("total_local_storage_gb")
@@ -32653,9 +32778,12 @@ class CfnCapacityProvider(
             subnets: typing.Sequence[builtins.str],
             security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
-            '''
-            :param subnets: 
-            :param security_groups: 
+            '''The network configuration for Amazon ECS Managed Instances.
+
+            This specifies the VPC subnets and security groups that instances use for network connectivity. Amazon ECS Managed Instances support multiple network modes including ``awsvpc`` (instances receive ENIs for task isolation), ``host`` (instances share network namespace with tasks), and ``none`` (no external network connectivity), ensuring backward compatibility for migrating workloads from Fargate or Amazon EC2.
+
+            :param subnets: The list of subnet IDs where Amazon ECS can launch Amazon ECS Managed Instances. Instances are distributed across the specified subnets for high availability. All subnets must be in the same VPC.
+            :param security_groups: The list of security group IDs to apply to Amazon ECS Managed Instances. These security groups control the network traffic allowed to and from the instances.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesnetworkconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -32685,7 +32813,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def subnets(self) -> typing.List[builtins.str]:
-            '''
+            '''The list of subnet IDs where Amazon ECS can launch Amazon ECS Managed Instances.
+
+            Instances are distributed across the specified subnets for high availability. All subnets must be in the same VPC.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesnetworkconfiguration.html#cfn-ecs-capacityprovider-managedinstancesnetworkconfiguration-subnets
             '''
             result = self._values.get("subnets")
@@ -32694,7 +32825,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The list of security group IDs to apply to Amazon ECS Managed Instances.
+
+            These security groups control the network traffic allowed to and from the instances.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesnetworkconfiguration.html#cfn-ecs-capacityprovider-managedinstancesnetworkconfiguration-securitygroups
             '''
             result = self._values.get("security_groups")
@@ -32728,10 +32862,13 @@ class CfnCapacityProvider(
             instance_launch_template: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.InstanceLaunchTemplateProperty", typing.Dict[builtins.str, typing.Any]]],
             propagate_tags: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param infrastructure_role_arn: 
-            :param instance_launch_template: 
-            :param propagate_tags: 
+            '''The configuration for a Amazon ECS Managed Instances provider.
+
+            Amazon ECS uses this configuration to automatically launch, manage, and terminate Amazon EC2 instances on your behalf. Managed instances provide access to the full range of Amazon EC2 instance types and features while offloading infrastructure management to AWS .
+
+            :param infrastructure_role_arn: The Amazon Resource Name (ARN) of the infrastructure role that Amazon ECS assumes to manage instances. This role must include permissions for Amazon EC2 instance lifecycle management, networking, and any additional AWS services required for your workloads. For more information, see `Amazon ECS infrastructure IAM role <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html>`_ in the *Amazon ECS Developer Guide* .
+            :param instance_launch_template: The launch template that defines how Amazon ECS launches Amazon ECS Managed Instances. This includes the instance profile for your tasks, network and storage configuration, and instance requirements that determine which Amazon EC2 instance types can be used. For more information, see `Store instance launch parameters in Amazon EC2 launch templates <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html>`_ in the *Amazon EC2 User Guide* .
+            :param propagate_tags: Determines whether tags from the capacity provider are automatically applied to Amazon ECS Managed Instances. This helps with cost allocation and resource management by ensuring consistent tagging across your infrastructure.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html
             :exampleMetadata: fixture=_generated
@@ -32837,7 +32974,12 @@ class CfnCapacityProvider(
 
         @builtins.property
         def infrastructure_role_arn(self) -> builtins.str:
-            '''
+            '''The Amazon Resource Name (ARN) of the infrastructure role that Amazon ECS assumes to manage instances.
+
+            This role must include permissions for Amazon EC2 instance lifecycle management, networking, and any additional AWS services required for your workloads.
+
+            For more information, see `Amazon ECS infrastructure IAM role <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html>`_ in the *Amazon ECS Developer Guide* .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html#cfn-ecs-capacityprovider-managedinstancesprovider-infrastructurerolearn
             '''
             result = self._values.get("infrastructure_role_arn")
@@ -32848,7 +32990,12 @@ class CfnCapacityProvider(
         def instance_launch_template(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceLaunchTemplateProperty"]:
-            '''
+            '''The launch template that defines how Amazon ECS launches Amazon ECS Managed Instances.
+
+            This includes the instance profile for your tasks, network and storage configuration, and instance requirements that determine which Amazon EC2 instance types can be used.
+
+            For more information, see `Store instance launch parameters in Amazon EC2 launch templates <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html>`_ in the *Amazon EC2 User Guide* .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html#cfn-ecs-capacityprovider-managedinstancesprovider-instancelaunchtemplate
             '''
             result = self._values.get("instance_launch_template")
@@ -32857,7 +33004,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def propagate_tags(self) -> typing.Optional[builtins.str]:
-            '''
+            '''Determines whether tags from the capacity provider are automatically applied to Amazon ECS Managed Instances.
+
+            This helps with cost allocation and resource management by ensuring consistent tagging across your infrastructure.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html#cfn-ecs-capacityprovider-managedinstancesprovider-propagatetags
             '''
             result = self._values.get("propagate_tags")
@@ -32881,8 +33031,11 @@ class CfnCapacityProvider(
     )
     class ManagedInstancesStorageConfigurationProperty:
         def __init__(self, *, storage_size_gib: jsii.Number) -> None:
-            '''
-            :param storage_size_gib: 
+            '''The storage configuration for Amazon ECS Managed Instances.
+
+            This defines the root volume configuration for the instances.
+
+            :param storage_size_gib: The size of the tasks volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesstorageconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -32906,7 +33059,8 @@ class CfnCapacityProvider(
 
         @builtins.property
         def storage_size_gib(self) -> jsii.Number:
-            '''
+            '''The size of the tasks volume.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesstorageconfiguration.html#cfn-ecs-capacityprovider-managedinstancesstorageconfiguration-storagesizegib
             '''
             result = self._values.get("storage_size_gib")
@@ -33071,9 +33225,12 @@ class CfnCapacityProvider(
             max: typing.Optional[jsii.Number] = None,
             min: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param max: 
-            :param min: 
+            '''The minimum and maximum amount of memory per vCPU in gibibytes (GiB).
+
+            This helps ensure that instance types have the appropriate memory-to-CPU ratio for your workloads.
+
+            :param max: The maximum amount of memory per vCPU in GiB. Instance types with a higher memory-to-vCPU ratio are excluded from selection.
+            :param min: The minimum amount of memory per vCPU in GiB. Instance types with a lower memory-to-vCPU ratio are excluded from selection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorygibpervcpurequest.html
             :exampleMetadata: fixture=_generated
@@ -33101,7 +33258,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def max(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum amount of memory per vCPU in GiB.
+
+            Instance types with a higher memory-to-vCPU ratio are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorygibpervcpurequest.html#cfn-ecs-capacityprovider-memorygibpervcpurequest-max
             '''
             result = self._values.get("max")
@@ -33109,7 +33269,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def min(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The minimum amount of memory per vCPU in GiB.
+
+            Instance types with a lower memory-to-vCPU ratio are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorygibpervcpurequest.html#cfn-ecs-capacityprovider-memorygibpervcpurequest-min
             '''
             result = self._values.get("min")
@@ -33138,9 +33301,12 @@ class CfnCapacityProvider(
             min: jsii.Number,
             max: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param min: 
-            :param max: 
+            '''The minimum and maximum amount of memory in mebibytes (MiB) for instance type selection.
+
+            This ensures that selected instance types have adequate memory for your workloads.
+
+            :param min: The minimum amount of memory in MiB. Instance types with less memory than this value are excluded from selection.
+            :param max: The maximum amount of memory in MiB. Instance types with more memory than this value are excluded from selection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorymibrequest.html
             :exampleMetadata: fixture=_generated
@@ -33170,7 +33336,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def min(self) -> jsii.Number:
-            '''
+            '''The minimum amount of memory in MiB.
+
+            Instance types with less memory than this value are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorymibrequest.html#cfn-ecs-capacityprovider-memorymibrequest-min
             '''
             result = self._values.get("min")
@@ -33179,7 +33348,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def max(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum amount of memory in MiB.
+
+            Instance types with more memory than this value are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-memorymibrequest.html#cfn-ecs-capacityprovider-memorymibrequest-max
             '''
             result = self._values.get("max")
@@ -33208,9 +33380,12 @@ class CfnCapacityProvider(
             max: typing.Optional[jsii.Number] = None,
             min: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param max: 
-            :param min: 
+            '''The minimum and maximum network bandwidth in gigabits per second (Gbps) for instance type selection.
+
+            This is important for network-intensive workloads.
+
+            :param max: The maximum network bandwidth in Gbps. Instance types with higher network bandwidth are excluded from selection.
+            :param min: The minimum network bandwidth in Gbps. Instance types with lower network bandwidth are excluded from selection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkbandwidthgbpsrequest.html
             :exampleMetadata: fixture=_generated
@@ -33238,7 +33413,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def max(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum network bandwidth in Gbps.
+
+            Instance types with higher network bandwidth are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkbandwidthgbpsrequest.html#cfn-ecs-capacityprovider-networkbandwidthgbpsrequest-max
             '''
             result = self._values.get("max")
@@ -33246,7 +33424,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def min(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The minimum network bandwidth in Gbps.
+
+            Instance types with lower network bandwidth are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkbandwidthgbpsrequest.html#cfn-ecs-capacityprovider-networkbandwidthgbpsrequest-min
             '''
             result = self._values.get("min")
@@ -33275,9 +33456,12 @@ class CfnCapacityProvider(
             max: typing.Optional[jsii.Number] = None,
             min: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param max: 
-            :param min: 
+            '''The minimum and maximum number of network interfaces for instance type selection.
+
+            This is useful for workloads that require multiple network interfaces.
+
+            :param max: The maximum number of network interfaces. Instance types that support more network interfaces are excluded from selection.
+            :param min: The minimum number of network interfaces. Instance types that support fewer network interfaces are excluded from selection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkinterfacecountrequest.html
             :exampleMetadata: fixture=_generated
@@ -33305,7 +33489,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def max(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum number of network interfaces.
+
+            Instance types that support more network interfaces are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkinterfacecountrequest.html#cfn-ecs-capacityprovider-networkinterfacecountrequest-max
             '''
             result = self._values.get("max")
@@ -33313,7 +33500,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def min(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The minimum number of network interfaces.
+
+            Instance types that support fewer network interfaces are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-networkinterfacecountrequest.html#cfn-ecs-capacityprovider-networkinterfacecountrequest-min
             '''
             result = self._values.get("min")
@@ -33342,9 +33532,12 @@ class CfnCapacityProvider(
             max: typing.Optional[jsii.Number] = None,
             min: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param max: 
-            :param min: 
+            '''The minimum and maximum total local storage in gigabytes (GB) for instance types with local storage.
+
+            This is useful for workloads that require local storage for temporary data or caching.
+
+            :param max: The maximum total local storage in GB. Instance types with more local storage are excluded from selection.
+            :param min: The minimum total local storage in GB. Instance types with less local storage are excluded from selection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-totallocalstoragegbrequest.html
             :exampleMetadata: fixture=_generated
@@ -33372,7 +33565,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def max(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum total local storage in GB.
+
+            Instance types with more local storage are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-totallocalstoragegbrequest.html#cfn-ecs-capacityprovider-totallocalstoragegbrequest-max
             '''
             result = self._values.get("max")
@@ -33380,7 +33576,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def min(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The minimum total local storage in GB.
+
+            Instance types with less local storage are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-totallocalstoragegbrequest.html#cfn-ecs-capacityprovider-totallocalstoragegbrequest-min
             '''
             result = self._values.get("min")
@@ -33409,9 +33608,12 @@ class CfnCapacityProvider(
             min: jsii.Number,
             max: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param min: 
-            :param max: 
+            '''The minimum and maximum number of vCPUs for instance type selection.
+
+            This allows you to specify a range of vCPU counts that meet your workload requirements.
+
+            :param min: The minimum number of vCPUs. Instance types with fewer vCPUs than this value are excluded from selection.
+            :param max: The maximum number of vCPUs. Instance types with more vCPUs than this value are excluded from selection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-vcpucountrangerequest.html
             :exampleMetadata: fixture=_generated
@@ -33441,7 +33643,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def min(self) -> jsii.Number:
-            '''
+            '''The minimum number of vCPUs.
+
+            Instance types with fewer vCPUs than this value are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-vcpucountrangerequest.html#cfn-ecs-capacityprovider-vcpucountrangerequest-min
             '''
             result = self._values.get("min")
@@ -33450,7 +33655,10 @@ class CfnCapacityProvider(
 
         @builtins.property
         def max(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum number of vCPUs.
+
+            Instance types with more vCPUs than this value are excluded from selection.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-vcpucountrangerequest.html#cfn-ecs-capacityprovider-vcpucountrangerequest-max
             '''
             result = self._values.get("max")
@@ -35148,7 +35356,7 @@ class CfnService(
         :param enable_ecs_managed_tags: Specifies whether to turn on Amazon ECS managed tags for the tasks within the service. For more information, see `Tagging your Amazon ECS resources <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-using-tags.html>`_ in the *Amazon Elastic Container Service Developer Guide* . When you use Amazon ECS managed tags, you must set the ``propagateTags`` request parameter.
         :param enable_execute_command: Determines whether the execute command functionality is turned on for the service. If ``true`` , the execute command functionality is turned on for all containers in tasks as part of the service.
         :param force_new_deployment: Determines whether to force a new deployment of the service. By default, deployments aren't forced. You can use this option to start a new deployment with no service definition changes. For example, you can update a service's tasks to use a newer Docker image with the same image/tag combination ( ``my_image:latest`` ) or to roll Fargate tasks onto a newer platform version.
-        :param health_check_grace_period_seconds: The period of time, in seconds, that the Amazon Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started. If you do not specify a health check grace period value, the default value of 0 is used. If you do not use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused. If your service has more running tasks than desired, unhealthy tasks in the grace period might be stopped to reach the desired count.
+        :param health_check_grace_period_seconds: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started. If you do not specify a health check grace period value, the default value of 0 is used. If you do not use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused. If your service has more running tasks than desired, unhealthy tasks in the grace period might be stopped to reach the desired count.
         :param launch_type: The launch type on which to run your service. For more information, see `Amazon ECS Launch Types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
         :param load_balancers: A list of load balancer objects to associate with the service. If you specify the ``Role`` property, ``LoadBalancers`` must be specified as well. For information about the number of load balancers that you can specify per service, see `Service Load Balancing <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html>`_ in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: To remove this property from your service resource, specify an empty ``LoadBalancer`` array.
         :param network_configuration: The network configuration for the service. This parameter is required for task definitions that use the ``awsvpc`` network mode to receive their own elastic network interface, and it is not supported for other network modes. For more information, see `Task Networking <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
@@ -35421,7 +35629,7 @@ class CfnService(
     @builtins.property
     @jsii.member(jsii_name="healthCheckGracePeriodSeconds")
     def health_check_grace_period_seconds(self) -> typing.Optional[jsii.Number]:
-        '''The period of time, in seconds, that the Amazon Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started.'''
+        '''The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started.'''
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "healthCheckGracePeriodSeconds"))
 
     @health_check_grace_period_seconds.setter
@@ -39381,7 +39589,7 @@ class CfnTaskDefinition(
         :param pid_mode: The process namespace to use for the containers in the task. The valid values are ``host`` or ``task`` . On Fargate for Linux containers, the only valid value is ``task`` . For example, monitoring sidecars might need ``pidMode`` to access information about other containers running in the same task. If ``host`` is specified, all containers within the tasks that specified the ``host`` PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If ``task`` is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace for each container. If the ``host`` PID mode is used, there's a heightened risk of undesired process namespace exposure. .. epigraph:: This parameter is not supported for Windows containers. > This parameter is only supported for tasks that are hosted on AWS Fargate if the tasks are using platform version ``1.4.0`` or later (Linux). This isn't supported for Windows containers on Fargate.
         :param placement_constraints: An array of placement constraint objects to use for tasks. .. epigraph:: This parameter isn't supported for tasks run on AWS Fargate .
         :param proxy_configuration: The configuration details for the App Mesh proxy. Your Amazon ECS container instances require at least version 1.26.0 of the container agent and at least version 1.26.0-1 of the ``ecs-init`` package to use a proxy configuration. If your container instances are launched from the Amazon ECS optimized AMI version ``20190301`` or later, they contain the required versions of the container agent and ``ecs-init`` . For more information, see `Amazon ECS-optimized Linux AMI <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
-        :param requires_compatibilities: The task launch types the task definition was validated against. The valid values are ``EC2`` , ``FARGATE`` , and ``EXTERNAL`` . For more information, see `Amazon ECS launch types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
+        :param requires_compatibilities: The task launch types the task definition was validated against. The valid values are ``MANAGED_INSTANCES`` , ``EC2`` , ``FARGATE`` , and ``EXTERNAL`` . For more information, see `Amazon ECS launch types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
         :param runtime_platform: The operating system that your tasks definitions run on. A platform family is specified only for tasks using the Fargate launch type.
         :param tags: The metadata that you apply to the task definition to help you categorize and organize them. Each tag consists of a key and an optional value. You define both of them. The following basic restrictions apply to tags: - Maximum number of tags per resource - 50 - For each resource, each tag key must be unique, and each tag key can have only one value. - Maximum key length - 128 Unicode characters in UTF-8 - Maximum value length - 256 Unicode characters in UTF-8 - If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : /
         :param task_role_arn: The short name or full Amazon Resource Name (ARN) of the AWS Identity and Access Management role that grants containers in the task permission to call AWS APIs on your behalf. For more information, see `Amazon ECS Task Role <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html>`_ in the *Amazon Elastic Container Service Developer Guide* . IAM roles for tasks on Windows require that the ``-EnableTaskIAMRole`` option is set when you launch the Amazon ECS-optimized Windows AMI. Your containers must also run some configuration code to use the feature. For more information, see `Windows IAM roles for tasks <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/windows_task_IAM_roles.html>`_ in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: String validation is done on the ECS side. If an invalid string value is given for ``TaskRoleArn`` , it may cause the Cloudformation job to hang.

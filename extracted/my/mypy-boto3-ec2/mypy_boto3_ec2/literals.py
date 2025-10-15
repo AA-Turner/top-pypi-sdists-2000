@@ -1176,7 +1176,7 @@ ImageStateType = Literal[
 ImageTypeValuesType = Literal["kernel", "machine", "ramdisk"]
 ImageUsageReportAvailableWaiterName = Literal["image_usage_report_available"]
 ImdsSupportValuesType = Literal["v2.0"]
-InitializationTypeType = Literal["default", "provisioned-rate"]
+InitializationTypeType = Literal["default", "provisioned-rate", "volume-copy"]
 InstanceAttributeNameType = Literal[
     "blockDeviceMapping",
     "disableApiStop",

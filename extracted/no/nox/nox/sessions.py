@@ -198,6 +198,11 @@ class Session:
         return self.virtualenv.env
 
     @property
+    def env_dir(self) -> pathlib.Path:
+        """The path to the environment of this session."""
+        return pathlib.Path(self._runner.envdir)
+
+    @property
     def posargs(self) -> list[str]:
         """Any extra arguments from the ``nox`` commandline or :class:`Session.notify`."""
         return self._runner.posargs
@@ -728,7 +733,7 @@ class Session:
             args = _dblquote_pkg_install_args(args)
 
         if silent is None:
-            silent = True
+            silent = not self._runner.global_config.verbose
 
         extraopts: list[str] = []
         if auto_offline and venv.is_offline():
@@ -838,7 +843,7 @@ class Session:
             return
 
         if silent is None:
-            silent = True
+            silent = not self._runner.global_config.verbose
 
         if isinstance(venv, VirtualEnv) and venv.venv_backend == "uv":
             cmd = ["uv", "pip", "install"]
@@ -942,7 +947,9 @@ class SessionRunner:
             self.multi = True
 
     def __repr__(self) -> str:
-        return f"<SessionRunner {self.name}: {self.signatures!r} {self.multi}>"
+        return (
+            f"<{self.__class__.__name__} {self.name}: {self.signatures!r} {self.multi}>"
+        )
 
     @property
     def description(self) -> str | None:
@@ -1015,10 +1022,15 @@ class SessionRunner:
             or "virtualenv"
         ).split("|")
 
+        download_python = (
+            self.global_config.download_python or self.func.download_python or "auto"
+        )
+
         self.venv = get_virtualenv(
             *backends,
-            reuse_existing=reuse_existing,
+            download_python=download_python,
             envdir=self.envdir,
+            reuse_existing=reuse_existing,
             interpreter=self.func.python,
             venv_params=self.func.venv_params,
         )
@@ -1077,7 +1089,7 @@ class SessionRunner:
         )
 
     def execute(self) -> Result:
-        logger.warning(f"Running session {self.friendly_name}")
+        logger.session_info(f"Running session {self.friendly_name}")
 
         for dependency in self.get_direct_dependencies():
             if not dependency.result:

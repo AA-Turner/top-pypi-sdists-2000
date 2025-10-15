@@ -301,6 +301,8 @@ from .type_defs import (
     CopyImageResultTypeDef,
     CopySnapshotRequestTypeDef,
     CopySnapshotResultTypeDef,
+    CopyVolumesRequestTypeDef,
+    CopyVolumesResultTypeDef,
     CreateCapacityReservationBySplittingRequestTypeDef,
     CreateCapacityReservationBySplittingResultTypeDef,
     CreateCapacityReservationFleetRequestTypeDef,
@@ -2233,6 +2235,15 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/copy_snapshot.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#copy_snapshot)
+        """
+
+    def copy_volumes(self, **kwargs: Unpack[CopyVolumesRequestTypeDef]) -> CopyVolumesResultTypeDef:
+        """
+        Creates a crash-consistent, point-in-time copy of an existing Amazon EBS volume
+        within the same Availability Zone.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/copy_volumes.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#copy_volumes)
         """
 
     def create_capacity_reservation(

@@ -851,6 +851,41 @@ cloudfront.Distribution(self, "Distribution",
 )
 ```
 
+### Configuring IP Address Type
+
+You can specify which IP protocol CloudFront uses when connecting to your Lambda Function URL origin. By default, CloudFront uses IPv4 only.
+
+```python
+import aws_cdk.aws_lambda as lambda_
+from aws_cdk.aws_cloudfront import OriginIpAddressType
+
+# fn: lambda.Function
+
+fn_url = fn.add_function_url(auth_type=lambda_.FunctionUrlAuthType.NONE)
+
+# Uses default IPv4 only
+cloudfront.Distribution(self, "Distribution",
+    default_behavior=cloudfront.BehaviorOptions(
+        origin=origins.FunctionUrlOrigin(fn_url)
+    )
+)
+
+# Explicitly specify IP address type
+cloudfront.Distribution(self, "Distribution",
+    default_behavior=cloudfront.BehaviorOptions(
+        origin=origins.FunctionUrlOrigin(fn_url,
+            ip_address_type=OriginIpAddressType.DUALSTACK
+        )
+    )
+)
+```
+
+Supported values for `ipAddressType`:
+
+* `OriginIpAddressType.IPV4` - CloudFront uses IPv4 only to connect to the origin (default)
+* `OriginIpAddressType.IPV6` - CloudFront uses IPv6 only to connect to the origin
+* `OriginIpAddressType.DUALSTACK` - CloudFront uses both IPv4 and IPv6 to connect to the origin
+
 ### Lambda Function URL with Origin Access Control (OAC)
 
 You can configure the Lambda Function URL with Origin Access Control (OAC) for enhanced security. When using OAC with Signing SIGV4_ALWAYS, it is recommended to set the Lambda Function URL authType to AWS_IAM to ensure proper authorization.
@@ -972,16 +1007,18 @@ class FunctionUrlOrigin(
     Example::
 
         import aws_cdk.aws_lambda as lambda_
+        
         # fn: lambda.Function
         
+        fn_url = fn.add_function_url(auth_type=lambda_.FunctionUrlAuthType.NONE)
         
-        fn_url = fn.add_function_url(
-            auth_type=lambda_.FunctionUrlAuthType.AWS_IAM
-        )
-        
-        cloudfront.Distribution(self, "MyDistribution",
+        cloudfront.Distribution(self, "Distribution",
             default_behavior=cloudfront.BehaviorOptions(
-                origin=origins.FunctionUrlOrigin.with_origin_access_control(fn_url)
+                origin=origins.FunctionUrlOrigin(fn_url,
+                    read_timeout=Duration.seconds(30),
+                    response_completion_timeout=Duration.seconds(90),
+                    keepalive_timeout=Duration.seconds(45)
+                )
             )
         )
     '''
@@ -990,6 +1027,7 @@ class FunctionUrlOrigin(
         self,
         lambda_function_url: _IFunctionUrl_1a74cd94,
         *,
+        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
         keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
         read_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_path: typing.Optional[builtins.str] = None,
@@ -1004,6 +1042,7 @@ class FunctionUrlOrigin(
     ) -> None:
         '''
         :param lambda_function_url: -
+        :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability. Default: OriginIpAddressType.IPV4
         :param keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(5)
         :param read_timeout: Specifies how long, in seconds, CloudFront waits for a response from the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(30)
         :param origin_path: An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin. Must begin, but not end, with '/' (e.g., '/production/images'). Default: '/'
@@ -1020,6 +1059,7 @@ class FunctionUrlOrigin(
             type_hints = typing.get_type_hints(_typecheckingstub__fcda903697b26acfe2149a285d5a64619682b675affb52f4ae2d1aca46c8f1c3)
             check_type(argname="argument lambda_function_url", value=lambda_function_url, expected_type=type_hints["lambda_function_url"])
         props = FunctionUrlOriginProps(
+            ip_address_type=ip_address_type,
             keepalive_timeout=keepalive_timeout,
             read_timeout=read_timeout,
             origin_path=origin_path,
@@ -1042,6 +1082,7 @@ class FunctionUrlOrigin(
         lambda_function_url: _IFunctionUrl_1a74cd94,
         *,
         origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
+        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
         keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
         read_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_path: typing.Optional[builtins.str] = None,
@@ -1058,6 +1099,7 @@ class FunctionUrlOrigin(
 
         :param lambda_function_url: -
         :param origin_access_control: An optional Origin Access Control. Default: - an Origin Access Control will be created.
+        :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability. Default: OriginIpAddressType.IPV4
         :param keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(5)
         :param read_timeout: Specifies how long, in seconds, CloudFront waits for a response from the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(30)
         :param origin_path: An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin. Must begin, but not end, with '/' (e.g., '/production/images'). Default: '/'
@@ -1075,6 +1117,7 @@ class FunctionUrlOrigin(
             check_type(argname="argument lambda_function_url", value=lambda_function_url, expected_type=type_hints["lambda_function_url"])
         props = FunctionUrlOriginWithOACProps(
             origin_access_control=origin_access_control,
+            ip_address_type=ip_address_type,
             keepalive_timeout=keepalive_timeout,
             read_timeout=read_timeout,
             origin_path=origin_path,
@@ -1316,6 +1359,7 @@ class FunctionUrlOriginBaseProps(_OriginProps_0675928d):
         "origin_shield_region": "originShieldRegion",
         "response_completion_timeout": "responseCompletionTimeout",
         "origin_path": "originPath",
+        "ip_address_type": "ipAddressType",
         "keepalive_timeout": "keepaliveTimeout",
         "read_timeout": "readTimeout",
     },
@@ -1333,6 +1377,7 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         origin_shield_region: typing.Optional[builtins.str] = None,
         response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_path: typing.Optional[builtins.str] = None,
+        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
         keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
         read_timeout: typing.Optional[_Duration_4839e8c3] = None,
     ) -> None:
@@ -1347,6 +1392,7 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         :param origin_shield_region: When you enable Origin Shield in the AWS Region that has the lowest latency to your origin, you can get better network performance. Default: - origin shield not enabled
         :param response_completion_timeout: The time that a request from CloudFront to the origin can stay open and wait for a response. If the complete response isn't received from the origin by this time, CloudFront ends the connection. Valid values are 1-3600 seconds, inclusive. Default: undefined - AWS CloudFront default is not enforcing a maximum value
         :param origin_path: An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin. Must begin, but not end, with '/' (e.g., '/production/images'). Default: '/'
+        :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability. Default: OriginIpAddressType.IPV4
         :param keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(5)
         :param read_timeout: Specifies how long, in seconds, CloudFront waits for a response from the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(30)
 
@@ -1381,6 +1427,7 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
             check_type(argname="argument origin_shield_region", value=origin_shield_region, expected_type=type_hints["origin_shield_region"])
             check_type(argname="argument response_completion_timeout", value=response_completion_timeout, expected_type=type_hints["response_completion_timeout"])
             check_type(argname="argument origin_path", value=origin_path, expected_type=type_hints["origin_path"])
+            check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
             check_type(argname="argument keepalive_timeout", value=keepalive_timeout, expected_type=type_hints["keepalive_timeout"])
             check_type(argname="argument read_timeout", value=read_timeout, expected_type=type_hints["read_timeout"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -1402,6 +1449,8 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
             self._values["response_completion_timeout"] = response_completion_timeout
         if origin_path is not None:
             self._values["origin_path"] = origin_path
+        if ip_address_type is not None:
+            self._values["ip_address_type"] = ip_address_type
         if keepalive_timeout is not None:
             self._values["keepalive_timeout"] = keepalive_timeout
         if read_timeout is not None:
@@ -1507,6 +1556,17 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def ip_address_type(self) -> typing.Optional[_OriginIpAddressType_1c01e1a0]:
+        '''Specifies which IP protocol CloudFront uses when connecting to your origin.
+
+        If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability.
+
+        :default: OriginIpAddressType.IPV4
+        '''
+        result = self._values.get("ip_address_type")
+        return typing.cast(typing.Optional[_OriginIpAddressType_1c01e1a0], result)
+
+    @builtins.property
     def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
         '''Specifies how long, in seconds, CloudFront persists its connection to the origin.
 
@@ -1559,6 +1619,7 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         "origin_shield_region": "originShieldRegion",
         "response_completion_timeout": "responseCompletionTimeout",
         "origin_path": "originPath",
+        "ip_address_type": "ipAddressType",
         "keepalive_timeout": "keepaliveTimeout",
         "read_timeout": "readTimeout",
         "origin_access_control": "originAccessControl",
@@ -1577,6 +1638,7 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         origin_shield_region: typing.Optional[builtins.str] = None,
         response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_path: typing.Optional[builtins.str] = None,
+        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
         keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
         read_timeout: typing.Optional[_Duration_4839e8c3] = None,
         origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
@@ -1592,6 +1654,7 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         :param origin_shield_region: When you enable Origin Shield in the AWS Region that has the lowest latency to your origin, you can get better network performance. Default: - origin shield not enabled
         :param response_completion_timeout: The time that a request from CloudFront to the origin can stay open and wait for a response. If the complete response isn't received from the origin by this time, CloudFront ends the connection. Valid values are 1-3600 seconds, inclusive. Default: undefined - AWS CloudFront default is not enforcing a maximum value
         :param origin_path: An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin. Must begin, but not end, with '/' (e.g., '/production/images'). Default: '/'
+        :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability. Default: OriginIpAddressType.IPV4
         :param keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(5)
         :param read_timeout: Specifies how long, in seconds, CloudFront waits for a response from the origin. The valid range is from 1 to 180 seconds, inclusive. Note that values over 60 seconds are possible only after a limit increase request for the origin response timeout quota has been approved in the target account; otherwise, values over 60 seconds will produce an error at deploy time. Default: Duration.seconds(30)
         :param origin_access_control: An optional Origin Access Control. Default: - an Origin Access Control will be created.
@@ -1634,6 +1697,7 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
             check_type(argname="argument origin_shield_region", value=origin_shield_region, expected_type=type_hints["origin_shield_region"])
             check_type(argname="argument response_completion_timeout", value=response_completion_timeout, expected_type=type_hints["response_completion_timeout"])
             check_type(argname="argument origin_path", value=origin_path, expected_type=type_hints["origin_path"])
+            check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
             check_type(argname="argument keepalive_timeout", value=keepalive_timeout, expected_type=type_hints["keepalive_timeout"])
             check_type(argname="argument read_timeout", value=read_timeout, expected_type=type_hints["read_timeout"])
             check_type(argname="argument origin_access_control", value=origin_access_control, expected_type=type_hints["origin_access_control"])
@@ -1656,6 +1720,8 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
             self._values["response_completion_timeout"] = response_completion_timeout
         if origin_path is not None:
             self._values["origin_path"] = origin_path
+        if ip_address_type is not None:
+            self._values["ip_address_type"] = ip_address_type
         if keepalive_timeout is not None:
             self._values["keepalive_timeout"] = keepalive_timeout
         if read_timeout is not None:
@@ -1761,6 +1827,17 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         '''
         result = self._values.get("origin_path")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def ip_address_type(self) -> typing.Optional[_OriginIpAddressType_1c01e1a0]:
+        '''Specifies which IP protocol CloudFront uses when connecting to your origin.
+
+        If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability.
+
+        :default: OriginIpAddressType.IPV4
+        '''
+        result = self._values.get("ip_address_type")
+        return typing.cast(typing.Optional[_OriginIpAddressType_1c01e1a0], result)
 
     @builtins.property
     def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -5770,6 +5847,7 @@ publication.publish()
 def _typecheckingstub__fcda903697b26acfe2149a285d5a64619682b675affb52f4ae2d1aca46c8f1c3(
     lambda_function_url: _IFunctionUrl_1a74cd94,
     *,
+    ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     read_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_path: typing.Optional[builtins.str] = None,
@@ -5789,6 +5867,7 @@ def _typecheckingstub__b4d59b7721f41be7903dbcffeddd34d596392d2c8d2a4110f31a4dacd
     lambda_function_url: _IFunctionUrl_1a74cd94,
     *,
     origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
+    ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     read_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_path: typing.Optional[builtins.str] = None,
@@ -5830,6 +5909,7 @@ def _typecheckingstub__56d340a9ac5dd93c6aa22cb98bcbc860fb23f8d247b53c2cd1a51ecd8
     origin_shield_region: typing.Optional[builtins.str] = None,
     response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_path: typing.Optional[builtins.str] = None,
+    ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     read_timeout: typing.Optional[_Duration_4839e8c3] = None,
 ) -> None:
@@ -5847,6 +5927,7 @@ def _typecheckingstub__56968af993436ccfcac0aa6a57169f1a033078c10740d435d086816ad
     origin_shield_region: typing.Optional[builtins.str] = None,
     response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_path: typing.Optional[builtins.str] = None,
+    ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     read_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,

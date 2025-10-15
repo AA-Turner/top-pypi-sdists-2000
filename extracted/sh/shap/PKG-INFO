@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: shap
-Version: 0.48.0
+Version: 0.49.1
 Summary: A unified approach to explain the output of any machine learning model.
 Author-email: Scott Lundberg <slund1@cs.washington.edu>
 License: MIT License
@@ -40,6 +40,8 @@ Requires-Dist: matplotlib; extra == "plots"
 Requires-Dist: ipython; extra == "plots"
 Provides-Extra: others
 Requires-Dist: lime; extra == "others"
+Provides-Extra: download-datasets
+Requires-Dist: scikit-learn; extra == "download-datasets"
 Provides-Extra: docs
 Requires-Dist: matplotlib; extra == "docs"
 Requires-Dist: ipython; extra == "docs"
@@ -63,11 +65,11 @@ Requires-Dist: pytest-cov; extra == "test"
 Requires-Dist: xgboost; extra == "test"
 Requires-Dist: lightgbm; extra == "test"
 Requires-Dist: catboost; python_version < "3.13" and extra == "test"
-Requires-Dist: gpboost; extra == "test"
+Requires-Dist: gpboost<=1.6.1; extra == "test"
 Requires-Dist: ngboost; extra == "test"
 Requires-Dist: pyspark; extra == "test"
 Requires-Dist: pyod; extra == "test"
-Requires-Dist: transformers; python_version < "3.13" and extra == "test"
+Requires-Dist: transformers<4.54.0; python_version < "3.13" and extra == "test"
 Requires-Dist: tf-keras; python_version < "3.13" and extra == "test"
 Requires-Dist: protobuf==3.20.3; extra == "test"
 Requires-Dist: torch; python_version < "3.13" and extra == "test"
@@ -87,6 +89,10 @@ Requires-Dist: nlp; extra == "test-notebooks"
 Requires-Dist: transformers; extra == "test-notebooks"
 Requires-Dist: datasets; extra == "test-notebooks"
 Requires-Dist: keras; extra == "test-notebooks"
+Provides-Extra: nbtest
+Requires-Dist: nbtest-plugin; extra == "nbtest"
+Requires-Dist: nbtest-gen; extra == "nbtest"
+Requires-Dist: nbtest-lab-extension; extra == "nbtest"
 Dynamic: license-file
 
 

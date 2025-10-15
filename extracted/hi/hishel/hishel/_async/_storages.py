@@ -4,7 +4,6 @@ import datetime
 import logging
 import os
 import time
-import typing as t
 import typing as tp
 import warnings
 from copy import deepcopy
@@ -24,13 +23,11 @@ except ImportError:  # pragma: no cover
 
 from httpcore import Request, Response
 
-if t.TYPE_CHECKING:  # pragma: no cover
+if tp.TYPE_CHECKING:  # pragma: no cover
     from typing_extensions import TypeAlias
 
-from hishel._serializers import BaseSerializer, clone_model
-
 from .._files import AsyncFileManager
-from .._serializers import JSONSerializer, Metadata
+from .._serializers import BaseSerializer, JSONSerializer, Metadata, clone_model
 from .._synchronization import AsyncLock
 from .._utils import float_seconds_to_int_milliseconds
 
@@ -39,10 +36,10 @@ logger = logging.getLogger("hishel.storages")
 __all__ = (
     "AsyncBaseStorage",
     "AsyncFileStorage",
-    "AsyncRedisStorage",
-    "AsyncSQLiteStorage",
     "AsyncInMemoryStorage",
+    "AsyncRedisStorage",
     "AsyncS3Storage",
+    "AsyncSQLiteStorage",
 )
 
 StoredResponse: TypeAlias = tp.Tuple[Response, Request, Metadata]
@@ -106,8 +103,7 @@ class AsyncFileStorage(AsyncBaseStorage):
         self._base_path = Path(base_path) if base_path is not None else Path(".cache/hishel")
         self._gitignore_file = self._base_path / ".gitignore"
 
-        if not self._base_path.is_dir():
-            self._base_path.mkdir(parents=True)
+        self._base_path.mkdir(parents=True, exist_ok=True)
 
         if not self._gitignore_file.is_file():
             with open(self._gitignore_file, "w", encoding="utf-8") as f:
@@ -153,7 +149,7 @@ class AsyncFileStorage(AsyncBaseStorage):
         """
 
         if isinstance(key, Response):  # pragma: no cover
-            key = t.cast(str, key.extensions["cache_metadata"]["cache_key"])
+            key = tp.cast(str, key.extensions["cache_metadata"]["cache_key"])
 
         response_path = self._base_path / key
 
@@ -322,7 +318,7 @@ class AsyncSQLiteStorage(AsyncBaseStorage):
         assert self._connection
 
         if isinstance(key, Response):  # pragma: no cover
-            key = t.cast(str, key.extensions["cache_metadata"]["cache_key"])
+            key = tp.cast(str, key.extensions["cache_metadata"]["cache_key"])
 
         async with self._lock:
             await self._connection.execute("DELETE FROM cache WHERE key = ?", [key])
@@ -459,7 +455,7 @@ class AsyncRedisStorage(AsyncBaseStorage):
         """
 
         if isinstance(key, Response):  # pragma: no cover
-            key = t.cast(str, key.extensions["cache_metadata"]["cache_key"])
+            key = tp.cast(str, key.extensions["cache_metadata"]["cache_key"])
 
         await self._client.delete(key)
 
@@ -572,7 +568,7 @@ class AsyncInMemoryStorage(AsyncBaseStorage):
         """
 
         if isinstance(key, Response):  # pragma: no cover
-            key = t.cast(str, key.extensions["cache_metadata"]["cache_key"])
+            key = tp.cast(str, key.extensions["cache_metadata"]["cache_key"])
 
         async with self._lock:
             self._cache.remove_key(key)
@@ -720,7 +716,7 @@ class AsyncS3Storage(AsyncBaseStorage):  # pragma: no cover
         """
 
         if isinstance(key, Response):  # pragma: no cover
-            key = t.cast(str, key.extensions["cache_metadata"]["cache_key"])
+            key = tp.cast(str, key.extensions["cache_metadata"]["cache_key"])
 
         async with self._lock:
             await self._s3_manager.remove_entry(key)

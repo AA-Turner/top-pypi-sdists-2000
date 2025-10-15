@@ -353,9 +353,6 @@ class LFSStatusCompatTest(LFSCompatTestCase):
         run_git_or_fail(["commit", "-m", "Add LFS file"], cwd=repo_dir)
 
         # Now check status with dulwich - this should not raise FilterError
-        repo = porcelain.open_repo(repo_dir)
-        self.addCleanup(repo.close)
-
         # This should work without raising FilterError
         # Before the fix, this would fail with:
         # dulwich.filters.FilterError: Process filter smudge failed: error
@@ -390,9 +387,6 @@ class LFSStatusCompatTest(LFSCompatTestCase):
             f.write(b"modified content\n")
 
         # Check status - should show file as modified
-        repo = porcelain.open_repo(repo_dir)
-        self.addCleanup(repo.close)
-
         status = porcelain.status(repo_dir, untracked_files="no")
 
         # File should be in unstaged changes
@@ -418,9 +412,6 @@ class LFSStatusCompatTest(LFSCompatTestCase):
         run_git_or_fail(["commit", "-m", "Add LFS files"], cwd=repo_dir)
 
         # Check status - should handle multiple files correctly
-        repo = porcelain.open_repo(repo_dir)
-        self.addCleanup(repo.close)
-
         status = porcelain.status(repo_dir, untracked_files="no")
 
         # All files should be clean

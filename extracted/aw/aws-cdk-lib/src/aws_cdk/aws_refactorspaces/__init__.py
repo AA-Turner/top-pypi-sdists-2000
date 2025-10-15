@@ -1207,9 +1207,13 @@ class CfnApplication(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_refactorspaces.CfnApplication",
 ):
-    '''Creates an AWS Migration Hub Refactor Spaces application.
+    '''.. epigraph::
 
-    The account that owns the environment also owns the applications created inside the environment, regardless of the account that creates the application. Refactor Spaces provisions an Amazon API Gateway, API Gateway VPC link, and Network Load Balancer for the application proxy inside your account.
+   AWS Migration Hub will no longer be open to new customers starting November 7, 2025.
+
+    To continue using the service, sign up prior to November 7, 2025. For capabilities similar to AWS Migration Hub , explore `AWS Migration Hub <https://docs.aws.amazon.com/https://aws.amazon.com/transform>`_ .
+
+    Creates an AWS Migration Hub Refactor Spaces application. The account that owns the environment also owns the applications created inside the environment, regardless of the account that creates the application. Refactor Spaces provisions an Amazon API Gateway, API Gateway VPC link, and Network Load Balancer for the application proxy inside your account.
 
     In environments created with a `CreateEnvironment:NetworkFabricType <https://docs.aws.amazon.com/migrationhub-refactor-spaces/latest/APIReference/API_CreateEnvironment.html#migrationhubrefactorspaces-CreateEnvironment-request-NetworkFabricType>`_ of ``NONE`` you need to configure `VPC to VPC connectivity <https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/amazon-vpc-to-amazon-vpc-connectivity-options.html>`_ between your service VPC and the application proxy VPC to route traffic through the application proxy to a service with a private URL endpoint. For more information, see `Create an application <https://docs.aws.amazon.com/migrationhub-refactor-spaces/latest/userguide/getting-started-create-application.html>`_ in the *Refactor Spaces User Guide* .
 
@@ -1565,9 +1569,13 @@ class CfnEnvironment(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_refactorspaces.CfnEnvironment",
 ):
-    '''Creates an AWS Migration Hub Refactor Spaces environment.
+    '''.. epigraph::
 
-    The caller owns the environment resource, and all Refactor Spaces applications, services, and routes created within the environment. They are referred to as the *environment owner* . The environment owner has cross-account visibility and control of Refactor Spaces resources that are added to the environment by other accounts that the environment is shared with.
+   AWS Migration Hub will no longer be open to new customers starting November 7, 2025.
+
+    To continue using the service, sign up prior to November 7, 2025. For capabilities similar to AWS Migration Hub , explore `AWS Migration Hub <https://docs.aws.amazon.com/https://aws.amazon.com/transform>`_ .
+
+    Creates an AWS Migration Hub Refactor Spaces environment. The caller owns the environment resource, and all Refactor Spaces applications, services, and routes created within the environment. They are referred to as the *environment owner* . The environment owner has cross-account visibility and control of Refactor Spaces resources that are added to the environment by other accounts that the environment is shared with.
 
     When creating an environment with a `CreateEnvironment:NetworkFabricType <https://docs.aws.amazon.com/migrationhub-refactor-spaces/latest/APIReference/API_CreateEnvironment.html#migrationhubrefactorspaces-CreateEnvironment-request-NetworkFabricType>`_ of ``TRANSIT_GATEWAY`` , Refactor Spaces provisions a transit gateway to enable services in VPCs to communicate directly across accounts. If `CreateEnvironment:NetworkFabricType <https://docs.aws.amazon.com/migrationhub-refactor-spaces/latest/APIReference/API_CreateEnvironment.html#migrationhubrefactorspaces-CreateEnvironment-request-NetworkFabricType>`_ is ``NONE`` , Refactor Spaces does not create a transit gateway and you must use your network infrastructure to route traffic to services with private URL endpoints.
 
@@ -2235,9 +2243,13 @@ class CfnService(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_refactorspaces.CfnService",
 ):
-    '''Creates an AWS Migration Hub Refactor Spaces service.
+    '''.. epigraph::
 
-    The account owner of the service is always the environment owner, regardless of which account in the environment creates the service. Services have either a URL endpoint in a virtual private cloud (VPC), or a Lambda function endpoint.
+   AWS Migration Hub will no longer be open to new customers starting November 7, 2025.
+
+    To continue using the service, sign up prior to November 7, 2025. For capabilities similar to AWS Migration Hub , explore `AWS Migration Hub <https://docs.aws.amazon.com/https://aws.amazon.com/transform>`_ .
+
+    Creates an AWS Migration Hub Refactor Spaces service. The account owner of the service is always the environment owner, regardless of which account in the environment creates the service. Services have either a URL endpoint in a virtual private cloud (VPC), or a Lambda function endpoint.
     .. epigraph::
 
        If an AWS resource is launched in a service VPC, and you want it to be accessible to all of an environment’s services with VPCs and routes, apply the ``RefactorSpacesSecurityGroup`` to the resource. Alternatively, to add more cross-account constraints, apply your own security group.

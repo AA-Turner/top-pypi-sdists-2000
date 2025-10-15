@@ -21672,25 +21672,20 @@ class RemovalPolicy(enum.Enum):
 
     Example::
 
-        import aws_cdk as cdk
+        # my_role: iam.Role
         
-        
-        app = cdk.App()
-        stack = cdk.Stack(app, "Stack", env=cdk.Environment(region="us-west-2"))
-        
-        global_table = dynamodb.TableV2(stack, "GlobalTable",
-            partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING),
-            removal_policy=cdk.RemovalPolicy.DESTROY,
-            deletion_protection=True,
-            # only the replica in us-east-1 will be deleted during stack deletion
-            replicas=[dynamodb.ReplicaTableProps(
-                region="us-east-1",
-                deletion_protection=False
-            ), dynamodb.ReplicaTableProps(
-                region="us-east-2",
-                deletion_protection=True
+        cr.AwsCustomResource(self, "Customized",
+            role=my_role,  # must be assumable by the `lambda.amazonaws.com` service principal
+            timeout=Duration.minutes(10),  # defaults to 2 minutes
+            memory_size=1025,  # defaults to 512 if installLatestAwsSdk is true
+            log_group=logs.LogGroup(self, "AwsCustomResourceLogs",
+                retention=logs.RetentionDays.ONE_DAY
+            ),
+            function_name="my-custom-name",  # defaults to a CloudFormation generated name
+            removal_policy=RemovalPolicy.RETAIN,  # defaults to `RemovalPolicy.DESTROY`
+            policy=cr.AwsCustomResourcePolicy.from_sdk_calls(
+                resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE
             )
-            ]
         )
     '''
 

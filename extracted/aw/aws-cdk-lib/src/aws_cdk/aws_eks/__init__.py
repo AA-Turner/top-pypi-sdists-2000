@@ -158,6 +158,28 @@ eks.Cluster(self, "HelloEKS",
 )
 ```
 
+You can control what happens to the resources created by the cluster construct when they are no longer managed by CloudFormation by specifying a `removalPolicy`.
+
+This can happen in one of three situations:
+
+* The resource is removed from the template, so CloudFormation stops managing it;
+* A change to the resource is made that requires it to be replaced, so CloudFormation stops managing it;
+* The stack is deleted, so CloudFormation stops managing all resources in it.
+
+This affects the EKS cluster itself, the custom resource that created the cluster, associated IAM roles, node groups, security groups, VPC and any other CloudFormation resources managed by this construct.
+
+```python
+from aws_cdk.lambda_layer_kubectl_v33 import KubectlV33Layer
+import aws_cdk as core
+
+
+eks.Cluster(self, "HelloEKS",
+    version=eks.KubernetesVersion.V1_33,
+    kubectl_layer=KubectlV33Layer(self, "kubectl"),
+    removal_policy=core.RemovalPolicy.RETAIN
+)
+```
+
 You can also use `FargateCluster` to provision a cluster that uses only fargate workers.
 
 ```python
@@ -2136,6 +2158,7 @@ from .. import (
     ITaggable as _ITaggable_36806126,
     ITaggableV2 as _ITaggableV2_4e6798f8,
     NestedStack as _NestedStack_dd393a45,
+    RemovalPolicy as _RemovalPolicy_9f93c814,
     Resource as _Resource_45bc6135,
     Size as _Size_7b441c34,
     TagManager as _TagManager_0a598cb3,
@@ -11632,19 +11655,17 @@ class KubernetesVersion(
 
         from aws_cdk.lambda_layer_kubectl_v33 import KubectlV33Layer
         
-        # or
-        # vpc: ec2.Vpc
         
-        
-        eks.Cluster(self, "MyCluster",
-            kubectl_memory=Size.gibibytes(4),
+        cluster = eks.Cluster(self, "HelloEKS",
             version=eks.KubernetesVersion.V1_33,
+            default_capacity=0,
             kubectl_layer=KubectlV33Layer(self, "kubectl")
         )
-        eks.Cluster.from_cluster_attributes(self, "MyCluster",
-            kubectl_memory=Size.gibibytes(4),
-            vpc=vpc,
-            cluster_name="cluster-name"
+        
+        cluster.add_nodegroup_capacity("custom-node-group",
+            instance_types=[ec2.InstanceType("m5.large")],
+            min_size=4,
+            disk_size=100
         )
     '''
 
@@ -19813,6 +19834,7 @@ class Cluster(
         prune: typing.Optional[builtins.bool] = None,
         remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
         remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         secrets_encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
         service_ipv4_cidr: typing.Optional[builtins.str] = None,
         version: KubernetesVersion,
@@ -19854,6 +19876,7 @@ class Cluster(
         :param prune: Indicates whether Kubernetes resources added through ``addManifest()`` can be automatically pruned. When this is enabled (default), prune labels will be allocated and injected to each resource. These labels will then be used when issuing the ``kubectl apply`` operation with the ``--prune`` switch. Default: true
         :param remote_node_networks: IPv4 CIDR blocks defining the expected address range of hybrid nodes that will join the cluster. Default: - none
         :param remote_pod_networks: IPv4 CIDR blocks for Pods running Kubernetes webhooks on hybrid nodes. Default: - none
+        :param removal_policy: The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation. This can happen in one of three situations: - The resource is removed from the template, so CloudFormation stops managing it; - A change to the resource is made that requires it to be replaced, so CloudFormation stops managing it; - The stack is deleted, so CloudFormation stops managing all resources in it. This affects the EKS cluster itself, associated IAM roles, node groups, security groups, VPC and any other CloudFormation resources managed by this construct. Default: - Resources will be deleted.
         :param secrets_encryption_key: KMS secret for envelope encryption for Kubernetes secrets. Default: - By default, Kubernetes stores all secret object data within etcd and all etcd volumes used by Amazon EKS are encrypted at the disk-level using AWS-Managed encryption keys.
         :param service_ipv4_cidr: The CIDR block to assign Kubernetes service IP addresses from. Default: - Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks
         :param version: The Kubernetes version to run in the cluster.
@@ -19896,6 +19919,7 @@ class Cluster(
             prune=prune,
             remote_node_networks=remote_node_networks,
             remote_pod_networks=remote_pod_networks,
+            removal_policy=removal_policy,
             secrets_encryption_key=secrets_encryption_key,
             service_ipv4_cidr=service_ipv4_cidr,
             version=version,
@@ -20843,6 +20867,7 @@ class Cluster(
         "prune": "prune",
         "remote_node_networks": "remoteNodeNetworks",
         "remote_pod_networks": "remotePodNetworks",
+        "removal_policy": "removalPolicy",
         "secrets_encryption_key": "secretsEncryptionKey",
         "service_ipv4_cidr": "serviceIpv4Cidr",
     },
@@ -20878,6 +20903,7 @@ class ClusterOptions(CommonClusterOptions):
         prune: typing.Optional[builtins.bool] = None,
         remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
         remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         secrets_encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
         service_ipv4_cidr: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -20910,6 +20936,7 @@ class ClusterOptions(CommonClusterOptions):
         :param prune: Indicates whether Kubernetes resources added through ``addManifest()`` can be automatically pruned. When this is enabled (default), prune labels will be allocated and injected to each resource. These labels will then be used when issuing the ``kubectl apply`` operation with the ``--prune`` switch. Default: true
         :param remote_node_networks: IPv4 CIDR blocks defining the expected address range of hybrid nodes that will join the cluster. Default: - none
         :param remote_pod_networks: IPv4 CIDR blocks for Pods running Kubernetes webhooks on hybrid nodes. Default: - none
+        :param removal_policy: The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation. This can happen in one of three situations: - The resource is removed from the template, so CloudFormation stops managing it; - A change to the resource is made that requires it to be replaced, so CloudFormation stops managing it; - The stack is deleted, so CloudFormation stops managing all resources in it. This affects the EKS cluster itself, associated IAM roles, node groups, security groups, VPC and any other CloudFormation resources managed by this construct. Default: - Resources will be deleted.
         :param secrets_encryption_key: KMS secret for envelope encryption for Kubernetes secrets. Default: - By default, Kubernetes stores all secret object data within etcd and all etcd volumes used by Amazon EKS are encrypted at the disk-level using AWS-Managed encryption keys.
         :param service_ipv4_cidr: The CIDR block to assign Kubernetes service IP addresses from. Default: - Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks
 
@@ -20983,6 +21010,7 @@ class ClusterOptions(CommonClusterOptions):
                 remote_pod_networks=[eks.RemotePodNetwork(
                     cidrs=["cidrs"]
                 )],
+                removal_policy=cdk.RemovalPolicy.DESTROY,
                 role=role,
                 secrets_encryption_key=key_ref,
                 security_group=security_group,
@@ -21029,6 +21057,7 @@ class ClusterOptions(CommonClusterOptions):
             check_type(argname="argument prune", value=prune, expected_type=type_hints["prune"])
             check_type(argname="argument remote_node_networks", value=remote_node_networks, expected_type=type_hints["remote_node_networks"])
             check_type(argname="argument remote_pod_networks", value=remote_pod_networks, expected_type=type_hints["remote_pod_networks"])
+            check_type(argname="argument removal_policy", value=removal_policy, expected_type=type_hints["removal_policy"])
             check_type(argname="argument secrets_encryption_key", value=secrets_encryption_key, expected_type=type_hints["secrets_encryption_key"])
             check_type(argname="argument service_ipv4_cidr", value=service_ipv4_cidr, expected_type=type_hints["service_ipv4_cidr"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -21085,6 +21114,8 @@ class ClusterOptions(CommonClusterOptions):
             self._values["remote_node_networks"] = remote_node_networks
         if remote_pod_networks is not None:
             self._values["remote_pod_networks"] = remote_pod_networks
+        if removal_policy is not None:
+            self._values["removal_policy"] = removal_policy
         if secrets_encryption_key is not None:
             self._values["secrets_encryption_key"] = secrets_encryption_key
         if service_ipv4_cidr is not None:
@@ -21394,6 +21425,24 @@ class ClusterOptions(CommonClusterOptions):
         return typing.cast(typing.Optional[typing.List[RemotePodNetwork]], result)
 
     @builtins.property
+    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+        '''The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation.
+
+        This can happen in one of three situations:
+
+        - The resource is removed from the template, so CloudFormation stops managing it;
+        - A change to the resource is made that requires it to be replaced, so CloudFormation stops managing it;
+        - The stack is deleted, so CloudFormation stops managing all resources in it.
+
+        This affects the EKS cluster itself, associated IAM roles, node groups, security groups, VPC
+        and any other CloudFormation resources managed by this construct.
+
+        :default: - Resources will be deleted.
+        '''
+        result = self._values.get("removal_policy")
+        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+
+    @builtins.property
     def secrets_encryption_key(self) -> typing.Optional[_IKeyRef_1e82344b]:
         '''KMS secret for envelope encryption for Kubernetes secrets.
 
@@ -21463,6 +21512,7 @@ class ClusterOptions(CommonClusterOptions):
         "prune": "prune",
         "remote_node_networks": "remoteNodeNetworks",
         "remote_pod_networks": "remotePodNetworks",
+        "removal_policy": "removalPolicy",
         "secrets_encryption_key": "secretsEncryptionKey",
         "service_ipv4_cidr": "serviceIpv4Cidr",
         "bootstrap_cluster_creator_admin_permissions": "bootstrapClusterCreatorAdminPermissions",
@@ -21505,6 +21555,7 @@ class ClusterProps(ClusterOptions):
         prune: typing.Optional[builtins.bool] = None,
         remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
         remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         secrets_encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
         service_ipv4_cidr: typing.Optional[builtins.str] = None,
         bootstrap_cluster_creator_admin_permissions: typing.Optional[builtins.bool] = None,
@@ -21544,6 +21595,7 @@ class ClusterProps(ClusterOptions):
         :param prune: Indicates whether Kubernetes resources added through ``addManifest()`` can be automatically pruned. When this is enabled (default), prune labels will be allocated and injected to each resource. These labels will then be used when issuing the ``kubectl apply`` operation with the ``--prune`` switch. Default: true
         :param remote_node_networks: IPv4 CIDR blocks defining the expected address range of hybrid nodes that will join the cluster. Default: - none
         :param remote_pod_networks: IPv4 CIDR blocks for Pods running Kubernetes webhooks on hybrid nodes. Default: - none
+        :param removal_policy: The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation. This can happen in one of three situations: - The resource is removed from the template, so CloudFormation stops managing it; - A change to the resource is made that requires it to be replaced, so CloudFormation stops managing it; - The stack is deleted, so CloudFormation stops managing all resources in it. This affects the EKS cluster itself, associated IAM roles, node groups, security groups, VPC and any other CloudFormation resources managed by this construct. Default: - Resources will be deleted.
         :param secrets_encryption_key: KMS secret for envelope encryption for Kubernetes secrets. Default: - By default, Kubernetes stores all secret object data within etcd and all etcd volumes used by Amazon EKS are encrypted at the disk-level using AWS-Managed encryption keys.
         :param service_ipv4_cidr: The CIDR block to assign Kubernetes service IP addresses from. Default: - Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks
         :param bootstrap_cluster_creator_admin_permissions: Whether or not IAM principal of the cluster creator was set as a cluster admin access entry during cluster creation time. Changing this value after the cluster has been created will result in the cluster being replaced. Default: true
@@ -21606,6 +21658,7 @@ class ClusterProps(ClusterOptions):
             check_type(argname="argument prune", value=prune, expected_type=type_hints["prune"])
             check_type(argname="argument remote_node_networks", value=remote_node_networks, expected_type=type_hints["remote_node_networks"])
             check_type(argname="argument remote_pod_networks", value=remote_pod_networks, expected_type=type_hints["remote_pod_networks"])
+            check_type(argname="argument removal_policy", value=removal_policy, expected_type=type_hints["removal_policy"])
             check_type(argname="argument secrets_encryption_key", value=secrets_encryption_key, expected_type=type_hints["secrets_encryption_key"])
             check_type(argname="argument service_ipv4_cidr", value=service_ipv4_cidr, expected_type=type_hints["service_ipv4_cidr"])
             check_type(argname="argument bootstrap_cluster_creator_admin_permissions", value=bootstrap_cluster_creator_admin_permissions, expected_type=type_hints["bootstrap_cluster_creator_admin_permissions"])
@@ -21669,6 +21722,8 @@ class ClusterProps(ClusterOptions):
             self._values["remote_node_networks"] = remote_node_networks
         if remote_pod_networks is not None:
             self._values["remote_pod_networks"] = remote_pod_networks
+        if removal_policy is not None:
+            self._values["removal_policy"] = removal_policy
         if secrets_encryption_key is not None:
             self._values["secrets_encryption_key"] = secrets_encryption_key
         if service_ipv4_cidr is not None:
@@ -21992,6 +22047,24 @@ class ClusterProps(ClusterOptions):
         return typing.cast(typing.Optional[typing.List[RemotePodNetwork]], result)
 
     @builtins.property
+    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+        '''The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation.
+
+        This can happen in one of three situations:
+
+        - The resource is removed from the template, so CloudFormation stops managing it;
+        - A change to the resource is made that requires it to be replaced, so CloudFormation stops managing it;
+        - The stack is deleted, so CloudFormation stops managing all resources in it.
+
+        This affects the EKS cluster itself, associated IAM roles, node groups, security groups, VPC
+        and any other CloudFormation resources managed by this construct.
+
+        :default: - Resources will be deleted.
+        '''
+        result = self._values.get("removal_policy")
+        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+
+    @builtins.property
     def secrets_encryption_key(self) -> typing.Optional[_IKeyRef_1e82344b]:
         '''KMS secret for envelope encryption for Kubernetes secrets.
 
@@ -22160,6 +22233,7 @@ class FargateCluster(
         prune: typing.Optional[builtins.bool] = None,
         remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
         remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         secrets_encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
         service_ipv4_cidr: typing.Optional[builtins.str] = None,
         version: KubernetesVersion,
@@ -22194,6 +22268,7 @@ class FargateCluster(
         :param prune: Indicates whether Kubernetes resources added through ``addManifest()`` can be automatically pruned. When this is enabled (default), prune labels will be allocated and injected to each resource. These labels will then be used when issuing the ``kubectl apply`` operation with the ``--prune`` switch. Default: true
         :param remote_node_networks: IPv4 CIDR blocks defining the expected address range of hybrid nodes that will join the cluster. Default: - none
         :param remote_pod_networks: IPv4 CIDR blocks for Pods running Kubernetes webhooks on hybrid nodes. Default: - none
+        :param removal_policy: The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation. This can happen in one of three situations: - The resource is removed from the template, so CloudFormation stops managing it; - A change to the resource is made that requires it to be replaced, so CloudFormation stops managing it; - The stack is deleted, so CloudFormation stops managing all resources in it. This affects the EKS cluster itself, associated IAM roles, node groups, security groups, VPC and any other CloudFormation resources managed by this construct. Default: - Resources will be deleted.
         :param secrets_encryption_key: KMS secret for envelope encryption for Kubernetes secrets. Default: - By default, Kubernetes stores all secret object data within etcd and all etcd volumes used by Amazon EKS are encrypted at the disk-level using AWS-Managed encryption keys.
         :param service_ipv4_cidr: The CIDR block to assign Kubernetes service IP addresses from. Default: - Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks
         :param version: The Kubernetes version to run in the cluster.
@@ -22230,6 +22305,7 @@ class FargateCluster(
             prune=prune,
             remote_node_networks=remote_node_networks,
             remote_pod_networks=remote_pod_networks,
+            removal_policy=removal_policy,
             secrets_encryption_key=secrets_encryption_key,
             service_ipv4_cidr=service_ipv4_cidr,
             version=version,
@@ -22288,6 +22364,7 @@ class FargateCluster(
         "prune": "prune",
         "remote_node_networks": "remoteNodeNetworks",
         "remote_pod_networks": "remotePodNetworks",
+        "removal_policy": "removalPolicy",
         "secrets_encryption_key": "secretsEncryptionKey",
         "service_ipv4_cidr": "serviceIpv4Cidr",
         "default_profile": "defaultProfile",
@@ -22324,6 +22401,7 @@ class FargateClusterProps(ClusterOptions):
         prune: typing.Optional[builtins.bool] = None,
         remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
         remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         secrets_encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
         service_ipv4_cidr: typing.Optional[builtins.str] = None,
         default_profile: typing.Optional[typing.Union[FargateProfileOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -22357,6 +22435,7 @@ class FargateClusterProps(ClusterOptions):
         :param prune: Indicates whether Kubernetes resources added through ``addManifest()`` can be automatically pruned. When this is enabled (default), prune labels will be allocated and injected to each resource. These labels will then be used when issuing the ``kubectl apply`` operation with the ``--prune`` switch. Default: true
         :param remote_node_networks: IPv4 CIDR blocks defining the expected address range of hybrid nodes that will join the cluster. Default: - none
         :param remote_pod_networks: IPv4 CIDR blocks for Pods running Kubernetes webhooks on hybrid nodes. Default: - none
+        :param removal_policy: The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation. This can happen in one of three situations: - The resource is removed from the template, so CloudFormation stops managing it; - A change to the resource is made that requires it to be replaced, so CloudFormation stops managing it; - The stack is deleted, so CloudFormation stops managing all resources in it. This affects the EKS cluster itself, associated IAM roles, node groups, security groups, VPC and any other CloudFormation resources managed by this construct. Default: - Resources will be deleted.
         :param secrets_encryption_key: KMS secret for envelope encryption for Kubernetes secrets. Default: - By default, Kubernetes stores all secret object data within etcd and all etcd volumes used by Amazon EKS are encrypted at the disk-level using AWS-Managed encryption keys.
         :param service_ipv4_cidr: The CIDR block to assign Kubernetes service IP addresses from. Default: - Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks
         :param default_profile: Fargate Profile to create along with the cluster. Default: - A profile called "default" with 'default' and 'kube-system' selectors will be created if this is left undefined.
@@ -22406,6 +22485,7 @@ class FargateClusterProps(ClusterOptions):
             check_type(argname="argument prune", value=prune, expected_type=type_hints["prune"])
             check_type(argname="argument remote_node_networks", value=remote_node_networks, expected_type=type_hints["remote_node_networks"])
             check_type(argname="argument remote_pod_networks", value=remote_pod_networks, expected_type=type_hints["remote_pod_networks"])
+            check_type(argname="argument removal_policy", value=removal_policy, expected_type=type_hints["removal_policy"])
             check_type(argname="argument secrets_encryption_key", value=secrets_encryption_key, expected_type=type_hints["secrets_encryption_key"])
             check_type(argname="argument service_ipv4_cidr", value=service_ipv4_cidr, expected_type=type_hints["service_ipv4_cidr"])
             check_type(argname="argument default_profile", value=default_profile, expected_type=type_hints["default_profile"])
@@ -22463,6 +22543,8 @@ class FargateClusterProps(ClusterOptions):
             self._values["remote_node_networks"] = remote_node_networks
         if remote_pod_networks is not None:
             self._values["remote_pod_networks"] = remote_pod_networks
+        if removal_policy is not None:
+            self._values["removal_policy"] = removal_policy
         if secrets_encryption_key is not None:
             self._values["secrets_encryption_key"] = secrets_encryption_key
         if service_ipv4_cidr is not None:
@@ -22772,6 +22854,24 @@ class FargateClusterProps(ClusterOptions):
         '''
         result = self._values.get("remote_pod_networks")
         return typing.cast(typing.Optional[typing.List[RemotePodNetwork]], result)
+
+    @builtins.property
+    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+        '''The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation.
+
+        This can happen in one of three situations:
+
+        - The resource is removed from the template, so CloudFormation stops managing it;
+        - A change to the resource is made that requires it to be replaced, so CloudFormation stops managing it;
+        - The stack is deleted, so CloudFormation stops managing all resources in it.
+
+        This affects the EKS cluster itself, associated IAM roles, node groups, security groups, VPC
+        and any other CloudFormation resources managed by this construct.
+
+        :default: - Resources will be deleted.
+        '''
+        result = self._values.get("removal_policy")
+        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
 
     @builtins.property
     def secrets_encryption_key(self) -> typing.Optional[_IKeyRef_1e82344b]:
@@ -25046,6 +25146,7 @@ def _typecheckingstub__786576ad54eacdb9ab8e92277c0fd07f813bc56d4243937f3b5a85c0c
     prune: typing.Optional[builtins.bool] = None,
     remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
     remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
+    removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     secrets_encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
     service_ipv4_cidr: typing.Optional[builtins.str] = None,
     version: KubernetesVersion,
@@ -25286,6 +25387,7 @@ def _typecheckingstub__0b45b97fda36b43e872f90f9fe4cde65de855b50b3acfd236c1f400ef
     prune: typing.Optional[builtins.bool] = None,
     remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
     remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
+    removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     secrets_encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
     service_ipv4_cidr: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -25321,6 +25423,7 @@ def _typecheckingstub__ce7a73a63de29ba5e5b5cd5cabde7aca1c4bc7d119de52fc4c0f11d99
     prune: typing.Optional[builtins.bool] = None,
     remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
     remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
+    removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     secrets_encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
     service_ipv4_cidr: typing.Optional[builtins.str] = None,
     bootstrap_cluster_creator_admin_permissions: typing.Optional[builtins.bool] = None,
@@ -25358,6 +25461,7 @@ def _typecheckingstub__ae166d791f5d5176f3386726c22bc44afedf5d336437a3513e3740387
     prune: typing.Optional[builtins.bool] = None,
     remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
     remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
+    removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     secrets_encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
     service_ipv4_cidr: typing.Optional[builtins.str] = None,
     version: KubernetesVersion,
@@ -25401,6 +25505,7 @@ def _typecheckingstub__f11c7f989209f6213cb855d2846bb0b2b79a6a2b85eb0d65939e981df
     prune: typing.Optional[builtins.bool] = None,
     remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
     remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
+    removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     secrets_encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
     service_ipv4_cidr: typing.Optional[builtins.str] = None,
     default_profile: typing.Optional[typing.Union[FargateProfileOptions, typing.Dict[builtins.str, typing.Any]]] = None,

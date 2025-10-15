@@ -486,7 +486,7 @@ metric = cloudwatch.Metric(
     namespace="AWS/EC2",
     metric_name="CPUUtilization",
     statistic="Average",
-    period=Duration.minutes(5)
+    period=Duration.hours(1)
 )
 
 # Create an anomaly detection alarm
@@ -1635,7 +1635,7 @@ class AnomalyDetectionAlarmProps:
                 namespace="AWS/EC2",
                 metric_name="CPUUtilization",
                 statistic="Average",
-                period=Duration.minutes(5)
+                period=Duration.hours(1)
             )
             
             # Create an anomaly detection alarm
@@ -6616,7 +6616,7 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
             namespace="AWS/EC2",
             metric_name="CPUUtilization",
             statistic="Average",
-            period=Duration.minutes(5)
+            period=Duration.hours(1)
         )
         
         # Create an anomaly detection alarm
@@ -7578,7 +7578,7 @@ class MetricProps(CommonMetricOptions):
                 namespace="AWS/EC2",
                 metric_name="CPUUtilization",
                 statistic="Average",
-                period=Duration.minutes(5)
+                period=Duration.hours(1)
             )
             
             # Create an anomaly detection alarm
@@ -17444,7 +17444,7 @@ class AnomalyDetectionAlarm(
             namespace="AWS/EC2",
             metric_name="CPUUtilization",
             statistic="Average",
-            period=Duration.minutes(5)
+            period=Duration.hours(1)
         )
         
         # Create an anomaly detection alarm

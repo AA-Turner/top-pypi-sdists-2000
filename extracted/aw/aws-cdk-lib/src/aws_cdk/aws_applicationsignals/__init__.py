@@ -114,6 +114,71 @@ class CfnDiscoveryProps:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_applicationsignals.CfnGroupingConfigurationProps",
+    jsii_struct_bases=[],
+    name_mapping={"grouping_attribute_definitions": "groupingAttributeDefinitions"},
+)
+class CfnGroupingConfigurationProps:
+    def __init__(
+        self,
+        *,
+        grouping_attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroupingConfiguration.GroupingAttributeDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+    ) -> None:
+        '''Properties for defining a ``CfnGroupingConfiguration``.
+
+        :param grouping_attribute_definitions: An array of grouping attribute definitions that specify how services should be grouped based on various attributes and source keys.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-groupingconfiguration.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_applicationsignals as applicationsignals
+            
+            cfn_grouping_configuration_props = applicationsignals.CfnGroupingConfigurationProps(
+                grouping_attribute_definitions=[applicationsignals.CfnGroupingConfiguration.GroupingAttributeDefinitionProperty(
+                    grouping_name="groupingName",
+                    grouping_source_keys=["groupingSourceKeys"],
+            
+                    # the properties below are optional
+                    default_grouping_value="defaultGroupingValue"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f1092a665e6fb60575de2d22516416485dc448d30b228f509e488593e009ff91)
+            check_type(argname="argument grouping_attribute_definitions", value=grouping_attribute_definitions, expected_type=type_hints["grouping_attribute_definitions"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "grouping_attribute_definitions": grouping_attribute_definitions,
+        }
+
+    @builtins.property
+    def grouping_attribute_definitions(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroupingConfiguration.GroupingAttributeDefinitionProperty"]]]:
+        '''An array of grouping attribute definitions that specify how services should be grouped based on various attributes and source keys.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-groupingconfiguration.html#cfn-applicationsignals-groupingconfiguration-groupingattributedefinitions
+        '''
+        result = self._values.get("grouping_attribute_definitions")
+        assert result is not None, "Required property 'grouping_attribute_definitions' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroupingConfiguration.GroupingAttributeDefinitionProperty"]]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnGroupingConfigurationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_applicationsignals.CfnServiceLevelObjectiveProps",
     jsii_struct_bases=[],
     name_mapping={
@@ -516,6 +581,55 @@ class DiscoveryReference:
         )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_applicationsignals.GroupingConfigurationReference",
+    jsii_struct_bases=[],
+    name_mapping={"account_id": "accountId"},
+)
+class GroupingConfigurationReference:
+    def __init__(self, *, account_id: builtins.str) -> None:
+        '''A reference to a GroupingConfiguration resource.
+
+        :param account_id: The AccountId of the GroupingConfiguration resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_applicationsignals as applicationsignals
+            
+            grouping_configuration_reference = applicationsignals.GroupingConfigurationReference(
+                account_id="accountId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ae567aeddbe652faa360c59707e41b9c2af35fb469b410ba0b525e8b848a24cf)
+            check_type(argname="argument account_id", value=account_id, expected_type=type_hints["account_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "account_id": account_id,
+        }
+
+    @builtins.property
+    def account_id(self) -> builtins.str:
+        '''The AccountId of the GroupingConfiguration resource.'''
+        result = self._values.get("account_id")
+        assert result is not None, "Required property 'account_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "GroupingConfigurationReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_applicationsignals.IDiscoveryRef")
 class IDiscoveryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
     '''(experimental) Indicates that this resource can be referenced as a Discovery.
@@ -554,6 +668,51 @@ class _IDiscoveryRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDiscoveryRef).__jsii_proxy_class__ = lambda : _IDiscoveryRefProxy
+
+
+@jsii.interface(
+    jsii_type="aws-cdk-lib.aws_applicationsignals.IGroupingConfigurationRef"
+)
+class IGroupingConfigurationRef(
+    _constructs_77d1e7e8.IConstruct,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a GroupingConfiguration.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="groupingConfigurationRef")
+    def grouping_configuration_ref(self) -> GroupingConfigurationReference:
+        '''(experimental) A reference to a GroupingConfiguration resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IGroupingConfigurationRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a GroupingConfiguration.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_applicationsignals.IGroupingConfigurationRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="groupingConfigurationRef")
+    def grouping_configuration_ref(self) -> GroupingConfigurationReference:
+        '''(experimental) A reference to a GroupingConfiguration resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(GroupingConfigurationReference, jsii.get(self, "groupingConfigurationRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IGroupingConfigurationRef).__jsii_proxy_class__ = lambda : _IGroupingConfigurationRefProxy
 
 
 @jsii.interface(
@@ -656,9 +815,11 @@ class CfnDiscovery(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_applicationsignals.CfnDiscovery",
 ):
-    '''Enables this AWS account to be able to use CloudWatch Application Signals by creating the ``AWSServiceRoleForCloudWatchApplicationSignals`` service-linked role.
+    '''.. epigraph::
 
-    This service-linked role has the following permissions:
+   If you have existing ``AWS::ApplicationSignals::Discovery`` resources that were created prior to the Application Map release, you will need to delete and recreate these resources in your account to enable Application Map.
+
+    Enables this AWS account to be able to use CloudWatch Application Signals by creating the ``AWSServiceRoleForCloudWatchApplicationSignals`` service-linked role. This service-linked role has the following permissions:
 
     - ``xray:GetServiceGraph``
     - ``logs:StartQuery``
@@ -667,6 +828,8 @@ class CfnDiscovery(
     - ``cloudwatch:ListMetrics``
     - ``tag:GetResources``
     - ``autoscaling:DescribeAutoScalingGroups``
+
+    A service-linked CloudTrail event channel is created to process CloudTrail events and return change event information. This includes last deployment time, userName, eventName, and other event metadata.
 
     After completing this step, you still need to instrument your Java and Python applications to send data to Application Signals. For more information, see `Enabling Application Signals <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Application-Signals-Enable.html>`_ .
 
@@ -745,6 +908,237 @@ class CfnDiscovery(
     def discovery_ref(self) -> DiscoveryReference:
         '''A reference to a Discovery resource.'''
         return typing.cast(DiscoveryReference, jsii.get(self, "discoveryRef"))
+
+
+@jsii.implements(_IInspectable_c2943556, IGroupingConfigurationRef)
+class CfnGroupingConfiguration(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_applicationsignals.CfnGroupingConfiguration",
+):
+    '''A structure that contains the complete grouping configuration for an account, including all defined grouping attributes and metadata about when it was last updated.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-groupingconfiguration.html
+    :cloudformationResource: AWS::ApplicationSignals::GroupingConfiguration
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_applicationsignals as applicationsignals
+        
+        cfn_grouping_configuration = applicationsignals.CfnGroupingConfiguration(self, "MyCfnGroupingConfiguration",
+            grouping_attribute_definitions=[applicationsignals.CfnGroupingConfiguration.GroupingAttributeDefinitionProperty(
+                grouping_name="groupingName",
+                grouping_source_keys=["groupingSourceKeys"],
+        
+                # the properties below are optional
+                default_grouping_value="defaultGroupingValue"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        grouping_attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroupingConfiguration.GroupingAttributeDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param grouping_attribute_definitions: An array of grouping attribute definitions that specify how services should be grouped based on various attributes and source keys.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__55532ed92820a19cd89fdea2459ad5e1c62c57066396013b794bd07c6ac99dc7)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnGroupingConfigurationProps(
+            grouping_attribute_definitions=grouping_attribute_definitions
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2a3e17541436550f60b4791ec84a0a3f55e01116438640d7611729b4a57c83f2)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cda9952303bd2ef359ba71cc1d51f0cf288102f05b353d4815dc5d37feca2339)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrAccountId")
+    def attr_account_id(self) -> builtins.str:
+        '''The identifier for the specified AWS account.
+
+        :cloudformationAttribute: AccountId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrAccountId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrUpdatedAt")
+    def attr_updated_at(self) -> builtins.str:
+        '''The timestamp when this grouping configuration was last updated.
+
+        When used in a raw HTTP Query API, it is formatted as epoch time in seconds.
+
+        :cloudformationAttribute: UpdatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrUpdatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="groupingConfigurationRef")
+    def grouping_configuration_ref(self) -> GroupingConfigurationReference:
+        '''A reference to a GroupingConfiguration resource.'''
+        return typing.cast(GroupingConfigurationReference, jsii.get(self, "groupingConfigurationRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="groupingAttributeDefinitions")
+    def grouping_attribute_definitions(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroupingConfiguration.GroupingAttributeDefinitionProperty"]]]:
+        '''An array of grouping attribute definitions that specify how services should be grouped based on various attributes and source keys.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroupingConfiguration.GroupingAttributeDefinitionProperty"]]], jsii.get(self, "groupingAttributeDefinitions"))
+
+    @grouping_attribute_definitions.setter
+    def grouping_attribute_definitions(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroupingConfiguration.GroupingAttributeDefinitionProperty"]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7d78d0fae36bb4fcb95bd95998dbc65997f7d545af59f216256213408c4f30f2)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "groupingAttributeDefinitions", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_applicationsignals.CfnGroupingConfiguration.GroupingAttributeDefinitionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "grouping_name": "groupingName",
+            "grouping_source_keys": "groupingSourceKeys",
+            "default_grouping_value": "defaultGroupingValue",
+        },
+    )
+    class GroupingAttributeDefinitionProperty:
+        def __init__(
+            self,
+            *,
+            grouping_name: builtins.str,
+            grouping_source_keys: typing.Sequence[builtins.str],
+            default_grouping_value: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''A structure that defines how services should be grouped based on specific attributes.
+
+            This includes the friendly name for the grouping, the source keys to derive values from, and an optional default value.
+
+            :param grouping_name: The friendly name for this grouping attribute, such as ``BusinessUnit`` or ``Environment`` . This name is used to identify the grouping in the console and APIs.
+            :param grouping_source_keys: An array of source keys used to derive the grouping attribute value from telemetry data, AWS tags, or other sources. For example, ["business_unit", "team"] would look for values in those fields.
+            :param default_grouping_value: The default value to use for this grouping attribute when no value can be derived from the source keys. This ensures all services have a grouping value even if the source data is missing.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationsignals-groupingconfiguration-groupingattributedefinition.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_applicationsignals as applicationsignals
+                
+                grouping_attribute_definition_property = applicationsignals.CfnGroupingConfiguration.GroupingAttributeDefinitionProperty(
+                    grouping_name="groupingName",
+                    grouping_source_keys=["groupingSourceKeys"],
+                
+                    # the properties below are optional
+                    default_grouping_value="defaultGroupingValue"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4809aa4639bc02468e9643d2a4f1a9e5305f3985a02486a04a21025dc2913b23)
+                check_type(argname="argument grouping_name", value=grouping_name, expected_type=type_hints["grouping_name"])
+                check_type(argname="argument grouping_source_keys", value=grouping_source_keys, expected_type=type_hints["grouping_source_keys"])
+                check_type(argname="argument default_grouping_value", value=default_grouping_value, expected_type=type_hints["default_grouping_value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "grouping_name": grouping_name,
+                "grouping_source_keys": grouping_source_keys,
+            }
+            if default_grouping_value is not None:
+                self._values["default_grouping_value"] = default_grouping_value
+
+        @builtins.property
+        def grouping_name(self) -> builtins.str:
+            '''The friendly name for this grouping attribute, such as ``BusinessUnit`` or ``Environment`` .
+
+            This name is used to identify the grouping in the console and APIs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationsignals-groupingconfiguration-groupingattributedefinition.html#cfn-applicationsignals-groupingconfiguration-groupingattributedefinition-groupingname
+            '''
+            result = self._values.get("grouping_name")
+            assert result is not None, "Required property 'grouping_name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def grouping_source_keys(self) -> typing.List[builtins.str]:
+            '''An array of source keys used to derive the grouping attribute value from telemetry data, AWS tags, or other sources.
+
+            For example, ["business_unit", "team"] would look for values in those fields.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationsignals-groupingconfiguration-groupingattributedefinition.html#cfn-applicationsignals-groupingconfiguration-groupingattributedefinition-groupingsourcekeys
+            '''
+            result = self._values.get("grouping_source_keys")
+            assert result is not None, "Required property 'grouping_source_keys' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def default_grouping_value(self) -> typing.Optional[builtins.str]:
+            '''The default value to use for this grouping attribute when no value can be derived from the source keys.
+
+            This ensures all services have a grouping value even if the source data is missing.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationsignals-groupingconfiguration-groupingattributedefinition.html#cfn-applicationsignals-groupingconfiguration-groupingattributedefinition-defaultgroupingvalue
+            '''
+            result = self._values.get("default_grouping_value")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "GroupingAttributeDefinitionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
 
 @jsii.implements(_IInspectable_c2943556, IServiceLevelObjectiveRef, _ITaggableV2_4e6798f8)
@@ -3321,15 +3715,26 @@ class CfnServiceLevelObjective(
 __all__ = [
     "CfnDiscovery",
     "CfnDiscoveryProps",
+    "CfnGroupingConfiguration",
+    "CfnGroupingConfigurationProps",
     "CfnServiceLevelObjective",
     "CfnServiceLevelObjectiveProps",
     "DiscoveryReference",
+    "GroupingConfigurationReference",
     "IDiscoveryRef",
+    "IGroupingConfigurationRef",
     "IServiceLevelObjectiveRef",
     "ServiceLevelObjectiveReference",
 ]
 
 publication.publish()
+
+def _typecheckingstub__f1092a665e6fb60575de2d22516416485dc448d30b228f509e488593e009ff91(
+    *,
+    grouping_attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroupingConfiguration.GroupingAttributeDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
 
 def _typecheckingstub__8a302456885343cc9ce5e0497feed773de1ef0f44e2934f97458bfdc5a810dee(
     *,
@@ -3346,6 +3751,13 @@ def _typecheckingstub__8a302456885343cc9ce5e0497feed773de1ef0f44e2934f97458bfdc5
     pass
 
 def _typecheckingstub__3ae2bd86b52b8376135e6a0403bddad426628a9251837d98b72330906f2e84b9(
+    *,
+    account_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ae567aeddbe652faa360c59707e41b9c2af35fb469b410ba0b525e8b848a24cf(
     *,
     account_id: builtins.str,
 ) -> None:
@@ -3374,6 +3786,42 @@ def _typecheckingstub__169149a48e72c8ecdaddbc89a3281a63982fa5a6a224a652a20963505
 
 def _typecheckingstub__eb458e3d0e3086df3dd6729e5a3b2db446683118361abbfeb5b60c322d39396e(
     props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__55532ed92820a19cd89fdea2459ad5e1c62c57066396013b794bd07c6ac99dc7(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    grouping_attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroupingConfiguration.GroupingAttributeDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2a3e17541436550f60b4791ec84a0a3f55e01116438640d7611729b4a57c83f2(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cda9952303bd2ef359ba71cc1d51f0cf288102f05b353d4815dc5d37feca2339(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7d78d0fae36bb4fcb95bd95998dbc65997f7d545af59f216256213408c4f30f2(
+    value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGroupingConfiguration.GroupingAttributeDefinitionProperty]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4809aa4639bc02468e9643d2a4f1a9e5305f3985a02486a04a21025dc2913b23(
+    *,
+    grouping_name: builtins.str,
+    grouping_source_keys: typing.Sequence[builtins.str],
+    default_grouping_value: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

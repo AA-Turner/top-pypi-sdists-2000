@@ -789,6 +789,7 @@ class CfnDistributionConfigurationProps:
         "image_recipe_arn": "imageRecipeArn",
         "image_scanning_configuration": "imageScanningConfiguration",
         "image_tests_configuration": "imageTestsConfiguration",
+        "logging_configuration": "loggingConfiguration",
         "schedule": "schedule",
         "status": "status",
         "tags": "tags",
@@ -809,6 +810,7 @@ class CfnImagePipelineProps:
         image_recipe_arn: typing.Optional[builtins.str] = None,
         image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.ImageTestsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.PipelineLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         status: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -826,6 +828,7 @@ class CfnImagePipelineProps:
         :param image_recipe_arn: The Amazon Resource Name (ARN) of the image recipe associated with this image pipeline.
         :param image_scanning_configuration: Contains settings for vulnerability scans.
         :param image_tests_configuration: The configuration of the image tests that run after image creation to ensure the quality of the image that was created.
+        :param logging_configuration: Defines logging configuration for the output image.
         :param schedule: The schedule of the image pipeline. A schedule configures how often and when a pipeline automatically creates a new image.
         :param status: The status of the image pipeline.
         :param tags: The tags of this image pipeline.
@@ -862,7 +865,14 @@ class CfnImagePipelineProps:
                     image_tests_enabled=False,
                     timeout_minutes=123
                 ),
+                logging_configuration=imagebuilder.CfnImagePipeline.PipelineLoggingConfigurationProperty(
+                    image_log_group_name="imageLogGroupName",
+                    pipeline_log_group_name="pipelineLogGroupName"
+                ),
                 schedule=imagebuilder.CfnImagePipeline.ScheduleProperty(
+                    auto_disable_policy=imagebuilder.CfnImagePipeline.AutoDisablePolicyProperty(
+                        failure_count=123
+                    ),
                     pipeline_execution_start_condition="pipelineExecutionStartCondition",
                     schedule_expression="scheduleExpression"
                 ),
@@ -893,6 +903,7 @@ class CfnImagePipelineProps:
             check_type(argname="argument image_recipe_arn", value=image_recipe_arn, expected_type=type_hints["image_recipe_arn"])
             check_type(argname="argument image_scanning_configuration", value=image_scanning_configuration, expected_type=type_hints["image_scanning_configuration"])
             check_type(argname="argument image_tests_configuration", value=image_tests_configuration, expected_type=type_hints["image_tests_configuration"])
+            check_type(argname="argument logging_configuration", value=logging_configuration, expected_type=type_hints["logging_configuration"])
             check_type(argname="argument schedule", value=schedule, expected_type=type_hints["schedule"])
             check_type(argname="argument status", value=status, expected_type=type_hints["status"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -917,6 +928,8 @@ class CfnImagePipelineProps:
             self._values["image_scanning_configuration"] = image_scanning_configuration
         if image_tests_configuration is not None:
             self._values["image_tests_configuration"] = image_tests_configuration
+        if logging_configuration is not None:
+            self._values["logging_configuration"] = logging_configuration
         if schedule is not None:
             self._values["schedule"] = schedule
         if status is not None:
@@ -1027,6 +1040,17 @@ class CfnImagePipelineProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImagePipeline.ImageTestsConfigurationProperty"]], result)
 
     @builtins.property
+    def logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImagePipeline.PipelineLoggingConfigurationProperty"]]:
+        '''Defines logging configuration for the output image.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagepipeline.html#cfn-imagebuilder-imagepipeline-loggingconfiguration
+        '''
+        result = self._values.get("logging_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImagePipeline.PipelineLoggingConfigurationProperty"]], result)
+
+    @builtins.property
     def schedule(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImagePipeline.ScheduleProperty"]]:
@@ -1092,6 +1116,7 @@ class CfnImagePipelineProps:
         "image_scanning_configuration": "imageScanningConfiguration",
         "image_tests_configuration": "imageTestsConfiguration",
         "infrastructure_configuration_arn": "infrastructureConfigurationArn",
+        "logging_configuration": "loggingConfiguration",
         "tags": "tags",
         "workflows": "workflows",
     },
@@ -1108,6 +1133,7 @@ class CfnImageProps:
         image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageTestsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         infrastructure_configuration_arn: typing.Optional[builtins.str] = None,
+        logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         workflows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.WorkflowConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
@@ -1121,6 +1147,7 @@ class CfnImageProps:
         :param image_scanning_configuration: Contains settings for vulnerability scans.
         :param image_tests_configuration: The image tests configuration of the image.
         :param infrastructure_configuration_arn: The Amazon Resource Name (ARN) of the infrastructure configuration that defines the environment in which your image will be built and tested.
+        :param logging_configuration: The logging configuration that's defined for the image. Image Builder uses the defined settings to direct execution log output during image creation.
         :param tags: The tags of the image.
         :param workflows: Contains an array of workflow configuration objects.
 
@@ -1151,6 +1178,9 @@ class CfnImageProps:
                     timeout_minutes=123
                 ),
                 infrastructure_configuration_arn="infrastructureConfigurationArn",
+                logging_configuration=imagebuilder.CfnImage.ImageLoggingConfigurationProperty(
+                    log_group_name="logGroupName"
+                ),
                 tags={
                     "tags_key": "tags"
                 },
@@ -1175,6 +1205,7 @@ class CfnImageProps:
             check_type(argname="argument image_scanning_configuration", value=image_scanning_configuration, expected_type=type_hints["image_scanning_configuration"])
             check_type(argname="argument image_tests_configuration", value=image_tests_configuration, expected_type=type_hints["image_tests_configuration"])
             check_type(argname="argument infrastructure_configuration_arn", value=infrastructure_configuration_arn, expected_type=type_hints["infrastructure_configuration_arn"])
+            check_type(argname="argument logging_configuration", value=logging_configuration, expected_type=type_hints["logging_configuration"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument workflows", value=workflows, expected_type=type_hints["workflows"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -1194,6 +1225,8 @@ class CfnImageProps:
             self._values["image_tests_configuration"] = image_tests_configuration
         if infrastructure_configuration_arn is not None:
             self._values["infrastructure_configuration_arn"] = infrastructure_configuration_arn
+        if logging_configuration is not None:
+            self._values["logging_configuration"] = logging_configuration
         if tags is not None:
             self._values["tags"] = tags
         if workflows is not None:
@@ -1280,6 +1313,19 @@ class CfnImageProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.ImageLoggingConfigurationProperty"]]:
+        '''The logging configuration that's defined for the image.
+
+        Image Builder uses the defined settings to direct execution log output during image creation.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-image.html#cfn-imagebuilder-image-loggingconfiguration
+        '''
+        result = self._values.get("logging_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.ImageLoggingConfigurationProperty"]], result)
+
+    @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         '''The tags of the image.
 
@@ -1320,6 +1366,7 @@ class CfnImageProps:
         "parent_image": "parentImage",
         "version": "version",
         "additional_instance_configuration": "additionalInstanceConfiguration",
+        "ami_tags": "amiTags",
         "block_device_mappings": "blockDeviceMappings",
         "description": "description",
         "tags": "tags",
@@ -1335,6 +1382,7 @@ class CfnImageRecipeProps:
         parent_image: builtins.str,
         version: builtins.str,
         additional_instance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImageRecipe.AdditionalInstanceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ami_tags: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         block_device_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImageRecipe.InstanceBlockDeviceMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -1347,6 +1395,7 @@ class CfnImageRecipeProps:
         :param parent_image: The base image for customizations specified in the image recipe. You can specify the parent image using one of the following options: - AMI ID - Image Builder image Amazon Resource Name (ARN) - AWS Systems Manager (SSM) Parameter Store Parameter, prefixed by ``ssm:`` , followed by the parameter name or ARN. - AWS Marketplace product ID
         :param version: The version of the image recipe.
         :param additional_instance_configuration: Before you create a new AMI, Image Builder launches temporary Amazon EC2 instances to build and test your image configuration. Instance configuration adds a layer of control over those instances. You can define settings and add scripts to run when an instance is launched from your AMI.
+        :param ami_tags: Tags that are applied to the AMI that Image Builder creates during the Build phase prior to image distribution.
         :param block_device_mappings: The block device mappings to apply when creating images from this recipe.
         :param description: The description of the image recipe.
         :param tags: The tags of the image recipe.
@@ -1380,6 +1429,9 @@ class CfnImageRecipeProps:
                     ),
                     user_data_override="userDataOverride"
                 ),
+                ami_tags={
+                    "ami_tags_key": "amiTags"
+                },
                 block_device_mappings=[imagebuilder.CfnImageRecipe.InstanceBlockDeviceMappingProperty(
                     device_name="deviceName",
                     ebs=imagebuilder.CfnImageRecipe.EbsInstanceBlockDeviceSpecificationProperty(
@@ -1409,6 +1461,7 @@ class CfnImageRecipeProps:
             check_type(argname="argument parent_image", value=parent_image, expected_type=type_hints["parent_image"])
             check_type(argname="argument version", value=version, expected_type=type_hints["version"])
             check_type(argname="argument additional_instance_configuration", value=additional_instance_configuration, expected_type=type_hints["additional_instance_configuration"])
+            check_type(argname="argument ami_tags", value=ami_tags, expected_type=type_hints["ami_tags"])
             check_type(argname="argument block_device_mappings", value=block_device_mappings, expected_type=type_hints["block_device_mappings"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -1421,6 +1474,8 @@ class CfnImageRecipeProps:
         }
         if additional_instance_configuration is not None:
             self._values["additional_instance_configuration"] = additional_instance_configuration
+        if ami_tags is not None:
+            self._values["ami_tags"] = ami_tags
         if block_device_mappings is not None:
             self._values["block_device_mappings"] = block_device_mappings
         if description is not None:
@@ -1493,6 +1548,17 @@ class CfnImageRecipeProps:
         '''
         result = self._values.get("additional_instance_configuration")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImageRecipe.AdditionalInstanceConfigurationProperty"]], result)
+
+    @builtins.property
+    def ami_tags(
+        self,
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        '''Tags that are applied to the AMI that Image Builder creates during the Build phase prior to image distribution.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagerecipe.html#cfn-imagebuilder-imagerecipe-amitags
+        '''
+        result = self._values.get("ami_tags")
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
 
     @builtins.property
     def block_device_mappings(
@@ -5799,6 +5865,9 @@ class CfnImage(
                 timeout_minutes=123
             ),
             infrastructure_configuration_arn="infrastructureConfigurationArn",
+            logging_configuration=imagebuilder.CfnImage.ImageLoggingConfigurationProperty(
+                log_group_name="logGroupName"
+            ),
             tags={
                 "tags_key": "tags"
             },
@@ -5827,6 +5896,7 @@ class CfnImage(
         image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageTestsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         infrastructure_configuration_arn: typing.Optional[builtins.str] = None,
+        logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         workflows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.WorkflowConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
@@ -5841,6 +5911,7 @@ class CfnImage(
         :param image_scanning_configuration: Contains settings for vulnerability scans.
         :param image_tests_configuration: The image tests configuration of the image.
         :param infrastructure_configuration_arn: The Amazon Resource Name (ARN) of the infrastructure configuration that defines the environment in which your image will be built and tested.
+        :param logging_configuration: The logging configuration that's defined for the image. Image Builder uses the defined settings to direct execution log output during image creation.
         :param tags: The tags of the image.
         :param workflows: Contains an array of workflow configuration objects.
         '''
@@ -5857,6 +5928,7 @@ class CfnImage(
             image_scanning_configuration=image_scanning_configuration,
             image_tests_configuration=image_tests_configuration,
             infrastructure_configuration_arn=infrastructure_configuration_arn,
+            logging_configuration=logging_configuration,
             tags=tags,
             workflows=workflows,
         )
@@ -6078,6 +6150,24 @@ class CfnImage(
         jsii.set(self, "infrastructureConfigurationArn", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="loggingConfiguration")
+    def logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.ImageLoggingConfigurationProperty"]]:
+        '''The logging configuration that's defined for the image.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.ImageLoggingConfigurationProperty"]], jsii.get(self, "loggingConfiguration"))
+
+    @logging_configuration.setter
+    def logging_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.ImageLoggingConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a3e3020758a024deeed0645c515a9c3a69ea5ecf40fc9a2133b40f82a94b72c2)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "loggingConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         '''The tags of the image.'''
@@ -6185,6 +6275,65 @@ class CfnImage(
 
         def __repr__(self) -> str:
             return "EcrConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImage.ImageLoggingConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"log_group_name": "logGroupName"},
+    )
+    class ImageLoggingConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            log_group_name: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The logging configuration that's defined for the image.
+
+            Image Builder uses the defined settings to direct execution log output during image creation.
+
+            :param log_group_name: The log group name that Image Builder uses for image creation. If not specified, the log group name defaults to ``/aws/imagebuilder/image-name`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-imageloggingconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_imagebuilder as imagebuilder
+                
+                image_logging_configuration_property = imagebuilder.CfnImage.ImageLoggingConfigurationProperty(
+                    log_group_name="logGroupName"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f48c0bf82989235f735b3b537ceae8bf7cbb63f48573c8a5dac03547706ff000)
+                check_type(argname="argument log_group_name", value=log_group_name, expected_type=type_hints["log_group_name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if log_group_name is not None:
+                self._values["log_group_name"] = log_group_name
+
+        @builtins.property
+        def log_group_name(self) -> typing.Optional[builtins.str]:
+            '''The log group name that Image Builder uses for image creation.
+
+            If not specified, the log group name defaults to ``/aws/imagebuilder/image-name`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-imageloggingconfiguration.html#cfn-imagebuilder-image-imageloggingconfiguration-loggroupname
+            '''
+            result = self._values.get("log_group_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ImageLoggingConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -6576,7 +6725,14 @@ class CfnImagePipeline(
                 image_tests_enabled=False,
                 timeout_minutes=123
             ),
+            logging_configuration=imagebuilder.CfnImagePipeline.PipelineLoggingConfigurationProperty(
+                image_log_group_name="imageLogGroupName",
+                pipeline_log_group_name="pipelineLogGroupName"
+            ),
             schedule=imagebuilder.CfnImagePipeline.ScheduleProperty(
+                auto_disable_policy=imagebuilder.CfnImagePipeline.AutoDisablePolicyProperty(
+                    failure_count=123
+                ),
                 pipeline_execution_start_condition="pipelineExecutionStartCondition",
                 schedule_expression="scheduleExpression"
             ),
@@ -6611,6 +6767,7 @@ class CfnImagePipeline(
         image_recipe_arn: typing.Optional[builtins.str] = None,
         image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.ImageTestsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.PipelineLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         status: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -6629,6 +6786,7 @@ class CfnImagePipeline(
         :param image_recipe_arn: The Amazon Resource Name (ARN) of the image recipe associated with this image pipeline.
         :param image_scanning_configuration: Contains settings for vulnerability scans.
         :param image_tests_configuration: The configuration of the image tests that run after image creation to ensure the quality of the image that was created.
+        :param logging_configuration: Defines logging configuration for the output image.
         :param schedule: The schedule of the image pipeline. A schedule configures how often and when a pipeline automatically creates a new image.
         :param status: The status of the image pipeline.
         :param tags: The tags of this image pipeline.
@@ -6649,6 +6807,7 @@ class CfnImagePipeline(
             image_recipe_arn=image_recipe_arn,
             image_scanning_configuration=image_scanning_configuration,
             image_tests_configuration=image_tests_configuration,
+            logging_configuration=logging_configuration,
             schedule=schedule,
             status=status,
             tags=tags,
@@ -6873,6 +7032,24 @@ class CfnImagePipeline(
         jsii.set(self, "imageTestsConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="loggingConfiguration")
+    def logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImagePipeline.PipelineLoggingConfigurationProperty"]]:
+        '''Defines logging configuration for the output image.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImagePipeline.PipelineLoggingConfigurationProperty"]], jsii.get(self, "loggingConfiguration"))
+
+    @logging_configuration.setter
+    def logging_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImagePipeline.PipelineLoggingConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fd669ff1d1a241fd9694fe5f0927bdc4b1cdbf105330ca8df7626d0785047d5e)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "loggingConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="schedule")
     def schedule(
         self,
@@ -6936,6 +7113,58 @@ class CfnImagePipeline(
             type_hints = typing.get_type_hints(_typecheckingstub__d31373519ea07e5936785c1446524bda21756ca2eb6c12f87303f5a12dc18c4f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "workflows", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImagePipeline.AutoDisablePolicyProperty",
+        jsii_struct_bases=[],
+        name_mapping={"failure_count": "failureCount"},
+    )
+    class AutoDisablePolicyProperty:
+        def __init__(self, *, failure_count: jsii.Number) -> None:
+            '''Defines the rules by which an image pipeline is automatically disabled when it fails.
+
+            :param failure_count: The number of consecutive scheduled image pipeline executions that must fail before Image Builder automatically disables the pipeline.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagepipeline-autodisablepolicy.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_imagebuilder as imagebuilder
+                
+                auto_disable_policy_property = imagebuilder.CfnImagePipeline.AutoDisablePolicyProperty(
+                    failure_count=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__69b844c16b5b7fe86f960e35030a259ca786bf1c7c25272436fa39cdc264de05)
+                check_type(argname="argument failure_count", value=failure_count, expected_type=type_hints["failure_count"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "failure_count": failure_count,
+            }
+
+        @builtins.property
+        def failure_count(self) -> jsii.Number:
+            '''The number of consecutive scheduled image pipeline executions that must fail before Image Builder automatically disables the pipeline.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagepipeline-autodisablepolicy.html#cfn-imagebuilder-imagepipeline-autodisablepolicy-failurecount
+            '''
+            result = self._values.get("failure_count")
+            assert result is not None, "Required property 'failure_count' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AutoDisablePolicyProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImagePipeline.EcrConfigurationProperty",
@@ -7178,9 +7407,87 @@ class CfnImagePipeline(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImagePipeline.PipelineLoggingConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "image_log_group_name": "imageLogGroupName",
+            "pipeline_log_group_name": "pipelineLogGroupName",
+        },
+    )
+    class PipelineLoggingConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            image_log_group_name: typing.Optional[builtins.str] = None,
+            pipeline_log_group_name: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The logging configuration that's defined for pipeline execution.
+
+            :param image_log_group_name: The log group name that Image Builder uses for image creation. If not specified, the log group name defaults to ``/aws/imagebuilder/image-name`` .
+            :param pipeline_log_group_name: The log group name that Image Builder uses for the log output during creation of a new pipeline. If not specified, the pipeline log group name defaults to ``/aws/imagebuilder/pipeline/pipeline-name`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagepipeline-pipelineloggingconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_imagebuilder as imagebuilder
+                
+                pipeline_logging_configuration_property = imagebuilder.CfnImagePipeline.PipelineLoggingConfigurationProperty(
+                    image_log_group_name="imageLogGroupName",
+                    pipeline_log_group_name="pipelineLogGroupName"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2af353350682d5947ff1643b9bf2422511eaee659a470f07d53aac235328167a)
+                check_type(argname="argument image_log_group_name", value=image_log_group_name, expected_type=type_hints["image_log_group_name"])
+                check_type(argname="argument pipeline_log_group_name", value=pipeline_log_group_name, expected_type=type_hints["pipeline_log_group_name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if image_log_group_name is not None:
+                self._values["image_log_group_name"] = image_log_group_name
+            if pipeline_log_group_name is not None:
+                self._values["pipeline_log_group_name"] = pipeline_log_group_name
+
+        @builtins.property
+        def image_log_group_name(self) -> typing.Optional[builtins.str]:
+            '''The log group name that Image Builder uses for image creation.
+
+            If not specified, the log group name defaults to ``/aws/imagebuilder/image-name`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagepipeline-pipelineloggingconfiguration.html#cfn-imagebuilder-imagepipeline-pipelineloggingconfiguration-imageloggroupname
+            '''
+            result = self._values.get("image_log_group_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def pipeline_log_group_name(self) -> typing.Optional[builtins.str]:
+            '''The log group name that Image Builder uses for the log output during creation of a new pipeline.
+
+            If not specified, the pipeline log group name defaults to ``/aws/imagebuilder/pipeline/pipeline-name`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagepipeline-pipelineloggingconfiguration.html#cfn-imagebuilder-imagepipeline-pipelineloggingconfiguration-pipelineloggroupname
+            '''
+            result = self._values.get("pipeline_log_group_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "PipelineLoggingConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImagePipeline.ScheduleProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "auto_disable_policy": "autoDisablePolicy",
             "pipeline_execution_start_condition": "pipelineExecutionStartCondition",
             "schedule_expression": "scheduleExpression",
         },
@@ -7189,11 +7496,13 @@ class CfnImagePipeline(
         def __init__(
             self,
             *,
+            auto_disable_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.AutoDisablePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             pipeline_execution_start_condition: typing.Optional[builtins.str] = None,
             schedule_expression: typing.Optional[builtins.str] = None,
         ) -> None:
             '''A schedule configures when and how often a pipeline will automatically create a new image.
 
+            :param auto_disable_policy: The policy that configures when Image Builder should automatically disable a pipeline that is failing.
             :param pipeline_execution_start_condition: The condition configures when the pipeline should trigger a new image build. When the ``pipelineExecutionStartCondition`` is set to ``EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE`` , and you use semantic version filters on the base image or components in your image recipe, Image Builder will build a new image only when there are new versions of the image or components in your recipe that match the semantic version filter. When it is set to ``EXPRESSION_MATCH_ONLY`` , it will build a new image every time the CRON expression matches the current time. For semantic version syntax, see `CreateComponent <https://docs.aws.amazon.com/imagebuilder/latest/APIReference/API_CreateComponent.html>`_ in the *Image Builder API Reference* .
             :param schedule_expression: The cron expression determines how often EC2 Image Builder evaluates your ``pipelineExecutionStartCondition`` . For information on how to format a cron expression in Image Builder, see `Use cron expressions in EC2 Image Builder <https://docs.aws.amazon.com/imagebuilder/latest/userguide/image-builder-cron.html>`_ .
 
@@ -7207,19 +7516,36 @@ class CfnImagePipeline(
                 from aws_cdk import aws_imagebuilder as imagebuilder
                 
                 schedule_property = imagebuilder.CfnImagePipeline.ScheduleProperty(
+                    auto_disable_policy=imagebuilder.CfnImagePipeline.AutoDisablePolicyProperty(
+                        failure_count=123
+                    ),
                     pipeline_execution_start_condition="pipelineExecutionStartCondition",
                     schedule_expression="scheduleExpression"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__02783d051498bb630cd6a27d361c0750914a59f05623585e0808549e9248bae0)
+                check_type(argname="argument auto_disable_policy", value=auto_disable_policy, expected_type=type_hints["auto_disable_policy"])
                 check_type(argname="argument pipeline_execution_start_condition", value=pipeline_execution_start_condition, expected_type=type_hints["pipeline_execution_start_condition"])
                 check_type(argname="argument schedule_expression", value=schedule_expression, expected_type=type_hints["schedule_expression"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if auto_disable_policy is not None:
+                self._values["auto_disable_policy"] = auto_disable_policy
             if pipeline_execution_start_condition is not None:
                 self._values["pipeline_execution_start_condition"] = pipeline_execution_start_condition
             if schedule_expression is not None:
                 self._values["schedule_expression"] = schedule_expression
+
+        @builtins.property
+        def auto_disable_policy(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImagePipeline.AutoDisablePolicyProperty"]]:
+            '''The policy that configures when Image Builder should automatically disable a pipeline that is failing.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagepipeline-schedule.html#cfn-imagebuilder-imagepipeline-schedule-autodisablepolicy
+            '''
+            result = self._values.get("auto_disable_policy")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImagePipeline.AutoDisablePolicyProperty"]], result)
 
         @builtins.property
         def pipeline_execution_start_condition(self) -> typing.Optional[builtins.str]:
@@ -7476,6 +7802,9 @@ class CfnImageRecipe(
                 ),
                 user_data_override="userDataOverride"
             ),
+            ami_tags={
+                "ami_tags_key": "amiTags"
+            },
             block_device_mappings=[imagebuilder.CfnImageRecipe.InstanceBlockDeviceMappingProperty(
                 device_name="deviceName",
                 ebs=imagebuilder.CfnImageRecipe.EbsInstanceBlockDeviceSpecificationProperty(
@@ -7509,6 +7838,7 @@ class CfnImageRecipe(
         parent_image: builtins.str,
         version: builtins.str,
         additional_instance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImageRecipe.AdditionalInstanceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ami_tags: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         block_device_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImageRecipe.InstanceBlockDeviceMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -7522,6 +7852,7 @@ class CfnImageRecipe(
         :param parent_image: The base image for customizations specified in the image recipe. You can specify the parent image using one of the following options: - AMI ID - Image Builder image Amazon Resource Name (ARN) - AWS Systems Manager (SSM) Parameter Store Parameter, prefixed by ``ssm:`` , followed by the parameter name or ARN. - AWS Marketplace product ID
         :param version: The version of the image recipe.
         :param additional_instance_configuration: Before you create a new AMI, Image Builder launches temporary Amazon EC2 instances to build and test your image configuration. Instance configuration adds a layer of control over those instances. You can define settings and add scripts to run when an instance is launched from your AMI.
+        :param ami_tags: Tags that are applied to the AMI that Image Builder creates during the Build phase prior to image distribution.
         :param block_device_mappings: The block device mappings to apply when creating images from this recipe.
         :param description: The description of the image recipe.
         :param tags: The tags of the image recipe.
@@ -7537,6 +7868,7 @@ class CfnImageRecipe(
             parent_image=parent_image,
             version=version,
             additional_instance_configuration=additional_instance_configuration,
+            ami_tags=ami_tags,
             block_device_mappings=block_device_mappings,
             description=description,
             tags=tags,
@@ -7686,6 +8018,24 @@ class CfnImageRecipe(
             type_hints = typing.get_type_hints(_typecheckingstub__fcc3e434aa1a301be5e1a5341bc64287bfcf82761f08ef98de5711b1b1bc6038)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "additionalInstanceConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="amiTags")
+    def ami_tags(
+        self,
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        '''Tags that are applied to the AMI that Image Builder creates during the Build phase prior to image distribution.'''
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "amiTags"))
+
+    @ami_tags.setter
+    def ami_tags(
+        self,
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7b194ae2195e82b1b59277988a8b1cf823ca9cdc3b2e26bbaa6e0b9e805a12ad)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "amiTags", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="blockDeviceMappings")
@@ -10591,6 +10941,7 @@ def _typecheckingstub__95f10c4451c6bf3f2cf15951831cd372e35975262c0be294c1ae7c774
     image_recipe_arn: typing.Optional[builtins.str] = None,
     image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.PipelineLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -10609,6 +10960,7 @@ def _typecheckingstub__5f217922888735234464ee573256caba679b2c1215a99c91ad609c9c7
     image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     infrastructure_configuration_arn: typing.Optional[builtins.str] = None,
+    logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     workflows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.WorkflowConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
@@ -10622,6 +10974,7 @@ def _typecheckingstub__a289ec10c5f4c9443f1dfb0dc4ecb78a20e5f6e491ed688cb2e3a59ad
     parent_image: builtins.str,
     version: builtins.str,
     additional_instance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImageRecipe.AdditionalInstanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ami_tags: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     block_device_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImageRecipe.InstanceBlockDeviceMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -11170,6 +11523,7 @@ def _typecheckingstub__1406bc225111bc54a87c50d1d8180aed46d22e10134235c4fa581d313
     image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     infrastructure_configuration_arn: typing.Optional[builtins.str] = None,
+    logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     workflows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.WorkflowConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
@@ -11236,6 +11590,12 @@ def _typecheckingstub__a190431e330e97015561230a0d9b0477abed6793472228169b2ce3d49
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a3e3020758a024deeed0645c515a9c3a69ea5ecf40fc9a2133b40f82a94b72c2(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImage.ImageLoggingConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c0e6ba55682dabdf30b5bb38534688ff3dbd8c6a8044f77eb6180bb8d815ceb8(
     value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
 ) -> None:
@@ -11252,6 +11612,13 @@ def _typecheckingstub__8e752dc7f51b470c209f9741b4ee9c9b1b8ab926ba9ba46ae3160a187
     *,
     container_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
     repository_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f48c0bf82989235f735b3b537ceae8bf7cbb63f48573c8a5dac03547706ff000(
+    *,
+    log_group_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11304,6 +11671,7 @@ def _typecheckingstub__e2d099702ab4ebcb03c34ae00fedabfa81a0c5d3662aa1605c47ff1fc
     image_recipe_arn: typing.Optional[builtins.str] = None,
     image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.PipelineLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -11384,6 +11752,12 @@ def _typecheckingstub__d9e327e008ef0b95ddde8197947e86b8bc9160733d270caa11482a88d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fd669ff1d1a241fd9694fe5f0927bdc4b1cdbf105330ca8df7626d0785047d5e(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImagePipeline.PipelineLoggingConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7493819df4798ffd45cd31ff99c66a5c22065a41d47c9c3792eaaf9d4c4150a1(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImagePipeline.ScheduleProperty]],
 ) -> None:
@@ -11404,6 +11778,13 @@ def _typecheckingstub__10f1255c06095afaded88e7544051acdac47218f9be5e78474eeaaeda
 
 def _typecheckingstub__d31373519ea07e5936785c1446524bda21756ca2eb6c12f87303f5a12dc18c4f(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnImagePipeline.WorkflowConfigurationProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__69b844c16b5b7fe86f960e35030a259ca786bf1c7c25272436fa39cdc264de05(
+    *,
+    failure_count: jsii.Number,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11432,8 +11813,17 @@ def _typecheckingstub__ae3643f34d20caf9e518f587e7eacbe6f2163c4d76025d717d8d8ea1b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2af353350682d5947ff1643b9bf2422511eaee659a470f07d53aac235328167a(
+    *,
+    image_log_group_name: typing.Optional[builtins.str] = None,
+    pipeline_log_group_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__02783d051498bb630cd6a27d361c0750914a59f05623585e0808549e9248bae0(
     *,
+    auto_disable_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.AutoDisablePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     pipeline_execution_start_condition: typing.Optional[builtins.str] = None,
     schedule_expression: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -11467,6 +11857,7 @@ def _typecheckingstub__b92e909d03413ceab5b5ff0737ae582bf88ebb71e7e89f62cc57922d1
     parent_image: builtins.str,
     version: builtins.str,
     additional_instance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImageRecipe.AdditionalInstanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ami_tags: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     block_device_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImageRecipe.InstanceBlockDeviceMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -11513,6 +11904,12 @@ def _typecheckingstub__73fc08f00d9d100507462b08c6b2bbdf08927d138dd7cc3a561740827
 
 def _typecheckingstub__fcc3e434aa1a301be5e1a5341bc64287bfcf82761f08ef98de5711b1b1bc6038(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImageRecipe.AdditionalInstanceConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7b194ae2195e82b1b59277988a8b1cf823ca9cdc3b2e26bbaa6e0b9e805a12ad(
+    value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
     pass

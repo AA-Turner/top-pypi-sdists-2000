@@ -1578,6 +1578,104 @@ class CfnDiskProps:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_lightsail.CfnDiskSnapshotProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "disk_name": "diskName",
+        "disk_snapshot_name": "diskSnapshotName",
+        "tags": "tags",
+    },
+)
+class CfnDiskSnapshotProps:
+    def __init__(
+        self,
+        *,
+        disk_name: builtins.str,
+        disk_snapshot_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDiskSnapshot``.
+
+        :param disk_name: The unique name of the disk.
+        :param disk_snapshot_name: The name of the disk snapshot ( ``my-disk-snapshot`` ).
+        :param tags: The tag keys and optional values for the resource. For more information about tags in Lightsail, see the `Amazon Lightsail Developer Guide <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-tags>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-disksnapshot.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_lightsail as lightsail
+            
+            cfn_disk_snapshot_props = lightsail.CfnDiskSnapshotProps(
+                disk_name="diskName",
+                disk_snapshot_name="diskSnapshotName",
+            
+                # the properties below are optional
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__582cce25c17f9f8ae3141662afacdd9a112ca28a80ce71bc1e60dbdced5f5b83)
+            check_type(argname="argument disk_name", value=disk_name, expected_type=type_hints["disk_name"])
+            check_type(argname="argument disk_snapshot_name", value=disk_snapshot_name, expected_type=type_hints["disk_snapshot_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "disk_name": disk_name,
+            "disk_snapshot_name": disk_snapshot_name,
+        }
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def disk_name(self) -> builtins.str:
+        '''The unique name of the disk.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-disksnapshot.html#cfn-lightsail-disksnapshot-diskname
+        '''
+        result = self._values.get("disk_name")
+        assert result is not None, "Required property 'disk_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def disk_snapshot_name(self) -> builtins.str:
+        '''The name of the disk snapshot ( ``my-disk-snapshot`` ).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-disksnapshot.html#cfn-lightsail-disksnapshot-disksnapshotname
+        '''
+        result = self._values.get("disk_snapshot_name")
+        assert result is not None, "Required property 'disk_snapshot_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tag keys and optional values for the resource.
+
+        For more information about tags in Lightsail, see the `Amazon Lightsail Developer Guide <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-tags>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-disksnapshot.html#cfn-lightsail-disksnapshot-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDiskSnapshotProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_lightsail.CfnDistributionProps",
     jsii_struct_bases=[],
     name_mapping={
@@ -2991,6 +3089,74 @@ class DiskReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_lightsail.DiskSnapshotReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "disk_snapshot_arn": "diskSnapshotArn",
+        "disk_snapshot_name": "diskSnapshotName",
+    },
+)
+class DiskSnapshotReference:
+    def __init__(
+        self,
+        *,
+        disk_snapshot_arn: builtins.str,
+        disk_snapshot_name: builtins.str,
+    ) -> None:
+        '''A reference to a DiskSnapshot resource.
+
+        :param disk_snapshot_arn: The ARN of the DiskSnapshot resource.
+        :param disk_snapshot_name: The DiskSnapshotName of the DiskSnapshot resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_lightsail as lightsail
+            
+            disk_snapshot_reference = lightsail.DiskSnapshotReference(
+                disk_snapshot_arn="diskSnapshotArn",
+                disk_snapshot_name="diskSnapshotName"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__35528b985666675fa216f8d2164f24930e657ecd0488c3148fa7312474fdbac6)
+            check_type(argname="argument disk_snapshot_arn", value=disk_snapshot_arn, expected_type=type_hints["disk_snapshot_arn"])
+            check_type(argname="argument disk_snapshot_name", value=disk_snapshot_name, expected_type=type_hints["disk_snapshot_name"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "disk_snapshot_arn": disk_snapshot_arn,
+            "disk_snapshot_name": disk_snapshot_name,
+        }
+
+    @builtins.property
+    def disk_snapshot_arn(self) -> builtins.str:
+        '''The ARN of the DiskSnapshot resource.'''
+        result = self._values.get("disk_snapshot_arn")
+        assert result is not None, "Required property 'disk_snapshot_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def disk_snapshot_name(self) -> builtins.str:
+        '''The DiskSnapshotName of the DiskSnapshot resource.'''
+        result = self._values.get("disk_snapshot_name")
+        assert result is not None, "Required property 'disk_snapshot_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "DiskSnapshotReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_lightsail.DistributionReference",
     jsii_struct_bases=[],
     name_mapping={
@@ -3356,6 +3522,46 @@ class _IDiskRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDiskRef).__jsii_proxy_class__ = lambda : _IDiskRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IDiskSnapshotRef")
+class IDiskSnapshotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+    '''(experimental) Indicates that this resource can be referenced as a DiskSnapshot.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="diskSnapshotRef")
+    def disk_snapshot_ref(self) -> DiskSnapshotReference:
+        '''(experimental) A reference to a DiskSnapshot resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IDiskSnapshotRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a DiskSnapshot.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_lightsail.IDiskSnapshotRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="diskSnapshotRef")
+    def disk_snapshot_ref(self) -> DiskSnapshotReference:
+        '''(experimental) A reference to a DiskSnapshot resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(DiskSnapshotReference, jsii.get(self, "diskSnapshotRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IDiskSnapshotRef).__jsii_proxy_class__ = lambda : _IDiskSnapshotRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IDistributionRef")
@@ -7097,6 +7303,314 @@ class CfnDisk(
             '''The AWS Region where the disk is located.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-disk-location.html#cfn-lightsail-disk-location-regionname
+            '''
+            result = self._values.get("region_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LocationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.implements(_IInspectable_c2943556, IDiskSnapshotRef, _ITaggableV2_4e6798f8)
+class CfnDiskSnapshot(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_lightsail.CfnDiskSnapshot",
+):
+    '''Describes a block storage disk snapshot.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-disksnapshot.html
+    :cloudformationResource: AWS::Lightsail::DiskSnapshot
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_lightsail as lightsail
+        
+        cfn_disk_snapshot = lightsail.CfnDiskSnapshot(self, "MyCfnDiskSnapshot",
+            disk_name="diskName",
+            disk_snapshot_name="diskSnapshotName",
+        
+            # the properties below are optional
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        disk_name: builtins.str,
+        disk_snapshot_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param disk_name: The unique name of the disk.
+        :param disk_snapshot_name: The name of the disk snapshot ( ``my-disk-snapshot`` ).
+        :param tags: The tag keys and optional values for the resource. For more information about tags in Lightsail, see the `Amazon Lightsail Developer Guide <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-tags>`_ .
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__635e9a5f927b657b2b6980a2d21a19d4d6ef337bedbd026386a09593585a2419)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnDiskSnapshotProps(
+            disk_name=disk_name, disk_snapshot_name=disk_snapshot_name, tags=tags
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__04aab83a28e37e63c1b2e591b678f9b3cb34b471058c106321646e02dbd6677b)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c914f1dd677dbf6ddbd3846df95651696795d109e5a6555fad7338b6a1fc858d)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedAt")
+    def attr_created_at(self) -> builtins.str:
+        '''The date when the disk snapshot was created.
+
+        :cloudformationAttribute: CreatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrDiskSnapshotArn")
+    def attr_disk_snapshot_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the disk snapshot.
+
+        :cloudformationAttribute: DiskSnapshotArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrDiskSnapshotArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrFromDiskName")
+    def attr_from_disk_name(self) -> builtins.str:
+        '''The unique name of the source disk from which the disk snapshot was created.
+
+        :cloudformationAttribute: FromDiskName
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrFromDiskName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrIsFromAutoSnapshot")
+    def attr_is_from_auto_snapshot(self) -> _IResolvable_da3f097b:
+        '''A Boolean value indicating whether the snapshot was created from an automatic snapshot.
+
+        :cloudformationAttribute: IsFromAutoSnapshot
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsFromAutoSnapshot"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLocation")
+    def attr_location(self) -> _IResolvable_da3f097b:
+        '''The AWS Region and Availability Zone where the disk snapshot was created.
+
+        :cloudformationAttribute: Location
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLocation"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrProgress")
+    def attr_progress(self) -> builtins.str:
+        '''The progress of the snapshot.
+
+        :cloudformationAttribute: Progress
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrProgress"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrResourceType")
+    def attr_resource_type(self) -> builtins.str:
+        '''The Lightsail resource type ( ``DiskSnapshot`` ).
+
+        :cloudformationAttribute: ResourceType
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrResourceType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrSizeInGb")
+    def attr_size_in_gb(self) -> jsii.Number:
+        '''The size of the disk in GB.
+
+        :cloudformationAttribute: SizeInGb
+        '''
+        return typing.cast(jsii.Number, jsii.get(self, "attrSizeInGb"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrState")
+    def attr_state(self) -> builtins.str:
+        '''The status of the disk snapshot operation.
+
+        :cloudformationAttribute: State
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrState"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrSupportCode")
+    def attr_support_code(self) -> builtins.str:
+        '''The support code.
+
+        Include this code in your email to support when you have questions about an instance or another resource in Lightsail. This code enables our support team to look up your Lightsail information more easily.
+
+        :cloudformationAttribute: SupportCode
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrSupportCode"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="diskSnapshotRef")
+    def disk_snapshot_ref(self) -> DiskSnapshotReference:
+        '''A reference to a DiskSnapshot resource.'''
+        return typing.cast(DiskSnapshotReference, jsii.get(self, "diskSnapshotRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="diskName")
+    def disk_name(self) -> builtins.str:
+        '''The unique name of the disk.'''
+        return typing.cast(builtins.str, jsii.get(self, "diskName"))
+
+    @disk_name.setter
+    def disk_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__861290cff23c7fe2934f1de7199f6b74624783a8bcd5b96cf38bbe3869d4b5e3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "diskName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="diskSnapshotName")
+    def disk_snapshot_name(self) -> builtins.str:
+        '''The name of the disk snapshot ( ``my-disk-snapshot`` ).'''
+        return typing.cast(builtins.str, jsii.get(self, "diskSnapshotName"))
+
+    @disk_snapshot_name.setter
+    def disk_snapshot_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__53378ceb6c4f8b6e46e0dc66cd89c3bc1960a20639410376f56d1e5ec9cbf9eb)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "diskSnapshotName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tag keys and optional values for the resource.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9132cbc1b1f3a90290073917b7b4c55b2c748bfade6bc8f30bf990e4d617be32)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lightsail.CfnDiskSnapshot.LocationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "availability_zone": "availabilityZone",
+            "region_name": "regionName",
+        },
+    )
+    class LocationProperty:
+        def __init__(
+            self,
+            *,
+            availability_zone: typing.Optional[builtins.str] = None,
+            region_name: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The AWS Region and Availability Zone where the disk snapshot was created.
+
+            :param availability_zone: The Availability Zone where the disk snapshot was created.
+            :param region_name: The AWS Region where the disk snapshot was created.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-disksnapshot-location.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lightsail as lightsail
+                
+                location_property = lightsail.CfnDiskSnapshot.LocationProperty(
+                    availability_zone="availabilityZone",
+                    region_name="regionName"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__fb7b13c4fd8a7881bacab9a4b8bcdc53a097639f681849e60b6f86c7094d1ddd)
+                check_type(argname="argument availability_zone", value=availability_zone, expected_type=type_hints["availability_zone"])
+                check_type(argname="argument region_name", value=region_name, expected_type=type_hints["region_name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if availability_zone is not None:
+                self._values["availability_zone"] = availability_zone
+            if region_name is not None:
+                self._values["region_name"] = region_name
+
+        @builtins.property
+        def availability_zone(self) -> typing.Optional[builtins.str]:
+            '''The Availability Zone where the disk snapshot was created.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-disksnapshot-location.html#cfn-lightsail-disksnapshot-location-availabilityzone
+            '''
+            result = self._values.get("availability_zone")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def region_name(self) -> typing.Optional[builtins.str]:
+            '''The AWS Region where the disk snapshot was created.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-disksnapshot-location.html#cfn-lightsail-disksnapshot-location-regionname
             '''
             result = self._values.get("region_name")
             return typing.cast(typing.Optional[builtins.str], result)
@@ -11023,6 +11537,8 @@ __all__ = [
     "CfnDatabaseProps",
     "CfnDisk",
     "CfnDiskProps",
+    "CfnDiskSnapshot",
+    "CfnDiskSnapshotProps",
     "CfnDistribution",
     "CfnDistributionProps",
     "CfnDomain",
@@ -11040,6 +11556,7 @@ __all__ = [
     "ContainerReference",
     "DatabaseReference",
     "DiskReference",
+    "DiskSnapshotReference",
     "DistributionReference",
     "DomainReference",
     "IAlarmRef",
@@ -11048,6 +11565,7 @@ __all__ = [
     "IContainerRef",
     "IDatabaseRef",
     "IDiskRef",
+    "IDiskSnapshotRef",
     "IDistributionRef",
     "IDomainRef",
     "IInstanceRef",
@@ -11175,6 +11693,15 @@ def _typecheckingstub__d095d2590ef382758292269648b2abe4a720c01c7094f3ff4555ad700
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__582cce25c17f9f8ae3141662afacdd9a112ca28a80ce71bc1e60dbdced5f5b83(
+    *,
+    disk_name: builtins.str,
+    disk_snapshot_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5746be261e67458f872b406208009ddcf740c3277f27869ccbc24697bfb6d14c(
     *,
     bundle_id: builtins.str,
@@ -11282,6 +11809,14 @@ def _typecheckingstub__76ca852295739d44edcdb281ca58f4a67dfe12a39cffa6c82dc0c5a0f
     *,
     disk_arn: builtins.str,
     disk_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__35528b985666675fa216f8d2164f24930e657ecd0488c3148fa7312474fdbac6(
+    *,
+    disk_snapshot_arn: builtins.str,
+    disk_snapshot_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11938,6 +12473,55 @@ def _typecheckingstub__a8fac9a027dbef91fb6dcd3972cd2f428689708e722e631dd37ac710d
     pass
 
 def _typecheckingstub__a7cd90525af9bd1ae5058a25d04444364be64fc46bff0d7ac63c54d5a6441c33(
+    *,
+    availability_zone: typing.Optional[builtins.str] = None,
+    region_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__635e9a5f927b657b2b6980a2d21a19d4d6ef337bedbd026386a09593585a2419(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    disk_name: builtins.str,
+    disk_snapshot_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__04aab83a28e37e63c1b2e591b678f9b3cb34b471058c106321646e02dbd6677b(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c914f1dd677dbf6ddbd3846df95651696795d109e5a6555fad7338b6a1fc858d(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__861290cff23c7fe2934f1de7199f6b74624783a8bcd5b96cf38bbe3869d4b5e3(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__53378ceb6c4f8b6e46e0dc66cd89c3bc1960a20639410376f56d1e5ec9cbf9eb(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9132cbc1b1f3a90290073917b7b4c55b2c748bfade6bc8f30bf990e4d617be32(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fb7b13c4fd8a7881bacab9a4b8bcdc53a097639f681849e60b6f86c7094d1ddd(
     *,
     availability_zone: typing.Optional[builtins.str] = None,
     region_name: typing.Optional[builtins.str] = None,

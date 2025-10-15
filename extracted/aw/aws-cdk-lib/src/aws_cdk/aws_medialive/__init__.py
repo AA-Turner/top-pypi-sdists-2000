@@ -7354,6 +7354,7 @@ class CfnChannel(
             "level": "level",
             "look_ahead_rate_control": "lookAheadRateControl",
             "max_bitrate": "maxBitrate",
+            "min_bitrate": "minBitrate",
             "min_i_interval": "minIInterval",
             "par_denominator": "parDenominator",
             "par_numerator": "parNumerator",
@@ -7379,6 +7380,7 @@ class CfnChannel(
             level: typing.Optional[builtins.str] = None,
             look_ahead_rate_control: typing.Optional[builtins.str] = None,
             max_bitrate: typing.Optional[jsii.Number] = None,
+            min_bitrate: typing.Optional[jsii.Number] = None,
             min_i_interval: typing.Optional[jsii.Number] = None,
             par_denominator: typing.Optional[jsii.Number] = None,
             par_numerator: typing.Optional[jsii.Number] = None,
@@ -7400,6 +7402,7 @@ class CfnChannel(
             :param level: 
             :param look_ahead_rate_control: 
             :param max_bitrate: 
+            :param min_bitrate: 
             :param min_i_interval: 
             :param par_denominator: 
             :param par_numerator: 
@@ -7442,6 +7445,7 @@ class CfnChannel(
                     level="level",
                     look_ahead_rate_control="lookAheadRateControl",
                     max_bitrate=123,
+                    min_bitrate=123,
                     min_iInterval=123,
                     par_denominator=123,
                     par_numerator=123,
@@ -7469,6 +7473,7 @@ class CfnChannel(
                 check_type(argname="argument level", value=level, expected_type=type_hints["level"])
                 check_type(argname="argument look_ahead_rate_control", value=look_ahead_rate_control, expected_type=type_hints["look_ahead_rate_control"])
                 check_type(argname="argument max_bitrate", value=max_bitrate, expected_type=type_hints["max_bitrate"])
+                check_type(argname="argument min_bitrate", value=min_bitrate, expected_type=type_hints["min_bitrate"])
                 check_type(argname="argument min_i_interval", value=min_i_interval, expected_type=type_hints["min_i_interval"])
                 check_type(argname="argument par_denominator", value=par_denominator, expected_type=type_hints["par_denominator"])
                 check_type(argname="argument par_numerator", value=par_numerator, expected_type=type_hints["par_numerator"])
@@ -7501,6 +7506,8 @@ class CfnChannel(
                 self._values["look_ahead_rate_control"] = look_ahead_rate_control
             if max_bitrate is not None:
                 self._values["max_bitrate"] = max_bitrate
+            if min_bitrate is not None:
+                self._values["min_bitrate"] = min_bitrate
             if min_i_interval is not None:
                 self._values["min_i_interval"] = min_i_interval
             if par_denominator is not None:
@@ -7612,6 +7619,14 @@ class CfnChannel(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-av1settings.html#cfn-medialive-channel-av1settings-maxbitrate
             '''
             result = self._values.get("max_bitrate")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min_bitrate(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-av1settings.html#cfn-medialive-channel-av1settings-minbitrate
+            '''
+            result = self._values.get("min_bitrate")
             return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
@@ -13669,6 +13684,7 @@ class CfnChannel(
             "level": "level",
             "look_ahead_rate_control": "lookAheadRateControl",
             "max_bitrate": "maxBitrate",
+            "min_bitrate": "minBitrate",
             "min_i_interval": "minIInterval",
             "min_qp": "minQp",
             "num_ref_frames": "numRefFrames",
@@ -13718,6 +13734,7 @@ class CfnChannel(
             level: typing.Optional[builtins.str] = None,
             look_ahead_rate_control: typing.Optional[builtins.str] = None,
             max_bitrate: typing.Optional[jsii.Number] = None,
+            min_bitrate: typing.Optional[jsii.Number] = None,
             min_i_interval: typing.Optional[jsii.Number] = None,
             min_qp: typing.Optional[jsii.Number] = None,
             num_ref_frames: typing.Optional[jsii.Number] = None,
@@ -13766,6 +13783,7 @@ class CfnChannel(
             :param level: The H.264 level.
             :param look_ahead_rate_control: The amount of lookahead. A value of low can decrease latency and memory usage, while high can produce better quality for certain content.
             :param max_bitrate: For QVBR: See the tooltip for Quality level. For VBR: Set the maximum bitrate in order to accommodate expected spikes in the complexity of the video.
+            :param min_bitrate: 
             :param min_i_interval: Meaningful only if sceneChangeDetect is set to enabled. This setting enforces separation between repeated (cadence) I-frames and I-frames inserted by Scene Change Detection. If a scene change I-frame is within I-interval frames of a cadence I-frame, the GOP is shrunk or stretched to the scene change I-frame. GOP stretch requires enabling lookahead as well as setting the I-interval. The normal cadence resumes for the next GOP. Note that the maximum GOP stretch = GOP size + Min-I-interval - 1.
             :param min_qp: 
             :param num_ref_frames: The number of reference frames to use. The encoder might use more than requested if you use B-frames or interlaced encoding.
@@ -13833,6 +13851,7 @@ class CfnChannel(
                     level="level",
                     look_ahead_rate_control="lookAheadRateControl",
                     max_bitrate=123,
+                    min_bitrate=123,
                     min_iInterval=123,
                     min_qp=123,
                     num_ref_frames=123,
@@ -13884,6 +13903,7 @@ class CfnChannel(
                 check_type(argname="argument level", value=level, expected_type=type_hints["level"])
                 check_type(argname="argument look_ahead_rate_control", value=look_ahead_rate_control, expected_type=type_hints["look_ahead_rate_control"])
                 check_type(argname="argument max_bitrate", value=max_bitrate, expected_type=type_hints["max_bitrate"])
+                check_type(argname="argument min_bitrate", value=min_bitrate, expected_type=type_hints["min_bitrate"])
                 check_type(argname="argument min_i_interval", value=min_i_interval, expected_type=type_hints["min_i_interval"])
                 check_type(argname="argument min_qp", value=min_qp, expected_type=type_hints["min_qp"])
                 check_type(argname="argument num_ref_frames", value=num_ref_frames, expected_type=type_hints["num_ref_frames"])
@@ -13951,6 +13971,8 @@ class CfnChannel(
                 self._values["look_ahead_rate_control"] = look_ahead_rate_control
             if max_bitrate is not None:
                 self._values["max_bitrate"] = max_bitrate
+            if min_bitrate is not None:
+                self._values["min_bitrate"] = min_bitrate
             if min_i_interval is not None:
                 self._values["min_i_interval"] = min_i_interval
             if min_qp is not None:
@@ -14225,6 +14247,14 @@ class CfnChannel(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-h264settings.html#cfn-medialive-channel-h264settings-maxbitrate
             '''
             result = self._values.get("max_bitrate")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min_bitrate(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-h264settings.html#cfn-medialive-channel-h264settings-minbitrate
+            '''
+            result = self._values.get("min_bitrate")
             return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
@@ -14677,12 +14707,15 @@ class CfnChannel(
             "flicker_aq": "flickerAq",
             "framerate_denominator": "framerateDenominator",
             "framerate_numerator": "framerateNumerator",
+            "gop_b_reference": "gopBReference",
             "gop_closed_cadence": "gopClosedCadence",
+            "gop_num_b_frames": "gopNumBFrames",
             "gop_size": "gopSize",
             "gop_size_units": "gopSizeUnits",
             "level": "level",
             "look_ahead_rate_control": "lookAheadRateControl",
             "max_bitrate": "maxBitrate",
+            "min_bitrate": "minBitrate",
             "min_i_interval": "minIInterval",
             "min_qp": "minQp",
             "mv_over_picture_boundaries": "mvOverPictureBoundaries",
@@ -14695,6 +14728,7 @@ class CfnChannel(
             "scan_type": "scanType",
             "scene_change_detect": "sceneChangeDetect",
             "slices": "slices",
+            "subgop_length": "subgopLength",
             "tier": "tier",
             "tile_height": "tileHeight",
             "tile_padding": "tilePadding",
@@ -14721,12 +14755,15 @@ class CfnChannel(
             flicker_aq: typing.Optional[builtins.str] = None,
             framerate_denominator: typing.Optional[jsii.Number] = None,
             framerate_numerator: typing.Optional[jsii.Number] = None,
+            gop_b_reference: typing.Optional[builtins.str] = None,
             gop_closed_cadence: typing.Optional[jsii.Number] = None,
+            gop_num_b_frames: typing.Optional[jsii.Number] = None,
             gop_size: typing.Optional[jsii.Number] = None,
             gop_size_units: typing.Optional[builtins.str] = None,
             level: typing.Optional[builtins.str] = None,
             look_ahead_rate_control: typing.Optional[builtins.str] = None,
             max_bitrate: typing.Optional[jsii.Number] = None,
+            min_bitrate: typing.Optional[jsii.Number] = None,
             min_i_interval: typing.Optional[jsii.Number] = None,
             min_qp: typing.Optional[jsii.Number] = None,
             mv_over_picture_boundaries: typing.Optional[builtins.str] = None,
@@ -14739,6 +14776,7 @@ class CfnChannel(
             scan_type: typing.Optional[builtins.str] = None,
             scene_change_detect: typing.Optional[builtins.str] = None,
             slices: typing.Optional[jsii.Number] = None,
+            subgop_length: typing.Optional[builtins.str] = None,
             tier: typing.Optional[builtins.str] = None,
             tile_height: typing.Optional[jsii.Number] = None,
             tile_padding: typing.Optional[builtins.str] = None,
@@ -14764,12 +14802,15 @@ class CfnChannel(
             :param flicker_aq: If set to enabled, adjust quantization within each frame to reduce flicker or 'pop' on I-frames.
             :param framerate_denominator: Framerate denominator.
             :param framerate_numerator: Framerate numerator - framerate is a fraction, e.g. 24000 / 1001 = 23.976 fps.
+            :param gop_b_reference: 
             :param gop_closed_cadence: Frequency of closed GOPs. In streaming applications, it is recommended that this be set to 1 so a decoder joining mid-stream will receive an IDR frame as quickly as possible. Setting this value to 0 will break output segmenting.
+            :param gop_num_b_frames: 
             :param gop_size: GOP size (keyframe interval) in units of either frames or seconds per gopSizeUnits. If gopSizeUnits is frames, gopSize must be an integer and must be greater than or equal to 1. If gopSizeUnits is seconds, gopSize must be greater than 0, but need not be an integer.
             :param gop_size_units: Indicates if the gopSize is specified in frames or seconds. If seconds the system will convert the gopSize into a frame count at run time.
             :param level: H.265 Level.
             :param look_ahead_rate_control: Amount of lookahead. A value of low can decrease latency and memory usage, while high can produce better quality for certain content.
             :param max_bitrate: For QVBR: See the tooltip for Quality level.
+            :param min_bitrate: 
             :param min_i_interval: Only meaningful if sceneChangeDetect is set to enabled. Defaults to 5 if multiplex rate control is used. Enforces separation between repeated (cadence) I-frames and I-frames inserted by Scene Change Detection. If a scene change I-frame is within I-interval frames of a cadence I-frame, the GOP is shrunk and/or stretched to the scene change I-frame. GOP stretch requires enabling lookahead as well as setting I-interval. The normal cadence resumes for the next GOP. Note: Maximum GOP stretch = GOP size + Min-I-interval - 1
             :param min_qp: 
             :param mv_over_picture_boundaries: 
@@ -14782,6 +14823,7 @@ class CfnChannel(
             :param scan_type: Sets the scan type of the output to progressive or top-field-first interlaced.
             :param scene_change_detect: Scene change detection.
             :param slices: Number of slices per picture. Must be less than or equal to the number of macroblock rows for progressive pictures, and less than or equal to half the number of macroblock rows for interlaced pictures. This field is optional; when no value is specified the encoder will choose the number of slices based on encode resolution.
+            :param subgop_length: 
             :param tier: H.265 Tier.
             :param tile_height: 
             :param tile_padding: 
@@ -14831,12 +14873,15 @@ class CfnChannel(
                     flicker_aq="flickerAq",
                     framerate_denominator=123,
                     framerate_numerator=123,
+                    gop_bReference="gopBReference",
                     gop_closed_cadence=123,
+                    gop_num_bFrames=123,
                     gop_size=123,
                     gop_size_units="gopSizeUnits",
                     level="level",
                     look_ahead_rate_control="lookAheadRateControl",
                     max_bitrate=123,
+                    min_bitrate=123,
                     min_iInterval=123,
                     min_qp=123,
                     mv_over_picture_boundaries="mvOverPictureBoundaries",
@@ -14849,6 +14894,7 @@ class CfnChannel(
                     scan_type="scanType",
                     scene_change_detect="sceneChangeDetect",
                     slices=123,
+                    subgop_length="subgopLength",
                     tier="tier",
                     tile_height=123,
                     tile_padding="tilePadding",
@@ -14877,12 +14923,15 @@ class CfnChannel(
                 check_type(argname="argument flicker_aq", value=flicker_aq, expected_type=type_hints["flicker_aq"])
                 check_type(argname="argument framerate_denominator", value=framerate_denominator, expected_type=type_hints["framerate_denominator"])
                 check_type(argname="argument framerate_numerator", value=framerate_numerator, expected_type=type_hints["framerate_numerator"])
+                check_type(argname="argument gop_b_reference", value=gop_b_reference, expected_type=type_hints["gop_b_reference"])
                 check_type(argname="argument gop_closed_cadence", value=gop_closed_cadence, expected_type=type_hints["gop_closed_cadence"])
+                check_type(argname="argument gop_num_b_frames", value=gop_num_b_frames, expected_type=type_hints["gop_num_b_frames"])
                 check_type(argname="argument gop_size", value=gop_size, expected_type=type_hints["gop_size"])
                 check_type(argname="argument gop_size_units", value=gop_size_units, expected_type=type_hints["gop_size_units"])
                 check_type(argname="argument level", value=level, expected_type=type_hints["level"])
                 check_type(argname="argument look_ahead_rate_control", value=look_ahead_rate_control, expected_type=type_hints["look_ahead_rate_control"])
                 check_type(argname="argument max_bitrate", value=max_bitrate, expected_type=type_hints["max_bitrate"])
+                check_type(argname="argument min_bitrate", value=min_bitrate, expected_type=type_hints["min_bitrate"])
                 check_type(argname="argument min_i_interval", value=min_i_interval, expected_type=type_hints["min_i_interval"])
                 check_type(argname="argument min_qp", value=min_qp, expected_type=type_hints["min_qp"])
                 check_type(argname="argument mv_over_picture_boundaries", value=mv_over_picture_boundaries, expected_type=type_hints["mv_over_picture_boundaries"])
@@ -14895,6 +14944,7 @@ class CfnChannel(
                 check_type(argname="argument scan_type", value=scan_type, expected_type=type_hints["scan_type"])
                 check_type(argname="argument scene_change_detect", value=scene_change_detect, expected_type=type_hints["scene_change_detect"])
                 check_type(argname="argument slices", value=slices, expected_type=type_hints["slices"])
+                check_type(argname="argument subgop_length", value=subgop_length, expected_type=type_hints["subgop_length"])
                 check_type(argname="argument tier", value=tier, expected_type=type_hints["tier"])
                 check_type(argname="argument tile_height", value=tile_height, expected_type=type_hints["tile_height"])
                 check_type(argname="argument tile_padding", value=tile_padding, expected_type=type_hints["tile_padding"])
@@ -14929,8 +14979,12 @@ class CfnChannel(
                 self._values["framerate_denominator"] = framerate_denominator
             if framerate_numerator is not None:
                 self._values["framerate_numerator"] = framerate_numerator
+            if gop_b_reference is not None:
+                self._values["gop_b_reference"] = gop_b_reference
             if gop_closed_cadence is not None:
                 self._values["gop_closed_cadence"] = gop_closed_cadence
+            if gop_num_b_frames is not None:
+                self._values["gop_num_b_frames"] = gop_num_b_frames
             if gop_size is not None:
                 self._values["gop_size"] = gop_size
             if gop_size_units is not None:
@@ -14941,6 +14995,8 @@ class CfnChannel(
                 self._values["look_ahead_rate_control"] = look_ahead_rate_control
             if max_bitrate is not None:
                 self._values["max_bitrate"] = max_bitrate
+            if min_bitrate is not None:
+                self._values["min_bitrate"] = min_bitrate
             if min_i_interval is not None:
                 self._values["min_i_interval"] = min_i_interval
             if min_qp is not None:
@@ -14965,6 +15021,8 @@ class CfnChannel(
                 self._values["scene_change_detect"] = scene_change_detect
             if slices is not None:
                 self._values["slices"] = slices
+            if subgop_length is not None:
+                self._values["subgop_length"] = subgop_length
             if tier is not None:
                 self._values["tier"] = tier
             if tile_height is not None:
@@ -15109,6 +15167,14 @@ class CfnChannel(
             return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
+        def gop_b_reference(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-h265settings.html#cfn-medialive-channel-h265settings-gopbreference
+            '''
+            result = self._values.get("gop_b_reference")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
         def gop_closed_cadence(self) -> typing.Optional[jsii.Number]:
             '''Frequency of closed GOPs.
 
@@ -15117,6 +15183,14 @@ class CfnChannel(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-h265settings.html#cfn-medialive-channel-h265settings-gopclosedcadence
             '''
             result = self._values.get("gop_closed_cadence")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def gop_num_b_frames(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-h265settings.html#cfn-medialive-channel-h265settings-gopnumbframes
+            '''
+            result = self._values.get("gop_num_b_frames")
             return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
@@ -15169,6 +15243,14 @@ class CfnChannel(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-h265settings.html#cfn-medialive-channel-h265settings-maxbitrate
             '''
             result = self._values.get("max_bitrate")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min_bitrate(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-h265settings.html#cfn-medialive-channel-h265settings-minbitrate
+            '''
+            result = self._values.get("min_bitrate")
             return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
@@ -15292,6 +15374,14 @@ class CfnChannel(
             '''
             result = self._values.get("slices")
             return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def subgop_length(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-h265settings.html#cfn-medialive-channel-h265settings-subgoplength
+            '''
+            result = self._values.get("subgop_length")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def tier(self) -> typing.Optional[builtins.str]:
@@ -26893,6 +26983,7 @@ class CfnChannel(
                         level="level",
                         look_ahead_rate_control="lookAheadRateControl",
                         max_bitrate=123,
+                        min_bitrate=123,
                         min_iInterval=123,
                         par_denominator=123,
                         par_numerator=123,
@@ -26951,6 +27042,7 @@ class CfnChannel(
                         level="level",
                         look_ahead_rate_control="lookAheadRateControl",
                         max_bitrate=123,
+                        min_bitrate=123,
                         min_iInterval=123,
                         min_qp=123,
                         num_ref_frames=123,
@@ -27008,12 +27100,15 @@ class CfnChannel(
                         flicker_aq="flickerAq",
                         framerate_denominator=123,
                         framerate_numerator=123,
+                        gop_bReference="gopBReference",
                         gop_closed_cadence=123,
+                        gop_num_bFrames=123,
                         gop_size=123,
                         gop_size_units="gopSizeUnits",
                         level="level",
                         look_ahead_rate_control="lookAheadRateControl",
                         max_bitrate=123,
+                        min_bitrate=123,
                         min_iInterval=123,
                         min_qp=123,
                         mv_over_picture_boundaries="mvOverPictureBoundaries",
@@ -27026,6 +27121,7 @@ class CfnChannel(
                         scan_type="scanType",
                         scene_change_detect="sceneChangeDetect",
                         slices=123,
+                        subgop_length="subgopLength",
                         tier="tier",
                         tile_height=123,
                         tile_padding="tilePadding",
@@ -27225,6 +27321,7 @@ class CfnChannel(
                             level="level",
                             look_ahead_rate_control="lookAheadRateControl",
                             max_bitrate=123,
+                            min_bitrate=123,
                             min_iInterval=123,
                             par_denominator=123,
                             par_numerator=123,
@@ -27283,6 +27380,7 @@ class CfnChannel(
                             level="level",
                             look_ahead_rate_control="lookAheadRateControl",
                             max_bitrate=123,
+                            min_bitrate=123,
                             min_iInterval=123,
                             min_qp=123,
                             num_ref_frames=123,
@@ -27340,12 +27438,15 @@ class CfnChannel(
                             flicker_aq="flickerAq",
                             framerate_denominator=123,
                             framerate_numerator=123,
+                            gop_bReference="gopBReference",
                             gop_closed_cadence=123,
+                            gop_num_bFrames=123,
                             gop_size=123,
                             gop_size_units="gopSizeUnits",
                             level="level",
                             look_ahead_rate_control="lookAheadRateControl",
                             max_bitrate=123,
+                            min_bitrate=123,
                             min_iInterval=123,
                             min_qp=123,
                             mv_over_picture_boundaries="mvOverPictureBoundaries",
@@ -27358,6 +27459,7 @@ class CfnChannel(
                             scan_type="scanType",
                             scene_change_detect="sceneChangeDetect",
                             slices=123,
+                            subgop_length="subgopLength",
                             tier="tier",
                             tile_height=123,
                             tile_padding="tilePadding",
@@ -35309,6 +35411,7 @@ def _typecheckingstub__1911156090a37730cd16cc0d13076f448f8b192dca9427883cf77e884
     level: typing.Optional[builtins.str] = None,
     look_ahead_rate_control: typing.Optional[builtins.str] = None,
     max_bitrate: typing.Optional[jsii.Number] = None,
+    min_bitrate: typing.Optional[jsii.Number] = None,
     min_i_interval: typing.Optional[jsii.Number] = None,
     par_denominator: typing.Optional[jsii.Number] = None,
     par_numerator: typing.Optional[jsii.Number] = None,
@@ -35824,6 +35927,7 @@ def _typecheckingstub__b5cab7f49556648d7d963fdbb4cfd87845bc6a70172808b1847d7a218
     level: typing.Optional[builtins.str] = None,
     look_ahead_rate_control: typing.Optional[builtins.str] = None,
     max_bitrate: typing.Optional[jsii.Number] = None,
+    min_bitrate: typing.Optional[jsii.Number] = None,
     min_i_interval: typing.Optional[jsii.Number] = None,
     min_qp: typing.Optional[jsii.Number] = None,
     num_ref_frames: typing.Optional[jsii.Number] = None,
@@ -35882,12 +35986,15 @@ def _typecheckingstub__ba24f075b346c08bd6351ec946aa6352e1a32fe09c8751f612abee3e6
     flicker_aq: typing.Optional[builtins.str] = None,
     framerate_denominator: typing.Optional[jsii.Number] = None,
     framerate_numerator: typing.Optional[jsii.Number] = None,
+    gop_b_reference: typing.Optional[builtins.str] = None,
     gop_closed_cadence: typing.Optional[jsii.Number] = None,
+    gop_num_b_frames: typing.Optional[jsii.Number] = None,
     gop_size: typing.Optional[jsii.Number] = None,
     gop_size_units: typing.Optional[builtins.str] = None,
     level: typing.Optional[builtins.str] = None,
     look_ahead_rate_control: typing.Optional[builtins.str] = None,
     max_bitrate: typing.Optional[jsii.Number] = None,
+    min_bitrate: typing.Optional[jsii.Number] = None,
     min_i_interval: typing.Optional[jsii.Number] = None,
     min_qp: typing.Optional[jsii.Number] = None,
     mv_over_picture_boundaries: typing.Optional[builtins.str] = None,
@@ -35900,6 +36007,7 @@ def _typecheckingstub__ba24f075b346c08bd6351ec946aa6352e1a32fe09c8751f612abee3e6
     scan_type: typing.Optional[builtins.str] = None,
     scene_change_detect: typing.Optional[builtins.str] = None,
     slices: typing.Optional[jsii.Number] = None,
+    subgop_length: typing.Optional[builtins.str] = None,
     tier: typing.Optional[builtins.str] = None,
     tile_height: typing.Optional[jsii.Number] = None,
     tile_padding: typing.Optional[builtins.str] = None,

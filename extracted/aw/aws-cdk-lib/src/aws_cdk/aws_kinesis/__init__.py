@@ -17,6 +17,8 @@ intake and aggregation.
     * [Write Permissions](#write-permissions)
     * [Custom Permissions](#custom-permissions)
   * [Metrics](#metrics)
+
+    * [Shard-level Metrics](#shard-level-metrics)
 * [Stream Consumers](#stream-consumers)
 
   * [Read Permissions](#read-permissions-1)
@@ -188,6 +190,40 @@ stream.metric_get_records_success()
 # using pre-defined and overriding the statistic
 stream.metric_get_records_success(statistic="Maximum")
 ```
+
+#### Shard-level Metrics
+
+You can enable enhanced shard-level metrics for your Kinesis stream to get detailed monitoring of individual shards. Shard-level metrics provide more granular insights into the performance and health of your stream.
+
+```python
+stream = kinesis.Stream(self, "MyStream",
+    shard_level_metrics=[kinesis.ShardLevelMetrics.ALL]
+)
+```
+
+You can also specify individual metrics that you want to monitor:
+
+```python
+stream = kinesis.Stream(self, "MyStream",
+    shard_level_metrics=[kinesis.ShardLevelMetrics.INCOMING_BYTES, kinesis.ShardLevelMetrics.INCOMING_RECORDS, kinesis.ShardLevelMetrics.ITERATOR_AGE_MILLISECONDS, kinesis.ShardLevelMetrics.OUTGOING_BYTES, kinesis.ShardLevelMetrics.OUTGOING_RECORDS, kinesis.ShardLevelMetrics.READ_PROVISIONED_THROUGHPUT_EXCEEDED, kinesis.ShardLevelMetrics.WRITE_PROVISIONED_THROUGHPUT_EXCEEDED
+    ]
+)
+```
+
+Available shard-level metrics include:
+
+* `INCOMING_BYTES` - The number of bytes successfully put to the shard
+* `INCOMING_RECORDS` - The number of records successfully put to the shard
+* `ITERATOR_AGE_MILLISECONDS` - The age of the last record in all GetRecords calls made against a shard
+* `OUTGOING_BYTES` - The number of bytes retrieved from the shard
+* `OUTGOING_RECORDS` - The number of records retrieved from the shard
+* `READ_PROVISIONED_THROUGHPUT_EXCEEDED` - The number of GetRecords calls throttled for the shard
+* `WRITE_PROVISIONED_THROUGHPUT_EXCEEDED` - The number of records rejected due to throttling for the shard
+* `ALL` - All available metrics
+
+Note: You cannot specify `ALL` together with other individual metrics. If you want all metrics, use `ALL` alone.
+
+For more information about shard-level metrics, see [Monitoring the Amazon Kinesis Data Streams Service with Amazon CloudWatch](https://docs.aws.amazon.com/streams/latest/dev/monitoring-with-cloudwatch.html#kinesis-metrics-shard).
 
 ## Stream Consumers
 
@@ -377,7 +413,7 @@ class CfnResourcePolicyProps:
     ) -> None:
         '''Properties for defining a ``CfnResourcePolicy``.
 
-        :param resource_arn: This is the name for the resource policy.
+        :param resource_arn: Returns the Amazon Resource Name (ARN) of the resource-based policy.
         :param resource_policy: This is the description for the resource policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-resourcepolicy.html
@@ -407,7 +443,7 @@ class CfnResourcePolicyProps:
 
     @builtins.property
     def resource_arn(self) -> builtins.str:
-        '''This is the name for the resource policy.
+        '''Returns the Amazon Resource Name (ARN) of the resource-based policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-resourcepolicy.html#cfn-kinesis-resourcepolicy-resourcearn
         '''
@@ -3274,6 +3310,38 @@ class ResourcePolicyReference:
         )
 
 
+@jsii.enum(jsii_type="aws-cdk-lib.aws_kinesis.ShardLevelMetrics")
+class ShardLevelMetrics(enum.Enum):
+    '''Enhanced shard-level metrics.
+
+    :see: https://docs.aws.amazon.com/streams/latest/dev/monitoring-with-cloudwatch.html#kinesis-metrics-shard
+    :exampleMetadata: infused
+
+    Example::
+
+        stream = kinesis.Stream(self, "MyStream",
+            shard_level_metrics=[kinesis.ShardLevelMetrics.ALL]
+        )
+    '''
+
+    INCOMING_BYTES = "INCOMING_BYTES"
+    '''The number of bytes successfully put to the shard over the specified time period.'''
+    INCOMING_RECORDS = "INCOMING_RECORDS"
+    '''The number of records successfully put to the shard over the specified time period.'''
+    ITERATOR_AGE_MILLISECONDS = "ITERATOR_AGE_MILLISECONDS"
+    '''The age of the last record in all GetRecords calls made against a shard, measured over the specified time period.'''
+    OUTGOING_BYTES = "OUTGOING_BYTES"
+    '''The number of bytes retrieved from the shard, measured over the specified time period.'''
+    OUTGOING_RECORDS = "OUTGOING_RECORDS"
+    '''The number of records retrieved from the shard, measured over the specified time period.'''
+    READ_PROVISIONED_THROUGHPUT_EXCEEDED = "READ_PROVISIONED_THROUGHPUT_EXCEEDED"
+    '''The number of GetRecords calls throttled for the shard over the specified time period.'''
+    WRITE_PROVISIONED_THROUGHPUT_EXCEEDED = "WRITE_PROVISIONED_THROUGHPUT_EXCEEDED"
+    '''The number of records rejected due to throttling for the shard over the specified time period.'''
+    ALL = "ALL"
+    '''All metrics.'''
+
+
 @jsii.implements(IStream)
 class Stream(
     _Resource_45bc6135,
@@ -3311,6 +3379,7 @@ class Stream(
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         retention_period: typing.Optional[_Duration_4839e8c3] = None,
         shard_count: typing.Optional[jsii.Number] = None,
+        shard_level_metrics: typing.Optional[typing.Sequence[ShardLevelMetrics]] = None,
         stream_mode: typing.Optional["StreamMode"] = None,
         stream_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -3322,6 +3391,7 @@ class Stream(
         :param removal_policy: Policy to apply when the stream is removed from the stack. Default: RemovalPolicy.RETAIN
         :param retention_period: The number of hours for the data records that are stored in shards to remain accessible. Default: Duration.hours(24)
         :param shard_count: The number of shards for the stream. Can only be provided if streamMode is Provisioned. Default: 1
+        :param shard_level_metrics: A list of shard-level metrics in properties to enable enhanced monitoring mode. Default: undefined - AWS Kinesis default is disabled
         :param stream_mode: The capacity mode of this stream. Default: StreamMode.PROVISIONED
         :param stream_name: Enforces a particular physical stream name. Default: 
         '''
@@ -3335,6 +3405,7 @@ class Stream(
             removal_policy=removal_policy,
             retention_period=retention_period,
             shard_count=shard_count,
+            shard_level_metrics=shard_level_metrics,
             stream_mode=stream_mode,
             stream_name=stream_name,
         )
@@ -5034,6 +5105,7 @@ class StreamMode(enum.Enum):
         "removal_policy": "removalPolicy",
         "retention_period": "retentionPeriod",
         "shard_count": "shardCount",
+        "shard_level_metrics": "shardLevelMetrics",
         "stream_mode": "streamMode",
         "stream_name": "streamName",
     },
@@ -5047,6 +5119,7 @@ class StreamProps:
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         retention_period: typing.Optional[_Duration_4839e8c3] = None,
         shard_count: typing.Optional[jsii.Number] = None,
+        shard_level_metrics: typing.Optional[typing.Sequence[ShardLevelMetrics]] = None,
         stream_mode: typing.Optional[StreamMode] = None,
         stream_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -5057,6 +5130,7 @@ class StreamProps:
         :param removal_policy: Policy to apply when the stream is removed from the stack. Default: RemovalPolicy.RETAIN
         :param retention_period: The number of hours for the data records that are stored in shards to remain accessible. Default: Duration.hours(24)
         :param shard_count: The number of shards for the stream. Can only be provided if streamMode is Provisioned. Default: 1
+        :param shard_level_metrics: A list of shard-level metrics in properties to enable enhanced monitoring mode. Default: undefined - AWS Kinesis default is disabled
         :param stream_mode: The capacity mode of this stream. Default: StreamMode.PROVISIONED
         :param stream_name: Enforces a particular physical stream name. Default: 
 
@@ -5078,6 +5152,7 @@ class StreamProps:
             check_type(argname="argument removal_policy", value=removal_policy, expected_type=type_hints["removal_policy"])
             check_type(argname="argument retention_period", value=retention_period, expected_type=type_hints["retention_period"])
             check_type(argname="argument shard_count", value=shard_count, expected_type=type_hints["shard_count"])
+            check_type(argname="argument shard_level_metrics", value=shard_level_metrics, expected_type=type_hints["shard_level_metrics"])
             check_type(argname="argument stream_mode", value=stream_mode, expected_type=type_hints["stream_mode"])
             check_type(argname="argument stream_name", value=stream_name, expected_type=type_hints["stream_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -5091,6 +5166,8 @@ class StreamProps:
             self._values["retention_period"] = retention_period
         if shard_count is not None:
             self._values["shard_count"] = shard_count
+        if shard_level_metrics is not None:
+            self._values["shard_level_metrics"] = shard_level_metrics
         if stream_mode is not None:
             self._values["stream_mode"] = stream_mode
         if stream_name is not None:
@@ -5155,6 +5232,17 @@ class StreamProps:
         '''
         result = self._values.get("shard_count")
         return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def shard_level_metrics(self) -> typing.Optional[typing.List[ShardLevelMetrics]]:
+        '''A list of shard-level metrics in properties to enable enhanced monitoring mode.
+
+        :default: undefined - AWS Kinesis default is disabled
+
+        :see: https://docs.aws.amazon.com/streams/latest/dev/monitoring-with-cloudwatch.html#kinesis-metrics-shard
+        '''
+        result = self._values.get("shard_level_metrics")
+        return typing.cast(typing.Optional[typing.List[ShardLevelMetrics]], result)
 
     @builtins.property
     def stream_mode(self) -> typing.Optional[StreamMode]:
@@ -5292,7 +5380,7 @@ class CfnResourcePolicy(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param resource_arn: This is the name for the resource policy.
+        :param resource_arn: Returns the Amazon Resource Name (ARN) of the resource-based policy.
         :param resource_policy: This is the description for the resource policy.
         '''
         if __debug__:
@@ -5349,7 +5437,7 @@ class CfnResourcePolicy(
     @builtins.property
     @jsii.member(jsii_name="resourceArn")
     def resource_arn(self) -> builtins.str:
-        '''This is the name for the resource policy.'''
+        '''Returns the Amazon Resource Name (ARN) of the resource-based policy.'''
         return typing.cast(builtins.str, jsii.get(self, "resourceArn"))
 
     @resource_arn.setter
@@ -6015,6 +6103,7 @@ __all__ = [
     "ResourcePolicy",
     "ResourcePolicyProps",
     "ResourcePolicyReference",
+    "ShardLevelMetrics",
     "Stream",
     "StreamAttributes",
     "StreamConsumer",
@@ -6164,6 +6253,7 @@ def _typecheckingstub__d9e4f581406090d861e3fe8214f939eedc5d1ccaffe122a7542878ec4
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     retention_period: typing.Optional[_Duration_4839e8c3] = None,
     shard_count: typing.Optional[jsii.Number] = None,
+    shard_level_metrics: typing.Optional[typing.Sequence[ShardLevelMetrics]] = None,
     stream_mode: typing.Optional[StreamMode] = None,
     stream_name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -6321,6 +6411,7 @@ def _typecheckingstub__88629f78086711b76f550ae13e14f2db1429deb350aa5b10b7073d585
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     retention_period: typing.Optional[_Duration_4839e8c3] = None,
     shard_count: typing.Optional[jsii.Number] = None,
+    shard_level_metrics: typing.Optional[typing.Sequence[ShardLevelMetrics]] = None,
     stream_mode: typing.Optional[StreamMode] = None,
     stream_name: typing.Optional[builtins.str] = None,
 ) -> None:

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: hypothesis
-Version: 6.140.3
+Version: 6.141.0
 Summary: A library for property-based testing
 Author-email: "David R. MacIver and Zac Hatfield-Dodds" <david@drmaciver.com>
 License-Expression: MPL-2.0
@@ -25,6 +25,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Programming Language :: Python :: Implementation :: PyPy
 Classifier: Topic :: Education :: Testing
@@ -62,7 +63,7 @@ Provides-Extra: redis
 Requires-Dist: redis>=3.0.0; extra == "redis"
 Provides-Extra: crosshair
 Requires-Dist: hypothesis-crosshair>=0.0.25; extra == "crosshair"
-Requires-Dist: crosshair-tool>=0.0.95; extra == "crosshair"
+Requires-Dist: crosshair-tool>=0.0.97; extra == "crosshair"
 Provides-Extra: zoneinfo
 Requires-Dist: tzdata>=2025.2; (sys_platform == "win32" or sys_platform == "emscripten") and extra == "zoneinfo"
 Provides-Extra: django
@@ -72,7 +73,7 @@ Requires-Dist: watchdog>=4.0.0; extra == "watchdog"
 Provides-Extra: all
 Requires-Dist: black>=20.8b0; extra == "all"
 Requires-Dist: click>=7.0; extra == "all"
-Requires-Dist: crosshair-tool>=0.0.95; extra == "all"
+Requires-Dist: crosshair-tool>=0.0.97; extra == "all"
 Requires-Dist: django>=4.2; extra == "all"
 Requires-Dist: dpcontracts>=0.4; extra == "all"
 Requires-Dist: hypothesis-crosshair>=0.0.25; extra == "all"

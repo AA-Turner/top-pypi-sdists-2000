@@ -886,6 +886,14 @@ class CfnPlan(
         return typing.cast(builtins.str, jsii.get(self, "attrOwner"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrPlanHealthChecks")
+    def attr_plan_health_checks(self) -> typing.List[builtins.str]:
+        '''
+        :cloudformationAttribute: PlanHealthChecks
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "attrPlanHealthChecks"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrRoute53HealthChecks")
     def attr_route53_health_checks(self) -> _IResolvable_da3f097b:
         '''

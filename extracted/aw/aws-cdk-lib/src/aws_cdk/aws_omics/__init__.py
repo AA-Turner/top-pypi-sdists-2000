@@ -2295,7 +2295,13 @@ class CfnAnnotationStore(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_omics.CfnAnnotationStore",
 ):
-    '''Creates an annotation store.
+    '''.. epigraph::
+
+   AWS HealthOmics variant stores and annotation stores will no longer be open to new customers starting November 7, 2025.
+
+    If you would like to use variant stores or annotation stores, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see `AWS HealthOmics variant store and annotation store availability change <https://docs.aws.amazon.com/omics/latest/dev/variant-store-availability-change.html>`_ .
+
+    Creates an annotation store.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html
     :cloudformationResource: AWS::Omics::AnnotationStore

@@ -205,7 +205,7 @@ class CfnAccessPointPolicyProps:
     ) -> None:
         '''Properties for defining a ``CfnAccessPointPolicy``.
 
-        :param object_lambda_access_point: An access point with an attached AWS Lambda function used to access transformed data from an Amazon S3 bucket.
+        :param object_lambda_access_point: .. epigraph:: Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025. If you would like to use the service, please sign up prior to 11/7/2025. For capabilities similar to S3 Object Lambda, learn more here - `Amazon S3 Object Lambda availability change <https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazons3-ol-change.html>`_ . An access point with an attached AWS Lambda function used to access transformed data from an Amazon S3 bucket.
         :param policy_document: Object Lambda Access Point resource policy document.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3objectlambda-accesspointpolicy.html
@@ -235,7 +235,13 @@ class CfnAccessPointPolicyProps:
 
     @builtins.property
     def object_lambda_access_point(self) -> builtins.str:
-        '''An access point with an attached AWS Lambda function used to access transformed data from an Amazon S3 bucket.
+        '''.. epigraph::
+
+   Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025.
+
+        If you would like to use the service, please sign up prior to 11/7/2025. For capabilities similar to S3 Object Lambda, learn more here - `Amazon S3 Object Lambda availability change <https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazons3-ol-change.html>`_ .
+
+        An access point with an attached AWS Lambda function used to access transformed data from an Amazon S3 bucket.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3objectlambda-accesspointpolicy.html#cfn-s3objectlambda-accesspointpolicy-objectlambdaaccesspoint
         '''
@@ -282,7 +288,7 @@ class CfnAccessPointProps:
     ) -> None:
         '''Properties for defining a ``CfnAccessPoint``.
 
-        :param object_lambda_configuration: A configuration used when creating an Object Lambda Access Point.
+        :param object_lambda_configuration: .. epigraph:: Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025. If you would like to use the service, please sign up prior to 11/7/2025. For capabilities similar to S3 Object Lambda, learn more here - `Amazon S3 Object Lambda availability change <https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazons3-ol-change.html>`_ . A configuration used when creating an Object Lambda Access Point.
         :param name: The name of this access point.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3objectlambda-accesspoint.html
@@ -327,7 +333,13 @@ class CfnAccessPointProps:
     def object_lambda_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ObjectLambdaConfigurationProperty"]:
-        '''A configuration used when creating an Object Lambda Access Point.
+        '''.. epigraph::
+
+   Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025.
+
+        If you would like to use the service, please sign up prior to 11/7/2025. For capabilities similar to S3 Object Lambda, learn more here - `Amazon S3 Object Lambda availability change <https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazons3-ol-change.html>`_ .
+
+        A configuration used when creating an Object Lambda Access Point.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3objectlambda-accesspoint.html#cfn-s3objectlambda-accesspoint-objectlambdaconfiguration
         '''
@@ -488,7 +500,7 @@ class CfnAccessPoint(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param object_lambda_configuration: A configuration used when creating an Object Lambda Access Point.
+        :param object_lambda_configuration: .. epigraph:: Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025. If you would like to use the service, please sign up prior to 11/7/2025. For capabilities similar to S3 Object Lambda, learn more here - `Amazon S3 Object Lambda availability change <https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazons3-ol-change.html>`_ . A configuration used when creating an Object Lambda Access Point.
         :param name: The name of this access point.
         '''
         if __debug__:
@@ -665,7 +677,9 @@ class CfnAccessPoint(
     def object_lambda_configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ObjectLambdaConfigurationProperty"]:
-        '''A configuration used when creating an Object Lambda Access Point.'''
+        '''.. epigraph::
+
+   Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ObjectLambdaConfigurationProperty"], jsii.get(self, "objectLambdaConfiguration"))
 
     @object_lambda_configuration.setter
@@ -703,9 +717,13 @@ class CfnAccessPoint(
             value: builtins.str,
             status: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The alias of an Object Lambda Access Point.
+            '''.. epigraph::
 
-            For more information, see `How to use a bucket-style alias for your S3 bucket Object Lambda Access Point <https://docs.aws.amazon.com/AmazonS3/latest/userguide/olap-use.html#ol-access-points-alias>`_ .
+   Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025.
+
+            If you would like to use the service, please sign up prior to 11/7/2025. For capabilities similar to S3 Object Lambda, learn more here - `Amazon S3 Object Lambda availability change <https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazons3-ol-change.html>`_ .
+
+            The alias of an Object Lambda Access Point. For more information, see `How to use a bucket-style alias for your S3 bucket Object Lambda Access Point <https://docs.aws.amazon.com/AmazonS3/latest/userguide/olap-use.html#ol-access-points-alias>`_ .
 
             :param value: The alias value of the Object Lambda Access Point.
             :param status: The status of the Object Lambda Access Point alias. If the status is ``PROVISIONING`` , the Object Lambda Access Point is provisioning the alias and the alias is not ready for use yet. If the status is ``READY`` , the Object Lambda Access Point alias is successfully provisioned and ready for use.
@@ -921,7 +939,13 @@ class CfnAccessPoint(
             allowed_features: typing.Optional[typing.Sequence[builtins.str]] = None,
             cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ) -> None:
-            '''A configuration used when creating an Object Lambda Access Point.
+            '''.. epigraph::
+
+   Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025.
+
+            If you would like to use the service, please sign up prior to 11/7/2025. For capabilities similar to S3 Object Lambda, learn more here - `Amazon S3 Object Lambda availability change <https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazons3-ol-change.html>`_ .
+
+            A configuration used when creating an Object Lambda Access Point.
 
             :param supporting_access_point: Standard access point associated with the Object Lambda Access Point.
             :param transformation_configurations: A container for transformation configurations for an Object Lambda Access Point.
@@ -1239,7 +1263,13 @@ class CfnAccessPoint(
             actions: typing.Sequence[builtins.str],
             content_transformation: typing.Any,
         ) -> None:
-            '''A configuration used when creating an Object Lambda Access Point transformation.
+            '''.. epigraph::
+
+   Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025.
+
+            If you would like to use the service, please sign up prior to 11/7/2025. For capabilities similar to S3 Object Lambda, learn more here - `Amazon S3 Object Lambda availability change <https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazons3-ol-change.html>`_ .
+
+            A configuration used when creating an Object Lambda Access Point transformation.
 
             :param actions: A container for the action of an Object Lambda Access Point configuration. Valid inputs are ``GetObject`` , ``HeadObject`` , ``ListObject`` , and ``ListObjectV2`` .
             :param content_transformation: A container for the content transformation of an Object Lambda Access Point configuration. Can include the FunctionArn and FunctionPayload. For more information, see `AwsLambdaTransformation <https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_AwsLambdaTransformation.html>`_ in the *Amazon S3 API Reference* .
@@ -1342,7 +1372,7 @@ class CfnAccessPointPolicy(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param object_lambda_access_point: An access point with an attached AWS Lambda function used to access transformed data from an Amazon S3 bucket.
+        :param object_lambda_access_point: .. epigraph:: Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025. If you would like to use the service, please sign up prior to 11/7/2025. For capabilities similar to S3 Object Lambda, learn more here - `Amazon S3 Object Lambda availability change <https://docs.aws.amazon.com/AmazonS3/latest/userguide/amazons3-ol-change.html>`_ . An access point with an attached AWS Lambda function used to access transformed data from an Amazon S3 bucket.
         :param policy_document: Object Lambda Access Point resource policy document.
         '''
         if __debug__:
@@ -1400,7 +1430,9 @@ class CfnAccessPointPolicy(
     @builtins.property
     @jsii.member(jsii_name="objectLambdaAccessPoint")
     def object_lambda_access_point(self) -> builtins.str:
-        '''An access point with an attached AWS Lambda function used to access transformed data from an Amazon S3 bucket.'''
+        '''.. epigraph::
+
+   Amazon S3 Object Lambda will no longer be open to new customers starting on 11/7/2025.'''
         return typing.cast(builtins.str, jsii.get(self, "objectLambdaAccessPoint"))
 
     @object_lambda_access_point.setter

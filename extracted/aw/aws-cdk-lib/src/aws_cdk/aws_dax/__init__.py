@@ -118,7 +118,7 @@ class CfnClusterProps:
         :param cluster_endpoint_encryption_type: The encryption type of the cluster's endpoint. Available values are:. - ``NONE`` - The cluster's endpoint will be unencrypted. - ``TLS`` - The cluster's endpoint will be encrypted with Transport Layer Security, and will provide an x509 certificate for authentication. The default value is ``NONE`` .
         :param cluster_name: The name of the DAX cluster.
         :param description: The description of the cluster.
-        :param network_type: 
+        :param network_type: The IP address type of the cluster. Values are:. - ``ipv4`` - IPv4 addresses only - ``ipv6`` - IPv6 addresses only - ``dual_stack`` - Both IPv4 and IPv6 addresses
         :param notification_topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications will be sent. .. epigraph:: The Amazon SNS topic owner must be same as the DAX cluster owner.
         :param parameter_group_name: The parameter group to be associated with the DAX cluster.
         :param preferred_maintenance_window: A range of time when maintenance of DAX cluster software will be performed. For example: ``sun:01:00-sun:09:00`` . Cluster maintenance normally takes less than 30 minutes, and is performed automatically within the maintenance window.
@@ -291,7 +291,12 @@ class CfnClusterProps:
 
     @builtins.property
     def network_type(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The IP address type of the cluster. Values are:.
+
+        - ``ipv4`` - IPv4 addresses only
+        - ``ipv6`` - IPv6 addresses only
+        - ``dual_stack`` - Both IPv4 and IPv6 addresses
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dax-cluster.html#cfn-dax-cluster-networktype
         '''
         result = self._values.get("network_type")
@@ -932,7 +937,7 @@ class CfnCluster(
         :param cluster_endpoint_encryption_type: The encryption type of the cluster's endpoint. Available values are:. - ``NONE`` - The cluster's endpoint will be unencrypted. - ``TLS`` - The cluster's endpoint will be encrypted with Transport Layer Security, and will provide an x509 certificate for authentication. The default value is ``NONE`` .
         :param cluster_name: The name of the DAX cluster.
         :param description: The description of the cluster.
-        :param network_type: 
+        :param network_type: The IP address type of the cluster. Values are:. - ``ipv4`` - IPv4 addresses only - ``ipv6`` - IPv6 addresses only - ``dual_stack`` - Both IPv4 and IPv6 addresses
         :param notification_topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications will be sent. .. epigraph:: The Amazon SNS topic owner must be same as the DAX cluster owner.
         :param parameter_group_name: The parameter group to be associated with the DAX cluster.
         :param preferred_maintenance_window: A range of time when maintenance of DAX cluster software will be performed. For example: ``sun:01:00-sun:09:00`` . Cluster maintenance normally takes less than 30 minutes, and is performed automatically within the maintenance window.
@@ -1162,6 +1167,10 @@ class CfnCluster(
     @builtins.property
     @jsii.member(jsii_name="networkType")
     def network_type(self) -> typing.Optional[builtins.str]:
+        '''The IP address type of the cluster.
+
+        Values are:.
+        '''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "networkType"))
 
     @network_type.setter

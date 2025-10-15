@@ -499,6 +499,7 @@ class EdgeFunction(
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[_FunctionUrlAuthType_9c7b2c86] = None,
+        invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
         scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
         source_account: typing.Optional[builtins.str] = None,
@@ -511,6 +512,7 @@ class EdgeFunction(
         :param action: The Lambda actions that you want to allow in this statement. For example, you can specify lambda:CreateFunction to specify a certain action, or use a wildcard (``lambda:*``) to grant permission to all Lambda actions. For a list of actions, see Actions and Condition Context Keys for AWS Lambda in the IAM User Guide. Default: 'lambda:InvokeFunction'
         :param event_source_token: A unique token that must be supplied by the principal invoking the function. Default: - The caller would not need to present a token.
         :param function_url_auth_type: The authType for the function URL that you are granting permissions for. Default: - No functionUrlAuthType
+        :param invoked_via_function_url: The condition key for limiting the scope of lambda:InvokeFunction action to Function URL only. When set to true, it restricts the principal in this policy to perform invokes for the resource only via Function URLs. Default: - false
         :param organization_id: The organization you want to grant permissions to. Use this ONLY if you need to grant permissions to a subset of the organization. If you want to grant permissions to the entire organization, sending the organization principal through the ``principal`` property will suffice. You can use this property to ensure that all source principals are owned by a specific organization. Default: - No organizationId
         :param scope: The scope to which the permission constructs be attached. The default is the Lambda function construct itself, but this would need to be different in cases such as cross-stack references where the Permissions would need to sit closer to the consumer of this permission (i.e., the caller). Default: - The instance of lambda.IFunction
         :param source_account: The AWS account ID (without hyphens) of the source owner. For example, if you specify an S3 bucket in the SourceArn property, this value is the bucket owner's account ID. You can use this property to ensure that all source principals are owned by a specific account.
@@ -524,6 +526,7 @@ class EdgeFunction(
             action=action,
             event_source_token=event_source_token,
             function_url_auth_type=function_url_auth_type,
+            invoked_via_function_url=invoked_via_function_url,
             organization_id=organization_id,
             scope=scope,
             source_account=source_account,
@@ -2196,6 +2199,7 @@ def _typecheckingstub__2eb22d84593be3f12d95da9b201a03a4c5bc3b744aa1e4ce7f555d5cd
     action: typing.Optional[builtins.str] = None,
     event_source_token: typing.Optional[builtins.str] = None,
     function_url_auth_type: typing.Optional[_FunctionUrlAuthType_9c7b2c86] = None,
+    invoked_via_function_url: typing.Optional[builtins.bool] = None,
     organization_id: typing.Optional[builtins.str] = None,
     scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
     source_account: typing.Optional[builtins.str] = None,

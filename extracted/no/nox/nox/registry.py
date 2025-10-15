@@ -14,10 +14,10 @@
 
 from __future__ import annotations
 
-import collections
 import copy
 import functools
-from typing import TYPE_CHECKING, Any, Callable, overload
+import warnings
+from typing import TYPE_CHECKING, Any, Callable, Literal, overload
 
 from ._decorators import Func
 
@@ -35,7 +35,7 @@ def __dir__() -> list[str]:
 
 RawFunc = Callable[..., Any]
 
-_REGISTRY: collections.OrderedDict[str, Func] = collections.OrderedDict()
+_REGISTRY: dict[str, Func] = {}
 
 
 @overload
@@ -48,14 +48,15 @@ def session_decorator(
     /,
     python: Python | None = ...,
     py: Python | None = ...,
-    reuse_venv: bool | None = ...,
+    reuse_venv: bool | None = ...,  # noqa: FBT001
     name: str | None = ...,
-    venv_backend: Any | None = ...,
+    venv_backend: str | None = ...,
     venv_params: Sequence[str] = ...,
     tags: Sequence[str] | None = ...,
     *,
     default: bool = ...,
     requires: Sequence[str] | None = ...,
+    download_python: Literal["auto", "never", "always"] | None = None,
 ) -> Callable[[RawFunc | Func], Func]: ...
 
 
@@ -64,14 +65,15 @@ def session_decorator(
     /,
     python: Python | None = None,
     py: Python | None = None,
-    reuse_venv: bool | None = None,
+    reuse_venv: bool | None = None,  # noqa: FBT001
     name: str | None = None,
-    venv_backend: Any | None = None,
+    venv_backend: str | None = None,
     venv_params: Sequence[str] = (),
     tags: Sequence[str] | None = None,
     *,
     default: bool = True,
     requires: Sequence[str] | None = None,
+    download_python: Literal["auto", "never", "always"] | None = None,
 ) -> Func | Callable[[RawFunc | Func], Func]:
     """Designate the decorated function as a session."""
     # If `func` is provided, then this is the decorator call with the function
@@ -93,6 +95,7 @@ def session_decorator(
             tags=tags,
             default=default,
             requires=requires,
+            download_python=download_python,
         )
 
     if py is not None and python is not None:
@@ -117,12 +120,21 @@ def session_decorator(
         tags=tags,
         default=default,
         requires=requires,
+        download_python=download_python,
     )
-    _REGISTRY[name or func.__name__] = fn
+    reg_name = name or func.__name__
+    if reg_name in _REGISTRY:
+        msg = (
+            f"The session {reg_name!r} has already been registered; "
+            "this will be an error in a future version of nox. "
+            "Overriding the old session for now."
+        )
+        warnings.warn(msg, FutureWarning, stacklevel=2)
+    _REGISTRY[reg_name] = fn
     return fn
 
 
-def get() -> collections.OrderedDict[str, Func]:
+def get() -> dict[str, Func]:
     """Return a shallow copy of the registry.
 
     This ensures that the registry is not accidentally modified by

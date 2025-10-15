@@ -553,6 +553,10 @@ logs.Transformer(self, "Transformer",
 
 For more details on CloudWatch Logs transformation processors, refer to the [AWS documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html).
 
+### Usage of metric filters on transformed logs
+
+In order to use the transformed logs as search pattern, set the parameter `applyOnTransformedLogs: true` in the MetricFilterProps.
+
 ## Notes
 
 Be aware that Log Group ARNs will always have the string `:*` appended to
@@ -5541,6 +5545,7 @@ class ILogGroup(_IResourceWithPolicy_720d64fc, typing_extensions.Protocol):
         filter_pattern: IFilterPattern,
         metric_name: builtins.str,
         metric_namespace: builtins.str,
+        apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
         default_value: typing.Optional[jsii.Number] = None,
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
@@ -5553,6 +5558,7 @@ class ILogGroup(_IResourceWithPolicy_720d64fc, typing_extensions.Protocol):
         :param filter_pattern: Pattern to search for log events.
         :param metric_name: The name of the metric to emit.
         :param metric_namespace: The namespace of the metric to emit.
+        :param apply_on_transformed_logs: Whether the metric filter is applied on the tranformed logs. This parameter is valid only for log groups that have an active log transformer. If this value is true, the metric filter is applied on the transformed version of the log events instead of the original ingested log events. Default: - false
         :param default_value: The value to emit if the pattern does not match a particular event. Default: No metric emitted.
         :param dimensions: The fields to use as dimensions for the metric. One metric filter can include as many as three dimensions. Default: - No dimensions attached to metrics.
         :param filter_name: The name of the metric filter. Default: - Cloudformation generated name.
@@ -5810,6 +5816,7 @@ class _ILogGroupProxy(
         filter_pattern: IFilterPattern,
         metric_name: builtins.str,
         metric_namespace: builtins.str,
+        apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
         default_value: typing.Optional[jsii.Number] = None,
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
@@ -5822,6 +5829,7 @@ class _ILogGroupProxy(
         :param filter_pattern: Pattern to search for log events.
         :param metric_name: The name of the metric to emit.
         :param metric_namespace: The namespace of the metric to emit.
+        :param apply_on_transformed_logs: Whether the metric filter is applied on the tranformed logs. This parameter is valid only for log groups that have an active log transformer. If this value is true, the metric filter is applied on the transformed version of the log events instead of the original ingested log events. Default: - false
         :param default_value: The value to emit if the pattern does not match a particular event. Default: No metric emitted.
         :param dimensions: The fields to use as dimensions for the metric. One metric filter can include as many as three dimensions. Default: - No dimensions attached to metrics.
         :param filter_name: The name of the metric filter. Default: - Cloudformation generated name.
@@ -5835,6 +5843,7 @@ class _ILogGroupProxy(
             filter_pattern=filter_pattern,
             metric_name=metric_name,
             metric_namespace=metric_namespace,
+            apply_on_transformed_logs=apply_on_transformed_logs,
             default_value=default_value,
             dimensions=dimensions,
             filter_name=filter_name,
@@ -7308,6 +7317,7 @@ class LogGroup(
         filter_pattern: IFilterPattern,
         metric_name: builtins.str,
         metric_namespace: builtins.str,
+        apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
         default_value: typing.Optional[jsii.Number] = None,
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
@@ -7320,6 +7330,7 @@ class LogGroup(
         :param filter_pattern: Pattern to search for log events.
         :param metric_name: The name of the metric to emit.
         :param metric_namespace: The namespace of the metric to emit.
+        :param apply_on_transformed_logs: Whether the metric filter is applied on the tranformed logs. This parameter is valid only for log groups that have an active log transformer. If this value is true, the metric filter is applied on the transformed version of the log events instead of the original ingested log events. Default: - false
         :param default_value: The value to emit if the pattern does not match a particular event. Default: No metric emitted.
         :param dimensions: The fields to use as dimensions for the metric. One metric filter can include as many as three dimensions. Default: - No dimensions attached to metrics.
         :param filter_name: The name of the metric filter. Default: - Cloudformation generated name.
@@ -7333,6 +7344,7 @@ class LogGroup(
             filter_pattern=filter_pattern,
             metric_name=metric_name,
             metric_namespace=metric_namespace,
+            apply_on_transformed_logs=apply_on_transformed_logs,
             default_value=default_value,
             dimensions=dimensions,
             filter_name=filter_name,
@@ -8654,6 +8666,7 @@ class MetricFilter(
         filter_pattern: IFilterPattern,
         metric_name: builtins.str,
         metric_namespace: builtins.str,
+        apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
         default_value: typing.Optional[jsii.Number] = None,
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
@@ -8667,6 +8680,7 @@ class MetricFilter(
         :param filter_pattern: Pattern to search for log events.
         :param metric_name: The name of the metric to emit.
         :param metric_namespace: The namespace of the metric to emit.
+        :param apply_on_transformed_logs: Whether the metric filter is applied on the tranformed logs. This parameter is valid only for log groups that have an active log transformer. If this value is true, the metric filter is applied on the transformed version of the log events instead of the original ingested log events. Default: - false
         :param default_value: The value to emit if the pattern does not match a particular event. Default: No metric emitted.
         :param dimensions: The fields to use as dimensions for the metric. One metric filter can include as many as three dimensions. Default: - No dimensions attached to metrics.
         :param filter_name: The name of the metric filter. Default: - Cloudformation generated name.
@@ -8682,6 +8696,7 @@ class MetricFilter(
             filter_pattern=filter_pattern,
             metric_name=metric_name,
             metric_namespace=metric_namespace,
+            apply_on_transformed_logs=apply_on_transformed_logs,
             default_value=default_value,
             dimensions=dimensions,
             filter_name=filter_name,
@@ -8756,6 +8771,7 @@ class MetricFilter(
         "filter_pattern": "filterPattern",
         "metric_name": "metricName",
         "metric_namespace": "metricNamespace",
+        "apply_on_transformed_logs": "applyOnTransformedLogs",
         "default_value": "defaultValue",
         "dimensions": "dimensions",
         "filter_name": "filterName",
@@ -8770,6 +8786,7 @@ class MetricFilterOptions:
         filter_pattern: IFilterPattern,
         metric_name: builtins.str,
         metric_namespace: builtins.str,
+        apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
         default_value: typing.Optional[jsii.Number] = None,
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
@@ -8781,6 +8798,7 @@ class MetricFilterOptions:
         :param filter_pattern: Pattern to search for log events.
         :param metric_name: The name of the metric to emit.
         :param metric_namespace: The namespace of the metric to emit.
+        :param apply_on_transformed_logs: Whether the metric filter is applied on the tranformed logs. This parameter is valid only for log groups that have an active log transformer. If this value is true, the metric filter is applied on the transformed version of the log events instead of the original ingested log events. Default: - false
         :param default_value: The value to emit if the pattern does not match a particular event. Default: No metric emitted.
         :param dimensions: The fields to use as dimensions for the metric. One metric filter can include as many as three dimensions. Default: - No dimensions attached to metrics.
         :param filter_name: The name of the metric filter. Default: - Cloudformation generated name.
@@ -8804,6 +8822,7 @@ class MetricFilterOptions:
                 metric_namespace="metricNamespace",
             
                 # the properties below are optional
+                apply_on_transformed_logs=False,
                 default_value=123,
                 dimensions={
                     "dimensions_key": "dimensions"
@@ -8818,6 +8837,7 @@ class MetricFilterOptions:
             check_type(argname="argument filter_pattern", value=filter_pattern, expected_type=type_hints["filter_pattern"])
             check_type(argname="argument metric_name", value=metric_name, expected_type=type_hints["metric_name"])
             check_type(argname="argument metric_namespace", value=metric_namespace, expected_type=type_hints["metric_namespace"])
+            check_type(argname="argument apply_on_transformed_logs", value=apply_on_transformed_logs, expected_type=type_hints["apply_on_transformed_logs"])
             check_type(argname="argument default_value", value=default_value, expected_type=type_hints["default_value"])
             check_type(argname="argument dimensions", value=dimensions, expected_type=type_hints["dimensions"])
             check_type(argname="argument filter_name", value=filter_name, expected_type=type_hints["filter_name"])
@@ -8828,6 +8848,8 @@ class MetricFilterOptions:
             "metric_name": metric_name,
             "metric_namespace": metric_namespace,
         }
+        if apply_on_transformed_logs is not None:
+            self._values["apply_on_transformed_logs"] = apply_on_transformed_logs
         if default_value is not None:
             self._values["default_value"] = default_value
         if dimensions is not None:
@@ -8859,6 +8881,18 @@ class MetricFilterOptions:
         result = self._values.get("metric_namespace")
         assert result is not None, "Required property 'metric_namespace' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def apply_on_transformed_logs(self) -> typing.Optional[builtins.bool]:
+        '''Whether the metric filter is applied on the tranformed logs.
+
+        This parameter is valid only for log groups that have an active log transformer.
+        If this value is true, the metric filter is applied on the transformed version of the log events instead of the original ingested log events.
+
+        :default: - false
+        '''
+        result = self._values.get("apply_on_transformed_logs")
+        return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
     def default_value(self) -> typing.Optional[jsii.Number]:
@@ -8940,6 +8974,7 @@ class MetricFilterOptions:
         "filter_pattern": "filterPattern",
         "metric_name": "metricName",
         "metric_namespace": "metricNamespace",
+        "apply_on_transformed_logs": "applyOnTransformedLogs",
         "default_value": "defaultValue",
         "dimensions": "dimensions",
         "filter_name": "filterName",
@@ -8955,6 +8990,7 @@ class MetricFilterProps(MetricFilterOptions):
         filter_pattern: IFilterPattern,
         metric_name: builtins.str,
         metric_namespace: builtins.str,
+        apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
         default_value: typing.Optional[jsii.Number] = None,
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
@@ -8967,6 +9003,7 @@ class MetricFilterProps(MetricFilterOptions):
         :param filter_pattern: Pattern to search for log events.
         :param metric_name: The name of the metric to emit.
         :param metric_namespace: The namespace of the metric to emit.
+        :param apply_on_transformed_logs: Whether the metric filter is applied on the tranformed logs. This parameter is valid only for log groups that have an active log transformer. If this value is true, the metric filter is applied on the transformed version of the log events instead of the original ingested log events. Default: - false
         :param default_value: The value to emit if the pattern does not match a particular event. Default: No metric emitted.
         :param dimensions: The fields to use as dimensions for the metric. One metric filter can include as many as three dimensions. Default: - No dimensions attached to metrics.
         :param filter_name: The name of the metric filter. Default: - Cloudformation generated name.
@@ -8993,6 +9030,7 @@ class MetricFilterProps(MetricFilterOptions):
             check_type(argname="argument filter_pattern", value=filter_pattern, expected_type=type_hints["filter_pattern"])
             check_type(argname="argument metric_name", value=metric_name, expected_type=type_hints["metric_name"])
             check_type(argname="argument metric_namespace", value=metric_namespace, expected_type=type_hints["metric_namespace"])
+            check_type(argname="argument apply_on_transformed_logs", value=apply_on_transformed_logs, expected_type=type_hints["apply_on_transformed_logs"])
             check_type(argname="argument default_value", value=default_value, expected_type=type_hints["default_value"])
             check_type(argname="argument dimensions", value=dimensions, expected_type=type_hints["dimensions"])
             check_type(argname="argument filter_name", value=filter_name, expected_type=type_hints["filter_name"])
@@ -9005,6 +9043,8 @@ class MetricFilterProps(MetricFilterOptions):
             "metric_namespace": metric_namespace,
             "log_group": log_group,
         }
+        if apply_on_transformed_logs is not None:
+            self._values["apply_on_transformed_logs"] = apply_on_transformed_logs
         if default_value is not None:
             self._values["default_value"] = default_value
         if dimensions is not None:
@@ -9036,6 +9076,18 @@ class MetricFilterProps(MetricFilterOptions):
         result = self._values.get("metric_namespace")
         assert result is not None, "Required property 'metric_namespace' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def apply_on_transformed_logs(self) -> typing.Optional[builtins.bool]:
+        '''Whether the metric filter is applied on the tranformed logs.
+
+        This parameter is valid only for log groups that have an active log transformer.
+        If this value is true, the metric filter is applied on the transformed version of the log events instead of the original ingested log events.
+
+        :default: - false
+        '''
+        result = self._values.get("apply_on_transformed_logs")
+        return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
     def default_value(self) -> typing.Optional[jsii.Number]:
@@ -19994,6 +20046,7 @@ def _typecheckingstub__5c3910e9df11478e889b7f25e252df8a33e79b82dd18c304bf83e6be6
     filter_pattern: IFilterPattern,
     metric_name: builtins.str,
     metric_namespace: builtins.str,
+    apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
     default_value: typing.Optional[jsii.Number] = None,
     dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     filter_name: typing.Optional[builtins.str] = None,
@@ -20172,6 +20225,7 @@ def _typecheckingstub__60bdb647264d5f9edd37cf7e07a8b1cde70ce81f1ebb17eb131efa9d1
     filter_pattern: IFilterPattern,
     metric_name: builtins.str,
     metric_namespace: builtins.str,
+    apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
     default_value: typing.Optional[jsii.Number] = None,
     dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     filter_name: typing.Optional[builtins.str] = None,
@@ -20368,6 +20422,7 @@ def _typecheckingstub__8d62ba20acf6180e35fd081efe9f21747bf2bd8765dd3a4a5c41cc0f4
     filter_pattern: IFilterPattern,
     metric_name: builtins.str,
     metric_namespace: builtins.str,
+    apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
     default_value: typing.Optional[jsii.Number] = None,
     dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     filter_name: typing.Optional[builtins.str] = None,
@@ -20382,6 +20437,7 @@ def _typecheckingstub__a5bb9c8220568f1b3f6adf2d20dcfde3ada18ce4351110a49b3a07078
     filter_pattern: IFilterPattern,
     metric_name: builtins.str,
     metric_namespace: builtins.str,
+    apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
     default_value: typing.Optional[jsii.Number] = None,
     dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     filter_name: typing.Optional[builtins.str] = None,
@@ -20396,6 +20452,7 @@ def _typecheckingstub__66722f3b881a30b7ce1b9efa7c76f2539915abe8fe84a770e1e2c4765
     filter_pattern: IFilterPattern,
     metric_name: builtins.str,
     metric_namespace: builtins.str,
+    apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
     default_value: typing.Optional[jsii.Number] = None,
     dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     filter_name: typing.Optional[builtins.str] = None,

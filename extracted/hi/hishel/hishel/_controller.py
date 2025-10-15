@@ -3,8 +3,7 @@ import typing as tp
 
 from httpcore import Request, Response
 
-from hishel._headers import Vary, parse_cache_control
-
+from ._headers import Vary, parse_cache_control
 from ._utils import (
     BaseClock,
     Clock,
@@ -21,7 +20,7 @@ logger = logging.getLogger("hishel.controller")
 HEURISTICALLY_CACHEABLE_STATUS_CODES = (200, 203, 204, 206, 300, 301, 308, 404, 405, 410, 414, 501)
 HTTP_METHODS = ["GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"]
 
-__all__ = ("Controller", "HEURISTICALLY_CACHEABLE_STATUS_CODES")
+__all__ = ("HEURISTICALLY_CACHEABLE_STATUS_CODES", "Controller")
 
 
 def get_updated_headers(

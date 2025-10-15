@@ -8,11 +8,10 @@ import httpx
 from httpx import SyncByteStream, Request, Response
 from httpx._exceptions import ConnectError
 
-from hishel._utils import extract_header_values_decoded, normalized_url
-
 from .._controller import Controller, allowed_stale
 from .._headers import parse_cache_control
 from .._serializers import JSONSerializer, Metadata
+from .._utils import extract_header_values_decoded, normalized_url
 from ._storages import BaseStorage, FileStorage
 
 if tp.TYPE_CHECKING:  # pragma: no cover
@@ -211,11 +210,17 @@ class CacheTransport(httpx.BaseTransport):
                 )
 
         regular_response = self._transport.handle_request(request)
-        assert isinstance(regular_response.stream, tp.Iterable)
+        try:
+            # Prefer already-read content, if available
+            stream = fake_stream(regular_response.content)
+        except httpx.ResponseNotRead:
+            # Fall back to stream if not yet read
+            assert isinstance(regular_response.stream, tp.Iterable)
+            stream = regular_response.stream
         httpcore_regular_response = httpcore.Response(
             status=regular_response.status_code,
             headers=regular_response.headers.raw,
-            content=CacheStream(regular_response.stream),
+            content=CacheStream(stream),
             extensions=regular_response.extensions,
         )
         httpcore_regular_response.read()

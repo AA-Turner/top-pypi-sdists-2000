@@ -301,7 +301,7 @@ class CfnComputeNodeGroupProps:
         :param subnet_ids: The list of subnet IDs where instances are provisioned by the compute node group. The subnets must be in the same VPC as the cluster.
         :param ami_id: The ID of the Amazon Machine Image (AMI) that AWS PCS uses to launch instances. If not provided, AWS PCS uses the AMI ID specified in the custom launch template.
         :param name: The name that identifies the compute node group.
-        :param purchase_option: Specifies how EC2 instances are purchased on your behalf. AWS AWS PCS supports On-Demand and Spot instances. For more information, see `Instance purchasing options <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>`_ in the *Amazon Elastic Compute Cloud User Guide* . If you don't provide this option, it defaults to On-Demand.
+        :param purchase_option: Specifies how EC2 instances are purchased on your behalf. AWS PCS supports On-Demand Instances, Spot Instances, and Amazon EC2 Capacity Blocks for ML. For more information, see `Amazon EC2 billing and purchasing options <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>`_ in the *Amazon Elastic Compute Cloud User Guide* . For more information about AWS PCS support for Capacity Blocks, see `Using Amazon EC2 Capacity Blocks for ML with AWS PCS <https://docs.aws.amazon.com/pcs/latest/userguide/capacity-blocks.html>`_ in the *AWS PCS User Guide* . If you don't provide this option, it defaults to On-Demand.
         :param slurm_configuration: Additional options related to the Slurm scheduler.
         :param spot_options: Additional configuration when you specify ``SPOT`` as the ``purchaseOption`` for the ``CreateComputeNodeGroup`` API action.
         :param tags: 1 or more tags added to the resource. Each tag consists of a tag key and tag value. The tag value is optional and can be an empty string.
@@ -480,7 +480,7 @@ class CfnComputeNodeGroupProps:
     def purchase_option(self) -> typing.Optional[builtins.str]:
         '''Specifies how EC2 instances are purchased on your behalf.
 
-        AWS AWS PCS supports On-Demand and Spot instances. For more information, see `Instance purchasing options <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>`_ in the *Amazon Elastic Compute Cloud User Guide* . If you don't provide this option, it defaults to On-Demand.
+        AWS PCS supports On-Demand Instances, Spot Instances, and Amazon EC2 Capacity Blocks for ML. For more information, see `Amazon EC2 billing and purchasing options <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>`_ in the *Amazon Elastic Compute Cloud User Guide* . For more information about AWS PCS support for Capacity Blocks, see `Using Amazon EC2 Capacity Blocks for ML with AWS PCS <https://docs.aws.amazon.com/pcs/latest/userguide/capacity-blocks.html>`_ in the *AWS PCS User Guide* . If you don't provide this option, it defaults to On-Demand.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-computenodegroup.html#cfn-pcs-computenodegroup-purchaseoption
         '''
@@ -539,6 +539,7 @@ class CfnComputeNodeGroupProps:
         "cluster_id": "clusterId",
         "compute_node_group_configurations": "computeNodeGroupConfigurations",
         "name": "name",
+        "slurm_configuration": "slurmConfiguration",
         "tags": "tags",
     },
 )
@@ -549,6 +550,7 @@ class CfnQueueProps:
         cluster_id: builtins.str,
         compute_node_group_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.ComputeNodeGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         name: typing.Optional[builtins.str] = None,
+        slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnQueue``.
@@ -556,6 +558,7 @@ class CfnQueueProps:
         :param cluster_id: The ID of the cluster of the queue.
         :param compute_node_group_configurations: The list of compute node group configurations associated with the queue. Queues assign jobs to associated compute node groups.
         :param name: The name that identifies the queue.
+        :param slurm_configuration: Additional options related to the Slurm scheduler.
         :param tags: 1 or more tags added to the resource. Each tag consists of a tag key and tag value. The tag value is optional and can be an empty string.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-queue.html
@@ -575,6 +578,12 @@ class CfnQueueProps:
                     compute_node_group_id="computeNodeGroupId"
                 )],
                 name="name",
+                slurm_configuration=pcs.CfnQueue.SlurmConfigurationProperty(
+                    slurm_custom_settings=[pcs.CfnQueue.SlurmCustomSettingProperty(
+                        parameter_name="parameterName",
+                        parameter_value="parameterValue"
+                    )]
+                ),
                 tags={
                     "tags_key": "tags"
                 }
@@ -585,6 +594,7 @@ class CfnQueueProps:
             check_type(argname="argument cluster_id", value=cluster_id, expected_type=type_hints["cluster_id"])
             check_type(argname="argument compute_node_group_configurations", value=compute_node_group_configurations, expected_type=type_hints["compute_node_group_configurations"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument slurm_configuration", value=slurm_configuration, expected_type=type_hints["slurm_configuration"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "cluster_id": cluster_id,
@@ -593,6 +603,8 @@ class CfnQueueProps:
             self._values["compute_node_group_configurations"] = compute_node_group_configurations
         if name is not None:
             self._values["name"] = name
+        if slurm_configuration is not None:
+            self._values["slurm_configuration"] = slurm_configuration
         if tags is not None:
             self._values["tags"] = tags
 
@@ -627,6 +639,17 @@ class CfnQueueProps:
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def slurm_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmConfigurationProperty"]]:
+        '''Additional options related to the Slurm scheduler.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-queue.html#cfn-pcs-queue-slurmconfiguration
+        '''
+        result = self._values.get("slurm_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmConfigurationProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -1889,7 +1912,11 @@ class CfnCluster(
         ) -> None:
             '''Additional settings that directly map to Slurm settings.
 
-            :param parameter_name: AWS PCS supports configuration of the following Slurm parameters:. - For *clusters* - ```Prolog`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Prolog_1>`_ - ```Epilog`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Epilog_1>`_ - ```SelectTypeParameters`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_SelectTypeParameters>`_ - ```AccountingStorageEnforce`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_AccountingStorageEnforce>`_ .. epigraph:: AWS PCS supports a subset of the options for ``AccountingStorageEnforce`` . For more information, see `Slurm accounting in AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/slurm-accounting.html>`_ in the *AWS PCS User Guide* . - For *compute node groups* - ```Weight`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Weight>`_ - ```RealMemory`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Weight>`_
+            .. epigraph::
+
+               AWS PCS supports a subset of Slurm settings. For more information, see `Configuring custom Slurm settings in AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/slurm-custom-settings.html>`_ in the *AWS PCS User Guide* .
+
+            :param parameter_name: AWS PCS supports custom Slurm settings for clusters, compute node groups, and queues. For more information, see `Configuring custom Slurm settings in AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/slurm-custom-settings.html>`_ in the *AWS PCS User Guide* .
             :param parameter_value: The values for the configured Slurm settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmcustomsetting.html
@@ -1917,21 +1944,9 @@ class CfnCluster(
 
         @builtins.property
         def parameter_name(self) -> builtins.str:
-            '''AWS PCS supports configuration of the following Slurm parameters:.
+            '''AWS PCS supports custom Slurm settings for clusters, compute node groups, and queues.
 
-            - For *clusters*
-            - ```Prolog`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Prolog_1>`_
-            - ```Epilog`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Epilog_1>`_
-            - ```SelectTypeParameters`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_SelectTypeParameters>`_
-            - ```AccountingStorageEnforce`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_AccountingStorageEnforce>`_
-
-            .. epigraph::
-
-               AWS PCS supports a subset of the options for ``AccountingStorageEnforce`` . For more information, see `Slurm accounting in AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/slurm-accounting.html>`_ in the *AWS PCS User Guide* .
-
-            - For *compute node groups*
-            - ```Weight`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Weight>`_
-            - ```RealMemory`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Weight>`_
+            For more information, see `Configuring custom Slurm settings in AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/slurm-custom-settings.html>`_ in the *AWS PCS User Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmcustomsetting.html#cfn-pcs-cluster-slurmcustomsetting-parametername
             '''
@@ -2047,7 +2062,7 @@ class CfnComputeNodeGroup(
         :param subnet_ids: The list of subnet IDs where instances are provisioned by the compute node group. The subnets must be in the same VPC as the cluster.
         :param ami_id: The ID of the Amazon Machine Image (AMI) that AWS PCS uses to launch instances. If not provided, AWS PCS uses the AMI ID specified in the custom launch template.
         :param name: The name that identifies the compute node group.
-        :param purchase_option: Specifies how EC2 instances are purchased on your behalf. AWS AWS PCS supports On-Demand and Spot instances. For more information, see `Instance purchasing options <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>`_ in the *Amazon Elastic Compute Cloud User Guide* . If you don't provide this option, it defaults to On-Demand.
+        :param purchase_option: Specifies how EC2 instances are purchased on your behalf. AWS PCS supports On-Demand Instances, Spot Instances, and Amazon EC2 Capacity Blocks for ML. For more information, see `Amazon EC2 billing and purchasing options <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>`_ in the *Amazon Elastic Compute Cloud User Guide* . For more information about AWS PCS support for Capacity Blocks, see `Using Amazon EC2 Capacity Blocks for ML with AWS PCS <https://docs.aws.amazon.com/pcs/latest/userguide/capacity-blocks.html>`_ in the *AWS PCS User Guide* . If you don't provide this option, it defaults to On-Demand.
         :param slurm_configuration: Additional options related to the Slurm scheduler.
         :param spot_options: Additional configuration when you specify ``SPOT`` as the ``purchaseOption`` for the ``CreateComputeNodeGroup`` API action.
         :param tags: 1 or more tags added to the resource. Each tag consists of a tag key and tag value. The tag value is optional and can be an empty string.
@@ -2695,7 +2710,11 @@ class CfnComputeNodeGroup(
         ) -> None:
             '''Additional settings that directly map to Slurm settings.
 
-            :param parameter_name: AWS PCS supports configuration of the following Slurm parameters:. - For *clusters* - ```Prolog`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Prolog_1>`_ - ```Epilog`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Epilog_1>`_ - ```SelectTypeParameters`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_SelectTypeParameters>`_ - ```AccountingStorageEnforce`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_AccountingStorageEnforce>`_ .. epigraph:: AWS PCS supports a subset of the options for ``AccountingStorageEnforce`` . For more information, see `Slurm accounting in AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/slurm-accounting.html>`_ in the *AWS PCS User Guide* . - For *compute node groups* - ```Weight`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Weight>`_ - ```RealMemory`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Weight>`_
+            .. epigraph::
+
+               AWS PCS supports a subset of Slurm settings. For more information, see `Configuring custom Slurm settings in AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/slurm-custom-settings.html>`_ in the *AWS PCS User Guide* .
+
+            :param parameter_name: AWS PCS supports custom Slurm settings for clusters, compute node groups, and queues. For more information, see `Configuring custom Slurm settings in AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/slurm-custom-settings.html>`_ in the *AWS PCS User Guide* .
             :param parameter_value: The values for the configured Slurm settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-computenodegroup-slurmcustomsetting.html
@@ -2723,21 +2742,9 @@ class CfnComputeNodeGroup(
 
         @builtins.property
         def parameter_name(self) -> builtins.str:
-            '''AWS PCS supports configuration of the following Slurm parameters:.
+            '''AWS PCS supports custom Slurm settings for clusters, compute node groups, and queues.
 
-            - For *clusters*
-            - ```Prolog`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Prolog_1>`_
-            - ```Epilog`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Epilog_1>`_
-            - ```SelectTypeParameters`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_SelectTypeParameters>`_
-            - ```AccountingStorageEnforce`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_AccountingStorageEnforce>`_
-
-            .. epigraph::
-
-               AWS PCS supports a subset of the options for ``AccountingStorageEnforce`` . For more information, see `Slurm accounting in AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/slurm-accounting.html>`_ in the *AWS PCS User Guide* .
-
-            - For *compute node groups*
-            - ```Weight`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Weight>`_
-            - ```RealMemory`` <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurm.conf.html#OPT_Weight>`_
+            For more information, see `Configuring custom Slurm settings in AWS PCS <https://docs.aws.amazon.com//pcs/latest/userguide/slurm-custom-settings.html>`_ in the *AWS PCS User Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-computenodegroup-slurmcustomsetting.html#cfn-pcs-computenodegroup-slurmcustomsetting-parametername
             '''
@@ -2852,6 +2859,12 @@ class CfnQueue(
                 compute_node_group_id="computeNodeGroupId"
             )],
             name="name",
+            slurm_configuration=pcs.CfnQueue.SlurmConfigurationProperty(
+                slurm_custom_settings=[pcs.CfnQueue.SlurmCustomSettingProperty(
+                    parameter_name="parameterName",
+                    parameter_value="parameterValue"
+                )]
+            ),
             tags={
                 "tags_key": "tags"
             }
@@ -2866,6 +2879,7 @@ class CfnQueue(
         cluster_id: builtins.str,
         compute_node_group_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.ComputeNodeGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         name: typing.Optional[builtins.str] = None,
+        slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
@@ -2874,6 +2888,7 @@ class CfnQueue(
         :param cluster_id: The ID of the cluster of the queue.
         :param compute_node_group_configurations: The list of compute node group configurations associated with the queue. Queues assign jobs to associated compute node groups.
         :param name: The name that identifies the queue.
+        :param slurm_configuration: Additional options related to the Slurm scheduler.
         :param tags: 1 or more tags added to the resource. Each tag consists of a tag key and tag value. The tag value is optional and can be an empty string.
         '''
         if __debug__:
@@ -2884,6 +2899,7 @@ class CfnQueue(
             cluster_id=cluster_id,
             compute_node_group_configurations=compute_node_group_configurations,
             name=name,
+            slurm_configuration=slurm_configuration,
             tags=tags,
         )
 
@@ -3019,6 +3035,24 @@ class CfnQueue(
             type_hints = typing.get_type_hints(_typecheckingstub__7e4f1e9c61fd11b4d3ed4834db791c7064b5408b742dfa6c4a00a242858ad868)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="slurmConfiguration")
+    def slurm_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmConfigurationProperty"]]:
+        '''Additional options related to the Slurm scheduler.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmConfigurationProperty"]], jsii.get(self, "slurmConfiguration"))
+
+    @slurm_configuration.setter
+    def slurm_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8b7380033da0bbecbc38adb9cf8f52dc687fd71722aa673c38c6fb2beb4cf53c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "slurmConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -3161,6 +3195,140 @@ class CfnQueue(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_pcs.CfnQueue.SlurmConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"slurm_custom_settings": "slurmCustomSettings"},
+    )
+    class SlurmConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            slurm_custom_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.SlurmCustomSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''The Slurm configuration for the queue.
+
+            :param slurm_custom_settings: Custom Slurm parameters that directly map to Slurm configuration settings.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-queue-slurmconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_pcs as pcs
+                
+                slurm_configuration_property = pcs.CfnQueue.SlurmConfigurationProperty(
+                    slurm_custom_settings=[pcs.CfnQueue.SlurmCustomSettingProperty(
+                        parameter_name="parameterName",
+                        parameter_value="parameterValue"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__28618a9f4bd71d830d18eda5c9c09bf4d7f232a6179eb690e9a3aa36984af24b)
+                check_type(argname="argument slurm_custom_settings", value=slurm_custom_settings, expected_type=type_hints["slurm_custom_settings"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if slurm_custom_settings is not None:
+                self._values["slurm_custom_settings"] = slurm_custom_settings
+
+        @builtins.property
+        def slurm_custom_settings(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmCustomSettingProperty"]]]]:
+            '''Custom Slurm parameters that directly map to Slurm configuration settings.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-queue-slurmconfiguration.html#cfn-pcs-queue-slurmconfiguration-slurmcustomsettings
+            '''
+            result = self._values.get("slurm_custom_settings")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmCustomSettingProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SlurmConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_pcs.CfnQueue.SlurmCustomSettingProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "parameter_name": "parameterName",
+            "parameter_value": "parameterValue",
+        },
+    )
+    class SlurmCustomSettingProperty:
+        def __init__(
+            self,
+            *,
+            parameter_name: builtins.str,
+            parameter_value: builtins.str,
+        ) -> None:
+            '''Additional settings that directly map to Slurm settings.
+
+            :param parameter_name: AWS PCS supports configuration of the Slurm parameters for queues:.
+            :param parameter_value: The value for the configured Slurm setting.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-queue-slurmcustomsetting.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_pcs as pcs
+                
+                slurm_custom_setting_property = pcs.CfnQueue.SlurmCustomSettingProperty(
+                    parameter_name="parameterName",
+                    parameter_value="parameterValue"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4b79818f0e6641251312f7d3e9ef610148d1b07122021df8e1de03465c51222b)
+                check_type(argname="argument parameter_name", value=parameter_name, expected_type=type_hints["parameter_name"])
+                check_type(argname="argument parameter_value", value=parameter_value, expected_type=type_hints["parameter_value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "parameter_name": parameter_name,
+                "parameter_value": parameter_value,
+            }
+
+        @builtins.property
+        def parameter_name(self) -> builtins.str:
+            '''AWS PCS supports configuration of the Slurm parameters for queues:.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-queue-slurmcustomsetting.html#cfn-pcs-queue-slurmcustomsetting-parametername
+            '''
+            result = self._values.get("parameter_name")
+            assert result is not None, "Required property 'parameter_name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def parameter_value(self) -> builtins.str:
+            '''The value for the configured Slurm setting.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-queue-slurmcustomsetting.html#cfn-pcs-queue-slurmcustomsetting-parametervalue
+            '''
+            result = self._values.get("parameter_value")
+            assert result is not None, "Required property 'parameter_value' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SlurmCustomSettingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 __all__ = [
     "CfnCluster",
@@ -3214,6 +3382,7 @@ def _typecheckingstub__4211e23057aa9883cd55dc7f797abf7f4ad0554424bd2d7d7cfce1230
     cluster_id: builtins.str,
     compute_node_group_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQueue.ComputeNodeGroupConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     name: typing.Optional[builtins.str] = None,
+    slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQueue.SlurmConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3536,6 +3705,7 @@ def _typecheckingstub__456edeb02414f262683a35f15a1fae223f92feec590d98024478f680e
     cluster_id: builtins.str,
     compute_node_group_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQueue.ComputeNodeGroupConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     name: typing.Optional[builtins.str] = None,
+    slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQueue.SlurmConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3571,6 +3741,12 @@ def _typecheckingstub__7e4f1e9c61fd11b4d3ed4834db791c7064b5408b742dfa6c4a00a2428
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8b7380033da0bbecbc38adb9cf8f52dc687fd71722aa673c38c6fb2beb4cf53c(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnQueue.SlurmConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__31674031b3f2a49a29efb9edfdb5a54431db3db7616989edd3617113cd6b9afd(
     value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
 ) -> None:
@@ -3588,6 +3764,21 @@ def _typecheckingstub__5e51eb0cec81203da74b9b3c33259135afec8fef04327498ab79338af
     *,
     code: typing.Optional[builtins.str] = None,
     message: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__28618a9f4bd71d830d18eda5c9c09bf4d7f232a6179eb690e9a3aa36984af24b(
+    *,
+    slurm_custom_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQueue.SlurmCustomSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4b79818f0e6641251312f7d3e9ef610148d1b07122021df8e1de03465c51222b(
+    *,
+    parameter_name: builtins.str,
+    parameter_value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

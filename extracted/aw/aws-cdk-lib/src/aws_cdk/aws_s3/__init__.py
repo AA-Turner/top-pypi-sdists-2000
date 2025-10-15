@@ -2110,17 +2110,23 @@ class BucketNotificationDestinationType(enum.Enum):
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_s3.BucketPolicyProps",
     jsii_struct_bases=[],
-    name_mapping={"bucket": "bucket", "removal_policy": "removalPolicy"},
+    name_mapping={
+        "bucket": "bucket",
+        "document": "document",
+        "removal_policy": "removalPolicy",
+    },
 )
 class BucketPolicyProps:
     def __init__(
         self,
         *,
         bucket: "IBucket",
+        document: typing.Optional[_PolicyDocument_3ac34393] = None,
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     ) -> None:
         '''
         :param bucket: The Amazon S3 bucket that the policy applies to.
+        :param document: Policy document to apply to the bucket. Default: - A new empty PolicyDocument will be created.
         :param removal_policy: Policy to apply when the policy is removed from this stack. Default: - RemovalPolicy.DESTROY.
 
         :exampleMetadata: fixture=_generated
@@ -2130,24 +2136,30 @@ class BucketPolicyProps:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             import aws_cdk as cdk
+            from aws_cdk import aws_iam as iam
             from aws_cdk import aws_s3 as s3
             
             # bucket: s3.Bucket
+            # policy_document: iam.PolicyDocument
             
             bucket_policy_props = s3.BucketPolicyProps(
                 bucket=bucket,
             
                 # the properties below are optional
+                document=policy_document,
                 removal_policy=cdk.RemovalPolicy.DESTROY
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4d7b9233434273933326211f004f27c2982fedd89ad904dc86d84c54f0f50ac6)
             check_type(argname="argument bucket", value=bucket, expected_type=type_hints["bucket"])
+            check_type(argname="argument document", value=document, expected_type=type_hints["document"])
             check_type(argname="argument removal_policy", value=removal_policy, expected_type=type_hints["removal_policy"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "bucket": bucket,
         }
+        if document is not None:
+            self._values["document"] = document
         if removal_policy is not None:
             self._values["removal_policy"] = removal_policy
 
@@ -2157,6 +2169,15 @@ class BucketPolicyProps:
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
         return typing.cast("IBucket", result)
+
+    @builtins.property
+    def document(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+        '''Policy document to apply to the bucket.
+
+        :default: - A new empty PolicyDocument will be created.
+        '''
+        result = self._values.get("document")
+        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
 
     @builtins.property
     def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
@@ -8546,19 +8567,23 @@ class BucketPolicy(
         id: builtins.str,
         *,
         bucket: "IBucket",
+        document: typing.Optional[_PolicyDocument_3ac34393] = None,
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     ) -> None:
         '''
         :param scope: -
         :param id: -
         :param bucket: The Amazon S3 bucket that the policy applies to.
+        :param document: Policy document to apply to the bucket. Default: - A new empty PolicyDocument will be created.
         :param removal_policy: Policy to apply when the policy is removed from this stack. Default: - RemovalPolicy.DESTROY.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__910b3df1208e67cb52dad0b0b8c5feb43c7bddb0ced50eaf6c953477298a840e)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = BucketPolicyProps(bucket=bucket, removal_policy=removal_policy)
+        props = BucketPolicyProps(
+            bucket=bucket, document=document, removal_policy=removal_policy
+        )
 
         jsii.create(self.__class__, self, [scope, id, props])
 
@@ -23634,6 +23659,7 @@ def _typecheckingstub__d6a435bc6f062bf994c2d09482e0e60e726c10272a9b728fd3ffc4281
 def _typecheckingstub__4d7b9233434273933326211f004f27c2982fedd89ad904dc86d84c54f0f50ac6(
     *,
     bucket: IBucket,
+    document: typing.Optional[_PolicyDocument_3ac34393] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
 ) -> None:
     """Type checking stubs"""
@@ -24088,6 +24114,7 @@ def _typecheckingstub__910b3df1208e67cb52dad0b0b8c5feb43c7bddb0ced50eaf6c9534772
     id: builtins.str,
     *,
     bucket: IBucket,
+    document: typing.Optional[_PolicyDocument_3ac34393] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
 ) -> None:
     """Type checking stubs"""

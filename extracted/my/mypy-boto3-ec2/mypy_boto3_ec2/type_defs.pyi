@@ -654,6 +654,8 @@ __all__ = (
     "CopySnapshotRequestSnapshotCopyTypeDef",
     "CopySnapshotRequestTypeDef",
     "CopySnapshotResultTypeDef",
+    "CopyVolumesRequestTypeDef",
+    "CopyVolumesResultTypeDef",
     "CpuOptionsRequestTypeDef",
     "CpuOptionsTypeDef",
     "CpuPerformanceFactorOutputTypeDef",
@@ -14100,6 +14102,7 @@ class VerifiedAccessLogOptionsTypeDef(TypedDict):
 class VolumeResponseTypeDef(TypedDict):
     AvailabilityZoneId: str
     OutpostArn: str
+    SourceVolumeId: str
     Iops: int
     Tags: List[TagTypeDef]
     VolumeType: VolumeTypeType
@@ -14123,6 +14126,7 @@ class VolumeResponseTypeDef(TypedDict):
 class VolumeTypeDef(TypedDict):
     AvailabilityZoneId: NotRequired[str]
     OutpostArn: NotRequired[str]
+    SourceVolumeId: NotRequired[str]
     Iops: NotRequired[int]
     Tags: NotRequired[List[TagTypeDef]]
     VolumeType: NotRequired[VolumeTypeType]
@@ -16479,6 +16483,10 @@ class ModifyVerifiedAccessInstanceLoggingConfigurationRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
     ClientToken: NotRequired[str]
 
+class CopyVolumesResultTypeDef(TypedDict):
+    Volumes: List[VolumeTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+
 class DescribeVolumesResultTypeDef(TypedDict):
     Volumes: List[VolumeTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
@@ -16623,6 +16631,17 @@ class CopySnapshotRequestTypeDef(TypedDict):
     CompletionDurationMinutes: NotRequired[int]
     DestinationAvailabilityZone: NotRequired[str]
     DryRun: NotRequired[bool]
+
+class CopyVolumesRequestTypeDef(TypedDict):
+    SourceVolumeId: str
+    Iops: NotRequired[int]
+    Size: NotRequired[int]
+    VolumeType: NotRequired[VolumeTypeType]
+    DryRun: NotRequired[bool]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
+    MultiAttachEnabled: NotRequired[bool]
+    Throughput: NotRequired[int]
+    ClientToken: NotRequired[str]
 
 class CreateCapacityReservationBySplittingRequestTypeDef(TypedDict):
     SourceCapacityReservationId: str
