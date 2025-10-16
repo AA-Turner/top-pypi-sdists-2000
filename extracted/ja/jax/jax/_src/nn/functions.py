@@ -727,7 +727,7 @@ def _one_hot(x: Array, num_classes: int, *,
       raise ValueError(f"Expected num_classes to match the size of axis {axis}, "
                        f"but {num_classes} != {axis_size}") from None
     axis_idx = lax.axis_index(axis)
-    return jnp.asarray(_dot_product_attention_xla == axis_idx, dtype=dtype)
+    return jnp.asarray(x == axis_idx, dtype=dtype)
   axis = operator.index(axis)  # type: ignore[arg-type]
   lhs = lax.expand_dims(x, (axis,))
   rhs_shape = [1] * x.ndim
@@ -1141,7 +1141,7 @@ def dot_product_attention(
       a symmetric window (window_size, window_size).
     implementation: A string to control which implementation backend to use.
       Supported strings are `xla`, `cudnn` (cuDNN flash attention). It defaults
-      to `None`, which will automatically select the best available backend.
+      to `None`, which currently falls back to `xla`.
       Note, `cudnn` supports only a subset of shapes/dtypes, and an exception
       will be thrown if its not supported.
 
@@ -1204,9 +1204,6 @@ def dot_product_attention(
           local_window_size=local_window_size,
       )
     case 'cudnn':
-      if bias is not None:
-        bias = check_valid_bias_batch(bias, query_arr.shape[-2])
-        bias = jnp.asarray(bias)
       use_padding = (
            query_seq_lengths is not None or key_value_seq_lengths is not None
       )
@@ -1241,8 +1238,7 @@ def dot_product_attention(
           sliding_window_length=sliding_window,
       )
     case None:
-      # TODO(kaixih@nvidia) Defaults to XLA for now. Will automatically select
-      # best backend.
+      # TODO(kaixih@nvidia) Automatically select the best backend (defaults to XLA for now).
       out = _dot_product_attention_xla(
           query_arr, key_arr, value_arr, bias, mask, is_causal=is_causal,
           scale=scale_val, q_seqlen=query_seq_lengths,

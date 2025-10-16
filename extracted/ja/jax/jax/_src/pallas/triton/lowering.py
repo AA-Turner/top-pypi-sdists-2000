@@ -83,7 +83,7 @@ class ModuleContext:
 
 @dataclasses.dataclass
 class BlockInfo:
-  full_shape_dtype: jax.ShapeDtypeStruct
+  full_shape_dtype: jax_core.ShapedArray
   start_indices: Sequence[Any]
   start_indices_alignment: Sequence[int]
   block_shape: tuple[int | pallas_core.Squeezed, ...]
@@ -184,14 +184,14 @@ def _bcast(
     out_aval: jax_core.ShapedArray,
 ) -> ir.Value:
   if isinstance(
-      x, (np.ndarray, np.number, int, float, literals.LiteralArray)
+      x, (np.ndarray, np.number, int, float, literals.TypedNdArray)
   ):
     x_dtype = x_aval.dtype
     if x_aval.weak_type:
       x_dtype = y_aval.dtype
     x = _ir_constant(x, _dtype_to_ir_type(x_dtype))
   if isinstance(
-      y, (np.ndarray, np.number, int, float, literals.LiteralArray)
+      y, (np.ndarray, np.number, int, float, literals.TypedNdArray)
   ):
     y_dtype = y_aval.dtype
     if y_aval.weak_type:
@@ -358,7 +358,7 @@ def lower_jaxpr_to_triton_module(
         )
       block_infos = [
           BlockInfo(
-              block_mapping.array_shape_dtype,
+              block_mapping.array_aval,
               _eval_index_map(ctx, program_ids, block_mapping),
               _get_index_alignment(block_mapping),
               tuple(pallas_core.squeezed if isinstance(b, pallas_core.Squeezed)
@@ -509,6 +509,10 @@ def _atomic_lowering_rule(
   assert block_info is not None
   ptr, indexers, val, mask = args_tree.unflatten(args_flat)
   *_, value_aval, mask_aval = args_tree.unflatten(ctx.avals_in)
+  indexers = list(indexers)
+  if not indexers or not isinstance(indexers[-1], indexing.NDIndexer):
+    ref_shape = state.get_transforms_shape(indexers, ctx.avals_in[0].shape)
+    indexers.append(NDIndexer.make_trivial_indexer(ref_shape))
   if len(indexers) != 1:
     raise NotImplementedError("Only single indexer is supported.")
   idx = indexers[0]
@@ -1957,10 +1961,7 @@ def _get_lowering_rule(ctx: LoweringRuleContext, ptr, *idx, tree):
   if not tt_dialect.PointerType.isinstance(ptr.type):
     assert len(indexers) == 0
     return ptr
-  if len(indexers) > 1:
-    raise NotImplementedError("No support for multiple indexers yet.")
-  indexer = indexers[0]
-  args_flat, args_tree = tree_util.tree_flatten((ptr, (indexer,), None, None))
+  args_flat, args_tree = tree_util.tree_flatten((ptr, indexers, None, None))
   return _masked_load_lowering_rule(
       ctx,
       *args_flat,
@@ -2099,7 +2100,12 @@ def _masked_load_lowering_rule(
   *_, mask_aval, other_aval = args_tree.unflatten(ctx.avals_in)
   if len(indexers) > 1:
     raise NotImplementedError("No support for multiple indexers yet.")
-  idx = indexers[0]
+  indexers = list(indexers)
+  if not indexers:
+    ref_shape = state.get_transforms_shape(indexers, ctx.avals_in[0].shape)
+    idx = NDIndexer.make_trivial_indexer(ref_shape)
+  else:
+    idx = indexers[0]
   if not tt_dialect.PointerType.isinstance(ptr.type):
     assert len(ctx.avals_in) == 1
     return ptr
@@ -2161,8 +2167,7 @@ def _swap_lowering_rule(ctx: LoweringRuleContext, ptr, value, *idx, tree):
     return ptr
   if len(indexers) > 1:
     raise NotImplementedError("No support for multiple indexers yet.")
-  indexer = indexers[0]
-  args_flat, args_tree = tree_util.tree_flatten((ptr, (indexer,), value, None))
+  args_flat, args_tree = tree_util.tree_flatten((ptr, indexers, value, None))
   return _masked_swap_lowering_rule(
       ctx, *args_flat, args_tree=args_tree, eviction_policy=None
   )
@@ -2232,7 +2237,11 @@ def _masked_swap_lowering_rule(
   *_, value_aval, mask_aval = args_tree.unflatten(ctx.avals_in)
   if len(indexers) > 1:
     raise NotImplementedError("No support for multiple indexers yet.")
-  idx = indexers[0]
+  if not indexers:
+    ref_shape = state.get_transforms_shape(indexers, ctx.avals_in[0].shape)
+    idx = NDIndexer.make_trivial_indexer(ref_shape)
+  else:
+    idx = indexers[0]
   ptr = _compute_pointers_from_indices(ptr, block_info, idx)
   other = None
   if value is not None:
@@ -2432,7 +2441,7 @@ def _reduction_lowering(body, ctx: LoweringRuleContext, a, axes):
   return list(reduce_op.result)
 
 
-def _reduce_lowering(body, ctx: LoweringRuleContext, a, *, axes):
+def _reduce_lowering(body, ctx: LoweringRuleContext, a, *, axes, **kwargs):
   assert isinstance(axes, tuple)
   if not axes:
     return a
@@ -2852,7 +2861,7 @@ def _ensure_ir_value(x: object, aval: jax_core.ShapedArray) -> ir.Value:
   if isinstance(x, ir.Value):
     return x
   elif isinstance(
-      x, (np.number, np.ndarray, int, float, literals.LiteralArray)
+      x, (np.number, np.ndarray, int, float, literals.TypedNdArray)
   ):
     return _ir_constant(x, _dtype_to_ir_type(aval.dtype))
   raise NotImplementedError
@@ -2860,7 +2869,7 @@ def _ensure_ir_value(x: object, aval: jax_core.ShapedArray) -> ir.Value:
 
 def _ir_constant(v: object, t: ir.Type) -> ir.Value:
   if isinstance(
-      v, (np.number, np.ndarray, int, float, literals.LiteralArray)
+      v, (np.number, np.ndarray, int, float, literals.TypedNdArray)
   ):
     if isinstance(t, ir.IntegerType):
       v = int(v)

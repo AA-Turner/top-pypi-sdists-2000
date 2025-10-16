@@ -16,40 +16,21 @@
 from collections.abc import Callable
 
 import jax
+from jax import lax
 from jax._src import checkify
 from jax._src import config
 from jax._src import core as jax_core
 from jax._src.pallas import core as pl_core
-from jax._src.pallas import pallas_call
 from jax._src.pallas import utils as pl_utils
 import jax.numpy as jnp
 
 
-@jax.named_call
-def empty(
-    shape: tuple[int, ...],
-    dtype: jax.typing.DTypeLike,
-    *,
-    backend: pl_core.Backend | None = None,
-):
-  return empty_like(jax.ShapeDtypeStruct(shape, dtype), backend=backend)
+empty = jax.named_call(lax.empty)
 
 
 @jax.named_call
-def empty_like(
-    x: object,
-    *,
-    backend: pl_core.Backend | None = None,
-):
-  return pallas_call.pallas_call(
-      # No-op to leave the out_ref uninitialized
-      lambda *_: None,
-      out_specs=jax.tree.map(
-          lambda _: pl_core.BlockSpec(memory_space=pl_core.MemorySpace.ANY), x
-      ),
-      out_shape=x,
-      backend=backend,
-  )()
+def empty_like(x: object):
+  return jax.tree.map(lambda leaf: empty(leaf.shape, leaf.dtype), x)
 
 
 def empty_ref_like(x: object) -> jax.Array:
@@ -61,15 +42,7 @@ def empty_ref_like(x: object) -> jax.Array:
       memory_space = pl_core.MemorySpace.ANY
     case _:
       raise ValueError(f'empty_ref_like does not support {type(x)}')
-  out = pallas_call.pallas_call(
-      # No-op to leave the out_ref uninitialized
-      lambda *_: None,
-      out_specs=jax.tree.map(
-          lambda _: pl_core.BlockSpec(memory_space=memory_space), x
-      ),
-      out_shape=x,
-  )()
-  return jax_core.mutable_array(out, memory_space=memory_space)
+  return jax_core.new_ref(empty_like(x), memory_space=memory_space)
 
 
 def when(
@@ -102,14 +75,19 @@ def loop(
     unroll: int | bool | None = None,
 ) -> Callable[[Callable[[jax.Array], None]], None]:
   """Returns a decorator that calls the decorated function in a loop."""
-  idx_type = jnp.result_type(lower, upper, step)
-  lower = jax.lax.convert_element_type(lower, idx_type)
-  upper = jax.lax.convert_element_type(upper, idx_type)
-  step = jax.lax.convert_element_type(step, idx_type)
+  zero: jax.typing.ArrayLike
+  if not all(map(jax_core.is_concrete, (lower, upper, step))):
+    idx_type = jnp.result_type(lower, upper, step)
+    lower = jax.lax.convert_element_type(lower, idx_type)
+    upper = jax.lax.convert_element_type(upper, idx_type)
+    step = jax.lax.convert_element_type(step, idx_type)
+    zero = jnp.array(0, dtype=idx_type)
+  else:
+    zero = 0
 
   def decorator(body):
     jax.lax.fori_loop(
-        jnp.array(0, dtype=idx_type),
+        zero,
         pl_utils.cdiv(upper - lower, step),
         lambda idx, _: body(lower + idx * step),
         init_val=None,

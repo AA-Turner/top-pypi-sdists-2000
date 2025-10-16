@@ -1,6 +1,7 @@
 import os
 import time
 
+import pytest
 import requests
 from playwright.sync_api import expect, sync_playwright
 
@@ -10,9 +11,9 @@ HEADLESS = bool(os.environ.get("HEADLESS", False))
 def do_url_test(page, _context):
     # skip dashboard tutorial
     page.get_by_text("Skip").click()
-    time.sleep(5)
 
     page.get_by_text("Single Url Load Test").click()
+    time.sleep(10)
 
     # skip locust tutorial
     page.get_by_text("Skip").click()
@@ -28,11 +29,11 @@ def do_url_test(page, _context):
     time.sleep(20)
 
     # Stop the test
-    page.get_by_text("Stop").click()
+    page.locator('button:has-text("Stop"):visible').click()
 
     # Wait for the test to have stopped and the new button to appear
-    button = page.locator('button:has-text("New")')
-    button.wait_for(state="visible", timeout=10000)
+    button = page.locator('button:has-text("New"):visible')
+    expect(button).to_be_enabled(timeout=2000)
 
 
 def do_signup(region):
@@ -73,14 +74,14 @@ def do_signup(region):
         browser.close()
 
 
-# @pytest.mark.skipif(HEADLESS, reason="verification code needs to be entered manually")
-# def test_signup_eu():
-#     do_signup(region="EU")
+@pytest.mark.skipif(HEADLESS, reason="verification code needs to be entered manually")
+def test_signup_eu():
+    do_signup(region="EU")
 
 
-# @pytest.mark.skipif(HEADLESS, reason="verification code needs to be entered manually")
-# def test_signup_us():
-#     do_signup(region="US")
+@pytest.mark.skipif(HEADLESS, reason="verification code needs to be entered manually")
+def test_signup_us():
+    do_signup(region="US")
 
 
 def test_login_and_dashboard_actions():
@@ -89,7 +90,7 @@ def test_login_and_dashboard_actions():
         context = browser.new_context(viewport={"width": 1280, "height": 1000})
         page = context.new_page()
 
-        page.goto("http://auth.dev.locust.cloud")
+        page.goto("http://auth.dev.locust.cloud/login")
 
         page.fill('input[name="email"]', os.environ["LOCUSTCLOUD_USERNAME"])
         page.fill('input[name="password"]', os.environ["LOCUSTCLOUD_PASSWORD"])

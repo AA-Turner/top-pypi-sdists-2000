@@ -13,54 +13,82 @@
 # limitations under the License.
 
 from typing import Sequence
-from jax._src import typing
 from jax._src.lib import _jax
 from jax._src.lib import jaxlib_extension_version
 import numpy as np
 
-# LiteralInt, LiteralFloat, and LiteralComplex are subclasses of int, float, and
+# TypedInt, TypedFloat, and TypedComplex are subclasses of int, float, and
 # complex that carry a JAX dtype. Canonicalization forms these types from int,
 # float, and complex. Repeated canonicalization, including under different
 # jax_enable_x64 modes, preserves the dtype.
 
-class LiteralInt(int):
+
+class TypedInt(int):
 
   dtype: np.dtype
 
   def __new__(cls, value: int, dtype: np.dtype):
-    v = super(LiteralInt, cls).__new__(cls, value)
+    v = super(TypedInt, cls).__new__(cls, value)
     v.dtype = dtype
     return v
 
+  def __repr__(self):
+    return f'TypedInt({int(self)}, dtype={self.dtype.name})'
 
-class LiteralFloat(float):
+  def __getnewargs__(self):
+    return (int(self), self.dtype)
+
+
+class TypedFloat(float):
 
   dtype: np.dtype
 
   def __new__(cls, value: float, dtype: np.dtype):
-    v = super(LiteralFloat, cls).__new__(cls, value)
+    v = super(TypedFloat, cls).__new__(cls, value)
     v.dtype = dtype
     return v
 
+  def __repr__(self):
+    return f'TypedFloat({float(self)}, dtype={self.dtype.name})'
 
-class LiteralComplex(complex):
+  def __getnewargs__(self):
+    return (float(self), self.dtype)
+
+
+class TypedComplex(complex):
 
   dtype: np.dtype
 
   def __new__(cls, value: complex, dtype: np.dtype):
-    v = super(LiteralComplex, cls).__new__(cls, value)
+    v = super(TypedComplex, cls).__new__(cls, value)
     v.dtype = dtype
     return v
 
+  def __repr__(self):
+    return f'TypedComplex({complex(self)}, dtype={self.dtype.name})'
 
-literal_scalar_types: set[type] = {LiteralInt, LiteralFloat, LiteralComplex}
+  def __getnewargs__(self):
+    return (complex(self), self.dtype)
 
 
-class LiteralArray:
-  """A LiteralArray is a host-side array used by JAX during tracing.
+if jaxlib_extension_version >= 375:
+  _jax.set_typed_int_type(TypedInt)
+  _jax.set_typed_float_type(TypedFloat)
+  _jax.set_typed_complex_type(TypedComplex)
+elif jaxlib_extension_version >= 374:
+  _jax.set_literal_int_type(TypedInt)  # pytype: disable=module-attr
+  _jax.set_literal_float_type(TypedFloat)  # pytype: disable=module-attr
+  _jax.set_literal_complex_type(TypedComplex)  # pytype: disable=module-attr
 
-  To most intents and purposes a LiteralArray is a thin wrapper around a numpy
-  array and should act like it. The primary differences are that a LiteralArray
+
+typed_scalar_types: set[type] = {TypedInt, TypedFloat, TypedComplex}
+
+
+class TypedNdArray:
+  """A TypedNdArray is a host-side array used by JAX during tracing.
+
+  To most intents and purposes a TypedNdArray is a thin wrapper around a numpy
+  array and should act like it. The primary differences are that a TypedNdArray
   carries a JAX type:
   * its type is not canonicalized by JAX, irrespective of the jax_enable_x64
     mode
@@ -77,11 +105,11 @@ class LiteralArray:
     self.weak_type = weak_type
 
   @property
-  def dtype(self) -> typing.DType:
+  def dtype(self) -> np.dtype:
     return self.val.dtype
 
   @property
-  def shape(self) -> typing.Shape:
+  def shape(self) -> tuple[int, ...]:
     return self.val.shape
 
   @property
@@ -96,8 +124,11 @@ class LiteralArray:
   def size(self) -> int:
     return self.val.size
 
+  def __len__(self) -> int:
+    return self.val.__len__()
+
   def __repr__(self):
-    prefix = 'LiteralArray('
+    prefix = 'TypedNdArray('
     if self.weak_type:
       dtype_str = f'dtype={self.val.dtype.name}, weak_type=True)'
     else:
@@ -147,6 +178,9 @@ class LiteralArray:
   def __mod__(self, other):
     return self.val.__mod__(other)
 
+  def __pow__(self, other):
+    return self.val.__pow__(other)
+
   def __radd__(self, other):
     return self.val.__radd__(other)
 
@@ -164,6 +198,9 @@ class LiteralArray:
 
   def __rmod__(self, other):
     return self.val.__rmod__(other)
+
+  def __rpow__(self, other):
+    return self.val.__rpow__(other)
 
   def __getitem__(self, index):
     return self.val.__getitem__(index)
@@ -201,6 +238,9 @@ class LiteralArray:
   def __ge__(self, other):
     return self.val.__ge__(other)
 
+  def __abs__(self):
+    return self.val.__abs__()
+
   def reshape(self, *args, **kw):
     return self.val.reshape(*args, **kw)
 
@@ -215,11 +255,15 @@ class LiteralArray:
   def mT(self):
     return self.val.mT
 
+  def clip(self, *args, **kwargs):
+    return self.val.clip(*args, **kwargs)
+
   def astype(self, dtype, order='K', casting='unsafe', subok=True, copy=True):
     return self.val.astype(
         dtype, order=order, casting=casting, subok=subok, copy=copy
     )
 
-
-if jaxlib_extension_version >= 373:
-  _jax.set_literal_array_type(LiteralArray)
+if jaxlib_extension_version >= 375:
+  _jax.set_typed_ndarray_type(TypedNdArray)
+else:
+  _jax.set_literal_array_type(TypedNdArray)  # pytype: disable=module-attr

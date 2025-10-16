@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sentry-sdk
-Version: 2.41.0
+Version: 2.42.0
 Summary: Python client for Sentry (https://sentry.io)
 Home-page: https://github.com/getsentry/sentry-python
 Author: Sentry Team and Contributors
@@ -118,6 +118,8 @@ Provides-Extra: tornado
 Requires-Dist: tornado>=6; extra == "tornado"
 Provides-Extra: unleash
 Requires-Dist: UnleashClient>=6.0.1; extra == "unleash"
+Provides-Extra: google-genai
+Requires-Dist: google-genai>=1.29.0; extra == "google-genai"
 Dynamic: author
 Dynamic: author-email
 Dynamic: classifier

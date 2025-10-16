@@ -16,7 +16,7 @@
 from collections.abc import Callable, Sequence
 import enum
 import functools
-from typing import TypeAlias
+from typing import TypeAlias, TypeVar, overload
 
 import jax
 from jax import api_util
@@ -27,12 +27,13 @@ from jax._src import effects
 from jax._src import linear_util as lu
 from jax._src.interpreters import partial_eval as pe
 from jax._src.lib.mlir import ir
+from jax._src.lib.mlir.dialects import arith
 from jax._src.lib.mlir.dialects import scf
 from jax._src.lib.mlir.dialects import vector
 from jax._src.pallas import core as pallas_core
 from jax._src.pallas.mosaic import core as tpu_core
-from jax._src.pallas.mosaic import sc_lowering
 from jax._src.pallas.mosaic import lowering as tc_lowering
+from jax._src.pallas.mosaic import sc_lowering
 from jax._src.state import primitives as state_primitives
 from jax._src.state import types as state_types
 from jax.experimental.mosaic.dialects import tpu
@@ -47,20 +48,25 @@ aval_to_ir_type = functools.partial(
 TransformedRef: TypeAlias = state_types.TransformedRef
 Ref: TypeAlias = state_types.AbstractRef | TransformedRef
 
+_T = TypeVar("_T")
+
 load_p = jax_core.Primitive("load")
 load_p.is_effectful = lambda params: True  # type: ignore
 
 
 @load_p.def_effectful_abstract_eval
 def _load_abstract_eval(ref, *args, has_mask, tree):
-  del tree  # Unused.
+  flat_transforms = args[:-1] if has_mask else args
+  tref = state_types.TransformedRef(
+      ref, jax.tree.unflatten(tree, flat_transforms))
   if has_mask:
     mask = args[-1]
     if mask.dtype != jnp.bool:
       raise TypeError(f"Mask must be a boolean array, got {mask.dtype}")
-    if mask.shape != ref.shape:
-      raise ValueError(f"Mask must have shape {ref.shape}, got {mask.shape}")
-  return jax_core.ShapedArray(ref.shape, ref.dtype), {state_types.ReadEffect(0)}
+    if mask.shape != tref.shape:
+      raise ValueError(f"Mask must have shape {tref.shape}, got {mask.shape}")
+  return (
+      jax_core.ShapedArray(tref.shape, ref.dtype), {state_types.ReadEffect(0)})
 
 
 @sc_lowering.register_lowering_rule(load_p)
@@ -110,19 +116,21 @@ swap_p.is_effectful = lambda params: True  # type: ignore
 
 @swap_p.def_effectful_abstract_eval
 def _swap_abstract_eval(ref, x, *args, has_mask, tree, add):
-  del tree  # Unused.
+  flat_transforms = args[:-1] if has_mask else args
+  tref = state_types.TransformedRef(
+      ref, jax.tree.unflatten(tree, flat_transforms))
   if has_mask:
     mask = args[-1]
     if mask.dtype != jnp.bool:
       raise TypeError(f"Mask must be a boolean array, got {mask.dtype}")
-    if mask.shape != ref.shape:
-      raise ValueError(f"Mask must have shape {ref.shape}, got {mask.shape}")
+    if mask.shape != tref.shape:
+      raise ValueError(f"Mask must have shape {tref.shape}, got {mask.shape}")
   if ref.dtype != x.dtype:
     raise TypeError(
         f"Ref and value must have the same dtype, got {ref.dtype} and {x.dtype}"
     )
-  if ref.shape != x.shape:
-    raise ValueError(f"Value must have shape {ref.shape}, got {x.shape}")
+  if tref.shape != x.shape:
+    raise ValueError(f"Value must have shape {tref.shape}, got {x.shape}")
   effects = {state_types.WriteEffect(0)}
   if add:
     effects.add(state_types.ReadEffect(0))
@@ -289,7 +297,7 @@ def load_gather(
     The gathered array.
   """
   ref, transforms = state_primitives.get_ref_and_transforms(
-      ref, None, "load_gather", force_trailing_indexer=False
+      ref, None, "load_gather"
   )
   flat_args, tree = jax.tree.flatten((ref, transforms, indices, mask))
   return gather_p.bind(*flat_args, tree=tree)
@@ -364,7 +372,7 @@ def store_scatter(
   if not indices:
     raise ValueError("Indices must not be empty")
   ref, transforms = state_primitives.get_ref_and_transforms(
-      ref, None, "store_scatter", force_trailing_indexer=False
+      ref, None, "store_scatter"
   )
   flat_args, tree = jax.tree.flatten((ref, transforms, indices, x, mask))
   _ = scatter_p.bind(*flat_args, tree=tree, add=False)
@@ -382,7 +390,7 @@ def addupdate_scatter(
   if not indices:
     raise ValueError("Indices must not be empty")
   ref, transforms = state_primitives.get_ref_and_transforms(
-      ref, None, "store_scatter", force_trailing_indexer=False
+      ref, None, "store_scatter"
   )
   flat_args, tree = jax.tree.flatten((ref, transforms, indices, x, mask))
   _ = scatter_p.bind(*flat_args, tree=tree, add=True)
@@ -426,7 +434,46 @@ def bitcast(x: jax.Array, dtype: jax.typing.DTypeLike) -> jax.Array:
   same rank as the input. The minormost dimension is expanded/shrunk to
   account for the difference in the element bitwidth.
   """
+  if x.dtype == dtype:
+    return x
   return bitcast_p.bind(x, dtype=jnp.dtype(dtype))
+
+
+class MemoryEffect(jax_core.Effect):
+  pass
+
+
+effects.control_flow_allowed_effects.add_type(MemoryEffect)
+_memory_effect = MemoryEffect()
+
+barrier_p = jax_core.Primitive("barrier")
+barrier_p.multiple_results = True
+
+@barrier_p.def_effectful_abstract_eval
+def _barrier_abstract_eval():
+  return (), {_memory_effect}
+
+
+@sc_lowering.register_lowering_rule(barrier_p)
+def _barrier_lowering_rule(ctx: sc_lowering.LoweringRuleContext):
+  ix = ir.IndexType.get()
+  tpu.barrier(arith.constant(ix, ir.IntegerAttr.get(ix, 0)))
+  return ()
+
+
+def subcore_barrier():
+  """Blocks until all subcores on the same core reach this instruction.
+
+  The barrier must be used with the vector subcore, either via
+  :class:jax.experimental.pallas.tpu_sc.VectorSubcoreMesh or by specifying
+  ```
+  pltpu.CompilerParams(
+      kernel_type=pltpu.KernelType.SC_VECTOR_SUBCORE,
+      dimension_semantics[..., "subcore_parallel", ...])
+  ```
+  to ``pallas_call``.
+  """
+  barrier_p.bind()
 
 
 scan_count_p = jax_core.Primitive("unique")
@@ -471,15 +518,74 @@ def scan_count(
   return scan_count_p.bind(x, lax.full(x.shape, True) if mask is None else mask)
 
 
+masked_cumsum_p = jax_core.Primitive("masked_cumsum")
+masked_cumsum_p.multiple_results = False
+
+@masked_cumsum_p.def_abstract_eval
+def _masked_cumsum_abstract_eval(x, mask):
+  if x.dtype != jnp.int32 and x.dtype != jnp.float32:
+    raise NotImplementedError(f"x.dtype={x.dtype} must be int32 or float32")
+  if not jnp.issubdtype(mask.dtype, jnp.bool):
+    raise TypeError(f"mask.dtype={mask.dtype} is not a boolean dtype")
+  if x.shape != mask.shape:
+    raise ValueError(f"x.shape={x.shape} != mask.shape={mask.shape}")
+  return jax_core.ShapedArray(x.shape, x.dtype)
+
+@sc_lowering.register_lowering_rule(masked_cumsum_p)
+def _masked_cumsum_lowering_rule(ctx: sc_lowering.LoweringRuleContext, x, mask):
+  del ctx  # Unused.
+  return tpu.scan(
+      x.type, x, ir.Attribute.parse("#tpu.reduction_kind<sum>"), mask=mask)
+
+@sc_lowering.register_lowering_rule(lax.cumsum_p)
+def _lax_cumsum_lowering_rule(ctx: sc_lowering.LoweringRuleContext, x, axis,
+                              reverse):
+  if axis != 0:
+    raise NotImplementedError(f"SC cumsum: axis={axis} must be 0.")
+  if len(ctx.avals_in[0].shape) != 1:
+    raise NotImplementedError(f"SC cumsum: x={ctx.avals_in[0]} must be rank 1")
+  if reverse:
+    raise NotImplementedError("SC cumsum: reverse=True is not yet supported")
+  i1t = ir.IntegerType.get_signless(1)
+  c1 = arith.constant(i1t, ir.IntegerAttr.get(i1t, 1))
+  c1v = vector.broadcast(ir.VectorType.get(x.type.shape, c1.type), c1)
+  return tpu.scan(
+      x.type, x, ir.Attribute.parse("#tpu.reduction_kind<sum>"), mask=c1v)
+
+def masked_cumsum(x: jax.Array, mask: jax.Array) -> jax.Array:
+  """Returns the cumulative sum of the array along its innermost axis.
+
+  This differs from `jnp.cumsum` in that it takes an additional `mask` argument.
+
+  Args:
+    x: An array of integers or floats.
+    mask: An optional array of booleans, which specifies which elements ``x``
+      are eligible for summing. If ``None``, all elements are eligible.
+  """
+  if x.ndim != 1:
+    raise NotImplementedError(f"masked_cumsum: x={x.aval} must be rank 1")
+  return masked_cumsum_p.bind(x, mask)
+
+
 parallel_loop_p = jax_core.Primitive("parallel_loop")
 parallel_loop_p.is_effectful = lambda params: bool(params["jaxpr"].effects)  # type: ignore
 parallel_loop_p.multiple_results = True
 
 
 @parallel_loop_p.def_effectful_abstract_eval
-def _parallel_loop_abstract_eval(*args, jaxpr, **params):
-  del args, params  # Unused.
-  return (), jaxpr.effects
+def _parallel_loop_abstract_eval(*args, jaxpr, tree, **params):
+  del params  # Unused.
+  _, _, _, _, carries = tree.unflatten(args)
+  if any(isinstance(c, (Ref, TransformedRef)) for c in carries):
+    raise TypeError(f"Carried values may not be refs, but got: {carries}")
+  updated_effects = set()
+  for eff in jaxpr.effects:
+    if isinstance(eff, effects.JaxprInputEffect):
+      # Offset for the parallel_loop eqn to account for start, stop, and step
+      # args passed to parallel_loop_p.bind.
+      eff = eff.replace(input_index=eff.input_index + 3)
+    updated_effects.add(eff)
+  return carries, updated_effects
 
 
 @sc_lowering.register_lowering_rule(parallel_loop_p)
@@ -490,66 +596,139 @@ def _parallel_loop_lowering_rule(
     unroll,
     jaxpr,
 ):
-  lower, upper, step, consts = tree.unflatten(flat_args)
+  lower, upper, step, consts, carry = tree.unflatten(flat_args)
   for_op = scf.ForOp(
       _ensure_ir_value(lower, pallas_core.index_map_grid_aval),
       _ensure_ir_value(upper, pallas_core.index_map_grid_aval),
       _ensure_ir_value(step, pallas_core.index_map_grid_aval),
-      [],
+      carry,
   )
   for_op.attributes["sc.parallel_access"] = ir.UnitAttr.get()
-  for_op.attributes["sc.loop_unroll_factor"] = ir.DenseI64ArrayAttr.get(
-      [unroll]
+  for_op.attributes["sc.loop_unroll_factor"] = ir.IntegerAttr.get(
+      ir.IntegerType.get_signless(64), unroll
   )
   with ir.InsertionPoint(for_op.body):
-    *_, consts_block_shapes = tree.unflatten(ctx.block_shapes)
+    _, _, _, consts_block_shapes, *_ = tree.unflatten(ctx.block_shapes)
     lowering_ctx = ctx.lowering_context.replace(
-        block_shapes=[*consts_block_shapes, None],
+        block_shapes=[*consts_block_shapes, None] + [None] * len(carry),
     )
-    _ = tc_lowering.jaxpr_subcomp(
+    carry_out = tc_lowering.jaxpr_subcomp(
         lowering_ctx,
         pe.convert_constvars_jaxpr(jaxpr),
         *consts,
         for_op.induction_variable,
+        *for_op.inner_iter_args,
     )
-    scf.yield_([])
-  return ()
+    scf.yield_(carry_out)
+  return for_op.results
 
 
+@overload
 def parallel_loop(
     lower: jax.typing.ArrayLike,
     upper: jax.typing.ArrayLike,
-    step: jax.typing.ArrayLike = 1,
+    step: jax.typing.ArrayLike = ...,
     *,
-    unroll: int = 1,
-) -> Callable[[Callable[[Sequence[jax.Array]], None]], None]:
+    unroll: int = ...,
+    carry: None = None,
+) -> Callable[[Callable[[jax.Array], None]], None]:
+  ...
+
+
+@overload
+def parallel_loop(
+    lower: jax.typing.ArrayLike,
+    upper: jax.typing.ArrayLike,
+    step: jax.typing.ArrayLike = ...,
+    *,
+    unroll: int = ...,
+    carry: _T,
+) -> Callable[[Callable[[jax.Array, _T], _T]], _T]:
+  ...
+
+
+def parallel_loop(lower, upper, step=1, *, unroll=1, carry=None):
   """A parallel loop decorator.
 
-  The decorated functions forms the loop body. It is called with the current
-  loop index as the argument.
+  The decorated function forms the loop body. It is called with the current
+  loop index as the argument and optionally, a single additional carry argument.
 
   The loop iterations must be independent, meaning that operations in one
-  iteration cannot depend on the results or side effects of any other iteration.
-  This allows the compiler to execute instructions from different iterations
-  concurrently, potentially reordering them for better performance.
+  iteration cannot depend on the side effects, especially Ref writes, of any
+  other iteration. This allows the compiler to execute instructions from
+  different iterations concurrently, potentially reordering them for better
+  performance.
+
+  Cross-iteration dependencies traceable via carried values are allowed. Refs
+  may not be carried.
+
+  Safe usage of carried value::
+
+    @parallel_loop(0, 64, step=8, carry=jnp.int32(1))
+    def body(i, j):
+      # Writes are independent across iterations.
+      x_ref[pl.ds(i, 8)] = j + jnp.arange(8)
+      return j + 1
+
+  Any pytree can be carried. The final value is returned by the decorator::
+
+    def body(i, my_tree: MyTree):
+      # Writes are independent across iterations.
+      x_ref[pl.ds(i, 8)] = my_tree.transform(jnp.arange(8))
+      return my_tree.step(i)
+    final_value = parallel_loop(0, 64, step=8, carry=MyTree())(body)
+
+  Undefined result::
+
+    @parallel_loop(0, 64, step=4, carry=jnp.int32(1))
+    def body(i, j):
+      # Because the step size is 4, the array written is of size 8, and loop
+      # iterations may be reordered, the values in indices 4-59 of x_ref are
+      # unspecified after the loop. (The values in 0-3 and 60-63 are only
+      # written by the first and last iterations, so are well-defined.)
+      x_ref[pl.ds(i, 8)] = j + jnp.arange(8)
+      return j + 1
+
+  Unsafe read of "previous" iteration's write (don't do this)::
+
+    @parallel_loop(0, 64, 8, carry=jnp.int32(1))
+    def body(i, j):
+      # Unsafe because it depends on the side-effect of "previous" iterations,
+      # which may be executed in parallel or reordered.
+      mask = x_ref[pl.ds(0, 8)] < j
+      x_ref[pl.ds(0, 8)] += jnp.where(mask, j + jnp.arange(8), 0)
+      return j + 1
 
   Args:
     lower: The starting value of the loop index.
     upper: The exclusive upper bound of the loop index.
     step: The increment of the loop index. Default to 1.
     unroll: The unroll factor of the loop.
+    carry: Optional carried state of the loop.
 
   Returns:
     A decorator that executes the given function in a parallel loop.
   """
 
-  def decorator(body: Callable[[Sequence[jax.Array]], None]) -> None:
+  def decorator(body):
+    flat_carries, carry_tree = jax.tree.flatten(carry)
+    def wrapped(idx, *carries):
+      if carry is None:
+        body(idx)
+        return []
+      return jax.tree.leaves(body(idx, carry_tree.unflatten(carries)))
+    flat_avals = [
+        pallas_core.index_map_grid_aval,
+        *(c.aval for c in flat_carries),
+    ]
     jaxpr, _, consts = pe.trace_to_jaxpr_dynamic(
         lu.wrap_init(
-            lambda idx: body(idx) or (),  # type: ignore
-            debug_info=api_util.debug_info("parallel_loop", body, (), {}),
+            wrapped,
+            debug_info=api_util.debug_info(
+                "parallel_loop", body, flat_avals, {}
+            ),
         ),
-        [pallas_core.index_map_grid_aval],
+        flat_avals,
     )
     disallowed_effects = effects.control_flow_allowed_effects.filter_not_in(
         jaxpr.effects
@@ -558,13 +737,15 @@ def parallel_loop(
       raise NotImplementedError(
           f"Effects not supported in parallel_loop: {disallowed_effects}"
       )
-    flat_args, tree = jax.tree.flatten((lower, upper, step, consts))
-    parallel_loop_p.bind(
-        *flat_args,
-        tree=tree,
-        unroll=unroll,
-        jaxpr=jaxpr,
+    flat_args, tree = jax.tree.flatten(
+        (lower, upper, step, consts, flat_carries)
     )
+    flat_result = parallel_loop_p.bind(
+        *flat_args, tree=tree, unroll=unroll, jaxpr=jaxpr
+    )
+    if carry is None:
+      return None
+    return carry_tree.unflatten(flat_result)
 
   return decorator
 
@@ -595,24 +776,26 @@ def _pack_abstract_eval(a, b, *, format, preferred_element_type):
     raise TypeError(
         f"Packed arrays must have the same dtype, got {a.dtype} and {b.dtype}"
     )
-  # TODO(slebedev): Support more types.
-  if a.dtype != jnp.float32:
-    raise NotImplementedError(
-        f"Only float32 packing is supported, got {a.dtype}"
-    )
-  if preferred_element_type is not None:
+  if preferred_element_type is None:
+    match a.dtype:
+      case jnp.float32:
+        packed_dtype = jnp.bfloat16
+      case jnp.int32:
+        packed_dtype = jnp.int16
+      case _:
+        # TODO(slebedev): Support more types.
+        raise NotImplementedError(
+            f"Only packing of float32 and int32 is supported, got {a.dtype}"
+        )
+  else:
     packed_bw = dtypes.bit_width(a.dtype) // 2
     if dtypes.bit_width(preferred_element_type) != packed_bw:
       raise ValueError(
           f"preferred_element_type= must have bitwidth {packed_bw}, got"
           f" {dtypes.bit_width(preferred_element_type)}"
       )
-    if preferred_element_type != jnp.bfloat16:
-      raise NotImplementedError(
-          "Only packing into bfloat16 is supported, got"
-          f" {preferred_element_type}"
-      )
-  packed_dtype = jnp.bfloat16
+    packed_dtype = preferred_element_type
+
   match format:
     case PackFormat.INTERLEAVED:
       packed_shape = (2 * a.size,)
@@ -689,24 +872,25 @@ def _unpack_abstract_eval(ab, *, format, preferred_element_type):
             "Compressed unpack requires an array with shape (N, 2), got"
             f" {ab.shape}"
         )
-  # TODO(slebedev): Support more types.
-  if ab.dtype != jnp.bfloat16:
-    raise NotImplementedError(
-        f"Only bfloat16 unpacking is supported, got {ab.dtype}"
-    )
-  if preferred_element_type is not None:
+  if preferred_element_type is None:
+    match ab.dtype:
+      case jnp.bfloat16:
+        unpacked_dtype = jnp.float32
+      case jnp.int16:
+        unpacked_dtype = jnp.int32
+      case _:
+        # TODO(slebedev): Support more types.
+        raise NotImplementedError(
+            f"Only unpacking of bloat16 and int16 is supported, got {ab.dtype}"
+        )
+  else:
     unpacked_bw = dtypes.bit_width(ab.dtype) * 2
     if dtypes.bit_width(preferred_element_type) != unpacked_bw:
       raise ValueError(
           f"preferred_element_type= must have bitwidth {unpacked_bw}, got"
           f" {dtypes.bit_width(preferred_element_type)}"
       )
-    if preferred_element_type != jnp.float32:
-      raise NotImplementedError(
-          "Only unpacking into float32 is supported, got"
-          f" {preferred_element_type}"
-      )
-  unpacked_dtype = jnp.float32
+    unpacked_dtype = preferred_element_type
   return (jax_core.ShapedArray((ab.size // 2,), unpacked_dtype),) * 2
 
 

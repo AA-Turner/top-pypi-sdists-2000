@@ -1,16 +1,15 @@
 Metadata-Version: 2.1
 Name: boto3
-Version: 1.40.52
+Version: 1.40.53
 Summary: The AWS SDK for Python
 Home-page: https://github.com/boto/boto3
 Author: Amazon Web Services
-License: Apache License 2.0
+License: Apache-2.0
 Project-URL: Documentation, https://boto3.amazonaws.com/v1/documentation/api/latest/index.html
 Project-URL: Source, https://github.com/boto/boto3
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: Natural Language :: English
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3 :: Only
@@ -23,7 +22,7 @@ Classifier: Programming Language :: Python :: 3.14
 Requires-Python: >= 3.9
 License-File: LICENSE
 License-File: NOTICE
-Requires-Dist: botocore<1.41.0,>=1.40.52
+Requires-Dist: botocore<1.41.0,>=1.40.53
 Requires-Dist: jmespath<2.0.0,>=0.7.1
 Requires-Dist: s3transfer<0.15.0,>=0.14.0
 Provides-Extra: crt

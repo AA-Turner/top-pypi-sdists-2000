@@ -29,8 +29,8 @@ import dataclasses
 from functools import partial
 import inspect
 import typing
-from typing import (Any, Literal, NamedTuple, TypeVar, overload,
-                    cast)
+from typing import (Any, Literal, NamedTuple, Optional, TypeVar, overload,
+                    cast, TYPE_CHECKING)
 import weakref
 
 import numpy as np
@@ -63,6 +63,7 @@ from jax._src.api_util import (
   flatten_axes, donation_vector, rebase_donate_argnums,
   _ensure_index, _ensure_index_tuple, apply_flat_fun_nokwargs, check_callable,
   debug_info, flat_out_axes)
+from jax._src.lib import jaxlib_extension_version
 from jax._src.lib import jax_jit
 from jax._src.lib import xla_client as xc
 from jax._src.lib import pmap_lib
@@ -80,6 +81,8 @@ from jax._src.interpreters import ad
 from jax._src.interpreters import batching
 from jax._src.interpreters import partial_eval as pe
 from jax._src.interpreters import pxla
+
+config_ext = xc._xla.config
 
 
 traceback_util.register_exclusion(__file__)
@@ -125,18 +128,37 @@ def _nan_check_posthook(fun, args, kwargs, output):
       # TODO(emilyaf): Shouldn't need this fallback.
       raise
 
-def _update_debug_special_global(_):
-  if config._read("jax_debug_nans") or config._read("jax_debug_infs"):
-    jax_jit.global_state().post_hook = _nan_check_posthook
-  else:
-    jax_jit.global_state().post_hook = None
+if TYPE_CHECKING or jaxlib_extension_version >= 376:
+  _post_hook_state = config_ext.Config[Optional[Callable]](
+      "post_hook", None, include_in_jit_key=False
+  )
+  jax_jit.set_post_hook_state(_post_hook_state)
 
-def _update_debug_special_thread_local(_):
-  if (config.debug_nans.get_local() == True or
-      config.debug_infs.get_local() == True):
-    jax_jit.thread_local_state().post_hook = _nan_check_posthook
-  else:
-    jax_jit.thread_local_state().post_hook = None
+  def _update_debug_special_global(_):
+    if config._read("jax_debug_nans") or config._read("jax_debug_infs"):
+      _post_hook_state.set_global(_nan_check_posthook)
+    else:
+      _post_hook_state.set_global(None)
+
+  def _update_debug_special_thread_local(_):
+    if (config.debug_nans.get_local() == True or
+        config.debug_infs.get_local() == True):
+      _post_hook_state.set_local(_nan_check_posthook)
+    else:
+      _post_hook_state.set_local(None)
+else:
+  def _update_debug_special_global(_):
+    if config._read("jax_debug_nans") or config._read("jax_debug_infs"):
+      jax_jit.global_state().post_hook = _nan_check_posthook
+    else:
+      jax_jit.global_state().post_hook = None
+
+  def _update_debug_special_thread_local(_):
+    if (config.debug_nans.get_local() == True or
+        config.debug_infs.get_local() == True):
+      jax_jit.thread_local_state().post_hook = _nan_check_posthook
+    else:
+      jax_jit.thread_local_state().post_hook = None
 
 config.debug_nans._add_hooks(_update_debug_special_global,
                              _update_debug_special_thread_local)
@@ -868,28 +890,42 @@ def _std_basis(pytree):
   ndim = sum(map(np.size, leaves))
   dtype = dtypes.result_type(*leaves)
   flat_basis = jnp.eye(ndim, dtype=dtype)
-  out_pytree = _unravel_array_into_pytree(pytree, 1, None, flat_basis)
+  axis = 1
+  arr_s = [None] * flat_basis.ndim
+  specs = tree_map(lambda l: P(arr_s[:axis], *core.typeof(l).sharding.spec,
+                               arr_s[axis+1:]), pytree)
+  out_pytree = _unravel_array_into_pytree(pytree, axis, None, flat_basis, specs)
   out_pytree = tree_map(_insert_pvary, out_pytree, pytree)
   return out_pytree
 
 def _jacfwd_unravel(input_pytree, output_pytree_leaf, arr):
+  axis = -1 % arr.ndim
+  arr_s = core.typeof(arr).sharding.spec
+  specs = tree_map(
+      lambda l: P(*arr_s[:axis], *[None] * len(np.shape(l)), *arr_s[axis+1:]),
+      input_pytree)
   return _unravel_array_into_pytree(
-    input_pytree, -1, output_pytree_leaf, arr)
+    input_pytree, axis, output_pytree_leaf, arr, specs)
 
 def _jacrev_unravel(output_pytree, input_pytree_leaf, arr):
+  specs = tree_map(
+      lambda l: P(*[None] * len(np.shape(l)), *core.typeof(arr).sharding.spec[1:]),
+      output_pytree)
   return _unravel_array_into_pytree(
-    output_pytree, 0, input_pytree_leaf, arr)
+    output_pytree, 0, input_pytree_leaf, arr, specs)
 
-def _possible_downcast(x, example):
+def _possible_downcast(x, example, spec):
   from jax._src.lax import lax as lax_internal  # pytype: disable=import-error
   if (dtypes.issubdtype(x.dtype, np.complexfloating) and
       not dtypes.issubdtype(_dtype(example), np.complexfloating)):
     x = x.real
-  dtype = None if example is None else _dtype(example)
-  weak_type = None if example is None else dtypes.is_weakly_typed(example)
-  return lax_internal._convert_element_type(x, dtype, weak_type)
+  dtype = _dtype(example)
+  weak_type = dtypes.is_weakly_typed(example)
+  sharding = NamedSharding(core.typeof(example).sharding.mesh, spec)
+  return lax_internal._convert_element_type(
+      x, dtype, weak_type, sharding=sharding)
 
-def _unravel_array_into_pytree(pytree, axis, example, arr):
+def _unravel_array_into_pytree(pytree, axis, example, arr, specs):
   """Unravel an array into a PyTree with a given structure.
   Args:
       pytree: The pytree that provides the structure.
@@ -900,12 +936,14 @@ def _unravel_array_into_pytree(pytree, axis, example, arr):
       arr: The array to be unraveled.
   """
   leaves, treedef = tree_flatten(pytree)
-  axis = axis % arr.ndim
+  specs, _ = tree_flatten(specs)
   shapes = [arr.shape[:axis] + np.shape(l) + arr.shape[axis+1:] for l in leaves]
   parts = _split(arr, np.cumsum(map(np.size, leaves[:-1])), axis)
   reshaped_parts = [
-      _possible_downcast(np.reshape(x, shape), leaf if example is None else example)
-      for x, shape, leaf in zip(parts, shapes, leaves)]
+      _possible_downcast(np.reshape(x, shape),
+                         leaf if example is None else example,
+                         spec=spec)
+      for x, shape, leaf, spec in zip(parts, shapes, leaves, specs)]
   return tree_unflatten(treedef, reshaped_parts)
 
 def _split(x, indices, axis):
@@ -1098,7 +1136,7 @@ def vmap(fun: F,
     if config.mutable_array_checks.value:
       avals = [None if d is None or batching.is_vmappable(x) else core.typeof(x)
                for x, d in zip(args_flat, in_axes_flat)]
-      api_util._check_no_aliased_ref_args(dbg, avals, args_flat)
+      api_util.check_no_aliased_ref_args(lambda: dbg, avals, args_flat)
 
     axis_size_ = (axis_size if axis_size is not None else
                   _mapped_axis_size(fun, in_tree, args_flat, in_axes_flat, "vmap"))
@@ -1111,10 +1149,16 @@ def vmap(fun: F,
     try:
       axis_data = batching.AxisData(axis_name, axis_size_, spmd_axis_name,
                                     explicit_mesh_axis)
-      out_flat = batching.batch(
-          flat_fun, axis_data, in_axes_flat,
-          lambda: flatten_axes("vmap out_axes", out_tree(), out_axes)
-      ).call_wrapped(*args_flat)
+      if config.vmap_primitive.value:
+        out_axes_thunk = lambda: flatten_axes("vmap out_axes", out_tree(), out_axes)
+        out_flat = batching.vmap_p.bind(
+            flat_fun, *args_flat, axis_data=axis_data, in_axes=(*in_axes_flat,),
+            out_axes_thunk=out_axes_thunk)
+      else:
+        out_flat = batching.batch(
+            flat_fun, axis_data, in_axes_flat,
+            lambda: flatten_axes("vmap out_axes", out_tree(), out_axes)
+        ).call_wrapped(*args_flat)
     except batching.SpecMatchError as e:
       out_axes_flat = flatten_axes("vmap out_axes", out_tree(), out_axes)
       out_axes_full = tree_unflatten(out_tree(), out_axes_flat)
@@ -1136,14 +1180,16 @@ def _mapped_axis_spec(args_flat, in_axes_flat):
       return None
 
   out_spec = None
+  non_none_count = 0
   for arg, i in zip(args_flat, in_axes_flat):
     if i is not None:
       spec = _get_spec(arg, i)
-      if out_spec is not None and out_spec != spec:
+      if non_none_count != 0 and out_spec != spec:
         raise ValueError(
             "Mapped away dimension of inputs passed to vmap should be sharded"
             f" the same. Got inconsistent axis specs: {out_spec} vs {spec}")
       out_spec = spec
+      non_none_count += 1
   if out_spec is not None and not isinstance(out_spec, tuple):
     out_spec = (out_spec,)
   return out_spec
@@ -1249,6 +1295,12 @@ def pmap(
     global_arg_shapes: tuple[tuple[int, ...], ...] | None = None,
   ) -> Any:
   """Parallel map with support for collective operations.
+
+  .. note::
+    :py:func:`pmap` is now implemented in terms of :py:func:`jit` and
+    :py:func:`shard_map`. Please see the [migration
+    guide](https://docs.jax.dev/en/latest/migrate_pmap.html) for
+    more information.
 
   The purpose of :py:func:`pmap` is to express single-program multiple-data
   (SPMD) programs. Applying :py:func:`pmap` to a function will compile the
@@ -2128,6 +2180,10 @@ def _vjp(fun: lu.WrappedFun, *primals, has_aux=False):
   if config.vjp3.value:
     return _vjp3(fun, *primals, has_aux=has_aux)
   primals_flat, in_tree = tree_flatten(primals)
+  primals_flat = [
+      dtypes.canonicalize_value(v) if not isinstance(v, core.Tracer) else v
+      for v in primals_flat
+  ]
   for arg in primals_flat: dispatch.check_arg(arg)
   if not has_aux:
     flat_fun, out_tree = flatten_fun_nokwargs(fun, in_tree)
@@ -2232,6 +2288,8 @@ def vjp3(f, *primals, has_aux=False):
 
 def _vjp3(fun, *primals, has_aux=False):
   primals_flat, in_tree = tree_flatten(primals)
+  primals_flat = [dtypes.canonicalize_value(v) if not isinstance(v, core.Tracer)
+                  else v for v in primals_flat]
   for arg in primals_flat: dispatch.check_arg(arg)
   if not has_aux:
     flat_fun, out_tree = flatten_fun_nokwargs(fun, in_tree)

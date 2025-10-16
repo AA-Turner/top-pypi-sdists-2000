@@ -32,7 +32,6 @@ import math
 import operator
 import os
 from typing import Any, IO, Literal, Protocol, TypeVar, Union, overload
-import warnings
 
 import numpy as np
 
@@ -65,6 +64,7 @@ from jax._src.typing import (
 )
 from jax._src.util import (
     canonicalize_axis as _canonicalize_axis,
+    canonicalize_axis_tuple as _canonicalize_axis_tuple,
     ceil_of_ratio, safe_zip, set_module, unzip2)
 from jax._src.sharding import Sharding
 from jax._src.sharding_impls import NamedSharding, PartitionSpec as P
@@ -448,7 +448,7 @@ def isscalar(element: Any) -> bool:
     False
     >>> jnp.isscalar([1])
     False
-    >>> jnp.isscalar(tuple())
+    >>> jnp.isscalar(())
     False
     >>> jnp.isscalar(slice(10))
     False
@@ -496,7 +496,7 @@ def result_type(*args: Any) -> DType:
     of the ``jax_enable_x64`` configuration flag, meaning that 64-bit types
     may be downcast to 32-bit:
 
-    >>> jnp.result_type('float64')
+    >>> jnp.result_type('float64')  # doctest: +SKIP
     dtype('float32')
 
     For details on 64-bit values, refer to `Sharp bits - double precision`_:
@@ -3447,6 +3447,9 @@ def round(a: ArrayLike, decimals: int = 0, out: None = None) -> Array:
                             lax.RoundingMethod.TO_NEAREST_EVEN), factor)
     return lax.convert_element_type(out, dtype) if dtype == np.float16 else out
 
+  if decimals > np.log10(dtypes.finfo(dtype).max):
+    # Rounding beyond the input precision is a no-op.
+    return lax.asarray(a)
   if issubdtype(dtype, np.complexfloating):
     return lax.complex(_round_float(lax.real(a)), _round_float(lax.imag(a)))
   else:
@@ -5344,7 +5347,7 @@ def astype(x: ArrayLike, dtype: DTypeLike | None,
   # We offer a more specific warning than the usual ComplexWarning so we prefer
   # to issue our warning.
   result = lax._convert_element_type(
-    x_arr, dtype, sharding=util.normalize_device_to_sharding(device),
+    x_arr, dtype, sharding=util.canonicalize_device_to_sharding(device),
     warn_on_complex_to_real_cast=False)
   return lax._array_copy(result) if copy else result
 
@@ -7428,13 +7431,14 @@ def diagflat(v: ArrayLike, k: int = 0) -> Array:
 
 # TODO(jakevdp): add support for N-dimensional inputs as in NumPy v2.2
 @export
-def trim_zeros(filt: ArrayLike, trim: str ='fb') -> Array:
+def trim_zeros(filt: ArrayLike, trim: str ='fb',
+               axis: int | Sequence[int] | None = None) -> Array:
   """Trim leading and/or trailing zeros of the input array.
 
   JAX implementation of :func:`numpy.trim_zeros`.
 
   Args:
-    filt: input array. Must have ``filt.ndim == 1``.
+    filt: N-dimensional input array.
     trim: string, optional, default = ``fb``. Specifies from which end the input
       is trimmed.
 
@@ -7442,34 +7446,63 @@ def trim_zeros(filt: ArrayLike, trim: str ='fb') -> Array:
       - ``b`` - trims only the trailing zeros.
       - ``fb`` - trims both leading and trailing zeros.
 
+    axis: optional axis or axes along which to trim. If not specified, trim along
+      all axes of the array.
+
   Returns:
     An array containing the trimmed input with same dtype as ``filt``.
 
   Examples:
+    One-dimensional input:
+
     >>> x = jnp.array([0, 0, 2, 0, 1, 4, 3, 0, 0, 0])
     >>> jnp.trim_zeros(x)
     Array([2, 0, 1, 4, 3], dtype=int32)
+    >>> jnp.trim_zeros(x, trim='f')
+    Array([2, 0, 1, 4, 3, 0, 0, 0], dtype=int32)
+    >>> jnp.trim_zeros(x, trim='b')
+    Array([0, 0, 2, 0, 1, 4, 3], dtype=int32)
+
+    Two-dimensional input:
+
+    >>> x = jnp.zeros((4, 5)).at[1:3, 1:4].set(1)
+    >>> x
+    Array([[0., 0., 0., 0., 0.],
+           [0., 1., 1., 1., 0.],
+           [0., 1., 1., 1., 0.],
+           [0., 0., 0., 0., 0.]], dtype=float32)
+    >>> jnp.trim_zeros(x)
+    Array([[1., 1., 1.],
+           [1., 1., 1.]], dtype=float32)
+    >>> jnp.trim_zeros(x, trim='f')
+    Array([[1., 1., 1., 0.],
+           [1., 1., 1., 0.],
+           [0., 0., 0., 0.]], dtype=float32)
+    >>> jnp.trim_zeros(x, axis=0)
+    Array([[0., 1., 1., 1., 0.],
+           [0., 1., 1., 1., 0.]], dtype=float32)
+    >>> jnp.trim_zeros(x, axis=1)
+    Array([[0., 0., 0.],
+           [1., 1., 1.],
+           [1., 1., 1.],
+           [0., 0., 0.]], dtype=float32)
   """
-  # Non-array inputs are deprecated 2024-09-11
-  util.check_arraylike("trim_zeros", filt, emit_warning=True)
+  filt = util.ensure_arraylike("trim_zeros", filt)
   core.concrete_or_error(None, filt,
                          "Error arose in the `filt` argument of trim_zeros()")
-  filt_arr = asarray(filt)
-  del filt
-  if filt_arr.ndim != 1:
-    # Added on 2024-09-11
-    if deprecations.is_accelerated("jax-numpy-trimzeros-not-1d-array"):
-      raise TypeError(f"'filt' must be 1-D array, but received {filt_arr.ndim}-D array.")
-    warnings.warn(
-      "Passing arrays with ndim != 1 to jnp.trim_zeros() is deprecated. Currently, it "
-      "works with Arrays having ndim != 1. In the future this will result in an error.",
-      DeprecationWarning, stacklevel=2)
-  nz = (filt_arr == 0)
-  if reductions.all(nz):
-    return array_creation.empty(0, filt_arr.dtype)
-  start: Array | int = argmin(nz) if 'f' in trim.lower() else 0
-  end: Array | int = argmin(nz[::-1]) if 'b' in trim.lower() else 0
-  return filt_arr[start:len(filt_arr) - end]
+  axis_set = set(_canonicalize_axis_tuple(axis, filt.ndim))
+  if not axis_set or ('f' not in trim.lower() and 'b' not in trim.lower()):
+    return filt
+  def _get_slice(x: Array, ax: int) -> slice:
+    if ax not in axis_set:
+      return slice(None)
+    mask = x.any(axis=[i for i in range(x.ndim) if i != ax])
+    if not mask.any():
+      return slice(0, 0)
+    start = int(mask.argmax()) if 'f' in trim.lower() else None
+    stop = x.shape[ax] - int(mask[::-1].argmax()) if 'b' in trim.lower() else None
+    return slice(start, stop)
+  return filt[*(_get_slice(filt, ax) for ax in range(filt.ndim))]
 
 
 def trim_zeros_tol(filt, tol, trim='fb'):
@@ -9118,7 +9151,7 @@ def cov(m: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True,
     raise ValueError("m has more than 2 dimensions")  # same as numpy error
 
   X = atleast_2d(m)
-  if not rowvar and X.shape[0] != 1:
+  if not rowvar and m.ndim != 1:
     X = X.T
   if X.shape[0] == 0:
     return array([]).reshape(0, 0)
@@ -9128,6 +9161,10 @@ def cov(m: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True,
     if not rowvar and y_arr.shape[0] != 1:
       y_arr = y_arr.T
     X = concatenate((X, y_arr), axis=0)
+  if X.shape[1] == 0:
+    cov_shape = () if X.shape[0] == 1 else (X.shape[0], X.shape[0])
+    return array_creation.full(cov_shape, np.nan, dtype=X.dtype)
+
   if ddof is None:
     ddof = 1 if bias == 0 else 0
 
@@ -9264,13 +9301,14 @@ def corrcoef(x: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True) -> A
 
 
 @partial(vectorize, excluded={0, 1, 3, 4})
-def _searchsorted_via_scan(unrolled: bool, sorted_arr: Array, query: Array, side: str, dtype: type) -> Array:
+def _searchsorted_via_scan(unrolled: bool, sorted_arr: Array, query: Array,
+                           side: str, dtype: type) -> Array:
   op = lax._sort_le_comparator if side == 'left' else lax._sort_lt_comparator
   unsigned_dtype = np.uint32 if dtype == np.int32 else np.uint64
   def body_fun(state, _):
     low, high = state
     mid = low.astype(unsigned_dtype) + high.astype(unsigned_dtype)
-    mid = lax.div(mid, unsigned_dtype(2)).astype(dtype)
+    mid = lax.div(mid, array(2, dtype=unsigned_dtype)).astype(dtype)
     go_left = op(query, sorted_arr[mid])
     return (where(go_left, low, mid), where(go_left, mid, high)), ()
   n_levels = int(np.ceil(np.log2(len(sorted_arr) + 1)))
@@ -9389,6 +9427,7 @@ def searchsorted(a: ArrayLike, v: ArrayLike, side: str = 'left',
       'sort': _searchsorted_via_sort,
       'compare_all': _searchsorted_via_compare_all,
   }[method]
+  a, v = core.standard_insert_pvary(a, v)
   return impl(a, v, side, dtype)  # type: ignore
 
 

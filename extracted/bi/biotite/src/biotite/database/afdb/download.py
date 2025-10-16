@@ -16,8 +16,11 @@ from biotite.database.error import RequestError
 _METADATA_URL = "https://alphafold.com/api/prediction"
 _BINARY_FORMATS = ["bcif"]
 # Adopted from https://www.uniprot.org/help/accession_numbers
+# adding the optional 'AF-' prefix and '-F1' suffix used by RCSB
 _UNIPROT_PATTERN = (
-    "[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
+    r"^(?P<prefix>(AF-)|(AF_AF))?"
+    r"(?P<id>[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})"
+    r"(?P<suffix>-?F1)?$"
 )
 
 
@@ -31,8 +34,8 @@ def fetch(ids, format, target_path=None, overwrite=False, verbose=False):
     ----------
     ids : str or iterable object of str
         A single ID or a list of IDs of the file(s) to be downloaded.
-        They can be either UniProt IDs (e.g. ``P12345``) or AlphaFold DB IDs
-        (e.g. ``AF-P12345F1``).
+        They can be either UniProt IDs (e.g. ``P12345``), AlphaFold DB IDs
+        (e.g. ``AF-P12345-F1``) or computational RCSB IDs (e.g. ``AF_AFP12345F1``).
     format : {'pdb', 'pdbx', 'cif', 'mmcif', 'bcif', 'fasta'}
         The format of the files to be downloaded.
     target_path : str, optional
@@ -142,7 +145,10 @@ def _get_file_url(id, format):
         The URL of the file to be downloaded.
     """
     uniprot_id = _extract_id(id)
-    metadata = requests.get(f"{_METADATA_URL}/{uniprot_id}").json()
+    try:
+        metadata = requests.get(f"{_METADATA_URL}/{uniprot_id}").json()
+    except requests.exceptions.JSONDecodeError:
+        raise RequestError("Received malformed JSON response")
     if len(metadata) == 0:
         raise RequestError(f"ID {id} is invalid")
     # A list of length 1 is always returned, if the response is valid
@@ -167,10 +173,10 @@ def _extract_id(id):
     uniprot_id : str
         The UniProt ID.
     """
-    match = re.search(_UNIPROT_PATTERN, id)
+    match = re.match(_UNIPROT_PATTERN, id)
     if match is None:
         raise ValueError(f"Cannot extract AFDB identifier from '{id}'")
-    return match.group()
+    return match.group("id")
 
 
 def _assert_valid_file(response, id):

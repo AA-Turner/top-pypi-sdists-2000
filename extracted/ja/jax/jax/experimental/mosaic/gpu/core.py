@@ -13,8 +13,7 @@
 # limitations under the License.
 # ==============================================================================
 
-from collections.abc import Callable
-from collections.abc import Sequence
+from collections.abc import Callable, Iterable, Sequence
 import contextlib
 import ctypes
 import dataclasses
@@ -29,6 +28,7 @@ from typing import Any, Generic, TypeVar
 import weakref
 
 import jax
+from jax._src import core as jax_core
 from jax._src import dtypes
 from jax._src import lib
 from jax._src import sharding_impls
@@ -61,7 +61,7 @@ os.environ["CUDA_ROOT"] = cuda_root
 PYTHON_RUNFILES = os.environ.get("PYTHON_RUNFILES")
 
 # This tracks the latest Mosaic GPU IR version with a monthly delay.
-FWD_COMPAT_IR_VERSION = 1
+FWD_COMPAT_IR_VERSION = 2
 
 c = utils.c  # This is too common to fully qualify.
 
@@ -130,15 +130,15 @@ def supports_cross_device_collectives():
   )
 
 
-mosaic_gpu_p = jax._src.core.Primitive("mosaic_gpu_p")
+mosaic_gpu_p = jax_core.Primitive("mosaic_gpu_p")
 mosaic_gpu_p.multiple_results = True
 
 
 @mosaic_gpu_p.def_abstract_eval
 def _mosaic_gpu_abstract_eval(*_, module, out_types, inout_types):
-  del module  # Unused.
+  del module # Unused.
   return [
-      jax._src.core.ShapedArray(t.shape, t.dtype)
+      jax_core.ShapedArray(t.shape, t.dtype)
       for t in itertools.chain(out_types, inout_types)
   ]
 
@@ -266,6 +266,7 @@ class Barrier:
 @dataclasses.dataclass(frozen=True)
 class ClusterBarrier:
   collective_dims: Sequence[gpu.Dimension]
+  arrival_count: int = 1
   num_barriers: int = 1
 
 @dataclasses.dataclass(frozen=True)
@@ -430,9 +431,9 @@ def _construct_smem_reftree(
             else utils.BarrierRef.initialize
         )
         ref = init_fn(barrier_memref(num_barriers), arrival_count=arrival_count)
-      case ClusterBarrier(collective_dims, num_barriers):
+      case ClusterBarrier(collective_dims, arrival_count, num_barriers):
         ref = utils.CollectiveBarrierRef.initialize(
-            barrier_memref(num_barriers), collective_dims, cluster_shape
+            barrier_memref(num_barriers), arrival_count, collective_dims, cluster_shape
         )
       case TMEM(shape, dtype, layout=layout, collective=collective, packing=packing):
         addr_ref = _slice_smem(
@@ -501,7 +502,7 @@ def _smem_tree_size(smem_buffers: ShapeTree) -> int:
         size += max(_smem_tree_size(s) for s in members)
       case (
           TMABarrier(num_barriers)
-          | ClusterBarrier(_, num_barriers=num_barriers)
+          | ClusterBarrier(_, _, num_barriers=num_barriers)
           | Barrier(_, num_barriers=num_barriers)
       ):
         if size % utils.MBARRIER_BYTES:
@@ -595,8 +596,16 @@ def _launch(
           c(profiler_start, index),
           lowering_semantics,
       )
+      if lowering_semantics == LoweringSemantics.Warpgroup:
+        prof_smem = dialect.with_transforms(prof_smem, ir.ArrayAttr.get([]))
+        wrap_in_custom_primitive = True
+      else:
+        wrap_in_custom_primitive = False
       prof = profiler.OnDeviceProfiler(
-          profiler_spec, prof_smem, maybe_prof_buffer
+          profiler_spec,
+          prof_smem,
+          maybe_prof_buffer,
+          wrap_in_custom_primitive,
       )
     else:
       prof = None
@@ -892,7 +901,12 @@ def as_gpu_kernel(
         )
 
   def bind(*args) -> Any:
-    return mosaic_gpu_p.bind(*args, module=module, out_types=out_shape, inout_types=inout_shape)
+    return mosaic_gpu_p.bind(
+        *args,
+        module=module,
+        out_types=out_shape,
+        inout_types=inout_shape,
+    )
 
   if prof_spec is not None:
     @jax.jit
@@ -900,10 +914,7 @@ def as_gpu_kernel(
       _check_args(*args)
       *results, prof_buffer = bind(*args)
       def dump_profile(prof_buffer):
-        out_file = os.path.join(
-            os.getenv("TEST_UNDECLARED_OUTPUTS_DIR", "/tmp"),
-            f"{time.time_ns()}-trace.json",
-        )
+        out_file = os.path.join(prof_spec.dump_path, f"{time.time_ns()}-trace.json")
         try:
           with open(out_file, "x") as f:
             prof_spec.dump(prof_buffer, f, grid=grid, block=block)
@@ -933,24 +944,57 @@ def as_torch_gpu_kernel(
     module_name: str = "unknown",
     kernel_name: str | None = None,
     thread_semantics: LoweringSemantics = LoweringSemantics.Lane,
-    inout_shape = (),
+    inout_shape=(),
 ):
-  try:
-    import torch  # type: ignore[import-not-found]  # pytype: disable=import-error
-  except ImportError:
-    raise RuntimeError("as_torch_gpu_kernel requires PyTorch")
-  torch.cuda.init()  # Make sure CUDA context is set up.
-
-  module, in_shape, inout_shape, out_shape, unwrap_output_tuple, is_device_collective = _kernel_to_module(
-      body, grid, block, in_shape, out_shape, smem_scratch_shape, prof_spec,
-      cluster, module_name, kernel_name, thread_semantics, inout_shape
+  (
+      module,
+      in_shape,
+      inout_shape,
+      out_shape,
+      unwrap_output_tuple,
+      is_device_collective,
+  ) = _kernel_to_module(
+      body,
+      grid,
+      block,
+      in_shape,
+      out_shape,
+      smem_scratch_shape,
+      prof_spec,
+      cluster,
+      module_name,
+      kernel_name,
+      thread_semantics,
+      inout_shape,
   )
+  module = _run_serde_pass(module, serialize=True, ir_version=None)
+  return _as_torch_gpu_kernel(
+      module.operation.get_asm(binary=True, enable_debug_info=True),
+      in_shape,
+      out_shape,
+      inout_shape,
+      unwrap_output_tuple=unwrap_output_tuple,
+  )
+
+
+def _as_torch_gpu_kernel(
+    module_asm: bytes,
+    in_shape: Iterable[object],
+    out_shape: Iterable[object],
+    inout_shape: Iterable[object] = (),
+    *,
+    unwrap_output_tuple: bool = False,
+):
   flat_arg_types, expected_arg_treedef = jax.tree.flatten((*in_shape, *inout_shape))
   flat_out_types, _ = jax.tree.flatten(out_shape)
   out_treedef = jax.tree.structure((*out_shape, *inout_shape))
 
-  if is_device_collective:
-    raise RuntimeError("Kernel is a cross-device collective but no support is available for Torch.")
+  try:
+    import torch  # type: ignore[import-not-found]  # pytype: disable=import-error
+  except ImportError:
+    raise RuntimeError("_as_torch_gpu_kernel requires PyTorch")
+
+  torch.cuda.init()  # Make sure CUDA context is set up.
 
   # Get our hands on the compilation and unload functions
   try:
@@ -969,8 +1013,6 @@ def as_torch_gpu_kernel(
   unload_func.argtypes = [compile_func.restype]
   unload_func.restype = None
 
-  module = _run_serde_pass(module, serialize=True, ir_version=None)
-  module_asm = module.operation.get_asm(binary=True, enable_debug_info=True)
   compiled = compile_func(ctypes.c_char_p(module_asm))
   if not compiled:
     raise RuntimeError("Failed to compile the module")

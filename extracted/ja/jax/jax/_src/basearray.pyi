@@ -11,12 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import abc
 from collections.abc import Callable, Sequence
 from types import ModuleType
 from typing import Any, Protocol, runtime_checkable, Union
 import numpy as np
 
+from jax._src import literals
 from jax._src.partition_spec import PartitionSpec as P
 from jax._src.named_sharding import NamedSharding
 from jax._src.sharding import Sharding
@@ -41,8 +41,7 @@ Traceback = Any
 PrecisionLike = Any
 
 
-# TODO(slebedev): Remove the metaclass once ``jax_extension_version >= 325``.
-class Array(metaclass=abc.ABCMeta):
+class Array:
   aval: Any
 
   @property
@@ -274,6 +273,8 @@ ArrayLike = Union[
   Array,  # JAX array type
   np.ndarray,  # NumPy array type
   StaticScalar,  # valid scalars
+  # Typed array and scalar types
+  literals.TypedNdArray,
 ]
 
 

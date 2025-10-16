@@ -4,7 +4,7 @@ import pathlib
 import time
 import webbrowser
 from argparse import ArgumentTypeError
-from datetime import timedelta
+from datetime import datetime, timedelta
 from threading import Thread
 
 import requests
@@ -44,6 +44,7 @@ def configure_logging(loglevel: str) -> None:
 
 
 def main(locustfiles: list[str] | None = None):
+    start_time = datetime.now()
     options, locust_options = combined_cloud_parser.parse_known_args()
 
     configure_logging(options.loglevel)
@@ -142,6 +143,11 @@ def main(locustfiles: list[str] | None = None):
                     logger.info(js["message"])
 
                 time.sleep(2)
+            except requests.exceptions.ConnectionError:
+                logger.error(
+                    "An error occured while trying to connect to the server. Please check your internet connection and try again."
+                )
+                return 1
             except requests.exceptions.RequestException as e:
                 logger.error(f"Failed to deploy the load generators: {e}")
                 return 1
@@ -174,6 +180,7 @@ def main(locustfiles: list[str] | None = None):
             log_ws_url,
             auth=session_id,
         )
+        websocket.sio.emit("subscribe")
         logger.debug(f"SocketIO transport type: {websocket.sio.transport()}")
         websocket.wait()
 
@@ -190,7 +197,10 @@ def main(locustfiles: list[str] | None = None):
             return 1
     except WebsocketTimeout as e:
         logger.error(str(e))
-        session.teardown("WebsocketTimeout")
+        if (datetime.now() - start_time).total_seconds() < 300:
+            session.teardown("WebsocketTimeout")
+        else:
+            session.teardown("IdleTimeout")
         return 1
     except SessionMismatchError as e:
         # In this case we do not trigger the teardown since the running instance is not ours

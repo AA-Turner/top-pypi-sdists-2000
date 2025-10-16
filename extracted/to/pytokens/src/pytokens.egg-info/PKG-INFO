@@ -1,7 +1,7 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.1
 Name: pytokens
-Version: 0.1.10
-Summary: A Fast, spec compliant Python 3.12+ tokenizer that runs on older Pythons.
+Version: 0.2.0
+Summary: A Fast, spec compliant Python 3.13+ tokenizer that runs on older Pythons.
 Home-page: https://github.com/tusharsadhwani/pytokens
 Author: Tushar Sadhwani
 Author-email: tushar.sadhwani000@gmail.com
@@ -33,7 +33,7 @@ Requires-Dist: wheel; extra == "dev"
 
 # pytokens
 
-A Fast, spec compliant Python 3.12+ tokenizer that runs on older Pythons.
+A Fast, spec compliant Python 3.13+ tokenizer that runs on older Pythons.
 
 ## Installation
 
@@ -44,7 +44,7 @@ pip install pytokens
 ## Usage
 
 ```bash
-pytokens path/to/file.py
+python -m pytokens path/to/file.py
 ```
 
 ## Local Development / Testing

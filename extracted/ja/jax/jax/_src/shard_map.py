@@ -33,9 +33,11 @@ from jax._src import dtypes
 from jax._src import linear_util as lu
 from jax._src import sharding_impls
 from jax._src import source_info_util
+from jax._src import stages
 from jax._src import traceback_util
 from jax._src import util
 from jax._src import xla_bridge as xb
+from jax._src.core import order_wrt_mesh
 from jax._src.api import _shared_code_pmap, _prepare_pmap
 from jax._src.core import pvary, Tracer, typeof, shard_aval, unshard_aval
 from jax._src.mesh import (AbstractMesh, Mesh, BaseMesh, AxisType,
@@ -205,7 +207,7 @@ def _smap(f, *, in_axes, out_axes, axis_name: AxisName):
 def _shard_map(f: Callable, *, mesh: Mesh | AbstractMesh | None,
                in_specs: Specs, out_specs: Specs | Callable[[], Specs],
                axis_names: Set[AxisName], check_vma: bool,
-               _skip_mesh_check: bool = False, _smap: bool = False) -> Callable:
+               _smap: bool = False) -> Callable:
   if not callable(f):
     raise TypeError("shard_map requires a callable for its first argument, "
                     f"but got {f} of type {type(f)}.")
@@ -214,8 +216,8 @@ def _shard_map(f: Callable, *, mesh: Mesh | AbstractMesh | None,
   @traceback_util.api_boundary
   def wrapped(*args):
     nonlocal mesh, axis_names
-    mesh, axis_names = _shmap_checks(mesh, axis_names, in_specs, out_specs,
-                                     _skip_mesh_check, _smap)
+    mesh, axis_names = _shmap_checks(
+        mesh, axis_names, in_specs, out_specs, _smap)
     fun = lu.wrap_init(
         f, debug_info=api_util.debug_info("shard_map", f, args, {}))
     args_flat, in_tree = tree_flatten(args)
@@ -237,6 +239,9 @@ def _shard_map(f: Callable, *, mesh: Mesh | AbstractMesh | None,
 
     dyn_argnums, in_specs_flat = unzip2((i, s) for i, s in enumerate(in_specs_flat)
                                         if s is not None)
+    if (fun.debug_info.arg_names is not None and
+        len(dyn_argnums) != len(fun.debug_info.arg_names)):
+      fun = fun.with_unknown_names()
     fun, args_flat = api_util.argnums_partial(fun, dyn_argnums, args_flat, False)
     _check_specs_vs_args(f, mesh, in_tree, in_specs, dyn_argnums, in_specs_flat,
                          args_flat)
@@ -293,8 +298,7 @@ def _axes_to_pspec(axis_name, axis):
   return P(*[None] * axis + [axis_name])
 
 
-def _shmap_checks(mesh, axis_names, in_specs, out_specs, _skip_mesh_check,
-                  _smap):
+def _shmap_checks(mesh, axis_names, in_specs, out_specs, _smap):
   if mesh is None:
     mesh = get_abstract_mesh()
     if mesh.empty:
@@ -303,8 +307,7 @@ def _shmap_checks(mesh, axis_names, in_specs, out_specs, _skip_mesh_check,
           " `jax.set_mesh(mesh)` to enter into a mesh context")
   else:
     ctx_mesh = get_abstract_mesh()
-    if (not _skip_mesh_check and not ctx_mesh.empty and
-        mesh.abstract_mesh != ctx_mesh):
+    if not ctx_mesh.empty and mesh.abstract_mesh != ctx_mesh:
       raise ValueError(
           f"The context mesh {ctx_mesh} should match the mesh passed to"
           f" shard_map {mesh}")
@@ -628,14 +631,11 @@ MaybeTracer = Union[JaxType, Tracer]
 
 class ShardMapPrimitive(core.Primitive):
   multiple_results = True
-
-  def bind(self, *args, **params):
-    return self._true_bind(*args, **params)
+  skip_canonicalization = True
 
   def bind_with_trace(self, trace, fun_and_args, params):
-    fun: lu.WrappedFun
     fun, *args = fun_and_args
-    return trace.process_shard_map(shard_map_p, fun, args, **params)
+    return trace.process_shard_map(shard_map_p, fun, args, **params)  # type: ignore
 
   def get_bind_params(self, params):
     new_params = dict(params)
@@ -833,7 +833,7 @@ def _shard_map_lowering_shardy(
   tokens = [ctx.tokens_in.get(eff) for eff in ctx.tokens_in.effects()]
   num_tokens = len(tokens)
   manual_axes = order_wrt_mesh(mesh, shardy_manual_axes)
-  if np.prod([mesh.shape[a] for a in manual_axes]) == 1:
+  if prod([mesh.shape[a] for a in manual_axes]) == 1:
     # No need for a `ManualComputationOp` if all manual axes are size 1.
     with _extend_axis_env(mesh, manual_axes), config._check_vma(check_vma):
       out_nodes, tokens_out = mlir.jaxpr_subcomp(
@@ -931,7 +931,7 @@ def _shard_map_lowering(ctx: mlir.LoweringRuleContext, *in_nodes,
   sub_ctx = ctx.module_context.replace(axis_context=new_axis_context)
   with _extend_axis_env(mesh, manual_axes), config._check_vma(check_vma):
     out_nodes_, tokens_out = mlir.call_lowering(
-        "shmap_body", jaxpr, None, sub_ctx, in_avals_,
+        "shmap_body", pe.close_jaxpr(jaxpr), None, sub_ctx, in_avals_,
         out_avals_, ctx.tokens_in, *in_nodes_,
         dim_var_values=ctx.dim_var_values,
         const_lowering=ctx.const_lowering,
@@ -1020,9 +1020,6 @@ def _spec_to_vma(spec):
   return frozenset(p for s in spec if s is not None
                    for p in (s if isinstance(s, tuple) else (s,))) | spec.unreduced
 
-def order_wrt_mesh(mesh, x):
-  return tuple(a for a in mesh.axis_names if a in x)
-
 def _shard_map_impl(trace, prim, fun, args, *, mesh, in_specs, out_specs_thunk,
                     check_vma, manual_axes):
   del prim
@@ -1041,7 +1038,8 @@ def _shard_map_impl(trace, prim, fun, args, *, mesh, in_specs, out_specs_thunk,
     _check_vmas(mesh, out_specs_thunk(), out_vma)
     src_pspecs = tuple(_vma_to_spec(mesh, r) for r in out_vma)
   else:
-    src_pspecs = tuple(P(mesh.axis_names) for _ in out_vma)
+    src_pspecs = tuple(P(order_wrt_mesh(mesh, manual_axes))
+                       for _ in range(len(out_vma)))
   dst_pspecs = out_specs_thunk()
   return map(partial(_match_spec, mesh, check_vma, manual_axes),
              src_pspecs, dst_pspecs, outs)
@@ -1176,7 +1174,7 @@ class ShardMapTrace(core.Trace):
       out_specs = tree_map(partial(_vma_to_spec, self.mesh), out_vma)
     else:
       out_vma = frozenset()
-      in_specs = out_specs = P(self.mesh.axis_names)
+      in_specs = out_specs = P(order_wrt_mesh(self.mesh, self.manual_axes))
 
     eager_rule = eager_rules.get(prim)
     if eager_rule:
@@ -1283,7 +1281,7 @@ class ShardMapTracer(core.Tracer):
     return out.update(sharding=new_sharding, vma=vma)
 
   def to_concrete_value(self):
-    if self.vma == frozenset():
+    if self._trace.check and self.vma == frozenset():
       with core.eval_context(), use_abstract_mesh(self._trace.amesh):
         return core.to_concrete_value(self.val[0])
     else:
@@ -1899,6 +1897,7 @@ def _shard_map_discharge(
 def pmap(f, axis_name=None, *, in_axes=0, out_axes=0,
          static_broadcasted_argnums=(), devices=None, backend=None,
          axis_size=None, donate_argnums=(), global_arg_shapes=None):
+  del global_arg_shapes
   # TODO(vanderplas): move these definitions into jax._src and avoid local import.
   import jax.experimental.multihost_utils as mhu  # pytype: disable=import-error
   devices = tuple(devices) if devices is not None else devices
@@ -1907,40 +1906,58 @@ def pmap(f, axis_name=None, *, in_axes=0, out_axes=0,
   if isinstance(axis_name, core._TempAxisName):
     axis_name = repr(axis_name)
 
-  def infer_params(*args, **kwargs):
+  def infer_params(*args, __check=True, **kwargs):
     p = _prepare_pmap(f, in_axes, out_axes, static_broadcasted_tuple,
                       donate_tuple, devices, backend, axis_size, args, kwargs)
-    for arg in p.flat_args:
-      dispatch.check_arg(arg)
+    if __check:
+      for arg in p.flat_args:
+        dispatch.check_arg(arg)
     mesh = Mesh(_get_devices(p, backend), (axis_name,))
     _pmapped, in_specs, out_specs = _cached_shard_map(
         p.flat_fun, mesh, p.in_axes_flat, p.out_axes_thunk, axis_name)
-    flat_global_args = mhu.host_local_array_to_global_array(
-        p.flat_args, mesh, list(in_specs))
     jitted_f = api.jit(
         _pmapped,
         donate_argnums=[i for i, val in enumerate(p.donated_invars) if val])
-    return jitted_f, flat_global_args, p.out_tree, mesh, out_specs
+    if __check and xb.process_count() > 1:
+      flat_global_args = mhu.host_local_array_to_global_array(
+          p.flat_args, mesh, list(in_specs))
+    else:
+      flat_global_args = p.flat_args
+    return jitted_f, flat_global_args, p, mesh, out_specs, donate_tuple
 
   def wrapped(*args, **kwargs):
-    (jitted_f, flat_global_args, out_tree, mesh,
-     out_specs) = infer_params(*args, **kwargs)
+    jitted_f, flat_global_args, p, mesh, out_specs, _ = infer_params(
+        *args, **kwargs)
     outs = jitted_f(*flat_global_args)
-    outs = mhu.global_array_to_host_local_array(outs, mesh, out_specs())
-    return tree_unflatten(out_tree(), outs)
+    if xb.process_count() > 1:
+      outs = mhu.global_array_to_host_local_array(outs, mesh, out_specs())
+    return tree_unflatten(p.out_tree(), outs)
 
   def lower(*args, **kwargs):
-    jitted_f, _, _, _, _ = infer_params(*args, **kwargs)
-    return jitted_f.lower(*args, **kwargs)
+    jitted_f, flat_global_args, p, _, _, donate_tuple = infer_params(
+        *args, __check=False, **kwargs
+    )
+    abstract_args = list(map(core.shaped_abstractify, flat_global_args))
+    args_info = stages.make_args_info(p.in_tree, abstract_args, donate_tuple)
+    lowered = jitted_f.trace(*flat_global_args).lower()
+    lowered = stages.Lowered(lowered._lowering, args_info, p.out_tree(),
+                             no_kwargs=lowered._no_kwargs)
+    return lowered
   wrapped.lower = lower
-
   return wrapped
 
 
 @lu.cache
 def _cached_shard_map(flat_fun, mesh, in_axes_flat, out_axes_thunk, axis_name):
-  in_specs = tuple(map(partial(_axis_to_spec, axis_name), in_axes_flat))
-  out_specs = lambda: map(partial(_axis_to_spec, axis_name), out_axes_thunk())
+  f_transformed = flat_fun.f_transformed
+  def reset_stores_f_transformed(*args, **kwargs):
+    for store in flat_fun.stores:
+      if store is not None:
+        store.reset()
+    return f_transformed(*args, **kwargs)
+  flat_fun.f_transformed = reset_stores_f_transformed
+  in_specs = tuple(map(partial(_axes_to_pspec, axis_name), in_axes_flat))
+  out_specs = lambda: map(partial(_axes_to_pspec, axis_name), out_axes_thunk())
   fun = _handle_reshapes(flat_fun, in_axes_flat, out_axes_thunk)
   return (_shard_map(fun.call_wrapped, mesh=mesh, in_specs=in_specs,
                      out_specs=out_specs, check_vma=False,
@@ -1954,15 +1971,6 @@ def _handle_reshapes(f, in_axes, out_axes_thunk, *args, **kwargs):
   out = f(*args)
   return tree_map(lambda x, ax: x if ax is None else lax.expand_dims(x, [ax]),
                   list(out), list(out_axes_thunk()))
-
-def _axis_to_spec(axis_name, ax):
-  if isinstance(ax, int):
-    specs = [None] * ax + [axis_name]
-    return P(*specs)
-  elif ax is None:
-    return P()
-  else:
-    raise TypeError(ax)
 
 def _get_devices(p, backend):
   if backend is not None and p.devices is None:

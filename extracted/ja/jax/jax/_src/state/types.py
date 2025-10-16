@@ -146,6 +146,18 @@ class RefReshaper:
       shape = shape[0]
     if not shape:
       raise ValueError("Cannot reshape ref to empty shape")
+    if any(s == -1 for s in shape):
+      num_elements = math.prod(ref_or_view.shape)
+      defined_dims = [d for d in shape if d != -1]
+      if len(defined_dims) != len(shape) - 1:
+        raise ValueError(f"At most one dimension can be -1, but got {shape}")
+      if num_elements % math.prod(defined_dims):
+        raise ValueError(
+            f"Specified dims {shape} do not evenly divide the size of the "
+            f"ref ({num_elements})."
+        )
+      remaining_dim = num_elements // math.prod(defined_dims)
+      shape = tuple(d if d != -1 else remaining_dim for d in shape)
     if np.prod(shape) != np.prod(ref_or_view.shape):
       raise TypeError(
           f"cannot reshape ref of shape {ref_or_view.shape} into shape {shape}"
@@ -364,6 +376,15 @@ class TransformedRef:
   def __setitem__(self, slc, value):
     from jax._src.state.primitives import ref_set # pytype: disable=import-error
     return ref_set(self, slc, value)
+
+
+def get_transforms_shape(
+    ts: Sequence[Transform], shape: tuple[int | Array, ...]
+) -> tuple[int | Array, ...]:
+  for t in ts:
+    shape = t.transform_shape(shape)  # type: ignore
+  assert shape is not None
+  return shape
 
 
 # We need an aval for `Ref`s so we can represent `get` and `swap` in Jaxprs.
@@ -589,3 +610,14 @@ def get_ref_aval_from_value(x: Any):
   if type(x) in _ref_type_aval_mappings:
     return _ref_type_aval_mappings[type(x)](x)
   return _default_value_to_ref_aval(x)
+
+# === pinned, chained LinearVals ===
+
+@dataclasses.dataclass(frozen=True)
+class AbstractLinVal(core.AbstractValue):
+  inner_aval: core.AbstractValue
+  memory_space: Any = None
+
+  shape = property(lambda self: self.inner_aval.shape)  # type: ignore
+  dtype = property(lambda self: self.inner_aval.dtype)  # type: ignore
+  ndim = property(lambda self: self.inner_aval.ndim)  # type: ignore

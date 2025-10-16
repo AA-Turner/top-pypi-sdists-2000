@@ -21,6 +21,7 @@ Usage::
         DescribeCapacityBlockOfferingsPaginator,
         DescribeCapacityBlockStatusPaginator,
         DescribeCapacityBlocksPaginator,
+        DescribeCapacityManagerDataExportsPaginator,
         DescribeCapacityReservationBillingRequestsPaginator,
         DescribeCapacityReservationFleetsPaginator,
         DescribeCapacityReservationsPaginator,
@@ -144,6 +145,8 @@ Usage::
         DescribeVpcsPaginator,
         GetAssociatedIpv6PoolCidrsPaginator,
         GetAwsNetworkPerformanceDataPaginator,
+        GetCapacityManagerMetricDataPaginator,
+        GetCapacityManagerMetricDimensionsPaginator,
         GetGroupsForCapacityReservationPaginator,
         GetInstanceTypesFromInstanceRequirementsPaginator,
         GetIpamAddressHistoryPaginator,
@@ -182,6 +185,7 @@ Usage::
     describe_capacity_block_offerings_paginator: DescribeCapacityBlockOfferingsPaginator = client.get_paginator("describe_capacity_block_offerings")
     describe_capacity_block_status_paginator: DescribeCapacityBlockStatusPaginator = client.get_paginator("describe_capacity_block_status")
     describe_capacity_blocks_paginator: DescribeCapacityBlocksPaginator = client.get_paginator("describe_capacity_blocks")
+    describe_capacity_manager_data_exports_paginator: DescribeCapacityManagerDataExportsPaginator = client.get_paginator("describe_capacity_manager_data_exports")
     describe_capacity_reservation_billing_requests_paginator: DescribeCapacityReservationBillingRequestsPaginator = client.get_paginator("describe_capacity_reservation_billing_requests")
     describe_capacity_reservation_fleets_paginator: DescribeCapacityReservationFleetsPaginator = client.get_paginator("describe_capacity_reservation_fleets")
     describe_capacity_reservations_paginator: DescribeCapacityReservationsPaginator = client.get_paginator("describe_capacity_reservations")
@@ -305,6 +309,8 @@ Usage::
     describe_vpcs_paginator: DescribeVpcsPaginator = client.get_paginator("describe_vpcs")
     get_associated_ipv6_pool_cidrs_paginator: GetAssociatedIpv6PoolCidrsPaginator = client.get_paginator("get_associated_ipv6_pool_cidrs")
     get_aws_network_performance_data_paginator: GetAwsNetworkPerformanceDataPaginator = client.get_paginator("get_aws_network_performance_data")
+    get_capacity_manager_metric_data_paginator: GetCapacityManagerMetricDataPaginator = client.get_paginator("get_capacity_manager_metric_data")
+    get_capacity_manager_metric_dimensions_paginator: GetCapacityManagerMetricDimensionsPaginator = client.get_paginator("get_capacity_manager_metric_dimensions")
     get_groups_for_capacity_reservation_paginator: GetGroupsForCapacityReservationPaginator = client.get_paginator("get_groups_for_capacity_reservation")
     get_instance_types_from_instance_requirements_paginator: GetInstanceTypesFromInstanceRequirementsPaginator = client.get_paginator("get_instance_types_from_instance_requirements")
     get_ipam_address_history_paginator: GetIpamAddressHistoryPaginator = client.get_paginator("get_ipam_address_history")
@@ -358,6 +364,8 @@ from .type_defs import (
     DescribeCapacityBlocksResultTypeDef,
     DescribeCapacityBlockStatusRequestPaginateTypeDef,
     DescribeCapacityBlockStatusResultTypeDef,
+    DescribeCapacityManagerDataExportsRequestPaginateTypeDef,
+    DescribeCapacityManagerDataExportsResultTypeDef,
     DescribeCapacityReservationBillingRequestsRequestPaginateTypeDef,
     DescribeCapacityReservationBillingRequestsResultTypeDef,
     DescribeCapacityReservationFleetsRequestPaginateTypeDef,
@@ -604,6 +612,10 @@ from .type_defs import (
     GetAssociatedIpv6PoolCidrsResultTypeDef,
     GetAwsNetworkPerformanceDataRequestPaginateTypeDef,
     GetAwsNetworkPerformanceDataResultTypeDef,
+    GetCapacityManagerMetricDataRequestPaginateTypeDef,
+    GetCapacityManagerMetricDataResultTypeDef,
+    GetCapacityManagerMetricDimensionsRequestPaginateTypeDef,
+    GetCapacityManagerMetricDimensionsResultTypeDef,
     GetGroupsForCapacityReservationRequestPaginateTypeDef,
     GetGroupsForCapacityReservationResultTypeDef,
     GetInstanceTypesFromInstanceRequirementsRequestPaginateTypeDef,
@@ -670,6 +682,7 @@ __all__ = (
     "DescribeCapacityBlockOfferingsPaginator",
     "DescribeCapacityBlockStatusPaginator",
     "DescribeCapacityBlocksPaginator",
+    "DescribeCapacityManagerDataExportsPaginator",
     "DescribeCapacityReservationBillingRequestsPaginator",
     "DescribeCapacityReservationFleetsPaginator",
     "DescribeCapacityReservationsPaginator",
@@ -793,6 +806,8 @@ __all__ = (
     "DescribeVpcsPaginator",
     "GetAssociatedIpv6PoolCidrsPaginator",
     "GetAwsNetworkPerformanceDataPaginator",
+    "GetCapacityManagerMetricDataPaginator",
+    "GetCapacityManagerMetricDimensionsPaginator",
     "GetGroupsForCapacityReservationPaginator",
     "GetInstanceTypesFromInstanceRequirementsPaginator",
     "GetIpamAddressHistoryPaginator",
@@ -1021,6 +1036,29 @@ class DescribeCapacityBlocksPaginator(_DescribeCapacityBlocksPaginatorBase):
         """
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeCapacityBlocks.html#EC2.Paginator.DescribeCapacityBlocks.paginate)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describecapacityblockspaginator)
+        """
+
+
+if TYPE_CHECKING:
+    _DescribeCapacityManagerDataExportsPaginatorBase = Paginator[
+        DescribeCapacityManagerDataExportsResultTypeDef
+    ]
+else:
+    _DescribeCapacityManagerDataExportsPaginatorBase = Paginator  # type: ignore[assignment]
+
+
+class DescribeCapacityManagerDataExportsPaginator(_DescribeCapacityManagerDataExportsPaginatorBase):
+    """
+    [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeCapacityManagerDataExports.html#EC2.Paginator.DescribeCapacityManagerDataExports)
+    [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describecapacitymanagerdataexportspaginator)
+    """
+
+    def paginate(  # type: ignore[override]
+        self, **kwargs: Unpack[DescribeCapacityManagerDataExportsRequestPaginateTypeDef]
+    ) -> PageIterator[DescribeCapacityManagerDataExportsResultTypeDef]:
+        """
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeCapacityManagerDataExports.html#EC2.Paginator.DescribeCapacityManagerDataExports.paginate)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describecapacitymanagerdataexportspaginator)
         """
 
 
@@ -3784,6 +3822,52 @@ class GetAwsNetworkPerformanceDataPaginator(_GetAwsNetworkPerformanceDataPaginat
         """
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetAwsNetworkPerformanceData.html#EC2.Paginator.GetAwsNetworkPerformanceData.paginate)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getawsnetworkperformancedatapaginator)
+        """
+
+
+if TYPE_CHECKING:
+    _GetCapacityManagerMetricDataPaginatorBase = Paginator[
+        GetCapacityManagerMetricDataResultTypeDef
+    ]
+else:
+    _GetCapacityManagerMetricDataPaginatorBase = Paginator  # type: ignore[assignment]
+
+
+class GetCapacityManagerMetricDataPaginator(_GetCapacityManagerMetricDataPaginatorBase):
+    """
+    [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetCapacityManagerMetricData.html#EC2.Paginator.GetCapacityManagerMetricData)
+    [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getcapacitymanagermetricdatapaginator)
+    """
+
+    def paginate(  # type: ignore[override]
+        self, **kwargs: Unpack[GetCapacityManagerMetricDataRequestPaginateTypeDef]
+    ) -> PageIterator[GetCapacityManagerMetricDataResultTypeDef]:
+        """
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetCapacityManagerMetricData.html#EC2.Paginator.GetCapacityManagerMetricData.paginate)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getcapacitymanagermetricdatapaginator)
+        """
+
+
+if TYPE_CHECKING:
+    _GetCapacityManagerMetricDimensionsPaginatorBase = Paginator[
+        GetCapacityManagerMetricDimensionsResultTypeDef
+    ]
+else:
+    _GetCapacityManagerMetricDimensionsPaginatorBase = Paginator  # type: ignore[assignment]
+
+
+class GetCapacityManagerMetricDimensionsPaginator(_GetCapacityManagerMetricDimensionsPaginatorBase):
+    """
+    [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetCapacityManagerMetricDimensions.html#EC2.Paginator.GetCapacityManagerMetricDimensions)
+    [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getcapacitymanagermetricdimensionspaginator)
+    """
+
+    def paginate(  # type: ignore[override]
+        self, **kwargs: Unpack[GetCapacityManagerMetricDimensionsRequestPaginateTypeDef]
+    ) -> PageIterator[GetCapacityManagerMetricDimensionsResultTypeDef]:
+        """
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetCapacityManagerMetricDimensions.html#EC2.Paginator.GetCapacityManagerMetricDimensions.paginate)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getcapacitymanagermetricdimensionspaginator)
         """
 
 

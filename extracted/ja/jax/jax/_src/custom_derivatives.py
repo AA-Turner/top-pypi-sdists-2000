@@ -384,13 +384,15 @@ def _flatten_jvp(f, store, primal_name, jvp_name, in_tree, maybe_out_type, *args
 
 class CustomJVPCallPrimitive(core.Primitive):
   multiple_results = True
-
-  def bind(self, *args, **params):
-    return self._true_bind(*args, **params)
+  skip_canonicalization = True
 
   def bind_with_trace(self, trace, args, params):
-    fun, jvp, tracers = args[0], args[1], args[2:]
-    return trace.process_custom_jvp_call(self, fun, jvp, tracers, **params)
+    fun, jvp, *tracers = args
+    if trace.requires_low and config.vmap_primitive.value:
+      with core.set_current_trace(trace):
+        return fun.call_wrapped(*tracers)
+    else:
+      return trace.process_custom_jvp_call(self, fun, jvp, tracers, **params)
 
   def impl(self, fun, _, *args):
     raise NotImplementedError
@@ -994,13 +996,15 @@ def _temporary_shape_exception(a, a_) -> bool:
 
 class CustomVJPCallPrimitive(core.Primitive):
   multiple_results = True
-
-  def bind(self, *args, **params):
-    return self._true_bind(*args, **params)
+  skip_canonicalization = True
 
   def bind_with_trace(self, trace, args, params):
-    fun, fwd, bwd, tracers = args[0], args[1], args[2], args[3:]
-    return trace.process_custom_vjp_call(self, fun, fwd, bwd, tracers, **params)
+    fun, fwd, bwd, *tracers = args
+    if trace.requires_low and config.vmap_primitive.value:
+      with core.set_current_trace(trace):
+        return fun.call_wrapped(*tracers)
+    else:
+      return trace.process_custom_vjp_call(self, fun, fwd, bwd, tracers, **params)
 
   def impl(self, fun, fwd, bwd, *args):
     raise NotImplementedError
@@ -1422,11 +1426,11 @@ def linear_call(fun: Callable,
   >>> custom_id(1.)
   1.0
   >>> transpose(custom_id, 1.)(1.)
-  7.0
+  TypedFloat(7.0, dtype=float32)
   >>> transpose(transpose(custom_id, 1.), 1.)(1.)
   1.0
   >>> transpose(transpose(transpose(custom_id, 1.), 1.), 1.)(1.)
-  7.0
+  TypedFloat(7.0, dtype=float32)
 
   Args:
     fun: a Python callable specifying a linear function. It should

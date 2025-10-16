@@ -32,11 +32,12 @@ from jax._src import dispatch
 from jax._src import dtypes
 from jax._src import effects
 from jax._src import linear_util as lu
+from jax._src import literals
 from jax._src import source_info_util
 from jax._src import state
 from jax._src import util
 from jax._src.api_util import (
-    _check_no_aliased_ref_args, _check_no_aliased_closed_over_refs)
+    check_no_aliased_ref_args, _check_no_aliased_closed_over_refs)
 from jax._src.core import ShapedArray, typeof, cur_qdd, ClosedJaxpr
 from jax._src.interpreters import ad
 from jax._src.interpreters import batching
@@ -51,7 +52,7 @@ from jax._src.lax.control_flow.common import (
     _avals_short, _initial_style_jaxpr, _prune_zeros, _typecheck_param,
     _make_closed_jaxpr)
 from jax._src.lax.other import logaddexp
-from jax._src.pjit import auto_axes, PartitionSpec as P
+from jax._src.pjit import auto_axes, PartitionSpec as P, reshard
 from jax._src.lib.mlir import ir
 from jax._src.lib.mlir.dialects import hlo
 from jax._src.sharding_impls import canonicalize_sharding
@@ -272,7 +273,7 @@ def scan(f: Callable[[Carry, X], tuple[Carry, Y]],
   if config.mutable_array_checks.value:
     in_flat, in_tree = tree_flatten((init, xs))
     in_avals = tuple(_map(core.get_aval, in_flat))
-    _check_no_aliased_ref_args(dbg_body, in_avals, in_flat)
+    check_no_aliased_ref_args(lambda: dbg_body, in_avals, in_flat)
 
   def _create_jaxpr(init):
     init_flat, init_tree = tree_flatten(init)
@@ -525,7 +526,17 @@ def _scan_impl(*args, reverse, length, num_consts, num_carry, jaxpr, linear,
   if remainder:
     carry, ys_rem = inner(remainder, carry, xs_rem)
     ys = _map(_concat, ys, ys_rem) if not reverse else _map(_concat, ys_rem, ys)
+  # If any carry leaf is unreduced, we need to add a reshard to
+  # typeof(carry).sharding which inserts a sharding_constraint so that shardy
+  # knows not to AR at the boundary of while. This is a no-op at the trace level
+  # but during lowering time, it inserts an extra sharding constraint.
+  carry = tree_map(_constrain_unreduced, carry)
+  ys = tree_map(_constrain_unreduced, ys)
   return [*carry, *ys]
+
+def _constrain_unreduced(val):
+  val_s = core.typeof(val).sharding
+  return reshard(val, val_s) if val_s.spec.unreduced else val
 
 def _split_leading(sz, x):
   return (slicing.slice_in_dim(x, 0, sz),
@@ -534,18 +545,18 @@ def _split_leading(sz, x):
 def _concat(a, b): return lax.concatenate([a, b], 0)
 
 def _empty_array(prefix, length_spec, aval):
-  sharding = aval.sharding.update(spec=(*length_spec, *aval.sharding.spec))
+  sharding = aval.sharding.update(spec=aval.sharding.spec.update(
+      partitions=(*length_spec, *aval.sharding.spec)))
   # TODO(yashkatariya): Replace `lax.empty2` with `lax.empty` once
   # AllocateBuffer issues are fixed. Also delete `empty2` after this usage is
   # removed. Basically uncomment the following 2 lines.
-  # empty = lax.empty((*prefix, *aval.shape), aval.dtype, out_sharding=sharding)
+  # lax.empty will also need to take a memory_space argument.
+  # empty = lax.empty((*prefix, *aval.shape), aval.dtype, out_sharding=sharding,
+  #                   memory_space=aval.memory_space)
   # return core.pvary(empty, tuple(aval.vma))
-  empty = core.pvary(lax.empty2(aval.dtype), tuple(aval.vma))
+  empty = core.pvary(lax.empty2(aval.dtype, memory_space=aval.memory_space),
+                     tuple(aval.vma))
   out = lax.broadcast(empty, (*prefix, *aval.shape), out_sharding=sharding)
-  # TODO(yashkatariya): Maybe make this more general by passing
-  # aval.memory_space to lax.broadcast and then remove this hack?
-  if aval.memory_space != core.typeof(out).memory_space:
-    out = api.device_put(out, aval.memory_space)
   return out
 
 eval_jaxpr_p = core.Primitive('eval_jaxpr')
@@ -644,9 +655,11 @@ def _scan_linearize(nzs, *primals_in, reverse: bool, length: int, num_consts:
   const_nz, init_nz, xs_nz = split_list(nzs, [num_consts, num_carry])
   num_ys = len(jaxpr.out_avals) - num_carry
   carry_nz = init_nz
-  allow_fwds = ([True] * len(jaxpr.consts) +
-                [(i < num_consts or i >= num_consts + num_carry) and
-                 not isinstance(x, np.ndarray) for i, x in enumerate(primals_in)])
+  allow_fwds = [True] * len(jaxpr.consts) + [
+      (i < num_consts or i >= num_consts + num_carry)
+      and not isinstance(x, (np.ndarray, literals.TypedNdArray))
+      for i, x in enumerate(primals_in)
+  ]
   for _ in range(1 + num_carry):
     nzs = const_nz + carry_nz + xs_nz
     primal_jaxpr, num_res_out, nzs_out, in_fwd_res, tangent_jaxpr = \
@@ -759,8 +772,11 @@ def _scan_partial_eval(trace, *tracers, reverse: bool,
   # iterations to decide carry_uk, plus one to prepare the jaxpr.
   carry_uk = init_uk
   # Don't allow forwarding from the carry or numpy.ndarrays.
-  fwd = [(i < num_consts or i >= num_consts + num_carry) and
-         not isinstance(t.pval.get_known(), np.ndarray) for i, t in enumerate(tracers)]
+  fwd = [
+      (i < num_consts or i >= num_consts + num_carry) and
+      not isinstance(t.pval.get_known(), (np.ndarray, literals.TypedNdArray))
+      for i, t in enumerate(tracers)
+  ]
   for _ in range(1 + len(carry_uk)):
     unknowns = const_uk + carry_uk + xs_uk
     jaxpr_known, jaxpr_unknown, out_uk, res_avals, in_fwd_res = \
@@ -862,7 +878,7 @@ def _scan_partial_eval(trace, *tracers, reverse: bool,
   return util.merge_lists(out_uk, known_outs, out_tracers)
 
 def _maybe_put(x):
-  if isinstance(x, np.ndarray):
+  if isinstance(x, (np.ndarray, literals.TypedNdArray)):
     aval = core.shaped_abstractify(x)
     s = sharding.SingleDeviceSharding(xb.local_devices(backend='cpu')[0])
     result_handler = pxla.global_aval_to_result_handler(aval, s, False)
@@ -1489,8 +1505,9 @@ def _scan_state_partial_discharge_rule(
   dus = partial(slicing.dynamic_update_index_in_dim, axis=0, allow_negative_indices=False)
 
   def body(*consts_carry_xs):
-    pure_consts, [i], const_refvals, carry, xs_refvals_, pure_xs = split_list(
+    pure_consts, [i_], const_refvals, carry, xs_refvals_, pure_xs = split_list(
         consts_carry_xs, [num_pure_consts, 1, num_const_refs, num_carry, num_xs_refs])
+    i = length - i_ - 1 if reverse else i_
     xs_refvals = [ds(x, i) for x in xs_refvals_]
     consts = merge_lists(is_ref_const, pure_consts, const_refvals)
     xs = merge_lists(is_ref_xs, pure_xs, xs_refvals)
@@ -1498,7 +1515,7 @@ def _scan_state_partial_discharge_rule(
     carry, ys, const_refvals, xs_updates = split_list_checked(
         outs, [num_carry, num_ys, num_const_refs, num_xs_refs])
     xs_refvals = [dus(x, u, i) for x, u in zip(xs_refvals_, xs_updates)]
-    return [i + 1, *const_refvals, *carry, *xs_refvals, *ys]
+    return [i_ + 1, *const_refvals, *carry, *xs_refvals, *ys]
 
   def rearrange(lst):
     consts, carry, xs = split_list_checked(lst, [num_consts, num_carry, num_xs])

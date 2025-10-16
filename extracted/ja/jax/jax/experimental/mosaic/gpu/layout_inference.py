@@ -14,29 +14,37 @@
 
 """Layout and transform inference pass for the MLIR Mosaic GPU dialect."""
 
+# mypy has been causing more problems than it solves here. Disable it for these
+# files. We have pytype checks anyway.
+# mypy: ignore-errors
+
 from __future__ import annotations
 
 from collections.abc import Callable, Iterator, Sequence, Set
 import dataclasses
 import enum
+from functools import partial
 import itertools
 import re
-from typing import assert_never, cast
+from typing import Any, assert_never, cast
 
-from jax._src import lib as jaxlib
 from jax._src.lib import mosaic_gpu_dialect as mgpu  # noqa: F401
 from jax._src.lib.mlir import ir
 from jax._src.lib.mlir.dialects import arith
+from jax._src.lib.mlir.dialects import gpu
 from jax._src.lib.mlir.dialects import math as mlir_math
+from jax._src.lib.mlir.dialects import memref
 from jax._src.lib.mlir.dialects import scf
 from jax._src.lib.mlir.dialects import vector
 
 from . import equations as eqns
 from . import fragmented_array as fa
 from . import inference_utils
+from . import launch_context as lc
 from . import layouts as layouts_lib
 from . import tcgen05
 from . import utils
+import numpy as np
 
 
 class VariableType(enum.IntEnum):
@@ -250,15 +258,45 @@ def _strided_layout_for_variable(
   return fa.WGStridedFragLayout.from_shaped_type(type)
 
 
-def _extract_variable_assignments_from_constraint(
-    constraint: eqns.Constraint,
+def _extract_tiling_candidate(
+    divides: eqns.Divides, num_tiled_dims: int
 ) -> Iterator[tuple[eqns.Variable, eqns.Constant]]:
-  """Attempts to extract variable assignments from a `Constraint`."""
-  if not isinstance(constraint, eqns.IsTransferable):
+  if not isinstance(divides.expr, eqns.Variable):
+    return
+  if num_tiled_dims > len(divides.dimensions_to_tile):
+    # TODO(b/447079781): Support this case, by just assuming 0 (no constraints).
     return
 
+  if num_tiled_dims == 0:
+    yield divides.expr, eqns.SMEMTiling(None)
+    return
+
+  static_tiling = []
+  dynamic_tiling = []
+  for dim in divides.dimensions_to_tile[-num_tiled_dims:]:
+    assert isinstance(dim[0], int)
+    static_tiling.append(dim[0])
+    # Any remaining values are dynamic. Use 1 for those to be safe.
+    dynamic_tiling.append(dim[0] if len(dim) == 1 else 1)
+
+  # The static tiling ignores dynamic values. Try this first as it yields
+  # larger tiles that are likely to have better performance.
+  yield divides.expr, eqns.SMEMTiling(lc.TileTransform(tuple(static_tiling)))
+
+  if dynamic_tiling != static_tiling:
+    # If that does not work, we could use a smaller, safe tiles by yielding
+    # dynamic_tiling here. However, performance will be worse, and we choose to
+    # return instead.
+    return
+
+def _extract_layout_candidates_from_memory_space_transfers(
+    constraint: eqns.IsTransferable,
+    divides_per_var: dict[eqns.Variable, list[eqns.Divides]],
+) -> Iterator[tuple[eqns.Variable, eqns.Constant]]:
+  """Attempts to extract variable assignments from a `Constraint`."""
   # This code assumes that the `IsTransferable` constraint is bidirectional.
-  # This is currently true for TMEM <-> REG transfers.
+  # This is currently true for TMEM <-> REG transfers and SMEM <-> REG
+  # transfers.
   src, tgt = constraint.source, constraint.target
   match src, tgt:
     case eqns.Variable(), eqns.Constant():
@@ -268,19 +306,62 @@ def _extract_variable_assignments_from_constraint(
     case _:
       return
 
+  assert isinstance(variable, eqns.Variable)  # Satisfy type checkers.
   if isinstance(constant, eqns.RegisterLayout):
-    for packing in (1, 2, 4, 8):
-      for tmem_layout, reg_layout in constraint.supported_tmem_transfers(
-          packing
-      ):
-        if constant.value == reg_layout:
-          yield variable, eqns.TMEMLayout(tmem_layout)
+    layout = constant.value
+    if variable.key.memory_space == MemorySpace.TMEM:
+      for packing in (1, 2, 4, 8):
+        for tmem_layout, reg_layout in constraint.supported_tmem_transfers(
+            packing
+        ):
+          if layout == reg_layout:
+            yield variable, eqns.TMEMLayout(tmem_layout)
+    elif variable.key.memory_space == MemorySpace.SMEM:
+      if inference_utils.is_mma_layout(layout):
+        tiling = _infer_tiling_for_mma_ref(
+            variable.key.value.type,
+            max_swizzle=mgpu.SwizzlingMode.k128ByteSwizzle
+        )
+        assert len(tiling) == 2
+        divides = divides_per_var.get(variable, [])
+        divides.append(eqns.Divides(variable, ((tiling[0],), (tiling[1],))))
+        [divides] = eqns.merge_divides_constraints(divides)
+        assert isinstance(divides, eqns.Divides)
+        yield from _extract_tiling_candidate(divides, len(tiling))
+      else:
+        # An empty tiling is valid here but we don't yield it in order to
+        # avoid duplicating the empty tiling yielded by the caller.
+        return
 
   elif isinstance(constant, eqns.TMEMLayout):
-    packing = constant.value.vector_length
+    layout = constant.value
+    packing = layout.vector_length
     for tmem_layout, reg_layout in constraint.supported_tmem_transfers(packing):
-      if constant.value == tmem_layout:
+      if layout == tmem_layout:
         yield variable, eqns.RegisterLayout(reg_layout)
+
+
+def _divides_per_var(
+    constraints: Sequence[eqns.Constraint],
+) -> dict[eqns.Variable, list[eqns.Divides]]:
+  """Returns all Divides constraints per variable."""
+  result: dict[eqns.Variable, list[eqns.Divides]] = {}
+  for constraint in constraints:
+    match constraint:
+      case eqns.Divides(expr=expr) if isinstance(expr, eqns.Variable):
+        result.setdefault(expr, []).append(constraint)
+  return result
+
+
+def _extract_variable_assignments_from_constraints(
+    constraints: Sequence[eqns.Constraint],
+) -> Iterator[tuple[eqns.Variable, eqns.Constant]]:
+  """Attempts to extract variable assignments from all constraints."""
+  dpv = _divides_per_var(constraints)
+  for c in constraints:
+    match c:
+      case eqns.IsTransferable():
+        yield from _extract_layout_candidates_from_memory_space_transfers(c, dpv)
 
 
 def conjure_assignment(
@@ -289,11 +370,11 @@ def conjure_assignment(
     hints: Sequence[Hint],
 ) -> Iterator[tuple[eqns.Variable, eqns.Constant]]:
   """Attempts to conjure an assignment for an unknown variable."""
-  for constraint in equation_system.constraints:
-    # TODO(allanrenucci): We should be able to short-circuit the search here if
-    # the constraint is not satisfiable.
-    for assg in _extract_variable_assignments_from_constraint(constraint):
-      yield assg
+  # TODO(allanrenucci): We should be able to short-circuit the search here if
+  # the constraint is not satisfiable.
+  yield from _extract_variable_assignments_from_constraints(
+      equation_system.constraints
+  )
 
   for hint in hints:
     if (assignment := extract_variable_assignment_from_hint(hint)) is not None:
@@ -310,11 +391,10 @@ def conjure_assignment(
     # reduces the system.
     if variable.key.memory_space == MemorySpace.REG:
       layout = _strided_layout_for_variable(variable)
-    else:
-      layout = None
-    if layout is None:
-      continue
-    yield variable, eqns.RegisterLayout(layout)
+      if layout is not None:
+        yield variable, eqns.RegisterLayout(layout)
+    elif variable.key.memory_space == MemorySpace.SMEM:
+      yield variable, eqns.SMEMTiling(None)
 
 
 def find_assignments_for(
@@ -374,6 +454,8 @@ def find_assignments_for(
 @dataclasses.dataclass()
 class DerivationContext:
   """Holds context information used for deriving an equation system."""
+  # TODO(b/447079781): Remove once SMEM transform inference is implemented.
+  enable_smem_inference : bool = False
   # A map of `OperandOrResult` to the variable that it is associated with.
   variable_for_operand_or_result: dict[OperandOrResult, eqns.Variable] = (
       dataclasses.field(default_factory=dict, init=False)
@@ -433,6 +515,10 @@ def is_vector(v: ir.Value) -> bool:
   return ir.VectorType.isinstance(v.type)
 
 
+def _is_smem_ref(v: ir.Value) -> bool:
+  return ir.MemRefType.isinstance(v.type) and utils.is_smem_ref(v)
+
+
 def _is_tmem_ref(v: ir.Value) -> bool:
   return ir.MemRefType.isinstance(v.type) and utils.is_tmem_ref(v)
 
@@ -486,9 +572,23 @@ for op in [
     mlir_math.LogOp,
     mlir_math.RsqrtOp,
     mlir_math.TanhOp,
-    vector.StoreOp,
 ]:
   _add_equation_system_derivation_rule(op)(_pointwise_op_equation_system)
+
+
+def _divides_constraint_from_indices(
+    var: eqns.Variable,
+    indices: Sequence[ir.Value],
+) -> eqns.Divides:
+  """Returns a Divides constraint from the given load/store indices."""
+  dimensions_to_tile : list[tuple[int | ir.Value, ...]] = []
+  for i in indices:
+    index_defining_op = i.owner.opview
+    if isinstance(index_defining_op, arith.ConstantOp):
+      dimensions_to_tile.append((index_defining_op.literal_value,))
+    else:
+      dimensions_to_tile.append((i,))
+  return eqns.Divides(var, tuple(dimensions_to_tile))
 
 
 @_add_equation_system_derivation_rule(vector.LoadOp)
@@ -496,20 +596,74 @@ def _vector_load_equation_system(
     ctx: DerivationContext,
     op: vector.LoadOp,
 ) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
-  equation_system: eqns.EquationSystem | eqns.Unsatisfiable
-  equation_system, operand_or_results_for_variable, hints = (
-      _pointwise_op_equation_system(ctx, op)
-  )
-  [result_variable] = operand_or_results_for_variable.keys()
-  result_is_not_splat = eqns.Distinct(
-      result_variable,
-      eqns.RegisterLayout(
-          fa.WGSplatFragLayout(shape=tuple(op.result.type.shape))
+  # TODO(b/447079781): Investigate whether we should check for contiguous
+  # strides here. An initial implementaiton of this failed the
+  # test_gmem_to_smem_with_multiple_smem_indexers_and_transforms test, but
+  # we should confirm that this is properly supported.
+
+  # Registers
+  dest = OperandOrResult(op, VariableType.RESULT, 0)
+  dest_var = eqns.Variable(dest)
+  operand_or_results_for_variable = {dest_var: [dest]}
+  constraints = [
+      eqns.Distinct(
+          dest_var,
+          eqns.RegisterLayout(
+              fa.WGSplatFragLayout(shape=tuple(ir.ShapedType(op.result.type).shape))
+          ),
       ),
-  )
-  equation_system &= eqns.EquationSystem(constraints=[result_is_not_splat])
-  assert not isinstance(equation_system, eqns.Unsatisfiable)
-  return equation_system, operand_or_results_for_variable, hints
+  ]
+
+  # SMEM
+  if ctx.enable_smem_inference and utils.is_smem_ref(op.base):
+    source = OperandOrResult(op, VariableType.OPERAND, 0)
+    source_var = ctx.producer_ref(source)
+    operand_or_results_for_variable[source_var] = [source]
+    constraints.extend([
+        eqns.IsTransferable(
+            source=source_var,
+            target=dest_var,
+            shape=tuple(ir.ShapedType(op.result.type).shape),
+        ),
+        _divides_constraint_from_indices(source_var, op.indices),
+    ])
+
+  system = eqns.EquationSystem(constraints=constraints)
+  return system, operand_or_results_for_variable, []
+
+
+@_add_equation_system_derivation_rule(vector.StoreOp)
+def _vector_store_equation_system(
+    ctx: DerivationContext,
+    op: vector.StoreOp,
+) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
+  # TODO(b/447079781): Investigate whether we should check for contiguous
+  # strides here. An initial implementaiton of this failed the
+  # test_gmem_to_smem_with_multiple_smem_indexers_and_transforms test, but
+  # we should confirm that this is properly supported.
+
+  # Registers
+  value = OperandOrResult(op, VariableType.OPERAND, 0)
+  value_var = eqns.Variable(value)
+  operand_or_results_for_variable = {value_var: [value]}
+
+  # SMEM
+  constraints = []
+  if ctx.enable_smem_inference and utils.is_smem_ref(op.base):
+    dest = OperandOrResult(op, VariableType.OPERAND, 1)
+    dest_var = ctx.producer_ref(dest)
+    operand_or_results_for_variable[dest_var] = [dest]
+    constraints = [
+        eqns.IsTransferable(
+            source=value_var,
+            target=dest_var,
+            shape=tuple(ir.ShapedType(op.base.type).shape),
+        ),
+        _divides_constraint_from_indices(dest_var, op.indices),
+    ]
+
+  system = eqns.EquationSystem(constraints=constraints)
+  return system, operand_or_results_for_variable, []
 
 
 @_add_equation_system_derivation_rule(mgpu.OptimizationBarrierOp)
@@ -532,7 +686,7 @@ def _optimization_barrier_equation_system(
   return eqns.EquationSystem(), operand_or_results_for_variable, []
 
 
-@_add_equation_system_derivation_rule(vector.SplatOp)
+@_add_equation_system_derivation_rule(vector.BroadcastOp)
 def _vector_splat_equation_system(
     ctx: DerivationContext,
     op: ir.OpView,
@@ -556,7 +710,7 @@ def _constant_equation_system(
   value = constant_op.value
   result = OperandOrResult(constant_op, VariableType.RESULT, 0)
   variable = eqns.Variable(result)
-  shape = tuple(constant_op.result.type.shape)
+  shape = tuple(ir.ShapedType(constant_op.result.type).shape)
   if (
       ir.DenseElementsAttr.isinstance(value)
       and ir.DenseElementsAttr(value).is_splat
@@ -592,7 +746,6 @@ def _for_equation_system(
     ctx: DerivationContext,
     op: scf.ForOp,
 ) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
-  del ctx
   [block] = op.region.blocks
   yield_op = _terminator(block, scf.YieldOp)
   operand_or_results_for_variable: OperandOrResultsForVariable = {}
@@ -601,7 +754,7 @@ def _for_equation_system(
   # in the operands but not in the results.
   num_leading_args = 3
   for index, o in enumerate(op.operands):
-    if not is_vector(o):
+    if not is_vector(o) and not (ctx.enable_smem_inference and _is_smem_ref(o)):
       continue
     result_index = index - num_leading_args
     operand = OperandOrResult(op, VariableType.OPERAND, index)
@@ -609,9 +762,8 @@ def _for_equation_system(
     yield_operand = OperandOrResult(
         yield_op, VariableType.OPERAND, result_index
     )
-    operand_or_results_for_variable[eqns.Variable(operand)] = [
-        operand, result, yield_operand,
-    ]
+    var = eqns.Variable(operand) if is_vector(o) else ctx.producer_ref(operand)
+    operand_or_results_for_variable[var] = [operand, result, yield_operand]
 
   return eqns.EquationSystem(), operand_or_results_for_variable, []
 
@@ -693,18 +845,100 @@ def _layout_cast_equation_system(
   )
 
 
+def _infer_tiling_for_mma_ref(
+    ref_ty: ir.MemRefType, max_swizzle: mgpu.SwizzlingMode
+) -> tuple[int, int]:
+  element_bytewidth = utils.bytewidth(ref_ty.element_type)
+  strides, _ = ref_ty.get_strides_and_offset()
+  min_dim_index = np.argmin(strides)
+  minor_dim = ref_ty.shape[min_dim_index]
+
+  # Try tiling with all swizzling modes starting from the largest one.
+  for swizzle in [
+      mgpu.SwizzlingMode.k128ByteSwizzle,
+      mgpu.SwizzlingMode.k64ByteSwizzle,
+      mgpu.SwizzlingMode.k32ByteSwizzle,
+      mgpu.SwizzlingMode.kNoSwizzle,
+  ]:
+    if swizzle > max_swizzle:
+      continue
+    swizzle_elems = swizzle // element_bytewidth
+    if minor_dim % swizzle_elems == 0:
+      minor_tiling = swizzle_elems
+      break
+  else:
+    # No valid tile transform can be inferred.
+    raise ValueError(f"{ref_ty.shape} is not a valid WGMMA shape")
+
+  major_tiling = 8
+  transposed = min_dim_index != len(strides) - 1
+  if transposed:
+    tiling = (minor_tiling, major_tiling)
+  else:
+    tiling = (major_tiling, minor_tiling)
+  return tiling
+
+
+def _infer_wgmma_tiling(
+    a_type: ir.Type, b_type: ir.MemRefType
+) -> tuple[tuple[int, int] | None, tuple[int, int]]:
+  """Infers the tiling for a (if in SMEM) and b of a WGMMAOp.
+
+  If both a and b are in SMEM, this function infers tilings that have matching
+  swizzle values.
+  """
+  b_tiling = _infer_tiling_for_mma_ref(
+      b_type, max_swizzle=mgpu.SwizzlingMode.k128ByteSwizzle
+  )
+  b_swizzle = _compute_swizzle(b_type, lc.TileTransform(b_tiling))
+  if not ir.MemRefType.isinstance(a_type):
+    return None, b_tiling
+
+  a_tiling = _infer_tiling_for_mma_ref(
+      cast(ir.MemRefType, a_type), max_swizzle=b_swizzle
+  )
+  a_swizzle = _compute_swizzle(a_type, lc.TileTransform(a_tiling))
+  if a_swizzle != b_swizzle:
+    # The swizzle for a and b has to match. This is not a fundamental
+    # limitation, rather the lowering doesn't currently support it.
+    b_tiling = _infer_tiling_for_mma_ref(b_type, max_swizzle=a_swizzle)
+    b_swizzle = _compute_swizzle(b_type, lc.TileTransform(b_tiling))
+    assert a_swizzle == b_swizzle
+  return a_tiling, b_tiling
+
+
 @_add_equation_system_derivation_rule(mgpu.WGMMAOp)
 def _wgmma_equation_system(
     ctx: DerivationContext,
     op: mgpu.WGMMAOp,
 ) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
-  del ctx
-  operands_or_results = vector_operands_and_results(op)
-  variable = eqns.Variable(operands_or_results[0])
+  assignments: dict[eqns.Variable, eqns.Constant] = {}
+  # Registers
+  vector_operands_or_results = vector_operands_and_results(op)
+  vec_variable = eqns.Variable(vector_operands_or_results[0])
+  assignments[vec_variable] = eqns.RegisterLayout(fa.WGMMA_LAYOUT)
+  operands_or_results_for_variable = {vec_variable: vector_operands_or_results}
+
+  # SMEM
+  if ctx.enable_smem_inference:
+    a_tiling, b_tiling = _infer_wgmma_tiling(op.a.type, op.b.type)
+    b = OperandOrResult(op, VariableType.OPERAND, 2)
+    b_var = ctx.producer_ref(b)
+
+    assignments[b_var] = eqns.SMEMTiling(lc.TileTransform(b_tiling))
+    operands_or_results_for_variable[b_var] = [b]
+
+    if a_tiling is not None:
+      # a is in SMEM
+      a = OperandOrResult(op, VariableType.OPERAND, 1)
+      a_var = ctx.producer_ref(a)
+      assignments[a_var] = eqns.SMEMTiling(lc.TileTransform(a_tiling))
+      operands_or_results_for_variable[a_var] = [a]
+
   system = eqns.EquationSystem(
-      assignments={variable: eqns.RegisterLayout(fa.WGMMA_LAYOUT)}
+      assignments=assignments,
   )
-  return system, {variable: operands_or_results}, []
+  return system, operands_or_results_for_variable, []
 
 
 @_add_equation_system_derivation_rule(vector.BroadcastOp)
@@ -766,7 +1000,8 @@ def _multi_dim_reduction_equation_system(
   out_variable = eqns.Variable(out)
 
   reduction_equation, broadcast_hint = _reduction_equation_and_hint(
-      source_variable, out_variable, tuple(op.source.type.shape), tuple(op.reduction_dims)
+      source_variable, out_variable,
+      tuple(ir.ShapedType(op.source.type).shape), tuple(op.reduction_dims)
   )
   # TODO(bchetioui): in the future, we may need to add rules that prevent
   # strided layouts from being chosen---since trying to reduce a strided layout
@@ -851,17 +1086,37 @@ def _custom_primitive_equation_system(
     ctx: DerivationContext,
     op: mgpu.CustomPrimitiveOp,
 ) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
-  del ctx
   assignments: dict[eqns.Variable, eqns.Constant] = {}
+  equations: list[eqns.Equation] = []
   in_layouts = iter(op.in_layouts)
+  in_transforms = iter(op.in_transforms)
   variables: list[eqns.Variable] = []
   for i, operand in enumerate(op.operands):
-    if ir.VectorType.isinstance(operand.type):
+    if is_vector(operand):
       v = eqns.Variable(OperandOrResult(op, VariableType.OPERAND, i))
       variables.append(v)
       assignments[v] = eqns.RegisterLayout(
           layouts_lib.from_layout_attr(next(in_layouts))
       )
+    elif ctx.enable_smem_inference and _is_smem_ref(operand):
+      # Here we need to create a new variable, even though it is equal to the
+      # source operand. This is because we directly assign the new variable and
+      # if we did that to the source there could be conflicting assignments.
+      # For example, the same ref could be passed into the custom op twice with
+      # different transforms, which needs to yield an unsatisfiable system.
+      #
+      # TODO(b/447079781): Consider creating the final Equation system using
+      # __and__ and potentially returning Unsatisfiable() directly if there is
+      # a conflict between the assignments.
+      operand_or_result = OperandOrResult(op, VariableType.OPERAND, i)
+      source_var = ctx.producer_ref(operand_or_result)
+      v = eqns.Variable(operand_or_result)
+      equations.append(eqns.Equation(lhs=source_var, rhs=v))
+      variables.append(v)
+      transforms = next(in_transforms)
+      ref_ty = operand_or_result.value.type
+      tiling = _extract_smem_tiling_from_custom_transform_attrs(ref_ty, transforms)
+      assignments[v] = tiling
 
   out_layouts = iter(op.out_layouts)
   for i, result in enumerate(op.results):
@@ -872,7 +1127,7 @@ def _custom_primitive_equation_system(
           layouts_lib.from_layout_attr(next(out_layouts))
       )
   return (
-      eqns.EquationSystem(assignments=assignments),
+      eqns.EquationSystem(equations=equations, assignments=assignments),
       {v: [v.key] for v in variables},
       [],
   )
@@ -888,21 +1143,20 @@ def _tmem_layout_from_layout_attr(
   )
 
 
-if jaxlib.version >= (0, 7, 2):
-  @_add_equation_system_derivation_rule(mgpu.TmemLayoutCastOp)
-  def _tmem_layout_cast_equation_system(
-      ctx: DerivationContext,
-      op: mgpu.TmemLayoutCastOp,
-  ) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
-    operand = OperandOrResult(op, VariableType.OPERAND, 0)
-    variable = ctx.producer_ref(operand)
-    result = OperandOrResult(op, VariableType.RESULT, 0)
-    out_layout = eqns.TMEMLayout(_tmem_layout_from_layout_attr(op.new_layout))
-    return (
-        eqns.EquationSystem(assignments={variable: out_layout}),
-        {variable: [operand, result]},
-        [],
-    )
+@_add_equation_system_derivation_rule(mgpu.TmemLayoutCastOp)
+def _tmem_layout_cast_equation_system(
+    ctx: DerivationContext,
+    op: mgpu.TmemLayoutCastOp,
+) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
+  operand = OperandOrResult(op, VariableType.OPERAND, 0)
+  variable = ctx.producer_ref(operand)
+  result = OperandOrResult(op, VariableType.RESULT, 0)
+  out_layout = eqns.TMEMLayout(_tmem_layout_from_layout_attr(op.new_layout))
+  return (
+      eqns.EquationSystem(assignments={variable: out_layout}),
+      {variable: [operand, result]},
+      [],
+  )
 
 
 @_add_equation_system_derivation_rule(mgpu.TmemAllocOp)
@@ -912,14 +1166,23 @@ def _tmem_alloc_equation_system(
 ) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
   del ctx
   result = OperandOrResult(op, VariableType.RESULT, 0)
-  variable = eqns.Variable(result)
+  result_var = eqns.Variable(result)
   layout = tcgen05._infer_tmem_layout(
       tuple(op.result.type.shape), op.collective, packing=1
   )
+
+  in_smem = OperandOrResult(op, VariableType.OPERAND, 0)
+  in_smem_var = eqns.Variable(in_smem)
+  assignments: dict[eqns.Variable, eqns.Constant] = {
+      in_smem_var: eqns.SMEMTiling(None)
+  }
+  operands_for_variable = {result_var: [result], in_smem_var: [in_smem]}
+
   # This is a hint, not a hard constraint. This will be the default layout if
   # none can be inferred.
-  hint = Hint(variable, eqns.TMEMLayout(layout))
-  return eqns.EquationSystem(), {variable: [result]}, [hint]
+  hint = Hint(result_var, eqns.TMEMLayout(layout))
+  system = eqns.EquationSystem(assignments=assignments)
+  return system, operands_for_variable, [hint]
 
 
 @_add_equation_system_derivation_rule(mgpu.TmemDeallocOp)
@@ -940,25 +1203,49 @@ def _tcgen05_mma_equation_system(
   assignments: dict[eqns.Variable, eqns.Constant] = {}
   operands_for_variable: OperandOrResultsForVariable = {}
 
+  # TMEM
   acc = OperandOrResult(op, VariableType.OPERAND, 0)
   acc_variable = ctx.producer_ref(acc)
+  acc_type = ir.ShapedType(op.accumulator.type)
   acc_layout = tcgen05._infer_tmem_layout(
-      tuple(op.accumulator.type.shape), op.collective, packing=1
+      tuple(acc_type.shape), op.collective, packing=1
   )
   assignments[acc_variable] = eqns.TMEMLayout(acc_layout)
   operands_for_variable[acc_variable] = [acc]
 
-  if utils.is_tmem_ref(op.a):
+  if _is_tmem_ref(op.a):
     a = OperandOrResult(op, VariableType.OPERAND, 1)
-    a_variable = ctx.producer_ref(a)
-    packing = 32 // utils.bitwidth(op.a.type.element_type)
+    a_type = ir.ShapedType(op.a.type)
+    a_var = ctx.producer_ref(a)
+    packing = 32 // utils.bitwidth(a_type.element_type)
     a_layout = tcgen05._infer_tmem_layout(
-        tuple(op.a.type.shape), op.collective, packing
+        tuple(a_type.shape), op.collective, packing
     )
-    assignments[a_variable] = eqns.TMEMLayout(a_layout)
-    operands_for_variable[a_variable] = [a]
+    assignments[a_var] = eqns.TMEMLayout(a_layout)
+    operands_for_variable[a_var] = [a]
 
-  return eqns.EquationSystem(assignments), operands_for_variable, []
+  # SMEM
+  if ctx.enable_smem_inference:
+    b_tiling = _infer_tiling_for_mma_ref(
+        ir.MemRefType(op.b.type),
+        max_swizzle=mgpu.SwizzlingMode.k128ByteSwizzle,
+    )
+    b = OperandOrResult(op, VariableType.OPERAND, 2)
+    b_var = ctx.producer_ref(b)
+    assignments[b_var] = eqns.SMEMTiling(lc.TileTransform(b_tiling))
+    operands_for_variable[b_var] = [b]
+
+    if _is_smem_ref(op.a):
+      a_tiling = _infer_tiling_for_mma_ref(
+          ir.MemRefType(op.a.type),
+          max_swizzle=mgpu.SwizzlingMode.k128ByteSwizzle,
+      )
+      a = OperandOrResult(op, VariableType.OPERAND, 1)
+      a_var = ctx.producer_ref(a)
+      assignments[a_var] = eqns.SMEMTiling(lc.TileTransform(a_tiling))
+      operands_for_variable[a_var] = [a]
+
+  return eqns.EquationSystem(assignments=assignments), operands_for_variable, []
 
 
 @_add_equation_system_derivation_rule(mgpu.AsyncLoadTmemOp)
@@ -973,7 +1260,7 @@ def _async_load_tmem_equation_system(
   constraint = eqns.IsTransferable(
       source_variable,
       destination_variable,
-      tuple(op.source.type.shape),
+      tuple(ir.ShapedType(op.source.type).shape),
   )
   return (
       eqns.EquationSystem(constraints=[constraint]),
@@ -994,7 +1281,7 @@ def _async_store_tmem_equation_system(
   constraint = eqns.IsTransferable(
       source_variable,
       destination_variable,
-      tuple(op.source.type.shape),
+      tuple(ir.ShapedType(op.source.type).shape),
   )
   return (
       eqns.EquationSystem(constraints=[constraint]),
@@ -1003,7 +1290,173 @@ def _async_store_tmem_equation_system(
   )
 
 
-def _ensure_all_layouts_are_set(op: ir.OpView) -> None:
+@_add_equation_system_derivation_rule(mgpu.SliceSMEMOp)
+def _slice_smem_equation_system(
+    ctx: DerivationContext,
+    op: mgpu.SliceSMEMOp,
+) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
+  del ctx
+  res = OperandOrResult(op, VariableType.RESULT, 0)
+  res_var = eqns.Variable(res)
+  return (eqns.EquationSystem(), {res_var: [res]}, [])
+
+
+# TODO(b/447079781): Check whether we still need this rule. Normally,
+# DynamicSharedMemory is only generated in the lowering pass. If there is
+# another case where a ViewOp is generated beforehand, and this rule cannot be
+# removed, document here what that case is.
+@_add_equation_system_derivation_rule(memref.ViewOp)
+def _memref_view_op_equation_system(
+    ctx: DerivationContext,
+    op: memref.ViewOp,
+) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
+  del ctx
+
+  # The source is expected to come from a DynamicSharedMemoryOp which does not
+  # participate in layout inference and no variable exists for it.
+  if not isinstance(op.source.owner.opview, gpu.DynamicSharedMemoryOp):
+    raise NotImplementedError(
+        "Memref view transforms are only inferred when the op is a direct user "
+        f"of a DynamicSharedMemoryOp but got {op}."
+    )
+
+  res = OperandOrResult(op, VariableType.RESULT, 0)
+  res_var = eqns.Variable(res)
+  return eqns.EquationSystem(), {res_var: [res]}, []
+
+
+# TODO(b/447079781): Check whether we should create new variables or use
+# variables from the producer_ref in all memref rules. Ideally all of those
+# rules should handles references the same way. If there is a reason for
+# handling them differently, document in each rule.
+#
+# E.g. here, using the producer_ref variable would work for all existing tests,
+# but we create a new variable + an equation in order to be consistent with the
+# other memref rules.
+@_add_equation_system_derivation_rule(memref.CastOp)
+def _memref_cast_op_equation_system(
+    ctx: DerivationContext,
+    op: memref.CastOp,
+) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
+  source = OperandOrResult(op, VariableType.OPERAND, 0)
+  var_source = ctx.producer_ref(source)
+  dest = OperandOrResult(op, VariableType.RESULT, 0)
+  var_dest = eqns.Variable(dest)
+  return (
+      eqns.EquationSystem(equations=[eqns.Equation(var_source, var_dest)]),
+      {var_source: [source], var_dest: [dest]},
+      [],
+  )
+
+
+@_add_equation_system_derivation_rule(memref.TransposeOp)
+def _memref_transpose_op_equation_system(
+    ctx: DerivationContext,
+    op: memref.TransposeOp,
+) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
+  in_ty = ir.MemRefType(op.in_.type)
+  if len(in_ty.shape) != 2:
+    raise NotImplementedError(f"Only 2D memrefs are supported, got {in_ty}")
+  in_strides, _ = in_ty.get_strides_and_offset()
+  out_strides, _ = ir.MemRefType(op.result.type).get_strides_and_offset()
+  transpose = in_strides != out_strides
+
+  source = OperandOrResult(op, VariableType.OPERAND, 0)
+  dest = OperandOrResult(op, VariableType.RESULT, 0)
+  source_var = ctx.producer_ref(source)
+
+  if not transpose:
+    return (eqns.EquationSystem(), {source_var: [source, dest]}, [])
+
+  dest_var = eqns.Variable(dest)
+  equations = [
+      eqns.Equation(source_var, eqns.Transpose(dest_var)),
+      eqns.Equation(eqns.Transpose(source_var), dest_var),
+  ]
+  system = eqns.EquationSystem(equations=equations)
+  return system, {source_var: [source], dest_var: [dest]}, []
+
+
+# `memref.load` and `memref.store` are used to load barrier phases which are
+# scalars---the rule needn't do anything interesting, but we need to have it.
+@_add_equation_system_derivation_rule(memref.LoadOp)
+@_add_equation_system_derivation_rule(memref.StoreOp)
+def _memref_load_store_op_equation_system(
+    ctx: DerivationContext,
+    op: memref.LoadOp | memref.StoreOp,
+) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
+  del ctx
+
+  ref_shape = ir.MemRefType(op.memref.type).shape
+  if ref_shape and ref_shape != [1]:
+    raise NotImplementedError(
+        f"Only scalar memrefs are supported, got {ref_shape}"
+    )
+
+  ref_op_index = 0 if isinstance(op, memref.LoadOp) else 1
+  ref = OperandOrResult(op, VariableType.OPERAND, ref_op_index)
+  var = eqns.Variable(ref)
+  assignments: dict[eqns.Variable, eqns.Constant] = {var: eqns.SMEMTiling(None)}
+  return eqns.EquationSystem(assignments=assignments), {var: [ref]}, []
+
+
+def _extract_smem_tiling_from_custom_transform_attrs(
+    ref_type: ir.MemRefType,
+    transform_attrs: ir.ArrayAttr,
+) -> eqns.SMEMTiling:
+  transforms = [layouts_lib.from_transform_attr(x) for x in transform_attrs]
+  match transforms:
+    case []:
+      tile_transform = None
+      swizzle = None
+    case [lc.TileTransform() as t]:
+      tile_transform = t
+      swizzle = None
+    case [lc.TileTransform() as t, mgpu.SwizzlingMode() as s]:
+      tile_transform = t
+      swizzle = s
+    case _:
+      raise NotImplementedError(f"Unsupported transforms {transforms}")
+
+  if swizzle is not None:
+    computed_swizzle = _compute_swizzle(ref_type, tile_transform)
+    if computed_swizzle != swizzle:
+      raise NotImplementedError(
+          f"Cannot honor caller-provided swizzle {swizzle} that is different "
+          f"from the computed swizle {computed_swizzle} for type {ref_type}."
+      )
+
+  return eqns.SMEMTiling(tile_transform)
+
+
+@_add_equation_system_derivation_rule(mgpu.WithTransformsOp)
+def _with_transforms_equation_system(
+    ctx: DerivationContext,
+    op: mgpu.WithTransformsOp,
+) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
+  source = OperandOrResult(op, VariableType.OPERAND, 0)
+  dest = OperandOrResult(op, VariableType.RESULT, 0)
+  var = ctx.producer_ref(source)
+  tiling = _extract_smem_tiling_from_custom_transform_attrs(op.ref.type, op.transforms)
+  assignments: dict[eqns.Variable, eqns.Constant] = {var: tiling}
+  return eqns.EquationSystem(assignments=assignments), {var: [source, dest]}, []
+
+
+@_add_equation_system_derivation_rule(mgpu.AsyncLoadOp)
+@_add_equation_system_derivation_rule(mgpu.AsyncStoreOp)
+def _async_load_store_equation_system(
+    ctx: DerivationContext,
+    op: mgpu.AsyncLoadOp | mgpu.AsyncStoreOp,
+) -> tuple[eqns.EquationSystem, OperandOrResultsForVariable, list[Hint]]:
+  operand_index = 1 if isinstance(op, mgpu.AsyncLoadOp) else 0
+  operand = OperandOrResult(op, VariableType.OPERAND, operand_index)
+  var = ctx.producer_ref(operand)
+  return eqns.EquationSystem(), {var: [operand]}, []
+
+
+def _ensure_all_layouts_are_set(
+    op: ir.OpView, enable_smem_inference: bool
+) -> None:
   if inference_utils.should_have_layout(op):
     _ensure_right_number_of_layouts(
         op,
@@ -1022,6 +1475,16 @@ def _ensure_all_layouts_are_set(op: ir.OpView) -> None:
         else [],
         inference_utils.out_tmem_layouts(op)
         if inference_utils.has_out_tmem_layouts_set(op)
+        else [],
+    )
+  if enable_smem_inference and inference_utils.should_have_transforms(op):
+    _ensure_right_number_of_transforms(
+        op,
+        inference_utils.in_transforms(op)
+        if inference_utils.has_in_transforms_set(op)
+        else [],
+        inference_utils.out_transforms(op)
+        if inference_utils.has_out_transforms_set(op)
         else [],
     )
 
@@ -1050,22 +1513,80 @@ def _ensure_right_number_of_tmem_layouts(
   """Ensures that the right number of in/out TMEM layouts are provided for an op."""
   if len(in_layouts) != sum(map(_is_tmem_ref, op.operands)):
     raise ValueError(
-        "Expected the same number of in_tmem_layouts as TMEM ref operands."
+        f"Expected the same number of in_tmem_layouts({in_layouts}) as TMEM ref operands. op=\n  {op}"
     )
   if len(out_layouts) != sum(map(_is_tmem_ref, op.results)):
     raise ValueError(
-        "Expected the same number of out_tmem_layouts as TMEM ref results."
+        f"Expected the same number of out_tmem_layouts({out_layouts}) as TMEM ref results. op=\n  {op}"
     )
+
+
+def _ensure_right_number_of_transforms(
+    op: ir.OpView,
+    in_transforms: Sequence[Any],
+    out_transforms: Sequence[Any],
+) -> None:
+  """Ensures that the right number of in/out SMEM transforms are provided for an op."""
+  if len(in_transforms) != sum(
+      map(inference_utils.is_transformable_smem_memref, op.operands)
+  ):
+    raise ValueError(
+        f"Expected the same number of in_transforms({in_transforms}) as SMEM ref operands. op=\n  {op}"
+    )
+  if len(out_transforms) != sum(
+      map(inference_utils.is_transformable_smem_memref, op.results)
+  ):
+    raise ValueError(
+        f"Expected the same number of out_transforms({out_transforms}) as SMEM ref results. op=\n  {op}"
+    )
+
+
+def _compute_swizzle(
+    type: ir.Type, tile_transform: lc.TileTransform | None
+) -> mgpu.SwizzlingMode:
+  """Computes the swizzle mode given a tiling transform and a data type."""
+  if tile_transform is None:
+    # TODO(b/447079781): Revisit if this is the behavior we want.
+    return mgpu.SwizzlingMode.kNoSwizzle
+
+  if not ir.MemRefType.isinstance(type):
+    raise ValueError(f"Expected a MemRefType, got {type}.")
+  ref_ty = ir.MemRefType(type)
+  strides, _ = ref_ty.get_strides_and_offset()
+  tiling = tile_transform.tiling
+
+  if len(tiling) > len(strides):
+    raise ValueError(
+        f"The tile rank ({len(tiling)}) cannot be greater than the ref's rank"
+        f" ({len(strides)})."
+    )
+
+  minor_tiling = tiling[np.argmin(strides[-len(tiling):])]
+  swizzle = minor_tiling * utils.bytewidth(ref_ty.element_type)
+  assert swizzle in (
+      mgpu.SwizzlingMode.k128ByteSwizzle,
+      mgpu.SwizzlingMode.k64ByteSwizzle,
+      mgpu.SwizzlingMode.k32ByteSwizzle,
+      mgpu.SwizzlingMode.kNoSwizzle,
+  )
+  return mgpu.SwizzlingMode(swizzle)
+
+
+@dataclasses.dataclass(frozen=True)
+class _TypeAndLayout:
+  type: ir.Type
+  layout: eqns.Constant
 
 
 def assign_layouts(
     solution: dict[OperandOrResult, eqns.Constant],
+    enable_smem_inference: bool,
 ) -> None:
   """Assigns the layouts in `solution` to the MLIR ops they belong to.
 
   This function requires that, for each MLIR op that appears in `solution`,
-  `solution` contains a layout assignment for all of its `vector` operands and
-  results.
+  `solution` contains a layout assignment for all of its `vector`, TMEM, and
+  SMEM operands and results.
   """
   solution_sorted_by_op = sorted(
       solution.items(), key=lambda kv: id(kv[0].operation)
@@ -1087,22 +1608,35 @@ def assign_layouts(
     out_assignments = assignments_by_type.get(VariableType.RESULT, [])
 
     index = lambda kv: kv[0].index
-    in_cs = [ce for _, ce in sorted(in_assignments, key=index)]
-    out_cs = [ce for _, ce in sorted(out_assignments, key=index)]
+    in_tls = [
+        _TypeAndLayout(v.value.type, ce)
+        for v, ce in sorted(in_assignments, key=index)
+    ]
+    out_tls = [
+        _TypeAndLayout(v.value.type, ce)
+        for v, ce in sorted(out_assignments, key=index)
+    ]
+
     in_layouts = [
-        ce.value for ce in in_cs if isinstance(ce, eqns.RegisterLayout)
+        tl.layout.value for tl in in_tls if isinstance(tl.layout, eqns.RegisterLayout)
     ]
     out_layouts = [
-        ce.value for ce in out_cs if isinstance(ce, eqns.RegisterLayout)
+        tl.layout.value for tl in out_tls if isinstance(tl.layout, eqns.RegisterLayout)
     ]
     in_tmem_layouts = [
-        ce.value for ce in in_cs if isinstance(ce, eqns.TMEMLayout)
+        tl.layout.value for tl in in_tls if isinstance(tl.layout, eqns.TMEMLayout)
     ]
     out_tmem_layouts = [
-        ce.value for ce in out_cs if isinstance(ce, eqns.TMEMLayout)
+        tl.layout.value for tl in out_tls if isinstance(tl.layout, eqns.TMEMLayout)
     ]
+    in_transforms = [tl for tl in in_tls if isinstance(tl.layout, eqns.SMEMTiling)]
+    out_transforms = [tl for tl in out_tls if isinstance(tl.layout, eqns.SMEMTiling)]
+
     _ensure_right_number_of_layouts(op, in_layouts, out_layouts)
     _ensure_right_number_of_tmem_layouts(op, in_tmem_layouts, out_tmem_layouts)
+    if enable_smem_inference:
+      _ensure_right_number_of_transforms(op, in_transforms, out_transforms)
+
     if inference_utils.should_have_in_layout(op):
       attrs = [layouts_lib.to_layout_attr(l) for l in in_layouts]
       op.attributes["in_layouts"] = ir.ArrayAttr.get(attrs)
@@ -1115,6 +1649,29 @@ def assign_layouts(
     if inference_utils.should_have_out_tmem_layout(op):
       attrs = [layouts_lib.to_layout_attr(l) for l in out_tmem_layouts]
       op.attributes["out_tmem_layouts"] = ir.ArrayAttr.get(attrs)
+
+    if enable_smem_inference:
+
+      def _to_transform_attrs(
+          transforms: list[_TypeAndLayout],
+      ) -> list[ir.ArrayAttr]:
+        all_attrs: list[ir.ArrayAttr] = []
+        for tl in transforms:
+          assert isinstance(tl.layout, eqns.SMEMTiling)  # make pytype happy
+          attrs = []
+          if tl.layout.value is not None:
+            attrs.append(layouts_lib.to_transform_attr(tl.layout.value))
+            swizzle = _compute_swizzle(tl.type, tl.layout.value)
+            attrs.append(layouts_lib.to_transform_attr(swizzle))
+          all_attrs.append(ir.ArrayAttr.get(attrs))
+        return all_attrs
+
+      if inference_utils.should_have_in_transforms(op):
+        attrs = _to_transform_attrs(in_transforms)
+        op.attributes["in_transforms"] = ir.ArrayAttr.get(attrs)
+      if inference_utils.should_have_out_transforms(op):
+        attrs = _to_transform_attrs(out_transforms)
+        op.attributes["out_transforms"] = ir.ArrayAttr.get(attrs)
 
 
 def vector_operands_and_results(op: ir.OpView) -> list[OperandOrResult]:
@@ -1210,6 +1767,10 @@ def derive_hints_and_constraints(
     producers: list[eqns.Variable] = []
     consumers: list[eqns.Variable] = []
     for operand_or_result in operand_and_results:
+      # We can only relayout variables that are in registers.
+      if operand_or_result.memory_space != MemorySpace.REG:
+        continue
+
       if operand_or_result.type == VariableType.OPERAND:
         pr = producer_result(operand_or_result)
         producer_variable = variable_for_operand_or_result[pr]
@@ -1245,7 +1806,60 @@ def is_terminator(op: ir.OpView) -> bool:
   return isinstance(op, (scf.YieldOp, scf.ConditionOp))
 
 
-def infer_layout(module: ir.Module):
+def _drop_smem(
+    system: eqns.EquationSystem, ctx: DerivationContext
+) -> tuple[eqns.EquationSystem, DerivationContext]:
+  """Drops SMEM related variables constraints and hints.
+
+  This is only needed to enable the gradual implementation and testing of
+  SMEM inference.
+  TODO(b/447079781): Remove this function once SMEM inference is fully
+  implemented.
+  """
+  def is_smem(
+      x: (
+          OperandOrResult
+          | eqns.Constraint
+          | eqns.Expression
+          | eqns.Equation
+      ),
+  ) -> bool:
+    match x:
+      case OperandOrResult(memory_space=MemorySpace.SMEM):
+        return True
+      case eqns.Transpose():
+        return True
+      case eqns.IsTransferable(source=source, target=target):
+        return is_smem(source) or is_smem(target)
+      case eqns.Divides():
+        return True
+      case eqns.Variable(key=key):
+        return is_smem(key)
+      case eqns.SMEMTiling():
+        return True
+      case eqns.Equation(lhs=lhs, rhs=rhs):
+        return is_smem(lhs) or is_smem(rhs)
+      case _:
+        return False
+
+  assign = {k: v for k, v in system.assignments.items() if not is_smem(v)}
+  equations = [e for e in system.equations if not is_smem(e)]
+  const = [c for c in system.constraints if not is_smem(c)]
+
+  new_ctx = DerivationContext()
+
+  new_ctx.operand_and_results_for_variable = {
+      k: v for k, v in ctx.operand_and_results_for_variable.items() if not is_smem(k)
+  }
+
+  new_ctx.variable_for_operand_or_result = {
+      k: v for k, v in ctx.variable_for_operand_or_result.items() if not is_smem(k)
+  }
+
+  return eqns.EquationSystem(assign, equations, const), new_ctx
+
+
+def infer_layout(module: ir.Module, enable_smem_inference: bool = False):
   """Infers layouts for the given module.
 
   * If there are vector (respectively SMEM refs, TMEM refs) operands,
@@ -1256,11 +1870,16 @@ def infer_layout(module: ir.Module):
   and contain one element per relevant argument in the memory space.
   * Any of these attributes is guaranteed to not be set if there is no relevant
   input/output in the corresponding memory space.
+
+  If `enable_smem_inference` is False, SMEM transforms are not inferred. This
+  is only a temporary flag to allow for an incremental rollout of SMEM
+  inference.
+  TODO(b/447079781): Remove this flag once SMEM inference is fully implemented.
   """
   global_equation_system: eqns.EquationSystem | eqns.Unsatisfiable
   global_equation_system = eqns.EquationSystem()
   hints: list[Hint] = []
-  ctx = DerivationContext()
+  ctx = DerivationContext(enable_smem_inference=enable_smem_inference)
 
   def gather_equations(op: ir.Operation):
     # Terminator ops are handled directly by the op whose region they belong to.
@@ -1272,6 +1891,7 @@ def infer_layout(module: ir.Module):
     should_have_layout = (
         inference_utils.should_have_layout(op)
         or inference_utils.should_have_tmem_layout(op)
+        or (inference_utils.should_have_transforms(op) and enable_smem_inference)
     )
     if not should_have_layout:
       return
@@ -1293,6 +1913,9 @@ def infer_layout(module: ir.Module):
         "user-provided layout casts are unsatisfiable."
     )
 
+  if not enable_smem_inference:
+    global_equation_system, ctx = _drop_smem(global_equation_system, ctx)
+
   propagation_hints, constraints = derive_hints_and_constraints(ctx.operand_and_results_for_variable)
   hints = reduce_hints(hints + propagation_hints, global_equation_system.assignments)  # pytype: disable=attribute-error
   global_equation_system &= eqns.EquationSystem(constraints=constraints)
@@ -1302,6 +1925,7 @@ def infer_layout(module: ir.Module):
   # faster.
   global_equation_system = eqns.saturate_distinct_from_splat(global_equation_system)
   assert not isinstance(global_equation_system, eqns.Unsatisfiable)
+  global_equation_system = eqns.saturate_divides_constraints_for_equal_vars(global_equation_system)
 
   # Attempt to find assignments that satisfy the equation system.
   solution = find_assignments_for(
@@ -1321,8 +1945,14 @@ def infer_layout(module: ir.Module):
   }
 
   # Assigns the layouts that we found to the ops.
-  assign_layouts(layout_for_operand_or_result)
+  assign_layouts(layout_for_operand_or_result, enable_smem_inference)
 
   # Sanity check: ensure that all ops have the right number of in/out layouts.
   for op in module.body:
-    inference_utils.traverse_op(op, _ensure_all_layouts_are_set)
+    inference_utils.traverse_op(
+        op,
+        partial(
+            _ensure_all_layouts_are_set,
+            enable_smem_inference=enable_smem_inference,
+        ),
+    )

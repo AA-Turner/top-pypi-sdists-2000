@@ -83,16 +83,19 @@ def lower_jaxpr_to_module(
     new_block_mappings = []
     for bm in grid_mapping.block_mappings:
 
-      def new_index_map(*args):  # Has a leading grid index
+      def new_index_map(*args, bm=bm):
         return jax_core.eval_jaxpr(
+            # Discard the leading grid index.
             bm.index_map_jaxpr.jaxpr, bm.index_map_jaxpr.consts, *args[1:]
         )
 
+      debug_info = bm.index_map_jaxpr.jaxpr.debug_info
+      if debug_info.arg_names is not None:
+        debug_info = debug_info._replace(
+            arg_names=("idx", *debug_info.arg_names)
+        )
       flat_fun, _ = api_util.flatten_fun(
-          lu.wrap_init(
-              new_index_map, debug_info=bm.index_map_jaxpr.jaxpr.debug_info
-          ),
-          index_map_tree,
+          lu.wrap_init(new_index_map, debug_info=debug_info), index_map_tree
       )
       with pallas_core.tracing_grid_env(new_grid, grid_mapping.vmapped_dims):
         index_map_jaxpr, _, index_map_jaxpr_consts = pe.trace_to_jaxpr_dynamic(
@@ -113,6 +116,15 @@ def lower_jaxpr_to_module(
         block_mappings=tuple(new_block_mappings),
     )
     dimension_semantics = ("arbitrary",)
+
+  for bm in grid_mapping.block_mappings:
+    for bd in bm.block_shape:
+      if not isinstance(bd, pallas_core.Blocked):
+        raise NotImplementedError(
+            "Unsupported block dimension type: "
+            f"{type(bd)} for block shape: {bm.block_shape}"
+        )
+
   backend = lowering_context.module_context.get_backend(optional=True)
   mosaic_grid_mapping = MosaicGridMapping(
       jaxpr, grid_mapping, dimension_semantics, mesh=mesh
@@ -152,13 +164,6 @@ def lower_jaxpr_to_module(
     m.body.append(mlir_func)
     sym_tab.insert(mlir_func)
 
-    for bd in bm.block_shape:
-      if not isinstance(bd, pallas_core.Blocked):
-        raise NotImplementedError(
-            "Unsupported block dimension type: "
-            f"{type(bd)} for block shape: {bm.block_shape}"
-        )
-
     block_shape = list(pallas_core._get_block_shape(bm.block_shape))
     block_params = dict(
         window_bounds=ir.DenseI64ArrayAttr.get(block_shape),
@@ -187,6 +192,15 @@ class MosaicGridMapping(tc_lowering.MosaicGridMapping):
             f"The minormost dimension of a block for {bm.origin} must be a"
             f" multiple of 8, got shape {shape}"
         )
+    if any(
+        isinstance(var.aval, sc_core.AbstractRef)
+        for var in jaxpr.invars[grid_mapping.slice_scratch_ops]
+    ):
+      # TODO(slebedev): Support tiling annotations for kernel operands.
+      raise NotImplementedError(
+          "``plsc.MemoryRef``s are not supported as scratch operands to the"
+          " kernel. Allocate them in the kernel body via ``pl.run_scoped``."
+      )
     super().__init__(
         jaxpr,
         grid_mapping,
@@ -309,14 +323,12 @@ def _load_lowering_rule(
   assert isinstance(ref_aval, state.AbstractRef)
   [out_aval] = ctx.avals_out
   assert isinstance(out_aval, jax_core.ShapedArray)
-  in_smem = ref_aval.memory_space is tpu_core.MemorySpace.SMEM
-  if in_smem:
-    if out_aval.ndim:
-      raise NotImplementedError("Get can only load scalars from SMEM")
-  else:
-    _check_aval_is_supported("Get", out_aval)
 
-  *prev_transforms, indexer = jax.tree.unflatten(tree, flat_transforms)
+  transforms = list(jax.tree.unflatten(tree, flat_transforms))
+  if not transforms or not isinstance(transforms[-1], indexing.NDIndexer):
+    ref_shape = state.get_transforms_shape(transforms, ref_aval.shape)
+    transforms.append(indexing.NDIndexer.make_trivial_indexer(ref_shape))
+  *prev_transforms, indexer = transforms
   ref_block_shape, *_ = ctx.block_shapes
   ref, ref_block_shape = _transform_ref(
       ref, ref_aval.dtype, ref_block_shape, prev_transforms
@@ -332,10 +344,15 @@ def _load_lowering_rule(
         "Get only supports slices with stride 1, got {strides}"
     )
 
-  if in_smem:
+  if not out_aval.ndim:
     if mask is not None:
-      raise NotImplementedError("Get does not support masked loads from SMEM")
+      raise NotImplementedError("Get does not support masked scalar loads")
     return memref.load(ref, starts)
+
+  if ref_aval.memory_space is tpu_core.MemorySpace.SMEM:
+    raise NotImplementedError("Get can only load scalars from SMEM")
+  else:
+    _check_aval_is_supported("Get", out_aval)
 
   vec_type = ir.VectorType.get(
       out_aval.shape, _dtype_to_ir_type(ref_aval.dtype)
@@ -360,14 +377,15 @@ def _store_lowering_rule(
   [out_aval] = ctx.avals_out
   assert isinstance(out_aval, jax_core.ShapedArray)
 
-  in_smem = ref_aval.memory_space is tpu_core.MemorySpace.SMEM
-  if in_smem:
-    if out_aval.ndim:
-      raise NotImplementedError("Swap can only store scalars to SMEM")
-  else:
-    _check_aval_is_supported("Swap", out_aval)
-
-  *prev_transforms, indexer = jax.tree.unflatten(tree, flat_transforms)
+  transforms = list(jax.tree.unflatten(tree, flat_transforms))
+  if not transforms or not isinstance(transforms[-1], indexing.NDIndexer):
+    ref_shape = (
+        ref_aval.shape
+        if not transforms
+        else state.get_transform_shape(transforms[-1])
+    )
+    transforms.append(indexing.NDIndexer.make_trivial_indexer(ref_shape))
+  *prev_transforms, indexer = transforms
   ref_block_shape, *_ = ctx.block_shapes
   ref, ref_block_shape = _transform_ref(
       ref, ref_aval.dtype, ref_block_shape, prev_transforms
@@ -383,16 +401,21 @@ def _store_lowering_rule(
         "Swap only supports slices with stride 1, got {strides}"
     )
 
-  if in_smem:
+  if not out_aval.ndim:
     if mask is not None:
-      raise NotImplementedError("Swap does not support masked stores to SMEM")
+      raise NotImplementedError("Swap does not support masked scalar stores")
     if add:
       # TODO(slebedev): We can use memref.atomic_rmw here, but the SC compiler
       # doesn't support it yet.
-      raise NotImplementedError("Swap does not support atomic adds to SMEM")
+      raise NotImplementedError("Swap does not support atomic scalar adds")
     old_val = memref.load(ref, starts)
     memref.store(val, ref, starts)
     return old_val
+
+  if ref_aval.memory_space is tpu_core.MemorySpace.SMEM:
+    raise NotImplementedError("Swap can only store scalars to SMEM")
+  else:
+    _check_aval_is_supported("Swap", out_aval)
 
   vec_type = ir.VectorType.get(
       out_aval.shape, _dtype_to_ir_type(ref_aval.dtype)
@@ -400,6 +423,20 @@ def _store_lowering_rule(
   old_val = tpu.vector_load(vec_type, ref, starts, strides=[], mask=mask)
   tpu.vector_store(val, ref, starts, strides=[], mask=mask, add=add)
   return old_val
+
+
+@register_lowering_rule(jax.lax.iota_p,
+                        kernel_types=[tpu_core.KernelType.SC_VECTOR_SUBCORE])
+def _iota_lowering_rule_sc(ctx: LoweringRuleContext, dtype, shape, dimension,
+                           sharding):
+  if shape != (sc_core._vector_dimension(),):
+    raise ValueError(
+        f"Unsupported iota shape for SC vector subcore. Got {shape}, supported "
+        f"shape is {(sc_core._vector_dimension(),)}.")
+  [out_aval] = ctx.avals_out
+  out_type = ir.VectorType.get(
+      [sc_core._vector_dimension()], _dtype_to_ir_type(out_aval.dtype))
+  return tpu.iota(out_type, dimensions=[dimension])
 
 
 def _check_aval_is_supported(caller: str, aval: jax_core.ShapedArray) -> None:
@@ -472,9 +509,9 @@ def _dma_start_lowering_rule(
       src_sem,
       src_sem_transforms,
       device_id,
-  ) = jax.tree.unflatten(tree, args)
+  ) = tpu_primitives._dma_unflatten(tree, args)
   src_aval, _, dst_aval, _, sem_aval, _, src_sem_aval, _, _ = (
-      jax.tree.unflatten(tree, ctx.avals_in)
+      tpu_primitives._dma_unflatten(tree, ctx.avals_in)
   )
 
   # If not ``None``, we lower to an indirect stream instead of a DMA.
@@ -551,9 +588,9 @@ def _dma_wait_lowering_rule(
       _,
       _,
       device_id,
-  ) = jax.tree.unflatten(tree, args)
-  src_aval, _, dst_aval, _, sem_aval, _, _, _, _ = jax.tree.unflatten(
-      tree, ctx.avals_in
+  ) = tpu_primitives._dma_unflatten(tree, args)
+  src_aval, _, dst_aval, _, sem_aval, _, _, _, _ = (
+      tpu_primitives._dma_unflatten(tree, ctx.avals_in)
   )
 
   # If not ``None``, we lower to an indirect stream instead of a DMA.
@@ -601,6 +638,7 @@ def _dma_wait_lowering_rule(
 def _extract_indirect_offsets(
     transforms: Sequence[ir.Value], expected_shape: tuple[int, ...]
 ) -> tuple[ir.Value | None, Sequence[pallas_core.MemoryRefTransform]]:
+  offsets_ref: Any  # Make mypy happy.
   match transforms[-1:]:
     case [
         indexing.NDIndexer(indices=[ir.Value() as offsets, *_]) as indexer
@@ -624,5 +662,82 @@ def _extract_indirect_offsets(
             " async_copy()"
         )
       return offsets, transforms[:-1]
+    case [
+        indexing.NDIndexer(indices=[state.TransformedRef() as offsets_ref, *_]) as indexer
+    ]:
+      offsets_type = ir.MemRefType(offsets_ref.ref.type)
+      if offsets_type.element_type != ir.IntegerType.get_signless(32):
+        raise NotImplementedError(
+            "Only int32 indices are supported in async_copy() with a"
+            " dynamically-shaped indexer"
+        )
+      offsets_ref, _ = _transform_ref(
+          offsets_ref.ref,
+          jnp.int32,  # Just a placeholder.
+          offsets_ref.shape,
+          offsets_ref.transforms,
+      )
+      if not state_discharge._is_trivial_indexer(
+          indexing.NDIndexer(indexer.indices[1:], indexer.shape[1:], ())
+      ):
+        # TODO(slebedev): Consider lifting this restriction.
+        raise NotImplementedError(
+            "Only indexing along the major dimension is supported in"
+            " async_copy()"
+        )
+      return offsets_ref, transforms[:-1]
     case _:
       return None, transforms
+
+
+@register_lowering_rule(pallas_primitives.run_scoped_p)
+def _run_scoped_lowering_rule(
+    ctx: LoweringRuleContext, *consts, jaxpr, collective_axes
+):
+  return tc_lowering._run_scoped_lowering_rule(
+      ctx,
+      *consts,
+      jaxpr=jaxpr,
+      collective_axes=collective_axes,
+      alloc_fn=_alloc_value,
+  )
+
+
+def _default_tile_strides(
+    tiling: sc_core.Tiling, shape: Sequence[int]
+) -> Sequence[int]:
+  """Returns default tile strides for a given shape and tiling."""
+  assert tiling
+
+  cdiv = lambda a, b: (a + b - 1) // b
+
+  strides = [0] * len(shape)
+  stride = 1
+  first_tile, *_ = tiling
+  for d in reversed(range(len(shape))):
+    assert shape[d] != ir.ShapedType.get_dynamic_size()
+    strides[d] = stride
+    if d >= len(shape) - len(first_tile):
+      tile_d = d - (len(shape) - len(first_tile))
+      stride *= cdiv(shape[d], first_tile[tile_d])
+    else:
+      stride *= shape[d]
+  return strides
+
+
+def _alloc_value(
+    aval: jax_core.AbstractValue, *, ctx: LoweringRuleContext
+) -> ir.Value:
+  if isinstance(aval, sc_core.AbstractRef) and aval.tiling is not None:
+    tiling = "".join(f"({','.join(map(str, tile))})" for tile in aval.tiling)
+    strides = _default_tile_strides(aval.tiling, aval.shape)
+    out_type = ir.MemRefType.get(
+        aval.shape,
+        _dtype_to_ir_type(aval.dtype, is_kernel_boundary=True),
+        layout=ir.Attribute.parse(f"#tpu.tiled<{tiling},{strides}>"),
+        memory_space=tc_lowering._memory_space_to_mosaic_attribute(
+            aval.memory_space or tpu_core.MemorySpace.VMEM
+        ),
+    )
+    return memref.alloca(out_type, [], [])
+  return tc_lowering._alloc_value(aval, ctx=ctx)

@@ -377,7 +377,7 @@ load_p = jax_core.Primitive('masked_load')
 @load_p.def_effectful_abstract_eval
 def _load_abstract_eval(*avals_flat, args_tree, **_):
   ref, transforms, _, _ = args_tree.unflatten(avals_flat)
-  assert transforms is not None and isinstance(transforms[-1], NDIndexer)
+  assert transforms is not None
   transformed_ref = pallas_core.TransformedRef(ref, transforms)
   return (
       jax_core.ShapedArray(transformed_ref.shape, transformed_ref.dtype),
@@ -482,6 +482,10 @@ _unpad_values_to_avoid_dynamic_slice_oob_shift = functools.partial(
 def _load_discharge_rule(in_avals, out_avals, *args_flat, args_tree, **_):
   del out_avals  # Unused.
   ref, transforms, mask, other = args_tree.unflatten(args_flat)
+  transforms = list(transforms)
+  if not transforms or not isinstance(transforms[-1], indexing.NDIndexer):
+    ref_shape = state.get_transforms_shape(transforms, in_avals[0].shape)
+    transforms.append(indexing.NDIndexer.make_trivial_indexer(ref_shape))
   *prev_transforms, idx = transforms
   assert isinstance(idx, NDIndexer)
   ref = state_discharge.transform_array(ref, prev_transforms)
@@ -521,7 +525,7 @@ swap_p = jax_core.Primitive('masked_swap')
 @swap_p.def_effectful_abstract_eval
 def _swap_abstract_eval(*avals_flat, args_tree, **_):
   ref, transforms, val, mask = args_tree.unflatten(avals_flat)
-  assert transforms is not None and isinstance(transforms[-1], NDIndexer)
+  assert transforms is not None
   transformed_ref = pallas_core.TransformedRef(ref, transforms)
   expected_output_shape = transformed_ref.shape
   expected_output_dtype = transformed_ref.dtype
@@ -597,6 +601,10 @@ ad.primitive_jvps[swap_p] = _swap_jvp
 def _swap_discharge_rule(in_avals, out_avals, *args_flat, args_tree, **_):
   del out_avals  # Unused.
   ref, transforms, val, mask = args_tree.unflatten(args_flat)
+  transforms = list(transforms)
+  if not transforms or not isinstance(transforms[-1], indexing.NDIndexer):
+    ref_shape = state.get_transforms_shape(transforms, in_avals[0].shape)
+    transforms.append(indexing.NDIndexer.make_trivial_indexer(ref_shape))
   *prev_transforms, idx = transforms
   assert isinstance(idx, NDIndexer)
   ref = state_discharge.transform_array(ref, prev_transforms)
@@ -693,6 +701,16 @@ def store(x_ref_or_view, idx, val, *, mask=None, eviction_policy=None) -> None:
   _ = swap(x_ref_or_view, idx, val, mask=mask, eviction_policy=eviction_policy,
            _function_name="store")
 
+
+def _handle_small(dtype: jax.typing.DTypeLike):
+  """Ugly workaround to support types that don't allow automatic promotion."""
+  if dtype == jnp.int4:
+    return jnp.int8
+  if dtype == jnp.float8_e4m3b11fnuz:
+    return jnp.bfloat16
+  return dtype
+
+
 def dot(a, b, trans_a: bool = False, trans_b: bool = False,
         allow_tf32: bool | None = None, precision=None):
   if (a.ndim != 2) or (b.ndim != 2):
@@ -704,13 +722,7 @@ def dot(a, b, trans_a: bool = False, trans_b: bool = False,
       raise ValueError("Only one of allow_tf32 and precision can be specified")
     precision = lax.Precision.HIGH if allow_tf32 else lax.Precision.HIGHEST
 
-  def _handle_f8(dtype: jax.typing.DTypeLike):
-    """Ugly workaround to support float8_e4m3b11fnuz in dot."""
-    if dtype == jnp.float8_e4m3b11fnuz:
-      return jnp.bfloat16
-    return dtype
-
-  dtype = jnp.promote_types(_handle_f8(a.dtype), _handle_f8(b.dtype))
+  dtype = jnp.promote_types(_handle_small(a.dtype), _handle_small(b.dtype))
   out_dtype = jnp.int32 if jnp.issubdtype(dtype, jnp.integer) else jnp.float32
   return jax.lax.dot_general(
       a,
@@ -952,6 +964,47 @@ def _run_scoped_lowering_rule(ctx, *args, jaxpr, collective_axes):
     return out[:num_return_values]
 
   return mlir.lower_fun(_lower_fun, multiple_results=True)(ctx, *args)
+
+
+get_global_p = jax_core.Primitive("get_global")
+get_global_p.multiple_results = False
+
+
+def get_global(what: pallas_core.ScratchShape) -> jax.Array:
+  """Returns a global reference that persists across all kernel invocations.
+
+  Each call to get_global returns a different and unique reference, but one that
+  is stable across invocations of the kernel body.
+
+  Args:
+    what: The reference type to allocate. Each backend has its own set of
+      reference types (e.g., `plgpu.SemaphoreType.REGULAR` for GPU).
+
+  Example::
+
+    sem_ref = pl.get_global(plgpu.SemaphoreType.REGULAR)
+    pl.semaphore_signal(sem_ref)
+    pl.semaphore_wait(sem_ref)
+  """
+  ref_aval = what.get_ref_aval()
+  return get_global_p.bind(what=ref_aval)
+
+
+@get_global_p.def_abstract_eval
+def _get_global_abstract_eval(*, what):
+  return what
+
+
+def _get_global_discharge_rule(in_avals, out_avals, *, what):
+  del in_avals, out_avals, what
+  raise NotImplementedError(
+      "get_global discharge is not supported in interpret mode."
+  )
+
+
+state_discharge.register_discharge_rule(get_global_p)(
+    _get_global_discharge_rule
+)
 
 
 def _get_ref_and_transforms(ref):

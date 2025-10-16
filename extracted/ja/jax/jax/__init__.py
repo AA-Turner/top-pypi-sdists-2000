@@ -47,6 +47,7 @@ from jax import typing as typing
 from jax._src.config import (
   config as config,
   enable_checks as enable_checks,
+  enable_x64 as enable_x64,
   debug_key_reuse as debug_key_reuse,
   check_tracer_leaks as check_tracer_leaks,
   checking_leaks as checking_leaks,
@@ -140,9 +141,8 @@ from jax._src.shard_map import shard_map as shard_map
 from jax._src.shard_map import smap as smap
 
 from jax.ref import new_ref as new_ref
-from jax.ref import array_ref as array_ref
+from jax.ref import freeze as freeze
 from jax.ref import Ref as Ref
-from jax.ref import ArrayRef as ArrayRef
 
 # Force import, allowing jax.interpreters.* to be used after import jax.
 from jax.interpreters import ad, batching, mlir, partial_eval, pxla, xla
@@ -165,6 +165,7 @@ from jax import debug as debug
 from jax import dlpack as dlpack
 from jax import dtypes as dtypes
 from jax import errors as errors
+from jax import export as export
 from jax import ffi as ffi
 from jax import image as image
 from jax import lax as lax
@@ -179,7 +180,6 @@ from jax import sharding as sharding
 from jax import memory as memory
 from jax import stages as stages
 from jax import tree_util as tree_util
-from jax import util as _deprecated_util
 
 # Also circular dependency.
 from jax._src.array import Shard as Shard
@@ -188,10 +188,14 @@ import jax.experimental.compilation_cache.compilation_cache as _ccache
 del _ccache
 
 _deprecations = {
-  # Deprecated for JAX v0.7.0; remove in JAX v0.8.0
-  "util": (
-    "jax.util and all its contents were deprecated in JAX v0.6.0, and removed in JAX v0.7.0",
-    _deprecated_util,
+  # Added for v0.8.0
+  "array_ref": (
+    "jax.array_ref is deprecated; use jax.new_ref instead.",
+    new_ref
+  ),
+  "ArrayRef": (
+    "jax.ArrayRef is deprecated; use jax.Ref instead.",
+    Ref
   ),
   # Finalized 2025-03-25; remove after 2025-06-25
   "treedef_is_leaf": (
@@ -232,7 +236,8 @@ _deprecations = {
 
 import typing as _typing
 if _typing.TYPE_CHECKING:
-  pass
+  array_ref = new_ref
+  ArrayRef = Ref
 else:
   from jax._src.deprecations import deprecation_getattr as _deprecation_getattr
   __getattr__ = _deprecation_getattr(__name__, _deprecations)

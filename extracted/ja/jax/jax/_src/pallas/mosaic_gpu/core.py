@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import abc
 import collections
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Callable, Hashable, Iterable, Mapping, Sequence
 import dataclasses
 import enum
 import functools
@@ -235,9 +235,10 @@ def kernel(
       thread_name = mesh.thread_name if mesh.thread_name is not None else ()
       def cmap_body():
         pallas_primitives.run_scoped(
-            lambda *scratch_refs: body(*operand_refs, *out_refs, *scratch_refs),
-            *scratch_shapes,
+            functools.partial(body, *operand_refs, *out_refs),
+            *(scratch_shapes if isinstance(scratch_shapes, Sequence) else ()),
             collective_axes=thread_name,
+            **(scratch_shapes if isinstance(scratch_shapes, Mapping) else {}),
         )
       if mesh.kernel_name is not None:
         cmap_body.__name__ = mesh.kernel_name
@@ -756,6 +757,30 @@ class PeerMemRef(state_types.Transform):
     return cls(arrays[0], metadata[0])
 
 
+@tree_util.register_pytree_node_class
+@dataclasses.dataclass
+class MulticastRef(state_types.Transform):
+  collective_axes: tuple[Hashable, ...]
+
+  def transform_shape(self, shape):
+    return shape
+
+  def transform_dtype(self, dtype):
+    return dtype
+
+  def untransform_index(
+      self, idxs: tuple[Index, ...]
+  ) -> tuple[tuple[Index, ...], state_types.Transform]:
+    return idxs, self
+
+  def tree_flatten(self):
+    return (), self.collective_axes
+
+  @classmethod
+  def tree_unflatten(cls, metadata, arrays):
+    return cls(metadata[0])
+
+
 def remote_ref(
     ref: _Ref,
     device_id: jax.typing.ArrayLike,
@@ -766,8 +791,33 @@ def remote_ref(
     if not isinstance(jax_core.get_aval(ref), state_types.AbstractRef):
       raise TypeError("ref must be a reference")
     ref = pallas_core.TransformedRef(ref, transforms=())
+  if any(isinstance(t, MulticastRef) for t in ref.transforms):
+    raise ValueError("Can't make a multicast reference into a peer reference.")
   return pallas_core.TransformedRef(
       ref.ref, (*ref.transforms, PeerMemRef(device_id, device_id_type)),
+  )
+
+
+def multicast_ref(
+    ref: _Ref,
+    collective_axes: Hashable | tuple[Hashable, ...],
+) -> pallas_core.TransformedRef:
+  """Return a multicast reference for cross-device operations.
+
+  Args:
+    ref: The reference to transform.
+    collective_axes: The JAX mesh axes indicating the devices to operate on.
+  """
+  if not isinstance(collective_axes, tuple):
+    collective_axes = (collective_axes,)
+  if not isinstance(ref, pallas_core.TransformedRef):
+    if not isinstance(jax_core.get_aval(ref), state_types.AbstractRef):
+      raise TypeError("ref must be a reference")
+    ref = pallas_core.TransformedRef(ref, transforms=())
+  if any(isinstance(t, PeerMemRef) for t in ref.transforms):
+    raise ValueError("Can't make a peer reference into a multicast reference.")
+  return pallas_core.TransformedRef(
+      ref.ref, (*ref.transforms, MulticastRef(collective_axes)),
   )
 
 
@@ -928,16 +978,23 @@ class UnswizzleRef(state_types.Transform):
 
 @dataclasses.dataclass
 class BlockSpec(pallas_core.BlockSpec):
-  """A GPU-specific `BlockSpec`.
+  r"""A GPU-specific ``BlockSpec``.
 
   Attributes:
     transforms: A sequence of transforms that will be applied to the
       reference.
     delay_release: used during pipelining to delay the release of
       resources of a slot after it is used in the computation.
+    collective_axes: When set, all blocks along the specified axes must execute
+      the same sequence of pipeline operations (with the only exception being
+      the index_map in non-collective ``BlockSpec``\ s), and all of them must
+      return the same block from the index_map for this operand. This enables
+      the pipelining helpers to use collective async copies, which can improve
+      performance.
   """
   transforms: Sequence[MemoryRefTransform] = ()
   delay_release: int = 0
+  collective_axes: tuple[Hashable, ...] = ()
 
   def to_block_mapping(
       self,
@@ -950,6 +1007,11 @@ class BlockSpec(pallas_core.BlockSpec):
       vmapped_dims: tuple[int, ...],
       debug: bool = False,
   ) -> pallas_core.BlockMapping:
+    if self.collective_axes:
+      raise ValueError(
+          "collective_axes is not supported in pallas_call. Use plgpu.kernel"
+          " with plgpu.emit_pipeline_warp_specialized instead."
+      )
     bm = super().to_block_mapping(
         origin,
         array_aval,
@@ -998,6 +1060,8 @@ class ClusterBarrierType(dtypes.ExtendedDType):
   name: ClassVar[str] = "cluster_barrier"
 
   collective_axes: tuple[str | tuple[str, ...], ...]
+  num_arrivals: int
+  orders_tensor_core: bool
 
   def __str__(self):
     return self.name
@@ -1021,7 +1085,7 @@ class Barrier:
   orders_tensor_core: bool = False
 
   def get_array_aval(self) -> jax_core.ShapedArray:
-    raise ValueError("Barriers are not arrays.")
+    raise ValueError("Barriers are not arrays")
 
   def get_ref_aval(self) -> state.AbstractRef:
     aval = jax_core.ShapedArray(
@@ -1042,10 +1106,18 @@ class Barrier:
 class ClusterBarrier:
   collective_axes: tuple[str | tuple[str, ...], ...]
   num_barriers: int = 1
+  num_arrivals: int = 1
+  orders_tensor_core: bool = False
+
+  def get_array_aval(self) -> jax_core.ShapedArray:
+    raise ValueError("Cluster barriers are not arrays")
 
   def get_ref_aval(self) -> state.AbstractRef:
     aval = jax_core.ShapedArray(
-        [self.num_barriers], ClusterBarrierType(self.collective_axes)
+        [self.num_barriers],
+        ClusterBarrierType(
+            self.collective_axes, self.num_arrivals, self.orders_tensor_core
+        ),
     )
     return state.AbstractRef(aval, SMEM)
 
@@ -1315,6 +1387,8 @@ class ReducedLayout(SomeLayout):
 class Layout(SomeLayout, enum.Enum):
   #: [m, n] matrix, where m % 64 == 0 == n % 8.
   WGMMA = enum.auto()
+  WGMMA_UPCAST_2X = enum.auto()
+  WGMMA_UPCAST_4X = enum.auto()
   WGMMA_TRANSPOSED = enum.auto()
 
   WG_SPLAT = enum.auto()
@@ -1348,6 +1422,12 @@ class Layout(SomeLayout, enum.Enum):
       case Layout.WGMMA:
         check_no_args()
         return mgpu.WGMMA_LAYOUT
+      case Layout.WGMMA_UPCAST_2X:
+        check_no_args()
+        return mgpu.WGMMA_LAYOUT_UPCAST_2X
+      case Layout.WGMMA_UPCAST_4X:
+        check_no_args()
+        return mgpu.WGMMA_LAYOUT_UPCAST_4X
       case Layout._WGMMA_ACC_32BIT:
         check_no_args()
         return mgpu.fragmented_array.WGMMA_LAYOUT_ACC_32BIT
@@ -1401,3 +1481,22 @@ class TMEMLayout(enum.Enum):
         return tcgen05.scales_layout()
       case TMEMLayout.SPARSE_METADATA_LAYOUT:
         return tcgen05.sparse_meta_layout()
+
+
+def TryClusterCancelResult(
+    num_buffers: int | None = None) -> pallas_core.MemoryRef:
+  """Helper function to create Refs for cluster launch control results.
+
+  Args:
+    num_buffers: Optional argument for specifying the number of buffers
+      to allocate. If None, will return a single 16-byte buffer. If specified,
+      will return a (num_buffers, 16)-shaped buffer.
+
+  Returns:
+    A MemoryRef with the correct shape for holding the opaque cluster launch
+    control result.
+  """
+  if num_buffers is None:
+    return SMEM((16,), jnp.int8)
+  else:
+    return SMEM((num_buffers, 16), jnp.int8)

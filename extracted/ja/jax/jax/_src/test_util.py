@@ -412,6 +412,21 @@ def is_device_cuda():
 def is_cloud_tpu():
   return running_in_cloud_tpu_vm
 
+def is_optimized_build():
+  return _jaxlib._jax.is_optimized_build()
+
+def is_asan():
+  return _jaxlib._jax.is_asan()
+
+def is_msan():
+  return _jaxlib._jax.is_msan()
+
+def is_tsan():
+  return _jaxlib._jax.is_tsan()
+
+def is_sanitized():
+  return _jaxlib._jax.is_sanitized()
+
 # Returns True if it is not cloud TPU. If it is cloud TPU, returns True if it is
 # built at least `date``.
 # TODO(b/327203806): after libtpu adds a XLA version and the oldest support
@@ -567,14 +582,13 @@ class CudaArchSpecificTest:
 def _get_device_tags():
   """returns a set of tags defined for the device under test"""
   if is_device_rocm():
-    device_tags = {device_under_test(), "rocm"}
+    return {device_under_test(), "rocm"}
   elif is_device_cuda():
-    device_tags = {device_under_test(), "cuda"}
+    return {device_under_test(), "cuda"}
   elif device_under_test() == "METAL":
-    device_tags = {device_under_test(), "gpu"}
+    return {device_under_test(), "gpu"}
   else:
-    device_tags = {device_under_test()}
-  return device_tags
+    return {device_under_test()}
 
 def test_device_matches(device_types: Iterable[str]) -> bool:
   assert not isinstance(
@@ -1863,8 +1877,8 @@ class vectorize_with_mpmath(np.vectorize):
     self.extra_prec_multiplier = kwargs.pop('extra_prec_multiplier', 0)
     self.extra_prec = kwargs.pop('extra_prec', 0)
     self.mpmath = mpmath
-    self.contexts = dict()
-    self.contexts_inv = dict()
+    self.contexts = {}
+    self.contexts_inv = {}
     for fp_format, prec in self.float_prec.items():
       ctx = self.mpmath.mp.clone()
       ctx.prec = prec

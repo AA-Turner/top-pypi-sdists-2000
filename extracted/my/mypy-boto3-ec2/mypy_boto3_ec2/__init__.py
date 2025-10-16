@@ -25,6 +25,7 @@ Usage::
         DescribeCapacityBlockOfferingsPaginator,
         DescribeCapacityBlockStatusPaginator,
         DescribeCapacityBlocksPaginator,
+        DescribeCapacityManagerDataExportsPaginator,
         DescribeCapacityReservationBillingRequestsPaginator,
         DescribeCapacityReservationFleetsPaginator,
         DescribeCapacityReservationsPaginator,
@@ -152,6 +153,8 @@ Usage::
         ExportTaskCompletedWaiter,
         GetAssociatedIpv6PoolCidrsPaginator,
         GetAwsNetworkPerformanceDataPaginator,
+        GetCapacityManagerMetricDataPaginator,
+        GetCapacityManagerMetricDimensionsPaginator,
         GetGroupsForCapacityReservationPaginator,
         GetInstanceTypesFromInstanceRequirementsPaginator,
         GetIpamAddressHistoryPaginator,
@@ -265,6 +268,7 @@ Usage::
     describe_capacity_block_offerings_paginator: DescribeCapacityBlockOfferingsPaginator = client.get_paginator("describe_capacity_block_offerings")
     describe_capacity_block_status_paginator: DescribeCapacityBlockStatusPaginator = client.get_paginator("describe_capacity_block_status")
     describe_capacity_blocks_paginator: DescribeCapacityBlocksPaginator = client.get_paginator("describe_capacity_blocks")
+    describe_capacity_manager_data_exports_paginator: DescribeCapacityManagerDataExportsPaginator = client.get_paginator("describe_capacity_manager_data_exports")
     describe_capacity_reservation_billing_requests_paginator: DescribeCapacityReservationBillingRequestsPaginator = client.get_paginator("describe_capacity_reservation_billing_requests")
     describe_capacity_reservation_fleets_paginator: DescribeCapacityReservationFleetsPaginator = client.get_paginator("describe_capacity_reservation_fleets")
     describe_capacity_reservations_paginator: DescribeCapacityReservationsPaginator = client.get_paginator("describe_capacity_reservations")
@@ -388,6 +392,8 @@ Usage::
     describe_vpcs_paginator: DescribeVpcsPaginator = client.get_paginator("describe_vpcs")
     get_associated_ipv6_pool_cidrs_paginator: GetAssociatedIpv6PoolCidrsPaginator = client.get_paginator("get_associated_ipv6_pool_cidrs")
     get_aws_network_performance_data_paginator: GetAwsNetworkPerformanceDataPaginator = client.get_paginator("get_aws_network_performance_data")
+    get_capacity_manager_metric_data_paginator: GetCapacityManagerMetricDataPaginator = client.get_paginator("get_capacity_manager_metric_data")
+    get_capacity_manager_metric_dimensions_paginator: GetCapacityManagerMetricDimensionsPaginator = client.get_paginator("get_capacity_manager_metric_dimensions")
     get_groups_for_capacity_reservation_paginator: GetGroupsForCapacityReservationPaginator = client.get_paginator("get_groups_for_capacity_reservation")
     get_instance_types_from_instance_requirements_paginator: GetInstanceTypesFromInstanceRequirementsPaginator = client.get_paginator("get_instance_types_from_instance_requirements")
     get_ipam_address_history_paginator: GetIpamAddressHistoryPaginator = client.get_paginator("get_ipam_address_history")
@@ -426,6 +432,7 @@ from .paginator import (
     DescribeCapacityBlockOfferingsPaginator,
     DescribeCapacityBlocksPaginator,
     DescribeCapacityBlockStatusPaginator,
+    DescribeCapacityManagerDataExportsPaginator,
     DescribeCapacityReservationBillingRequestsPaginator,
     DescribeCapacityReservationFleetsPaginator,
     DescribeCapacityReservationsPaginator,
@@ -549,6 +556,8 @@ from .paginator import (
     DescribeVpcsPaginator,
     GetAssociatedIpv6PoolCidrsPaginator,
     GetAwsNetworkPerformanceDataPaginator,
+    GetCapacityManagerMetricDataPaginator,
+    GetCapacityManagerMetricDimensionsPaginator,
     GetGroupsForCapacityReservationPaginator,
     GetInstanceTypesFromInstanceRequirementsPaginator,
     GetIpamAddressHistoryPaginator,
@@ -644,6 +653,7 @@ __all__ = (
     "DescribeCapacityBlockOfferingsPaginator",
     "DescribeCapacityBlockStatusPaginator",
     "DescribeCapacityBlocksPaginator",
+    "DescribeCapacityManagerDataExportsPaginator",
     "DescribeCapacityReservationBillingRequestsPaginator",
     "DescribeCapacityReservationFleetsPaginator",
     "DescribeCapacityReservationsPaginator",
@@ -771,6 +781,8 @@ __all__ = (
     "ExportTaskCompletedWaiter",
     "GetAssociatedIpv6PoolCidrsPaginator",
     "GetAwsNetworkPerformanceDataPaginator",
+    "GetCapacityManagerMetricDataPaginator",
+    "GetCapacityManagerMetricDimensionsPaginator",
     "GetGroupsForCapacityReservationPaginator",
     "GetInstanceTypesFromInstanceRequirementsPaginator",
     "GetIpamAddressHistoryPaginator",

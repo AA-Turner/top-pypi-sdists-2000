@@ -23,6 +23,7 @@ from typing import Any, Protocol, TypeVar
 
 from jax._src import ad_util
 from jax._src import api_util
+from jax._src import config
 from jax._src import core
 from jax._src import literals
 from jax._src import linear_util as lu
@@ -37,7 +38,7 @@ from jax._src.interpreters import partial_eval as pe
 from jax._src.lax import lax
 from jax._src.lax import slicing as lax_slicing
 from jax._src.state import indexing
-from jax._src.state.primitives import addupdate_p, get_p, swap_p
+from jax._src.state.primitives import addupdate_p, get_p, swap_p, pin, unpin
 from jax._src.state.types import (
     AbstractRef, RefBitcaster, RefEffect, RefReshaper, get_ref_aval_from_value,
     uninitialized,)
@@ -161,13 +162,17 @@ def _eval_jaxpr_discharge_state(
     with source_info_util.user_context(
         traceback, name_stack=name_stack), eqn.ctx.manager:
       should_discharge = [id(v.aval) in refs_to_discharge for v in eqn.invars]
-      if eqn.primitive is core.mutable_array_p:
+      if eqn.primitive is core.ref_p:
         [invar], [outvar] = eqn.invars, eqn.outvars
         ans = env.read(invar)
+        if config.refs_to_pins.value:
+          ans = pin(ans)
         refs_to_discharge.add(id(outvar.aval))
       elif eqn.primitive is core.freeze_p:
         [invar], [outvar] = eqn.invars, eqn.outvars
         ans = env.read(invar)
+        if config.refs_to_pins.value:
+          ans = unpin(ans)
         refs_to_discharge.remove(id(invar.aval))
       elif any(should_discharge) or core.internal_mutable_array_effect in eqn.effects:
         if eqn.primitive in _partial_discharge_rules:
@@ -359,7 +364,7 @@ def _convert_to_gather_arrays(indexer: indexing.NDIndexer) -> tuple[Array, ...]:
       diff = len(total_shape) - idx_in_shape_after_indexing - 1
       arr = arr.reshape(arr.shape + (1,) * diff)
       arrs.append(arr)
-    elif isinstance(idxer, (np.ndarray, Array, literals.LiteralArray)):
+    elif isinstance(idxer, (np.ndarray, Array, literals.TypedNdArray)):
       diff = n_idxers - 1 - last_int_index_idx
       arr = idxer.reshape(idxer.shape + (1,) * diff)
       arrs.append(arr)
@@ -525,6 +530,8 @@ def _addupdate_discharge_rule(
 
 def _addupdate_discharge(x, val, idx, tree):
   transforms = tree_util.tree_unflatten(tree, idx)
+  if not transforms:
+    return x + val
   if len(transforms) > 1:
     raise NotImplementedError("Only single indexer is supported.")
   indexer = transforms[0]

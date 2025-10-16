@@ -1,6 +1,6 @@
 [project]
 name = "python-socketio"
-version = "5.14.1"
+version = "5.14.2"
 license = {text = "MIT"}
 authors = [
     { name = "Miguel Grinberg", email = "miguel.grinberg@gmail.com" },
@@ -33,6 +33,9 @@ client = [
 ]
 asyncio_client = [
     "aiohttp >= 3.4",
+]
+dev = [
+    "tox",
 ]
 docs = [
     "sphinx",

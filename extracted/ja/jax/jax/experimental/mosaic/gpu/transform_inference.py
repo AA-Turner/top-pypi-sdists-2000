@@ -31,10 +31,8 @@ from jax._src.lib.mlir.dialects import llvm
 from jax._src.lib.mlir.dialects import memref
 from jax._src.lib.mlir.dialects import vector
 
-from . import fragmented_array as fa
 from . import inference_utils
 from . import layouts as layouts_lib
-from . import tcgen05
 from . import utils
 
 
@@ -127,8 +125,7 @@ def _infer_transforms_for_mma_ref(
     raise ValueError(f"Expected a 2D memref, got {ref_ty}")
 
   element_bytewidth = utils.bytewidth(ref_ty.element_type)
-  strides, _ = ref_ty.get_strides_and_offset()
-  transposed = strides[0] < strides[1]
+  transposed = utils.is_memref_transposed(ref_ty)
   minor_dim = ref_ty.shape[0 if transposed else 1]
   major_tiling = 8
 
@@ -232,26 +229,16 @@ def _infer_vector_load_store_transforms(
     [layout_attr] = inference_utils.in_layouts(op)
 
   layout = layouts_lib.from_layout_attr(layout_attr)
-  transforms = inference_utils.value_transforms(op.base)
-
-  if layout == fa.WGMMA_LAYOUT:
+  if inference_utils.is_mma_layout(layout):
+    base_type = ir.MemRefType(op.base.type)
     layout_transforms, _ = _infer_transforms_for_mma_ref(
-        ir.MemRefType(op.base.type),
+        base_type,
         max_swizzle=mgpu.SwizzlingMode.k128ByteSwizzle,
     )
-  elif (
-      layout == fa.WGMMA_ROW_LAYOUT
-      or layout == fa.WGMMA_COL_LAYOUT
-      or layout == tcgen05.TMEM_NATIVE_LAYOUT
-      or isinstance(layout, fa.WGStridedFragLayout)
-      or isinstance(layout, fa.WGSplatFragLayout)
-  ):
-    layout_transforms = None
   else:
-    raise NotImplementedError(
-        f"Got layout {layout} which is not yet supported"
-    )
+    layout_transforms = None
 
+  transforms = inference_utils.value_transforms(op.base)
   transforms = _resolve_transforms(transforms, layout_transforms)
   return None if transforms is None else ([transforms], [])
 
@@ -329,6 +316,9 @@ def _infer_memref_subview_transforms(
 
   if transforms is None:
     return None
+  if not transforms:
+    empty = ir.ArrayAttr.get([])
+    return [empty], [empty]
 
   # Here, we have some transforms to propagate one way or the other. For now,
   # we implement only the following basic propagation rules:

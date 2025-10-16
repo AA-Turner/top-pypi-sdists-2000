@@ -204,7 +204,7 @@ class AsyncCopyDescriptor:
 
   def _get_args_and_tree(self, swap_src_and_dst: bool = False):
     if swap_src_and_dst:
-      return tree_util.tree_flatten((
+      return _dma_flatten(
           self.dst_ref,
           self.dst_transforms,
           self.src_ref,
@@ -214,9 +214,9 @@ class AsyncCopyDescriptor:
           self.dst_sem,
           self.dst_sem_transforms,
           self.device_id,
-      ))
+      )
     else:
-      return tree_util.tree_flatten((
+      return _dma_flatten(
           self.src_ref,
           self.src_transforms,
           self.dst_ref,
@@ -226,7 +226,7 @@ class AsyncCopyDescriptor:
           self.src_sem,
           self.src_sem_transforms,
           self.device_id,
-      ))
+      )
 
   def start(self, priority: int = 0):
     self._used = True
@@ -261,6 +261,91 @@ class AsyncCopyDescriptor:
     dma_wait_p.bind(
         *flat_args, tree=tree, device_id_type=self.device_id_type
     )
+
+
+def _dma_flatten(
+    src_ref,
+    src_transforms,
+    dst_ref,
+    dst_transforms,
+    dst_sem,
+    dst_sem_transforms,
+    src_sem,
+    src_sem_transforms,
+    device_id,
+):
+  return tree_util.tree_flatten((
+      src_ref,
+      _maybe_wrap_transformed_refs(src_transforms),
+      dst_ref,
+      _maybe_wrap_transformed_refs(dst_transforms),
+      dst_sem,
+      dst_sem_transforms,
+      src_sem,
+      src_sem_transforms,
+      device_id,
+  ))
+
+
+def _dma_unflatten(tree, flat_args):
+  (
+      src_ref,
+      src_transforms,
+      dst_ref,
+      dst_transforms,
+      dst_sem,
+      dst_sem_transforms,
+      src_sem,
+      src_sem_transforms,
+      device_id,
+  ) = tree_util.tree_unflatten(tree, flat_args)
+  return (
+      src_ref,
+      _maybe_unwrap_transformed_refs(src_transforms),
+      dst_ref,
+      _maybe_unwrap_transformed_refs(dst_transforms),
+      dst_sem,
+      dst_sem_transforms,
+      src_sem,
+      src_sem_transforms,
+      device_id,
+  )
+
+
+def _maybe_wrap_transformed_refs(transforms: Any) -> Any:
+  return jax.tree.map(
+      lambda obj: _maybe_wrap_transformed_refs(TransformedRefTree.wrap(obj))
+      if isinstance(obj, state.TransformedRef)
+      else obj,
+      transforms,
+  )
+
+
+def _maybe_unwrap_transformed_refs(transforms: Any) -> Any:
+  return jax.tree.map(
+      lambda obj: _maybe_unwrap_transformed_refs(obj.unwrap())
+      if isinstance(obj, TransformedRefTree)
+      else obj,
+      transforms,
+      is_leaf=lambda obj: isinstance(obj, TransformedRefTree),
+  )
+
+
+@jax.tree_util.register_dataclass
+@dataclasses.dataclass(frozen=True)
+class TransformedRefTree(state.TransformedRef):
+  """A PyTree wrapper for a ``TransformedRef``.
+
+  The wrapper is necessary to support the case when a ``TransformedRef`` is
+  indexed with other ``TransformedRef``s.
+  """
+
+  @classmethod
+  def wrap(cls, ref: state.TransformedRef) -> TransformedRefTree:
+    return cls(ref.ref, ref.transforms)
+
+  def unwrap(self) -> state.TransformedRef:
+    return state.TransformedRef(self.ref, self.transforms)
 
 
 def _get_dma_effects(
@@ -303,7 +388,7 @@ def _dma_start_abstract_eval(*args, tree, device_id_type, priority):
       src_sem_aval,
       src_sem_transforms_avals,
       device_id_aval,
-  ) = tree_util.tree_unflatten(tree, args)
+  ) = _dma_unflatten(tree, args)
   if not all(isinstance(x, state.AbstractRef) for x in [
       src_ref_aval, dst_ref_aval, dst_sem_aval]):
     raise ValueError(
@@ -349,7 +434,7 @@ def _dma_start_pp_eqn(eqn: jax_core.JaxprEqn,
       src_sem,
       src_sem_transforms,
       device_id,
-  ) = tree_util.tree_unflatten(tree, invars)
+  ) = _dma_unflatten(tree, invars)
   del src_sem_transforms
   # TODO(sharadmv): pretty print source semaphores and device id
   if src_sem or device_id:
@@ -382,7 +467,7 @@ def dma_start_partial_discharge_rule(
       src_sem,
       src_sem_transforms,
       device_id,
-  ) = tree_util.tree_unflatten(tree, args)
+  ) = _dma_unflatten(tree, args)
   (
       _,
       src_transforms_avals,
@@ -393,7 +478,7 @@ def dma_start_partial_discharge_rule(
       src_sem_aval,
       src_sem_transforms_avals,
       _,
-  ) = tree_util.tree_unflatten(tree, in_avals)
+  ) = _dma_unflatten(tree, in_avals)
   del out_avals
 
   (
@@ -404,7 +489,7 @@ def dma_start_partial_discharge_rule(
       dst_sem_discharge,
       _,
       *maybe_src_sem_discharge,
-  ) = tree_util.tree_unflatten(tree, should_discharge)
+  ) = _dma_unflatten(tree, should_discharge)
   is_remote = device_id is not None
   src_sem_discharge = None
 
@@ -560,7 +645,7 @@ def _dma_wait_abstract_eval(*args, tree, device_id_type):
       src_sem_aval,
       src_sem_transforms_avals,
       device_id_aval,
-  ) = tree_util.tree_unflatten(tree, args)
+  ) = _dma_unflatten(tree, args)
   return [], _get_dma_effects(
       src_transforms_avals,
       dst_transforms_avals,
@@ -584,7 +669,7 @@ def _dma_wait_pp_eqn(eqn: jax_core.JaxprEqn,
       _,
       _,
       _,
-  ) = tree_util.tree_unflatten(tree, invars)
+  ) = _dma_unflatten(tree, invars)
   return pp.concat([
       pp.text("dma_wait"),
       pp.text(" "),
@@ -601,8 +686,10 @@ def dma_wait_partial_discharge_rule(should_discharge,
   # TODO(b/370563115): perform ref update in dma_wait discharge rule instead of dma_start
   del out_avals, device_id_type
   _, _, dst_ref, dst_ref_transforms, dst_sem, dst_sem_transforms, _, _, _ = (
-      tree_util.tree_unflatten(tree, args))
-  (_,
+      _dma_unflatten(tree, args)
+  )
+  (
+      _,
       src_ref_transforms_avals,
       _,
       dst_ref_transforms_avals,
@@ -611,12 +698,12 @@ def dma_wait_partial_discharge_rule(should_discharge,
       src_sem_aval,
       src_sem_transforms_avals,
       device_id_aval,
-  ) = tree_util.tree_unflatten(tree, in_avals)
+  ) = _dma_unflatten(tree, in_avals)
 
   # The only one we can discharge is the dst semaphore. The provided
   # buffers are only specified for their types and not their value so
   # it's completely irrelevant for us here if they are discharged.
-  should_discharge_unflattened = tree_util.tree_unflatten(tree, should_discharge)
+  should_discharge_unflattened = _dma_unflatten(tree, should_discharge)
   if not should_discharge_unflattened[4]:
     return (None,) * len(in_avals), []
 

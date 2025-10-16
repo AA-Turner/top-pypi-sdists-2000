@@ -27,7 +27,6 @@ from jax._src import api
 from jax._src import basearray
 from jax._src import config
 from jax._src import core
-from jax._src import deprecations
 from jax._src import dispatch
 from jax._src import dtypes
 from jax._src import errors
@@ -39,7 +38,6 @@ from jax._src.op_shardings import are_hlo_shardings_equal
 from jax._src.interpreters import mlir
 from jax._src.interpreters import pxla
 from jax._src.layout import AutoLayout, Format, Layout
-from jax._src.lib import jaxlib_extension_version
 from jax._src.lib import _jax
 from jax._src.lib import xla_client as xc
 from jax._src.mesh import empty_concrete_mesh
@@ -125,16 +123,6 @@ def _reconstruct_array(fun, args, arr_state, aval_state):
   np_value = fun(*args)
   np_value.__setstate__(arr_state)
   jnp_value = api.device_put(np_value)
-  # TODO(slebedev): Remove this branch after December 10th 2024.
-  if "named_shape" in aval_state:
-    deprecations.warn(
-        "jax-aval-named-shape",
-        "Pickled array contains an aval with a named_shape attribute. This is"
-        " deprecated and the code path supporting such avals will be removed."
-        " Please re-pickle the array.",
-        stacklevel=2,
-    )
-    del aval_state["named_shape"]
   jnp_value.aval = jnp_value.aval.update(**aval_state)
   return jnp_value
 
@@ -166,7 +154,7 @@ def _process_has_full_value_in_mcjax(s, shape):
 
 
 def _validate_shape_and_dtype_for_per_device_arrays(
-    arrays: Sequence[ArrayImpl | np.ndarray | literals.LiteralArray],
+    arrays: Sequence[ArrayImpl | np.ndarray | literals.TypedNdArray],
     sharding: Sharding,
     aval: core.ShapedArray,
     expected_shape: Shape,
@@ -560,7 +548,7 @@ class ArrayImpl(basearray.Array):
     try:
       return Format(Layout.from_pjrt_layout(self._pjrt_layout),
                     self.sharding)
-    except _jax.XlaRuntimeError as e:
+    except _jax.JaxRuntimeError as e:
       msg, *_ = e.args
       if type(msg) is str and msg.startswith("UNIMPLEMENTED"):
         return Format(None, self.sharding)
@@ -690,7 +678,7 @@ def _get_shape_from_index(slc: Index, shape: Shape) -> Shape:
 
 
 def _get_and_check_dtype(
-    arrays: Sequence[basearray.Array | np.ndarray | literals.LiteralArray],
+    arrays: Sequence[basearray.Array | np.ndarray | literals.TypedNdArray],
     dtype: DTypeLike | ExtendedDType | None,
     fname: str,
 ):
@@ -776,7 +764,7 @@ def make_array_from_callback(
 
   def get_data(
       index: Index | None,
-  ) -> ArrayImpl | literals.LiteralArray | np.ndarray:
+  ) -> ArrayImpl | literals.TypedNdArray | np.ndarray:
     # Perhaps cache on index here, then we can unify fully_replicated
     # and non-fully_replicated cases below and become faster for
     # partially replicated cases.
@@ -789,13 +777,11 @@ def make_array_from_callback(
       )
     # Value can be python scalars, resolve it into something with dtype.
     r = dtypes.canonicalize_value(r)
-    if isinstance(r, (literals.LiteralInt, literals.LiteralFloat,
-                      literals.LiteralComplex)):
-      r = literals.LiteralArray(np.asarray(r, dtype=r.dtype), weak_type=False)
+    if isinstance(r, (literals.TypedInt, literals.TypedFloat,
+                      literals.TypedComplex)):
+      r = literals.TypedNdArray(np.asarray(r, dtype=r.dtype), weak_type=False)
     elif isinstance(r, bool):
-      r = literals.LiteralArray(np.asarray(r, dtype=np.bool_), weak_type=False)
-    if jaxlib_extension_version < 372 and isinstance(r, literals.LiteralArray):
-      r = np.asarray(r)
+      r = literals.TypedNdArray(np.asarray(r, dtype=np.bool_), weak_type=False)
     return r
 
   if sharding.is_fully_replicated:

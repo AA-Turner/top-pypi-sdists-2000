@@ -29,6 +29,7 @@ from jax._src import core as jax_core
 from jax._src import frozen_dict
 from jax._src import sharding_impls
 from jax._src import tpu_custom_call
+from jax._src.state import types as state_types
 from jax._src.interpreters import mlir
 from jax._src.lib.mlir import ir
 from jax._src.lib.mlir import passmanager
@@ -49,7 +50,8 @@ def _maybe_cast_to_int(x: jax.Array | jax_core.AbstractValue):
   after loading from a memref inside of the kernel.
   """
   assert isinstance(
-      x, (jax.Array, jax_core.ShapedArray, jax_core.DShapedArray)
+      x, (jax.Array, jax_core.ShapedArray, jax_core.DShapedArray,
+          state_types.AbstractLinVal)
   ), type(x)
   if isinstance(x, jax.Array):
     if dtypes.issubdtype(x.dtype, jax.numpy.bool_):
@@ -57,6 +59,8 @@ def _maybe_cast_to_int(x: jax.Array | jax_core.AbstractValue):
     return x
   else:
     if dtypes.issubdtype(x.dtype, jax.numpy.bool_):
+      if isinstance(x, state_types.AbstractLinVal):
+        raise NotImplementedError  # TODO(mattjj,sharadmv)
       return jax_core.ShapedArray(x.shape, lowering.BOOL_MEMREF_TYPE)
     return x
 
@@ -151,14 +155,13 @@ def _tc_lowering_rule(
           dynamic_shape_replacement_enabled=pallas_core.dynamic_shapes_export_enabled(),
       )
 
-  mosaic_module, extra_args = lower_module(for_verification=False)
+  mosaic_module = lower_module(for_verification=False)
   if debug:
     print(f"\nThe Mosaic module for pallas_call {debug_info.func_src_info}:")
     print(mosaic_module)
-  num_extra_args = len(extra_args)
   num_dyn_bounds = grid_mapping.num_dynamic_grid_bounds
   input_output_aliases = tuple(
-      (a[0] + num_dyn_bounds + num_extra_args, a[1])
+      (a[0] + num_dyn_bounds, a[1])
       for a in input_output_aliases
   )
 
@@ -169,7 +172,7 @@ def _tc_lowering_rule(
         if jax_mesh is None
         else jax_mesh.devices[0].num_cores
     )
-    verification_module, _ = lower_module(for_verification=True)
+    verification_module = lower_module(for_verification=True)
     model = verification.export_promela_model(
         verification_module, num_devices, num_cores
     )
@@ -206,7 +209,7 @@ def _tc_lowering_rule(
     return args
 
   kernel_in_avals = [_maybe_cast_to_int(x) for x in ctx.avals_in]
-  kernel_out_avals = [_maybe_cast_to_int(x) for x in out_avals]
+  kernel_out_avals = [_maybe_cast_to_int(x) for x in ctx.avals_out]
   cast_ctx = ctx.replace(avals_out=kernel_in_avals)
   in_nodes = mlir.lower_fun(_maybe_cast_inputs)(cast_ctx, *in_nodes)
 
@@ -219,11 +222,10 @@ def _tc_lowering_rule(
       isinstance(aval, pallas_core.ShapedArrayWithMemorySpace)
       for aval in ctx.avals_in
   ):
-    # TODO(sharadmv): Support dynamic grid bounds and extra args.
-    if num_dyn_bounds != 0 or len(extra_args) > 0:
+    # TODO(sharadmv): Support dynamic grid bounds.
+    if num_dyn_bounds != 0:
       raise NotImplementedError(
-          "Dynamic grid bounds and extra args are not supported when"
-          " specifying memory spaces for inputs."
+          "Dynamic grid bounds are not supported when specifying memory spaces for inputs."
       )
     input_memory_spaces = _get_memory_spaces_from_avals(ctx.avals_in)
   if cost_estimate is not None:
@@ -258,7 +260,6 @@ def _tc_lowering_rule(
   out_nodes = mosaic.lower_module_to_custom_call(
       kernel_ctx,
       *dynamic_grid_args,
-      *extra_args,
       *args,
       module=mosaic_module,
       out_type=kernel_out_avals,
@@ -278,6 +279,7 @@ def _tc_lowering_rule(
       metadata=dict(metadata) if metadata is not None else None,
       skip_device_barrier=mosaic_params.skip_device_barrier,
       allow_collective_id_without_custom_barrier=mosaic_params.allow_collective_id_without_custom_barrier,
+      shape_invariant_numerics=mosaic_params.shape_invariant_numerics,
   )
   _maybe_cast_to_bool = (
       lambda x, aval: x.astype(jax.numpy.bool_)

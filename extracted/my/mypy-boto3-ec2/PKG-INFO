@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: mypy-boto3-ec2
-Version: 1.40.52
-Summary: Type annotations for boto3 EC2 1.40.52 service generated with mypy-boto3-builder 8.11.0
+Version: 1.40.53
+Summary: Type annotations for boto3 EC2 1.40.53 service generated with mypy-boto3-builder 8.11.0
 Home-page: https://github.com/youtype/mypy_boto3_builder
 Author: Vlad Emelianov
 Author-email: vlad.emelianov.nz@gmail.com
@@ -56,7 +56,7 @@ Dynamic: summary
 
 ![boto3.typed](https://github.com/youtype/mypy_boto3_builder/raw/main/logo.png)
 
-Type annotations for [boto3 EC2 1.40.52](https://pypi.org/project/boto3/)
+Type annotations for [boto3 EC2 1.40.53](https://pypi.org/project/boto3/)
 compatible with [VSCode](https://code.visualstudio.com/),
 [PyCharm](https://www.jetbrains.com/pycharm/),
 [Emacs](https://www.gnu.org/software/emacs/),
@@ -123,7 +123,7 @@ You can generate type annotations for `boto3` package locally with
 isolation.
 
 1. Run mypy-boto3-builder in your package root directory:
-   `uvx --with 'boto3==1.40.52' mypy-boto3-builder`
+   `uvx --with 'boto3==1.40.53' mypy-boto3-builder`
 2. Select `boto3-stubs` AWS SDK.
 3. Add `EC2` service.
 4. Use provided commands to install generated packages.
@@ -390,6 +390,7 @@ from mypy_boto3_ec2.paginator import (
     DescribeCapacityBlockOfferingsPaginator,
     DescribeCapacityBlockStatusPaginator,
     DescribeCapacityBlocksPaginator,
+    DescribeCapacityManagerDataExportsPaginator,
     DescribeCapacityReservationBillingRequestsPaginator,
     DescribeCapacityReservationFleetsPaginator,
     DescribeCapacityReservationsPaginator,
@@ -513,6 +514,8 @@ from mypy_boto3_ec2.paginator import (
     DescribeVpcsPaginator,
     GetAssociatedIpv6PoolCidrsPaginator,
     GetAwsNetworkPerformanceDataPaginator,
+    GetCapacityManagerMetricDataPaginator,
+    GetCapacityManagerMetricDimensionsPaginator,
     GetGroupsForCapacityReservationPaginator,
     GetInstanceTypesFromInstanceRequirementsPaginator,
     GetIpamAddressHistoryPaginator,
@@ -569,6 +572,9 @@ describe_capacity_block_status_paginator: DescribeCapacityBlockStatusPaginator =
 )
 describe_capacity_blocks_paginator: DescribeCapacityBlocksPaginator = client.get_paginator(
     "describe_capacity_blocks"
+)
+describe_capacity_manager_data_exports_paginator: DescribeCapacityManagerDataExportsPaginator = (
+    client.get_paginator("describe_capacity_manager_data_exports")
 )
 describe_capacity_reservation_billing_requests_paginator: DescribeCapacityReservationBillingRequestsPaginator = client.get_paginator(
     "describe_capacity_reservation_billing_requests"
@@ -918,6 +924,12 @@ get_associated_ipv6_pool_cidrs_paginator: GetAssociatedIpv6PoolCidrsPaginator = 
 )
 get_aws_network_performance_data_paginator: GetAwsNetworkPerformanceDataPaginator = (
     client.get_paginator("get_aws_network_performance_data")
+)
+get_capacity_manager_metric_data_paginator: GetCapacityManagerMetricDataPaginator = (
+    client.get_paginator("get_capacity_manager_metric_data")
+)
+get_capacity_manager_metric_dimensions_paginator: GetCapacityManagerMetricDimensionsPaginator = (
+    client.get_paginator("get_capacity_manager_metric_dimensions")
 )
 get_groups_for_capacity_reservation_paginator: GetGroupsForCapacityReservationPaginator = (
     client.get_paginator("get_groups_for_capacity_reservation")

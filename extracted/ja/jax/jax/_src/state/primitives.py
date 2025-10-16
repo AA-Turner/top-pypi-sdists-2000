@@ -35,6 +35,7 @@ from jax._src.lax import lax
 from jax._src.state import indexing
 from jax._src.state.types import (
     AbstractRef,
+    AbstractLinVal,
     AccumEffect,
     ReadEffect,
     Transform,
@@ -69,8 +70,12 @@ batching.ragged_prop_rules[get_p] = batching.ragged_mask_transfer_identity
 
 get_p.is_high = lambda ref_aval, *_, tree: ref_aval.is_high  # type: ignore
 def _get_to_lojax(ref, *idx, tree):
-  if idx: raise NotImplementedError
   val_ty = core.typeof(ref._refs)
+  transforms = tree_util.tree_unflatten(tree, idx)
+  if transforms:
+    ref = TransformedRef(ref, transforms[:-1])
+    idx = transforms[-1]
+    return val_ty.ref_get_to_lojax(ref, idx)
   return val_ty.raise_val(*map(ref_get, val_ty.lower_val(ref._refs)))
 get_p.to_lojax = _get_to_lojax  # type: ignore
 
@@ -81,7 +86,6 @@ def get_ref_and_transforms(
     ref_or_view: Any,
     idx: Indexer | tuple[Indexer, ...] | None,
     function_name: str,
-    force_trailing_indexer: bool = True,  # TODO(apaszke): Clean this up.
 ) -> tuple[Any, tuple[Transform, ...]]:
   if isinstance(ref_or_view, TransformedRef):
     ref, transforms = ref_or_view.ref, ref_or_view.transforms
@@ -90,7 +94,8 @@ def get_ref_and_transforms(
   ref_aval = core.get_aval(ref)
   if not isinstance(ref_aval, AbstractRef):
     raise ValueError(f"Can only call `{function_name}` on a `Ref`: {ref}.")
-  if not isinstance(ref_aval.inner_aval, core.ShapedArray):
+  if (not isinstance(ref_aval.inner_aval, core.ShapedArray)
+      and not ref_aval.inner_aval.is_high):
     return ref, ()
 
   if idx is None or idx is Ellipsis:
@@ -98,7 +103,7 @@ def get_ref_and_transforms(
   elif not isinstance(idx, tuple):
     idx = (idx,)
 
-  if not idx and not force_trailing_indexer:
+  if not idx:
     return ref, transforms
   if not idx and transforms and isinstance(transforms[-1], indexing.NDIndexer):
     return ref, transforms
@@ -124,7 +129,7 @@ def ref_get(
 
   Examples:
     >>> import jax
-    >>> ref = jax.array_ref(jax.numpy.arange(5))
+    >>> ref = jax.new_ref(jax.numpy.arange(5))
     >>> jax.ref.get(ref, slice(1, 3))
     Array([1, 2], dtype=int32)
 
@@ -165,6 +170,22 @@ swap_p = core.Primitive("swap")
 swap_p.is_effectful = lambda params: True  # type: ignore
 swap_p.def_impl(partial(dispatch.apply_primitive, swap_p))
 
+swap_p.is_high = lambda ref_aval, *_, tree: ref_aval.is_high  # type: ignore
+def _swap_to_lojax(ref, val, *idx, tree):
+  ref_val_ty = core.typeof(ref._refs)
+  val_ty = core.typeof(val)
+  transforms = tree_util.tree_unflatten(tree, idx)
+  if transforms:
+    ref = TransformedRef(ref, transforms[:-1])
+    idx = transforms[-1]
+    return ref_val_ty.ref_swap_to_lojax(ref, val, idx)
+  lo_refs = ref_val_ty.lower_val(ref._refs)
+  lo_vals = val_ty.lower_val(val)
+  outs = [ref_swap(lo_ref, idx, lo_val) for lo_ref, lo_val
+          in zip(lo_refs, lo_vals)]
+  return val_ty.raise_val(*outs)
+swap_p.to_lojax = _swap_to_lojax  # type: ignore
+
 
 def swap_ragged_prop_rule(eqn_params, invar_raggedness, outvars):
   assert len(invar_raggedness) == 2
@@ -182,7 +203,7 @@ def ref_swap(
     value: Array,
     _function_name: str = "ref_swap",
 ) -> Array:
-  """Set an array value inplace while returning the existing value.
+  """Update an array value inplace while returning the previous value.
 
   This is equivalent to ``ref[idx], prev = value, ref[idx]`` while returning
   ``prev``, for a NumPy-style indexer ``idx``.
@@ -200,7 +221,7 @@ def ref_swap(
 
   Examples:
     >>> import jax
-    >>> ref = jax.array_ref(jax.numpy.arange(5))
+    >>> ref = jax.new_ref(jax.numpy.arange(5))
     >>> jax.ref.swap(ref, 3, 10)
     Array(3, dtype=int32)
     >>> ref
@@ -208,7 +229,7 @@ def ref_swap(
 
     Equivalent operation via indexing syntax:
 
-    >>> ref = jax.array_ref(jax.numpy.arange(5))
+    >>> ref = jax.new_ref(jax.numpy.arange(5))
     >>> ref[3], prev = 10, ref[3]
     >>> prev
     Array(3, dtype=int32)
@@ -217,7 +238,7 @@ def ref_swap(
 
     Use ``...`` to swap the value of a scalar ref:
 
-    >>> ref = jax.array_ref(jax.numpy.int32(5))
+    >>> ref = jax.new_ref(jax.numpy.int32(5))
     >>> jax.ref.swap(ref, ..., 10)
     Array(5, dtype=int32)
     >>> ref
@@ -225,7 +246,6 @@ def ref_swap(
 
   .. _Ref guide: https://docs.jax.dev/en/latest/array_refs.html
   """
-  "Sets a ref's value as `ref[idx], prev = value, ref[idx]` and returns `prev`."
   if hasattr(ref, 'dtype'):
     value = _maybe_implicit_cast(ref.dtype, value)
   ref, transforms = get_ref_and_transforms(ref, idx, _function_name)
@@ -237,6 +257,8 @@ def ref_swap(
 #     value == np.array(value, dtype).item()): return cast
 def _maybe_implicit_cast(dtype, value):
   aval = core.typeof(value)
+  if not isinstance(aval, core.ShapedArray):
+    return value
   if (aval.weak_type and
       (dtypes.issubdtype(dtype, np.floating) and
        dtypes.issubdtype(aval.dtype, np.floating)) or
@@ -268,21 +290,21 @@ def ref_set(
 
   Examples:
     >>> import jax
-    >>> ref = jax.array_ref(jax.numpy.zeros(5))
+    >>> ref = jax.new_ref(jax.numpy.zeros(5))
     >>> jax.ref.set(ref, 1, 10.0)
     >>> ref
     Ref([ 0., 10.,  0.,  0.,  0.], dtype=float32)
 
     Equivalent operation via indexing syntax:
 
-    >>> ref = jax.array_ref(jax.numpy.zeros(5))
+    >>> ref = jax.new_ref(jax.numpy.zeros(5))
     >>> ref[1] = 10.0
     >>> ref
     Ref([ 0., 10.,  0.,  0.,  0.], dtype=float32)
 
     Use ``...`` to set the value of a scalar ref:
 
-    >>> ref = jax.array_ref(jax.numpy.int32(0))
+    >>> ref = jax.new_ref(jax.numpy.int32(0))
     >>> ref[...] = 4
     >>> ref
     Ref(4, dtype=int32)
@@ -334,21 +356,21 @@ def ref_addupdate(
 
   Examples:
     >>> import jax
-    >>> ref = jax.array_ref(jax.numpy.arange(5))
+    >>> ref = jax.new_ref(jax.numpy.arange(5))
     >>> jax.ref.addupdate(ref, 2, 10)
     >>> ref
     Ref([ 0,  1, 12,  3,  4], dtype=int32)
 
     Equivalent operation via indexing syntax:
 
-    >>> ref = jax.array_ref(jax.numpy.arange(5))
+    >>> ref = jax.new_ref(jax.numpy.arange(5))
     >>> ref[2] += 10
     >>> ref
     Ref([ 0,  1, 12,  3,  4], dtype=int32)
 
     Use ``...`` to add to a scalar ref:
 
-    >>> ref = jax.array_ref(jax.numpy.int32(2))
+    >>> ref = jax.new_ref(jax.numpy.int32(2))
     >>> ref[...] += 10
     >>> ref
     Ref(12, dtype=int32)
@@ -391,6 +413,8 @@ def _sharding_after_transforming(sharding, transforms):
 def _get_abstract_eval(ref_aval: AbstractRef, *args,
                        tree):
   transforms = tree_util.tree_unflatten(tree, args)
+  if transforms and ref_aval.inner_aval.is_high:
+    return ref_aval.inner_aval.ref_get_abstract_eval(ref_aval, *args, tree=tree)
   if not isinstance(ref_aval, AbstractRef):
     raise ValueError(f"`get` must be called on `Ref` types: {ref_aval}.")
   if isinstance(ref_aval.inner_aval, core.ShapedArray):
@@ -410,6 +434,9 @@ def _swap_abstract_eval(ref_aval: AbstractRef,
                         val_aval: core.AbstractValue,
                         *args: Any, tree):
   transforms = tree_util.tree_unflatten(tree, args)
+  if transforms and ref_aval.inner_aval.is_high:
+    return ref_aval.inner_aval.ref_swap_abstract_eval(
+        ref_aval, val_aval, *args, tree=tree)
   out_aval: core.AbstractValue
   if not isinstance(ref_aval, AbstractRef):
     raise ValueError(f"`swap` must be called on `Ref` types: {ref_aval}.")
@@ -450,6 +477,7 @@ def _addupdate_abstract_eval(ref_aval: AbstractRef,
   if isinstance(ref_aval.inner_aval, core.ShapedArray):
     out_shape = _shape_after_transforming(ref_aval.shape, transforms)
     out_dtype = _dtype_after_transforming(ref_aval.dtype, transforms)
+    out_sharding = _sharding_after_transforming(ref_aval.sharding, transforms)
     assert isinstance(val_aval, core.ShapedArray)
     if out_shape != val_aval.shape:
       raise ValueError(
@@ -463,6 +491,12 @@ def _addupdate_abstract_eval(ref_aval: AbstractRef,
       raise ValueError("Invalid dtype for `addupdate`. "
                        f"Ref dtype: {ref_aval.dtype}. "
                        f"Value shape: {val_aval.dtype}. ")
+    if ((out_sharding.mesh._any_axis_explicit or
+         val_aval.sharding.mesh._any_axis_explicit) and
+        out_sharding != val_aval.sharding):
+      raise ValueError("Invalid sharding for `addupdate`. "
+                       f"Ref sharding: {ref_aval.sharding}. "
+                       f"Value sharding: {val_aval.sharding}. ")
   else:
     # Check that the transforms are valid
     if transforms:
@@ -622,7 +656,7 @@ def _swap_transpose_fancy(g, ref_, x, *idx, **params):
 ad.fancy_transposes[swap_p] = _swap_transpose_fancy
 
 def addupdate_transpose_fancy(cts_in, ref_, x, *idx, **params):
-  if ref_.ref is not None:
+  if ref_.ref is not None and isinstance(x, ad.GradAccum):
     x_bar = get_p.bind(ref_.ref, *idx, **params)
     x.accum(x_bar)
 ad.fancy_transposes[addupdate_p] = addupdate_transpose_fancy
@@ -639,17 +673,25 @@ def _array_ref_partial_eval_custom(saveable, unks_in, inst_in, eqn):
     return None, eqn, [True], [True], res  # tangent operation
   else:
     return eqn, eqn, [False], [True], res  # full remat
-pe.partial_eval_jaxpr_custom_rules[core.array_ref_p] = _array_ref_partial_eval_custom
+pe.partial_eval_jaxpr_custom_rules[core.ref_p] = _array_ref_partial_eval_custom
 
 def _array_ref_batched(axis_data, vals_in, dims_in, memory_space):
   val, = vals_in
   dim, = dims_in
   if dim is None:
-    val2 = batching.broadcast(val, axis_data.size, 0)
-    return core.array_ref_p.bind(val2, memory_space=memory_space), 0
+    # We defensively batch the ref, b/c it could later be hit with a batched val
+    val2 = batching.broadcast(val, axis_data.size, 0,
+                              axis_data.explicit_mesh_axis)
+    return core.ref_p.bind(val2, memory_space=memory_space), 0
   else:
-    return core.array_ref_p.bind(val, memory_space=memory_space), dim
-batching.fancy_primitive_batchers[core.array_ref_p] = _array_ref_batched
+    return core.ref_p.bind(val, memory_space=memory_space), dim
+batching.fancy_primitive_batchers[core.ref_p] = _array_ref_batched
+
+def _freeze_batched(axis_data, vals_in, dims_in):
+  ref, = vals_in
+  dim, = dims_in
+  return core.freeze_p.bind(ref), dim
+batching.fancy_primitive_batchers[core.freeze_p] = _freeze_batched
 
 def _state_partial_eval_custom(saveable, unks_in, inst_in, eqn):
   del saveable  # ignored, always full remat state ops on known inputs
@@ -664,7 +706,19 @@ def _state_partial_eval_custom(saveable, unks_in, inst_in, eqn):
     return eqn, eqn, [False], [True], res  # full remat
 pe.partial_eval_jaxpr_custom_rules[get_p] = _state_partial_eval_custom
 pe.partial_eval_jaxpr_custom_rules[swap_p] = _state_partial_eval_custom
-pe.partial_eval_jaxpr_custom_rules[addupdate_p] = _state_partial_eval_custom
+
+def _addupdate_partial_eval_custom(saveable, unks_in, inst_in, eqn):
+  del saveable  # ignored, always full remat state ops on known inputs
+  ref_unk, *_ = unks_in
+  ref_inst, *inst_in = inst_in
+  _, *val_vars = eqn.invars
+  assert ref_inst
+  res = [v for v, inst in zip(val_vars, inst_in) if not inst]
+  if ref_unk:
+    return None, eqn, [], [], res  # tangent operation
+  else:
+    return eqn, eqn, [], [], res  # full remat
+pe.partial_eval_jaxpr_custom_rules[addupdate_p] = _addupdate_partial_eval_custom
 
 ##  get/swap/addupdate batching rules
 
@@ -763,8 +817,12 @@ def _batch_indexer(
                                       bcast_dims)
       new_indices.append(idx)
   if ref_dim is not batching.not_mapped:
-    iota = lax.broadcasted_iota(np.dtype('int32'), new_integer_indexer_shape, 0)
-    new_indices.insert(ref_dim, iota)
+    if indexer.int_indexer_shape:
+      batch_idx = lax.broadcasted_iota(
+          np.dtype('int32'), new_integer_indexer_shape, 0)
+    else:
+      batch_idx = indexing.Slice(0, axis_size)  # type: ignore
+    new_indices.insert(ref_dim, batch_idx)
   return indexing.NDIndexer(
       tuple(new_indices), ref_shape, new_integer_indexer_shape, validate=True
   )
@@ -775,12 +833,15 @@ def _get_vmap(batched_args, batched_dims, *, tree):
   ref, *flat_idxs = batched_args
   ref_dim, *flat_idx_dims = batched_dims
   indexers = tree_util.tree_unflatten(tree, flat_idxs)
+  if not indexers:
+    return get_p.bind(ref, *flat_idxs, tree=tree), ref_dim
   indexers_dims = tree_util.tree_unflatten(tree, flat_idx_dims)
 
   idx_is_batched = any(i_dim is not batching.not_mapped
                        for i_dim in flat_idx_dims)
   if len(indexers) > 1:
     raise NotImplementedError("Batching with multiple indexers not supported.")
+
   # TODO(sharadmv): handle vmap of multiple indexers
   new_indexers = tuple(_batch_indexer(indexer, dims, axis_size,
                                   ref.shape, ref_dim, idx_is_batched)
@@ -801,7 +862,10 @@ def _get_vmap(batched_args, batched_dims, *, tree):
     out_bdim = 0
   else:  # originally not going to be moved to the front
     if new_int_indexers_contiguous:  # now not going to be moved to the front
-      out_bdim = is_new_int_indexing.index(True)
+      try:
+        out_bdim = is_new_int_indexing.index(True)
+      except ValueError:
+        out_bdim = 0
     else:  # now going to be moved to the front
       original_pos = is_int_indexing.index(True)
       array_indexer_shape = new_indexers[0].int_indexer_shape
@@ -820,9 +884,7 @@ def _get_vmap(batched_args, batched_dims, *, tree):
   return out, out_bdim
 batching.primitive_batchers[get_p] = _get_vmap
 
-def _swap_vmap(batched_args, batched_dims, *, tree):
-  axis_size, = {x.shape[d] for x, d in zip(batched_args, batched_dims)
-                if d is not batching.not_mapped}
+def _swap_vmap(axis_data, batched_args, batched_dims, *, tree):
   ref, val, *flat_idxs = batched_args
   ref_dim, val_dim, *flat_idx_dims = batched_dims
   indexers = tree_util.tree_unflatten(tree, flat_idxs)
@@ -838,11 +900,15 @@ def _swap_vmap(batched_args, batched_dims, *, tree):
                     f"an unbatched array reference of type {core.typeof(ref)}. "
                     "Move the array reference to be an argument to the vmapped "
                     "function?")
-
+  if not indexers:
+    if ref_is_batched and not val_is_batched:
+      val = batching.broadcast(val, axis_data.size, ref_dim,
+                               axis_data.explicit_mesh_axis)
+    return swap_p.bind(ref, val, *flat_idxs, tree=tree), ref_dim
   if len(indexers) > 1:
     raise NotImplementedError("Batching with multiple indexers not supported.")
   # TODO(sharadmv): handle vmap of multiple indexers
-  new_indexers = tuple(_batch_indexer(indexer, dims, axis_size,
+  new_indexers = tuple(_batch_indexer(indexer, dims, axis_data.size,
                                   ref.shape, ref_dim, idx_is_batched)
                      for indexer, dims in zip(indexers, indexers_dims))
   flat_indexers, tree = tree_util.tree_flatten(new_indexers)
@@ -859,11 +925,15 @@ def _swap_vmap(batched_args, batched_dims, *, tree):
   if not new_int_indexers_contiguous:  # will be moved to the front
     batched_dim_in_result = 0
   else:
-    batched_dim_in_result = is_new_int_indexing.index(True) + 0
+    try:
+      batched_dim_in_result = is_new_int_indexing.index(True) + 0
+    except ValueError:
+      batched_dim_in_result = ref_dim
 
   if not val_is_batched:
     if ref_is_batched or idx_is_batched:
-      val = batching.broadcast(val, axis_size, batched_dim_in_result)
+      val = batching.broadcast(val, axis_data.size, batched_dim_in_result,
+                               axis_data.explicit_mesh_axis)
   else:
     val = batching.moveaxis(val, val_dim, batched_dim_in_result)
 
@@ -895,11 +965,9 @@ def _swap_vmap(batched_args, batched_dims, *, tree):
     out = out.transpose(transpose_order_inversed)
 
   return out, batched_dim_in_result
-batching.primitive_batchers[swap_p] = _swap_vmap
+batching.fancy_primitive_batchers[swap_p] = _swap_vmap
 
-def _addupdate_vmap(batched_args, batched_dims, *, tree):
-  axis_size, = {x.shape[d] for x, d in zip(batched_args, batched_dims)
-                if d is not batching.not_mapped}
+def _addupdate_vmap(axis_data, batched_args, batched_dims, *, tree):
   ref, val, *flat_idxs = batched_args
   ref_dim, val_dim, *flat_idx_dims = batched_dims
   indexers = tree_util.tree_unflatten(tree, flat_idxs)
@@ -909,10 +977,21 @@ def _addupdate_vmap(batched_args, batched_dims, *, tree):
   val_is_batched = val_dim is not batching.not_mapped
   idx_is_batched = any(i_dim is not batching.not_mapped
                        for i_dim in flat_idx_dims)
+
+  if not ref_is_batched:
+    raise Exception("performing an addupdate operation with vmapped value on "
+                    f"an unbatched array reference of type {core.typeof(ref)}. "
+                    "Move the array reference to be an argument to the vmapped "
+                    "function?")
+  if not indexers:
+    if val_dim != ref_dim:
+      val = batching.matchaxis2(axis_data, val_dim, ref_dim, val)
+    return addupdate_p.bind(ref, val, *flat_idxs, tree=tree), []
   if len(indexers) > 1:
     raise NotImplementedError("Batching with multiple indexers not supported.")
+
   # TODO(sharadmv): handle vmap of multiple indexers
-  new_indexers = tuple(_batch_indexer(indexer, dims, axis_size,
+  new_indexers = tuple(_batch_indexer(indexer, dims, axis_data.size,
                                   ref.shape, ref_dim, idx_is_batched)
                      for indexer, dims in zip(indexers, indexers_dims))
   flat_indexers, tree = tree_util.tree_flatten(new_indexers)
@@ -929,11 +1008,15 @@ def _addupdate_vmap(batched_args, batched_dims, *, tree):
   if not new_int_indexers_contiguous:  # will be moved to the front
     batched_dim_in_result = 0
   else:
-    batched_dim_in_result = is_new_int_indexing.index(True)
+    try:
+      batched_dim_in_result = is_new_int_indexing.index(True)
+    except ValueError:
+      batched_dim_in_result = ref_dim
 
   if not val_is_batched:
     if ref_is_batched or idx_is_batched:
-      val = batching.broadcast(val, axis_size, batched_dim_in_result)
+      val = batching.broadcast(val, axis_data.size, batched_dim_in_result,
+                               axis_data.explicit_mesh_axis)
   else:
     val = batching.moveaxis(val, val_dim, batched_dim_in_result)
 
@@ -954,7 +1037,7 @@ def _addupdate_vmap(batched_args, batched_dims, *, tree):
     val = val.transpose(transpose_order)
 
   return addupdate_p.bind(ref, val, *flat_indexers, tree=tree), []
-batching.primitive_batchers[addupdate_p] = _addupdate_vmap
+batching.fancy_primitive_batchers[addupdate_p] = _addupdate_vmap
 
 # Currently, JAX doesn't have a primitive that does an equal-rank broadcast.
 # We could use `jnp.broadcast_to` but that lowers to squeezing,
@@ -988,25 +1071,89 @@ mlir.register_lowering(
 
 def _mut_jvp(primals, tangents, *, memory_space):
   (init_val,), (init_val_dot,) = primals, tangents
-  primal_out = core.mutable_array_p.bind(init_val, memory_space=memory_space)
+  primal_out = core.ref_p.bind(init_val, memory_space=memory_space)
   if type(init_val_dot) is ad_util.Zero:
-    tangent_out = core.mutable_array_p.bind(
+    tangent_out = core.ref_p.bind(
         ad_util.zeros_like_aval(init_val_dot.aval), memory_space=memory_space)
   else:
-    tangent_out = core.mutable_array_p.bind(init_val_dot,
+    tangent_out = core.ref_p.bind(init_val_dot,
                                             memory_space=memory_space)
   return primal_out, tangent_out
 
 def _mut_lin(nzs, x, *, memory_space):
   nz, = nzs
-  x_ref = core.mutable_array_p.bind(x, memory_space=memory_space)
+  x_ref = core.ref_p.bind(x, memory_space=memory_space)
   def mut_lin(_, x_dot):
-    return core.mutable_array_p.bind(ad_util.instantiate(x_dot),
+    return core.ref_p.bind(ad_util.instantiate(x_dot),
                                      memory_space=memory_space)
   return x_ref, True, None, mut_lin
 
-ad.primitive_jvps[core.mutable_array_p] = _mut_jvp
-ad.primitive_linearizations[core.mutable_array_p] = _mut_lin
+ad.primitive_jvps[core.ref_p] = _mut_jvp
+ad.primitive_linearizations[core.ref_p] = _mut_lin
 # TODO(mattjj): lin rule for freeze and accum_grad_in_ref?
 ad.defjvp(core.freeze_p, lambda g, _: core.freeze(g))
 ad.defjvp(core.accum_grad_in_ref_p, lambda g, _: core.accum_grad_in_ref_p.bind(g))
+
+# === pinned, chained LinearVals ===
+
+def create_linear(ty, memory_space=None):
+  return create_linear_p.bind(ty=ty, memory_space=memory_space)
+create_linear_p = core.Primitive('create_linear')
+
+@create_linear_p.def_abstract_eval
+def _create_linear_abstract_eval(*, ty, memory_space):
+  if not isinstance(ty, core.ShapedArray): raise NotImplementedError(ty)
+  return AbstractLinVal(ty, memory_space)
+
+def _lower_create_linear(ctx):
+  out_aval, = ctx.avals_out
+  return mlir.custom_call(
+      "CreateBuffer",
+      operands=[],
+      result_types=[mlir.aval_to_ir_type(out_aval)],
+  ).results
+mlir.register_lowering(create_linear_p, _lower_create_linear)
+
+
+def pin(x):
+  return pin_p.bind(x)
+pin_p = core.Primitive('pin')
+
+@pin_p.def_abstract_eval
+def _pin_abstract_eval(aval):
+  if not isinstance(aval, core.ShapedArray): raise NotImplementedError(aval)
+  return AbstractLinVal(aval)
+
+def _lower_pin(ctx, x_op):
+  out_aval, = ctx.avals_out
+  return mlir.custom_call(
+      "Pin",
+      operands=mlir.flatten_ir_values([x_op]),
+      result_types=[mlir.aval_to_ir_type(out_aval)],
+  ).results
+mlir.register_lowering(pin_p, _lower_pin)
+
+
+def unpin(x):
+  return unpin_p.bind(x)
+unpin_p = core.Primitive('unpin')
+
+@unpin_p.def_abstract_eval
+def _unpin_abstract_eval(aval):
+  if not isinstance(aval, AbstractLinVal): raise TypeError(aval)
+  return aval.inner_aval
+
+def _lower_unpin(ctx, x_op):
+  out_aval, = ctx.avals_out
+  return mlir.custom_call(
+      "Unpin",
+      operands=mlir.flatten_ir_values([x_op]),
+      result_types=[mlir.aval_to_ir_type(out_aval)],
+  ).results
+mlir.register_lowering(unpin_p, _lower_unpin)
+
+
+def _linval_to_mlir_type(a):
+  return mlir.ir.MemRefType.get(a.shape, mlir.dtype_to_ir_type(a.dtype),
+                                memory_space=a.memory_space)
+mlir.ir_type_handlers[AbstractLinVal] = _linval_to_mlir_type

@@ -14,7 +14,7 @@ import sys
 from collections.abc import Iterable
 from enum import Enum, auto
 from re import Pattern
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import astroid
 from astroid import bases, nodes, util
@@ -99,7 +99,7 @@ def _redefines_import(node: nodes.AssignName) -> bool:
     current = node
     while current and not isinstance(current.parent, nodes.ExceptHandler):
         current = current.parent
-    if not current or not utils.error_of_type(current.parent, ImportError):
+    if not (current and utils.error_of_type(current.parent, ImportError)):
         return False
     try_block = current.parent.parent
     for import_node in try_block.nodes_of_class((nodes.ImportFrom, nodes.Import)):
@@ -160,7 +160,7 @@ def _is_multi_naming_match(
         match is not None
         and match.lastgroup is not None
         and match.lastgroup not in EXEMPT_NAME_CATEGORIES
-        and (node_type != "method" or confidence != interfaces.INFERENCE_FAILURE)
+        and not (node_type == "method" and confidence == interfaces.INFERENCE_FAILURE)
     )
 
 
@@ -484,12 +484,21 @@ class NameChecker(_BasicChecker):
                         )
                         return
 
-                # Check classes (TypeVar's are classes so they need to be excluded first)
-                elif isinstance(inferred_assign_type, nodes.ClassDef):
-                    self._check_name("class", node.name, node)
-
                 elif inferred_assign_type in (None, util.Uninferable):
                     return
+
+                # Check classes (TypeVar's are classes so they need to be excluded first)
+                elif isinstance(inferred_assign_type, nodes.ClassDef) or (
+                    isinstance(inferred_assign_type, bases.Instance)
+                    and "EnumMeta"
+                    in {
+                        ancestor.name
+                        for ancestor in cast(
+                            InferenceResult, inferred_assign_type
+                        ).mro()
+                    }
+                ):
+                    self._check_name("class", node.name, node)
 
                 # Don't emit if the name redefines an import in an ImportError except handler
                 # nor any other reassignment.

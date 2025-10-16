@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: hatch
-Version: 1.14.2
+Version: 1.15.0
 Summary: Modern, extensible Python project management
 Project-URL: Homepage, https://hatch.pypa.io/latest/
 Project-URL: Sponsor, https://github.com/sponsors/ofek
@@ -16,16 +16,16 @@ Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Natural Language :: English
 Classifier: Operating System :: OS Independent
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Programming Language :: Python :: Implementation :: PyPy
 Classifier: Topic :: Software Development :: Build Tools
-Requires-Python: >=3.8
+Requires-Python: >=3.9
 Requires-Dist: click>=8.0.6
 Requires-Dist: hatchling>=1.26.3
 Requires-Dist: httpx>=0.22.0

@@ -78,12 +78,12 @@ def _check_prng_key(name: str, key: ArrayLike, *,
     # Call random_wrap here to surface errors for invalid keys.
     wrapped_key = prng.random_wrap(key, impl=default_prng_impl())
     wrapped = True
-    if config.legacy_prng_key.value == 'error':
+    if config.legacy_prng_key.value == config.LegacyPrngKeyState.ERROR:
       raise ValueError(
         'Legacy uint32 key array passed as key to jax.random function. '
         'Please create keys using jax.random.key(). If use of a raw key array '
         'was intended, set jax_legacy_prng_key="allow".')
-    elif config.legacy_prng_key.value == 'warn':
+    elif config.legacy_prng_key.value == config.LegacyPrngKeyState.WARN:
       warnings.warn(
         'Legacy uint32 key array passed as key to jax.random function. '
         'Please create keys using jax.random.key(). If use of a raw key array '
@@ -462,11 +462,16 @@ def _uniform(key, minval, maxval, shape, dtype) -> Array:
   # 1 (after applying the bias), then shift and scale to the desired range. The
   # bit-level transformation we use relies on Numpy and XLA having bit-for-bit
   # equivalent float representations, which might not be true on all platforms.
+  float_bits = lax.shift_right_logical(
+      bits, jnp.array(rng_bits - nmant, uint_dtype))
   float_bits = lax.bitwise_or(
-      lax.shift_right_logical(bits, np.array(rng_bits - nmant, uint_dtype)),
-      np.array(1.0, dtype).view(uint_dtype),
-  )
-  floats = lax.bitcast_convert_type(float_bits, dtype) - np.array(1., dtype)
+      float_bits,
+      # The double cast is because the TPU backend does not implement `view` on
+      # float64 values => do the `view` in NumPy first, but then ensure that
+      # we have a JAX array that won't be canonicalized further.
+      jnp.asarray(np.array(1.0, dtype).view(float_bits.dtype),
+                  dtype=float_bits.dtype))
+  floats = lax.bitcast_convert_type(float_bits, dtype) - jnp.array(1., dtype)
   return lax.max(
       minval,
       lax.reshape(floats * (maxval - minval) + minval, shape))

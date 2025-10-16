@@ -147,8 +147,8 @@ class KernelEvalContext:
   program_ids: tuple[int | jax.Array, ...] | None
   avals_in: tuple[core.AbstractValue, ...] | None
   avals_out: tuple[core.AbstractValue, ...] | None
-  in_block_specs: tuple[pallas_core.BlockSpec, ...] | None
-  out_block_specs: tuple[pallas_core.BlockSpec, ...] | None
+  in_block_specs: tuple[pallas_core.BlockSpec, ...]
+  out_block_specs: tuple[pallas_core.BlockSpec, ...]
   grid: tuple[int | jax.Array, ...] | None
   scalar_prefetch_handler: Any | None
   out_usages: tuple[set[Usage], ...] | None
@@ -1048,7 +1048,10 @@ def _swap_eval_rule(ctx: KernelEvalContext, ref, val, *idx, tree):
   assert hasattr(ref_aval, 'shape')
   if len(indexers) > 1:
     raise NotImplementedError('swap not supported yet')
-  indexer_aval = indexers_avals[0]
+  if not indexers_avals:
+    indexer_aval = indexing.NDIndexer.make_trivial_indexer(ref_aval.shape)
+  else:
+    indexer_aval = indexers_avals[0]
   for idx_aval, size in zip(indexer_aval.indices, ref_aval.shape, strict=True):
     if not isinstance(idx_aval, indexing.Slice):
       raise NotImplementedError('swap not supported yet')
@@ -1088,7 +1091,10 @@ def _get_pull_rule(
   indexers_avals = tree_util.tree_unflatten(tree, ctx.avals_in[1:])
   if len(indexers_avals) > 1:
     raise NotImplementedError('get not supported yet')
-  indexer_aval = indexers_avals[0]
+  if not indexers_avals:
+    indexer_aval = indexing.NDIndexer.make_trivial_indexer(ref_aval.shape)
+  else:
+    indexer_aval = indexers_avals[0]
   block_shape_iter = iter(block_spec.block_shape)
   block_shape = []
   if not all(
@@ -1141,8 +1147,12 @@ def _get_eval_rule(ctx: KernelEvalContext, ref, *idx, tree):
   assert hasattr(ref_aval, 'shape')
   if len(indexers) > 1:
     raise NotImplementedError('get not supported yet')
-  indexer = indexers[0]
-  indexer_aval = indexers_avals[0]
+  if not indexers:
+    indexer = indexing.NDIndexer.make_trivial_indexer(ref_aval.shape)
+    indexer_aval = indexer
+  else:
+    indexer = indexers[0]
+    indexer_aval = indexers_avals[0]
   block_indexer = []
 
   def _slice(i, b):
@@ -1688,6 +1698,7 @@ def _reduce_sum_pull_rule(
     block_spec: pallas_core.BlockSpec,
     *,
     axes: tuple[int, ...],
+    out_sharding,
 ):
   aval_in = ctx.avals_in[0]
   assert isinstance(aval_in, core.ShapedArray)
@@ -1721,6 +1732,7 @@ def _reduce_sum_eval_rule(
     x,
     *,
     axes: tuple[int, ...],
+    out_sharding,
 ):
   aval_in = ctx.avals_in[0]
   assert isinstance(aval_in, core.ShapedArray)

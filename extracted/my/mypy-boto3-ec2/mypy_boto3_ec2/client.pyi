@@ -35,6 +35,7 @@ from .paginator import (
     DescribeCapacityBlockOfferingsPaginator,
     DescribeCapacityBlocksPaginator,
     DescribeCapacityBlockStatusPaginator,
+    DescribeCapacityManagerDataExportsPaginator,
     DescribeCapacityReservationBillingRequestsPaginator,
     DescribeCapacityReservationFleetsPaginator,
     DescribeCapacityReservationsPaginator,
@@ -158,6 +159,8 @@ from .paginator import (
     DescribeVpcsPaginator,
     GetAssociatedIpv6PoolCidrsPaginator,
     GetAwsNetworkPerformanceDataPaginator,
+    GetCapacityManagerMetricDataPaginator,
+    GetCapacityManagerMetricDimensionsPaginator,
     GetGroupsForCapacityReservationPaginator,
     GetInstanceTypesFromInstanceRequirementsPaginator,
     GetIpamAddressHistoryPaginator,
@@ -303,6 +306,8 @@ from .type_defs import (
     CopySnapshotResultTypeDef,
     CopyVolumesRequestTypeDef,
     CopyVolumesResultTypeDef,
+    CreateCapacityManagerDataExportRequestTypeDef,
+    CreateCapacityManagerDataExportResultTypeDef,
     CreateCapacityReservationBySplittingRequestTypeDef,
     CreateCapacityReservationBySplittingResultTypeDef,
     CreateCapacityReservationFleetRequestTypeDef,
@@ -482,6 +487,8 @@ from .type_defs import (
     CreateVpnConnectionRouteRequestTypeDef,
     CreateVpnGatewayRequestTypeDef,
     CreateVpnGatewayResultTypeDef,
+    DeleteCapacityManagerDataExportRequestTypeDef,
+    DeleteCapacityManagerDataExportResultTypeDef,
     DeleteCarrierGatewayRequestTypeDef,
     DeleteCarrierGatewayResultTypeDef,
     DeleteClientVpnEndpointRequestTypeDef,
@@ -671,6 +678,8 @@ from .type_defs import (
     DescribeCapacityBlocksResultTypeDef,
     DescribeCapacityBlockStatusRequestTypeDef,
     DescribeCapacityBlockStatusResultTypeDef,
+    DescribeCapacityManagerDataExportsRequestTypeDef,
+    DescribeCapacityManagerDataExportsResultTypeDef,
     DescribeCapacityReservationBillingRequestsRequestTypeDef,
     DescribeCapacityReservationBillingRequestsResultTypeDef,
     DescribeCapacityReservationFleetsRequestTypeDef,
@@ -999,6 +1008,8 @@ from .type_defs import (
     DisableAllowedImagesSettingsResultTypeDef,
     DisableAwsNetworkPerformanceMetricSubscriptionRequestTypeDef,
     DisableAwsNetworkPerformanceMetricSubscriptionResultTypeDef,
+    DisableCapacityManagerRequestTypeDef,
+    DisableCapacityManagerResultTypeDef,
     DisableEbsEncryptionByDefaultRequestTypeDef,
     DisableEbsEncryptionByDefaultResultTypeDef,
     DisableFastLaunchRequestTypeDef,
@@ -1069,6 +1080,8 @@ from .type_defs import (
     EnableAllowedImagesSettingsResultTypeDef,
     EnableAwsNetworkPerformanceMetricSubscriptionRequestTypeDef,
     EnableAwsNetworkPerformanceMetricSubscriptionResultTypeDef,
+    EnableCapacityManagerRequestTypeDef,
+    EnableCapacityManagerResultTypeDef,
     EnableEbsEncryptionByDefaultRequestTypeDef,
     EnableEbsEncryptionByDefaultResultTypeDef,
     EnableFastLaunchRequestTypeDef,
@@ -1121,6 +1134,12 @@ from .type_defs import (
     GetAssociatedIpv6PoolCidrsResultTypeDef,
     GetAwsNetworkPerformanceDataRequestTypeDef,
     GetAwsNetworkPerformanceDataResultTypeDef,
+    GetCapacityManagerAttributesRequestTypeDef,
+    GetCapacityManagerAttributesResultTypeDef,
+    GetCapacityManagerMetricDataRequestTypeDef,
+    GetCapacityManagerMetricDataResultTypeDef,
+    GetCapacityManagerMetricDimensionsRequestTypeDef,
+    GetCapacityManagerMetricDimensionsResultTypeDef,
     GetCapacityReservationUsageRequestTypeDef,
     GetCapacityReservationUsageResultTypeDef,
     GetCoipPoolUsageRequestTypeDef,
@@ -1513,6 +1532,8 @@ from .type_defs import (
     UnlockSnapshotResultTypeDef,
     UnmonitorInstancesRequestTypeDef,
     UnmonitorInstancesResultTypeDef,
+    UpdateCapacityManagerOrganizationsAccessRequestTypeDef,
+    UpdateCapacityManagerOrganizationsAccessResultTypeDef,
     UpdateSecurityGroupRuleDescriptionsEgressRequestTypeDef,
     UpdateSecurityGroupRuleDescriptionsEgressResultTypeDef,
     UpdateSecurityGroupRuleDescriptionsIngressRequestTypeDef,
@@ -2241,6 +2262,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/copy_volumes.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#copy_volumes)
+        """
+
+    def create_capacity_manager_data_export(
+        self, **kwargs: Unpack[CreateCapacityManagerDataExportRequestTypeDef]
+    ) -> CreateCapacityManagerDataExportResultTypeDef:
+        """
+        Creates a new data export configuration for EC2 Capacity Manager.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_capacity_manager_data_export.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_capacity_manager_data_export)
         """
 
     def create_capacity_reservation(
@@ -3194,6 +3225,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_vpn_gateway.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_vpn_gateway)
+        """
+
+    def delete_capacity_manager_data_export(
+        self, **kwargs: Unpack[DeleteCapacityManagerDataExportRequestTypeDef]
+    ) -> DeleteCapacityManagerDataExportResultTypeDef:
+        """
+        Deletes an existing Capacity Manager data export configuration.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_capacity_manager_data_export.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_capacity_manager_data_export)
         """
 
     def delete_carrier_gateway(
@@ -4249,6 +4290,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_capacity_blocks.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_capacity_blocks)
+        """
+
+    def describe_capacity_manager_data_exports(
+        self, **kwargs: Unpack[DescribeCapacityManagerDataExportsRequestTypeDef]
+    ) -> DescribeCapacityManagerDataExportsResultTypeDef:
+        """
+        Describes one or more Capacity Manager data export configurations.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_capacity_manager_data_exports.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_capacity_manager_data_exports)
         """
 
     def describe_capacity_reservation_billing_requests(
@@ -5968,6 +6019,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#disable_aws_network_performance_metric_subscription)
         """
 
+    def disable_capacity_manager(
+        self, **kwargs: Unpack[DisableCapacityManagerRequestTypeDef]
+    ) -> DisableCapacityManagerResultTypeDef:
+        """
+        Disables EC2 Capacity Manager for your account.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/disable_capacity_manager.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#disable_capacity_manager)
+        """
+
     def disable_ebs_encryption_by_default(
         self, **kwargs: Unpack[DisableEbsEncryptionByDefaultRequestTypeDef]
     ) -> DisableEbsEncryptionByDefaultResultTypeDef:
@@ -6341,6 +6402,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#enable_aws_network_performance_metric_subscription)
         """
 
+    def enable_capacity_manager(
+        self, **kwargs: Unpack[EnableCapacityManagerRequestTypeDef]
+    ) -> EnableCapacityManagerResultTypeDef:
+        """
+        Enables EC2 Capacity Manager for your account.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/enable_capacity_manager.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#enable_capacity_manager)
+        """
+
     def enable_ebs_encryption_by_default(
         self, **kwargs: Unpack[EnableEbsEncryptionByDefaultRequestTypeDef]
     ) -> EnableEbsEncryptionByDefaultResultTypeDef:
@@ -6621,6 +6692,39 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_aws_network_performance_data.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_aws_network_performance_data)
+        """
+
+    def get_capacity_manager_attributes(
+        self, **kwargs: Unpack[GetCapacityManagerAttributesRequestTypeDef]
+    ) -> GetCapacityManagerAttributesResultTypeDef:
+        """
+        Retrieves the current configuration and status of EC2 Capacity Manager for your
+        account, including enablement status, Organizations access settings, and data
+        ingestion status.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_capacity_manager_attributes.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_capacity_manager_attributes)
+        """
+
+    def get_capacity_manager_metric_data(
+        self, **kwargs: Unpack[GetCapacityManagerMetricDataRequestTypeDef]
+    ) -> GetCapacityManagerMetricDataResultTypeDef:
+        """
+        Retrieves capacity usage metrics for your EC2 resources.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_capacity_manager_metric_data.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_capacity_manager_metric_data)
+        """
+
+    def get_capacity_manager_metric_dimensions(
+        self, **kwargs: Unpack[GetCapacityManagerMetricDimensionsRequestTypeDef]
+    ) -> GetCapacityManagerMetricDimensionsResultTypeDef:
+        """
+        Retrieves the available dimension values for capacity metrics within a
+        specified time range.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_capacity_manager_metric_dimensions.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_capacity_manager_metric_dimensions)
         """
 
     def get_capacity_reservation_usage(
@@ -8731,6 +8835,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#unmonitor_instances)
         """
 
+    def update_capacity_manager_organizations_access(
+        self, **kwargs: Unpack[UpdateCapacityManagerOrganizationsAccessRequestTypeDef]
+    ) -> UpdateCapacityManagerOrganizationsAccessResultTypeDef:
+        """
+        Updates the Organizations access setting for EC2 Capacity Manager.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/update_capacity_manager_organizations_access.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#update_capacity_manager_organizations_access)
+        """
+
     def update_security_group_rule_descriptions_egress(
         self, **kwargs: Unpack[UpdateSecurityGroupRuleDescriptionsEgressRequestTypeDef]
     ) -> UpdateSecurityGroupRuleDescriptionsEgressResultTypeDef:
@@ -8853,6 +8967,17 @@ class EC2Client(BaseClient):
     def get_paginator(  # type: ignore[override]
         self, operation_name: Literal["describe_capacity_blocks"]
     ) -> DescribeCapacityBlocksPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["describe_capacity_manager_data_exports"]
+    ) -> DescribeCapacityManagerDataExportsPaginator:
         """
         Create a paginator for an operation.
 
@@ -10209,6 +10334,28 @@ class EC2Client(BaseClient):
     def get_paginator(  # type: ignore[override]
         self, operation_name: Literal["get_aws_network_performance_data"]
     ) -> GetAwsNetworkPerformanceDataPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["get_capacity_manager_metric_data"]
+    ) -> GetCapacityManagerMetricDataPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["get_capacity_manager_metric_dimensions"]
+    ) -> GetCapacityManagerMetricDimensionsPaginator:
         """
         Create a paginator for an operation.
 

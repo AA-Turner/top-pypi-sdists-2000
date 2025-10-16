@@ -36,6 +36,7 @@ from jax._src import profiler
 from jax._src import traceback_util
 from jax._src import util
 from jax._src.interpreters import mlir
+from jax._src.lib import jaxlib_extension_version
 from jax._src.lib import xla_client as xc
 from jax._src.lib import _jax
 from jax._src.lib.mlir import ir
@@ -291,12 +292,8 @@ def backend_compile(
 ) -> xc.Executable:
   sym_name = module.operation.attributes['sym_name']
   module_name = ir.StringAttr(sym_name).value
-  # Convert ir.Module to a string representation, unless the backend
-  # explicitly flags the ability to handle a module directly (avoiding the
-  # overhead of back and forth conversions).
-  # TODO(slebedev): Change the backend.compile() to accept ir.Module.
   built_c: Any
-  if getattr(backend, "needs_str_ir", True):
+  if jaxlib_extension_version < 378:
     built_c = mlir.module_to_bytecode(module)
   else:
     built_c = module
@@ -311,7 +308,7 @@ def backend_compile(
 
   try:
     return backend.compile(built_c, executable_devices, options)
-  except xc.XlaRuntimeError as e:
+  except _jax.JaxRuntimeError as e:
     for error_handler in _XLA_RUNTIME_ERROR_HANDLERS:
       handler_result = error_handler(e)
       if handler_result is not None:
@@ -334,7 +331,7 @@ def backend_compile_and_load(
   # overhead of back and forth conversions).
   # TODO(slebedev): Change the backend.compile() to accept ir.Module.
   built_c: Any
-  if getattr(backend, "needs_str_ir", True):
+  if jaxlib_extension_version < 378:
     built_c = mlir.module_to_bytecode(module)
   else:
     built_c = module
@@ -380,7 +377,7 @@ def backend_compile_and_load(
           executable_devices=executable_devices,
           compile_options=options,
       )
-  except xc.XlaRuntimeError as e:
+  except _jax.JaxRuntimeError as e:
     for error_handler in _XLA_RUNTIME_ERROR_HANDLERS:
       handler_result = error_handler(e)
       if handler_result is not None:
@@ -392,7 +389,7 @@ _XLA_RUNTIME_ERROR_HANDLERS = []
 
 
 def register_xla_runtime_error_handler(
-    handler_fn: Callable[[xc.XlaRuntimeError], Exception | None],
+    handler_fn: Callable[[_jax.JaxRuntimeError], Exception | None],
 ):
   """Registers a custom exception handler for XLA runtime errors.
 
@@ -626,7 +623,7 @@ def _get_cache_key(
         backend,
         ignore_callbacks,
     )
-  except xc._xla.XlaRuntimeError as ex:
+  except _jax.JaxRuntimeError as ex:
     logger.error("compile_or_get_cached: unable to generate cache key, "
                   "skipping the cache: %s", ex)
   return None
@@ -640,11 +637,11 @@ def _share_fdo_profiles(
     backend: xc.Client,
     global_client: lib._jax.DistributedRuntimeClient,
     min_process_id
-) -> bytes | None:
+) -> bytes:
   sym_name = computation.operation.attributes['sym_name']
   module_name = ir.StringAttr(sym_name).value
   fdo_profile = compile_options.executable_build_options.fdo_profile
-  if fdo_profile is None or len(fdo_profile) == 0:
+  if len(fdo_profile) == 0:
     return fdo_profile
 
   compile_options.executable_build_options.fdo_profile = b""
@@ -659,7 +656,7 @@ def _share_fdo_profiles(
         )
         + "_fdo_sync"
     )
-  except xc._xla.XlaRuntimeError as ex:
+  except _jax.JaxRuntimeError as ex:
     logger.error(
         "compile_or_get_cached: unable to generate cache key, "
         "skipping the fdo profile sharing: %s",

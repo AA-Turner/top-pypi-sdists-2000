@@ -38,8 +38,15 @@ from . import fragmented_array as fa
 
 TMA_DESCRIPTOR_BYTES = 128
 TMA_DESCRIPTOR_ALIGNMENT = 64
+TMAReductionOp = Literal["add", "min", "max", "inc", "dec", "and", "or", "xor"]
 
 c = utils.c  # This is too common to fully qualify.
+
+class GlobalBroadcast:
+  pass
+
+GLOBAL_BROADCAST = GlobalBroadcast()
+
 
 @dataclasses.dataclass(frozen=True)
 class MemRefTransform:
@@ -243,8 +250,6 @@ class CollapseLeadingIndicesTransform(MemRefTransform):
 
 OnDeviceProfiler = profiler.OnDeviceProfiler
 
-ReductionOp = Literal["add", "min", "max", "inc", "dec", "and", "or", "xor"]
-
 MOSAIC_GPU_SMEM_ALLOC_ATTR = "mosaic_gpu_smem_alloc"
 
 class Scratch:
@@ -364,10 +369,10 @@ class Scratch:
     assert alloc_op is not None
     [alloc_user] = alloc_op.result.uses
     load_op = alloc_user.owner
-    assert isinstance(load_op, llvm.LoadOp)
+    assert load_op.operation.name == "llvm.load"
     [load_op_user] = load_op.result.uses
     device_ptr = load_op_user.owner
-    assert isinstance(device_ptr, builtin.UnrealizedConversionCastOp)
+    assert device_ptr.operation.name == "builtin.unrealized_conversion_cast"
     return alloc_op, load_op, device_ptr.result
 
   def device_ptr(self) -> ir.Value:
@@ -498,14 +503,12 @@ class LaunchContext:
 
   def _get_tma_desc(
       self,
-      gmem_ref,
+      gmem_ref: ir.Value,
       gmem_transform: tuple[MemRefTransform, ...],
-      gmem_peer_id: int | ir.Value | None,
+      gmem_peer_id: int | ir.Value | GlobalBroadcast | None,
       transformed_slice_shape: tuple[int, ...],
       swizzle: int | None,
-      reduction_op: Literal[
-        "add","min","max","inc","dec","and","or","xor"
-      ] | None,
+      reduction_op: TMAReductionOp | None,
   ):
     gmem_ref = _find_kernel_argument_for_gmem_ref(gmem_ref)
     # Using ir.Values in cache keys is a little sketchy, but I think it should
@@ -538,7 +541,17 @@ class LaunchContext:
         base_ptr = llvm.getelementptr(
             ptr_ty, alloc_ptr, [as_i64(offset)], [llvm_dyn], ref_ty.element_type, llvm.GEPNoWrapFlags.none,
         )
-        if gmem_peer_id is not None:
+        if isinstance(gmem_peer_id, GlobalBroadcast):
+          self._ensure_nvshmem_decls()
+          world_team = arith.constant(i32, 0)
+          base_ptr = llvm.call(
+              base_ptr.type,
+              [world_team, base_ptr],
+              [],
+              [],
+              callee="nvshmemx_mc_ptr",
+          )
+        elif gmem_peer_id is not None:
           if not isinstance(gmem_peer_id, ir.Value):
             peer_id = c(gmem_peer_id, i32)
           else:
@@ -816,7 +829,14 @@ class LaunchContext:
           )
       idx = self.cluster_idx(collective)
       rem_collective_size = collective_size
-      for dim, slice_size in enumerate(slice_shape[:-1]):
+      has_swizzle = (
+          swizzle is not None
+          and swizzle != mgpu_dialect.SwizzlingMode.kNoSwizzle
+      )
+      # We can partition the minormost dim if there's no swizzling.
+      for dim, slice_size in enumerate(
+          slice_shape[:-1] if has_swizzle else slice_shape
+      ):
         if slice_size % rem_collective_size == 0:
           partition_dim(dim, idx, rem_collective_size)
           rem_collective_size = 1
@@ -864,11 +884,11 @@ class LaunchContext:
   def async_copy(
       self,
       *,
-      src_ref,
-      dst_ref,
+      src_ref: ir.Value,
+      dst_ref: ir.Value,
       gmem_slice: Any = (),
       gmem_transform: MemRefTransform | tuple[MemRefTransform, ...] = (),
-      gmem_peer_id: int | ir.Value | None = None,
+      gmem_peer_id: int | ir.Value | GlobalBroadcast | None = None,
       barrier: utils.BarrierRef | None = None,
       swizzle: int | None = None,
       arrive: bool | None = None,
@@ -876,7 +896,7 @@ class LaunchContext:
       partitioned: int | None = None,
       # Should select 0 or 1 threads from the WG.
       predicate: ir.Value | None | _DefaultPredicate = _DefaultPredicate(),
-      reduction_op: ReductionOp | None = None,
+      reduction_op: TMAReductionOp | None = None,
       implementation: AsyncCopyImplementation = AsyncCopyImplementation.TMA,
   ):
     """Initiates an async copy between GMEM and SMEM.
@@ -909,6 +929,7 @@ class LaunchContext:
     i8 = ir.IntegerType.get_signless(8)
     i16 = ir.IntegerType.get_signless(16)
     i32 = ir.IntegerType.get_signless(32)
+
     src_ref_ty = ir.MemRefType(src_ref.type)
     dst_ref_ty = ir.MemRefType(dst_ref.type)
     element_type = src_ref_ty.element_type
@@ -1040,7 +1061,7 @@ class LaunchContext:
       dyn_offset = arith.divui(dyn_offset, c(offset_scale, i32))
       if gmem_ref_ty.rank != 2:
         raise NotImplementedError("Only 2D copies implemented")
-      transfers = fa.FragmentedArray.transfer_tiled2(
+      transfers = fa.FragmentedArray.transfer_tiled(
           smem_ref, swizzle, layout, tuple(gmem_ref_ty.shape), optimized=False
       )
       gmem_base_ptr = utils.getelementptr(utils.memref_ptr(gmem_ref), [dyn_offset], gep_type)
@@ -1394,7 +1415,6 @@ class LaunchContext:
         has_side_effects=True,
     )
 
-
   def await_async_copy(
       self, allow_groups: int, await_read_only: bool = False,
       scope: utils.ThreadSubset = utils.ThreadSubset.WARPGROUP,
@@ -1424,6 +1444,12 @@ class LaunchContext:
           ir.Type.parse("!llvm.func<!llvm.ptr(!llvm.ptr,i32)>")
       )
       llvm.LLVMFuncOp("nvshmem_ptr", nvshmem_ptr_type, sym_visibility="private")
+      nvshmemx_mc_ptr_type = ir.TypeAttr.get(
+          ir.Type.parse("!llvm.func<!llvm.ptr(i32,!llvm.ptr)>")
+      )
+      llvm.LLVMFuncOp(
+          "nvshmemx_mc_ptr", nvshmemx_mc_ptr_type, sym_visibility="private"
+      )
 
   def to_remote(self, ref: ir.Value, peer: ir.Value):
     self._ensure_nvshmem_decls()
@@ -1446,6 +1472,28 @@ class LaunchContext:
     if peer.type != ir.IntegerType.get_signless(32):
       raise ValueError(f"peer index must be an i32, got {peer.type}")
     return llvm.call(ref.type, [ref, peer], [], [], callee="nvshmem_ptr")
+
+  def to_remote_multicast(self, ref: ir.Value):
+    i32 = ir.IntegerType.get_signless(32)
+    self._ensure_nvshmem_decls()
+    if not ir.MemRefType.isinstance(ref.type):
+      raise ValueError(f"Unsupported type for to_remote_multicast: {ref.type}")
+      # We replace the offset in the ref type by 0, because memref_ptr always
+      # folds the offset into the pointer.
+    ref_ty = ir.MemRefType(ref.type)
+    strides, _ = ref_ty.get_strides_and_offset()
+    result_type = ir.MemRefType.get(
+        ref_ty.shape,
+        ref_ty.element_type,
+        ir.StridedLayoutAttr.get(0, strides),
+        ref_ty.memory_space,
+    )
+    world_team = arith.constant(i32, 0)
+    ptr = utils.memref_ptr(ref)
+    mc_ptr = llvm.call(
+        ptr.type, [world_team, ptr], [], [], callee="nvshmemx_mc_ptr",
+    )
+    return utils.MultimemRef(utils.ptr_as_memref(mc_ptr, result_type))
 
   def device_id(self) -> ir.Value:
     self._ensure_nvshmem_decls()

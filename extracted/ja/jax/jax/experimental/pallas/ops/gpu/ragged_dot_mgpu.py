@@ -46,7 +46,7 @@ class GroupInfo:
     """Get the group info for the current block."""
 
     tile = jnp.int32(tile)
-    group_boundaries = [group_lengths[i] for i in range(group_lengths.shape[0])]
+    group_boundaries = [group_lengths[i] for i in range(len(group_lengths))]
 
     # We usually only have very few groups, so we unroll the loop processing
     # them. Normally we'd break out of the loop early, once we'd have found our
@@ -126,8 +126,8 @@ def ragged_dot(
     )
 
     @plgpu.nd_loop(grid, collective_axes="sm")
-    def mn_loop(idx):  # pylint: disable=unused-variable
-      block_ni, mi, remainder_ni = idx
+    def mn_loop(loop_info: plgpu.NDLoopInfo):  # pylint: disable=unused-variable
+      block_ni, mi, remainder_ni = loop_info.index
       ni = block_ni * pl.cdiv(n, block_n * grid_block_n) + remainder_ni
       group_info = GroupInfo.create(rows_per_expert_gmem, block_m, mi)
 

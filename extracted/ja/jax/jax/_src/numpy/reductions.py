@@ -26,7 +26,6 @@ import numpy as np
 from jax._src import api
 from jax._src import config
 from jax._src import core
-from jax._src import deprecations
 from jax._src import dtypes
 from jax._src.numpy.util import (
     _broadcast_to, ensure_arraylike,
@@ -37,7 +36,7 @@ from jax._src.lax import other as lax_other
 from jax._src.lax import parallel as lax_parallel
 from jax._src.lax import slicing as lax_slicing
 from jax._src.typing import Array, ArrayLike, DType, DTypeLike, DeprecatedArg
-from jax._src.util import canonicalize_axis, maybe_named_axis, set_module
+from jax._src.util import canonicalize_axis, canonicalize_axis_tuple, maybe_named_axis, set_module
 
 
 export = set_module('jax.numpy')
@@ -84,15 +83,12 @@ def _promote_integer_dtype(dtype: DType) -> DType:
 def check_where(name: str, where: ArrayLike | None) -> Array | None:
   if where is None:
     return where
-  where_arr = ensure_arraylike(name, where)
-  if where_arr.dtype != bool:
-    # Deprecation added 2024-12-05
-    deprecations.warn(
-      'jax-numpy-reduction-non-boolean-where',
-      f"jnp.{name}: where must be None or a boolean array; got dtype={where_arr.dtype}.",
-      stacklevel=2)
-    return where_arr.astype(bool)
-  return where_arr
+  where = ensure_arraylike(name, where)
+  if where.dtype != bool:
+    raise ValueError(
+      f"jnp.{name}: where must be None or a boolean array; got {where.dtype=}."
+    )
+  return where
 
 
 ReductionOp = Callable[[Any, Any], Any]
@@ -941,8 +937,9 @@ def average(a: ArrayLike, axis: Axis = None, weights: ArrayLike | None = None,
     a: array to be averaged
     axis: an optional integer or sequence of integers specifying the axis along which
       the mean to be computed. If not specified, mean is computed along all the axes.
-    weights: an optional array of weights for a weighted average. Must be
-      broadcast-compatible with ``a``.
+    weights: an optional array of weights for a weighted average. This must either exactly
+      match the shape of `a`, or if `axis` is specified, it must have shape ``a.shape[axis]``
+      for a single axis, or shape ``tuple(a.shape[ax] for ax in axis)`` for multiple axes.
     returned: If False (default) then return only the average. If True then return both
       the average and the normalization factor (i.e. the sum of weights).
     keepdims: If True, reduced axes are left in the result with size 1. If False (default)
@@ -989,6 +986,8 @@ def average(a: ArrayLike, axis: Axis = None, weights: ArrayLike | None = None,
 @partial(api.jit, static_argnames=('axis', 'returned', 'keepdims'), inline=True)
 def _average(a: ArrayLike, axis: Axis = None, weights: ArrayLike | None = None,
              returned: bool = False, keepdims: bool = False) -> Array | tuple[Array, Array]:
+  axis = None if axis is None else canonicalize_axis_tuple(axis, np.ndim(a))
+
   if weights is None: # Treat all weights as 1
     a = ensure_arraylike("average", a)
     a, = promote_dtypes_inexact(a)
@@ -996,40 +995,20 @@ def _average(a: ArrayLike, axis: Axis = None, weights: ArrayLike | None = None,
     if axis is None:
       weights_sum = lax.full((), core.dimension_as_value(a.size), dtype=avg.dtype)
     elif isinstance(axis, tuple):
-      weights_sum = lax.full_like(avg, math.prod(core.dimension_as_value(a.shape[d]) for d in axis))
-    else:
-      weights_sum = lax.full_like(avg, core.dimension_as_value(a.shape[axis]))  # type: ignore[index]
+      weights_sum = lax.full((), math.prod(core.dimension_as_value(a.shape[d]) for d in axis), dtype=avg.dtype)
   else:
     a, weights = ensure_arraylike("average", a, weights)
     a, weights = promote_dtypes_inexact(a, weights)
 
-    a_shape = np.shape(a)
-    a_ndim = len(a_shape)
-    weights_shape = np.shape(weights)
-
-    if axis is None:
-      pass
-    elif isinstance(axis, Sequence):
-      axis = tuple(canonicalize_axis(d, a_ndim) for d in axis)
-    else:
-      axis = canonicalize_axis(axis, a_ndim)
-
-    if a_shape != weights_shape:
-      # Make sure the dimensions work out
-      if len(weights_shape) != 1:
-        raise ValueError("1D weights expected when shapes of a and "
-                         "weights differ.")
+    if a.shape != weights.shape:
       if axis is None:
         raise ValueError("Axis must be specified when shapes of a and "
                          "weights differ.")
-      elif isinstance(axis, tuple):
-        raise ValueError("Single axis expected when shapes of a and weights differ")
-      elif not core.definitely_equal(weights_shape[0], a_shape[axis]):
-        raise ValueError("Length of weights not "
-                         "compatible with specified axis.")
-
-      weights = _broadcast_to(weights, (a_ndim - 1) * (1,) + weights_shape)
-      weights = _moveaxis(weights, -1, axis)
+      if weights.shape != tuple(a.shape[ax] for ax in axis):
+        raise ValueError("Shape of weights must be consistent with shape "
+                         "of a along specified axis.")
+      new_shape = tuple(dim if i in axis else 1 for i, dim in enumerate(a.shape))
+      weights = lax.reshape(weights, new_shape, dimensions=tuple(np.argsort(axis)))
 
     weights_sum = sum(weights, axis=axis, keepdims=keepdims)
     avg = sum(a * weights, axis=axis, keepdims=keepdims) / weights_sum
@@ -2366,7 +2345,7 @@ def cumulative_prod(
 @partial(api.jit, static_argnames=('axis', 'overwrite_input', 'interpolation', 'keepdims', 'method'))
 def quantile(a: ArrayLike, q: ArrayLike, axis: int | tuple[int, ...] | None = None,
              out: None = None, overwrite_input: bool = False, method: str = "linear",
-             keepdims: bool = False, *, interpolation: DeprecatedArg | str = DeprecatedArg()) -> Array:
+             keepdims: bool = False, *, interpolation: DeprecatedArg = DeprecatedArg()) -> Array:
   """Compute the quantile of the data along the specified axis.
 
   JAX implementation of :func:`numpy.quantile`.
@@ -2383,8 +2362,6 @@ def quantile(a: ArrayLike, q: ArrayLike, axis: int | tuple[int, ...] | None = No
       default is ``linear``.
     keepdims: if True, then the returned array will have the same number of
       dimensions as the input. Default is False.
-    interpolation: deprecated alias of the ``method`` argument. Will result
-      in a :class:`DeprecationWarning` if used.
 
   Returns:
     An array containing the specified quantiles along the specified axes.
@@ -2410,12 +2387,10 @@ def quantile(a: ArrayLike, q: ArrayLike, axis: int | tuple[int, ...] | None = No
   if overwrite_input or out is not None:
     raise ValueError("jax.numpy.quantile does not support overwrite_input=True "
                      "or out != None")
+  # TODO(jakevdp): remove the interpolation argument in JAX v0.9.0
   if not isinstance(interpolation, DeprecatedArg):
-    deprecations.warn(
-      "jax-numpy-quantile-interpolation",
-      ("The interpolation= argument to 'quantile' is deprecated. "
-       "Use 'method=' instead."), stacklevel=2)
-    method = interpolation
+    raise TypeError("quantile() argument interpolation was removed in JAX"
+                    " v0.8.0. Use method instead.")
   return _quantile(lax.asarray(a), lax.asarray(q), axis, method, keepdims, False)
 
 # TODO(jakevdp): interpolation argument deprecated 2024-05-16
@@ -2423,7 +2398,7 @@ def quantile(a: ArrayLike, q: ArrayLike, axis: int | tuple[int, ...] | None = No
 @partial(api.jit, static_argnames=('axis', 'overwrite_input', 'interpolation', 'keepdims', 'method'))
 def nanquantile(a: ArrayLike, q: ArrayLike, axis: int | tuple[int, ...] | None = None,
                 out: None = None, overwrite_input: bool = False, method: str = "linear",
-                keepdims: bool = False, *, interpolation: DeprecatedArg | str = DeprecatedArg()) -> Array:
+                keepdims: bool = False, *, interpolation: DeprecatedArg = DeprecatedArg()) -> Array:
   """Compute the quantile of the data along the specified axis, ignoring NaNs.
 
   JAX implementation of :func:`numpy.nanquantile`.
@@ -2440,8 +2415,6 @@ def nanquantile(a: ArrayLike, q: ArrayLike, axis: int | tuple[int, ...] | None =
       default is ``linear``.
     keepdims: if True, then the returned array will have the same number of
       dimensions as the input. Default is False.
-    interpolation: deprecated alias of the ``method`` argument. Will result
-      in a :class:`DeprecationWarning` if used.
 
   Returns:
     An array containing the specified quantiles along the specified axes.
@@ -2469,12 +2442,10 @@ def nanquantile(a: ArrayLike, q: ArrayLike, axis: int | tuple[int, ...] | None =
     msg = ("jax.numpy.nanquantile does not support overwrite_input=True or "
            "out != None")
     raise ValueError(msg)
+  # TODO(jakevdp): remove the interpolation argument in JAX v0.9.0
   if not isinstance(interpolation, DeprecatedArg):
-    deprecations.warn(
-      "jax-numpy-quantile-interpolation",
-      ("The interpolation= argument to 'nanquantile' is deprecated. "
-       "Use 'method=' instead."), stacklevel=2)
-    method = interpolation
+    raise TypeError("nanquantile() argument interpolation was removed in JAX"
+                    " v0.8.0. Use method instead.")
   return _quantile(lax.asarray(a), lax.asarray(q), axis, method, keepdims, True)
 
 def _quantile(a: Array, q: Array, axis: int | tuple[int, ...] | None,
@@ -2607,7 +2578,7 @@ def _quantile(a: Array, q: Array, axis: int | tuple[int, ...] | None,
 def percentile(a: ArrayLike, q: ArrayLike,
                axis: int | tuple[int, ...] | None = None,
                out: None = None, overwrite_input: bool = False, method: str = "linear",
-               keepdims: bool = False, *, interpolation: str | DeprecatedArg = DeprecatedArg()) -> Array:
+               keepdims: bool = False, *, interpolation: DeprecatedArg = DeprecatedArg()) -> Array:
   """Compute the percentile of the data along the specified axis.
 
   JAX implementation of :func:`numpy.percentile`.
@@ -2624,8 +2595,6 @@ def percentile(a: ArrayLike, q: ArrayLike,
       default is ``linear``.
     keepdims: if True, then the returned array will have the same number of
       dimensions as the input. Default is False.
-    interpolation: deprecated alias of the ``method`` argument. Will result
-      in a :class:`DeprecationWarning` if used.
 
   Returns:
     An array containing the specified percentiles along the specified axes.
@@ -2649,12 +2618,10 @@ def percentile(a: ArrayLike, q: ArrayLike,
   """
   a, q = ensure_arraylike("percentile", a, q)
   q, = promote_dtypes_inexact(q)
+  # TODO(jakevdp): remove the interpolation argument in JAX v0.9.0
   if not isinstance(interpolation, DeprecatedArg):
-    deprecations.warn(
-      "jax-numpy-quantile-interpolation",
-      ("The interpolation= argument to 'percentile' is deprecated. "
-       "Use 'method=' instead."), stacklevel=2)
-    method = interpolation
+    raise TypeError("percentile() argument interpolation was removed in JAX"
+                    " v0.8.0. Use method instead.")
   return quantile(a, q / 100, axis=axis, out=out, overwrite_input=overwrite_input,
                   method=method, keepdims=keepdims)
 
@@ -2665,7 +2632,7 @@ def percentile(a: ArrayLike, q: ArrayLike,
 def nanpercentile(a: ArrayLike, q: ArrayLike,
                   axis: int | tuple[int, ...] | None = None,
                   out: None = None, overwrite_input: bool = False, method: str = "linear",
-                  keepdims: bool = False, *, interpolation: str | DeprecatedArg = DeprecatedArg()) -> Array:
+                  keepdims: bool = False, *, interpolation: DeprecatedArg = DeprecatedArg()) -> Array:
   """Compute the percentile of the data along the specified axis, ignoring NaN values.
 
   JAX implementation of :func:`numpy.nanpercentile`.
@@ -2682,8 +2649,6 @@ def nanpercentile(a: ArrayLike, q: ArrayLike,
       default is ``linear``.
     keepdims: if True, then the returned array will have the same number of
       dimensions as the input. Default is False.
-    interpolation: deprecated alias of the ``method`` argument. Will result
-      in a :class:`DeprecationWarning` if used.
 
   Returns:
     An array containing the specified percentiles along the specified axes.
@@ -2710,12 +2675,10 @@ def nanpercentile(a: ArrayLike, q: ArrayLike,
   a, q = ensure_arraylike("nanpercentile", a, q)
   q, = promote_dtypes_inexact(q)
   q = q / 100
+  # TODO(jakevdp): remove the interpolation argument in JAX v0.9.0
   if not isinstance(interpolation, DeprecatedArg):
-    deprecations.warn(
-      "jax-numpy-quantile-interpolation",
-      ("The interpolation= argument to 'nanpercentile' is deprecated. "
-       "Use 'method=' instead."), stacklevel=2)
-    method = interpolation
+    raise TypeError("nanpercentile() argument interpolation was removed in JAX"
+                    " v0.8.0. Use method instead.")
   return nanquantile(a, q, axis=axis, out=out, overwrite_input=overwrite_input,
                      method=method, keepdims=keepdims)
 

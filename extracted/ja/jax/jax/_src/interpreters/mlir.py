@@ -49,10 +49,10 @@ from jax._src import util
 from jax._src import xla_bridge as xb
 from jax._src.interpreters import partial_eval as pe
 from jax._src.layout import AutoLayout, Layout
+from jax._src.lib import version as jaxlib_version
 from jax._src.lib import _jax
 from jax._src.lib import jax_mlir_ext
 from jax._src.lib import xla_client as xc
-from jax._src.lib import jaxlib_extension_version
 from jax._src.lib.mlir import dialects, ir, passmanager
 from jax._src.lib.mlir.dialects import func as func_dialect, hlo
 from jax._src.mesh import AxisType
@@ -78,9 +78,6 @@ Value = Any  # = ir.Value
 # mypy implicitly sets this variable to true when type checking.
 MYPY = False
 
-lowerable_effects: effects_lib.EffectTypeSet = effects_lib.lowerable_effects
-
-
 # IR Helpers
 
 IrValues = Union[ir.Value, tuple[ir.Value, ...]]
@@ -89,7 +86,6 @@ IrValues = Union[ir.Value, tuple[ir.Value, ...]]
 def _is_not_block_argument(x: IrValues) -> bool:
   return not isinstance(x, ir.BlockArgument)
 
-
 def dense_int_elements(xs) -> ir.DenseIntElementsAttr:
   return ir.DenseIntElementsAttr.get(np.asarray(xs, np.int64))
 
@@ -97,15 +93,8 @@ dense_int_array = ir.DenseI64ArrayAttr.get
 
 def dense_bool_elements(xs: Sequence[bool]) -> ir.DenseElementsAttr:
   a = np.packbits(np.array(xs, np.bool_), bitorder='little')
-  # TODO(b/209005197): Work around for MLIR crash for non-splat single element
-  # buffers.
-  if len(xs) == 1:
-    a = np.array(0 if a.item() == 0 else 0xff, np.uint8)
   return ir.DenseElementsAttr.get(
       a, type=ir.IntegerType.get_signless(1), shape=[len(xs)])
-
-def dense_bool_array(xs: Sequence[bool]) -> ir.DenseBoolArrayAttr:
-  return ir.DenseBoolArrayAttr.get(xs)
 
 def i32_attr(i): return ir.IntegerAttr.get(ir.IntegerType.get_signless(32), i)
 def i64_attr(i): return ir.IntegerAttr.get(ir.IntegerType.get_signless(64), i)
@@ -335,7 +324,7 @@ def _ndarray_constant_handler(val: np.ndarray | np.generic,
     return _numpy_array_constant(val)
 
 register_constant_handler(np.ndarray, _ndarray_constant_handler)
-register_constant_handler(literals.LiteralArray, _ndarray_constant_handler)
+register_constant_handler(literals.TypedNdArray, _ndarray_constant_handler)
 
 for _scalar_type in [np.int8, np.int16, np.int32, np.int64,
                      np.uint8, np.uint16, np.uint32, np.uint64,
@@ -460,59 +449,9 @@ def get_canonical_source_file(file_name: str, caches: TracebackCaches) -> str:
   caches.canonical_name_cache[file_name] = file_name
   return file_name
 
-def _is_user_file(ctx: ModuleContext, file_name: str) -> bool:
-  is_user = ctx.traceback_caches.is_user_file_cache.get(file_name, None)
-  if is_user is not None:
-    return is_user
-  out = source_info_util.is_user_filename(file_name)
-  ctx.traceback_caches.is_user_file_cache[file_name] = out
-  return out
-
 def _traceback_to_location(ctx: ModuleContext, tb: xc.Traceback) -> ir.Location:
   """Converts a full traceback to a callsite() MLIR location."""
-  if jaxlib_extension_version >= 368:
-    return ctx.traceback_caches.traceback_to_location_cache.get(tb)
-
-  loc = ctx.traceback_caches.traceback_cache.get(tb, None)
-  if loc is not None:
-    return loc
-
-  frame_locs = []
-  frames_limit = config.traceback_in_locations_limit.value
-  frames_limit = frames_limit if frames_limit >= 0 else 1000
-
-  codes, lastis = tb.raw_frames()
-  for i, code in enumerate(codes):
-    if not _is_user_file(ctx, code.co_filename):
-      continue
-
-    lasti = lastis[i]
-    code_lasti = code, lasti
-    loc = ctx.traceback_caches.location_cache.get(code_lasti, None)
-    if loc is None:
-      frame = source_info_util.raw_frame_to_frame(code, lasti)
-      file_loc = ir.Location.file(
-          get_canonical_source_file(frame.file_name, ctx.traceback_caches),
-          frame.start_line,
-          frame.start_column,
-          frame.end_line,
-          frame.end_column,
-      )
-      loc = ir.Location.name(frame.function_name, childLoc=file_loc)
-      ctx.traceback_caches.location_cache[code_lasti] = loc
-    frame_locs.append(loc)
-    if len(frame_locs) >= frames_limit:
-      break
-
-  n = len(frame_locs)
-  if n == 0:
-    loc = ir.Location.unknown()
-  elif n == 1:
-    loc = frame_locs[0]
-  else:
-    loc = ir.Location.callsite(frame_locs[0], frame_locs[1:])
-  ctx.traceback_caches.traceback_cache[tb] = loc
-  return loc
+  return ctx.traceback_caches.traceback_to_location_cache.get(tb)
 
 def source_info_to_location(
     ctx: ModuleContext, primitive: core.Primitive | None,
@@ -623,9 +562,18 @@ def make_ir_context() -> ir.Context:
 
   context.set_thread_pool(global_thread_pool)
   dialects.sdy.register_dialect(context)
+  # TODO(joelwee): Remove this once jaxlib 0.8 is the minimum.
+  if dialects.mpmd:
+    dialects.mpmd.register_dialect(context)
   dialects.mhlo.register_mhlo_dialect(context)
   dialects.chlo.register_dialect(context)
   dialects.hlo.register_dialect(context)
+  # If built in debug mode, and MLIR is in a multithreaded context, enabling
+  # multi threaded execution aborts the process if we try to register a new
+  # dialect after this point. The dialect registry in a context is not thread
+  # safe, and a fatal error is much better than a data race.
+  if jaxlib_version >= (0, 8):
+    jax_mlir_ext.enter_multi_threaded_execution(context)
   return context
 
 
@@ -706,25 +654,14 @@ def _code_to_filename(code: types.CodeType) -> str | None:
 @dataclasses.dataclass
 class TracebackCaches:
   traceback_to_location_cache: Any  # jax_mlir_ext.TracebackToLocationCache
-
-  # TODO(phawkins): remove after jaxlib 0.7.1 is the minimum supported version.
-  traceback_cache: dict[xc.Traceback, ir.Location]
-  location_cache: dict[tuple[types.CodeType, int], ir.Location]
   canonical_name_cache: dict[str, str]
-  is_user_file_cache: dict[str, bool]
 
   def __init__(self):
-    if jaxlib_extension_version >= 368:
-      frame_limit = config.traceback_in_locations_limit.value
-      frame_limit = frame_limit if frame_limit >= 0 else 1000
-      self.traceback_to_location_cache = jax_mlir_ext.TracebackToLocationCache(
-          code_to_filename=_code_to_filename, frame_limit=frame_limit)
-    else:
-      self.traceback_to_location_cache = None
-    self.traceback_cache = {}
-    self.location_cache = {}
+    frame_limit = config.traceback_in_locations_limit.value
+    frame_limit = frame_limit if frame_limit >= 0 else 1000
+    self.traceback_to_location_cache = jax_mlir_ext.TracebackToLocationCache(
+        code_to_filename=_code_to_filename, frame_limit=frame_limit)
     self.canonical_name_cache = {}
-    self.is_user_file_cache = {}
 
 
 @dataclasses.dataclass(frozen=True)
@@ -1189,6 +1126,8 @@ def contains_unconstrained(s):
 
 def all_unconstrained(s, aval):
   if isinstance(s, NamedSharding):
+    if aval.ndim == 0:
+      return False
     if aval.ndim != len(s.spec):
       return False
     return all(p is PartitionSpec.UNCONSTRAINED for p in s.spec)
@@ -1250,6 +1189,12 @@ def check_jaxpr_constants(closed_jaxpr: core.ClosedJaxpr):
   except Exception as exc:
     warnings.warn(message + f" Exception raised while generating report: {exc}")
 
+# TODO(phawkins): it is my firm belief that:
+# a) channel IDs have only a vestigal function when applied to collectives, and
+# b) their identity does not matter. The presence or absence of a channel
+#    changes whether XLA considers collectives to be inter-replica or
+#    inter-partition, but beyond that we believe they have little effect.
+COLLECTIVE_CHANNEL_ID = 1
 
 def lower_jaxpr_to_module(
     module_name: str,
@@ -1285,6 +1230,7 @@ def lower_jaxpr_to_module(
   See https://docs.jax.dev/en/latest/internals/constants.html
   """
   util.test_event("lower_jaxpr_to_module")
+  assert not jaxpr.is_high
   platforms = tuple(map(xb.canonicalize_platform, platforms))
 
   sharded_in_avals = (in_avals if arg_shardings is None else
@@ -1336,12 +1282,13 @@ def lower_jaxpr_to_module(
   # Delete donated_args by default here, since it's not needed beyond this point
   del donated_args
 
-  unlowerable_effects = lowerable_effects.filter_not_in(jaxpr.effects)
+  unlowerable_effects = effects_lib.lowerable_effects.filter_not_in(
+      jaxpr.effects)
   if unlowerable_effects:
     raise ValueError(f'Cannot lower jaxpr with effects: {jaxpr.effects}')
 
-  # HLO channels need to start at 1
-  channel_iter = itertools.count(1)
+  # HLO channels need to start at 1. We reserve 1 for collectives.
+  channel_iter = itertools.count(COLLECTIVE_CHANNEL_ID + 1)
   # Create a keepalives list that will be mutated during the lowering.
   keepalives: list[Any] = []
   host_callbacks: list[Any] = []
@@ -1494,6 +1441,33 @@ def _set_up_aliases(input_output_aliases, avals_in, avals_out,
           xla_donated_args = [False] * len(avals_in)
         xla_donated_args[input_id] = True
 
+  aliased_output_ids = {i for i in input_output_aliases if i is not None}
+
+  results_not_matched = collections.defaultdict(collections.deque)
+  for i, (aval, rm) in enumerate(zip(avals_out, result_memory_kinds)):
+    if i not in aliased_output_ids and aval is not core.abstract_token:
+      results_not_matched[(aval.size, rm)].append(i)
+
+  # For each donated argument that hasn't been aliased or donated to XLA, try to
+  # find an output array with matching size ignoring shapes. If a matching
+  # output array is found, then the argument is donated to XLA.
+  # Similar to the aliasing logic above, an argument is donated to XLA even if
+  # its layout and the output's layout don't match. This is being done to
+  # provide more opportunities for XLA to reuse the donated arguments.
+  for input_idx in range(len(out_donated_args)):
+    # If the argument is not a token and hasn't been aliased or donated to XLA,
+    # then try to find an output array with matching size.
+    if (out_donated_args[input_idx]
+        and avals_in[input_idx] is not core.abstract_token):
+      key = (avals_in[input_idx].size, arg_memory_kinds[input_idx])
+      if results_not_matched.get(key, ()):
+        # XLA donate the argument because there's a matching output array.
+        results_not_matched[key].popleft()
+        out_donated_args[input_idx] = False
+        if xla_donated_args is None:
+          xla_donated_args = [False] * len(avals_in)
+        xla_donated_args[input_idx] = True
+
   return input_output_aliases, out_donated_args, xla_donated_args
 
 Token = ir.Value
@@ -1603,6 +1577,7 @@ def lower_jaxpr_to_fun(
     MLIR func op
   """
   util.test_event("lower_jaxpr_to_fun", name)
+  assert not jaxpr.is_high
   if not config.use_simplified_jaxpr_constants.value:
     check_jaxpr_constants(jaxpr)
 
@@ -2019,42 +1994,6 @@ def replicate_trailing_dims(ctx, val: ir.Value, aval) -> ir.Value:
       ctx, val, aval, xc.HloSharding.replicate().to_proto(),
       unspecified_dims=set(range(aval.ndim)))
 
-class HashableLiteral:
-  """Hashable wrapper of core.Literal, used for deduplicating IR constants."""
-
-  __slots__ = ["value", "data"]
-
-  value: core.Literal
-
-  # Copy of the value suitable for an equality comparison. We are careful to
-  # avoid floating point comparisons here, because in particular we don't want
-  # 0.0 and -0.0 to be considered equal, but we are fine with NaNs being equal.
-  data: bytes | int | bool | None
-
-  def __init__(self, value):
-    self.value = value
-    if isinstance(value.val, (np.generic, np.ndarray)):
-      self.data = value.val.tobytes()
-    elif isinstance(value.val, (bool, int)):
-      self.data = value.val
-    elif isinstance(value.val, float):
-      self.data = np.float64(value.val).tobytes()
-    elif isinstance(value.val, complex):
-      self.data = np.complex128(value.val).tobytes()
-    else:
-      self.data = None  # Unhandled case.
-
-  def __hash__(self):
-    return hash(self.data)
-
-  def __eq__(self, other):
-    if type(self.value.val) != type(other.value.val):
-      return False
-    if self.value.aval != other.value.aval:
-      return False
-    if self.data is None:
-      return self is other
-    return self.data == other.data
 
 _uncacheable_primitives: set[core.Primitive] = set()
 
@@ -2077,26 +2016,14 @@ def jaxpr_subcomp(ctx: ModuleContext, jaxpr: core.Jaxpr,
     See https://docs.jax.dev/en/latest/internals/constants.html
   """
   assert "gpu" not in ctx.platforms
-  cached_ir_consts: dict[HashableLiteral, IrValues] = {}
+  assert not jaxpr.is_high
 
   def read(v: core.Atom) -> IrValues:
     if type(v) is core.Literal:
-      h = HashableLiteral(v)
-      c = cached_ir_consts.get(h)
-      if c is None:
-        c = ir_constant(v.val, const_lowering=const_lowering, aval=v.aval)
-        # TODO(necula): do we really need the cache, now that we hoist?
-        cached_ir_consts[h] = c
-      return c
+      return ir_constant(v.val, const_lowering=const_lowering, aval=v.aval)
     else:
       assert isinstance(v, core.Var)
       return env[v]
-
-  def aval(v: core.Atom) -> core.AbstractValue:
-    if type(v) is core.Literal:
-      return core.abstractify(v.val)
-    else:
-      return v.aval
 
   def write(v: core.Var, node: IrValues):
     assert node is not None
@@ -2133,7 +2060,7 @@ def jaxpr_subcomp(ctx: ModuleContext, jaxpr: core.Jaxpr,
     in_nodes = tuple(map(read, eqn.invars))
     assert all(_is_ir_values(v) for v in in_nodes), (eqn, in_nodes)
 
-    avals_in = tuple(map(aval, eqn.invars))
+    avals_in = tuple(v.aval for v in eqn.invars)
     ordered_effects = list(effects_lib.ordered_effects.filter_in(eqn.effects))
     tokens_in = tokens.subset(ordered_effects)
 
@@ -2165,7 +2092,7 @@ def jaxpr_subcomp(ctx: ModuleContext, jaxpr: core.Jaxpr,
             name_stack=eqn_name_stack,
             traceback=eqn.source_info.traceback,
             avals_in=avals_in,
-            avals_out=map(aval, eqn.outvars), tokens_in=tokens_in,
+            avals_out=tuple(v.aval for v in eqn.outvars), tokens_in=tokens_in,
             tokens_out=None, jaxpr_eqn_ctx=eqn.ctx,
             dim_var_values=dim_var_values,
             axis_size_env=axis_size_env,
@@ -2196,13 +2123,7 @@ def _cached_lowering(
   equation. For each such equation we either inline the function body or emit
   an out-of-line call to it, depending on whether any of the lowering rules
   opted out of inlining."""
-  def aval(v: core.Atom) -> core.AbstractValue:
-    if type(v) is core.Literal:
-      return core.abstractify(v.val)
-    else:
-      return v.aval
-
-  avals_in = tuple(map(aval, eqn.invars))
+  avals_in = tuple(v.aval for v in eqn.invars)
   ordered_effects = list(effects_lib.ordered_effects.filter_in(eqn.effects))
   cache_key = LoweringCacheKey(
       primitive=eqn.primitive,
@@ -2570,14 +2491,15 @@ def lower_fun(fun: Callable, multiple_results: bool = True) -> Callable:
         wrapped_fun = lu.annotate(wrapped_fun, (*implicit_args, *explicit_args))
         jaxpr, _, consts_for_constvars = pe.trace_to_jaxpr_dynamic2(wrapped_fun)
       else:
-        jaxpr, _, consts_for_constvars = pe.trace_to_jaxpr_dynamic(wrapped_fun,
-                                                                   ctx.avals_in)
+        jaxpr, _, consts_for_constvars = pe.trace_to_jaxpr_dynamic(
+            wrapped_fun, ctx.avals_in, lower=True)
         # TODO(frostig,mattjj): check ctx.avals_out against jaxpr avals out?
 
       if ctx.platforms is not None:
         sub_context = ctx.module_context.replace(platforms=ctx.platforms)
       else:
         sub_context = ctx.module_context
+      assert not jaxpr.is_high
       out, tokens = jaxpr_subcomp(
           sub_context, jaxpr, ctx.name_stack, ctx.tokens_in,
           ir_consts(consts_for_constvars, [v.aval for v in jaxpr.constvars]),
@@ -2644,7 +2566,7 @@ def check_backend_matches(inner_backend: str | None,
 
 def lower_called_computation(
     fn_name,
-    call_jaxpr: core.ClosedJaxpr | core.Jaxpr,
+    call_jaxpr: core.ClosedJaxpr,
     ctx: ModuleContext,
     num_const_args: int,
     in_avals,
@@ -2654,8 +2576,7 @@ def lower_called_computation(
     arg_names=None,
     result_names=None,
 ):
-  if isinstance(call_jaxpr, core.Jaxpr):
-    call_jaxpr = pe.close_jaxpr(call_jaxpr)
+  assert isinstance(call_jaxpr, core.ClosedJaxpr), type(call_jaxpr)
   check_backend_matches(backend, ctx.platforms)
   effects = list(tokens_in.effects())
   output_types = map(aval_to_ir_type, out_avals)
@@ -2673,18 +2594,15 @@ def lower_called_computation(
   return func_op, output_types, effects
 
 
-def call_lowering(fn_name, call_jaxpr: core.ClosedJaxpr | core.Jaxpr, backend,
+def call_lowering(fn_name, call_jaxpr: core.ClosedJaxpr, backend,
                   ctx: ModuleContext, in_avals,
                   out_avals, tokens_in, *args,
                   dim_var_values: Sequence[ir.Value],
                   const_lowering: dict[tuple[int, core.AbstractValue], IrValues],
                   arg_names=None, result_names=None,
                   attributes: None | dict[str, Any] = None):
-  # TODO(necula): clean up the types
-  if isinstance(call_jaxpr, core.ClosedJaxpr):
-    const_args_and_avals = core.jaxpr_const_args(call_jaxpr.jaxpr)
-  else:
-    const_args_and_avals = core.jaxpr_const_args(call_jaxpr)
+  assert isinstance(call_jaxpr, core.ClosedJaxpr), type(call_jaxpr)
+  const_args_and_avals = core.jaxpr_const_args(call_jaxpr.jaxpr)
   const_args, const_avals = util.unzip2(const_args_and_avals)
   const_arg_values = [ir_constant(c, const_lowering=const_lowering, aval=aval)
                       for c, aval in const_args_and_avals]
@@ -2713,7 +2631,9 @@ def call_lowering(fn_name, call_jaxpr: core.ClosedJaxpr | core.Jaxpr, backend,
 
 def core_call_lowering(ctx: LoweringRuleContext,
                        *args, name, backend=None,
-                       call_jaxpr: core.ClosedJaxpr):
+                       call_jaxpr: core.ClosedJaxpr | core.Jaxpr):
+  if isinstance(call_jaxpr, core.Jaxpr):
+    call_jaxpr = pe.close_jaxpr(call_jaxpr)
   out_nodes, tokens = call_lowering(
       name, call_jaxpr, backend, ctx.module_context,
       ctx.avals_in, ctx.avals_out, ctx.tokens_in, *args,
@@ -3196,7 +3116,8 @@ def build_mlir_module_helper(
     backend: xb.XlaBackend | None,
     axis_context: AxisContext) -> ir.Module:
   """Helper to generate pmap-style XLA computations for custom partitioners."""
-  unlowerable_effects = lowerable_effects.filter_not_in(closed_jaxpr.effects)
+  unlowerable_effects = effects_lib.lowerable_effects.filter_not_in(
+      closed_jaxpr.effects)
   if unlowerable_effects:
     raise ValueError(f'Cannot lower jaxpr with effects: {closed_jaxpr.effects}')
   lowering_result = lower_jaxpr_to_module(name, closed_jaxpr,

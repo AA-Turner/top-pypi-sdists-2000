@@ -67,6 +67,8 @@ from .literals import (
     CapacityBlockExtensionStatusType,
     CapacityBlockInterconnectStatusType,
     CapacityBlockResourceStateType,
+    CapacityManagerDataExportStatusType,
+    CapacityManagerStatusType,
     CapacityReservationBillingRequestStatusType,
     CapacityReservationDeliveryPreferenceType,
     CapacityReservationFleetStateType,
@@ -75,6 +77,7 @@ from .literals import (
     CapacityReservationStateType,
     CapacityReservationTenancyType,
     CapacityReservationTypeType,
+    CapacityTenancyType,
     CarrierGatewayStateType,
     ClientCertificateRevocationListStatusCodeType,
     ClientVpnAuthenticationTypeType,
@@ -83,6 +86,7 @@ from .literals import (
     ClientVpnEndpointAttributeStatusCodeType,
     ClientVpnEndpointStatusCodeType,
     ClientVpnRouteStatusCodeType,
+    ComparisonType,
     ConnectionNotificationStateType,
     ConnectivityTypeType,
     ConversionTaskStateType,
@@ -123,6 +127,7 @@ from .literals import (
     ExportTaskStateType,
     FastLaunchStateCodeType,
     FastSnapshotRestoreStateCodeType,
+    FilterByDimensionType,
     FindingsFoundType,
     FleetActivityStatusType,
     FleetEventTypeType,
@@ -136,6 +141,7 @@ from .literals import (
     FpgaImageAttributeNameType,
     FpgaImageStateCodeType,
     GatewayAssociationStateType,
+    GroupByType,
     HostMaintenanceType,
     HostnameTypeType,
     HostRecoveryType,
@@ -149,6 +155,7 @@ from .literals import (
     ImageReferenceResourceTypeType,
     ImageStateType,
     ImageTypeValuesType,
+    IngestionStatusType,
     InitializationTypeType,
     InstanceAttributeNameType,
     InstanceAutoRecoveryStateType,
@@ -232,6 +239,7 @@ from .literals import (
     MarketTypeType,
     MembershipTypeType,
     MetadataDefaultHttpTokensStateType,
+    MetricType,
     ModifyAvailabilityZoneOptInStatusType,
     MonitoringStateType,
     MoveStatusType,
@@ -249,6 +257,7 @@ from .literals import (
     OfferingTypeValuesType,
     OnDemandAllocationStrategyType,
     OperationTypeType,
+    OutputFormatType,
     PartitionLoadFrequencyType,
     PaymentOptionType,
     PeriodTypeType,
@@ -267,7 +276,9 @@ from .literals import (
     ReportInstanceReasonCodesType,
     ReportStateType,
     ReportStatusTypeType,
+    ReservationEndDateTypeType,
     ReservationStateType,
+    ReservationTypeType,
     ReservedInstanceStateType,
     ResourceTypeType,
     RIProductDescriptionType,
@@ -589,6 +600,9 @@ __all__ = (
     "CapacityBlockOfferingTypeDef",
     "CapacityBlockStatusTypeDef",
     "CapacityBlockTypeDef",
+    "CapacityManagerConditionTypeDef",
+    "CapacityManagerDataExportResponseTypeDef",
+    "CapacityManagerDimensionTypeDef",
     "CapacityReservationBillingRequestTypeDef",
     "CapacityReservationCommitmentInfoTypeDef",
     "CapacityReservationFleetCancellationStateTypeDef",
@@ -663,6 +677,8 @@ __all__ = (
     "CpuPerformanceFactorRequestTypeDef",
     "CpuPerformanceFactorTypeDef",
     "CpuPerformanceFactorUnionTypeDef",
+    "CreateCapacityManagerDataExportRequestTypeDef",
+    "CreateCapacityManagerDataExportResultTypeDef",
     "CreateCapacityReservationBySplittingRequestTypeDef",
     "CreateCapacityReservationBySplittingResultTypeDef",
     "CreateCapacityReservationFleetRequestTypeDef",
@@ -890,6 +906,8 @@ __all__ = (
     "DataQueryTypeDef",
     "DataResponseTypeDef",
     "DeclarativePoliciesReportTypeDef",
+    "DeleteCapacityManagerDataExportRequestTypeDef",
+    "DeleteCapacityManagerDataExportResultTypeDef",
     "DeleteCarrierGatewayRequestTypeDef",
     "DeleteCarrierGatewayResultTypeDef",
     "DeleteClientVpnEndpointRequestTypeDef",
@@ -1117,6 +1135,9 @@ __all__ = (
     "DescribeCapacityBlocksRequestPaginateTypeDef",
     "DescribeCapacityBlocksRequestTypeDef",
     "DescribeCapacityBlocksResultTypeDef",
+    "DescribeCapacityManagerDataExportsRequestPaginateTypeDef",
+    "DescribeCapacityManagerDataExportsRequestTypeDef",
+    "DescribeCapacityManagerDataExportsResultTypeDef",
     "DescribeCapacityReservationBillingRequestsRequestPaginateTypeDef",
     "DescribeCapacityReservationBillingRequestsRequestTypeDef",
     "DescribeCapacityReservationBillingRequestsResultTypeDef",
@@ -1621,6 +1642,7 @@ __all__ = (
     "DhcpConfigurationTypeDef",
     "DhcpOptionsCreateTagsRequestTypeDef",
     "DhcpOptionsTypeDef",
+    "DimensionConditionTypeDef",
     "DirectoryServiceAuthenticationRequestTypeDef",
     "DirectoryServiceAuthenticationTypeDef",
     "DisableAddressTransferRequestTypeDef",
@@ -1629,6 +1651,8 @@ __all__ = (
     "DisableAllowedImagesSettingsResultTypeDef",
     "DisableAwsNetworkPerformanceMetricSubscriptionRequestTypeDef",
     "DisableAwsNetworkPerformanceMetricSubscriptionResultTypeDef",
+    "DisableCapacityManagerRequestTypeDef",
+    "DisableCapacityManagerResultTypeDef",
     "DisableEbsEncryptionByDefaultRequestTypeDef",
     "DisableEbsEncryptionByDefaultResultTypeDef",
     "DisableFastLaunchRequestTypeDef",
@@ -1739,6 +1763,8 @@ __all__ = (
     "EnableAllowedImagesSettingsResultTypeDef",
     "EnableAwsNetworkPerformanceMetricSubscriptionRequestTypeDef",
     "EnableAwsNetworkPerformanceMetricSubscriptionResultTypeDef",
+    "EnableCapacityManagerRequestTypeDef",
+    "EnableCapacityManagerResultTypeDef",
     "EnableEbsEncryptionByDefaultRequestTypeDef",
     "EnableEbsEncryptionByDefaultResultTypeDef",
     "EnableFastLaunchRequestTypeDef",
@@ -1842,6 +1868,14 @@ __all__ = (
     "GetAwsNetworkPerformanceDataRequestPaginateTypeDef",
     "GetAwsNetworkPerformanceDataRequestTypeDef",
     "GetAwsNetworkPerformanceDataResultTypeDef",
+    "GetCapacityManagerAttributesRequestTypeDef",
+    "GetCapacityManagerAttributesResultTypeDef",
+    "GetCapacityManagerMetricDataRequestPaginateTypeDef",
+    "GetCapacityManagerMetricDataRequestTypeDef",
+    "GetCapacityManagerMetricDataResultTypeDef",
+    "GetCapacityManagerMetricDimensionsRequestPaginateTypeDef",
+    "GetCapacityManagerMetricDimensionsRequestTypeDef",
+    "GetCapacityManagerMetricDimensionsResultTypeDef",
     "GetCapacityReservationUsageRequestTypeDef",
     "GetCapacityReservationUsageResultTypeDef",
     "GetCoipPoolUsageRequestTypeDef",
@@ -2225,7 +2259,9 @@ __all__ = (
     "MemoryInfoTypeDef",
     "MemoryMiBRequestTypeDef",
     "MemoryMiBTypeDef",
+    "MetricDataResultTypeDef",
     "MetricPointTypeDef",
+    "MetricValueTypeDef",
     "ModifyAddressAttributeRequestTypeDef",
     "ModifyAddressAttributeResultTypeDef",
     "ModifyAvailabilityZoneGroupRequestTypeDef",
@@ -2846,6 +2882,8 @@ __all__ = (
     "UnsuccessfulInstanceCreditSpecificationItemTypeDef",
     "UnsuccessfulItemErrorTypeDef",
     "UnsuccessfulItemTypeDef",
+    "UpdateCapacityManagerOrganizationsAccessRequestTypeDef",
+    "UpdateCapacityManagerOrganizationsAccessResultTypeDef",
     "UpdateSecurityGroupRuleDescriptionsEgressRequestTypeDef",
     "UpdateSecurityGroupRuleDescriptionsEgressResultTypeDef",
     "UpdateSecurityGroupRuleDescriptionsIngressRequestTypeDef",
@@ -3738,6 +3776,32 @@ class CapacityReservationStatusTypeDef(TypedDict):
     TotalUnavailableCapacity: NotRequired[int]
 
 
+class DimensionConditionTypeDef(TypedDict):
+    Dimension: NotRequired[FilterByDimensionType]
+    Comparison: NotRequired[ComparisonType]
+    Values: NotRequired[Sequence[str]]
+
+
+class CapacityManagerDimensionTypeDef(TypedDict):
+    ResourceRegion: NotRequired[str]
+    AvailabilityZoneId: NotRequired[str]
+    AccountId: NotRequired[str]
+    InstanceFamily: NotRequired[str]
+    InstanceType: NotRequired[str]
+    InstancePlatform: NotRequired[str]
+    ReservationArn: NotRequired[str]
+    ReservationId: NotRequired[str]
+    ReservationType: NotRequired[ReservationTypeType]
+    ReservationCreateTimestamp: NotRequired[datetime]
+    ReservationStartTimestamp: NotRequired[datetime]
+    ReservationEndTimestamp: NotRequired[datetime]
+    ReservationEndDateType: NotRequired[ReservationEndDateTypeType]
+    Tenancy: NotRequired[CapacityTenancyType]
+    ReservationState: NotRequired[ReservationStateType]
+    ReservationInstanceMatchCriteria: NotRequired[str]
+    ReservationUnusedFinancialOwner: NotRequired[str]
+
+
 class CapacityReservationInfoTypeDef(TypedDict):
     InstanceType: NotRequired[str]
     AvailabilityZone: NotRequired[str]
@@ -4392,6 +4456,11 @@ class MetricPointTypeDef(TypedDict):
     EndDate: NotRequired[datetime]
     Value: NotRequired[float]
     Status: NotRequired[str]
+
+
+class DeleteCapacityManagerDataExportRequestTypeDef(TypedDict):
+    CapacityManagerDataExportId: str
+    DryRun: NotRequired[bool]
 
 
 class DeleteCarrierGatewayRequestTypeDef(TypedDict):
@@ -5537,6 +5606,11 @@ class DisableAwsNetworkPerformanceMetricSubscriptionRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
 
+class DisableCapacityManagerRequestTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
+    ClientToken: NotRequired[str]
+
+
 class DisableEbsEncryptionByDefaultRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
@@ -5916,6 +5990,12 @@ class EnableAwsNetworkPerformanceMetricSubscriptionRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
 
+class EnableCapacityManagerRequestTypeDef(TypedDict):
+    OrganizationsAccess: NotRequired[bool]
+    DryRun: NotRequired[bool]
+    ClientToken: NotRequired[str]
+
+
 class EnableEbsEncryptionByDefaultRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
@@ -6217,6 +6297,10 @@ class GetAssociatedIpv6PoolCidrsRequestTypeDef(TypedDict):
 class Ipv6CidrAssociationTypeDef(TypedDict):
     Ipv6Cidr: NotRequired[str]
     AssociatedResource: NotRequired[str]
+
+
+class GetCapacityManagerAttributesRequestTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
 
 
 class GetCapacityReservationUsageRequestTypeDef(TypedDict):
@@ -7150,6 +7234,11 @@ class MacSystemIntegrityProtectionConfigurationTypeDef(TypedDict):
 
 class MediaDeviceMemoryInfoTypeDef(TypedDict):
     SizeInMiB: NotRequired[int]
+
+
+class MetricValueTypeDef(TypedDict):
+    Metric: NotRequired[MetricType]
+    Value: NotRequired[float]
 
 
 class ModifyAddressAttributeRequestTypeDef(TypedDict):
@@ -8525,6 +8614,12 @@ class UnsuccessfulItemErrorTypeDef(TypedDict):
     Message: NotRequired[str]
 
 
+class UpdateCapacityManagerOrganizationsAccessRequestTypeDef(TypedDict):
+    OrganizationsAccess: bool
+    DryRun: NotRequired[bool]
+    ClientToken: NotRequired[str]
+
+
 class ValidationErrorTypeDef(TypedDict):
     Code: NotRequired[str]
     Message: NotRequired[str]
@@ -8786,6 +8881,11 @@ class CopyImageResultTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class CreateCapacityManagerDataExportResultTypeDef(TypedDict):
+    CapacityManagerDataExportId: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 class CreateFpgaImageResultTypeDef(TypedDict):
     FpgaImageId: str
     FpgaImageGlobalId: str
@@ -8819,6 +8919,11 @@ class CreateRouteResultTypeDef(TypedDict):
 
 class CreateStoreImageTaskResultTypeDef(TypedDict):
     ObjectKey: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DeleteCapacityManagerDataExportResultTypeDef(TypedDict):
+    CapacityManagerDataExportId: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -8941,6 +9046,12 @@ class DisableAwsNetworkPerformanceMetricSubscriptionResultTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class DisableCapacityManagerResultTypeDef(TypedDict):
+    CapacityManagerStatus: CapacityManagerStatusType
+    OrganizationsAccess: bool
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 class DisableEbsEncryptionByDefaultResultTypeDef(TypedDict):
     EbsEncryptionByDefault: bool
     ResponseMetadata: ResponseMetadataTypeDef
@@ -9031,6 +9142,12 @@ class EnableAwsNetworkPerformanceMetricSubscriptionResultTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class EnableCapacityManagerResultTypeDef(TypedDict):
+    CapacityManagerStatus: CapacityManagerStatusType
+    OrganizationsAccess: bool
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 class EnableEbsEncryptionByDefaultResultTypeDef(TypedDict):
     EbsEncryptionByDefault: bool
     ResponseMetadata: ResponseMetadataTypeDef
@@ -9093,6 +9210,17 @@ class ExportClientVpnClientConfigurationResultTypeDef(TypedDict):
 
 class ExportTransitGatewayRoutesResultTypeDef(TypedDict):
     S3Location: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class GetCapacityManagerAttributesResultTypeDef(TypedDict):
+    CapacityManagerStatus: CapacityManagerStatusType
+    OrganizationsAccess: bool
+    DataExportCount: int
+    IngestionStatus: IngestionStatusType
+    IngestionStatusMessage: str
+    EarliestDatapointTimestamp: datetime
+    LatestDatapointTimestamp: datetime
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -9446,6 +9574,12 @@ class UnlockSnapshotResultTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class UpdateCapacityManagerOrganizationsAccessResultTypeDef(TypedDict):
+    CapacityManagerStatus: CapacityManagerStatusType
+    OrganizationsAccess: bool
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 class UpdateSecurityGroupRuleDescriptionsEgressResultTypeDef(TypedDict):
     Return: bool
     ResponseMetadata: ResponseMetadataTypeDef
@@ -9567,6 +9701,20 @@ class CapacityBlockTypeDef(TypedDict):
     EndDate: NotRequired[datetime]
     CreateDate: NotRequired[datetime]
     State: NotRequired[CapacityBlockResourceStateType]
+    Tags: NotRequired[List[TagTypeDef]]
+
+
+class CapacityManagerDataExportResponseTypeDef(TypedDict):
+    CapacityManagerDataExportId: NotRequired[str]
+    S3BucketName: NotRequired[str]
+    S3BucketPrefix: NotRequired[str]
+    Schedule: NotRequired[Literal["hourly"]]
+    OutputFormat: NotRequired[OutputFormatType]
+    CreateTime: NotRequired[datetime]
+    LatestDeliveryStatus: NotRequired[CapacityManagerDataExportStatusType]
+    LatestDeliveryStatusMessage: NotRequired[str]
+    LatestDeliveryS3LocationUri: NotRequired[str]
+    LatestDeliveryTime: NotRequired[datetime]
     Tags: NotRequired[List[TagTypeDef]]
 
 
@@ -10781,6 +10929,16 @@ class CapacityBlockStatusTypeDef(TypedDict):
     CapacityReservationStatuses: NotRequired[List[CapacityReservationStatusTypeDef]]
 
 
+class CapacityManagerConditionTypeDef(TypedDict):
+    DimensionCondition: NotRequired[DimensionConditionTypeDef]
+
+
+class GetCapacityManagerMetricDimensionsResultTypeDef(TypedDict):
+    MetricDimensionResults: List[CapacityManagerDimensionTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
 class CapacityReservationBillingRequestTypeDef(TypedDict):
     CapacityReservationId: NotRequired[str]
     RequestedBy: NotRequired[str]
@@ -11577,6 +11735,21 @@ class DescribeCapacityBlocksRequestTypeDef(TypedDict):
     MaxResults: NotRequired[int]
     Filters: NotRequired[Sequence[FilterTypeDef]]
     DryRun: NotRequired[bool]
+
+
+class DescribeCapacityManagerDataExportsRequestPaginateTypeDef(TypedDict):
+    CapacityManagerDataExportIds: NotRequired[Sequence[str]]
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class DescribeCapacityManagerDataExportsRequestTypeDef(TypedDict):
+    CapacityManagerDataExportIds: NotRequired[Sequence[str]]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
 
 
 class DescribeCapacityReservationBillingRequestsRequestPaginateTypeDef(TypedDict):
@@ -15131,6 +15304,12 @@ class MediaDeviceInfoTypeDef(TypedDict):
     MemoryInfo: NotRequired[MediaDeviceMemoryInfoTypeDef]
 
 
+class MetricDataResultTypeDef(TypedDict):
+    Dimension: NotRequired[CapacityManagerDimensionTypeDef]
+    Timestamp: NotRequired[datetime]
+    MetricValues: NotRequired[List[MetricValueTypeDef]]
+
+
 class ModifyIpamRequestTypeDef(TypedDict):
     IpamId: str
     DryRun: NotRequired[bool]
@@ -16105,6 +16284,12 @@ class DescribeCapacityBlocksResultTypeDef(TypedDict):
     NextToken: NotRequired[str]
 
 
+class DescribeCapacityManagerDataExportsResultTypeDef(TypedDict):
+    CapacityManagerDataExports: List[CapacityManagerDataExportResponseTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
 class CreateCarrierGatewayResultTypeDef(TypedDict):
     CarrierGateway: CarrierGatewayTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
@@ -16897,6 +17082,50 @@ class DescribeCapacityBlockStatusResultTypeDef(TypedDict):
     CapacityBlockStatuses: List[CapacityBlockStatusTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
+
+
+class GetCapacityManagerMetricDataRequestPaginateTypeDef(TypedDict):
+    MetricNames: Sequence[MetricType]
+    StartTime: TimestampTypeDef
+    EndTime: TimestampTypeDef
+    Period: int
+    GroupBy: NotRequired[Sequence[GroupByType]]
+    FilterBy: NotRequired[Sequence[CapacityManagerConditionTypeDef]]
+    DryRun: NotRequired[bool]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class GetCapacityManagerMetricDataRequestTypeDef(TypedDict):
+    MetricNames: Sequence[MetricType]
+    StartTime: TimestampTypeDef
+    EndTime: TimestampTypeDef
+    Period: int
+    GroupBy: NotRequired[Sequence[GroupByType]]
+    FilterBy: NotRequired[Sequence[CapacityManagerConditionTypeDef]]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+
+
+class GetCapacityManagerMetricDimensionsRequestPaginateTypeDef(TypedDict):
+    GroupBy: Sequence[GroupByType]
+    StartTime: TimestampTypeDef
+    EndTime: TimestampTypeDef
+    MetricNames: Sequence[MetricType]
+    FilterBy: NotRequired[Sequence[CapacityManagerConditionTypeDef]]
+    DryRun: NotRequired[bool]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class GetCapacityManagerMetricDimensionsRequestTypeDef(TypedDict):
+    GroupBy: Sequence[GroupByType]
+    StartTime: TimestampTypeDef
+    EndTime: TimestampTypeDef
+    MetricNames: Sequence[MetricType]
+    FilterBy: NotRequired[Sequence[CapacityManagerConditionTypeDef]]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+    DryRun: NotRequired[bool]
 
 
 class DescribeCapacityReservationBillingRequestsResultTypeDef(TypedDict):
@@ -17935,6 +18164,12 @@ class MediaAcceleratorInfoTypeDef(TypedDict):
     TotalMediaMemoryInMiB: NotRequired[int]
 
 
+class GetCapacityManagerMetricDataResultTypeDef(TypedDict):
+    MetricDataResults: List[MetricDataResultTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
 class ReservedInstancesModificationTypeDef(TypedDict):
     ClientToken: NotRequired[str]
     CreateDate: NotRequired[datetime]
@@ -18895,6 +19130,16 @@ class CopyVolumesRequestTypeDef(TypedDict):
     MultiAttachEnabled: NotRequired[bool]
     Throughput: NotRequired[int]
     ClientToken: NotRequired[str]
+
+
+class CreateCapacityManagerDataExportRequestTypeDef(TypedDict):
+    S3BucketName: str
+    Schedule: Literal["hourly"]
+    OutputFormat: OutputFormatType
+    S3BucketPrefix: NotRequired[str]
+    ClientToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
 
 
 class CreateCapacityReservationBySplittingRequestTypeDef(TypedDict):

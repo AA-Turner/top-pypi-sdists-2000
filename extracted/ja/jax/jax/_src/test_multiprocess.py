@@ -14,6 +14,7 @@
 
 """Helper for running multi-process tests."""
 
+import functools
 import os
 import pathlib
 import re
@@ -31,7 +32,7 @@ from jax._src import xla_bridge as xb
 from jax._src import test_util as jtu
 from jax._src.config import config
 from jax._src.lib import cuda_versions
-from jax._src.lib import xla_client as xc
+from jax._src.lib import _jax
 
 try:
   import portpicker  # pytype: disable=import-error
@@ -67,9 +68,9 @@ _MULTIPROCESS_TEST_CONTROLLER_ADDRESS = absl.flags.DEFINE_string(
 expect_failures_with_regex = None
 
 
-def main():
+def main(shard_main=None):
   config.config_with_absl()
-  app.run(_main)
+  app.run(functools.partial(_main, shard_main=shard_main))
 
 
 class GracefulKiller:
@@ -87,7 +88,7 @@ class GracefulKiller:
     self.kill_now = True
 
 
-def _main(argv):
+def _main(argv, shard_main):
   if _MULTIPROCESS_TEST_WORKER_ID.value >= 0:
     distributed.initialize(
         _MULTIPROCESS_TEST_CONTROLLER_ADDRESS.value,
@@ -95,7 +96,9 @@ def _main(argv):
         process_id=_MULTIPROCESS_TEST_WORKER_ID.value,
         initialization_timeout=10,
     )
-    absltest.main(testLoader=jtu.JaxTestLoader())
+    if shard_main is not None:
+      return shard_main()
+    return absltest.main(testLoader=jtu.JaxTestLoader())
 
   if not argv[0].endswith(".py"):  # Skip the interpreter path if present.
     argv = argv[1:]
@@ -242,7 +245,7 @@ class MultiProcessTest(parameterized.TestCase):
     client = distributed.global_state.client
     try:
       client.wait_at_barrier(self._testMethodName + "_start", 10000)
-    except xc.XlaRuntimeError as e:
+    except _jax.JaxRuntimeError as e:
       msg, *_ = e.args
       if msg.startswith("DEADLINE_EXCEEDED"):
         raise RuntimeError(
@@ -260,7 +263,7 @@ class MultiProcessTest(parameterized.TestCase):
     # but the overall test should fail).
     try:
       client.wait_at_barrier(self._testMethodName + "_end", 10000)
-    except xc.XlaRuntimeError as e:
+    except _jax.JaxRuntimeError as e:
       msg, *_ = e.args
       if msg.startswith("DEADLINE_EXCEEDED"):
         raise RuntimeError(
