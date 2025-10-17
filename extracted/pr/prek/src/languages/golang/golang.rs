@@ -38,7 +38,7 @@ impl LanguageImpl for Golang {
             _ => unreachable!(),
         };
         let go = installer
-            .install(version)
+            .install(store, version)
             .await
             .context("Failed to install go")?;
 
@@ -95,12 +95,11 @@ impl LanguageImpl for Golang {
                 .await?;
         }
         for dep in &hook.additional_dependencies {
-            go_install_cmd()
-                .arg(dep)
-                .remove_git_env()
-                .check(true)
-                .output()
-                .await?;
+            let mut cmd = go_install_cmd();
+            if let Some(repo) = hook.repo_path() {
+                cmd.current_dir(repo);
+            }
+            cmd.arg(dep).remove_git_env().check(true).output().await?;
         }
 
         reporter.on_install_complete(progress);

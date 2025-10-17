@@ -146,7 +146,7 @@ class ConfigLoader:
 
         # We still have to modify metrics metadata in case the config was a
         # registry URL
-        if is_semgrep_url(config_str):
+        if is_semgrep_url(config_str, state.env.semgrep_url):
             state.metrics.is_using_registry = True
             state.metrics.add_registry_url(self._config_path)
             self._origin = ConfigType.REGISTRY
@@ -445,6 +445,10 @@ def parse_config_files(
     ] = {}
 
     ctx = click.get_current_context(silent=True)
+    configured_semgrep_url = None
+    if ctx is not None:
+        with ctx.scope():
+            configured_semgrep_url = get_state().env.semgrep_url
 
     def context_aware_parse_config_string(
         *args: Any,
@@ -482,7 +486,7 @@ def parse_config_files(
                 # used).
                 config_id = (
                     REGISTRY_CONFIG_ID
-                    if is_semgrep_url(config_path)
+                    if is_semgrep_url(config_path, configured_semgrep_url)
                     else NON_REGISTRY_REMOTE_CONFIG_ID
                 )
                 filename = f"{config_path[:20]}..."
@@ -821,40 +825,39 @@ def parse_config_string(
 
     # Should we guard this code and checks whether filename ends with .json?
     errors: List[SemgrepError] = []
+    tmp_fd, rules_tmp_path = mkstemp(suffix=".rules", prefix="semgrep-", text=True)
 
-    rules_tmp_path: Optional[str] = None
     try:
-        fd, rules_tmp_path = mkstemp(suffix=".rules", prefix="semgrep-", text=True)
-        with os.fdopen(fd, "w") as fp:
+        with os.fdopen(tmp_fd, "w") as fp:
             fp.write(contents)
-        logger.debug(f"Saving rules to {rules_tmp_path}")
-    except Exception as e:
-        logger.debug(f"Failed to write {rules_tmp_path=} to disk: {e}")
 
-    try:
-        # we pretend it came from YAML so we can keep later code simple
-        data = YamlTree.wrap(json.loads(contents), EmptySpan)
-        source_hash = SourceTracker.add_source(contents)
-        errors.extend(
-            validate_yaml(
-                data,
-                source_hash,
-                filename,
-                no_rewrite_rule_ids=no_rewrite_rule_ids,
-                rules_tmp_path=rules_tmp_path,
+        logger.debug(f"Saved rules to {rules_tmp_path}")
+
+        try:
+            # we pretend it came from YAML so we can keep later code simple
+            data = YamlTree.wrap(json.loads(contents), EmptySpan)
+            source_hash = SourceTracker.add_source(contents)
+            errors.extend(
+                validate_yaml(
+                    data,
+                    source_hash,
+                    filename,
+                    no_rewrite_rule_ids=no_rewrite_rule_ids,
+                    rules_tmp_path=rules_tmp_path,
+                )
             )
-        )
-        return ({config_id: data}, errors)
-    except json.decoder.JSONDecodeError:
-        pass
+            return ({config_id: data}, errors)
+        except json.decoder.JSONDecodeError:
+            pass
 
-    try:
         data, config_errors = parse_config_preserve_spans(
             contents,
             filename,
             rules_tmp_path=rules_tmp_path,
         )
         errors.extend(config_errors)
+        return {config_id: data}, errors
+
     except EmptyYamlException:
         raise SemgrepError(
             f"Empty configuration file {filename}", code=UNPARSEABLE_YAML_EXIT_CODE
@@ -864,7 +867,10 @@ def parse_config_string(
             f"Invalid YAML file {config_id}:\n{indent(str(se))}",
             code=UNPARSEABLE_YAML_EXIT_CODE,
         )
-    return {config_id: data}, errors
+    # We need to make sure this temp file is deleted
+    # see: saf-2257
+    finally:
+        os.remove(rules_tmp_path)
 
 
 def is_registry_id(config_str: str) -> bool:

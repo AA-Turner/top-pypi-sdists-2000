@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mlflow
-Version: 3.4.0
+Version: 3.5.0
 Summary: MLflow is an open source platform for the complete machine learning lifecycle
 Maintainer-email: Databricks <mlflow-oss-maintainers@googlegroups.com>
 License: Copyright 2018 Databricks, Inc.  All rights reserved.
@@ -224,11 +224,12 @@ Classifier: Programming Language :: Python :: 3.10
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
-Requires-Dist: mlflow-skinny==3.4.0
-Requires-Dist: mlflow-tracing==3.4.0
+Requires-Dist: mlflow-skinny==3.5.0
+Requires-Dist: mlflow-tracing==3.5.0
+Requires-Dist: Flask-CORS<7
 Requires-Dist: Flask<4
 Requires-Dist: alembic!=1.10.0,<2
-Requires-Dist: cryptography<46,>=43.0.0
+Requires-Dist: cryptography<47,>=43.0.0
 Requires-Dist: docker<8,>=4.0.0
 Requires-Dist: fastmcp<3,>=2.0.0
 Requires-Dist: graphene<4
@@ -284,9 +285,11 @@ Requires-Dist: aliyunstoreplugin; extra == "aliyun-oss"
 Provides-Extra: jfrog
 Requires-Dist: mlflow-jfrog-plugin; extra == "jfrog"
 Provides-Extra: langchain
-Requires-Dist: langchain<=0.3.27,>=0.2.16; extra == "langchain"
+Requires-Dist: langchain<=0.3.27,>=0.3.3; extra == "langchain"
 Provides-Extra: auth
 Requires-Dist: Flask-WTF<2; extra == "auth"
+Provides-Extra: jobs
+Requires-Dist: huey<3,>=2.5.0; extra == "jobs"
 Dynamic: license-file
 
 <h1 align="center" style="border-bottom: none">

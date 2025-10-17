@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "nox"
-version = "2025.10.14"
+version = "2025.10.16"
 description = "Flexible test automation."
 readme = "README.md"
 keywords = [
@@ -43,12 +43,15 @@ dependencies = [
   "attrs>=24.1",
   "colorlog>=2.6.1,<7",
   "dependency-groups>=1.1",
+  "humanize>=4",
   "packaging>=20.9; python_version<'3.10'",
   "packaging>=21; python_version>='3.10'",
-  "pbs-installer[all]>=2025.1.6",
   "tomli>=1.1; python_version<'3.11'",
   "virtualenv>=20.14.1; python_version<'3.10'",
   "virtualenv>=20.15; python_version>='3.10'",
+]
+optional-dependencies.pbs = [
+  "pbs-installer[all]>=2025.1.6",
 ]
 optional-dependencies.tox_to_nox = [
   "importlib-resources; python_version<'3.9'",

@@ -36,6 +36,7 @@ __protobuf__ = proto.module(
         "AddAccessConfigInstanceRequest",
         "AddAssociationFirewallPolicyRequest",
         "AddAssociationNetworkFirewallPolicyRequest",
+        "AddAssociationOrganizationSecurityPolicyRequest",
         "AddAssociationRegionNetworkFirewallPolicyRequest",
         "AddHealthCheckTargetPoolRequest",
         "AddInstanceTargetPoolRequest",
@@ -49,6 +50,7 @@ __protobuf__ = proto.module(
         "AddResourcePoliciesRegionDiskRequest",
         "AddRuleFirewallPolicyRequest",
         "AddRuleNetworkFirewallPolicyRequest",
+        "AddRuleOrganizationSecurityPolicyRequest",
         "AddRuleRegionNetworkFirewallPolicyRequest",
         "AddRuleRegionSecurityPolicyRequest",
         "AddRuleSecurityPolicyRequest",
@@ -209,6 +211,7 @@ __protobuf__ = proto.module(
         "ConnectionDraining",
         "ConsistentHashLoadBalancerSettings",
         "ConsistentHashLoadBalancerSettingsHttpCookie",
+        "CopyRulesOrganizationSecurityPolicyRequest",
         "CorsPolicy",
         "CreateInstancesInstanceGroupManagerRequest",
         "CreateInstancesRegionInstanceGroupManagerRequest",
@@ -220,6 +223,7 @@ __protobuf__ = proto.module(
         "CustomerEncryptionKey",
         "CustomerEncryptionKeyProtectedDisk",
         "Data",
+        "Date",
         "DeleteAccessConfigInstanceRequest",
         "DeleteAddressRequest",
         "DeleteAutoscalerRequest",
@@ -263,6 +267,7 @@ __protobuf__ = proto.module(
         "DeleteNodeGroupRequest",
         "DeleteNodeTemplateRequest",
         "DeleteNodesNodeGroupRequest",
+        "DeleteOrganizationSecurityPolicyRequest",
         "DeletePacketMirroringRequest",
         "DeletePerInstanceConfigsInstanceGroupManagerRequest",
         "DeletePerInstanceConfigsRegionInstanceGroupManagerRequest",
@@ -387,6 +392,7 @@ __protobuf__ = proto.module(
         "GetAddressRequest",
         "GetAssociationFirewallPolicyRequest",
         "GetAssociationNetworkFirewallPolicyRequest",
+        "GetAssociationOrganizationSecurityPolicyRequest",
         "GetAssociationRegionNetworkFirewallPolicyRequest",
         "GetAutoscalerRequest",
         "GetBackendBucketRequest",
@@ -397,6 +403,8 @@ __protobuf__ = proto.module(
         "GetEffectiveFirewallsInstanceRequest",
         "GetEffectiveFirewallsNetworkRequest",
         "GetEffectiveFirewallsRegionNetworkFirewallPolicyRequest",
+        "GetEffectiveSecurityPoliciesBackendServiceRequest",
+        "GetEffectiveSecurityPoliciesBackendServiceResponse",
         "GetExternalVpnGatewayRequest",
         "GetFirewallPolicyRequest",
         "GetFirewallRequest",
@@ -472,8 +480,10 @@ __protobuf__ = proto.module(
         "GetNodeTypeRequest",
         "GetOperationalStatusInterconnectAttachmentGroupRequest",
         "GetOperationalStatusInterconnectGroupRequest",
+        "GetOrganizationSecurityPolicyRequest",
         "GetPacketMirroringRequest",
         "GetPacketMirroringRuleNetworkFirewallPolicyRequest",
+        "GetPreviewFeatureRequest",
         "GetProjectRequest",
         "GetPublicAdvertisedPrefixeRequest",
         "GetPublicDelegatedPrefixeRequest",
@@ -510,6 +520,7 @@ __protobuf__ = proto.module(
         "GetRouterStatusRouterRequest",
         "GetRuleFirewallPolicyRequest",
         "GetRuleNetworkFirewallPolicyRequest",
+        "GetRuleOrganizationSecurityPolicyRequest",
         "GetRuleRegionNetworkFirewallPolicyRequest",
         "GetRuleRegionSecurityPolicyRequest",
         "GetRuleSecurityPolicyRequest",
@@ -584,6 +595,7 @@ __protobuf__ = proto.module(
         "Image",
         "ImageFamilyView",
         "ImageList",
+        "ImageParams",
         "InitialStateConfig",
         "InsertAddressRequest",
         "InsertAutoscalerRequest",
@@ -619,6 +631,7 @@ __protobuf__ = proto.module(
         "InsertNetworkRequest",
         "InsertNodeGroupRequest",
         "InsertNodeTemplateRequest",
+        "InsertOrganizationSecurityPolicyRequest",
         "InsertPacketMirroringRequest",
         "InsertPublicAdvertisedPrefixeRequest",
         "InsertPublicDelegatedPrefixeRequest",
@@ -834,6 +847,7 @@ __protobuf__ = proto.module(
         "ListAcceleratorTypesRequest",
         "ListAddressesRequest",
         "ListAssociationsFirewallPolicyRequest",
+        "ListAssociationsOrganizationSecurityPolicyRequest",
         "ListAutoscalersRequest",
         "ListAvailableFeaturesRegionSslPoliciesRequest",
         "ListAvailableFeaturesSslPoliciesRequest",
@@ -888,11 +902,14 @@ __protobuf__ = proto.module(
         "ListNodeTemplatesRequest",
         "ListNodeTypesRequest",
         "ListNodesNodeGroupsRequest",
+        "ListOrganizationSecurityPoliciesRequest",
         "ListPacketMirroringsRequest",
         "ListPeeringRoutesNetworksRequest",
         "ListPerInstanceConfigsInstanceGroupManagersRequest",
         "ListPerInstanceConfigsRegionInstanceGroupManagersRequest",
+        "ListPreconfiguredExpressionSetsOrganizationSecurityPoliciesRequest",
         "ListPreconfiguredExpressionSetsSecurityPoliciesRequest",
+        "ListPreviewFeaturesRequest",
         "ListPublicAdvertisedPrefixesRequest",
         "ListPublicDelegatedPrefixesRequest",
         "ListReferrersInstancesRequest",
@@ -977,6 +994,7 @@ __protobuf__ = proto.module(
         "MoveFirewallPolicyRequest",
         "MoveGlobalAddressRequest",
         "MoveInstanceProjectRequest",
+        "MoveOrganizationSecurityPolicyRequest",
         "NamedPort",
         "NatIpInfo",
         "NatIpInfoNatIpInfoMapping",
@@ -1054,6 +1072,7 @@ __protobuf__ = proto.module(
         "OperationAggregatedList",
         "OperationList",
         "OperationsScopedList",
+        "OrganizationSecurityPoliciesListAssociationsResponse",
         "OutlierDetection",
         "PacketIntervals",
         "PacketMirroring",
@@ -1087,6 +1106,7 @@ __protobuf__ = proto.module(
         "PatchNetworkFirewallPolicyRequest",
         "PatchNetworkRequest",
         "PatchNodeGroupRequest",
+        "PatchOrganizationSecurityPolicyRequest",
         "PatchPacketMirroringRequest",
         "PatchPacketMirroringRuleNetworkFirewallPolicyRequest",
         "PatchPerInstanceConfigsInstanceGroupManagerRequest",
@@ -1108,6 +1128,7 @@ __protobuf__ = proto.module(
         "PatchRouterRequest",
         "PatchRuleFirewallPolicyRequest",
         "PatchRuleNetworkFirewallPolicyRequest",
+        "PatchRuleOrganizationSecurityPolicyRequest",
         "PatchRuleRegionNetworkFirewallPolicyRequest",
         "PatchRuleRegionSecurityPolicyRequest",
         "PatchRuleSecurityPolicyRequest",
@@ -1134,6 +1155,12 @@ __protobuf__ = proto.module(
         "PreservedStatePreservedDisk",
         "PreservedStatePreservedNetworkIp",
         "PreservedStatePreservedNetworkIpIpAddress",
+        "PreviewFeature",
+        "PreviewFeatureList",
+        "PreviewFeatureRolloutOperation",
+        "PreviewFeatureRolloutOperationRolloutInput",
+        "PreviewFeatureStatus",
+        "PreviewFeatureStatusReleaseStatus",
         "PreviewRouterRequest",
         "Project",
         "ProjectsDisableXpnResourceRequest",
@@ -1198,6 +1225,7 @@ __protobuf__ = proto.module(
         "RegionUrlMapsValidateRequest",
         "RemoveAssociationFirewallPolicyRequest",
         "RemoveAssociationNetworkFirewallPolicyRequest",
+        "RemoveAssociationOrganizationSecurityPolicyRequest",
         "RemoveAssociationRegionNetworkFirewallPolicyRequest",
         "RemoveHealthCheckTargetPoolRequest",
         "RemoveInstanceTargetPoolRequest",
@@ -1209,9 +1237,11 @@ __protobuf__ = proto.module(
         "RemoveResourcePoliciesRegionDiskRequest",
         "RemoveRuleFirewallPolicyRequest",
         "RemoveRuleNetworkFirewallPolicyRequest",
+        "RemoveRuleOrganizationSecurityPolicyRequest",
         "RemoveRuleRegionNetworkFirewallPolicyRequest",
         "RemoveRuleRegionSecurityPolicyRequest",
         "RemoveRuleSecurityPolicyRequest",
+        "ReportFaultyReservationSubBlockRequest",
         "ReportHostAsFaultyInstanceRequest",
         "RequestMirrorPolicy",
         "RequestRemovePeeringNetworkRequest",
@@ -1232,6 +1262,8 @@ __protobuf__ = proto.module(
         "ReservationSubBlockPhysicalTopology",
         "ReservationSubBlocksGetResponse",
         "ReservationSubBlocksListResponse",
+        "ReservationSubBlocksReportFaultyRequest",
+        "ReservationSubBlocksReportFaultyRequestFaultReason",
         "ReservationsBlocksPerformMaintenanceRequest",
         "ReservationsPerformMaintenanceRequest",
         "ReservationsResizeRequest",
@@ -1322,6 +1354,7 @@ __protobuf__ = proto.module(
         "SecurityPolicyAdaptiveProtectionConfigLayer7DdosDefenseConfigThresholdConfigTrafficGranularityConfig",
         "SecurityPolicyAdvancedOptionsConfig",
         "SecurityPolicyAdvancedOptionsConfigJsonCustomConfig",
+        "SecurityPolicyAssociation",
         "SecurityPolicyDdosProtectionConfig",
         "SecurityPolicyList",
         "SecurityPolicyRecaptchaOptionsConfig",
@@ -1463,6 +1496,7 @@ __protobuf__ = proto.module(
         "SimulateMaintenanceEventNodeGroupRequest",
         "Snapshot",
         "SnapshotList",
+        "SnapshotParams",
         "SnapshotSettings",
         "SnapshotSettingsStorageLocationSettings",
         "SnapshotSettingsStorageLocationSettingsStorageLocationPreference",
@@ -1629,6 +1663,7 @@ __protobuf__ = proto.module(
         "UpdatePeeringNetworkRequest",
         "UpdatePerInstanceConfigsInstanceGroupManagerRequest",
         "UpdatePerInstanceConfigsRegionInstanceGroupManagerRequest",
+        "UpdatePreviewFeatureRequest",
         "UpdateRegionAutoscalerRequest",
         "UpdateRegionBackendServiceRequest",
         "UpdateRegionCommitmentRequest",
@@ -2639,6 +2674,68 @@ class AddAssociationNetworkFirewallPolicyRequest(proto.Message):
     )
 
 
+class AddAssociationOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for
+    OrganizationSecurityPolicies.AddAssociation. See the method
+    description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        replace_existing_association (bool):
+            Indicates whether or not to replace it if an
+            association of the attachment already exists.
+            This is false by default, in which case an error
+            will be returned if an association already
+            exists.
+
+            This field is a member of `oneof`_ ``_replace_existing_association``.
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        security_policy (str):
+            Name of the security policy to update.
+        security_policy_association_resource (google.cloud.compute_v1.types.SecurityPolicyAssociation):
+            The body resource for this request
+    """
+
+    replace_existing_association: bool = proto.Field(
+        proto.BOOL,
+        number=209541240,
+        optional=True,
+    )
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
+    )
+    security_policy_association_resource: "SecurityPolicyAssociation" = proto.Field(
+        proto.MESSAGE,
+        number=11761274,
+        message="SecurityPolicyAssociation",
+    )
+
+
 class AddAssociationRegionNetworkFirewallPolicyRequest(proto.Message):
     r"""A request message for
     RegionNetworkFirewallPolicies.AddAssociation. See the method
@@ -3459,6 +3556,54 @@ class AddRuleNetworkFirewallPolicyRequest(proto.Message):
         proto.STRING,
         number=37109963,
         optional=True,
+    )
+
+
+class AddRuleOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for OrganizationSecurityPolicies.AddRule.
+    See the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        security_policy (str):
+            Name of the security policy to update.
+        security_policy_rule_resource (google.cloud.compute_v1.types.SecurityPolicyRule):
+            The body resource for this request
+    """
+
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
+    )
+    security_policy_rule_resource: "SecurityPolicyRule" = proto.Field(
+        proto.MESSAGE,
+        number=402693443,
+        message="SecurityPolicyRule",
     )
 
 
@@ -20872,6 +21017,56 @@ class ConsistentHashLoadBalancerSettingsHttpCookie(proto.Message):
     )
 
 
+class CopyRulesOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for OrganizationSecurityPolicies.CopyRules.
+    See the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        security_policy (str):
+            Name of the security policy to update.
+        source_security_policy (str):
+            The security policy from which to copy rules.
+
+            This field is a member of `oneof`_ ``_source_security_policy``.
+    """
+
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
+    )
+    source_security_policy: str = proto.Field(
+        proto.STRING,
+        number=234793709,
+        optional=True,
+    )
+
+
 class CorsPolicy(proto.Message):
     r"""The specification for allowing client-side cross-origin
     requests. For more information about the W3C recommendation for
@@ -21519,6 +21714,58 @@ class Data(proto.Message):
     value: str = proto.Field(
         proto.STRING,
         number=111972721,
+        optional=True,
+    )
+
+
+class Date(proto.Message):
+    r"""Represents a whole or partial calendar date, such as a birthday. The
+    time of day and time zone are either specified elsewhere or are
+    insignificant. The date is relative to the Gregorian Calendar. This
+    can represent one of the following: \* A full date, with non-zero
+    year, month, and day values. \* A month and day, with a zero year
+    (for example, an anniversary). \* A year on its own, with a zero
+    month and a zero day. \* A year and month, with a zero day (for
+    example, a credit card expiration date). Related types: \*
+    google.type.TimeOfDay \* google.type.DateTime \*
+    google.protobuf.Timestamp
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        day (int):
+            Day of a month. Must be from 1 to 31 and
+            valid for the year and month, or 0 to specify a
+            year by itself or a year and month where the day
+            isn't significant.
+
+            This field is a member of `oneof`_ ``_day``.
+        month (int):
+            Month of a year. Must be from 1 to 12, or 0
+            to specify a year without a month and day.
+
+            This field is a member of `oneof`_ ``_month``.
+        year (int):
+            Year of the date. Must be from 1 to 9999, or
+            0 to specify a date without a year.
+
+            This field is a member of `oneof`_ ``_year``.
+    """
+
+    day: int = proto.Field(
+        proto.INT32,
+        number=99228,
+        optional=True,
+    )
+    month: int = proto.Field(
+        proto.INT32,
+        number=104080000,
+        optional=True,
+    )
+    year: int = proto.Field(
+        proto.INT32,
+        number=3704893,
         optional=True,
     )
 
@@ -23602,6 +23849,47 @@ class DeleteNodesNodeGroupRequest(proto.Message):
     zone: str = proto.Field(
         proto.STRING,
         number=3744684,
+    )
+
+
+class DeleteOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for OrganizationSecurityPolicies.Delete.
+    See the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        security_policy (str):
+            Name of the security policy to delete.
+    """
+
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
     )
 
 
@@ -32097,6 +32385,36 @@ class GetAssociationNetworkFirewallPolicyRequest(proto.Message):
     )
 
 
+class GetAssociationOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for
+    OrganizationSecurityPolicies.GetAssociation. See the method
+    description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        name (str):
+            The name of the association to get from the
+            security policy.
+
+            This field is a member of `oneof`_ ``_name``.
+        security_policy (str):
+            Name of the security policy to which the
+            queried rule belongs.
+    """
+
+    name: str = proto.Field(
+        proto.STRING,
+        number=3373707,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
+    )
+
+
 class GetAssociationRegionNetworkFirewallPolicyRequest(proto.Message):
     r"""A request message for
     RegionNetworkFirewallPolicies.GetAssociation. See the method
@@ -32365,6 +32683,36 @@ class GetEffectiveFirewallsRegionNetworkFirewallPolicyRequest(proto.Message):
         proto.STRING,
         number=138946292,
     )
+
+
+class GetEffectiveSecurityPoliciesBackendServiceRequest(proto.Message):
+    r"""A request message for
+    BackendServices.GetEffectiveSecurityPolicies. See the method
+    description for details.
+
+    Attributes:
+        backend_service (str):
+            Name of the Backend Service for this request.
+        project (str):
+            Project ID for this request.
+    """
+
+    backend_service: str = proto.Field(
+        proto.STRING,
+        number=306946058,
+    )
+    project: str = proto.Field(
+        proto.STRING,
+        number=227560217,
+    )
+
+
+class GetEffectiveSecurityPoliciesBackendServiceResponse(proto.Message):
+    r"""A response message for
+    BackendServices.GetEffectiveSecurityPolicies. See the method
+    description for details.
+
+    """
 
 
 class GetExternalVpnGatewayRequest(proto.Message):
@@ -34684,6 +35032,21 @@ class GetOperationalStatusInterconnectGroupRequest(proto.Message):
     )
 
 
+class GetOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for OrganizationSecurityPolicies.Get. See
+    the method description for details.
+
+    Attributes:
+        security_policy (str):
+            Name of the security policy to get.
+    """
+
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
+    )
+
+
 class GetPacketMirroringRequest(proto.Message):
     r"""A request message for PacketMirrorings.Get. See the method
     description for details.
@@ -34741,6 +35104,27 @@ class GetPacketMirroringRuleNetworkFirewallPolicyRequest(proto.Message):
         proto.INT32,
         number=445151652,
         optional=True,
+    )
+    project: str = proto.Field(
+        proto.STRING,
+        number=227560217,
+    )
+
+
+class GetPreviewFeatureRequest(proto.Message):
+    r"""A request message for PreviewFeatures.Get. See the method
+    description for details.
+
+    Attributes:
+        preview_feature (str):
+            Name of the PreviewFeature for this request.
+        project (str):
+            Project ID for this request.
+    """
+
+    preview_feature: str = proto.Field(
+        proto.STRING,
+        number=454999423,
     )
     project: str = proto.Field(
         proto.STRING,
@@ -35785,6 +36169,35 @@ class GetRuleNetworkFirewallPolicyRequest(proto.Message):
     project: str = proto.Field(
         proto.STRING,
         number=227560217,
+    )
+
+
+class GetRuleOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for OrganizationSecurityPolicies.GetRule.
+    See the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        priority (int):
+            The priority of the rule to get from the
+            security policy.
+
+            This field is a member of `oneof`_ ``_priority``.
+        security_policy (str):
+            Name of the security policy to which the
+            queried rule belongs.
+    """
+
+    priority: int = proto.Field(
+        proto.INT32,
+        number=445151652,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
     )
 
 
@@ -40227,6 +40640,11 @@ class Image(proto.Message):
             except the last character, which cannot be a dash.
 
             This field is a member of `oneof`_ ``_name``.
+        params (google.cloud.compute_v1.types.ImageParams):
+            Input only. [Input Only] Additional params passed with the
+            request, but not persisted as part of resource payload.
+
+            This field is a member of `oneof`_ ``_params``.
         raw_disk (google.cloud.compute_v1.types.RawDisk):
             The parameters of the raw disk image.
 
@@ -40490,6 +40908,12 @@ class Image(proto.Message):
         number=3373707,
         optional=True,
     )
+    params: "ImageParams" = proto.Field(
+        proto.MESSAGE,
+        number=78313862,
+        optional=True,
+        message="ImageParams",
+    )
     raw_disk: "RawDisk" = proto.Field(
         proto.MESSAGE,
         number=503113556,
@@ -40673,6 +41097,25 @@ class ImageList(proto.Message):
         number=50704284,
         optional=True,
         message="Warning",
+    )
+
+
+class ImageParams(proto.Message):
+    r"""Additional image params.
+
+    Attributes:
+        resource_manager_tags (MutableMapping[str, str]):
+            Resource manager tags to be bound to the image. Tag keys and
+            values have the same definition as resource manager tags.
+            Keys must be in the format ``tagKeys/{tag_key_id}``, and
+            values are in the format ``tagValues/456``. The field is
+            ignored (both PUT & PATCH) when empty.
+    """
+
+    resource_manager_tags: MutableMapping[str, str] = proto.MapField(
+        proto.STRING,
+        proto.STRING,
+        number=377671164,
     )
 
 
@@ -42537,6 +42980,60 @@ class InsertNodeTemplateRequest(proto.Message):
         proto.STRING,
         number=37109963,
         optional=True,
+    )
+
+
+class InsertOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for OrganizationSecurityPolicies.Insert.
+    See the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        parent_id (str):
+            Parent ID for this request. The ID can be either be
+            "folders/[FOLDER_ID]" if the parent is a folder or
+            "organizations/[ORGANIZATION_ID]" if the parent is an
+            organization.
+
+            This field is a member of `oneof`_ ``_parent_id``.
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        security_policy_resource (google.cloud.compute_v1.types.SecurityPolicy):
+            The body resource for this request
+    """
+
+    parent_id: str = proto.Field(
+        proto.STRING,
+        number=459714768,
+        optional=True,
+    )
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    security_policy_resource: "SecurityPolicy" = proto.Field(
+        proto.MESSAGE,
+        number=216159612,
+        message="SecurityPolicy",
     )
 
 
@@ -51139,6 +51636,13 @@ class Interconnect(proto.Message):
             possible values.
 
             This field is a member of `oneof`_ ``_state``.
+        subzone (str):
+            Specific subzone in the InterconnectLocation
+            that represents where this connection is to be
+            provisioned. Check the Subzone enum for the list
+            of possible values.
+
+            This field is a member of `oneof`_ ``_subzone``.
     """
 
     class AvailableFeatures(proto.Enum):
@@ -51267,6 +51771,23 @@ class Interconnect(proto.Message):
         UNDEFINED_STATE = 0
         ACTIVE = 314733318
         UNPROVISIONED = 517333979
+
+    class Subzone(proto.Enum):
+        r"""Specific subzone in the InterconnectLocation that represents
+        where this connection is to be provisioned.
+
+        Values:
+            UNDEFINED_SUBZONE (0):
+                A value indicating that the enum field is not
+                set.
+            SUBZONE_A (291575438):
+                Subzone A.
+            SUBZONE_B (291575439):
+                Subzone B.
+        """
+        UNDEFINED_SUBZONE = 0
+        SUBZONE_A = 291575438
+        SUBZONE_B = 291575439
 
     aai_enabled: bool = proto.Field(
         proto.BOOL,
@@ -51433,6 +51954,11 @@ class Interconnect(proto.Message):
     state: str = proto.Field(
         proto.STRING,
         number=109757585,
+        optional=True,
+    )
+    subzone: str = proto.Field(
+        proto.STRING,
+        number=280084972,
         optional=True,
     )
 
@@ -57540,6 +58066,29 @@ class ListAddressesRequest(proto.Message):
 class ListAssociationsFirewallPolicyRequest(proto.Message):
     r"""A request message for FirewallPolicies.ListAssociations. See
     the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        target_resource (str):
+            The target resource to list associations. It
+            is an organization, or a folder.
+
+            This field is a member of `oneof`_ ``_target_resource``.
+    """
+
+    target_resource: str = proto.Field(
+        proto.STRING,
+        number=467318524,
+        optional=True,
+    )
+
+
+class ListAssociationsOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for
+    OrganizationSecurityPolicies.ListAssociations. See the method
+    description for details.
 
 
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
@@ -64720,6 +65269,134 @@ class ListNodesNodeGroupsRequest(proto.Message):
     )
 
 
+class ListOrganizationSecurityPoliciesRequest(proto.Message):
+    r"""A request message for OrganizationSecurityPolicies.List. See
+    the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        filter (str):
+            A filter expression that filters resources listed in the
+            response. Most Compute resources support two types of filter
+            expressions: expressions that support regular expressions
+            and expressions that follow API improvement proposal
+            AIP-160. These two types of filter expressions cannot be
+            mixed in one request. If you want to use AIP-160, your
+            expression must specify the field name, an operator, and the
+            value that you want to use for filtering. The value must be
+            a string, a number, or a boolean. The operator must be
+            either ``=``, ``!=``, ``>``, ``<``, ``<=``, ``>=`` or ``:``.
+            For example, if you are filtering Compute Engine instances,
+            you can exclude instances named ``example-instance`` by
+            specifying ``name != example-instance``. The ``:*``
+            comparison can be used to test whether a key has been
+            defined. For example, to find all objects with ``owner``
+            label use: ``labels.owner:*`` You can also filter nested
+            fields. For example, you could specify
+            ``scheduling.automaticRestart = false`` to include instances
+            only if they are not scheduled for automatic restarts. You
+            can use filtering on nested fields to filter based on
+            resource labels. To filter on multiple expressions, provide
+            each separate expression within parentheses. For example:
+            ``(scheduling.automaticRestart = true) (cpuPlatform = "Intel Skylake")``
+            By default, each expression is an ``AND`` expression.
+            However, you can include ``AND`` and ``OR`` expressions
+            explicitly. For example:
+            ``(cpuPlatform = "Intel Skylake") OR (cpuPlatform = "Intel Broadwell") AND (scheduling.automaticRestart = true)``
+            If you want to use a regular expression, use the ``eq``
+            (equal) or ``ne`` (not equal) operator against a single
+            un-parenthesized expression with or without quotes or
+            against multiple parenthesized expressions. Examples:
+            ``fieldname eq unquoted literal``
+            ``fieldname eq 'single quoted literal'``
+            ``fieldname eq "double quoted literal"``
+            ``(fieldname1 eq literal) (fieldname2 ne "literal")`` The
+            literal value is interpreted as a regular expression using
+            Google RE2 library syntax. The literal value must match the
+            entire field. For example, to filter for instances that do
+            not end with name "instance", you would use
+            ``name ne .*instance``. You cannot combine constraints on
+            multiple fields using regular expressions.
+
+            This field is a member of `oneof`_ ``_filter``.
+        max_results (int):
+            The maximum number of results per page that should be
+            returned. If the number of available results is larger than
+            ``maxResults``, Compute Engine returns a ``nextPageToken``
+            that can be used to get the next page of results in
+            subsequent list requests. Acceptable values are ``0`` to
+            ``500``, inclusive. (Default: ``500``)
+
+            This field is a member of `oneof`_ ``_max_results``.
+        order_by (str):
+            Sorts list results by a certain order. By default, results
+            are returned in alphanumerical order based on the resource
+            name. You can also sort results in descending order based on
+            the creation timestamp using
+            ``orderBy="creationTimestamp desc"``. This sorts results
+            based on the ``creationTimestamp`` field in reverse
+            chronological order (newest result first). Use this to sort
+            resources like operations so that the newest operation is
+            returned first. Currently, only sorting by ``name`` or
+            ``creationTimestamp desc`` is supported.
+
+            This field is a member of `oneof`_ ``_order_by``.
+        page_token (str):
+            Specifies a page token to use. Set ``pageToken`` to the
+            ``nextPageToken`` returned by a previous list request to get
+            the next page of results.
+
+            This field is a member of `oneof`_ ``_page_token``.
+        parent_id (str):
+            Parent ID for this request.
+
+            This field is a member of `oneof`_ ``_parent_id``.
+        return_partial_success (bool):
+            Opt-in for partial success behavior which
+            provides partial results in case of failure. The
+            default value is false. For example, when
+            partial success behavior is enabled,
+            aggregatedList for a single zone scope either
+            returns all resources in the zone or no
+            resources, with an error code.
+
+            This field is a member of `oneof`_ ``_return_partial_success``.
+    """
+
+    filter: str = proto.Field(
+        proto.STRING,
+        number=336120696,
+        optional=True,
+    )
+    max_results: int = proto.Field(
+        proto.UINT32,
+        number=54715419,
+        optional=True,
+    )
+    order_by: str = proto.Field(
+        proto.STRING,
+        number=160562920,
+        optional=True,
+    )
+    page_token: str = proto.Field(
+        proto.STRING,
+        number=19994697,
+        optional=True,
+    )
+    parent_id: str = proto.Field(
+        proto.STRING,
+        number=459714768,
+        optional=True,
+    )
+    return_partial_success: bool = proto.Field(
+        proto.BOOL,
+        number=517198390,
+        optional=True,
+    )
+
+
 class ListPacketMirroringsRequest(proto.Message):
     r"""A request message for PacketMirrorings.List. See the method
     description for details.
@@ -65311,9 +65988,263 @@ class ListPerInstanceConfigsRegionInstanceGroupManagersRequest(proto.Message):
     )
 
 
+class ListPreconfiguredExpressionSetsOrganizationSecurityPoliciesRequest(proto.Message):
+    r"""A request message for
+    OrganizationSecurityPolicies.ListPreconfiguredExpressionSets.
+    See the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        filter (str):
+            A filter expression that filters resources listed in the
+            response. Most Compute resources support two types of filter
+            expressions: expressions that support regular expressions
+            and expressions that follow API improvement proposal
+            AIP-160. These two types of filter expressions cannot be
+            mixed in one request. If you want to use AIP-160, your
+            expression must specify the field name, an operator, and the
+            value that you want to use for filtering. The value must be
+            a string, a number, or a boolean. The operator must be
+            either ``=``, ``!=``, ``>``, ``<``, ``<=``, ``>=`` or ``:``.
+            For example, if you are filtering Compute Engine instances,
+            you can exclude instances named ``example-instance`` by
+            specifying ``name != example-instance``. The ``:*``
+            comparison can be used to test whether a key has been
+            defined. For example, to find all objects with ``owner``
+            label use: ``labels.owner:*`` You can also filter nested
+            fields. For example, you could specify
+            ``scheduling.automaticRestart = false`` to include instances
+            only if they are not scheduled for automatic restarts. You
+            can use filtering on nested fields to filter based on
+            resource labels. To filter on multiple expressions, provide
+            each separate expression within parentheses. For example:
+            ``(scheduling.automaticRestart = true) (cpuPlatform = "Intel Skylake")``
+            By default, each expression is an ``AND`` expression.
+            However, you can include ``AND`` and ``OR`` expressions
+            explicitly. For example:
+            ``(cpuPlatform = "Intel Skylake") OR (cpuPlatform = "Intel Broadwell") AND (scheduling.automaticRestart = true)``
+            If you want to use a regular expression, use the ``eq``
+            (equal) or ``ne`` (not equal) operator against a single
+            un-parenthesized expression with or without quotes or
+            against multiple parenthesized expressions. Examples:
+            ``fieldname eq unquoted literal``
+            ``fieldname eq 'single quoted literal'``
+            ``fieldname eq "double quoted literal"``
+            ``(fieldname1 eq literal) (fieldname2 ne "literal")`` The
+            literal value is interpreted as a regular expression using
+            Google RE2 library syntax. The literal value must match the
+            entire field. For example, to filter for instances that do
+            not end with name "instance", you would use
+            ``name ne .*instance``. You cannot combine constraints on
+            multiple fields using regular expressions.
+
+            This field is a member of `oneof`_ ``_filter``.
+        max_results (int):
+            The maximum number of results per page that should be
+            returned. If the number of available results is larger than
+            ``maxResults``, Compute Engine returns a ``nextPageToken``
+            that can be used to get the next page of results in
+            subsequent list requests. Acceptable values are ``0`` to
+            ``500``, inclusive. (Default: ``500``)
+
+            This field is a member of `oneof`_ ``_max_results``.
+        order_by (str):
+            Sorts list results by a certain order. By default, results
+            are returned in alphanumerical order based on the resource
+            name. You can also sort results in descending order based on
+            the creation timestamp using
+            ``orderBy="creationTimestamp desc"``. This sorts results
+            based on the ``creationTimestamp`` field in reverse
+            chronological order (newest result first). Use this to sort
+            resources like operations so that the newest operation is
+            returned first. Currently, only sorting by ``name`` or
+            ``creationTimestamp desc`` is supported.
+
+            This field is a member of `oneof`_ ``_order_by``.
+        page_token (str):
+            Specifies a page token to use. Set ``pageToken`` to the
+            ``nextPageToken`` returned by a previous list request to get
+            the next page of results.
+
+            This field is a member of `oneof`_ ``_page_token``.
+        parent_id (str):
+            Parent ID for this request.
+
+            This field is a member of `oneof`_ ``_parent_id``.
+        return_partial_success (bool):
+            Opt-in for partial success behavior which
+            provides partial results in case of failure. The
+            default value is false. For example, when
+            partial success behavior is enabled,
+            aggregatedList for a single zone scope either
+            returns all resources in the zone or no
+            resources, with an error code.
+
+            This field is a member of `oneof`_ ``_return_partial_success``.
+    """
+
+    filter: str = proto.Field(
+        proto.STRING,
+        number=336120696,
+        optional=True,
+    )
+    max_results: int = proto.Field(
+        proto.UINT32,
+        number=54715419,
+        optional=True,
+    )
+    order_by: str = proto.Field(
+        proto.STRING,
+        number=160562920,
+        optional=True,
+    )
+    page_token: str = proto.Field(
+        proto.STRING,
+        number=19994697,
+        optional=True,
+    )
+    parent_id: str = proto.Field(
+        proto.STRING,
+        number=459714768,
+        optional=True,
+    )
+    return_partial_success: bool = proto.Field(
+        proto.BOOL,
+        number=517198390,
+        optional=True,
+    )
+
+
 class ListPreconfiguredExpressionSetsSecurityPoliciesRequest(proto.Message):
     r"""A request message for
     SecurityPolicies.ListPreconfiguredExpressionSets. See the method
+    description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        filter (str):
+            A filter expression that filters resources listed in the
+            response. Most Compute resources support two types of filter
+            expressions: expressions that support regular expressions
+            and expressions that follow API improvement proposal
+            AIP-160. These two types of filter expressions cannot be
+            mixed in one request. If you want to use AIP-160, your
+            expression must specify the field name, an operator, and the
+            value that you want to use for filtering. The value must be
+            a string, a number, or a boolean. The operator must be
+            either ``=``, ``!=``, ``>``, ``<``, ``<=``, ``>=`` or ``:``.
+            For example, if you are filtering Compute Engine instances,
+            you can exclude instances named ``example-instance`` by
+            specifying ``name != example-instance``. The ``:*``
+            comparison can be used to test whether a key has been
+            defined. For example, to find all objects with ``owner``
+            label use: ``labels.owner:*`` You can also filter nested
+            fields. For example, you could specify
+            ``scheduling.automaticRestart = false`` to include instances
+            only if they are not scheduled for automatic restarts. You
+            can use filtering on nested fields to filter based on
+            resource labels. To filter on multiple expressions, provide
+            each separate expression within parentheses. For example:
+            ``(scheduling.automaticRestart = true) (cpuPlatform = "Intel Skylake")``
+            By default, each expression is an ``AND`` expression.
+            However, you can include ``AND`` and ``OR`` expressions
+            explicitly. For example:
+            ``(cpuPlatform = "Intel Skylake") OR (cpuPlatform = "Intel Broadwell") AND (scheduling.automaticRestart = true)``
+            If you want to use a regular expression, use the ``eq``
+            (equal) or ``ne`` (not equal) operator against a single
+            un-parenthesized expression with or without quotes or
+            against multiple parenthesized expressions. Examples:
+            ``fieldname eq unquoted literal``
+            ``fieldname eq 'single quoted literal'``
+            ``fieldname eq "double quoted literal"``
+            ``(fieldname1 eq literal) (fieldname2 ne "literal")`` The
+            literal value is interpreted as a regular expression using
+            Google RE2 library syntax. The literal value must match the
+            entire field. For example, to filter for instances that do
+            not end with name "instance", you would use
+            ``name ne .*instance``. You cannot combine constraints on
+            multiple fields using regular expressions.
+
+            This field is a member of `oneof`_ ``_filter``.
+        max_results (int):
+            The maximum number of results per page that should be
+            returned. If the number of available results is larger than
+            ``maxResults``, Compute Engine returns a ``nextPageToken``
+            that can be used to get the next page of results in
+            subsequent list requests. Acceptable values are ``0`` to
+            ``500``, inclusive. (Default: ``500``)
+
+            This field is a member of `oneof`_ ``_max_results``.
+        order_by (str):
+            Sorts list results by a certain order. By default, results
+            are returned in alphanumerical order based on the resource
+            name. You can also sort results in descending order based on
+            the creation timestamp using
+            ``orderBy="creationTimestamp desc"``. This sorts results
+            based on the ``creationTimestamp`` field in reverse
+            chronological order (newest result first). Use this to sort
+            resources like operations so that the newest operation is
+            returned first. Currently, only sorting by ``name`` or
+            ``creationTimestamp desc`` is supported.
+
+            This field is a member of `oneof`_ ``_order_by``.
+        page_token (str):
+            Specifies a page token to use. Set ``pageToken`` to the
+            ``nextPageToken`` returned by a previous list request to get
+            the next page of results.
+
+            This field is a member of `oneof`_ ``_page_token``.
+        project (str):
+            Project ID for this request.
+        return_partial_success (bool):
+            Opt-in for partial success behavior which
+            provides partial results in case of failure. The
+            default value is false. For example, when
+            partial success behavior is enabled,
+            aggregatedList for a single zone scope either
+            returns all resources in the zone or no
+            resources, with an error code.
+
+            This field is a member of `oneof`_ ``_return_partial_success``.
+    """
+
+    filter: str = proto.Field(
+        proto.STRING,
+        number=336120696,
+        optional=True,
+    )
+    max_results: int = proto.Field(
+        proto.UINT32,
+        number=54715419,
+        optional=True,
+    )
+    order_by: str = proto.Field(
+        proto.STRING,
+        number=160562920,
+        optional=True,
+    )
+    page_token: str = proto.Field(
+        proto.STRING,
+        number=19994697,
+        optional=True,
+    )
+    project: str = proto.Field(
+        proto.STRING,
+        number=227560217,
+    )
+    return_partial_success: bool = proto.Field(
+        proto.BOOL,
+        number=517198390,
+        optional=True,
+    )
+
+
+class ListPreviewFeaturesRequest(proto.Message):
+    r"""A request message for PreviewFeatures.List. See the method
     description for details.
 
 
@@ -74961,6 +75892,56 @@ class MoveInstanceProjectRequest(proto.Message):
     )
 
 
+class MoveOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for OrganizationSecurityPolicies.Move. See
+    the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        parent_id (str):
+            The new parent of the security policy.
+
+            This field is a member of `oneof`_ ``_parent_id``.
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        security_policy (str):
+            Name of the security policy to update.
+    """
+
+    parent_id: str = proto.Field(
+        proto.STRING,
+        number=459714768,
+        optional=True,
+    )
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
+    )
+
+
 class NamedPort(proto.Message):
     r"""The named port. For example: <"http", 80>.
 
@@ -82197,6 +83178,34 @@ class OperationsScopedList(proto.Message):
     )
 
 
+class OrganizationSecurityPoliciesListAssociationsResponse(proto.Message):
+    r"""
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        associations (MutableSequence[google.cloud.compute_v1.types.SecurityPolicyAssociation]):
+            A list of associations.
+        kind (str):
+            [Output Only] Type of securityPolicy associations. Always
+            compute#organizationSecurityPoliciesListAssociations for
+            lists of securityPolicy associations.
+
+            This field is a member of `oneof`_ ``_kind``.
+    """
+
+    associations: MutableSequence["SecurityPolicyAssociation"] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=508736530,
+        message="SecurityPolicyAssociation",
+    )
+    kind: str = proto.Field(
+        proto.STRING,
+        number=3292052,
+        optional=True,
+    )
+
+
 class OutlierDetection(proto.Message):
     r"""Settings controlling the eviction of unhealthy hosts from the
     load balancing pool for the backend service.
@@ -84319,6 +85328,54 @@ class PatchNodeGroupRequest(proto.Message):
     )
 
 
+class PatchOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for OrganizationSecurityPolicies.Patch. See
+    the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        security_policy (str):
+            Name of the security policy to update.
+        security_policy_resource (google.cloud.compute_v1.types.SecurityPolicy):
+            The body resource for this request
+    """
+
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
+    )
+    security_policy_resource: "SecurityPolicy" = proto.Field(
+        proto.MESSAGE,
+        number=216159612,
+        message="SecurityPolicy",
+    )
+
+
 class PatchPacketMirroringRequest(proto.Message):
     r"""A request message for PacketMirrorings.Patch. See the method
     description for details.
@@ -85600,6 +86657,63 @@ class PatchRuleNetworkFirewallPolicyRequest(proto.Message):
         proto.STRING,
         number=37109963,
         optional=True,
+    )
+
+
+class PatchRuleOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for OrganizationSecurityPolicies.PatchRule.
+    See the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        priority (int):
+            The priority of the rule to patch.
+
+            This field is a member of `oneof`_ ``_priority``.
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        security_policy (str):
+            Name of the security policy to update.
+        security_policy_rule_resource (google.cloud.compute_v1.types.SecurityPolicyRule):
+            The body resource for this request
+    """
+
+    priority: int = proto.Field(
+        proto.INT32,
+        number=445151652,
+        optional=True,
+    )
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
+    )
+    security_policy_rule_resource: "SecurityPolicyRule" = proto.Field(
+        proto.MESSAGE,
+        number=402693443,
+        message="SecurityPolicyRule",
     )
 
 
@@ -87388,6 +88502,365 @@ class PreservedStatePreservedNetworkIpIpAddress(proto.Message):
         proto.STRING,
         number=182460591,
         optional=True,
+    )
+
+
+class PreviewFeature(proto.Message):
+    r"""Represents a single Google Compute Engine preview feature.
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        activation_status (str):
+            Specifies whether the feature is enabled or
+            disabled. Check the ActivationStatus enum for
+            the list of possible values.
+
+            This field is a member of `oneof`_ ``_activation_status``.
+        creation_timestamp (str):
+            [Output Only] Creation timestamp in RFC3339 text format.
+
+            This field is a member of `oneof`_ ``_creation_timestamp``.
+        description (str):
+            [Output Only] Description of the feature.
+
+            This field is a member of `oneof`_ ``_description``.
+        id (int):
+            [Output Only] The unique identifier for the resource. This
+            identifier is defined by the server.
+
+            This field is a member of `oneof`_ ``_id``.
+        kind (str):
+            [Output only] The type of the feature. Always
+            "compute#previewFeature" for preview features.
+
+            This field is a member of `oneof`_ ``_kind``.
+        name (str):
+            Name of the feature.
+
+            This field is a member of `oneof`_ ``_name``.
+        rollout_operation (google.cloud.compute_v1.types.PreviewFeatureRolloutOperation):
+            Rollout operation of the feature.
+
+            This field is a member of `oneof`_ ``_rollout_operation``.
+        self_link (str):
+            [Output Only] Server-defined URL for the resource.
+
+            This field is a member of `oneof`_ ``_self_link``.
+        status (google.cloud.compute_v1.types.PreviewFeatureStatus):
+            [Output only] Status of the feature.
+
+            This field is a member of `oneof`_ ``_status``.
+    """
+
+    class ActivationStatus(proto.Enum):
+        r"""Specifies whether the feature is enabled or disabled.
+
+        Values:
+            UNDEFINED_ACTIVATION_STATUS (0):
+                A value indicating that the enum field is not
+                set.
+            ACTIVATION_STATE_UNSPECIFIED (632160):
+                No description available.
+            DISABLED (516696700):
+                No description available.
+            ENABLED (182130465):
+                No description available.
+        """
+        UNDEFINED_ACTIVATION_STATUS = 0
+        ACTIVATION_STATE_UNSPECIFIED = 632160
+        DISABLED = 516696700
+        ENABLED = 182130465
+
+    activation_status: str = proto.Field(
+        proto.STRING,
+        number=71960379,
+        optional=True,
+    )
+    creation_timestamp: str = proto.Field(
+        proto.STRING,
+        number=30525366,
+        optional=True,
+    )
+    description: str = proto.Field(
+        proto.STRING,
+        number=422937596,
+        optional=True,
+    )
+    id: int = proto.Field(
+        proto.UINT64,
+        number=3355,
+        optional=True,
+    )
+    kind: str = proto.Field(
+        proto.STRING,
+        number=3292052,
+        optional=True,
+    )
+    name: str = proto.Field(
+        proto.STRING,
+        number=3373707,
+        optional=True,
+    )
+    rollout_operation: "PreviewFeatureRolloutOperation" = proto.Field(
+        proto.MESSAGE,
+        number=486746201,
+        optional=True,
+        message="PreviewFeatureRolloutOperation",
+    )
+    self_link: str = proto.Field(
+        proto.STRING,
+        number=456214797,
+        optional=True,
+    )
+    status: "PreviewFeatureStatus" = proto.Field(
+        proto.MESSAGE,
+        number=181260274,
+        optional=True,
+        message="PreviewFeatureStatus",
+    )
+
+
+class PreviewFeatureList(proto.Message):
+    r"""
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        etag (str):
+
+            This field is a member of `oneof`_ ``_etag``.
+        id (str):
+            [Output Only] Unique identifier for the resource; defined by
+            the server.
+
+            This field is a member of `oneof`_ ``_id``.
+        items (MutableSequence[google.cloud.compute_v1.types.PreviewFeature]):
+            A list of PreviewFeature resources.
+        next_page_token (str):
+            [Output Only] This token allows you to get the next page of
+            results for list requests. If the number of results is
+            larger than maxResults, use the nextPageToken as a value for
+            the query parameter pageToken in the next list request.
+            Subsequent list requests will have their own nextPageToken
+            to continue paging through the results.
+
+            This field is a member of `oneof`_ ``_next_page_token``.
+        self_link (str):
+            [Output Only] Server-defined URL for this resource.
+
+            This field is a member of `oneof`_ ``_self_link``.
+        unreachables (MutableSequence[str]):
+            [Output Only] Unreachable resources. end_interface:
+            MixerListResponseWithEtagBuilder
+        warning (google.cloud.compute_v1.types.Warning):
+            [Output Only] Informational warning message.
+
+            This field is a member of `oneof`_ ``_warning``.
+    """
+
+    @property
+    def raw_page(self):
+        return self
+
+    etag: str = proto.Field(
+        proto.STRING,
+        number=3123477,
+        optional=True,
+    )
+    id: str = proto.Field(
+        proto.STRING,
+        number=3355,
+        optional=True,
+    )
+    items: MutableSequence["PreviewFeature"] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=100526016,
+        message="PreviewFeature",
+    )
+    next_page_token: str = proto.Field(
+        proto.STRING,
+        number=79797525,
+        optional=True,
+    )
+    self_link: str = proto.Field(
+        proto.STRING,
+        number=456214797,
+        optional=True,
+    )
+    unreachables: MutableSequence[str] = proto.RepeatedField(
+        proto.STRING,
+        number=243372063,
+    )
+    warning: "Warning" = proto.Field(
+        proto.MESSAGE,
+        number=50704284,
+        optional=True,
+        message="Warning",
+    )
+
+
+class PreviewFeatureRolloutOperation(proto.Message):
+    r"""Represents the rollout operation
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        rollout_input (google.cloud.compute_v1.types.PreviewFeatureRolloutOperationRolloutInput):
+            Input only. The input for the rollout
+            operation.
+
+            This field is a member of `oneof`_ ``_rollout_input``.
+    """
+
+    rollout_input: "PreviewFeatureRolloutOperationRolloutInput" = proto.Field(
+        proto.MESSAGE,
+        number=265745340,
+        optional=True,
+        message="PreviewFeatureRolloutOperationRolloutInput",
+    )
+
+
+class PreviewFeatureRolloutOperationRolloutInput(proto.Message):
+    r"""Represents the input for the rollout operation.
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        name (str):
+            The name of the rollout plan Ex.
+            organizations//locations/global/rolloutPlans/
+            Ex. folders//locations/global/rolloutPlans/ Ex.
+            projects//locations/global/rolloutPlans/.
+
+            This field is a member of `oneof`_ ``_name``.
+        predefined_rollout_plan (str):
+            Predefined rollout plan.
+            Check the PredefinedRolloutPlan enum for the
+            list of possible values.
+
+            This field is a member of `oneof`_ ``_predefined_rollout_plan``.
+    """
+
+    class PredefinedRolloutPlan(proto.Enum):
+        r"""Predefined rollout plan.
+
+        Values:
+            UNDEFINED_PREDEFINED_ROLLOUT_PLAN (0):
+                A value indicating that the enum field is not
+                set.
+            ROLLOUT_PLAN_FAST_ROLLOUT (167808726):
+                No description available.
+            ROLLOUT_PLAN_TWO_DAY_ROLLOUT (349866771):
+                No description available.
+            ROLLOUT_PLAN_UNSPECIFIED (144511983):
+                No description available.
+        """
+        UNDEFINED_PREDEFINED_ROLLOUT_PLAN = 0
+        ROLLOUT_PLAN_FAST_ROLLOUT = 167808726
+        ROLLOUT_PLAN_TWO_DAY_ROLLOUT = 349866771
+        ROLLOUT_PLAN_UNSPECIFIED = 144511983
+
+    name: str = proto.Field(
+        proto.STRING,
+        number=3373707,
+        optional=True,
+    )
+    predefined_rollout_plan: str = proto.Field(
+        proto.STRING,
+        number=364023440,
+        optional=True,
+    )
+
+
+class PreviewFeatureStatus(proto.Message):
+    r"""[Output Only] The status of the feature.
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        description (str):
+            [Output Only] The description of the feature.
+
+            This field is a member of `oneof`_ ``_description``.
+        help_link (str):
+            [Output Only] Link to the public documentation for the
+            feature.
+
+            This field is a member of `oneof`_ ``_help_link``.
+        release_status (google.cloud.compute_v1.types.PreviewFeatureStatusReleaseStatus):
+
+            This field is a member of `oneof`_ ``_release_status``.
+    """
+
+    description: str = proto.Field(
+        proto.STRING,
+        number=422937596,
+        optional=True,
+    )
+    help_link: str = proto.Field(
+        proto.STRING,
+        number=223410744,
+        optional=True,
+    )
+    release_status: "PreviewFeatureStatusReleaseStatus" = proto.Field(
+        proto.MESSAGE,
+        number=508026666,
+        optional=True,
+        message="PreviewFeatureStatusReleaseStatus",
+    )
+
+
+class PreviewFeatureStatusReleaseStatus(proto.Message):
+    r"""[Output Only] The release status of the feature.
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        stage (str):
+            [Output Only] The stage of the feature. Check the Stage enum
+            for the list of possible values.
+
+            This field is a member of `oneof`_ ``_stage``.
+        update_date (google.cloud.compute_v1.types.Date):
+            Output only. The last date when a feature
+            transitioned between ReleaseStatuses.
+
+            This field is a member of `oneof`_ ``_update_date``.
+    """
+
+    class Stage(proto.Enum):
+        r"""[Output Only] The stage of the feature.
+
+        Values:
+            UNDEFINED_STAGE (0):
+                A value indicating that the enum field is not
+                set.
+            DEPRECATED (463360435):
+                No description available.
+            GA (2266):
+                No description available.
+            PREVIEW (399798184):
+                No description available.
+            STAGE_UNSPECIFIED (63695670):
+                No description available.
+        """
+        UNDEFINED_STAGE = 0
+        DEPRECATED = 463360435
+        GA = 2266
+        PREVIEW = 399798184
+        STAGE_UNSPECIFIED = 63695670
+
+    stage: str = proto.Field(
+        proto.STRING,
+        number=109757182,
+        optional=True,
+    )
+    update_date: "Date" = proto.Field(
+        proto.MESSAGE,
+        number=499811684,
+        optional=True,
+        message="Date",
     )
 
 
@@ -91647,6 +93120,57 @@ class RemoveAssociationNetworkFirewallPolicyRequest(proto.Message):
     )
 
 
+class RemoveAssociationOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for
+    OrganizationSecurityPolicies.RemoveAssociation. See the method
+    description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        name (str):
+            Name for the attachment that will be removed.
+
+            This field is a member of `oneof`_ ``_name``.
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        security_policy (str):
+            Name of the security policy to update.
+    """
+
+    name: str = proto.Field(
+        proto.STRING,
+        number=3373707,
+        optional=True,
+    )
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
+    )
+
+
 class RemoveAssociationRegionNetworkFirewallPolicyRequest(proto.Message):
     r"""A request message for
     RegionNetworkFirewallPolicies.RemoveAssociation. See the method
@@ -92298,6 +93822,58 @@ class RemoveRuleNetworkFirewallPolicyRequest(proto.Message):
     )
 
 
+class RemoveRuleOrganizationSecurityPolicyRequest(proto.Message):
+    r"""A request message for
+    OrganizationSecurityPolicies.RemoveRule. See the method
+    description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        priority (int):
+            The priority of the rule to remove from the
+            security policy.
+
+            This field is a member of `oneof`_ ``_priority``.
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        security_policy (str):
+            Name of the security policy to update.
+    """
+
+    priority: int = proto.Field(
+        proto.INT32,
+        number=445151652,
+        optional=True,
+    )
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    security_policy: str = proto.Field(
+        proto.STRING,
+        number=171082513,
+    )
+
+
 class RemoveRuleRegionNetworkFirewallPolicyRequest(proto.Message):
     r"""A request message for
     RegionNetworkFirewallPolicies.RemoveRule. See the method
@@ -92433,6 +94009,76 @@ class RemoveRuleSecurityPolicyRequest(proto.Message):
     security_policy: str = proto.Field(
         proto.STRING,
         number=171082513,
+    )
+
+
+class ReportFaultyReservationSubBlockRequest(proto.Message):
+    r"""A request message for ReservationSubBlocks.ReportFaulty. See
+    the method description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        parent_name (str):
+            The name of the parent reservation and parent block. In the
+            format of
+            reservations/{reservation_name}/reservationBlocks/{reservation_block_name}
+        project (str):
+            Project ID for this request.
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+        reservation_sub_block (str):
+            The name of the reservation subBlock. Name
+            should conform to RFC1035 or be a resource ID.
+        reservation_sub_blocks_report_faulty_request_resource (google.cloud.compute_v1.types.ReservationSubBlocksReportFaultyRequest):
+            The body resource for this request
+        zone (str):
+            Name of the zone for this request. Zone name
+            should conform to RFC1035.
+    """
+
+    parent_name: str = proto.Field(
+        proto.STRING,
+        number=478151936,
+    )
+    project: str = proto.Field(
+        proto.STRING,
+        number=227560217,
+    )
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+    reservation_sub_block: str = proto.Field(
+        proto.STRING,
+        number=22750491,
+    )
+    reservation_sub_blocks_report_faulty_request_resource: "ReservationSubBlocksReportFaultyRequest" = proto.Field(
+        proto.MESSAGE,
+        number=450847938,
+        message="ReservationSubBlocksReportFaultyRequest",
+    )
+    zone: str = proto.Field(
+        proto.STRING,
+        number=3744684,
     )
 
 
@@ -94048,6 +95694,136 @@ class ReservationSubBlocksListResponse(proto.Message):
         number=50704284,
         optional=True,
         message="Warning",
+    )
+
+
+class ReservationSubBlocksReportFaultyRequest(proto.Message):
+    r"""
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        disruption_schedule (str):
+            The disruption schedule for the subBlock.
+            Check the DisruptionSchedule enum for the list
+            of possible values.
+
+            This field is a member of `oneof`_ ``_disruption_schedule``.
+        failure_component (str):
+            The component that experienced the fault.
+            Check the FailureComponent enum for the list of
+            possible values.
+
+            This field is a member of `oneof`_ ``_failure_component``.
+        fault_reasons (MutableSequence[google.cloud.compute_v1.types.ReservationSubBlocksReportFaultyRequestFaultReason]):
+            The reasons for the fault experienced with
+            the subBlock.
+    """
+
+    class DisruptionSchedule(proto.Enum):
+        r"""The disruption schedule for the subBlock.
+
+        Values:
+            UNDEFINED_DISRUPTION_SCHEDULE (0):
+                A value indicating that the enum field is not
+                set.
+            DISRUPTION_SCHEDULE_UNSPECIFIED (332543835):
+                No description available.
+            IMMEDIATE (152881041):
+                All VMs will be disrupted immediately.
+        """
+        UNDEFINED_DISRUPTION_SCHEDULE = 0
+        DISRUPTION_SCHEDULE_UNSPECIFIED = 332543835
+        IMMEDIATE = 152881041
+
+    class FailureComponent(proto.Enum):
+        r"""The component that experienced the fault.
+
+        Values:
+            UNDEFINED_FAILURE_COMPONENT (0):
+                A value indicating that the enum field is not
+                set.
+            FAILURE_COMPONENT_UNSPECIFIED (332003744):
+                No description available.
+            MULTIPLE_FAULTY_HOSTS (423545298):
+                Multiple hosts experienced the fault.
+            NVLINK_SWITCH (239107153):
+                The NVLink switch experienced the fault.
+        """
+        UNDEFINED_FAILURE_COMPONENT = 0
+        FAILURE_COMPONENT_UNSPECIFIED = 332003744
+        MULTIPLE_FAULTY_HOSTS = 423545298
+        NVLINK_SWITCH = 239107153
+
+    disruption_schedule: str = proto.Field(
+        proto.STRING,
+        number=95871619,
+        optional=True,
+    )
+    failure_component: str = proto.Field(
+        proto.STRING,
+        number=25912456,
+        optional=True,
+    )
+    fault_reasons: MutableSequence[
+        "ReservationSubBlocksReportFaultyRequestFaultReason"
+    ] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=168056210,
+        message="ReservationSubBlocksReportFaultyRequestFaultReason",
+    )
+
+
+class ReservationSubBlocksReportFaultyRequestFaultReason(proto.Message):
+    r"""The reason for the fault experienced with the subBlock.
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        behavior (str):
+            The behavior of the fault experienced with
+            the subBlock. Check the Behavior enum for the
+            list of possible values.
+
+            This field is a member of `oneof`_ ``_behavior``.
+        description (str):
+            The description of the fault experienced with
+            the subBlock.
+
+            This field is a member of `oneof`_ ``_description``.
+    """
+
+    class Behavior(proto.Enum):
+        r"""The behavior of the fault experienced with the subBlock.
+
+        Values:
+            UNDEFINED_BEHAVIOR (0):
+                A value indicating that the enum field is not
+                set.
+            FAULT_BEHAVIOR_UNSPECIFIED (447660743):
+                No description available.
+            GPU_ERROR (198817909):
+                The subBlock experienced a GPU error.
+            PERFORMANCE (135701520):
+                The subBlock experienced performance issues.
+            SWITCH_FAILURE (254909279):
+                The subBlock experienced a switch failure.
+        """
+        UNDEFINED_BEHAVIOR = 0
+        FAULT_BEHAVIOR_UNSPECIFIED = 447660743
+        GPU_ERROR = 198817909
+        PERFORMANCE = 135701520
+        SWITCH_FAILURE = 254909279
+
+    behavior: str = proto.Field(
+        proto.STRING,
+        number=437170770,
+        optional=True,
+    )
+    description: str = proto.Field(
+        proto.STRING,
+        number=422937596,
+        optional=True,
     )
 
 
@@ -100613,6 +102389,9 @@ class SecurityPolicy(proto.Message):
         advanced_options_config (google.cloud.compute_v1.types.SecurityPolicyAdvancedOptionsConfig):
 
             This field is a member of `oneof`_ ``_advanced_options_config``.
+        associations (MutableSequence[google.cloud.compute_v1.types.SecurityPolicyAssociation]):
+            A list of associations that belong to this
+            policy.
         creation_timestamp (str):
             [Output Only] Creation timestamp in RFC3339 text format.
 
@@ -100701,6 +102480,20 @@ class SecurityPolicy(proto.Message):
             [Output Only] Server-defined URL for the resource.
 
             This field is a member of `oneof`_ ``_self_link``.
+        short_name (str):
+            User-provided name of the organization security policy. The
+            name should be unique in the organization in which the
+            security policy is created. This should only be used when
+            SecurityPolicyType is CLOUD_ARMOR. The name must be 1-63
+            characters long, and comply with
+            https://www.ietf.org/rfc/rfc1035.txt. Specifically, the name
+            must be 1-63 characters long and match the regular
+            expression ``[a-z]([-a-z0-9]*[a-z0-9])?`` which means the
+            first character must be a lowercase letter, and all
+            following characters must be a dash, lowercase letter, or
+            digit, except the last character, which cannot be a dash.
+
+            This field is a member of `oneof`_ ``_short_name``.
         type_ (str):
             The type indicates the intended use of the security policy.
             - CLOUD_ARMOR: Cloud Armor backend security policies can be
@@ -100784,6 +102577,11 @@ class SecurityPolicy(proto.Message):
         optional=True,
         message="SecurityPolicyAdvancedOptionsConfig",
     )
+    associations: MutableSequence["SecurityPolicyAssociation"] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=508736530,
+        message="SecurityPolicyAssociation",
+    )
     creation_timestamp: str = proto.Field(
         proto.STRING,
         number=30525366,
@@ -100849,6 +102647,11 @@ class SecurityPolicy(proto.Message):
     self_link: str = proto.Field(
         proto.STRING,
         number=456214797,
+        optional=True,
+    )
+    short_name: str = proto.Field(
+        proto.STRING,
+        number=492051566,
         optional=True,
     )
     type_: str = proto.Field(
@@ -101209,6 +103012,78 @@ class SecurityPolicyAdvancedOptionsConfigJsonCustomConfig(proto.Message):
     content_types: MutableSequence[str] = proto.RepeatedField(
         proto.STRING,
         number=17428787,
+    )
+
+
+class SecurityPolicyAssociation(proto.Message):
+    r"""
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        attachment_id (str):
+            The resource that the security policy is
+            attached to.
+
+            This field is a member of `oneof`_ ``_attachment_id``.
+        display_name (str):
+            [Output Only] The display name of the security policy of the
+            association.
+
+            This field is a member of `oneof`_ ``_display_name``.
+        excluded_folders (MutableSequence[str]):
+            A list of folders to exclude from the
+            security policy.
+        excluded_projects (MutableSequence[str]):
+            A list of projects to exclude from the
+            security policy.
+        name (str):
+            The name for an association.
+
+            This field is a member of `oneof`_ ``_name``.
+        security_policy_id (str):
+            [Output Only] The security policy ID of the association.
+
+            This field is a member of `oneof`_ ``_security_policy_id``.
+        short_name (str):
+            [Output Only] The short name of the security policy of the
+            association.
+
+            This field is a member of `oneof`_ ``_short_name``.
+    """
+
+    attachment_id: str = proto.Field(
+        proto.STRING,
+        number=103768503,
+        optional=True,
+    )
+    display_name: str = proto.Field(
+        proto.STRING,
+        number=4473832,
+        optional=True,
+    )
+    excluded_folders: MutableSequence[str] = proto.RepeatedField(
+        proto.STRING,
+        number=310611024,
+    )
+    excluded_projects: MutableSequence[str] = proto.RepeatedField(
+        proto.STRING,
+        number=283070287,
+    )
+    name: str = proto.Field(
+        proto.STRING,
+        number=3373707,
+        optional=True,
+    )
+    security_policy_id: str = proto.Field(
+        proto.STRING,
+        number=203671817,
+        optional=True,
+    )
+    short_name: str = proto.Field(
+        proto.STRING,
+        number=492051566,
+        optional=True,
     )
 
 
@@ -108510,7 +110385,6 @@ class Snapshot(proto.Message):
     r"""Represents a Persistent Disk Snapshot resource. You can use
     snapshots to back up data on a regular interval. For more
     information, read Creating persistent disk snapshots.
-    LINT.IfChange
 
 
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
@@ -108633,6 +110507,11 @@ class Snapshot(proto.Message):
             except the last character, which cannot be a dash.
 
             This field is a member of `oneof`_ ``_name``.
+        params (google.cloud.compute_v1.types.SnapshotParams):
+            Input only. [Input Only] Additional params passed with the
+            request, but not persisted as part of resource payload.
+
+            This field is a member of `oneof`_ ``_params``.
         satisfies_pzi (bool):
             Output only. Reserved for future use.
 
@@ -108929,6 +110808,12 @@ class Snapshot(proto.Message):
         number=3373707,
         optional=True,
     )
+    params: "SnapshotParams" = proto.Field(
+        proto.MESSAGE,
+        number=78313862,
+        optional=True,
+        message="SnapshotParams",
+    )
     satisfies_pzi: bool = proto.Field(
         proto.BOOL,
         number=480964257,
@@ -109093,6 +110978,25 @@ class SnapshotList(proto.Message):
         number=50704284,
         optional=True,
         message="Warning",
+    )
+
+
+class SnapshotParams(proto.Message):
+    r"""Additional snapshot params.
+
+    Attributes:
+        resource_manager_tags (MutableMapping[str, str]):
+            Resource manager tags to be bound to the snapshot. Tag keys
+            and values have the same definition as resource manager
+            tags. Keys must be in the format ``tagKeys/{tag_key_id}``,
+            and values are in the format ``tagValues/456``. The field is
+            ignored (both PUT & PATCH) when empty.
+    """
+
+    resource_manager_tags: MutableMapping[str, str] = proto.MapField(
+        proto.STRING,
+        proto.STRING,
+        number=377671164,
     )
 
 
@@ -119868,6 +121772,60 @@ class UpdatePerInstanceConfigsRegionInstanceGroupManagerRequest(proto.Message):
         proto.MESSAGE,
         number=89036583,
         message="RegionInstanceGroupManagerUpdateInstanceConfigReq",
+    )
+    request_id: str = proto.Field(
+        proto.STRING,
+        number=37109963,
+        optional=True,
+    )
+
+
+class UpdatePreviewFeatureRequest(proto.Message):
+    r"""A request message for PreviewFeatures.Update. See the method
+    description for details.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        preview_feature (str):
+            Name of the PreviewFeature for this request.
+        preview_feature_resource (google.cloud.compute_v1.types.PreviewFeature):
+            The body resource for this request
+        project (str):
+            Project ID for this request.
+        request_id (str):
+            An optional request ID to identify requests.
+            Specify a unique request ID so that if you must
+            retry your request, the server will know to
+            ignore the request if it has already been
+            completed. For example, consider a situation
+            where you make an initial request and the
+            request times out. If you make the request again
+            with the same request ID, the server can check
+            if original operation with the same request ID
+            was received, and if so, will ignore the second
+            request. This prevents clients from accidentally
+            creating duplicate commitments. The request ID
+            must be a valid UUID with the exception that
+            zero UUID is not supported (
+            00000000-0000-0000-0000-000000000000).
+
+            This field is a member of `oneof`_ ``_request_id``.
+    """
+
+    preview_feature: str = proto.Field(
+        proto.STRING,
+        number=454999423,
+    )
+    preview_feature_resource: "PreviewFeature" = proto.Field(
+        proto.MESSAGE,
+        number=10876622,
+        message="PreviewFeature",
+    )
+    project: str = proto.Field(
+        proto.STRING,
+        number=227560217,
     )
     request_id: str = proto.Field(
         proto.STRING,

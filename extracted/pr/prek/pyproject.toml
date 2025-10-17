@@ -1,6 +1,6 @@
 [project]
 name = "prek"
-version = "0.2.8"
+version = "0.2.9"
 description = "Better `pre-commit`, re-engineered in Rust"
 authors = [{ name = "j178", email = "hi@j178.dev" }]
 requires-python = ">=3.8"
@@ -21,6 +21,7 @@ classifiers = [
 Repository = "https://github.com/j178/prek"
 Changelog = "https://github.com/j178/prek/blob/master/CHANGELOG.md"
 Releases = "https://github.com/j178/prek/releases"
+Homepage = "https://prek.j178.dev/"
 
 [build-system]
 requires = ["maturin>=1.0,<2.0"]

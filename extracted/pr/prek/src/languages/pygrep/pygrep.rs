@@ -90,7 +90,7 @@ impl LanguageImpl for Pygrep {
         let progress = reporter.on_install_start(&hook);
 
         let uv_dir = store.tools_path(ToolBucket::Uv);
-        let uv = Uv::install(&uv_dir).await?;
+        let uv = Uv::install(store, &uv_dir).await?;
         let python_dir = store.tools_path(ToolBucket::Python);
 
         // Find or download a Python interpreter.
@@ -111,6 +111,9 @@ impl LanguageImpl for Pygrep {
                 .arg("--no-python-downloads")
                 .arg("--no-config")
                 .arg("--no-project")
+                // `--managed_python` conflicts with `--python-preference`, ignore any user setting
+                .env_remove(EnvVars::UV_MANAGED_PYTHON)
+                .env_remove(EnvVars::UV_NO_MANAGED_PYTHON)
                 .check(false)
                 .output()
                 .await?;

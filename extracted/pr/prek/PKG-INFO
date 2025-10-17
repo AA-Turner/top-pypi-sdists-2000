@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: prek
-Version: 0.2.8
+Version: 0.2.9
 Classifier: Development Status :: 2 - Pre-Alpha
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -11,13 +11,14 @@ Classifier: Topic :: Software Development :: Quality Assurance
 License-File: LICENSE
 Summary: Better `pre-commit`, re-engineered in Rust
 Keywords: pre-commit,git,hooks
-Home-Page: https://github.com/j178/prek
+Home-Page: https://prek.j178.dev/
 Author-email: j178 <hi@j178.dev>
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
 Project-URL: Repository, https://github.com/j178/prek
 Project-URL: Changelog, https://github.com/j178/prek/blob/master/CHANGELOG.md
 Project-URL: Releases, https://github.com/j178/prek/releases
+Project-URL: Homepage, https://prek.j178.dev/
 
 <div align="center">
 
@@ -51,7 +52,7 @@ while also providing some additional long-requested features.
 ## Features
 
 - 🚀 A single binary with no dependencies, does not require Python or any other runtime.
-- ⚡ About [10x faster](https://prek.j178.dev/benchmark/) than `pre-commit` and uses only half the disk space.
+- ⚡ [Faster](https://prek.j178.dev/benchmark/) than `pre-commit` and uses only half the disk space.
 - 🔄 Fully compatible with the original pre-commit configurations and hooks.
 - 🏗️ Built-in support for monorepos (i.e. [workspace mode](https://prek.j178.dev/workspace/)).
 - 🐍 Integration with [`uv`](https://github.com/astral-sh/uv) for managing Python virtual environments and dependencies.
@@ -81,9 +82,9 @@ For configuring `.pre-commit-config.yaml` and writing hooks, you can refer to th
 <!-- why:start -->
 ## Why prek?
 
-### prek is way faster
+### prek is faster
 
-- It is about [10x faster](https://prek.j178.dev/benchmark/) than `pre-commit` and uses only half the disk space.
+- It is [multiple times faster](https://prek.j178.dev/benchmark/) than `pre-commit` and takes up half the disk space.
 - It redesigned how hook environments and toolchains are managed, they are all shared between hooks, which reduces the disk space usage and speeds up the installation process.
 - Repositories are cloned in parallel, and hooks are installed in parallel if their dependencies are disjoint.
 - It uses [`uv`](https://github.com/astral-sh/uv) for creating Python virtualenvs and installing dependencies, which is known for its speed and efficiency.
@@ -129,7 +130,7 @@ On Linux and macOS:
 
 <!-- linux-standalone-install:start -->
 ```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.8/prek-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.9/prek-installer.sh | sh
 ```
 <!-- linux-standalone-install:end -->
 
@@ -137,7 +138,7 @@ On Windows:
 
 <!-- windows-standalone-install:start -->
 ```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.8/prek-installer.ps1 | iex"
+powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.9/prek-installer.ps1 | iex"
 ```
 <!-- windows-standalone-install:end -->
 
@@ -184,6 +185,19 @@ To use prek with [mise](https://mise.jdx.dev):
 mise use prek
 ```
 <!-- mise-install:end -->
+
+</details>
+
+<details>
+<summary>Cargo binstall</summary>
+
+<!-- cargo-binstall:start -->
+Install pre-compiled binaries from GitHub using Cargo binstall (Rust 1.89+ is required):
+
+```bash
+cargo binstall prek --git https://github.com/j178/prek
+```
+<!-- cargo-binstall:end -->
 
 </details>
 

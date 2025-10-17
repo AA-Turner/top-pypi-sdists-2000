@@ -49,7 +49,7 @@ if WHEEL_CMD in sys.argv:
             # and a few workflows as show for example in this PR:
             # https://github.com/semgrep/semgrep-proprietary/pull/2606/files
             # coupling: semgrep.libsonnet default_python_version
-            python = "cp310.cp311.cp312.cp313.py310.py311.py312.py313"
+            python = "cp310.cp311.cp312.cp313.cp314.py310.py311.py312.py313.py314"
 
             # We don't require a specific Python ABI
             abi = "none"
@@ -122,8 +122,7 @@ install_requires = [
     "defusedxml~=0.7.1",
     "exceptiongroup~=1.2.0",
     "glom~=22.1",
-    "mcp==1.12.2",
-    "jsonschema~=4.20.0",
+    "mcp==1.16.0",
     "opentelemetry-api~=1.37.0",
     "opentelemetry-sdk~=1.37.0",
     "opentelemetry-exporter-otlp-proto-http~=1.37.0",
@@ -132,12 +131,8 @@ install_requires = [
     "peewee~=3.14",
     "requests~=2.22",
     "rich~=13.5.2",
-    "ruamel.yaml>=0.18.5",
-    # 0.2.13 is broken on macos
-    # https://sourceforge.net/p/ruamel-yaml-clib/tickets/47/
-    # 0.2.14 is broken on linux
-    # https://sourceforge.net/p/ruamel-yaml-clib/tickets/49/
-    "ruamel.yaml.clib==0.2.12",
+    "ruamel.yaml>=0.18.15",
+    "ruamel.yaml.clib==0.2.14",
     "tomli~=2.0.1",
     "typing-extensions~=4.2",
     "urllib3~=2.0",
@@ -148,7 +143,7 @@ install_requires = [
 
 setuptools.setup(
     name="semgrep",
-    version="1.139.0",
+    version="1.140.0",
     author="Semgrep Inc.",
     author_email="support@semgrep.com",
     description="Lightweight static analysis for many languages. Find bug variants with patterns that look like source code.",
@@ -178,6 +173,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Security",
         "Topic :: Software Development :: Quality Assurance",
     ],
