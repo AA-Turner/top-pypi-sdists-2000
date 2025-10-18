@@ -1,16 +1,16 @@
 Metadata-Version: 2.1
 Name: langchain-google-genai
-Version: 2.1.12
+Version: 3.0.0
 Summary: An integration package connecting Google's genai package and LangChain
 License: MIT
 Project-URL: Source Code, https://github.com/langchain-ai/langchain-google/tree/main/libs/genai
 Project-URL: Release Notes, https://github.com/langchain-ai/langchain-google/releases
 Project-URL: repository, https://github.com/langchain-ai/langchain-google
-Requires-Python: >=3.9
-Requires-Dist: langchain-core>=0.3.75
-Requires-Dist: google-ai-generativelanguage<1,>=0.7
-Requires-Dist: pydantic<3,>=2
-Requires-Dist: filetype<2,>=1.2
+Requires-Python: <4.0.0,>=3.10.0
+Requires-Dist: langchain-core<2.0.0,>=1.0.0
+Requires-Dist: google-ai-generativelanguage<1.0.0,>=0.7.0
+Requires-Dist: pydantic<3.0.0,>=2.0.0
+Requires-Dist: filetype<2.0.0,>=1.2.0
 Description-Content-Type: text/markdown
 
 # langchain-google-genai
@@ -76,7 +76,7 @@ Then use the `ChatGoogleGenerativeAI` interface:
 ```python
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+llm = ChatGoogleGenerativeAI(model="gemini-flash-latest")
 response = llm.invoke("Sing a ballad of LangChain.")
 print(response.content)
 ```
@@ -97,7 +97,7 @@ Most Gemini models support image inputs.
 from langchain_core.messages import HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+llm = ChatGoogleGenerativeAI(model="gemini-flash-latest")
 
 message = HumanMessage(
     content=[

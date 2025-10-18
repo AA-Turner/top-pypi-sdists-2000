@@ -1,15 +1,12 @@
 import dataclasses
 import inspect
 import json
+import sys
 from functools import partial
 from typing import (
     Annotated,
-    List,
     Literal,
-    Optional,
-    Type,
     TypeVar,
-    Union,
 )
 
 import pytest
@@ -27,14 +24,18 @@ from langchain_core.messages import (
 from langchain_core.runnables import RunnableConfig, RunnableLambda
 from langchain_core.tools import InjectedToolCallId, ToolException
 from langchain_core.tools import tool as dec_tool
-from pydantic import BaseModel, Field
-from pydantic.v1 import BaseModel as BaseModelV1
-from typing_extensions import TypedDict
-
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.config import get_stream_writer
 from langgraph.graph import START, MessagesState, StateGraph, add_messages
 from langgraph.graph.message import REMOVE_ALL_MESSAGES
+from langgraph.runtime import Runtime
+from langgraph.store.base import BaseStore
+from langgraph.store.memory import InMemoryStore
+from langgraph.types import Command, Interrupt, interrupt
+from pydantic import BaseModel, Field
+from pydantic.v1 import BaseModel as BaseModelV1
+from typing_extensions import TypedDict
+
 from langgraph.prebuilt import (
     ToolNode,
     create_react_agent,
@@ -54,10 +55,6 @@ from langgraph.prebuilt.tool_node import (
     _get_state_args,
     _infer_handled_types,
 )
-from langgraph.runtime import Runtime
-from langgraph.store.base import BaseStore
-from langgraph.store.memory import InMemoryStore
-from langgraph.types import Command, Interrupt, interrupt
 from tests.any_str import AnyStr
 from tests.messages import _AnyIdHumanMessage, _AnyIdToolMessage
 from tests.model import FakeToolCallingModel
@@ -419,7 +416,7 @@ def test__infer_handled_types() -> None:
     def handle2(e: Exception) -> str:
         return ""
 
-    def handle3(e: Union[ValueError, ToolException]) -> str:
+    def handle3(e: ValueError | ToolException) -> str:
         return ""
 
     class Handler:
@@ -428,7 +425,7 @@ def test__infer_handled_types() -> None:
 
     handle4 = Handler().handle
 
-    def handle5(e: Union[Union[TypeError, ValueError], ToolException]):
+    def handle5(e: TypeError | ValueError | ToolException):
         return ""
 
     expected: tuple = (Exception,)
@@ -467,7 +464,7 @@ def test__infer_handled_types() -> None:
 
     with pytest.raises(ValueError):
 
-        def handler(e: Union[str, int]):
+        def handler(e: str | int):
             return ""
 
         _infer_handled_types(handler)
@@ -506,7 +503,7 @@ class CustomState(AgentState):
 
 
 class CustomStatePydantic(AgentStatePydantic):
-    user_name: Optional[str] = None
+    user_name: str | None = None
 
 
 @pytest.mark.parametrize("version", REACT_TOOL_CALL_VERSIONS)
@@ -682,12 +679,18 @@ T = TypeVar("T")
     "schema_",
     [
         _InjectStateSchema,
-        _InjectedStatePydanticSchema,
+        pytest.param(
+            _InjectedStatePydanticSchema,
+            marks=pytest.mark.skipif(
+                sys.version_info >= (3, 14),
+                reason="Pydantic v1 not supported in Python 3.14+",
+            ),
+        ),
         _InjectedStatePydanticV2Schema,
         _InjectedStateDataclassSchema,
     ],
 )
-def test_tool_node_inject_state(schema_: Type[T]) -> None:
+def test_tool_node_inject_state(schema_: type[T]) -> None:
     def tool1(some_val: int, state: Annotated[T, InjectedState]) -> str:
         """Tool 1 docstring."""
         if isinstance(state, dict):
@@ -705,13 +708,13 @@ def test_tool_node_inject_state(schema_: Type[T]) -> None:
     def tool3(
         some_val: int,
         foo: Annotated[str, InjectedState("foo")],
-        msgs: Annotated[List[AnyMessage], InjectedState("messages")],
+        msgs: Annotated[list[AnyMessage], InjectedState("messages")],
     ) -> str:
         """Tool 1 docstring."""
         return foo
 
     def tool4(
-        some_val: int, msgs: Annotated[List[AnyMessage], InjectedState("messages")]
+        some_val: int, msgs: Annotated[list[AnyMessage], InjectedState("messages")]
     ) -> str:
         """Tool 1 docstring."""
         return msgs[0].content
@@ -2012,7 +2015,7 @@ def test_post_model_hook_with_structured_output() -> None:
         flag: bool
         structured_response: WeatherResponse
 
-    def post_model_hook(state: State) -> Union[dict[str, bool], Command]:
+    def post_model_hook(state: State) -> dict[str, bool] | Command:
         return {"flag": True}
 
     agent = create_react_agent(

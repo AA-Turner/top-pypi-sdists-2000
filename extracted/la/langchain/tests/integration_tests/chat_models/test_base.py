@@ -25,22 +25,20 @@ async def test_init_chat_model_chain() -> None:
 
     model_with_config = model_with_tools.with_config(
         RunnableConfig(tags=["foo"]),
-        configurable={"bar_model": "claude-3-sonnet-20240229"},
+        configurable={"bar_model": "claude-3-7-sonnet-20250219"},
     )
     prompt = ChatPromptTemplate.from_messages([("system", "foo"), ("human", "{input}")])
     chain = prompt | model_with_config
     output = chain.invoke({"input": "bar"})
     assert isinstance(output, AIMessage)
-    events = [
-        event async for event in chain.astream_events({"input": "bar"}, version="v2")
-    ]
+    events = [event async for event in chain.astream_events({"input": "bar"}, version="v2")]
     assert events
 
 
 class TestStandard(ChatModelIntegrationTests):
     @property
     def chat_model_class(self) -> type[BaseChatModel]:
-        return cast(type[BaseChatModel], init_chat_model)
+        return cast("type[BaseChatModel]", init_chat_model)
 
     @property
     def chat_model_params(self) -> dict:

@@ -1,4 +1,4 @@
-"""**LangChain Google Generative AI Integration**
+"""**LangChain Google Generative AI Integration**.
 
 This module contains the LangChain integrations for Vertex AI service - Google foundational models, third-party foundational modela available on Vertex Model Garden and.
 
@@ -56,14 +56,6 @@ from langchain_google_vertexai.evaluators.evaluation import (
 from langchain_google_vertexai.functions_utils import (
     PydanticFunctionsOutputParser,
 )
-from langchain_google_vertexai.gemma import (
-    GemmaChatLocalHF,
-    GemmaChatLocalKaggle,
-    GemmaChatVertexAIModelGarden,
-    GemmaLocalHF,
-    GemmaLocalKaggle,
-    GemmaVertexAIModelGarden,
-)
 from langchain_google_vertexai.llms import VertexAI
 from langchain_google_vertexai.model_garden import VertexAIModelGarden
 from langchain_google_vertexai.model_garden_maas import get_vertex_maas_model
@@ -85,17 +77,10 @@ from langchain_google_vertexai.vision_models import (
 
 __all__ = [
     "ChatVertexAI",
-    "create_structured_runnable",
     "DataStoreDocumentStorage",
     "FunctionCallingConfig",
     "FunctionDeclaration",
     "GCSDocumentStorage",
-    "GemmaChatLocalHF",
-    "GemmaChatLocalKaggle",
-    "GemmaChatVertexAIModelGarden",
-    "GemmaLocalHF",
-    "GemmaLocalKaggle",
-    "GemmaVertexAIModelGarden",
     "HarmBlockThreshold",
     "HarmCategory",
     "Modality",
@@ -118,5 +103,6 @@ __all__ = [
     "VertexPairWiseStringEvaluator",
     "VertexStringEvaluator",
     "create_context_cache",
+    "create_structured_runnable",
     "get_vertex_maas_model",
 ]

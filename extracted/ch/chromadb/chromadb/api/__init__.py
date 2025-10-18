@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Sequence, Optional, List
+from typing import Sequence, Optional, List, Dict, Any
 from uuid import UUID
 
 from overrides import override
@@ -21,18 +21,19 @@ from chromadb.api.types import (
     IncludeMetadataDocuments,
     Loadable,
     Metadatas,
+    Schema,
     URIs,
     Where,
     QueryResult,
     GetResult,
     WhereDocument,
     SearchResult,
+    DefaultEmbeddingFunction,
 )
 from chromadb.auth import UserIdentity
 from chromadb.execution.expression.plan import Search
 from chromadb.config import Component, Settings
 from chromadb.types import Database, Tenant, Collection as CollectionModel
-import chromadb.utils.embedding_functions as ef
 from chromadb.api.models.Collection import Collection
 
 # Re-export the async version
@@ -368,11 +369,12 @@ class ClientAPI(BaseAPI, ABC):
     def create_collection(
         self,
         name: str,
+        schema: Optional[Schema] = None,
         configuration: Optional[CreateCollectionConfiguration] = None,
         metadata: Optional[CollectionMetadata] = None,
         embedding_function: Optional[
             EmbeddingFunction[Embeddable]
-        ] = ef.DefaultEmbeddingFunction(),  # type: ignore
+        ] = DefaultEmbeddingFunction(),  # type: ignore
         data_loader: Optional[DataLoader[Loadable]] = None,
         get_or_create: bool = False,
     ) -> Collection:
@@ -409,7 +411,7 @@ class ClientAPI(BaseAPI, ABC):
         name: str,
         embedding_function: Optional[
             EmbeddingFunction[Embeddable]
-        ] = ef.DefaultEmbeddingFunction(),  # type: ignore
+        ] = DefaultEmbeddingFunction(),  # type: ignore
         data_loader: Optional[DataLoader[Loadable]] = None,
     ) -> Collection:
         """Get a collection with the given name.
@@ -437,11 +439,12 @@ class ClientAPI(BaseAPI, ABC):
     def get_or_create_collection(
         self,
         name: str,
+        schema: Optional[Schema] = None,
         configuration: Optional[CreateCollectionConfiguration] = None,
         metadata: Optional[CollectionMetadata] = None,
         embedding_function: Optional[
             EmbeddingFunction[Embeddable]
-        ] = ef.DefaultEmbeddingFunction(),  # type: ignore
+        ] = DefaultEmbeddingFunction(),  # type: ignore
         data_loader: Optional[DataLoader[Loadable]] = None,
     ) -> Collection:
         """Get or create a collection with the given name and metadata.
@@ -589,6 +592,7 @@ class ServerAPI(BaseAPI, AdminAPI, Component):
     def create_collection(
         self,
         name: str,
+        schema: Optional[Schema] = None,
         configuration: Optional[CreateCollectionConfiguration] = None,
         metadata: Optional[CollectionMetadata] = None,
         get_or_create: bool = False,
@@ -610,6 +614,7 @@ class ServerAPI(BaseAPI, AdminAPI, Component):
     def get_or_create_collection(
         self,
         name: str,
+        schema: Optional[Schema] = None,
         configuration: Optional[CreateCollectionConfiguration] = None,
         metadata: Optional[CollectionMetadata] = None,
         tenant: str = DEFAULT_TENANT,
@@ -769,4 +774,54 @@ class ServerAPI(BaseAPI, AdminAPI, Component):
         tenant: str = DEFAULT_TENANT,
         database: str = DEFAULT_DATABASE,
     ) -> None:
+        pass
+
+    @abstractmethod
+    def create_task(
+        self,
+        task_name: str,
+        operator_name: str,
+        input_collection_id: UUID,
+        output_collection_name: str,
+        params: Optional[Dict[str, Any]] = None,
+        tenant: str = DEFAULT_TENANT,
+        database: str = DEFAULT_DATABASE,
+    ) -> tuple[bool, str]:
+        """Create a recurring task on a collection.
+
+        Args:
+            task_name: Unique name for this task instance
+            operator_name: Built-in operator name (e.g., 'record_counter')
+            input_collection_id: Source collection that triggers the task
+            output_collection_name: Target collection where task output is stored
+            params: Optional dictionary with operator-specific parameters
+            tenant: The tenant name
+            database: The database name
+
+        Returns:
+            tuple: (success: bool, task_id: str)
+        """
+        pass
+
+    @abstractmethod
+    def remove_task(
+        self,
+        task_name: str,
+        input_collection_id: UUID,
+        delete_output: bool = False,
+        tenant: str = DEFAULT_TENANT,
+        database: str = DEFAULT_DATABASE,
+    ) -> bool:
+        """Delete a task and prevent any further runs.
+
+        Args:
+            task_name: Name of the task to remove
+            input_collection_id: Id of the input collection the task is registered on
+            delete_output: Whether to also delete the output collection
+            tenant: The tenant name
+            database: The database name
+
+        Returns:
+            bool: True if successful
+        """
         pass

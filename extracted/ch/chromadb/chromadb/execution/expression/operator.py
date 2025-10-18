@@ -11,7 +11,6 @@ from chromadb.api.types import (
     SparseVector,
     normalize_embeddings,
     validate_embeddings,
-    validate_sparse_vector,
 )
 from chromadb.types import (
     Collection,
@@ -672,8 +671,14 @@ class Rank:
             query = knn_data["query"]
 
             if isinstance(query, dict):
-                # SparseVector case
-                validate_sparse_vector(query)
+                # SparseVector case - deserialize from transport format
+                if query.get("#type") == "sparse_vector":
+                    query = SparseVector.from_dict(query)
+                else:
+                    # Old format or invalid - try to construct directly
+                    raise ValueError(
+                        f"Expected dict with #type='sparse_vector', got {query}"
+                    )
 
             elif isinstance(query, (list, tuple, np.ndarray)):
                 # Dense vector case - normalize then validate
@@ -695,7 +700,7 @@ class Rank:
             if not isinstance(key, str):
                 raise TypeError(f"$knn key must be a string, got {type(key).__name__}")
 
-            limit = knn_data.get("limit", 128)
+            limit = knn_data.get("limit", 16)
             if not isinstance(limit, int):
                 raise TypeError(
                     f"$knn limit must be an integer, got {type(limit).__name__}"
@@ -1013,7 +1018,7 @@ class Knn(Rank):
         key: The embedding key to search against. Can be:
              - "#embedding" (default) - searches the main embedding field
              - A metadata field name (e.g., "my_custom_field") - searches that metadata field
-        limit: Maximum number of results to consider (default: 128)
+        limit: Maximum number of results to consider (default: 16)
         default: Default score for records not in KNN results (default: None)
         return_rank: If True, return the rank position (0, 1, 2, ...) instead of distance (default: False)
 
@@ -1035,14 +1040,18 @@ class Knn(Rank):
         "NDArray[np.int32]",
     ]
     key: str = "#embedding"
-    limit: int = 128
+    limit: int = 16
     default: Optional[float] = None
     return_rank: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
-        # Convert numpy array to list if needed
+        # Convert to transport format
         query_value = self.query
-        if isinstance(query_value, np.ndarray):
+        if isinstance(query_value, SparseVector):
+            # Convert SparseVector dataclass to transport dict
+            query_value = query_value.to_dict()
+        elif isinstance(query_value, np.ndarray):
+            # Convert numpy array to list
             query_value = query_value.tolist()
 
         # Build result dict - only include non-default values to keep JSON clean

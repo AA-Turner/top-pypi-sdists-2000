@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Sequence
 from concurrent.futures import Executor
 from typing import (
     Any,
@@ -9,13 +10,12 @@ from typing import (
     Dict,
     List,
     Optional,
-    Sequence,
     Tuple,
     Union,
     cast,
 )
 
-import vertexai  # type: ignore[import-untyped]
+import vertexai
 from google.api_core.client_options import ClientOptions
 from google.cloud.aiplatform import initializer
 from google.cloud.aiplatform.constants import base as constants
@@ -42,8 +42,8 @@ from google.protobuf.struct_pb2 import Value
 from langchain_core.outputs import Generation, LLMResult
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing_extensions import Literal, Self
-from vertexai.generative_models._generative_models import (  # type: ignore
-    SafetySettingsType,
+from vertexai.generative_models._generative_models import (
+    SafetySettingsType,  # TODO: migrate to google-genai since this is deprecated
 )
 
 from langchain_google_vertexai._client_utils import (
@@ -80,13 +80,13 @@ class _VertexAIBase(BaseModel):
         default=None, exclude=True
     )  #: :meta private:
     "The full name of the model's endpoint."
-    client_options: Optional["ClientOptions"] = Field(
+    client_options: Optional[ClientOptions] = Field(
         default=None, exclude=True
     )  #: :meta private:
     api_endpoint: Optional[str] = Field(default=None, alias="base_url")
     "Desired API endpoint, e.g., us-central1-aiplatform.googleapis.com"
     api_transport: Optional[str] = None
-    """The desired API transport method, can be either 'grpc' or 'rest'. 
+    """The desired API transport method, can be either 'grpc' or 'rest'.
     Uses the default parameter in vertexai.init if defined.
     """
     default_metadata: Sequence[Tuple[str, str]] = Field(
@@ -103,7 +103,7 @@ class _VertexAIBase(BaseModel):
     "the environment."
     endpoint_version: Literal["v1", "v1beta1"] = "v1beta1"
     """Whether to use v1 or v1beta1 endpoint.
-    
+
     v1 is more performant, but v1beta1 might have some new features.
     """
 
@@ -171,7 +171,7 @@ class _VertexAIBase(BaseModel):
             self.async_client = _get_async_prediction_client(
                 endpoint_version=self.endpoint_version,
                 credentials=self.credentials,
-                client_options=cast(ClientOptions, self.client_options),
+                client_options=cast("ClientOptions", self.client_options),
                 user_agent=self._user_agent,
             )
         return self.async_client
@@ -192,33 +192,33 @@ class _VertexAIBase(BaseModel):
 class _VertexAICommon(_VertexAIBase):
     client_preview: Any = Field(default=None, exclude=True)  #: :meta private:
     model_name: Optional[str] = Field(default=None, alias="model")
-    "Underlying model name."
+    """Underlying model name."""
     temperature: Optional[float] = None
-    "Sampling temperature, it controls the degree of randomness in token selection."
+    """Sampling temperature, it controls the degree of randomness in token selection."""
     frequency_penalty: Optional[float] = None
-    "Positive values penalize tokens that repeatedly appear in the generated text, "
-    "decreasing the probability of repeating content."
+    """Positive values penalize tokens that repeatedly appear in the generated text,
+    decreasing the probability of repeating content."""
     presence_penalty: Optional[float] = None
-    "Positive values penalize tokens that already appear in the generated text, "
-    "increasing the probability of generating more diverse content."
+    """Positive values penalize tokens that already appear in the generated text,
+    increasing the probability of generating more diverse content."""
     max_output_tokens: Optional[int] = Field(default=None, alias="max_tokens")
-    "Token limit determines the maximum amount of text output from one prompt."
+    """Token limit determines the maximum amount of text output from one prompt."""
     top_p: Optional[float] = None
-    "Tokens are selected from most probable to least until the sum of their "
-    "probabilities equals the top-p value. Top-p is ignored for Codey models."
+    """Tokens are selected from most probable to least until the sum of their 
+    probabilities equals the top-p value. Top-p is ignored for Codey models."""
     top_k: Optional[int] = None
-    "How the model selects tokens for output, the next token is selected from "
-    "among the top-k most probable tokens. Top-k is ignored for Codey models."
+    """How the model selects tokens for output, the next token is selected from
+    among the top-k most probable tokens. Top-k is ignored for Codey models."""
     n: int = 1
     """How many completions to generate for each prompt."""
     seed: Optional[int] = None
     """Random seed for the generation."""
     streaming: bool = False
     """Whether to stream the results or not."""
-    safety_settings: Optional["SafetySettingsType"] = None
-    """The default safety settings to use for all generations. 
-    
-        For example: 
+    safety_settings: Optional[SafetySettingsType] = None
+    """The default safety settings to use for all generations.
+
+        For example:
 
             from langchain_google_vertexai import HarmBlockThreshold, HarmCategory
 
@@ -229,7 +229,7 @@ class _VertexAICommon(_VertexAIBase):
                 HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
                 HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
             }
-            """  # noqa: E501
+    """  # noqa: E501
 
     tuned_model_name: Optional[str] = None
     """The name of a tuned model."""
@@ -261,7 +261,7 @@ class _VertexAICommon(_VertexAIBase):
     @property
     def _identifying_params(self) -> Dict[str, Any]:
         """Gets the identifying parameters."""
-        return {**{"model_name": self.model_name}, **self._default_params}
+        return {"model_name": self.model_name, **self._default_params}
 
     @property
     def _default_params(self) -> Dict[str, Any]:
@@ -295,7 +295,6 @@ class _VertexAICommon(_VertexAIBase):
             api_endpoint=values.get("api_endpoint"),
             request_metadata=values.get("default_metadata"),
         )
-        return None
 
     def _prepare_params(
         self,
@@ -317,24 +316,22 @@ class _BaseVertexAIModelGarden(_VertexAIBase):
 
     async_client: Any = Field(default=None, exclude=True)  #: :meta private:
     endpoint_id: str
-    "A name of an endpoint where the model has been deployed."
+    """A name of an endpoint where the model has been deployed."""
     allowed_model_args: Optional[List[str]] = None
-    "Allowed optional args to be passed to the model."
+    """Allowed optional args to be passed to the model."""
     prompt_arg: str = "prompt"
     result_arg: Optional[str] = "generated_text"
-    "Set result_arg to None if output of the model is expected to be a string."
-    "Otherwise, if it's a dict, provided an argument that contains the result."
+    """Set result_arg to None if output of the model is expected to be a string.
+    Otherwise, if it's a dict, provided an argument that contains the result."""
     single_example_per_request: bool = True
-    "LLM endpoint currently serves only the first example in the request"
+    """LLM endpoint currently serves only the first example in the request"""
 
     @model_validator(mode="after")
     def validate_environment(self) -> Self:
         """Validate that the python package exists in environment."""
-
         if not self.project:
-            raise ValueError(
-                "A GCP project should be provided to run inference on Model Garden!"
-            )
+            msg = "A GCP project should be provided to run inference on Model Garden!"
+            raise ValueError(msg)
 
         client_options = ClientOptions(
             api_endpoint=f"{self.location}-aiplatform.googleapis.com"
@@ -358,7 +355,7 @@ class _BaseVertexAIModelGarden(_VertexAIBase):
     def _llm_type(self) -> str:
         return "vertexai_model_garden"
 
-    def _prepare_request(self, prompts: List[str], **kwargs: Any) -> List["Value"]:
+    def _prepare_request(self, prompts: List[str], **kwargs: Any) -> List[Value]:
         instances = []
         for prompt in prompts:
             if self.allowed_model_args:
@@ -370,12 +367,11 @@ class _BaseVertexAIModelGarden(_VertexAIBase):
             instance[self.prompt_arg] = prompt
             instances.append(instance)
 
-        predict_instances = [
+        return [
             json_format.ParseDict(instance_dict, Value()) for instance_dict in instances
         ]
-        return predict_instances
 
-    def _parse_response(self, predictions: "Prediction") -> LLMResult:
+    def _parse_response(self, predictions: Prediction) -> LLMResult:
         generations: List[List[Generation]] = []
         for result in predictions.predictions:
             if isinstance(result, str):
@@ -413,7 +409,7 @@ class _BaseVertexAIModelGarden(_VertexAIBase):
                         "initialization."
                     )
                     raise ValueError(error_desc)
-                else:
-                    raise ValueError(f"{self.result_arg} key not found in prediction!")
+                msg = f"{self.result_arg} key not found in prediction!"
+                raise ValueError(msg)
 
         return prediction

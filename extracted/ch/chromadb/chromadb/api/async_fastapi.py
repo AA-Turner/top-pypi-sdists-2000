@@ -32,6 +32,7 @@ from chromadb.api.types import (
     Embeddings,
     IDs,
     Include,
+    Schema,
     Metadatas,
     URIs,
     Where,
@@ -49,6 +50,8 @@ from chromadb.api.types import (
 
 from chromadb.api.types import (
     IncludeMetadataDocumentsEmbeddings,
+    serialize_metadata,
+    deserialize_metadata,
 )
 
 
@@ -293,6 +296,7 @@ class AsyncFastAPI(BaseHTTPClient, AsyncServerAPI):
     async def create_collection(
         self,
         name: str,
+        schema: Optional[Schema] = None,
         configuration: Optional[CreateCollectionConfiguration] = None,
         metadata: Optional[CollectionMetadata] = None,
         get_or_create: bool = False,
@@ -305,6 +309,7 @@ class AsyncFastAPI(BaseHTTPClient, AsyncServerAPI):
             if configuration
             else None
         )
+        serialized_schema = schema.serialize_to_json() if schema else None
         resp_json = await self._make_request(
             "post",
             f"/tenants/{tenant}/databases/{database}/collections",
@@ -312,6 +317,7 @@ class AsyncFastAPI(BaseHTTPClient, AsyncServerAPI):
                 "name": name,
                 "metadata": metadata,
                 "configuration": config_json,
+                "schema": serialized_schema,
                 "get_or_create": get_or_create,
             },
         )
@@ -343,6 +349,7 @@ class AsyncFastAPI(BaseHTTPClient, AsyncServerAPI):
     async def get_or_create_collection(
         self,
         name: str,
+        schema: Optional[Schema] = None,
         configuration: Optional[CreateCollectionConfiguration] = None,
         metadata: Optional[CollectionMetadata] = None,
         tenant: str = DEFAULT_TENANT,
@@ -350,6 +357,7 @@ class AsyncFastAPI(BaseHTTPClient, AsyncServerAPI):
     ) -> CollectionModel:
         return await self.create_collection(
             name=name,
+            schema=schema,
             configuration=configuration,
             metadata=metadata,
             get_or_create=True,
@@ -409,7 +417,6 @@ class AsyncFastAPI(BaseHTTPClient, AsyncServerAPI):
         database: str = DEFAULT_DATABASE,
     ) -> SearchResult:
         """Performs hybrid search on a collection"""
-        # Convert Search objects to dictionaries
         payload = {"searches": [s.to_dict() for s in searches]}
 
         resp_json = await self._make_request(
@@ -417,6 +424,18 @@ class AsyncFastAPI(BaseHTTPClient, AsyncServerAPI):
             f"/tenants/{tenant}/databases/{database}/collections/{collection_id}/search",
             json=payload,
         )
+
+        metadata_batches = resp_json.get("metadatas", None)
+        if metadata_batches is not None:
+            resp_json["metadatas"] = [
+                [
+                    deserialize_metadata(metadata) if metadata is not None else None
+                    for metadata in metadatas
+                ]
+                if metadatas is not None
+                else None
+                for metadatas in metadata_batches
+            ]
 
         return SearchResult(resp_json)
 
@@ -498,10 +517,17 @@ class AsyncFastAPI(BaseHTTPClient, AsyncServerAPI):
             },
         )
 
+        metadatas = resp_json.get("metadatas", None)
+        if metadatas is not None:
+            metadatas = [
+                deserialize_metadata(metadata) if metadata is not None else None
+                for metadata in metadatas
+            ]
+
         return GetResult(
             ids=resp_json["ids"],
             embeddings=resp_json.get("embeddings", None),
-            metadatas=resp_json.get("metadatas", None),
+            metadatas=metadatas,  # type: ignore
             documents=resp_json.get("documents", None),
             data=None,
             uris=resp_json.get("uris", None),
@@ -542,12 +568,20 @@ class AsyncFastAPI(BaseHTTPClient, AsyncServerAPI):
         Submits a batch of embeddings to the database
         """
         supports_base64_encoding = await self.supports_base64_encoding()
+
+        serialized_metadatas = None
+        if batch[2] is not None:
+            serialized_metadatas = [
+                serialize_metadata(metadata) if metadata is not None else None
+                for metadata in batch[2]
+            ]
+
         data = {
             "ids": batch[0],
             "embeddings": optional_embeddings_to_base64_strings(batch[1])
             if supports_base64_encoding
             else batch[1],
-            "metadatas": batch[2],
+            "metadatas": serialized_metadatas,
             "documents": batch[3],
             "uris": batch[4],
         }
@@ -673,11 +707,23 @@ class AsyncFastAPI(BaseHTTPClient, AsyncServerAPI):
             },
         )
 
+        metadata_batches = resp_json.get("metadatas", None)
+        if metadata_batches is not None:
+            metadata_batches = [
+                [
+                    deserialize_metadata(metadata) if metadata is not None else None
+                    for metadata in metadatas
+                ]
+                if metadatas is not None
+                else None
+                for metadatas in metadata_batches
+            ]
+
         return QueryResult(
             ids=resp_json["ids"],
             distances=resp_json.get("distances", None),
             embeddings=resp_json.get("embeddings", None),
-            metadatas=resp_json.get("metadatas", None),
+            metadatas=metadata_batches,  # type: ignore
             documents=resp_json.get("documents", None),
             uris=resp_json.get("uris", None),
             data=None,

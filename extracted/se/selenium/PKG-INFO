@@ -12,19 +12,19 @@ Classifier: Operating System :: MacOS :: MacOS X
 Classifier: Topic :: Software Development :: Testing
 Classifier: Topic :: Software Development :: Libraries
 Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
-Requires-Python: >=3.9
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.10
 Requires-Dist: urllib3[socks]>=2.5.0,<3.0
-Requires-Dist: trio>=0.30.0,<1.0
+Requires-Dist: trio>=0.31.0,<1.0
 Requires-Dist: trio-websocket>=0.12.2,<1.0
-Requires-Dist: certifi>=2025.6.15
-Requires-Dist: typing_extensions>=4.14.0,<5.0
+Requires-Dist: certifi>=2025.10.5
+Requires-Dist: typing_extensions>=4.15.0,<5.0
 Requires-Dist: websocket-client>=1.8.0,<2.0
-Version: 4.36.0
+Version: 4.37.0
 
 ======================
 Selenium Client Driver
@@ -58,7 +58,7 @@ Updated documentation published with each commit is available at: `readthedocs.i
 Supported Python Versions
 =========================
 
-* Python 3.9+
+* Python 3.10+
 
 Supported Browsers
 ==================

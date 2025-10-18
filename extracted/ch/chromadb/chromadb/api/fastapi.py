@@ -24,6 +24,7 @@ from chromadb.api.types import (
     Embeddings,
     IDs,
     Include,
+    Schema,
     Metadatas,
     URIs,
     Where,
@@ -41,6 +42,8 @@ from chromadb.api.types import (
 from chromadb.api.types import (
     IncludeMetadataDocumentsEmbeddings,
     optional_embeddings_to_base64_strings,
+    serialize_metadata,
+    deserialize_metadata,
 )
 from chromadb.auth import UserIdentity
 from chromadb.auth import (
@@ -249,6 +252,7 @@ class FastAPI(BaseHTTPClient, ServerAPI):
     def create_collection(
         self,
         name: str,
+        schema: Optional[Schema] = None,
         configuration: Optional[CreateCollectionConfiguration] = None,
         metadata: Optional[CollectionMetadata] = None,
         get_or_create: bool = False,
@@ -256,17 +260,20 @@ class FastAPI(BaseHTTPClient, ServerAPI):
         database: str = DEFAULT_DATABASE,
     ) -> CollectionModel:
         """Creates a collection"""
+        config_json = (
+            create_collection_configuration_to_json(configuration, metadata)
+            if configuration
+            else None
+        )
+        serialized_schema = schema.serialize_to_json() if schema else None
         resp_json = self._make_request(
             "post",
             f"/tenants/{tenant}/databases/{database}/collections",
             json={
                 "name": name,
                 "metadata": metadata,
-                "configuration": create_collection_configuration_to_json(
-                    configuration, metadata
-                )
-                if configuration
-                else None,
+                "configuration": config_json,
+                "schema": serialized_schema,
                 "get_or_create": get_or_create,
             },
         )
@@ -298,6 +305,7 @@ class FastAPI(BaseHTTPClient, ServerAPI):
     def get_or_create_collection(
         self,
         name: str,
+        schema: Optional[Schema] = None,
         configuration: Optional[CreateCollectionConfiguration] = None,
         metadata: Optional[CollectionMetadata] = None,
         tenant: str = DEFAULT_TENANT,
@@ -307,6 +315,7 @@ class FastAPI(BaseHTTPClient, ServerAPI):
             name=name,
             metadata=metadata,
             configuration=configuration,
+            schema=schema,
             get_or_create=True,
             tenant=tenant,
             database=database,
@@ -374,6 +383,20 @@ class FastAPI(BaseHTTPClient, ServerAPI):
             f"/tenants/{tenant}/databases/{database}/collections/{collection_id}/search",
             json=payload,
         )
+
+        # Deserialize metadatas: convert transport format to SparseVector instances
+        metadata_batches = resp_json.get("metadatas", None)
+        if metadata_batches is not None:
+            # SearchResult has nested structure: List[Optional[List[Optional[Metadata]]]]
+            resp_json["metadatas"] = [
+                [
+                    deserialize_metadata(metadata) if metadata is not None else None
+                    for metadata in metadatas
+                ]
+                if metadatas is not None
+                else None
+                for metadatas in metadata_batches
+            ]
 
         return SearchResult(resp_json)
 
@@ -456,10 +479,18 @@ class FastAPI(BaseHTTPClient, ServerAPI):
             },
         )
 
+        # Deserialize metadatas: convert transport format to SparseVector instances
+        metadatas = resp_json.get("metadatas", None)
+        if metadatas is not None:
+            metadatas = [
+                deserialize_metadata(metadata) if metadata is not None else None
+                for metadata in metadatas
+            ]
+
         return GetResult(
             ids=resp_json["ids"],
             embeddings=resp_json.get("embeddings", None),
-            metadatas=resp_json.get("metadatas", None),
+            metadatas=metadatas,  # type: ignore
             documents=resp_json.get("documents", None),
             data=None,
             uris=resp_json.get("uris", None),
@@ -504,12 +535,20 @@ class FastAPI(BaseHTTPClient, ServerAPI):
         """
         Submits a batch of embeddings to the database
         """
+        # Serialize metadatas: convert SparseVector instances to transport format
+        serialized_metadatas = None
+        if batch[2] is not None:
+            serialized_metadatas = [
+                serialize_metadata(metadata) if metadata is not None else None
+                for metadata in batch[2]
+            ]
+
         data = {
             "ids": batch[0],
             "embeddings": optional_embeddings_to_base64_strings(batch[1])
             if self.supports_base64_encoding()
             else batch[1],
-            "metadatas": batch[2],
+            "metadatas": serialized_metadatas,
             "documents": batch[3],
             "uris": batch[4],
         }
@@ -642,11 +681,24 @@ class FastAPI(BaseHTTPClient, ServerAPI):
             },
         )
 
+        # Deserialize metadatas: convert transport format to SparseVector instances
+        metadata_batches = resp_json.get("metadatas", None)
+        if metadata_batches is not None:
+            metadata_batches = [
+                [
+                    deserialize_metadata(metadata) if metadata is not None else None
+                    for metadata in metadatas
+                ]
+                if metadatas is not None
+                else None
+                for metadatas in metadata_batches
+            ]
+
         return QueryResult(
             ids=resp_json["ids"],
             distances=resp_json.get("distances", None),
             embeddings=resp_json.get("embeddings", None),
-            metadatas=resp_json.get("metadatas", None),
+            metadatas=metadata_batches,  # type: ignore
             documents=resp_json.get("documents", None),
             uris=resp_json.get("uris", None),
             data=None,
@@ -695,3 +747,49 @@ class FastAPI(BaseHTTPClient, ServerAPI):
         pre_flight_checks = self.get_pre_flight_checks()
         max_batch_size = cast(int, pre_flight_checks.get("max_batch_size", -1))
         return max_batch_size
+
+    @trace_method("FastAPI.create_task", OpenTelemetryGranularity.ALL)
+    @override
+    def create_task(
+        self,
+        task_name: str,
+        operator_name: str,
+        input_collection_id: UUID,
+        output_collection_name: str,
+        params: Optional[Dict[str, Any]] = None,
+        tenant: str = DEFAULT_TENANT,
+        database: str = DEFAULT_DATABASE,
+    ) -> tuple[bool, str]:
+        """Register a recurring task on a collection."""
+        resp_json = self._make_request(
+            "post",
+            f"/tenants/{tenant}/databases/{database}/collections/{input_collection_id}/tasks/create",
+            json={
+                "task_name": task_name,
+                "operator_name": operator_name,
+                "output_collection_name": output_collection_name,
+                "params": params,
+            },
+        )
+        return cast(bool, resp_json["success"]), cast(str, resp_json["task_id"])
+
+    @trace_method("FastAPI.remove_task", OpenTelemetryGranularity.ALL)
+    @override
+    def remove_task(
+        self,
+        task_name: str,
+        input_collection_id: UUID,
+        delete_output: bool = False,
+        tenant: str = DEFAULT_TENANT,
+        database: str = DEFAULT_DATABASE,
+    ) -> bool:
+        """Delete a task and prevent any further runs."""
+        resp_json = self._make_request(
+            "post",
+            f"/tenants/{tenant}/databases/{database}/collections/{input_collection_id}/tasks/delete",
+            json={
+                "task_name": task_name,
+                "delete_output": delete_output,
+            },
+        )
+        return cast(bool, resp_json["success"])

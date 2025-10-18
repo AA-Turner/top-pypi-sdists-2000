@@ -3303,7 +3303,7 @@ class Instance(ServiceResource):
         self, **kwargs: Unpack[TerminateInstancesRequestInstanceTerminateTypeDef]
     ) -> TerminateInstancesResultTypeDef:
         """
-        Shuts down the specified instances.
+        Terminates (deletes) the specified instances.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/instance/terminate.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/service_resource/#instanceterminate-method)

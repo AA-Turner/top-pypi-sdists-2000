@@ -2,6 +2,8 @@ from langchain_core.tools import tool
 
 from langchain_google_genai import ChatGoogleGenerativeAI
 
+MODEL = "gemini-flash-lite-latest"
+
 
 @tool
 def check_weather(location: str) -> str:
@@ -25,7 +27,7 @@ def test_multiple_tools() -> None:
     tools = [check_weather, check_live_traffic, check_tennis_score]
 
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash-001",
+        model=MODEL,
     )
 
     model_with_tools = model.bind_tools(tools)
@@ -33,5 +35,5 @@ def test_multiple_tools() -> None:
     input_ = "What is the latest tennis score for Leonid?"
 
     result = model_with_tools.invoke(input_)
-    assert len(result.tool_calls) == 1  # type: ignore
-    assert result.tool_calls[0]["name"] == "check_tennis_score"  # type: ignore
+    assert len(result.tool_calls) == 1
+    assert result.tool_calls[0]["name"] == "check_tennis_score"

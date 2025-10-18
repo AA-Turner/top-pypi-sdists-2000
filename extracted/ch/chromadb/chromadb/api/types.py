@@ -8,14 +8,17 @@ from typing import (
     Any,
     Tuple,
     cast,
-    ClassVar,
     Literal,
     get_args,
     TYPE_CHECKING,
     Final,
 )
+from copy import deepcopy
+from typing_extensions import TypeAlias
+from dataclasses import dataclass
 from numpy.typing import NDArray
 import numpy as np
+import warnings
 from typing_extensions import TypedDict, Protocol, runtime_checkable
 from pydantic import BaseModel, field_validator
 
@@ -37,6 +40,11 @@ from chromadb.base_types import (
 
 if TYPE_CHECKING:
     pass
+
+try:
+    from chromadb.is_thin_client import is_thin_client
+except ImportError:
+    is_thin_client = False
 from inspect import signature
 from tenacity import retry
 from abc import abstractmethod
@@ -55,8 +63,6 @@ __all__ = [
     "SearchResult",
     "SearchResultRow",
     "SparseVector",
-    "is_valid_sparse_vector",
-    "validate_sparse_vector",
     # Index Configuration Types
     "FtsIndexConfig",
     "HnswIndexConfig",
@@ -68,7 +74,23 @@ __all__ = [
     "FloatInvertedIndexConfig",
     "BoolInvertedIndexConfig",
     "IndexConfig",
-    "IndexEntry",
+    # New Schema System (mirrors Rust InternalSchema)
+    "Schema",
+    "ValueTypes",
+    "StringValueType",
+    "FloatListValueType",
+    "SparseVectorValueType",
+    "IntValueType",
+    "FloatValueType",
+    "BoolValueType",
+    # Index Type Classes
+    "FtsIndexType",
+    "VectorIndexType",
+    "SparseVectorIndexType",
+    "StringInvertedIndexType",
+    "IntInvertedIndexType",
+    "FloatInvertedIndexType",
+    "BoolInvertedIndexType",
     # Value Type Constants
     "STRING_VALUE_NAME",
     "INT_VALUE_NAME",
@@ -88,21 +110,6 @@ __all__ = [
     "SPANN_INDEX_NAME",
     "DOCUMENT_KEY",
     "EMBEDDING_KEY",
-    # Internal Index Types
-    "InternalFtsIndex",
-    "InternalHnswIndex",
-    "InternalSpannIndex",
-    "InternalVectorIndex",
-    "InternalSparseVectorIndex",
-    "InternalStringInvertedIndex",
-    "InternalIntInvertedIndex",
-    "InternalFloatInvertedIndex",
-    "InternalBoolInvertedIndex",
-    "InternalIndexType",
-    "ValueTypeIndexes",
-    # Schema Builder and Internal Schema
-    "Schema",
-    "InternalSchema",
     # Space type
     "Space",
     # Embedding Functions
@@ -160,11 +167,11 @@ def _to_f32(value: float) -> float:
 
 def pack_embedding_safely(embedding: Embedding) -> str:
     try:
-        return pybase64.b64encode_as_string(  # type: ignore
+        return pybase64.b64encode_as_string(
             _get_struct(len(embedding)).pack(*embedding)
         )
     except OverflowError:
-        return pybase64.b64encode_as_string(  # type: ignore
+        return pybase64.b64encode_as_string(
             _get_struct(len(embedding)).pack(*[_to_f32(value) for value in embedding])
         )
 
@@ -556,7 +563,7 @@ class SearchResultRow(TypedDict, total=False):
     score: Optional[float]
 
 
-class SearchResult(dict):
+class SearchResult(dict):  # type: ignore
     """Column-major response from the search API with conversion methods.
 
     Inherits from dict to maintain backward compatibility with existing code
@@ -726,7 +733,6 @@ class EmbeddingFunction(Protocol[D]):
         Note: This method is provided for backward compatibility.
         Future implementations should override this method.
         """
-        import warnings
 
         warnings.warn(
             f"The class {self.__class__.__name__} does not implement __init__. "
@@ -743,7 +749,6 @@ class EmbeddingFunction(Protocol[D]):
         Note: This method is provided for backward compatibility.
         Future implementations should override this method.
         """
-        import warnings
 
         warnings.warn(
             "The EmbeddingFunction class does not implement name(). "
@@ -774,7 +779,6 @@ class EmbeddingFunction(Protocol[D]):
         Note: This method is provided for backward compatibility.
         Future implementations should override this method.
         """
-        import warnings
 
         warnings.warn(
             "The EmbeddingFunction class does not implement build_from_config(). "
@@ -792,7 +796,6 @@ class EmbeddingFunction(Protocol[D]):
         Note: This method is provided for backward compatibility.
         Future implementations should override this method.
         """
-        import warnings
 
         warnings.warn(
             f"The class {self.__class__.__name__} does not implement get_config(). "
@@ -827,6 +830,41 @@ class EmbeddingFunction(Protocol[D]):
         return False
 
 
+class DefaultEmbeddingFunction(EmbeddingFunction[Documents]):
+    """Default embedding function that delegates to ONNXMiniLM_L6_V2."""
+
+    def __init__(self) -> None:
+        if is_thin_client:
+            return
+
+    def __call__(self, input: Documents) -> Embeddings:
+        # Import here to avoid circular imports
+        from chromadb.utils.embedding_functions.onnx_mini_lm_l6_v2 import (
+            ONNXMiniLM_L6_V2,
+        )
+
+        return ONNXMiniLM_L6_V2()(input)
+
+    @staticmethod
+    def build_from_config(config: Dict[str, Any]) -> "DefaultEmbeddingFunction":
+        DefaultEmbeddingFunction.validate_config(config)
+        return DefaultEmbeddingFunction()
+
+    @staticmethod
+    def name() -> str:
+        return "default"
+
+    def get_config(self) -> Dict[str, Any]:
+        return {}
+
+    def max_tokens(self) -> int:
+        return 256
+
+    @staticmethod
+    def validate_config(config: Dict[str, Any]) -> None:
+        return
+
+
 def validate_embedding_function(
     embedding_function: EmbeddingFunction[Embeddable],
 ) -> None:
@@ -841,20 +879,6 @@ def validate_embedding_function(
             "Please see https://docs.trychroma.com/guides/embeddings for details of the EmbeddingFunction interface.\n"
             "Please note the recent change to the EmbeddingFunction interface: https://docs.trychroma.com/deployment/migration#migration-to-0.4.16---november-7,-2023 \n"
         )
-
-
-def validate_sparse_embedding_function(
-    sparse_embedding_function: Any,
-) -> None:
-    """Validate that a sparse embedding function conforms to the SparseEmbeddingFunction protocol."""
-    if not callable(sparse_embedding_function):
-        raise ValueError('sparse_embedding_function must be callable')
-
-    if not hasattr(sparse_embedding_function, '__call__'):
-        raise ValueError('sparse_embedding_function must have a __call__ method')
-
-    # Basic validation - check if it looks like a sparse embedding function
-    # We'll do more detailed validation when SparseEmbeddingFunction is fully defined
 
 
 class DataLoader(Protocol[L]):
@@ -898,67 +922,7 @@ def validate_ids(ids: IDs) -> IDs:
     return ids
 
 
-def is_valid_sparse_vector(value: Any) -> bool:
-    """Check if a value looks like a SparseVector (has indices and values keys)."""
-    return isinstance(value, dict) and "indices" in value and "values" in value
 
-
-def validate_sparse_vector(value: Any) -> None:
-    """Validate that a value is a properly formed SparseVector.
-
-    Args:
-        value: The value to validate as a SparseVector
-
-    Raises:
-        ValueError: If the value is not a valid SparseVector
-    """
-    if not isinstance(value, dict):
-        raise ValueError(
-            f"Expected SparseVector to be a dict, got {type(value).__name__}"
-        )
-
-    if "indices" not in value or "values" not in value:
-        raise ValueError("SparseVector must have 'indices' and 'values' keys")
-
-    indices = value.get("indices")
-    values = value.get("values")
-
-    # Validate indices
-    if not isinstance(indices, list):
-        raise ValueError(
-            f"Expected SparseVector indices to be a list, got {type(indices).__name__}"
-        )
-
-    # Validate values
-    if not isinstance(values, list):
-        raise ValueError(
-            f"Expected SparseVector values to be a list, got {type(values).__name__}"
-        )
-
-    # Check lengths match
-    if len(indices) != len(values):
-        raise ValueError(
-            f"SparseVector indices and values must have the same length, "
-            f"got {len(indices)} indices and {len(values)} values"
-        )
-
-    # Validate each index
-    for i, idx in enumerate(indices):
-        if not isinstance(idx, int):
-            raise ValueError(
-                f"SparseVector indices must be integers, got {type(idx).__name__} at position {i}"
-            )
-        if idx < 0:
-            raise ValueError(
-                f"SparseVector indices must be non-negative, got {idx} at position {i}"
-            )
-
-    # Validate each value
-    for i, val in enumerate(values):
-        if not isinstance(val, (int, float)):
-            raise ValueError(
-                f"SparseVector values must be numbers, got {type(val).__name__} at position {i}"
-            )
 
 
 def validate_metadata(metadata: Metadata) -> Metadata:
@@ -982,12 +946,9 @@ def validate_metadata(metadata: Metadata) -> Metadata:
             raise TypeError(
                 f"Expected metadata key to be a str, got {key} which is a {type(key).__name__}"
             )
-        # Check if value is a SparseVector
-        if is_valid_sparse_vector(value):
-            try:
-                validate_sparse_vector(value)
-            except ValueError as e:
-                raise ValueError(f"Invalid SparseVector for key '{key}': {e}")
+        # Check if value is a SparseVector (validation happens in __post_init__)
+        if isinstance(value, SparseVector):
+            pass  # Already validated in SparseVector.__post_init__
         # isinstance(True, int) evaluates to True, so we need to check for bools separately
         elif not isinstance(value, bool) and not isinstance(
             value, (str, int, float, type(None))
@@ -1011,12 +972,9 @@ def validate_update_metadata(metadata: UpdateMetadata) -> UpdateMetadata:
     for key, value in metadata.items():
         if not isinstance(key, str):
             raise ValueError(f"Expected metadata key to be a str, got {key}")
-        # Check if value is a SparseVector
-        if is_valid_sparse_vector(value):
-            try:
-                validate_sparse_vector(value)
-            except ValueError as e:
-                raise ValueError(f"Invalid SparseVector for key '{key}': {e}")
+        # Check if value is a SparseVector (validation happens in __post_init__)
+        if isinstance(value, SparseVector):
+            pass  # Already validated in SparseVector.__post_init__
         # isinstance(True, int) evaluates to True, so we need to check for bools separately
         elif not isinstance(value, bool) and not isinstance(
             value, (str, int, float, type(None))
@@ -1025,6 +983,50 @@ def validate_update_metadata(metadata: UpdateMetadata) -> UpdateMetadata:
                 f"Expected metadata value to be a str, int, float, bool, SparseVector, or None, got {value}"
             )
     return metadata
+
+
+def serialize_metadata(metadata: Optional[Metadata]) -> Optional[Dict[str, Any]]:
+    """Serialize metadata for transport, converting SparseVector dataclass instances to dicts.
+
+    Args:
+        metadata: Metadata dictionary that may contain SparseVector instances
+
+    Returns:
+        Metadata dictionary with SparseVector instances converted to transport format
+    """
+    if metadata is None:
+        return None
+
+    result: Dict[str, Any] = {}
+    for key, value in metadata.items():
+        if isinstance(value, SparseVector):
+            result[key] = value.to_dict()
+        else:
+            result[key] = value
+    return result
+
+
+def deserialize_metadata(
+    metadata: Optional[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
+    """Deserialize metadata from transport, converting dicts with #type=sparse_vector to dataclass instances.
+
+    Args:
+        metadata: Metadata dictionary from transport that may contain serialized SparseVectors
+
+    Returns:
+        Metadata dictionary with serialized SparseVectors converted to dataclass instances
+    """
+    if metadata is None:
+        return None
+
+    result: Dict[str, Any] = {}
+    for key, value in metadata.items():
+        if isinstance(value, dict) and value.get("#type") == "sparse_vector":
+            result[key] = SparseVector.from_dict(value)
+        else:
+            result[key] = value
+    return result
 
 
 def validate_metadatas(metadatas: Metadatas) -> Metadatas:
@@ -1252,7 +1254,10 @@ def validate_sparse_embeddings(embeddings: SparseEmbeddings) -> SparseEmbeddings
             f"Expected sparse embeddings to be a non-empty list, got {len(embeddings)} sparse embeddings"
         )
     for embedding in embeddings:
-        validate_sparse_vector(embedding)
+        if not isinstance(embedding, SparseVector):
+            raise ValueError(
+                f"Expected SparseVector dataclass instance, got {type(embedding).__name__}"
+            )
     return embeddings
 
 
@@ -1404,14 +1409,32 @@ class SparseEmbeddingFunction(Protocol[D]):
         return
 
 
+def validate_sparse_embedding_function(
+    sparse_embedding_function: SparseEmbeddingFunction[Embeddable],
+) -> None:
+    """Validate that a sparse embedding function conforms to the SparseEmbeddingFunction protocol."""
+    function_signature = signature(
+        sparse_embedding_function.__class__.__call__
+    ).parameters.keys()
+    protocol_signature = signature(SparseEmbeddingFunction.__call__).parameters.keys()
+
+    if not function_signature == protocol_signature:
+        raise ValueError(
+            f"Expected SparseEmbeddingFunction.__call__ to have the following signature: {protocol_signature}, got {function_signature}\n"
+            "Please see https://docs.trychroma.com/guides/embeddings for details of the SparseEmbeddingFunction interface.\n"
+        )
+
+
 # Index Configuration Types for Collection Schema
 class FtsIndexConfig(BaseModel):
     """Configuration for Full-Text Search index. No parameters required."""
+
     pass
 
 
 class HnswIndexConfig(BaseModel):
     """Configuration for HNSW vector index."""
+
     ef_construction: Optional[int] = None
     max_neighbors: Optional[int] = None
     ef_search: Optional[int] = None
@@ -1423,6 +1446,7 @@ class HnswIndexConfig(BaseModel):
 
 class SpannIndexConfig(BaseModel):
     """Configuration for SPANN vector index."""
+
     search_nprobe: Optional[int] = None
     write_nprobe: Optional[int] = None
     ef_construction: Optional[int] = None
@@ -1435,14 +1459,15 @@ class SpannIndexConfig(BaseModel):
 
 class VectorIndexConfig(BaseModel):
     """Configuration for vector index with space, embedding function, and algorithm config."""
+
     model_config = {"arbitrary_types_allowed": True}
     space: Optional[Space] = None
-    embedding_function: Optional[Any] = None
+    embedding_function: Optional[Any] = DefaultEmbeddingFunction()
     source_key: Optional[str] = None  # key to source the vector from
     hnsw: Optional[HnswIndexConfig] = None
     spann: Optional[SpannIndexConfig] = None
 
-    @field_validator('embedding_function', mode='before')
+    @field_validator("embedding_function", mode="before")
     @classmethod
     def validate_embedding_function_field(cls, v: Any) -> Any:
         # Use the existing validate_embedding_function for proper validation
@@ -1452,16 +1477,19 @@ class VectorIndexConfig(BaseModel):
             # Use the existing validation function
             validate_embedding_function(v)
             return v
-        raise ValueError('embedding_function must be callable or None')
+        raise ValueError("embedding_function must be callable or None")
 
 
 class SparseVectorIndexConfig(BaseModel):
     """Configuration for sparse vector index."""
+
     model_config = {"arbitrary_types_allowed": True}
+    # TODO(Sanket): Change this to the appropriate sparse ef and use a default here.
     embedding_function: Optional[Any] = None
     source_key: Optional[str] = None  # key to source the sparse vector from
+    bm25: Optional[bool] = None
 
-    @field_validator('embedding_function', mode='before')
+    @field_validator("embedding_function", mode="before")
     @classmethod
     def validate_embedding_function_field(cls, v: Any) -> Any:
         # Validate sparse embedding function for sparse vector index
@@ -1471,146 +1499,37 @@ class SparseVectorIndexConfig(BaseModel):
             # Use the sparse embedding function validation
             validate_sparse_embedding_function(v)
             return v
-        raise ValueError('embedding_function must be a callable SparseEmbeddingFunction or None')
+        raise ValueError(
+            "embedding_function must be a callable SparseEmbeddingFunction or None"
+        )
 
 
 class StringInvertedIndexConfig(BaseModel):
     """Configuration for string inverted index."""
+
     pass
 
 
 class IntInvertedIndexConfig(BaseModel):
     """Configuration for integer inverted index."""
+
     pass
 
 
 class FloatInvertedIndexConfig(BaseModel):
     """Configuration for float inverted index."""
+
     pass
 
 
 class BoolInvertedIndexConfig(BaseModel):
     """Configuration for boolean inverted index."""
+
     pass
 
 
-# Value type constants
-STRING_VALUE_NAME: Final[str] = "#string"
-INT_VALUE_NAME: Final[str] = "#int"
-BOOL_VALUE_NAME: Final[str] = "#bool"
-FLOAT_VALUE_NAME: Final[str] = "#float"
-FLOAT_LIST_VALUE_NAME: Final[str] = "#float_list"
-SPARSE_VECTOR_VALUE_NAME: Final[str] = "#sparse_vector"
-
-# Index type name constants
-FTS_INDEX_NAME: Final[str] = "$fts_index"
-VECTOR_INDEX_NAME: Final[str] = "$vector_index"
-SPARSE_VECTOR_INDEX_NAME: Final[str] = "$sparse_vector_index"
-STRING_INVERTED_INDEX_NAME: Final[str] = "$string_inverted_index"
-INT_INVERTED_INDEX_NAME: Final[str] = "$int_inverted_index"
-FLOAT_INVERTED_INDEX_NAME: Final[str] = "$float_inverted_index"
-BOOL_INVERTED_INDEX_NAME: Final[str] = "$bool_inverted_index"
-HNSW_INDEX_NAME: Final[str] = "$hnsw_index"
-SPANN_INDEX_NAME: Final[str] = "$spann_index"
-
-# Special key constants
-DOCUMENT_KEY: Final[str] = "$document"
-EMBEDDING_KEY: Final[str] = "$embedding"
-
-
-# Internal index types that encapsulate the configuration, name, value type, and enabled status
-class InternalFtsIndex:
-    """Internal wrapper for FTS index with encapsulated name, value type, and enabled status."""
-    NAME: Final[str] = "$fts_index"
-    VALUE_TYPE_NAME: Final[str] = STRING_VALUE_NAME
-
-    def __init__(self, config: FtsIndexConfig, enabled: bool = True):
-        self.config = config
-        self.enabled = enabled
-
-
-class InternalHnswIndex:
-    """Internal wrapper for HNSW index with encapsulated name, value type, and enabled status."""
-    NAME: Final[str] = "$hnsw_index"
-    VALUE_TYPE_NAME: Final[str] = FLOAT_LIST_VALUE_NAME
-
-    def __init__(self, config: HnswIndexConfig, enabled: bool = True):
-        self.config = config
-        self.enabled = enabled
-
-
-class InternalSpannIndex:
-    """Internal wrapper for SPANN index with encapsulated name, value type, and enabled status."""
-    NAME: Final[str] = "$spann_index"
-    VALUE_TYPE_NAME: Final[str] = FLOAT_LIST_VALUE_NAME
-
-    def __init__(self, config: SpannIndexConfig, enabled: bool = True):
-        self.config = config
-        self.enabled = enabled
-
-
-class InternalVectorIndex:
-    """Internal wrapper for vector index with encapsulated name, value type, and enabled status."""
-    NAME: Final[str] = "$vector_index"
-    VALUE_TYPE_NAME: Final[str] = FLOAT_LIST_VALUE_NAME
-
-    def __init__(self, config: VectorIndexConfig, enabled: bool = True):
-        self.config = config
-        self.enabled = enabled
-
-
-class InternalSparseVectorIndex:
-    """Internal wrapper for sparse vector index with encapsulated name, value type, and enabled status."""
-    NAME: Final[str] = "$sparse_vector_index"
-    VALUE_TYPE_NAME: Final[str] = SPARSE_VECTOR_VALUE_NAME
-
-    def __init__(self, config: SparseVectorIndexConfig, enabled: bool = True):
-        self.config = config
-        self.enabled = enabled
-
-
-class InternalStringInvertedIndex:
-    """Internal wrapper for string inverted index with encapsulated name, value type, and enabled status."""
-    NAME: Final[str] = "$string_inverted_index"
-    VALUE_TYPE_NAME: Final[str] = STRING_VALUE_NAME
-
-    def __init__(self, config: StringInvertedIndexConfig, enabled: bool = True):
-        self.config = config
-        self.enabled = enabled
-
-
-class InternalIntInvertedIndex:
-    """Internal wrapper for int inverted index with encapsulated name, value type, and enabled status."""
-    NAME: Final[str] = "$int_inverted_index"
-    VALUE_TYPE_NAME: Final[str] = INT_VALUE_NAME
-
-    def __init__(self, config: IntInvertedIndexConfig, enabled: bool = True):
-        self.config = config
-        self.enabled = enabled
-
-
-class InternalFloatInvertedIndex:
-    """Internal wrapper for float inverted index with encapsulated name, value type, and enabled status."""
-    NAME: Final[str] = "$float_inverted_index"
-    VALUE_TYPE_NAME: Final[str] = FLOAT_VALUE_NAME
-
-    def __init__(self, config: FloatInvertedIndexConfig, enabled: bool = True):
-        self.config = config
-        self.enabled = enabled
-
-
-class InternalBoolInvertedIndex:
-    """Internal wrapper for bool inverted index with encapsulated name, value type, and enabled status."""
-    NAME: Final[str] = "$bool_inverted_index"
-    VALUE_TYPE_NAME: Final[str] = BOOL_VALUE_NAME
-
-    def __init__(self, config: BoolInvertedIndexConfig, enabled: bool = True):
-        self.config = config
-        self.enabled = enabled
-
-
-# Union type for all index configurations
-IndexConfig = Union[
+# Union type for all index configurations (used by new Schema class)
+IndexConfig: TypeAlias = Union[
     FtsIndexConfig,
     VectorIndexConfig,
     SparseVectorIndexConfig,
@@ -1621,320 +1540,940 @@ IndexConfig = Union[
 ]
 
 
-# Type for index entry in schema
-class IndexEntry(BaseModel):
-    config: IndexConfig
+# Value type constants
+STRING_VALUE_NAME: Final[str] = "string"
+INT_VALUE_NAME: Final[str] = "int"
+BOOL_VALUE_NAME: Final[str] = "bool"
+FLOAT_VALUE_NAME: Final[str] = "float"
+FLOAT_LIST_VALUE_NAME: Final[str] = "float_list"
+SPARSE_VECTOR_VALUE_NAME: Final[str] = "sparse_vector"
+
+# Index type name constants
+FTS_INDEX_NAME: Final[str] = "fts_index"
+VECTOR_INDEX_NAME: Final[str] = "vector_index"
+SPARSE_VECTOR_INDEX_NAME: Final[str] = "sparse_vector_index"
+STRING_INVERTED_INDEX_NAME: Final[str] = "string_inverted_index"
+INT_INVERTED_INDEX_NAME: Final[str] = "int_inverted_index"
+FLOAT_INVERTED_INDEX_NAME: Final[str] = "float_inverted_index"
+BOOL_INVERTED_INDEX_NAME: Final[str] = "bool_inverted_index"
+HNSW_INDEX_NAME: Final[str] = "hnsw_index"
+SPANN_INDEX_NAME: Final[str] = "spann_index"
+
+# Special key constants
+DOCUMENT_KEY: Final[str] = "#document"
+EMBEDDING_KEY: Final[str] = "#embedding"
+
+
+# Index Type Classes
+
+
+@dataclass
+class FtsIndexType:
     enabled: bool
+    config: FtsIndexConfig
 
 
-def _get_class_name(config: IndexConfig) -> str:
-    """Get the class name for a config."""
-    # Pydantic models retain their class information at runtime
-    return config.__class__.__name__
+@dataclass
+class VectorIndexType:
+    enabled: bool
+    config: VectorIndexConfig
 
 
-# Internal schema types with strong typing using existing Internal*Index types
-# Union type for index values (boolean for default/unset, Internal*Index for configured)
-InternalIndexType = Union[
-    InternalFtsIndex,
-    InternalVectorIndex,
-    InternalSparseVectorIndex,
-    InternalStringInvertedIndex,
-    InternalIntInvertedIndex,
-    InternalFloatInvertedIndex,
-    InternalBoolInvertedIndex
-]
-
-# Type for a value type's index configuration (reused in multiple places)
-ValueTypeIndexes = Dict[str, Union[bool, InternalIndexType]]
+@dataclass
+class SparseVectorIndexType:
+    enabled: bool
+    config: SparseVectorIndexConfig
 
 
-# Schema builder and final schema classes
+@dataclass
+class StringInvertedIndexType:
+    enabled: bool
+    config: StringInvertedIndexConfig
+
+
+@dataclass
+class IntInvertedIndexType:
+    enabled: bool
+    config: IntInvertedIndexConfig
+
+
+@dataclass
+class FloatInvertedIndexType:
+    enabled: bool
+    config: FloatInvertedIndexConfig
+
+
+@dataclass
+class BoolInvertedIndexType:
+    enabled: bool
+    config: BoolInvertedIndexConfig
+
+
+# Individual Value Type Classes
+
+
+@dataclass
+class StringValueType:
+    fts_index: Optional[FtsIndexType] = None
+    string_inverted_index: Optional[StringInvertedIndexType] = None
+
+
+@dataclass
+class FloatListValueType:
+    vector_index: Optional[VectorIndexType] = None
+
+
+@dataclass
+class SparseVectorValueType:
+    sparse_vector_index: Optional[SparseVectorIndexType] = None
+
+
+@dataclass
+class IntValueType:
+    int_inverted_index: Optional[IntInvertedIndexType] = None
+
+
+@dataclass
+class FloatValueType:
+    float_inverted_index: Optional[FloatInvertedIndexType] = None
+
+
+@dataclass
+class BoolValueType:
+    bool_inverted_index: Optional[BoolInvertedIndexType] = None
+
+
+@dataclass
+class ValueTypes:
+    string: Optional[StringValueType] = None
+    float_list: Optional[FloatListValueType] = None
+    sparse_vector: Optional[SparseVectorValueType] = None
+    int_value: Optional[IntValueType] = None
+    float_value: Optional[FloatValueType] = None
+    boolean: Optional[BoolValueType] = None
+
+
+@dataclass
 class Schema:
-    """Schema builder for collection index configurations."""
+    defaults: ValueTypes
+    keys: Dict[str, ValueTypes]
 
     def __init__(self) -> None:
-        # Dict structure: {key: {index_type_name: IndexEntry}}
-        self._index_configs: Dict[str, Dict[str, IndexEntry]] = {}
-        # Dict structure: {index_type_name: IndexEntry}
-        self._global_configs: Dict[str, IndexEntry] = {}
+        # Initialize the dataclass fields first
+        self.defaults = ValueTypes()
+        self.keys: Dict[str, ValueTypes] = {}
 
-    def create_index(self, config: Optional[IndexConfig] = None, key: Optional[str] = None) -> "Schema":
+        # Populate with sensible defaults automatically
+        self._initialize_defaults()
+        self._initialize_keys()
+
+    def create_index(
+        self, config: Optional[IndexConfig] = None, key: Optional[str] = None
+    ) -> "Schema":
         """Create an index configuration."""
         # Disallow config=None and key=None - too dangerous
         if config is None and key is None:
-            raise ValueError("Cannot enable all index types globally. Must specify either config or key.")
+            raise ValueError(
+                "Cannot enable all index types globally. Must specify either config or key."
+            )
+
+        # Disallow using special internal keys (#embedding, #document)
+        if key is not None and key in (EMBEDDING_KEY, DOCUMENT_KEY):
+            raise ValueError(
+                f"Cannot create index on special key '{key}'. These keys are managed automatically by the system."
+            )
+
+        # Special handling for vector index
+        if isinstance(config, VectorIndexConfig):
+            if key is None:
+                # Allow setting vector config globally - it applies to defaults and #embedding
+                # but doesn't change enabled state (vector index is always enabled on #embedding)
+                self._set_vector_index_config(config)
+                return self
+            else:
+                # Disallow vector index on any custom key
+                raise ValueError(
+                    "Vector index cannot be enabled on specific keys. Use create_index(config=VectorIndexConfig(...)) without specifying a key to configure the vector index globally."
+                )
+
+        # Special handling for FTS index
+        if isinstance(config, FtsIndexConfig):
+            if key is None:
+                # Allow setting FTS config globally - it applies to defaults and #document
+                # but doesn't change enabled state (FTS is always enabled on #document)
+                self._set_fts_index_config(config)
+                return self
+            else:
+                # Disallow FTS index on any custom key
+                raise ValueError(
+                    "FTS index cannot be enabled on specific keys. Use create_index(config=FtsIndexConfig(...)) without specifying a key to configure the FTS index globally."
+                )
+
+        # Disallow sparse vector index without a specific key
+        if isinstance(config, SparseVectorIndexConfig) and key is None:
+            raise ValueError(
+                "Sparse vector index must be created on a specific key. "
+                "Please specify a key using: create_index(config=SparseVectorIndexConfig(...), key='your_key')"
+            )
+
+        # TODO: Consider removing this check in the future to allow enabling all indexes for a key
+        # Disallow enabling all index types for a key (config=None, key="some_key")
+        if config is None and key is not None:
+            raise ValueError(
+                f"Cannot enable all index types for key '{key}'. Please specify a specific index configuration."
+            )
 
         # Case 1: config is not None and key is None - enable specific index type globally
         if config is not None and key is None:
-            # For TypedDict configs, we need to determine the type by checking the structure
-            index_type_name = _get_class_name(config)
-            self._global_configs[index_type_name] = IndexEntry(config=config, enabled=True)
+            self._set_index_in_defaults(config, enabled=True)
 
         # Case 2: config is None and key is not None - enable all index types for that key
         elif config is None and key is not None:
-            if key not in self._index_configs:
-                self._index_configs[key] = {}
-            for config_class in IndexConfig.__args__:  # type: ignore
-                index_type_name = config_class.__name__
-                default_config = config_class()
-                self._index_configs[key][index_type_name] = IndexEntry(config=default_config, enabled=True)
+            self._enable_all_indexes_for_key(key)
 
         # Case 3: config is not None and key is not None - enable specific index type for that key
         elif config is not None and key is not None:
-            index_type_name = _get_class_name(config)
-            if key not in self._index_configs:
-                self._index_configs[key] = {}
-            self._index_configs[key][index_type_name] = IndexEntry(config=config, enabled=True)
+            self._set_index_for_key(key, config, enabled=True)
 
         return self
 
-    def delete_index(self, config: Optional[IndexConfig] = None, key: Optional[str] = None) -> "Schema":
+    def delete_index(
+        self, config: Optional[IndexConfig] = None, key: Optional[str] = None
+    ) -> "Schema":
         """Disable an index configuration (set enabled=False)."""
         # Case 1: Both config and key are None - fail the request
         if config is None and key is None:
-            raise ValueError("Cannot disable all indexes. Must specify either config or key.")
+            raise ValueError(
+                "Cannot disable all indexes. Must specify either config or key."
+            )
+
+        # Disallow using special internal keys (#embedding, #document)
+        if key is not None and key in (EMBEDDING_KEY, DOCUMENT_KEY):
+            raise ValueError(
+                f"Cannot delete index on special key '{key}'. These keys are managed automatically by the system."
+            )
+
+        # TODO: Consider removing these checks in the future to allow disabling vector, FTS, and sparse vector indexes
+        # Temporarily disallow deleting vector index (both globally and per-key)
+        if isinstance(config, VectorIndexConfig):
+            raise ValueError("Deleting vector index is not currently supported.")
+
+        # Temporarily disallow deleting FTS index (both globally and per-key)
+        if isinstance(config, FtsIndexConfig):
+            raise ValueError("Deleting FTS index is not currently supported.")
+
+        # Temporarily disallow deleting sparse vector index (both globally and per-key)
+        if isinstance(config, SparseVectorIndexConfig):
+            raise ValueError("Deleting sparse vector index is not currently supported.")
+
+        # TODO: Consider removing this check in the future to allow disabling all indexes for a key
+        # Disallow disabling all index types for a key (config=None, key="some_key")
+        if key is not None and config is None:
+            raise ValueError(
+                f"Cannot disable all index types for key '{key}'. Please specify a specific index configuration."
+            )
 
         # Case 2: key is not None and config is None - disable all possible index types for that key
         if key is not None and config is None:
-            if key not in self._index_configs:
-                self._index_configs[key] = {}
-
-            # Disable all possible index types for this key
-            for config_class in IndexConfig.__args__:  # type: ignore
-                index_type_name = config_class.__name__
-                default_config = config_class()
-                self._index_configs[key][index_type_name] = IndexEntry(config=default_config, enabled=False)
+            self._disable_all_indexes_for_key(key)
 
         # Case 3: key is not None and config is not None - disable specific index for that key
         elif key is not None and config is not None:
-            index_type_name = _get_class_name(config)
-            if key not in self._index_configs:
-                self._index_configs[key] = {}
-            self._index_configs[key][index_type_name] = IndexEntry(config=config, enabled=False)
+            self._set_index_for_key(key, config, enabled=False)
 
         # Case 4: key is None and config is not None - disable specific index globally
         elif key is None and config is not None:
-            index_type_name = _get_class_name(config)
-            self._global_configs[index_type_name] = IndexEntry(config=config, enabled=False)
+            self._set_index_in_defaults(config, enabled=False)
 
         return self
 
+    def _get_config_class_name(self, config: IndexConfig) -> str:
+        """Get the class name for a config."""
+        return config.__class__.__name__
 
-class InternalSchema(BaseModel):
-    """Internal schema representation for server-side processing."""
-    model_config = {"arbitrary_types_allowed": True}
-    defaults: Dict[str, ValueTypeIndexes]
-    key_overrides: Dict[str, Dict[str, ValueTypeIndexes]]
+    def _set_vector_index_config(self, config: VectorIndexConfig) -> None:
+        """
+        Set vector index config globally and on #embedding key.
+        This updates the config but preserves the enabled state.
+        Vector index is always enabled on #embedding, disabled in defaults.
+        Note: source_key on #embedding is always preserved as "#document".
+        """
+        # Update the config in defaults (preserve enabled=False)
+        current_enabled = self.defaults.float_list.vector_index.enabled  # type: ignore[union-attr]
+        self.defaults.float_list.vector_index = VectorIndexType(enabled=current_enabled, config=config)  # type: ignore[union-attr]
 
-    # Index type mappings for deserialization and schema conversion
-    # Maps index names to (Internal*Index class, Config class) tuples
-    _INDEX_TYPE_MAP: ClassVar[Dict[str, Tuple[Any, Any]]] = {
-        FTS_INDEX_NAME: (InternalFtsIndex, FtsIndexConfig),
-        VECTOR_INDEX_NAME: (InternalVectorIndex, VectorIndexConfig),
-        SPARSE_VECTOR_INDEX_NAME: (InternalSparseVectorIndex, SparseVectorIndexConfig),
-        STRING_INVERTED_INDEX_NAME: (InternalStringInvertedIndex, StringInvertedIndexConfig),
-        INT_INVERTED_INDEX_NAME: (InternalIntInvertedIndex, IntInvertedIndexConfig),
-        FLOAT_INVERTED_INDEX_NAME: (InternalFloatInvertedIndex, FloatInvertedIndexConfig),
-        BOOL_INVERTED_INDEX_NAME: (InternalBoolInvertedIndex, BoolInvertedIndexConfig),
-        HNSW_INDEX_NAME: (InternalHnswIndex, HnswIndexConfig),
-        SPANN_INDEX_NAME: (InternalSpannIndex, SpannIndexConfig),
-    }
+        # Update the config on #embedding key (preserve enabled=True and source_key="#document")
+        current_enabled = self.keys[EMBEDDING_KEY].float_list.vector_index.enabled  # type: ignore[union-attr]
+        current_source_key = self.keys[EMBEDDING_KEY].float_list.vector_index.config.source_key  # type: ignore[union-attr]
 
-    # Maps config class names to their internal representations
-    _CONFIG_TO_INTERNAL_MAP: ClassVar[Dict[str, Any]] = {
-        'FtsIndexConfig': InternalFtsIndex,
-        'VectorIndexConfig': InternalVectorIndex,
-        'SparseVectorIndexConfig': InternalSparseVectorIndex,
-        'StringInvertedIndexConfig': InternalStringInvertedIndex,
-        'IntInvertedIndexConfig': InternalIntInvertedIndex,
-        'FloatInvertedIndexConfig': InternalFloatInvertedIndex,
-        'BoolInvertedIndexConfig': InternalBoolInvertedIndex,
-    }
+        # Create a new config with user settings but preserve the original source_key
+        embedding_config = VectorIndexConfig(
+            space=config.space,
+            embedding_function=config.embedding_function,
+            hnsw=config.hnsw,
+            spann=config.spann,
+            source_key=current_source_key,  # Preserve original source_key (should be "#document")
+        )
+        self.keys[EMBEDDING_KEY].float_list.vector_index = VectorIndexType(enabled=current_enabled, config=embedding_config)  # type: ignore[union-attr]
 
-    # Maps value types to supported index types
-    _VALUE_TYPE_TO_INDEX_TYPES: ClassVar[Dict[str, List[str]]] = {
-        STRING_VALUE_NAME: [STRING_INVERTED_INDEX_NAME, FTS_INDEX_NAME],
-        FLOAT_VALUE_NAME: [FLOAT_INVERTED_INDEX_NAME],
-        FLOAT_LIST_VALUE_NAME: [VECTOR_INDEX_NAME],
-        SPARSE_VECTOR_VALUE_NAME: [SPARSE_VECTOR_INDEX_NAME],
-        BOOL_VALUE_NAME: [BOOL_INVERTED_INDEX_NAME],
-        INT_VALUE_NAME: [INT_INVERTED_INDEX_NAME],
-    }
+    def _set_fts_index_config(self, config: FtsIndexConfig) -> None:
+        """
+        Set FTS index config globally and on #document key.
+        This updates the config but preserves the enabled state.
+        FTS index is always enabled on #document, disabled in defaults.
+        """
+        # Update the config in defaults (preserve enabled=False)
+        current_enabled = self.defaults.string.fts_index.enabled  # type: ignore[union-attr]
+        self.defaults.string.fts_index = FtsIndexType(enabled=current_enabled, config=config)  # type: ignore[union-attr]
 
-    def _initialize_defaults(self, defaults: Dict[str, ValueTypeIndexes]) -> None:
+        # Update the config on #document key (preserve enabled=True)
+        current_enabled = self.keys[DOCUMENT_KEY].string.fts_index.enabled  # type: ignore[union-attr]
+        self.keys[DOCUMENT_KEY].string.fts_index = FtsIndexType(enabled=current_enabled, config=config)  # type: ignore[union-attr]
+
+    def _set_index_in_defaults(self, config: IndexConfig, enabled: bool) -> None:
+        """Set an index configuration in the defaults."""
+        config_name = self._get_config_class_name(config)
+
+        if config_name == "FtsIndexConfig":
+            if self.defaults.string is None:
+                self.defaults.string = StringValueType()
+            self.defaults.string.fts_index = FtsIndexType(
+                enabled=enabled, config=cast(FtsIndexConfig, config)
+            )
+
+        elif config_name == "StringInvertedIndexConfig":
+            if self.defaults.string is None:
+                self.defaults.string = StringValueType()
+            self.defaults.string.string_inverted_index = StringInvertedIndexType(
+                enabled=enabled, config=cast(StringInvertedIndexConfig, config)
+            )
+
+        elif config_name == "VectorIndexConfig":
+            if self.defaults.float_list is None:
+                self.defaults.float_list = FloatListValueType()
+            self.defaults.float_list.vector_index = VectorIndexType(
+                enabled=enabled, config=cast(VectorIndexConfig, config)
+            )
+
+        elif config_name == "SparseVectorIndexConfig":
+            if self.defaults.sparse_vector is None:
+                self.defaults.sparse_vector = SparseVectorValueType()
+            self.defaults.sparse_vector.sparse_vector_index = SparseVectorIndexType(
+                enabled=enabled, config=cast(SparseVectorIndexConfig, config)
+            )
+
+        elif config_name == "IntInvertedIndexConfig":
+            if self.defaults.int_value is None:
+                self.defaults.int_value = IntValueType()
+            self.defaults.int_value.int_inverted_index = IntInvertedIndexType(
+                enabled=enabled, config=cast(IntInvertedIndexConfig, config)
+            )
+
+        elif config_name == "FloatInvertedIndexConfig":
+            if self.defaults.float_value is None:
+                self.defaults.float_value = FloatValueType()
+            self.defaults.float_value.float_inverted_index = FloatInvertedIndexType(
+                enabled=enabled, config=cast(FloatInvertedIndexConfig, config)
+            )
+
+        elif config_name == "BoolInvertedIndexConfig":
+            if self.defaults.boolean is None:
+                self.defaults.boolean = BoolValueType()
+            self.defaults.boolean.bool_inverted_index = BoolInvertedIndexType(
+                enabled=enabled, config=cast(BoolInvertedIndexConfig, config)
+            )
+
+    def _validate_single_sparse_vector_index(self, key: str) -> None:
+        """
+        Validate that only one sparse vector index is enabled per collection.
+
+        Raises ValueError if another key already has a sparse vector index enabled.
+        """
+        for existing_key, value_types in self.keys.items():
+            if existing_key == key:
+                continue  # Skip the current key being updated
+            if value_types.sparse_vector is not None:
+                if value_types.sparse_vector.sparse_vector_index is not None:
+                    if value_types.sparse_vector.sparse_vector_index.enabled:
+                        raise ValueError(
+                            f"Cannot enable sparse vector index on key '{key}'. "
+                            f"A sparse vector index is already enabled on key '{existing_key}'. "
+                            f"Only one sparse vector index is allowed per collection."
+                        )
+
+    def _set_index_for_key(self, key: str, config: IndexConfig, enabled: bool) -> None:
+        """Set an index configuration for a specific key."""
+        config_name = self._get_config_class_name(config)
+
+        # Validate sparse vector index - only one is allowed per collection
+        # Do this BEFORE creating the key entry
+        if config_name == "SparseVectorIndexConfig" and enabled:
+            self._validate_single_sparse_vector_index(key)
+
+        if key not in self.keys:
+            self.keys[key] = ValueTypes()
+
+        if config_name == "FtsIndexConfig":
+            if self.keys[key].string is None:
+                self.keys[key].string = StringValueType()
+            self.keys[key].string.fts_index = FtsIndexType(enabled=enabled, config=cast(FtsIndexConfig, config))  # type: ignore[union-attr]
+
+        elif config_name == "StringInvertedIndexConfig":
+            if self.keys[key].string is None:
+                self.keys[key].string = StringValueType()
+            self.keys[key].string.string_inverted_index = StringInvertedIndexType(enabled=enabled, config=cast(StringInvertedIndexConfig, config))  # type: ignore[union-attr]
+
+        elif config_name == "VectorIndexConfig":
+            if self.keys[key].float_list is None:
+                self.keys[key].float_list = FloatListValueType()
+            self.keys[key].float_list.vector_index = VectorIndexType(enabled=enabled, config=cast(VectorIndexConfig, config))  # type: ignore[union-attr]
+
+        elif config_name == "SparseVectorIndexConfig":
+            if self.keys[key].sparse_vector is None:
+                self.keys[key].sparse_vector = SparseVectorValueType()
+            self.keys[key].sparse_vector.sparse_vector_index = SparseVectorIndexType(enabled=enabled, config=cast(SparseVectorIndexConfig, config))  # type: ignore[union-attr]
+
+        elif config_name == "IntInvertedIndexConfig":
+            if self.keys[key].int_value is None:
+                self.keys[key].int_value = IntValueType()
+            self.keys[key].int_value.int_inverted_index = IntInvertedIndexType(enabled=enabled, config=cast(IntInvertedIndexConfig, config))  # type: ignore[union-attr]
+
+        elif config_name == "FloatInvertedIndexConfig":
+            if self.keys[key].float_value is None:
+                self.keys[key].float_value = FloatValueType()
+            self.keys[key].float_value.float_inverted_index = FloatInvertedIndexType(enabled=enabled, config=cast(FloatInvertedIndexConfig, config))  # type: ignore[union-attr]
+
+        elif config_name == "BoolInvertedIndexConfig":
+            if self.keys[key].boolean is None:
+                self.keys[key].boolean = BoolValueType()
+            self.keys[key].boolean.bool_inverted_index = BoolInvertedIndexType(enabled=enabled, config=cast(BoolInvertedIndexConfig, config))  # type: ignore[union-attr]
+
+    def _enable_all_indexes_for_key(self, key: str) -> None:
+        """Enable all possible index types for a specific key."""
+        if key not in self.keys:
+            self.keys[key] = ValueTypes()
+
+        # Enable all index types with default configs
+        self.keys[key].string = StringValueType(
+            fts_index=FtsIndexType(enabled=True, config=FtsIndexConfig()),
+            string_inverted_index=StringInvertedIndexType(
+                enabled=True, config=StringInvertedIndexConfig()
+            ),
+        )
+        self.keys[key].float_list = FloatListValueType(
+            vector_index=VectorIndexType(enabled=True, config=VectorIndexConfig())
+        )
+        self.keys[key].sparse_vector = SparseVectorValueType(
+            sparse_vector_index=SparseVectorIndexType(
+                enabled=True, config=SparseVectorIndexConfig()
+            )
+        )
+        self.keys[key].int_value = IntValueType(
+            int_inverted_index=IntInvertedIndexType(
+                enabled=True, config=IntInvertedIndexConfig()
+            )
+        )
+        self.keys[key].float_value = FloatValueType(
+            float_inverted_index=FloatInvertedIndexType(
+                enabled=True, config=FloatInvertedIndexConfig()
+            )
+        )
+        self.keys[key].boolean = BoolValueType(
+            bool_inverted_index=BoolInvertedIndexType(
+                enabled=True, config=BoolInvertedIndexConfig()
+            )
+        )
+
+    def _disable_all_indexes_for_key(self, key: str) -> None:
+        """Disable all possible index types for a specific key."""
+        if key not in self.keys:
+            self.keys[key] = ValueTypes()
+
+        # Disable all index types with default configs
+        self.keys[key].string = StringValueType(
+            fts_index=FtsIndexType(enabled=False, config=FtsIndexConfig()),
+            string_inverted_index=StringInvertedIndexType(
+                enabled=False, config=StringInvertedIndexConfig()
+            ),
+        )
+        self.keys[key].float_list = FloatListValueType(
+            vector_index=VectorIndexType(enabled=False, config=VectorIndexConfig())
+        )
+        self.keys[key].sparse_vector = SparseVectorValueType(
+            sparse_vector_index=SparseVectorIndexType(
+                enabled=False, config=SparseVectorIndexConfig()
+            )
+        )
+        self.keys[key].int_value = IntValueType(
+            int_inverted_index=IntInvertedIndexType(
+                enabled=False, config=IntInvertedIndexConfig()
+            )
+        )
+        self.keys[key].float_value = FloatValueType(
+            float_inverted_index=FloatInvertedIndexType(
+                enabled=False, config=FloatInvertedIndexConfig()
+            )
+        )
+        self.keys[key].boolean = BoolValueType(
+            bool_inverted_index=BoolInvertedIndexType(
+                enabled=False, config=BoolInvertedIndexConfig()
+            )
+        )
+
+    def _initialize_defaults(self) -> None:
         """Initialize defaults with base structure and standard configuration."""
-        # Set all supported index types to enabled by default
-        for value_type, index_types in self._VALUE_TYPE_TO_INDEX_TYPES.items():
-            defaults[value_type] = {}
-            for index_type in index_types:
-                defaults[value_type][index_type] = True
+        # Initialize all value types with default configurations
+        self.defaults.string = StringValueType(
+            fts_index=FtsIndexType(
+                enabled=False, config=FtsIndexConfig()
+            ),  # Disabled for performance
+            string_inverted_index=StringInvertedIndexType(
+                enabled=True, config=StringInvertedIndexConfig()
+            ),
+        )
 
-        # Apply specific default overrides for certain index types
-        # Most indexes are enabled by default, but some are disabled for performance reasons
+        self.defaults.float_list = FloatListValueType(
+            vector_index=VectorIndexType(
+                enabled=False, config=VectorIndexConfig()
+            )  # Disabled by default
+        )
 
-        # "#sparse_vector": { "$sparse_vector_index": False }
-        defaults[SPARSE_VECTOR_VALUE_NAME][SPARSE_VECTOR_INDEX_NAME] = False
+        self.defaults.sparse_vector = SparseVectorValueType(
+            sparse_vector_index=SparseVectorIndexType(
+                enabled=False, config=SparseVectorIndexConfig()
+            )  # Disabled for performance
+        )
 
-        # For string values, prefer inverted index over full-text search for better performance
-        defaults[STRING_VALUE_NAME][FTS_INDEX_NAME] = False
+        self.defaults.int_value = IntValueType(
+            int_inverted_index=IntInvertedIndexType(
+                enabled=True, config=IntInvertedIndexConfig()
+            )
+        )
 
-        # "#float_list": { "$vector_index": False }
-        defaults[FLOAT_LIST_VALUE_NAME][VECTOR_INDEX_NAME] = False
+        self.defaults.float_value = FloatValueType(
+            float_inverted_index=FloatInvertedIndexType(
+                enabled=True, config=FloatInvertedIndexConfig()
+            )
+        )
 
-    def _initialize_key_overrides(self, key_overrides: Dict[str, Dict[str, ValueTypeIndexes]]) -> None:
+        self.defaults.boolean = BoolValueType(
+            bool_inverted_index=BoolInvertedIndexType(
+                enabled=True, config=BoolInvertedIndexConfig()
+            )
+        )
+
+    def _initialize_keys(self) -> None:
         """Initialize key-specific index overrides."""
         # Enable full-text search for document content
-        key_overrides[DOCUMENT_KEY] = {
-            STRING_VALUE_NAME: {
-                FTS_INDEX_NAME: True,
-                STRING_INVERTED_INDEX_NAME: False
-            }
-        }
+        self.keys[DOCUMENT_KEY] = ValueTypes(
+            string=StringValueType(
+                fts_index=FtsIndexType(enabled=True, config=FtsIndexConfig()),
+                string_inverted_index=StringInvertedIndexType(
+                    enabled=False, config=StringInvertedIndexConfig()
+                ),
+            )
+        )
 
         # Enable vector index for embeddings with document source reference
         vector_config = VectorIndexConfig(source_key=DOCUMENT_KEY)
-        key_overrides[EMBEDDING_KEY] = {
-            FLOAT_LIST_VALUE_NAME: {
-                VECTOR_INDEX_NAME: InternalVectorIndex(
-                    config=vector_config,
-                    enabled=True
-                )
-            }
-        }
-
-    def __init__(self, schema: Schema) -> None:
-        """Create InternalSchema from a client-facing Schema."""
-        defaults: Dict[str, ValueTypeIndexes] = {}
-        key_overrides: Dict[str, Dict[str, ValueTypeIndexes]] = {}
-
-        # Initialize with standard defaults
-        self._initialize_defaults(defaults)
-        self._initialize_key_overrides(key_overrides)
-
-        # Process global configs
-        for config_type_name, index_entry in schema._global_configs.items():
-            internal_class = self._CONFIG_TO_INTERNAL_MAP.get(config_type_name)
-            if internal_class:
-                value_type = internal_class.VALUE_TYPE_NAME
-                index_name = internal_class.NAME
-
-                # Apply user-specified global configurations
-                defaults[value_type][index_name] = internal_class(
-                    config=index_entry.config,
-                    enabled=index_entry.enabled
-                )
-
-        # Process key-specific configs
-        for key, key_configs in schema._index_configs.items():
-            # Initialize key if not already present
-            if key not in key_overrides:
-                key_overrides[key] = {}
-
-            for config_type_name, index_entry in key_configs.items():
-                internal_class = self._CONFIG_TO_INTERNAL_MAP.get(config_type_name)
-                if internal_class:
-                    value_type = internal_class.VALUE_TYPE_NAME
-                    index_name = internal_class.NAME
-
-                    # Create value_type dict only when we have configs for it
-                    if value_type not in key_overrides[key]:
-                        key_overrides[key][value_type] = {}
-
-                    # Apply user-specified key configurations
-                    key_overrides[key][value_type][index_name] = internal_class(
-                        config=index_entry.config,
-                        enabled=index_entry.enabled
-                    )
-
-        # Initialize the Pydantic model with computed values
-        super().__init__(defaults=defaults, key_overrides=key_overrides)
-
-    def _serialize_value_type_indexes(self, value_type_indexes: ValueTypeIndexes) -> Dict[str, Any]:
-        """Convert a ValueTypeIndexes dict to JSON-serializable format."""
-        result: Dict[str, Any] = {}
-        for index_name, index_value in value_type_indexes.items():
-            if isinstance(index_value, bool):
-                result[index_name] = index_value
-            else:
-                # Exclude None values from serialization
-                config_dict = index_value.config.model_dump(exclude_none=True) if hasattr(index_value.config, 'model_dump') else index_value.config.__dict__
-                result[index_name] = {
-                    "enabled": index_value.enabled,
-                    "config": config_dict
-                }
-        return result
+        self.keys[EMBEDDING_KEY] = ValueTypes(
+            float_list=FloatListValueType(
+                vector_index=VectorIndexType(enabled=True, config=vector_config)
+            )
+        )
 
     def serialize_to_json(self) -> Dict[str, Any]:
-        """Convert InternalSchema to a JSON-serializable dict for transmission over the wire."""
+        """Convert Schema to a JSON-serializable dict for transmission over the wire."""
         # Convert defaults to JSON format
-        defaults_json = {}
-        for value_type, indexes in self.defaults.items():
-            defaults_json[value_type] = self._serialize_value_type_indexes(indexes)
+        defaults_json = self._serialize_value_types(self.defaults)
 
         # Convert key overrides to JSON format
-        key_overrides_json: Dict[str, Dict[str, Any]] = {}
-        for key, value_types in self.key_overrides.items():
-            key_overrides_json[key] = {}
-            for value_type, indexes in value_types.items():
-                key_overrides_json[key][value_type] = self._serialize_value_type_indexes(indexes)
+        keys_json: Dict[str, Dict[str, Any]] = {}
+        for key, value_types in self.keys.items():
+            keys_json[key] = self._serialize_value_types(value_types)
 
-        return {
-            "defaults": defaults_json,
-            "key_overrides": key_overrides_json
-        }
+        return {"defaults": defaults_json, "keys": keys_json}
 
     @classmethod
-    def deserialize_from_json(cls, json_data: Dict[str, Any]) -> "InternalSchema":
-        """Create InternalSchema from JSON-serialized data."""
-        # Extract and deserialize components
-        defaults = cls._deserialize_defaults(json_data.get("defaults", {}))
-        key_overrides = cls._deserialize_key_overrides(json_data.get("key_overrides", {}))
+    def deserialize_from_json(cls, json_data: Dict[str, Any]) -> "Schema":
+        """Create Schema from JSON-serialized data."""
+        # Create empty instance
+        instance = cls.__new__(cls)
 
-        # Create instance directly from deserialized data
-        instance = cls.model_construct(defaults=defaults, key_overrides=key_overrides)
+        # Deserialize and set the components
+        instance.defaults = cls._deserialize_value_types(json_data.get("defaults", {}))
+        instance.keys = {}
+        for key, value_types_json in json_data.get("keys", {}).items():
+            instance.keys[key] = cls._deserialize_value_types(value_types_json)
 
         return instance
 
-    @classmethod
-    def _deserialize_defaults(cls, defaults_json: Dict[str, Any]) -> Dict[str, ValueTypeIndexes]:
-        """Deserialize defaults from JSON format."""
-        defaults: Dict[str, ValueTypeIndexes] = {}
+    def _serialize_value_types(self, value_types: ValueTypes) -> Dict[str, Any]:
+        """Convert a ValueTypes object to JSON-serializable format."""
+        result: Dict[str, Any] = {}
 
-        for value_type, indexes_json in defaults_json.items():
-            defaults[value_type] = cls._deserialize_value_type_indexes(indexes_json)
+        # Serialize each value type if it exists
+        if value_types.string is not None:
+            result[STRING_VALUE_NAME] = self._serialize_string_value_type(value_types.string)
 
-        return defaults
+        if value_types.float_list is not None:
+            result[FLOAT_LIST_VALUE_NAME] = self._serialize_float_list_value_type(
+                value_types.float_list
+            )
 
-    @classmethod
-    def _deserialize_key_overrides(cls, key_overrides_json: Dict[str, Any]) -> Dict[str, Dict[str, ValueTypeIndexes]]:
-        """Deserialize key_overrides from JSON format."""
-        key_overrides: Dict[str, Dict[str, ValueTypeIndexes]] = {}
+        if value_types.sparse_vector is not None:
+            result[SPARSE_VECTOR_VALUE_NAME] = self._serialize_sparse_vector_value_type(
+                value_types.sparse_vector
+            )
 
-        for key, value_types_json in key_overrides_json.items():
-            key_overrides[key] = {}
-            for value_type, indexes_json in value_types_json.items():
-                key_overrides[key][value_type] = cls._deserialize_value_type_indexes(indexes_json)
+        if value_types.int_value is not None:
+            result[INT_VALUE_NAME] = self._serialize_int_value_type(value_types.int_value)
 
-        return key_overrides
+        if value_types.float_value is not None:
+            result[FLOAT_VALUE_NAME] = self._serialize_float_value_type(value_types.float_value)
 
-    @classmethod
-    def _deserialize_value_type_indexes(cls, indexes_json: Dict[str, Any]) -> ValueTypeIndexes:
-        """Deserialize ValueTypeIndexes from JSON format."""
-        result: ValueTypeIndexes = {}
-
-        for index_name, index_data in indexes_json.items():
-            if isinstance(index_data, bool):
-                result[index_name] = index_data
-            else:
-                # Reconstruct Internal*Index object
-                index_mapping = cls._INDEX_TYPE_MAP.get(index_name)
-                if index_mapping:
-                    internal_class, config_class = index_mapping
-                    config_obj = config_class(**index_data["config"])
-                    result[index_name] = internal_class(config=config_obj, enabled=index_data["enabled"])
-                else:
-                    # Unknown index type - cannot reconstruct
-                    raise ValueError(f"Unknown index type '{index_name}' during deserialization. Cannot reconstruct Internal*Index object.")
+        if value_types.boolean is not None:
+            result[BOOL_VALUE_NAME] = self._serialize_bool_value_type(value_types.boolean)
 
         return result
+
+    def _serialize_string_value_type(
+        self, string_type: StringValueType
+    ) -> Dict[str, Any]:
+        """Serialize StringValueType to JSON format."""
+        result: Dict[str, Any] = {}
+
+        if string_type.fts_index is not None:
+            result[FTS_INDEX_NAME] = {
+                "enabled": string_type.fts_index.enabled,
+                "config": self._serialize_config(string_type.fts_index.config),
+            }
+
+        if string_type.string_inverted_index is not None:
+            result[STRING_INVERTED_INDEX_NAME] = {
+                "enabled": string_type.string_inverted_index.enabled,
+                "config": self._serialize_config(
+                    string_type.string_inverted_index.config
+                ),
+            }
+
+        return result
+
+    def _serialize_float_list_value_type(
+        self, float_list_type: FloatListValueType
+    ) -> Dict[str, Any]:
+        """Serialize FloatListValueType to JSON format."""
+        result: Dict[str, Any] = {}
+
+        if float_list_type.vector_index is not None:
+            result[VECTOR_INDEX_NAME] = {
+                "enabled": float_list_type.vector_index.enabled,
+                "config": self._serialize_config(float_list_type.vector_index.config),
+            }
+
+        return result
+
+    def _serialize_sparse_vector_value_type(
+        self, sparse_vector_type: SparseVectorValueType
+    ) -> Dict[str, Any]:
+        """Serialize SparseVectorValueType to JSON format."""
+        result: Dict[str, Any] = {}
+
+        if sparse_vector_type.sparse_vector_index is not None:
+            result[SPARSE_VECTOR_INDEX_NAME] = {
+                "enabled": sparse_vector_type.sparse_vector_index.enabled,
+                "config": self._serialize_config(
+                    sparse_vector_type.sparse_vector_index.config
+                ),
+            }
+
+        return result
+
+    def _serialize_int_value_type(self, int_type: IntValueType) -> Dict[str, Any]:
+        """Serialize IntValueType to JSON format."""
+        result: Dict[str, Any] = {}
+
+        if int_type.int_inverted_index is not None:
+            result[INT_INVERTED_INDEX_NAME] = {
+                "enabled": int_type.int_inverted_index.enabled,
+                "config": self._serialize_config(int_type.int_inverted_index.config),
+            }
+
+        return result
+
+    def _serialize_float_value_type(self, float_type: FloatValueType) -> Dict[str, Any]:
+        """Serialize FloatValueType to JSON format."""
+        result: Dict[str, Any] = {}
+
+        if float_type.float_inverted_index is not None:
+            result[FLOAT_INVERTED_INDEX_NAME] = {
+                "enabled": float_type.float_inverted_index.enabled,
+                "config": self._serialize_config(
+                    float_type.float_inverted_index.config
+                ),
+            }
+
+        return result
+
+    def _serialize_bool_value_type(self, bool_type: BoolValueType) -> Dict[str, Any]:
+        """Serialize BoolValueType to JSON format."""
+        result: Dict[str, Any] = {}
+
+        if bool_type.bool_inverted_index is not None:
+            result[BOOL_INVERTED_INDEX_NAME] = {
+                "enabled": bool_type.bool_inverted_index.enabled,
+                "config": self._serialize_config(bool_type.bool_inverted_index.config),
+            }
+
+        return result
+
+    def _serialize_config(self, config: IndexConfig) -> Dict[str, Any]:
+        """Serialize config object to JSON-serializable dictionary."""
+        # All IndexConfig types are Pydantic models, so use model_dump
+        config_dict = config.model_dump(exclude_none=True)
+
+        # Handle embedding function serialization for vector configs
+        if isinstance(config, VectorIndexConfig):
+            if hasattr(config, "embedding_function"):
+                embedding_func = getattr(config, "embedding_function", None)
+                if embedding_func is None:
+                    config_dict["embedding_function"] = {"type": "legacy"}
+                else:
+                    try:
+                        # Cast to EmbeddingFunction type to access methods
+                        embedding_func = cast(EmbeddingFunction, embedding_func)  # type: ignore
+                        if embedding_func.is_legacy():
+                            config_dict["embedding_function"] = {"type": "legacy"}
+                        else:
+                            config_dict["embedding_function"] = {
+                                "name": embedding_func.name(),
+                                "type": "known",
+                                "config": embedding_func.get_config(),
+                            }
+
+                            # Handle space resolution from embedding function
+                            if hasattr(config, "space") and config.space is None:
+                                config_dict["space"] = embedding_func.default_space()
+                            elif hasattr(config, "space") and config.space is not None:
+                                if (
+                                    config.space
+                                    not in embedding_func.supported_spaces()
+                                ):
+                                    warnings.warn(
+                                        f"space {config.space} is not supported by {embedding_func.name()}. Supported spaces: {embedding_func.supported_spaces()}",
+                                        UserWarning,
+                                        stacklevel=2,
+                                    )
+                    except Exception:
+                        config_dict["embedding_function"] = {"type": "legacy"}
+
+        elif isinstance(config, SparseVectorIndexConfig):
+            if hasattr(config, "embedding_function"):
+                embedding_func = getattr(config, "embedding_function", None)
+                if embedding_func is None:
+                    config_dict["embedding_function"] = {"type": "unknown"}
+                else:
+                    embedding_func = cast(SparseEmbeddingFunction, embedding_func)  # type: ignore
+                    config_dict["embedding_function"] = {
+                        "name": embedding_func.name(),
+                        "type": "known",
+                        "config": embedding_func.get_config(),
+                    }
+
+        return config_dict
+
+    @classmethod
+    def _deserialize_value_types(cls, value_types_json: Dict[str, Any]) -> ValueTypes:
+        """Deserialize ValueTypes from JSON format."""
+        result = ValueTypes()
+
+        # Deserialize each value type if present
+        if STRING_VALUE_NAME in value_types_json:
+            result.string = cls._deserialize_string_value_type(
+                value_types_json[STRING_VALUE_NAME]
+            )
+
+        if FLOAT_LIST_VALUE_NAME in value_types_json:
+            result.float_list = cls._deserialize_float_list_value_type(
+                value_types_json[FLOAT_LIST_VALUE_NAME]
+            )
+
+        if SPARSE_VECTOR_VALUE_NAME in value_types_json:
+            result.sparse_vector = cls._deserialize_sparse_vector_value_type(
+                value_types_json[SPARSE_VECTOR_VALUE_NAME]
+            )
+
+        if INT_VALUE_NAME in value_types_json:
+            result.int_value = cls._deserialize_int_value_type(value_types_json[INT_VALUE_NAME])
+
+        if FLOAT_VALUE_NAME in value_types_json:
+            result.float_value = cls._deserialize_float_value_type(
+                value_types_json[FLOAT_VALUE_NAME]
+            )
+
+        if BOOL_VALUE_NAME in value_types_json:
+            result.boolean = cls._deserialize_bool_value_type(value_types_json[BOOL_VALUE_NAME])
+
+        return result
+
+    @classmethod
+    def _deserialize_string_value_type(
+        cls, string_json: Dict[str, Any]
+    ) -> StringValueType:
+        """Deserialize StringValueType from JSON format."""
+        fts_index = None
+        string_inverted_index = None
+
+        if FTS_INDEX_NAME in string_json:
+            fts_index_data = string_json[FTS_INDEX_NAME]
+            fts_enabled = fts_index_data.get("enabled", True)
+            fts_config_data = fts_index_data.get("config", {})
+            fts_config = FtsIndexConfig(**fts_config_data)
+            fts_index = FtsIndexType(enabled=fts_enabled, config=fts_config)
+
+        if STRING_INVERTED_INDEX_NAME in string_json:
+            string_index_data = string_json[STRING_INVERTED_INDEX_NAME]
+            string_enabled = string_index_data.get("enabled", True)
+            string_config_data = string_index_data.get("config", {})
+            string_config = StringInvertedIndexConfig(**string_config_data)
+            string_inverted_index = StringInvertedIndexType(
+                enabled=string_enabled, config=string_config
+            )
+
+        return StringValueType(
+            fts_index=fts_index, string_inverted_index=string_inverted_index
+        )
+
+    @classmethod
+    def _deserialize_float_list_value_type(
+        cls, float_list_json: Dict[str, Any]
+    ) -> FloatListValueType:
+        """Deserialize FloatListValueType from JSON format."""
+        vector_index = None
+
+        if VECTOR_INDEX_NAME in float_list_json:
+            index_data = float_list_json[VECTOR_INDEX_NAME]
+            enabled = index_data.get("enabled", True)
+            config_data = deepcopy(index_data.get("config", {}))
+
+            # Handle embedding function deserialization
+            if "embedding_function" in config_data:
+                ef_config = config_data["embedding_function"]
+                if ef_config.get("type") == "legacy":
+                    config_data["embedding_function"] = None
+                else:
+                    try:
+                        from chromadb.utils.embedding_functions import (
+                            known_embedding_functions,
+                        )
+
+                        ef_name = ef_config["name"]
+                        ef = known_embedding_functions[ef_name]
+                        config_data["embedding_function"] = ef.build_from_config(
+                            ef_config["config"]
+                        )
+
+                        # Handle space deserialization
+                        if "space" not in config_data or config_data["space"] is None:
+                            config_data["space"] = config_data[
+                                "embedding_function"
+                            ].default_space()
+                    except Exception as e:
+                        warnings.warn(
+                            f"Could not reconstruct embedding function {ef_config.get('name', 'unknown')}: {e}. Setting to None.",
+                            UserWarning,
+                            stacklevel=2,
+                        )
+                        config_data["embedding_function"] = None
+
+            config = VectorIndexConfig(**config_data)
+            vector_index = VectorIndexType(enabled=enabled, config=config)
+
+        return FloatListValueType(vector_index=vector_index)
+
+    @classmethod
+    def _deserialize_sparse_vector_value_type(
+        cls, sparse_vector_json: Dict[str, Any]
+    ) -> SparseVectorValueType:
+        """Deserialize SparseVectorValueType from JSON format."""
+        sparse_vector_index = None
+
+        if SPARSE_VECTOR_INDEX_NAME in sparse_vector_json:
+            index_data = sparse_vector_json[SPARSE_VECTOR_INDEX_NAME]
+            enabled = index_data.get("enabled", True)
+            config_data = deepcopy(index_data.get("config", {}))
+
+            # Handle embedding function deserialization
+            if "embedding_function" in config_data:
+                ef_config = config_data["embedding_function"]
+                if ef_config.get("type") == "unknown" or ef_config.get("type") == "legacy":
+                    config_data["embedding_function"] = None
+                else:
+                    try:
+                        from chromadb.utils.embedding_functions import (
+                            sparse_known_embedding_functions,
+                        )
+
+                        ef_name = ef_config["name"]
+                        ef = sparse_known_embedding_functions[ef_name]
+                        config_data["embedding_function"] = ef.build_from_config(
+                            ef_config["config"]
+                        )
+                    except Exception as e:
+                        warnings.warn(
+                            f"Could not reconstruct sparse embedding function {ef_config.get('name', 'unknown')}: {e}. Setting to None.",
+                            UserWarning,
+                            stacklevel=2,
+                        )
+                        config_data["embedding_function"] = None
+
+            config = SparseVectorIndexConfig(**config_data)
+            sparse_vector_index = SparseVectorIndexType(enabled=enabled, config=config)
+
+        return SparseVectorValueType(sparse_vector_index=sparse_vector_index)
+
+    @classmethod
+    def _deserialize_int_value_type(cls, int_json: Dict[str, Any]) -> IntValueType:
+        """Deserialize IntValueType from JSON format."""
+        int_inverted_index = None
+
+        if INT_INVERTED_INDEX_NAME in int_json:
+            index_data = int_json[INT_INVERTED_INDEX_NAME]
+            enabled = index_data.get("enabled", True)
+            config_data = index_data.get("config", {})
+            config = IntInvertedIndexConfig(**config_data)
+            int_inverted_index = IntInvertedIndexType(enabled=enabled, config=config)
+
+        return IntValueType(int_inverted_index=int_inverted_index)
+
+    @classmethod
+    def _deserialize_float_value_type(
+        cls, float_json: Dict[str, Any]
+    ) -> FloatValueType:
+        """Deserialize FloatValueType from JSON format."""
+        float_inverted_index = None
+
+        if FLOAT_INVERTED_INDEX_NAME in float_json:
+            index_data = float_json[FLOAT_INVERTED_INDEX_NAME]
+            enabled = index_data.get("enabled", True)
+            config_data = index_data.get("config", {})
+            config = FloatInvertedIndexConfig(**config_data)
+            float_inverted_index = FloatInvertedIndexType(
+                enabled=enabled, config=config
+            )
+
+        return FloatValueType(float_inverted_index=float_inverted_index)
+
+    @classmethod
+    def _deserialize_bool_value_type(cls, bool_json: Dict[str, Any]) -> BoolValueType:
+        """Deserialize BoolValueType from JSON format."""
+        bool_inverted_index = None
+
+        if BOOL_INVERTED_INDEX_NAME in bool_json:
+            index_data = bool_json[BOOL_INVERTED_INDEX_NAME]
+            enabled = index_data.get("enabled", True)
+            config_data = index_data.get("config", {})
+            config = BoolInvertedIndexConfig(**config_data)
+            bool_inverted_index = BoolInvertedIndexType(enabled=enabled, config=config)
+
+        return BoolValueType(bool_inverted_index=bool_inverted_index)

@@ -1,5 +1,4 @@
 from langchain_google_community.bigquery import BigQueryLoader
-from langchain_google_community.bigquery_vector_search import BigQueryVectorSearch
 from langchain_google_community.bq_storage_vectorstores.bigquery import (
     BigQueryVectorStore,
 )
@@ -41,6 +40,18 @@ from langchain_google_community.search import (
     GoogleSearchResults,
     GoogleSearchRun,
 )
+from langchain_google_community.sheets import (
+    SheetsAppendValuesTool,
+    SheetsBatchReadDataTool,
+    SheetsBatchUpdateValuesTool,
+    SheetsClearValuesTool,
+    SheetsCreateSpreadsheetTool,
+    SheetsFilteredReadDataTool,
+    SheetsGetSpreadsheetInfoTool,
+    SheetsReadDataTool,
+    SheetsToolkit,
+    SheetsUpdateValuesTool,
+)
 from langchain_google_community.texttospeech import TextToSpeechTool
 from langchain_google_community.translate import GoogleTranslateTransformer
 from langchain_google_community.vertex_ai_search import (
@@ -57,7 +68,6 @@ from langchain_google_community.vision import CloudVisionLoader, CloudVisionPars
 __all__ = [
     "BigQueryLoader",
     "BigQueryVectorStore",
-    "BigQueryVectorSearch",
     "CalendarCreateEvent",
     "CalendarDeleteEvent",
     "CalendarMoveEvent",
@@ -76,6 +86,16 @@ __all__ = [
     "GMailLoader",
     "GmailToolkit",
     "GoogleDriveLoader",
+    "SheetsAppendValuesTool",
+    "SheetsBatchReadDataTool",
+    "SheetsBatchUpdateValuesTool",
+    "SheetsClearValuesTool",
+    "SheetsCreateSpreadsheetTool",
+    "SheetsFilteredReadDataTool",
+    "SheetsGetSpreadsheetInfoTool",
+    "SheetsReadDataTool",
+    "SheetsToolkit",
+    "SheetsUpdateValuesTool",
     "GoogleGeocodingAPIWrapper",
     "GoogleGeocodingTool",
     "GooglePlacesAPIWrapper",
