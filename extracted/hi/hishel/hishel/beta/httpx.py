@@ -21,6 +21,9 @@ SOCKET_OPTION = t.Union[
     t.Tuple[int, int, None, int],
 ]
 
+# 128 KB
+CHUNK_SIZE = 131072
+
 
 class IteratorStream(httpx.SyncByteStream, httpx.AsyncByteStream):
     def __init__(self, iterator: Iterator[bytes] | AsyncIterator[bytes]) -> None:
@@ -86,7 +89,11 @@ def httpx_to_internal(
         stream = AnyIterable(value.content)
     except (httpx.RequestNotRead, httpx.ResponseNotRead):
         if isinstance(value, httpx.Response):
-            stream = value.iter_raw() if isinstance(value.stream, Iterable) else value.aiter_raw()
+            stream = (
+                value.iter_raw(chunk_size=CHUNK_SIZE)
+                if isinstance(value.stream, Iterable)
+                else value.aiter_raw(chunk_size=CHUNK_SIZE)
+            )
         else:
             stream = value.stream  # type: ignore
     if isinstance(value, httpx.Request):
@@ -125,6 +132,7 @@ class SyncCacheTransport(httpx.BaseTransport):
             cache_options=cache_options,
             ignore_specification=ignore_specification,
         )
+        self.storage = self._cache_proxy.storage
 
     def handle_request(
         self,
@@ -137,6 +145,7 @@ class SyncCacheTransport(httpx.BaseTransport):
 
     def close(self) -> None:
         self.next_transport.close()
+        self.storage.close()
         super().close()
 
     def sync_send_request(self, request: Request) -> Response:
@@ -235,6 +244,7 @@ class AsyncCacheTransport(httpx.AsyncBaseTransport):
             cache_options=cache_options,
             ignore_specification=ignore_specification,
         )
+        self.storage = self._cache_proxy.storage
 
     async def handle_async_request(
         self,
@@ -247,6 +257,7 @@ class AsyncCacheTransport(httpx.AsyncBaseTransport):
 
     async def aclose(self) -> None:
         await self.next_transport.aclose()
+        await self.storage.close()
         await super().aclose()
 
     async def async_send_request(self, request: Request) -> Response:

@@ -45,6 +45,7 @@ pub(crate) async fn run(
     directories: Vec<String>,
     last_commit: bool,
     show_diff_on_failure: bool,
+    fail_fast: bool,
     dry_run: bool,
     refresh: bool,
     extra_args: RunExtraArgs,
@@ -166,6 +167,7 @@ pub(crate) async fn run(
         filenames,
         store,
         show_diff_on_failure,
+        fail_fast,
         dry_run,
         verbose,
         printer,
@@ -285,8 +287,14 @@ pub async fn install_hooks(
     // Group hooks by language to enable parallel installation across different languages.
     let mut hooks_by_language = FxHashMap::default();
     for hook in hooks {
+        let mut language = hook.language;
+        if hook.language == Language::Pygrep {
+            // Treat `pygrep` hooks as `python` hooks for installation purposes.
+            // They share the same installation logic.
+            language = Language::Python;
+        }
         hooks_by_language
-            .entry(hook.language)
+            .entry(language)
             .or_insert_with(Vec::new)
             .push(hook);
     }
@@ -522,6 +530,7 @@ async fn run_hooks(
     filenames: Vec<PathBuf>,
     store: &Store,
     show_diff_on_failure: bool,
+    fail_fast: bool,
     dry_run: bool,
     verbose: bool,
     printer: Printer,
@@ -566,7 +575,8 @@ async fn run_hooks(
         }
         let mut diff = git::get_diff(project.path()).await?;
 
-        let fail_fast = project.config().fail_fast.unwrap_or(false);
+        // CLI flag overrides config setting
+        let fail_fast = fail_fast || project.config().fail_fast.unwrap_or(false);
 
         let filter = FileFilter::for_project(filenames.iter(), project);
         trace!(

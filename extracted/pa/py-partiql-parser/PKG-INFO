@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: py-partiql-parser
-Version: 0.6.2
+Version: 0.6.3
 Summary: Pure Python PartiQL Parser
 Project-URL: Homepage, https://github.com/getmoto/py-partiql-parser
 Project-URL: Bug Tracker, https://github.com/getmoto/py-partiql-parser/issues

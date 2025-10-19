@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: prek
-Version: 0.2.9
+Version: 0.2.10
 Classifier: Development Status :: 2 - Pre-Alpha
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -24,7 +24,7 @@ Project-URL: Homepage, https://prek.j178.dev/
 
 # prek
 
-<img width="220" alt="prek" src="./docs/assets/logo_512.webp" />
+<img width="220" alt="prek" src="./docs/assets/logo.webp" />
 
 [![CI](https://github.com/j178/prek/actions/workflows/ci.yml/badge.svg)](https://github.com/j178/prek/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/github/j178/prek/graph/badge.svg?token=MP6TY24F43)](https://codecov.io/github/j178/prek)
@@ -46,7 +46,7 @@ while also providing some additional long-requested features.
 > [!WARNING]
 > prek is not production-ready yet. Some subcommands and languages are not implemented. See the current gaps for drop-in parity: [TODO](https://prek.j178.dev/todo/).
 >
-> It's already being adopted by [some projects](#who-is-using-prek), please give it a try - we'd love your feedback!
+> But it's already being adopted by [some projects](#who-is-using-prek) like Airflow, so please give it a try - we'd love your feedback!
 
 <!-- features:start -->
 ## Features
@@ -130,7 +130,7 @@ On Linux and macOS:
 
 <!-- linux-standalone-install:start -->
 ```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.9/prek-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.10/prek-installer.sh | sh
 ```
 <!-- linux-standalone-install:end -->
 
@@ -138,7 +138,7 @@ On Windows:
 
 <!-- windows-standalone-install:start -->
 ```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.9/prek-installer.ps1 | iex"
+powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.10/prek-installer.ps1 | iex"
 ```
 <!-- windows-standalone-install:end -->
 
@@ -153,6 +153,9 @@ prek is published as Python binary wheel to PyPI, you can install it using `pip`
 ```bash
 # Using uv (recommended)
 uv tool install prek
+
+# Using uvx (install and run in one command)
+uvx prek
 
 # Using pip
 pip install prek
@@ -192,7 +195,7 @@ mise use prek
 <summary>Cargo binstall</summary>
 
 <!-- cargo-binstall:start -->
-Install pre-compiled binaries from GitHub using Cargo binstall (Rust 1.89+ is required):
+Install pre-compiled binaries from GitHub using [cargo-binstall](https://github.com/cargo-bins/cargo-binstall):
 
 ```bash
 cargo binstall prek --git https://github.com/j178/prek

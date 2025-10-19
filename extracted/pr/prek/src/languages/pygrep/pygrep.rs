@@ -76,6 +76,13 @@ fn find_installed_python(python_dir: &Path) -> Option<PathBuf> {
         .flatten()
         .flatten()
         .filter(|entry| entry.file_type().is_ok_and(|f| f.is_dir()))
+        // Ignore any `.` prefixed directories
+        .filter(|path| {
+            path.file_name()
+                .to_str()
+                .map(|name| !name.starts_with('.'))
+                .unwrap_or(true)
+        })
         .map(|entry| python_exec(&entry.path()))
         .next()
 }
@@ -151,7 +158,7 @@ impl LanguageImpl for Pygrep {
             hook.language,
             hook.dependencies().clone(),
             &store.hooks_dir(),
-        );
+        )?;
         info.with_toolchain(python);
 
         fs_err::tokio::create_dir_all(&info.env_path).await?;
@@ -165,26 +172,9 @@ impl LanguageImpl for Pygrep {
     }
 
     async fn check_health(&self, info: &InstallInfo) -> Result<()> {
-        let python = python_exec(&info.env_path);
-        let python_info = query_python_info(&python)
+        query_python_info(&info.toolchain)
             .await
             .context("Failed to query Python info")?;
-
-        if python_info.version != info.language_version {
-            anyhow::bail!(
-                "Python version mismatch: expected {}, found {}",
-                info.language_version,
-                python_info.version
-            );
-        }
-
-        if python_info.python_exec != info.toolchain {
-            anyhow::bail!(
-                "Python executable mismatch: expected {}, found {}",
-                info.toolchain.display(),
-                python_info.python_exec.display()
-            );
-        }
 
         Ok(())
     }

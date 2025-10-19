@@ -985,3 +985,282 @@ fn detect_private_key_hook() -> Result<()> {
 
     Ok(())
 }
+
+#[test]
+fn check_merge_conflict_hook() -> Result<()> {
+    let context = TestContext::new();
+    context.init_project();
+    context.configure_git_author();
+
+    context.write_pre_commit_config(indoc::indoc! {r"
+        repos:
+          - repo: https://github.com/pre-commit/pre-commit-hooks
+            rev: v5.0.0
+            hooks:
+              - id: check-merge-conflict
+                args: ['--assume-in-merge']
+    "});
+
+    let cwd = context.work_dir();
+
+    // Create test files with conflict markers
+    cwd.child("conflict.txt").write_str(indoc::indoc! {r"
+        Before conflict
+        <<<<<<< HEAD
+        Our changes
+        =======
+        Their changes
+        >>>>>>> branch
+        After conflict
+    "})?;
+
+    cwd.child("clean.txt").write_str("No conflicts here\n")?;
+
+    cwd.child("partial_conflict.txt")
+        .write_str(indoc::indoc! {r"
+        Some content
+        <<<<<<< HEAD
+        Conflicting line
+    "})?;
+
+    context.git_add(".");
+
+    // First run: hooks should fail due to conflict markers
+    cmd_snapshot!(context.filters(), context.run(), @r#"
+    success: false
+    exit_code: 1
+    ----- stdout -----
+    check for merge conflicts................................................Failed
+    - hook id: check-merge-conflict
+    - exit code: 1
+      partial_conflict.txt:2: Merge conflict string "<<<<<<< " found
+      conflict.txt:2: Merge conflict string "<<<<<<< " found
+      conflict.txt:4: Merge conflict string "=======" found
+      conflict.txt:6: Merge conflict string ">>>>>>> " found
+
+    ----- stderr -----
+    "#);
+
+    // Fix the files by removing conflict markers
+    cwd.child("conflict.txt").write_str(indoc::indoc! {r"
+        Before conflict
+        Our changes
+        After conflict
+    "})?;
+
+    cwd.child("partial_conflict.txt")
+        .write_str("Some content\nResolved line\n")?;
+
+    context.git_add(".");
+
+    // Second run: hooks should now pass
+    cmd_snapshot!(context.filters(), context.run(), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    check for merge conflicts................................................Passed
+
+    ----- stderr -----
+    "#);
+
+    Ok(())
+}
+
+#[test]
+fn check_merge_conflict_without_assume_flag() -> Result<()> {
+    let context = TestContext::new();
+    context.init_project();
+    context.configure_git_author();
+
+    // Without --assume-in-merge, hook should pass even with conflict markers
+    // if we're not actually in a merge state
+    context.write_pre_commit_config(indoc::indoc! {r"
+        repos:
+          - repo: https://github.com/pre-commit/pre-commit-hooks
+            rev: v5.0.0
+            hooks:
+              - id: check-merge-conflict
+    "});
+
+    let cwd = context.work_dir();
+
+    cwd.child("conflict.txt").write_str(indoc::indoc! {r"
+        <<<<<<< HEAD
+        Our changes
+        =======
+        Their changes
+        >>>>>>> branch
+    "})?;
+
+    context.git_add(".");
+
+    // Should pass because we're not in a merge state and no --assume-in-merge flag
+    cmd_snapshot!(context.filters(), context.run(), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    check for merge conflicts................................................Passed
+
+    ----- stderr -----
+    "#);
+
+    Ok(())
+}
+
+#[test]
+fn check_xml_hook() -> Result<()> {
+    let context = TestContext::new();
+    context.init_project();
+    context.configure_git_author();
+
+    context.write_pre_commit_config(indoc::indoc! {r"
+        repos:
+          - repo: https://github.com/pre-commit/pre-commit-hooks
+            rev: v5.0.0
+            hooks:
+              - id: check-xml
+    "});
+
+    let cwd = context.work_dir();
+
+    // Create test files
+    cwd.child("valid.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <element>value</element>
+</root>"#,
+    )?;
+    cwd.child("invalid_unclosed.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <element>value
+</root>"#,
+    )?;
+    cwd.child("invalid_mismatched.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <element>value</different>
+</root>"#,
+    )?;
+    cwd.child("multiple_roots.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<element>value</element>
+<another>value</another>"#,
+    )?;
+    cwd.child("empty.xml").touch()?;
+
+    context.git_add(".");
+
+    // First run: hooks should fail
+    cmd_snapshot!(context.filters(), context.run(), @r"
+    success: false
+    exit_code: 1
+    ----- stdout -----
+    check xml................................................................Failed
+    - hook id: check-xml
+    - exit code: 1
+      invalid_mismatched.xml: Failed to xml parse (ill-formed document: expected `</element>`, but `</different>` was found)
+      empty.xml: Failed to xml parse (no element found)
+      invalid_unclosed.xml: Failed to xml parse (ill-formed document: expected `</element>`, but `</root>` was found)
+      multiple_roots.xml: Failed to xml parse (junk after document element)
+
+    ----- stderr -----
+    ");
+
+    // Fix the files
+    cwd.child("invalid_unclosed.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <element>value</element>
+</root>"#,
+    )?;
+    cwd.child("invalid_mismatched.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <element>value</element>
+</root>"#,
+    )?;
+    cwd.child("multiple_roots.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <element>value</element>
+    <another>value</another>
+</root>"#,
+    )?;
+
+    context.git_add(".");
+
+    // Second run: hooks should now pass
+    cmd_snapshot!(context.filters(), context.run(), @r"
+    success: false
+    exit_code: 1
+    ----- stdout -----
+    check xml................................................................Failed
+    - hook id: check-xml
+    - exit code: 1
+      empty.xml: Failed to xml parse (no element found)
+
+    ----- stderr -----
+    ");
+
+    Ok(())
+}
+
+#[test]
+fn check_xml_with_features() -> Result<()> {
+    let context = TestContext::new();
+    context.init_project();
+    context.configure_git_author();
+
+    context.write_pre_commit_config(indoc::indoc! {r"
+        repos:
+          - repo: https://github.com/pre-commit/pre-commit-hooks
+            rev: v5.0.0
+            hooks:
+              - id: check-xml
+    "});
+
+    let cwd = context.work_dir();
+
+    // Create test files with various XML features
+    cwd.child("with_attributes.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="http://example.com">
+    <element id="1" type="test">value</element>
+</root>"#,
+    )?;
+    cwd.child("with_cdata.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <element><![CDATA[Some <special> characters & symbols]]></element>
+</root>"#,
+    )?;
+    cwd.child("with_comments.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <!-- This is a comment -->
+    <element>value</element>
+</root>"#,
+    )?;
+    cwd.child("with_doctype.xml").write_str(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "root.dtd">
+<root>
+    <element>value</element>
+</root>"#,
+    )?;
+
+    context.git_add(".");
+
+    // All should pass
+    cmd_snapshot!(context.filters(), context.run(), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    check xml................................................................Passed
+
+    ----- stderr -----
+    "#);
+
+    Ok(())
+}
