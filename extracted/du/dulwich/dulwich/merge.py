@@ -478,6 +478,148 @@ class Merger:
         return merged_tree, conflicts
 
 
+def _create_virtual_commit(
+    object_store: BaseObjectStore,
+    tree: Tree,
+    parents: list[bytes],
+    message: bytes = b"Virtual merge base",
+) -> Commit:
+    """Create a virtual commit object for recursive merging.
+
+    Args:
+        object_store: Object store to add the commit to
+        tree: Tree object for the commit
+        parents: List of parent commit IDs
+        message: Commit message
+
+    Returns:
+        The created Commit object
+    """
+    # Add the tree to the object store
+    object_store.add_object(tree)
+
+    # Create a virtual commit
+    commit = Commit()
+    commit.tree = tree.id
+    commit.parents = parents
+    commit.author = b"Dulwich Recursive Merge <dulwich@example.com>"
+    commit.committer = commit.author
+    commit.commit_time = 0
+    commit.author_time = 0
+    commit.commit_timezone = 0
+    commit.author_timezone = 0
+    commit.encoding = b"UTF-8"
+    commit.message = message
+
+    # Add the commit to the object store
+    object_store.add_object(commit)
+
+    return commit
+
+
+def recursive_merge(
+    object_store: BaseObjectStore,
+    merge_bases: list[bytes],
+    ours_commit: Commit,
+    theirs_commit: Commit,
+    gitattributes: Optional[GitAttributes] = None,
+    config: Optional[Config] = None,
+) -> tuple[Tree, list[bytes]]:
+    """Perform a recursive merge with multiple merge bases.
+
+    This implements Git's recursive merge strategy, which handles cases where
+    there are multiple common ancestors (criss-cross merges). The algorithm:
+
+    1. If there's 0 or 1 merge base, perform a simple three-way merge
+    2. If there are multiple merge bases, merge them recursively to create
+       a virtual merge base, then use that for the final three-way merge
+
+    Args:
+        object_store: Object store to read/write objects
+        merge_bases: List of merge base commit IDs
+        ours_commit: Our commit
+        theirs_commit: Their commit
+        gitattributes: Optional GitAttributes object for checking merge drivers
+        config: Optional Config object for loading merge driver configuration
+
+    Returns:
+        tuple of (merged_tree, list_of_conflicted_paths)
+    """
+    if not merge_bases:
+        # No common ancestor - use None as base
+        return three_way_merge(
+            object_store, None, ours_commit, theirs_commit, gitattributes, config
+        )
+    elif len(merge_bases) == 1:
+        # Single merge base - simple three-way merge
+        base_commit_obj = object_store[merge_bases[0]]
+        if not isinstance(base_commit_obj, Commit):
+            raise TypeError(
+                f"Expected commit, got {base_commit_obj.type_name.decode()}"
+            )
+        return three_way_merge(
+            object_store,
+            base_commit_obj,
+            ours_commit,
+            theirs_commit,
+            gitattributes,
+            config,
+        )
+    else:
+        # Multiple merge bases - need to create a virtual merge base
+        # Start by merging the first two bases
+        virtual_base_id = merge_bases[0]
+        virtual_commit_obj = object_store[virtual_base_id]
+        if not isinstance(virtual_commit_obj, Commit):
+            raise TypeError(
+                f"Expected commit, got {virtual_commit_obj.type_name.decode()}"
+            )
+
+        # Recursively merge each additional base
+        for next_base_id in merge_bases[1:]:
+            next_base_obj = object_store[next_base_id]
+            if not isinstance(next_base_obj, Commit):
+                raise TypeError(
+                    f"Expected commit, got {next_base_obj.type_name.decode()}"
+                )
+
+            # Find merge base of these two bases
+            # Import here to avoid circular dependency
+
+            # We need access to the repo for find_merge_base
+            # For now, we'll perform a simple three-way merge without recursion
+            # between the two virtual commits
+            # A proper implementation would require passing the repo object
+
+            # Perform three-way merge of the two bases (using None as their base)
+            merged_tree, _conflicts = three_way_merge(
+                object_store,
+                None,  # No common ancestor for virtual merge bases
+                virtual_commit_obj,
+                next_base_obj,
+                gitattributes,
+                config,
+            )
+
+            # Create a virtual commit with this merged tree
+            virtual_commit_obj = _create_virtual_commit(
+                object_store,
+                merged_tree,
+                [virtual_base_id, next_base_id],
+            )
+            virtual_base_id = virtual_commit_obj.id
+
+        # Now use the virtual merge base for the final merge
+        return three_way_merge(
+            object_store,
+            virtual_commit_obj,
+            ours_commit,
+            theirs_commit,
+            gitattributes,
+            config,
+        )
+
+
 def three_way_merge(
     object_store: BaseObjectStore,
     base_commit: Optional[Commit],
@@ -521,7 +663,97 @@ def three_way_merge(
     else:
         raise TypeError(f"Expected tree, got {theirs_obj.type_name.decode()}")
 
-    assert isinstance(base_tree, Tree)
+    assert base_tree is None or isinstance(base_tree, Tree)
     assert isinstance(ours_tree, Tree)
     assert isinstance(theirs_tree, Tree)
     return merger.merge_trees(base_tree, ours_tree, theirs_tree)
+
+
+def octopus_merge(
+    object_store: BaseObjectStore,
+    merge_bases: list[bytes],
+    head_commit: Commit,
+    other_commits: list[Commit],
+    gitattributes: Optional[GitAttributes] = None,
+    config: Optional[Config] = None,
+) -> tuple[Tree, list[bytes]]:
+    """Perform an octopus merge of multiple commits.
+
+    The octopus merge strategy merges multiple branches sequentially into a single
+    commit with multiple parents. It refuses to proceed if any merge would result
+    in conflicts that require manual resolution.
+
+    Args:
+        object_store: Object store to read/write objects
+        merge_bases: List of common ancestor commit IDs for all commits
+        head_commit: Current HEAD commit (ours)
+        other_commits: List of commits to merge (theirs)
+        gitattributes: Optional GitAttributes object for checking merge drivers
+        config: Optional Config object for loading merge driver configuration
+
+    Returns:
+        tuple of (merged_tree, list_of_conflicted_paths)
+        If any conflicts occur during the sequential merges, the function returns
+        early with the conflicts list populated.
+
+    Raises:
+        TypeError: If any object is not of the expected type
+    """
+    if not other_commits:
+        raise ValueError("octopus_merge requires at least one commit to merge")
+
+    # Start with the head commit's tree as our current state
+    current_commit = head_commit
+
+    # Merge each commit sequentially
+    for i, other_commit in enumerate(other_commits):
+        # Find the merge base between current state and the commit we're merging
+        # For octopus merges, we use the octopus base for all commits
+        if merge_bases:
+            base_commit_id = merge_bases[0]
+            base_commit = object_store[base_commit_id]
+            if not isinstance(base_commit, Commit):
+                raise TypeError(f"Expected Commit, got {type(base_commit)}")
+        else:
+            base_commit = None
+
+        # Perform three-way merge
+        merged_tree, conflicts = three_way_merge(
+            object_store,
+            base_commit,
+            current_commit,
+            other_commit,
+            gitattributes,
+            config,
+        )
+
+        # Octopus merge refuses to proceed if there are conflicts
+        if conflicts:
+            return merged_tree, conflicts
+
+        # Add merged tree to object store
+        object_store.add_object(merged_tree)
+
+        # Create a temporary commit object with the merged tree for the next iteration
+        # This allows us to continue merging additional commits
+        if i < len(other_commits) - 1:
+            temp_commit = Commit()
+            temp_commit.tree = merged_tree.id
+            # For intermediate merges, we use the same parent as current
+            temp_commit.parents = (
+                current_commit.parents
+                if current_commit.parents
+                else [current_commit.id]
+            )
+            # Set minimal required commit fields
+            temp_commit.author = current_commit.author
+            temp_commit.committer = current_commit.committer
+            temp_commit.author_time = current_commit.author_time
+            temp_commit.commit_time = current_commit.commit_time
+            temp_commit.author_timezone = current_commit.author_timezone
+            temp_commit.commit_timezone = current_commit.commit_timezone
+            temp_commit.message = b"Temporary octopus merge commit"
+            object_store.add_object(temp_commit)
+            current_commit = temp_commit
+
+    return merged_tree, []

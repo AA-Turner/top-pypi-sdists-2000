@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: psutil
-Version: 7.1.0
+Version: 7.1.1
 Summary: Cross-platform lib for process and system monitoring.
 Home-page: https://github.com/giampaolo/psutil
 Author: Giampaolo Rodola
@@ -69,6 +69,7 @@ Requires-Dist: packaging; extra == "dev"
 Requires-Dist: pylint; extra == "dev"
 Requires-Dist: pyperf; extra == "dev"
 Requires-Dist: pypinfo; extra == "dev"
+Requires-Dist: pyreadline; os_name == "nt" and extra == "dev"
 Requires-Dist: pytest-cov; extra == "dev"
 Requires-Dist: requests; extra == "dev"
 Requires-Dist: rstcheck; extra == "dev"
@@ -77,10 +78,10 @@ Requires-Dist: sphinx; extra == "dev"
 Requires-Dist: sphinx_rtd_theme; extra == "dev"
 Requires-Dist: toml-sort; extra == "dev"
 Requires-Dist: twine; extra == "dev"
+Requires-Dist: validate-pyproject[all]; extra == "dev"
 Requires-Dist: virtualenv; extra == "dev"
 Requires-Dist: vulture; extra == "dev"
 Requires-Dist: wheel; extra == "dev"
-Requires-Dist: pyreadline; os_name == "nt" and extra == "dev"
 Provides-Extra: test
 Requires-Dist: pytest; extra == "test"
 Requires-Dist: pytest-instafail; extra == "test"

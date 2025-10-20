@@ -9455,6 +9455,322 @@ class ReflogTest(PorcelainTestCase):
         self.assertIn(b"HEAD", refs_seen)
         self.assertIn(b"refs/heads/master", refs_seen)
 
+    def test_reflog_expire_by_time(self):
+        """Test expiring reflog entries by timestamp."""
+        # Create commits
+        blob = Blob.from_string(b"test content")
+        self.repo.object_store.add_object(blob)
+
+        tree = Tree()
+        tree.add(b"test", 0o100644, blob.id)
+        self.repo.object_store.add_object(tree)
+
+        commit1 = Commit()
+        commit1.tree = tree.id
+        commit1.author = b"Test Author <test@example.com>"
+        commit1.committer = b"Test Author <test@example.com>"
+        commit1.commit_time = 1000000000
+        commit1.commit_timezone = 0
+        commit1.author_time = 1000000000
+        commit1.author_timezone = 0
+        commit1.message = b"Old commit"
+        self.repo.object_store.add_object(commit1)
+
+        commit2 = Commit()
+        commit2.tree = tree.id
+        commit2.author = b"Test Author <test@example.com>"
+        commit2.committer = b"Test Author <test@example.com>"
+        commit2.commit_time = 2000000000
+        commit2.commit_timezone = 0
+        commit2.author_time = 2000000000
+        commit2.author_timezone = 0
+        commit2.message = b"Recent commit"
+        self.repo.object_store.add_object(commit2)
+
+        # Write reflog entries with different timestamps
+        self.repo._write_reflog(
+            b"HEAD",
+            ZERO_SHA,
+            commit1.id,
+            b"Test Author <test@example.com>",
+            1000000000,
+            0,
+            b"commit: Old commit",
+        )
+        self.repo._write_reflog(
+            b"HEAD",
+            commit1.id,
+            commit2.id,
+            b"Test Author <test@example.com>",
+            2000000000,
+            0,
+            b"commit: Recent commit",
+        )
+
+        # Expire entries older than timestamp 1500000000
+        result = porcelain.reflog_expire(
+            self.repo_path, ref=b"HEAD", expire_time=1500000000
+        )
+        self.assertEqual(1, result[b"HEAD"])
+
+        # Check that only the recent entry remains
+        entries = list(porcelain.reflog(self.repo_path, b"HEAD"))
+        self.assertEqual(1, len(entries))
+        self.assertEqual(commit2.id, entries[0].new_sha)
+
+    def test_reflog_expire_all(self):
+        """Test expiring reflog entries for all refs."""
+        # Create a commit
+        blob = Blob.from_string(b"test content")
+        self.repo.object_store.add_object(blob)
+
+        tree = Tree()
+        tree.add(b"test", 0o100644, blob.id)
+        self.repo.object_store.add_object(tree)
+
+        commit = Commit()
+        commit.tree = tree.id
+        commit.author = b"Test Author <test@example.com>"
+        commit.committer = b"Test Author <test@example.com>"
+        commit.commit_time = 1000000000
+        commit.commit_timezone = 0
+        commit.author_time = 1000000000
+        commit.author_timezone = 0
+        commit.message = b"Test commit"
+        self.repo.object_store.add_object(commit)
+
+        # Write old reflog entries for multiple refs
+        self.repo._write_reflog(
+            b"HEAD",
+            ZERO_SHA,
+            commit.id,
+            b"Test Author <test@example.com>",
+            1000000000,
+            0,
+            b"commit: Test commit",
+        )
+        self.repo._write_reflog(
+            b"refs/heads/master",
+            ZERO_SHA,
+            commit.id,
+            b"Test Author <test@example.com>",
+            1000000000,
+            0,
+            b"commit: Test commit",
+        )
+
+        # Expire all old entries
+        result = porcelain.reflog_expire(
+            self.repo_path, all=True, expire_time=2000000000
+        )
+
+        # Should have expired entries from both refs
+        self.assertIn(b"HEAD", result)
+        self.assertIn(b"refs/heads/master", result)
+        self.assertEqual(1, result[b"HEAD"])
+        self.assertEqual(1, result[b"refs/heads/master"])
+
+    def test_reflog_expire_dry_run(self):
+        """Test dry-run mode for reflog expire."""
+        # Create a commit
+        blob = Blob.from_string(b"test content")
+        self.repo.object_store.add_object(blob)
+
+        tree = Tree()
+        tree.add(b"test", 0o100644, blob.id)
+        self.repo.object_store.add_object(tree)
+
+        commit = Commit()
+        commit.tree = tree.id
+        commit.author = b"Test Author <test@example.com>"
+        commit.committer = b"Test Author <test@example.com>"
+        commit.commit_time = 1000000000
+        commit.commit_timezone = 0
+        commit.author_time = 1000000000
+        commit.author_timezone = 0
+        commit.message = b"Test commit"
+        self.repo.object_store.add_object(commit)
+
+        # Write old reflog entry
+        self.repo._write_reflog(
+            b"HEAD",
+            ZERO_SHA,
+            commit.id,
+            b"Test Author <test@example.com>",
+            1000000000,
+            0,
+            b"commit: Test commit",
+        )
+
+        # Dry run expire
+        result = porcelain.reflog_expire(
+            self.repo_path, ref=b"HEAD", expire_time=2000000000, dry_run=True
+        )
+        self.assertEqual(1, result[b"HEAD"])
+
+        # Entry should still exist
+        entries = list(porcelain.reflog(self.repo_path, b"HEAD"))
+        self.assertEqual(1, len(entries))
+
+    def test_reflog_delete(self):
+        """Test deleting specific reflog entry."""
+        # Create commits
+        blob = Blob.from_string(b"test content")
+        self.repo.object_store.add_object(blob)
+
+        tree = Tree()
+        tree.add(b"test", 0o100644, blob.id)
+        self.repo.object_store.add_object(tree)
+
+        commit1 = Commit()
+        commit1.tree = tree.id
+        commit1.author = b"Test Author <test@example.com>"
+        commit1.committer = b"Test Author <test@example.com>"
+        commit1.commit_time = 1000000000
+        commit1.commit_timezone = 0
+        commit1.author_time = 1000000000
+        commit1.author_timezone = 0
+        commit1.message = b"First commit"
+        self.repo.object_store.add_object(commit1)
+
+        commit2 = Commit()
+        commit2.tree = tree.id
+        commit2.author = b"Test Author <test@example.com>"
+        commit2.committer = b"Test Author <test@example.com>"
+        commit2.commit_time = 2000000000
+        commit2.commit_timezone = 0
+        commit2.author_time = 2000000000
+        commit2.author_timezone = 0
+        commit2.message = b"Second commit"
+        self.repo.object_store.add_object(commit2)
+
+        # Write two reflog entries
+        self.repo._write_reflog(
+            b"HEAD",
+            ZERO_SHA,
+            commit1.id,
+            b"Test Author <test@example.com>",
+            1000000000,
+            0,
+            b"commit: First commit",
+        )
+        self.repo._write_reflog(
+            b"HEAD",
+            commit1.id,
+            commit2.id,
+            b"Test Author <test@example.com>",
+            2000000000,
+            0,
+            b"commit: Second commit",
+        )
+
+        # Delete the most recent entry (index 0)
+        porcelain.reflog_delete(self.repo_path, ref=b"HEAD", index=0)
+
+        # Should only have one entry left
+        entries = list(porcelain.reflog(self.repo_path, b"HEAD"))
+        self.assertEqual(1, len(entries))
+        self.assertEqual(commit1.id, entries[0].new_sha)
+
+    def test_reflog_expire_unreachable(self):
+        """Test expiring unreachable reflog entries."""
+        # Create commits
+        blob = Blob.from_string(b"test content")
+        self.repo.object_store.add_object(blob)
+
+        tree = Tree()
+        tree.add(b"test", 0o100644, blob.id)
+        self.repo.object_store.add_object(tree)
+
+        # Create commit 1 - will be reachable (pointed to by HEAD)
+        commit1 = Commit()
+        commit1.tree = tree.id
+        commit1.author = b"Test Author <test@example.com>"
+        commit1.committer = b"Test Author <test@example.com>"
+        commit1.commit_time = 1000000000
+        commit1.commit_timezone = 0
+        commit1.author_time = 1000000000
+        commit1.author_timezone = 0
+        commit1.message = b"Reachable commit"
+        self.repo.object_store.add_object(commit1)
+
+        # Create commit 2 - will be unreachable
+        commit2 = Commit()
+        commit2.tree = tree.id
+        commit2.author = b"Test Author <test@example.com>"
+        commit2.committer = b"Test Author <test@example.com>"
+        commit2.commit_time = 1500000000
+        commit2.commit_timezone = 0
+        commit2.author_time = 1500000000
+        commit2.author_timezone = 0
+        commit2.message = b"Unreachable commit"
+        self.repo.object_store.add_object(commit2)
+
+        # Create commit 3 - will also be reachable (pointed to by master)
+        commit3 = Commit()
+        commit3.tree = tree.id
+        commit3.author = b"Test Author <test@example.com>"
+        commit3.committer = b"Test Author <test@example.com>"
+        commit3.commit_time = 2000000000
+        commit3.commit_timezone = 0
+        commit3.author_time = 2000000000
+        commit3.author_timezone = 0
+        commit3.message = b"Another reachable commit"
+        self.repo.object_store.add_object(commit3)
+
+        # Set up refs to make commit1 and commit3 reachable
+        # HEAD is a symbolic ref to refs/heads/master by default, so we set master first
+        self.repo.refs[b"refs/heads/master"] = commit1.id
+        # Create another branch pointing to commit3
+        self.repo.refs[b"refs/heads/feature"] = commit3.id
+
+        # Write reflog entries for all three commits
+        self.repo._write_reflog(
+            b"HEAD",
+            ZERO_SHA,
+            commit1.id,
+            b"Test Author <test@example.com>",
+            1000000000,
+            0,
+            b"commit: Reachable commit",
+        )
+        self.repo._write_reflog(
+            b"HEAD",
+            commit1.id,
+            commit2.id,
+            b"Test Author <test@example.com>",
+            1500000000,
+            0,
+            b"commit: Unreachable commit",
+        )
+        self.repo._write_reflog(
+            b"HEAD",
+            commit2.id,
+            commit3.id,
+            b"Test Author <test@example.com>",
+            2000000000,
+            0,
+            b"commit: Another reachable commit",
+        )
+
+        # Expire unreachable entries older than a time that includes commit2
+        # but not the reachable commits
+        result = porcelain.reflog_expire(
+            self.repo_path,
+            ref=b"HEAD",
+            expire_unreachable_time=1600000000,  # After commit2, before commit3
+        )
+
+        # Should have expired only commit2
+        self.assertEqual(1, result[b"HEAD"])
+
+        # Verify the remaining entries
+        entries = list(porcelain.reflog(self.repo_path, b"HEAD"))
+        self.assertEqual(2, len(entries))
+        # commit1 and commit3 should remain (both reachable)
+        self.assertEqual(commit1.id, entries[0].new_sha)
+        self.assertEqual(commit3.id, entries[1].new_sha)
+
 
 class WriteCommitGraphTests(PorcelainTestCase):
     """Tests for the write_commit_graph porcelain function."""
@@ -10041,3 +10357,240 @@ class MergeBaseTests(PorcelainTestCase):
         """Test independent_commits with empty list."""
         result = porcelain.independent_commits(self.repo.path, committishes=[])
         self.assertEqual([], result)
+
+
+class CherryTests(PorcelainTestCase):
+    """Tests for cherry command."""
+
+    def test_cherry_no_changes(self):
+        """Test cherry when head and upstream are the same."""
+        # Create a simple commit
+        commit_sha = self.repo.do_commit(
+            b"Initial commit", committer=b"Test <test@example.com>"
+        )
+
+        # Cherry should return empty when comparing a commit to itself
+        results = porcelain.cherry(
+            self.repo.path, upstream=commit_sha.decode(), head=commit_sha.decode()
+        )
+        self.assertEqual([], results)
+
+    def test_cherry_unique_commits(self):
+        """Test cherry with commits unique to head."""
+        # Create initial commit
+        with open(os.path.join(self.repo_path, "file1.txt"), "w") as f:
+            f.write("base content\n")
+        self.repo.stage(["file1.txt"])
+        base_commit = self.repo.do_commit(
+            b"Base commit", committer=b"Test <test@example.com>"
+        )
+
+        # Create a new commit on head
+        with open(os.path.join(self.repo_path, "file2.txt"), "w") as f:
+            f.write("new content\n")
+        self.repo.stage(["file2.txt"])
+        head_commit = self.repo.do_commit(
+            b"New commit", committer=b"Test <test@example.com>"
+        )
+
+        # Cherry should show the new commit as unique
+        results = porcelain.cherry(
+            self.repo.path, upstream=base_commit.decode(), head=head_commit.decode()
+        )
+        self.assertEqual(1, len(results))
+        status, commit_sha, message = results[0]
+        self.assertEqual("+", status)
+        self.assertEqual(head_commit, commit_sha)
+        self.assertIsNone(message)
+
+    def test_cherry_verbose(self):
+        """Test cherry with verbose flag."""
+        # Create initial commit
+        with open(os.path.join(self.repo_path, "file1.txt"), "w") as f:
+            f.write("base content\n")
+        self.repo.stage(["file1.txt"])
+        base_commit = self.repo.do_commit(
+            b"Base commit", committer=b"Test <test@example.com>"
+        )
+
+        # Create a new commit on head
+        with open(os.path.join(self.repo_path, "file2.txt"), "w") as f:
+            f.write("new content\n")
+        self.repo.stage(["file2.txt"])
+        head_commit = self.repo.do_commit(
+            b"New commit on head", committer=b"Test <test@example.com>"
+        )
+
+        # Cherry with verbose should include commit message
+        results = porcelain.cherry(
+            self.repo.path,
+            upstream=base_commit.decode(),
+            head=head_commit.decode(),
+            verbose=True,
+        )
+        self.assertEqual(1, len(results))
+        status, commit_sha, message = results[0]
+        self.assertEqual("+", status)
+        self.assertEqual(head_commit, commit_sha)
+        self.assertEqual(b"New commit on head", message)
+
+    def test_cherry_equivalent_patches(self):
+        """Test cherry with equivalent patches (cherry-picked commits)."""
+        # Create base commit
+        with open(os.path.join(self.repo_path, "file.txt"), "w") as f:
+            f.write("line1\n")
+        self.repo.stage(["file.txt"])
+        base_commit = self.repo.do_commit(
+            b"Base commit", committer=b"Test <test@example.com>"
+        )
+
+        # Create upstream branch with a change
+        with open(os.path.join(self.repo_path, "file.txt"), "w") as f:
+            f.write("line1\nline2\n")
+        self.repo.stage(["file.txt"])
+        upstream_commit = self.repo.do_commit(
+            b"Add line2", committer=b"Test <test@example.com>"
+        )
+
+        # Reset to base and create same change on head branch
+        self.repo.refs[b"HEAD"] = base_commit
+        self.repo.reset_index()
+        with open(os.path.join(self.repo_path, "file.txt"), "w") as f:
+            f.write("line1\nline2\n")
+        self.repo.stage(["file.txt"])
+        head_commit = self.repo.do_commit(
+            b"Add line2 (different metadata)",
+            committer=b"Different <different@example.com>",
+        )
+
+        # Cherry should mark this as equivalent (-)
+        results = porcelain.cherry(
+            self.repo.path,
+            upstream=upstream_commit.decode(),
+            head=head_commit.decode(),
+        )
+        self.assertEqual(1, len(results))
+        status, commit_sha, _message = results[0]
+        self.assertEqual("-", status)
+        self.assertEqual(head_commit, commit_sha)
+
+
+class GrepTests(PorcelainTestCase):
+    def test_basic_grep(self) -> None:
+        """Test basic pattern matching in files."""
+        # Create some test files
+        with open(os.path.join(self.repo_path, "foo.txt"), "w") as f:
+            f.write("hello world\ngoodbye world\n")
+        with open(os.path.join(self.repo_path, "bar.txt"), "w") as f:
+            f.write("foo bar\nbaz qux\n")
+
+        porcelain.add(self.repo, paths=["foo.txt", "bar.txt"])
+        porcelain.commit(self.repo, message=b"Add test files")
+
+        # Search for "world"
+        outstream = StringIO()
+        porcelain.grep(self.repo, "world", outstream=outstream)
+        output = outstream.getvalue().replace("\r\n", "\n")
+
+        self.assertEqual("foo.txt:hello world\nfoo.txt:goodbye world\n", output)
+
+    def test_grep_with_line_numbers(self) -> None:
+        """Test grep with line numbers."""
+        with open(os.path.join(self.repo_path, "test.txt"), "w") as f:
+            f.write("line one\nline two\nline three\n")
+
+        porcelain.add(self.repo, paths=["test.txt"])
+        porcelain.commit(self.repo, message=b"Add test file")
+
+        outstream = StringIO()
+        porcelain.grep(self.repo, "line", outstream=outstream, line_number=True)
+        output = outstream.getvalue().replace("\r\n", "\n")
+
+        self.assertEqual(
+            "test.txt:1:line one\ntest.txt:2:line two\ntest.txt:3:line three\n",
+            output,
+        )
+
+    def test_grep_case_insensitive(self) -> None:
+        """Test case-insensitive grep."""
+        with open(os.path.join(self.repo_path, "case.txt"), "w") as f:
+            f.write("Hello WORLD\nGoodbye world\n")
+
+        porcelain.add(self.repo, paths=["case.txt"])
+        porcelain.commit(self.repo, message=b"Add case file")
+
+        outstream = StringIO()
+        porcelain.grep(self.repo, "HELLO", outstream=outstream, ignore_case=True)
+        output = outstream.getvalue().replace("\r\n", "\n")
+
+        self.assertEqual("case.txt:Hello WORLD\n", output)
+
+    def test_grep_with_pathspec(self) -> None:
+        """Test grep with pathspec filtering."""
+        os.makedirs(os.path.join(self.repo_path, "subdir"))
+        with open(os.path.join(self.repo_path, "file1.txt"), "w") as f:
+            f.write("pattern match\n")
+        with open(os.path.join(self.repo_path, "subdir", "file2.txt"), "w") as f:
+            f.write("pattern match\n")
+
+        porcelain.add(self.repo, paths=["file1.txt", "subdir/file2.txt"])
+        porcelain.commit(self.repo, message=b"Add files")
+
+        # Search only in subdir
+        outstream = StringIO()
+        porcelain.grep(self.repo, "pattern", outstream=outstream, pathspecs=["subdir/"])
+        output = outstream.getvalue().replace("\r\n", "\n")
+
+        self.assertEqual("subdir/file2.txt:pattern match\n", output)
+
+    def test_grep_no_matches(self) -> None:
+        """Test grep with no matches."""
+        with open(os.path.join(self.repo_path, "empty.txt"), "w") as f:
+            f.write("nothing to see here\n")
+
+        porcelain.add(self.repo, paths=["empty.txt"])
+        porcelain.commit(self.repo, message=b"Add empty file")
+
+        outstream = StringIO()
+        porcelain.grep(self.repo, "nonexistent", outstream=outstream)
+        output = outstream.getvalue()
+
+        self.assertEqual("", output)
+
+    def test_grep_regex_pattern(self) -> None:
+        """Test grep with regex patterns."""
+        with open(os.path.join(self.repo_path, "regex.txt"), "w") as f:
+            f.write("test123\ntest456\nnotest\n")
+
+        porcelain.add(self.repo, paths=["regex.txt"])
+        porcelain.commit(self.repo, message=b"Add regex file")
+
+        # Search for "test" followed by digits
+        outstream = StringIO()
+        porcelain.grep(self.repo, r"test\d+", outstream=outstream)
+        output = outstream.getvalue().replace("\r\n", "\n")
+
+        self.assertEqual("regex.txt:test123\nregex.txt:test456\n", output)
+
+    def test_grep_invalid_pattern(self) -> None:
+        """Test grep with invalid regex pattern."""
+        with open(os.path.join(self.repo_path, "test.txt"), "w") as f:
+            f.write("test\n")
+
+        porcelain.add(self.repo, paths=["test.txt"])
+        porcelain.commit(self.repo, message=b"Add test file")
+
+        outstream = StringIO()
+        with self.assertRaises(ValueError):
+            porcelain.grep(self.repo, "[invalid", outstream=outstream)
+
+    def test_grep_no_head(self) -> None:
+        """Test grep fails when there's no HEAD commit."""
+        # Create a fresh repo with no commits
+        empty_repo_path = os.path.join(self.test_dir, "empty_repo")
+        empty_repo = Repo.init(empty_repo_path, mkdir=True)
+        self.addCleanup(empty_repo.close)
+
+        outstream = StringIO()
+        with self.assertRaises(ValueError):
+            porcelain.grep(empty_repo, "pattern", outstream=outstream)

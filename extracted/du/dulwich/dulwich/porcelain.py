@@ -39,10 +39,12 @@ Currently implemented:
  * fetch
  * filter_branch
  * for_each_ref
+ * grep
  * init
  * ls_files
  * ls_remote
  * ls_tree
+ * mailsplit
  * merge
  * merge_tree
  * mv/move
@@ -84,6 +86,7 @@ import fnmatch
 import logging
 import os
 import posixpath
+import re
 import stat
 import sys
 import time
@@ -191,6 +194,10 @@ from .refs import (
     Ref,
     SymrefLoop,
     _import_remote_refs,
+    filter_ref_prefix,
+    local_branch_name,
+    local_tag_name,
+    shorten_ref_name,
 )
 from .repo import BaseRepo, Repo, get_user_identity
 from .server import (
@@ -2975,6 +2982,7 @@ def shortlog(
 
     Returns:
         A list of dictionaries, each containing:
+
             - "author": the author's name as a string
             - "messages": all commit messages concatenated into a single string
     """
@@ -3191,6 +3199,128 @@ def get_untracked_paths(
     yield from ignored_dirs
 
 
+def grep(
+    repo: RepoPath,
+    pattern: Union[str, bytes],
+    *,
+    outstream: TextIO = sys.stdout,
+    rev: Optional[Union[str, bytes]] = None,
+    pathspecs: Optional[Sequence[Union[str, bytes]]] = None,
+    ignore_case: bool = False,
+    line_number: bool = False,
+    max_depth: Optional[int] = None,
+    respect_ignores: bool = True,
+) -> None:
+    """Search for a pattern in tracked files.
+
+    Args:
+      repo: Path to repository or Repo object
+      pattern: Regular expression pattern to search for
+      outstream: Stream to write results to
+      rev: Revision to search in (defaults to HEAD)
+      pathspecs: Optional list of path patterns to limit search
+      ignore_case: Whether to perform case-insensitive matching
+      line_number: Whether to output line numbers
+      max_depth: Maximum directory depth to search
+      respect_ignores: Whether to respect .gitignore patterns
+    """
+    from .object_store import iter_tree_contents
+
+    # Compile the pattern
+    flags = re.IGNORECASE if ignore_case else 0
+    try:
+        if isinstance(pattern, bytes):
+            compiled_pattern = re.compile(pattern, flags)
+        else:
+            compiled_pattern = re.compile(pattern.encode("utf-8"), flags)
+    except re.error as e:
+        raise ValueError(f"Invalid regular expression: {e}") from e
+
+    with open_repo_closing(repo) as r:
+        # Get the tree to search
+        if rev is None:
+            try:
+                commit = r[b"HEAD"]
+                assert isinstance(commit, Commit)
+            except KeyError as e:
+                raise ValueError("No HEAD commit found") from e
+        else:
+            rev_bytes = rev if isinstance(rev, bytes) else rev.encode("utf-8")
+            commit_obj = parse_commit(r, rev_bytes)
+            if commit_obj is None:
+                raise ValueError(f"Invalid revision: {rev}")
+            commit = commit_obj
+
+        tree = r[commit.tree]
+        assert isinstance(tree, Tree)
+
+        # Set up ignore filter if requested
+        ignore_manager = None
+        if respect_ignores:
+            ignore_manager = IgnoreFilterManager.from_repo(r)
+
+        # Convert pathspecs to bytes
+        pathspecs_bytes: Optional[list[bytes]] = None
+        if pathspecs:
+            pathspecs_bytes = [
+                p if isinstance(p, bytes) else p.encode("utf-8") for p in pathspecs
+            ]
+
+        # Iterate through all files in the tree
+        for entry in iter_tree_contents(r.object_store, tree.id):
+            path, mode, sha = entry.path, entry.mode, entry.sha
+            assert path is not None
+            assert mode is not None
+            assert sha is not None
+
+            # Skip directories
+            if stat.S_ISDIR(mode):
+                continue
+
+            # Check max depth
+            if max_depth is not None:
+                depth = path.count(b"/")
+                if depth > max_depth:
+                    continue
+
+            # Check pathspecs
+            if pathspecs_bytes:
+                matches_pathspec = False
+                for pathspec in pathspecs_bytes:
+                    # Simple prefix matching (could be enhanced with full pathspec support)
+                    if path.startswith(pathspec) or fnmatch.fnmatch(
+                        path.decode("utf-8", errors="replace"),
+                        pathspec.decode("utf-8", errors="replace"),
+                    ):
+                        matches_pathspec = True
+                        break
+                if not matches_pathspec:
+                    continue
+
+            # Check ignore patterns
+            if ignore_manager:
+                path_str = path.decode("utf-8", errors="replace")
+                if ignore_manager.is_ignored(path_str) is True:
+                    continue
+
+            # Get the blob content
+            blob = r[sha]
+            assert isinstance(blob, Blob)
+
+            # Search for pattern in the blob
+            content = blob.data
+            lines = content.split(b"\n")
+
+            for line_num, line in enumerate(lines, 1):
+                if compiled_pattern.search(line):
+                    path_str = path.decode("utf-8", errors="replace")
+                    line_str = line.decode("utf-8", errors="replace")
+                    if line_number:
+                        outstream.write(f"{path_str}:{line_num}:{line_str}\n")
+                    else:
+                        outstream.write(f"{path_str}:{line_str}\n")
+
+
 def get_tree_changes(repo: RepoPath) -> dict[str, list[Union[str, bytes]]]:
     """Return add/delete/modify changes to tree by comparing index to HEAD.
 
@@ -3351,13 +3481,13 @@ def receive_pack(
 def _make_branch_ref(name: Union[str, bytes]) -> Ref:
     if isinstance(name, str):
         name = name.encode(DEFAULT_ENCODING)
-    return LOCAL_BRANCH_PREFIX + name
+    return local_branch_name(name)
 
 
 def _make_tag_ref(name: Union[str, bytes]) -> Ref:
     if isinstance(name, str):
         name = name.encode(DEFAULT_ENCODING)
-    return LOCAL_TAG_PREFIX + name
+    return local_tag_name(name)
 
 
 def branch_delete(
@@ -3403,10 +3533,11 @@ def branch_create(
             if isinstance(objectish, str)
             else objectish
         )
+
         if b"refs/remotes/" + objectish_bytes in r.refs:
             objectish = b"refs/remotes/" + objectish_bytes
-        elif b"refs/heads/" + objectish_bytes in r.refs:
-            objectish = b"refs/heads/" + objectish_bytes
+        elif local_branch_name(objectish_bytes) in r.refs:
+            objectish = local_branch_name(objectish_bytes)
 
         object = parse_object(r, objectish)
         refname = _make_branch_ref(name)
@@ -3438,12 +3569,13 @@ def branch_create(
                 if isinstance(original_objectish, str)
                 else original_objectish
             )
+
             if objectish_bytes in r.refs:
                 objectish_ref = objectish_bytes
             elif b"refs/remotes/" + objectish_bytes in r.refs:
                 objectish_ref = b"refs/remotes/" + objectish_bytes
-            elif b"refs/heads/" + objectish_bytes in r.refs:
-                objectish_ref = b"refs/heads/" + objectish_bytes
+            elif local_branch_name(objectish_bytes) in r.refs:
+                objectish_ref = local_branch_name(objectish_bytes)
         else:
             # HEAD might point to a remote-tracking branch
             head_ref = r.refs.follow(b"HEAD")[0][1]
@@ -3463,7 +3595,7 @@ def branch_create(
                 parts = objectish_ref[len(b"refs/remotes/") :].split(b"/", 1)
                 if len(parts) == 2:
                     remote_name = parts[0]
-                    remote_branch = b"refs/heads/" + parts[1]
+                    remote_branch = local_branch_name(parts[1])
 
                     # Set up tracking
                     repo_config = r.get_config()
@@ -3526,7 +3658,7 @@ def branch_list(repo: RepoPath) -> list[bytes]:
         elif sort_key in ("committerdate", "authordate"):
             # Sort by date
             def get_commit_date(branch_name: bytes) -> int:
-                ref = LOCAL_BRANCH_PREFIX + branch_name
+                ref = local_branch_name(branch_name)
                 sha = r.refs[ref]
                 commit = r.object_store[sha]
                 assert isinstance(commit, Commit)
@@ -3614,9 +3746,10 @@ def _get_branch_merge_status(repo: RepoPath) -> Iterator[tuple[bytes, bool]]:
         repo: Path to the repository
 
     Yields:
-        Tuple of (branch_name, is_merged) where:
-        - branch_name: Branch name without refs/heads/ prefix
-        - is_merged: True if branch is merged into HEAD, False otherwise
+        Tuple of (``branch_name``, ``is_merged``) where:
+
+        - ``branch_name``: Branch name without refs/heads/ prefix
+        - ``is_merged``: True if branch is merged into HEAD, False otherwise
     """
     with open_repo_closing(repo) as r:
         current_sha = r.refs[b"HEAD"]
@@ -3893,6 +4026,388 @@ def for_each_ref(
     ]
 
     return ret
+
+
+def show_ref(
+    repo: Union[Repo, str] = ".",
+    patterns: Optional[list[Union[str, bytes]]] = None,
+    head: bool = False,
+    branches: bool = False,
+    tags: bool = False,
+    dereference: bool = False,
+    verify: bool = False,
+) -> list[tuple[bytes, bytes]]:
+    """List references in a local repository.
+
+    Args:
+      repo: Path to the repository
+      patterns: Optional list of patterns to filter refs (matched from the end)
+      head: Show the HEAD reference
+      branches: Limit to local branches (refs/heads/)
+      tags: Limit to local tags (refs/tags/)
+      dereference: Dereference tags into object IDs
+      verify: Enable stricter reference checking (exact path match)
+    Returns: List of tuples with (sha, ref_name) or (sha, ref_name^{}) for dereferenced tags
+    """
+    # Convert string patterns to bytes
+    byte_patterns: Optional[list[bytes]] = None
+    if patterns:
+        byte_patterns = [os.fsencode(p) if isinstance(p, str) else p for p in patterns]
+
+    with open_repo_closing(repo) as r:
+        refs = r.get_refs()
+
+        # Filter by branches/tags if specified
+        if branches or tags:
+            prefixes = []
+            if branches:
+                prefixes.append(LOCAL_BRANCH_PREFIX)
+            if tags:
+                prefixes.append(LOCAL_TAG_PREFIX)
+            filtered_refs = filter_ref_prefix(refs, prefixes)
+        else:
+            # By default, show tags, heads, and remote refs (but not HEAD)
+            filtered_refs = filter_ref_prefix(refs, [b"refs/"])
+
+        # Add HEAD if requested
+        if head and b"HEAD" in refs:
+            filtered_refs[b"HEAD"] = refs[b"HEAD"]
+
+        # Filter by patterns if specified
+        if byte_patterns:
+            matching_refs: dict[bytes, bytes] = {}
+            for ref, sha in filtered_refs.items():
+                for pattern in byte_patterns:
+                    if verify:
+                        # Verify mode requires exact match
+                        if ref == pattern:
+                            matching_refs[ref] = sha
+                            break
+                    else:
+                        # Pattern matching from the end of the full name
+                        # Only complete parts are matched
+                        # E.g., "master" matches "refs/heads/master" but not "refs/heads/mymaster"
+                        pattern_parts = pattern.split(b"/")
+                        ref_parts = ref.split(b"/")
+
+                        # Try to match from the end
+                        if len(pattern_parts) <= len(ref_parts):
+                            # Check if the end of ref matches the pattern
+                            matches = True
+                            for i in range(len(pattern_parts)):
+                                if (
+                                    ref_parts[-(len(pattern_parts) - i)]
+                                    != pattern_parts[i]
+                                ):
+                                    matches = False
+                                    break
+                            if matches:
+                                matching_refs[ref] = sha
+                                break
+            filtered_refs = matching_refs
+
+        # Sort by ref name
+        sorted_refs = sorted(filtered_refs.items(), key=lambda x: x[0])
+
+        # Build result list
+        result: list[tuple[bytes, bytes]] = []
+        for ref, sha in sorted_refs:
+            result.append((sha, ref))
+
+            # Dereference tags if requested
+            if dereference and ref.startswith(LOCAL_TAG_PREFIX):
+                try:
+                    obj = r.get_object(sha)
+                    # Peel tag objects to get the underlying commit/object
+                    from .objects import Tag
+
+                    while obj.type_name == b"tag":
+                        assert isinstance(obj, Tag)
+                        _obj_class, sha = obj.object
+                        obj = r.get_object(sha)
+                    result.append((sha, ref + b"^{}"))
+                except KeyError:
+                    # Object not found, skip dereferencing
+                    pass
+
+    return result
+
+
+def show_branch(
+    repo: Union[Repo, str] = ".",
+    branches: Optional[list[Union[str, bytes]]] = None,
+    all_branches: bool = False,
+    remotes: bool = False,
+    current: bool = False,
+    topo_order: bool = False,
+    more: Optional[int] = None,
+    list_branches: bool = False,
+    independent_branches: bool = False,
+    merge_base: bool = False,
+) -> list[str]:
+    """Display branches and their commits.
+
+    Args:
+      repo: Path to the repository
+      branches: List of specific branches to show (default: all local branches)
+      all_branches: Show both local and remote branches
+      remotes: Show only remote branches
+      current: Include current branch if not specified
+      topo_order: Show in topological order instead of chronological
+      more: Show N more commits beyond common ancestor (negative to show only headers)
+      list_branches: Synonym for more=-1 (show only branch headers)
+      independent_branches: Show only branches not reachable from others
+      merge_base: Show merge bases instead of commit list
+
+    Returns:
+      List of output lines
+    """
+    from .graph import find_octopus_base, independent
+
+    output_lines: list[str] = []
+
+    with open_repo_closing(repo) as r:
+        refs = r.get_refs()
+
+        # Determine which branches to show
+        branch_refs: dict[bytes, bytes] = {}
+
+        if branches:
+            # Specific branches requested
+            for branch in branches:
+                branch_bytes = (
+                    os.fsencode(branch) if isinstance(branch, str) else branch
+                )
+                # Try as full ref name first
+                if branch_bytes in refs:
+                    branch_refs[branch_bytes] = refs[branch_bytes]
+                else:
+                    # Try as branch name
+                    branch_ref = local_branch_name(branch_bytes)
+                    if branch_ref in refs:
+                        branch_refs[branch_ref] = refs[branch_ref]
+                    # Try as remote branch
+                    elif LOCAL_REMOTE_PREFIX + branch_bytes in refs:
+                        branch_refs[LOCAL_REMOTE_PREFIX + branch_bytes] = refs[
+                            LOCAL_REMOTE_PREFIX + branch_bytes
+                        ]
+        else:
+            # Default behavior: show local branches
+            if all_branches:
+                # Show both local and remote branches
+                branch_refs = filter_ref_prefix(
+                    refs, [LOCAL_BRANCH_PREFIX, LOCAL_REMOTE_PREFIX]
+                )
+            elif remotes:
+                # Show only remote branches
+                branch_refs = filter_ref_prefix(refs, [LOCAL_REMOTE_PREFIX])
+            else:
+                # Show only local branches
+                branch_refs = filter_ref_prefix(refs, [LOCAL_BRANCH_PREFIX])
+
+        # Add current branch if requested and not already included
+        if current:
+            try:
+                head_refs, _ = r.refs.follow(b"HEAD")
+                if head_refs:
+                    head_ref = head_refs[0]
+                    if head_ref not in branch_refs and head_ref in refs:
+                        branch_refs[head_ref] = refs[head_ref]
+            except (KeyError, TypeError):
+                # HEAD doesn't point to a branch or doesn't exist
+                pass
+
+        if not branch_refs:
+            return output_lines
+
+        # Sort branches for consistent output
+        sorted_branches = sorted(branch_refs.items(), key=lambda x: x[0])
+        branch_sha_list = [sha for _, sha in sorted_branches]
+
+        # Handle --independent flag
+        if independent_branches:
+            independent_shas = independent(r, branch_sha_list)
+            for ref_name, sha in sorted_branches:
+                if sha in independent_shas:
+                    ref_str = os.fsdecode(shorten_ref_name(ref_name))
+                    output_lines.append(ref_str)
+            return output_lines
+
+        # Handle --merge-base flag
+        if merge_base:
+            if len(branch_sha_list) < 2:
+                # Need at least 2 branches for merge base
+                return output_lines
+
+            merge_bases = find_octopus_base(r, branch_sha_list)
+            for sha in merge_bases:
+                output_lines.append(sha.decode("ascii"))
+            return output_lines
+
+        # Get current branch for marking
+        current_branch: Optional[bytes] = None
+        try:
+            head_refs, _ = r.refs.follow(b"HEAD")
+            if head_refs:
+                current_branch = head_refs[0]
+        except (KeyError, TypeError):
+            pass
+
+        # Collect commit information for each branch
+        branch_commits: list[tuple[bytes, str]] = []  # (sha, message)
+        for ref_name, sha in sorted_branches:
+            try:
+                commit = r[sha]
+                if hasattr(commit, "message"):
+                    message = commit.message.decode("utf-8", errors="replace").split(
+                        "\n"
+                    )[0]
+                else:
+                    message = ""
+                branch_commits.append((sha, message))
+            except KeyError:
+                branch_commits.append((sha, ""))
+
+        # Handle --list flag (show only branch headers)
+        if list_branches or (more is not None and more < 0):
+            # Just show the branch headers
+            for i, (ref_name, sha) in enumerate(sorted_branches):
+                is_current = ref_name == current_branch
+                marker = "*" if is_current else "!"
+                # Create spacing for alignment
+                prefix = " " * i + marker + " " * (len(sorted_branches) - i - 1)
+                ref_str = os.fsdecode(shorten_ref_name(ref_name))
+                _, message = branch_commits[i]
+                output_lines.append(f"{prefix}[{ref_str}] {message}")
+            return output_lines
+
+        # Build commit history for visualization
+        # Collect all commits reachable from any branch
+        all_commits: dict[
+            bytes, tuple[int, list[bytes], str]
+        ] = {}  # sha -> (timestamp, parents, message)
+
+        def collect_commits(sha: bytes, branch_idx: int, visited: set[bytes]) -> None:
+            """Recursively collect commits."""
+            if sha in visited:
+                return
+            visited.add(sha)
+
+            try:
+                commit = r[sha]
+                if not hasattr(commit, "commit_time"):
+                    return
+
+                timestamp = commit.commit_time
+                parents = commit.parents if hasattr(commit, "parents") else []
+                message = (
+                    commit.message.decode("utf-8", errors="replace").split("\n")[0]
+                    if hasattr(commit, "message")
+                    else ""
+                )
+
+                if sha not in all_commits:
+                    all_commits[sha] = (timestamp, parents, message)
+
+                # Recurse to parents
+                for parent in parents:
+                    collect_commits(parent, branch_idx, visited)
+            except KeyError:
+                # Commit not found, stop traversal
+                pass
+
+        # Collect commits from all branches
+        for i, (_, sha) in enumerate(sorted_branches):
+            collect_commits(sha, i, set())
+
+        # Find common ancestor
+        common_ancestor_sha = None
+        if len(branch_sha_list) >= 2:
+            try:
+                merge_bases = find_octopus_base(r, branch_sha_list)
+                if merge_bases:
+                    common_ancestor_sha = merge_bases[0]
+            except (KeyError, IndexError):
+                pass
+
+        # Sort commits (chronological by default, or topological if requested)
+        if topo_order:
+            # Topological sort is more complex, for now use chronological
+            # TODO: Implement proper topological ordering
+            sorted_commits = sorted(all_commits.items(), key=lambda x: -x[1][0])
+        else:
+            # Reverse chronological order (newest first)
+            sorted_commits = sorted(all_commits.items(), key=lambda x: -x[1][0])
+
+        # Determine how many commits to show
+        if more is not None:
+            # Find index of common ancestor
+            if common_ancestor_sha and common_ancestor_sha in all_commits:
+                ancestor_idx = next(
+                    (
+                        i
+                        for i, (sha, _) in enumerate(sorted_commits)
+                        if sha == common_ancestor_sha
+                    ),
+                    None,
+                )
+                if ancestor_idx is not None:
+                    # Show commits up to ancestor + more
+                    sorted_commits = sorted_commits[: ancestor_idx + 1 + more]
+
+        # Determine which branches contain which commits
+        branch_contains: list[set[bytes]] = []
+        for ref_name, sha in sorted_branches:
+            reachable = set()
+
+            def mark_reachable(commit_sha: bytes) -> None:
+                if commit_sha in reachable:
+                    return
+                reachable.add(commit_sha)
+                if commit_sha in all_commits:
+                    _, parents, _ = all_commits[commit_sha]
+                    for parent in parents:
+                        mark_reachable(parent)
+
+            mark_reachable(sha)
+            branch_contains.append(reachable)
+
+        # Output branch headers
+        for i, (ref_name, sha) in enumerate(sorted_branches):
+            is_current = ref_name == current_branch
+            marker = "*" if is_current else "!"
+            # Create spacing for alignment
+            prefix = " " * i + marker + " " * (len(sorted_branches) - i - 1)
+            ref_str = os.fsdecode(shorten_ref_name(ref_name))
+            _, message = branch_commits[i]
+            output_lines.append(f"{prefix}[{ref_str}] {message}")
+
+        # Output separator
+        output_lines.append("-" * (len(sorted_branches) + 2))
+
+        # Output commits
+        for commit_sha, (_, _, message) in sorted_commits:
+            # Build marker string
+            markers = []
+            for i, (ref_name, branch_sha) in enumerate(sorted_branches):
+                if commit_sha == branch_sha:
+                    # This is the tip of the branch
+                    markers.append("*")
+                elif commit_sha in branch_contains[i]:
+                    # This commit is in the branch
+                    markers.append("+")
+                else:
+                    # This commit is not in the branch
+                    markers.append(" ")
+
+            marker_str = "".join(markers)
+            output_lines.append(f"{marker_str} [{message}]")
+
+            # Limit output to 26 branches (git show-branch limitation)
+            if len(sorted_branches) > 26:
+                break
+
+    return output_lines
 
 
 def ls_remote(
@@ -4432,7 +4947,7 @@ def checkout(
             update_head(r, new_branch)
 
             # Set up tracking if creating from a remote branch
-            from .refs import LOCAL_REMOTE_PREFIX, parse_remote_ref
+            from .refs import LOCAL_REMOTE_PREFIX, local_branch_name, parse_remote_ref
 
             if isinstance(original_target, bytes) and target_bytes.startswith(
                 LOCAL_REMOTE_PREFIX
@@ -4441,7 +4956,7 @@ def checkout(
                     remote_name, branch_name = parse_remote_ref(target_bytes)
                     # Set tracking to refs/heads/<branch> on the remote
                     set_branch_tracking(
-                        r, new_branch, remote_name, b"refs/heads/" + branch_name
+                        r, new_branch, remote_name, local_branch_name(branch_name)
                     )
                 except ValueError:
                     # Invalid remote ref format, skip tracking setup
@@ -4947,7 +5462,7 @@ def _do_merge(
       if no_commit=True or there were conflicts
     """
     from .graph import find_merge_base
-    from .merge import three_way_merge
+    from .merge import recursive_merge
 
     # Get HEAD commit
     try:
@@ -4966,7 +5481,7 @@ def _do_merge(
     if not merge_bases:
         raise Error("No common ancestor found")
 
-    # Use the first merge base
+    # Use the first merge base for fast-forward checks
     base_commit_id = merge_bases[0]
 
     # Check if we're trying to merge the same commit
@@ -4989,13 +5504,11 @@ def _do_merge(
         # Already up to date
         return (None, [])
 
-    # Perform three-way merge
-    base_commit = r[base_commit_id]
-    assert isinstance(base_commit, Commit), "Expected a Commit object"
+    # Perform recursive merge (handles multiple merge bases automatically)
     gitattributes = r.get_gitattributes()
     config = r.get_config()
-    merged_tree, conflicts = three_way_merge(
-        r.object_store, base_commit, head_commit, merge_commit, gitattributes, config
+    merged_tree, conflicts = recursive_merge(
+        r.object_store, merge_bases, head_commit, merge_commit, gitattributes, config
     )
 
     # Add merged tree to object store
@@ -5045,20 +5558,155 @@ def _do_merge(
     return (merge_commit_obj.id, [])
 
 
-def merge(
-    repo: Union[str, os.PathLike[str], Repo],
-    committish: Union[str, bytes, Commit, Tag],
+def _do_octopus_merge(
+    r: Repo,
+    merge_commit_ids: list[bytes],
     no_commit: bool = False,
     no_ff: bool = False,
     message: Optional[bytes] = None,
     author: Optional[bytes] = None,
     committer: Optional[bytes] = None,
 ) -> tuple[Optional[bytes], list[bytes]]:
-    """Merge a commit into the current branch.
+    """Internal octopus merge implementation that operates on an open repository.
+
+    Args:
+      r: Open repository object
+      merge_commit_ids: List of commit SHAs to merge
+      no_commit: If True, do not create a merge commit
+      no_ff: If True, force creation of a merge commit (ignored for octopus)
+      message: Optional merge commit message
+      author: Optional author for merge commit
+      committer: Optional committer for merge commit
+
+    Returns:
+      Tuple of (merge_commit_sha, conflicts) where merge_commit_sha is None
+      if no_commit=True or there were conflicts
+    """
+    from .graph import find_octopus_base
+    from .merge import octopus_merge
+
+    # Get HEAD commit
+    try:
+        head_commit_id = r.refs[b"HEAD"]
+    except KeyError:
+        raise Error("No HEAD reference found")
+
+    head_commit = r[head_commit_id]
+    assert isinstance(head_commit, Commit), "Expected a Commit object"
+
+    # Get all commits to merge
+    other_commits = []
+    for merge_commit_id in merge_commit_ids:
+        merge_commit = r[merge_commit_id]
+        assert isinstance(merge_commit, Commit), "Expected a Commit object"
+
+        # Check if we're trying to merge the same commit as HEAD
+        if head_commit_id == merge_commit_id:
+            # Skip this commit, it's already merged
+            continue
+
+        other_commits.append(merge_commit)
+
+    # If no commits to merge after filtering, we're already up to date
+    if not other_commits:
+        return (None, [])
+
+    # If only one commit to merge, use regular merge
+    if len(other_commits) == 1:
+        return _do_merge(
+            r, other_commits[0].id, no_commit, no_ff, message, author, committer
+        )
+
+    # Find the octopus merge base
+    all_commit_ids = [head_commit_id] + [c.id for c in other_commits]
+    merge_bases = find_octopus_base(r, all_commit_ids)
+
+    if not merge_bases:
+        raise Error("No common ancestor found")
+
+    # Check if this is a fast-forward (HEAD is the merge base)
+    # For octopus merges, fast-forward doesn't really apply, so we always create a merge commit
+
+    # Perform octopus merge
+    gitattributes = r.get_gitattributes()
+    config = r.get_config()
+    merged_tree, conflicts = octopus_merge(
+        r.object_store, merge_bases, head_commit, other_commits, gitattributes, config
+    )
+
+    # Add merged tree to object store
+    r.object_store.add_object(merged_tree)
+
+    # Update index and working directory
+    changes = tree_changes(r.object_store, head_commit.tree, merged_tree.id)
+    update_working_tree(r, head_commit.tree, merged_tree.id, change_iterator=changes)
+
+    if conflicts:
+        # Don't create a commit if there are conflicts
+        # Octopus merge refuses to proceed with conflicts
+        return (None, conflicts)
+
+    if no_commit:
+        # Don't create a commit if no_commit is True
+        return (None, [])
+
+    # Create merge commit with multiple parents
+    merge_commit_obj = Commit()
+    merge_commit_obj.tree = merged_tree.id
+    merge_commit_obj.parents = [head_commit_id] + [c.id for c in other_commits]
+
+    # Set author/committer
+    if author is None:
+        author = get_user_identity(r.get_config_stack())
+    if committer is None:
+        committer = author
+
+    merge_commit_obj.author = author
+    merge_commit_obj.committer = committer
+
+    # Set timestamps
+    timestamp = int(time.time())
+    timezone = 0  # UTC
+    merge_commit_obj.author_time = timestamp
+    merge_commit_obj.author_timezone = timezone
+    merge_commit_obj.commit_time = timestamp
+    merge_commit_obj.commit_timezone = timezone
+
+    # Set commit message
+    if message is None:
+        # Generate default message for octopus merge
+        branch_names = []
+        for commit_id in merge_commit_ids:
+            branch_names.append(commit_id.decode()[:7])
+        message = f"Merge commits {', '.join(branch_names)}\n".encode()
+    merge_commit_obj.message = message.encode() if isinstance(message, str) else message
+
+    # Add commit to object store
+    r.object_store.add_object(merge_commit_obj)
+
+    # Update HEAD
+    r.refs[b"HEAD"] = merge_commit_obj.id
+
+    return (merge_commit_obj.id, [])
+
+
+def merge(
+    repo: Union[str, os.PathLike[str], Repo],
+    committish: Union[
+        str, bytes, Commit, Tag, Sequence[Union[str, bytes, Commit, Tag]]
+    ],
+    no_commit: bool = False,
+    no_ff: bool = False,
+    message: Optional[bytes] = None,
+    author: Optional[bytes] = None,
+    committer: Optional[bytes] = None,
+) -> tuple[Optional[bytes], list[bytes]]:
+    """Merge one or more commits into the current branch.
 
     Args:
       repo: Repository to merge into
-      committish: Commit to merge
+      committish: Commit(s) to merge. Can be a single commit or a sequence of commits.
+                  When merging more than two heads, the octopus merge strategy is used.
       no_commit: If True, do not create a merge commit
       no_ff: If True, force creation of a merge commit
       message: Optional merge commit message
@@ -5073,17 +5721,42 @@ def merge(
       Error: If there is no HEAD reference or commit cannot be found
     """
     with open_repo_closing(repo) as r:
-        # Parse the commit to merge
-        try:
-            merge_commit_id = parse_commit(r, committish).id
-        except KeyError:
-            raise Error(
-                f"Cannot find commit '{committish.decode() if isinstance(committish, bytes) else committish}'"
-            )
+        # Handle both single commit and multiple commits
+        if isinstance(committish, (list, tuple)):
+            # Multiple commits - use octopus merge
+            merge_commit_ids = []
+            for c in committish:
+                try:
+                    merge_commit_ids.append(parse_commit(r, c).id)
+                except KeyError:
+                    raise Error(
+                        f"Cannot find commit '{c.decode() if isinstance(c, bytes) else c}'"
+                    )
 
-        result = _do_merge(
-            r, merge_commit_id, no_commit, no_ff, message, author, committer
-        )
+            if len(merge_commit_ids) == 1:
+                # Only one commit, use regular merge
+                result = _do_merge(
+                    r, merge_commit_ids[0], no_commit, no_ff, message, author, committer
+                )
+            else:
+                # Multiple commits, use octopus merge
+                result = _do_octopus_merge(
+                    r, merge_commit_ids, no_commit, no_ff, message, author, committer
+                )
+        else:
+            # Single commit - use regular merge
+            # Type narrowing: committish is not a sequence in this branch
+            single_committish = cast(Union[str, bytes, Commit, Tag], committish)
+            try:
+                merge_commit_id = parse_commit(r, single_committish).id
+            except KeyError:
+                raise Error(
+                    f"Cannot find commit '{single_committish.decode() if isinstance(single_committish, bytes) else single_committish}'"
+                )
+
+            result = _do_merge(
+                r, merge_commit_id, no_commit, no_ff, message, author, committer
+            )
 
         # Trigger auto GC if needed
         from .gc import maybe_auto_gc
@@ -5161,6 +5834,144 @@ def merge_tree(
         r.object_store.add_object(merged_tree)
 
         return merged_tree.id, conflicts
+
+
+def cherry(
+    repo: Union[str, os.PathLike[str], Repo],
+    upstream: Optional[Union[str, bytes]] = None,
+    head: Optional[Union[str, bytes]] = None,
+    limit: Optional[Union[str, bytes]] = None,
+    verbose: bool = False,
+) -> list[tuple[str, bytes, Optional[bytes]]]:
+    """Find commits not merged upstream.
+
+    Args:
+        repo: Repository path or object
+        upstream: Upstream branch (default: tracking branch or @{upstream})
+        head: Head branch (default: HEAD)
+        limit: Limit commits to those after this ref
+        verbose: Include commit messages in output
+
+    Returns:
+        List of tuples (status, commit_sha, message) where status is '+' or '-'
+        '+' means commit is not in upstream, '-' means equivalent patch exists upstream
+        message is None unless verbose=True
+    """
+    from .patch import commit_patch_id
+
+    with open_repo_closing(repo) as r:
+        # Resolve upstream
+        if upstream is None:
+            # Try to find tracking branch
+            upstream_found = False
+            head_refs, _ = r.refs.follow(b"HEAD")
+            if head_refs:
+                head_ref = head_refs[0]
+                if head_ref.startswith(b"refs/heads/"):
+                    config = r.get_config()
+                    branch_name = head_ref[len(b"refs/heads/") :]
+
+                    try:
+                        upstream_ref = config.get((b"branch", branch_name), b"merge")
+                    except KeyError:
+                        upstream_ref = None
+
+                    if upstream_ref:
+                        try:
+                            remote_name = config.get(
+                                (b"branch", branch_name), b"remote"
+                            )
+                        except KeyError:
+                            remote_name = None
+
+                        if remote_name:
+                            # Build the tracking branch ref
+                            upstream_refname = (
+                                b"refs/remotes/"
+                                + remote_name
+                                + b"/"
+                                + upstream_ref.split(b"/")[-1]
+                            )
+                            if upstream_refname in r.refs:
+                                upstream = upstream_refname
+                                upstream_found = True
+
+            if not upstream_found:
+                # Default to HEAD^ if no tracking branch found
+                head_commit = r[b"HEAD"]
+                if isinstance(head_commit, Commit) and head_commit.parents:
+                    upstream = head_commit.parents[0]
+                else:
+                    raise ValueError("Could not determine upstream branch")
+
+        # Resolve head
+        if head is None:
+            head = b"HEAD"
+
+        # Convert strings to bytes
+        if isinstance(upstream, str):
+            upstream = upstream.encode("utf-8")
+        if isinstance(head, str):
+            head = head.encode("utf-8")
+        if limit is not None and isinstance(limit, str):
+            limit = limit.encode("utf-8")
+
+        # Resolve refs to commit IDs
+        assert upstream is not None
+        upstream_obj = r[upstream]
+        head_obj = r[head]
+        upstream_id = upstream_obj.id
+        head_id = head_obj.id
+
+        # Get limit commit ID if specified
+        limit_id = None
+        if limit is not None:
+            limit_id = r[limit].id
+
+        # Find all commits reachable from head but not from upstream
+        # This is equivalent to: git rev-list ^upstream head
+
+        # Get commits from head that are not in upstream
+        walker = r.get_walker([head_id], exclude=[upstream_id])
+        head_commits = []
+        for entry in walker:
+            commit = entry.commit
+            # Apply limit if specified
+            if limit_id is not None:
+                # Stop when we reach the limit commit
+                if commit.id == limit_id:
+                    break
+            head_commits.append(commit.id)
+
+        # Compute patch IDs for upstream commits
+        upstream_walker = r.get_walker([upstream_id])
+        upstream_patch_ids = {}  # Maps patch_id -> commit_id for debugging
+        for entry in upstream_walker:
+            commit = entry.commit
+            pid = commit_patch_id(r.object_store, commit.id)
+            upstream_patch_ids[pid] = commit.id
+
+        # For each head commit, check if equivalent patch exists in upstream
+        results: list[tuple[str, bytes, Optional[bytes]]] = []
+        for commit_id in reversed(head_commits):  # Show oldest first
+            obj = r.object_store[commit_id]
+            assert isinstance(obj, Commit)
+            commit = obj
+
+            pid = commit_patch_id(r.object_store, commit_id)
+
+            if pid in upstream_patch_ids:
+                status = "-"
+            else:
+                status = "+"
+
+            message = None
+            if verbose:
+                message = commit.message.split(b"\n")[0]  # First line only
+
+            results.append((status, commit_id, message))
+
+        return results
 
 
 def cherry_pick(  # noqa: D417
@@ -5892,7 +6703,7 @@ def filter_branch(
             else:
                 # Convert branch name to full ref if needed
                 if not branch.startswith(b"refs/"):
-                    branch = b"refs/heads/" + branch
+                    branch = local_branch_name(branch)
                 refs = [branch]
 
         # Convert subdirectory filter to bytes if needed
@@ -6336,6 +7147,147 @@ def reflog(
                 # Read the reflog entries for this ref
                 for entry in r.read_reflog(ref_bytes):
                     yield (ref_bytes, entry)
+
+
+def reflog_expire(
+    repo: RepoPath = ".",
+    ref: Optional[Union[str, bytes]] = None,
+    all: bool = False,
+    expire_time: Optional[int] = None,
+    expire_unreachable_time: Optional[int] = None,
+    dry_run: bool = False,
+) -> dict[bytes, int]:
+    """Expire reflog entries based on age and reachability.
+
+    Args:
+        repo: Path to repository or a Repo object
+        ref: Reference name (if not using --all)
+        all: If True, expire reflogs for all refs
+        expire_time: Expire entries older than this timestamp (seconds since epoch)
+        expire_unreachable_time: Expire unreachable entries older than this timestamp
+        dry_run: If True, show what would be expired without making changes
+
+    Returns:
+        Dictionary mapping ref names to number of expired entries
+    """
+    import os
+    import time
+
+    from .reflog import expire_reflog, iter_reflogs
+
+    if not all and ref is None:
+        raise ValueError("Must specify either ref or all=True")
+
+    if isinstance(ref, str):
+        ref = ref.encode("utf-8")
+
+    # Default expire times if not specified
+    if expire_time is None and expire_unreachable_time is None:
+        # Default: expire entries older than 90 days, unreachable older than 30 days
+        now = int(time.time())
+        expire_time = now - (90 * 24 * 60 * 60)
+        expire_unreachable_time = now - (30 * 24 * 60 * 60)
+
+    result = {}
+
+    with open_repo_closing(repo) as r:
+        # Determine which refs to process
+        refs_to_process: list[bytes] = []
+        if all:
+            logs_dir = os.path.join(r.controldir(), "logs")
+            refs_to_process = list(iter_reflogs(logs_dir))
+        else:
+            assert ref is not None  # Already checked above
+            refs_to_process = [ref]
+
+        # Build set of reachable objects if we have unreachable expiration time
+        reachable_objects: Optional[set[bytes]] = None
+        if expire_unreachable_time is not None:
+            from .gc import find_reachable_objects
+
+            reachable_objects = find_reachable_objects(
+                r.object_store, r.refs, include_reflogs=False
+            )
+
+        # Process each ref
+        for ref_name in refs_to_process:
+            reflog_path = r._reflog_path(ref_name)
+            if not os.path.exists(reflog_path):
+                continue
+
+            # Create reachability checker
+            def is_reachable(sha: bytes) -> bool:
+                if reachable_objects is None:
+                    # No unreachable expiration, so assume everything is reachable
+                    return True
+                return sha in reachable_objects
+
+            # Open the reflog file
+            if dry_run:
+                # For dry run, just read and count what would be expired
+                with open(reflog_path, "rb") as f:
+                    from .reflog import read_reflog
+
+                    count = 0
+                    for entry in read_reflog(f):
+                        is_obj_reachable = is_reachable(entry.new_sha)
+                        should_expire = False
+
+                        if is_obj_reachable and expire_time is not None:
+                            if entry.timestamp < expire_time:
+                                should_expire = True
+                        elif (
+                            not is_obj_reachable and expire_unreachable_time is not None
+                        ):
+                            if entry.timestamp < expire_unreachable_time:
+                                should_expire = True
+
+                        if should_expire:
+                            count += 1
+
+                    result[ref_name] = count
+            else:
+                # Actually expire entries
+                with open(reflog_path, "r+b") as f:  # type: ignore[assignment]
+                    count = expire_reflog(
+                        f,
+                        expire_time=expire_time,
+                        expire_unreachable_time=expire_unreachable_time,
+                        reachable_checker=is_reachable,
+                    )
+                    result[ref_name] = count
+
+    return result
+
+
+def reflog_delete(
+    repo: RepoPath = ".",
+    ref: Union[str, bytes] = b"HEAD",
+    index: int = 0,
+    rewrite: bool = False,
+) -> None:
+    """Delete a specific reflog entry.
+
+    Args:
+        repo: Path to repository or a Repo object
+        ref: Reference name
+        index: Reflog entry index (0 = newest, in Git reflog order)
+        rewrite: If True, rewrite old_sha of subsequent entries to maintain consistency
+    """
+    import os
+
+    from .reflog import drop_reflog_entry
+
+    if isinstance(ref, str):
+        ref = ref.encode("utf-8")
+
+    with open_repo_closing(repo) as r:
+        reflog_path = r._reflog_path(ref)
+        if not os.path.exists(reflog_path):
+            raise ValueError(f"No reflog for ref {ref.decode()}")
+
+        with open(reflog_path, "r+b") as f:
+            drop_reflog_entry(f, index, rewrite=rewrite)
 
 
 def lfs_track(
@@ -6788,7 +7740,8 @@ def lfs_fetch(
                         if pointer and pointer.is_valid_oid():
                             # Check if we already have it
                             try:
-                                store.open_object(pointer.oid)
+                                with store.open_object(pointer.oid):
+                                    pass  # Object exists, no need to fetch
                             except KeyError:
                                 pointers_to_fetch.append((pointer.oid, pointer.size))
 
@@ -6975,7 +7928,8 @@ def lfs_status(repo: Union[str, os.PathLike[str], Repo] = ".") -> dict[str, list
 
                     # Check if object exists locally
                     try:
-                        store.open_object(pointer.oid)
+                        with store.open_object(pointer.oid):
+                            pass  # Object exists locally
                     except KeyError:
                         status["missing"].append(path_str)
 
@@ -7283,3 +8237,80 @@ def independent_commits(
 
         # Filter to independent commits
         return independent(r, commit_ids)
+
+
+def mailsplit(
+    input_path: Optional[Union[str, os.PathLike[str], IO[bytes]]] = None,
+    output_dir: Union[str, os.PathLike[str]] = ".",
+    start_number: int = 1,
+    precision: int = 4,
+    keep_cr: bool = False,
+    mboxrd: bool = False,
+    is_maildir: bool = False,
+) -> list[str]:
+    r"""Split an mbox file or Maildir into individual message files.
+
+    This is similar to git mailsplit.
+
+    Args:
+        input_path: Path to mbox file, Maildir, or file-like object. If None, reads from stdin.
+        output_dir: Directory where individual messages will be written
+        start_number: Starting number for output files (default: 1)
+        precision: Number of digits for output filenames (default: 4)
+        keep_cr: If True, preserve \r in lines ending with \r\n (default: False)
+        mboxrd: If True, treat input as mboxrd format and reverse escaping (default: False)
+        is_maildir: If True, treat input_path as a Maildir (default: False)
+
+    Returns:
+        List of output file paths that were created
+
+    Raises:
+        ValueError: If output_dir doesn't exist or input is invalid
+        OSError: If there are issues reading/writing files
+    """
+    from .mbox import split_maildir, split_mbox
+
+    if is_maildir:
+        if input_path is None:
+            raise ValueError("input_path is required for Maildir splitting")
+        if not isinstance(input_path, (str, bytes, os.PathLike)):
+            raise ValueError("Maildir splitting requires a path, not a file object")
+        # Convert PathLike to str for split_maildir
+        maildir_path: Union[str, bytes] = (
+            os.fspath(input_path) if isinstance(input_path, os.PathLike) else input_path
+        )
+        out_dir: Union[str, bytes] = (
+            os.fspath(output_dir) if isinstance(output_dir, os.PathLike) else output_dir
+        )
+        return split_maildir(
+            maildir_path,
+            out_dir,
+            start_number=start_number,
+            precision=precision,
+            keep_cr=keep_cr,
+        )
+    else:
+        from typing import BinaryIO, cast
+
+        if input_path is None:
+            # Read from stdin
+            input_file: Union[str, bytes, BinaryIO] = sys.stdin.buffer
+        else:
+            # Convert PathLike to str if needed
+            if isinstance(input_path, os.PathLike):
+                input_file = os.fspath(input_path)
+            else:
+                # input_path is either str or IO[bytes] here
+                input_file = cast(Union[str, BinaryIO], input_path)
+
+        out_dir = (
+            os.fspath(output_dir) if isinstance(output_dir, os.PathLike) else output_dir
+        )
+        return split_mbox(
+            input_file,
+            out_dir,
+            start_number=start_number,
+            precision=precision,
+            keep_cr=keep_cr,
+            mboxrd=mboxrd,
+        )

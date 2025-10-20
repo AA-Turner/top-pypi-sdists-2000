@@ -16,8 +16,6 @@ import contextlib
 import glob
 import io
 import os
-import platform
-import re
 import shutil
 import struct
 import subprocess
@@ -100,6 +98,7 @@ DEV_DEPS = TEST_DEPS + [
     "pylint",
     "pyperf",
     "pypinfo",
+    "pyreadline ; os_name == 'nt'",
     "pytest-cov",
     "requests",
     "rstcheck",
@@ -108,13 +107,19 @@ DEV_DEPS = TEST_DEPS + [
     "sphinx_rtd_theme",
     "toml-sort",
     "twine",
+    "validate-pyproject[all]",
     "virtualenv",
     "vulture",
     "wheel",
-    "pyreadline ; os_name == 'nt'",
 ]
 
+# External libraries to link against.
+libraries = []
+
+# The pre-processor macros that are passed to the C compiler when
+# building the extension.
 macros = []
+
 if POSIX:
     macros.append(("PSUTIL_POSIX", 1))
 if BSD:
@@ -279,6 +284,17 @@ if WINDOWS:
         msg += "2000, XP and 2003 server"
         raise RuntimeError(msg)
 
+    libraries.extend([
+        "advapi32",
+        "kernel32",
+        "netapi32",
+        "pdh",
+        "PowrProf",
+        "psapi",
+        "shell32",
+        "ws2_32",
+    ])
+
     macros.append(("PSUTIL_WINDOWS", 1))
     macros.extend([
         # be nice to mingw, see:
@@ -301,16 +317,7 @@ if WINDOWS:
             + glob.glob("psutil/arch/windows/*.c")
         ),
         define_macros=macros,
-        libraries=[
-            "psapi",
-            "kernel32",
-            "advapi32",
-            "shell32",
-            "netapi32",
-            "ws2_32",
-            "PowrProf",
-            "pdh",
-        ],
+        libraries=libraries,
         # extra_compile_args=["/W 4"],
         # extra_link_args=["/DEBUG"],
         # fmt: off
@@ -342,7 +349,9 @@ elif MACOS:
     )
 
 elif FREEBSD:
+    libraries.extend(["devstat"])
     macros.append(("PSUTIL_FREEBSD", 1))
+
     ext = Extension(
         'psutil._psutil_bsd',
         sources=(
@@ -352,7 +361,7 @@ elif FREEBSD:
             + glob.glob("psutil/arch/freebsd/*.c")
         ),
         define_macros=macros,
-        libraries=["devstat"],
+        libraries=libraries,
         # fmt: off
         # python 2.7 compatibility requires no comma
         **py_limited_api
@@ -360,7 +369,9 @@ elif FREEBSD:
     )
 
 elif OPENBSD:
+    libraries.extend(["kvm"])
     macros.append(("PSUTIL_OPENBSD", 1))
+
     ext = Extension(
         'psutil._psutil_bsd',
         sources=(
@@ -370,7 +381,7 @@ elif OPENBSD:
             + glob.glob("psutil/arch/openbsd/*.c")
         ),
         define_macros=macros,
-        libraries=["kvm"],
+        libraries=libraries,
         # fmt: off
         # python 2.7 compatibility requires no comma
         **py_limited_api
@@ -378,7 +389,9 @@ elif OPENBSD:
     )
 
 elif NETBSD:
+    libraries.extend(["kvm"])
     macros.append(("PSUTIL_NETBSD", 1))
+
     ext = Extension(
         'psutil._psutil_bsd',
         sources=(
@@ -388,7 +401,7 @@ elif NETBSD:
             + glob.glob("psutil/arch/netbsd/*.c")
         ),
         define_macros=macros,
-        libraries=["kvm"],
+        libraries=libraries,
         # fmt: off
         # python 2.7 compatibility requires no comma
         **py_limited_api
@@ -416,17 +429,18 @@ elif LINUX:
     )
 
 elif SUNOS:
+    libraries.extend(["kstat", "nsl", "socket"])
     macros.append(("PSUTIL_SUNOS", 1))
+
     ext = Extension(
         'psutil._psutil_sunos',
         sources=(
             sources
             + ["psutil/_psutil_sunos.c"]
             + glob.glob("psutil/arch/sunos/*.c")
-            + glob.glob("psutil/arch/sunos/v10/*.c")
         ),
         define_macros=macros,
-        libraries=['kstat', 'nsl', 'socket'],
+        libraries=libraries,
         # fmt: off
         # python 2.7 compatibility requires no comma
         **py_limited_api
@@ -434,17 +448,17 @@ elif SUNOS:
     )
 
 elif AIX:
+    libraries.extend(["perfstat"])
     macros.append(("PSUTIL_AIX", 1))
+
     ext = Extension(
         'psutil._psutil_aix',
-        sources=sources
-        + [
-            'psutil/_psutil_aix.c',
-            'psutil/arch/aix/net_connections.c',
-            'psutil/arch/aix/common.c',
-            'psutil/arch/aix/ifaddrs.c',
-        ],
-        libraries=['perfstat'],
+        sources=(
+            sources
+            + ["psutil/_psutil_aix.c"]
+            + glob.glob("psutil/arch/aix/*.c")
+        ),
+        libraries=libraries,
         define_macros=macros,
         # fmt: off
         # python 2.7 compatibility requires no comma
@@ -459,6 +473,7 @@ else:
 if POSIX:
     posix_extension = Extension(
         'psutil._psutil_posix',
+        libraries=libraries,
         define_macros=macros,
         sources=sources,
         # fmt: off
@@ -466,30 +481,6 @@ if POSIX:
         **py_limited_api
         # fmt: on
     )
-    if SUNOS:
-
-        def get_sunos_update():
-            # See https://serverfault.com/q/524883
-            # for an explanation of Solaris /etc/release
-            with open('/etc/release') as f:
-                update = re.search(r'(?<=s10s_u)[0-9]{1,2}', f.readline())
-                return int(update.group(0)) if update else 0
-
-        posix_extension.libraries.append('socket')
-        if platform.release() == '5.10':
-            # Detect Solaris 5.10, update >= 4, see:
-            # https://github.com/giampaolo/psutil/pull/1638
-            if get_sunos_update() >= 4:
-                # MIB compliance starts with SunOS 5.10 Update 4:
-                posix_extension.define_macros.append(('NEW_MIB_COMPLIANT', 1))
-            posix_extension.sources.append('psutil/arch/solaris/v10/ifaddrs.c')
-            posix_extension.define_macros.append(('PSUTIL_SUNOS10', 1))
-        else:
-            # Other releases are by default considered to be new mib compliant.
-            posix_extension.define_macros.append(('NEW_MIB_COMPLIANT', 1))
-    elif AIX:
-        posix_extension.sources.append('psutil/arch/aix/ifaddrs.c')
-
     extensions = [ext, posix_extension]
 else:
     extensions = [ext]

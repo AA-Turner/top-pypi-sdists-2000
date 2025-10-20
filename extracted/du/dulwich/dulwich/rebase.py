@@ -33,6 +33,7 @@ from dulwich.graph import find_merge_base
 from dulwich.merge import three_way_merge
 from dulwich.objects import Commit
 from dulwich.objectspec import parse_commit
+from dulwich.refs import local_branch_name
 from dulwich.repo import BaseRepo, Repo
 
 
@@ -762,7 +763,7 @@ class Rebaser:
                 self._rebasing_branch = branch
             else:
                 # Assume it's a branch name
-                self._rebasing_branch = b"refs/heads/" + branch
+                self._rebasing_branch = local_branch_name(branch)
         else:
             # Use current branch
             if self._original_head is not None and self._original_head.startswith(
@@ -1064,10 +1065,10 @@ def process_interactive_rebase(
         editor_callback: Optional callback for reword operations
 
     Returns:
-        Tuple of (is_complete, pause_reason):
+        Tuple of (``is_complete``, ``pause_reason``):
 
-        * is_complete: True if rebase is complete, False if paused
-        * pause_reason: Reason for pause (e.g., "edit", "conflict", "break") or None
+        * ``is_complete``: True if rebase is complete, False if paused
+        * ``pause_reason``: Reason for pause (e.g., "edit", "conflict", "break") or None
 
     Raises:
         RebaseError: If rebase fails

@@ -143,6 +143,51 @@ class HelperFunctionsTest(TestCase):
         result = launch_editor(b"Test template content")
         self.assertEqual(b"Test template content", result)
 
+    def test_parse_relative_time(self):
+        """Test parsing relative time strings."""
+        from dulwich.cli import parse_relative_time
+
+        self.assertEqual(0, parse_relative_time("now"))
+        self.assertEqual(60, parse_relative_time("1 minute ago"))
+        self.assertEqual(120, parse_relative_time("2 minutes ago"))
+        self.assertEqual(3600, parse_relative_time("1 hour ago"))
+        self.assertEqual(7200, parse_relative_time("2 hours ago"))
+        self.assertEqual(86400, parse_relative_time("1 day ago"))
+        self.assertEqual(172800, parse_relative_time("2 days ago"))
+        self.assertEqual(604800, parse_relative_time("1 week ago"))
+        self.assertEqual(1209600, parse_relative_time("2 weeks ago"))
+        self.assertEqual(2592000, parse_relative_time("1 month ago"))
+        self.assertEqual(31536000, parse_relative_time("1 year ago"))
+
+        # Test invalid formats
+        with self.assertRaises(ValueError):
+            parse_relative_time("invalid")
+        with self.assertRaises(ValueError):
+            parse_relative_time("2 days")  # Missing "ago"
+        with self.assertRaises(ValueError):
+            parse_relative_time("two days ago")  # Not a number
+
+    def test_parse_time_to_timestamp(self):
+        """Test parsing time specifications to Unix timestamps."""
+        import time
+
+        from dulwich.cli import parse_time_to_timestamp
+
+        # Test special values
+        self.assertEqual(0, parse_time_to_timestamp("never"))
+        future_time = parse_time_to_timestamp("all")
+        self.assertGreater(future_time, int(time.time()))
+
+        # Test Unix timestamp
+        self.assertEqual(1234567890, parse_time_to_timestamp("1234567890"))
+
+        # Test relative time
+        now = int(time.time())
+        result = parse_time_to_timestamp("1 day ago")
+        expected = now - 86400
+        # Allow 2 second tolerance for test execution time
+        self.assertAlmostEqual(expected, result, delta=2)
+
 
 class AddCommandTest(DulwichCliTestCase):
     """Tests for add command."""
@@ -1444,6 +1489,373 @@ class ShowCommandTest(DulwichCliTestCase):
         self.assertIn("Test commit", stdout)
 
 
+class ShowRefCommandTest(DulwichCliTestCase):
+    """Tests for show-ref command."""
+
+    def test_show_ref_basic(self):
+        """Test basic show-ref functionality."""
+        # Create a commit to have a HEAD ref
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+
+        # Create a branch
+        self._run_cli("branch", "test-branch")
+
+        # Get the exact SHAs
+        master_sha = self.repo.refs[b"refs/heads/master"].decode()
+        test_branch_sha = self.repo.refs[b"refs/heads/test-branch"].decode()
+
+        # Run show-ref
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli("show-ref")
+            output = "\n".join([record.message for record in cm.records])
+
+        expected = (
+            f"{master_sha} refs/heads/master\n{test_branch_sha} refs/heads/test-branch"
+        )
+        self.assertEqual(output, expected)
+
+    def test_show_ref_with_head(self):
+        """Test show-ref with --head option."""
+        # Create a commit to have a HEAD ref
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+
+        # Get the exact SHAs
+        head_sha = self.repo.refs[b"HEAD"].decode()
+        master_sha = self.repo.refs[b"refs/heads/master"].decode()
+
+        # Run show-ref with --head
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli("show-ref", "--head")
+            output = "\n".join([record.message for record in cm.records])
+
+        expected = f"{head_sha} HEAD\n{master_sha} refs/heads/master"
+        self.assertEqual(output, expected)
+
+    def test_show_ref_with_pattern(self):
+        """Test show-ref with pattern matching."""
+        # Create commits and branches
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+        self._run_cli("branch", "feature-1")
+        self._run_cli("branch", "feature-2")
+        self._run_cli("branch", "bugfix-1")
+
+        # Get the exact SHA for master
+        master_sha = self.repo.refs[b"refs/heads/master"].decode()
+
+        # Test pattern matching for "master"
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli("show-ref", "master")
+            output = "\n".join([record.message for record in cm.records])
+
+        expected = f"{master_sha} refs/heads/master"
+        self.assertEqual(output, expected)
+
+    def test_show_ref_branches_only(self):
+        """Test show-ref with --branches option."""
+        # Create commits and a tag
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+        self._run_cli("tag", "v1.0")
+
+        # Get the exact SHA for master
+        master_sha = self.repo.refs[b"refs/heads/master"].decode()
+
+        # Run show-ref with --branches
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli("show-ref", "--branches")
+            output = "\n".join([record.message for record in cm.records])
+
+        expected = f"{master_sha} refs/heads/master"
+        self.assertEqual(output, expected)
+
+    def test_show_ref_tags_only(self):
+        """Test show-ref with --tags option."""
+        # Create commits and tags
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+        self._run_cli("tag", "v1.0")
+        self._run_cli("tag", "v2.0")
+
+        # Get the exact SHAs for tags
+        v1_sha = self.repo.refs[b"refs/tags/v1.0"].decode()
+        v2_sha = self.repo.refs[b"refs/tags/v2.0"].decode()
+
+        # Run show-ref with --tags
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli("show-ref", "--tags")
+            output = "\n".join([record.message for record in cm.records])
+
+        expected = f"{v1_sha} refs/tags/v1.0\n{v2_sha} refs/tags/v2.0"
+        self.assertEqual(output, expected)
+
+    def test_show_ref_hash_only(self):
+        """Test show-ref with --hash option to show only OID."""
+        # Create a commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+
+        # Get the exact SHA for master
+        master_sha = self.repo.refs[b"refs/heads/master"].decode()
+
+        # Run show-ref with --hash
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli(
+                "show-ref", "--hash", "--", "master"
+            )
+            output = "\n".join([record.message for record in cm.records])
+
+        expected = f"{master_sha}"
+        self.assertEqual(output, expected)
+
+    def test_show_ref_verify(self):
+        """Test show-ref with --verify option for exact matching."""
+        # Create a commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+
+        # Get the exact SHA for master
+        master_sha = self.repo.refs[b"refs/heads/master"].decode()
+
+        # Verify with exact ref path should succeed
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            result, _stdout, _stderr = self._run_cli(
+                "show-ref", "--verify", "refs/heads/master"
+            )
+            self.assertEqual(result, 0)
+            output = "\n".join([record.message for record in cm.records])
+
+        expected = f"{master_sha} refs/heads/master"
+        self.assertEqual(output, expected)
+
+        # Verify with partial name should fail
+        result, _stdout, _stderr = self._run_cli("show-ref", "--verify", "master")
+        self.assertEqual(result, 1)
+
+    def test_show_ref_exists(self):
+        """Test show-ref with --exists option."""
+        # Create a commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+
+        # Check if existing ref exists
+        result, _stdout, _stderr = self._run_cli(
+            "show-ref", "--exists", "refs/heads/master"
+        )
+        self.assertEqual(result, 0)
+
+        # Check if non-existing ref exists
+        result, _stdout, _stderr = self._run_cli(
+            "show-ref", "--exists", "refs/heads/nonexistent"
+        )
+        self.assertEqual(result, 2)
+
+    def test_show_ref_quiet(self):
+        """Test show-ref with --quiet option."""
+        # Create a commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+
+        # Run show-ref with --quiet - should not log anything
+        result, _stdout, _stderr = self._run_cli("show-ref", "--quiet")
+        self.assertEqual(result, 0)
+
+    def test_show_ref_abbrev(self):
+        """Test show-ref with --abbrev option."""
+        # Create a commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+
+        # Get the exact SHA for master
+        master_sha = self.repo.refs[b"refs/heads/master"].decode()
+
+        # Run show-ref with --abbrev=7
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli("show-ref", "--abbrev=7")
+            output = "\n".join([record.message for record in cm.records])
+
+        expected = f"{master_sha[:7]} refs/heads/master"
+        self.assertEqual(output, expected)
+
+    def test_show_ref_no_matches(self):
+        """Test show-ref returns error when no matches found."""
+        # Create a commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("test content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Test commit")
+
+        # Search for non-existent pattern
+        result, _stdout, _stderr = self._run_cli("show-ref", "nonexistent")
+        self.assertEqual(result, 1)
+
+
+class ShowBranchCommandTest(DulwichCliTestCase):
+    """Tests for show-branch command."""
+
+    def test_show_branch_basic(self):
+        """Test basic show-branch functionality."""
+        # Create initial commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("initial content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Initial commit")
+
+        # Create a branch and add a commit
+        self._run_cli("branch", "branch1")
+        self._run_cli("checkout", "branch1")
+        with open(test_file, "a") as f:
+            f.write("\nbranch1 content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Branch1 commit")
+
+        # Switch back to master
+        self._run_cli("checkout", "master")
+
+        # Run show-branch
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli(
+                "show-branch", "master", "branch1"
+            )
+            output = "\n".join([record.message for record in cm.records])
+
+        # Check exact output
+        expected = (
+            "! [branch1] Branch1 commit\n"
+            " ![master] Initial commit\n"
+            "----\n"
+            "*  [Branch1 commit]\n"
+            "+* [Initial commit]"
+        )
+        self.assertEqual(expected, output)
+
+    def test_show_branch_list(self):
+        """Test show-branch with --list option."""
+        # Create initial commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("initial content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Initial commit")
+
+        # Create branches
+        self._run_cli("branch", "branch1")
+        self._run_cli("branch", "branch2")
+
+        # Run show-branch --list
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli("show-branch", "--list")
+            output = "\n".join([record.message for record in cm.records])
+
+        # Check exact output (only branch headers, no separator)
+        expected = (
+            "!  [branch1] Initial commit\n"
+            " ! [branch2] Initial commit\n"
+            "  ![master] Initial commit"
+        )
+        self.assertEqual(expected, output)
+
+    def test_show_branch_independent(self):
+        """Test show-branch with --independent option."""
+        # Create initial commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("initial content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Initial commit")
+
+        # Create a branch and add a commit
+        self._run_cli("branch", "branch1")
+        self._run_cli("checkout", "branch1")
+        with open(test_file, "a") as f:
+            f.write("\nbranch1 content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Branch1 commit")
+
+        # Run show-branch --independent
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli(
+                "show-branch", "--independent", "master", "branch1"
+            )
+            output = "\n".join([record.message for record in cm.records])
+
+        # Only branch1 should be shown (it's not reachable from master)
+        expected = "branch1"
+        self.assertEqual(expected, output)
+
+    def test_show_branch_merge_base(self):
+        """Test show-branch with --merge-base option."""
+        # Create initial commit
+        test_file = os.path.join(self.repo_path, "test.txt")
+        with open(test_file, "w") as f:
+            f.write("initial content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Initial commit")
+
+        # Get the initial commit SHA
+        initial_sha = self.repo.refs[b"HEAD"]
+
+        # Create a branch and add a commit
+        self._run_cli("branch", "branch1")
+        self._run_cli("checkout", "branch1")
+        with open(test_file, "a") as f:
+            f.write("\nbranch1 content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Branch1 commit")
+
+        # Switch back to master and add a different commit
+        self._run_cli("checkout", "master")
+        with open(test_file, "a") as f:
+            f.write("\nmaster content")
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Master commit")
+
+        # Run show-branch --merge-base
+        with self.assertLogs("dulwich.cli", level="INFO") as cm:
+            _result, _stdout, _stderr = self._run_cli(
+                "show-branch", "--merge-base", "master", "branch1"
+            )
+            output = "\n".join([record.message for record in cm.records])
+
+        # The merge base should be the initial commit SHA
+        expected = initial_sha.decode("ascii")
+        self.assertEqual(expected, output)
+
+
 class FormatPatchCommandTest(DulwichCliTestCase):
     """Tests for format-patch command."""
 
@@ -2067,6 +2479,56 @@ class FsckCommandTest(DulwichCliTestCase):
         # Should complete without errors
 
 
+class GrepCommandTest(DulwichCliTestCase):
+    """Tests for grep command."""
+
+    def test_grep_basic(self):
+        # Create test files
+        with open(os.path.join(self.repo_path, "file1.txt"), "w") as f:
+            f.write("hello world\n")
+        with open(os.path.join(self.repo_path, "file2.txt"), "w") as f:
+            f.write("foo bar\n")
+
+        self._run_cli("add", "file1.txt", "file2.txt")
+        self._run_cli("commit", "--message=Add files")
+
+        _result, stdout, _stderr = self._run_cli("grep", "world")
+        self.assertEqual("file1.txt:hello world\n", stdout.replace("\r\n", "\n"))
+
+    def test_grep_line_numbers(self):
+        with open(os.path.join(self.repo_path, "test.txt"), "w") as f:
+            f.write("line1\nline2\nline3\n")
+
+        self._run_cli("add", "test.txt")
+        self._run_cli("commit", "--message=Add test")
+
+        _result, stdout, _stderr = self._run_cli("grep", "-n", "line")
+        self.assertEqual(
+            "test.txt:1:line1\ntest.txt:2:line2\ntest.txt:3:line3\n",
+            stdout.replace("\r\n", "\n"),
+        )
+
+    def test_grep_case_insensitive(self):
+        with open(os.path.join(self.repo_path, "case.txt"), "w") as f:
+            f.write("Hello World\n")
+
+        self._run_cli("add", "case.txt")
+        self._run_cli("commit", "--message=Add case")
+
+        _result, stdout, _stderr = self._run_cli("grep", "-i", "hello")
+        self.assertEqual("case.txt:Hello World\n", stdout.replace("\r\n", "\n"))
+
+    def test_grep_no_matches(self):
+        with open(os.path.join(self.repo_path, "empty.txt"), "w") as f:
+            f.write("nothing here\n")
+
+        self._run_cli("add", "empty.txt")
+        self._run_cli("commit", "--message=Add empty")
+
+        _result, stdout, _stderr = self._run_cli("grep", "nonexistent")
+        self.assertEqual("", stdout)
+
+
 class RepackCommandTest(DulwichCliTestCase):
     """Tests for repack command."""
 
@@ -2659,12 +3121,12 @@ class ParseRelativeTimeTestCase(TestCase):
     def test_invalid_unit(self):
         """Test invalid time units."""
         with self.assertRaises(ValueError) as cm:
-            parse_relative_time("5 months ago")
-        self.assertIn("Unknown time unit: months", str(cm.exception))
+            parse_relative_time("5 fortnights ago")
+        self.assertIn("Unknown time unit: fortnights", str(cm.exception))
 
         with self.assertRaises(ValueError) as cm:
-            parse_relative_time("2 years ago")
-        self.assertIn("Unknown time unit: years", str(cm.exception))
+            parse_relative_time("2 decades ago")
+        self.assertIn("Unknown time unit: decades", str(cm.exception))
 
     def test_singular_plural(self):
         """Test that both singular and plural forms work."""
@@ -3095,6 +3557,119 @@ class MergeBaseCommandTest(DulwichCliTestCase):
 
         result, _stdout, _stderr = self._run_cli("merge-base", "--is-ancestor", "HEAD")
         self.assertEqual(result, 1)
+
+
+class ConfigCommandTest(DulwichCliTestCase):
+    """Tests for config command."""
+
+    def test_config_set_and_get(self):
+        """Test setting and getting a config value."""
+        # Set a config value
+        result, stdout, _stderr = self._run_cli("config", "user.name", "Test User")
+        self.assertEqual(result, 0)
+        self.assertEqual(stdout, "")
+
+        # Get the value back
+        result, stdout, _stderr = self._run_cli("config", "user.name")
+        self.assertEqual(result, 0)
+        self.assertEqual(stdout, "Test User\n")
+
+    def test_config_set_and_get_subsection(self):
+        """Test setting and getting a config value with subsection."""
+        # Set a config value with subsection (e.g., remote.origin.url)
+        result, stdout, _stderr = self._run_cli(
+            "config", "remote.origin.url", "https://example.com/repo.git"
+        )
+        self.assertEqual(result, 0)
+        self.assertEqual(stdout, "")
+
+        # Get the value back
+        result, stdout, _stderr = self._run_cli("config", "remote.origin.url")
+        self.assertEqual(result, 0)
+        self.assertEqual(stdout, "https://example.com/repo.git\n")
+
+    def test_config_list(self):
+        """Test listing all config values."""
+        # Set some config values
+        self._run_cli("config", "user.name", "Test User")
+        self._run_cli("config", "user.email", "test@example.com")
+
+        # Get the actual config values that may vary by platform
+        config = self.repo.get_config()
+        filemode = config.get((b"core",), b"filemode")
+        try:
+            symlinks = config.get((b"core",), b"symlinks")
+        except KeyError:
+            symlinks = None
+
+        # List all values
+        result, stdout, _stderr = self._run_cli("config", "--list")
+        self.assertEqual(result, 0)
+
+        # Build expected output with platform-specific values
+        expected = "core.repositoryformatversion=0\n"
+        expected += f"core.filemode={filemode.decode('utf-8')}\n"
+        if symlinks is not None:
+            expected += f"core.symlinks={symlinks.decode('utf-8')}\n"
+        expected += (
+            "core.bare=false\n"
+            "core.logallrefupdates=true\n"
+            "user.name=Test User\n"
+            "user.email=test@example.com\n"
+        )
+
+        self.assertEqual(stdout, expected)
+
+    def test_config_unset(self):
+        """Test unsetting a config value."""
+        # Set a config value
+        self._run_cli("config", "user.name", "Test User")
+
+        # Verify it's set
+        result, stdout, _stderr = self._run_cli("config", "user.name")
+        self.assertEqual(result, 0)
+        self.assertEqual(stdout, "Test User\n")
+
+        # Unset it
+        result, stdout, _stderr = self._run_cli("config", "--unset", "user.name")
+        self.assertEqual(result, 0)
+        self.assertEqual(stdout, "")
+
+        # Verify it's gone
+        result, stdout, _stderr = self._run_cli("config", "user.name")
+        self.assertEqual(result, 1)
+        self.assertEqual(stdout, "")
+
+    def test_config_get_nonexistent(self):
+        """Test getting a nonexistent config value."""
+        result, stdout, _stderr = self._run_cli("config", "nonexistent.key")
+        self.assertEqual(result, 1)
+        self.assertEqual(stdout, "")
+
+    def test_config_unset_nonexistent(self):
+        """Test unsetting a nonexistent config value."""
+        result, _stdout, _stderr = self._run_cli("config", "--unset", "nonexistent.key")
+        self.assertEqual(result, 1)
+
+    def test_config_invalid_key_format(self):
+        """Test config with invalid key format."""
+        result, stdout, _stderr = self._run_cli("config", "invalidkey")
+        self.assertEqual(result, 1)
+        self.assertEqual(stdout, "")
+
+    def test_config_get_all(self):
+        """Test getting all values for a multivar."""
+        # Set multiple values for the same key
+        config = self.repo.get_config()
+        config.set(("test",), "multivar", "value1")
+        config.add(("test",), "multivar", "value2")
+        config.add(("test",), "multivar", "value3")
+        config.write_to_path()
+
+        # Get all values
+        result, stdout, _stderr = self._run_cli("config", "--get-all", "test.multivar")
+        self.assertEqual(result, 0)
+        self.assertEqual(stdout, "value1\nvalue2\nvalue3\n")
 
 
 if __name__ == "__main__":
