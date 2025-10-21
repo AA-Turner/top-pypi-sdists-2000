@@ -173,13 +173,6 @@ pub struct ChecklistResponse {
     pub supports_base64_encoding: bool,
 }
 
-#[derive(Serialize, ToSchema)]
-pub struct HeartbeatResponse {
-    #[serde(rename(serialize = "nanosecond heartbeat"))]
-    #[schema(rename = "nanosecond heartbeat")]
-    pub nanosecond_heartbeat: u128,
-}
-
 #[derive(Debug, Error, ToSchema)]
 pub enum HeartbeatError {
     #[error("system time error: {0}")]
@@ -196,13 +189,6 @@ impl ChromaError for HeartbeatError {
     fn code(&self) -> ErrorCodes {
         ErrorCodes::Internal
     }
-}
-
-#[derive(Serialize, Deserialize, ToSchema, Default)]
-pub struct GetUserIdentityResponse {
-    pub user_id: String,
-    pub tenant: String,
-    pub databases: Vec<String>,
 }
 
 #[non_exhaustive]
@@ -1216,7 +1202,7 @@ impl UpdateCollectionRecordsRequest {
     }
 }
 
-#[derive(Serialize, ToSchema)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct UpdateCollectionRecordsResponse {}
 
 #[derive(Error, Debug)]
@@ -1280,7 +1266,7 @@ impl UpsertCollectionRecordsRequest {
     }
 }
 
-#[derive(Serialize, ToSchema)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct UpsertCollectionRecordsResponse {}
 
 #[derive(Error, Debug)]
@@ -1340,7 +1326,7 @@ impl DeleteCollectionRecordsRequest {
     }
 }
 
-#[derive(Serialize, ToSchema)]
+#[derive(Serialize, Deserialize, ToSchema)]
 pub struct DeleteCollectionRecordsResponse {}
 
 #[derive(Error, Debug)]

@@ -32,6 +32,7 @@ from typing import (
     Union,
     cast,
 )
+import uuid
 import warnings
 
 from google.api_core import client_options as client_options_lib
@@ -758,7 +759,7 @@ class VideoIntelligenceServiceClient(metaclass=VideoIntelligenceServiceClientMet
                 For more information, see `Request
                 URIs <https://cloud.google.com/storage/docs/request-endpoints>`__.
                 A video URI may include wildcards in ``object-id``, and
-                thus identify multiple videos. Supported wildcards: '*'
+                thus identify multiple videos. Supported wildcards: '\*'
                 to match 0 or more characters; '?' to match 1 character.
                 If unset, the input video should be embedded in the
                 request as ``input_content``. If set, ``input_content``

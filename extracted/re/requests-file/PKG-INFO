@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: requests-file
-Version: 3.0.0
+Version: 3.0.1
 Summary: File transport adapter for Requests
 Author-email: David Shea <reallylongword@gmail.com>
 License: Apache 2.0

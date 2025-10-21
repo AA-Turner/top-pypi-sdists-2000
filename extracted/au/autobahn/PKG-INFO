@@ -1,13 +1,12 @@
 Metadata-Version: 2.4
 Name: autobahn
-Version: 25.9.1
+Version: 25.10.1
 Summary: WebSocket client & server library, WAMP real-time framework
 Author-email: typedef int GmbH <contact@typedefint.eu>
-License: MIT License
+License-Expression: MIT
 Project-URL: Homepage, https://autobahn.readthedocs.io/
 Project-URL: Source, https://github.com/crossbario/autobahn-python
 Keywords: autobahn,crossbar,websocket,realtime,rfc6455,wamp,rpc,pubsub,twisted,asyncio
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: No Input/Output (Daemon)
 Classifier: Framework :: Twisted

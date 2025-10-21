@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: checkov
-Version: 3.2.484
+Version: 3.2.485
 Summary: Infrastructure as code static analysis
 Home-page: https://github.com/bridgecrewio/checkov
 Author: bridgecrew
@@ -64,7 +64,7 @@ Requires-Dist: license-expression<31.0.0,>=30.1.0
 Requires-Dist: rustworkx<1.0.0,>=0.13.0
 Requires-Dist: pydantic<3.0.0,>=2.0.0
 Requires-Dist: asteval==1.0.6
-Requires-Dist: urllib3==1.26.20
+Requires-Dist: urllib3>=1.26.20
 Provides-Extra: dev
 Requires-Dist: pytest<8.0.0; extra == "dev"
 Requires-Dist: coverage==7.6.1; extra == "dev"

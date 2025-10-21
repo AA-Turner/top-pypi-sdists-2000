@@ -1,6 +1,7 @@
 from io import BytesIO
 from requests.adapters import BaseAdapter
 from requests import PreparedRequest, Response, codes
+from typing import Any
 from urllib.parse import urlparse, unquote
 import errno
 import os
@@ -10,11 +11,11 @@ import io
 
 
 class FileAdapter(BaseAdapter):
-    def __init__(self, set_content_length=True):
+    def __init__(self, set_content_length: bool = True) -> None:
         super(FileAdapter, self).__init__()
         self._set_content_length = set_content_length
 
-    def send(self, request: PreparedRequest, *args, **kwargs) -> Response:
+    def send(self, request: PreparedRequest, *args: Any, **kwargs: Any) -> Response:
         """Wraps a file, described in request, in a Response object.
 
         :param request: The PreparedRequest` being "sent".
@@ -121,5 +122,5 @@ class FileAdapter(BaseAdapter):
 
         return resp
 
-    def close(self):
+    def close(self) -> None:
         pass

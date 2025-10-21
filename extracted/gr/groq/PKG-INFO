@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: groq
-Version: 0.32.0
+Version: 0.33.0
 Summary: The official Python library for the groq API
 Project-URL: Homepage, https://github.com/groq/groq-python
 Project-URL: Repository, https://github.com/groq/groq-python
@@ -30,7 +30,7 @@ Requires-Dist: sniffio
 Requires-Dist: typing-extensions<5,>=4.10
 Provides-Extra: aiohttp
 Requires-Dist: aiohttp; extra == 'aiohttp'
-Requires-Dist: httpx-aiohttp>=0.1.8; extra == 'aiohttp'
+Requires-Dist: httpx-aiohttp>=0.1.9; extra == 'aiohttp'
 Description-Content-Type: text/markdown
 
 # Groq Python API library
