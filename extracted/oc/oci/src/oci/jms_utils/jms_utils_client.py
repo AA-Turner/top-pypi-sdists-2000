@@ -154,7 +154,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -263,7 +263,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/delete_java_migration_analysis.py.html>`__ to see an example of how to use delete_java_migration_analysis API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/delete_java_migration_analysis.py.html>`__ to see an example of how to use delete_java_migration_analysis API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['javaMigrationAnalysisId']
@@ -372,7 +372,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/delete_performance_tuning_analysis.py.html>`__ to see an example of how to use delete_performance_tuning_analysis API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/delete_performance_tuning_analysis.py.html>`__ to see an example of how to use delete_performance_tuning_analysis API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['performanceTuningAnalysisId']
@@ -475,7 +475,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/get_analyze_applications_configuration.py.html>`__ to see an example of how to use get_analyze_applications_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/get_analyze_applications_configuration.py.html>`__ to see an example of how to use get_analyze_applications_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -574,7 +574,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/get_java_migration_analysis.py.html>`__ to see an example of how to use get_java_migration_analysis API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/get_java_migration_analysis.py.html>`__ to see an example of how to use get_java_migration_analysis API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['javaMigrationAnalysisId']
@@ -677,7 +677,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/get_performance_tuning_analysis.py.html>`__ to see an example of how to use get_performance_tuning_analysis API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/get_performance_tuning_analysis.py.html>`__ to see an example of how to use get_performance_tuning_analysis API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['performanceTuningAnalysisId']
@@ -780,7 +780,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/get_subscription_acknowledgment_configuration.py.html>`__ to see an example of how to use get_subscription_acknowledgment_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/get_subscription_acknowledgment_configuration.py.html>`__ to see an example of how to use get_subscription_acknowledgment_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -879,7 +879,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1006,7 +1006,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/list_java_migration_analysis.py.html>`__ to see an example of how to use list_java_migration_analysis API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/list_java_migration_analysis.py.html>`__ to see an example of how to use list_java_migration_analysis API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1160,7 +1160,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/list_performance_tuning_analysis.py.html>`__ to see an example of how to use list_performance_tuning_analysis API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/list_performance_tuning_analysis.py.html>`__ to see an example of how to use list_performance_tuning_analysis API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1300,7 +1300,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/list_work_items.py.html>`__ to see an example of how to use list_work_items API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/list_work_items.py.html>`__ to see an example of how to use list_work_items API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1429,7 +1429,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1576,7 +1576,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1738,7 +1738,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1877,7 +1877,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/request_java_migration_analysis.py.html>`__ to see an example of how to use request_java_migration_analysis API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/request_java_migration_analysis.py.html>`__ to see an example of how to use request_java_migration_analysis API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1976,7 +1976,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/request_performance_tuning_analysis.py.html>`__ to see an example of how to use request_performance_tuning_analysis API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/request_performance_tuning_analysis.py.html>`__ to see an example of how to use request_performance_tuning_analysis API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2079,7 +2079,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/update_analyze_applications_configuration.py.html>`__ to see an example of how to use update_analyze_applications_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/update_analyze_applications_configuration.py.html>`__ to see an example of how to use update_analyze_applications_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2191,7 +2191,7 @@ class JmsUtilsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/jmsutils/update_subscription_acknowledgment_configuration.py.html>`__ to see an example of how to use update_subscription_acknowledgment_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/jmsutils/update_subscription_acknowledgment_configuration.py.html>`__ to see an example of how to use update_subscription_acknowledgment_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []

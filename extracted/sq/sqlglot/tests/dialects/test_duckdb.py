@@ -268,6 +268,26 @@ class TestDuckDB(Validator):
                 "bigquery": "SELECT IF(pos = pos_2, y, NULL) + 1 AS y FROM UNNEST(GENERATE_ARRAY(0, GREATEST(ARRAY_LENGTH(x)) - 1)) AS pos CROSS JOIN UNNEST(x) AS y WITH OFFSET AS pos_2 WHERE pos = pos_2 OR (pos > (ARRAY_LENGTH(x) - 1) AND pos_2 = (ARRAY_LENGTH(x) - 1))",
             },
         )
+        self.validate_all(
+            "SELECT DATE_DIFF('DAY', CAST('2020-01-01' AS DATE), CAST('2025-10-12' AS DATE))",
+            read={
+                "snowflake": "SELECT DATEDIFF('day', '2020-01-01', '2025-10-12')",
+            },
+        )
+        self.validate_all(
+            "SELECT DATE_DIFF('SECOND', CAST('2020-01-01' AS DATE), CAST('2025-10-12 00:56:42.345' AS TIMESTAMP))",
+            read={
+                "duckdb": "SELECT DATE_DIFF('SECOND', CAST('2020-01-01' AS DATE), CAST('2025-10-12 00:56:42.345' AS TIMESTAMP))",
+                "snowflake": "SELECT DATEDIFF('second', '2020-01-01', '2025-10-12 00:56:42.345')",
+            },
+        )
+        self.validate_all(
+            "SELECT DATE_DIFF('SECOND', CAST('2020-01-01' AS DATE), CAST('2025-10-12 00:56:42.345+07:00' AS TIMESTAMPTZ))",
+            read={
+                "duckdb": "SELECT DATE_DIFF('SECOND', CAST('2020-01-01' AS DATE), CAST('2025-10-12 00:56:42.345+07:00' AS TIMESTAMPTZ))",
+                "snowflake": "SELECT DATEDIFF('second', '2020-01-01', '2025-10-12 00:56:42.345+07:00')",
+            },
+        )
 
         # https://github.com/duckdb/duckdb/releases/tag/v0.8.0
         self.assertEqual(
@@ -1098,6 +1118,40 @@ class TestDuckDB(Validator):
         self.validate_identity(
             "DELETE FROM t USING (VALUES (1)) AS t1(c), (VALUES (1), (2)) AS t2(c) WHERE t.c = t1.c AND t.c = t2.c"
         )
+
+        self.validate_identity(
+            "FROM (FROM t1 UNION FROM t2)",
+            "SELECT * FROM (SELECT * FROM t1 UNION SELECT * FROM t2)",
+        )
+        self.validate_identity(
+            "FROM (FROM (SELECT 1) AS t2(c), (SELECT t2.c AS c0))",
+            "SELECT * FROM (SELECT * FROM (SELECT 1) AS t2(c), (SELECT t2.c AS c0))",
+        )
+        self.validate_identity(
+            "FROM (FROM (SELECT 2000 as amount) t GROUP BY amount HAVING SUM(amount) > 1000)",
+            "SELECT * FROM (SELECT * FROM (SELECT 2000 AS amount) AS t GROUP BY amount HAVING SUM(amount) > 1000)",
+        )
+        self.validate_identity(
+            "(FROM (SELECT 1) t1(c) EXCEPT FROM (SELECT 2) t2(c)) UNION ALL (FROM (SELECT 3) t3(c) EXCEPT FROM (SELECT 4) t4(c))",
+            "(SELECT * FROM (SELECT 1) AS t1(c) EXCEPT SELECT * FROM (SELECT 2) AS t2(c)) UNION ALL (SELECT * FROM (SELECT 3) AS t3(c) EXCEPT SELECT * FROM (SELECT 4) AS t4(c))",
+        )
+
+        for option in (
+            "ORDER BY 1",
+            "LIMIT 1",
+            "OFFSET 1",
+            "ORDER BY 1 LIMIT 1",
+            "ORDER BY 1 OFFSET 1",
+            "ORDER BY 1 LIMIT 1 OFFSET 1",
+            "LIMIT 1 OFFSET 1",
+        ):
+            with self.subTest(f"Testing DuckDB VALUES with modifier option: {option}"):
+                self.validate_identity(
+                    f"SELECT 1 FROM (SELECT 1) AS t(c) WHERE ((VALUES (1), (c) {option}) INTERSECT (SELECT 1))"
+                )
+
+        self.validate_identity("FORMAT('foo')")
+        self.validate_identity("FORMAT('foo', 'foo2', 'foo3')")
 
     def test_array_index(self):
         with self.assertLogs(helper_logger) as cm:

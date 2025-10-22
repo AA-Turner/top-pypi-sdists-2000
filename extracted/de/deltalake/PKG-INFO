@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: deltalake
-Version: 1.2.0
+Version: 1.2.1
 Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
@@ -18,7 +18,7 @@ Keywords: deltalake,delta,datalake,pandas,arrow
 Home-Page: https://github.com/delta-io/delta-rs
 Author: Qingping Hou <dave2008713@gmail.com>, Will Jones <willjones127@gmail.com>
 Author-email: Qingping Hou <dave2008713@gmail.com>, Will Jones <willjones127@gmail.com>
-License: MIT
+License: Apache-2.0
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
 Project-URL: documentation, https://delta-io.github.io/delta-rs/

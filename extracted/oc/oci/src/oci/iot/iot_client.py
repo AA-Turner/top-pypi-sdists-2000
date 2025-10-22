@@ -167,14 +167,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/change_iot_domain_compartment.py.html>`__ to see an example of how to use change_iot_domain_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/change_iot_domain_compartment.py.html>`__ to see an example of how to use change_iot_domain_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainId']
         resource_path = "/iotDomains/{iotDomainId}/actions/changeCompartment"
         method = "POST"
         operation_name = "change_iot_domain_compartment"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomain/ChangeIotDomainCompartment"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -290,14 +290,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/change_iot_domain_data_retention_period.py.html>`__ to see an example of how to use change_iot_domain_data_retention_period API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/change_iot_domain_data_retention_period.py.html>`__ to see an example of how to use change_iot_domain_data_retention_period API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainId']
         resource_path = "/iotDomains/{iotDomainId}/actions/changeDataRetentionPeriod"
         method = "POST"
         operation_name = "change_iot_domain_data_retention_period"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomain/ChangeIotDomainDataRetentionPeriod"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -416,14 +416,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/change_iot_domain_group_compartment.py.html>`__ to see an example of how to use change_iot_domain_group_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/change_iot_domain_group_compartment.py.html>`__ to see an example of how to use change_iot_domain_group_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainGroupId']
         resource_path = "/iotDomainGroups/{iotDomainGroupId}/actions/changeCompartment"
         method = "POST"
         operation_name = "change_iot_domain_group_compartment"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/ChangeIotDomainGroupCompartment"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -539,14 +539,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/configure_iot_domain_data_access.py.html>`__ to see an example of how to use configure_iot_domain_data_access API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/configure_iot_domain_data_access.py.html>`__ to see an example of how to use configure_iot_domain_data_access API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainId']
         resource_path = "/iotDomains/{iotDomainId}/actions/configureDataAccess"
         method = "POST"
         operation_name = "configure_iot_domain_data_access"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomain/ConfigureIotDomainDataAccess"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -662,14 +662,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/configure_iot_domain_group_data_access.py.html>`__ to see an example of how to use configure_iot_domain_group_data_access API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/configure_iot_domain_group_data_access.py.html>`__ to see an example of how to use configure_iot_domain_group_data_access API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainGroupId']
         resource_path = "/iotDomainGroups/{iotDomainGroupId}/actions/configureDataAccess"
         method = "POST"
         operation_name = "configure_iot_domain_group_data_access"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/ConfigureIotDomainGroupDataAccess"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -773,14 +773,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/create_digital_twin_adapter.py.html>`__ to see an example of how to use create_digital_twin_adapter API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/create_digital_twin_adapter.py.html>`__ to see an example of how to use create_digital_twin_adapter API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/digitalTwinAdapters"
         method = "POST"
         operation_name = "create_digital_twin_adapter"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinAdapter/CreateDigitalTwinAdapter"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -872,14 +872,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/create_digital_twin_instance.py.html>`__ to see an example of how to use create_digital_twin_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/create_digital_twin_instance.py.html>`__ to see an example of how to use create_digital_twin_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/digitalTwinInstances"
         method = "POST"
         operation_name = "create_digital_twin_instance"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinInstance/CreateDigitalTwinInstance"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -971,14 +971,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/create_digital_twin_model.py.html>`__ to see an example of how to use create_digital_twin_model API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/create_digital_twin_model.py.html>`__ to see an example of how to use create_digital_twin_model API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/digitalTwinModels"
         method = "POST"
         operation_name = "create_digital_twin_model"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinModel/CreateDigitalTwinModel"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1070,14 +1070,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/create_digital_twin_relationship.py.html>`__ to see an example of how to use create_digital_twin_relationship API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/create_digital_twin_relationship.py.html>`__ to see an example of how to use create_digital_twin_relationship API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/digitalTwinRelationships"
         method = "POST"
         operation_name = "create_digital_twin_relationship"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinRelationship/CreateDigitalTwinRelationship"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1169,14 +1169,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/create_iot_domain.py.html>`__ to see an example of how to use create_iot_domain API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/create_iot_domain.py.html>`__ to see an example of how to use create_iot_domain API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/iotDomains"
         method = "POST"
         operation_name = "create_iot_domain"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomain/CreateIotDomain"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1268,14 +1268,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/create_iot_domain_group.py.html>`__ to see an example of how to use create_iot_domain_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/create_iot_domain_group.py.html>`__ to see an example of how to use create_iot_domain_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
         resource_path = "/iotDomainGroups"
         method = "POST"
         operation_name = "create_iot_domain_group"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/CreateIotDomainGroup"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1369,14 +1369,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/delete_digital_twin_adapter.py.html>`__ to see an example of how to use delete_digital_twin_adapter API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/delete_digital_twin_adapter.py.html>`__ to see an example of how to use delete_digital_twin_adapter API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinAdapterId']
         resource_path = "/digitalTwinAdapters/{digitalTwinAdapterId}"
         method = "DELETE"
         operation_name = "delete_digital_twin_adapter"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinAdapter/DeleteDigitalTwinAdapter"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1477,14 +1477,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/delete_digital_twin_instance.py.html>`__ to see an example of how to use delete_digital_twin_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/delete_digital_twin_instance.py.html>`__ to see an example of how to use delete_digital_twin_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinInstanceId']
         resource_path = "/digitalTwinInstances/{digitalTwinInstanceId}"
         method = "DELETE"
         operation_name = "delete_digital_twin_instance"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinInstance/DeleteDigitalTwinInstance"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1585,14 +1585,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/delete_digital_twin_model.py.html>`__ to see an example of how to use delete_digital_twin_model API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/delete_digital_twin_model.py.html>`__ to see an example of how to use delete_digital_twin_model API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinModelId']
         resource_path = "/digitalTwinModels/{digitalTwinModelId}"
         method = "DELETE"
         operation_name = "delete_digital_twin_model"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinModel/DeleteDigitalTwinModel"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1693,14 +1693,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/delete_digital_twin_relationship.py.html>`__ to see an example of how to use delete_digital_twin_relationship API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/delete_digital_twin_relationship.py.html>`__ to see an example of how to use delete_digital_twin_relationship API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinRelationshipId']
         resource_path = "/digitalTwinRelationships/{digitalTwinRelationshipId}"
         method = "DELETE"
         operation_name = "delete_digital_twin_relationship"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinRelationship/DeleteDigitalTwinRelationship"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1801,14 +1801,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/delete_iot_domain.py.html>`__ to see an example of how to use delete_iot_domain API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/delete_iot_domain.py.html>`__ to see an example of how to use delete_iot_domain API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainId']
         resource_path = "/iotDomains/{iotDomainId}"
         method = "DELETE"
         operation_name = "delete_iot_domain"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomain/DeleteIotDomain"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -1909,14 +1909,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/delete_iot_domain_group.py.html>`__ to see an example of how to use delete_iot_domain_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/delete_iot_domain_group.py.html>`__ to see an example of how to use delete_iot_domain_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainGroupId']
         resource_path = "/iotDomainGroups/{iotDomainGroupId}"
         method = "DELETE"
         operation_name = "delete_iot_domain_group"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/DeleteIotDomainGroup"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2010,14 +2010,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/get_digital_twin_adapter.py.html>`__ to see an example of how to use get_digital_twin_adapter API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/get_digital_twin_adapter.py.html>`__ to see an example of how to use get_digital_twin_adapter API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinAdapterId']
         resource_path = "/digitalTwinAdapters/{digitalTwinAdapterId}"
         method = "GET"
         operation_name = "get_digital_twin_adapter"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinAdapter/GetDigitalTwinAdapter"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2111,14 +2111,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/get_digital_twin_instance.py.html>`__ to see an example of how to use get_digital_twin_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/get_digital_twin_instance.py.html>`__ to see an example of how to use get_digital_twin_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinInstanceId']
         resource_path = "/digitalTwinInstances/{digitalTwinInstanceId}"
         method = "GET"
         operation_name = "get_digital_twin_instance"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinInstance/GetDigitalTwinInstance"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2215,14 +2215,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/get_digital_twin_instance_content.py.html>`__ to see an example of how to use get_digital_twin_instance_content API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/get_digital_twin_instance_content.py.html>`__ to see an example of how to use get_digital_twin_instance_content API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinInstanceId']
         resource_path = "/digitalTwinInstances/{digitalTwinInstanceId}/content"
         method = "GET"
         operation_name = "get_digital_twin_instance_content"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinInstance/GetDigitalTwinInstanceContent"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2324,14 +2324,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/get_digital_twin_model.py.html>`__ to see an example of how to use get_digital_twin_model API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/get_digital_twin_model.py.html>`__ to see an example of how to use get_digital_twin_model API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinModelId']
         resource_path = "/digitalTwinModels/{digitalTwinModelId}"
         method = "GET"
         operation_name = "get_digital_twin_model"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinModel/GetDigitalTwinModel"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2425,14 +2425,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/get_digital_twin_model_spec.py.html>`__ to see an example of how to use get_digital_twin_model_spec API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/get_digital_twin_model_spec.py.html>`__ to see an example of how to use get_digital_twin_model_spec API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinModelId']
         resource_path = "/digitalTwinModels/{digitalTwinModelId}/spec"
         method = "GET"
         operation_name = "get_digital_twin_model_spec"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinModel/GetDigitalTwinModelSpec"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2526,14 +2526,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/get_digital_twin_relationship.py.html>`__ to see an example of how to use get_digital_twin_relationship API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/get_digital_twin_relationship.py.html>`__ to see an example of how to use get_digital_twin_relationship API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinRelationshipId']
         resource_path = "/digitalTwinRelationships/{digitalTwinRelationshipId}"
         method = "GET"
         operation_name = "get_digital_twin_relationship"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinRelationship/GetDigitalTwinRelationship"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2627,14 +2627,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/get_iot_domain.py.html>`__ to see an example of how to use get_iot_domain API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/get_iot_domain.py.html>`__ to see an example of how to use get_iot_domain API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainId']
         resource_path = "/iotDomains/{iotDomainId}"
         method = "GET"
         operation_name = "get_iot_domain"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomain/GetIotDomain"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2728,14 +2728,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/get_iot_domain_group.py.html>`__ to see an example of how to use get_iot_domain_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/get_iot_domain_group.py.html>`__ to see an example of how to use get_iot_domain_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainGroupId']
         resource_path = "/iotDomainGroups/{iotDomainGroupId}"
         method = "GET"
         operation_name = "get_iot_domain_group"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/GetIotDomainGroup"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2829,14 +2829,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}"
         method = "GET"
         operation_name = "get_work_request"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/WorkRequest/GetWorkRequest"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -2940,14 +2940,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/invoke_raw_command.py.html>`__ to see an example of how to use invoke_raw_command API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/invoke_raw_command.py.html>`__ to see an example of how to use invoke_raw_command API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinInstanceId']
         resource_path = "/digitalTwinInstances/{digitalTwinInstanceId}/actions/invokeRawCommand"
         method = "POST"
         operation_name = "invoke_raw_command"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinInstance/InvokeRawCommand"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3086,14 +3086,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/list_digital_twin_adapters.py.html>`__ to see an example of how to use list_digital_twin_adapters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/list_digital_twin_adapters.py.html>`__ to see an example of how to use list_digital_twin_adapters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainId']
         resource_path = "/digitalTwinAdapters"
         method = "GET"
         operation_name = "list_digital_twin_adapters"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinAdapter/ListDigitalTwinAdapters"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3263,14 +3263,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/list_digital_twin_instances.py.html>`__ to see an example of how to use list_digital_twin_instances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/list_digital_twin_instances.py.html>`__ to see an example of how to use list_digital_twin_instances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainId']
         resource_path = "/digitalTwinInstances"
         method = "GET"
         operation_name = "list_digital_twin_instances"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinInstance/ListDigitalTwinInstances"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3435,14 +3435,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/list_digital_twin_models.py.html>`__ to see an example of how to use list_digital_twin_models API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/list_digital_twin_models.py.html>`__ to see an example of how to use list_digital_twin_models API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainId']
         resource_path = "/digitalTwinModels"
         method = "GET"
         operation_name = "list_digital_twin_models"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinModel/ListDigitalTwinModels"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3615,14 +3615,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/list_digital_twin_relationships.py.html>`__ to see an example of how to use list_digital_twin_relationships API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/list_digital_twin_relationships.py.html>`__ to see an example of how to use list_digital_twin_relationships API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainId']
         resource_path = "/digitalTwinRelationships"
         method = "GET"
         operation_name = "list_digital_twin_relationships"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinRelationship/ListDigitalTwinRelationships"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3790,14 +3790,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/list_iot_domain_groups.py.html>`__ to see an example of how to use list_iot_domain_groups API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/list_iot_domain_groups.py.html>`__ to see an example of how to use list_iot_domain_groups API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
         resource_path = "/iotDomainGroups"
         method = "GET"
         operation_name = "list_iot_domain_groups"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/ListIotDomainGroups"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -3964,14 +3964,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/list_iot_domains.py.html>`__ to see an example of how to use list_iot_domains API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/list_iot_domains.py.html>`__ to see an example of how to use list_iot_domains API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
         resource_path = "/iotDomains"
         method = "GET"
         operation_name = "list_iot_domains"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomain/ListIotDomains"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -4121,14 +4121,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}/errors"
         method = "GET"
         operation_name = "list_work_request_errors"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/WorkRequest/ListWorkRequestErrors"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -4274,14 +4274,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
         resource_path = "/workRequests/{workRequestId}/logs"
         method = "GET"
         operation_name = "list_work_request_logs"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/WorkRequest/ListWorkRequestLogs"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -4442,14 +4442,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
         resource_path = "/workRequests"
         method = "GET"
         operation_name = "list_work_requests"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/WorkRequest/ListWorkRequests"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -4583,14 +4583,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/update_digital_twin_adapter.py.html>`__ to see an example of how to use update_digital_twin_adapter API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/update_digital_twin_adapter.py.html>`__ to see an example of how to use update_digital_twin_adapter API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinAdapterId']
         resource_path = "/digitalTwinAdapters/{digitalTwinAdapterId}"
         method = "PUT"
         operation_name = "update_digital_twin_adapter"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinAdapter/UpdateDigitalTwinAdapter"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -4698,14 +4698,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/update_digital_twin_instance.py.html>`__ to see an example of how to use update_digital_twin_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/update_digital_twin_instance.py.html>`__ to see an example of how to use update_digital_twin_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinInstanceId']
         resource_path = "/digitalTwinInstances/{digitalTwinInstanceId}"
         method = "PUT"
         operation_name = "update_digital_twin_instance"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinInstance/UpdateDigitalTwinInstance"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -4813,14 +4813,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/update_digital_twin_model.py.html>`__ to see an example of how to use update_digital_twin_model API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/update_digital_twin_model.py.html>`__ to see an example of how to use update_digital_twin_model API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinModelId']
         resource_path = "/digitalTwinModels/{digitalTwinModelId}"
         method = "PUT"
         operation_name = "update_digital_twin_model"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinModel/UpdateDigitalTwinModel"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -4928,14 +4928,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/update_digital_twin_relationship.py.html>`__ to see an example of how to use update_digital_twin_relationship API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/update_digital_twin_relationship.py.html>`__ to see an example of how to use update_digital_twin_relationship API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['digitalTwinRelationshipId']
         resource_path = "/digitalTwinRelationships/{digitalTwinRelationshipId}"
         method = "PUT"
         operation_name = "update_digital_twin_relationship"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/DigitalTwinRelationship/UpdateDigitalTwinRelationship"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -5043,14 +5043,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/update_iot_domain.py.html>`__ to see an example of how to use update_iot_domain API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/update_iot_domain.py.html>`__ to see an example of how to use update_iot_domain API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainId']
         resource_path = "/iotDomains/{iotDomainId}"
         method = "PUT"
         operation_name = "update_iot_domain"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomain/UpdateIotDomain"
 
         # Don't accept unknown kwargs
         expected_kwargs = [
@@ -5156,14 +5156,14 @@ class IotClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.0/iot/update_iot_domain_group.py.html>`__ to see an example of how to use update_iot_domain_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/iot/update_iot_domain_group.py.html>`__ to see an example of how to use update_iot_domain_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['iotDomainGroupId']
         resource_path = "/iotDomainGroups/{iotDomainGroupId}"
         method = "PUT"
         operation_name = "update_iot_domain_group"
-        api_reference_link = ""
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/UpdateIotDomainGroup"
 
         # Don't accept unknown kwargs
         expected_kwargs = [

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: supabase
-Version: 2.22.0
+Version: 2.22.1
 Summary: Supabase client for Python.
 Author: Joel Lee, Leon Fedden, Daniel Reinón García, Leynier Gutiérrez González, Anand, Andrew Smith
 Author-email: Joel Lee <joel@joellee.org>, Leon Fedden <leonfedden@gmail.com>, Daniel Reinón García <danielreinon@outlook.com>, Leynier Gutiérrez González <leynier41@gmail.com>, Andrew Smith <a.smith@silentworks.co.uk>
@@ -17,7 +17,7 @@ Requires-Dist: httpx>=0.26,<0.29
 Maintainer: Leonardo Santiago
 Maintainer-email: Leonardo Santiago <leonardo.santiago@supabase.io>
 Requires-Python: >=3.9
-Project-URL: changelog, https://github.com/supabase/supabase-py/CHANGELOG.md
+Project-URL: changelog, https://github.com/supabase/supabase-py/tree/main/CHANGELOG.md
 Project-URL: documentation, https://github.com/supabase/supabase-py/src/supabase
 Project-URL: homepage, https://github.com/supabase/supabase-py
 Project-URL: repository, https://github.com/supabase/supabase-py

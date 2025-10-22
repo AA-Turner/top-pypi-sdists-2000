@@ -307,6 +307,7 @@ class _HTTPStream(Stream, t.Generic[_TToken], metaclass=abc.ABCMeta):  # noqa: P
             max_tries=self.backoff_max_tries,
             on_backoff=self.backoff_handler,
             jitter=self.backoff_jitter,
+            logger=self.logger,
         )(func)
         return decorator
 
@@ -324,8 +325,9 @@ class _HTTPStream(Stream, t.Generic[_TToken], metaclass=abc.ABCMeta):  # noqa: P
         Returns:
             TODO
         """
+        authenticated_request = self.authenticator(prepared_request)
         response = self.requests_session.send(
-            prepared_request,
+            authenticated_request,
             timeout=self.timeout,
             allow_redirects=self.allow_redirects,
         )
@@ -333,7 +335,7 @@ class _HTTPStream(Stream, t.Generic[_TToken], metaclass=abc.ABCMeta):  # noqa: P
             endpoint=self.path,
             response=response,
             context=context,
-            extra_tags={"url": prepared_request.path_url}
+            extra_tags={"url": authenticated_request.path_url}
             if self._LOG_REQUEST_METRIC_URLS
             else None,
         )
@@ -391,7 +393,6 @@ class _HTTPStream(Stream, t.Generic[_TToken], metaclass=abc.ABCMeta):  # noqa: P
             A :class:`requests.PreparedRequest` object.
         """
         request = requests.Request(*args, **kwargs)
-        self.requests_session.auth = self.authenticator
         return self.requests_session.prepare_request(request)
 
     def prepare_request(
@@ -425,7 +426,6 @@ class _HTTPStream(Stream, t.Generic[_TToken], metaclass=abc.ABCMeta):  # noqa: P
             "url": url,
             "params": params,
             "headers": headers,
-            "auth": self.authenticator,
         }
 
         if self.payload_as_json:
@@ -726,6 +726,23 @@ class _HTTPStream(Stream, t.Generic[_TToken], metaclass=abc.ABCMeta):  # noqa: P
             details: backoff invocation details
                 https://github.com/litl/backoff#event-handlers
         """
+        if (
+            (exc := details.get("exception"))
+            and isinstance(exc, RetriableAPIError)
+            and exc.response is not None
+        ):
+            self.log(
+                "Backing off %0.2f seconds after %d tries "
+                "for URL %s, failing with status %s: %s",
+                details.get("wait"),
+                details.get("tries"),
+                self.path,
+                exc.response.status_code,
+                exc.response.reason,
+                level=logging.ERROR,
+            )
+            return
+
         self.log(
             "Backing off %0.2f seconds after %d tries "
             "calling function %s with args %s and kwargs "

@@ -29,6 +29,7 @@ use datafusion::logical_expr::utils::split_conjunction;
 use datafusion::logical_expr::{BinaryExpr, LogicalPlan, Operator};
 use datafusion::optimizer::simplify_expressions::ExprSimplifier;
 use datafusion::physical_optimizer::pruning::PruningPredicate;
+use datafusion::physical_plan::filter_pushdown::{FilterDescription, FilterPushdownPhase};
 use datafusion::physical_plan::metrics::{ExecutionPlanMetricsSet, MetricBuilder, MetricsSet};
 use datafusion::physical_plan::{
     stream::RecordBatchStreamAdapter, DisplayAs, DisplayFormatType, ExecutionPlan, PhysicalExpr,
@@ -625,7 +626,7 @@ impl<'a> DeltaScanBuilder<'a> {
             let mut pruned_batches = Vec::new();
             let mut mask_offset = 0;
 
-            for batch in &self.snapshot.files {
+            for batch in self.snapshot.files()? {
                 let batch_size = batch.num_rows();
                 let batch_mask = &mask[mask_offset..mask_offset + batch_size];
                 let batch_mask_array = BooleanArray::from(batch_mask.to_vec());
@@ -979,6 +980,15 @@ impl ExecutionPlan for DeltaScan {
 
     fn partition_statistics(&self, partition: Option<usize>) -> Result<Statistics> {
         self.parquet_scan.partition_statistics(partition)
+    }
+
+    fn gather_filters_for_pushdown(
+        &self,
+        _phase: FilterPushdownPhase,
+        parent_filters: Vec<Arc<dyn PhysicalExpr>>,
+        _config: &ConfigOptions,
+    ) -> Result<FilterDescription> {
+        FilterDescription::from_children(parent_filters, &self.children())
     }
 }
 

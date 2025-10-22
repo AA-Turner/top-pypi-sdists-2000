@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: smart_open
-Version: 7.4.0
+Version: 7.4.1
 Summary: Utils for streaming large files (S3, HDFS, GCS, SFTP, Azure Blob Storage, gzip, bz2, zst...)
 Author-email: Radim Rehurek <me@radimrehurek.com>
 Project-URL: Repository, https://github.com/piskvorky/smart_open
@@ -24,7 +24,7 @@ Description-Content-Type: text/x-rst
 License-File: LICENSE
 Requires-Dist: wrapt
 Provides-Extra: s3
-Requires-Dist: boto3; extra == "s3"
+Requires-Dist: boto3>=1.9.17; extra == "s3"
 Provides-Extra: gcs
 Requires-Dist: google-cloud-storage>=2.6.0; extra == "gcs"
 Provides-Extra: azure
