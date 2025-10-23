@@ -16,7 +16,7 @@ fn hash_shuffle_bits(h: usize) -> usize {
 #[derive(Debug)]
 struct Key {
     hash: isize,
-    inner: PyObject,
+    inner: Py<PyAny>,
 }
 
 impl<'py> IntoPyObject<'py> for Key {
@@ -49,7 +49,7 @@ impl Eq for Key {}
 
 impl PartialEq for Key {
     fn eq(&self, other: &Self) -> bool {
-        Python::with_gil(|py| {
+        Python::attach(|py| {
             self.inner
                 .call_method1(py, "__eq__", (&other.inner,))
                 .and_then(|value| value.extract(py))
@@ -67,11 +67,13 @@ impl Key {
     }
 }
 
-impl<'source> FromPyObject<'source> for Key {
-    fn extract_bound(ob: &Bound<'source, PyAny>) -> PyResult<Self> {
+impl<'py> FromPyObject<'_, 'py> for Key {
+    type Error = PyErr;
+
+    fn extract(ob: Borrowed<'_, 'py, PyAny>) -> Result<Self, Self::Error> {
         Ok(Key {
             hash: ob.hash()?,
-            inner: ob.clone().unbind(),
+            inner: ob.unbind(),
         })
     }
 }
@@ -79,21 +81,23 @@ impl<'source> FromPyObject<'source> for Key {
 #[repr(transparent)]
 #[pyclass(name = "HashTrieMap", module = "rpds", frozen, mapping)]
 struct HashTrieMapPy {
-    inner: HashTrieMapSync<Key, PyObject>,
+    inner: HashTrieMapSync<Key, Py<PyAny>>,
 }
 
-impl From<HashTrieMapSync<Key, PyObject>> for HashTrieMapPy {
-    fn from(map: HashTrieMapSync<Key, PyObject>) -> Self {
+impl From<HashTrieMapSync<Key, Py<PyAny>>> for HashTrieMapPy {
+    fn from(map: HashTrieMapSync<Key, Py<PyAny>>) -> Self {
         HashTrieMapPy { inner: map }
     }
 }
 
-impl<'source> FromPyObject<'source> for HashTrieMapPy {
-    fn extract_bound(ob: &Bound<'source, PyAny>) -> PyResult<Self> {
+impl<'py> FromPyObject<'_, 'py> for HashTrieMapPy {
+    type Error = PyErr;
+
+    fn extract(ob: Borrowed<'_, 'py, PyAny>) -> Result<Self, Self::Error> {
         let mut ret = HashTrieMap::new_sync();
-        if let Ok(mapping) = ob.downcast::<PyMapping>() {
+        if let Ok(mapping) = ob.cast::<PyMapping>() {
             for each in mapping.items()?.iter() {
-                let (k, v): (Key, PyObject) = each.extract()?;
+                let (k, v): (Key, Py<PyAny>) = each.extract()?;
                 ret.insert_mut(k, v);
             }
         } else {
@@ -105,6 +109,8 @@ impl<'source> FromPyObject<'source> for HashTrieMapPy {
         Ok(HashTrieMapPy { inner: ret })
     }
 }
+
+type PickledTypeWithVec<'a> = (Bound<'a, PyType>, (Vec<(Key, Py<PyAny>)>,));
 
 #[pymethods]
 impl HashTrieMapPy {
@@ -121,7 +127,8 @@ impl HashTrieMapPy {
         }
         if let Some(kwds) = kwds {
             for (k, v) in kwds {
-                map.inner.insert_mut(Key::extract_bound(&k)?, v.into());
+                map.inner
+                    .insert_mut(Key::extract(k.as_borrowed())?, v.into());
             }
         }
         Ok(map)
@@ -137,7 +144,7 @@ impl HashTrieMapPy {
         }
     }
 
-    fn __getitem__(&self, key: Key, py: Python) -> PyResult<PyObject> {
+    fn __getitem__(&self, key: Key, py: Python) -> PyResult<Py<PyAny>> {
         match self.inner.get(&key) {
             Some(value) => Ok(value.clone_ref(py)),
             None => Err(PyKeyError::new_err(key)),
@@ -167,7 +174,12 @@ impl HashTrieMapPy {
         )
     }
 
-    fn __richcmp__<'py>(&self, other: &Self, op: CompareOp, py: Python<'py>) -> PyResult<PyObject> {
+    fn __richcmp__<'py>(
+        &self,
+        other: &Self,
+        op: CompareOp,
+        py: Python<'py>,
+    ) -> PyResult<Py<PyAny>> {
         match op {
             CompareOp::Eq => (self.inner.size() == other.inner.size()
                 && self
@@ -240,7 +252,7 @@ impl HashTrieMapPy {
         Ok(hash_val as isize)
     }
 
-    fn __reduce__(slf: PyRef<Self>) -> (Bound<'_, PyType>, (Vec<(Key, PyObject)>,)) {
+    fn __reduce__(slf: PyRef<'_, Self>) -> PickledTypeWithVec<'_> {
         (
             HashTrieMapPy::type_object(slf.py()),
             (slf.inner
@@ -255,11 +267,11 @@ impl HashTrieMapPy {
         _cls: &Bound<'_, PyType>,
         value: Bound<'_, PyAny>,
         py: Python,
-    ) -> PyResult<PyObject> {
+    ) -> PyResult<Py<PyAny>> {
         if value.is_instance_of::<HashTrieMapPy>() {
             Ok(value.unbind())
         } else {
-            HashTrieMapPy::extract_bound(&value)?
+            HashTrieMapPy::extract(value.as_borrowed())?
                 .into_pyobject(py)
                 .map(BoundObject::into_any)
                 .map(BoundObject::unbind)
@@ -278,14 +290,14 @@ impl HashTrieMapPy {
         let none = py.None().into_bound(py);
         let value = val.unwrap_or(&none);
         for each in keys.try_iter()? {
-            let key = Key::extract_bound(&each?)?;
+            let key = Key::extract(each?.as_borrowed())?;
             inner.insert_mut(key, value.clone().unbind());
         }
         Ok(HashTrieMapPy { inner })
     }
 
     #[pyo3(signature = (key, default=None))]
-    fn get(&self, key: Key, default: Option<PyObject>, py: Python) -> Option<PyObject> {
+    fn get(&self, key: Key, default: Option<Py<PyAny>>, py: Python) -> Option<Py<PyAny>> {
         if let Some(value) = self.inner.get(&key) {
             Some(value.clone_ref(py))
         } else {
@@ -345,14 +357,14 @@ impl HashTrieMapPy {
     ) -> PyResult<HashTrieMapPy> {
         let mut inner = self.inner.clone();
         for value in maps {
-            let map = HashTrieMapPy::extract_bound(&value)?;
+            let map = HashTrieMapPy::extract(value.as_borrowed())?;
             for (k, v) in &map.inner {
                 inner.insert_mut(k.clone_ref(value.py()), v.clone_ref(value.py()));
             }
         }
         if let Some(kwds) = kwds {
             for (k, v) in kwds {
-                inner.insert_mut(Key::extract_bound(&k)?, v.extract()?);
+                inner.insert_mut(Key::extract(k.as_borrowed())?, v.extract()?);
             }
         }
         Ok(HashTrieMapPy { inner })
@@ -361,7 +373,7 @@ impl HashTrieMapPy {
 
 #[pyclass(module = "rpds")]
 struct KeysIterator {
-    inner: HashTrieMapSync<Key, PyObject>,
+    inner: HashTrieMapSync<Key, Py<PyAny>>,
 }
 
 #[pymethods]
@@ -379,7 +391,7 @@ impl KeysIterator {
 
 #[pyclass(module = "rpds")]
 struct ValuesIterator {
-    inner: HashTrieMapSync<Key, PyObject>,
+    inner: HashTrieMapSync<Key, Py<PyAny>>,
 }
 
 #[pymethods]
@@ -388,7 +400,7 @@ impl ValuesIterator {
         slf
     }
 
-    fn __next__(mut slf: PyRefMut<'_, Self>) -> Option<PyObject> {
+    fn __next__(mut slf: PyRefMut<'_, Self>) -> Option<Py<PyAny>> {
         let kv = slf.inner.iter().next()?;
         let value = kv.1.clone_ref(slf.py());
         slf.inner = slf.inner.remove(kv.0);
@@ -398,7 +410,7 @@ impl ValuesIterator {
 
 #[pyclass(module = "rpds")]
 struct ItemsIterator {
-    inner: HashTrieMapSync<Key, PyObject>,
+    inner: HashTrieMapSync<Key, Py<PyAny>>,
 }
 
 #[pymethods]
@@ -407,7 +419,7 @@ impl ItemsIterator {
         slf
     }
 
-    fn __next__(mut slf: PyRefMut<'_, Self>) -> Option<(Key, PyObject)> {
+    fn __next__(mut slf: PyRefMut<'_, Self>) -> Option<(Key, Py<PyAny>)> {
         let kv = slf.inner.iter().next()?;
         let key = kv.0.clone_ref(slf.py());
         let value = kv.1.clone_ref(slf.py());
@@ -420,7 +432,7 @@ impl ItemsIterator {
 
 #[pyclass(module = "rpds")]
 struct KeysView {
-    inner: HashTrieMapSync<Key, PyObject>,
+    inner: HashTrieMapSync<Key, Py<PyAny>>,
 }
 
 #[pymethods]
@@ -435,7 +447,7 @@ impl KeysView {
             return Ok(false);
         }
         for each in other.try_iter()? {
-            if !slf.inner.contains_key(&Key::extract_bound(&each?)?) {
+            if !slf.inner.contains_key(&Key::extract(each?.as_borrowed())?) {
                 return Ok(false);
             }
         }
@@ -476,7 +488,7 @@ impl KeysView {
             return Ok(false);
         }
         for each in other.try_iter()? {
-            if !slf.inner.contains_key(&Key::extract_bound(&each?)?) {
+            if !slf.inner.contains_key(&Key::extract(each?.as_borrowed())?) {
                 return Ok(false);
             }
         }
@@ -489,7 +501,7 @@ impl KeysView {
             return Ok(false);
         }
         for each in other.try_iter()? {
-            if !slf.inner.contains_key(&Key::extract_bound(&each?)?) {
+            if !slf.inner.contains_key(&Key::extract(each?.as_borrowed())?) {
                 return Ok(false);
             }
         }
@@ -531,7 +543,7 @@ impl KeysView {
         // TODO: iterate over the shorter one if it's got a length
         let mut inner = HashTrieSet::new_sync();
         for each in other.try_iter()? {
-            let key = Key::extract_bound(&each?)?;
+            let key = Key::extract(each?.as_borrowed())?;
             if slf.inner.contains_key(&key) {
                 inner.insert_mut(key);
             }
@@ -544,7 +556,7 @@ impl KeysView {
         // so we just keep our map and add values we'll ignore.
         let mut inner = slf.inner.clone();
         for each in other.try_iter()? {
-            inner.insert_mut(Key::extract_bound(&each?)?, py.None());
+            inner.insert_mut(Key::extract(each?.as_borrowed())?, py.None());
         }
         Ok(KeysView { inner })
     }
@@ -552,7 +564,7 @@ impl KeysView {
 
 #[pyclass(module = "rpds")]
 struct ValuesView {
-    inner: HashTrieMapSync<Key, PyObject>,
+    inner: HashTrieMapSync<Key, Py<PyAny>>,
 }
 
 #[pymethods]
@@ -581,11 +593,11 @@ impl ValuesView {
 
 #[pyclass(module = "rpds")]
 struct ItemsView {
-    inner: HashTrieMapSync<Key, PyObject>,
+    inner: HashTrieMapSync<Key, Py<PyAny>>,
 }
 
 #[derive(FromPyObject)]
-struct ItemViewQuery(Key, PyObject);
+struct ItemViewQuery(Key, Py<PyAny>);
 
 #[pymethods]
 impl ItemsView {
@@ -667,7 +679,7 @@ impl ItemsView {
         for each in other.try_iter()? {
             let kv = each?;
             let k = kv.get_item(0)?;
-            match slf.inner.get(&Key::extract_bound(&k)?) {
+            match slf.inner.get(&Key::extract(k.as_borrowed())?) {
                 Some(value) => {
                     let pair = PyTuple::new(py, [k, value.bind(py).clone()])?;
                     if !pair.eq(kv)? {
@@ -688,7 +700,7 @@ impl ItemsView {
         for each in other.try_iter()? {
             let kv = each?;
             let k = kv.get_item(0)?;
-            match slf.inner.get(&Key::extract_bound(&k)?) {
+            match slf.inner.get(&Key::extract(k.as_borrowed())?) {
                 Some(value) => {
                     let pair = PyTuple::new(py, [k, value.bind(py).clone()])?;
                     if !pair.eq(kv)? {
@@ -727,10 +739,10 @@ impl ItemsView {
         for each in other.try_iter()? {
             let kv = each?;
             let k = kv.get_item(0)?;
-            if let Some(value) = slf.inner.get(&Key::extract_bound(&k)?) {
+            if let Some(value) = slf.inner.get(&Key::extract(k.as_borrowed())?) {
                 let pair = PyTuple::new(py, [k, value.bind(py).clone()])?;
                 if pair.eq(kv)? {
-                    inner.insert_mut(Key::extract_bound(&pair)?);
+                    inner.insert_mut(Key::extract(pair.as_any().as_borrowed())?);
                 }
             }
         }
@@ -746,10 +758,10 @@ impl ItemsView {
         let mut inner = HashTrieSet::new_sync();
         for (k, v) in slf.inner.iter() {
             let pair = PyTuple::new(py, [k.inner.clone_ref(py), v.clone_ref(py)])?;
-            inner.insert_mut(Key::extract_bound(&pair)?);
+            inner.insert_mut(Key::extract(pair.as_any().as_borrowed())?);
         }
         for each in other.try_iter()? {
-            inner.insert_mut(Key::extract_bound(&each?)?);
+            inner.insert_mut(Key::extract(each?.as_borrowed())?);
         }
         Ok(HashTrieSetPy { inner })
     }
@@ -761,8 +773,10 @@ struct HashTrieSetPy {
     inner: HashTrieSetSync<Key>,
 }
 
-impl<'source> FromPyObject<'source> for HashTrieSetPy {
-    fn extract_bound(ob: &Bound<'source, PyAny>) -> PyResult<Self> {
+impl<'py> FromPyObject<'_, 'py> for HashTrieSetPy {
+    type Error = PyErr;
+
+    fn extract(ob: Borrowed<'_, 'py, PyAny>) -> Result<Self, Self::Error> {
         let mut ret = HashTrieSet::new_sync();
         for each in ob.try_iter()? {
             let k: Key = each?.extract()?;
@@ -834,7 +848,7 @@ impl HashTrieSetPy {
             return Ok(false);
         }
         for each in other.try_iter()? {
-            if !slf.inner.contains(&Key::extract_bound(&each?)?) {
+            if !slf.inner.contains(&Key::extract(each?.as_borrowed())?) {
                 return Ok(false);
             }
         }
@@ -892,7 +906,7 @@ impl HashTrieSetPy {
             return Ok(false);
         }
         for each in other.try_iter()? {
-            if !slf.inner.contains(&Key::extract_bound(&each?)?) {
+            if !slf.inner.contains(&Key::extract(each?.as_borrowed())?) {
                 return Ok(false);
             }
         }
@@ -905,14 +919,14 @@ impl HashTrieSetPy {
             return Ok(false);
         }
         for each in other.try_iter()? {
-            if !slf.inner.contains(&Key::extract_bound(&each?)?) {
+            if !slf.inner.contains(&Key::extract(each?.as_borrowed())?) {
                 return Ok(false);
             }
         }
         Ok(true)
     }
 
-    fn __reduce__(slf: PyRef<Self>) -> (Bound<'_, PyType>, (Vec<Key>,)) {
+    fn __reduce__(slf: PyRef<'_, Self>) -> (Bound<'_, PyType>, (Vec<Key>,)) {
         (
             HashTrieSetPy::type_object(slf.py()),
             (slf.inner.iter().map(|e| e.clone_ref(slf.py())).collect(),),
@@ -1014,7 +1028,7 @@ impl HashTrieSetPy {
         for each in iterables {
             let iter = each.try_iter()?;
             for value in iter {
-                inner.insert_mut(Key::extract_bound(&value?)?);
+                inner.insert_mut(Key::extract(value?.as_borrowed())?);
             }
         }
         Ok(HashTrieSetPy { inner })
@@ -1042,17 +1056,19 @@ impl SetIterator {
 #[repr(transparent)]
 #[pyclass(name = "List", module = "rpds", frozen, sequence)]
 struct ListPy {
-    inner: ListSync<PyObject>,
+    inner: ListSync<Py<PyAny>>,
 }
 
-impl From<ListSync<PyObject>> for ListPy {
-    fn from(elements: ListSync<PyObject>) -> Self {
+impl From<ListSync<Py<PyAny>>> for ListPy {
+    fn from(elements: ListSync<Py<PyAny>>) -> Self {
         ListPy { inner: elements }
     }
 }
 
-impl<'source> FromPyObject<'source> for ListPy {
-    fn extract_bound(ob: &Bound<'source, PyAny>) -> PyResult<Self> {
+impl<'py> FromPyObject<'_, 'py> for ListPy {
+    type Error = PyErr;
+
+    fn extract(ob: Borrowed<'_, 'py, PyAny>) -> Result<Self, Self::Error> {
         let mut ret = List::new_sync();
         let reversed = PyModule::import(ob.py(), "builtins")?.getattr("reversed")?;
         let rob: Bound<'_, PyIterator> = reversed.call1((ob,))?.try_iter()?;
@@ -1100,7 +1116,7 @@ impl ListPy {
         Ok(format!("List([{}])", contents.join(", ")))
     }
 
-    fn __richcmp__(&self, other: &Self, op: CompareOp, py: Python<'_>) -> PyResult<PyObject> {
+    fn __richcmp__(&self, other: &Self, op: CompareOp, py: Python<'_>) -> PyResult<Py<PyAny>> {
         match op {
             CompareOp::Eq => (self.inner.len() == other.inner.len()
                 && self
@@ -1165,7 +1181,7 @@ impl ListPy {
         }
     }
 
-    fn __reduce__(slf: PyRef<Self>) -> (Bound<'_, PyType>, (Vec<PyObject>,)) {
+    fn __reduce__(slf: PyRef<'_, Self>) -> (Bound<'_, PyType>, (Vec<Py<PyAny>>,)) {
         (
             ListPy::type_object(slf.py()),
             (slf.inner.iter().map(|e| e.clone_ref(slf.py())).collect(),),
@@ -1173,7 +1189,7 @@ impl ListPy {
     }
 
     #[getter]
-    fn first(&self) -> PyResult<&PyObject> {
+    fn first(&self) -> PyResult<&Py<PyAny>> {
         self.inner
             .first()
             .ok_or_else(|| PyIndexError::new_err("empty list has no first element"))
@@ -1186,7 +1202,7 @@ impl ListPy {
         ListPy { inner }
     }
 
-    fn push_front(&self, other: PyObject) -> ListPy {
+    fn push_front(&self, other: Py<PyAny>) -> ListPy {
         ListPy {
             inner: self.inner.push_front(other),
         }
@@ -1203,7 +1219,7 @@ impl ListPy {
 
 #[pyclass(module = "rpds")]
 struct ListIterator {
-    inner: ListSync<PyObject>,
+    inner: ListSync<Py<PyAny>>,
 }
 
 #[pymethods]
@@ -1212,7 +1228,7 @@ impl ListIterator {
         slf
     }
 
-    fn __next__(mut slf: PyRefMut<'_, Self>) -> Option<PyObject> {
+    fn __next__(mut slf: PyRefMut<'_, Self>) -> Option<Py<PyAny>> {
         let first_op = slf.inner.first()?;
         let first = first_op.clone_ref(slf.py());
 
@@ -1224,7 +1240,7 @@ impl ListIterator {
 
 #[pyclass(module = "rpds")]
 struct QueueIterator {
-    inner: QueueSync<PyObject>,
+    inner: QueueSync<Py<PyAny>>,
 }
 
 #[pymethods]
@@ -1233,7 +1249,7 @@ impl QueueIterator {
         slf
     }
 
-    fn __next__(mut slf: PyRefMut<'_, Self>) -> Option<PyObject> {
+    fn __next__(mut slf: PyRefMut<'_, Self>) -> Option<Py<PyAny>> {
         let first_op = slf.inner.peek()?;
         let first = first_op.clone_ref(slf.py());
         slf.inner = slf.inner.dequeue()?;
@@ -1244,17 +1260,19 @@ impl QueueIterator {
 #[repr(transparent)]
 #[pyclass(name = "Queue", module = "rpds", frozen, sequence)]
 struct QueuePy {
-    inner: QueueSync<PyObject>,
+    inner: QueueSync<Py<PyAny>>,
 }
 
-impl From<QueueSync<PyObject>> for QueuePy {
-    fn from(elements: QueueSync<PyObject>) -> Self {
+impl From<QueueSync<Py<PyAny>>> for QueuePy {
+    fn from(elements: QueueSync<Py<PyAny>>) -> Self {
         QueuePy { inner: elements }
     }
 }
 
-impl<'source> FromPyObject<'source> for QueuePy {
-    fn extract_bound(ob: &Bound<'source, PyAny>) -> PyResult<Self> {
+impl<'py> FromPyObject<'_, 'py> for QueuePy {
+    type Error = PyErr;
+
+    fn extract(ob: Borrowed<'_, 'py, PyAny>) -> Result<Self, Self::Error> {
         let mut ret = Queue::new_sync();
         for each in ob.try_iter()? {
             ret.enqueue_mut(each?.extract()?);
@@ -1351,7 +1369,7 @@ impl QueuePy {
     }
 
     #[getter]
-    fn peek(&self, py: Python) -> PyResult<PyObject> {
+    fn peek(&self, py: Python) -> PyResult<Py<PyAny>> {
         if let Some(peeked) = self.inner.peek() {
             Ok(peeked.clone_ref(py))
         } else {

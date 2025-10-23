@@ -367,6 +367,7 @@ from mypy_boto3_route53_recovery_readiness.client import Route53RecoveryReadines
 from mypy_boto3_route53domains.client import Route53DomainsClient
 from mypy_boto3_route53profiles.client import Route53ProfilesClient
 from mypy_boto3_route53resolver.client import Route53ResolverClient
+from mypy_boto3_rtbfabric.client import RTBFabricClient
 from mypy_boto3_rum.client import CloudWatchRUMClient
 from mypy_boto3_s3.client import S3Client
 from mypy_boto3_s3.service_resource import S3ServiceResource
@@ -6816,6 +6817,25 @@ class Session:
     ) -> Route53ResolverClient:
         """
         Create client for Route53Resolver service.
+        """
+
+    @overload
+    def client(
+        self,
+        service_name: Literal["rtbfabric"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: Config | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> RTBFabricClient:
+        """
+        Create client for RTBFabric service.
         """
 
     @overload

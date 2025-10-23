@@ -23,6 +23,7 @@ from redis.client import EMPTY_RESPONSE, NEVER_DECODE
 from redis.commands.json.path import Path
 from redis.commands.search.field import TextField
 from redis.commands.search.query import Query
+from redis.utils import safe_str
 from tests.conftest import (
     assert_resp_response,
     assert_resp_response_in,
@@ -2071,11 +2072,14 @@ class TestRedisCommands:
             r, response, [(b"a2", 2.0), (b"a3", 3.0)], [[b"a2", 2.0], [b"a3", 3.0]]
         )
 
-        # custom score function
-        # assert await r.zrange("a", 0, 1, withscores=True, score_cast_func=int) == [
-        #     (b"a1", 1),
-        #     (b"a2", 2),
-        # ]
+        # custom score cast function
+        response = await r.zrange("a", 0, 1, withscores=True, score_cast_func=safe_str)
+        assert_resp_response(
+            r,
+            response,
+            [(b"a1", "1"), (b"a2", "2")],
+            [[b"a1", "1.0"], [b"a2", "2.0"]],
+        )
 
     @skip_if_server_version_lt("2.8.9")
     async def test_zrangebylex(self, r: redis.Redis):
@@ -2127,6 +2131,15 @@ class TestRedisCommands:
             [(b"a2", 2), (b"a3", 3), (b"a4", 4)],
             [[b"a2", 2], [b"a3", 3], [b"a4", 4]],
         )
+        response = await r.zrangebyscore(
+            "a", 2, 4, withscores=True, score_cast_func=safe_str
+        )
+        assert_resp_response(
+            r,
+            response,
+            [(b"a2", "2"), (b"a3", "3"), (b"a4", "4")],
+            [[b"a2", "2.0"], [b"a3", "3.0"], [b"a4", "4.0"]],
+        )
 
     async def test_zrank(self, r: redis.Redis):
         await r.zadd("a", {"a1": 1, "a2": 2, "a3": 3, "a4": 4, "a5": 5})
@@ -2141,9 +2154,13 @@ class TestRedisCommands:
         assert await r.zrank("a", "a2") == 1
         assert await r.zrank("a", "a6") is None
         assert_resp_response(
-            r, await r.zrank("a", "a3", withscore=True), [2, b"3"], [2, 3.0]
+            r, await r.zrank("a", "a3", withscore=True), [2, 3.0], [2, 3.0]
         )
         assert await r.zrank("a", "a6", withscore=True) is None
+
+        # custom score cast function
+        response = await r.zrank("a", "a3", withscore=True, score_cast_func=safe_str)
+        assert_resp_response(r, response, [2, "3"], [2, "3.0"])
 
     async def test_zrem(self, r: redis.Redis):
         await r.zadd("a", {"a1": 1, "a2": 2, "a3": 3})
@@ -2200,6 +2217,19 @@ class TestRedisCommands:
             r, response, [(b"a3", 3), (b"a2", 2)], [[b"a3", 3], [b"a2", 2]]
         )
 
+        # custom score cast function
+        # should be applied to resp2 and resp3
+        # responses
+        response = await r.zrevrange(
+            "a", 0, 1, withscores=True, score_cast_func=safe_str
+        )
+        assert_resp_response(
+            r,
+            response,
+            [(b"a3", "3"), (b"a2", "2")],
+            [[b"a3", "3.0"], [b"a2", "2.0"]],
+        )
+
     async def test_zrevrangebyscore(self, r: redis.Redis):
         await r.zadd("a", {"a1": 1, "a2": 2, "a3": 3, "a4": 4, "a5": 5})
         assert await r.zrevrangebyscore("a", 4, 2) == [b"a4", b"a3", b"a2"]
@@ -2240,7 +2270,7 @@ class TestRedisCommands:
         assert await r.zrevrank("a", "a2") == 3
         assert await r.zrevrank("a", "a6") is None
         assert_resp_response(
-            r, await r.zrevrank("a", "a3", withscore=True), [2, b"3"], [2, 3.0]
+            r, await r.zrevrank("a", "a3", withscore=True), [2, 3.0], [2, 3.0]
         )
         assert await r.zrevrank("a", "a6", withscore=True) is None
 
@@ -3158,6 +3188,7 @@ class TestRedisCommands:
         assert await r.xgroup_destroy(stream, group)
 
     @skip_if_server_version_lt("7.0.0")
+    @skip_if_server_version_gte("8.2.2")
     async def test_xgroup_setid(self, r: redis.Redis):
         stream = "stream"
         group = "group"
@@ -3174,6 +3205,28 @@ class TestRedisCommands:
                 "last-delivered-id": message_id,
                 "entries-read": 2,
                 "lag": -1,
+            }
+        ]
+        assert await r.xinfo_groups(stream) == expected
+
+    @skip_if_server_version_lt("8.2.2")
+    async def test_xgroup_setid_fixed_max_entries_read(self, r):
+        stream = "stream"
+        group = "group"
+        message_id = await r.xadd(stream, {"foo": "bar"})
+        await r.xadd(stream, {"foo1": "bar1"})
+
+        await r.xgroup_create(stream, group, 0)
+        # advance the last_delivered_id to the message_id
+        await r.xgroup_setid(stream, group, message_id, entries_read=2)
+        expected = [
+            {
+                "name": group.encode(),
+                "consumers": 0,
+                "pending": 0,
+                "last-delivered-id": message_id,
+                "entries-read": 2,
+                "lag": 0,
             }
         ]
         assert await r.xinfo_groups(stream) == expected

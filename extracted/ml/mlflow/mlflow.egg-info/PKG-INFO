@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mlflow
-Version: 3.5.0
+Version: 3.5.1
 Summary: MLflow is an open source platform for the complete machine learning lifecycle
 Maintainer-email: Databricks <mlflow-oss-maintainers@googlegroups.com>
 License: Copyright 2018 Databricks, Inc.  All rights reserved.
@@ -224,14 +224,13 @@ Classifier: Programming Language :: Python :: 3.10
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
-Requires-Dist: mlflow-skinny==3.5.0
-Requires-Dist: mlflow-tracing==3.5.0
+Requires-Dist: mlflow-skinny==3.5.1
+Requires-Dist: mlflow-tracing==3.5.1
 Requires-Dist: Flask-CORS<7
 Requires-Dist: Flask<4
 Requires-Dist: alembic!=1.10.0,<2
 Requires-Dist: cryptography<47,>=43.0.0
 Requires-Dist: docker<8,>=4.0.0
-Requires-Dist: fastmcp<3,>=2.0.0
 Requires-Dist: graphene<4
 Requires-Dist: gunicorn<24; platform_system != "Windows"
 Requires-Dist: matplotlib<4
@@ -278,6 +277,8 @@ Requires-Dist: slowapi<1,>=0.1.9; extra == "genai"
 Requires-Dist: tiktoken<1; extra == "genai"
 Requires-Dist: uvicorn[standard]<1; extra == "genai"
 Requires-Dist: watchfiles<2; extra == "genai"
+Provides-Extra: mcp
+Requires-Dist: fastmcp<3,>=2.0.0; extra == "mcp"
 Provides-Extra: sqlserver
 Requires-Dist: mlflow-dbstore; extra == "sqlserver"
 Provides-Extra: aliyun-oss

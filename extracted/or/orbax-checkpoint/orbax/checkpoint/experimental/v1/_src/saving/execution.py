@@ -22,7 +22,6 @@ import uuid
 from absl import logging
 from etils import epath
 import jax
-import nest_asyncio
 from orbax.checkpoint._src.futures import future
 from orbax.checkpoint._src.logging import event_tracking
 from orbax.checkpoint._src.metadata import step_metadata_serialization
@@ -31,11 +30,12 @@ from orbax.checkpoint._src.path import atomicity_types
 from orbax.checkpoint.experimental.v1._src.context import context as context_lib
 from orbax.checkpoint.experimental.v1._src.handlers import composite_handler
 from orbax.checkpoint.experimental.v1._src.handlers import types as handler_types
+from orbax.checkpoint.experimental.v1._src.layout import checkpoint_layout
 from orbax.checkpoint.experimental.v1._src.metadata import serialization as metadata_serialization
 from orbax.checkpoint.experimental.v1._src.path import async_utils as path_async_utils
-from orbax.checkpoint.experimental.v1._src.path import format_utils
 from orbax.checkpoint.experimental.v1._src.path import types as path_types
 from orbax.checkpoint.experimental.v1._src.saving import path_utils as saving_path_utils
+from orbax.checkpoint.experimental.v1._src.synchronization import asyncio_utils
 from orbax.checkpoint.experimental.v1._src.synchronization import multihost
 from orbax.checkpoint.experimental.v1._src.synchronization import thread_utils
 from orbax.checkpoint.experimental.v1._src.synchronization import types as async_types
@@ -56,7 +56,7 @@ def add_internal_checkpointables(
   """Adds descriptor to checkpointables if enabled."""
   # Global registration ties metrics key to JsonHandler.
   if metrics:
-    checkpointables[format_utils.METRICS_CHECKPOINTABLE_KEY] = metrics
+    checkpointables[checkpoint_layout.METRICS_CHECKPOINTABLE_KEY] = metrics
   return checkpointables
 
 
@@ -201,6 +201,15 @@ async def run_blocking_save(
   ):
     await tmp_path_awaiting_creation.await_creation()
 
+  if partial_save:
+    await multihost.sync_global_processes(
+        multihost.unique_barrier_key(
+            'save_checkpointables_async:run_blocking_save:partial_save',
+            prefix=context.multiprocessing_options.barrier_sync_key_prefix,
+        ),
+        processes=context.multiprocessing_options.active_processes,
+    )
+
   # Delegate to the handler to get the background awaitable.
   background_awaitable = await handler.save(
       tmp_path_awaiting_creation, checkpointables
@@ -265,7 +274,7 @@ def save_checkpointables_impl(
     partial_save: bool = False,
 ) -> async_types.AsyncResponse[None]:
   """See caller docstrings."""
-  nest_asyncio.apply()
+  asyncio_utils.maybe_apply_nest_asyncio()
   context = context_lib.get_context()
   path = epath.Path(path)
   path_exists = path.exists() if partial_save else False

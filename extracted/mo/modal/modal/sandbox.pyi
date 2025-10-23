@@ -3,6 +3,7 @@ import collections.abc
 import google.protobuf.message
 import modal._object
 import modal._tunnel
+import modal._utils.task_command_router_client
 import modal.app
 import modal.client
 import modal.cloud_bucket_mount
@@ -83,6 +84,7 @@ class _Sandbox(modal._object._Object):
     _task_id: typing.Optional[str]
     _tunnels: typing.Optional[dict[int, modal._tunnel.Tunnel]]
     _enable_snapshot: bool
+    _command_router_client: typing.Optional[modal._utils.task_command_router_client.TaskCommandRouterClient]
 
     @staticmethod
     def _default_pty_info() -> modal_proto.api_pb2.PTYInfo: ...
@@ -276,11 +278,10 @@ class _Sandbox(modal._object._Object):
     async def create_connect_token(
         self, user_metadata: typing.Union[str, dict[str, typing.Any], None] = None
     ) -> SandboxConnectCredentials:
-        """mdmd:hidden
-        [Alpha] Create a token for making HTTP connections to the sandbox.
+        """[Alpha] Create a token for making HTTP connections to the Sandbox.
 
         Also accepts an optional user_metadata string or dict to associate with the token. This metadata
-        will be added to the headers by the proxy when forwarding requests to the sandbox.
+        will be added to the headers by the proxy when forwarding requests to the Sandbox.
         """
         ...
 
@@ -306,6 +307,9 @@ class _Sandbox(modal._object._Object):
         ...
 
     async def _get_task_id(self) -> str: ...
+    async def _get_command_router_client(
+        self, task_id: str
+    ) -> typing.Optional[modal._utils.task_command_router_client.TaskCommandRouterClient]: ...
     @typing.overload
     async def exec(
         self,
@@ -355,6 +359,41 @@ class _Sandbox(modal._object._Object):
 
         This method exposes some internal arguments (currently `pty_info`) which are not in the public API.
         """
+        ...
+
+    async def _exec_through_server(
+        self,
+        *args: str,
+        task_id: str,
+        pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+        stdout: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+        stderr: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+        timeout: typing.Optional[int] = None,
+        workdir: typing.Optional[str] = None,
+        secret_ids: typing.Optional[collections.abc.Collection[str]] = None,
+        text: bool = True,
+        bufsize: typing.Literal[-1, 1] = -1,
+        runtime_debug: bool = False,
+    ) -> typing.Union[modal.container_process._ContainerProcess[bytes], modal.container_process._ContainerProcess[str]]:
+        """Execute a command through the Modal server."""
+        ...
+
+    async def _exec_through_command_router(
+        self,
+        *args: str,
+        task_id: str,
+        command_router_client: modal._utils.task_command_router_client.TaskCommandRouterClient,
+        pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+        stdout: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+        stderr: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+        timeout: typing.Optional[int] = None,
+        workdir: typing.Optional[str] = None,
+        secret_ids: typing.Optional[collections.abc.Collection[str]] = None,
+        text: bool = True,
+        bufsize: typing.Literal[-1, 1] = -1,
+        runtime_debug: bool = False,
+    ) -> typing.Union[modal.container_process._ContainerProcess[bytes], modal.container_process._ContainerProcess[str]]:
+        """Execute a command through a task command router running on the Modal worker."""
         ...
 
     async def _experimental_snapshot(self) -> modal.snapshot._SandboxSnapshot: ...
@@ -445,6 +484,7 @@ class Sandbox(modal.object.Object):
     _task_id: typing.Optional[str]
     _tunnels: typing.Optional[dict[int, modal._tunnel.Tunnel]]
     _enable_snapshot: bool
+    _command_router_client: typing.Optional[modal._utils.task_command_router_client.TaskCommandRouterClient]
 
     def __init__(self, *args, **kwargs):
         """mdmd:hidden"""
@@ -832,22 +872,20 @@ class Sandbox(modal.object.Object):
         def __call__(
             self, /, user_metadata: typing.Union[str, dict[str, typing.Any], None] = None
         ) -> SandboxConnectCredentials:
-            """mdmd:hidden
-            [Alpha] Create a token for making HTTP connections to the sandbox.
+            """[Alpha] Create a token for making HTTP connections to the Sandbox.
 
             Also accepts an optional user_metadata string or dict to associate with the token. This metadata
-            will be added to the headers by the proxy when forwarding requests to the sandbox.
+            will be added to the headers by the proxy when forwarding requests to the Sandbox.
             """
             ...
 
         async def aio(
             self, /, user_metadata: typing.Union[str, dict[str, typing.Any], None] = None
         ) -> SandboxConnectCredentials:
-            """mdmd:hidden
-            [Alpha] Create a token for making HTTP connections to the sandbox.
+            """[Alpha] Create a token for making HTTP connections to the Sandbox.
 
             Also accepts an optional user_metadata string or dict to associate with the token. This metadata
-            will be added to the headers by the proxy when forwarding requests to the sandbox.
+            will be added to the headers by the proxy when forwarding requests to the Sandbox.
             """
             ...
 
@@ -909,6 +947,16 @@ class Sandbox(modal.object.Object):
         async def aio(self, /) -> str: ...
 
     _get_task_id: ___get_task_id_spec[typing_extensions.Self]
+
+    class ___get_command_router_client_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(
+            self, /, task_id: str
+        ) -> typing.Optional[modal._utils.task_command_router_client.TaskCommandRouterClient]: ...
+        async def aio(
+            self, /, task_id: str
+        ) -> typing.Optional[modal._utils.task_command_router_client.TaskCommandRouterClient]: ...
+
+    _get_command_router_client: ___get_command_router_client_spec[typing_extensions.Self]
 
     class __exec_spec(typing_extensions.Protocol[SUPERSELF]):
         @typing.overload
@@ -1028,6 +1076,94 @@ class Sandbox(modal.object.Object):
             ...
 
     _exec: ___exec_spec[typing_extensions.Self]
+
+    class ___exec_through_server_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(
+            self,
+            /,
+            *args: str,
+            task_id: str,
+            pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+            stdout: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+            stderr: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+            timeout: typing.Optional[int] = None,
+            workdir: typing.Optional[str] = None,
+            secret_ids: typing.Optional[collections.abc.Collection[str]] = None,
+            text: bool = True,
+            bufsize: typing.Literal[-1, 1] = -1,
+            runtime_debug: bool = False,
+        ) -> typing.Union[
+            modal.container_process.ContainerProcess[bytes], modal.container_process.ContainerProcess[str]
+        ]:
+            """Execute a command through the Modal server."""
+            ...
+
+        async def aio(
+            self,
+            /,
+            *args: str,
+            task_id: str,
+            pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+            stdout: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+            stderr: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+            timeout: typing.Optional[int] = None,
+            workdir: typing.Optional[str] = None,
+            secret_ids: typing.Optional[collections.abc.Collection[str]] = None,
+            text: bool = True,
+            bufsize: typing.Literal[-1, 1] = -1,
+            runtime_debug: bool = False,
+        ) -> typing.Union[
+            modal.container_process.ContainerProcess[bytes], modal.container_process.ContainerProcess[str]
+        ]:
+            """Execute a command through the Modal server."""
+            ...
+
+    _exec_through_server: ___exec_through_server_spec[typing_extensions.Self]
+
+    class ___exec_through_command_router_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(
+            self,
+            /,
+            *args: str,
+            task_id: str,
+            command_router_client: modal._utils.task_command_router_client.TaskCommandRouterClient,
+            pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+            stdout: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+            stderr: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+            timeout: typing.Optional[int] = None,
+            workdir: typing.Optional[str] = None,
+            secret_ids: typing.Optional[collections.abc.Collection[str]] = None,
+            text: bool = True,
+            bufsize: typing.Literal[-1, 1] = -1,
+            runtime_debug: bool = False,
+        ) -> typing.Union[
+            modal.container_process.ContainerProcess[bytes], modal.container_process.ContainerProcess[str]
+        ]:
+            """Execute a command through a task command router running on the Modal worker."""
+            ...
+
+        async def aio(
+            self,
+            /,
+            *args: str,
+            task_id: str,
+            command_router_client: modal._utils.task_command_router_client.TaskCommandRouterClient,
+            pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+            stdout: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+            stderr: modal.stream_type.StreamType = modal.stream_type.StreamType.PIPE,
+            timeout: typing.Optional[int] = None,
+            workdir: typing.Optional[str] = None,
+            secret_ids: typing.Optional[collections.abc.Collection[str]] = None,
+            text: bool = True,
+            bufsize: typing.Literal[-1, 1] = -1,
+            runtime_debug: bool = False,
+        ) -> typing.Union[
+            modal.container_process.ContainerProcess[bytes], modal.container_process.ContainerProcess[str]
+        ]:
+            """Execute a command through a task command router running on the Modal worker."""
+            ...
+
+    _exec_through_command_router: ___exec_through_command_router_spec[typing_extensions.Self]
 
     class ___experimental_snapshot_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /) -> modal.snapshot.SandboxSnapshot: ...

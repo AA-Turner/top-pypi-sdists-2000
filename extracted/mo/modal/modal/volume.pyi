@@ -626,6 +626,14 @@ class _Volume(modal._object._Object):
         """
         ...
 
+    async def _read_file_into_fileobj(
+        self,
+        path: str,
+        fileobj: typing.IO[bytes],
+        concurrency: typing.Optional[int] = None,
+        download_semaphore: typing.Optional[asyncio.locks.Semaphore] = None,
+        progress_cb: typing.Optional[collections.abc.Callable[..., typing.Any]] = None,
+    ) -> int: ...
     async def remove_file(self, path: str, recursive: bool = False) -> None:
         """Remove a file or directory from a volume."""
         ...
@@ -1064,6 +1072,28 @@ class Volume(modal.object.Object):
             ...
 
     read_file_into_fileobj: __read_file_into_fileobj_spec[typing_extensions.Self]
+
+    class ___read_file_into_fileobj_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(
+            self,
+            /,
+            path: str,
+            fileobj: typing.IO[bytes],
+            concurrency: typing.Optional[int] = None,
+            download_semaphore: typing.Optional[asyncio.locks.Semaphore] = None,
+            progress_cb: typing.Optional[collections.abc.Callable[..., typing.Any]] = None,
+        ) -> int: ...
+        async def aio(
+            self,
+            /,
+            path: str,
+            fileobj: typing.IO[bytes],
+            concurrency: typing.Optional[int] = None,
+            download_semaphore: typing.Optional[asyncio.locks.Semaphore] = None,
+            progress_cb: typing.Optional[collections.abc.Callable[..., typing.Any]] = None,
+        ) -> int: ...
+
+    _read_file_into_fileobj: ___read_file_into_fileobj_spec[typing_extensions.Self]
 
     class __remove_file_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /, path: str, recursive: bool = False) -> None:

@@ -3419,6 +3419,7 @@ ServiceName = Literal[
     "route53domains",
     "route53profiles",
     "route53resolver",
+    "rtbfabric",
     "rum",
     "s3",
     "s3control",

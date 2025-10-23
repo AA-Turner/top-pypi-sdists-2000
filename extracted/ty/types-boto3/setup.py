@@ -12,13 +12,13 @@ LONG_DESCRIPTION = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name="types-boto3",
-    version="1.40.56",
+    version="1.40.57",
     packages=["boto3-stubs"],
     url="https://github.com/youtype/mypy_boto3_builder",
     license="MIT License",
     author="Vlad Emelianov",
     author_email="vlad.emelianov.nz@gmail.com",
-    description="Type annotations for boto3 1.40.56 generated with mypy-boto3-builder 8.11.0",
+    description="Type annotations for boto3 1.40.57 generated with mypy-boto3-builder 8.11.0",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -55,7 +55,7 @@ setup(
     ],
     extras_require={
         "full": ["types-boto3-full>=1.40.0, <1.41.0"],
-        "boto3": ["boto3==1.40.56"],
+        "boto3": ["boto3==1.40.57"],
         "all": [
             "types-boto3-accessanalyzer>=1.40.0, <1.41.0",
             "types-boto3-account>=1.40.0, <1.41.0",
@@ -390,6 +390,7 @@ setup(
             "types-boto3-route53domains>=1.40.0, <1.41.0",
             "types-boto3-route53profiles>=1.40.0, <1.41.0",
             "types-boto3-route53resolver>=1.40.0, <1.41.0",
+            "types-boto3-rtbfabric>=1.40.0, <1.41.0",
             "types-boto3-rum>=1.40.0, <1.41.0",
             "types-boto3-s3>=1.40.0, <1.41.0",
             "types-boto3-s3control>=1.40.0, <1.41.0",
@@ -828,6 +829,7 @@ setup(
         "route53domains": ["types-boto3-route53domains>=1.40.0, <1.41.0"],
         "route53profiles": ["types-boto3-route53profiles>=1.40.0, <1.41.0"],
         "route53resolver": ["types-boto3-route53resolver>=1.40.0, <1.41.0"],
+        "rtbfabric": ["types-boto3-rtbfabric>=1.40.0, <1.41.0"],
         "rum": ["types-boto3-rum>=1.40.0, <1.41.0"],
         "s3": ["types-boto3-s3>=1.40.0, <1.41.0"],
         "s3control": ["types-boto3-s3control>=1.40.0, <1.41.0"],

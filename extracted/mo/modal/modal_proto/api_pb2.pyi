@@ -8917,44 +8917,6 @@ class SandboxCreateResponse(google.protobuf.message.Message):
 
 global___SandboxCreateResponse = SandboxCreateResponse
 
-class SandboxGetCommandRouterAccessRequest(google.protobuf.message.Message):
-    """Used to get a JWT and URL for direct access to a sandbox router server
-    running on the modal-worker, so the client can issue exec commands (and other
-    operations as they become available) directly to the worker.
-    DEPRECATED: Use TaskGetCommandRouterAccessRequest instead.
-    TODO(saltzm): Remove this.
-    """
-
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
-
-    SANDBOX_ID_FIELD_NUMBER: builtins.int
-    sandbox_id: builtins.str
-    def __init__(
-        self,
-        *,
-        sandbox_id: builtins.str = ...,
-    ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["sandbox_id", b"sandbox_id"]) -> None: ...
-
-global___SandboxGetCommandRouterAccessRequest = SandboxGetCommandRouterAccessRequest
-
-class SandboxGetCommandRouterAccessResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
-
-    JWT_FIELD_NUMBER: builtins.int
-    URL_FIELD_NUMBER: builtins.int
-    jwt: builtins.str
-    url: builtins.str
-    def __init__(
-        self,
-        *,
-        jwt: builtins.str = ...,
-        url: builtins.str = ...,
-    ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["jwt", b"jwt", "url", b"url"]) -> None: ...
-
-global___SandboxGetCommandRouterAccessResponse = SandboxGetCommandRouterAccessResponse
-
 class SandboxGetFromNameRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -10302,36 +10264,6 @@ class TaskCurrentInputsResponse(google.protobuf.message.Message):
 
 global___TaskCurrentInputsResponse = TaskCurrentInputsResponse
 
-class TaskGetAutoscalingMetricsRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
-
-    TASK_ID_FIELD_NUMBER: builtins.int
-    task_id: builtins.str
-    def __init__(
-        self,
-        *,
-        task_id: builtins.str = ...,
-    ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["task_id", b"task_id"]) -> None: ...
-
-global___TaskGetAutoscalingMetricsRequest = TaskGetAutoscalingMetricsRequest
-
-class TaskGetAutoscalingMetricsResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
-
-    METRICS_FIELD_NUMBER: builtins.int
-    @property
-    def metrics(self) -> global___AutoscalingMetrics: ...
-    def __init__(
-        self,
-        *,
-        metrics: global___AutoscalingMetrics | None = ...,
-    ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["metrics", b"metrics"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["metrics", b"metrics"]) -> None: ...
-
-global___TaskGetAutoscalingMetricsResponse = TaskGetAutoscalingMetricsResponse
-
 class TaskGetCommandRouterAccessRequest(google.protobuf.message.Message):
     """Used to get a JWT and URL for direct access to a task command router
     running on the modal-worker, so the client can issue exec commands (and other
@@ -11597,9 +11529,11 @@ class WebhookConfig(google.protobuf.message.Message):
     WEB_SERVER_STARTUP_TIMEOUT_FIELD_NUMBER: builtins.int
     WEB_ENDPOINT_DOCS_FIELD_NUMBER: builtins.int
     REQUIRES_PROXY_AUTH_FIELD_NUMBER: builtins.int
+    EPHEMERAL_SUFFIX_FIELD_NUMBER: builtins.int
     type: global___WebhookType.ValueType
     method: builtins.str
     requested_suffix: builtins.str
+    """User-supplied "label" component of URL"""
     async_mode: global___WebhookAsyncMode.ValueType
     @property
     def custom_domains(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___CustomDomainConfig]: ...
@@ -11607,6 +11541,8 @@ class WebhookConfig(google.protobuf.message.Message):
     web_server_startup_timeout: builtins.float
     web_endpoint_docs: builtins.bool
     requires_proxy_auth: builtins.bool
+    ephemeral_suffix: builtins.str
+    """Additional URL suffix added for ephemeral Apps"""
     def __init__(
         self,
         *,
@@ -11619,8 +11555,9 @@ class WebhookConfig(google.protobuf.message.Message):
         web_server_startup_timeout: builtins.float = ...,
         web_endpoint_docs: builtins.bool = ...,
         requires_proxy_auth: builtins.bool = ...,
+        ephemeral_suffix: builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["async_mode", b"async_mode", "custom_domains", b"custom_domains", "method", b"method", "requested_suffix", b"requested_suffix", "requires_proxy_auth", b"requires_proxy_auth", "type", b"type", "web_endpoint_docs", b"web_endpoint_docs", "web_server_port", b"web_server_port", "web_server_startup_timeout", b"web_server_startup_timeout"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["async_mode", b"async_mode", "custom_domains", b"custom_domains", "ephemeral_suffix", b"ephemeral_suffix", "method", b"method", "requested_suffix", b"requested_suffix", "requires_proxy_auth", b"requires_proxy_auth", "type", b"type", "web_endpoint_docs", b"web_endpoint_docs", "web_server_port", b"web_server_port", "web_server_startup_timeout", b"web_server_startup_timeout"]) -> None: ...
 
 global___WebhookConfig = WebhookConfig
 

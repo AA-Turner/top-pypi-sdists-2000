@@ -595,11 +595,6 @@ class ModalClientStub(object):
                 request_serializer=modal__proto_dot_api__pb2.SandboxCreateConnectTokenRequest.SerializeToString,
                 response_deserializer=modal__proto_dot_api__pb2.SandboxCreateConnectTokenResponse.FromString,
                 )
-        self.SandboxGetCommandRouterAccess = channel.unary_unary(
-                '/modal.client.ModalClient/SandboxGetCommandRouterAccess',
-                request_serializer=modal__proto_dot_api__pb2.SandboxGetCommandRouterAccessRequest.SerializeToString,
-                response_deserializer=modal__proto_dot_api__pb2.SandboxGetCommandRouterAccessResponse.FromString,
-                )
         self.SandboxGetFromName = channel.unary_unary(
                 '/modal.client.ModalClient/SandboxGetFromName',
                 request_serializer=modal__proto_dot_api__pb2.SandboxGetFromNameRequest.SerializeToString,
@@ -759,11 +754,6 @@ class ModalClientStub(object):
                 '/modal.client.ModalClient/TaskCurrentInputs',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=modal__proto_dot_api__pb2.TaskCurrentInputsResponse.FromString,
-                )
-        self.TaskGetAutoscalingMetrics = channel.unary_unary(
-                '/modal.client.ModalClient/TaskGetAutoscalingMetrics',
-                request_serializer=modal__proto_dot_api__pb2.TaskGetAutoscalingMetricsRequest.SerializeToString,
-                response_deserializer=modal__proto_dot_api__pb2.TaskGetAutoscalingMetricsResponse.FromString,
                 )
         self.TaskGetCommandRouterAccess = channel.unary_unary(
                 '/modal.client.ModalClient/TaskGetCommandRouterAccess',
@@ -1620,12 +1610,6 @@ class ModalClientServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def SandboxGetCommandRouterAccess(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def SandboxGetFromName(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -1818,13 +1802,6 @@ class ModalClientServicer(object):
 
     def TaskCurrentInputs(self, request, context):
         """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def TaskGetAutoscalingMetrics(self, request, context):
-        """Used for flash autoscaling
-        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -2572,11 +2549,6 @@ def add_ModalClientServicer_to_server(servicer, server):
                     request_deserializer=modal__proto_dot_api__pb2.SandboxCreateConnectTokenRequest.FromString,
                     response_serializer=modal__proto_dot_api__pb2.SandboxCreateConnectTokenResponse.SerializeToString,
             ),
-            'SandboxGetCommandRouterAccess': grpc.unary_unary_rpc_method_handler(
-                    servicer.SandboxGetCommandRouterAccess,
-                    request_deserializer=modal__proto_dot_api__pb2.SandboxGetCommandRouterAccessRequest.FromString,
-                    response_serializer=modal__proto_dot_api__pb2.SandboxGetCommandRouterAccessResponse.SerializeToString,
-            ),
             'SandboxGetFromName': grpc.unary_unary_rpc_method_handler(
                     servicer.SandboxGetFromName,
                     request_deserializer=modal__proto_dot_api__pb2.SandboxGetFromNameRequest.FromString,
@@ -2736,11 +2708,6 @@ def add_ModalClientServicer_to_server(servicer, server):
                     servicer.TaskCurrentInputs,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                     response_serializer=modal__proto_dot_api__pb2.TaskCurrentInputsResponse.SerializeToString,
-            ),
-            'TaskGetAutoscalingMetrics': grpc.unary_unary_rpc_method_handler(
-                    servicer.TaskGetAutoscalingMetrics,
-                    request_deserializer=modal__proto_dot_api__pb2.TaskGetAutoscalingMetricsRequest.FromString,
-                    response_serializer=modal__proto_dot_api__pb2.TaskGetAutoscalingMetricsResponse.SerializeToString,
             ),
             'TaskGetCommandRouterAccess': grpc.unary_unary_rpc_method_handler(
                     servicer.TaskGetCommandRouterAccess,
@@ -4855,23 +4822,6 @@ class ModalClient(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def SandboxGetCommandRouterAccess(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/modal.client.ModalClient/SandboxGetCommandRouterAccess',
-            modal__proto_dot_api__pb2.SandboxGetCommandRouterAccessRequest.SerializeToString,
-            modal__proto_dot_api__pb2.SandboxGetCommandRouterAccessResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
     def SandboxGetFromName(request,
             target,
             options=(),
@@ -5412,23 +5362,6 @@ class ModalClient(object):
         return grpc.experimental.unary_unary(request, target, '/modal.client.ModalClient/TaskCurrentInputs',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             modal__proto_dot_api__pb2.TaskCurrentInputsResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def TaskGetAutoscalingMetrics(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/modal.client.ModalClient/TaskGetAutoscalingMetrics',
-            modal__proto_dot_api__pb2.TaskGetAutoscalingMetricsRequest.SerializeToString,
-            modal__proto_dot_api__pb2.TaskGetAutoscalingMetricsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

@@ -17982,6 +17982,7 @@ class NetworkInterfaceTypeDef(TypedDict):
     Ipv6Address: NotRequired[str]
     Operator: NotRequired[OperatorResponseTypeDef]
     AssociatedSubnets: NotRequired[List[str]]
+    AvailabilityZoneId: NotRequired[str]
 
 class CreateDhcpOptionsResultTypeDef(TypedDict):
     DhcpOptions: DhcpOptionsTypeDef

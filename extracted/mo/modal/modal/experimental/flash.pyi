@@ -1,5 +1,4 @@
 import modal.client
-import modal_proto.api_pb2
 import subprocess
 import typing
 import typing_extensions
@@ -139,7 +138,7 @@ class _FlashPrometheusAutoscaler:
     async def start(self): ...
     async def _run_autoscaler_loop(self): ...
     async def _compute_target_containers(self, current_replicas: int) -> int:
-        """Gets internal metrics from container to autoscale up or down."""
+        """Gets metrics from container to autoscale up or down."""
         ...
 
     def _calculate_desired_replicas(
@@ -154,13 +153,10 @@ class _FlashPrometheusAutoscaler:
         ...
 
     async def _get_scaling_info(self, containers) -> tuple[float, int]:
-        """Get metrics using either internal container metrics API or prometheus HTTP endpoints."""
+        """Get metrics using container exposed metrics endpoints."""
         ...
 
     async def _get_metrics(self, url: str) -> typing.Optional[dict[str, list[typing.Any]]]: ...
-    async def _get_container_metrics(
-        self, container_id: str
-    ) -> typing.Optional[modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse]: ...
     async def _get_all_containers(self): ...
     async def _set_target_slots(self, target_slots: int): ...
     def _make_scaling_decision(
@@ -226,11 +222,11 @@ class FlashPrometheusAutoscaler:
 
     class ___compute_target_containers_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /, current_replicas: int) -> int:
-            """Gets internal metrics from container to autoscale up or down."""
+            """Gets metrics from container to autoscale up or down."""
             ...
 
         async def aio(self, /, current_replicas: int) -> int:
-            """Gets internal metrics from container to autoscale up or down."""
+            """Gets metrics from container to autoscale up or down."""
             ...
 
     _compute_target_containers: ___compute_target_containers_spec[typing_extensions.Self]
@@ -248,11 +244,11 @@ class FlashPrometheusAutoscaler:
 
     class ___get_scaling_info_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /, containers) -> tuple[float, int]:
-            """Get metrics using either internal container metrics API or prometheus HTTP endpoints."""
+            """Get metrics using container exposed metrics endpoints."""
             ...
 
         async def aio(self, /, containers) -> tuple[float, int]:
-            """Get metrics using either internal container metrics API or prometheus HTTP endpoints."""
+            """Get metrics using container exposed metrics endpoints."""
             ...
 
     _get_scaling_info: ___get_scaling_info_spec[typing_extensions.Self]
@@ -262,16 +258,6 @@ class FlashPrometheusAutoscaler:
         async def aio(self, /, url: str) -> typing.Optional[dict[str, list[typing.Any]]]: ...
 
     _get_metrics: ___get_metrics_spec[typing_extensions.Self]
-
-    class ___get_container_metrics_spec(typing_extensions.Protocol[SUPERSELF]):
-        def __call__(
-            self, /, container_id: str
-        ) -> typing.Optional[modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse]: ...
-        async def aio(
-            self, /, container_id: str
-        ) -> typing.Optional[modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse]: ...
-
-    _get_container_metrics: ___get_container_metrics_spec[typing_extensions.Self]
 
     class ___get_all_containers_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /): ...

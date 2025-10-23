@@ -28,6 +28,7 @@ from orbax.checkpoint._src.multihost import multihost
 from orbax.checkpoint._src.multihost import multislice
 from orbax.checkpoint._src.testing.benchmarks.core import core as benchmarks_core
 from orbax.checkpoint._src.testing.benchmarks.core import mesh_utils
+from orbax.checkpoint._src.testing.benchmarks.core import metric as metric_lib
 from orbax.checkpoint._src.testing.benchmarks.core import pytree_utils
 from orbax.checkpoint._src.tree import utils
 from orbax.checkpoint.experimental.emergency import checkpoint_manager as emergency_checkpoint_manager
@@ -58,7 +59,6 @@ class EcmBenchmarkOptions(benchmarks_core.BenchmarkOptions):
   local_max_to_keep: int | Sequence[int] = 2
   replica_axis_index: int | Sequence[int] = 0
   train_steps: int | Sequence[int] = 10
-  use_shard_map_broadcast: bool | Sequence[bool] = True
   single_host_load_and_broadcast: bool | Sequence[bool] = True
   experimental_use_distributed_id_for_mesh_consistency: (
       bool | Sequence[bool]
@@ -92,7 +92,6 @@ def _create_checkpoint_manager(
               max_to_keep=options.persistent_max_to_keep,
           ),
           replica_axis_index=options.replica_axis_index,
-          use_shard_map_broadcast=options.use_shard_map_broadcast,
           single_host_load_and_broadcast=options.single_host_load_and_broadcast,
       ),
   )
@@ -112,7 +111,7 @@ def _is_in_replica(
 
 def _restore_and_validate(
     manager: emergency_checkpoint_manager.CheckpointManager,
-    metrics: benchmarks_core.Metrics,
+    metrics: metric_lib.Metrics,
     pytree: Any,
     step: int,
     local_directory: epath.Path,
@@ -164,7 +163,7 @@ class EmergencyCheckpointManagerBenchmark(benchmarks_core.BenchmarksGenerator):
       self, context: benchmarks_core.TestContext
   ) -> benchmarks_core.TestResult:
     """The core test logic for a single save/restore cycle."""
-    metrics = benchmarks_core.Metrics()
+    metrics = metric_lib.Metrics()
     pytree = context.pytree
     persistent_directory = context.path / "persistent_replica_ckpt"
     local_directory = (

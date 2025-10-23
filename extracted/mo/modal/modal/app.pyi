@@ -74,6 +74,42 @@ class _FunctionDecoratorType:
         self, func: collections.abc.Callable[P, ReturnType]
     ) -> modal.functions.Function[P, ReturnType, ReturnType]: ...
 
+class _LocalAppState:
+    """All state for apps that's part of the local/definition state"""
+
+    functions: dict[str, modal._functions._Function]
+    classes: dict[str, modal.cls._Cls]
+    image_default: typing.Optional[modal.image._Image]
+    web_endpoints: list[str]
+    local_entrypoints: dict[str, _LocalEntrypoint]
+    tags: dict[str, str]
+    include_source_default: bool
+    secrets_default: collections.abc.Sequence[modal.secret._Secret]
+    volumes_default: dict[typing.Union[str, pathlib.PurePosixPath], modal.volume._Volume]
+
+    def __init__(
+        self,
+        functions: dict[str, modal._functions._Function],
+        classes: dict[str, modal.cls._Cls],
+        image_default: typing.Optional[modal.image._Image],
+        web_endpoints: list[str],
+        local_entrypoints: dict[str, _LocalEntrypoint],
+        tags: dict[str, str],
+        include_source_default: bool,
+        secrets_default: collections.abc.Sequence[modal.secret._Secret],
+        volumes_default: dict[typing.Union[str, pathlib.PurePosixPath], modal.volume._Volume],
+    ) -> None:
+        """Initialize self.  See help(type(self)) for accurate signature."""
+        ...
+
+    def __repr__(self):
+        """Return repr(self)."""
+        ...
+
+    def __eq__(self, other):
+        """Return self==value."""
+        ...
+
 class _App:
     """A Modal App is a group of functions and classes that are deployed together.
 
@@ -110,18 +146,15 @@ class _App:
     _container_app: typing.ClassVar[typing.Optional[_App]]
     _name: typing.Optional[str]
     _description: typing.Optional[str]
-    _tags: dict[str, str]
-    _functions: dict[str, modal._functions._Function]
-    _classes: dict[str, modal.cls._Cls]
-    _image: typing.Optional[modal.image._Image]
-    _secrets: collections.abc.Sequence[modal.secret._Secret]
-    _volumes: dict[typing.Union[str, pathlib.PurePosixPath], modal.volume._Volume]
-    _web_endpoints: list[str]
-    _local_entrypoints: dict[str, _LocalEntrypoint]
+    _local_state_attr: typing.Optional[_LocalAppState]
     _app_id: typing.Optional[str]
     _running_app: typing.Optional[modal.running_app.RunningApp]
     _client: typing.Optional[modal.client._Client]
-    _include_source_default: typing.Optional[bool]
+
+    @property
+    def _local_state(self) -> _LocalAppState:
+        """For internal use only. Do not use this property directly."""
+        ...
 
     def __init__(
         self,
@@ -630,18 +663,10 @@ class App:
     _container_app: typing.ClassVar[typing.Optional[App]]
     _name: typing.Optional[str]
     _description: typing.Optional[str]
-    _tags: dict[str, str]
-    _functions: dict[str, modal.functions.Function]
-    _classes: dict[str, modal.cls.Cls]
-    _image: typing.Optional[modal.image.Image]
-    _secrets: collections.abc.Sequence[modal.secret.Secret]
-    _volumes: dict[typing.Union[str, pathlib.PurePosixPath], modal.volume.Volume]
-    _web_endpoints: list[str]
-    _local_entrypoints: dict[str, LocalEntrypoint]
+    _local_state_attr: typing.Optional[_LocalAppState]
     _app_id: typing.Optional[str]
     _running_app: typing.Optional[modal.running_app.RunningApp]
     _client: typing.Optional[modal.client.Client]
-    _include_source_default: typing.Optional[bool]
 
     def __init__(
         self,
@@ -662,6 +687,11 @@ class App:
         app = modal.App(image=image, secrets=[secret], volumes={"/mnt/data": volume})
         ```
         """
+        ...
+
+    @property
+    def _local_state(self) -> _LocalAppState:
+        """For internal use only. Do not use this property directly."""
         ...
 
     @property

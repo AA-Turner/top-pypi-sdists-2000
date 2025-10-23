@@ -164,6 +164,7 @@ class PyTreeCheckpointHandlerTestBase:
         array_metadata_store: array_metadata_store_lib.Store | None = (
             ARRAY_METADATA_STORE
         ),
+        use_compression: bool = True,
     ):
       """Registers handlers with OCDBT support and resets when done."""
       type_handler_registry = copy.deepcopy(
@@ -179,6 +180,7 @@ class PyTreeCheckpointHandlerTestBase:
           type_handler_registry=type_handler_registry,
           pytree_metadata_options=pytree_metadata_options,
           enable_pinned_host_transfer=enable_pinned_host_transfer,
+          use_compression=use_compression,
       )
       try:
         yield handler
@@ -485,6 +487,7 @@ class PyTreeCheckpointHandlerTestBase:
           shape=np.array([2]),
           axis_names=['x'],
           partition_spec=('x',),
+          axis_types=(jax.sharding.AxisType.Auto,),
           device_mesh=sharding_metadata.DeviceMetadataMesh.from_jax_mesh(
               jax.sharding.Mesh(devices_subset, ('x',))
           ),
@@ -493,6 +496,7 @@ class PyTreeCheckpointHandlerTestBase:
           shape=np.array([8]),
           axis_names=['x'],
           partition_spec=('x',),
+          axis_types=(jax.sharding.AxisType.Auto,),
           device_mesh=sharding_metadata.DeviceMetadataMesh.from_jax_mesh(
               jax.sharding.Mesh(jax.devices(), ('x',))
           ),
@@ -755,6 +759,52 @@ class PyTreeCheckpointHandlerTestBase:
               pytree_metadata_options=self.pytree_metadata_options,
               array_metadata_store=array_metadata_store,
           )
+
+    @parameterized.product(
+        use_ocdbt=(True, False),
+        use_zarr3=(False, True),
+        array_metadata_store=(None, ARRAY_METADATA_STORE),
+        use_compression=(True, False),
+    )
+    def test_compression(
+        self,
+        use_ocdbt: bool,
+        use_zarr3: bool,
+        array_metadata_store: array_metadata_store_lib.Store | None,
+        use_compression: bool,
+    ):
+      """Test case for zarr2 compression."""
+      with self.ocdbt_checkpoint_handler(
+          use_ocdbt,
+          use_zarr3=use_zarr3,
+          array_metadata_store=array_metadata_store,
+          use_compression=use_compression,
+      ) as checkpoint_handler:
+        checkpoint_handler.save(
+            self.directory, args=PyTreeSaveArgs(self.pytree)
+        )
+        restored = checkpoint_handler.restore(
+            self.directory,
+            args=PyTreeRestoreArgs(restore_args=self.restore_args),
+        )
+        self.validate_restore(self.pytree, restored)
+        if self.should_validate_metadata():
+          self.validate_metadata(
+              expected_reference_metadata_tree=self.pytree,
+              actual_metadata=checkpoint_handler.metadata(self.directory),
+              pytree_metadata_options=self.pytree_metadata_options,
+              array_metadata_store=array_metadata_store,
+          )
+
+        self.assertEqual(
+            test_utils.is_compression_used(
+                self.directory,
+                'a',
+                use_zarr3,
+                use_ocdbt,
+            ),
+            use_compression,
+        )
 
     @parameterized.product(use_ocdbt=(True, False))
     def test_restore_reverse_mesh(self, use_ocdbt: bool):
@@ -2314,9 +2364,7 @@ class PyTreeCheckpointHandlerTestBase:
       if multihost.process_index() != 0:  # only test on primary host
         self.skipTest('Test only for primary host to avoid barrier timeout.')
 
-      class MissingArrayMetadataSerializer(
-          array_metadata_store_lib.Serializer
-      ):
+      class MissingArrayMetadataSerializer(array_metadata_store_lib.Serializer):
 
         def deserialize(
             self, serialized: str
@@ -2662,7 +2710,7 @@ class PyTreeCheckpointHandlerTestBase:
           }
           with self.assertRaisesRegex(
               ValueError,
-              r"Missing 1 keys in structure path \(\), including: \['z'\]",
+              'Missing keys were found in the user-provided restore item.',
           ):
             restore_handler.restore(
                 directory,
@@ -2761,3 +2809,83 @@ class PyTreeCheckpointHandlerTestBase:
             ),
         )
         test_utils.assert_tree_equal(self, expected, restored)
+
+    @parameterized.product(
+        enable_replica_parallel_separate_folder=(True, False),
+        use_ocdbt=(True, False),
+    )
+    def test_array_handler_replica_separate_folder(
+        self, enable_replica_parallel_separate_folder, use_ocdbt
+    ):
+      if multihost.is_pathways_backend():
+        self.skipTest('Replica parallel is not supported on Pathways.')
+
+      handler = type_handlers.ArrayHandler(
+          use_replica_parallel=True,
+          enable_replica_parallel_separate_folder=enable_replica_parallel_separate_folder,
+      )
+
+      fn = lambda ty: issubclass(ty, jax.Array)
+      with test_utils.register_type_handler(jax.Array, handler, fn):
+
+        with self.ocdbt_checkpoint_handler(
+            use_ocdbt=use_ocdbt,
+            array_metadata_store=array_metadata_store_lib.Store(),
+        ) as handler:
+          # build shardings
+          mesh = jax.sharding.Mesh(
+              devices=np.asarray(jax.devices()).reshape(2, 4),
+              axis_names=('x', 'y'),
+          )
+          full_replicated_sharding = jax.sharding.NamedSharding(
+              mesh=mesh,
+              spec=jax.sharding.PartitionSpec(),  # Fully replicated
+          )
+          partial_replicated_sharding = jax.sharding.NamedSharding(
+              mesh=mesh,
+              spec=jax.sharding.PartitionSpec('x'),  # Replicated on y
+          )
+
+          # build tree
+          full_replicated_arr = jax.device_put(
+              np.arange(32).reshape(4, 8), full_replicated_sharding
+          )
+          partial_replicated_arr = jax.device_put(
+              np.arange(32).reshape(4, 8), partial_replicated_sharding
+          )
+
+          pytree = {
+              'full_replicated': full_replicated_arr,
+              'partial_replicated': partial_replicated_arr,
+              'sharded': self.pytree,
+          }
+
+          handler.save(self.directory, args=PyTreeSaveArgs(pytree))
+
+          test_utils.print_directory(self.directory)
+
+          # Verify if replica folders are created according to the options.
+          replicated_dirs = list(
+              self.directory.glob('*' + ts_utils.REPLICA_SUBDIR_SUFFIX + '*')
+          )
+          if enable_replica_parallel_separate_folder and use_ocdbt:
+            self.assertNotEmpty(replicated_dirs)
+          else:
+            self.assertEmpty(replicated_dirs)
+
+          pytree_restore_args = {
+              'full_replicated': ArrayRestoreArgs(
+                  sharding=full_replicated_sharding
+              ),
+              'partial_replicated': ArrayRestoreArgs(
+                  sharding=partial_replicated_sharding
+              ),
+              'sharded': self.restore_args,
+          }
+
+          restored = handler.restore(
+              self.directory,
+              args=PyTreeRestoreArgs(restore_args=pytree_restore_args),
+          )
+
+          test_utils.assert_tree_equal(self, pytree, restored)

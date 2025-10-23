@@ -692,7 +692,7 @@ def setup_stats_db(cnx):
     """Setup the database for storing statistics"""
     cur = cnx.cursor()
 
-    supported_python = ("3.9", "3.10", "3.11", "3.12")
+    supported_python = ("3.10", "3.11", "3.12", "3.13")
     supported_mysql = ("5.7", "8.0", "8.4", "9.0")
 
     columns = []
@@ -1013,6 +1013,15 @@ def main():
                     res = cur.fetchone()
                     if res:
                         mysql_server.mysqlx_unix_socket = res[1]
+
+                    cur.execute(
+                        """
+                        SELECT 1 FROM information_schema.ROUTINES
+                        WHERE ROUTINE_SCHEMA=%s AND ROUTINE_NAME=%s AND ROUTINE_TYPE='PROCEDURE' LIMIT 1
+                        """,
+                        ("sys", "ML_TRAIN"),
+                    )
+                    tests.MYSQL_ML_ENABLED = cur.fetchone() is not None
 
             tests.MYSQL_VERSION = mysql_server.version
             tests.MYSQL_LICENSE = mysql_server.license

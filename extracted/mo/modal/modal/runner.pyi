@@ -1,14 +1,11 @@
-import modal._functions
+import modal.app
 import modal.client
-import modal.cls
 import modal.running_app
 import modal_proto.api_pb2
 import multiprocessing.synchronize
 import synchronicity.combined_types
 import typing
 import typing_extensions
-
-_App = typing.TypeVar("_App")
 
 V = typing.TypeVar("V")
 
@@ -29,8 +26,7 @@ async def _init_local_app_from_name(
 async def _create_all_objects(
     client: modal.client._Client,
     running_app: modal.running_app.RunningApp,
-    functions: dict[str, modal._functions._Function],
-    classes: dict[str, modal.cls._Cls],
+    local_app_state: modal.app._LocalAppState,
     environment_name: str,
 ) -> None:
     """Create objects that have been defined but not created on the server."""
@@ -40,10 +36,8 @@ async def _publish_app(
     client: modal.client._Client,
     running_app: modal.running_app.RunningApp,
     app_state: int,
-    functions: dict[str, modal._functions._Function],
-    classes: dict[str, modal.cls._Cls],
+    app_local_state: modal.app._LocalAppState,
     name: str = "",
-    tags: dict[str, str] = {},
     deployment_tag: str = "",
     commit_info: typing.Optional[modal_proto.api_pb2.CommitInfo] = None,
 ) -> tuple[str, list[modal_proto.api_pb2.Warning]]:
@@ -66,18 +60,18 @@ async def _status_based_disconnect(
     ...
 
 def _run_app(
-    app: _App,
+    app: modal.app._App,
     *,
     client: typing.Optional[modal.client._Client] = None,
     detach: bool = False,
     environment_name: typing.Optional[str] = None,
     interactive: bool = False,
-) -> typing.AsyncContextManager[_App]:
+) -> typing.AsyncContextManager[modal.app._App]:
     """mdmd:hidden"""
     ...
 
 async def _serve_update(
-    app: _App, existing_app_id: str, is_ready: multiprocessing.synchronize.Event, environment_name: str
+    app: modal.app._App, existing_app_id: str, is_ready: multiprocessing.synchronize.Event, environment_name: str
 ) -> None:
     """mdmd:hidden"""
     ...
@@ -115,7 +109,7 @@ class DeployResult:
         ...
 
 async def _deploy_app(
-    app: _App,
+    app: modal.app._App,
     name: typing.Optional[str] = None,
     namespace: typing.Any = None,
     client: typing.Optional[modal.client._Client] = None,
@@ -129,7 +123,7 @@ async def _deploy_app(
     ...
 
 async def _interactive_shell(
-    _app: _App, cmds: list[str], environment_name: str = "", pty: bool = True, **kwargs: typing.Any
+    _app: modal.app._App, cmds: list[str], environment_name: str = "", pty: bool = True, **kwargs: typing.Any
 ) -> None:
     """Run an interactive shell (like `bash`) within the image for this app.
 
@@ -159,26 +153,26 @@ class __run_app_spec(typing_extensions.Protocol):
     def __call__(
         self,
         /,
-        app: _App,
+        app: modal.app.App,
         *,
         client: typing.Optional[modal.client.Client] = None,
         detach: bool = False,
         environment_name: typing.Optional[str] = None,
         interactive: bool = False,
-    ) -> synchronicity.combined_types.AsyncAndBlockingContextManager[_App]:
+    ) -> synchronicity.combined_types.AsyncAndBlockingContextManager[modal.app.App]:
         """mdmd:hidden"""
         ...
 
     def aio(
         self,
         /,
-        app: _App,
+        app: modal.app.App,
         *,
         client: typing.Optional[modal.client.Client] = None,
         detach: bool = False,
         environment_name: typing.Optional[str] = None,
         interactive: bool = False,
-    ) -> typing.AsyncContextManager[_App]:
+    ) -> typing.AsyncContextManager[modal.app.App]:
         """mdmd:hidden"""
         ...
 
@@ -186,13 +180,23 @@ run_app: __run_app_spec
 
 class __serve_update_spec(typing_extensions.Protocol):
     def __call__(
-        self, /, app: _App, existing_app_id: str, is_ready: multiprocessing.synchronize.Event, environment_name: str
+        self,
+        /,
+        app: modal.app.App,
+        existing_app_id: str,
+        is_ready: multiprocessing.synchronize.Event,
+        environment_name: str,
     ) -> None:
         """mdmd:hidden"""
         ...
 
     async def aio(
-        self, /, app: _App, existing_app_id: str, is_ready: multiprocessing.synchronize.Event, environment_name: str
+        self,
+        /,
+        app: modal.app.App,
+        existing_app_id: str,
+        is_ready: multiprocessing.synchronize.Event,
+        environment_name: str,
     ) -> None:
         """mdmd:hidden"""
         ...
@@ -203,7 +207,7 @@ class __deploy_app_spec(typing_extensions.Protocol):
     def __call__(
         self,
         /,
-        app: _App,
+        app: modal.app.App,
         name: typing.Optional[str] = None,
         namespace: typing.Any = None,
         client: typing.Optional[modal.client.Client] = None,
@@ -219,7 +223,7 @@ class __deploy_app_spec(typing_extensions.Protocol):
     async def aio(
         self,
         /,
-        app: _App,
+        app: modal.app.App,
         name: typing.Optional[str] = None,
         namespace: typing.Any = None,
         client: typing.Optional[modal.client.Client] = None,
@@ -236,7 +240,13 @@ deploy_app: __deploy_app_spec
 
 class __interactive_shell_spec(typing_extensions.Protocol):
     def __call__(
-        self, /, _app: _App, cmds: list[str], environment_name: str = "", pty: bool = True, **kwargs: typing.Any
+        self,
+        /,
+        _app: modal.app.App,
+        cmds: list[str],
+        environment_name: str = "",
+        pty: bool = True,
+        **kwargs: typing.Any,
     ) -> None:
         """Run an interactive shell (like `bash`) within the image for this app.
 
@@ -263,7 +273,13 @@ class __interactive_shell_spec(typing_extensions.Protocol):
         ...
 
     async def aio(
-        self, /, _app: _App, cmds: list[str], environment_name: str = "", pty: bool = True, **kwargs: typing.Any
+        self,
+        /,
+        _app: modal.app.App,
+        cmds: list[str],
+        environment_name: str = "",
+        pty: bool = True,
+        **kwargs: typing.Any,
     ) -> None:
         """Run an interactive shell (like `bash`) within the image for this app.
 

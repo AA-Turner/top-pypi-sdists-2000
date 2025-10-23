@@ -144,6 +144,7 @@ from litellm.llms.base_llm.google_genai.transformation import (
     BaseGoogleGenAIGenerateContentConfig,
 )
 from litellm.llms.base_llm.ocr.transformation import BaseOCRConfig
+from litellm.llms.base_llm.search.transformation import BaseSearchConfig
 from litellm.llms.base_llm.text_to_speech.transformation import (
     BaseTextToSpeechConfig,
 )
@@ -7613,6 +7614,37 @@ class ProviderConfigManager:
         PROVIDER_TO_CONFIG_MAP = {
             litellm.LlmProviders.MISTRAL: MistralOCRConfig,
             litellm.LlmProviders.AZURE_AI: AzureAIOCRConfig,
+        }
+        config_class = PROVIDER_TO_CONFIG_MAP.get(provider, None)
+        if config_class is None:
+            return None
+        return config_class()
+
+    @staticmethod
+    def get_provider_search_config(
+        provider: LlmProviders,
+    ) -> Optional["BaseSearchConfig"]:
+        """
+        Get Search configuration for a given provider.
+        """
+        from litellm.llms.exa_ai.search.transformation import (
+            ExaAISearchConfig,
+        )
+        from litellm.llms.parallel_ai.search.transformation import (
+            ParallelAISearchConfig,
+        )
+        from litellm.llms.perplexity.search.transformation import (
+            PerplexitySearchConfig,
+        )
+        from litellm.llms.tavily.search.transformation import (
+            TavilySearchConfig,
+        )
+
+        PROVIDER_TO_CONFIG_MAP = {
+            litellm.LlmProviders.PERPLEXITY: PerplexitySearchConfig,
+            litellm.LlmProviders.TAVILY: TavilySearchConfig,
+            litellm.LlmProviders.PARALLEL_AI: ParallelAISearchConfig,
+            litellm.LlmProviders.EXA_AI: ExaAISearchConfig,
         }
         config_class = PROVIDER_TO_CONFIG_MAP.get(provider, None)
         if config_class is None:

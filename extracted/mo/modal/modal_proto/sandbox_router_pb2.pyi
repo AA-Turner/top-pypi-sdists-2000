@@ -146,10 +146,6 @@ class SandboxExecStartRequest(google.protobuf.message.Message):
     exec_id: builtins.str
     """Execution ID. This ID will be used to identify the execution for other
     requests and ensure exec commands are idempotent.
-
-    TODO(saltzm): Could instead have a separate idempotency key from the exec_id
-    like present day, and have the server generate the exec_id and return it in
-    the ExecStartResponse.
     """
     @property
     def command_args(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:

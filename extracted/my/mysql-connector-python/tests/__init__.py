@@ -1,4 +1,4 @@
-# Copyright (c) 2013, 2024, Oracle and/or its affiliates.
+# Copyright (c) 2013, 2025, Oracle and/or its affiliates.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License, version 2.0, as
@@ -46,7 +46,7 @@ import sys
 import traceback
 import unittest
 
-from distutils.dist import Distribution
+from setuptools.dist import Distribution
 from functools import lru_cache, wraps
 from pkgutil import walk_packages
 from time import sleep
@@ -103,6 +103,7 @@ OPTIONS_INIT = False
 
 MYSQL_EXTERNAL_SERVER = False
 MYSQL_SERVERS_NEEDED = 1
+MYSQL_ML_ENABLED = False
 MYSQL_SERVERS = []
 MYSQL_VERSION = ()
 MYSQL_LICENSE = ""
@@ -522,7 +523,15 @@ def cnx_aio_config(**extra_config):
     return _cnx_config
 
 
-def foreach_cnx(*cnx_classes, **extra_config):
+def foreach_cnx(*cnx_classes, always_setup=False, **extra_config):
+    """
+    Decorator to wrap a function. The decorator sets a self.cnx to 
+
+    Args:
+        cnx_classes: The cnx classes to iterate/test over for generating different connectors
+        always_setup: Whether every invocation should call setUp and tearDown
+        extra_config: Additional information for instantiating connectors
+    """
     def _use_cnx(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs):
@@ -534,6 +543,10 @@ def foreach_cnx(*cnx_classes, **extra_config):
             for cnx_class in cnx_classes or self.all_cnx_classes:
                 if cnx_class is None:
                     continue
+
+                if always_setup:
+                    self.setUp()
+
                 try:
                     self.cnx = cnx_class(**self.config)
                     self._testMethodName = "{0} (using {1})".format(
@@ -558,6 +571,9 @@ def foreach_cnx(*cnx_classes, **extra_config):
                     except:
                         # Might already be closed.
                         pass
+
+                    if always_setup:
+                        self.tearDown()
 
         return wrapper
 

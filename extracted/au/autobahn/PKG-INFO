@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: autobahn
-Version: 25.10.1
+Version: 25.10.2
 Summary: WebSocket client & server library, WAMP real-time framework
 Author-email: typedef int GmbH <contact@typedefint.eu>
 License-Expression: MIT

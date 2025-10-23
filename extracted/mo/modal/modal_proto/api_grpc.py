@@ -483,10 +483,6 @@ class ModalClientBase(abc.ABC):
         pass
 
     @abc.abstractmethod
-    async def SandboxGetCommandRouterAccess(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.SandboxGetCommandRouterAccessRequest, modal_proto.api_pb2.SandboxGetCommandRouterAccessResponse]') -> None:
-        pass
-
-    @abc.abstractmethod
     async def SandboxGetFromName(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.SandboxGetFromNameRequest, modal_proto.api_pb2.SandboxGetFromNameResponse]') -> None:
         pass
 
@@ -612,10 +608,6 @@ class ModalClientBase(abc.ABC):
 
     @abc.abstractmethod
     async def TaskCurrentInputs(self, stream: 'grpclib.server.Stream[google.protobuf.empty_pb2.Empty, modal_proto.api_pb2.TaskCurrentInputsResponse]') -> None:
-        pass
-
-    @abc.abstractmethod
-    async def TaskGetAutoscalingMetrics(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.TaskGetAutoscalingMetricsRequest, modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse]') -> None:
         pass
 
     @abc.abstractmethod
@@ -1420,12 +1412,6 @@ class ModalClientBase(abc.ABC):
                 modal_proto.api_pb2.SandboxCreateConnectTokenRequest,
                 modal_proto.api_pb2.SandboxCreateConnectTokenResponse,
             ),
-            '/modal.client.ModalClient/SandboxGetCommandRouterAccess': grpclib.const.Handler(
-                self.SandboxGetCommandRouterAccess,
-                grpclib.const.Cardinality.UNARY_UNARY,
-                modal_proto.api_pb2.SandboxGetCommandRouterAccessRequest,
-                modal_proto.api_pb2.SandboxGetCommandRouterAccessResponse,
-            ),
             '/modal.client.ModalClient/SandboxGetFromName': grpclib.const.Handler(
                 self.SandboxGetFromName,
                 grpclib.const.Cardinality.UNARY_UNARY,
@@ -1617,12 +1603,6 @@ class ModalClientBase(abc.ABC):
                 grpclib.const.Cardinality.UNARY_UNARY,
                 google.protobuf.empty_pb2.Empty,
                 modal_proto.api_pb2.TaskCurrentInputsResponse,
-            ),
-            '/modal.client.ModalClient/TaskGetAutoscalingMetrics': grpclib.const.Handler(
-                self.TaskGetAutoscalingMetrics,
-                grpclib.const.Cardinality.UNARY_UNARY,
-                modal_proto.api_pb2.TaskGetAutoscalingMetricsRequest,
-                modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse,
             ),
             '/modal.client.ModalClient/TaskGetCommandRouterAccess': grpclib.const.Handler(
                 self.TaskGetCommandRouterAccess,
@@ -2482,12 +2462,6 @@ class ModalClientStub:
             modal_proto.api_pb2.SandboxCreateConnectTokenRequest,
             modal_proto.api_pb2.SandboxCreateConnectTokenResponse,
         )
-        self.SandboxGetCommandRouterAccess = grpclib.client.UnaryUnaryMethod(
-            channel,
-            '/modal.client.ModalClient/SandboxGetCommandRouterAccess',
-            modal_proto.api_pb2.SandboxGetCommandRouterAccessRequest,
-            modal_proto.api_pb2.SandboxGetCommandRouterAccessResponse,
-        )
         self.SandboxGetFromName = grpclib.client.UnaryUnaryMethod(
             channel,
             '/modal.client.ModalClient/SandboxGetFromName',
@@ -2679,12 +2653,6 @@ class ModalClientStub:
             '/modal.client.ModalClient/TaskCurrentInputs',
             google.protobuf.empty_pb2.Empty,
             modal_proto.api_pb2.TaskCurrentInputsResponse,
-        )
-        self.TaskGetAutoscalingMetrics = grpclib.client.UnaryUnaryMethod(
-            channel,
-            '/modal.client.ModalClient/TaskGetAutoscalingMetrics',
-            modal_proto.api_pb2.TaskGetAutoscalingMetricsRequest,
-            modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse,
         )
         self.TaskGetCommandRouterAccess = grpclib.client.UnaryUnaryMethod(
             channel,

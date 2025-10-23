@@ -3303,7 +3303,7 @@ class Instance(ServiceResource):
         self, **kwargs: Unpack[TerminateInstancesRequestInstanceTerminateTypeDef]
     ) -> TerminateInstancesResultTypeDef:
         """
-        Terminates (deletes) the specified instances.
+        Shuts down the specified instances.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/instance/terminate.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/service_resource/#instanceterminate-method)
@@ -3680,6 +3680,7 @@ class NetworkInterface(ServiceResource):
     ipv6_address: str
     operator: OperatorResponseTypeDef
     associated_subnets: List[str]
+    availability_zone_id: str
     meta: EC2ResourceMeta  # type: ignore[override]
 
     def get_available_subresources(self) -> Sequence[str]:

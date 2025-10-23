@@ -81,6 +81,14 @@ DEFAULT_CONCURRENT_GB = 96
 
 
 
+class PartialSaveError(Exception):
+  """Raised when there is an error during partial saving."""
+
+
+class PartialSaveReplacementError(PartialSaveError):
+  """Raised when a replacement is attempted during partial saving."""
+
+
 def _default_sizeof_values(values: Sequence[Any]) -> Sequence[int]:
   return [sys.getsizeof(v) for v in values]
 
@@ -115,17 +123,16 @@ def _log_io_metrics(
   bytes_per_sec = (
       float('nan') if time_elapsed == 0 else float(size) / time_elapsed
   )
-  gbytes_per_sec = bytes_per_sec / (1024 ** 3)
   logging.info(
       '[process=%d] %s: %s/s (total gbytes: %s) (time elapsed: %s) (per-host)',
       multihost.process_index(),
       gbytes_per_sec_metric,
-      humanize.naturalsize(gbytes_per_sec, binary=True),
+      humanize.naturalsize(bytes_per_sec, binary=True, format='%.3f'),
       humanize.naturalsize(size, binary=True),
       humanize.naturaldelta(time_elapsed, minimum_unit='microseconds'),
   )
   jax.monitoring.record_event(
-      gbytes_per_sec_metric, gbytes_per_sec=f'{gbytes_per_sec:.3f}'
+      gbytes_per_sec_metric, gbytes_per_sec=f'{bytes_per_sec / (1024 ** 3):.3f}'
   )
   if gbytes_metric is not None:
     jax.monitoring.record_event(
@@ -315,6 +322,7 @@ class BasePyTreeCheckpointHandler(
       save_device_host_concurrent_bytes: Optional[int] = None,
       use_ocdbt: bool = True,
       use_zarr3: bool = False,
+      use_compression: bool = True,
       multiprocessing_options: options_lib.MultiprocessingOptions = options_lib.MultiprocessingOptions(),
       type_handler_registry: TypeHandlerRegistry = type_handlers.GLOBAL_TYPE_HANDLER_REGISTRY,
       enable_post_merge_validation: bool = True,
@@ -325,6 +333,7 @@ class BasePyTreeCheckpointHandler(
           array_metadata_store_lib.Validator()
       ),
       enable_pinned_host_transfer: Optional[bool] = None,
+      is_prioritized_key_fn: Optional[types.IsPrioritizedKeyFn] = None,
   ):
     """Creates BasePyTreeCheckpointHandler.
 
@@ -343,6 +352,7 @@ class BasePyTreeCheckpointHandler(
         before a new array can start being transferred.
       use_ocdbt: Whether to use OCDBT format for saving.
       use_zarr3: If True, use Zarr ver3 otherwise Zarr ver2.
+      use_compression: If True, use zstd compression.
       multiprocessing_options: See orbax.checkpoint.options.
       type_handler_registry: a type_handlers.TypeHandlerRegistry. If not
         specified, the global type handler registry will be used.
@@ -354,12 +364,25 @@ class BasePyTreeCheckpointHandler(
         transfer from device to host memory. Passing None will enable
         pinned_host memory depending on the platform used (currently only
         enables it for the GPU backend).
+      is_prioritized_key_fn: A function that accepts a PyTree keypath (obtained
+        using jax.tree.map_with_path) that should be scheduled for D2H transfer
+        before other keys. The transfer is scheduled before returning to the
+        caller, so the values will never be corrupted by a concurrent update.
+        Keys that are not prioritized will not be scheduled for transfer until
+        all prioritized keys have been fully written to the checkpoint. This
+        means that these values may be altered if the values are updated
+        concurrently. Callers should take care to call `wait_until_finished`
+        before updating array values (e.g. `apply_gradients`) if some keys are
+        not prioritized. Note that any "prioritized" keys are assumed to be
+        lightweight, and `save_device_host_concurrent_gb` will be ignored for
+        them.
     """
     self._save_concurrent_bytes = save_concurrent_bytes
     self._restore_concurrent_bytes = restore_concurrent_bytes
     self._save_device_host_concurrent_bytes = save_device_host_concurrent_bytes
     self._use_ocdbt = use_ocdbt
     self._use_zarr3 = use_zarr3
+    self._use_compression = use_compression
     self._primary_host = multiprocessing_options.primary_host
     self._type_handler_registry = type_handler_registry
     self._enable_post_merge_validation = enable_post_merge_validation
@@ -378,6 +401,7 @@ class BasePyTreeCheckpointHandler(
     if enable_pinned_host_transfer is None:
       enable_pinned_host_transfer = jax.default_backend() == 'gpu'
     self._enable_pinned_host_transfer = enable_pinned_host_transfer
+    self._is_prioritized_key_fn = is_prioritized_key_fn
 
     jax.monitoring.record_event(
         '/jax/orbax/pytree_checkpoint_handler/init/ocdbt'
@@ -406,6 +430,7 @@ class BasePyTreeCheckpointHandler(
       directory: epath.Path,
       *,
       use_ocdbt: bool = True,
+      use_compression: bool | None = True,
       use_zarr3: Optional[bool] = None,
       ocdbt_target_data_file_size: Optional[int] = None,
       byte_limiter: Optional[serialization.ByteLimiter] = None,
@@ -421,6 +446,7 @@ class BasePyTreeCheckpointHandler(
       item: a PyTree to extract information from.
       directory: a directory where checkpoint files are located.
       use_ocdbt: Whether to use OCDBT for writing or reading.
+      use_compression: Whether to use zstd compression
       use_zarr3: Whether to use zarr3.
       ocdbt_target_data_file_size: Specifies the target size (in bytes) of each
         OCDBT data file.
@@ -436,7 +462,7 @@ class BasePyTreeCheckpointHandler(
     names = self.get_param_names(item)
     ts_context = ts_utils.get_ts_context(use_ocdbt=use_ocdbt)
 
-    def _param_info(name, value):
+    def _param_info(keypath, name, value):
       if isinstance(value, tree_metadata.ValueMetadataEntry):
         skip_deserialize = value.skip_deserialize
       elif isinstance(value, type(PLACEHOLDER)):
@@ -445,10 +471,12 @@ class BasePyTreeCheckpointHandler(
         skip_deserialize = False
       return ParamInfo(
           name=name,
+          keypath=keypath,
           path=(directory / name),
           parent_dir=directory,
           skip_deserialize=skip_deserialize,
           is_ocdbt_checkpoint=use_ocdbt,
+          use_compression=use_compression,
           use_zarr3=use_zarr3,
           enable_pinned_host_transfer=self._enable_pinned_host_transfer,
           ocdbt_target_data_file_size=ocdbt_target_data_file_size,
@@ -459,9 +487,10 @@ class BasePyTreeCheckpointHandler(
               value, self._type_handler_registry, self._pytree_metadata_options
           ),
           raise_array_data_missing_error=raise_array_data_missing_error,
+          is_prioritized_key_fn=self._is_prioritized_key_fn,
       )
 
-    return jax.tree.map(
+    return jax.tree.map_with_path(
         _param_info, names, item, is_leaf=utils.is_empty_or_leaf
     )
 
@@ -487,7 +516,7 @@ class BasePyTreeCheckpointHandler(
         if diff.rhs is None:  # Leaf was not in the on-disk metadata
           additions.add(keypath)
         else:  # Leaf was also in the on-disk metadata
-          raise ValueError(
+          raise PartialSaveReplacementError(
               f'Key "{keypath}" was found in the on-disk PyTree metadata and'
               ' supplied item. Partial saving currently does not support'
               ' REPLACEMENT. Please reach out to the Orbax team if you need'
@@ -499,15 +528,6 @@ class BasePyTreeCheckpointHandler(
         tree_diff,
         is_leaf=lambda x: isinstance(x, tree_structure_utils.Diff),
     )
-
-    if not additions:
-      # TODO: b/428711337 - Create PartialSaveError for certain categories of
-      # errors only encountered during partial saving. And subclasses of errors
-      # like PartialSaveReplacementError and such.
-      raise ValueError(
-          'Partial save: No structural differences or new/replaced leaves found'
-          ' in the item compared to on-disk metadata (or item is empty).'
-      )
 
     logging.info(
         '[process=%d] Found the following additions during partial save: %s',
@@ -615,6 +635,8 @@ class BasePyTreeCheckpointHandler(
         ocdbt_target_data_file_size=ocdbt_target_data_file_size,
         byte_limiter=byte_limiter,
         device_host_byte_limiter=device_host_byte_limiter,
+        use_compression=self._use_compression,
+        use_zarr3=self._use_zarr3,
     )
     assert all(
         leaf.parent_dir == directory for leaf in jax.tree.leaves(param_infos)
@@ -924,9 +946,14 @@ class BasePyTreeCheckpointHandler(
             serialized_item,
             is_leaf=tree_utils.is_empty_or_leaf,
         )
-      value_metadata_tree = tree_structure_utils.tree_trim(
-          serialized_item, value_metadata_tree, strict=True
-      )
+      try:
+        value_metadata_tree = tree_structure_utils.tree_trim(
+            serialized_item, value_metadata_tree, strict=True
+        )
+      except ValueError as e:
+        raise ValueError(
+            'Missing keys were found in the user-provided restore item.'
+        ) from e
       if restore_args is not None:
         restore_args = tree_structure_utils.tree_trim(
             item, restore_args, strict=True

@@ -37,6 +37,7 @@ FILE_DRIVER = 'file'
 DEFAULT_DRIVER = FILE_DRIVER
 
 PROCESS_SUBDIR_PREFIX = 'ocdbt.process_'
+REPLICA_SUBDIR_SUFFIX = 'replica_'
 _OCDBT_PROCESS_ID_RE = r'[A-Za-z0-9]+'
 _DEFAULT_OCDBT_TARGET_DATA_FILE_SIZE = 2**31  # 2 GiB
 
@@ -129,6 +130,7 @@ def build_kvstore_tspec(
     *,
     use_ocdbt: bool = True,
     process_id: int | str | None = None,
+    replica_separate_folder: bool = False,
 ) -> JsonSpec:
   """Constructs a spec for a Tensorstore KvStore.
 
@@ -140,6 +142,7 @@ def build_kvstore_tspec(
     process_id: [only used with OCDBT driver] If provided,
       `{directory}/ocdbt.process_{process_id}` path is used as the base path. If
       a string, must conform to [A-Za-z0-9]+ pattern.
+    replica_separate_folder: Whether a replica separated folder is used.
 
   Returns:
     A Tensorstore KvStore spec in dictionary form.
@@ -161,9 +164,15 @@ def build_kvstore_tspec(
             f'process_id must conform to {_OCDBT_PROCESS_ID_RE} pattern'
             f', got {process_id}'
         )
-      directory = os.path.join(
-          directory, f'{PROCESS_SUBDIR_PREFIX}{process_id}'
-      )
+
+      join_paths = [directory, f'{PROCESS_SUBDIR_PREFIX}{process_id}']
+      if replica_separate_folder:
+        # make sure the the sub dictory is ended with '_process_id'
+        join_paths = [
+            directory,
+            f'{PROCESS_SUBDIR_PREFIX}{REPLICA_SUBDIR_SUFFIX}{process_id}',
+        ]
+      directory = os.path.join(*join_paths)
     base_driver_spec = (
         directory
         if is_gcs_path
@@ -203,6 +212,23 @@ def build_kvstore_tspec(
   return kv_spec
 
 
+def build_kvstore_tspec_for_merge(
+    directory: str,
+    subdir: str,
+) -> JsonSpec:
+  """Constructs a spec for a Tensorstore KvStore."""
+
+  tokens = subdir.split('_')
+  process_id = tokens[-1]
+  is_replica_separate_folder = REPLICA_SUBDIR_SUFFIX in subdir
+  return build_kvstore_tspec(
+      directory,
+      use_ocdbt=True,
+      process_id=process_id,
+      replica_separate_folder=is_replica_separate_folder,
+  )
+
+
 def add_ocdbt_write_options(
     kvstore_tspec: JsonSpec,
     target_data_file_size: int | None = None,
@@ -240,7 +266,7 @@ def build_zarr_shard_and_chunk_metadata(
     *,
     global_shape: Shape,
     shard_shape: Shape,
-    use_zarr2_compression: bool = True,
+    use_compression: bool = True,
     use_zarr3: bool,
     chunk_shape: Shape,
 ) -> JsonSpec:
@@ -250,7 +276,7 @@ def build_zarr_shard_and_chunk_metadata(
   if not use_zarr3:
     # Zarr v2.
     metadata['chunks'] = chunk_shape
-    if use_zarr2_compression:
+    if use_compression:
       metadata['compressor'] = {'id': 'zstd'}
     else:
       metadata['compressor'] = None
@@ -272,7 +298,6 @@ def build_zarr_shard_and_chunk_metadata(
                 'chunk_shape': chunk_shape,
                 'codecs': [
                     {'name': 'bytes', 'configuration': {'endian': 'little'}},
-                    {'name': 'zstd'},
                 ],
                 'index_codecs': [
                     {'name': 'bytes', 'configuration': {'endian': 'little'}},
@@ -282,6 +307,9 @@ def build_zarr_shard_and_chunk_metadata(
             },
         },
     ]
+    if use_compression:
+      # Remove zstd codec if not using compression.
+      metadata['codecs'][0]['configuration']['codecs'].append({'name': 'zstd'})
 
   return metadata
 
@@ -355,12 +383,13 @@ class ArrayWriteSpec:
       target_dtype: DType | None = None,
       chunk_byte_size: int | None = None,
       shard_axes: tuple[int, ...] = (),
-      use_zarr2_compression: bool = True,
+      use_compression: bool = True,
       use_zarr3: bool = False,
       use_ocdbt: bool,
       ocdbt_target_data_file_size: int | None = None,
       process_id: int | str | None = None,
       metadata_key: str | None = None,
+      replica_separate_folder: bool = False,
       ext_metadata: ExtMetadata | None = None,
   ):
     """Builds a TensorStore spec for writing an array."""
@@ -370,6 +399,7 @@ class ArrayWriteSpec:
         name=relative_array_filename,
         use_ocdbt=use_ocdbt,
         process_id=process_id,
+        replica_separate_folder=replica_separate_folder,
     )
     # Construct the top-level array spec.
     tspec = {
@@ -417,7 +447,7 @@ class ArrayWriteSpec:
     tspec['metadata'] = build_zarr_shard_and_chunk_metadata(
         global_shape=global_shape,
         shard_shape=write_shape,
-        use_zarr2_compression=use_zarr2_compression,
+        use_compression=use_compression,
         use_zarr3=use_zarr3,
         chunk_shape=chunk_shape,
     )

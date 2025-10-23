@@ -498,10 +498,6 @@ class ModalClientStub:
         modal_proto.api_pb2.SandboxCreateConnectTokenRequest,
         modal_proto.api_pb2.SandboxCreateConnectTokenResponse,
     ]
-    SandboxGetCommandRouterAccess: grpc.UnaryUnaryMultiCallable[
-        modal_proto.api_pb2.SandboxGetCommandRouterAccessRequest,
-        modal_proto.api_pb2.SandboxGetCommandRouterAccessResponse,
-    ]
     SandboxGetFromName: grpc.UnaryUnaryMultiCallable[
         modal_proto.api_pb2.SandboxGetFromNameRequest,
         modal_proto.api_pb2.SandboxGetFromNameResponse,
@@ -634,11 +630,6 @@ class ModalClientStub:
         google.protobuf.empty_pb2.Empty,
         modal_proto.api_pb2.TaskCurrentInputsResponse,
     ]
-    TaskGetAutoscalingMetrics: grpc.UnaryUnaryMultiCallable[
-        modal_proto.api_pb2.TaskGetAutoscalingMetricsRequest,
-        modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse,
-    ]
-    """Used for flash autoscaling"""
     TaskGetCommandRouterAccess: grpc.UnaryUnaryMultiCallable[
         modal_proto.api_pb2.TaskGetCommandRouterAccessRequest,
         modal_proto.api_pb2.TaskGetCommandRouterAccessResponse,
@@ -1470,12 +1461,6 @@ class ModalClientServicer(metaclass=abc.ABCMeta):
         context: grpc.ServicerContext,
     ) -> modal_proto.api_pb2.SandboxCreateConnectTokenResponse: ...
     @abc.abstractmethod
-    def SandboxGetCommandRouterAccess(
-        self,
-        request: modal_proto.api_pb2.SandboxGetCommandRouterAccessRequest,
-        context: grpc.ServicerContext,
-    ) -> modal_proto.api_pb2.SandboxGetCommandRouterAccessResponse: ...
-    @abc.abstractmethod
     def SandboxGetFromName(
         self,
         request: modal_proto.api_pb2.SandboxGetFromNameRequest,
@@ -1671,13 +1656,6 @@ class ModalClientServicer(metaclass=abc.ABCMeta):
         request: google.protobuf.empty_pb2.Empty,
         context: grpc.ServicerContext,
     ) -> modal_proto.api_pb2.TaskCurrentInputsResponse: ...
-    @abc.abstractmethod
-    def TaskGetAutoscalingMetrics(
-        self,
-        request: modal_proto.api_pb2.TaskGetAutoscalingMetricsRequest,
-        context: grpc.ServicerContext,
-    ) -> modal_proto.api_pb2.TaskGetAutoscalingMetricsResponse:
-        """Used for flash autoscaling"""
     @abc.abstractmethod
     def TaskGetCommandRouterAccess(
         self,
