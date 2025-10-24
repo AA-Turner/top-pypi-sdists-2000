@@ -10,9 +10,7 @@ use crate::types::TypeContext;
 use crate::{
     Db, FxOrderSet,
     place::{Definedness, Place, PlaceAndQualifiers, place_from_bindings, place_from_declarations},
-    semantic_index::{
-        SemanticIndex, definition::Definition, place::ScopedPlaceId, place_table, use_def_map,
-    },
+    semantic_index::{definition::Definition, place::ScopedPlaceId, place_table, use_def_map},
     types::{
         ApplyTypeMappingVisitor, BoundTypeVarInstance, CallableType, ClassBase, ClassLiteral,
         ClassType, FindLegacyTypeVarsVisitor, HasRelationToVisitor,
@@ -77,11 +75,11 @@ impl<'db> ProtocolClass<'db> {
     /// Iterate through the body of the protocol class. Check that all definitions
     /// in the protocol class body are either explicitly declared directly in the
     /// class body, or are declared in a superclass of the protocol class.
-    pub(super) fn validate_members(self, context: &InferContext, index: &SemanticIndex<'db>) {
+    pub(super) fn validate_members(self, context: &InferContext) {
         let db = context.db();
         let interface = self.interface(db);
         let body_scope = self.class_literal(db).0.body_scope(db);
-        let class_place_table = index.place_table(body_scope.file_scope_id(db));
+        let class_place_table = place_table(db, body_scope);
 
         for (symbol_id, mut bindings_iterator) in
             use_def_map(db, body_scope).all_end_of_scope_symbol_bindings()
@@ -104,8 +102,7 @@ impl<'db> ProtocolClass<'db> {
                         };
                         !place_from_declarations(
                             db,
-                            index
-                                .use_def_map(superclass_scope.file_scope_id(db))
+                            use_def_map(db, superclass_scope)
                                 .end_of_scope_declarations(ScopedPlaceId::Symbol(scoped_symbol_id)),
                         )
                         .into_place_and_conflicting_declarations()
@@ -769,7 +766,7 @@ impl BoundOnClass {
 }
 
 /// Inner Salsa query for [`ProtocolClassLiteral::interface`].
-#[salsa::tracked(cycle_fn=proto_interface_cycle_recover, cycle_initial=proto_interface_cycle_initial, heap_size=ruff_memory_usage::heap_size)]
+#[salsa::tracked(cycle_initial=proto_interface_cycle_initial, heap_size=ruff_memory_usage::heap_size)]
 fn cached_protocol_interface<'db>(
     db: &'db dyn Db,
     class: ClassType<'db>,
@@ -867,15 +864,6 @@ fn cached_protocol_interface<'db>(
 // If we use `expect(clippy::trivially_copy_pass_by_ref)` here,
 // the lint expectation is unfulfilled on WASM
 #[allow(clippy::trivially_copy_pass_by_ref)]
-fn proto_interface_cycle_recover<'db>(
-    _db: &dyn Db,
-    _value: &ProtocolInterface<'db>,
-    _count: u32,
-    _class: ClassType<'db>,
-) -> salsa::CycleRecoveryAction<ProtocolInterface<'db>> {
-    salsa::CycleRecoveryAction::Iterate
-}
-
 fn proto_interface_cycle_initial<'db>(
     db: &'db dyn Db,
     _class: ClassType<'db>,

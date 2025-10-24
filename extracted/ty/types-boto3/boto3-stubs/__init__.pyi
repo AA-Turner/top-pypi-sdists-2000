@@ -61,10 +61,8 @@ from types_boto3_bcm_recommended_actions.client import (
 from types_boto3_bedrock.client import BedrockClient
 from types_boto3_bedrock_agent.client import AgentsforBedrockClient
 from types_boto3_bedrock_agent_runtime.client import AgentsforBedrockRuntimeClient
-from types_boto3_bedrock_agentcore.client import BedrockAgentCoreDataPlaneFrontingLayerClient
-from types_boto3_bedrock_agentcore_control.client import (
-    BedrockAgentCoreControlPlaneFrontingLayerClient,
-)
+from types_boto3_bedrock_agentcore.client import BedrockAgentCoreClient
+from types_boto3_bedrock_agentcore_control.client import BedrockAgentCoreControlClient
 from types_boto3_bedrock_data_automation.client import DataAutomationforBedrockClient
 from types_boto3_bedrock_data_automation_runtime.client import RuntimeforBedrockDataAutomationClient
 from types_boto3_bedrock_runtime.client import BedrockRuntimeClient
@@ -1297,9 +1295,9 @@ def client(
     aws_session_token: str | None = ...,
     config: Config | None = ...,
     aws_account_id: str | None = ...,
-) -> BedrockAgentCoreDataPlaneFrontingLayerClient:
+) -> BedrockAgentCoreClient:
     """
-    Create client for BedrockAgentCoreDataPlaneFrontingLayer service.
+    Create client for BedrockAgentCore service.
     """
 
 @overload
@@ -1315,9 +1313,9 @@ def client(
     aws_session_token: str | None = ...,
     config: Config | None = ...,
     aws_account_id: str | None = ...,
-) -> BedrockAgentCoreControlPlaneFrontingLayerClient:
+) -> BedrockAgentCoreControlClient:
     """
-    Create client for BedrockAgentCoreControlPlaneFrontingLayer service.
+    Create client for BedrockAgentCoreControl service.
     """
 
 @overload

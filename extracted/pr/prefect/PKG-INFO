@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: prefect
-Version: 3.4.24
+Version: 3.4.25
 Summary: Workflow orchestration and management.
 Project-URL: Changelog, https://github.com/PrefectHQ/prefect/releases
 Project-URL: Documentation, https://docs.prefect.io
@@ -19,8 +19,9 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Software Development :: Libraries
-Requires-Python: <3.14,>=3.9
+Requires-Python: <3.15,>=3.9
 Requires-Dist: aiosqlite<1.0.0,>=0.17.0
 Requires-Dist: alembic<2.0.0,>=1.7.5
 Requires-Dist: anyio<5.0.0,>=4.4.0
@@ -216,7 +217,7 @@ def github_stars(repos: list[str]):
 
 # run the flow!
 if __name__ == "__main__":
-    github_stars(["PrefectHQ/Prefect"])
+    github_stars(["PrefectHQ/prefect"])
 ```
 
 Fire up a Prefect server and open the UI at http://localhost:4200 to see what happened:

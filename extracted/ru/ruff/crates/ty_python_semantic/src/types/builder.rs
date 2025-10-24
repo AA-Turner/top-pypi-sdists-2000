@@ -206,7 +206,7 @@ enum ReduceResult<'db> {
 //
 // For now (until we solve https://github.com/astral-sh/ty/issues/957), keep this number
 // below 200, which is the salsa fixpoint iteration limit.
-const MAX_UNION_LITERALS: usize = 199;
+const MAX_UNION_LITERALS: usize = 190;
 
 pub(crate) struct UnionBuilder<'db> {
     elements: Vec<UnionElement<'db>>,
@@ -1062,8 +1062,7 @@ impl<'db> InnerIntersectionBuilder<'db> {
         let mut positive_to_remove = SmallVec::<[usize; 1]>::new();
 
         for (typevar_index, ty) in self.positive.iter().enumerate() {
-            let (Type::NonInferableTypeVar(bound_typevar) | Type::TypeVar(bound_typevar)) = ty
-            else {
+            let Type::TypeVar(bound_typevar) = ty else {
                 continue;
             };
             let Some(TypeVarBoundOrConstraints::Constraints(constraints)) =

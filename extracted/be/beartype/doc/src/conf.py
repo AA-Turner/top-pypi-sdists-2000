@@ -86,6 +86,7 @@ from beartype.meta import (
     COPYRIGHT,
     NAME,
     SPHINX_THEME_NAME,
+    URL_BLUESKY,
     URL_CONDA,
     URL_LIBRARIES,
     URL_PYPI,
@@ -163,8 +164,11 @@ exclude_patterns = [
 rst_prolog = '''
 .. tip::
 
-   `Please consider sponsoring us <GitHub Sponsors_>`__. **Your support is our
-   quality assurance.** `💗 <GitHub Sponsors_>`__.
+   💗 **Upbear us** at `GitHub Sponsors`_ and `SonarQube Advanced Security
+   (Tidelift) <SonarQube Advanced Security_>`__. **Follow us** `on Bluesky
+   <beartype Bluesky_>`__.
+
+   Your generous support is our quality assurance. 💗
 '''
 
 # String of arbitrary reStructuredText (reST) to be implicitly appended to the
@@ -580,16 +584,24 @@ html_theme_options = {
     #   https://fontawesome.com/icons?d=gallery&m=free
     #
     # Note that:
-    # * This theme requires long-form FontAwesome styles (e.g., "fa-brand",
+    # * This theme requires long-form FontAwesome styles (e.g., "fa-brands",
     #   "fa-solid") to be abbreviated to these three-letter abbreviations:
-    #   * "fa-brand" -> "fab".
+    #   * "fa-brands" -> "fab".
     #   * "fa-regular" -> "far".
     #   * "fa-solid" -> "fas".
     'icon_links': [
         {
+            'name': 'Bluesky',
+            'url': URL_BLUESKY,
+            #FIXME: Preferable, but unavailable under the older FontAwesome
+            #dialect leveraged by this obsolete theme version. *sigh*
+            # 'icon': 'fab fa-bluesky',
+            'icon': 'fas fa-cloud',  # <-- whatevahs!
+        },
+        {
             'name': 'GitHub',
             'url': URL_REPO,
-            'icon': 'fab fa-github-square',
+            'icon': 'fab fa-github',
         },
         {
             'name': 'PyPI',
@@ -599,7 +611,12 @@ html_theme_options = {
         {
             'name': 'Anaconda',
             'url': URL_CONDA,
-            'icon': 'far fa-circle',
+            #FIXME: Preferable, but unavailable under the older FontAwesome
+            #dialect leveraged by this obsolete theme version. *sigh*
+            # 'icon': 'fas fa-staff-snake',
+            #FIXME: Actually, it'd probably be preferable just to use the
+            #Unicode snake character, which is *ADORABLE*: 🐍
+            'icon': 'fas fa-circle',  # <-- whatevahs!
         },
         {
             'name': 'Libraries.io',

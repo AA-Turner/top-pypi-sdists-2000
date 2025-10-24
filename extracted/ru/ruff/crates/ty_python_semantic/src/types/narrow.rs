@@ -83,7 +83,6 @@ fn all_narrowing_constraints_for_pattern<'db>(
 
 #[salsa::tracked(
     returns(as_ref),
-    cycle_fn=constraints_for_expression_cycle_recover,
     cycle_initial=constraints_for_expression_cycle_initial,
     heap_size=ruff_memory_usage::heap_size,
 )]
@@ -98,7 +97,6 @@ fn all_narrowing_constraints_for_expression<'db>(
 
 #[salsa::tracked(
     returns(as_ref),
-    cycle_fn=negative_constraints_for_expression_cycle_recover,
     cycle_initial=negative_constraints_for_expression_cycle_initial,
     heap_size=ruff_memory_usage::heap_size,
 )]
@@ -120,31 +118,11 @@ fn all_negative_narrowing_constraints_for_pattern<'db>(
     NarrowingConstraintsBuilder::new(db, &module, PredicateNode::Pattern(pattern), false).finish()
 }
 
-#[expect(clippy::ref_option)]
-fn constraints_for_expression_cycle_recover<'db>(
-    _db: &'db dyn Db,
-    _value: &Option<NarrowingConstraints<'db>>,
-    _count: u32,
-    _expression: Expression<'db>,
-) -> salsa::CycleRecoveryAction<Option<NarrowingConstraints<'db>>> {
-    salsa::CycleRecoveryAction::Iterate
-}
-
 fn constraints_for_expression_cycle_initial<'db>(
     _db: &'db dyn Db,
     _expression: Expression<'db>,
 ) -> Option<NarrowingConstraints<'db>> {
     None
-}
-
-#[expect(clippy::ref_option)]
-fn negative_constraints_for_expression_cycle_recover<'db>(
-    _db: &'db dyn Db,
-    _value: &Option<NarrowingConstraints<'db>>,
-    _count: u32,
-    _expression: Expression<'db>,
-) -> salsa::CycleRecoveryAction<Option<NarrowingConstraints<'db>>> {
-    salsa::CycleRecoveryAction::Iterate
 }
 
 fn negative_constraints_for_expression_cycle_initial<'db>(
@@ -207,15 +185,16 @@ impl ClassInfoConstraintFunction {
             Type::Union(union) => {
                 union.try_map(db, |element| self.generate_constraint(db, *element))
             }
-            Type::NonInferableTypeVar(bound_typevar) => match bound_typevar
-                .typevar(db)
-                .bound_or_constraints(db)?
-            {
-                TypeVarBoundOrConstraints::UpperBound(bound) => self.generate_constraint(db, bound),
-                TypeVarBoundOrConstraints::Constraints(constraints) => {
-                    self.generate_constraint(db, Type::Union(constraints))
+            Type::TypeVar(bound_typevar) => {
+                match bound_typevar.typevar(db).bound_or_constraints(db)? {
+                    TypeVarBoundOrConstraints::UpperBound(bound) => {
+                        self.generate_constraint(db, bound)
+                    }
+                    TypeVarBoundOrConstraints::Constraints(constraints) => {
+                        self.generate_constraint(db, Type::Union(constraints))
+                    }
                 }
-            },
+            }
 
             // It's not valid to use a generic alias as the second argument to `isinstance()` or `issubclass()`,
             // e.g. `isinstance(x, list[int])` fails at runtime.
@@ -251,7 +230,6 @@ impl ClassInfoConstraintFunction {
             | Type::IntLiteral(_)
             | Type::KnownInstance(_)
             | Type::TypeIs(_)
-            | Type::TypeVar(_)
             | Type::WrapperDescriptor(_)
             | Type::DataclassTransformer(_)
             | Type::TypedDict(_) => None,

@@ -36,13 +36,14 @@ name = "beartype"
 
 # Human-readable single-line synopsis of this project.
 #
-# Note that, by PyPI design, this string *MUST*:
-# * Prefix each newline in this string with a continuation character, which then
-#   forces line wrapping.
-# * Otherwise not span multiple lines or paragraphs.
+# Note that, by PyPI design, this string *MUST* prefix each newline in this
+# string with a continuation character (which then forces line wrapping) but
+# otherwise not span multiple lines or paragraphs.
+#
+# See also official TOML documentation on multi-line strings: https://toml.io
 description = """\
-Unbearably fast near-real-time hybrid runtime-static type-checking in pure Python.
-"""
+    Unbearably fast near-real-time pure-Python runtime-static type-checker.\
+    """
 
 # Relative filename of the top-level file describing project licensing.
 #
@@ -96,7 +97,7 @@ classifiers = [
 # These authors should be thought of as the corresponding authors of a paper.
 # Ideally, correspondence should be redirected to these authors.
 authors = [
-    { name="Cecil Curry", email="leycec@gmail.com" },
+    { name = "Cecil Curry", email = "leycec@gmail.com" },
 ]
 
 # List of all secondary authors of this package as a list of tables (i.e.,
@@ -139,7 +140,15 @@ dynamic = [
 # release of the oldest version of CPython still under active development.
 # Obsolete and insecure versions of CPython that have reached their official End
 # of Life (EoL) (e.g., Python 3.7) are explicitly unsupported.
-requires-python = ">=3.9"
+#
+# Note that:
+# * This requirement specification intentionally blacklists obsolete Python 3.14
+#   release candidates, which removed the PEP 484-compliant "typing.ByteString"
+#   type hint singleton added back by Python 3.14 release candidate 3. Older
+#   release candidates are non-compliant with the official Python 3.14 release
+#   and thus @beartype itself. See also:
+#       https://github.com/beartype/beartype/issues/561#issuecomment-3379278748
+requires-python = ">=3.10,!=3.14rc1,!=3.14rc2"
 
 # Mandatory runtime dependencies. This package intentionally requires no
 # mandatory runtime dependencies and hopefully never will.
@@ -163,6 +172,31 @@ dependencies = []
 #     https://stackoverflow.com/a/72524073/2809027
 [project.optional-dependencies]
 
+# GitHub Pages (GHP)-specific documentation-time package dependencies required
+# to automatically build documentation for this project from GitHub's homegrown
+# hosting service.
+doc-ghp = [
+    # ....................{ THEME                          }....................
+    # Theme stack -- which transitively requires reasonably recent versions of
+    # both MkDocs itself as well as all requisite MkDocs plugins. Note that:
+    # * The "imaging" extra is required by popular optional "mkdocs-material"
+    #   plugins (e.g., "optimize", "social"). Doing so installs Python-centric
+    #   image-processing packages like CairoSVG and Pillow, which *COULD* prove
+    #   non-trivial to install under edge-case environments and platforms.
+    "mkdocs-material[imaging] >=9.6.0",
+
+    # ....................{ EXTENSIONS                     }....................
+    # API reference generation stack -- which transitively requires a reasonably
+    # recent version of the third-party "mkdocstrings" extension as well.
+    "mkdocstrings-python >=1.16.0",
+
+    # "mkdocstrings-python"-specific third-party extension expanding the default
+    # "mkdocstrings-python" support for absolute cross-references with
+    # additional support for relative cross-references.
+    "mkdocstrings-python-xref >=1.16.0",
+]
+
+#FIXME: Remove *AFTER* successfully migrating from RTD to GHP.
 # Read The Docs (RTD)-specific documentation-time package dependencies required
 # to automatically build documentation for this project from the third-party RTD
 # hosting service. For consistency, these dependencies are often constrained to
@@ -318,15 +352,9 @@ test-tox = [
 
     #FIXME: Reenable Python >= 3.14 support *AFTER* nuitka and all reverse
     #dependencies thereof officially ship Python 3.14 wheels.
-    #FIXME: Let's avoid attempting to remotely compile with nuitka under GitHub
-    #Actions-hosted continuous integration (CI) for the moment. Doing so is
-    #non-trivial enough under local testing workflows. *sigh*
     # Required by optional nuitka-specific integration tests if the current
     # platform is a Linux distribution.
     "nuitka >=1.2.6; sys_platform == 'linux' and python_version < '3.14.0'",
-
-    # Required by optional SQLAlchemy-specific integration tests.
-    "sqlalchemy",
 
     # ....................{ CLI                            }....................
     # Required by optional Typer-specific integration tests.
@@ -340,6 +368,13 @@ test-tox = [
     # Required by optional Celery-specific integration tests. Note that Celery
     # requires Click.
     "celery",
+
+    # ....................{ DATABASE                       }....................
+    # Required by optional Redis-specific integration tests.
+    "redis",
+
+    # Required by optional SQLAlchemy-specific integration tests.
+    "sqlalchemy",
 
     # ....................{ SCIENCE ~ data                 }....................
     # Data science-centric optional test-time dependencies.
@@ -640,6 +675,7 @@ include = [
     "/*.md",
     "/*.rst",
     "/conftest.py",
+    "/mkdocs",
     "/mypy",
     "/mypy.ini",
     "/pyproject.toml",
@@ -655,7 +691,15 @@ include = [
 
     # Relative dirnames of all requisite top-level installation-time
     # directories, including:
-    # * All files documenting this project.
+    # * All up-to-date MkDocs-specific files documenting this project in the
+    #   top-level "docs/" subdirectory.
+    # * All obsolete Sphinx-specific files documenting this project in the
+    #   top-level "doc/" subdirectory.
+    #
+    # Yes, this is confusing. The obsolete "doc/" subdirectory will be
+    # permanently removed at some point. For now, it lingers like a bad smell.
+    "/docs/*.md",
+    "/docs/js/*.js",
     "/doc/Makefile",
     "/doc/*.bat",
     "/doc/*.md",

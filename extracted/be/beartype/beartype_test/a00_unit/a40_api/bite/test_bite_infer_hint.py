@@ -16,17 +16,18 @@ This submodule unit tests the public :mod:`beartype.bite.infer_hint` function.
 # package-specific submodules at module scope.
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 from beartype_test._util.mark.pytskip import skip_unless_package
+from collections.abc import Iterable
 
 # ....................{ TESTS                              }....................
 def test_bite_infer_hint(
     bite_cases_infer_hint: (
-    'Dict[beartype.BeartypeConf, Iterable[Tuple[object, object]]]')) -> None:
+    dict['beartype.BeartypeConf', Iterable[tuple[object, object]]])) -> None:
     '''
     Test the :func:`beartype.bite.infer_hint` function.
 
     Parameters
     ----------
-    bite_cases_infer_hint : Dict[beartype.BeartypeConf, Iterable[Tuple[object, object]]]
+    bite_cases_infer_hint : dict[beartype.BeartypeConf, Iterable[tuple[object, object]]]
         Dictionary mapping from each relevant beartype configuration to a
         corresponding iterable of all **type hint inference cases** specific to
         that configuration.
@@ -86,14 +87,8 @@ def test_bite_infer_hint_recursion() -> None:
         BeartypeStrategy,
     )
     from beartype.bite import infer_hint
-    from beartype.bite._infermain import (
-        BeartypeInferHintContainerRecursion)
+    from beartype.bite._infermain import BeartypeInferHintContainerRecursion
     from beartype.roar import BeartypeDoorInferHintRecursionWarning
-    from beartype.typing import (
-        List,
-        Union,
-    )
-    from beartype._util.py.utilpyversion import IS_PYTHON_AT_LEAST_3_10
     from pytest import warns
 
     # ..................{ LOCALS ~ list                      }..................
@@ -120,7 +115,7 @@ def test_bite_infer_hint_recursion() -> None:
         assert infer_hint(
             LIST_RECURSIVE_STRATEGY_O1,
             conf=BeartypeConf(strategy=BeartypeStrategy.O1),
-        ) == List[BeartypeInferHintContainerRecursion]
+        ) == list[BeartypeInferHintContainerRecursion]
 
     # Assert that this function, when configured for O(n) linear-time type hint
     # inference and passed a recursive list containing a reference to itself as
@@ -128,16 +123,8 @@ def test_bite_infer_hint_recursion() -> None:
     # * Emits the expected warning.
     # * Returns the expected type hint.
     with warns(BeartypeDoorInferHintRecursionWarning):
-        assert infer_hint(LIST_RECURSIVE_STRATEGY_ON) == List[
-            # If the active Python interpreter targets Python >= 3.10 and thus
-            # supports PEP 604-compliant new-style unions, this kind of union;
-            str | bytes | BeartypeInferHintContainerRecursion
-            if IS_PYTHON_AT_LEAST_3_10 else
-            # Else, the active Python interpreter targets Python < 3.10 and thus
-            # fails to support PEP 604-compliant new-style unions. In this case,
-            # fallback to a PEP 484-compliant old-style union.
-            Union[str, bytes, BeartypeInferHintContainerRecursion]
-        ]
+        assert infer_hint(LIST_RECURSIVE_STRATEGY_ON) == list[
+            str | bytes | BeartypeInferHintContainerRecursion ]
 
 # ....................{ TESTS ~ third-party                }....................
 # Tests exercising infer_hint() with respect to third-party packages.

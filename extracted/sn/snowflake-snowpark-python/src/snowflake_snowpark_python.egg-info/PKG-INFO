@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: snowflake-snowpark-python
-Version: 1.40.0
+Version: 1.41.0
 Summary: Snowflake Snowpark for Python
 Home-page: https://www.snowflake.com/
 Author: Snowflake, Inc
@@ -38,7 +38,7 @@ Description-Content-Type: text/markdown
 License-File: LICENSE.txt
 Requires-Dist: setuptools>=40.6.0
 Requires-Dist: wheel
-Requires-Dist: snowflake-connector-python<4.0.0,>=3.17.0
+Requires-Dist: snowflake-connector-python<5.0.0,>=3.17.0
 Requires-Dist: typing-extensions<5.0.0,>=4.1.0
 Requires-Dist: pyyaml
 Requires-Dist: cloudpickle!=2.1.0,!=2.2.0,<=3.1.1,>=1.6.0
@@ -46,15 +46,15 @@ Requires-Dist: protobuf<6.32,>=3.20
 Requires-Dist: python-dateutil
 Requires-Dist: tzlocal
 Provides-Extra: pandas
-Requires-Dist: snowflake-connector-python[pandas]<4.0.0,>=3.17.0; extra == "pandas"
+Requires-Dist: snowflake-connector-python[pandas]<5.0.0,>=3.17.0; extra == "pandas"
 Provides-Extra: modin
-Requires-Dist: snowflake-connector-python[pandas]<4.0.0,>=3.17.0; extra == "modin"
+Requires-Dist: snowflake-connector-python[pandas]<5.0.0,>=3.17.0; extra == "modin"
 Requires-Dist: modin<0.38.0,>=0.36.0; extra == "modin"
 Requires-Dist: pandas<=2.3.1; extra == "modin"
 Requires-Dist: tqdm; extra == "modin"
 Requires-Dist: ipywidgets; extra == "modin"
 Provides-Extra: secure-local-storage
-Requires-Dist: snowflake-connector-python[secure-local-storage]<4.0.0,>=3.17.0; extra == "secure-local-storage"
+Requires-Dist: snowflake-connector-python[secure-local-storage]<5.0.0,>=3.17.0; extra == "secure-local-storage"
 Provides-Extra: development
 Requires-Dist: pytest<8.0.0; extra == "development"
 Requires-Dist: pytest-cov; extra == "development"
@@ -75,7 +75,7 @@ Requires-Dist: snowflake.core<2,>=1.0.0; extra == "development"
 Requires-Dist: psutil; extra == "development"
 Requires-Dist: lxml; extra == "development"
 Provides-Extra: modin-development
-Requires-Dist: snowflake-connector-python[pandas]<4.0.0,>=3.17.0; extra == "modin-development"
+Requires-Dist: snowflake-connector-python[pandas]<5.0.0,>=3.17.0; extra == "modin-development"
 Requires-Dist: modin<0.38.0,>=0.36.0; extra == "modin-development"
 Requires-Dist: pandas<=2.3.1; extra == "modin-development"
 Requires-Dist: tqdm; extra == "modin-development"
@@ -146,7 +146,7 @@ If you don't have a Snowflake account yet, you can [sign up for a 30-day free tr
 
 ### Create a Python virtual environment
 You can use [miniconda][miniconda], [anaconda][anaconda], or [virtualenv][virtualenv]
-to create a Python 3.9, 3.10, 3.11 or 3.12 virtual environment.
+to create a Python 3.9, 3.10, 3.11, 3.12 or 3.13 virtual environment.
 
 For Snowpark pandas, only Python 3.9, 3.10, or 3.11 is supported.
 
@@ -338,6 +338,165 @@ Please refer to [CONTRIBUTING.md][contributing].
 
 # Release History
 
+## 1.41.0 (2025-10-23)
+
+### Snowpark Python API Updates
+
+#### New Features
+
+- Added a new function `service` in `snowflake.snowpark.functions` that allows users to create a callable representing a Snowpark Container Services (SPCS) service.
+- Added `connection_parameters` parameter to `DataFrameReader.dbapi()` (PuPr) method to allow passing keyword arguments to the `create_connection` callable.
+- Added support for `Session.begin_transaction`, `Session.commit` and `Session.rollback`.
+- Added support for the following functions in `functions.py`:
+  - Geospatial functions:
+    - `st_interpolate`
+    - `st_intersection`
+    - `st_intersection_agg`
+    - `st_intersects`
+    - `st_isvalid`
+    - `st_length`
+    - `st_makegeompoint`
+    - `st_makeline`
+    - `st_makepolygon`
+    - `st_makepolygonoriented`
+    - `st_disjoint`
+    - `st_distance`
+    - `st_dwithin`
+    - `st_endpoint`
+    - `st_envelope`
+    - `st_geohash`
+    - `st_geomfromgeohash`
+    - `st_geompointfromgeohash`
+    - `st_hausdorffdistance`
+    - `st_makepoint`
+    - `st_npoints`
+    - `st_perimeter`
+    - `st_pointn`
+    - `st_setsrid`
+    - `st_simplify`
+    - `st_srid`
+    - `st_startpoint`
+    - `st_symdifference`
+    - `st_transform`
+    - `st_union`
+    - `st_union_agg`
+    - `st_within`
+    - `st_x`
+    - `st_xmax`
+    - `st_xmin`
+    - `st_y`
+    - `st_ymax`
+    - `st_ymin`
+    - `st_geogfromgeohash`
+    - `st_geogpointfromgeohash`
+    - `st_geographyfromwkb`
+    - `st_geographyfromwkt`
+    - `st_geometryfromwkb`
+    - `st_geometryfromwkt`
+    - `try_to_geography`
+    - `try_to_geometry`
+- Added a parameter to enable and disable automatic column name aliasing for `interval_day_time_from_parts` and `interval_year_month_from_parts` functions.
+
+#### Bug Fixes
+
+- Fixed a bug that `DataFrameReader.xml` fails to parse XML files with undeclared namespaces when `ignoreNamespace` is `True`.
+- Added a fix for floating point precision discrepancies in `interval_day_time_from_parts`.
+- Fixed a bug where writing Snowpark pandas dataframes on the pandas backend with a column multiindex to Snowflake with `to_snowflake` would raise `KeyError`.
+- Fixed a bug that `DataFrameReader.dbapi` (PuPr) is not compatible with oracledb 3.4.0.
+- Fixed a bug where `modin` would unintentionally be imported during session initialization in some scenarios.
+- Fixed a bug where `session.udf|udtf|udaf|sproc.register` failed when an extra session argument was passed. These methods do not expect a session argument; please remove it if provided.
+
+#### Improvements
+
+- The default maximum length for inferred StringType columns during schema inference in `DataFrameReader.dbapi` is now increased from 16MB to 128MB in parquet file based ingestion.
+
+#### Dependency Updates
+
+- Updated dependency of `snowflake-connector-python>=3.17,<5.0.0`.
+
+### Snowpark pandas API Updates
+
+#### New Features
+
+- Added support for the `dtypes` parameter of `pd.get_dummies`
+- Added support for `nunique` in `df.pivot_table`, `df.agg` and other places where aggregate functions can be used.
+- Added support for `DataFrame.interpolate` and `Series.interpolate` with the "linear", "ffill"/"pad", and "backfill"/bfill" methods. These use the SQL `INTERPOLATE_LINEAR`, `INTERPOLATE_FFILL`, and `INTERPOLATE_BFILL` functions (PuPr).
+
+#### Improvements
+
+- Improved performance of `Series.to_snowflake` and `pd.to_snowflake(series)` for large data by uploading data via a parquet file. You can control the dataset size at which Snowpark pandas switches to parquet with the variable `modin.config.PandasToSnowflakeParquetThresholdBytes`.
+- Enhanced autoswitching functionality from Snowflake to native Pandas for methods with unsupported argument combinations:
+  - `get_dummies()` with `dummy_na=True`, `drop_first=True`, or custom `dtype` parameters
+  - `cumsum()`, `cummin()`, `cummax()` with `axis=1` (column-wise operations)
+  - `skew()` with `axis=1` or `numeric_only=False` parameters
+  - `round()` with `decimals` parameter as a Series
+  - `corr()` with `method!=pearson` parameter
+- Set `cte_optimization_enabled` to True for all Snowpark pandas sessions.
+- Add support for the following in faster pandas:
+  - `isin`
+  - `isna`
+  - `isnull`
+  - `notna`
+  - `notnull`
+  - `str.contains`
+  - `str.startswith`
+  - `str.endswith`
+  - `str.slice`
+  - `dt.date`
+  - `dt.time`
+  - `dt.hour`
+  - `dt.minute`
+  - `dt.second`
+  - `dt.microsecond`
+  - `dt.nanosecond`
+  - `dt.year`
+  - `dt.month`
+  - `dt.day`
+  - `dt.quarter`
+  - `dt.is_month_start`
+  - `dt.is_month_end`
+  - `dt.is_quarter_start`
+  - `dt.is_quarter_end`
+  - `dt.is_year_start`
+  - `dt.is_year_end`
+  - `dt.is_leap_year`
+  - `dt.days_in_month`
+  - `dt.daysinmonth`
+  - `sort_values`
+  - `loc` (setting columns)
+  - `to_datetime`
+  - `rename`
+  - `drop`
+  - `invert`
+  - `duplicated`
+  - `iloc`
+  - `head`
+  - `columns` (e.g., df.columns = ["A", "B"])
+  - `agg`
+  - `min`
+  - `max`
+  - `count`
+  - `sum`
+  - `mean`
+  - `median`
+  - `std`
+  - `var`
+  - `groupby.agg`
+  - `groupby.min`
+  - `groupby.max`
+  - `groupby.count`
+  - `groupby.sum`
+  - `groupby.mean`
+  - `groupby.median`
+  - `groupby.std`
+  - `groupby.var`
+  - `drop_duplicates`
+- Reuse row count from the relaxed query compiler in `get_axis_len`.
+
+#### Bug Fixes
+
+- Fixed a bug where the row count was not getting cached in the ordered dataframe each time count_rows() is called.
+
 ## 1.40.0 (2025-10-02)
 
 ### Snowpark Python API Updates
@@ -364,7 +523,7 @@ Please refer to [CONTRIBUTING.md][contributing].
       - `nullif`
       - `nvl2`
       - `regr_valx`
-      
+
     - Semi-structured and structured date functions:
       - `array_remove_at`
       - `as_boolean`
@@ -376,14 +535,14 @@ Please refer to [CONTRIBUTING.md][contributing].
     - String & binary functions:
       - `chr`
       - `hex_decode_binary`
-      
+
     - Numeric functions:
       - `div0null`
 
     - Differential privacy functions:
       - `dp_interval_high`
       - `dp_interval_low`
-      
+
     - Context functions:
       - `last_query_id`
       - `last_transaction`
@@ -474,6 +633,16 @@ Please refer to [CONTRIBUTING.md][contributing].
 - When hybrid execution is enabled, `pd.merge`, `pd.concat`, `DataFrame.merge`, and `DataFrame.join` may now move arguments to backends other than those among the function arguments.
 - Improved performance of `DataFrame.to_snowflake` and `pd.to_snowflake(dataframe)` for large data by uploading data via a parquet file. You can control the dataset size at which Snowpark pandas switches to parquet with the variable `modin.config.PandasToSnowflakeParquetThresholdBytes`.
 
+## 1.39.1 (2025-09-25)
+
+### Snowpark Python API Updates
+
+#### Bug Fixes
+
+
+- Added an experimental fix for a bug in schema query generation that could cause invalid sql to be generated when using nested structured types.
+
+
 ## 1.39.0 (2025-09-17)
 
 ### Snowpark Python API Updates
@@ -551,7 +720,7 @@ Please refer to [CONTRIBUTING.md][contributing].
 - Eliminate duplicate parameter check queries for casing status when retrieving the session.
 - Retrieve dataframe row counts through object metadata to avoid a COUNT(\*) query (performance)
 - Added support for applying Snowflake Cortex function `Complete`.
-- Introduce faster pandas: Improved performance by deferring row position computation. 
+- Introduce faster pandas: Improved performance by deferring row position computation.
   - The following operations are currently supported and can benefit from the optimization: `read_snowflake`, `repr`, `loc`, `reset_index`, `merge`, and binary operations.
   - If a lazy object (e.g., DataFrame or Series) depends on a mix of supported and unsupported operations, the optimization will not be used.
 - Updated the error message for when Snowpark pandas is referenced within apply.
